@@ -41,7 +41,7 @@ sub unpack_cabinet_file
     my ($cabfilename, $unpackdir) = @_;
 
     my $infoline = "Unpacking cabinet file: $cabfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $expandfile = "expand.exe";  # Has to be in the path
 
@@ -84,18 +84,18 @@ sub unpack_cabinet_file
 
     my $returnvalue = system($systemcall);
     $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program("ERROR: Could not extract cabinet file: $mergemodulehash->{'cabinetfile'} !", "change_file_table");
     }
     else
     {
         $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -139,18 +139,18 @@ sub include_tables_into_pcpfile
     $returnvalue = system($systemcall);
 
     $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program("ERROR: Could not include tables into msi database: $fullmsidatabasepath !", "include_tables_into_pcpfile");
     }
     else
     {
         $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -197,18 +197,18 @@ sub extract_tables_from_pcpfile
     $returnvalue = system($systemcall);
 
     $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program("ERROR: Could not exclude tables from pcp file: $localfullmsidatabasepath !", "extract_tables_from_pcpfile");
     }
     else
     {
         $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -480,7 +480,7 @@ sub copy_files_into_directory_structure
             {
                 my $infoline = "ERROR: Could not copy $sourcefile to $destfile (insufficient disc space for $destfile ?)\n";
                 $returnvalue = 0;
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 installer::exiter::exit_program($infoline, "copy_files_into_directory_structure");
             }
 
@@ -540,7 +540,8 @@ sub remove_properties_from_registry_table
 {
     my ($registryhash, $componentkeypathhash, $registryfilecontent) = @_;
 
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Start remove_properties_from_registry_table");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: Start remove_properties_from_registry_table");
 
     my @registrytable = ();
 
@@ -623,7 +624,7 @@ sub remove_properties_from_registry_table
                 delete($registryhash->{$regitem});
                 $removecounter++;
                 $infoline = "Removing registry item: $regitem : $value\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
             else
             {
@@ -651,16 +652,16 @@ sub remove_properties_from_registry_table
                     $infoline = "Changing registry item: $regitem\n";
                     $infoline = "Old: $oldkey : $oldname : $oldvalue\n";
                     $infoline = "New: $registryhash->{$regitem}->{'Key'} : $registryhash->{$regitem}->{'Name'} : $registryhash->{$regitem}->{'Value'}\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
             }
         }
     }
 
     $infoline = "Number of removed registry items: $removecounter\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Number of changed registry items: $renamecounter\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # Creating the new content of Registry table
     # First three lines from $registryfilecontent
@@ -689,9 +690,10 @@ sub remove_properties_from_registry_table
     }
 
     $infoline = "Number of registry items: $newitemcounter. Old value: $olditemcounter.\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: End remove_properties_from_registry_table");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: End remove_properties_from_registry_table");
 
     return (\@registrytable);
 }
@@ -733,13 +735,13 @@ sub write_sis_info
     }
 
     $systemcall = $msiinfo . " " . "\"" . $localmsidatabase . "\"" . " -w " . $wordcount . " -s " . "\"" . $lastprinted . "\"" . " -l $lastsavedby";
-    push(@installer::globals::logfileinfo, $systemcall);
+    $installer::logger::Lang->printf($systemcall);
     $returnvalue = system($systemcall);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program($infoline, "write_sis_info");
     }
 }
@@ -816,7 +818,9 @@ sub make_admin_install
 
     # Create helper directory
 
-    installer::logger::print_message( "... installing $databasepath in directory $targetdir ...\n" );
+    $installer::logger::Info->printf("... installing %s in directory %s ...\n",
+        $databasepath,
+        $targetdir);
 
     my $helperdir = $targetdir . $installer::globals::separator . "installhelper";
     installer::systemactions::create_directory($helperdir);

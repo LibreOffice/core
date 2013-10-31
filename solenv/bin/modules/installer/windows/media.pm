@@ -277,8 +277,9 @@ sub create_media_table
                 }
                 else
                 {
-                    my $localinfoline = "Warning: Could not find cabinet file \"$media{'Cabinet'}}\" in update database. This seems to be an new cabinet file!?\n";
-                    push(@installer::globals::logfileinfo, $localinfoline);
+                    $installer::logger::Lang->printf(
+                        "Warning: Could not find cabinet file \"%s}\" in update database. This seems to be an new cabinet file!?\n",
+                        $media{'Cabinet'});
                 }
             }
         }
@@ -447,8 +448,7 @@ sub create_media_table
 
     my $mediatablename = $basedir . $installer::globals::separator . "Media.idt";
     installer::files::save_file($mediatablename ,\@mediatable);
-    my $infoline = "Created idt file: $mediatablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Created idt file: %s\n", $mediatablename);
 }
 
 1;

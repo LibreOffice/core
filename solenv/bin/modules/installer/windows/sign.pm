@@ -63,7 +63,7 @@ sub copy_install_set
     if ( -d $removepath ) { installer::systemactions::remove_complete_directory($removepath, 1); }
 
     $infoline = "Copy installation set from $installsetpath to $newpath\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     $installsetpath = installer::systemactions::copy_complete_directory($installsetpath, $newpath);
 
@@ -141,7 +141,8 @@ sub check_system_path
 
     foreach my $onefile ( @needed_files_in_path )
     {
-        installer::logger::print_message( "...... searching $onefile ..." );
+
+        $installer::logger::Info->printf("...... searching %s ...\n", $onefile);
 
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$onefile, $patharrayref , 0);
 
@@ -152,7 +153,7 @@ sub check_system_path
         }
         else
         {
-            installer::logger::print_message( "\tFound: $$fileref\n" );
+            $installer::logger::Info->printf("\tFound: %s\n", $$fileref);
         }
     }
 
@@ -169,24 +170,24 @@ sub make_systemcall
 {
     my ($systemcall, $displaysystemcall) = @_;
 
-    installer::logger::print_message( "... $displaysystemcall ...\n" );
+    $installer::logger::Info->printf("... %s ...\n", $displaysystemcall);
 
     my $success = 1;
     my $returnvalue = system($systemcall);
 
     my $infoline = "Systemcall: $displaysystemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute \"$displaysystemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         $success = 0;
     }
     else
     {
         $infoline = "Success: Executed \"$displaysystemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return $success;
@@ -200,24 +201,24 @@ sub make_systemcall_with_warning
 {
     my ($systemcall, $displaysystemcall) = @_;
 
-    installer::logger::print_message( "... $displaysystemcall ...\n" );
+    $installer::logger::Info->printf("... %s ...\n", $displaysystemcall);
 
     my $success = 1;
     my $returnvalue = system($systemcall);
 
     my $infoline = "Systemcall: $displaysystemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "WARNING: Could not execute \"$displaysystemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         $success = 0;
     }
     else
     {
         $infoline = "Success: Executed \"$displaysystemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return $success;
@@ -256,13 +257,13 @@ sub execute_open_system_call
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         $success = 0;
     }
     else
     {
         $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return ($success, \@openoutput);
@@ -504,7 +505,7 @@ sub cabinet_cosistency_check
     my ( $onefile, $followmeinfohash, $filenamehash, $lastsequencehash, $temppath ) = @_;
 
     my $infoline = "Making consistency check of $onefile\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     my $expandfile = "expand.exe";  # Has to be in the path
 
     if ( $^O =~ /cygwin/i )
@@ -516,12 +517,12 @@ sub cabinet_cosistency_check
     if ( $filenamehash == 0 )
     {
         $infoline = "Warning: Stopping consistency check: Important hash of filenames is empty!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
     elsif  ( $lastsequencehash == 0 )
     {
         $infoline = "Warning: Stopping consistency check; Important hash of last sequences is empty!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
     else # both hashes are available
     {
@@ -529,7 +530,7 @@ sub cabinet_cosistency_check
          my $sequence = $lastsequencehash->{$onefile};
          my $lastfile = $filenamehash->{$sequence};
         $infoline = "Check of $onefile: Sequence: $sequence is file: $lastfile\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
          # Therefore the file $lastfile need to be binary compared.
          # It has to be expanded from the cabinet file
@@ -555,12 +556,12 @@ sub cabinet_cosistency_check
         if ( ! -f $sourcecabfile )
         {
             $infoline = "WARNING: Check of cab file cannot happen, because source cabinet file was not found: $sourcecabfile\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
         elsif ( ! -f $destcabfile )
         {
             $infoline = "WARNING: Check of cab file cannot happen, because destination cabinet file was not found: $sourcecabfile\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
         else # everything is okay for the check
         {
@@ -574,14 +575,14 @@ sub cabinet_cosistency_check
 
             my $systemcall = "$expandfile $sourcecabfile $origdiffpath -f:$lastfile ";
             $infoline = $systemcall . "\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             my $success = make_systemcall($systemcall, $systemcall);
             if ( ! $success ) { installer::exiter::exit_program("ERROR: Could not successfully execute: $systemcall !", "cabinet_cosistency_check"); }
 
             $systemcall = "$expandfile $destcabfile $newdiffpath -f:$lastfile ";
             $infoline = $systemcall . "\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             $success = make_systemcall($systemcall, $systemcall);
             if ( ! $success ) { installer::exiter::exit_program("ERROR: Could not successfully execute: $systemcall !", "cabinet_cosistency_check"); }
@@ -599,13 +600,13 @@ sub cabinet_cosistency_check
             if ( $origsize != $newsize ) # This shows an error!
             {
                 $infoline = "ERROR: Different filesize after signtool.exe was used. Original: $origsize Bytes, new: $newsize. File: $lastfile\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 installer::exiter::exit_program("ERROR: The cabinet file $destcabfile is broken after signtool.exe signed this file !", "cabinet_cosistency_check");
             }
             else
             {
                 $infoline = "Same size of last file in cabinet file after usage of signtool.exe: $newsize (File: $lastfile)\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
 
                 # Also making a binary diff?
 
@@ -620,18 +621,18 @@ sub cabinet_cosistency_check
                 if ( $success == 0 )
                 {
                     $infoline = "Last files are identical after signing cabinet file (File: $lastfile)\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
                 elsif ( $success == 1 )
                 {
                     $infoline = "ERROR: Last files are different after signing cabinet file (File: $lastfile)\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                     installer::exiter::exit_program("ERROR: Last files are different after signing cabinet file (File: $lastfile)!", "cabinet_cosistency_check");
                 }
                 else
                 {
                     $infoline = "ERROR: Problem occured calling diff.exe (File: $lastfile)\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                     installer::exiter::exit_program("ERROR: Problem occured calling diff.exe (File: $lastfile) !", "cabinet_cosistency_check");
                 }
             }
@@ -671,7 +672,7 @@ sub sign_files
         if ( already_certified($onefile) )
         {
             $infoline = "Already certified: Skipping file $onefile\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             next;
         }
 
@@ -680,8 +681,16 @@ sub sign_files
 
         while (( $counter <= $maxcounter ) && ( ! $success ))
         {
-            if ( $counter > 1 ) { installer::logger::print_message( "\n\n... repeating file $onefile ...\n" ); }
-            if ( $cabinternal ) { installer::logger::print_message("    Signing: $onefile\n"); }
+            if ( $counter > 1 )
+            {
+                $installer::logger::Info->printf("\n");
+                $installer::logger::Info->printf("\n");
+                $installer::logger::Info->printf("... repeating file %s ...\n", $onefile);
+            }
+            if ( $cabinternal )
+            {
+                $installer::logger::Info->printf("    Signing: %s\n", $onefile);
+            }
             my $systemcall = "signtool.exe sign /f \"$pfxfilepath\" /p $pw $productname $url /t \"$timestampurl\" \"$onefile\"";
             my $displaysystemcall = "signtool.exe sign /f \"$pfxfilepath\" /p ***** $productname $url /t \"$timestampurl\" \"$onefile\"";
              $success = make_systemcall_with_warning($systemcall, $displaysystemcall);
@@ -737,7 +746,7 @@ sub check_ddf_file
     }
 
     my $infoline = "Check of ddf file \"$ddffilename\": Maximum length \"$maxlength\" in line \"$maxline\" (allowed line length: 256 characters)\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 #################################################################
@@ -838,9 +847,10 @@ sub read_cab_file
 {
     my ($cabfilename) = @_;
 
-    installer::logger::print_message( "\n... reading cabinet file $cabfilename ...\n" );
+    $installer::logger::Info->printf("\n");
+    $installer::logger::Info->printf("... reading cabinet file %s ...\n", $cabfilename);
     my $infoline = "Reading cabinet file $cabfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $systemcall = "cabarc.exe" . " L " . $cabfilename;
     push(@logfile, "$systemcall\n");
@@ -870,9 +880,10 @@ sub unpack_cab_file
 {
     my ($cabfilename, $temppath) = @_;
 
-    installer::logger::print_message( "\n... unpacking cabinet file $cabfilename ...\n" );
+    $installer::logger::Info->printf("\n");
+    $installer::logger::Info->printf("... unpacking cabinet file %s ...\n", $cabfilename);
     my $infoline = "Unpacking cabinet file $cabfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $dirname = $cabfilename;
     $dirname =~ s/\.cab\s*$//;
@@ -965,9 +976,10 @@ sub do_pack_cab_file
 {
     my ($cabfilename, $allfiles, $workingpath, $temppath) = @_;
 
-    installer::logger::print_message( "\n... packing cabinet file $cabfilename ...\n" );
+    $installer::logger::Info->print("\n");
+    $installer::logger::Info->printf("... packing cabinet file %s ...\n", $cabfilename);
     my $infoline = "Packing cabinet file $cabfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ( -f $cabfilename ) { unlink($cabfilename); } # removing cab file
     if ( -f $cabfilename ) { installer::exiter::exit_program("ERROR: Failed to remove file: $cabfilename!", "do_pack_cab_file"); }
@@ -1049,7 +1061,7 @@ sub already_certified
      if ( $success )
      {
          $is_certified = 1;
-        installer::logger::print_message( "... already certified -> skipping $filename ...\n" );
+        $installer::logger::Info->printf("... already certified -> skipping %s ...\n", $filename);
     }
 
     return $is_certified;
@@ -1116,7 +1128,7 @@ sub compare_directories
     $dir2 =~ s/\/\s*//;
 
     my $infoline = "Comparing directories: $dir1 and $dir2\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     foreach my $onefile ( @{$files} )
     {
@@ -1130,7 +1142,7 @@ sub compare_directories
         my $size2 = -s $file2;
 
         $infoline = "Comparing files: $file1 ($size1) and $file2 ($size2)\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         if ( $size1 != $size2 )
         {
@@ -1155,7 +1167,7 @@ sub sign_install_set
     my $success = 1;
 
     my $infoline = "Signing installation set in $installsetpath\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # check required files.
     if ( ! $installer::globals::signfiles_checked ) { check_system_path(); }

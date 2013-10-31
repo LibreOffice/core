@@ -77,8 +77,7 @@ sub create_selfreg_table
 
     my $selfregtablename = $basedir . $installer::globals::separator . "SelfReg.idt";
     installer::files::save_file($selfregtablename ,\@selfregtable);
-    my $infoline = "Created idt file: $selfregtablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Created idt file: %s\n", $selfregtablename);
 }
 
 1;

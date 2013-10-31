@@ -30,6 +30,7 @@ use installer::globals;
 use installer::logger;
 use installer::remover;
 use installer::systemactions;
+use strict;
 
 ############################################
 # Parameter Operations
@@ -95,21 +96,16 @@ sub saveparameter
 {
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::saveparameter"); }
 
-    my $include = "";
+    $installer::logger::Global->printf("Command line arguments:\n");
 
-    installer::logger::globallog("Command line arguments:");
-
-    for ( my $i = 0; $i <= $#ARGV; $i++ )
+    my $index = 0;
+    foreach my $argument (@ARGV)
     {
-        $include = $ARGV[$i] . "\n";
-        push(@installer::globals::globallogfileinfo, $include);
+        $installer::logger::Global->printf("    %2d: %s\n", $index++, $argument);
     }
 
     # also saving global settings:
-
-    $include = "Separator: $installer::globals::separator\n";
-    push(@installer::globals::globallogfileinfo, $include);
-
+    $installer::logger::Global->printf("Separator: %s\n", $installer::globals::separator);
 }
 
 #####################################
@@ -340,8 +336,8 @@ sub setglobalvariables
             $installer::globals::debian = 1;
             $installer::globals::packageformat = "deb";
             my $message = "Creating Debian packages";
-            installer::logger::print_message( $message );
-            push(@installer::globals::globallogfileinfo, $message);
+            $installer::logger::Info->print($message);
+            $installer::logger::Global->print($message);
             $installer::globals::islinuxrpmbuild = 0;
             $installer::globals::islinuxdebbuild = 1;
             $installer::globals::epmoutpath = "DEBS";
@@ -573,15 +569,14 @@ sub control_required_parameter
 # Writing parameter to shell and into logfile
 ################################################
 
-sub outputparameter
+sub outputparameter ()
 {
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::outputparameter"); }
 
-    my $element;
-
     my @output = ();
 
-    push(@output, "\n########################################################\n");
+    push(@output, "\n");
+    push(@output, "########################################################\n");
     push(@output, "$installer::globals::prog, version 1.0\n");
     push(@output, "Product list file: $installer::globals::ziplistname\n");
     if (!($installer::globals::setupscript_defined_in_productlist))
@@ -624,7 +619,7 @@ sub outputparameter
     if (!($installer::globals::languages_defined_in_productlist))
     {
         push(@output, "Languages:\n");
-        foreach $element (@installer::globals::languageproducts) { push(@output, "\t$element\n"); }
+        foreach my $element (@installer::globals::languageproducts) { push(@output, "\t$element\n"); }
     }
     else
     {
@@ -637,10 +632,10 @@ sub outputparameter
 
     # output into shell and into logfile
 
-    for ( my $i = 0; $i <= $#output; $i++ )
+    foreach my $line (@output)
     {
-        installer::logger::print_message( $output[$i] );
-        push(@installer::globals::globallogfileinfo, $output[$i]);
+        $installer::logger::Info->print($line);
+        $installer::logger::Global->print($line);
     }
 }
 

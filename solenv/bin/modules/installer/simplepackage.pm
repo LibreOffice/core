@@ -86,7 +86,7 @@ sub register_extensions
     if ( $preregdir eq "" )
     {
         $infoline = "ERROR: Failed to determine directory \"prereg\" for extension registration! Please check your installation set.\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program($infoline, "register_extensions");
     }
 
@@ -104,31 +104,31 @@ sub register_extensions
     {
         $unopkgexists = 0;
         $infoline = "Language packs do not contain unopkg!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( ! -f $unopkgfile )
     {
         $unopkgexists = 0;
         $infoline = "Info: File $unopkgfile does not exist! Extensions cannot be registered.\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $unopkgexists )
     {
         my $currentdir = cwd();
-        print "... current dir: $currentdir ...\n";
+        $installer::logger::Info->printf("... current dir: %s ...\n", $currentdir);
         $infoline = "Current dir: $currentdir\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
 
         my $systemcall = $unopkgfile . " sync --verbose" . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
 
-        print "... $systemcall ...\n";
+        $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
         $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         my @unopkgoutput = ();
 
@@ -147,16 +147,19 @@ sub register_extensions
             # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
             # contains strings like "Error" even in the case of success. This causes a packaging error
             # when the log file is analyzed at the end, even if there is no real error.
-            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+            foreach my $line (@unopkgoutput)
+            {
+                $installer::logger::Lang->printf($line);
+            }
 
             $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
         }
         else
         {
             $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
     }
 
@@ -177,7 +180,7 @@ sub get_mac_translation_file
     my $translationfile = installer::files::read_file($translationfilename);
 
     my $infoline = "Reading translation file: $translationfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $translationfile;
 }
@@ -352,7 +355,7 @@ sub create_package
 {
     my ( $installdir, $archivedir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $format ) = @_;
 
-    installer::logger::print_message( "... creating $installer::globals::packageformat file ...\n" );
+    $installer::logger::Info->printf("... creating %s file ...\n", $installer::globals::packageformat);
     installer::logger::include_header_into_logfile("Creating $installer::globals::packageformat file:");
 
     # moving dir into temporary directory
@@ -448,20 +451,20 @@ sub create_package
 
             $systemcall = "tar -cjf $tarballname Contents/";
 
-            print "... $systemcall ...\n";
+            $installer::logger::Info->printf("... %s ...\n", $systemcall);
             my $localreturnvalue = system($systemcall);
             $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             if ($localreturnvalue)
             {
                 $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
             else
             {
                 $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
 
             my $sourcefile = $appfolder . "/" . $tarballname;
@@ -563,26 +566,26 @@ sub create_package
 
     if ( $makesystemcall )
     {
-        print "... $systemcall ...\n";
+        $installer::logger::Info->printf("... %s ...\n", $systemcall);
         my $returnvalue = system($systemcall);
         my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         if ($returnvalue)
         {
             $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
         else
         {
             $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
     }
 
     if ( $return_to_start ) { chdir($from); }
 
-    print "... removing $tempdir ...\n";
+    $installer::logger::Info->printf("... removing %s ...\n", $tempdir);
     installer::systemactions::remove_complete_directory($tempdir);
 }
 
@@ -600,7 +603,7 @@ sub create_simple_package
     my $current_install_number = "";
     my $infoline = "";
 
-    installer::logger::print_message( "... creating installation directory ...\n" );
+    $installer::logger::Info->print( "... creating installation directory ...\n" );
     installer::logger::include_header_into_logfile("Creating installation directory");
 
     $installer::globals::csp_installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
@@ -653,7 +656,7 @@ sub create_simple_package
 
     # Create directories, copy files and ScpActions
 
-    installer::logger::print_message( "... creating directories ...\n" );
+    $installer::logger::Info->print("... creating directories ...\n");
     installer::logger::include_header_into_logfile("Creating directories:");
 
     for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
@@ -668,8 +671,7 @@ sub create_simple_package
             {
                 if ( $^O =~ /cygwin/i || $^O =~ /os2/i ) # Cygwin performance check
                 {
-                    $infoline = "Try to create directory $destdir\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("Try to create directory %s\n", $destdir);
                     # Directories in $dirsref are sorted and all parents were added -> "mkdir" works without parent creation!
                     if ( ! ( -d $destdir )) { mkdir($destdir, 0775); }
                 }
@@ -685,7 +687,7 @@ sub create_simple_package
     if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::isos2 )) { installer::strip::strip_libraries($filesref, $languagestringref); }
 
     # copy Files
-    installer::logger::print_message( "... copying files ...\n" );
+    $installer::logger::Info->print("... copying files ...\n");
     installer::logger::include_header_into_logfile("Copying files:");
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
@@ -711,16 +713,14 @@ sub create_simple_package
 
             if ($copyreturn)
             {
-                $infoline = "Copy: $source to $destination\n";
+                $installer::logger::Lang->printf("Copy: $source to %s\n", $destination);
                 $returnvalue = 1;
             }
             else
             {
-                $infoline = "ERROR: Could not copy $source to $destination\n";
+                $installer::logger::Lang->printf("ERROR: Could not copy %s to %s\n", $source, $destination);
                 $returnvalue = 0;
             }
-
-            push(@installer::globals::logfileinfo, $infoline);
         }
         else
         {
@@ -743,7 +743,7 @@ sub create_simple_package
 
     # creating Links
 
-    installer::logger::print_message( "... creating links ...\n" );
+    $installer::logger::Info->print("... creating links ...\n");
     installer::logger::include_header_into_logfile("Creating links:");
 
     for ( my $i = 0; $i <= $#{$linksref}; $i++ )
@@ -759,8 +759,9 @@ sub create_simple_package
         my $localcall = "ln -sf \'$destinationfile\' \'$destination\' \>\/dev\/null 2\>\&1";
         system($localcall);
 
-        $infoline = "Creating link: \"ln -sf $destinationfile $destination\"\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Creating link: \"ln -sf %s %s\"\n",
+            $destinationfile,
+            $destination);
     }
 
     for ( my $i = 0; $i <= $#{$unixlinksref}; $i++ )
@@ -775,22 +776,23 @@ sub create_simple_package
         my $localcall = "ln -sf \'$target\' \'$destination\' \>\/dev\/null 2\>\&1";
         system($localcall);
 
-        $infoline = "Creating Unix link: \"ln -sf $target $destination\"\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Creating Unix link: \"ln -sf %s %s\"\n",
+            $target,
+            $destination);
     }
 
     # Setting privileges for cygwin globally
 
     if ( $^O =~ /cygwin/i )
     {
-        installer::logger::print_message( "... changing privileges in $subfolderdir ...\n" );
+        $installer::logger::Lang->print( "... changing privileges in $subfolderdir ...\n" );
         installer::logger::include_header_into_logfile("Changing privileges in $subfolderdir:");
 
         my $localcall = "chmod -R 755 " . "\"" . $subfolderdir . "\"";
         system($localcall);
     }
 
-    installer::logger::print_message( "... removing superfluous directories ...\n" );
+    $installer::logger::Lang->print( "... removing superfluous directories ...\n" );
     installer::logger::include_header_into_logfile("Removing superfluous directories:");
 
     my ( $extensionfolder, $preregdir ) = get_extensions_dir($subfolderdir);
@@ -798,7 +800,7 @@ sub create_simple_package
 
     # Registering the extensions
 
-    installer::logger::print_message( "... registering extensions ...\n" );
+    $installer::logger::Lang->print( "... registering extensions ...\n" );
     installer::logger::include_header_into_logfile("Registering extensions:");
     register_extensions($subfolderdir, $languagestringref, $preregdir);
 

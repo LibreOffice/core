@@ -136,7 +136,7 @@ sub put_license_file_into_script
     my ($scriptfile, $licensefile) = @_;
 
     my $infoline = "Adding licensefile into language pack script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $includestring = "";
 
@@ -167,17 +167,17 @@ sub create_tar_gz_file
     my $returnvalue = system($systemcall);
 
     my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
     else
     {
         $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return $targzname;
@@ -268,7 +268,7 @@ sub determine_packagename
     }
 
     my $infoline = "Found package in installation directory $installdir : $packagename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return ( $packagename, $allnames);
 }
@@ -285,7 +285,7 @@ sub put_packagename_into_script
     my $localpackagename = $packagename;
     $localpackagename =~ s/\.tar\.gz//; # making "OOOopenoffice-it-ea.tar.gz" to "OOOopenoffice-it-ea"
     my $infoline = "Adding packagename $localpackagename into language pack script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $installline = "";
 
@@ -319,7 +319,7 @@ sub put_productname_into_script
     $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
 
     my $infoline = "Adding productname $productname into language pack script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
@@ -342,7 +342,7 @@ sub put_fullproductname_into_script
     my $fullproductname = $productname . " " . $productversion;
 
     my $infoline = "Adding full productname \"$fullproductname\" into language pack script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
@@ -365,10 +365,10 @@ sub put_searchpackage_into_script
     if ( $installer::globals::issolarisbuild ) { $basispackageversion =~ s/\.//g; } # "3.0" -> "30"
 
     my $infoline = "Adding basis package prefix $basispackageprefix into language pack script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     $infoline = "Adding basis package version $basispackageversion into language pack script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
@@ -389,7 +389,7 @@ sub put_linenumber_into_script
     my $linenumber =  $#{$scriptfile} + $#{$licensefile} + 3;   # also adding the content of the license file!
 
     my $infoline = "Adding linenumber $linenumber into language pack script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
@@ -413,7 +413,7 @@ sub determine_scriptfile_name
     $scriptfilename =~ s/\.tar\.gz\s*$/\.sh/;
 
     my $infoline = "Setting language pack script file name to $scriptfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $scriptfilename;
 }
@@ -430,7 +430,7 @@ sub save_script_file
     installer::files::save_file($newscriptfilename, $scriptfile);
 
     my $infoline = "Saving script file $newscriptfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $newscriptfilename;
 }
@@ -449,17 +449,17 @@ sub include_package_into_script
     my $returnvalue = system($systemcall);
 
     my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
     else
     {
         $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     my $localcall = "chmod 775 $scriptfilename \>\/dev\/null 2\>\&1";
@@ -485,7 +485,7 @@ sub remove_package
         unlink $longpackagename;
 
         my $infoline = "Removing package: $longpackagename \n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -511,7 +511,7 @@ sub build_installer_for_languagepack
     my $scriptfile = installer::files::read_file($$scriptref);
 
     my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # find and read english license file
     my $licenselanguage = "en-US";                  # always english !
@@ -523,7 +523,7 @@ sub build_installer_for_languagepack
     my $licensefile = installer::files::read_file($$licenseref);
 
     $infoline = "Found licensefile $licensefilename: $$licenseref \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # including variables into license file
     installer::scpzipfiles::replace_all_ziplistvariables_in_file($licensefile, $allvariableshashref);

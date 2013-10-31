@@ -66,8 +66,7 @@ sub update_binary_table
     # Saving the file
 
     installer::files::save_file($binaryidttablename ,$binaryidttable);
-    my $infoline = "Updated idt file: $binaryidttablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Updated idt file: %s\n", $binaryidttablename);
 }
 
 1;

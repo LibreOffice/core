@@ -611,7 +611,7 @@ sub get_size_value
         my $rpmname = $packagename;
         installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$rpmname);
         $infoline = "Filesize $rpmname : $value\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $installer::globals::issolarispkgbuild )
@@ -671,7 +671,7 @@ sub get_md5_value
             my $rpmname = $packagename;
             installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$rpmname);
             $infoline = "md5sum of $rpmname : $value\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
     }
 
@@ -746,7 +746,7 @@ sub get_fullpkgname_value
         installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$rpmname);
 
         $infoline = "Full package name from $rpmname: $value\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return $value;
@@ -873,23 +873,26 @@ sub make_systemcall
     my $returnvalue = $?;   # $? contains the return value of the systemcall
 
     my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ( $logreturn )
     {
-        for ( my $j = 0; $j <= $#returns; $j++ ) { push( @installer::globals::logfileinfo, "$returns[$j]"); }
+        foreach my $line (@returns)
+        {
+            $installer::logger::Lang->print($line);
+        }
     }
 
     if ($returnvalue)
     {
         $infoline = "ERROR: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         $error_occured = 1;
     }
     else
     {
         $infoline = "SUCCESS: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return \@returns;
@@ -914,11 +917,14 @@ sub make_systemcall_allowing_error
     my $returnvalue = $?;   # $? contains the return value of the systemcall
 
     my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ( $logreturn )
     {
-        for ( my $j = 0; $j <= $#returns; $j++ ) { push( @installer::globals::logfileinfo, "$returns[$j]"); }
+        foreach my $line (@returns)
+        {
+            $installer::logger::Lang->print($line);
+        }
     }
 
     if ($returnvalue)
@@ -926,20 +932,20 @@ sub make_systemcall_allowing_error
         if ( $can_fail )
         {
             $infoline = "WARNING: Failed system call:  $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             $error_occured = 1;
         }
         else
         {
             $infoline = "ERROR: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             $error_occured = 1;
         }
     }
     else
     {
         $infoline = "SUCCESS: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return (\@returns, $returnvalue);
@@ -1480,7 +1486,7 @@ sub create_emptyparents_xpd_file
         installer::files::save_file($xpdfilename, $xpdfile);
         push(@installer::globals::allxpdfiles, $xpdfilename);
         my $infoline = "Saving xpd file: $xpdfilename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # push(@installer::globals::emptyxpdparents, $parentgid);
@@ -1595,7 +1601,7 @@ sub create_xpd_file
             installer::files::save_file($xpdfilename, $emptyfilecontent);
             push(@installer::globals::allxpdfiles, $xpdfilename);
             $infoline = "Saving xpd file: $xpdfilename\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             $xpdfilename = $newxpdfilename;
             change_parent_in_xpdfile($xpdfile, $module->{'XpdPackageName'});
@@ -1605,7 +1611,7 @@ sub create_xpd_file
         push( @installer::globals::createdxpdfiles, $modulegid);
         push(@installer::globals::allxpdfiles, $xpdfilename);
         $infoline = "Saving xpd file: $xpdfilename\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         my $grandpagid = "root";
         if ( $parentgid ne "root" )
@@ -1663,7 +1669,7 @@ sub create_xpd_file_for_childproject
     push( @installer::globals::createdxpdfiles, $modulegid);
     push(@installer::globals::allxpdfiles, $xpdfilename);
     my $infoline = "Saving xpd file: $xpdfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ( $parentgid ne "root" )
     {
@@ -1697,7 +1703,7 @@ sub create_xpd_file_for_systemintegration
         # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$newpackagename);
 
         my $infoline = "Creating xpd file for package: $newpackagename\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         my $childmodule = installer::worker::copy_hash_from_references($module);
         $childmodule->{'ParentID'} = $module->{'gid'};  # the module gid is the new parent
@@ -1748,7 +1754,7 @@ sub create_xpd_file_for_systemintegration
         installer::files::save_file($xpdfilename, $xpdfile);
         push(@installer::globals::allxpdfiles, $xpdfilename);
         $infoline = "Saving xpd file: $xpdfilename\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # Creating the top level visible xpd file
@@ -1804,7 +1810,7 @@ sub create_setup_xpd
     installer::files::save_file($xpdfilename, $xpdfile);
     push(@installer::globals::allxpdfiles, $xpdfilename);
     my $infoline = "Saving xpd file: $xpdfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 ###################################################

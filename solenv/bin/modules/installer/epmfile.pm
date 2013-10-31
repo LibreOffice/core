@@ -36,7 +36,7 @@ use installer::remover;
 use installer::scriptitems;
 use installer::systemactions;
 use installer::worker;
-use POSIX;
+use POSIX qw(uname);
 
 ############################################################################
 # Reading the package map to find Solaris package names for
@@ -51,8 +51,9 @@ sub read_packagemap
     if ( $allvariables->{'PACKAGEMAP'} ) { $packagemapname = $allvariables->{'PACKAGEMAP'}; }
     if ( $packagemapname eq "" ) { installer::exiter::exit_program("ERROR: Property PACKAGEMAP must be defined!", "read_packagemap"); }
 
-    my $infoline = "\n\nCollected abbreviations and package names:\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
+    $installer::logger::Lang->printf("\n");
+    $installer::logger::Lang->printf("nCollected abbreviations and package names:\n");
 
     # Can be a comma separated list. All files have to be found in include pathes
     my $allpackagemapnames = installer::converter::convert_stringlist_into_hash(\$packagemapname, ",");
@@ -90,8 +91,10 @@ sub read_packagemap
                         $local_packagename =~ s/\%LANGUAGESTRING/$onelang/g;
 
                         # Logging all abbreviations and packagenames
-                        $infoline = "$onelang : $local_abbreviation : $local_packagename\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->printf("%s : %s : %s\n",
+                            $onelang,
+                            $local_abbreviation,
+                            $local_packagename);
 
                         if ( exists($installer::globals::dependfilenames{$local_abbreviation}) )
                         {
@@ -106,8 +109,7 @@ sub read_packagemap
                 else
                 {
                     # Logging all abbreviations and packagenames
-                    $infoline = "$abbreviation : $packagename\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("%s : %s\n", $abbreviation, $packagename);
 
                     if ( exists($installer::globals::dependfilenames{$abbreviation}) )
                     {
@@ -127,9 +129,8 @@ sub read_packagemap
         }
     }
 
-    $infoline = "\n\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->print("\n");
 }
 
 ############################################################################
@@ -481,8 +482,7 @@ sub create_epm_header
             installer::files::save_file($$fileref, $copyrightfile);
         }
 
-        $infoline = "Using license file: \"$$fileref\"!\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Using license file: \"%s\"!\n", $$fileref);
 
         $foundlicensefile = 1;
         $line = "%license" . " " . $$fileref . "\n";
@@ -824,8 +824,7 @@ sub find_epm_on_system
         if (!($$epmfileref eq "")) { $epmname = $$epmfileref; }
     }
 
-    my $infoline = "Using epmfile: $epmname\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Using epmfile: %s\n", $epmname);
 
     return $epmname;
 }
@@ -854,13 +853,15 @@ sub set_patch_state
 
     if ( $installer::globals::is_special_epm )
     {
-        $infoline = "\nPatch state: This is a patched version of epm!\n\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->print("Patch state: This is a patched version of epm!\n");
+        $installer::logger::Lang->print("\n");
     }
     else
     {
-        $infoline = "\nPatch state: This is an unpatched version of epm!\n\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->print("Patch state: This is an unpatched version of epm!\n");
+        $installer::logger::Lang->print("\n");
     }
 
     if ( ( $installer::globals::is_special_epm ) && (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild)) )
@@ -927,7 +928,7 @@ sub call_epm
 
     my $systemcall = $ldpreloadstring . $epmname . " -f " . $packageformat . " " . $extraflags . " " . $localpackagename . " " . $epmlistfilename . $outdirstring . " " . $verboseflag . " " . " 2\>\&1 |";
 
-    installer::logger::print_message( "... $systemcall ...\n" );
+    $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
     my $maxepmcalls = 3;
 
@@ -941,26 +942,23 @@ sub call_epm
 
         my $returnvalue = $?;   # $? contains the return value of the systemcall
 
-        my $infoline = "Systemcall  (Try $i): $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Systemcall  (Try %d): \n", $i, $systemcall);
 
         for ( my $j = 0; $j <= $#epmoutput; $j++ )
         {
             if ( $i < $maxepmcalls ) { $epmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
-            push( @installer::globals::logfileinfo, "$epmoutput[$j]");
+            $installer::logger::Lang->print($epmoutput[$j]);
         }
 
         if ($returnvalue)
         {
-            $infoline = "Try $i : Could not execute \"$systemcall\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Try %d : Could not execute \"%s\"!\n", $i, $systemcall);
             if ( $i == $maxepmcalls ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "call_epm"); }
         }
         else
         {
-            installer::logger::print_message( "Success (Try $i): \"$systemcall\"\n" );
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Info->printf("Success: Executed (Try %d): \"%s\" successfully\n", $i, $systemcall);
+            $installer::logger::Lang->printf("Success: Executed (Try %d): \"%s\" successfully\n", $i, $systemcall);
             last;
         }
     }
@@ -1000,8 +998,7 @@ sub add_one_line_into_file
     }
 
     $insertline =~ s/\s*$//;    # removing line end for correct logging
-    my $infoline = "Success: Added line $insertline into file $filename!\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Success: Added line %s into file !\n", $insertline, $filename);
 }
 
 #####################################################################
@@ -1035,8 +1032,10 @@ sub set_revision_in_pkginfo
             my $oldstring = $1;
             my $newstring = $oldstring . $revisionstring;   # also adding the date string
             ${$file}[$i] =~ s/$oldstring/$newstring/;
-            my $infoline = "Info: Changed in $filename file: \"$oldstring\" to \"$newstring\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Info: Changed in %s file: \"%s\" to \"\"!\n",
+                $filename,
+                $oldstring,
+                $newstring);
             last;
         }
     }
@@ -1091,8 +1090,7 @@ sub set_revision_in_pkginfo
                     ${$file}[$i] = $newstring;
                     $oldstring =~ s/\s*$//;
                     $newstring =~ s/\s*$//;
-                    my $infoline = "Info: Changed in $filename file: \"$oldstring\" to \"$newstring\"!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("Info: Changed in %s file: \"%s\" to \"\"!\n", $filename, $oldstring, $newstring);
                     last;
                 }
             }
@@ -1324,8 +1322,7 @@ sub set_topdir_in_specfile
             my $removeline = ${$changefile}[$i];
             $removeline =~ s/\s*$//;
             splice(@{$changefile},$i,1);
-            my $infoline = "Info: Removed line \"$removeline\" from file $filename!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Info: Removed line \"%s\" from file %s!\n", $removeline, $filename);
             last;
         }
     }
@@ -1343,8 +1340,7 @@ sub set_topdir_in_specfile
             splice(@{$changefile},$i+1,0,$topdirline);
             $inserted_line = 1;
             $topdirline =~ s/\s*$//;
-            my $infoline = "Success: Added line $topdirline into file $filename!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Success: Added line %s into file %s!\n", $topdirline, $filename);
         }
     }
 
@@ -1369,8 +1365,9 @@ sub set_packager_in_specfile
         {
             my $oldstring = $1;
             ${$changefile}[$i] =~ s/\Q$oldstring\E/$packager/;
-            my $infoline = "Info: Changed Packager in spec file from $oldstring to $packager!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Info: Changed Packager in spec file from %s to %s!\n",
+                $oldstring,
+                $packager);
             last;
         }
     }
@@ -1393,8 +1390,9 @@ sub set_prereq_in_specfile
         {
             my $oldstring = ${$changefile}[$i];
             ${$changefile}[$i] =~ s/Requires:/$prereq/;
-            my $infoline = "Info: Changed requirements in spec file from $oldstring to ${$changefile}[$i]!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Info: Changed requirements in spec file from %s to %s!\n",
+                $oldstring,
+                ${$changefile}[$i]);
         }
     }
 }
@@ -1427,9 +1425,7 @@ sub set_autoprovreq_in_specfile
         {
             splice(@{$changefile},$i+1,0,$autoreqprovline);
             $autoreqprovline =~ s/\s*$//;
-            $infoline = "Success: Added line $autoreqprovline into spec file!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-
+            $installer::logger::Lang->printf("Success: Added line %s into spec file!\n", $autoreqprovline);
             last;
         }
     }
@@ -1451,8 +1447,7 @@ sub set_license_in_specfile
         if ( ${$changefile}[$i] =~ /^\s*Copyright\s*:\s*(.+?)\s*$/ )
         {
             ${$changefile}[$i] = "License: $license\n";
-            my $infoline = "Info: Replaced Copyright with License: $license !\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Info: Replaced Copyright with License: %s !\n", $license);
             last;
         }
     }
@@ -1491,8 +1486,7 @@ sub make_prototypefile_relocatable
             my $line = ${$prototypefile}[$i];
             splice(@{$prototypefile},$i,1); # removing the line
             $line =~ s/\s*$//;
-            my $infoline = "Info: Removed line \"$line\" from prototype file!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Info: Removed line \"%s\" from prototype file!\n", $line);
             last;
         }
     }
@@ -1504,8 +1498,7 @@ sub make_prototypefile_relocatable
         if ( ${$prototypefile}[$i] =~ /\\\$/ )
         {
             ${$prototypefile}[$i] =~ s/\\\$/\$/g;
-            my $infoline2 = "Info: Changed line in prototype file: ${$prototypefile}[$i] !\n";
-            push( @installer::globals::logfileinfo, $infoline2);
+            $installer::logger::Lang->printf("Info: Changed line in prototype file: %s !\n", ${$prototypefile}[$i]);
         }
     }
 }
@@ -1541,8 +1534,10 @@ sub set_volatilefile_into_prototypefile
                     my $newline = ${$prototypefile}[$j];
                     $oldline =~ s/\s*$//;
                     $newline =~ s/\s*$//;
-                    my $infoline = "Volatile file: Changing content from \"$oldline\" to \"$newline\" .\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf(
+                        "Volatile file: Changing content from \"%s\" to \"%s\" .\n",
+                        $oldline,
+                        $newline);
                     last;
                 }
             }
@@ -1566,8 +1561,8 @@ sub replace_variables_in_shellscripts_for_patch
             my $oldline = ${$scriptfile}[$i];
             if (( $oldstring eq "PRODUCTDIRECTORYNAME" ) && ( $newstring eq "" )) { $oldstring = $oldstring . "/"; }
             ${$scriptfile}[$i] =~ s/\Q$oldstring\E/$newstring/g;
-            my $infoline = "Info: Substituting in $scriptfilename $oldstring by $newstring\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Info: Substituting in %s %s by %s\n",
+                $scriptfilename, $oldstring, $newstring);
         }
     }
 }
@@ -1595,14 +1590,14 @@ sub replace_variables_in_shellscripts
             my $oldline = ${$scriptfile}[$i];
             ${$scriptfile}[$i] =~ s/\Q$oldstring\E/$newstring/g;
             ${$scriptfile}[$i] =~ s/\/\//\//g;  # replacing "//" by "/" , if path $newstring is empty!
-            my $infoline = "Info: Substituting in $scriptfilename $oldstring by $newstring\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Info: Substituting in %s %s by %s\n",
+                $scriptfilename,
+                $oldstring,
+                $newstring);
             if ( $debug )
             {
-                $infoline = "Old Line: $oldline";
-                push(@installer::globals::logfileinfo, $infoline);
-                $infoline = "New Line: ${$scriptfile}[$i]";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Old Line: %s", $oldline);
+                $installer::logger::Lang->printf("New Line: %s", ${$scriptfile}[$i]);
             }
         }
     }
@@ -1626,8 +1621,7 @@ sub determine_installdir_ooo
 
     $dirname =~ s/\s*$//;
 
-    my $infoline = "Info: Directory created by epm: $dirname\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Info: Directory created by epm: %s\n", $dirname);
 
     return $dirname;
 }
@@ -1663,8 +1657,8 @@ sub set_tab_into_datafile
                         $oldline =~ s/\s*$//;
                         $newline =~ s/\s*$//;
 
-                        my $infoline = "TAB: Changing content from \"$oldline\" to \"$newline\" .\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->printf("TAB: Changing content from \"%s\" to \"%s\" .\n",
+                            $oldline, $newline);
 
                         # collecting all new classes
                         if (! installer::existence::exists_in_array($onefile->{'SolarisClass'}, \@newclasses))
@@ -1705,8 +1699,8 @@ sub set_tab_into_datafile
                         $oldline =~ s/\s*$//;
                         $newline =~ s/\s*$//;
 
-                        my $infoline = "TAB: Changing content from \"$oldline\" to \"$newline\" .\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->printf(
+                            "TAB: Changing content from \"%s\" to \"%s\" .\n", $oldline, $newline);
 
                         last;
                     }
@@ -1736,8 +1730,8 @@ sub include_classes_into_pkginfo
             my $newline = ${$changefile}[$i];
             $newline =~ s/\s*$//;
 
-            my $infoline = "pkginfo file: Changing content from \"$oldline\" to \"$newline\" .\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("pkginfo file: Changing content from \"%s\" to \"%s\" .\n",
+                $oldline, $newline);
         }
     }
 }
@@ -2196,8 +2190,8 @@ sub check_requirements_in_specfile
 
             $oldline =~ s/\s*$//;
             $newline =~ s/\s*$//;
-            my $infoline = "Spec File: Changing content from \"$oldline\" to \"$newline\".\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Spec File: Changing content from \"%s\" to \"%s\".\n",
+                $oldline, $newline);
         }
     }
 }
@@ -2261,13 +2255,16 @@ sub determine_rpm_version
     {
         $rpmout =~ s/\s*$//g;
 
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
-        if ( $rpmout eq "" ) { $infoline = "ERROR: Could not find file \"rpm\" !\n"; }
-        else { $infoline = "Success: rpm version: $rpmout\n"; }
-
-        push( @installer::globals::logfileinfo, $infoline);
+        if ( $rpmout eq "" )
+        {
+            $installer::logger::Lang->printf("ERROR: Could not find file \"rpm\" !\n");
+        }
+        else
+        {
+            $installer::logger::Lang->printf("Success: rpm version: %s\n", $rpmout);
+        }
 
         if ( $rpmout =~ /(\d+)\.(\d+)\.(\d+)/ ) { $rpmversion = $1; }
         elsif ( $rpmout =~ /(\d+)\.(\d+)/ ) { $rpmversion = $1; }
@@ -2287,8 +2284,9 @@ sub log_rpm_info
     my $systemcall = "";
     my $infoline = "";
 
-    $infoline = "\nLogging rpmrc content using --showrc\n\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
+    $installer::logger::Lang->printf("Logging rpmrc content using --showrc\n");
+    $installer::logger::Lang->printf("\n");
 
     if ( $installer::globals::rpm ne "" )
     {
@@ -2314,17 +2312,16 @@ sub log_rpm_info
 
             $infoline = "$rpmout\n";
             $infoline =~ s/error/e_r_r_o_r/gi;  # avoiding log problems
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf($infoline);
         }
     }
     else
     {
-        $infoline = "Problem in systemcall: $systemcall : No return value\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Problem in systemcall: %s : No return value\n", $systemcall);
     }
 
-    $infoline = "End of logging rpmrc\n\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("End of logging rpmrc\n");
+    $installer::logger::Lang->print("\n");
 }
 
 #################################################
@@ -2350,7 +2347,7 @@ sub create_packages_without_epm
 
         # my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir \> /dev/null 2\>\&1";
         my $systemcall = "pkgmk -l 1073741824 -o -f $prototypefile -d $destinationdir 2\>\&1 |";
-        installer::logger::print_message( "... $systemcall ...\n" );
+        $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
         my $maxpkgmkcalls = 3;
 
@@ -2364,26 +2361,26 @@ sub create_packages_without_epm
 
             my $returnvalue = $?;   # $? contains the return value of the systemcall
 
-            my $infoline = "Systemcall (Try $i): $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Systemcall (Try %d): %s\n", $i, $systemcall);
 
             for ( my $j = 0; $j <= $#pkgmkoutput; $j++ )
             {
                 if ( $i < $maxpkgmkcalls ) { $pkgmkoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
-                push( @installer::globals::logfileinfo, "$pkgmkoutput[$j]");
+                $installer::logger::Lang->print($pkgmkoutput[$j]);
             }
 
             if ($returnvalue)
             {
-                $infoline = "Try $i : Could not execute \"$systemcall\"!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Try %s : Could not execute \"%s\"!\n",
+                    $i, $systemcall);
                 if ( $i == $maxpkgmkcalls ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "create_packages_without_epm"); }
             }
             else
             {
-                installer::logger::print_message( "Success (Try $i): \"$systemcall\"\n" );
-                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Info->printf("Success: (Try %d): Executed \"%s\" successfully\n",
+                    $i, $systemcall);
+                $installer::logger::Lang->printf("Success: (Try %d): Executed \"%s\" successfully\n",
+                    $i, $systemcall);
                 last;
             }
         }
@@ -2410,28 +2407,25 @@ sub create_packages_without_epm
 
                 $systemcall = "cd $destinationdir; cp -p -R $packagename $installer::globals::saved_packages_path;";
                  make_systemcall($systemcall);
-                installer::logger::print_message( "... $systemcall ...\n" );
+                $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
                 # Setting unix rights to "775" for all created directories inside the package,
                 # that is saved in temp directory
 
                 $systemcall = "cd $packagestempdir; find $packagename -type d -exec chmod 775 \{\} \\\;";
-                installer::logger::print_message( "... $systemcall ...\n" );
+                $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
                 $returnvalue = system($systemcall);
 
-                $infoline = "Systemcall: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
                 if ($returnvalue)
                 {
-                    $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
                 }
                 else
                 {
-                    $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
                 }
             }
         }
@@ -2452,11 +2446,10 @@ sub create_packages_without_epm
                  make_systemcall($systemcall);
 
                 $faspac = $$compressorref;
-                $infoline = "Found compressor: $faspac\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Found compressor: %s\n", $faspac);
 
-                installer::logger::print_message( "... $faspac ...\n" );
-                installer::logger::include_timestamp_into_logfile("Starting $faspac");
+                $installer::logger::Info->printf("... %s ...\n", $faspac);
+                $installer::logger::Lang->add_timestamp("Starting $faspac");
 
                  $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
                  make_systemcall($systemcall);
@@ -2467,83 +2460,31 @@ sub create_packages_without_epm
                  make_systemcall($systemcall);
                 if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
 
-                installer::logger::include_timestamp_into_logfile("End of $faspac");
+                $installer::logger::Lang->add_timestamp("End of $faspac");
             }
             else
             {
-                $infoline = "Not found: $faspac\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Not found: %s\n", $faspac);
             }
         }
 
         # Setting unix rights to "775" for all created directories inside the package
 
         $systemcall = "cd $destinationdir; find $packagename -type d -exec chmod 775 \{\} \\\;";
-        installer::logger::print_message( "... $systemcall ...\n" );
+        $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
         $returnvalue = system($systemcall);
 
-        $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
         if ($returnvalue)
         {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
         }
         else
         {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
         }
-
-        ######################
-        # making pkg files
-        ######################
-
-        # my $streamname = $packagename . ".pkg";
-        # $systemcall = "pkgtrans $destinationdir $streamname $packagename";
-        # print "... $systemcall ...\n";
-
-        # $returnvalue = system($systemcall);
-
-        # $infoline = "Systemcall: $systemcall\n";
-        # push( @installer::globals::logfileinfo, $infoline);
-
-        # if ($returnvalue)
-        # {
-        #   $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        #   push( @installer::globals::logfileinfo, $infoline);
-        # }
-        # else
-        # {
-        #   $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        #   push( @installer::globals::logfileinfo, $infoline);
-        # }
-
-        #########################
-        # making tar.gz files
-        #########################
-
-        # my $targzname = $packagename . ".tar.gz";
-        # $systemcall = "cd $destinationdir; tar -cf - $packagename | gzip > $targzname";
-        # print "... $systemcall ...\n";
-
-        # $returnvalue = system($systemcall);
-
-        # $infoline = "Systemcall: $systemcall\n";
-        # push( @installer::globals::logfileinfo, $infoline);
-
-        # if ($returnvalue)
-        # {
-        #   $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        #   push( @installer::globals::logfileinfo, $infoline);
-        # }
-        # else
-        # {
-        #   $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        #   push( @installer::globals::logfileinfo, $infoline);
-        # }
     }
 
     # Linux: rpm -bb so8m35.spec    ( -> dependency check abklemmen? )
@@ -2587,7 +2528,7 @@ sub create_packages_without_epm
 
         my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
 
-        installer::logger::print_message( "... $systemcall ...\n" );
+        $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
         my $maxrpmcalls = 3;
         my $rpm_failed = 0;
@@ -2602,27 +2543,24 @@ sub create_packages_without_epm
 
             my $returnvalue = $?;   # $? contains the return value of the systemcall
 
-            my $infoline = "Systemcall (Try $i): $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Systemcall (Try %d): %s\n", $i, $systemcall);
 
             for ( my $j = 0; $j <= $#rpmoutput; $j++ )
             {
                 # if ( $i < $maxrpmcalls ) { $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
                 $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig;
-                push( @installer::globals::logfileinfo, "$rpmoutput[$j]");
+                $installer::logger::Lang->printf($rpmoutput[$j]);
             }
 
             if ($returnvalue)
             {
-                $infoline = "Try $i : Could not execute \"$systemcall\"!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Try %d : Could not execute \"%s\"!\n", $i, $systemcall);
                 $rpm_failed = 1;
             }
             else
             {
-                installer::logger::print_message( "Success (Try $i): \"$systemcall\"\n" );
-                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Info->printf("Success (Try %d): Executed \"%s\" successfully!\n", $i, $systemcall);
+                $installer::logger::Lang->printf("Success (Try %d): Executed \"%s\" successfully!\n", $i, $systemcall);
                 $rpm_failed = 0;
                 last;
             }
@@ -2637,7 +2575,7 @@ sub create_packages_without_epm
 
             if ( $rpmprog ne "" )
             {
-                installer::logger::print_message( "... $rpmprog ...\n" );
+                $installer::logger::Info->printf("... %s ...\n", $rpmprog);
 
                 my $helpersystemcall = "$rpmprog -bb $specfilename --target $target $buildrootstring 2\>\&1 |";
 
@@ -2649,24 +2587,26 @@ sub create_packages_without_epm
 
                 my $helperreturnvalue = $?; # $? contains the return value of the systemcall
 
-                $infoline = "\nLast try: Using $rpmprog directly (problem with LD_LIBARY_PATH)\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("\n");
+                $installer::logger::Lang->printf("Last try: Using %s directly (problem with LD_LIBARY_PATH)\n",
+                    $rpmprog);
 
-                $infoline = "\nSystemcall: $helpersystemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("\n");
+                $installer::logger::Lang->printf("Systemcall: %s\n", $helpersystemcall);
 
-                for ( my $j = 0; $j <= $#helperrpmoutput; $j++ ) { push( @installer::globals::logfileinfo, "$helperrpmoutput[$j]"); }
+                foreach my $line (@helperrpmoutput)
+                {
+                    $installer::logger::Lang->printf($helperrpmoutput[$j]);
+                }
 
                 if ($helperreturnvalue)
                 {
-                    $infoline = "Could not execute \"$helpersystemcall\"!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("Could not execute \"%s\"!\n", $helpersystemcall);
                 }
                 else
                 {
-                    installer::logger::print_message( "Success: \"$helpersystemcall\"\n" );
-                    $infoline = "Success: Executed \"$helpersystemcall\" successfully!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $helpersystemcall);
+                    $installer::logger::Info->printf("Success: Executed \"%s\" successfully!\n", $helpersystemcall);
                     $rpm_failed = 0;
                 }
             }
@@ -2707,33 +2647,8 @@ sub remove_temporary_epm_files
 
             my $systemcall = "mv -f $removefile $destfile";
             system($systemcall);     # ignoring the return value
-            $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
         }
-
-        # removing the package
-
-#       my $removedir = $epmdir . $packagename;
-#
-#       my $systemcall = "rm -rf $removedir";
-#
-#       print "... $systemcall ...\n";
-#
-#       my $returnvalue = system($systemcall);
-#
-#       my $infoline = "Systemcall: $systemcall\n";
-#       push( @installer::globals::logfileinfo, $infoline);
-#
-#       if ($returnvalue)
-#       {
-#           $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-#           push( @installer::globals::logfileinfo, $infoline);
-#       }
-#       else
-#       {
-#           $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-#           push( @installer::globals::logfileinfo, $infoline);
-#       }
     }
 
     if ( $installer::globals::islinuxrpmbuild )
@@ -2745,8 +2660,7 @@ sub remove_temporary_epm_files
 
         my $systemcall = "mv -f $removefile $destfile";
         system($systemcall);     # ignoring the return value
-        $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
         # removing the directory "buildroot"
 
@@ -2754,7 +2668,7 @@ sub remove_temporary_epm_files
 
         $systemcall = "rm -rf $removedir";
 
-        installer::logger::print_message( "... $systemcall ...\n" );
+        $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
         my $returnvalue = system($systemcall);
 
@@ -2762,23 +2676,19 @@ sub remove_temporary_epm_files
 
         $systemcall = "rm -rf $removedir";
 
-        installer::logger::print_message( "... $systemcall ...\n" );
+        $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
         $returnvalue = system($systemcall);
 
-
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
         if ($returnvalue)
         {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
         }
         else
         {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
         }
     }
 }
@@ -2793,18 +2703,15 @@ sub make_systemcall
 
     my $returnvalue = system($systemcall);
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
     }
 }
 
@@ -2835,18 +2742,17 @@ sub create_new_directory_structure
 
         my $returnvalue = system($systemcall);
 
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
         if ($returnvalue)
         {
-            $infoline = "ERROR: Could not move content of \"$rpmdir\" to \"$newdir\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("ERROR: Could not move content of \"%s\" to \"%s\"!\n",
+                $rpmdir,$newdir);
         }
         else
         {
-            $infoline = "Success: Moved content of \"$rpmdir\" to \"$newdir\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Success: Moved content of \"%s\" to \"%s\"!\n",
+                $rpmdir, $newdir);
         }
 
         # and removing the empty directory
@@ -2867,18 +2773,15 @@ sub create_new_directory_structure
     my $localcall = "chmod 775 $newdir \>\/dev\/null 2\>\&1";
     my $callreturnvalue = system($localcall);
 
-    my $callinfoline = "Systemcall: $localcall\n";
-    push( @installer::globals::logfileinfo, $callinfoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $localcall);
 
     if ($callreturnvalue)
     {
-        $callinfoline = "ERROR: Could not execute \"$localcall\"!\n";
-        push( @installer::globals::logfileinfo, $callinfoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $localcall);
     }
     else
     {
-        $callinfoline = "Success: Executed \"$localcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $callinfoline);
+        $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $localcall);
     }
 }
 
@@ -3139,8 +3042,7 @@ sub put_systemintegration_into_installset
         my $onemodule = ${$allmodules}[$i];
         my $packagetarfilename = $onemodule->{'PackageName'};
 
-        my $infoline = "Including into installation set: $packagetarfilename\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Including into installation set: %s\n", $packagetarfilename);
 
         my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packagetarfilename, $includepatharrayref, 1);
         if ( $$sourcepathref eq "" ) { installer::exiter::exit_program("ERROR: Source path not found for $packagetarfilename!", "copy_systemintegration_files"); }
@@ -3260,8 +3162,8 @@ sub put_installsetfiles_into_installset
         else { $destfile = $destdir . $installer::globals::separator . $onefile->{'Name'}; }
         installer::systemactions::copy_one_file($sourcefile, $destfile);
 
-        my $infoline = "Adding to installation set \"$destfile\" from source \"$sourcefile\".\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Adding to installation set \"%s\" from source \"%s\".\n",
+            $destfile, $sourcefile);
     }
 }
 
@@ -3375,8 +3277,7 @@ sub finalize_linux_patch
     if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find patch script template $scriptfilename!", "finalize_linux_patch"); }
     my $scriptfile = installer::files::read_file($$scriptref);
 
-    my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Found  script file %s: %s \n", $scriptfilename, $$scriptref);
 
     # Collecting all RPMs in the patch directory
 
@@ -3426,8 +3327,7 @@ sub finalize_linux_patch
     $productname = lc($productname);
     $productname =~ s/ /_/g;    # abc office -> abc_office
 
-    $infoline = "Adding productname $productname into Linux patch script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Adding productname %s into Linux patch script\n", $productname);
 
     for ( my $j = 0; $j <= $#{$scriptfile}; $j++ ) { ${$scriptfile}[$j] =~ s/PRODUCTNAMEPLACEHOLDER/$productname/; }
 
@@ -3436,8 +3336,7 @@ sub finalize_linux_patch
     my $newscriptfilename = "setup"; # $newepmdir . $installer::globals::separator . "setup";
     installer::files::save_file($newscriptfilename, $scriptfile);
 
-    $infoline = "Saved Linux patch setup $newscriptfilename \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Saved Linux patch setup %s\n", $newscriptfilename);
 
     # Setting unix rights 755
     my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";

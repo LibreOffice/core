@@ -361,7 +361,7 @@ sub get_component_keypath
         {
             # Warning: This keypath was changed because of info from old database
             $infoline = "WARNING: The KeyPath for component \"$componentname\" was changed from \"$oneitem->{'uniquename'}\" to \"$keypath\" because of information from update database";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
     }
 
@@ -438,7 +438,7 @@ sub create_component_table
     my $componenttablename = $basedir . $installer::globals::separator . "Componen.idt";
     installer::files::save_file($componenttablename ,\@componenttable);
     $infoline = "Created idt file: $componenttablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 ####################################################################################
@@ -501,14 +501,14 @@ sub set_component_in_environment_table
                 if ( $componentname )   # only do something if a component could be found
                 {
                     $infoline = "Updated Environment table:\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                     $infoline = "Old line: ${$environmentfile}[$i]\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
 
                     ${$environmentfile}[$i] =~ s/$modulegid/$componentname/;
 
                     $infoline = "New line: ${$environmentfile}[$i]\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
 
                 }
             }
@@ -518,7 +518,7 @@ sub set_component_in_environment_table
 
         installer::files::save_file($environmentfilename ,$environmentfile);
         $infoline = "Updated idt file: $environmentfilename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
     }
 }

@@ -760,18 +760,16 @@ sub save_and_zip_configfile
 
     chdir($currentdir);
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not zip $savefilename to $zipfilename\n";
+        $installer::logger::Lang->printf("ERROR: Could not zip %s to %s\n", $savefilename, $zipfilename);
     }
     else
     {
-        $infoline = "SUCCESS: Zipped file $savefilename to $zipfilename\n";
+        $installer::logger::Lang->printf("SUCCESS: Zipped file %s to %s\n", $savefilename, $zipfilename);
     }
-    push( @installer::globals::logfileinfo, $infoline);
 
     return $zipfilename;
 }
@@ -889,9 +887,7 @@ sub create_configuration_files
         }
     }
 
-    my $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
+    $installer::logger::Lang->print("\n");
 }
 
 1;

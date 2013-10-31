@@ -176,8 +176,7 @@ sub resolving_scpzip_replace_flag
         }
     }
 
-    my $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
 }
 
 1;

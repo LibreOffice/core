@@ -48,8 +48,8 @@ sub create_directory
 
         if ($returnvalue)
         {
-            $infoline = "\nCreated directory: $directory\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->printf("Created directory: %s\n", $directory);
 
             my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
             system($localcall);
@@ -64,8 +64,10 @@ sub create_directory
             # was not created in this process. There is only an important error, if the directory does not
             # exist now.
 
-            $infoline = "\nDid not succeed in creating directory: \"$directory\". Further attempts will follow.\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->printf(
+                "Did not succeed in creating directory: \"%s\". Further attempts will follow.\n",
+                $directory);
 
             if (!(-d $directory))
             {
@@ -79,8 +81,10 @@ sub create_directory
 
                     if ($returnvalue)
                     {
-                        $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print("\n");
+                        $installer::logger::Lang->printf(
+                            "Attention: Successfully created parent directory (should already be created before): %s\n",
+                            $parentdir);
 
                         my $localcall = "chmod 775 $parentdir \>\/dev\/null 2\>\&1";
                         system($localcall);
@@ -88,11 +92,13 @@ sub create_directory
                     else
                     {
                         $infoline = "\Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print($infoline);
                         if ( -d $parentdir )
                         {
-                            $infoline = "\nAttention: Finally the parent directory \"$parentdir\" exists, but I could not create it.\n";
-                            push(@installer::globals::logfileinfo, $infoline);
+                            $installer::logger::Lang->print("\n");
+                            $installer::logger::Lang->printf(
+                                "Attention: Finally the parent directory \"%s\" exists, but I could not create it.\n",
+                                $parentdir);
                         }
                         else
                         {
@@ -109,8 +115,10 @@ sub create_directory
 
                 if ($returnvalue)
                 {
-                    $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print("\n");
+                    $installer::logger::Lang->printf(
+                        "Attention: Created directory \"\" in the second try.\n",
+                        $directory);;
 
                     my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
                     system($localcall);
@@ -119,8 +127,10 @@ sub create_directory
                 {
                     if ( -d $directory )
                     {
-                        $infoline = "\nAttention: Finally the directory \"$directory\" exists, but I could not create it.\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print("\n");
+                        $installer::logger::Lang->printf(
+                            "Attention: Finally the directory \"%s\" exists, but I could not create it.\n",
+                            $directory);
                     }
                     else
                     {
@@ -131,15 +141,16 @@ sub create_directory
             }
             else
             {
-                $infoline = "\nAnother process created this directory in exactly this moment :-) : $directory\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print("\n");
+                $installer::logger::Lang->printf(
+                    "Another process created this directory in exactly this moment :-) : %s\n",
+                    $directory);;
             }
         }
     }
     else
     {
-        $infoline = "\nAlready existing directory, did not create: $directory\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Already existing directory, did not create: %s\n", $directory);
     }
 }
 
@@ -161,8 +172,8 @@ sub create_directory_with_privileges
 
         if ($returnvalue)
         {
-            $infoline = "\nCreated directory: $directory\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->printf("Created directory: %s\n", $directory);
 
             my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
             system($localcall);
@@ -173,8 +184,10 @@ sub create_directory_with_privileges
             # was not created in this process. There is only an important error, if the directory does not
             # exist now.
 
-            $infoline = "\nDid not succeed in creating directory: \"$directory\". Further attempts will follow.\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->printf(
+                "Did not succeed in creating directory: \"%s\". Further attempts will follow.\n",
+                $directory);
 
             if (!(-d $directory))
             {
@@ -188,8 +201,10 @@ sub create_directory_with_privileges
 
                     if ($returnvalue)
                     {
-                        $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print("\n");
+                        $installer::logger::Lang->printf(
+                            "Attention: Successfully created parent directory (should already be created before): %s\n",
+                            $parentdir);
 
                         my $localcall = "chmod $privileges $parentdir \>\/dev\/null 2\>\&1";
                         system($localcall);
@@ -197,11 +212,13 @@ sub create_directory_with_privileges
                     else
                     {
                         $infoline = "\Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print($infoline);
                         if ( -d $parentdir )
                         {
-                            $infoline = "\nAttention: Finally the parent directory \"$parentdir\" exists, but I could not create it.\n";
-                            push(@installer::globals::logfileinfo, $infoline);
+                            $installer::logger::Lang->print("\n");
+                            $installer::logger::Lang->printf(
+                                "Attention: Finally the parent directory \"%s\" exists, but I could not create it.\n",
+                                $parentdir);
                         }
                         else
                         {
@@ -218,8 +235,9 @@ sub create_directory_with_privileges
 
                 if ($returnvalue)
                 {
-                    $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print("\n");
+                    $installer::logger::Lang->printf("Attention: Created directory \"%s\" in the second try.\n",
+                        $directory);
 
                     my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
                     system($localcall);
@@ -228,8 +246,10 @@ sub create_directory_with_privileges
                 {
                     if ( -d $directory )
                     {
-                        $infoline = "\nAttention: Finally the directory \"$directory\" exists, but I could not create it.\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print("\n");
+                        $installer::logger::Lang->printf(
+                            "Attention: Finally the directory \"\" exists, but I could not create it.\n",
+                            $directory);
                     }
                     else
                     {
@@ -240,20 +260,53 @@ sub create_directory_with_privileges
             }
             else
             {
-                $infoline = "\nAnother process created this directory in exactly this moment :-) : $directory\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print("\n");
+                $installer::logger::Lang->printf(
+                    "Another process created this directory in exactly this moment :-) : %s\n",
+                    $directory);
             }
         }
     }
     else
     {
-        $infoline = "\nAlready existing directory, did not create: $directory\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->printf("Already existing directory, did not create: %s\n", $directory);
 
         my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
         system($localcall);
     }
 }
+
+
+
+
+=item is_directory_empty ($path)
+    Return
+        1 if there are no files in the directory pointed to by $path
+        0 if there are files
+       -1 if there is an error accessing the directory.
+=cut
+sub is_directory_empty ($)
+{
+    my ($path) = @_;
+
+    opendir my $dir, $path or return -1;
+
+    my $result = 1;
+    while (my $entry = readdir($dir))
+    {
+        if ($entry !~ /^\.+$/)
+        {
+            $result = 0;
+            last;
+        }
+    }
+
+    return $result;
+}
+
+
+
 
 ######################################################
 # Removing a new direcotory
@@ -267,22 +320,27 @@ sub remove_empty_directory
 
     if (-d $directory)
     {
-        my $systemcall = "rmdir $directory";
-
-        $returnvalue = system($systemcall);
-
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        if ($returnvalue)
+        if ( ! is_directory_empty($directory))
         {
-            $infoline = "ERROR: Could not remove \"$directory\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("directory '%s' is not empty and can not be removed\n", $directory);
+            return;
         }
         else
         {
-            $infoline = "Success: Removed \"$directory\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            my $systemcall = "rmdir $directory";
+
+            $returnvalue = system($systemcall);
+
+            $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
+
+            if ($returnvalue)
+            {
+                $installer::logger::Lang->printf("ERROR: Could not remove \"%s\"!\n", $directory);
+            }
+            else
+            {
+                $installer::logger::Lang->printf("Success: Removed \"%s\"!\n", $directory);
+            }
         }
     }
 }
@@ -348,7 +406,7 @@ sub create_directories
     }
 
     $infoline = "create_directories: Using $path for $newdirectory !\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($newdirectory eq "unzip" )  # special handling for common directory
     {
@@ -445,7 +503,7 @@ sub copy_one_file
         $returnvalue = 0;
     }
 
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ( !$returnvalue ) {
         return $returnvalue;
@@ -467,7 +525,7 @@ sub copy_one_file
             $returnvalue = 0;
         }
 
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return $returnvalue;
@@ -496,7 +554,7 @@ sub hardlink_one_file
         $returnvalue = 0;
     }
 
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $returnvalue;
 }
@@ -524,7 +582,7 @@ sub softlink_one_file
         $returnvalue = 0;
     }
 
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $returnvalue;
 }
@@ -552,7 +610,7 @@ sub rename_one_file
         $returnvalue = 0;
     }
 
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $returnvalue;
 }
@@ -572,9 +630,9 @@ sub copy_directory
     $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
 
     my $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Copying files from directory $sourcedir to directory $destdir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $sourcedir);
     @sourcefiles = readdir(DIR);
@@ -644,9 +702,9 @@ sub hardlink_complete_directory
     if ( ! -d $destdir ) { create_directory($destdir); }
 
     my $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Creating hard links for all files from directory $sourcedir to directory $destdir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $sourcedir);
     @sourcefiles = readdir(DIR);
@@ -688,9 +746,9 @@ sub softlink_complete_directory
     if ( ! -d $destdir ) { create_directory($destdir); }
 
     my $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Creating soft links for all files from directory $sourcedir to directory $destdir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $sourcedir);
     @sourcefiles = readdir(DIR);
@@ -735,9 +793,9 @@ sub copy_complete_directory
     if ( ! -d $destdir ) { create_directory($destdir); }
 
     my $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Copying files from directory $sourcedir to directory $destdir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $sourcedir);
     @sourcefiles = readdir(DIR);
@@ -782,9 +840,9 @@ sub copy_complete_directory_without_cvs
     if ( ! -d $destdir ) { create_directory($destdir); }
 
     my $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Copying files from directory $sourcedir to directory $destdir (without CVS)\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $sourcedir);
     @sourcefiles = readdir(DIR);
@@ -825,9 +883,9 @@ sub copy_directory_with_fileextension
     $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
 
     $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Copying files with extension $extension from directory $sourcedir to directory $destdir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $sourcedir);
     @sourcefiles = readdir(DIR);
@@ -867,9 +925,9 @@ sub copy_directory_except_fileextension
     $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
 
     $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Copying files without extension $extension from directory $sourcedir to directory $destdir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $sourcedir);
     @sourcefiles = readdir(DIR);
@@ -909,9 +967,9 @@ sub rename_files_with_fileextension
     $dir =~ s/\Q$installer::globals::separator\E\s*$//;
 
     my $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Renaming files with extension \"$extension\" in the directory $dir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $dir);
     @sourcefiles = readdir(DIR);
@@ -951,9 +1009,9 @@ sub find_file_with_file_extension
     $dir =~ s/\Q$installer::globals::separator\E\s*$//;
 
     my $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Searching files with extension \"$extension\" in the directory $dir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     opendir(DIR, $dir);
     @sourcefiles = sort readdir(DIR);
@@ -1010,14 +1068,16 @@ sub make_numbered_dir
 
     if ( move($olddir, $newdir) )
     {
-        $infoline = "\nMoved directory from $olddir to $newdir\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->printf("Moved directory from %s to %s\n", $olddir, $newdir);
         $returndir = $newdir;
     }
     else
     {
-        $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"make_numbered_dir\"\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->printf("ATTENTION: Could not move directory from %s to %s, \"make_numbered_dir\"\n",
+            $olddir,
+            $newdir);
         $returndir = $olddir;
     }
 
@@ -1131,13 +1191,15 @@ sub rename_string_in_directory
 
     if ( move($olddir, $newdir) )
     {
-        $infoline = "\nMoved directory from $olddir to $newdir\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->printf("Moved directory from $olddir to %s\n", $newdir);
     }
     else
     {
-        $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"rename_string_in_directory\"\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->printf(
+            "ATTENTION: Could not move directory from %s to %s, \"rename_string_in_directory\"\n",
+            $olddir, $newdir);
     }
 
     return $newdir;
@@ -1194,14 +1256,12 @@ sub rename_directory
     sleep(2);
     if ( move($olddir, $newdir) )
     {
-        $infoline = "\nMoved directory from $olddir to $newdir\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->printf("Moved directory from $olddir to %s\n", $newdir);
     }
     else
     {
         installer::exiter::exit_program("ERROR: Could not move directory from $olddir to $newdir", "rename_directory");
-        # $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"rename_directory\"\n";
-        # push(@installer::globals::logfileinfo, $infoline);
     }
 
     return $newdir;
@@ -1435,8 +1495,8 @@ sub try_to_create_directory
         if ($returnvalue)
         {
             $created_directory = 1;
-            $infoline = "\nCreated directory: $directory\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->printf("Created directory: %s\n", $directory);
 
             my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
             system($localcall);
@@ -1471,10 +1531,8 @@ sub create_directory_structure
         my $parentdir = $directory;
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$parentdir);
 
-        my $infoline = "INFO: Did not create directory $directory\n";
-        push(@installer::globals::logfileinfo, $infoline);
-        $infoline = "Now trying to create parent directory $parentdir\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("INFO: Did not create directory %s\n", $directory);
+        $installer::logger::Lang->printf("Now trying to create parent directory %s\n", $parentdir);
 
         create_directory_structure($parentdir);                                 # recursive
     }
@@ -1499,10 +1557,8 @@ sub remove_complete_directory
     {
         if ( $start )
         {
-            $infoline = "\n";
-            push(@installer::globals::logfileinfo, $infoline);
-            $infoline = "Removing directory $directory\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->printf("Removing directory %s\n", $directory);
         }
 
         opendir(DIR, $directory);
@@ -1531,12 +1587,15 @@ sub remove_complete_directory
 
         # try to remove empty directory
 
+        if ( ! -d $directory)
+        {
+            $installer::logger::Info->printf("trying to remove directory that doesn't exist: %s\n", $directory);
+        }
         my $returnvalue = rmdir $directory;
 
         if ( ! $returnvalue )
         {
-            $infoline = "Warning: Problem with removing empty dir $directory\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Warning: Problem with removing empty dir %s\n", $directory);
         }
 
         # try a little bit harder (sometimes there is a performance problem)
@@ -1546,20 +1605,19 @@ sub remove_complete_directory
             {
                 if ( -d $directory )
                 {
-                    $infoline = "\n";
-                    push(@installer::globals::logfileinfo, $infoline);
-                    $infoline = "Warning (Try $j): Problems with removing directory $directory\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print("\n");
+                    $installer::logger::Lang->printf("Warning (Try %d): Problems with removing directory %s\n",
+                        $j, $directory);
 
                     $returnvalue = rmdir $directory;
 
                     if ( $returnvalue )
                     {
-                        $infoline = "Successfully removed empty dir $directory\n";
-                        push(@installer::globals::logfileinfo, $infoline);
-                    } else {
-                        $infoline = "Warning: rmdir $directory failed.\n";
-                        push(@installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->printf("Successfully removed empty dir %s\n", $directory);
+                    }
+                    else
+                    {
+                        $installer::logger::Lang->printf("Warning: rmdir %s failed.\n", $directory);
                     }
                 }
             }
@@ -1728,12 +1786,12 @@ sub remove_empty_dirs_in_folder
         }
 
         # try to remove empty directory
+        $installer::logger::Info->printf("remove_empty_dirs_in_folder %s\n", $dir);
         my $returnvalue = rmdir $dir;
 
         if ( $returnvalue )
         {
-            $infoline = "Successfully removed empty dir $dir\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Successfully removed empty dir %s\n", $dir);
         }
 
     }

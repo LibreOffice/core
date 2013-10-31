@@ -60,38 +60,26 @@ sub exit_program
 
     if ( $#installer::globals::logfileinfo > -1 )
     {
-        $infoline = "\n***************************************************************\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->print("***************************************************************\n");
+        $installer::logger::Lang->print($message."\n");
+        $installer::logger::Lang->printf("in function: %s\n", $function);
+        $installer::logger::Lang->printf("***************************************************************\n");
 
-        $infoline = "$message\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        $infoline = "in function: $function\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        $infoline = "***************************************************************\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        installer::files::save_file($installer::globals::logfilename ,\@installer::globals::logfileinfo);
+#       installer::files::save_file($installer::globals::logfilename ,\@installer::globals::logfileinfo);
     }
     else
     {
-        $infoline = "\n***************************************************************\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
+        $installer::logger::Global->print("\n");
+        $installer::logger::Global->print("***************************************************************\n");
+        $installer::logger::Global->print($message."\n");
+        $installer::logger::Global->printf("in function: %s\n", $function);
+        $installer::logger::Global->printf("***************************************************************\n");
 
-        $infoline = "$message\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
-
-        $infoline = "in function: $function\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
-
-        $infoline = "***************************************************************\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
-
-        installer::files::save_file($installer::globals::logfilename ,\@installer::globals::globallogfileinfo);
+#       installer::files::save_file($installer::globals::logfilename ,\@installer::globals::globallogfileinfo);
     }
     installer::logger::print_error("$message\nin function: $function");
-    installer::logger::print_error("Saved logfile: $installer::globals::logfilename\n");
+#   installer::logger::print_error("Saved logfile: $installer::globals::logfilename\n");
 
     # Saving the debug info
 

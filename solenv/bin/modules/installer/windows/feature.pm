@@ -329,8 +329,9 @@ sub sort_feature
     {
         if ( $sorted{$modulekey} == 0 )
         {
-            my $infoline = "Warning: Module \"$modulekey\" could not be sorted. Added to the end of the module array.\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf(
+                "Warning: Module \"%s\" could not be sorted. Added to the end of the module array.\n",
+                $modulekey);
             push(@feature, ${$modulesref}[$directaccess{$modulekey}]);
         }
     }
@@ -432,10 +433,8 @@ sub create_feature_table
 
         my $featuretablename = $basedir . $installer::globals::separator . "Feature.idt" . "." . $onelanguage;
         installer::files::save_file($featuretablename ,\@featuretable);
-        $infoline = "Created idt file: $featuretablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Created idt file: %s\n", $featuretablename);
     }
-
 }
 
 1;

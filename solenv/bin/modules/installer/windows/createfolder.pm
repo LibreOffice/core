@@ -141,9 +141,7 @@ sub create_createfolder_table
 
     my $createfoldertablename = $basedir . $installer::globals::separator . "CreateFo.idt";
     installer::files::save_file($createfoldertablename ,\@createfoldertable);
-    $infoline = "Created idt file: $createfoldertablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
+    $installer::logger::Lang->printf("Created idt file: %s\n", $createfoldertablename);
 }
 
 1;

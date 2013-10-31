@@ -162,8 +162,8 @@ sub check_number_of_components_at_feature
 {
     my ($featurecomponenttable) = @_;
 
-    my $infoline = "\nChecking number of components at features. Maximum is 817 (for Win 98 and Win Me)\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->print("Checking number of components at features. Maximum is 817 (for Win 98 and Win Me)\n");
 
     my $allfeature = collect_all_feature($featurecomponenttable);
 
@@ -184,12 +184,10 @@ sub check_number_of_components_at_feature
 
         # Logging the result
 
-        $infoline = "Number of components at feature $onefeature : $featurecomponents\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Number of components at feature $onefeature : %s\n", $featurecomponents);
     }
 
-    $infoline = "\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
 }
 
 #################################################################################
@@ -232,9 +230,7 @@ sub create_featurecomponent_table
 
     my $featurecomponenttablename = $basedir . $installer::globals::separator . "FeatureC.idt";
     installer::files::save_file($featurecomponenttablename ,\@featurecomponenttable);
-    $infoline = "Created idt file: $featurecomponenttablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
+    $installer::logger::Lang->printf("Created idt file: %s\n", $featurecomponenttablename);
 }
 
 1;

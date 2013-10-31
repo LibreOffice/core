@@ -52,8 +52,7 @@ sub put_productname_into_script
     $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
     $productname =~ s/\s*//g;
 
-    my $infoline = "Adding productname $productname into download shell script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Adding productname %s into download shell script\n", $productname);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
@@ -71,8 +70,7 @@ sub put_linenumber_into_script
 
     my $linenumber =  $#{$scriptfile} + 2;
 
-    my $infoline = "Adding linenumber $linenumber into download shell script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Adding linenumber %d into download shell script\n", $linenumber);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
@@ -92,8 +90,7 @@ sub determine_scriptfile_name
     $filename = $filename . $installer::globals::downloadfileextension;
     $installer::globals::downloadfilename = $filename;
 
-    my $infoline = "Setting download shell script file name to $filename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Setting download shell script file name to %s\n", $filename);
 
     return $filename;
 }
@@ -109,8 +106,7 @@ sub save_script_file
     $newscriptfilename = $directory . $installer::globals::separator . $newscriptfilename;
     installer::files::save_file($newscriptfilename, $scriptfile);
 
-    my $infoline = "Saving script file $newscriptfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Saving script file %s\n", $newscriptfilename);
 
     if ( ! $installer::globals::iswindowsbuild )
     {
@@ -142,8 +138,8 @@ sub put_checksum_and_size_into_script
         installer::exiter::exit_program("ERROR: Incorrect return value from /usr/bin/sum: $sumout", "put_checksum_and_size_into_script");
     }
 
-    my $infoline = "Adding checksum $checksum and size $size into download shell script\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf(
+        "Adding checksum %s and size %s into download shell script\n", $checksum, $size);
 
     for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
     {
@@ -175,18 +171,15 @@ sub call_md5sum
 
     my $returnvalue = $?;   # $? contains the return value of the systemcall
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("Success: Executed \"%s\" successfully!\n", $systemcall);
     }
 
     return $md5sumoutput;
@@ -211,8 +204,7 @@ sub get_md5sum
         installer::exiter::exit_program("ERROR: Incorrect return value from /usr/bin/md5sum: $md5sumoutput", "get_md5sum");
     }
 
-    my $infoline = "Setting md5sum: $md5sum\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Setting md5sum: %s\n", $md5sum);
 
     return $md5sum;
 }
@@ -235,18 +227,15 @@ sub call_sum
 
     my $returnvalue = $?;   # $? contains the return value of the systemcall
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
     }
 
     $sumoutput =~ s/\s+$filename\s$//;
@@ -290,18 +279,15 @@ sub include_tar_into_script
     my $systemcall = "cat $temporary_tarfile >> $scriptfile && rm $temporary_tarfile";
     my $returnvalue = system($systemcall);
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
     }
     return $returnvalue;
 }
@@ -321,18 +307,15 @@ sub tar_package
 
     my $returnvalue = system($systemcall);
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Success: Executed \"\" successfully!\n", $systemcall);
     }
 
     my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
@@ -349,7 +332,6 @@ sub create_tar_gz_file_from_package
 {
     my ($installdir, $getuidlibrary) = @_;
 
-    my $infoline = "";
     my $alldirs = installer::systemactions::get_all_directories($installdir);
     my $onedir = ${$alldirs}[0];
     $installdir = $onedir;
@@ -362,18 +344,15 @@ sub create_tar_gz_file_from_package
         my $systemcall = "cd $installdir; rm $onefile";
         my $returnvalue = system($systemcall);
 
-        $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
         if ($returnvalue)
         {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
         }
         else
         {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
         }
     }
 
@@ -394,18 +373,15 @@ sub create_tar_gz_file_from_package
 
     my $returnvalue = system($systemcall);
 
-    $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
     }
 }
 
@@ -761,24 +737,20 @@ sub get_versionstring
 
 sub get_current_version
 {
-    my $infoline = "";
     my $versionstring = "";
     my $filename = "version.info";
     # $filename = $installer::globals::ooouploaddir . $installer::globals::separator . $filename;
 
     if ( -f $filename )
     {
-        $infoline = "File $filename exists. Trying to find current version.\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("File %s exists. Trying to find current version.\n", $filename);
         my $versionfile = installer::files::read_file($filename);
         $versionstring = get_versionstring($versionfile);
-        $infoline = "Setting version string: $versionstring\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Setting version string: %s\n", $versionstring);
     }
     else
     {
-        $infoline = "File $filename does not exist. No version setting in download file name.\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("File %s does not exist. No version setting in download file name.\n", $filename);
     }
 
     $installer::globals::oooversionstring = $versionstring;
@@ -826,8 +798,6 @@ sub create_tar_gz_file_from_directory
 {
     my ($installdir, $getuidlibrary, $downloaddir, $downloadfilename) = @_;
 
-    my $infoline = "";
-
     my $packdir = $installdir;
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$packdir);
     my $changedir = $installdir;
@@ -844,18 +814,15 @@ sub create_tar_gz_file_from_directory
 
     my $returnvalue = system($systemcall);
 
-    $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
     }
 
     return $targzname;
@@ -912,8 +879,7 @@ sub replace_one_variable
 {
     my ($templatefile, $placeholder, $value) = @_;
 
-    my $infoline = "Replacing $placeholder by $value in nsi file\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Replacing %s by %s in nsi file\n", $placeholder, $value);
 
     for ( my $i = 0; $i <= $#{$templatefile}; $i++ )
     {
@@ -1309,11 +1275,10 @@ sub nsis_language_converter
     elsif ( $language eq "vi" ) { $nsislanguage = "Vietnamese"; }
     elsif ( $language eq "zh-CN" ) { $nsislanguage = "SimpChinese"; }
     elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
-    else {
-        my $infoline = "NSIS language_converter : Could not find nsis language for $language!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+    else
+    {
+        $installer::logger::Lang->printf("NSIS language_converter : Could not find nsis language for %s!\n", $language);
         $nsislanguage = "English";
-        # installer::exiter::exit_program("ERROR: Could not find nsis language for $language!", "nsis_language_converter");
     }
 
     return $nsislanguage;
@@ -1472,8 +1437,11 @@ sub replace_identifier_in_nshfile
         {
             my $oldstring = $1;
             ${$nshfile}[$i] =~ s/\Q$oldstring\E/$newstring/;
-            my $infoline = "NSIS replacement in $nshfilename ($onelanguage): $oldstring \-\> $newstring\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("NSIS replacement in %s (%s):  \-\> %s\n",
+                $nshfilename,
+                $onelanguage,
+                $oldstring,
+                $newstring);
         }
     }
 }
@@ -1497,8 +1465,11 @@ sub replace_identifier_in_nlffile
             my $oldstring = ${$nlffile}[$next];
             ${$nlffile}[$next] = $newstring . "\n";
             $oldstring =~ s/\s*$//;
-            my $infoline = "NSIS replacement in $nlffilename ($onelanguage): $oldstring \-\> $newstring\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("NSIS replacement in %s (%s): %s \-\> %s\n",
+                $nlffilename,
+                $onelanguage,
+                $oldstring,
+                $newstring);
         }
     }
 }
@@ -1620,8 +1591,6 @@ sub copy_and_translate_nsis_language_files
     my $nlffilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Language\ files" . $installer::globals::separator;
     my $nshfilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Modern\ UI" . $installer::globals::separator . "Language files" . $installer::globals::separator;
 
-    my $infoline = "";
-
     for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
     {
         my $onelanguage = ${$languagesarrayref}[$i];
@@ -1656,8 +1625,7 @@ sub copy_and_translate_nsis_language_files
 
         if ( $installer::globals::unicodensis )
         {
-            $infoline = "This is Unicode NSIS!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("This is Unicode NSIS!\n");
             convert_utf16_to_utf8($nshfilename);
             convert_utf16_to_utf8($nlffilename);
             $nshfile = installer::files::read_file($nshfilename);   # read nsh file again
@@ -1776,8 +1744,9 @@ sub get_path_to_nsis_sdk
 
     if ( $nsispath eq "" )
     {
-        installer::logger::print_message( "... no Environment variable \"SOLARROOT\", \"NSIS_PATH\" or \"NSISSDK_SOURCE\" found and NSIS not found in path!", "get_path_to_nsis_sdk");
-    } elsif ( ! -d $nsispath )
+        $installer::logger::Info->print("... no Environment variable \"SOLARROOT\", \"NSIS_PATH\" or \"NSISSDK_SOURCE\" found and NSIS not found in path!\n");
+    }
+    elsif ( ! -d $nsispath )
     {
         installer::exiter::exit_program("ERROR: NSIS path $nsispath does not exist!", "get_path_to_nsis_sdk");
     }
@@ -1795,14 +1764,13 @@ sub call_nsis
 
     my $makensisexe = $nsispath . $installer::globals::separator . "makensis.exe";
 
-    installer::logger::print_message( "... starting $makensisexe ... \n" );
+    $installer::logger::Info->printf("... starting %s ... \n", $makensisexe);
 
     if( $^O =~ /cygwin/i ) { $nsifile =~ s/\\/\//g; }
 
     my $systemcall = "$makensisexe $nsifile |";
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     my @nsisoutput = ();
 
@@ -1814,17 +1782,17 @@ sub call_nsis
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: $systemcall !\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: %s !\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Success: %s\n", $systemcall);
     }
 
-    for ( my $i = 0; $i <= $#nsisoutput; $i++ ) { push( @installer::globals::logfileinfo, "$nsisoutput[$i]"); }
-
+    foreach my $line (@nsisoutput)
+    {
+        $installer::logger::Lang->print($line);
+    }
 }
 
 #################################################################################
@@ -1874,8 +1842,7 @@ sub get_translation_file
     my $translationfile = installer::files::read_file($translationfilename);
     replace_variables($translationfile, $allvariableshashref);
 
-    my $infoline = "Reading translation file: $translationfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Reading translation file: %s\n", $translationfilename);
 
     return $translationfile;
 }
@@ -1904,8 +1871,7 @@ sub create_link_tree
 
     if ( ! $installer::globals::ooouploaddir ) { installer::exiter::exit_program("ERROR: Directory for AOO upload not defined!", "create_link_tree"); }
     my $versiondir = $installer::globals::ooouploaddir . $installer::globals::separator . $versionstring;
-    my $infoline = "Directory for the link: $versiondir\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Directory for the link: %s\n", $versiondir);
 
     if ( ! -d $versiondir ) { installer::systemactions::create_directory_structure($versiondir); }
 
@@ -1915,8 +1881,7 @@ sub create_link_tree
     # If there is an older version of this file (link), it has to be removed
     if ( -f $linkdestination ) { unlink($linkdestination); }
 
-    $infoline = "Creating hard link from $sourcedownloadfile to $linkdestination\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Creating hard link from %s to %s\n", $sourcedownloadfile, $linkdestination);
     installer::systemactions::hardlink_one_file($sourcedownloadfile, $linkdestination);
 }
 
@@ -1948,12 +1913,10 @@ sub create_download_sets
 {
     my ($installationdir, $includepatharrayref, $allvariableshashref, $downloadname, $languagestringref, $languagesarrayref) = @_;
 
-    my $infoline = "";
-
-    my $force = 1; # print this message even in 'quiet' mode
-    installer::logger::print_message( "\n******************************************\n" );
-    installer::logger::print_message( "... creating download installation set ...\n", $force );
-    installer::logger::print_message( "******************************************\n" );
+    $installer::logger::Info->print("\n");
+    $installer::logger::Info->print("******************************************\n");
+    $installer::logger::Info->print("... creating download installation set ...\n", 1);
+    $installer::logger::Info->print("******************************************\n");
 
     installer::logger::include_header_into_logfile("Creating download installation sets:");
 
@@ -2030,8 +1993,7 @@ sub create_download_sets
             if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "create_download_sets"); }
             my $scriptfile = installer::files::read_file($$scriptref);
 
-            $infoline = "Found  script file $scriptfilename: $$scriptref \n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Found  script file %s: %s \n", $scriptfilename, $$scriptref);
 
             # add product name into script template
             put_productname_into_script($scriptfile, $allvariableshashref);
@@ -2054,7 +2016,7 @@ sub create_download_sets
             my $newscriptfilename = determine_scriptfile_name($downloadname);
             $newscriptfilename = save_script_file($downloaddir, $newscriptfilename, $scriptfile);
 
-            installer::logger::print_message( "... including installation set into $newscriptfilename ... \n" );
+            $installer::logger::Info->printf("... including installation set into %s ... \n", $newscriptfilename);
             # Append tar file to script
             include_tar_into_script($newscriptfilename, $temporary_tarfile_name);
         }
@@ -2070,9 +2032,9 @@ sub create_download_sets
         if ( $nsispath eq "" ) {
             # If nsis is not found just skip the rest of this function
             # and do not create the NSIS file.
-            $infoline = "\nNo NSIS SDK found. Skipping the generation of NSIS file.\n";
-            push(@installer::globals::logfileinfo, $infoline);
-            installer::logger::print_message( "... no NSIS SDK found. Skipping the generation of NSIS file ... \n" );
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->printf("No NSIS SDK found. Skipping the generation of NSIS file.\n");
+            $installer::logger::Info->print("... no NSIS SDK found. Skipping the generation of NSIS file ... \n");
             return $downloaddir;
         }
 
@@ -2115,7 +2077,7 @@ sub create_download_sets
 
         my $nsifilename = save_script_file($localnsisdir, $templatefilename, $templatefile);
 
-        installer::logger::print_message( "... created NSIS file $nsifilename ... \n" );
+        $installer::logger::Info->printf("... created NSIS file %s ... \n", $nsifilename);
 
         # starting the NSIS SDK to create the download file
         call_nsis($nsispath, $nsifilename);
@@ -2132,14 +2094,14 @@ sub create_download_link_tree
 {
     my ($downloaddir, $languagestringref, $allvariableshashref) = @_;
 
-    my $infoline;
-
-    installer::logger::print_message( "\n******************************************\n" );
-    installer::logger::print_message( "... creating download hard link ...\n" );
-    installer::logger::print_message( "******************************************\n" );
+    $installer::logger::Info->print("\n");
+    $installer::logger::Info->print("******************************************\n"); #
+    $installer::logger::Info->print("... creating download hard link ...\n");
+    $installer::logger::Info->print("******************************************\n");
 
     installer::logger::include_header_into_logfile("Creating download hard link:");
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Creating hard link, start");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: Creating hard link, start");
 
     if ( is_supported_platform() )
     {
@@ -2151,8 +2113,7 @@ sub create_download_link_tree
 
         # Is $versionstring empty? If yes, there is nothing to do now.
 
-        $infoline = "Version string is set to: $versionstring\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Version string is set to: %s\n", $versionstring);
 
         if ( $versionstring )
         {
@@ -2165,13 +2126,11 @@ sub create_download_link_tree
             {
                 $destdownloadfilename = $destdownloadfilename . $installer::globals::downloadfileextension;
 
-                $infoline = "Setting destination download file name: $destdownloadfilename\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Setting destination download file name: %s\n", $destdownloadfilename);
 
                 my $sourcedownloadfile = $downloaddir . $installer::globals::separator . $installer::globals::downloadfilename;
 
-                $infoline = "Setting source download file name: $sourcedownloadfile\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Setting source download file name: %s\n", $sourcedownloadfile);
 
                 create_link_tree($sourcedownloadfile, $destdownloadfilename, $versionstring);
                 # my $md5sumoutput = call_md5sum($downloadfile);
@@ -2181,17 +2140,15 @@ sub create_download_link_tree
         }
         else
         {
-            $infoline = "Version string is empty. Nothing to do!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Version string is empty. Nothing to do!\n");
         }
     }
     else
     {
-        $infoline = "Platform not used for hard linking. Nothing to do!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Platform not used for hard linking. Nothing to do!\n");
     }
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: Creating hard link, stop");
+    $installer::logger::Lang->add_timestamp("Performance Info: Creating hard link, stop");
 }
 
 1;

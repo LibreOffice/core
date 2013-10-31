@@ -32,6 +32,8 @@ use installer::pathanalyzer;
 use installer::scriptitems;
 use installer::systemactions;
 
+our @ErrorMessages = undef;
+
 #########################################################
 # Function that can be used for additional controls.
 # Search happens in $installer::globals::patharray.
@@ -41,9 +43,10 @@ sub check_needed_files_in_path
 {
     my ( $filesref ) = @_;
 
-    foreach $onefile ( @{$filesref} )
+    my $error = 0;
+    foreach my $onefile ( @{$filesref} )
     {
-        installer::logger::print_message( "...... searching $onefile ..." );
+        $installer::logger::Info->printf("...... searching %s ...\n", $onefile);
 
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$onefile, $installer::globals::patharray , 0);
 
@@ -54,7 +57,7 @@ sub check_needed_files_in_path
         }
         else
         {
-            installer::logger::print_message( "\tFound: $$fileref\n" );
+            $installer::logger::Info->print( "\tFound: $$fileref\n" );
         }
     }
 
@@ -126,7 +129,7 @@ sub check_system_path
 
     foreach $onefile ( @needed_files_in_path )
     {
-        installer::logger::print_message( "...... searching $onefile ..." );
+        $installer::logger::Info->printf("...... searching %s ...\n", $onefile);
 
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$onefile, $patharrayref , 0);
 
@@ -137,7 +140,7 @@ sub check_system_path
         }
         else
         {
-            installer::logger::print_message( "\tFound: $$fileref\n" );
+            $installer::logger::Info->print( "\tFound: $$fileref\n" );
             # Saving the absolut path for msitran.exe. This is required for the determination of the checksum.
             if ( $onefile eq "msitran.exe" ) { $installer::globals::msitranpath = $$fileref; }
         }
@@ -180,7 +183,7 @@ sub check_system_path
     {
         $installer::globals::upx_in_path = 1;
         $installer::globals::upxfile = $$upxfileref;
-        installer::logger::print_message( "\tFound: $$upxfileref\n" );
+        $installer::logger::Info->print( "\tFound: $$upxfileref\n" );
     }
 
 }
@@ -204,13 +207,11 @@ sub get_makecab_version
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::globallogfileinfo, $infoline);
+        $installer::logger::Global->printf("ERROR: Could not execute \"%s\"!\n", $systemcall);
     }
     else
     {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::globallogfileinfo, $infoline);
+        $installer::logger::Global->printf("Success: Executed \"%s\" successfully!\n", $systemcall);
 
         my $versionline = "";
 
@@ -223,8 +224,7 @@ sub get_makecab_version
             }
         }
 
-        $infoline = $versionline;
-        push( @installer::globals::globallogfileinfo, $infoline);
+        $installer::logger::Global->printf("%s\n", $versionline);
 
         if ( $versionline =~ /\bVersion\b\s+(\d+[\d\.]+\d+)\s+/ )
         {
@@ -238,8 +238,7 @@ sub get_makecab_version
             $makecabversion = $1;
         }
 
-        $infoline = "Using version: " . $makecabversion . "\n";
-        push( @installer::globals::globallogfileinfo, $infoline);
+        $installer::logger::Global->printf("Using version: %s\n", $makecabversion);
     }
 
     return $makecabversion;
@@ -258,8 +257,7 @@ sub check_makecab_version
 
     my $makecabversion = get_makecab_version();
 
-    my $infoline = "Tested version: " . $installer::globals::controlledmakecabversion . "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->printf("Tested version: %s\n", $installer::globals::controlledmakecabversion);
 
     if ( $makecabversion < 0 ) { $do_check = 0; } # version could not be determined
 
@@ -280,8 +278,7 @@ sub check_makecab_version
     }
     else
     {
-        $infoline = "Warning: No version check of makecab.exe\n";
-        push( @installer::globals::globallogfileinfo, $infoline);
+        $installer::logger::Global->print("Warning: No version check of makecab.exe\n");
     }
 }
 
@@ -317,113 +314,120 @@ sub check_system_environment
     return \%variables;
 }
 
-#############################################################
-# Controlling the log file at the end of the
-# packaging process
-#############################################################
 
-sub check_logfile
+sub prepare_error_processing ()
+{
+    @ErrorMessages = ();
+}
+
+=item filter_log_error ($relative_time, $log_id, $process_id, $message)
+
+    Process the given log message.  Returns $message unaltered.
+
+=cut
+sub filter_log_error ($$$$)
+{
+    my ($relative_time, $log_id, $process_id, $message) = @_;
+
+    if ($message =~ /\berror\b/i)
+    {
+        # Message contains the word "error".  Now we have to find out if it is relevant.
+
+        # Remove all filenames that contain the word "Error".
+        my $work_string = $message;
+        $work_string =~ s/Error\.(idt|mlf|ulf|html|hpp|ipp)//g;
+
+        if ($work_string =~ /\bError\b/i)
+        {
+            # This really is an error message.
+            push @ErrorMessages, {'relative_time' => $relative_time,
+                                  'message' => $message};
+        }
+    }
+
+    return $message;
+}
+
+
+
+
+sub printocessed_error_lines ()
+{
+    my $lines = [];
+
+    foreach my $line (@ErrorMessages)
+    {
+        push @$lines, sprintf("    %12.6f : %s", $line->{'relative_time'}, $line->{'message'});
+    }
+
+    return $lines;
+}
+
+
+
+
+=item check_logfile()
+
+    Print all error messages (typically at the end) on the console.
+
+=cut
+sub check_logfile ()
 {
     my ($logfile) = @_;
 
     my @errors = ();
     my @output = ();
-    my $contains_error = 0;
 
-    my $ignore_error = 0;
-    my $make_error_to_warning = 0;
+    my $ignore_errors = ( ! $installer::globals::pro ) && ( $installer::globals::ignore_error_in_logfile );
+    my $contains_errors = scalar @ErrorMessages > 0;
 
-    if (( ! $installer::globals::pro ) && ( $installer::globals::ignore_error_in_logfile )) { $ignore_error = 1; }
-
-    for ( my $i = 0; $i <= $#{$logfile}; $i++ )
+    # Format errors
+    if ($contains_errors)
     {
-        my $line = ${$logfile}[$i];
-
-        # Errors are all errors, but not the Windows installer table "Error.idt"
-
-        my $compareline = $line;
-        $compareline =~ s/Error\.idt//g;    # removing all occurences of "Error.idt"
-        $compareline =~ s/Error\.mlf//g;    # removing all occurences of "Error.mlf"
-        $compareline =~ s/Error\.ulf//g;    # removing all occurences of "Error.ulf"
-        $compareline =~ s/Error\.idl//g;    # removing all occurences of "Error.idl"
-        $compareline =~ s/Error\.html//g;   # removing all occurences of "Error.html"
-        # Ugly workaround for (boost) headers
-        $compareline =~ s/error\.hpp//g;    # removing all occurences of "error.hpp"
-        $compareline =~ s/error\.ipp//g;    # removing all occurences of "error.ipp"
-
-        if ( $compareline =~ /\bError\b/i )
+        push(@output, "\n");
+        push(@output, "*********************************************************************\n");
+        if ($ignore_errors)
         {
-            $contains_error = 1;
-            push(@errors, $line);
-
-            if ( $ignore_error )
-            {
-                $contains_error = 0;
-                $make_error_to_warning = 1;
-            }
+            push(@output, "The following errors in the log file were ignored:\n");
         }
-    }
-
-    if ($contains_error)
-    {
-        my $line = "\n*********************************************************************\n";
-        push(@output, $line);
-        $line = "ERROR: The following errors occured in packaging process:\n\n";
-        push(@output, $line);
-
-        for ( my $i = 0; $i <= $#errors; $i++ )
+        else
         {
-            $line = "$errors[$i]";
-            push(@output, $line);
+            push(@output, "ERROR: The following errors occured in packaging process:\n");
+        }
+        push(@output, "\n");
+
+        foreach my $line (@ErrorMessages)
+        {
+            push @output, sprintf("    %12.6f : %s", $line->{'relative_time'}, $line->{'message'});
         }
 
-        $line = "*********************************************************************\n";
-        push(@output, $line);
-#       exit(-1);
+        push(@output, "*********************************************************************\n");
     }
-    else
+
+    # Claim success if there where no errors or if errors are treated as warnings.
+    if ( ! $contains_errors || $ignore_errors)
     {
-        my $line = "";
-
-        if ( $make_error_to_warning )
-        {
-            $line = "\n*********************************************************************\n";
-            push(@output, $line);
-            $line = "The following errors in the log file were ignored:\n\n";
-            push(@output, $line);
-
-            for ( my $i = 0; $i <= $#errors; $i++ )
-            {
-                $line = "$errors[$i]";
-                push(@output, $line);
-            }
-
-            $line = "*********************************************************************\n";
-            push(@output, $line);
-        }
-
-        $line = "\n***********************************************************\n";
-        push(@output, $line);
-        $line = "Successful packaging process!\n";
-        push(@output, $line);
-        $line = "***********************************************************\n";
-        push(@output, $line);
+        push(@output, "\n");
+        push(@output, "***********************************************************\n");
+        push(@output, "Successful packaging process!\n");
+        push(@output, "***********************************************************\n");
     }
 
-    # printing the output file and adding it to the logfile
-
+    # Print the summary.
     installer::logger::include_header_into_logfile("Summary:");
-
     my $force = 1; # print this message even in 'quiet' mode
-    for ( my $i = 0; $i <= $#output; $i++ )
+    foreach my $line (@output)
     {
-        my $line = "$output[$i]";
-        installer::logger::print_message( "$line", $force );
-        push( @installer::globals::logfileinfo, $line);
-        push( @installer::globals::errorlogfileinfo, $line);
+        $installer::logger::Info->print($line, $force);
     }
 
-    return $contains_error;
+    # Delete the accumulated error messages.  The @ErrorMessages will now contain
+    # lines caused by printing those error messages.
+    @ErrorMessages = ();
+
+    @installer::globals::errorlogfileinfo = @output;
+
+    return $contains_error && ! $ignore_error;
 }
 
 #############################################################
@@ -471,8 +475,8 @@ sub determine_ship_directory
                 $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
                 "native_inprogress-number_" . $languagestring . "\." . $installer::globals::buildid;
 
-    my $infoline = "\nSetting ship directory: $destdir\n";
-    push(@installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->print("\n");
+    $installer::logger::Global->printf("Setting ship directory: %s\n", $destdir);
 
     return $destdir;
 }
@@ -489,44 +493,40 @@ sub check_updatepack
 
     if ( $ENV{'UPDATER'} )  # the environment variable UPDATER has to be set
     {
-        $infoline = "\nEnvironment variable UPDATER set\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
+        $installer::logger::Global->print("\n");
+        $installer::logger::Global->print("Environment variable UPDATER set\n");
 
         if ( ! $ENV{'CWS_WORK_STAMP'} ) # the environment variable CWS_WORK_STAMP must not be set (set only in CWS)
         {
-            $infoline = "Environment variable CWS_WORK_STAMP not set\n";
-            push(@installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->print("Environment variable CWS_WORK_STAMP not set\n");
 
             if ( $ENV{'SHIPDRIVE'} )    # the environment variable SHIPDRIVE must be set
             {
                 $shipdrive = $ENV{'SHIPDRIVE'};
-                $infoline = "Ship drive defined: $shipdrive\n";
-                push(@installer::globals::globallogfileinfo, $infoline);
+                $installer::logger::Global->printf("Ship drive defined: %s\n", $shipdrive);
 
                 if ( -d $shipdrive )    # SHIPDRIVE must be a directory
                 {
-                    $infoline = "Ship drive exists\n";
-                    push(@installer::globals::globallogfileinfo, $infoline);
+                    $installer::logger::Global->print("Ship drive exists\n");
 
                     # try to write into $shipdrive
 
-                    $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test_$$";
+                    my $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test_$$";
                     $directory =~ s/\,/\_/g;    # for the list of languages
                     $directory =~ s/\-/\_/g;    # for en-US, pt-BR, ...
                     $directory = $shipdrive . $installer::globals::separator . $directory;
 
-                    $infoline = "Try to create directory: $directory\n";
-                    push(@installer::globals::globallogfileinfo, $infoline);
+                    $installer::logger::Global->printf("Try to create directory: %s\n", $directory);
 
                     # saving this directory for later removal
                     $installer::globals::shiptestdirectory = $directory;
 
                     if ( installer::systemactions::try_to_create_directory($directory))
                     {
-                        $infoline = "Write access on Ship drive\n";
-                        push(@installer::globals::globallogfileinfo, $infoline);
-                        $infoline = "Ship test directory $installer::globals::shiptestdirectory was successfully created\n";
-                        push(@installer::globals::globallogfileinfo, $infoline);
+                        $installer::logger::Global->print("Write access on Ship drive\n");
+                        $installer::logger::Global->print(
+                            "Ship test directory %s was successfully created\n",
+                            $installer::globals::shiptestdirectory);
                         my $systemcall = "rmdir $directory";
                         my $returnvalue = system($systemcall);
 
@@ -537,8 +537,7 @@ sub check_updatepack
                         my $sol_tmp;
                         if ( $ENV{'SOLARENV'} ) { $solarenv = $ENV{'SOLARENV'}; }
 
-                        $infoline = "Environment variable SOLARENV: $solarenv\n";
-                        push(@installer::globals::globallogfileinfo, $infoline);
+                        $installer::logger::Global->printf("Environment variable SOLARENV: %s\n", $solarenv);
 
                         if ( $ENV{'SOL_TMP'} )
                         {
@@ -547,17 +546,15 @@ sub check_updatepack
                         } else {
                             $infoline = "Environment variable SOL_TMP not set\n";
                         }
-                        push(@installer::globals::globallogfileinfo, $infoline);
+                        $installer::logger::Global->print($infoline);
 
                         if ( defined $sol_tmp && ( $solarenv =~ /^\s*\Q$sol_tmp\E/ ))
                         {
-                            $infoline = "Content of SOLARENV starts with the content of SOL_TMP\: Local environment -\> No Updatepack\n";
-                            push(@installer::globals::globallogfileinfo, $infoline);
+                            $installer::logger::Global->print("Content of SOLARENV starts with the content of SOL_TMP\: Local environment -\> No Updatepack\n");
                         }
                         else
                         {
-                            $infoline = "Content of SOLARENV does not start with the content of SOL_TMP: No local environment\n";
-                            push(@installer::globals::globallogfileinfo, $infoline);
+                            $installer::logger::Global->print("Content of SOLARENV does not start with the content of SOL_TMP: No local environment\n");
 
                             $installer::globals::updatepack = 1;    # That's it
                         }
@@ -566,48 +563,53 @@ sub check_updatepack
 
                         if ( -d $installer::globals::shiptestdirectory )
                         {
-                            $infoline = "Ship test directory $installer::globals::shiptestdirectory still exists. Trying removal later again.\n";
-                            push(@installer::globals::globallogfileinfo, $infoline);
+                            $installer::logger::Global->printf(
+                                "Ship test directory %s still exists. Trying removal later again.\n",
+                                $installer::globals::shiptestdirectory);
                         }
                         else
                         {
-                            $infoline = "Ship test directory $installer::globals::shiptestdirectory was successfully removed.\n";
-                            push(@installer::globals::globallogfileinfo, $infoline);
+                            $installer::logger::Global->printf(
+                                "Ship test directory %s was successfully removed.\n",
+                                $installer::globals::shiptestdirectory);
                         }
                     }
                     else
                     {
-                        $infoline = "No write access on Ship drive\n";
-                        push(@installer::globals::globallogfileinfo, $infoline);
-                        $infoline = "Failed to create directory $directory\n";
-                        push(@installer::globals::globallogfileinfo, $infoline);
-                        if ( defined $ENV{'BSCLIENT'} && ( uc $ENV{'BSCLIENT'} eq 'TRUE' ) ) {
+                        $installer::logger::Global->print("No write access on Ship drive\n");
+                        $installer::logger::Global->printf("Failed to create directory \n", $directory);
+                        if ( defined $ENV{'BSCLIENT'} && ( uc $ENV{'BSCLIENT'} eq 'TRUE' ) )
+                        {
                             installer::exiter::exit_program("ERROR: No write access to SHIPDRIVE allthough BSCLIENT is set.", "check_updatepack");
                         }
                     }
                 }
                 else
                 {
-                    $infoline = "Ship drive not found: No updatepack\n";
-                    push(@installer::globals::globallogfileinfo, $infoline);
+                    $installer::logger::Global->print("Ship drive not found: No updatepack\n");
                 }
             }
             else
             {
-                $infoline = "Environment variable SHIPDRIVE not set: No updatepack\n";
-                push(@installer::globals::globallogfileinfo, $infoline);
+                $installer::logger::Global->print("Environment variable SHIPDRIVE not set: No updatepack\n");
             }
         }
         else
         {
-            $infoline = "Environment variable CWS_WORK_STAMP defined: No updatepack\n";
-            push(@installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->print("Environment variable CWS_WORK_STAMP defined: No updatepack\n");
         }
     }
 
-    if ( $installer::globals::updatepack ) { $infoline = "Setting updatepack true\n\n"; }
-    else { $infoline = "\nNo updatepack\n"; }
-    push(@installer::globals::globallogfileinfo, $infoline);
+    if ( $installer::globals::updatepack )
+    {
+        $installer::logger::Global->print("Setting updatepack true\n");
+        $installer::logger::Global->print("\n");
+    }
+    else
+    {
+        $installer::logger::Global->print("\n");
+        $installer::logger::Global->print("No updatepack\n");
+    }
 
 }
 
@@ -623,8 +625,7 @@ sub read_encodinglist
 
     if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Did not find Windows encoding list $installer::globals::encodinglistname!", "read_encodinglist"); }
 
-    my $infoline = "Found encoding file: $$fileref\n";
-    push(@installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->printf("Found encoding file: %s\n", $$fileref);
 
     my $encodinglist = installer::files::read_file($$fileref);
 
@@ -720,8 +721,9 @@ sub set_addchildprojects
         $installer::globals::addchildprojects = 0;  # no child projects for patches
     }
 
-    my $infoline = "Value of \$installer::globals::addchildprojects: $installer::globals::addchildprojects\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->printf(
+        "Value of \$installer::globals::addchildprojects: %s\n",
+        $installer::globals::addchildprojects);
 }
 
 ####################################################################
@@ -738,8 +740,9 @@ sub set_addjavainstaller
     if ( $installer::globals::languagepack ) { $installer::globals::addjavainstaller = 0; }
     if ( $allvariableshashref->{'XPDINSTALLER'} ) { $installer::globals::addjavainstaller = 0; }
 
-    my $infoline = "Value of \$installer::globals::addjavainstaller: $installer::globals::addjavainstaller\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->printf(
+        "Value of \$installer::globals::addjavainstaller: %s\n",
+        $installer::globals::addjavainstaller);
 }
 
 #######################################################################
@@ -756,8 +759,9 @@ sub set_addsystemintegration
     if ( $installer::globals::languagepack ) { $installer::globals::addsystemintegration = 0; }
     if (( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "portable" )) { $installer::globals::addsystemintegration = 0; }
 
-    my $infoline = "Value of \$installer::globals::addsystemintegration: $installer::globals::addsystemintegration\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->printf(
+        "Value of \$installer::globals::addsystemintegration: %s\n",
+        $installer::globals::addsystemintegration);
 }
 
 1;

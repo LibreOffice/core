@@ -285,10 +285,14 @@ sub replace_all_setupscriptvariables_in_script
         $num++;
         if ( $check =~ /^.*\%\w+.*$/ )
         {
-            if (( $check =~ /%1/ ) || ( $check =~ /%2/ ) || ( $check =~ /%verify/ )) { next; }
-            my $infoline = "WARNING: mis-named or un-known '%' variable in setup script at line $num:\n$check\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
-            # print STDERR "Warning: mis-named or un-known '%' variable at line $num:\n$check\n";
+            if (( $check =~ /%1/ ) || ( $check =~ /%2/ ) || ( $check =~ /%verify/ ))
+            {
+                next;
+            }
+            $installer::logger::Global->printf(
+                "WARNING: mis-named or un-known '%s' variable in setup script at line %s:\n",
+                "%", $num);
+            $installer::logger::Global->printf("%s\n", $check);
         }
     }
 

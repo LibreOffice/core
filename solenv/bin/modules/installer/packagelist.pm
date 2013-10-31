@@ -527,8 +527,7 @@ sub check_packagelist
 
             if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find script file $scriptfile for module $gid!", "check_packagelist"); }
 
-            my $infoline = "$gid: Using script file: \"$$fileref\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("%s: Using script file: \"%s\"!\n", $gid, $$fileref);
 
             $onepackage->{'script'} = $$fileref;
         }
@@ -679,8 +678,7 @@ sub collectpackages
 
             if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $packinfofile for module $modulegid!", "collectpackages"); }
 
-            my $infoline = "$modulegid: Using packinfo: \"$$fileref\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("%s: Using packinfo: \"%s\"!\n", $modulegid, $$fileref);
 
             get_packinfo($modulegid, $$fileref, \@packages, $onelanguage, $islanguagemodule);
         }
@@ -709,8 +707,7 @@ sub log_packages_content
 
         # checking all items that must be defined
 
-        $infoline = "Package $onepackage->{'module'}\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Package %s\n", $onepackage->{'module'});
 
         my $key;
         foreach $key (sort keys %{$onepackage})
@@ -719,24 +716,20 @@ sub log_packages_content
 
             if ( $key eq "allmodules" )
             {
-                $infoline = "\t$key:\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("\t%s:\n", $key);
                 my $onemodule;
                 foreach $onemodule ( @{$onepackage->{$key}} )
                 {
-                    $infoline = "\t\t$onemodule\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("\t\t%s\n", $onemodule);
                 }
             }
             else
             {
-                $infoline = "\t$key: $onepackage->{$key}\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("\t%s: %s\n", $key, $onepackage->{$key});
             }
         }
 
-        $infoline = "\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("\n");
 
     }
 }
@@ -824,8 +817,7 @@ sub prepare_cabinet_files
 
         # checking all items that must be defined
 
-        $infoline = "Package $onepackage->{'module'}\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Package %s\n", $onepackage->{'module'});
 
         # Assigning the cab file to the module and also to all corresponding sub modules
 
@@ -838,10 +830,12 @@ sub prepare_cabinet_files
             }
             else
             {
-                my $infoline = "Warning: Already existing assignment: $onemodule : $installer::globals::allcabinetassigns{$onemodule}\n";
-                push(@installer::globals::logfileinfo, $infoline);
-                $infoline = "Ignoring further assignment: $onemodule : $cabinetfile\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Warning: Already existing assignment: %s : %s\n",
+                    $onemodule,
+                    $installer::globals::allcabinetassigns{$onemodule});
+                $installer::logger::Lang->printf("Ignoring further assignment: %s : %s\n",
+                    $onemodule,
+                    $cabinetfile);
             }
         }
     }
@@ -855,16 +849,23 @@ sub log_cabinet_assignments
 {
     installer::logger::include_header_into_logfile("Logging cabinet files:");
 
-    my $infoline = "List of cabinet files:\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("List of cabinet files:\n");
 
     my $key;
-    foreach $key ( sort keys %installer::globals::allcabinets ) { push(@installer::globals::logfileinfo, "\t$key\n"); }
+    foreach $key ( sort keys %installer::globals::allcabinets )
+    {
+        $installer::logger::Lang->printf("\t%s\n", $key);
+    }
 
-    $infoline = "\nList of assignments from modules to cabinet files:\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
+    $installer::logger::Lang->printf("List of assignments from modules to cabinet files:\n");
 
-    foreach $key ( sort keys %installer::globals::allcabinetassigns ) { push(@installer::globals::logfileinfo, "\t$key : $installer::globals::allcabinetassigns{$key}\n"); }
+    foreach $key ( sort keys %installer::globals::allcabinetassigns )
+    {
+        $installer::logger::Lang->printf("\t%s : %s\n",
+            $key,
+            $installer::globals::allcabinetassigns{$key});
+    }
 }
 
 1;

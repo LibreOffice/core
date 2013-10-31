@@ -134,9 +134,7 @@ sub create_inifile_table
 
     my $inifiletablename = $basedir . $installer::globals::separator . "IniFile.idt";
     installer::files::save_file($inifiletablename ,\@inifiletable);
-    my $infoline = "Created idt file: $inifiletablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
+    $installer::logger::Lang->printf("Created idt file: %s\n", $inifiletablename);
 }
 
 1;

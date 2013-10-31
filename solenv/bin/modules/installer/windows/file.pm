@@ -70,13 +70,13 @@ sub assign_cab_to_files
 
     # logging the number of files in each cabinet file
 
-    $infoline = "\nCabinet file content:\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->print("Cabinet file content:\n");
     my $cabfile;
     foreach $cabfile ( sort keys %installer::globals::cabfilecounter )
     {
         $infoline = "$cabfile : $installer::globals::cabfilecounter{$cabfile} files\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # assigning startsequencenumbers for each cab file
@@ -93,22 +93,22 @@ sub assign_cab_to_files
 
     # logging the start sequence numbers
 
-    $infoline = "\nCabinet file start sequences:\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->print("Cabinet file start sequences:\n");
     foreach $cabfile ( sort keys %installer::globals::cabfilecounter )
     {
         $infoline = "$cabfile : $installer::globals::cabfilecounter{$cabfile}\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # logging the last sequence numbers
 
-    $infoline = "\nCabinet file last sequences:\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->print("Cabinet file last sequences:\n");
     foreach $cabfile ( sort keys %installer::globals::lastsequence )
     {
         $infoline = "$cabfile : $installer::globals::lastsequence{$cabfile}\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -594,7 +594,7 @@ sub get_sequence_for_file
             if ( $pffcomponentname eq $allupdatecomponentshashref->{$onefile->{'uniquename'}} )
             {
                 $infoline = "Warning: Special handling for component \"$pffcomponentname\". This file was added after the final, but before this ServicePack.\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 $onefile->{'componentname'} = $pffcomponentname; # pff for "post final file"
                 $fileentry->{'Component_'} = $onefile->{'componentname'};
                 if ( ! exists($allfilecomponents->{$fileentry->{'Component_'}}) ) { $allfilecomponents->{$fileentry->{'Component_'}} = 1; }
@@ -746,7 +746,7 @@ sub check_file_sequences
         }
 
         $infoline = "ERROR: Files are removed compared with update database.\nThe following files are missing:\n$errorstring";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program($infoline, "check_file_sequences");
     }
 
@@ -760,18 +760,20 @@ sub check_file_sequences
         $counter++;
         if ( $counter == 1 )
         {
-            $infoline = "\nNew files compared to the update database:\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->print("New files compared to the update database:\n");
         }
 
-        $infoline = "$onefile->{'Name'} ($onefile->{'gid'}) Sequence: $onefile->{'assignedsequencenumber'}\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("%s (%s) Sequence: %s\n",
+            $onefile->{'Name'},
+            $onefile->{'gid'},
+            $onefile->{'assignedsequencenumber'});
     }
 
     if ( $counter == 0 )
     {
         $infoline = "Info: No new file compared with update database!\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
 }
@@ -844,7 +846,7 @@ sub create_files_table
 {
     my ($filesref, $allfilecomponentsref, $basedir, $allvariables, $uniquefilenamehashref, $allupdatesequenceshashref, $allupdatecomponentshashref, $allupdatefileorderhashref) = @_;
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: File Table start");
+    $installer::logger::Lang->add_timestamp("Performance Info: File Table start");
 
     # Structure of the files table:
     # File Component_ FileName FileSize Version Language Attributes Sequence
@@ -1040,15 +1042,15 @@ sub create_files_table
 
     my $filetablename = $basedir . $installer::globals::separator . "File.idt";
     installer::files::save_file($filetablename ,\@filetable);
-    $infoline = "\nCreated idt file: $filetablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->printf("Created idt file: %s\n", $filetablename);
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: File Table end");
+    $installer::logger::Lang->add_timestamp("Performance Info: File Table end");
 
     my $filehashtablename = $basedir . $installer::globals::separator . "MsiFileHash.idt";
     installer::files::save_file($filehashtablename ,\@filehashtable);
-    $infoline = "\nCreated idt file: $filehashtablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->printf("Created idt file: %s\n", $filehashtablename);
 
     # Now the new files can be added to the files collector (only in update packaging processes)
     if ( $installer::globals::newfilesexist )

@@ -217,7 +217,7 @@ sub create_msiassembly_table
     my $msiassemblytablename = $basedir . $installer::globals::separator . "MsiAssem.idt";
     installer::files::save_file($msiassemblytablename ,\@msiassemblytable);
     my $infoline = "Created idt file: $msiassemblytablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 ####################################################################################
@@ -299,7 +299,7 @@ sub create_msiassemblyname_table
     my $msiassemblynametablename = $basedir . $installer::globals::separator . "MsiAsseN.idt";
     installer::files::save_file($msiassemblynametablename ,\@msiassemblynametable);
     my $infoline = "Created idt file: $msiassemblynametablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -346,9 +346,9 @@ sub add_assembly_condition_into_component_table
                     ${$componenttable}[$j] = $oneline;
                     $changed = 1;
                     $infoline = "Changing $componenttablename :\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                     $infoline = $oneline;
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                     last;
                 }
             }
@@ -360,7 +360,7 @@ sub add_assembly_condition_into_component_table
         # Saving the file
         installer::files::save_file($componenttablename ,$componenttable);
         $infoline = "Saved idt file: $componenttablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 

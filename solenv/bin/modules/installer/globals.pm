@@ -245,9 +245,9 @@ BEGIN
     $globallogging = 0;
     $globalloggingform21 = 1;
     $logfilename = "logfile.log";   # the default logfile name for global errors
-    @logfileinfo = ();
-    @errorlogfileinfo = ();
-    @globallogfileinfo = ();
+#   @logfileinfo = ();
+#   @errorlogfileinfo = ();
+#   @globallogfileinfo = ();
     $ignore_error_in_logfile = 0;
     $exitlog = "";
     $globalinfo_copied = 0;
@@ -508,7 +508,7 @@ BEGIN
         $libextension = "\.dll";
         $isunix = 0;
         $iswin = 1;
-                $archiveformat = ".zip";
+        $archiveformat = ".zip";
         %savedmapping = ();
         %savedrevmapping = ();
         %savedrev83mapping = ();
@@ -526,7 +526,7 @@ BEGIN
         $isunix = 0;
         $iswin = 0;
         $isos2 = 1;
-                $archiveformat = ".zip";
+        $archiveformat = ".zip";
     }
     else
     {

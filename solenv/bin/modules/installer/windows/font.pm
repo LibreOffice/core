@@ -68,7 +68,7 @@ sub create_font_table
     my $fonttablename = $basedir . $installer::globals::separator . "Font.idt";
     installer::files::save_file($fonttablename ,\@fonttable);
     my $infoline = "Created idt file: $fonttablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -92,12 +92,12 @@ sub get_font_version
     {
         $fontversion = $1;
         $infoline = "FONT: Font \"$fontfile\" version: $fontversion\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
     else
     {
         $infoline = "FONT: Could not determine font version: \"$fontfile\"\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return $fontversion;

@@ -445,13 +445,11 @@ sub create_registry_table
 
         my $registrytablename = $basedir . $installer::globals::separator . "Registry.idt" . "." . $onelanguage;
         installer::files::save_file($registrytablename ,\@registrytable);
-        my $infoline = "Created idt file: $registrytablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Created idt file: %s\n", $registrytablename);
 
         $registrytablename = $basedir . $installer::globals::separator . "Reg64.idt" . "." . $onelanguage;
         installer::files::save_file($registrytablename ,\@reg64table );
-        $infoline = "Created idt file: $registrytablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Created idt file: %s\n", $registrytablename);
     }
 }
 
