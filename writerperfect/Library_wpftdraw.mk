@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_static_libraries,wpftdraw,\
 $(eval $(call gb_Library_use_externals,wpftdraw,\
 	cdr \
 	etonyek \
+	freehand \
 	mspub \
 	odfgen \
 	visio \
@@ -63,6 +64,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
 	writerperfect/source/draw/CDRImportFilter \
 	writerperfect/source/draw/CMXImportFilter \
+	writerperfect/source/draw/FreehandImportFilter \
 	writerperfect/source/draw/MSPUBImportFilter \
 	writerperfect/source/draw/VisioImportFilter \
 	writerperfect/source/draw/WPGImportFilter \

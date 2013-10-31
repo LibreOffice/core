@@ -556,6 +556,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
     draw_Publisher_Document \
 	draw_CorelDraw_Document \
 	draw_Corel_Presentation_Exchange \
+	draw_Freehand_Document \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
@@ -569,6 +570,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
     PublisherDocument \
 	CorelDrawDocument \
 	CorelPresentationExchange \
+	FreehandDocument \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
