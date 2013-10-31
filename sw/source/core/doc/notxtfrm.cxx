@@ -72,6 +72,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace com::sun::star;
@@ -695,57 +696,19 @@ bool paintUsingPrimitivesHelper(
     OutputDevice& rOutputDevice,
     const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
     const basegfx::B2DRange& rSourceRange,
-    const basegfx::B2DRange& rTargetRange,
-    const sal_Int32 nLeftCrop = 0,
-    const sal_Int32 nTopCrop = 0,
-    const sal_Int32 nRightCrop = 0,
-    const sal_Int32 nBottomCrop = 0,
-    const bool bMirrorX = false,
-    const bool bMirrorY = false)
+    const basegfx::B2DRange& rTargetRange)
 {
-    const double fSourceWidth(rSourceRange.getWidth());
-    const double fSourceHeight(rSourceRange.getHeight());
-
-    if(rSequence.hasElements() && !basegfx::fTools::equalZero(fSourceWidth) && !basegfx::fTools::equalZero(fSourceHeight))
+    if(rSequence.hasElements() && !basegfx::fTools::equalZero(rSourceRange.getWidth()) && !basegfx::fTools::equalZero(rSourceRange.getHeight()))
     {
-        // copy target range and apply evtl. cropping
-        basegfx::B2DRange aTargetRange(rTargetRange);
-
-        if(nLeftCrop || nTopCrop || nRightCrop || nBottomCrop)
+        if(!basegfx::fTools::equalZero(rTargetRange.getWidth()) && !basegfx::fTools::equalZero(rTargetRange.getHeight()))
         {
-            // calculate original TargetRange
-            const double fFactor100thmmToTwips(72.0 / 127.0);
-
-            aTargetRange = basegfx::B2DRange(
-                aTargetRange.getMinX() - (nLeftCrop * fFactor100thmmToTwips),
-                aTargetRange.getMinY() - (nTopCrop * fFactor100thmmToTwips),
-                aTargetRange.getMaxX() + (nRightCrop * fFactor100thmmToTwips),
-                aTargetRange.getMaxY() + (nBottomCrop * fFactor100thmmToTwips));
-        }
-
-        const double fTargetWidth(aTargetRange.getWidth());
-        const double fTargetHeight(aTargetRange.getHeight());
-
-        if(!basegfx::fTools::equalZero(fTargetWidth) && !basegfx::fTools::equalZero(fTargetHeight))
-        {
-            // map graphic range to target range. This will automatically include
-            // tme mapping from Svg 1/100th mm content to twips since the target
-            // range is twips already
-            basegfx::B2DHomMatrix aMappingTransform(
-                basegfx::tools::createTranslateB2DHomMatrix(
-                    -rSourceRange.getMinX(),
-                    -rSourceRange.getMinY()));
-
-            aMappingTransform.scale(fTargetWidth / fSourceWidth, fTargetHeight / fSourceHeight);
-            aMappingTransform.translate(aTargetRange.getMinX(), aTargetRange.getMinY());
-
-            // apply mirrorings
-            if(bMirrorX || bMirrorY)
-            {
-                aMappingTransform.translate(-aTargetRange.getCenterX(), -aTargetRange.getCenterY());
-                aMappingTransform.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0); // #119176# small typo with X/Y
-                aMappingTransform.translate(aTargetRange.getCenterX(), aTargetRange.getCenterY());
-            }
+            // map graphic range to target range. This will e.g. automatically include
+            // tme mapping from 1/100th mm content to twips if needed when the target
+            // range is defined in twips
+            const basegfx::B2DHomMatrix aMappingTransform(
+                basegfx::tools::createSourceRangeTargetRangeTransform(
+                    rSourceRange,
+                    rTargetRange));
 
             // Fill ViewInformation. Use MappingTransform here, so there is no need to
             // embed the primitives to it. Use original TargetRange here so there is also
@@ -754,7 +717,7 @@ bool paintUsingPrimitivesHelper(
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
                 aMappingTransform,
                 rOutputDevice.GetViewTransformation(),
-                aTargetRange,
+                rTargetRange,
                 0,
                 0.0,
                 uno::Sequence< beans::PropertyValue >());
@@ -863,14 +826,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, false );
                 bContinue = false;
             }
-            else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
-                                    aAlignedGrfArea.SSize(), &aGrfAttr ))
-            {
-                pGrfNd->DrawGraphicWithPDFHandling(*pOut,
-                    aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                    &aGrfAttr );
-                bContinue = false;
-            }
         }
 
         if( bContinue )
@@ -907,35 +862,30 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 }
                 else
                 {
-                    const SvgDataPtr& rSvgDataPtr = rGrfObj.GetGraphic().getSvgData();
-                    bool bDone(false);
+                    // unify using GraphicPrimitive2D
+                    // -> the primitive handles all crop and mirror stuff
+                    // -> the primitive renderer will create the needed pdf export data
+                    // -> if bitmap conent, it will be cached system-dependent
+                    const basegfx::B2DRange aTargetRange(
+                        aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
+                        aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
+                    const basegfx::B2DHomMatrix aTargetTransform(
+                        basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            aTargetRange.getRange(),
+                            aTargetRange.getMinimum()));
+                    drawinglayer::primitive2d::Primitive2DSequence aContent;
 
-                    if(rSvgDataPtr.get())
-                    {
-                        // Graphic is Svg and can be painted as primitives (vector graphic)
-                        const basegfx::B2DRange aTargetRange(
-                            aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
-                            aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
-                        const bool bCropped(aGrfAttr.IsCropped());
+                    aContent.realloc(1);
+                    aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
+                        aTargetTransform,
+                        rGrfObj.GetGraphic(),
+                        aGrfAttr);
 
-                        bDone = paintUsingPrimitivesHelper(
-                            *pOut,
-                            rSvgDataPtr->getPrimitive2DSequence(),
-                            rSvgDataPtr->getRange(),
-                            aTargetRange,
-                            bCropped ? aGrfAttr.GetLeftCrop() : 0,
-                            bCropped ? aGrfAttr.GetTopCrop() : 0,
-                            bCropped ? aGrfAttr.GetRightCrop() : 0,
-                            bCropped ? aGrfAttr.GetBottomCrop() : 0,
-                            aGrfAttr.GetMirrorFlags() & BMP_MIRROR_HORZ,
-                            aGrfAttr.GetMirrorFlags() & BMP_MIRROR_VERT);
-                    }
-
-                    if(!bDone)
-                    {
-                        // fallback paint, uses replacement image
-                        pGrfNd->DrawGraphicWithPDFHandling(*pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), &aGrfAttr);
-                    }
+                    paintUsingPrimitivesHelper(
+                        *pOut,
+                        aContent,
+                        aTargetRange,
+                        aTargetRange);
                 }
             }
             else
