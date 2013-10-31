@@ -58,6 +58,10 @@ static rtl_uString const aImplEmpty_rtl_uString =
 };
 
 /* ======================================================================= */
+/* These macros are for the "poor-man templates" included from
+ * the strtmpl.cxx just below, used to share code between here and
+ * string.cxx
+ */
 
 #define IMPL_RTL_STRCODE            sal_Unicode
 #define IMPL_RTL_USTRCODE( c )      (c)
@@ -467,18 +471,18 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
 
     if ( !nLen )
     {
-        IMPL_RTL_STRINGNAME( new )( ppThis );
+        rtl_uString_new( ppThis );
         return;
     }
 
     if ( *ppThis )
-        IMPL_RTL_STRINGNAME( release )( *ppThis );
+        rtl_uString_release( *ppThis );
 
-    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+    *ppThis = rtl_uString_ImplAlloc( nLen );
     OSL_ASSERT(*ppThis != NULL);
     if ( (*ppThis) )
     {
-        IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
+        sal_Unicode* pBuffer = (*ppThis)->buffer;
         do
         {
             /* Check ASCII range */
@@ -603,13 +607,13 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
     else
     {
         if ( *ppThis )
-            IMPL_RTL_STRINGNAME( release )( *ppThis );
+            rtl_uString_release( *ppThis );
 
         /* Optimization for US-ASCII */
         if ( eTextEncoding == RTL_TEXTENCODING_ASCII_US )
         {
-            IMPL_RTL_STRCODE* pBuffer;
-            *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+            sal_Unicode* pBuffer;
+            *ppThis = rtl_uString_ImplAlloc( nLen );
             if (*ppThis == NULL) {
                 if (pInfo != NULL) {
                     *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
@@ -654,8 +658,8 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                    the buffer faster */
                 if ( nNewLen == (sal_Size)nLen )
                 {
-                    IMPL_RTL_STRCODE* pBuffer;
-                    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+                    sal_Unicode* pBuffer;
+                    *ppThis = rtl_uString_ImplAlloc( nLen );
                     if (*ppThis == NULL)
                     {
                         if (pInfo != NULL) {
@@ -690,7 +694,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
             nCvtFlags |= RTL_TEXTTOUNICODE_FLAGS_FLUSH;
             hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
 
-            pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
+            pTemp = rtl_uString_ImplAlloc( nNewLen );
             if (pTemp == NULL) {
                 if (pInfo != NULL) {
                     *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
@@ -712,7 +716,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
             {
                 rtl_freeMemory( pTemp );
                 nNewLen += 8;
-                pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
+                pTemp = rtl_uString_ImplAlloc( nNewLen );
                 if (pTemp == NULL) {
                     if (pInfo != NULL) {
                         *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
@@ -734,7 +738,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                much overhead, reallocate to the correct size */
             if ( nNewLen > nDestChars+8 )
             {
-                pTemp2 = IMPL_RTL_STRINGNAME( ImplAlloc )( nDestChars );
+                pTemp2 = rtl_uString_ImplAlloc( nDestChars );
             }
             if (pTemp2 != NULL)
             {
@@ -892,7 +896,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
             int i;
             rtl_uString *pScratch;
             pScratch = static_cast< rtl_uString * >(
-                alloca(sizeof (rtl_uString) + len * sizeof (IMPL_RTL_STRCODE)));
+                alloca(sizeof (rtl_uString) + len * sizeof (sal_Unicode)));
             for (i = 0; i < len; i++)
             {
                 /* Check ASCII range */
@@ -913,7 +917,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
 
             pScratch = static_cast< rtl_uString * >(
                 alloca(
-                    sizeof (rtl_uString) + ulen * sizeof (IMPL_RTL_STRCODE)));
+                    sizeof (rtl_uString) + ulen * sizeof (sal_Unicode)));
 
             hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
             rtl_convertTextToUnicode(

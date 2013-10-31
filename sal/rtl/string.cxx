@@ -52,7 +52,10 @@ static rtl_String const aImplEmpty_rtl_String =
 };
 
 /* ======================================================================= */
-
+/* These macros are for the "poor-man templates" included from
+ * the strtmpl.cxx just below, used to share code between here and
+ * ustring.cxx
+ */
 #define IMPL_RTL_STRCODE            sal_Char
 #define IMPL_RTL_USTRCODE( c )      ((unsigned char)c)
 #define IMPL_RTL_STRNAME( n )       rtl_str_ ## n
@@ -205,10 +208,10 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                the buffer faster */
             if ( nNewLen == (sal_Size)nLength )
             {
-                IMPL_RTL_STRCODE* pBuffer;
+                sal_Char* pBuffer;
                 if ( *pTarget )
-                    IMPL_RTL_STRINGNAME( release )( *pTarget );
-                *pTarget = IMPL_RTL_STRINGNAME( ImplAlloc )( nLength );
+                    rtl_string_release( *pTarget );
+                *pTarget = rtl_string_ImplAlloc( nLength );
                 OSL_ASSERT(*pTarget != NULL);
                 pBuffer = (*pTarget)->buffer;
                 do
@@ -217,7 +220,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                     OSL_ENSURE( *pSource <= 127,
                                 "rtl_uString2String() - UTF8 test is encoding is wrong" );
 
-                    *pBuffer = (IMPL_RTL_STRCODE)(unsigned char)*pSource;
+                    *pBuffer = (sal_Char)(unsigned char)*pSource;
                     pBuffer++;
                     pSource++;
                     nLength--;
@@ -247,7 +250,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
 
         for (;;)
         {
-            pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
+            pTemp = rtl_string_ImplAlloc( nNewLen );
             OSL_ASSERT(pTemp != NULL);
             nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
                                                    pSource, nLength,
@@ -277,7 +280,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
            much overhead, reallocate to the correct size */
         if ( nNewLen > nDestBytes+8 )
         {
-            rtl_String* pTemp2 = IMPL_RTL_STRINGNAME( ImplAlloc )( nDestBytes );
+            rtl_String* pTemp2 = rtl_string_ImplAlloc( nDestBytes );
             OSL_ASSERT(pTemp2 != NULL);
             rtl_str_ImplCopy( pTemp2->buffer, pTemp->buffer, nDestBytes );
             rtl_freeMemory( pTemp );
@@ -291,7 +294,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
 
         rtl_destroyUnicodeToTextConverter( hConverter );
         if ( *pTarget )
-            IMPL_RTL_STRINGNAME( release )( *pTarget );
+            rtl_string_release( *pTarget );
         *pTarget = pTemp;
 
         /* Results the conversion in an empty buffer -
