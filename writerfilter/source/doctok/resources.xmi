@@ -3125,9 +3125,6 @@
         <!--Class FontTable-->
         <UML:Class xmi.id="FontTable" name="FontTable">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>

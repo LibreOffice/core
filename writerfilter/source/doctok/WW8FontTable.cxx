@@ -22,31 +22,6 @@
 namespace writerfilter {
 namespace doctok {
 
-sal_uInt32 WW8FontTable::getEntryCount()
-{
-    return entryOffsets.size() - 1;
-}
-
-writerfilter::Reference<Properties>::Pointer_t
-WW8FontTable::getEntry(sal_uInt32 nIndex)
-{
-    writerfilter::Reference<Properties>::Pointer_t pResult;
-
-    sal_uInt32 nCount = entryOffsets[nIndex + 1] - entryOffsets[nIndex];
-
-    if (nCount > 1)
-    {
-        WW8Font * pFont = new WW8Font(this,
-                                      entryOffsets[nIndex], nCount);
-
-        pFont->setIndex(nIndex);
-
-        pResult = writerfilter::Reference<Properties>::Pointer_t(pFont);
-    }
-
-    return pResult;
-}
-
 sal_uInt32 WW8Font::get_f()
 {
     return mnIndex;
