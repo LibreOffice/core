@@ -180,7 +180,7 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl :: getSupportedService
 Sequence< OUString > SecurityEnvironment_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString("com.sun.star.xml.crypto.SecurityEnvironment") ;
+    seqServiceNames[0] = "com.sun.star.xml.crypto.SecurityEnvironment";
     return seqServiceNames ;
 }
 

@@ -296,7 +296,7 @@ Sequence< OUString > SAL_CALL XMLSignature_NssImpl :: getSupportedServiceNames()
 Sequence< OUString > XMLSignature_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString("com.sun.star.xml.crypto.XMLSignature") ;
+    seqServiceNames[0] = "com.sun.star.xml.crypto.XMLSignature";
     return seqServiceNames ;
 }
 

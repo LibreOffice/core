@@ -103,8 +103,8 @@ Sequence< OUString > SAL_CALL XMLEncryptionTemplateImpl :: getSupportedServiceNa
 Sequence< OUString > XMLEncryptionTemplateImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString("com.sun.star.xml.crypto.XMLEncryptionTemplate") ;
-    return seqServiceNames ;
+    seqServiceNames[0] = "com.sun.star.xml.crypto.XMLEncryptionTemplate";
+    return seqServiceNames;
 }
 
 OUString XMLEncryptionTemplateImpl :: impl_getImplementationName() throw( RuntimeException ) {

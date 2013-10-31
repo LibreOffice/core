@@ -129,7 +129,7 @@ Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl :: getSupportedServiceNam
 Sequence< OUString > XMLSignatureTemplateImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString("com.sun.star.xml.crypto.XMLSignatureTemplate") ;
+    seqServiceNames[0] = "com.sun.star.xml.crypto.XMLSignatureTemplate";
     return seqServiceNames ;
 }
 

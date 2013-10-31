@@ -141,7 +141,7 @@ Sequence< OUString > SAL_CALL XMLSecurityContext_MSCryptImpl :: getSupportedServ
 Sequence< OUString > XMLSecurityContext_MSCryptImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString("com.sun.star.xml.crypto.XMLSecurityContext") ;
+    seqServiceNames[0] = "com.sun.star.xml.crypto.XMLSecurityContext";
     return seqServiceNames ;
 }
 

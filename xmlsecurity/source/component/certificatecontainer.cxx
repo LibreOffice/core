@@ -114,7 +114,7 @@ CertificateContainer::impl_getStaticSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence< OUString > aRet(1);
-    *aRet.getArray() = OUString("com.sun.star.security.CertificateContainer");
+    aRet[0] = "com.sun.star.security.CertificateContainer";
     return aRet;
 }
 

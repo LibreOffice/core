@@ -212,7 +212,7 @@ DocumentSignatureHelper::CreateElementList(
                     ; // Doesn't have to exist...
                 }
                 // 3) OLE....
-                aSubStorageName = OUString("ObjectReplacements");
+                aSubStorageName = "ObjectReplacements";
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -261,7 +261,7 @@ DocumentSignatureHelper::CreateElementList(
             }
 
             // 2) Dialogs
-            aSubStorageName = OUString("Dialogs") ;
+            aSubStorageName = "Dialogs";
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -272,7 +272,7 @@ DocumentSignatureHelper::CreateElementList(
                 ; // Doesn't have to exist...
             }
             // 3) Scripts
-            aSubStorageName = OUString("Scripts") ;
+            aSubStorageName = "Scripts";
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
