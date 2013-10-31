@@ -62,7 +62,6 @@
 #define QBX_CONFIRM_RESTORE_DEFAULT (66 + CFG_OFFSET)
 #define QBX_CONFIRM_DELETE_TOOLBAR (67 + CFG_OFFSET)
 
-#define MD_MENU_ORGANISER (79 + CFG_OFFSET)
 #define TXT_MENU (80 + CFG_OFFSET)
 #define BOX_MAIN_MENUS (81 + CFG_OFFSET)
 #define BTN_MENU_UP (82 + CFG_OFFSET)
@@ -92,8 +91,5 @@
 #define EDT_ADDR (121 + CFG_OFFSET)
 #define MD_BTN_OK (122 + CFG_OFFSET)
 #define FI_INFO (123 + CFG_OFFSET)
-
-#define BUTTON_STR_UP   (130 + CFG_OFFSET)
-#define BUTTON_STR_DOWN (131 + CFG_OFFSET)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

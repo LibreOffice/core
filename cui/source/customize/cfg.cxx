@@ -1611,8 +1611,6 @@ SvxConfigPage::SvxConfigPage(
     aDescriptionField.SetAutoScroll( sal_True );
     aDescriptionField.EnableCursor( sal_False );
 
-    aMoveUpButton.SetAccessibleName(CUI_RES(BUTTON_STR_UP));
-    aMoveDownButton.SetAccessibleName(CUI_RES(BUTTON_STR_DOWN));
     aMoveUpButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
     aMoveDownButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
     aNewTopLevelButton.SetAccessibleRelationMemberOf(&aTopLevelSeparator);
@@ -2741,20 +2739,15 @@ SaveInData* SvxMenuConfigPage::CreateSaveInData(
 SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     Window* pParent, SvxEntries* entries,
     SvxConfigEntry* selection, bool bCreateMenu )
-    :
-    ModalDialog( pParent, CUI_RES( MD_MENU_ORGANISER ) ),
-    aMenuNameText( this, CUI_RES( TXT_MENU_NAME ) ),
-    aMenuNameEdit( this, CUI_RES( EDIT_MENU_NAME ) ),
-    aMenuListText( this, CUI_RES( TXT_MENU ) ),
-    aMenuListBox( this, CUI_RES( BOX_MAIN_MENUS ) ),
-    aMoveUpButton( this, CUI_RES( BTN_MENU_UP ) ),
-    aMoveDownButton( this, CUI_RES( BTN_MENU_DOWN ) ),
-    aOKButton( this, CUI_RES( BTN_MENU_ADD ) ),
-    aCloseButton( this, CUI_RES( BTN_MENU_CLOSE ) ),
-    aHelpButton( this, CUI_RES( BTN_MENU_HELP ) ),
-    bModified( sal_False )
+    : ModalDialog(pParent, "MoveMenuDialog", "cui/ui/movemenu.ui")
+    , bModified(false)
 {
-    FreeResource();
+    get(m_pMenuBox, "namebox");
+    get(m_pMenuNameEdit, "menuname");
+    get(m_pMoveUpButton, "up");
+    get(m_pMoveDownButton, "down");
+    get(m_pMenuListBox, "menulist");
+    m_pMenuListBox->set_height_request(m_pMenuListBox->GetTextHeight() * 12);
 
     // Copy the entries list passed in
     if ( entries != NULL )
@@ -2769,13 +2762,13 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         {
             pEntry = *iter;
             pLBEntry =
-                aMenuListBox.InsertEntry( stripHotKey( pEntry->GetName() ) );
+                m_pMenuListBox->InsertEntry( stripHotKey( pEntry->GetName() ) );
             pLBEntry->SetUserData( pEntry );
             pEntries->push_back( pEntry );
 
             if ( pEntry == selection )
             {
-                aMenuListBox.Select( pLBEntry );
+                m_pMenuListBox->Select( pLBEntry );
             }
             ++iter;
         }
@@ -2795,63 +2788,32 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         pNewEntryData->SetMain( sal_True );
 
         pNewMenuEntry =
-            aMenuListBox.InsertEntry( stripHotKey( pNewEntryData->GetName() ) );
-        aMenuListBox.Select( pNewMenuEntry );
+            m_pMenuListBox->InsertEntry( stripHotKey( pNewEntryData->GetName() ) );
+        m_pMenuListBox->Select( pNewMenuEntry );
 
         pNewMenuEntry->SetUserData( pNewEntryData );
 
         pEntries->push_back( pNewEntryData );
 
-        aMenuNameEdit.SetText( newname );
-        aMenuNameEdit.SetModifyHdl(
+        m_pMenuNameEdit->SetText( newname );
+        m_pMenuNameEdit->SetModifyHdl(
             LINK( this, SvxMainMenuOrganizerDialog, ModifyHdl ) );
     }
     else
     {
-        Point p, newp;
-        Size s, news;
-
-        // get offset to bottom of name textfield from top of dialog
-        p = aMenuNameEdit.GetPosPixel();
-        s = aMenuNameEdit.GetSizePixel();
-        long offset = p.Y() + s.Height();
-
-        // reposition menu list and label
-        aMenuListText.SetPosPixel( aMenuNameText.GetPosPixel() );
-        aMenuListBox.SetPosPixel( aMenuNameEdit.GetPosPixel() );
-
-        // reposition up and down buttons
-        p = aMoveUpButton.GetPosPixel();
-        newp = Point( p.X(), p.Y() - offset );
-        aMoveUpButton.SetPosPixel( newp );
-
-        p = aMoveDownButton.GetPosPixel();
-        newp = Point( p.X(), p.Y() - offset );
-        aMoveDownButton.SetPosPixel( newp );
-
-        // change size of dialog
-        s = GetSizePixel();
-        news = Size( s.Width(), s.Height() - offset );
-        SetSizePixel( news );
-
         // hide name label and textfield
-        aMenuNameText.Hide();
-        aMenuNameEdit.Hide();
-
+        m_pMenuBox->Hide();
         // change the title
         SetText( CUI_RES( RID_SVXSTR_MOVE_MENU ) );
     }
 
-    aMenuListBox.SetSelectHdl(
+    m_pMenuListBox->SetSelectHdl(
         LINK( this, SvxMainMenuOrganizerDialog, SelectHdl ) );
 
-    aMoveUpButton.SetClickHdl (
+    m_pMoveUpButton->SetClickHdl (
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
-    aMoveDownButton.SetClickHdl (
+    m_pMoveDownButton->SetClickHdl (
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
-
-    aMoveUpButton.SetAccessibleName(CUI_RES(BUTTON_STR_UP));
-    aMoveDownButton.SetAccessibleName(CUI_RES(BUTTON_STR_DOWN));
 }
 
 IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
@@ -2859,7 +2821,7 @@ IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
     (void)pEdit;
 
     // if the Edit control is empty do not change the name
-    if ( aMenuNameEdit.GetText() == "" )
+    if (m_pMenuNameEdit->GetText().isEmpty())
     {
         return 0;
     }
@@ -2867,9 +2829,9 @@ IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
     SvxConfigEntry* pNewEntryData =
         (SvxConfigEntry*) pNewMenuEntry->GetUserData();
 
-    pNewEntryData->SetName( aMenuNameEdit.GetText() );
+    pNewEntryData->SetName(m_pMenuNameEdit->GetText());
 
-    aMenuListBox.SetEntryText( pNewMenuEntry, pNewEntryData->GetName() );
+    m_pMenuListBox->SetEntryText( pNewMenuEntry, pNewEntryData->GetName() );
 
     return 0;
 }
@@ -2888,17 +2850,17 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, SelectHdl, Control*, pCtrl )
 void SvxMainMenuOrganizerDialog::UpdateButtonStates()
 {
     // Disable Up and Down buttons depending on current selection
-    SvTreeListEntry* selection = aMenuListBox.GetCurEntry();
-    SvTreeListEntry* first = aMenuListBox.First();
-    SvTreeListEntry* last = aMenuListBox.Last();
+    SvTreeListEntry* selection = m_pMenuListBox->GetCurEntry();
+    SvTreeListEntry* first = m_pMenuListBox->First();
+    SvTreeListEntry* last = m_pMenuListBox->Last();
 
-    aMoveUpButton.Enable( selection != first );
-    aMoveDownButton.Enable( selection != last );
+    m_pMoveUpButton->Enable( selection != first );
+    m_pMoveDownButton->Enable( selection != last );
 }
 
 IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
 {
-    SvTreeListEntry *pSourceEntry = aMenuListBox.FirstSelected();
+    SvTreeListEntry *pSourceEntry = m_pMenuListBox->FirstSelected();
     SvTreeListEntry *pTargetEntry = NULL;
 
     if ( !pSourceEntry )
@@ -2906,15 +2868,15 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
         return 0;
     }
 
-    if ( pButton == &aMoveDownButton )
+    if (pButton == m_pMoveDownButton)
     {
-        pTargetEntry = aMenuListBox.NextSibling( pSourceEntry );
+        pTargetEntry = m_pMenuListBox->NextSibling( pSourceEntry );
     }
-    else if ( pButton == &aMoveUpButton )
+    else if (pButton == m_pMoveUpButton)
     {
         // Move Up is just a Move Down with the source and target reversed
         pTargetEntry = pSourceEntry;
-        pSourceEntry = aMenuListBox.PrevSibling( pTargetEntry );
+        pSourceEntry = m_pMenuListBox->PrevSibling( pTargetEntry );
     }
 
     if ( pSourceEntry != NULL && pTargetEntry != NULL )
@@ -2936,8 +2898,8 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
         if ( iter1 != end && iter2 != end )
         {
             std::swap( *iter1, *iter2 );
-            aMenuListBox.GetModel()->Move( pSourceEntry, pTargetEntry );
-            aMenuListBox.MakeVisible( pSourceEntry );
+            m_pMenuListBox->GetModel()->Move( pSourceEntry, pTargetEntry );
+            m_pMenuListBox->MakeVisible( pSourceEntry );
 
             bModified = sal_True;
         }
@@ -2958,7 +2920,7 @@ SvxEntries* SvxMainMenuOrganizerDialog::GetEntries()
 
 SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
 {
-    return (SvxConfigEntry*)aMenuListBox.FirstSelected()->GetUserData();
+    return (SvxConfigEntry*)m_pMenuListBox->FirstSelected()->GetUserData();
 }
 
 const OUString&

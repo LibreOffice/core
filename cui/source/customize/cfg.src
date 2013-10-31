@@ -410,80 +410,6 @@ String RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION
     Text [ en-US ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
 };
 
-ModalDialog MD_MENU_ORGANISER
-{
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 172 , 154 ) ;
-    Text [ en-US ] = "New Menu" ;
-    SvLook = TRUE ;
-    Moveable = TRUE ;
-    HelpId = HID_SVX_CONFIG_MENU_ORGANIZER;
-    FixedText TXT_MENU_NAME
-    {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 93 , 8 ) ;
-        Group = TRUE ;
-        Left = TRUE ;
-        Text [ en-US ] = "Menu name" ;
-    };
-    Edit EDIT_MENU_NAME
-    {
-        HelpID = "cui:Edit:MD_MENU_ORGANISER:EDIT_MENU_NAME";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 93 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText TXT_MENU
-    {
-        Pos = MAP_APPFONT ( 6 , 37 ) ;
-        Size = MAP_APPFONT ( 93 , 8 ) ;
-        Group = TRUE ;
-        Left = TRUE ;
-        Text [ en-US ] = "Menu position" ;
-    };
-    Control BOX_MAIN_MENUS
-    {
-        HelpId = HID_SVX_CONFIG_MENU_LISTBOX ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 48 ) ;
-        Size = MAP_APPFONT ( 93 , 100 ) ;
-        TabStop = TRUE ;
-    };
-    ImageButton BTN_MENU_UP
-    {
-        HelpID = "cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_UP";
-        Pos = MAP_APPFONT ( 102 , 80 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop = TRUE ;
-        Symbol = IMAGEBUTTON_ARROW_UP ;
-    };
-    ImageButton BTN_MENU_DOWN
-    {
-        HelpID = "cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_DOWN";
-        Pos = MAP_APPFONT ( 102 , 97 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop = TRUE ;
-        Symbol = IMAGEBUTTON_ARROW_DOWN ;
-    };
-    OKButton BTN_MENU_ADD
-    {
-        DefButton = TRUE;
-        Pos = MAP_APPFONT ( 119 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    CancelButton BTN_MENU_CLOSE
-    {
-        Pos = MAP_APPFONT ( 119 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_MENU_HELP
-    {
-        Pos = MAP_APPFONT ( 119 , 40 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
-
 #ifndef IMAGE_STDBTN_COLOR
 #define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 #endif
@@ -730,15 +656,6 @@ String RID_SVXSTR_RENAME_MENU
 String RID_SVXSTR_RENAME_TOOLBAR
 {
     Text [ en-US ] = "Rename Toolbar";
-};
-
-String BUTTON_STR_UP
-{
-    Text [ en-US ] = "Up";
-};
-String BUTTON_STR_DOWN
-{
-    Text [ en-US ] = "Down";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

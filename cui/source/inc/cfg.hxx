@@ -19,9 +19,10 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CFG_HXX
 #define INCLUDED_CUI_SOURCE_INC_CFG_HXX
 
-#include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/treelistbox.hxx>
@@ -510,15 +511,11 @@ public:
 
 class SvxMainMenuOrganizerDialog : public ModalDialog
 {
-    FixedText       aMenuNameText;
-    Edit            aMenuNameEdit;
-    FixedText       aMenuListText;
-    SvTreeListBox   aMenuListBox;
-    ImageButton     aMoveUpButton;
-    ImageButton     aMoveDownButton;
-    OKButton        aOKButton;
-    CancelButton    aCloseButton;
-    HelpButton      aHelpButton;
+    VclContainer*   m_pMenuBox;
+    Edit*           m_pMenuNameEdit;
+    SvTreeListBox*  m_pMenuListBox;
+    PushButton*     m_pMoveUpButton;
+    PushButton*     m_pMoveDownButton;
 
     SvxEntries*     pEntries;
     SvTreeListEntry*    pNewMenuEntry;
