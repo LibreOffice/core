@@ -20,17 +20,12 @@
 #include "unxsplash.hxx"
 #include <stdio.h>
 #include <osl/process.h>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+//#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
 #define PIPE_ARG "--splash-pipe="
-
-using namespace ::rtl;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::uno;
 
 namespace desktop
 {
@@ -130,7 +125,7 @@ using namespace desktop;
 // get service instance...
 static uno::Reference< uno::XInterface > m_xINSTANCE;
 
-uno::Reference< uno::XInterface > SAL_CALL UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
+uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
 {
     static osl::Mutex m_aMutex;
     if ( !m_xINSTANCE.is() )
@@ -148,34 +143,11 @@ OUString UnxSplash_getImplementationName()
     return OUString( "com.sun.star.office.comp.PipeSplashScreen" );
 }
 
-uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw()
+uno::Sequence< OUString > UnxSplash_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( "com.sun.star.office.PipeSplashScreen" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
-
-::cppu::ImplementationEntry aEntries[] =
-{
-    {
-        UnxSplash_createInstance, UnxSplash_getImplementationName,
-        UnxSplash_getSupportedServiceNames,
-        ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL splash_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager,
-                                               pRegistryKey, aEntries );
-}
-
-} // extern "C"
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
