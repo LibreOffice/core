@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAZX///sY\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-31T12:15:31Z",
+      "side": 1,
+      "message": "Oops, it was my personal trace indeed.\nRemoved the line.",
+      "parentUuid": "AAAAZX///tM\u003d",
+      "revId": "177443513f5f154288e1a8fcddb4b6f609e0fa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAZX///tI\u003d",
         "filename": "sc/source/filter/excel/xlformula.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-10-31T11:20:30Z",
       "side": 1,
       "message": "These are not RX/MX functions, they have 4 to 6 parameters defined. Probably should be\n\n EXC_FUNCENTRY_V_VR( ..., 4, 6, ...)",
+      "revId": "177443513f5f154288e1a8fcddb4b6f609e0fa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///sU\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-31T12:15:31Z",
+      "side": 1,
+      "message": "It\u0027s even worse, for BETA.INV it ought to be ... 3, 5, ...\nDone.",
+      "parentUuid": "AAAAZX///tI\u003d",
       "revId": "177443513f5f154288e1a8fcddb4b6f609e0fa05",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAZX///sQ\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-31T12:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAZX///tE\u003d",
+      "revId": "177443513f5f154288e1a8fcddb4b6f609e0fa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAZX///s4\u003d",
         "filename": "sc/source/ui/src/scfuncs.src",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2013-10-31T11:20:30Z",
       "side": 1,
       "message": "This says 6 parameters, of which 3 have to be given and 3 are optional. If the function expects 4-6 it should be\n\n 6; 0; 0; 0; 0; 1; 1;\n\nYou can check in the Function Wizard what/how it is displayed.",
+      "revId": "177443513f5f154288e1a8fcddb4b6f609e0fa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///sM\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 6744,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-31T12:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAZX///s4\u003d",
       "revId": "177443513f5f154288e1a8fcddb4b6f609e0fa05",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
