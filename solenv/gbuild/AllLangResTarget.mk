@@ -376,7 +376,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
 		$(gb_ResTarget_RSCDEPS)
 	$(call gb_Output_announce,$*,$(true),RES,2)
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) $(OUTDIR)/bin \
+		mkdir -p $(dir $@) \
 			$(dir $(call gb_ResTarget_get_imagelist_target,$*)) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
 		echo "-r -p \
