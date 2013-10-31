@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///qY\u003d",
+        "filename": "solenv/bin/ooinstall",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2013-10-31T15:16:51Z",
+      "side": 0,
+      "message": "Shouldn\u0027t this be like\n$ENV{\u0027PYTHONPATH\u0027} \u003d \"$ENV{\u0027SRC_ROOT\u0027}/instsetoo_native/$ENV{\u0027INPATH\u0027}/bin;\ninstead?",
+      "revId": "fc68745898647e1b9070459be43c5d1e0e933150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
