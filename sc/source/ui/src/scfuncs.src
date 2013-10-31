@@ -6729,6 +6729,126 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The final value for the value interval of the distribution." ;
         };
     };
+     // -=*# Resource for function BETA.DIST #*=-
+    Resource SC_OPCODE_BETA_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the beta distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_BETADIST_MS );
+            6;  0;  0;  0;  0;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the beta distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "alpha" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The Alpha parameter of the Beta distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "beta" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The Beta parameter of the Beta distribution." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [en-US ] = "Cumulative" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "0 or FALSE for probability density function, any other value or TRUE or omitted for cumulative distribution function.";
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "Start" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "The starting value for the value interval of the distribution." ;
+        };
+        String 12 // Name of Parameter 6
+        {
+            Text [ en-US ] = "End" ;
+        };
+        String 13 // Description of Parameter 6
+        {
+            Text [ en-US ] = "The final value for the value interval of the distribution." ;
+        };
+    };
+     // -=*# Resource for function BETA.INV #*=-
+    Resource SC_OPCODE_BETA_INV_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse beta distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_BETAINV_MS );
+            5;  0;  0;  0;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse beta distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "alpha" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The Alpha parameter of the Beta distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "beta" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The Beta parameter of the Beta distribution." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "Start" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "The starting value for the value interval of the distribution." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "End" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "The final value for the value interval of the distribution." ;
+        };
+    };
      // -=*# Resource for function WEIBULL #*=-
     Resource SC_OPCODE_WEIBULL
     {
