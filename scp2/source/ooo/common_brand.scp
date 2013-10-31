@@ -550,16 +550,6 @@ End
 
 #endif
 
-// use this for high detail file open dialog >= 5.1 windows
-#if defined( _MSC_VER )
-File gid_Brand_File_Bin_Soffice_Bin_Manifest
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-    Name = "soffice.bin.manifest";
-End
-#endif
-
 #ifdef WNT
 File gid_Brand_File_Desktophelper_Txt
     TXT_FILE_BODY;
