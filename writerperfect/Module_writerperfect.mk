@@ -34,10 +34,12 @@ ifneq (,$(SYSTEM_WPG))
 ifneq (,$(SYSTEM_VISIO))
 ifneq (,$(SYSTEM_CDR))
 ifneq (,$(SYSTEM_MSPUB))
+ifneq (,$(SYSTEM_FREEHAND))
 ifneq (,$(SYSTEM_ODFGEN))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftdraw \
 ))
+endif
 endif
 endif
 endif
