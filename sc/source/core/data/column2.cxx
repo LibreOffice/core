@@ -2722,7 +2722,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             {
                 // Requested range falls within the first block.
                 copyFirstStringBlock(*pDocument, rArray, nRow2+1, itBlk);
-                return formula::VectorRefArray(&rArray[0]);
+                return formula::VectorRefArray(&rArray[nRow1]);
             }
 
             copyFirstStringBlock(*pDocument, rArray, itBlk->size, itBlk);

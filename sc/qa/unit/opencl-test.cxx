@@ -237,13 +237,12 @@ void ScOpenclTest::testCompilerString()
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 5; ++i)
     {
-#if 0
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
-#endif
-        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+
+        fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();

@@ -61,7 +61,13 @@ bool equals( const formula::VectorRefArray& rArray, size_t nPos, const OUString&
     if (!rArray.mpStringArray)
         return false;
 
-    return OUString(rArray.mpStringArray[nPos]).equalsIgnoreAsciiCase(rVal);
+    bool bEquals = OUString(rArray.mpStringArray[nPos]).equalsIgnoreAsciiCase(rVal);
+    if (!bEquals)
+    {
+        cerr << "Expected: " << rVal.toAsciiUpperCase() << " (upcased)" << endl;
+        cerr << "Actual: " << OUString(rArray.mpStringArray[nPos]) << " (upcased)" << endl;
+    }
+    return bEquals;
 }
 
 }
@@ -234,6 +240,34 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+
+    // Column G consists only of strings.
+    m_pDoc->SetString(ScAddress(6,0,0), "Title");
+    m_pDoc->SetString(ScAddress(6,1,0), "foo");
+    m_pDoc->SetString(ScAddress(6,2,0), "bar");
+    m_pDoc->SetString(ScAddress(6,3,0), "foo");
+    m_pDoc->SetString(ScAddress(6,4,0), "baz");
+    m_pDoc->SetString(ScAddress(6,5,0), "quack");
+    m_pDoc->SetString(ScAddress(6,6,0), "beep");
+    m_pDoc->SetString(ScAddress(6,7,0), "kerker");
+
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(6,1,0), 4); // G2:G5
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a numeric array.", !aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should have a string array.", aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, "foo"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 1, "bar"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 2, "foo"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 3, "baz"));
+
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(6,2,0), 4); // G3:G6
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a numeric array.", !aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should have a string array.", aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, "bar"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 1, "foo"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 2, "baz"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 3, "quack"));
 
     m_pDoc->DeleteTab(0);
 }
