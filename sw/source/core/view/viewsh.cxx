@@ -1771,8 +1771,18 @@ void SwViewShell::PaintTile(OutputDevice *pOut, const Rectangle &rRect)
 
 #if !HAVE_FEATURE_DESKTOP
 extern "C"
-void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight)
+void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLODpxPoint tileDpxPosition, MLODpxSize tileDpxSize)
 {
+    MLORipPoint tileRipPosition = MLORipPointByDpxPoint(tileDpxPosition);
+    MLORipSize rileRipSize = MLORipSizeByDpxSize(tileDpxSize);
+    MLORip tileRipPosX = tileRipPosition.x;
+    MLORip tileRipPosY = tileRipPosition.y;
+    MLORip tileRipWidth = rileRipSize.width;
+    MLORip tileRipHeight = rileRipSize.height;
+    int tilePosX = tileRipPosX;
+    int tilePosY = tileRipPosY;
+    int tileWidth  = tileRipWidth;
+    int tileHeight = tileRipHeight;
     // Currently we expect that only one document is open, so we are using the
     // current shell.  Should it turn out that we need to have more documents
     // open, we need to add a documentHandle that would hold the right
@@ -1816,36 +1826,36 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
     Application::ReleaseSolarMutex();
 }
 extern "C"
-CGSize touch_lo_get_content_size()
+MLODpxSize touch_lo_get_content_size()
 {
     SwWrtShell *pViewShell = GetActiveWrtShell();
     if (pViewShell)
     {
-        static const long WIDTH_ADDITION  = 6L * DOCUMENTBORDER;
-        static const long HEIGHT_ADDITION = 2L * DOCUMENTBORDER;
+        static const MLORip WIDTH_ADDITION  = 6L * DOCUMENTBORDER;
+        static const MLORip HEIGHT_ADDITION = 2L * DOCUMENTBORDER;
         Size documentSize =pViewShell->GetView().GetDocSz();
-        return MLOPixelsToCGSize(documentSize.Width() + WIDTH_ADDITION,
-                                  documentSize.Height() + HEIGHT_ADDITION);
+        return MLODpxSizeByRips(((MLORip)documentSize.Width()) + WIDTH_ADDITION,
+                               ((MLORip)documentSize.Height()) + HEIGHT_ADDITION);
     }
-    return CGSizeMake(0,0);
+    return MLODpxSizeByDpxes(0,0);
 }
 
 extern "C"
-MLOPixelPoint CGPointToMLOPixelPoint(CGPoint cgPoint)
+MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint)
 {
-    CGSize contentSize = touch_lo_get_content_size();
-    MLOPixel x = CGFloatToMLOPixel(cgPoint.x - (contentSize.width/2.0f));
-    MLOPixel y = CGFloatToMLOPixel(cgPoint.y);
-    return MLOPixelPointMake(x,y);
+    MLODpxSize contentSize = touch_lo_get_content_size();
+    MLORip x = MLORipByDpx(mloDpxPoint.x - (contentSize.width/2.0f));
+    MLORip y = MLORipByDpx(mloDpxPoint.y);
+    return MLORipPointByRips(x,y);
 }
 
 extern "C"
-CGPoint MLOPixelPointToCGPoint(MLOPixelPoint mloPixelPoint)
+MLODpxPoint MLODpxPointByRipPoint(MLORipPoint mloRipPoint)
 {
-    CGSize contentSize = touch_lo_get_content_size();
-    CGFloat x = MLOPixelToCGFloat(mloPixelPoint.x) + (contentSize.width/2.0f);
-    CGFloat y = MLOPixelToCGFloat(mloPixelPoint.y);
-    return CGPointMake(x,y);
+    MLODpxSize contentSize = touch_lo_get_content_size();
+    MLODpx x = MLODpxByRip(mloRipPoint.x) + (contentSize.width/2.0f);
+    MLODpx y = MLODpxByRip(mloRipPoint.y);
+    return MLODpxPointByDpxes(x,y);
 }
 #endif
 

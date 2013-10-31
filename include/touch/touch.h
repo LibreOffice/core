@@ -92,69 +92,89 @@ typedef basegfx::B2IBox MLORect;
 
 // MLODip - Device Independent Pixels
 
-typedef long long MLOPixel;
-static const MLOPixel LO_TWIPS_TO_MLO_PIXEL_RATIO = 10L;
-struct MLOPixelSize {
-    MLOPixel width;
-    MLOPixel height;
+typedef long long MLORip;
+typedef CGFloat MLODpx;
+typedef CGPoint MLODpxPoint;
+typedef CGSize MLODpxSize;
+
+CG_INLINE MLODpxPoint
+MLODpxPointByDpxes(MLODpx x, MLODpx y)
+{
+    return CGPointMake(x, y);
+}
+
+CG_INLINE MLODpxSize
+MLODpxSizeByDpxes(MLODpx width, MLODpx height)
+{
+    return CGSizeMake(width, height);
+}
+
+static const MLORip LO_TWIPS_TO_MLO_RIP_RATIO = 10L;
+
+struct MLORipSize
+{
+    MLORip width;
+    MLORip height;
 };
-typedef struct MLOPixelSize MLOPixelSize;
-struct MLOPixelPoint {
-    MLOPixel x;
-    MLOPixel y;
+typedef struct MLORipSize MLORipSize;
+
+struct MLORipPoint
+{
+    MLORip x;
+    MLORip y;
 };
-typedef struct MLOPixelPoint MLOPixelPoint;
+typedef struct MLORipPoint MLORipPoint;
 
-CG_INLINE CGFloat
-MLOPixelToCGFloat(MLOPixel mloPixel)
+CG_INLINE MLODpx
+MLODpxByRip(MLORip rip)
 {
-    return (CGFloat) (mloPixel / LO_TWIPS_TO_MLO_PIXEL_RATIO);
+    return (MLODpx) (rip / LO_TWIPS_TO_MLO_RIP_RATIO);
 }
 
-CG_INLINE MLOPixel
-CGFloatToMLOPixel(CGFloat cgFloat)
+CG_INLINE MLORip
+MLORipByDpx(MLODpx dpx)
 {
-    return (MLOPixel) cgFloat * LO_TWIPS_TO_MLO_PIXEL_RATIO;
+    return (MLORip) (dpx * LO_TWIPS_TO_MLO_RIP_RATIO);
 }
 
-CG_INLINE MLOPixelSize
-MLOPixelSizeMake(MLOPixel width, MLOPixel height)
+CG_INLINE MLORipSize
+MLORipSizeByRips(MLORip width, MLORip height)
 {
-    MLOPixelSize size; size.width = width; size.height = height; return size;
+    MLORipSize ripSize; ripSize.width = width; ripSize.height = height; return ripSize;
 }
 
-CG_INLINE MLOPixelPoint
-MLOPixelPointMake(MLOPixel x, MLOPixel y)
+CG_INLINE MLORipPoint
+MLORipPointByRips(MLORip x, MLORip y)
 {
-    MLOPixelPoint point; point.x = x; point.y = y; return point;
+    MLORipPoint point; point.x = x; point.y = y; return point;
 }
 
-CG_INLINE MLOPixelSize
-CGSizeToMLOPixelSize(CGSize cgSize)
+CG_INLINE MLORipSize
+MLORipSizeByDpxSize(MLODpxSize dpxSize)
 {
-    MLOPixelSize mloPixelSize;
-    mloPixelSize.width = MLOPixelToCGFloat(cgSize.width);
-    mloPixelSize.height = MLOPixelToCGFloat(cgSize.height);
-    return mloPixelSize;
+    MLORipSize ripSize;
+    ripSize.width = MLORipByDpx(dpxSize.width);
+    ripSize.height = MLORipByDpx(dpxSize.height);
+    return ripSize;
 }
 
-CG_INLINE CGSize
-MLOPixelsToCGSize(MLOPixel width, MLOPixel height)
+CG_INLINE MLODpxSize
+MLODpxSizeByRips(MLORip width, MLORip height)
 {
-    CGFloat fWidth = MLOPixelToCGFloat(width);
-    CGFloat fHeight = MLOPixelToCGFloat(height);
+    CGFloat fWidth = MLODpxByRip(width);
+    CGFloat fHeight = MLODpxByRip(height);
     return CGSizeMake(fWidth, fHeight);
 }
 
-CG_INLINE CGSize
-MLOPixelSizeToCGSize(MLOPixelSize mloPixelSize)
+CG_INLINE MLODpxSize
+MLODpxSizeByRipSize(MLORipSize ripSize)
 {
-    return MLOPixelsToCGSize(mloPixelSize.width, mloPixelSize.height);
+    return MLODpxSizeByRips(ripSize.width, ripSize.height);
 }
 
-MLOPixelPoint CGPointToMLOPixelPoint(CGPoint cgPoint);
+MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint);
 
-CGPoint MLOPixelPointToCGPoint(MLOPixelPoint mloPixelPoint);
+MLODpxPoint MLODpxPointByMLORipPoint(MLORipPoint mloRipPoint);
 
 
 // selection
@@ -199,9 +219,9 @@ void touch_lo_keyboard_input(int c);
 tilePosX, tilePosY, tileWidth, tileHeight address the part of the document to be drawn.
 context, contextHeight, contextWidth specify where to draw.
 */
-void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight);
+void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLODpxPoint tilePosition, MLODpxSize tileSize);
 void touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeight, size_t sourceBytesPerRow, void * target, size_t targetWidth, size_t targetHeight);
-CGSize touch_lo_get_content_size();
+MLODpxSize touch_lo_get_content_size();
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
 
 // Move the start of the selection to (x,y)
