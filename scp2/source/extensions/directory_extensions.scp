@@ -33,17 +33,6 @@ End
 
 #endif
 
-/* ** Numbertext ** */
-
-#ifdef WITH_EXTENSION_NUMBERTEXT
-
-Directory gid_Brand_Dir_Share_Extensions_NumberText
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "numbertext";
-End
-
-#endif
-
 /* ** ConvertTextToNumber ** */
 
 #ifdef WITH_EXTENSION_CT2N
@@ -51,83 +40,6 @@ End
 Directory gid_Brand_Dir_Share_Extensions_CT2N
 	ParentID = gid_Brand_Dir_Share_Extensions;
 	DosName = "ConvertTextToNumber";
-End
-
-#endif
-
-/* ** Hungarian Cross-reference Toolbar** */
-
-#ifdef WITH_EXTENSION_HUNART
-
-Directory gid_Brand_Dir_Share_Extensions_HunArt
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "hunart";
-End
-
-#endif
-
-/* ** Typography Toolbar** */
-
-#ifdef WITH_EXTENSION_TYPO
-
-Directory gid_Brand_Dir_Share_Extensions_Typo
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "typo";
-End
-
-#endif
-
-/* ** Watch Window ** */
-
-#ifdef WITH_EXTENSION_WATCH_WINDOW
-
-Directory gid_Brand_Dir_Share_Extensions_Watch_Window
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "WatchWindow";
-End
-
-#endif
-
-/* ** Diagram ** */
-
-#ifdef WITH_EXTENSION_DIAGRAM
-
-Directory gid_Brand_Dir_Share_Extensions_Diagram
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "Diagram";
-End
-
-#endif
-
-/* ** Validator ** */
-
-#ifdef WITH_EXTENSION_VALIDATOR
-
-Directory gid_Brand_Dir_Share_Extensions_Validator
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "Validator";
-End
-
-#endif
-
-/* ** Barcode ** */
-
-#ifdef WITH_EXTENSION_BARCODE
-
-Directory gid_Brand_Dir_Share_Extensions_Barcode
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "Barcode";
-End
-
-#endif
-
-/* ** Google Docs ** */
-
-#ifdef WITH_EXTENSION_GOOGLE_DOCS
-
-Directory gid_Brand_Dir_Share_Extensions_Google_Docs
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "gdocs";
 End
 
 #endif
@@ -150,23 +62,6 @@ End
 Directory gid_Brand_Dir_Share_Extensions_MySQLConnector
 	ParentID = gid_Brand_Dir_Share_Extensions;
 	DosName = "mysql-connector-ooo";
-End
-
-#endif
-
-/* ** Sun Template Pack ** */
-
-#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
-
-Directory gid_Brand_Dir_Share_Extensions_Sun_Template_Pack
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName (en-US) = "Sun_ODF_Template_Pack_en-US";
-    DosName (de) = "Sun_ODF_Template_Pack_de";
-    DosName (es) = "Sun_ODF_Template_Pack_es";
-    DosName (fr) = "Sun_ODF_Template_Pack_fr";
-    DosName (hu) = "Sun_ODF_Template_Pack_hu";
-    DosName (it) = "Sun_ODF_Template_Pack_it";
-    DosName = "Sun_ODF_Template_Pack";
 End
 
 #endif

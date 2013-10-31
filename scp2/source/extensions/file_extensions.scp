@@ -41,9 +41,9 @@ End
 
 File gid_File_Oxt_NumberText
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_NumberText;
-    Name = "numbertext.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "numbertext.filelist";
 End
 
 #endif
@@ -67,9 +67,9 @@ End
 
 File gid_File_Oxt_HunArt
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_HunArt;
-    Name = "hunart.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "hunart.filelist";
 End
 
 #endif
@@ -80,9 +80,9 @@ End
 
 File gid_File_Oxt_Typo
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Typo;
-    Name = "typo.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "typo.filelist";
 End
 
 #endif
@@ -93,9 +93,9 @@ End
 
 File gid_File_Oxt_Watch_Window
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Watch_Window;
-    Name = "WatchWindow.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "WatchWindow.filelist";
 End
 
 #endif
@@ -106,9 +106,9 @@ End
 
 File gid_File_Oxt_Diagram
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Diagram;
-    Name = "SmART.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "SmART.filelist";
 End
 
 #endif
@@ -119,9 +119,9 @@ End
 
 File gid_File_Oxt_Validator
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Validator;
-    Name = "Validator.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "Validator.filelist";
 End
 
 #endif
@@ -132,9 +132,9 @@ End
 
 File gid_File_Oxt_Barcode
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Barcode;
-    Name = "Barcode.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "Barcode.filelist";
 End
 
 #endif
@@ -145,9 +145,9 @@ End
 
 File gid_File_Oxt_Google_Docs
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Google_Docs;
-    Name = "gdocs.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "gdocs.filelist";
 End
 
 #endif
@@ -197,14 +197,14 @@ End
 
 File gid_File_Optional_Extensions_Sun_Template_Pack
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Sun_Template_Pack;
-    Name (en-US) = "Sun-ODF-Template-Pack-en-US.oxt";
-    Name (de) = "Sun-ODF-Template-Pack-de.oxt";
-    Name (it) = "Sun-ODF-Template-Pack-it.oxt";
-    Name (fr) = "Sun-ODF-Template-Pack-fr.oxt";
-    Name (es) = "Sun-ODF-Template-Pack-es.oxt";
-    Name (hu) = "Sun-ODF-Template-Pack-hu.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name (en-US) = "Sun_ODF_Template_Pack_en-US.filelist";
+    Name (de) = "Sun_ODF_Template_Pack_de.filelist";
+    Name (it) = "Sun_ODF_Template_Pack_it.filelist";
+    Name (fr) = "Sun_ODF_Template_Pack_fr.filelist";
+    Name (es) = "Sun_ODF_Template_Pack_es.filelist";
+    Name (hu) = "Sun_ODF_Template_Pack_hu.filelist";
 End
 
 #endif

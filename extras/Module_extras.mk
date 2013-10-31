@@ -59,12 +59,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 ))
 endif
 
-ifeq ($(WITH_EXTRA_EXTENSIONS),YES)
-$(eval $(call gb_Module_add_targets,extras,\
-	Package_extensions \
-))
-endif
-
 ifeq ($(WITH_EXTRA_FONT),YES)
 $(eval $(call gb_Module_add_targets,extras,\
 	ExternalPackage_extra_fonts \
