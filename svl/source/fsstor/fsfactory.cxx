@@ -40,8 +40,8 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
-    aRet[0] = OUString("com.sun.star.embed.FileSystemStorageFactory");
-    aRet[1] = OUString("com.sun.star.comp.embed.FileSystemStorageFactory");
+    aRet[0] = "com.sun.star.embed.FileSystemStorageFactory";
+    aRet[1] = "com.sun.star.comp.embed.FileSystemStorageFactory";
     return aRet;
 }
 

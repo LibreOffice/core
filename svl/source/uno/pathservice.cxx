@@ -53,7 +53,7 @@ public:
         throw(css::uno::RuntimeException)
         {
             css::uno::Sequence< OUString > aRet(1);
-            aRet.getArray()[0] = OUString("com.sun.star.config.SpecialConfigManager");
+            aRet.getArray()[0] = "com.sun.star.config.SpecialConfigManager";
             return aRet;
         }
 

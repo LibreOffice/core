@@ -253,7 +253,7 @@ void StorageItem::setUseStorage( bool bUse )
     Sequence< OUString > sendNames(1);
     Sequence< uno::Any > sendVals(1);
 
-    sendNames[0] = OUString("UseStorage");
+    sendNames[0] = "UseStorage";
 
     sendVals[0] <<= bUse;
 
@@ -265,7 +265,7 @@ void StorageItem::setUseStorage( bool bUse )
 bool StorageItem::useStorage()
 {
     Sequence< OUString > aNodeNames( 1 );
-    aNodeNames[0] = OUString("UseStorage");
+    aNodeNames[0] = "UseStorage";
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
 
@@ -291,8 +291,8 @@ bool StorageItem::getEncodedMP( OUString& aResult )
     }
 
     Sequence< OUString > aNodeNames( 2 );
-    aNodeNames[0] = OUString("HasMaster");
-    aNodeNames[1] = OUString("Master");
+    aNodeNames[0] = "HasMaster";
+    aNodeNames[1] = "Master";
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
 
@@ -316,8 +316,8 @@ void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
     Sequence< OUString > sendNames(2);
     Sequence< uno::Any > sendVals(2);
 
-    sendNames[0] = OUString("HasMaster");
-    sendNames[1] = OUString("Master");
+    sendNames[0] = "HasMaster";
+    sendNames[1] = "Master";
 
     sal_Bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
     sendVals[0] <<= bHasMaster;
@@ -537,7 +537,7 @@ OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUS
                     {
                         for( int ind = 0; ind < aSeq1.getLength(); ind++ )
                             if( resSeq[ind] != aSeq1[ind] )
-                                testOU = OUString();
+                                testOU = "";
                     }
 
                     result = rtl_cipher_decode ( aEncoder, (sal_uInt8*)aSeq1.getArray(), aSeq1.getLength(),
@@ -1175,7 +1175,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     ::osl::MutexGuard aGuard( mMutex );
     if ( m_pStorageFile )
     {
-        m_aMasterPasswd = OUString();
+        m_aMasterPasswd = "";
         m_pStorageFile->setEncodedMP( OUString() ); // let the master password be removed from configuration
     }
 }
@@ -1384,7 +1384,7 @@ Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  ) th
 Sequence< OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     Sequence< OUString > aRet(1);
-    *aRet.getArray() = OUString("com.sun.star.task.PasswordContainer");
+    aRet[0] = "com.sun.star.task.PasswordContainer";
     return aRet;
 }
 

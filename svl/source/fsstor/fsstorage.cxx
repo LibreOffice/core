@@ -233,8 +233,8 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
     // create cursor for access to children
     uno::Sequence< OUString > aProps( 2 );
     OUString* pProps = aProps.getArray();
-    pProps[0] = OUString("TargetURL");
-    pProps[1] = OUString("IsFolder");
+    pProps[0] = "TargetURL";
+    pProps[1] = "IsFolder";
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
@@ -1064,8 +1064,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
         throw io::IOException(); // TODO: error handling
 
     uno::Sequence< OUString > aProps( 1 );
-    OUString* pProps = aProps.getArray();
-    pProps[0] = OUString("Title");
+    aProps[0] = "Title";
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     uno::Sequence< OUString > aResult;
@@ -1177,7 +1176,7 @@ sal_Bool SAL_CALL FSStorage::hasElements()
         throw io::IOException(); // TODO: error handling
 
     uno::Sequence< OUString > aProps( 1 );
-    aProps[0] = OUString("TargetURL");
+    aProps[0] = "TargetURL";
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
