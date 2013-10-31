@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///qk\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-31T14:51:26Z",
+      "side": 1,
+      "message": "Should be EXC_FUNCENTRY_V_VR instead of EXC_FUNCENTRY_V_RX\n\nYes, those MS parameter types are a PITA ...",
+      "revId": "c29d67ceb9df6da8efcf3d4421a99c2e2ffcf8b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///qg\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-31T14:51:26Z",
+      "side": 1,
+      "message": "Should be { VR } instead of { RX }\n\nYes, those MS parameter types are a PITA ...",
+      "revId": "c29d67ceb9df6da8efcf3d4421a99c2e2ffcf8b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
