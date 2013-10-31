@@ -287,10 +287,6 @@ End
 
 #endif
 
-#if defined UNX && !defined MACOSX && !defined LIBO_HEADLESS
-STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
-#endif
-
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans
     PACKED_LIB_FILE_BODY;

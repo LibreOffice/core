@@ -85,7 +85,6 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
 	$(if $(filter unx,$(GUIBASE)),spa) \
 	spell \
-	$(if $(filter-out WNT MACOSX ANDROID IOS,$(OS)),spl_unx) \
 	svgfilter \
 	swd \
 	t602filter \

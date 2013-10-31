@@ -35,6 +35,7 @@ $(eval $(call gb_Library_set_componentfile,spl,desktop/source/splash/spl))
 $(eval $(call gb_Library_add_exception_objects,spl,\
     desktop/source/splash/services_spl \
     desktop/source/splash/splash \
+    desktop/source/splash/unxsplash \
 ))
 
 # vim: set ts=4 sw=4 et:

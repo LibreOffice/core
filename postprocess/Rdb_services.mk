@@ -333,7 +333,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/unix/exec/syssh \
 	) \
 	$(if $(filter-out MACOSX WNT,$(OS)), \
-		desktop/unx/splash/splash \
 		$(if $(ENABLE_HEADLESS),, \
 			shell/source/backends/desktopbe/desktopbe1 \
 			vcl/vcl.unx \

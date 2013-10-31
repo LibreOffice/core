@@ -24,13 +24,23 @@
 #include "sal/types.h"
 
 #include "splash.hxx"
+#include "unxsplash.hxx"
 
 namespace {
 
 static cppu::ImplementationEntry const services[] = {
-    { &desktop::splash::create, &desktop::splash::getImplementationName,
+    {
+      &desktop::splash::create,
+      &desktop::splash::getImplementationName,
       &desktop::splash::getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
+      &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+      UnxSplash_createInstance,
+      UnxSplash_getImplementationName,
+      UnxSplash_getSupportedServiceNames,
+      ::cppu::createSingleComponentFactory, 0, 0
+    },
     { 0, 0, 0, 0, 0, 0 }
 };
 

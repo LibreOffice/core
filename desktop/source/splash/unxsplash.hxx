@@ -13,6 +13,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -20,6 +21,11 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::uno;
 
 namespace desktop {
 
@@ -55,5 +61,9 @@ public:
 };
 
 }
+
+uno::Reference< uno::XInterface > SAL_CALL UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception );
+OUString UnxSplash_getImplementationName();
+com::sun::star::uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw ();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

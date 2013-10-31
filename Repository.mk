@@ -429,14 +429,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 
 endif
 
-ifeq ($(filter MACOSX WNT,$(OS)),)
-
-$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	spl_unx \
-))
-
-endif
-
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	getuid \
 	smoketest \

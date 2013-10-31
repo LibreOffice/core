@@ -25,4 +25,7 @@
   <implementation name="com.sun.star.office.comp.SplashScreen">
     <service name="com.sun.star.office.SplashScreen"/>
   </implementation>
+  <implementation name="com.sun.star.office.comp.PipeSplashScreen">
+    <service name="com.sun.star.office.PipeSplashScreen"/>
+  </implementation>
 </component>
