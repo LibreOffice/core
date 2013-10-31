@@ -901,6 +901,12 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 
             // insert ColEntry at new position.
             Insert( nRow2, pCell1 );
+
+            // A broadcaster that exists at cell 1 will have no effect in a
+            // subsequent SetDirty(ScRange) that broadcasts only existing cells
+            // so broadcast the change here. fdo#70815
+            // Delete(SCROW) does broadcast for other cases below.
+            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( nCol, nRow1, nTab)));
         }
 
         return;
