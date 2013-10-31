@@ -303,9 +303,9 @@ public:
     virtual std::string GenSlidingWindowDeclRef(bool) const
     {
         std::stringstream ss;
-        ss << "(!isNan(" << DynamicKernelArgument::GenSlidingWindowDeclRef(ss);
-        ss << ")?" << DynamicKernelArgument::GenSlidingWindowDeclRef(ss);
-        ss << ":" << mStringArgument.GenSlidingWindowDeclRef(ss);
+        ss << "(!isNan(" << DynamicKernelArgument::GenSlidingWindowDeclRef();
+        ss << ")?" << DynamicKernelArgument::GenSlidingWindowDeclRef();
+        ss << ":" << mStringArgument.GenSlidingWindowDeclRef();
         ss << ")";
         return ss.str();
     }
