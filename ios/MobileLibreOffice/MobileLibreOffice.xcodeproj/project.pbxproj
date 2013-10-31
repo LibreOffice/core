@@ -14,7 +14,6 @@
 		681D78BE180C12D300D52D5E /* rc in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B3180C12D300D52D5E /* rc */; };
 		681D78C0180C12D300D52D5E /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B5180C12D300D52D5E /* services.rdb */; };
 		681D78C1180C12D300D52D5E /* share in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B6180C12D300D52D5E /* share */; };
-		681D78C2180C12D300D52D5E /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B7180C12D300D52D5E /* udkapi.rdb */; };
 		681D78C3180C12D300D52D5E /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B8180C12D300D52D5E /* unorc */; };
 		681D78C6180C136400D52D5E /* ure in Resources */ = {isa = PBXBuildFile; fileRef = 681D78C5180C136400D52D5E /* ure */; };
 		688EAB01180D67E9003741B3 /* libios_sharedlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 688EAAFE180D679F003741B3 /* libios_sharedlo.a */; };
@@ -75,7 +74,6 @@
 		681D78B3180C12D300D52D5E /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = resource_link/rc; sourceTree = SOURCE_ROOT; };
 		681D78B5180C12D300D52D5E /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = resource_link/services.rdb; sourceTree = SOURCE_ROOT; };
 		681D78B6180C12D300D52D5E /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = resource_link/share; sourceTree = SOURCE_ROOT; };
-		681D78B7180C12D300D52D5E /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = resource_link/udkapi.rdb; sourceTree = SOURCE_ROOT; };
 		681D78B8180C12D300D52D5E /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = resource_link/unorc; sourceTree = SOURCE_ROOT; };
 		681D78C5180C136400D52D5E /* ure */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ure; path = resource_link/ure; sourceTree = SOURCE_ROOT; };
 		688EAAE8180D3130003741B3 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../lo.xcconfig; sourceTree = "<group>"; };
@@ -298,7 +296,6 @@
 				681D78B1180C12D300D52D5E /* oovbaapi.rdb */,
 				681D78B3180C12D300D52D5E /* rc */,
 				681D78B5180C12D300D52D5E /* services.rdb */,
-				681D78B7180C12D300D52D5E /* udkapi.rdb */,
 				681D78B8180C12D300D52D5E /* unorc */,
 			);
 			name = linked;
@@ -359,7 +356,7 @@
 		689EBADF18069FB7002F1CD7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = LibreOffice.org;
 			};
 			buildConfigurationList = 689EBAE218069FB7002F1CD7 /* Build configuration list for PBXProject "MobileLibreOffice" */;
@@ -428,7 +425,6 @@
 				681D78BE180C12D300D52D5E /* rc in Resources */,
 				681D78C0180C12D300D52D5E /* services.rdb in Resources */,
 				681D78C1180C12D300D52D5E /* share in Resources */,
-				681D78C2180C12D300D52D5E /* udkapi.rdb in Resources */,
 				681D78C3180C12D300D52D5E /* unorc in Resources */,
 				681D78C6180C136400D52D5E /* ure in Resources */,
 			);
@@ -471,8 +467,8 @@
 			baseConfigurationReference = 688EAAE8180D3130003741B3 /* lo.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -502,7 +498,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "";
 				LLVM_LTO = NO;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(LINK_LDFLAGS)",
@@ -519,8 +515,8 @@
 			baseConfigurationReference = 688EAAE8180D3130003741B3 /* lo.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -597,8 +593,8 @@
 			baseConfigurationReference = 688EAAE8180D3130003741B3 /* lo.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
