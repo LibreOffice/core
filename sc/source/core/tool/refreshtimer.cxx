@@ -18,7 +18,7 @@
  */
 
 #include "refreshtimer.hxx"
-
+#include "refreshtimerprotector.hxx"
 
 ScRefreshTimerProtector::ScRefreshTimerProtector( ScRefreshTimerControl * const * pp )
         :
@@ -32,6 +32,11 @@ ScRefreshTimerProtector::ScRefreshTimerProtector( ScRefreshTimerControl * const 
     }
 }
 
+ScRefreshTimerProtector::~ScRefreshTimerProtector()
+{
+    if ( ppControl && *ppControl )
+        (*ppControl)->SetAllowRefresh( true );
+}
 
 ScRefreshTimer::~ScRefreshTimer()
 {

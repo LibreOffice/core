@@ -89,6 +89,7 @@
 #include "formulacell.hxx"
 #include "clipcontext.hxx"
 #include "refupdatecontext.hxx"
+#include "refreshtimerprotector.hxx"
 #include "scopetools.hxx"
 #include "formulagroup.hxx"
 

@@ -33,7 +33,7 @@
 #include "appoptio.hxx"
 #include "formulaopt.hxx"
 #include "shellids.hxx"
-#include "refreshtimer.hxx"
+#include "refreshtimerprotector.hxx"
 #include "optutil.hxx"
 #include "docuno.hxx"
 
@@ -61,6 +61,7 @@ class VirtualDevice;
 class ScImportOptions;
 class ScDocShellModificator;
 class ScOptSolverSave;
+class ScRefreshTimer;
 class ScSheetSaveData;
 class ScFlatBoolRowSegments;
 class HelperModelObj;

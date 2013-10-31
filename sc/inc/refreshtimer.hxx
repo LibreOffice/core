@@ -46,21 +46,6 @@ public:
     ::osl::Mutex& GetMutex() { return aMutex; }
 };
 
-class ScRefreshTimerProtector
-{
-private:
-    ScRefreshTimerControl * const * ppControl;
-
-public:
-    ScRefreshTimerProtector( ScRefreshTimerControl * const * pp );
-
-    ~ScRefreshTimerProtector()
-    {
-        if ( ppControl && *ppControl )
-            (*ppControl)->SetAllowRefresh( true );
-    }
-};
-
 class ScRefreshTimer : public AutoTimer
 {
 private:
