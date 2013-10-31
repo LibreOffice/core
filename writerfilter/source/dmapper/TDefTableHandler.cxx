@@ -21,6 +21,7 @@
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <doctok/resourceids.hxx>
+#include <filter/msfilter/util.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -249,6 +250,32 @@ OUString lcl_getBorderTypeString(sal_Int32 nType)
     return OUString();
 }
 
+OUString lcl_getThemeColorTypeString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_Value_St_ThemeColor_dark1: return OUString("dark1");
+        case NS_ooxml::LN_Value_St_ThemeColor_light1: return OUString("light1");
+        case NS_ooxml::LN_Value_St_ThemeColor_dark2: return OUString("dark2");
+        case NS_ooxml::LN_Value_St_ThemeColor_light2: return OUString("light2");
+        case NS_ooxml::LN_Value_St_ThemeColor_accent1: return OUString("accent1");
+        case NS_ooxml::LN_Value_St_ThemeColor_accent2: return OUString("accent2");
+        case NS_ooxml::LN_Value_St_ThemeColor_accent3: return OUString("accent3");
+        case NS_ooxml::LN_Value_St_ThemeColor_accent4: return OUString("accent4");
+        case NS_ooxml::LN_Value_St_ThemeColor_accent5: return OUString("accent5");
+        case NS_ooxml::LN_Value_St_ThemeColor_accent6: return OUString("accent6");
+        case NS_ooxml::LN_Value_St_ThemeColor_hyperlink: return OUString("hyperlink");
+        case NS_ooxml::LN_Value_St_ThemeColor_followedHyperlink: return OUString("followedHyperlink");
+        case NS_ooxml::LN_Value_St_ThemeColor_none: return OUString("none");
+        case NS_ooxml::LN_Value_St_ThemeColor_background1: return OUString("background1");
+        case NS_ooxml::LN_Value_St_ThemeColor_text1: return OUString("text1");
+        case NS_ooxml::LN_Value_St_ThemeColor_background2: return OUString("background2");
+        case NS_ooxml::LN_Value_St_ThemeColor_text2: return OUString("text2");
+        default: break;
+    }
+    return OUString();
+}
+
 void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
@@ -301,6 +328,7 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_rtf::LN_DPTLINEWIDTH: // 0x2871
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
             m_nLineWidth = nIntValue * 5 / 2;
+            appendGrabBag("sz", OUString::number(nIntValue));
         break;
         case NS_rtf::LN_BRCTYPE:    // 0x2872
             m_nLineType = nIntValue;
@@ -308,9 +336,11 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Border_color:
         case NS_rtf::LN_ICO:        // 0x2873
+            appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue), RTL_TEXTENCODING_UTF8));
             m_nLineColor = nIntValue;
         break;
         case NS_rtf::LN_DPTSPACE:   // 0x2874
+            appendGrabBag("space", OUString::number(nIntValue));
             m_nLineDistance = nIntValue;
         break;
         case NS_rtf::LN_FSHADOW:    // 0x2875
@@ -320,6 +350,8 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
             // ignored
         break;
         case NS_ooxml::LN_CT_Border_themeColor:
+            appendGrabBag("themeColor", lcl_getThemeColorTypeString(nIntValue));
+        break;
         case NS_ooxml::LN_CT_Border_themeTint:
         case NS_ooxml::LN_CT_Border_themeShade:
             // ignored

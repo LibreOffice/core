@@ -91,6 +91,15 @@ void lcl_TableStyleTblCellMar(sax_fastparser::FSHelperPtr pSerializer, uno::Sequ
     pSerializer->endElementNS(XML_w, XML_tblCellMar);
 }
 
+static DocxStringTokenMap const aTcBorderTokens[] = {
+    {"val", XML_val},
+    {"sz", XML_sz},
+    {"color", XML_color},
+    {"space", XML_space},
+    {"themeColor", XML_themeColor},
+    {0, 0}
+};
+
 /// Export of a given table cell border type in a table style.
 void lcl_TableStyleTcBorder(sax_fastparser::FSHelperPtr pSerializer, sal_Int32 nToken, const uno::Sequence<beans::PropertyValue>& rTcBorder)
 {
@@ -99,10 +108,9 @@ void lcl_TableStyleTcBorder(sax_fastparser::FSHelperPtr pSerializer, sal_Int32 n
 
     sax_fastparser::FastAttributeList* pAttributeList = pSerializer->createAttrList();
     for (sal_Int32 i = 0; i < rTcBorder.getLength(); ++i)
-    {
-        if (rTcBorder[i].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rTcBorder[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
-    }
+        if (sal_Int32 nAttrToken = DocxStringGetToken(aTcBorderTokens, rTcBorder[i].Name))
+            pAttributeList->add(FSNS(XML_w, nAttrToken), OUStringToOString(rTcBorder[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
 }
