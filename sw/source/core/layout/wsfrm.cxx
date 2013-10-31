@@ -2607,8 +2607,15 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         {
             _InvalidateAll();
             InvalidatePage( pPage );
-            const SvxGraphicPosition ePos = GetFmt()->GetBackground().GetGraphicPos();
-            if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
+            bool bCompletePaint = true;
+            const SwFrmFmt* pFmt = GetFmt();
+            if (pFmt)
+            {
+                const SvxGraphicPosition ePos = pFmt->GetBackground().GetGraphicPos();
+                if ( GPOS_NONE == ePos || GPOS_TILED == ePos )
+                    bCompletePaint = false;
+            }
+            if (bCompletePaint)
                 SetCompletePaint();
         }
 
