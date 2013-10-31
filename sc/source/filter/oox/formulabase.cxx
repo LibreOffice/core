@@ -751,7 +751,9 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.STDEV.P",                "STDEV.P",             NOID,    NOID,   1, MX,  V, { RX }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.STDEV.S",                "STDEV.S",             NOID,    NOID,   1, MX,  V, { RX }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.VAR.P",                  "VAR.P"  ,             NOID,    NOID,   1, MX,  V, { RX }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.VAR.S",                  "VAR.S",               NOID,    NOID,   1, MX,  V, { RX }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.VAR.S",                  "VAR.S",               NOID,    NOID,   1, MX,  V, { RX }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.BETA.DIST",              "BETA.DIST"  ,         NOID,    NOID,   4,  6,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.BETA.INV",               "BETA.INV",            NOID,    NOID,   3,  5,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions new in Excel 2013.

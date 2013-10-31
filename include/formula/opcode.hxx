@@ -378,6 +378,8 @@ enum OpCodeEnum
         ocTableOp           = SC_OPCODE_TABLE_OP,
         ocBetaDist          = SC_OPCODE_BETA_DIST,
         ocBetaInv           = SC_OPCODE_BETA_INV,
+        ocBetaDist_MS       = SC_OPCODE_BETA_DIST_MS,
+        ocBetaInv_MS        = SC_OPCODE_BETA_INV_MS,
     // Bit functions
         ocBitAnd            = SC_OPCODE_BITAND,
         ocBitOr             = SC_OPCODE_BITOR,

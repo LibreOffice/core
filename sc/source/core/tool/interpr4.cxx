@@ -4167,7 +4167,9 @@ StackVar ScInterpreter::Interpret()
                 case ocFInv             : ScFInv();                     break;
                 case ocLogInv           : ScLogNormInv();               break;
                 case ocBetaDist         : ScBetaDist();                 break;
-                case ocBetaInv          : ScBetaInv();                  break;
+                case ocBetaDist_MS      : ScBetaDist_MS();              break;
+                case ocBetaInv          :
+                case ocBetaInv_MS       : ScBetaInv();                  break;
                 case ocExternal         : ScExternal();                 break;
                 case ocTableOp          : ScTableOp();                  break;
                 case ocStop :                                           break;

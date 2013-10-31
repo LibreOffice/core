@@ -2357,6 +2357,8 @@ void Test::testFunctionLists()
         "AVERAGEIF",
         "AVERAGEIFS",
         "B",
+        "BETA.DIST",
+        "BETA.INV",
         "BETADIST",
         "BETAINV",
         "BINOMDIST",
