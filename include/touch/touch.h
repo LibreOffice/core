@@ -141,8 +141,8 @@ CGSizeToMLOPixelSize(CGSize cgSize)
 CG_INLINE CGSize
 MLOPixelsToCGSize(MLOPixel width, MLOPixel height)
 {
-    CGFloat fWidth = CGFloatToMLOPixel(width);
-    CGFloat fHeight = CGFloatToMLOPixel(height);
+    CGFloat fWidth = MLOPixelToCGFloat(width);
+    CGFloat fHeight = MLOPixelToCGFloat(height);
     return CGSizeMake(fWidth, fHeight);
 }
 
