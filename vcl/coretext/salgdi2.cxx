@@ -852,6 +852,13 @@ bool SvpSalGraphics::CheckContext()
                                           CGColorSpaceCreateDeviceRGB(),
                                           kCGImageAlphaNoneSkipLast);
         break;
+    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
+        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
+                                          bufferSize.getX(), bufferSize.getY(),
+                                          8, scanlineStride,
+                                          CGColorSpaceCreateDeviceRGB(),
+                                          kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little);
+        break;
     default:
         SAL_WARN( "vcl.ios", "CheckContext: unsupported color format " << basebmp::formatName( m_aDevice->getScanlineFormat() ) );
         warned = true;
