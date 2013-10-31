@@ -55,7 +55,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		autoreconf \
 		&& ./configure \
 			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls \
-			$(if $(filter ANDROID,$(OS)),$(if $(DISABLE_OPENSSL),--without-openssl,--with-openssl=$(OUTDIR))) \
+			$(if $(filter ANDROID,$(OS)),$(if $(DISABLE_OPENSSL),--without-openssl,--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl))) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter NO,$(SYSTEM_NSS))$(filter MACOSX,$(OS)),--disable-pkgconfig) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
