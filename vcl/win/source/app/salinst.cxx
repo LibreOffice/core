@@ -1103,10 +1103,10 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
                     }
                 }
             }
+        }
 #else
         (void) rDocumentService;
 #endif
-        }
         // For whatever reason, we could not use the SHARD_APPIDINFO semantics
         SHAddToRecentDocs(SHARD_PATHW, (PCWSTR) system_path.getStr());
     }
