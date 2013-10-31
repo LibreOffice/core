@@ -16,6 +16,7 @@
 #include <com/sun/star/table/XCell2.hpp>
 #include "formulacell.hxx"
 #include "document.hxx"
+#include "documentimport.hxx"
 #include "convuno.hxx"
 
 #include "rangelst.hxx"
@@ -92,9 +93,7 @@ void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& 
     ScUnoConversion::FillScAddress( aCellPos, rAddress );
     ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
     ScFormulaCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
-    pNewCell->StartListeningTo( &rDoc );
-    rDoc.EnsureTable(aCellPos.Tab());
-    rDoc.SetGroupFormulaCell(aCellPos, pNewCell);
+    getDocImport().setFormulaCell(aCellPos, pNewCell);
 }
 
 void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
@@ -140,7 +139,7 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
     const std::vector<SharedFormulaEntry>& rSharedFormulas = itShared->second;
     const std::vector<SharedFormulaDesc>& rCells = itCells->second;
 
-    ScDocument& rDoc = getScDocument();
+    ScDocumentImport& rDoc = getDocImport();
 
     sc::SharedFormulaGroups aGroups;
     {
@@ -154,7 +153,7 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
 
             ScAddress aPos;
             ScUnoConversion::FillScAddress(aPos, rAddr);
-            ScCompiler aComp(&rDoc, aPos);
+            ScCompiler aComp(&rDoc.getDoc(), aPos);
             aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
@@ -174,17 +173,8 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
 
             ScAddress aPos;
             ScUnoConversion::FillScAddress(aPos, rAddr);
-            ScFormulaCell* pCell = new ScFormulaCell(&rDoc, aPos, pArray);
-            bool bInserted = rDoc.SetGroupFormulaCell(aPos, pCell);
-            if (!bInserted)
-            {
-                // Insertion failed.
-                delete pCell;
-                continue;
-            }
-
-            pCell->StartListeningTo(&rDoc);
-
+            ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pArray);
+            rDoc.setFormulaCell(aPos, pCell);
             if (it->maCellValue.isEmpty())
             {
                 // No cached cell value. Mark it for re-calculation.
@@ -210,7 +200,7 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
 
 void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem >& rVector )
 {
-    ScDocument& rDoc = getScDocument();
+    ScDocumentImport& rDocImport = getDocImport();
     std::vector<TokenRangeAddressItem>::const_iterator it = rVector.begin(), itEnd = rVector.end();
     for (; it != itEnd; ++it)
     {
@@ -219,21 +209,11 @@ void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem
         ScRange aRange;
         ScUnoConversion::FillScRange(aRange, it->maCellRangeAddress);
 
-        ScCompiler aComp(&rDoc, aPos);
+        ScCompiler aComp(&rDocImport.getDoc(), aPos);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
         ScTokenArray* pArray = aComp.CompileString(it->maTokenAndAddress.maTokenStr);
         if (pArray)
-        {
-            ScMarkData aMark;
-            aMark.SelectOneTable(aPos.Tab());
-            rDoc.InsertMatrixFormula(
-                aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(),
-                aMark, it->maTokenAndAddress.maTokenStr, pArray, formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
-
-            ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
-            if (pFC)
-                pFC->StartListeningTo(&rDoc);
-        }
+            rDocImport.setMatrixCells(aRange, *pArray, formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
     }
 }
 

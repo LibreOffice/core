@@ -1383,14 +1383,6 @@ ScFormulaCell* ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* p
     return aCol[nCol].SetFormulaCell(nRow, pCell);
 }
 
-bool ScTable::SetGroupFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell )
-{
-    if (!ValidColRow(nCol, nRow))
-        return false;
-
-    return aCol[nCol].SetGroupFormulaCell(nRow, pCell);
-}
-
 svl::SharedString ScTable::GetSharedString( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))

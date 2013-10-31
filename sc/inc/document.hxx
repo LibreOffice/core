@@ -825,16 +825,6 @@ public:
      */
     SC_DLLPUBLIC ScFormulaCell* SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
 
-    /**
-     * Set formula cell, and transfer its ownership to the document.  Unlike
-     * SetFormulaCell(), this call will <i>not</i> attempt to group the passed
-     * formula cell with the adjacent cells or cell groups.
-     *
-     * @return true if the cell is inserted, false otherwise. The caller
-     *         should delete the cell instance if the method returns false.
-     */
-    SC_DLLPUBLIC bool SetGroupFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
-
     SC_DLLPUBLIC void InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark,

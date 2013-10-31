@@ -1769,21 +1769,6 @@ ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCR
     return pCell;
 }
 
-bool ScColumn::SetGroupFormulaCell( SCROW nRow, ScFormulaCell* pCell )
-{
-    sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
-    sal_uInt32 nCellFormat = GetNumberFormat(nRow);
-    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
-        pCell->SetNeedNumberFormat(true);
-    it = maCells.set(it, nRow, pCell);
-    maCellTextAttrs.set(nRow, sc::CellTextAttr());
-
-    CellStorageModified();
-
-    ActivateNewFormulaCell(it, nRow, *pCell, false);
-    return true;
-}
-
 svl::SharedString ScColumn::GetSharedString( SCROW nRow ) const
 {
     sc::CellStoreType::const_position_type aPos = maCells.position(nRow);

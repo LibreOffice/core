@@ -284,7 +284,6 @@ public:
      */
     ScFormulaCell* SetFormulaCell( SCROW nRow, ScFormulaCell* pCell );
     ScFormulaCell* SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell );
-    bool SetGroupFormulaCell( SCROW nRow, ScFormulaCell* pCell );
 
     svl::SharedString GetSharedString( SCROW nRow ) const;
 

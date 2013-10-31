@@ -1578,12 +1578,12 @@ void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichStri
 
 void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens )
 {
-    ScDocument& rDoc = getScDocument();
+    ScDocumentImport& rDoc = getDocImport();
     ScTokenArray aTokenArray;
     ScAddress aCellPos;
     ScUnoConversion::FillScAddress( aCellPos, rAddress );
-    ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
-    getDocImport().setFormulaCell(aCellPos, aTokenArray);
+    ScTokenConversion::ConvertToTokenArray(rDoc.getDoc(), aTokenArray, rTokens);
+    rDoc.setFormulaCell(aCellPos, aTokenArray);
 }
 
 void WorksheetHelper::initializeWorksheetImport()

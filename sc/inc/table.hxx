@@ -339,7 +339,6 @@ public:
      *         is deleted automatically on failure to insert.
      */
     ScFormulaCell* SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell );
-    bool SetGroupFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell );
 
     svl::SharedString GetSharedString( SCCOL nCol, SCROW nRow ) const;
 
