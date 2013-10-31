@@ -27,7 +27,7 @@ printf '\nError: a unit test failed, please do one of:\n\nexport DEBUGCPPUNIT=TR
 endef
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
-gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(OUTDIR)/lib" --command=$(SOLARENV)/bin/gdbtrycatchtrace-stdout -return-child-result --args
+gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(INSTDIR)" --command=$(SOLARENV)/bin/gdbtrycatchtrace-stdout -return-child-result --args
 else ifneq ($(strip $(CPPUNITTRACE)),)
 gb_CppunitTest_GDBTRACE := $(CPPUNITTRACE)
 gb_CppunitTest__interactive := $(true)
