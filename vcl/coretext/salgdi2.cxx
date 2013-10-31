@@ -828,6 +828,7 @@ bool SvpSalGraphics::CheckContext()
     const basegfx::B2IVector bufferSize = m_aDevice->getBufferSize();
     const sal_Int32 scanlineStride = m_aDevice->getScanlineStride();
     basebmp::RawMemorySharedArray pixelBuffer = m_aDevice->getBuffer();
+    bool warned = false;
 
     SAL_INFO( "vcl.ios",
               "CheckContext: device=" << m_aDevice.get() <<
@@ -852,10 +853,11 @@ bool SvpSalGraphics::CheckContext()
                                           kCGImageAlphaNoneSkipLast);
         break;
     default:
-        SAL_INFO( "vcl.ios", "CheckContext: unsupported color format " << basebmp::formatName( m_aDevice->getScanlineFormat() ) );
+        SAL_WARN( "vcl.ios", "CheckContext: unsupported color format " << basebmp::formatName( m_aDevice->getScanlineFormat() ) );
+        warned = true;
     }
 
-    SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );
+    SAL_WARN_IF( mrContext == NULL && !warned, "vcl.ios", "CheckContext: CGBitmapContextCreate() failed" );
 
     // Should we also clip the context? (Then we need to add a
     // getBounds() function to BitmapDevice.)
