@@ -35,7 +35,7 @@ extern "C" {
 
     //ADD_LIB(dbaxml);          // dbaccess lib
     ADD_LIB(evtatt);            // basic event handling
-    ADD_LIB(fileacc);           // Simple file access func
+    //ADD_LIB(fileacc);           // Simple file access func
     //ADD_LIB(frm);             // form control in documents
     ADD_LIB(fsstorage);         // part of svl required when editing file
     ADD_LIB(stocservices);
@@ -140,7 +140,8 @@ lo_get_libmap(void)
         //MAP_LIB_LO(xmlfd),
         MAP_LIB(xmlsecurity), //MAP_LIB_LO(sc),       //MAP_LIB_LO(sd),
         MAP_LIB_LO(svx),        MAP_LIB_LO(fwl),        MAP_LIB_LO(oox),
-        MAP_LIB(fileacc),       MAP_LIB_LO(svt),        MAP_LIB_LO(xof),
+        //MAP_LIB(fileacc),
+        MAP_LIB_LO(svt),        MAP_LIB_LO(xof),
         MAP_LIB_LO(evtatt),     MAP_LIB_LO(fsstorage),  MAP_LIB_LO(lng),
         MAP_LIB_LO(swd),        MAP_LIB_LO(sw),         MAP_LIB_LO(lnth),
         MAP_LIB_LO(unordf),     MAP_LIB_LO(unoxml),     MAP_LIB_LO(xo),

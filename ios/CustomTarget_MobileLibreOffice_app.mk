@@ -15,9 +15,9 @@ BUILDID			:=$(shell cd $(SRCDIR) && git log -1 --format=%H)
 #- Macros ---------------------------------------------------------------------
 
 define MobileLibreOfficeXcodeBuild 
-	CC=;xcodebuild -project shared/ios_sharedlo.xcodeproj -target ios_sharedlo -arch armv7 -configuration $(if $(ENABLE_DEBUG),Debug,Release) $(1) >/dev/null
-	CC=;xcodebuild -project MobileLibreOffice/MobileLibreOffice.xcodeproj -target MobileLibreOffice -arch armv7 -configuration $(if $(ENABLE_DEBUG),Debug,Release) $(1) >/dev/null
+	CC=;xcodebuild -project MobileLibreOffice/MobileLibreOffice.xcodeproj -scheme MobileLibreOffice -arch armv7 -configuration $(if $(ENABLE_DEBUG),Debug,Release) $(1) >/dev/null
 endef
+
 #- Targets --------------------------------------------------------------------
 
 .PHONY: MobileLibreOffice_setup 
@@ -47,25 +47,30 @@ MobileLibreOffice_setup:
 
 	# Libs #
 	# Create the link flags in the xcconfig for Xcode linkage
-	for path in $(OUTDIR)/lib \
-				$(INSTDIR)/program \
+	for path in $(INSTDIR)/program \
+				$(WORKDIR)/Headers/Library \
 				$(WORKDIR)/LinkTarget/StaticLibrary \
-				$(WORKDIR)/UnpackedTarball/*/.libs/ \
+				$(WORKDIR)/UnpackedTarball/*/.libs \
 				$(WORKDIR)/UnpackedTarball/*/src/.libs \
 				$(WORKDIR)/UnpackedTarball/*/src/*/.libs \
+				$(WORKDIR)/UnpackedTarball/xslt/libxslt/.libs \
+				$(WORKDIR)/UnpackedTarball/icu/source/lib \
 				$(WORKDIR)/UnpackedTarball/openssl; do \
-    	flags+=" -L$$path"; \
+		flags=''; \
     	for lib in $$path/lib*.a; do \
         	if [ ! -r $$lib ]; then \
             	continue; \
         	fi; \
-        	base=$${lib##*/lib}; \
+        	base="$${lib##*/lib}"; \
         	base=$${base%\.a}; \
         	flags+=" -l$${base}"; \
     	done; \
+		if [ "$$flags" ]; then \
+			all_flags+=" -L$$path $$flags"; \
+		fi; \
 	done; \
 	file=$(LO_XCCONFIG); \
-	sed -i '' -e "s|^\(LINK_LDFLAGS =\).*$$|\1 $$flags|" $$file;
+	sed -i '' -e "s|^\(LINK_LDFLAGS =\).*$$|\1 $$all_flags|" $$file;
 
 	# Resources #
 	rm -rf $(DEST_RESOURCE) 2>/dev/null
@@ -73,9 +78,8 @@ MobileLibreOffice_setup:
 	mkdir -p $(DEST_RESOURCE)/ure
 
 	# copy rdb files
-	cp $(OUTDIR)/bin/offapi.rdb          		$(DEST_RESOURCE)
-	cp $(OUTDIR)/bin/udkapi.rdb          		$(DEST_RESOURCE)
-	cp $(OUTDIR)/bin/oovbaapi.rdb        		$(DEST_RESOURCE)
+	cp $(INSTDIR)/program/types/offapi.rdb      $(DEST_RESOURCE)
+	cp $(INSTDIR)/program/types/oovbaapi.rdb  	$(DEST_RESOURCE)
 	cp $(INSTDIR)/program/services/services.rdb $(DEST_RESOURCE)
 	cp $(INSTDIR)/ure/share/misc/services.rdb   $(DEST_RESOURCE)/ure
 
@@ -131,7 +135,6 @@ $(call gb_CustomTarget_get_clean_target,ios/MobileLibreOffice):
 #==============================================================================
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),APP,2)
 	$(call MobileLibreOfficeXcodeBuild, clean)
-	rm -f $(LO_XCCONFIG) 2>/dev/null
 
 #------------------------------------------------------------------------------
 # vim: set noet sw=4 ts=4:
