@@ -570,7 +570,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
-        aMediaDescriptor[0].Name = OUString("URL");
+        aMediaDescriptor[0].Name = "URL";
         aMediaDescriptor[0].Value <<= OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
         {
@@ -579,7 +579,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             if ( xInteraction.is() )
             {
                 aMediaDescriptor.realloc( 2 );
-                aMediaDescriptor[1].Name = OUString( "InteractionHandler" );
+                aMediaDescriptor[1].Name = "InteractionHandler";
                 aMediaDescriptor[1].Value <<= xInteraction;
             }
         }
@@ -940,7 +940,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             }
             catch ( uno::Exception& )
             {
-                aParaName = OUString("PluginCommands");
+                aParaName = "PluginCommands";
                 try
                 {
                     xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );

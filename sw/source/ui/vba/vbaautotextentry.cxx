@@ -63,7 +63,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
                 uno::Reference< text::XTextViewCursor > xTVCursor = word::getXTextViewCursor( xModel );
                 uno::Reference< text::XTextRange > xCurrentRange( xTC->getEnd(), uno::UNO_QUERY_THROW );
                 xTVCursor->gotoRange( xCurrentRange, sal_False );
-                OUString url = OUString( ".uno:Delete");
+                OUString url = ".uno:Delete";
                 dispatchRequests( xModel,url );
                 xTVCursor->gotoRange( xEndMarker->getEnd(), sal_False );
             }
@@ -88,7 +88,7 @@ SwVbaAutoTextEntry::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.AutoTextEntry" );
+        aServiceNames[ 0 ] = "ooo.vba.word.AutoTextEntry";
     }
     return aServiceNames;
 }
@@ -130,7 +130,7 @@ SwVbaAutoTextEntries::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = OUString("ooo.vba.word.AutoTextEntries");
+        sNames[0] = "ooo.vba.word.AutoTextEntries";
     }
     return sNames;
 }

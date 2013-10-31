@@ -127,7 +127,7 @@ SwVbaTemplate::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = OUString("ooo.vba.word.Template" );
+                aServiceNames[ 0 ] = "ooo.vba.word.Template";
         }
         return aServiceNames;
 }

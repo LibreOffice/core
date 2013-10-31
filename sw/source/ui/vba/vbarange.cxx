@@ -260,11 +260,11 @@ void SwVbaRange::GetStyleInfo(OUString& aStyleName, OUString& aStyleType ) throw
     uno::Reference< beans::XPropertySet > xProp( mxTextCursor, uno::UNO_QUERY_THROW );
     if( ( xProp->getPropertyValue("CharStyleName") >>= aStyleName ) && !aStyleName.isEmpty() )
     {
-        aStyleType = OUString("CharacterStyles");
+        aStyleType = "CharacterStyles";
     }
     else if( ( xProp->getPropertyValue("ParaStyleName") >>= aStyleName ) && !aStyleName.isEmpty() )
     {
-        aStyleType = OUString("ParagraphStyles");
+        aStyleType = "ParagraphStyles";
     }
     if( aStyleType.isEmpty() )
     {
@@ -420,7 +420,7 @@ SwVbaRange::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Range" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Range";
     }
     return aServiceNames;
 }

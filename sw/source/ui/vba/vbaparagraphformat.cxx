@@ -183,7 +183,7 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getOutlineLevel() throw (uno::RuntimeEx
 {
     sal_Int32 nLevel = word::WdOutlineLevel::wdOutlineLevelBodyText;
     OUString aHeading;
-    const OUString HEADING = OUString("Heading");
+    const OUString HEADING = "Heading";
     mxParaProps->getPropertyValue("ParaStyleName") >>= aHeading;
     if( aHeading.startsWith( HEADING ) )
     {
@@ -560,7 +560,7 @@ SwVbaParagraphFormat::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.ParagraphFormat" );
+        aServiceNames[ 0 ] = "ooo.vba.word.ParagraphFormat";
     }
     return aServiceNames;
 }

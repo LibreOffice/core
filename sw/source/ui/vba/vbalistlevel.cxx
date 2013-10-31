@@ -381,7 +381,7 @@ SwVbaListLevel::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.ListLevel" );
+        aServiceNames[ 0 ] = "ooo.vba.word.ListLevel";
     }
     return aServiceNames;
 }

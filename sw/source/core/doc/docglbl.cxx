@@ -223,7 +223,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     {
         if( '.' != sExt[ 0 ] )
         {
-            sExt = OUString(".") + sExt;
+            sExt = "." + sExt;
         }
     }
 

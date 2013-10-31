@@ -1710,9 +1710,9 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 // Thus, a temporary service name is introduced to make this possible.
                 OUString aTmpServiceName( rServiceName );
                 if ( bShape &&
-                     rServiceName.compareToAscii( "com.sun.star.drawing.temporaryForXMLImportOLE2Shape" ) == 0 )
+                     rServiceName.equalsAscii( "com.sun.star.drawing.temporaryForXMLImportOLE2Shape" ) )
                 {
-                    aTmpServiceName = OUString("com.sun.star.drawing.OLE2Shape");
+                    aTmpServiceName = "com.sun.star.drawing.OLE2Shape";
                 }
                 //here search for the draw service
                 Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(aTmpServiceName);
@@ -2138,7 +2138,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_VBA_DOCOBJ:
         {
             beans::PropertyValue aProp;
-            aProp.Name = OUString("ThisWordDoc");
+            aProp.Name = "ThisWordDoc";
             aProp.Value <<= pDocShell->GetModel();
             aAny <<= aProp;
         }
@@ -2814,22 +2814,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
         sal_Int32 nLen = 2;
         aRenderer.realloc(2);
-        aRenderer[0].Name  = OUString( "PageSize" );
+        aRenderer[0].Name  = "PageSize";
         aRenderer[0].Value <<= aPageSize;
-        aRenderer[1].Name  = OUString( "PageIncludesNonprintableArea" );
+        aRenderer[1].Name  = "PageIncludesNonprintableArea";
         aRenderer[1].Value <<= sal_True;
         if (aPreferredPageSize.Width && aPreferredPageSize.Height)
         {
             ++nLen;
             aRenderer.realloc( nLen );
-            aRenderer[ nLen - 1 ].Name  = OUString( "PreferredPageSize" );
+            aRenderer[ nLen - 1 ].Name  = "PreferredPageSize";
             aRenderer[ nLen - 1 ].Value <<= aPreferredPageSize;
         }
         if (nPrinterPaperTray >= 0)
         {
             ++nLen;
             aRenderer.realloc( nLen );
-            aRenderer[ nLen - 1 ].Name  = OUString( "PrinterPaperTray" );
+            aRenderer[ nLen - 1 ].Name  = "PrinterPaperTray";
             aRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
         }
     }
@@ -2850,22 +2850,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             aRenderer.realloc( nLen );
             // put page print settings attribute into render data
             const sal_Int32 nRow = pPagePrintSettings->GetRow();
-            aRenderer[ nRenderDataIdxStart + 0 ].Name  = OUString( "NUpRows" );
+            aRenderer[ nRenderDataIdxStart + 0 ].Name  = "NUpRows";
             aRenderer[ nRenderDataIdxStart + 0 ].Value <<= ( nRow > 1 ? nRow : 1 );
             const sal_Int32 nCol = pPagePrintSettings->GetCol();
-            aRenderer[ nRenderDataIdxStart + 1 ].Name  = OUString( "NUpColumns" );
+            aRenderer[ nRenderDataIdxStart + 1 ].Name  = "NUpColumns";
             aRenderer[ nRenderDataIdxStart + 1 ].Value <<= ( nCol > 1 ? nCol : 1 );
-            aRenderer[ nRenderDataIdxStart + 2 ].Name  = OUString( "NUpPageMarginLeft" );
+            aRenderer[ nRenderDataIdxStart + 2 ].Name  = "NUpPageMarginLeft";
             aRenderer[ nRenderDataIdxStart + 2 ].Value <<= pPagePrintSettings->GetLeftSpace();
-            aRenderer[ nRenderDataIdxStart + 3 ].Name  = OUString( "NUpPageMarginRight" );
+            aRenderer[ nRenderDataIdxStart + 3 ].Name  = "NUpPageMarginRight";
             aRenderer[ nRenderDataIdxStart + 3 ].Value <<= pPagePrintSettings->GetRightSpace();
-            aRenderer[ nRenderDataIdxStart + 4 ].Name  = OUString( "NUpPageMarginTop" );
+            aRenderer[ nRenderDataIdxStart + 4 ].Name  = "NUpPageMarginTop";
             aRenderer[ nRenderDataIdxStart + 4 ].Value <<= pPagePrintSettings->GetTopSpace();
-            aRenderer[ nRenderDataIdxStart + 5 ].Name  = OUString( "NUpPageMarginBottom" );
+            aRenderer[ nRenderDataIdxStart + 5 ].Name  = "NUpPageMarginBottom";
             aRenderer[ nRenderDataIdxStart + 5 ].Value <<= pPagePrintSettings->GetBottomSpace();
-            aRenderer[ nRenderDataIdxStart + 6 ].Name  = OUString( "NUpHorizontalSpacing" );
+            aRenderer[ nRenderDataIdxStart + 6 ].Name  = "NUpHorizontalSpacing";
             aRenderer[ nRenderDataIdxStart + 6 ].Value <<= pPagePrintSettings->GetHorzSpace();
-            aRenderer[ nRenderDataIdxStart + 7 ].Name  = OUString( "NUpVerticalSpacing" );
+            aRenderer[ nRenderDataIdxStart + 7 ].Name  = "NUpVerticalSpacing";
             aRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
             {
                 Printer* pPrinter = pDocShell->GetDoc()->getPrinter( false );
@@ -2881,7 +2881,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                     {
                         aNewPageSize = awt::Size( aPageSize.Height(), aPageSize.Width() );
                     }
-                    aRenderer[ nRenderDataIdxStart + 8 ].Name  = OUString( "NUpPaperSize" );
+                    aRenderer[ nRenderDataIdxStart + 8 ].Name  = "NUpPaperSize";
                     aRenderer[ nRenderDataIdxStart + 8 ].Value <<= aNewPageSize;
                 }
             }

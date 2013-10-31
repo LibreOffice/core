@@ -555,7 +555,7 @@ sal_Bool SwOLENode::UpdateLinkURL_Impl()
 
                     // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
                     uno::Sequence< beans::PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = OUString( "URL" );
+                    aArgs[0].Name = "URL";
                     aArgs[0].Value <<= aNewLinkURL;
                     xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
@@ -593,7 +593,7 @@ void SwOLENode::BreakFileLink_Impl()
                 uno::Reference< embed::XLinkageSupport > xLinkSupport( aOLEObj.GetOleRef(), uno::UNO_QUERY_THROW );
                 xLinkSupport->breakLink( xStorage, aOLEObj.GetCurrentPersistName() );
                 DisconnectFileLink_Impl();
-                maLinkURL = OUString();
+                maLinkURL = "";
             }
             catch( uno::Exception& )
             {
@@ -924,7 +924,7 @@ uno::Sequence< OUString > SwOLELRUCache::GetPropertyNames()
 {
     Sequence< OUString > aNames( 1 );
     OUString* pNames = aNames.getArray();
-    pNames[0] = OUString("Writer/OLE_Objects");
+    pNames[0] = "Writer/OLE_Objects";
     return aNames;
 }
 

@@ -310,18 +310,18 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                         case word::WdStyleType::wdStyleTypeParagraph:
                         case word::WdStyleType::wdStyleTypeTable:
                         {
-                            aStyleType = OUString("ParagraphStyles");
+                            aStyleType = "ParagraphStyles";
                             break;
                         }
                         case word::WdStyleType::wdStyleTypeCharacter:
                         {
-                            aStyleType = OUString("CharacterStyles");
+                            aStyleType = "CharacterStyles";
                             break;
                         }
                         case word::WdStyleType::wdStyleTypeList:
                         {
                             // should use Paragraph style and set the property "NumberingStyleName"
-                            aStyleType = OUString("ParagraphStyles");
+                            aStyleType = "ParagraphStyles";
                             break;
                         }
                         default:
@@ -361,7 +361,7 @@ SwVbaStyles::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.XStyles" );
+        aServiceNames[ 0 ] = "ooo.vba.word.XStyles";
     }
     return aServiceNames;
 }

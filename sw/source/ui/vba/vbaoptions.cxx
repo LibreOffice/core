@@ -45,39 +45,39 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path ) throw ( uno::RuntimeException )
     {
         case word::WdDefaultFilePath::wdDocumentsPath:
         {
-            msDefaultFilePath = OUString("Work");
+            msDefaultFilePath = "Work";
             break;
         }
         case word::WdDefaultFilePath::wdPicturesPath:
         {
-            msDefaultFilePath = OUString("Gallery");
+            msDefaultFilePath = "Gallery";
             break;
         }
         case word::WdDefaultFilePath::wdUserTemplatesPath:
         case word::WdDefaultFilePath::wdWorkgroupTemplatesPath:
         {
-            msDefaultFilePath = OUString("Template");
+            msDefaultFilePath = "Template";
             break;
         }
         case word::WdDefaultFilePath::wdStartupPath:
         {
-            msDefaultFilePath = OUString("Addin");
+            msDefaultFilePath = "Addin";
             break;
         }
         case word::WdDefaultFilePath::wdUserOptionsPath:
         {
-            msDefaultFilePath = OUString("UserConfig");
+            msDefaultFilePath = "UserConfig";
             break;
         }
         case word::WdDefaultFilePath::wdToolsPath:
         case word::WdDefaultFilePath::wdProgramPath:
         {
-            msDefaultFilePath = OUString("Module");
+            msDefaultFilePath = "Module";
             break;
         }
         case word::WdDefaultFilePath::wdTempFilePath:
         {
-            msDefaultFilePath = OUString("Temp");
+            msDefaultFilePath = "Temp";
             break;
         }
         default:
@@ -268,7 +268,7 @@ SwVbaOptions::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Options" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Options";
     }
     return aServiceNames;
 }

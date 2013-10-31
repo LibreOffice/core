@@ -1356,9 +1356,7 @@ void SwDoc::CalculatePagesForPrinting(
     if (aPageRange.isEmpty())    // empty string -> print all
     {
         // set page range to print to 'all pages'
-        aPageRange = OUString::number( 1 );
-        aPageRange += OUString( (sal_Unicode)'-');
-        aPageRange += OUString::number( nDocPageCount );
+        aPageRange = OUString::number( 1 ) + "-" + OUString::number( nDocPageCount );
     }
     rData.SetPageRange( aPageRange );
 
@@ -1528,9 +1526,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     if (aPageRange.isEmpty())    // empty string -> print all
     {
         // set page range to print to 'all pages'
-        aPageRange = OUString::number( 1 );
-        aPageRange += OUString( (sal_Unicode)'-');
-        aPageRange += OUString::number( nDocPageCount );
+        aPageRange = OUString::number( 1 ) + "-" + OUString::number( nDocPageCount );
     }
     StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
 
@@ -1703,24 +1699,24 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
     sal_Int32 n=0;
-    aStat[n].Name = OUString("TableCount");
+    aStat[n].Name = "TableCount";
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nTbl;
-    aStat[n].Name = OUString("ImageCount");
+    aStat[n].Name = "ImageCount";
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nGrf;
-    aStat[n].Name = OUString("ObjectCount");
+    aStat[n].Name = "ObjectCount";
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nOLE;
     if ( mpDocStat->nPage )
     {
-        aStat[n].Name = OUString("PageCount");
+        aStat[n].Name = "PageCount";
         aStat[n++].Value <<= (sal_Int32)mpDocStat->nPage;
     }
-    aStat[n].Name = OUString("ParagraphCount");
+    aStat[n].Name = "ParagraphCount";
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nPara;
-    aStat[n].Name = OUString("WordCount");
+    aStat[n].Name = "WordCount";
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nWord;
-    aStat[n].Name = OUString("CharacterCount");
+    aStat[n].Name = "CharacterCount";
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nChar;
-    aStat[n].Name = OUString("NonWhitespaceCharacterCount");
+    aStat[n].Name = "NonWhitespaceCharacterCount";
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nCharExcludingSpaces;
 
     // For e.g. autotext documents there is no pSwgInfo (#i79945)

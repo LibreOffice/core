@@ -1607,7 +1607,7 @@ sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName) throw( Runt
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.text.Bookmarks");
+    aRet[0] = "com.sun.star.text.Bookmarks";
     return aRet;
 }
 

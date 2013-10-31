@@ -1319,7 +1319,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     for (sal_Int32 i = 0;  i < nSortedRanges;  ++i)
     {
         if (!aSortedCellRanges.isEmpty())
-            aSortedCellRanges += OUString( (sal_Unicode) ';');
+            aSortedCellRanges += ";";
         aSortedCellRanges += pSortedRanges[i];
     }
 
@@ -1851,14 +1851,13 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
         if (aCellRange.aTableName != aFirstFoundTable)
             throw lang::IllegalArgumentException();
 
-        OUString aTmp( aCellRange.aTableName );
-        aTmp += OUString((sal_Unicode) '.');
-        aTmp += sw_GetCellName( aCellRange.aUpperLeft.nColumn,
+        OUString aTmp = aCellRange.aTableName + "." +
+                        sw_GetCellName( aCellRange.aUpperLeft.nColumn,
                                  aCellRange.aUpperLeft.nRow );
         // does cell range consist of more than a single cell?
         if (!aCellRange.aLowerRight.bIsEmpty)
         {
-            aTmp += OUString((sal_Unicode) ':');
+            aTmp += ":";
             aTmp += sw_GetCellName( aCellRange.aLowerRight.nColumn,
                                      aCellRange.aLowerRight.nRow );
         }
@@ -2173,12 +2172,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                             OUString aNew;
                             if (bUseCol)
                             {
-                                aRplc = OUString("%COLUMNLETTER");
+                                aRplc = "%COLUMNLETTER";
                                 aNew = OUString(aCellName.getStr(), pBuf - aCellName.getStr());
                             }
                             else
                             {
-                                aRplc = OUString("%ROWNUMBER");
+                                aRplc = "%ROWNUMBER";
                                 aNew = OUString(pBuf, (aCellName.getStr() + nLen) - pBuf);
                             }
                             aTxt = aTxt.replaceFirst( aRplc, aNew );

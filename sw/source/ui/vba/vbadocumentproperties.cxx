@@ -632,7 +632,7 @@ SwVbaBuiltInDocumentProperty::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.DocumentProperty" );
+        aServiceNames[ 0 ] = "ooo.vba.word.DocumentProperty";
     }
     return aServiceNames;
 }
@@ -786,7 +786,7 @@ SwVbaBuiltinDocumentProperties::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.DocumentProperties" );
+        aServiceNames[ 0 ] = "ooo.vba.word.DocumentProperties";
     }
     return aServiceNames;
 }

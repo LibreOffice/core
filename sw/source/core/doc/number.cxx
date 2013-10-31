@@ -1141,7 +1141,7 @@ namespace numfunc
 
     void SwDefBulletConfig::SetToDefault()
     {
-        msFontname = OUString("OpenSymbol");
+        msFontname = "OpenSymbol";
         mbUserDefinedFontname = false;
         meFontWeight = WEIGHT_DONTKNOW;
         meFontItalic = ITALIC_NONE;
@@ -1162,19 +1162,19 @@ namespace numfunc
     {
         uno::Sequence<OUString> aPropNames(13);
         OUString* pNames = aPropNames.getArray();
-        pNames[0] = OUString("BulletFont/FontFamilyname");
-        pNames[1] = OUString("BulletFont/FontWeight");
-        pNames[2] = OUString("BulletFont/FontItalic");
-        pNames[3] = OUString("BulletCharLvl1");
-        pNames[4] = OUString("BulletCharLvl2");
-        pNames[5] = OUString("BulletCharLvl3");
-        pNames[6] = OUString("BulletCharLvl4");
-        pNames[7] = OUString("BulletCharLvl5");
-        pNames[8] = OUString("BulletCharLvl6");
-        pNames[9] = OUString("BulletCharLvl7");
-        pNames[10] = OUString("BulletCharLvl8");
-        pNames[11] = OUString("BulletCharLvl9");
-        pNames[12] = OUString("BulletCharLvl10");
+        pNames[0] = "BulletFont/FontFamilyname";
+        pNames[1] = "BulletFont/FontWeight";
+        pNames[2] = "BulletFont/FontItalic";
+        pNames[3] = "BulletCharLvl1";
+        pNames[4] = "BulletCharLvl2";
+        pNames[5] = "BulletCharLvl3";
+        pNames[6] = "BulletCharLvl4";
+        pNames[7] = "BulletCharLvl5";
+        pNames[8] = "BulletCharLvl6";
+        pNames[9] = "BulletCharLvl7";
+        pNames[10] = "BulletCharLvl8";
+        pNames[11] = "BulletCharLvl9";
+        pNames[12] = "BulletCharLvl10";
 
         return aPropNames;
     }
@@ -1344,7 +1344,7 @@ namespace numfunc
     {
         com::sun::star::uno::Sequence<OUString> aPropNames(1);
         OUString* pNames = aPropNames.getArray();
-        pNames[0] = OUString("ChangeIndentOnTabAtFirstPosOfFirstListItem");
+        pNames[0] = "ChangeIndentOnTabAtFirstPosOfFirstListItem";
 
         return aPropNames;
     }

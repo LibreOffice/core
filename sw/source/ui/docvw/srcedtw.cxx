@@ -263,8 +263,8 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
         notifier_ = n;
     }
     css::uno::Sequence< OUString > s(2);
-    s[0] = OUString("FontHeight");
-    s[1] = OUString("FontName");
+    s[0] = "FontHeight";
+    s[1] = "FontName";
     n->addPropertiesChangeListener(s, listener_.get());
 }
 

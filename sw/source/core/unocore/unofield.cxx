@@ -2623,7 +2623,7 @@ static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
         if( 2 <= nDotCount )
         {
             // #i51815#
-            rName = OUString("DataBase.") + rName;
+            rName = "DataBase." + rName;
             nResId = RES_DBFLD;
         }
     }

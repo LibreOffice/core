@@ -1238,7 +1238,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
-                            aParam.Name = OUString("ParentWindow");
+                            aParam.Name = "ParentWindow";
                             aParam.Value <<= makeAny(xDialogParentWindow);
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );

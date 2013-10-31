@@ -1509,7 +1509,7 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
     if( bFull )
     {
         // zweiter Versuch, wir kuerzen den String:
-        aExpand = OUString("...");
+        aExpand = "...";
         bFull = SwFldPortion::Format( rInf );
         SetLen( 0 );
         if( bFull  )
@@ -1584,7 +1584,7 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     aExpand += rStr;
 
     // 7773: sinnvolle Massnahme: ein Blank Abstand zum Text
-    aExpand += OUString(' ');
+    aExpand += " ";
     SetWhichPor( POR_ERGOSUM );
 }
 

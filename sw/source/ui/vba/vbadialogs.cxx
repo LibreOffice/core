@@ -45,7 +45,7 @@ SwVbaDialogs::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Dialogs" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Dialogs";
     }
     return aServiceNames;
 }

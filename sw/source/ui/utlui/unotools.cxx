@@ -472,9 +472,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         for (sal_uInt16 i = 0;
                 i < (sizeof(nZoomValues)/sizeof(nZoomValues[0])); ++i)
         {
-            OUString sTemp;
-            sTemp = OUString::number(nZoomValues[i]);
-            sTemp += " %";
+            OUString sTemp = OUString::number(nZoomValues[i]) + " %";
             aSubPop1.InsertItem( ITEM_ZOOM + i + 1, sTemp);
             if(nZoom == nZoomValues[i])
                 aSubPop1.CheckItem(ITEM_ZOOM + i + 1);

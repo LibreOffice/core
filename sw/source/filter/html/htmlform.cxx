@@ -865,7 +865,7 @@ static void lcl_html_setEvents(
         rDesc.EventMethod = sMethod;
         rDesc.ScriptType = rType;
         rDesc.ScriptCode = sCode;
-        rDesc.AddListenerParam = OUString();
+        rDesc.AddListenerParam = "";
 
         if(!rUnoMacroParamTbl.empty())
         {
@@ -1013,7 +1013,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             rFCompPropSet->getPropertySetInfo();
-        OUString sPropName = OUString("BackgroundColor");
+        OUString sPropName = "BackgroundColor";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_BACKGROUND, sal_True,
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1029,7 +1029,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         }
 
-        sPropName = OUString("TextColor");
+        sPropName = "TextColor";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_COLOR, sal_True,
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1039,7 +1039,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = OUString("FontHeight");
+        sPropName = "FontHeight";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_FONTSIZE,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1054,31 +1054,31 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      &pItem ) )
         {
             const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
-            sPropName = OUString("FontName");
+            sPropName = "FontName";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= OUString( pFontItem->GetFamilyName() );
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = OUString("FontStyleName");
+            sPropName = "FontStyleName";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= OUString( pFontItem->GetStyleName() );
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = OUString("FontFamily");
+            sPropName = "FontFamily";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= (sal_Int16)pFontItem->GetFamily() ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = OUString("FontCharset");
+            sPropName = "FontCharset";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= (sal_Int16)pFontItem->GetCharSet() ;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
-            sPropName = OUString("FontPitch");
+            sPropName = "FontPitch";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
                 aTmp <<= (sal_Int16)pFontItem->GetPitch() ;
@@ -1086,7 +1086,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             }
         }
 
-        sPropName = OUString("FontWeight");
+        sPropName = "FontWeight";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_WEIGHT,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1097,7 +1097,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = OUString("FontSlant");
+        sPropName = "FontSlant";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_POSTURE,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1106,7 +1106,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = OUString("FontUnderline");
+        sPropName = "FontUnderline";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_UNDERLINE,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
@@ -1115,7 +1115,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        sPropName = OUString("FontStrikeout");
+        sPropName = "FontStrikeout";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_CROSSEDOUT,
                                                      sal_True, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )

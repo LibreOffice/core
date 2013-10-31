@@ -3210,7 +3210,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                         if ( aIt != aPattern.end() )
                                         {
                                             SwFormToken aNumberEntrySeparator( TOKEN_TEXT );
-                                            aNumberEntrySeparator.sText = OUString(" ");
+                                            aNumberEntrySeparator.sText = " ";
                                             aPattern.insert( ++aIt, aNumberEntrySeparator );
                                             pForm->SetPattern( nStyleLevel, aPattern );
                                         }

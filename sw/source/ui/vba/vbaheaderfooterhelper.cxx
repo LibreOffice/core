@@ -54,8 +54,8 @@ sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xM
     if( !isHeaderFooter( xCurrentText ) )
         return sal_False;
 
-    OUString aPropIsShared = OUString("HeaderIsShared");
-    OUString aPropText = OUString("HeaderText");
+    OUString aPropIsShared = "HeaderIsShared";
+    OUString aPropText = "HeaderText";
     uno::Reference< style::XStyle > xPageStyle = word::getCurrentPageStyle( xModel );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyle, uno::UNO_QUERY_THROW );
     sal_Bool isShared = sal_True;
@@ -64,9 +64,9 @@ sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xM
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
         if( 0 == xPageCursor->getPage() % 2 )
-            aPropText = OUString("HeaderTextLeft");
+            aPropText = "HeaderTextLeft";
         else
-            aPropText = OUString("HeaderTextRight");
+            aPropText = "HeaderTextRight";
     }
 
     uno::Reference< text::XText > xHeaderText( xPageProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
@@ -120,8 +120,8 @@ sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xM
     if( !isHeaderFooter( xCurrentText ) )
         return sal_False;
 
-    OUString aPropIsShared = OUString("FooterIsShared");
-    OUString aPropText = OUString("FooterText");
+    OUString aPropIsShared = "FooterIsShared";
+    OUString aPropText = "FooterText";
     uno::Reference< style::XStyle > xPageStyle = word::getCurrentPageStyle( xModel );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyle, uno::UNO_QUERY_THROW );
     sal_Bool isShared = sal_True;
@@ -130,9 +130,9 @@ sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xM
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
         if( 0 == xPageCursor->getPage() % 2 )
-            aPropText = OUString("FooterTextLeft");
+            aPropText = "FooterTextLeft";
         else
-            aPropText = OUString("FooterTextRight");
+            aPropText = "FooterTextRight";
     }
 
     uno::Reference< text::XText > xFooterText( xPageProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );

@@ -67,7 +67,7 @@ SwVbaParagraph::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Paragraph" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Paragraph";
     }
     return aServiceNames;
 }
@@ -170,7 +170,7 @@ SwVbaParagraphs::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = OUString("ooo.vba.word.Paragraphs");
+        sNames[0] = "ooo.vba.word.Paragraphs";
     }
     return sNames;
 }

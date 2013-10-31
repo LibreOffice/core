@@ -41,7 +41,7 @@ SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Refere
 {
     OSL_TRACE("SwVbaGlobals::SwVbaGlobals()");
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = OUString("Application");
+        aInitArgs[ 0 ].Name = "Application";
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
         aInitArgs[ 1 ].Name = sDocCtxName;
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
@@ -151,7 +151,7 @@ SwVbaGlobals::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = OUString("ooo.vba.word.Globals" );
+                aServiceNames[ 0 ] = "ooo.vba.word.Globals";
         }
         return aServiceNames;
 }

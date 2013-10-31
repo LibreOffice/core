@@ -148,7 +148,7 @@ protected:
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = OUString("ooo.vba.word.Border" );
+            aServiceNames[ 0 ] = "ooo.vba.word.Border";
         }
         return aServiceNames;
     }
@@ -361,7 +361,7 @@ SwVbaBorders::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Borders" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Borders";
     }
     return aServiceNames;
 }

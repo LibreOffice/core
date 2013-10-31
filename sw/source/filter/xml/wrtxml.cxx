@@ -281,7 +281,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( pOrigFileName )
     {
         PropertyValue *pProps = aProps.getArray();
-        pProps->Name = OUString("FileName");
+        pProps->Name = "FileName";
         (pProps++)->Value <<= OUString( *pOrigFileName  );
     }
 

@@ -272,7 +272,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
     sal_Bool bTextOnly = sal_True;
     OUString aFolderName = GeneratePackageName ( rShort );
     OUString aStreamName = aFolderName + ".xml";
-    rText = OUString();
+    rText = "";
 
     try
     {
@@ -281,7 +281,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
         if ( !xAccess->hasByName( aStreamName ) || !xRoot->isStreamElement( aStreamName ) )
         {
             bTextOnly = sal_False;
-            aStreamName = OUString("content.xml");
+            aStreamName = "content.xml";
         }
 
         uno::Reference < io::XStream > xContents = xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );

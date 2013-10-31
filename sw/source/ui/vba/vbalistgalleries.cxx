@@ -97,7 +97,7 @@ SwVbaListGalleries::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = OUString("ooo.vba.word.ListGalleries");
+        sNames[0] = "ooo.vba.word.ListGalleries";
     }
     return sNames;
 }

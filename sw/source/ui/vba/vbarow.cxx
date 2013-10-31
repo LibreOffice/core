@@ -117,7 +117,7 @@ SwVbaRow::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Row" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Row";
     }
     return aServiceNames;
 }

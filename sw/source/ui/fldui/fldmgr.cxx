@@ -311,9 +311,9 @@ SwField* SwFldMgr::GetCurFld()
         pCurFld = NULL;
 
     // initialise strings and format
-    aCurPar1 = OUString();
-    aCurPar2 = OUString();
-    sCurFrame = OUString();
+    aCurPar1 = "";
+    aCurPar2 = "";
+    sCurFrame = "";
     nCurFmt = 0;
 
     if(!pCurFld)
@@ -1468,7 +1468,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
-                sPar2 = OUString('1');
+                sPar2 = "1";
             }
             else
             {
@@ -1484,7 +1484,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
-                sPar2 = OUString("-1");
+                sPar2 = "-1";
             }
             else
             {

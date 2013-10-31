@@ -595,7 +595,7 @@ void SwHTMLWriter::OutHiddenControls(
                 *(uno::Reference< form::XFormComponent > *)aTmp.getValue();
         uno::Reference< beans::XPropertySet > xPropSet( xFC, uno::UNO_QUERY );
 
-        OUString sPropName = OUString("ClassId");
+        OUString sPropName = "ClassId";
         if( !xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
             continue;
 
@@ -1096,7 +1096,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 aItemSet.Put( SvxBrushItem( aCol, RES_CHRATR_BACKGROUND ) );
             }
         }
-        sPropName = OUString("TextColor");
+        sPropName = "TextColor";
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
@@ -1106,7 +1106,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 aItemSet.Put( SvxColorItem( aColor, RES_CHRATR_COLOR ) );
             }
         }
-        sPropName = OUString("FontHeight");
+        sPropName = "FontHeight";
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
@@ -1118,7 +1118,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     aItemSet.Put( SvxFontHeightItem( sal_Int16(nHeight * 20.), 100, RES_CHRATR_FONTSIZE ) );
             }
         }
-        sPropName = OUString("FontName");
+        sPropName = "FontName";
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
@@ -1132,7 +1132,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( !bEdit || aFName != aFixedFont.GetName() )
                 {
                     FontFamily eFamily = FAMILY_DONTKNOW;
-                    sPropName = OUString("FontFamily");
+                    sPropName = "FontFamily";
                     if( xPropSetInfo->hasPropertyByName( sPropName ) )
                     {
                         aTmp = xPropSet->getPropertyValue( sPropName );
@@ -1144,7 +1144,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 }
             }
         }
-        sPropName = OUString("FontWeight");
+        sPropName = "FontWeight";
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
@@ -1156,7 +1156,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     aItemSet.Put( SvxWeightItem( eWeight, RES_CHRATR_WEIGHT ) );
             }
         }
-        sPropName = OUString("FontSlant");
+        sPropName = "FontSlant";
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
@@ -1167,7 +1167,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     aItemSet.Put( SvxPostureItem( eItalic, RES_CHRATR_POSTURE ) );
             }
         }
-        sPropName = OUString("FontUnderline");
+        sPropName = "FontUnderline";
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
@@ -1180,7 +1180,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     aItemSet.Put( SvxUnderlineItem( eUnderline, RES_CHRATR_UNDERLINE ) );
             }
         }
-        sPropName = OUString("FontStrikeout");
+        sPropName = "FontStrikeout";
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );

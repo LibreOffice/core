@@ -1254,9 +1254,9 @@ Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     Sequence< OUString > aSeq( 3 );
-    aSeq[0] = OUString("com.sun.star.document.Settings");
-    aSeq[1] = OUString("com.sun.star.text.DocumentSettings");
-    aSeq[2] = OUString("com.sun.star.text.PrintSettings");
+    aSeq[0] = "com.sun.star.document.Settings";
+    aSeq[1] = "com.sun.star.text.DocumentSettings";
+    aSeq[2] = "com.sun.star.text.PrintSettings";
     return aSeq;
 }
 

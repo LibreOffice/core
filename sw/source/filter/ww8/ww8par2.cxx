@@ -4230,7 +4230,7 @@ void WW8RStyle::ImportOldFormatStyles()
                 if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
                     sName = OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US);
                 else
-                    sName = OUString("Unknown");
+                    sName = "Unknown";
             }
             else               // user style
             {

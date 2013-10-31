@@ -1349,7 +1349,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     aKeyboardLang = aLangTable.GetString( nLang );
 
                 // get the language that is in use
-                OUString aCurrentLang = OUString("*");
+                OUString aCurrentLang = "*";
                 nLang = SwLangHelper::GetCurrentLanguage( rSh );
                 if (nLang != LANGUAGE_DONTKNOW)
                     aCurrentLang = aLangTable.GetString( nLang );

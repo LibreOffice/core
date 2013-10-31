@@ -100,10 +100,10 @@ static SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
     aStartToken.nAuthorityField = AUTH_FIELD_IDENTIFIER;
     aRet.push_back( aStartToken );
     SwFormToken aSeparatorToken( TOKEN_TEXT );
-    aSeparatorToken.sText = OUString(": ");
+    aSeparatorToken.sText = ": ";
     aRet.push_back( aSeparatorToken );
     SwFormToken aTextToken( TOKEN_TEXT );
-    aTextToken.sText = OUString(", ");
+    aTextToken.sText = ", ";
 
     for(sal_uInt16 i = 0; i < 5 ; i++)
     {

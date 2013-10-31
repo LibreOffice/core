@@ -50,7 +50,7 @@ SwAsyncRetrieveInputStreamThread::~SwAsyncRetrieveInputStreamThread()
 void SwAsyncRetrieveInputStreamThread::threadFunction()
 {
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > xProps( 1 );
-    xProps[0].Name = OUString("URL");
+    xProps[0].Name = "URL";
     xProps[0].Value <<= OUString( mrLinkedURL );
     comphelper::MediaDescriptor aMedium( xProps );
 

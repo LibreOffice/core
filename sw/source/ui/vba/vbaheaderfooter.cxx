@@ -54,11 +54,11 @@ uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange() throw (uno
     OUString sPropsNameText;
     if( mbHeader )
     {
-        sPropsNameText = OUString("HeaderText");
+        sPropsNameText = "HeaderText";
     }
     else
     {
-        sPropsNameText = OUString("FooterText");
+        sPropsNameText = "FooterText";
     }
     if( mnIndex == word::WdHeaderFooterIndex::wdHeaderFooterEvenPages )
     {
@@ -96,7 +96,7 @@ SwVbaHeaderFooter::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Pane" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Pane";
     }
     return aServiceNames;
 }

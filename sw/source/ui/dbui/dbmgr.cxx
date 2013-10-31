@@ -840,7 +840,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer));
         if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
         {
-            sBodyMimeType = OUString("text/html; charset=");
+            sBodyMimeType = "text/html; charset=";
             sBodyMimeType += OUString::createFromAscii(
                                 rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
             SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
@@ -1195,7 +1195,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                                     while ( bDone )
                                                     {
                                                         sBody += OStringToOUString(sLine, eEncoding);
-                                                        sBody += OUString('\n');
+                                                        sBody += "\n";
                                                         bDone = pInStream->ReadLine( sLine );
                                                     }
                                                 }
@@ -1291,7 +1291,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
 
                     aOptions.realloc( 1 );
-                    aOptions[ 0 ].Name = OUString("Wait");
+                    aOptions[ 0 ].Name = "Wait";
                     aOptions[ 0 ].Value <<= sal_True ;
                     // move print options
                     const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
@@ -1810,7 +1810,7 @@ sal_Bool    SwNewDBMgr::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt1
 {
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
     {
-        rResult = OUString();
+        rResult = "";
         return sal_False;
     }
 
@@ -2337,7 +2337,7 @@ OUString SwNewDBMgr::LoadAndRegisterDataSource()
 
                 Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
                 Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-                OUString sOutputExt = OUString(".odb");
+                OUString sOutputExt = ".odb";
                 OUString sTmpName;
                 {
                     utl::TempFile aTempFile(sNewName , &sOutputExt, &sHomePath);

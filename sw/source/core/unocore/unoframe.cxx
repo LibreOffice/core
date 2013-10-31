@@ -1187,7 +1187,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     pGrfObj = new GraphicObject;
                     pGrfObj->SetUserData( sTmp );
                     pGrfObj->SetSwapState();
-                    sGrfName = OUString();
+                    sGrfName = "";
                 }
                 else if( sTmp.startsWith(sGraphicObjectProtocol) )
                 {
@@ -1195,7 +1195,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         sTmp.copy(sizeof(sGraphicObjectProtocol)-1),
                         RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
-                    sGrfName = OUString();
+                    sGrfName = "";
                 }
                 else
                 {
@@ -2239,7 +2239,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pGrfObj = new GraphicObject;
                     pGrfObj->SetUserData( sGraphicURL );
                     pGrfObj->SetSwapState();
-                    sGraphicURL = OUString();
+                    sGraphicURL = "";
                 }
                 else if( sGraphicURL.startsWith(sGraphicObjectProtocol) )
                 {
@@ -2247,7 +2247,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                         sGraphicURL.copy( sizeof(sGraphicObjectProtocol)-1 ),
                         RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
-                    sGraphicURL = OUString();
+                    sGraphicURL = "";
                 }
             }
             Graphic aGraphic;
@@ -2318,7 +2318,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     if( !aClassName.MakeId( aCLSID ) )
                     {
                         lang::IllegalArgumentException aExcept;
-                        aExcept.Message = OUString("CLSID invalid");
+                        aExcept.Message = "CLSID invalid";
                         throw aExcept;
                     }
 

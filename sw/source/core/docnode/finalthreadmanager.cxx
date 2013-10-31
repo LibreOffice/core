@@ -452,7 +452,7 @@ namespace comp_FinalThreadManager {
     css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
     {
         css::uno::Sequence< OUString > s(1);
-        s[0] = OUString("com.sun.star.util.JobManager");
+        s[0] = "com.sun.star.util.JobManager";
         return s;
     }
 

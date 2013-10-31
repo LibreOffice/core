@@ -856,9 +856,9 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
 
     uno::Sequence < beans::PropertyValue > aProps( 2 );
-    aProps[0]. Name = OUString("MonitorVisible");
+    aProps[0]. Name = "MonitorVisible";
     aProps[0].Value <<= sal_True;
-    aProps[1]. Name = OUString("Pages");
+    aProps[1]. Name = "Pages";
     aProps[1]. Value <<= sPages;
 
     pTargetView->ExecPrint( aProps, false, true );

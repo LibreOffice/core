@@ -716,14 +716,14 @@ OUString SwXAutoTextGroup::getImplementationName(void) throw( uno::RuntimeExcept
 
 sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return OUString("com.sun.star.text.AutoTextGroup") == rServiceName;
+    return "com.sun.star.text.AutoTextGroup" == rServiceName;
 }
 
 uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString("com.sun.star.text.AutoTextGroup");
+    pArray[0] = "com.sun.star.text.AutoTextGroup";
     return aRet;
 }
 

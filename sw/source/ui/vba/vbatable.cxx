@@ -130,7 +130,7 @@ SwVbaTable::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Table" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Table";
     }
     return aServiceNames;
 }

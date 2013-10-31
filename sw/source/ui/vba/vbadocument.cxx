@@ -377,13 +377,13 @@ void SAL_CALL SwVbaDocument::PrintOut( const uno::Any& /*Background*/, const uno
 
 void SAL_CALL SwVbaDocument::PrintPreview(  ) throw (uno::RuntimeException)
 {
-    OUString url = OUString( ".uno:PrintPreview");
+    OUString url = ".uno:PrintPreview";
     dispatchRequests( mxModel,url );
 }
 
 void SAL_CALL SwVbaDocument::ClosePrintPreview(  ) throw (uno::RuntimeException)
 {
-    OUString url = OUString( ".uno:ClosePreview");
+    OUString url = ".uno:ClosePreview";
     dispatchRequests( mxModel,url );
 }
 
@@ -506,7 +506,7 @@ SwVbaDocument::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Document" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Document";
     }
     return aServiceNames;
 }

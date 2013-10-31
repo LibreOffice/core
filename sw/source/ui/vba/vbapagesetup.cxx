@@ -149,9 +149,9 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
 
     OUString newStyle;
     if( status )
-        newStyle = OUString("First Page");
+        newStyle = "First Page";
     else
-        newStyle = OUString("Standard");
+        newStyle = "Standard";
 
     uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( mxModel ), uno::UNO_QUERY_THROW );
     sal_Int32 nTopMargin = 0;
@@ -256,7 +256,7 @@ SwVbaPageSetup::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.PageSetup" );
+        aServiceNames[ 0 ] = "ooo.vba.word.PageSetup";
     }
     return aServiceNames;
 }

@@ -62,7 +62,7 @@ SwVbaField::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Field" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Field";
     }
     return aServiceNames;
 }
@@ -459,7 +459,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
 
     if( bCustom )
     {
-        sFieldService = OUString( "com.sun.star.text.textfield.docinfo.Custom" );
+        sFieldService = "com.sun.star.text.textfield.docinfo.Custom";
     }
     else if( sFieldService.isEmpty() )
     {
@@ -530,7 +530,7 @@ SwVbaFields::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Fields" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Fields";
     }
     return aServiceNames;
 }

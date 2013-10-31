@@ -157,9 +157,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
         if( ! rWrtShell.IsTblComplexForChart())
         {
             SwFrmFmt* pTblFmt = rWrtShell.GetTableFmt();
-            aRangeString = pTblFmt->GetName();
-            aRangeString += OUString( sal_Unicode('.') );
-            aRangeString += rWrtShell.GetBoxNms();
+            aRangeString = pTblFmt->GetName() + "." + rWrtShell.GetBoxNms();
 
             // get table data provider
             xDataProvider.set( pView->GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider( true ) );
@@ -190,10 +188,10 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                 uno::Sequence<uno::Any> aSeq(2);
                 uno::Any* pArray = aSeq.getArray();
                 beans::PropertyValue aParam1;
-                aParam1.Name = OUString("ParentWindow");
+                aParam1.Name = "ParentWindow";
                 aParam1.Value <<= uno::makeAny(xDialogParentWindow);
                 beans::PropertyValue aParam2;
-                aParam2.Name = OUString("ChartModel");
+                aParam2.Name = "ChartModel";
                 aParam2.Value <<= uno::makeAny(xChartModel);
                 pArray[0] <<= uno::makeAny(aParam1);
                 pArray[1] <<= uno::makeAny(aParam2);

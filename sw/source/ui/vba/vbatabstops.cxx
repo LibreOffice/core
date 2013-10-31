@@ -262,7 +262,7 @@ SwVbaTabStops::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = OUString("ooo.vba.word.TabStops");
+        sNames[0] = "ooo.vba.word.TabStops";
     }
     return sNames;
 }

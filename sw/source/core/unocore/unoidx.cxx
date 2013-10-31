@@ -1416,11 +1416,11 @@ OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
     if (m_pImpl->m_bIsDescriptor)
     {
-        uRet = OUString(m_pImpl->m_pProps->GetTOXBase().GetTOXName());
+        uRet = m_pImpl->m_pProps->GetTOXBase().GetTOXName();
     }
     else if(pSectionFmt)
     {
-        uRet = OUString(pSectionFmt->GetSection()->GetSectionName());
+        uRet = pSectionFmt->GetSection()->GetSectionName();
     }
     else
     {
@@ -1730,7 +1730,7 @@ SwXDocumentIndexMark::getMarkEntry() throw (uno::RuntimeException)
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
     {
-        sRet = OUString(m_pImpl->m_pTOXMark->GetAlternativeText());
+        sRet = m_pImpl->m_pTOXMark->GetAlternativeText();
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -2504,8 +2504,7 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode())
         {
-            pArray[nCnt++] = OUString(
-                static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName());
+            pArray[nCnt++] = static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName();
         }
     }
     return aRet;

@@ -725,7 +725,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
                             uno::Sequence< beans::PropertyValue > aArgs(1);
-                            aArgs[0].Name = OUString("RtfOutline");
+                            aArgs[0].Name = "RtfOutline";
                             aArgs[0].Value <<= aSeq;
                             xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aArgs );
                         }
@@ -792,7 +792,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
                             uno::Sequence< beans::PropertyValue > aArgs(1);
-                            aArgs[0].Name = OUString("RtfOutline");
+                            aArgs[0].Name = "RtfOutline";
                             aArgs[0].Value <<= aSeq;
                             xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aArgs );
                         }

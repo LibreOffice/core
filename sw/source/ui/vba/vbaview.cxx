@@ -256,10 +256,10 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
         case word::WdSeekView::wdSeekPrimaryFooter:
         case word::WdSeekView::wdSeekEvenPagesFooter:
         {
-            aPropIsOn = OUString("FooterIsOn");
-            aPropIsShared = OUString("FooterIsShared");
-            aPropBodyDistance = OUString("FooterBodyDistance");
-            aPropText = OUString("FooterText");
+            aPropIsOn = "FooterIsOn";
+            aPropIsShared = "FooterIsShared";
+            aPropBodyDistance = "FooterBodyDistance";
+            aPropText = "FooterText";
             break;
         }
         case word::WdSeekView::wdSeekCurrentPageHeader:
@@ -267,10 +267,10 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
         case word::WdSeekView::wdSeekPrimaryHeader:
         case word::WdSeekView::wdSeekEvenPagesHeader:
         {
-            aPropIsOn = OUString("HeaderIsOn");
-            aPropIsShared = OUString("HeaderIsShared");
-            aPropBodyDistance = OUString("HeaderBodyDistance");
-            aPropText = OUString("HeaderText");
+            aPropIsOn = "HeaderIsOn";
+            aPropIsShared = "HeaderIsShared";
+            aPropBodyDistance = "HeaderBodyDistance";
+            aPropText = "HeaderText";
             break;
         }
     }
@@ -383,7 +383,7 @@ SwVbaView::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.View" );
+        aServiceNames[ 0 ] = "ooo.vba.word.View";
     }
     return aServiceNames;
 }

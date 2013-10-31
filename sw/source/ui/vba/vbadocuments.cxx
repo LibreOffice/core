@@ -163,7 +163,7 @@ SwVbaDocuments::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = OUString("ooo.vba.word.Documents");
+        sNames[0] = "ooo.vba.word.Documents";
     }
     return sNames;
 }

@@ -232,7 +232,7 @@ SwVbaStyle::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.XStyle" );
+        aServiceNames[ 0 ] = "ooo.vba.word.XStyle";
     }
     return aServiceNames;
 }

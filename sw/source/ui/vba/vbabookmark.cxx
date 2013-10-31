@@ -96,7 +96,7 @@ SwVbaBookmark::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Bookmark" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Bookmark";
     }
     return aServiceNames;
 }

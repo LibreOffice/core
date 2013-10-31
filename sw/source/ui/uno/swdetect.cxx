@@ -349,7 +349,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = OUString("InputStream");
+        lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -358,7 +358,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = OUString("UCBContent");
+        lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -368,7 +368,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = OUString("ReadOnly");
+            lDescriptor[nPropertyCount].Name = "ReadOnly";
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -379,7 +379,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = OUString("RepairPackage");
+        lDescriptor[nPropertyCount].Name = "RepairPackage";
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
         bOpenAsTemplate = sal_True;
@@ -391,7 +391,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = OUString("AsTemplate");
+            lDescriptor[nPropertyCount].Name = "AsTemplate";
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -405,7 +405,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = OUString("DocumentTitle");
+            lDescriptor[nPropertyCount].Name = "DocumentTitle";
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -448,9 +448,9 @@ Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( 
 Sequence< OUString > SwFilterDetect::impl_getStaticSupportedServiceNames()
 {
     Sequence< OUString > seqServiceNames( 3 );
-    seqServiceNames.getArray() [0] = OUString("com.sun.star.frame.ExtendedTypeDetection"  );
-    seqServiceNames.getArray() [1] = OUString("com.sun.star.text.FormatDetector"  );
-    seqServiceNames.getArray() [2] = OUString("com.sun.star.text.W4WFormatDetector"  );
+    seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection";
+    seqServiceNames.getArray() [1] = "com.sun.star.text.FormatDetector";
+    seqServiceNames.getArray() [2] = "com.sun.star.text.W4WFormatDetector";
     return seqServiceNames ;
 }
 

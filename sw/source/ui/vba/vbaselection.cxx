@@ -219,7 +219,7 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count ) throw ( 
             }
         }
     }
-    OUString url = OUString( ".uno:Delete");
+    OUString url = ".uno:Delete";
     dispatchRequests( mxModel,url );
 }
 
@@ -548,7 +548,7 @@ SwVbaSelection::getFont() throw ( uno::RuntimeException )
 void SAL_CALL
 SwVbaSelection::TypeBackspace() throw ( uno::RuntimeException )
 {
-    OUString url = OUString( ".uno:SwBackspace");
+    OUString url = ".uno:SwBackspace";
     dispatchRequests( mxModel,url );
 }
 
@@ -1041,7 +1041,7 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index ) throw (uno::Run
 
 void SAL_CALL SwVbaSelection::Copy(  ) throw (uno::RuntimeException)
 {
-    OUString url = OUString( ".uno:Copy");
+    OUString url = ".uno:Copy";
     dispatchRequests( mxModel,url );
 }
 
@@ -1053,7 +1053,7 @@ void SAL_CALL SwVbaSelection::CopyAsPicture(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SwVbaSelection::Paste(  ) throw (uno::RuntimeException)
 {
-    OUString url = OUString( ".uno:Paste");
+    OUString url = ".uno:Paste";
     dispatchRequests( mxModel,url );
 }
 
@@ -1101,7 +1101,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException)
             // insert an empty line
             uno::Reference< text::XTextRange > xFirstCellRange = word::getFirstObjectPosition( xText );
             mxTextViewCursor->gotoRange( xFirstCellRange, sal_False );
-            OUString url = OUString( ".uno:InsertPara");
+            OUString url = ".uno:InsertPara";
             dispatchRequests( mxModel,url );
         }
     }
@@ -1175,7 +1175,7 @@ SwVbaSelection::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.word.Selection" );
+        aServiceNames[ 0 ] = "ooo.vba.word.Selection";
     }
     return aServiceNames;
 }

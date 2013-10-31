@@ -1341,7 +1341,7 @@ SwXTextRange::getAvailableServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString("com.sun.star.text.TextContent");
+    pArray[0] = "com.sun.star.text.TextContent";
     return aRet;
 }
 
