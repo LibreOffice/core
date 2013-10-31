@@ -221,9 +221,9 @@ static bool impl_getZipFile(
         OUString aFileName = pPathArray[ i ];
         if ( !aFileName.isEmpty() )
         {
-            if ( 1 + aFileName.lastIndexOf( '/' ) != aFileName.getLength() )
+            if ( !aFileName.endsWith("/") )
             {
-                aFileName += OUString( "/" );
+                aFileName += "/";
             }
             aFileName += rZipName;
             // the icons are not read when the URL is a symlink
@@ -249,7 +249,7 @@ OString Databases::getImagesZipFileURL()
         // set root path
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
-        aParam.Name    = OUString("nodepath");
+        aParam.Name    = "nodepath";
         aParam.Value <<= OUString("org.openoffice.Office.Common");
         lParams[0] = uno::makeAny(aParam);
 
@@ -285,9 +285,7 @@ OString Databases::getImagesZipFileURL()
                     else
                         aSymbolsStyleName = "tango";
                 }
-                OUString aZipName = OUString( "images_" );
-                aZipName += aSymbolsStyleName;
-                aZipName += OUString( ".zip" );
+                OUString aZipName = "images_" + aSymbolsStyleName + ".zip";
 
                 bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
             }
@@ -296,7 +294,7 @@ OString Databases::getImagesZipFileURL()
                 bFound = impl_getZipFile( m_aImagesZipPaths, OUString( "images.zip" ), aImageZip );
 
             if ( ! bFound )
-                aImageZip = OUString();
+                aImageZip = "";
 
             m_aImagesZipFileURL = OUStringToOString(
                         rtl::Uri::encode(
@@ -601,7 +599,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
         OUString fileNameHDFHelp( fileURL );
         //Extensions always use the new format
         if( pExtensionPath != NULL )
-            fileNameHDFHelp += OUString( "_" );
+            fileNameHDFHelp += "_";
         //SimpleFileAccess takes file URLs as arguments!!! Using filenames works accidentally but
         //fails for example when using long path names on Windows (starting with \\?\)
         if( m_xSFA->exists( fileNameHDFHelp ) )
@@ -636,21 +634,21 @@ Databases::getCollator( const OUString& Language,
         if( countryStr.isEmpty() )
         {
             if( langStr.compareToAscii("de") == 0 )
-                countryStr = OUString("DE");
+                countryStr = "DE";
             else if( langStr.compareToAscii("en") == 0 )
-                countryStr = OUString("US");
+                countryStr = "US";
             else if( langStr.compareToAscii("es") == 0 )
-                countryStr = OUString("ES");
+                countryStr = "ES";
             else if( langStr.compareToAscii("it") == 0 )
-                countryStr = OUString("IT");
+                countryStr = "IT";
             else if( langStr.compareToAscii("fr") == 0 )
-                countryStr = OUString("FR");
+                countryStr = "FR";
             else if( langStr.compareToAscii("sv") == 0 )
-                countryStr = OUString("SE");
+                countryStr = "SE";
             else if( langStr.compareToAscii("ja") == 0 )
-                countryStr = OUString("JP");
+                countryStr = "JP";
             else if( langStr.compareToAscii("ko") == 0 )
-                countryStr = OUString("KR");
+                countryStr = "KR";
         }
         /* FIXME-BCP47: all this does not look right for language tag context,
          * also check processLang() and country() methods */
@@ -961,7 +959,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
 
             // let ZipPackage be used ( no manifest.xml is required )
             beans::NamedValue aArg;
-            aArg.Name = OUString( "StorageFormat" );
+            aArg.Name = "StorageFormat";
             aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
             aArguments[ 1 ] <<= aArg;
 
@@ -1081,7 +1079,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
                     uno::Any aHCMode = xVclWindowPeer->getProperty( OUString( "HighContrastMode" ) );
                     if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
                     {
-                        aCSS = OUString( "highcontrastblack" );
+                        aCSS = "highcontrastblack";
                         #ifdef WNT
                         HKEY hKey = NULL;
                         LONG lResult = RegOpenKeyExA( HKEY_CURRENT_USER, "Control Panel\\Accessibility\\HighContrast", 0, KEY_QUERY_VALUE, &hKey );
@@ -1094,11 +1092,11 @@ void Databases::cascadingStylesheet( const OUString& Language,
                             {
                                 szBuffer[nSize] = '\0';
                                 if ( strncmp( szBuffer, "High Contrast #1", strlen("High Contrast #1") ) == 0 )
-                                    aCSS = OUString( "highcontrast1" );
+                                    aCSS = "highcontrast1";
                                 if ( strncmp( szBuffer, "High Contrast #2", strlen("High Contrast #2") ) == 0 )
-                                    aCSS = OUString( "highcontrast2" );
+                                    aCSS = "highcontrast2";
                                 if ( strncmp( szBuffer, "High Contrast White", strlen("High Contrast White") ) == 0 )
-                                    aCSS = OUString( "highcontrastwhite" );
+                                    aCSS = "highcontrastwhite";
                             }
                             RegCloseKey( hKey );
                         }
@@ -1147,7 +1145,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
             if ( !retry && error && bHighContrastMode )
             {
                 // fall back to default css
-                aCSS = OUString( "default" );
+                aCSS = "default";
                 retry = 2;
                 bHighContrastMode = sal_False;
             }
@@ -1235,8 +1233,8 @@ void Databases::setInstallPath( const OUString& aInstDir )
     osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory );
         //TODO: check returned error code
 
-    if( m_aInstallDirectory.lastIndexOf( sal_Unicode( '/' ) ) != m_aInstallDirectory.getLength() - 1 )
-        m_aInstallDirectory += OUString( "/" );
+    if( m_aInstallDirectory.endsWith( "/" ) )
+        m_aInstallDirectory += "/";
 }
 
 // class ExtensionIteratorBase
@@ -1760,7 +1758,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = OUString( "StorageFormat" );
+        aArg.Name = "StorageFormat";
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         aArguments[ 1 ] <<= aArg;
 
@@ -1912,7 +1910,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                 if( nLastSlash != -1 )
                     aLang = aLangURL.copy( nLastSlash + 1 );
                 else
-                    aLang = OUString( "en" );
+                    aLang = "en";
 
                 OUString aMod("help");
 

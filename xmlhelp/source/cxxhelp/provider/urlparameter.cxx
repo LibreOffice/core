@@ -167,7 +167,7 @@ OUString URLParameter::get_title()
             m_aTitle = inf->get_title();
     }
     else   // This must be the root
-        m_aTitle = OUString("root");
+        m_aTitle = "root";
 
     return m_aTitle;
 }
@@ -610,7 +610,7 @@ bool URLParameter::query()
         if( delimIdx == -1 )
         {
             value = query_.copy( equalIdx + 1 ).trim();
-            query_ = OUString();
+            query_ = "";
         }
         else
         {

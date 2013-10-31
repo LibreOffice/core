@@ -329,9 +329,9 @@ TVRead::getElementNames( )
 {
     Sequence< OUString > seq( 3 );
 
-    seq[0] = OUString( "Title" );
-    seq[1] = OUString( "TargetURL" );
-    seq[2] = OUString( "Children" );
+    seq[0] = "Title";
+    seq[1] = "TargetURL";
+    seq[2] = "Children";
 
     return seq;
 }
@@ -669,7 +669,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
       // try to determine path from default
-      instPath = OUString( "$(instpath)/help" );
+      instPath = "$(instpath)/help";
 
     // replace anything like $(instpath);
     subst( instPath );
@@ -690,7 +690,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
-        aParam.Name    = OUString("nodepath");
+        aParam.Name    = "nodepath";
         aParam.Value <<= OUString("/org.openoffice.Setup/Product");
         lParams[0] = uno::makeAny(aParam);
 
@@ -718,7 +718,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     osl::FileBase::RC errFile = osl::FileBase::getFileURLFromSystemPath( instPath,url );
     if( errFile != osl::FileBase::E_None ) return configData;
     if( url.lastIndexOf( sal_Unicode( '/' ) ) != url.getLength() - 1 )
-        url += OUString( "/" );
+        url += "/";
     OUString ret;
     sal_Int32 idx;
     osl::DirectoryItem aDirItem;
@@ -731,8 +731,8 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
         ret = locale.copy( 0,idx );
     else
         {
-        locale = OUString( "en-US" );
-        ret = OUString("en");
+        locale = "en-US";
+        ret = "en";
         }
     url = url + ret;
 
@@ -1229,7 +1229,7 @@ OUString TreeFileIterator::implGetTreeFileFromPackage
     if( m_xSFA->exists( aRetFile ) )
         rnFileSize = m_xSFA->getSize( aRetFile );
     else
-        aRetFile = OUString();
+        aRetFile = "";
 
     return aRetFile;
 }

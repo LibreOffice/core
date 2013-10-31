@@ -224,7 +224,7 @@ void ContentProvider::init()
     OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
         // try to determine path from default
-        instPath = OUString( "$(instpath)/" LIBO_SHARE_HELP_FOLDER );
+        instPath = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
     // replace anything like $(instpath);
     subst( instPath );
 
@@ -260,7 +260,7 @@ void ContentProvider::init()
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
-        aParam.Name    = OUString("nodepath");
+        aParam.Name    = "nodepath";
         aParam.Value <<= OUString("/org.openoffice.Setup/Product");
         lParams[0] = uno::makeAny(aParam);
 
@@ -290,7 +290,7 @@ void ContentProvider::init()
     subst( aPath );
     aImagesZipPaths[ 0 ] = aPath;
 
-    aPath = OUString("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config");
+    aPath = "$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config";
     rtl::Bootstrap::expandMacros(aPath);
     aImagesZipPaths[ 1 ] = aPath;
 
