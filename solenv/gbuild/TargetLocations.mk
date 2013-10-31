@@ -25,12 +25,6 @@ gb_CliNativeLibrary_get_target = $(INSTROOT)/$(LIBO_URE_LIB_FOLDER)/$(1)$(gb_Cli
 gb_CliUnoApi_get_target = $(INSTROOT)/$(if $(filter cli_uretypes,$(1)),$(LIBO_URE_LIB_FOLDER),$(LIBO_LIB_FOLDER))/$(1)$(gb_CliUnoApi_EXT)
 gb_PackagePart_get_destinations = \
 	$(INSTDIR) \
-	$(OUTDIR)/bin \
-	$(OUTDIR)/lib \
-	$(OUTDIR)/par \
-	$(OUTDIR)/pck \
-	$(OUTDIR)/res \
-	$(OUTDIR)/share \
 	$(WORKDIR)/unittest \
 
 # kind of lame but with just 3 of these why bother with registration etc.

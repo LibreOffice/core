@@ -162,30 +162,12 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             continue; // Failed modification because of a macro expansion?
         /* Check where the file actually is, and warn about cases where modification
            most probably doesn't matter (generated files in workdir).
-           The order here is important, as OUTDIR and WORKDIR are often in SRCDIR/BUILDDIR,
+           The order here is important, as INSTDIR and WORKDIR are often in SRCDIR/BUILDDIR,
            and BUILDDIR is sometimes in SRCDIR. */
         string modifyFile;
         const char* pathWarning = NULL;
         bool skip = false;
-        if( strncmp( e->getName(), OUTDIR "/", strlen( OUTDIR "/" )) == 0 )
-            {
-            /* Try to find a matching file for a file in solver/ (include files
-               are usually included from there rather than from the source dir) if possible. */
-            if( strncmp( e->getName(), OUTDIR "/inc/", strlen( OUTDIR ) + strlen( "/inc/" )) == 0 )
-                {
-                string filename( e->getName());
-                int modulePos = strlen( OUTDIR ) + strlen( "/inc/" );
-                size_t moduleEnd = filename.find( '/', modulePos );
-                if( moduleEnd != string::npos )
-                    {
-                    modifyFile = SRCDIR "/" + filename.substr( modulePos, moduleEnd - modulePos )
-                        + "/inc/" + filename.substr( modulePos );
-                    }
-                }
-            if( modifyFile.empty())
-                pathWarning = "modified source in solver/ : %0";
-            }
-        else if( strncmp( e->getName(), WORKDIR "/", strlen( WORKDIR "/" )) == 0 )
+        if( strncmp( e->getName(), WORKDIR "/", strlen( WORKDIR "/" )) == 0 )
             pathWarning = "modified source in workdir/ : %0";
         else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR "/", strlen( BUILDDIR "/" )) == 0 )
             pathWarning = "modified source in build dir : %0";
@@ -198,8 +180,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             }
         if( modifyFile.empty())
             modifyFile = e->getName();
-        // Check whether the modified file is in the wanted scope (done after path checking above), so
-        // that files mapped from OUTDIR to SRCDIR are included.
+        // Check whether the modified file is in the wanted scope
         if( scope == "mainfile" )
             {
             if( it->first != context.getSourceManager().getMainFileID())

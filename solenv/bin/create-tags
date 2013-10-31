@@ -18,5 +18,5 @@ fi
 omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 ctags -h "+.hdl.hrc" --langmap=c:+.hdl.hrc.src $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
-      -R --exclude=`echo ${INPATH} | sed 's/\./\\\./g'` --exclude=solver \
-      --exclude=clone --exclude=install --totals=yes *
+      -R --exclude=`echo ${INPATH} | sed 's/\./\\\./g'` --exclude=workdir \
+      --exclude=clone --totals=yes *

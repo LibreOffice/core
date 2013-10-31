@@ -267,15 +267,12 @@ $(eval $(call gb_Deliver_init))
 
 # We are using a set of scopes that we might as well call classes.
 
+# TODO: to what extent is the following still true?
 # It is important to include them in the right order as that is
 # -- at least in part -- defining precedence. This is not an issue in the
-# WORKDIR as there are no nameing collisions there, but OUTDIR is a mess
+# WORKDIR as there are no nameing collisions there, but INSTDIR is a mess
 # and precedence is important there. This is also platform dependant.
-# For example:
-# $(OUTDIR)/bin/% for executables collides
-#	with $(OUTDIR)/bin/%.res for resources on unix
-# $(OUTDIR)/lib/%.lib collides
-#	on windows (static and dynamic libs)
+#
 # This is less of an issue with GNU Make versions > 3.82 which matches for
 # shortest stem instead of first match. However, upon intoduction this version
 # is not available everywhere by default.

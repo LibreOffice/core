@@ -180,7 +180,7 @@ $(foreach file,$(3),$(call gb_Extension_add_file,$(1),$(if $(strip $(2)),$(strip
 
 endef
 
-# add a library from the solver; DO NOT use gb_Library_get_target
+# add a library from workdir; DO NOT use gb_Library_get_target
 define gb_Extension_add_library
 $(call gb_Extension_add_file,$(1),$(call gb_Library_get_runtime_filename,$(2)),\
 	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(2))))
@@ -192,7 +192,7 @@ $(foreach lib,$(2),$(call gb_Extension_add_library,$(1),$(lib)))
 
 endef
 
-# add an executable from the solver
+# add an executable
 define gb_Extension_add_executable
 $(call gb_Extension_add_file,$(1),$(notdir $(call gb_Executable_get_target,$(2))),\
 	$(call gb_Executable_get_target,$(2)))

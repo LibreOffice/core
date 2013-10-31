@@ -2334,8 +2334,6 @@ else
 fi
 AC_SUBST(DISABLE_DYNLOADING)
 
-SOLARVER="${BUILDDIR}/solver"
-
 # remenber SYSBASE value
 AC_SUBST(SYSBASE)
 
@@ -3869,7 +3867,6 @@ aix*)
     PLATFORMID=aix_powerpc
     OUTPATH=unxaigppc
     P_SEP=:
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 cygwin*)
@@ -3901,7 +3898,6 @@ cygwin*)
         ;;
     esac
     SCPDEFS="$SCPDEFS -D_MSC_VER"
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 darwin*)
@@ -3950,7 +3946,6 @@ darwin*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 dragonfly*)
@@ -3978,7 +3973,6 @@ dragonfly*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 freebsd*)
@@ -4007,7 +4001,6 @@ freebsd*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 kfreebsd*)
@@ -4038,7 +4031,6 @@ kfreebsd*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 linux-gnu*)
@@ -4181,7 +4173,6 @@ linux-gnu*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 linux-android*)
@@ -4218,7 +4209,6 @@ linux-android*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 mingw*)
@@ -4251,7 +4241,6 @@ mingw*)
         ;;
     esac
 
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 *netbsd*)
@@ -4292,7 +4281,6 @@ mingw*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 openbsd*)
@@ -4321,7 +4309,6 @@ openbsd*)
         ;;
     esac
     SOLARINC="$SOLARINC -I/usr/local/include"
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L/usr/local/lib"
 
     ;;
@@ -4354,7 +4341,6 @@ solaris*)
         ;;
     esac
     SOLARINC="$SOLARINC -I/usr/local/include"
-    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$COMPATH/lib"
     SOLARLIB="$SOLARLIB -L/usr/local/bin -L/usr/dt/lib -L/usr/openwin/lib"
     ;;
@@ -4375,7 +4361,6 @@ INPATH="${OUTPATH}${PROEXT}"
 WORKDIR="${BUILDDIR}/workdir/${INPATH}"
 INSTDIR="${BUILDDIR}/instdir/${INPATH}"
 INSTROOT="${INSTDIR}${INSTROOTSUFFIX}"
-OUTDIR="${SOLARVER}/${INPATH}"
 SOLARINC="-I. -I$SRC_ROOT/include $SOLARINC"
 AC_SUBST(COM)
 AC_SUBST(CPU)
@@ -4388,13 +4373,10 @@ AC_SUBST(INPATH)
 AC_SUBST([INSTDIR])
 AC_SUBST([INSTROOT])
 AC_SUBST(OS)
-AC_SUBST(OUTDIR)
 AC_SUBST(OUTPATH)
 AC_SUBST(P_SEP)
-AC_SUBST(SOLARVER)
 AC_SUBST(WORKDIR)
 AC_SUBST(PLATFORMID)
-AC_DEFINE_UNQUOTED(OUTDIR,"$OUTDIR")
 AC_DEFINE_UNQUOTED(WORKDIR,"$WORKDIR")
 
 dnl ===================================================================
@@ -4513,7 +4495,7 @@ if test "$cross_compiling" = "yes"; then
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
-    . ./bin/get_config_variables CC CXX INPATH INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS OUTDIR PATH SDKDIRNAME SYSTEM_LIBXSLT WORKDIR
+    . ./bin/get_config_variables CC CXX INPATH INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXSLT WORKDIR
 
     for V in CC CXX INPATH LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS SDKDIRNAME SYSTEM_LIBXSLT; do
         VV='$'$V
@@ -4524,7 +4506,7 @@ if test "$cross_compiling" = "yes"; then
         fi
     done
 
-    for V in INSTDIR INSTROOT OUTDIR WORKDIR; do
+    for V in INSTDIR INSTROOT WORKDIR; do
         VV='$'$V
         VV=`eval "echo $VV"`
         VV=`echo $VV | sed -e 's,/CONF-FOR-BUILD,,g'`
@@ -4554,7 +4536,6 @@ else
     LIBO_BIN_FOLDER_FOR_BUILD="$LIBO_BIN_FOLDER"
     LIBO_LIB_FOLDER_FOR_BUILD="$LIBO_LIB_FOLDER"
     LIBO_URE_LIB_FOLDER_FOR_BUILD="$LIBO_URE_LIB_FOLDER"
-    OUTDIR_FOR_BUILD="$OUTDIR"
     SDKDIRNAME_FOR_BUILD="$SDKDIRNAME"
     WORKDIR_FOR_BUILD="$WORKDIR"
 fi
@@ -4565,7 +4546,6 @@ AC_SUBST(INSTROOT_FOR_BUILD)
 AC_SUBST(LIBO_BIN_FOLDER_FOR_BUILD)
 AC_SUBST(LIBO_LIB_FOLDER_FOR_BUILD)
 AC_SUBST(LIBO_URE_LIB_FOLDER_FOR_BUILD)
-AC_SUBST(OUTDIR_FOR_BUILD)
 AC_SUBST(SDKDIRNAME_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
 
@@ -7622,7 +7602,7 @@ else
     SYSTEM_ZLIB=NO
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${WORKDIR}/UnpackedTarball/zlib"
-    ZLIB_LIBS="-L${OUTDIR}/lib -lzlib"
+    ZLIB_LIBS="-lzlib"
 fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
@@ -12412,7 +12392,7 @@ AC_SUBST(CHECK_PARALLELISM)
 # Set up ILIB for MSVC build
 #
 if test "$build_os" = "cygwin"; then
-    ILIB=".;${SOLARVER}/$INPATH/lib"
+    ILIB="."
     if test -n "$JAVA_HOME" -a "$JAVA_HOME" != "NO_JAVA_HOME"; then
         ILIB="$ILIB;$JAVA_HOME/lib"
     fi

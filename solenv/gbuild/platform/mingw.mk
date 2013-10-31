@@ -225,8 +225,6 @@ gb_Library_ILIBEXT := .lib
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
-$(call gb_Library_get_target,$(1)) :| $(OUTDIR)/bin/.dir
-
 $(call gb_LinkTarget_add_auxtargets,$(2), \
 	$(3) \
 	$(call gb_LinkTarget_get_mapfile,$(2)) \
@@ -382,6 +380,6 @@ endef
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
 # Python
-gb_PYTHON_PRECOMMAND := PATH="$${PATH}:$(OUTDIR_FOR_BUILD)/bin" PYTHONHOME="$(OUTDIR_FOR_BUILD)/lib/python" PYTHONPATH="$(OUTDIR_FOR_BUILD)/lib/python;$(OUTDIR_FOR_BUILD)/lib/python/lib-dynload"
+gb_PYTHON_PRECOMMAND := $$(error FIXME)
 
 # vim: set noet sw=4:

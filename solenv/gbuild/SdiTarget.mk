@@ -17,10 +17,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# SdiTarget is evil, in that it does not support multiple repositories for now (hardcoded to SRCDIR)
-# Also there is no way to cleanly deliver the generated header to OUTDIR.
-# (This can be workarounded by using gb_Package, but really should not.)
-
 # SdiTarget class
 gb_SdiTarget_SVIDLDEPS := $(call gb_Executable_get_runtime_dependencies,svidl)
 gb_SdiTarget_SVIDLCOMMAND := $(call gb_Executable_get_command,svidl)

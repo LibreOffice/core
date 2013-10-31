@@ -31,10 +31,7 @@ sub create_pathvariables
     my %variables = ();
 
     # The following variables are needed in the path file list
-    # solarpath, solarenvpath, os, pmiscpath
-
-    my $solarpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
-    $variables{'solarpath'} = $solarpath;
+    # solarenvpath, os, pmiscpath
 
     my $shlxthdlpath = $ENV{'INSTDIR'} . $installer::globals::separator . "program" . $installer::globals::separator . "shlxthdl";
     $variables{'shlxthdlpath'} = $shlxthdlpath;

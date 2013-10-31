@@ -187,7 +187,7 @@ sub call_sum
 }
 
 #########################################################
-# Searching for the getuid.so in the solver
+# Searching for the getuid.so
 #########################################################
 
 sub get_path_for_library

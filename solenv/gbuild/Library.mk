@@ -75,7 +75,6 @@ endef
 define gb_Library__Library_impl_copy
 $(call gb_Package_Package,Library_Copy_$(1),$(gb_Package_PRESTAGEDIR))
 $(call gb_Package_add_file,Library_Copy_$(1),$(2),$(2))
-$(OUTDIR)/lib/$(notdir $(2)) : $(INSTROOT)/$(2)
 endef
 
 # Note: there may be targets in 3 different directories: the library itself,

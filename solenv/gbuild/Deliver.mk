@@ -65,7 +65,7 @@ endif
 define gb_Deliver_deliver
 $(if $(1),$(call gb_Deliver__deliver,$(1),$(2)),\
  $(error gb_Deliver_deliver:\
-  file does not exist in solver, and cannot be delivered: $(2)))
+  file does not exist in instdir, and cannot be delivered: $(2)))
 endef
 
 define gb_Deliver_print_deliverable

@@ -38,10 +38,10 @@ namespace gb
     class Package : public Target, public IsCleanable
     {
         public:
-            /// Creates a new package that copies files from source_dir to the \$(OUTDIR).
+            /// Creates a new package that copies files from source_dir to the \$(INSTDIR).
             Package(String name, Path source_dir);
             /// Adds a file to the package. destination is the relative path in
-            /// the \$(OUTDIR) and source is the relative path in the source_dir.
+            /// the \$(INSTROOT) and source is the relative path in the source_dir.
             add_file(Path destination, Path source);
     }
 }

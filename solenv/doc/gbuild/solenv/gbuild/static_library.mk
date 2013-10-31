@@ -40,7 +40,7 @@ namespace gb
             /// helper function to wrap LinkTargets functions (this is more or less pimpl ...).
             void forward_to_linktarget(Function f);
 
-            /// List of buildable static libraries (i.e. static libraries that are not expected to exist outside of \$(OUTDIR) on the system).
+            /// List of buildable static libraries (i.e. static libraries that are not expected to exist on the system).
             static const List<StaticLibrary> TARGETS;
             /// List of additional defines for compiling objects for static libraries
             static const List<String> DEFS;
@@ -48,8 +48,6 @@ namespace gb
             static const List<String> TARGETTYPEFLAGS;
             /// Mapping from symbolic static library names to filenames
             static const Map<StaticLibrary,Path> FILENAMES;
-            /// location to place static libraries in the \$(OUTDIR)
-            static const Path OUTDIRLOCATION;
             /// platformdependant file extension for static libraries
             static const String PLAINEXT;
     };

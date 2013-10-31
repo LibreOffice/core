@@ -183,7 +183,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter YES,$(LIBRARY_X64)),,$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS$(MSC_SUBSYSTEM_VERSION), -SUBSYSTEM:CONSOLE$(MSC_SUBSYSTEM_VERSION))) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64) \
 		$(if $(filter YES,$(LIBRARY_X64)), \
-			-LIBPATH:$(OUTDIR)/lib/x64 \
 			-LIBPATH:$(COMPATH)/lib/amd64 \
 			-LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64 \
 		    $(if $(filter 80,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/win8/um/x64)) \
@@ -301,8 +300,6 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(notdir $(3)),$(3),$(1))
-
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile_in,$(2))
 
@@ -385,8 +382,6 @@ endef
 # CppunitTest class
 
 gb_CppunitTest_DEFS := -D_DLL
-# cppunittester.exe is in the cppunit subdirectory of ${OUTDIR}/bin,
-# thus it won't find its DLLs unless ${OUTDIR}/bin is added to PATH.
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(shell cygpath -w $(gb_Library_DLLDIR)):$(shell cygpath -w $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll,ReleaseDll))"
 
 gb_CppunitTest_get_filename = test_$(1).dll
@@ -569,7 +564,7 @@ endef
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
 # Python
-gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR)/program);$(shell cygpath -w $(OUTDIR)/bin)" PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib;$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload:$(INSTDIR)/program"
+gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR)/program)" PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib;$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload:$(INSTDIR)/program"
 gb_Python_INSTALLED_EXECUTABLE := $(INSTROOT)/$(LIBO_BIN_FOLDER)/python.exe
 
 gb_ICU_PRECOMMAND := PATH="$(shell cygpath -w $(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/lib)"

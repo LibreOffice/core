@@ -526,7 +526,7 @@ sub collect_scpactions
 
 ###########################################################
 # Adding additional variables into the variableshashref,
-# that are defined in include files in the solver. The
+# that are defined in include files in the source tree. The
 # names of the include files are stored in
 # ADD_INCLUDE_FILES (comma separated list).
 ###########################################################

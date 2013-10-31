@@ -514,7 +514,7 @@ sub outputparameter
     }
     else
     {
-        push(@output, "Taking setup script from solver\n");
+        push(@output, "Taking setup script from workdir\n");
     }
     push(@output, "Unpackpath: $installer::globals::unpackpath\n");
     push(@output, "Compiler: $installer::globals::compiler\n");

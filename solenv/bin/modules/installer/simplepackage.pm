@@ -347,7 +347,7 @@ sub create_package
             my $scripthelperrealfilename = $volume_name_classic_app;
             my $translationfilename = $installer::globals::macinstallfilename;
 
-            # Finding both files in solver
+            # Finding both files in source tree
 
             my $scriptref = $ENV{'SRCDIR'} . "/setup_native/scripts/" . $scriptfilename;
             if (! -f $scriptref) { installer::exiter::exit_program("ERROR: Could not find Apple script $scriptfilename ($scriptref)!", "create_package"); }
@@ -374,7 +374,7 @@ sub create_package
             chmod 0775, $scripthelperrealfilename;
 
             # Copy also Info.plist and icon file
-            # Finding both files in solver
+            # Finding both files in source tree
             my $iconfile = "ooo3_installer.icns";
             my $iconfileref = $ENV{'SRCDIR'} . "/setup_native/source/mac/" . $iconfile;
             if (! -f $iconfileref) { installer::exiter::exit_program("ERROR: Could not find Apple script icon file $iconfile ($iconfileref)!", "create_package"); }
