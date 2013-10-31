@@ -218,6 +218,31 @@ bool touch_ui_keyboard_visible()
     return keyboardShows;
 }
 
+static const char *
+dialog_kind_to_string(MLODialogKind kind)
+{
+    switch (kind) {
+    case MLODialogMessage:
+        return "MSG";
+    case MLODialogInformation:
+        return "INF";
+    case MLODialogWarning:
+        return "WRN";
+    case MLODialogError:
+        return "ERR";
+    case MLODialogQuery:
+        return "QRY";
+    default:
+        return "WTF";
+    }
+}
+
+MLODialogResult touch_ui_dialog_modal(MLODialogKind kind, const char *message)
+{
+    NSLog(@"===>  %s: %s", dialog_kind_to_string(kind), message);
+    return MLODialogOK;
+}
+
 void touch_ui_selection_start(MLOSelectionKind kind,
                               const void *documentHandle,
                               MLORect *rectangles,
