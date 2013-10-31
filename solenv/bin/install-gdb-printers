@@ -8,7 +8,6 @@
 #
 
 GDBDIR="${SOLARENV}/gdb"
-SOLVERLIBDIR="${SOLARVER}/${INPATH}/lib"
 INSTALLDIR="${TESTINSTALLDIR}"
 DYLIB=so
 if [ "$(uname)" = Darwin ]; then
@@ -26,7 +25,7 @@ usage() {
 Install gdb pretty printers and autoloaders for them.
 
 Usage:
-install-gdb-printers [ -a dir ] [ -i dir ] [ -p dir ] [ -c ] [ -L ]
+install-gdb-printers [ -a dir ] [ -i dir ] [ -p dir ] [ -c ]
 install-gdb-printers -h
 
 Options:
@@ -38,21 +37,13 @@ Options:
         used during build.
 -h      Show this help text.
 -i dir  The dir where libreoffice is installed. Defaults to whatever -a is.
--L      Create symlinks to autoloaders already present in the build tree.
-        Only makes sense for dev. installation.
 -p dir  The dir where pretty printers are placed.
 
 Env. variables:
 DESTDIR     If set, it is prepended to all dir arguments.
 
 Examples:
-1) Make pretty printers usable in your dev. installation (this is
-   already done as part of make dev-install, but it would not have been
-   run if smoketest failed):
-
-install-gdb-printers -L
-
-2) Install pretty printers into /usr/share/libreoffice/gdb, with
+1) Install pretty printers into /usr/share/libreoffice/gdb, with
    autoloaders in /usr/share/gdb/auto-load (run
    "info gdb 'Extending GDB' Python Auto-loading" to learn more) and
    installation in /usr/lib64/libreoffice (this is what Fedora does):
@@ -78,21 +69,13 @@ make_autoload() {
         mkdir -p "${dir}" || die "cannot create dir '${dir}'"
     fi
 
-    if ${link}; then
-        if [[ ${dir} != ${SOLVERLIBDIR} ]]; then
-            local gdbname="${lib##*/}-gdb.py"
-            [[ -f ${dir}/${gdbname} ]] && rm -f "${dir}/${gdbname}"
-            ln -s "${SOLVERLIBDIR}/${gdbname}" "${dir}/${gdbname}"
-        fi
+    [[ -f ${lib}-gdb.py ]] && rm -f "${lib}-gdb.py"
+    if [[ -n "${merged}" ]]; then
+        sed -e "s!%PYTHONDIR%!${pythondir}!" -e "s!%MODULES%!${*:5}!" \
+            "${GDBDIR}/autoload.template" > "${lib}-gdb.py"
     else
-        [[ -f ${lib}-gdb.py ]] && rm -f "${lib}-gdb.py"
-        if [[ -n "${merged}" ]]; then
-            sed -e "s!%PYTHONDIR%!${pythondir}!" -e "s!%MODULES%!${*:5}!" \
-                "${GDBDIR}/autoload.template" > "${lib}-gdb.py"
-        else
-            sed -e "s!%PYTHONDIR%!${pythondir}!" -e "s!%MODULES%!$1!" \
-                "${GDBDIR}/autoload.template" > "${lib}-gdb.py"
-        fi
+        sed -e "s!%PYTHONDIR%!${pythondir}!" -e "s!%MODULES%!$1!" \
+            "${GDBDIR}/autoload.template" > "${lib}-gdb.py"
     fi
 }
 
@@ -106,9 +89,6 @@ pythondir="${GDBDIR}"
 # Create autoload dir if it does not exist. This only makes sense when
 # installing into system gdb dir, so $autoloaddir must be absolute path.
 create=false
-# Create symlinks to existing autoloaders in solver. This only makes
-# sense for dev-install.
-link=false
 # This option is only here to enable using the script during build of
 # solenv/gdb . We must (or, better, want to :) avoid using the
 # installation subpaths (like ure-link), because all libs in solver
@@ -124,7 +104,6 @@ while getopts :a:cfhi:p:L opt; do
         h) usage; exit ;;
         i) installdir="${OPTARG}" ;;
         p) pythondir="${OPTARG}" ;;
-        L) link=true ;;
         *) die "unknown option ${OPTARG}" ;;
     esac
 done
@@ -138,7 +117,6 @@ elif [[ -z ${autoloaddir} && -n ${installdir} ]]; then
     autoloaddir="${installdir}"
 fi
 
-${create} && ${link} && die "-c and -L cannot be used together"
 if [[ -n ${DESTDIR} ]]; then
     [[ ${autoloaddir:0:1} = / ]] || die 'the arg to -a must be an absolute path'
     [[ ${pythondir:0:1} = / ]] || die 'the arg to -p must be an absolute path'
