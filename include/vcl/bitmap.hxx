@@ -394,13 +394,6 @@ public:
 
     Size                    GetSizePixel() const;
 
-    /**
-     * The pixel size of a bitmap's source (e.g. an image file)
-     * and the pixel size of its resulting bitmap can differ,
-     * e.g. when the image reader has its preview mode enabled.
-     */
-    void                    SetSourceSizePixel( const Size& );
-
     sal_uInt16                  GetBitCount() const;
     inline sal_uLong            GetColorCount() const;
     inline sal_uLong            GetSizeBytes() const;

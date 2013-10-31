@@ -652,8 +652,6 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     if( !mpAcc )
         return false;
 
-    mpBmp->SetSourceSizePixel( maOrigSize );
-
     if ( mbAlphaChannel )
     {
         mpAlphaMask = new AlphaMask( maTargetSize );

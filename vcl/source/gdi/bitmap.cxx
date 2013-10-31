@@ -262,12 +262,6 @@ Size Bitmap::GetSizePixel() const
     return( mpImpBmp ? mpImpBmp->ImplGetSize() : Size() );
 }
 
-void Bitmap::SetSourceSizePixel( const Size& rSize)
-{
-    if( mpImpBmp )
-        mpImpBmp->ImplSetSourceSize( rSize);
-}
-
 sal_uInt16 Bitmap::GetBitCount() const
 {
     return( mpImpBmp ? mpImpBmp->ImplGetBitCount() : 0 );

@@ -43,7 +43,6 @@ private:
     sal_uLong               mnRefCount;
     sal_uLong               mnChecksum;
     SalBitmap*          mpSalBitmap;
-    Size                maSourceSize;
 
 public:
 
@@ -63,8 +62,6 @@ public:
     sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
 
     Size                ImplGetSize() const;
-    Size                ImplGetSourceSize() const;
-    void                ImplSetSourceSize( const Size&);
     sal_uInt16              ImplGetBitCount() const;
 
     BitmapBuffer*       ImplAcquireBuffer( sal_Bool bReadOnly );
@@ -79,16 +76,6 @@ public:
     inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
     inline sal_uLong        ImplGetChecksum() const { return mnChecksum; }
 };
-
-inline Size ImpBitmap::ImplGetSourceSize() const
-{
-    return maSourceSize;
-}
-
-inline void ImpBitmap::ImplSetSourceSize( const Size& rSize)
-{
-    maSourceSize = rSize;
-}
 
 #endif // INCLUDED_VCL_INC_IMPBMP_HXX
 

@@ -32,8 +32,7 @@
 ImpBitmap::ImpBitmap() :
             mnRefCount  ( 1UL ),
             mnChecksum  ( 0UL ),
-            mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() ),
-            maSourceSize( 0, 0 )
+            mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() )
 {
 }
 
@@ -54,7 +53,6 @@ void ImpBitmap::ImplSetSalBitmap( SalBitmap* pBitmap )
 
 sal_Bool ImpBitmap::ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
 {
-    maSourceSize = rSize;
     return mpSalBitmap->Create( rSize, nBitCount, rPal );
 }
 
@@ -62,7 +60,6 @@ sal_Bool ImpBitmap::ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const B
 
 sal_Bool ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap )
 {
-    maSourceSize = rImpBitmap.maSourceSize;
     mnChecksum = rImpBitmap.mnChecksum;
     return mpSalBitmap->Create( *rImpBitmap.mpSalBitmap );
 }
