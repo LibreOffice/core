@@ -39,7 +39,7 @@ namespace // private
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString("com.sun.star.sys.shell.SimpleSystemMail");
+        aRet[0] = "com.sun.star.sys.shell.SimpleSystemMail";
         return aRet;
     }
 

@@ -66,7 +66,7 @@ namespace // private
     Sequence< OUString > SAL_CALL SysShExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString("com.sun.star.sys.shell.SystemShellExecute");
+        aRet[0] = "com.sun.star.sys.shell.SystemShellExecute";
         return aRet;
     }
 

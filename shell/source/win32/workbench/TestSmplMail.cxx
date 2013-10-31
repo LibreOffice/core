@@ -110,12 +110,12 @@ int SAL_CALL main(int , char*, char* )
                 xSmplMailMsg->setOriginator( OUString("tino.rachui@germany.sun.com") );
 
                 Sequence< OUString > ccRecips( 1 );
-                ccRecips[0] = OUString("tino.rachui@germany.sun.com");
+                ccRecips[0] = "tino.rachui@germany.sun.com";
 
                 xSmplMailMsg->setCcRecipient( ccRecips );
 
                 Sequence< OUString > bccRecips( 1 );
-                bccRecips[0] = OUString("tino.rachui@germany.sun.com");
+                bccRecips[0] = "tino.rachui@germany.sun.com";
 
                 xSmplMailMsg->setBccRecipient( bccRecips );
 
@@ -129,7 +129,7 @@ int SAL_CALL main(int , char*, char* )
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
                 attachements[0] = aFileURL;
 
-                aFile = OUString("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe");
+                aFile = "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe";
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
 
                 attachements[1] = aFile;

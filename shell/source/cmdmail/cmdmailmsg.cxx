@@ -166,25 +166,25 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     Sequence< OUString > aRet( 7 );
 
     if( !m_aBody.isEmpty() )
-        aRet[nItems++] = OUString("body");
+        aRet[nItems++] = "body";
 
     if( !m_aOriginator.isEmpty() )
-        aRet[nItems++] = OUString("from");
+        aRet[nItems++] = "from";
 
     if( !m_aRecipient.isEmpty() )
-        aRet[nItems++] = OUString("to");
+        aRet[nItems++] = "to";
 
     if( m_CcRecipients.getLength() )
-        aRet[nItems++] = OUString("cc");
+        aRet[nItems++] = "cc";
 
     if( m_BccRecipients.getLength() )
-        aRet[nItems++] = OUString("bcc");
+        aRet[nItems++] = "bcc";
 
     if( !m_aSubject.isEmpty() )
-        aRet[nItems++] = OUString("subject");
+        aRet[nItems++] = "subject";
 
     if( m_Attachments.getLength() )
-        aRet[nItems++] = OUString("attachment");
+        aRet[nItems++] = "attachment";
 
     aRet.realloc( nItems );
     return aRet;
