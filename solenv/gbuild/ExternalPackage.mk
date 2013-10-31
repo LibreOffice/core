@@ -70,7 +70,7 @@ endef
 
 # Set output dir for the package's files.
 #
-# Default is $(OUTDIR).
+# Default is $(INSTROOT).
 #
 # gb_ExternalPackage_set_outdir package outdir
 define gb_ExternalPackage_set_outdir

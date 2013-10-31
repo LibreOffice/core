@@ -32,17 +32,17 @@ $(gb_Helper_MISCDUMMY) :
 ifeq ($(SRCDIR),$(BUILDDIR))
 define gb_Helper_abbreviate_dirs
 S=$(SRCDIR) && \
-$(subst $(SRCDIR)/,$$S/,O=$(OUTDIR)) && \
+$(subst $(SRCDIR)/,$$S/,I=$(INSTDIR)) && \
 $(subst $(SRCDIR)/,$$S/,W=$(WORKDIR)) && \
-$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(1))))
+$(subst $(SRCDIR)/,$$S/,$(subst $(INSTDIR)/,$$I/,$(subst $(WORKDIR)/,$$W/,$(1))))
 endef
 else
 define gb_Helper_abbreviate_dirs
 S=$(SRCDIR) && \
 $(subst $(SRCDIR)/,$$S/,B=$(BUILDDIR)) && \
-$(subst $(SRCDIR)/,$$S/,$(subst $(BUILDDIR)/,$$B/,O=$(OUTDIR))) && \
+$(subst $(SRCDIR)/,$$S/,$(subst $(BUILDDIR)/,$$B/,I=$(INSTDIR))) && \
 $(subst $(SRCDIR)/,$$S/,$(subst $(BUILDDIR)/,$$B/,W=$(WORKDIR))) && \
-$(subst $(SRCDIR)/,$$S/,$(subst $(BUILDDIR)/,$$B/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(1)))))
+$(subst $(SRCDIR)/,$$S/,$(subst $(BUILDDIR)/,$$B/,$(subst $(INSTDIR)/,$$I/,$(subst $(WORKDIR)/,$$W/,$(1)))))
 endef
 endif
 
