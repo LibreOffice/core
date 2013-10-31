@@ -361,7 +361,7 @@ Any SAL_CALL FTPContent::execute(
                 {
                     Sequence<Any> seq(1);
                     PropertyValue value;
-                    value.Name = OUString("Uri");
+                    value.Name = "Uri";
                     value.Handle = -1;
                     value.Value <<= m_aFTPURL.ident(false,false);
                     value.State = PropertyState_DIRECT_VALUE;
@@ -396,7 +396,7 @@ Any SAL_CALL FTPContent::execute(
                 {
                     Sequence<Any> seq(1);
                     PropertyValue value;
-                    value.Name = OUString("Uri");
+                    value.Name = "Uri";
                     value.Handle = -1;
                     value.Value <<= m_aFTPURL.ident(false,false);
                     value.State = PropertyState_DIRECT_VALUE;
@@ -514,7 +514,7 @@ Any SAL_CALL FTPContent::execute(
                         if(n) {
                             Sequence<Any> seq(1);
                             PropertyValue value;
-                            value.Name = OUString("Uri");
+                            value.Name = "Uri";
                             value.Handle = -1;
                             value.Value <<= m_aFTPURL.ident(false,false);
                             value.State = PropertyState_DIRECT_VALUE;
@@ -733,7 +733,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
     if(m_bInserted && !m_bTitleSet) {
         MissingPropertiesException excep;
         excep.Properties.realloc(1);
-        excep.Properties[0] = OUString("Title");
+        excep.Properties[0] = "Title";
         Any aAny; aAny <<= excep;
         ucbhelper::cancelCommandExecution(aAny,Env);
     }

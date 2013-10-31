@@ -114,7 +114,7 @@ void Uri::init() const
             if ( nSlash != - 1 )
                 m_aInternalPath = m_aPath.copy( nSlash );
             else
-                m_aInternalPath = OUString("/");
+                m_aInternalPath = "/";
         }
 
         m_eState = VALID;

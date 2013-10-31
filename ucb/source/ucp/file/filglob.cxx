@@ -85,13 +85,13 @@ namespace {
                 switch (aStatus.getFileType())
                 {
                     case osl::FileStatus::Directory:
-                        aResourceType = OUString( "folder");
+                        aResourceType = "folder";
                         bResourceType = true;
                         break;
 
                     case osl::FileStatus::Volume:
                     {
-                        aResourceType = OUString( "volume");
+                        aResourceType = "volume";
                         bResourceType = true;
                         osl::VolumeInfo aVolumeInfo(
                             osl_VolumeInfo_Mask_Attributes );
@@ -555,7 +555,7 @@ namespace fileaccess {
             excep.Name = getTitle(aUncPath);
             excep.Classification = InteractionClassification_ERROR;
             excep.Context = xComProc;
-            excep.Message = OUString( "file exists and overwrite forbidden");
+            excep.Message = "file exists and overwrite forbidden";
             aAny <<= excep;
             cancelCommandExecution( aAny,xEnv );
         }
@@ -564,7 +564,7 @@ namespace fileaccess {
             InteractiveAugmentedIOException excep;
             excep.Code = IOErrorCode_INVALID_CHARACTER;
             PropertyValue prop;
-            prop.Name = OUString("ResourceName");
+            prop.Name = "ResourceName";
             prop.Handle = -1;
             OUString m_aClashingName(
                 rtl::Uri::decode(
@@ -577,7 +577,7 @@ namespace fileaccess {
             excep.Arguments = seq;
             excep.Classification = InteractionClassification_ERROR;
             excep.Context = xComProc;
-            excep.Message = OUString( "the name contained invalid characters");
+            excep.Message = "the name contained invalid characters";
             if(isHandled)
                 throw excep;
             else {
@@ -598,7 +598,7 @@ namespace fileaccess {
             excep.Name = getTitle(aUncPath);
             excep.Classification = InteractionClassification_ERROR;
             excep.Context = xComProc;
-            excep.Message = OUString( "folder exists and overwrite forbidden");
+            excep.Message = "folder exists and overwrite forbidden";
             if(isHandled)
                 throw excep;
             else {
@@ -756,18 +756,18 @@ namespace fileaccess {
                          errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT )
                     {
                         ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        aMsg = OUString( "source file/folder does not exist");
+                        aMsg = "source file/folder does not exist";
                         break;
                     }
                     else
                     {
                         ioErrorCode = IOErrorCode_GENERAL;
-                        aMsg = OUString( "a general error during transfer command");
+                        aMsg = "a general error during transfer command";
                     break;
                     }
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
-                    aMsg = OUString( "a general error during transfer command");
+                    aMsg = "a general error during transfer command";
                     break;
             }
             cancelCommandExecution(
@@ -831,7 +831,7 @@ namespace fileaccess {
                     break;
                 case FileBase::E_NOENT:         // No such file or directory
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
-                    aMsg = OUString( "file/folder does not exist");
+                    aMsg = "file/folder does not exist";
                     break;
                 case FileBase::E_ROFS:          // Read-only file system<p>
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
@@ -854,7 +854,7 @@ namespace fileaccess {
             excep.Name = getTitle(aUncPath);
             excep.Classification = InteractionClassification_ERROR;
             excep.Context = xComProc;
-            excep.Message = OUString( "name clash during copy or move");
+            excep.Message = "name clash during copy or move";
             aAny <<= excep;
 
             cancelCommandExecution(aAny,xEnv);
@@ -865,7 +865,7 @@ namespace fileaccess {
             UnsupportedNameClashException excep;
             excep.NameClash = minorCode;
             excep.Context = xComProc;
-            excep.Message = OUString( "name clash value not supported during copy or move");
+            excep.Message = "name clash value not supported during copy or move";
 
             aAny <<= excep;
             cancelCommandExecution(aAny,xEnv);

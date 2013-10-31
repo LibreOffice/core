@@ -883,8 +883,7 @@ bool UniversalContentBroker::getContentProviderData(
 
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
-        aProperty.Name
-            = OUString(  "nodepath"  );
+        aProperty.Name = "nodepath";
         aProperty.Value <<= aFullPath.makeStringAndClear();
         aArguments[ 0 ] <<= aProperty;
 

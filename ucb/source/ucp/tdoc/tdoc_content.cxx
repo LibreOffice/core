@@ -314,13 +314,13 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     uno::Sequence< OUString > aSNS( 1 );
 
     if ( m_aProps.getType() == STREAM )
-        aSNS.getArray()[ 0 ] = OUString( TDOC_STREAM_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = TDOC_STREAM_CONTENT_SERVICE_NAME;
     else if ( m_aProps.getType() == FOLDER )
-        aSNS.getArray()[ 0 ] = OUString( TDOC_FOLDER_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = TDOC_FOLDER_CONTENT_SERVICE_NAME;
     else if ( m_aProps.getType() == DOCUMENT )
-        aSNS.getArray()[ 0 ] = OUString( TDOC_DOCUMENT_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = TDOC_DOCUMENT_CONTENT_SERVICE_NAME;
     else
-        aSNS.getArray()[ 0 ] = OUString( TDOC_ROOT_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = TDOC_ROOT_CONTENT_SERVICE_NAME;
 
     return aSNS;
 }
@@ -1350,7 +1350,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Roll-back.
             m_aProps.setTitle( aOldTitle );
-            aOldTitle = OUString();
+            aOldTitle = "";
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(
@@ -1361,7 +1361,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( !aOldTitle.isEmpty() )
     {
-        aEvent.PropertyName = OUString("Title");
+        aEvent.PropertyName = "Title";
         aEvent.OldValue     = uno::makeAny( aOldTitle );
         aEvent.NewValue     = uno::makeAny( m_aProps.getTitle() );
 
@@ -2953,10 +2953,8 @@ ContentProperties::getCreatableContentsInfo() const
             uno::Sequence< ucb::ContentInfo > aSeq( 1 );
 
             // Folder.
-            aSeq.getArray()[ 0 ].Type
-                = OUString( TDOC_FOLDER_CONTENT_TYPE );
-            aSeq.getArray()[ 0 ].Attributes
-                = ucb::ContentInfoAttribute::KIND_FOLDER;
+            aSeq.getArray()[ 0 ].Type = TDOC_FOLDER_CONTENT_TYPE;
+            aSeq.getArray()[ 0 ].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
             aSeq.getArray()[ 0 ].Properties = aProps;
 
             return aSeq;
@@ -2967,15 +2965,13 @@ ContentProperties::getCreatableContentsInfo() const
             uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
             // Folder.
-            aSeq.getArray()[ 0 ].Type
-                = OUString( TDOC_FOLDER_CONTENT_TYPE );
+            aSeq.getArray()[ 0 ].Type = TDOC_FOLDER_CONTENT_TYPE;
             aSeq.getArray()[ 0 ].Attributes
                 = ucb::ContentInfoAttribute::KIND_FOLDER;
             aSeq.getArray()[ 0 ].Properties = aProps;
 
             // Stream.
-            aSeq.getArray()[ 1 ].Type
-                = OUString( TDOC_STREAM_CONTENT_TYPE );
+            aSeq.getArray()[ 1 ].Type = TDOC_STREAM_CONTENT_TYPE;
             aSeq.getArray()[ 1 ].Attributes
                 = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
                   | ucb::ContentInfoAttribute::KIND_DOCUMENT;

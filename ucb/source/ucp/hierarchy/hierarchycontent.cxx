@@ -300,11 +300,11 @@ HierarchyContent::getSupportedServiceNames()
     uno::Sequence< OUString > aSNS( 1 );
 
     if ( m_eKind == LINK )
-        aSNS.getArray()[ 0 ] = OUString( HIERARCHY_LINK_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = HIERARCHY_LINK_CONTENT_SERVICE_NAME;
     else if ( m_eKind == FOLDER )
-        aSNS.getArray()[ 0 ] = OUString( HIERARCHY_FOLDER_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = HIERARCHY_FOLDER_CONTENT_SERVICE_NAME;
     else
-        aSNS.getArray()[ 0 ] = OUString( HIERARCHY_ROOT_FOLDER_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = HIERARCHY_ROOT_FOLDER_CONTENT_SERVICE_NAME;
 
     return aSNS;
 }
@@ -1325,7 +1325,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             m_aProps.setTitle( aOldTitle );
             m_aProps.setName ( aOldName );
 
-            aOldTitle = aOldName = OUString();
+            aOldTitle = aOldName = "";
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(
@@ -1336,7 +1336,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
     if ( !aOldTitle.isEmpty() )
     {
-        aEvent.PropertyName = OUString("Title");
+        aEvent.PropertyName = "Title";
         aEvent.OldValue     = uno::makeAny( aOldTitle );
         aEvent.NewValue     = uno::makeAny( m_aProps.getTitle() );
 
@@ -1401,7 +1401,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     if ( m_aProps.getTitle().isEmpty() )
     {
         uno::Sequence< OUString > aProps( 1 );
-        aProps[ 0 ] = OUString("Title");
+        aProps[ 0 ] = "Title";
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingPropertiesException(
                                 OUString(),
@@ -1807,7 +1807,7 @@ void HierarchyContent::transfer(
 
             ucb::TransferInfo aInfo;
             aInfo.MoveData  = sal_False;
-            aInfo.NewTitle  = OUString();
+            aInfo.NewTitle  = "";
             aInfo.SourceURL = aChildId;
             aInfo.NameClash = rInfo.NameClash;
 
@@ -1866,10 +1866,8 @@ HierarchyContentProperties::getCreatableContentsInfo() const
         uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
         // Folder.
-        aSeq.getArray()[ 0 ].Type
-            = OUString( HIERARCHY_FOLDER_CONTENT_TYPE );
-        aSeq.getArray()[ 0 ].Attributes
-            = ucb::ContentInfoAttribute::KIND_FOLDER;
+        aSeq.getArray()[ 0 ].Type = HIERARCHY_FOLDER_CONTENT_TYPE;
+        aSeq.getArray()[ 0 ].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
 
         uno::Sequence< beans::Property > aFolderProps( 1 );
         aFolderProps.getArray()[ 0 ] = beans::Property(
@@ -1880,10 +1878,8 @@ HierarchyContentProperties::getCreatableContentsInfo() const
         aSeq.getArray()[ 0 ].Properties = aFolderProps;
 
         // Link.
-        aSeq.getArray()[ 1 ].Type
-            = OUString( HIERARCHY_LINK_CONTENT_TYPE );
-        aSeq.getArray()[ 1 ].Attributes
-            = ucb::ContentInfoAttribute::KIND_LINK;
+        aSeq.getArray()[ 1 ].Type = HIERARCHY_LINK_CONTENT_TYPE;
+        aSeq.getArray()[ 1 ].Attributes = ucb::ContentInfoAttribute::KIND_LINK;
 
         uno::Sequence< beans::Property > aLinkProps( 2 );
         aLinkProps.getArray()[ 0 ] = beans::Property(

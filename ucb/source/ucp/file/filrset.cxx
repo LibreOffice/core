@@ -226,7 +226,7 @@ void XResultSet_impl::rowCountChanged()
         aOldValue = aNewValue-1;
     }
     beans::PropertyChangeEvent aEv;
-    aEv.PropertyName = OUString("RowCount");
+    aEv.PropertyName = "RowCount";
     aEv.Further = false;
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= aOldValue;
@@ -251,7 +251,7 @@ void XResultSet_impl::isFinalChanged()
         m_bRowCountFinal = true;
     }
     beans::PropertyChangeEvent aEv;
-    aEv.PropertyName = OUString("IsRowCountFinal");
+    aEv.PropertyName = "IsRowCountFinal";
     aEv.Further = false;
     aEv.PropertyHandle = -1;
     sal_Bool fval = false;
@@ -788,12 +788,12 @@ XResultSet_impl::getPropertySetInfo()
 {
 
     uno::Sequence< beans::Property > seq(2);
-    seq[0].Name = OUString("RowCount");
+    seq[0].Name = "RowCount";
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
 
-    seq[0].Name = OUString("IsRowCountFinal");
+    seq[0].Name = "IsRowCountFinal";
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Bool* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;

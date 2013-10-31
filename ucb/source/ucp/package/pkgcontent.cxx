@@ -417,9 +417,9 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aSNS( 1 );
     if ( isFolder() )
-        aSNS.getArray()[ 0 ] = OUString( PACKAGE_FOLDER_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = PACKAGE_FOLDER_CONTENT_SERVICE_NAME;
     else
-        aSNS.getArray()[ 0 ] = OUString( PACKAGE_STREAM_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = PACKAGE_STREAM_CONTENT_SERVICE_NAME;
 
     return aSNS;
 }
@@ -1390,7 +1390,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         else
         {
             // Do not set new title!
-            aNewTitle = OUString();
+            aNewTitle = "";
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(
@@ -1401,7 +1401,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( !aNewTitle.isEmpty() )
     {
-        aEvent.PropertyName = OUString("Title");
+        aEvent.PropertyName = "Title";
         aEvent.OldValue     = uno::makeAny( m_aProps.aTitle );
         aEvent.NewValue     = uno::makeAny( aNewTitle );
 
@@ -2041,7 +2041,7 @@ void Content::transfer(
 
                     ucb::TransferInfo aInfo;
                     aInfo.MoveData  = sal_False;
-                    aInfo.NewTitle  = OUString();
+                    aInfo.NewTitle  = "";
                     aInfo.SourceURL = aChildId;
                     aInfo.NameClash = rInfo.NameClash;
 

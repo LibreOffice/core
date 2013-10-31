@@ -50,13 +50,13 @@ void HierarchyUri::init() const
     if ( !m_aUri.isEmpty() && m_aPath.isEmpty() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
-        m_aService = m_aParentUri = m_aName = OUString();
+        m_aService = m_aParentUri = m_aName = "";
 
         // URI must match at least: <sheme>:
         if ( ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 ) )
         {
             // error, but remember that we did a init().
-            m_aPath = OUString("/");
+            m_aPath = "/";
             return;
         }
 
@@ -76,7 +76,7 @@ void HierarchyUri::init() const
             {
                 // root folder URI without path and service specifier.
                 m_aUri += "//" DEFAULT_DATA_SOURCE_SERVICE "/";
-                m_aService = OUString( DEFAULT_DATA_SOURCE_SERVICE  );
+                m_aService = DEFAULT_DATA_SOURCE_SERVICE ;
 
                 nPos = m_aUri.getLength() - 1;
             }
@@ -86,7 +86,7 @@ void HierarchyUri::init() const
             {
                 // root folder URI without service specifier.
                 m_aUri += "/" DEFAULT_DATA_SOURCE_SERVICE "/";
-                m_aService = OUString( DEFAULT_DATA_SOURCE_SERVICE  );
+                m_aService = DEFAULT_DATA_SOURCE_SERVICE;
 
                 nPos = m_aUri.getLength() - 1;
             }
@@ -99,7 +99,7 @@ void HierarchyUri::init() const
                             HIERARCHY_URL_SCHEME_LENGTH + 2,
                             0,
                             OUString( "/" DEFAULT_DATA_SOURCE_SERVICE "/"  ) );
-                m_aService = OUString( DEFAULT_DATA_SOURCE_SERVICE  );
+                m_aService = DEFAULT_DATA_SOURCE_SERVICE;
 
                 nPos
                     = HIERARCHY_URL_SCHEME_LENGTH + 3 + m_aService.getLength();
@@ -116,7 +116,7 @@ void HierarchyUri::init() const
                 if ( nStart == m_aUri.getLength() )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = OUString("/");
+                    m_aPath = "/";
                     return;
                 }
 
@@ -126,7 +126,7 @@ void HierarchyUri::init() const
                         nStart ) != -1 )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = OUString("/");
+                    m_aPath = "/";
                     return;
                 }
 
@@ -136,7 +136,7 @@ void HierarchyUri::init() const
                 if ( nEnd == nStart )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = OUString("/");
+                    m_aPath = "/";
                     return;
                 }
 
@@ -180,7 +180,7 @@ void HierarchyUri::init() const
         else
         {
             // error, but remember that we did a init().
-            m_aPath = OUString("/");
+            m_aPath = "/";
         }
     }
 }

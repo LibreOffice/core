@@ -134,7 +134,7 @@ namespace cmis
                         xContent, uno::UNO_QUERY_THROW );
                     sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
                     ucb::Command aCmd;
-                    aCmd.Name = OUString("getPropertyValues");
+                    aCmd.Name = "getPropertyValues";
                     aCmd.Handle = -1;
                     aCmd.Argument <<= getResultSet()->getProperties();
                     uno::Any aResult( xCmdProc->execute(

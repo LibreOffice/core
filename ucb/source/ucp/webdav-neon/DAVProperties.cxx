@@ -130,7 +130,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
              DAVProperties::GETETAG.matchIgnoreAsciiCase( aName, 4 ) ||
              DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) ||
              DAVProperties::SOURCE.matchIgnoreAsciiCase( aName, 4 ) )
-            aNameSpace = OUString(  "DAV:"  );
+            aNameSpace = "DAV:";
     }
 
     // Note: Concatenating strings BEFORE comparing against known namespaces
@@ -156,11 +156,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
     else
     {
         // Create property name that encodes, namespace and name ( XML ).
-        rFullName  = OUString("<prop:");
-        rFullName += aName;
-        rFullName += OUString( " xmlns:prop=\"" );
-        rFullName += aNameSpace;
-        rFullName += OUString( "\">" );
+        rFullName  = "<prop:" + aName + " xmlns:prop=\"" + aNameSpace + "\">";
     }
 }
 

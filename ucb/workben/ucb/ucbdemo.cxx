@@ -907,18 +907,15 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
             return;
         }
         aArgument.Properties.realloc(5);
-        aArgument.Properties[0].Name = OUString("Title");
+        aArgument.Properties[0].Name = "Title";
         aArgument.Properties[0].Handle = -1;
-        aArgument.Properties[1].Name
-            = OUString("DateCreated");
+        aArgument.Properties[1].Name = "DateCreated";
         aArgument.Properties[1].Handle = -1;
-        aArgument.Properties[2].Name = OUString("Size");
+        aArgument.Properties[2].Name = "Size";
         aArgument.Properties[2].Handle = -1;
-        aArgument.Properties[3].Name
-            = OUString("IsFolder");
+        aArgument.Properties[3].Name = "IsFolder";
         aArgument.Properties[3].Handle = -1;
-        aArgument.Properties[4].Name
-            = OUString("IsDocument");
+        aArgument.Properties[4].Name = "IsDocument";
         aArgument.Properties[4].Handle = -1;
         aArg <<= aArgument;
     }
@@ -931,19 +928,19 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
             // Property values which shall be in the result set...
             uno::Sequence< beans::Property > aProps( 5 );
             beans::Property* pProps = aProps.getArray();
-            pProps[ 0 ].Name   = OUString("Title");
+            pProps[ 0 ].Name   = "Title";
             pProps[ 0 ].Handle = -1; // Important!
 /**/        pProps[ 0 ].Type = getCppuType(static_cast< OUString * >(0));
                 // HACK for sorting...
-            pProps[ 1 ].Name   = OUString("DateCreated");
+            pProps[ 1 ].Name   = "DateCreated";
             pProps[ 1 ].Handle = -1; // Important!
-            pProps[ 2 ].Name   = OUString("Size");
+            pProps[ 2 ].Name   = "Size";
             pProps[ 2 ].Handle = -1; // Important!
-            pProps[ 3 ].Name   = OUString("IsFolder");
+            pProps[ 3 ].Name   = "IsFolder";
             pProps[ 3 ].Handle = -1; // Important!
 /**/        pProps[ 3 ].Type = getCppuType(static_cast< sal_Bool * >(0));
                 // HACK for sorting...
-            pProps[ 4 ].Name   = OUString("IsDocument");
+            pProps[ 4 ].Name   = "IsDocument";
             pProps[ 4 ].Handle = -1; // Important!
             aOpenArg.Properties = aProps;
 
@@ -2204,7 +2201,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             uno::Any aArgument;
             if (nItemId == MYWIN_ITEMID_OFFLINE)
             {
-                aName = OUString("goOffline");
+                aName = "goOffline";
 
                 uno::Sequence<
                     uno::Reference< ucb::XContentIdentifier > >
@@ -2215,7 +2212,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
                 aArgument <<= aIdentifiers;
             }
             else
-                aName = OUString("goOnline");
+                aName = "goOnline";
 
             UcbCommandProcessor(m_aUCB, xProcessor, m_pOutEdit).
                 executeCommand(aName, aArgument);
@@ -2268,7 +2265,7 @@ void MyApp::Main()
             {
                 aConfigurationKey1
                     = aParam.Copy(RTL_CONSTASCII_LENGTH("-key="));
-                aConfigurationKey2 = OUString();
+                aConfigurationKey2 = "";
             }
             else
             {

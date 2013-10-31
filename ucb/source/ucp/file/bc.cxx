@@ -278,7 +278,7 @@ BaseContent::getSupportedServiceNames()
     throw( RuntimeException )
 {
     Sequence< OUString > ret( 1 );
-    ret[0] = OUString("com.sun.star.ucb.FileContent");
+    ret[0] = "com.sun.star.ucb.FileContent";
     return ret;
 }
 

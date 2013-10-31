@@ -353,39 +353,39 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
                                              | beans::PropertyAttribute::READONLY ) );
 
     // Commands
-    m_sCommandInfo[0].Name = OUString("getCommandInfo");
+    m_sCommandInfo[0].Name = "getCommandInfo";
     m_sCommandInfo[0].Handle = -1;
     m_sCommandInfo[0].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[1].Name = OUString("getPropertySetInfo");
+    m_sCommandInfo[1].Name = "getPropertySetInfo";
     m_sCommandInfo[1].Handle = -1;
     m_sCommandInfo[1].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[2].Name = OUString("getPropertyValues");
+    m_sCommandInfo[2].Name = "getPropertyValues";
     m_sCommandInfo[2].Handle = -1;
     m_sCommandInfo[2].ArgType = getCppuType( static_cast< uno::Sequence< beans::Property >* >( 0 ) );
 
-    m_sCommandInfo[3].Name = OUString("setPropertyValues");
+    m_sCommandInfo[3].Name = "setPropertyValues";
     m_sCommandInfo[3].Handle = -1;
     m_sCommandInfo[3].ArgType = getCppuType( static_cast< uno::Sequence< beans::PropertyValue >* >( 0 ) );
 
-    m_sCommandInfo[4].Name = OUString("open");
+    m_sCommandInfo[4].Name = "open";
     m_sCommandInfo[4].Handle = -1;
     m_sCommandInfo[4].ArgType = getCppuType( static_cast< OpenCommandArgument* >( 0 ) );
 
-    m_sCommandInfo[5].Name = OUString("transfer");
+    m_sCommandInfo[5].Name = "transfer";
     m_sCommandInfo[5].Handle = -1;
     m_sCommandInfo[5].ArgType = getCppuType( static_cast< TransferInfo* >( 0 ) );
 
-    m_sCommandInfo[6].Name = OUString("delete");
+    m_sCommandInfo[6].Name = "delete";
     m_sCommandInfo[6].Handle = -1;
     m_sCommandInfo[6].ArgType = getCppuType( static_cast< sal_Bool* >( 0 ) );
 
-    m_sCommandInfo[7].Name = OUString("insert");
+    m_sCommandInfo[7].Name = "insert";
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< InsertCommandArgument* > ( 0 ) );
 
-    m_sCommandInfo[7].Name = OUString("createNewContent");
+    m_sCommandInfo[7].Name = "createNewContent";
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< ucb::ContentInfo * > ( 0 ) );
 
@@ -1952,11 +1952,11 @@ void SAL_CALL shell::insertDefaultProperties( const OUString& aUnqPath )
 /******************************************************************************/
 
 
-sal_Bool SAL_CALL shell::getUnqFromUrl( const OUString& Url,OUString& Unq )
+sal_Bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
 {
     if ( Url == "file:///" || Url == "file://localhost/" || Url == "file://127.0.0.1/" )
     {
-        Unq = OUString("file:///");
+        Unq = "file:///";
         return false;
     }
 
@@ -3037,14 +3037,14 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 
 /*******************************************************************************/
 /*                                                                             */
-/*                 some misceancellous static functions                        */
+/*                 some miscellaneous static functions                        */
 /*                                                                             */
 /*******************************************************************************/
 
 void SAL_CALL
 shell::getScheme( OUString& Scheme )
 {
-  Scheme = OUString("file");
+  Scheme = "file";
 }
 
 OUString SAL_CALL

@@ -1484,7 +1484,7 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal 
             sal_Bool bIsFinal = sal_False;
             PropertyChangeEvent aEvt;
 
-            aEvt.PropertyName = OUString("RowCount");
+            aEvt.PropertyName = "RowCount";
             aEvt.Further = sal_False;
             aEvt.PropertyHandle = -1;
             aEvt.OldValue <<= nOldCount;
@@ -1492,7 +1492,7 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal 
 
             PropertyChanged( aEvt );
 
-            OUString aName = OUString("IsRowCountFinal");
+            OUString aName = "IsRowCountFinal";
             Any aRet = getPropertyValue( aName );
             if ( (aRet >>= bIsFinal) && bIsFinal != bWasFinal )
             {
@@ -1998,12 +1998,12 @@ void SimpleList::Replace( void* pData, sal_uInt32 nPos )
 
 SRSPropertySetInfo::SRSPropertySetInfo()
 {
-    maProps[0].Name = OUString("RowCount");
+    maProps[0].Name = "RowCount";
     maProps[0].Handle = -1;
     maProps[0].Type = ::getCppuType( (const OUString*) NULL );
     maProps[0].Attributes = -1;
 
-    maProps[1].Name = OUString("IsRowCountFinal");
+    maProps[1].Name = "IsRowCountFinal";
     maProps[1].Handle = -1;
     maProps[1].Type = ::getBooleanCppuType();
     maProps[1].Attributes = -1;

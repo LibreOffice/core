@@ -484,8 +484,7 @@ bool setTitle(
     try
     {
         uno::Sequence< beans::PropertyValue > aPropValues( 1 );
-        aPropValues[ 0 ].Name
-            = OUString(  "Title"  );
+        aPropValues[ 0 ].Name = "Title";
         aPropValues[ 0 ].Handle = -1;
         aPropValues[ 0 ].Value  = uno::makeAny( rNewTitle );
 
@@ -560,10 +559,8 @@ uno::Reference< ucb::XContent > createNew(
     }
 
     uno::Sequence< beans::Property > aPropsToObtain( 1 );
-    aPropsToObtain[ 0 ].Name
-        = OUString("CreatableContentsInfo");
-    aPropsToObtain[ 0 ].Handle
-        = -1;
+    aPropsToObtain[ 0 ].Name = "CreatableContentsInfo";
+    aPropsToObtain[ 0 ].Handle = -1;
 
     ucb::Command aGetPropsCommand(
             OUString("getPropertyValues"),
@@ -879,8 +876,7 @@ void transferProperties(
     // Title needed, but not set yet?
     if ( !bHasTitle && !rContext.aArg.NewTitle.isEmpty() )
     {
-        aPropValues[ nWritePos ].Name
-            = OUString("Title");
+        aPropValues[ nWritePos ].Name = "Title";
         aPropValues[ nWritePos ].Handle = -1;
         aPropValues[ nWritePos ].Value <<= rContext.aArg.NewTitle;
 
@@ -891,8 +887,7 @@ void transferProperties(
     if ( !bHasTargetURL && ( rContext.aArg.Operation
                                 == ucb::TransferCommandOperation_LINK ) )
     {
-        aPropValues[ nWritePos ].Name
-            = OUString("TargetURL");
+        aPropValues[ nWritePos ].Name = "TargetURL";
         aPropValues[ nWritePos ].Handle = -1;
         aPropValues[ nWritePos ].Value <<= rContext.aArg.SourceURL;
 
@@ -1006,11 +1001,11 @@ uno::Reference< sdbc::XResultSet > getResultSet(
 
     uno::Sequence< beans::Property > aProps( 3 );
 
-    aProps[ 0 ].Name   = OUString("IsFolder");
+    aProps[ 0 ].Name   = "IsFolder";
     aProps[ 0 ].Handle = -1; /* unknown */
-    aProps[ 1 ].Name   = OUString("IsDocument");
+    aProps[ 1 ].Name   = "IsDocument";
     aProps[ 1 ].Handle = -1; /* unknown */
-    aProps[ 2 ].Name   = OUString("TargetURL");
+    aProps[ 2 ].Name   = "TargetURL";
     aProps[ 2 ].Handle = -1; /* unknown */
 
     ucb::OpenCommandArgument2 aArg;
@@ -1057,7 +1052,7 @@ void handleNameClashRename(
 
     // Obtain old title.
     uno::Sequence< beans::Property > aProps( 1 );
-    aProps[ 0 ].Name   = OUString("Title");
+    aProps[ 0 ].Name   = "Title";
     aProps[ 0 ].Handle = -1;
 
     ucb::Command aGetPropsCommand(
@@ -1958,13 +1953,13 @@ void UniversalContentBroker::globalTransfer(
 
     uno::Sequence< beans::Property > aProps( 4 );
 
-    aProps[ 0 ].Name   = OUString("IsFolder");
+    aProps[ 0 ].Name   = "IsFolder";
     aProps[ 0 ].Handle = -1; /* unknown */
-    aProps[ 1 ].Name   = OUString("IsDocument");
+    aProps[ 1 ].Name   = "IsDocument";
     aProps[ 1 ].Handle = -1; /* unknown */
-    aProps[ 2 ].Name   = OUString("TargetURL");
+    aProps[ 2 ].Name   = "TargetURL";
     aProps[ 2 ].Handle = -1; /* unknown */
-    aProps[ 3 ].Name   = OUString("BaseURI");
+    aProps[ 3 ].Name   = "BaseURI";
     aProps[ 3 ].Handle = -1; /* unknown */
 
     ucb::Command aGetPropsCommand(

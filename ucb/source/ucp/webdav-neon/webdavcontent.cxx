@@ -345,8 +345,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ]
-        = OUString( WEBDAV_CONTENT_SERVICE_NAME );
+    aSNS[ 0 ] = WEBDAV_CONTENT_SERVICE_NAME;
     return aSNS;
 }
 
@@ -1030,8 +1029,7 @@ Content::queryCreatableContentsInfo()
     uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
     // document.
-    aSeq.getArray()[ 0 ].Type
-        = OUString( WEBDAV_CONTENT_TYPE );
+    aSeq.getArray()[ 0 ].Type = WEBDAV_CONTENT_TYPE;
     aSeq.getArray()[ 0 ].Attributes
         = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
           | ucb::ContentInfoAttribute::KIND_DOCUMENT;
@@ -1045,8 +1043,7 @@ Content::queryCreatableContentsInfo()
     aSeq.getArray()[ 0 ].Properties = aDocProps;
 
     // folder.
-    aSeq.getArray()[ 1 ].Type
-        = OUString( WEBDAV_COLLECTION_TYPE );
+    aSeq.getArray()[ 1 ].Type = WEBDAV_COLLECTION_TYPE;
     aSeq.getArray()[ 1 ].Attributes
         = ucb::ContentInfoAttribute::KIND_FOLDER;
 
@@ -1890,7 +1887,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 // Do not set new title!
-                aNewTitle = OUString();
+                aNewTitle = "";
 
                 // Set error .
                 aRet[ nTitlePos ] <<= uno::Exception(
@@ -1901,7 +1898,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         catch ( DAVException const & e )
         {
             // Do not set new title!
-            aNewTitle = OUString();
+            aNewTitle = "";
 
             // Set error .
             aRet[ nTitlePos ] <<= MapDAVException( e, sal_True );
@@ -1912,7 +1909,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        aEvent.PropertyName = OUString("Title");
+        aEvent.PropertyName = "Title";
         aEvent.OldValue     = uno::makeAny( aOldTitle );
         aEvent.NewValue     = uno::makeAny( aNewTitle );
 
@@ -2289,7 +2286,7 @@ void Content::insert(
         OSL_FAIL( "Content::insert - Title missing!" );
 
         uno::Sequence< OUString > aProps( 1 );
-        aProps[ 0 ] = OUString("Title");
+        aProps[ 0 ] = "Title";
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingPropertiesException(
                                 OUString(),
@@ -2595,7 +2592,7 @@ void Content::transfer(
         if ( aTitle == "/" )
         {
             // kso: ???
-            aTitle = OUString();
+            aTitle = "";
         }
 
         targetURI.AppendPath( aTitle );
@@ -2943,7 +2940,7 @@ sal_Bool Content::isFolder(
     }
 
     uno::Sequence< beans::Property > aProperties( 1 );
-    aProperties[ 0 ].Name   = OUString("IsFolder");
+    aProperties[ 0 ].Name   = "IsFolder";
     aProperties[ 0 ].Handle = -1;
     uno::Reference< sdbc::XRow > xRow( getPropertyValues( aProperties, xEnv ) );
     if ( xRow.is() )
@@ -3210,10 +3207,10 @@ Content::ResourceType Content::getResourceType(
             std::vector< DAVResource > resources;
             std::vector< OUString > aPropNames;
             uno::Sequence< beans::Property > aProperties( 5 );
-            aProperties[ 0 ].Name = OUString("IsFolder");
-            aProperties[ 1 ].Name = OUString("IsDocument");
-            aProperties[ 2 ].Name = OUString("IsReadOnly");
-            aProperties[ 3 ].Name = OUString("MediaType");
+            aProperties[ 0 ].Name = "IsFolder";
+            aProperties[ 1 ].Name = "IsDocument";
+            aProperties[ 2 ].Name = "IsReadOnly";
+            aProperties[ 3 ].Name = "MediaType";
             aProperties[ 4 ].Name = DAVProperties::SUPPORTEDLOCK;
 
             ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );

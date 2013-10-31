@@ -576,7 +576,7 @@ OUString FTPURL::net_title() const
                 aNetTitle = decodePathSegment(m_aPathSegmentVec.back());
             else
                 // must be root
-                aNetTitle = OUString("/");
+                aNetTitle = "/";
             try_more = false;
         }
 

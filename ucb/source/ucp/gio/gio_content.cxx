@@ -706,7 +706,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 g_warning ("Set new name to '%s'", newName);
 #endif
 
-                aEvent.PropertyName = OUString("Title");
+                aEvent.PropertyName = "Title";
                 if (oldName)
                     aEvent.OldValue = uno::makeAny(OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8));
                 aEvent.NewValue = uno::makeAny(aNewTitle);
@@ -1340,7 +1340,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
        throw( uno::RuntimeException )
 {
        uno::Sequence< OUString > aSNS( 1 );
-       aSNS.getArray()[ 0 ] = OUString("com.sun.star.ucb.GIOContent");
+       aSNS.getArray()[ 0 ] = "com.sun.star.ucb.GIOContent";
        return aSNS;
 }
 

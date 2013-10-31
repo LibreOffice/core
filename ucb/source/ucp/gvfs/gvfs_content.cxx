@@ -245,7 +245,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = OUString( "com.sun.star.ucb.GnomeVFSContent" );
+    aSNS.getArray()[ 0 ] = "com.sun.star.ucb.GnomeVFSContent";
     return aSNS;
 }
 
@@ -538,7 +538,7 @@ OUString Content::getParentURL()
         nPos1 = aURL.lastIndexOf( '/', nPos1 );
 
     if ( nPos1 != -1 )
-        aParentURL = OUString( aURL.copy( 0, nPos + 1 ) );
+        aParentURL = aURL.copy( 0, nPos + 1 );
 
 #if OSL_DEBUG_LEVEL > 1
     g_warning ("getParentURL '%s' -> '%s'",
@@ -805,7 +805,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         g_warning ("Set new name to '%s'", newName);
 #endif
 
-                        aEvent.PropertyName = OUString("Title");
+                        aEvent.PropertyName = "Title";
                         aEvent.OldValue     = uno::makeAny( GnomeToOUString( newInfo.name ) );
                         aEvent.NewValue     = uno::makeAny( aNewTitle );
                         aChanges.getArray()[ nChanged ] = aEvent;
