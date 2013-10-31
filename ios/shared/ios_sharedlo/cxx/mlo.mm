@@ -216,5 +216,12 @@ mlo_initialize(void)
     osl_setCommandArgs(argc, (char **) argv);
 }
 
+// Dummy implementation for now, probably this should be handled in a
+// different way in each app that uses this "shared" library? Like
+// most in touch.h, the dialog API is not set in stone yet.
 
-
+MLODialogResult touch_ui_dialog_modal(MLODialogKind kind, const char *message)
+{
+    NSLog(@"===>  %s", message);
+    return MLODialogOK;
+}
