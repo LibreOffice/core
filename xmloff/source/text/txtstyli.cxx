@@ -515,13 +515,11 @@ void XMLTextStyleContext::FillPropertySet(
                 rAny >>= sFontName;
                 if ( !sFontName.isEmpty() )
                 {
-                    OUString sStarBats( "StarBats" );
-                    OUString sStarMath( "StarMath" );
-                    if ( sFontName.equalsIgnoreAsciiCase( sStarBats ) ||
-                         sFontName.equalsIgnoreAsciiCase( sStarMath ) )
+                    if ( sFontName.equalsIgnoreAsciiCase( "StarBats" ) ||
+                         sFontName.equalsIgnoreAsciiCase( "StarMath" ) )
                     {
                         // construct new value
-                        sFontName = OUString("StarSymbol");
+                        sFontName = "StarSymbol";
                         Any aAny( rAny );
                         aAny <<= sFontName;
 

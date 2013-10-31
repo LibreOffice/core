@@ -395,8 +395,8 @@ void SvXMLExport::_InitCtor()
 
     mxAttrList = (xml::sax::XAttributeList*)mpAttrList;
 
-    msGraphicObjectProtocol = OUString(  "vnd.sun.star.GraphicObject:"  );
-    msEmbeddedObjectProtocol = OUString(  "vnd.sun.star.EmbeddedObject:"  );
+    msGraphicObjectProtocol = "vnd.sun.star.GraphicObject:";
+    msEmbeddedObjectProtocol = "vnd.sun.star.EmbeddedObject:";
 
     if (mxModel.is() && !mxEventListener.is())
     {
@@ -738,14 +738,14 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             mpImpl->SetSchemeOf( msOrigFileName );
         }
         OUString sRelPath;
-        sPropName = OUString( "StreamRelPath"  );
+        sPropName = "StreamRelPath";
         if( xPropertySetInfo->hasPropertyByName(sPropName) )
         {
             uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
             aAny >>= sRelPath;
         }
         OUString sName;
-        sPropName = OUString( "StreamName"  );
+        sPropName = "StreamName";
         if( xPropertySetInfo->hasPropertyByName(sPropName) )
         {
             uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
@@ -874,8 +874,8 @@ uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
     throw(uno::RuntimeException)
 {
     uno::Sequence<OUString> aSeq(2);
-    aSeq[0] = OUString( "com.sun.star.document.ExportFilter");
-    aSeq[1] = OUString( "com.sun.star.xml.XMLExportFilter");
+    aSeq[0] = "com.sun.star.document.ExportFilter";
+    aSeq[1] = "com.sun.star.xml.XMLExportFilter";
     return aSeq;
 }
 
@@ -1546,7 +1546,7 @@ void SvXMLExport::_ExportScripts()
     if ( mnExportFlags & EXPORT_EMBEDDED )
     {
         OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-        aValue += OUString(  ":Basic"  );
+        aValue += ":Basic";
         AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, aValue );
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, sal_True, sal_True );
@@ -1852,7 +1852,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
             sal_Int32 nOldLength(rProps.getLength());
             rProps.realloc(nOldLength + 1);
             beans::PropertyValue aProp;
-            aProp.Name = OUString("Views");
+            aProp.Name = "Views";
             aProp.Value <<= xIndexAccess;
             rProps[nOldLength] = aProp;
         }
@@ -1921,7 +1921,7 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
         if( (getExportFlags() & EXPORT_EMBEDDED) == 0 )
             sRet = mxGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
         else
-            sRet = OUString();
+            sRet = "";
     }
     else
         sRet = GetRelativeReference( sRet );

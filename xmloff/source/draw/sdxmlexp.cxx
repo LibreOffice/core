@@ -750,7 +750,7 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
 
 sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUString& rName)
 {
-    rName = OUString();
+    rName = "";
     sal_Bool bRetval(sal_False);
 
     Reference <beans::XPropertySet> xPropSet(xPage, UNO_QUERY);
@@ -1831,9 +1831,7 @@ void SdXMLExport::_ExportContent()
                             OUString aFileName( aBookmarkURL.copy( 0, nIndex ) );
                             OUString aBookmarkName( aBookmarkURL.copy( nIndex+1 ) );
 
-                            aBookmarkURL = GetRelativeReference( aFileName );
-                            aBookmarkURL += OUString(static_cast<sal_Unicode>('#'));
-                            aBookmarkURL += aBookmarkName;
+                            aBookmarkURL = GetRelativeReference( aFileName ) + "#" + aBookmarkName;
                         }
 
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, aBookmarkURL);

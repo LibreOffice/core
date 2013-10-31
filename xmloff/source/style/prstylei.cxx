@@ -194,7 +194,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     aValues.realloc( nLen + 2 );
                     PropertyValue *pProps = aValues.getArray() + nLen;
-                    pProps->Name = OUString("ParaStyleName");
+                    pProps->Name = "ParaStyleName";
                     OUString sParent( GetParentName() );
                     if( !sParent.isEmpty() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
@@ -202,7 +202,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                         sParent =  OUString("Standard");
                     pProps->Value <<= sParent;
                     ++pProps;
-                    pProps->Name = OUString("ParaConditionalStyleName");
+                    pProps->Name = "ParaConditionalStyleName";
                     pProps->Value <<= sParent;
                 }
 

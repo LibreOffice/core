@@ -337,7 +337,7 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
                     else
                     {
                         if ( rCurrencySymbol.getLength() == 1 && rCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                            rCurrencySymbol = OUString("EUR");
+                            rCurrencySymbol = "EUR";
                     }
                 }
                 return sal_True;

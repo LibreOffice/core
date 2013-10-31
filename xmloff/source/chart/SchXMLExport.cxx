@@ -1049,7 +1049,7 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         mbRowSourceColumns( sal_True ),
         msCLSID( OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
 {
-    msTableName = OUString( "local-table" );
+    msTableName = "local-table";
 
     // create property set mapper
     mxPropertySetMapper = new XMLChartPropertySetMapper;
@@ -1227,12 +1227,12 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         {
             OUString aDataProviderURL(  ".."  );
             if( xNewDoc->hasInternalDataProvider() )
-                aDataProviderURL = OUString(  "."  );
+                aDataProviderURL = ".";
             else //special handling for data base data provider necessary
             {
                 Reference< chart2::data::XDatabaseDataProvider > xDBDataProvider( xNewDoc->getDataProvider(), uno::UNO_QUERY );
                 if( xDBDataProvider.is() )
-                    aDataProviderURL = OUString(  "."  );
+                    aDataProviderURL = ".";
             }
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aDataProviderURL );
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
@@ -2473,7 +2473,7 @@ void SchXMLExportHelper_Impl::exportAxes(
             }
         }
         exportAxis( XML_X, XML_PRIMARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasXAxisTitle, bHasXAxisMajorGrid, bHasXAxisMinorGrid, bExportContent );
-        aCategoriesRange = OUString();
+        aCategoriesRange = "";
     }
 
     // secondary x axis
@@ -2740,7 +2740,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     if ( nSeriesIdx == 0 && aRange.compareToAscii("label 1") == 0)
                                         modifyLabelRange = true;
                                     if (modifyLabelRange)
-                                        aRange = OUString("label ") + OUString::number(aRange.copy( OUString("label").getLength()).toInt32() - 1);
+                                        aRange = "label " + OUString::number(aRange.copy( OUString("label").getLength()).toInt32() - 1);
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS,
                                                            lcl_ConvertRange(
                                                                aRange,
