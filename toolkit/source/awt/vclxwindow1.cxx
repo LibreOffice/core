@@ -43,7 +43,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     if ( pWindow->GetType() != WINDOW_WORKWINDOW )
     {
         com::sun::star::uno::Exception aException;
-        aException.Message = OUString("not a work window");
+        aException.Message = "not a work window";
         throw aException;
     }
 
@@ -73,7 +73,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     if( bThrow )
     {
         com::sun::star::uno::Exception aException;
-        aException.Message = OUString("incorrect window handle type");
+        aException.Message = "incorrect window handle type";
         throw aException;
     }
     // create system parent data

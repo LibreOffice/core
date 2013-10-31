@@ -93,7 +93,7 @@ sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) 
 {
     ::com::sun::star::uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString("com.sun.star.awt.RoadmapItem");
+    pArray[0] = "com.sun.star.awt.RoadmapItem";
     return aRet;
 }
 //--------------------------------------------------------------------------

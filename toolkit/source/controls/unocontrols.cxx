@@ -107,7 +107,7 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
         uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
         uno::Sequence< beans::PropertyValue > aMediaProperties(1);
-        aMediaProperties[0].Name = OUString( "URL" );
+        aMediaProperties[0].Name = "URL";
         aMediaProperties[0].Value <<= _rURL;
         xGraphic = xProvider->queryGraphic( aMediaProperties );
     }
@@ -221,7 +221,7 @@ OUString UnoEditControl::GetComponentServiceName()
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
     sal_Bool b = sal_Bool();
     if ( ( aVal >>= b ) && b )
-        sName= OUString("MultiLineEdit");
+        sName = "MultiLineEdit";
 
     return sName;
 }
@@ -711,11 +711,11 @@ OUString UnoButtonControl::GetComponentServiceName()
         // Use PushButtonType later when available...
         switch ( n )
         {
-            case 1 /*PushButtonType::OK*/:      aName= OUString("okbutton");
+            case 1 /*PushButtonType::OK*/:      aName = "okbutton";
                                                 break;
-            case 2 /*PushButtonType::CANCEL*/:  aName= OUString("cancelbutton");
+            case 2 /*PushButtonType::CANCEL*/:  aName = "cancelbutton";
                                                 break;
-            case 3 /*PushButtonType::HELP*/:    aName= OUString("helpbutton");
+            case 3 /*PushButtonType::HELP*/:    aName = "helpbutton";
                                                 break;
             default:
             {
