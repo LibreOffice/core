@@ -26,11 +26,6 @@
 #endif
 #include <windows.h>
 #include <mapi.h>
-#ifndef __MINGW32__
-#if NTDDI_VERSION < NTDDI_WIN8
-#include <mapix.h>
-#endif
-#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
