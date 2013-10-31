@@ -169,7 +169,11 @@ namespace dmapper {
                 if( pProperties.get())
                 {
                     BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
+                    if (m_pCurrentInteropGrabBag)
+                        pBorderHandler->enableInteropGrabBag("tblBorders");
                     pProperties->resolve(*pBorderHandler);
+                    if (m_pCurrentInteropGrabBag)
+                        m_pCurrentInteropGrabBag->push_back(pBorderHandler->getInteropGrabBag());
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     pTablePropMap->InsertProps(pBorderHandler->getProperties());
 

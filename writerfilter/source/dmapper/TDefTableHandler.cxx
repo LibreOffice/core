@@ -50,7 +50,7 @@ TDefTableHandler::~TDefTableHandler()
 {
 }
 
-OUString lcl_getBorderTypeString(sal_Int32 nType)
+OUString TDefTableHandler::getBorderTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
@@ -250,7 +250,7 @@ OUString lcl_getBorderTypeString(sal_Int32 nType)
     return OUString();
 }
 
-OUString lcl_getThemeColorTypeString(sal_Int32 nType)
+OUString TDefTableHandler::getThemeColorTypeString(sal_Int32 nType)
 {
     switch (nType)
     {
@@ -332,7 +332,7 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_rtf::LN_BRCTYPE:    // 0x2872
             m_nLineType = nIntValue;
-            appendGrabBag("val", lcl_getBorderTypeString(nIntValue));
+            appendGrabBag("val", TDefTableHandler::getBorderTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_color:
         case NS_rtf::LN_ICO:        // 0x2873
@@ -350,7 +350,7 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
             // ignored
         break;
         case NS_ooxml::LN_CT_Border_themeColor:
-            appendGrabBag("themeColor", lcl_getThemeColorTypeString(nIntValue));
+            appendGrabBag("themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_themeTint:
         case NS_ooxml::LN_CT_Border_themeShade:
@@ -373,7 +373,6 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
             aSavedGrabBag = m_aInteropGrabBag;
             m_aInteropGrabBag.clear();
         }
-        m_aInteropGrabBag.clear();
         pProperties->resolve( *this );
         table::BorderLine2 aBorderLine;
         ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,

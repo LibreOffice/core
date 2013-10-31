@@ -97,6 +97,7 @@ static DocxStringTokenMap const aTcBorderTokens[] = {
     {"color", XML_color},
     {"space", XML_space},
     {"themeColor", XML_themeColor},
+    {"themeTint", XML_themeTint},
     {0, 0}
 };
 
@@ -129,17 +130,17 @@ DocxStringTokenMap const aTcBordersTokens[] = {
     {0, 0}
 };
 
-/// Export of w:tcBorders in a table style.
-void lcl_TableStyleTcBorders(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTcBorders)
+/// Export of w:tcBorders (and w:tblBorders) in a table style.
+void lcl_TableStyleTcBorders(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTcBorders, sal_Int32 nToken = XML_tcBorders)
 {
     if (!rTcBorders.hasElements())
         return;
 
-    pSerializer->startElementNS(XML_w, XML_tcBorders, FSEND);
+    pSerializer->startElementNS(XML_w, nToken, FSEND);
     for (sal_Int32 i = 0; i < rTcBorders.getLength(); ++i)
-        if (sal_Int32 nToken = DocxStringGetToken(aTcBordersTokens, rTcBorders[i].Name))
-            lcl_TableStyleTcBorder(pSerializer, nToken, rTcBorders[i].Value.get< uno::Sequence<beans::PropertyValue> >());
-    pSerializer->endElementNS(XML_w, XML_tcBorders);
+        if (sal_Int32 nSubToken = DocxStringGetToken(aTcBordersTokens, rTcBorders[i].Name))
+            lcl_TableStyleTcBorder(pSerializer, nSubToken, rTcBorders[i].Value.get< uno::Sequence<beans::PropertyValue> >());
+    pSerializer->endElementNS(XML_w, nToken);
 }
 
 /// Export of w:shd in a table style.
@@ -189,6 +190,10 @@ void lcl_TableStyleRLang(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<
     {
         if (rLang[i].Name == "eastAsia")
             pAttributeList->add(FSNS(XML_w, XML_eastAsia), OUStringToOString(rLang[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rLang[i].Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rLang[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rLang[i].Name == "bidi")
+            pAttributeList->add(FSNS(XML_w, XML_bidi), OUStringToOString(rLang[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, XML_lang, xAttributeList);
@@ -280,7 +285,7 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
     pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
 
     uno::Sequence<beans::PropertyValue> aRFonts, aLang, aColor;
-    OUString aB, aI, aSz;
+    OUString aB, aI, aSz, aSzCs;
     for (sal_Int32 i = 0; i < rRPr.getLength(); ++i)
     {
         if (rRPr[i].Name == "rFonts")
@@ -295,6 +300,8 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
             aColor = rRPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rRPr[i].Name == "sz")
             aSz = rRPr[i].Value.get<OUString>();
+        else if (rRPr[i].Name == "szCs")
+            aSzCs = rRPr[i].Value.get<OUString>();
     }
     lcl_TableStyleRRFonts(pSerializer, aRFonts);
     lcl_TableStyleRLang(pSerializer, aLang);
@@ -304,6 +311,10 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
     if (!aSz.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_sz,
                 FSNS(XML_w, XML_val), OUStringToOString(aSz, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
+    if (!aSzCs.isEmpty())
+        pSerializer->singleElementNS(XML_w, XML_szCs,
+                FSNS(XML_w, XML_val), OUStringToOString(aSzCs, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
 
     pSerializer->endElementNS(XML_w, XML_rPr);
@@ -319,16 +330,23 @@ void lcl_TableStylePPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
 
     uno::Sequence<beans::PropertyValue> aSpacing;
     bool bWordWrap = false;
+    OUString aJc;
     for (sal_Int32 i = 0; i < rPPr.getLength(); ++i)
     {
         if (rPPr[i].Name == "spacing")
             aSpacing = rPPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
-        if (rPPr[i].Name == "wordWrap")
+        else if (rPPr[i].Name == "wordWrap")
             bWordWrap = true;
+        else if (rPPr[i].Name == "jc")
+            aJc = rPPr[i].Value.get<OUString>();
     }
     if (bWordWrap)
         pSerializer->singleElementNS(XML_w, XML_wordWrap, FSEND);
     lcl_TableStylePSpacing(pSerializer, aSpacing);
+    if (!aJc.isEmpty())
+        pSerializer->singleElementNS(XML_w, XML_jc,
+                FSNS(XML_w, XML_val), OUStringToOString(aJc, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
 
     pSerializer->endElementNS(XML_w, XML_pPr);
 }
@@ -341,7 +359,7 @@ void lcl_TableStyleTblPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<
 
     pSerializer->startElementNS(XML_w, XML_tblPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aTblInd, aTblCellMar;
+    uno::Sequence<beans::PropertyValue> aTblInd, aTblBorders, aTblCellMar;
     boost::optional<sal_Int32> oTblStyleRowBandSize, oTblStyleColBandSize;
     for (sal_Int32 i = 0; i < rTblPr.getLength(); ++i)
     {
@@ -351,6 +369,8 @@ void lcl_TableStyleTblPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<
             oTblStyleColBandSize = rTblPr[i].Value.get<sal_Int32>();
         else if (rTblPr[i].Name == "tblInd")
             aTblInd = rTblPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rTblPr[i].Name == "tblBorders")
+            aTblBorders = rTblPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rTblPr[i].Name == "tblCellMar")
             aTblCellMar = rTblPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
     }
@@ -363,6 +383,7 @@ void lcl_TableStyleTblPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<
                 FSNS(XML_w, XML_val), OString::number(oTblStyleColBandSize.get()),
                 FSEND);
     lcl_TableStyleTblInd(pSerializer, aTblInd);
+    lcl_TableStyleTcBorders(pSerializer, aTblBorders, XML_tblBorders);
     lcl_TableStyleTblCellMar(pSerializer, aTblCellMar);
 
     pSerializer->endElementNS(XML_w, XML_tblPr);

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <BorderHandler.hxx>
+#include <TDefTableHandler.hxx>
 #include <PropertyMap.hxx>
 #include <resourcemodel/QNameToString.hxx>
 #include <doctok/resourceids.hxx>
@@ -24,6 +25,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <ooxml/resourceids.hxx>
 #include <dmapperLoggers.hxx>
+#include <filter/msfilter/util.hxx>
 
 namespace writerfilter {
 
@@ -72,16 +74,20 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_rtf::LN_DPTLINEWIDTH: // 0x2871
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
             m_nLineWidth = nIntValue * 5 / 2;
+            appendGrabBag("sz", OUString::number(nIntValue));
         break;
         case NS_rtf::LN_BRCTYPE:    // 0x2872
             m_nLineType = nIntValue;
+            appendGrabBag("val", TDefTableHandler::getBorderTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_color:
         case NS_rtf::LN_ICO:        // 0x2873
             m_nLineColor = nIntValue;
+            appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue), RTL_TEXTENCODING_UTF8));
         break;
         case NS_rtf::LN_DPTSPACE:   // border distance in points
             m_nLineDistance = ConversionHelper::convertTwipToMM100( nIntValue * 20 );
+            appendGrabBag("space", OUString::number(nIntValue));
         break;
         case NS_rtf::LN_FSHADOW:    // 0x2875
             m_bShadow = nIntValue;
@@ -90,8 +96,12 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
         break;
-        case NS_ooxml::LN_CT_Border_themeTint: break;
-        case NS_ooxml::LN_CT_Border_themeColor: break;
+        case NS_ooxml::LN_CT_Border_themeTint:
+            appendGrabBag("themeTint", OUString::number(nIntValue, 16));
+            break;
+        case NS_ooxml::LN_CT_Border_themeColor:
+            appendGrabBag("themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
+            break;
         default:
             OSL_FAIL( "unknown attribute");
     }
@@ -101,31 +111,40 @@ void BorderHandler::lcl_sprm(Sprm & rSprm)
 {
     BorderPosition pos = BORDER_COUNT; // invalid pos
     bool rtl = false; // TODO detect
+    OUString aBorderPos;
     switch( rSprm.getId())
     {
         case NS_ooxml::LN_CT_TblBorders_top:
             pos = BORDER_TOP;
+            aBorderPos = "top";
             break;
         case NS_ooxml::LN_CT_TblBorders_start:
             pos = rtl ? BORDER_RIGHT : BORDER_LEFT;
+            aBorderPos = "start";
             break;
         case NS_ooxml::LN_CT_TblBorders_left:
             pos = BORDER_LEFT;
+            aBorderPos = "left";
             break;
         case NS_ooxml::LN_CT_TblBorders_bottom:
             pos = BORDER_BOTTOM;
+            aBorderPos = "bottom";
             break;
         case NS_ooxml::LN_CT_TblBorders_end:
             pos = rtl ? BORDER_LEFT : BORDER_RIGHT;
+            aBorderPos = "end";
             break;
         case NS_ooxml::LN_CT_TblBorders_right:
             pos = BORDER_RIGHT;
+            aBorderPos = "right";
             break;
         case NS_ooxml::LN_CT_TblBorders_insideH:
             pos = BORDER_HORIZONTAL;
+            aBorderPos = "insideH";
             break;
         case NS_ooxml::LN_CT_TblBorders_insideV:
             pos = BORDER_VERTICAL;
+            aBorderPos = "insideV";
             break;
         default:
             break;
@@ -134,7 +153,20 @@ void BorderHandler::lcl_sprm(Sprm & rSprm)
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
+        {
+            std::vector<beans::PropertyValue> aSavedGrabBag;
+            if (!m_aInteropGrabBagName.isEmpty())
+            {
+                aSavedGrabBag = m_aInteropGrabBag;
+                m_aInteropGrabBag.clear();
+            }
             pProperties->resolve(*this);
+            if (!m_aInteropGrabBagName.isEmpty())
+            {
+                aSavedGrabBag.push_back(getInteropGrabBag(aBorderPos));
+                m_aInteropGrabBag = aSavedGrabBag;
+            }
+        }
         ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
                                m_aBorderLines[ pos ], m_bOOXML );
         m_aFilledLines[ pos ] = true;
@@ -178,6 +210,36 @@ table::BorderLine2 BorderHandler::getBorderLine()
 bool BorderHandler::getShadow()
 {
     return m_bShadow;
+}
+
+void BorderHandler::enableInteropGrabBag(OUString aName)
+{
+    m_aInteropGrabBagName = aName;
+}
+
+beans::PropertyValue BorderHandler::getInteropGrabBag(OUString aName)
+{
+    beans::PropertyValue aRet;
+    if (aName.isEmpty())
+        aRet.Name = m_aInteropGrabBagName;
+    else
+        aRet.Name = aName;
+
+    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
+    beans::PropertyValue* pSeq = aSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
+        *pSeq++ = *i;
+
+    aRet.Value = uno::makeAny(aSeq);
+    return aRet;
+}
+
+void BorderHandler::appendGrabBag(OUString aKey, OUString aValue)
+{
+    beans::PropertyValue aProperty;
+    aProperty.Name = aKey;
+    aProperty.Value = uno::makeAny(aValue);
+    m_aInteropGrabBag.push_back(aProperty);
 }
 
 } //namespace dmapper

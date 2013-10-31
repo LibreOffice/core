@@ -82,6 +82,8 @@ public:
     sal_Int32                                   getTableWidth() const;
     void enableInteropGrabBag(OUString aName);
     beans::PropertyValue getInteropGrabBag(OUString aName = OUString());
+    static OUString getBorderTypeString(sal_Int32 nType);
+    static OUString getThemeColorTypeString(sal_Int32 nType);
 };
 typedef boost::shared_ptr< TDefTableHandler >          TDefTableHandlerPtr;
 }}

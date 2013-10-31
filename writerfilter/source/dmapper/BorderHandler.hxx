@@ -23,6 +23,7 @@
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace writerfilter {
 namespace dmapper
@@ -55,6 +56,9 @@ private:
 
     bool                                        m_aFilledLines[BORDER_COUNT];
     ::com::sun::star::table::BorderLine2        m_aBorderLines[BORDER_COUNT];
+    OUString m_aInteropGrabBagName;
+    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+    void appendGrabBag(OUString aKey, OUString aValue);
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
@@ -68,6 +72,8 @@ public:
     ::com::sun::star::table::BorderLine2        getBorderLine();
     sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
     bool                                        getShadow();
+    void enableInteropGrabBag(OUString aName);
+    beans::PropertyValue getInteropGrabBag(OUString aName = OUString());
 };
 typedef boost::shared_ptr< BorderHandler >          BorderHandlerPtr;
 }}

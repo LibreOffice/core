@@ -1168,6 +1168,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         {
             if (nName == NS_ooxml::LN_CT_Language_eastAsia)
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "eastAsia", sStringValue);
+            else if (nName == NS_ooxml::LN_CT_Language_val)
+                m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "val", sStringValue);
+            else if (nName == NS_ooxml::LN_CT_Language_bidi)
+                m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "bidi", sStringValue);
             lang::Locale aLocale( LanguageTag::convertToLocale( sStringValue));
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(NS_ooxml::LN_CT_Language_val== nName ? PROP_CHAR_LOCALE :
@@ -2251,8 +2255,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
             if (!m_pImpl->IsStyleSheetImport())
                 m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
-            if (nSprmId == NS_sprm::LN_CHps)
-                m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "sz", OUString::number(nIntValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_sprm::LN_CHps ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
         break;
     case NS_sprm::LN_CHpsInc:
@@ -4056,19 +4059,23 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::bo
 {
     sal_Int16 nAdjust = 0;
     sal_Int16 nLastLineAdjust = 0;
+    OUString aStringValue = "left";
     switch(nIntValue)
     {
     case 1:
         nAdjust = style::ParagraphAdjust_CENTER;
+        aStringValue = "center";
         break;
     case 2:
         nAdjust = static_cast< sal_Int16 > (bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT);
+        aStringValue = "right";
         break;
     case 4:
         nLastLineAdjust = style::ParagraphAdjust_BLOCK;
         //no break;
     case 3:
         nAdjust = style::ParagraphAdjust_BLOCK;
+        aStringValue = "both";
         break;
     case 0:
     default:
@@ -4077,6 +4084,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::bo
     }
     pContext->Insert( PROP_PARA_ADJUST, uno::makeAny( nAdjust ) );
     pContext->Insert( PROP_PARA_LAST_LINE_ADJUST, uno::makeAny( nLastLineAdjust ) );
+    m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "jc", aStringValue);
 }
 
 bool DomainMapper::getColorFromIndex(const sal_Int32 nIndex, sal_Int32 &nColor)
