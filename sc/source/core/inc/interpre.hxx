@@ -754,6 +754,7 @@ void ScChiSqDist(); // returns left tail or density
 void ScChiSqInv(); //invers to CHISQDIST
 void ScWeibull();
 void ScBetaDist();
+void ScBetaDist_MS();
 void ScFInv();
 void ScTInv();
 void ScChiInv();

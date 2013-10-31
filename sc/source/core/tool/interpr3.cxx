@@ -1040,6 +1040,67 @@ void ScInterpreter::ScBetaDist()
     }
 }
 
+/**
+  fdo#71008
+  Microsoft version has parameters in different order
+  Also, upper and lowerbound are optional and have default values
+  otherwise, function is identical with ScInterpreter::ScBetaDist()
+*/
+void ScInterpreter::ScBetaDist_MS()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
+        return;
+    double fLowerBound, fUpperBound;
+    double alpha, beta, x;
+    bool bIsCumulative;
+    if (nParamCount == 6)
+        fUpperBound = GetDouble();
+    else
+        fUpperBound = 1.0;
+    if (nParamCount >= 4)
+        fLowerBound = GetDouble();
+    else
+        fLowerBound = 0.0;
+    bIsCumulative = GetBool();
+    beta = GetDouble();
+    alpha = GetDouble();
+    x = GetDouble();
+    double fScale = fUpperBound - fLowerBound;
+    if (fScale <= 0.0 || alpha <= 0.0 || beta <= 0.0)
+    {
+        PushIllegalArgument();
+        return;
+    }
+    if (bIsCumulative) // cumulative distribution function
+    {
+        // special cases
+        if (x < fLowerBound)
+        {
+            PushDouble(0.0); return; //see spec
+        }
+        if (x > fUpperBound)
+        {
+            PushDouble(1.0); return; //see spec
+        }
+        // normal cases
+        x = (x-fLowerBound)/fScale;  // convert to standard form
+        PushDouble(GetBetaDist(x, alpha, beta));
+        return;
+    }
+    else // probability density function
+    {
+        if (x < fLowerBound || x > fUpperBound)
+        {
+            PushDouble(0.0);
+            return;
+        }
+        x = (x-fLowerBound)/fScale;
+        PushDouble(GetBetaDistPDF(x, alpha, beta)/fScale);
+        return;
+    }
+}
+
 void ScInterpreter::ScPhi()
 {
     PushDouble(phi(GetDouble()));
