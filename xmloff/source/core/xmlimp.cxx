@@ -432,8 +432,6 @@ SvXMLImport::~SvXMLImport() throw ()
     delete mpNumImport;
     delete mpProgressBarHelper;
 
-    xmloff::token::ResetTokens();
-
     if( mpImpl )
         delete mpImpl;
 

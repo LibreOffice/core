@@ -578,8 +578,6 @@ SvXMLExport::~SvXMLExport()
         delete mpNumExport;
     }
 
-    xmloff::token::ResetTokens();
-
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
 

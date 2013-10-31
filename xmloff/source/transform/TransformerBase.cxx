@@ -201,8 +201,6 @@ XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
 
 XMLTransformerBase::~XMLTransformerBase() throw ()
 {
-    ResetTokens();
-
     delete m_pNamespaceMap;
     delete m_pReplaceNamespaceMap;
     delete m_pContexts;

@@ -3222,8 +3222,6 @@ namespace xmloff { namespace token {
 #endif
     };
 
-    sal_Int32 nRescheduleCount = 0;
-
     // get OUString representation of token
     const OUString& GetXMLToken( enum XMLTokenEnum eToken )
     {
@@ -3269,36 +3267,6 @@ namespace xmloff { namespace token {
         const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         return rString.equalsAsciiL( pToken->pChar, pToken->nLength );
     }
-
-    // gives all allocated memory for OUString* back
-    void ResetTokens()
-    {
-        if (nRescheduleCount == 0)
-        {
-            for (sal_Int16 i=0, nEnd = sizeof ( aTokenList ) / sizeof ( XMLTokenEntry );
-                 i < nEnd;
-                 i++)
-            {
-                delete aTokenList[i].pOUString;
-                aTokenList[i].pOUString = NULL;
-            }
-        }
-    }
-
-    void IncRescheduleCount()
-    {
-        ++nRescheduleCount;
-    }
-
-    void DecRescheduleCount()
-    {
-        if (nRescheduleCount > 0)
-            --nRescheduleCount;
-        else {
-            OSL_FAIL("RescheduleCount not increased");
-        }
-    }
-
 }
 }
 

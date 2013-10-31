@@ -93,11 +93,7 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
             double fValue(nValue);
             double fNewValue ((fValue * nRange) / nReference);
 
-            xmloff::token::IncRescheduleCount();
-
             xStatusIndicator->setValue((sal_Int32)fNewValue);
-
-            xmloff::token::DecRescheduleCount();
 
             // #95181# disabled, because we want to call setValue very often to enable a good reschedule
         }

@@ -3227,15 +3227,6 @@ namespace xmloff { namespace token {
     XMLOFF_DLLPUBLIC sal_Bool IsXMLToken(
         const OUString& rString,
         enum XMLTokenEnum eToken );
-
-    // gives all allocated memory for OUString* back
-    XMLOFF_DLLPUBLIC void ResetTokens();
-
-    XMLOFF_DLLPUBLIC void IncRescheduleCount();
-
-    XMLOFF_DLLPUBLIC void DecRescheduleCount();
-
-
 } }
 
 #endif
