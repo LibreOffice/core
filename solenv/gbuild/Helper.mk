@@ -200,9 +200,6 @@ $(1) : $(2) | $(dir $(1)).dir
 $(call gb_Deliver_add_deliverable,$(1),$(2),$(1))
 endef
 
-# gb_Helper_OUTDIRLIBDIR is set by the platform to the path the dynamic linker need to use
-# for libraries from the OUTDIR
-
 define gb_Helper_optional
 $(if $(filter $(1),$(BUILD_TYPE)),$(2))
 endef

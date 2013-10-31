@@ -45,13 +45,10 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
 #ifndef ANDROID
     const char* pSrcRoot = getenv( "SRC_ROOT" );
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
-    const char* pSolverRoot = getenv( "OUTDIR_FOR_BUILD" );
-    CPPUNIT_ASSERT_MESSAGE("$OUTDIR_FOR_BUILD env variable not set", pSolverRoot != NULL && pSolverRoot[0] != 0);
     const char* pWorkdirRoot = getenv( "WORKDIR_FOR_BUILD" );
     CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot != NULL && pWorkdirRoot[0] != 0);
 #else
     const char* pSrcRoot = "/assets";
-    const char* pSolverRoot = "/assets";
     const char* pWorkdirRoot = "/assets";
 #endif
     m_aSrcRootPath = OUString::createFromAscii( pSrcRoot );

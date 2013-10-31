@@ -508,8 +508,8 @@ $(WORKDIR)/Headers/% :
 
 # Explanation of some of the targets:
 # - gb_LinkTarget_get_headers_target is the target that guarantees all headers
-#   from the linked against the libraries and the linktargets own headers
-#   (including generated headers) are in the OUTDIR.
+#   from the linked against libraries and the linktargets own generated headers
+#   are generated.
 # - gb_LinkTarget_get_target links the objects into a file in WORKDIR.
 # gb_LinkTarget_get_target depends on gb_LinkTarget_get_headers_target.
 # gb_LinkTarget_get_target depends additionally on the objects, which in turn
@@ -756,7 +756,7 @@ endef
 # call gb_LinkTarget_set_include,linktarget,includes
 define gb_LinkTarget_set_include
 $(call gb_LinkTarget__check_srcdir_paths,$(1),\
-    $(patsubst -I%,%,$(filter -I$(SRCDIR)/%,$(filter-out -I$(OUTDIR)/% -I$(WORKDIR)/%,$(2)))))
+    $(patsubst -I%,%,$(filter -I$(SRCDIR)/%,$(filter-out -I$(WORKDIR)/%,$(2)))))
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
@@ -1392,7 +1392,7 @@ $$(call gb_Output_error,\
  gb_LinkTarget_add_precompiled_header: use gb_LinkTarget_set_precompiled_header instead.)
 endef
 
-# use a header package, possibly from another module (i.e. via OUTDIR)
+# use a header package, possibly from another module
 # call gb_LinkTarget_use_package,linktarget,package
 define gb_LinkTarget_use_package
 $(call gb_LinkTarget_get_headers_target,$(1)) :| \

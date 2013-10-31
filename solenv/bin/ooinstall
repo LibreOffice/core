@@ -40,9 +40,6 @@ if ($ENV{'SYSTEM_MOZILLA'} eq 'YES') {
     $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
 }
 
-# Workaround for the Python
-$ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python/lib-dynload";
-
 for $arg (@ARGV) {
     if ($arg eq '-s' || $arg eq '--strip') {
         $strip = "-strip";

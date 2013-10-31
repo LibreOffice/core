@@ -44,7 +44,7 @@ namespace gb
             /// helper function to wrap LinkTargets functions (this is more or less pimpl ...)
             void forward_to_linktarget(Function f);
 
-            /// List of buildable libraries (i.e. libraries that are not expected to exist outside of \$(OUTDIR) on the system).
+            /// List of buildable libraries (i.e. libraries that are not expected to exist on the system).
             static const List<Library> TARGETS;
             /// List of additional defines for compiling objects for libraries
             static const List<String> DEFS;

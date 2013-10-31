@@ -27,7 +27,7 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest) : \
 $(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		echo $(if $(filter MACOSX,$(OS)), "$(gb_Helper_LIBRARY_PATH_VAR)=\$${$(gb_Helper_LIBRARY_PATH_VAR):+\$$$(gb_Helper_LIBRARY_PATH_VAR):}$(OUTDIR)/lib") \
+		echo \
 		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.CppTestObject" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
@@ -59,11 +59,9 @@ $(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(te
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "JAVA_HOME=$(JAVA_HOME)" \
-		"$(gb_Helper_LIBRARY_PATH_VAR)=\$${$(gb_Helper_LIBRARY_PATH_VAR):+\$$$(gb_Helper_LIBRARY_PATH_VAR):}$(OUTDIR)/lib" \
 		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.BridgeTest" \
 		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_WORKDIR_FOR_BUILD))" \
-		"-env:URE_INTERNAL_JAVA_DIR=file://$(OUTDIR)/bin" \
 		"-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services))" \
 		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		"-- com.sun.star.test.bridge.JavaTestObject noCurrentContext" \
@@ -73,7 +71,7 @@ $(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(te
 $(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		echo $(if $(filter MACOSX,$(OS)), "$(gb_Helper_LIBRARY_PATH_VAR)=\$${$(gb_Helper_LIBRARY_PATH_VAR):+\$$$(gb_Helper_LIBRARY_PATH_VAR):}$(OUTDIR)/lib") \
+		echo \
 		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.BridgeTest --" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \

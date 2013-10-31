@@ -286,7 +286,7 @@ endef
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
 # Python
-gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+gb_PYTHON_PRECOMMAND :=
 
 include $(GBUILDDIR)/platform/com_GCC_class.mk
 

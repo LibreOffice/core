@@ -40,7 +40,7 @@ AVAILABLE TARGETS
        <module>.check   run unittests of the named module
        <module>.clean   clean the named module
        <module>.all     build the named module and the pre-requisite modules for it
-       <module>.showdeliverables show the targets delivered to OUTDIR and their
+       <module>.showdeliverables show the targets delivered to INSTDIR and their
                         source
        cmd              execute the command contained in the variable cmd=""
                         in a shell with config_host.mk or config_build.mk

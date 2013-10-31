@@ -40,12 +40,6 @@ namespace gb
             static void make_dep_target(TargetType t);
             /// Creates the default get_dep_target() function for the types.
             static void make_dep_targets(List<TargetType> ts);
-            /// Creates the default get_dep_target() function for the type modifying the \$(OUTDIR).
-            static void make_outdir_clean_target(TargetType t);
-            /// Creates the default get_dep_target() function for types modifying the \$(OUTDIR).
-            static void make_outdir_clean_targets(List<TargetType> ts);
-            /// Returns the clean target of a target modifying the \$(OUTDIR).
-            static Path get_outdir_clean_target(Path target);
 
             /// The path to a zero length file.
             static const Path NULLFILE;

@@ -25,8 +25,6 @@ $(WORKDIR)/%:
 	$(eval gb_CountersOutdated_COUNTER_$(gb_CountersOutdated__TYPE)+= x)
 	@true
 	
-$(OUTDIR)/%:
-	@true
-
 endif
+
 # vim: set noet ts=4 sw=4:

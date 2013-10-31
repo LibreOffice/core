@@ -147,22 +147,7 @@ static rtl::OUString s_getSDrive(void)
 {
     rtl::OUString path;//(RTL_CONSTASCII_USTRINGPARAM("file://"));
 
-    char const * tmp = getenv("SOLARVER");
-    path += rtl::OUString(tmp, rtl_str_getLength(tmp), RTL_TEXTENCODING_ASCII_US);
-    path += rtl::OUString(SAL_PATHDELIMITER);
-
-    tmp = getenv("INPATH");
-    path += rtl::OUString(tmp, rtl_str_getLength(tmp), RTL_TEXTENCODING_ASCII_US);
-    path += rtl::OUString(SAL_PATHDELIMITER);
-#ifdef WIN32
-    path += "bin";
-#else
-    path += "lib";
-#endif
-
-    tmp = getenv("UPDMINOREXT");
-    if (tmp)
-        path += rtl::OUString(tmp, rtl_str_getLength(tmp), RTL_TEXTENCODING_ASCII_US);
+    // FIXME no more S drive
 
     osl::FileBase::getFileURLFromSystemPath(path, path);
 

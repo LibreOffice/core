@@ -24,7 +24,7 @@ ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,redland,build):
 	$(call gb_ExternalProject_run,build,\
 		CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols -L$(OUTDIR)/lib" \
+		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
@@ -45,7 +45,7 @@ else
 $(call gb_ExternalProject_get_state_target,redland,build):
 	$(call gb_ExternalProject_run,build,\
 		CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
-		LDFLAGS="-L$(OUTDIR)/lib \
+		LDFLAGS=" \
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib") \
 			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \

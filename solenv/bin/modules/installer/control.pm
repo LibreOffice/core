@@ -256,7 +256,7 @@ sub check_makecab_version
 
 ######################################################################
 # Reading the environment variables for the paths in ziplist.
-# solarpath, solarenvpath, os, pmiscpath
+# solarenvpath, os, pmiscpath
 ######################################################################
 
 sub check_system_environment
@@ -265,7 +265,6 @@ sub check_system_environment
     my $error = 0;
 
     my @environmentvariables = qw(
-        SOLARVERSION
         WORK_STAMP
         OUTPATH
         LOCAL_OUT

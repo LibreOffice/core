@@ -25,7 +25,6 @@ static const Command SHELL;
 
 // gbuild root directorys
 static Path SRCDIR;
-static Path OUTDIR;
 static Path WORKDIR;
 
 // Expected from configure/environment

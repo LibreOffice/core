@@ -55,7 +55,7 @@ else ifeq ($(OS)$(COM),WNTGCC)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		PATH=$(OUTDIR)/bin:$$PATH ./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
+		./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
 			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
