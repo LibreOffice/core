@@ -2312,7 +2312,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                             }
                             else
                             {
-                                if( aMethName != OUString("queryInterface") )
+                                if( aMethName != "queryInterface" )
                                 {
                                     rMethodConcept_i |= MethodConcept::DANGEROUS;
                                     continue;

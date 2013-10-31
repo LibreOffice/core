@@ -155,8 +155,8 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames(void) throw ()
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static(void) throw ()
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = OUString(SERVICE_NAME);
-    aSNS.getArray()[1] = OUString("com.sun.star.bridge.Bridge");
+    aSNS.getArray()[0] = SERVICE_NAME;
+    aSNS.getArray()[1] = "com.sun.star.bridge.Bridge";
     return aSNS;
 }
 
@@ -179,7 +179,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 #if ! defined SAL_DLLPREFIX
 #define SAL_DLLPREFIX ""
 #endif
-     OUString atUModule2 = OUString( SAL_DLLPREFIX "testsmgr_component" SAL_DLLEXTENSION  );
+     OUString atUModule2 = SAL_DLLPREFIX "testsmgr_component" SAL_DLLEXTENSION ;
 
     // expand shared library name
     OString  atModule2( OUStringToOString(atUModule2, RTL_TEXTENCODING_ASCII_US) );

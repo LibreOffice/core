@@ -73,7 +73,7 @@ namespace stoc_bootstrap
 Sequence< OUString > smgr_wrapper_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString("com.sun.star.lang.MultiServiceFactory");
+    seqNames.getArray()[0] = "com.sun.star.lang.MultiServiceFactory";
     return seqNames;
 }
 
@@ -85,8 +85,8 @@ OUString smgr_wrapper_getImplementationName()
 Sequence< OUString > smgr_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(2);
-    seqNames.getArray()[0] = OUString("com.sun.star.lang.MultiServiceFactory");
-    seqNames.getArray()[1] = OUString("com.sun.star.lang.ServiceManager");
+    seqNames.getArray()[0] = "com.sun.star.lang.MultiServiceFactory";
+    seqNames.getArray()[1] = "com.sun.star.lang.ServiceManager";
     return seqNames;
 }
 
@@ -98,8 +98,8 @@ OUString smgr_getImplementationName()
 Sequence< OUString > regsmgr_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(2);
-    seqNames.getArray()[0] = OUString("com.sun.star.lang.MultiServiceFactory");
-    seqNames.getArray()[1] = OUString("com.sun.star.lang.RegistryServiceManager");
+    seqNames.getArray()[0] = "com.sun.star.lang.MultiServiceFactory";
+    seqNames.getArray()[1] = "com.sun.star.lang.RegistryServiceManager";
     return seqNames;
 }
 
@@ -864,8 +864,7 @@ Any OServiceManager::getPropertyValue(const OUString& PropertyName)
     else
     {
         UnknownPropertyException except;
-        except.Message = OUString( "ServiceManager : unknown property " );
-        except.Message += PropertyName;
+        except.Message =  "ServiceManager : unknown property " + PropertyName;
         throw except;
     }
 }
@@ -1507,7 +1506,7 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
 
     try
     {
-        OUString implementationName = OUString("/IMPLEMENTATIONS/") + name;
+        OUString implementationName = "/IMPLEMENTATIONS/" + name;
         Reference<XRegistryKey > xImpKey = m_xRootKey->openKey(implementationName);
 
         if( xImpKey.is() )

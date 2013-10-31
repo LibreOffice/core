@@ -737,7 +737,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
 
             InvocationTargetException aExc;
             aExc.Context = *(const Reference< XInterface > *)rObj.getValue();
-            aExc.Message = OUString("exception occurred during invocation!");
+            aExc.Message = "exception occurred during invocation!";
             uno_any_destruct(
                 &aExc.TargetException,
                 reinterpret_cast< uno_ReleaseFunc >(cpp_release) );

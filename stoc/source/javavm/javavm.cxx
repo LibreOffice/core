@@ -294,13 +294,13 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         // read ftp proxy name
         css::uno::Reference<css::registry::XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey("Settings/ooInetFTPProxyName");
         if(ftpProxy_name.is() && !ftpProxy_name->getStringValue().isEmpty()) {
-            OUString ftpHost = OUString("ftp.proxyHost=");
+            OUString ftpHost = "ftp.proxyHost=";
             ftpHost += ftpProxy_name->getStringValue();
 
             // read ftp proxy port
             css::uno::Reference<css::registry::XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey("Settings/ooInetFTPProxyPort");
             if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
-                OUString ftpPort = OUString("ftp.proxyPort=");
+                OUString ftpPort = "ftp.proxyPort=";
                 ftpPort += OUString::number(ftpProxy_port->getLongValue());
 
                 pjvm->pushProp(ftpHost);
@@ -311,13 +311,13 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         // read http proxy name
         css::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey("Settings/ooInetHTTPProxyName");
         if(httpProxy_name.is() && !httpProxy_name->getStringValue().isEmpty()) {
-            OUString httpHost = OUString("http.proxyHost=");
+            OUString httpHost = "http.proxyHost=";
             httpHost += httpProxy_name->getStringValue();
 
             // read http proxy port
             css::uno::Reference<css::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey("Settings/ooInetHTTPProxyPort");
             if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
-                OUString httpPort = OUString("http.proxyPort=");
+                OUString httpPort = "http.proxyPort=";
                 httpPort += OUString::number(httpProxy_port->getLongValue());
 
                 pjvm->pushProp(httpHost);
@@ -328,13 +328,13 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         // read https proxy name
         css::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey("Settings/ooInetHTTPSProxyName");
         if(httpsProxy_name.is() && !httpsProxy_name->getStringValue().isEmpty()) {
-            OUString httpsHost = OUString("https.proxyHost=");
+            OUString httpsHost = "https.proxyHost=";
             httpsHost += httpsProxy_name->getStringValue();
 
             // read https proxy port
             css::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey("Settings/ooInetHTTPSProxyPort");
             if(httpsProxy_port.is() && httpsProxy_port->getLongValue()) {
-                OUString httpsPort = OUString("https.proxyPort=");
+                OUString httpsPort = "https.proxyPort=";
                 httpsPort += OUString::number(httpsProxy_port->getLongValue());
 
                 pjvm->pushProp(httpsHost);
@@ -345,8 +345,8 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         // read  nonProxyHosts
         css::uno::Reference<css::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey("Settings/ooInetNoProxy");
         if(nonProxies_name.is() && !nonProxies_name->getStringValue().isEmpty()) {
-            OUString httpNonProxyHosts = OUString("http.nonProxyHosts=");
-            OUString ftpNonProxyHosts= OUString("ftp.nonProxyHosts=");
+            OUString httpNonProxyHosts = "http.nonProxyHosts=";
+            OUString ftpNonProxyHosts = "ftp.nonProxyHosts=";
             OUString value= nonProxies_name->getStringValue();
             // replace the separator ";" by "|"
             value= value.replace((sal_Unicode)';', (sal_Unicode)'|');
@@ -449,11 +449,11 @@ void getJavaPropsFromSafetySettings(
             OUString sVal;
             switch( val)
             {
-            case 0: sVal= OUString("host");
+            case 0: sVal = "host";
                 break;
-            case 1: sVal= OUString("unrestricted");
+            case 1: sVal = "unrestricted";
                 break;
-            case 3: sVal= OUString("none");
+            case 3: sVal = "none";
                 break;
             }
             OUString sProperty("appletviewer.security.mode=");
@@ -1077,62 +1077,62 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     else if ( aAccessor == "ooInetHTTPProxyName" )
     {
-        aPropertyName = OUString("http.proxyHost");
+        aPropertyName = "http.proxyHost";
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetHTTPProxyPort" )
     {
-        aPropertyName = OUString("http.proxyPort");
+        aPropertyName = "http.proxyPort";
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = OUString::number(n);
     }
     else if ( aAccessor == "ooInetHTTPSProxyName" )
     {
-        aPropertyName = OUString("https.proxyHost");
+        aPropertyName = "https.proxyHost";
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetHTTPSProxyPort" )
     {
-        aPropertyName = OUString("https.proxyPort");
+        aPropertyName = "https.proxyPort";
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = OUString::number(n);
     }
     else if ( aAccessor == "ooInetFTPProxyName" )
     {
-        aPropertyName = OUString("ftp.proxyHost");
+        aPropertyName = "ftp.proxyHost";
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetFTPProxyPort" )
     {
-        aPropertyName = OUString("ftp.proxyPort");
+        aPropertyName = "ftp.proxyPort";
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = OUString::number(n);
     }
     else if ( aAccessor == "ooInetNoProxy" )
     {
-        aPropertyName = OUString("http.nonProxyHosts");
-        aPropertyName2 = OUString("ftp.nonProxyHosts");
+        aPropertyName = "http.nonProxyHosts";
+        aPropertyName2 = "ftp.nonProxyHosts";
         rEvent.Element >>= aPropertyValue;
         aPropertyValue = aPropertyValue.replace(';', '|');
     }
     else if ( aAccessor == "NetAccess" )
     {
-        aPropertyName = OUString("appletviewer.security.mode");
+        aPropertyName = "appletviewer.security.mode";
         sal_Int32 n = 0;
         if (rEvent.Element >>= n)
             switch (n)
             {
             case 0:
-                aPropertyValue = OUString("host");
+                aPropertyValue = "host";
                 break;
             case 1:
-                aPropertyValue = OUString("unrestricted");
+                aPropertyValue = "unrestricted";
                 break;
             case 3:
-                aPropertyValue = OUString("none");
+                aPropertyValue = "none";
                 break;
             }
         else
@@ -1141,13 +1141,13 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     else if ( aAccessor == "Security" )
     {
-        aPropertyName = OUString("stardiv.security.disableSecurity");
+        aPropertyName = "stardiv.security.disableSecurity";
         sal_Bool b = sal_Bool();
         if (rEvent.Element >>= b)
             if (b)
-                aPropertyValue = OUString("false");
+                aPropertyValue = "false";
             else
-                aPropertyValue = OUString("true");
+                aPropertyValue = "true";
         else
             return;
         bSecurityChanged = true;

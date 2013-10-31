@@ -1131,7 +1131,7 @@ css::uno::Reference< css::uno::XInterface > SimpleRegistry_CreateInstance(
 
 css::uno::Sequence< OUString > simreg_getSupportedServiceNames() {
     css::uno::Sequence< OUString > names(1);
-    names[0] = OUString("com.sun.star.registry.SimpleRegistry");
+    names[0] = "com.sun.star.registry.SimpleRegistry";
     return names;
 }
 

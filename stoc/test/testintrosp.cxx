@@ -102,19 +102,19 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
     OUString aRetStr;
     switch( eType )
     {
-        case TypeClass_TYPE:            aRetStr = OUString("TYPE TYPE");           break;
-        case TypeClass_INTERFACE:       aRetStr = OUString("TYPE INTERFACE");      break;
-        case TypeClass_SERVICE:         aRetStr = OUString("TYPE SERVICE");        break;
-        case TypeClass_STRUCT:          aRetStr = OUString("TYPE STRUCT");         break;
-        case TypeClass_TYPEDEF:         aRetStr = OUString("TYPE TYPEDEF");        break;
-        case TypeClass_UNION:           aRetStr = OUString("TYPE UNION");          break;
-        case TypeClass_ENUM:            aRetStr = OUString("TYPE ENUM");           break;
-        case TypeClass_EXCEPTION:       aRetStr = OUString("TYPE EXCEPTION");      break;
-        case TypeClass_ARRAY:           aRetStr = OUString("TYPE ARRAY");          break;
-        case TypeClass_SEQUENCE:        aRetStr = OUString("TYPE SEQUENCE");       break;
-        case TypeClass_VOID:            aRetStr = OUString("TYPE void");           break;
-        case TypeClass_ANY:             aRetStr = OUString("TYPE any");            break;
-        case TypeClass_UNKNOWN:         aRetStr = OUString("TYPE unknown");        break;
+        case TypeClass_TYPE:            aRetStr = "TYPE TYPE";           break;
+        case TypeClass_INTERFACE:       aRetStr = "TYPE INTERFACE";      break;
+        case TypeClass_SERVICE:         aRetStr = "TYPE SERVICE";        break;
+        case TypeClass_STRUCT:          aRetStr = "TYPE STRUCT";         break;
+        case TypeClass_TYPEDEF:         aRetStr = "TYPE TYPEDEF";        break;
+        case TypeClass_UNION:           aRetStr = "TYPE UNION";          break;
+        case TypeClass_ENUM:            aRetStr = "TYPE ENUM";           break;
+        case TypeClass_EXCEPTION:       aRetStr = "TYPE EXCEPTION";      break;
+        case TypeClass_ARRAY:           aRetStr = "TYPE ARRAY";          break;
+        case TypeClass_SEQUENCE:        aRetStr = "TYPE SEQUENCE";       break;
+        case TypeClass_VOID:            aRetStr = "TYPE void";           break;
+        case TypeClass_ANY:             aRetStr = "TYPE any";            break;
+        case TypeClass_UNKNOWN:         aRetStr = "TYPE unknown";        break;
         case TypeClass_BOOLEAN:
         {
             sal_Bool b = *(sal_Bool*)aValue.getValue();
@@ -215,17 +215,17 @@ Sequence< Property > ImplPropertySetInfo::getProperties(void)
         pSeq = new Sequence<Property>( 3 );
         Property * pAry = pSeq->getArray();
 
-        pAry[0].Name = OUString("Factor");
+        pAry[0].Name = "Factor";
         pAry[0].Handle = -1;
         pAry[0].Type = getCppuType( (double*) NULL );
         pAry[0].Attributes = BOUND | TRANSIENT;
 
-        pAry[1].Name = OUString("MyCount");
+        pAry[1].Name = "MyCount";
         pAry[1].Handle = -1;
         pAry[1].Type = getCppuType( (sal_Int32*) NULL );
         pAry[1].Attributes = BOUND | TRANSIENT;
 
-        pAry[2].Name = OUString("Info");
+        pAry[2].Name = "Info";
         pAry[2].Handle = -1;
         pAry[2].Type = getCppuType( (OUString*) NULL );
         pAry[2].Attributes = TRANSIENT;
@@ -439,7 +439,7 @@ void ImplIntroTest::Init( void )
     // Properties initialization
     aAnyArray[0] <<= 3.14;
     aAnyArray[1] <<= (sal_Int32)42;
-    aAnyArray[2] <<= OUString( OUString("Hallo") );
+    aAnyArray[2] <<= OUString( "Hallo" );
 
     // Einmal fuer den internen Gebrauch die PropertySetInfo abholen
     m_xMyInfo = getPropertySetInfo();
@@ -457,13 +457,12 @@ void ImplIntroTest::Init( void )
 
     // String-Sequence initialization
     aStringSeq.realloc( 3 );
-    OUString* pStr = aStringSeq.getArray();
-    pStr[ 0 ] = OUString( OUString("String 0") );
-    pStr[ 1 ] = OUString( OUString("String 1") );
-    pStr[ 2 ] = OUString( OUString("String 2") );
+    aStringSeq[ 0 ] = "String 0";
+    aStringSeq[ 1 ] = "String 1";
+    aStringSeq[ 2 ] = "String 2";
 
     // structs initialization
-    m_aFirstStruct.Name = OUString("FirstStruct-Name");
+    m_aFirstStruct.Name = "FirstStruct-Name";
     m_aFirstStruct.Handle = 77777;
     //XIdlClassRef Type;
     m_aFirstStruct.Attributes = -222;
@@ -1199,8 +1198,7 @@ SAL_IMPLEMENT_MAIN()
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         // Introspection
-        libName = OUString(
-            "introspection.uno" SAL_DLLEXTENSION);
+        libName = OUString( "introspection.uno" SAL_DLLEXTENSION);
         fprintf(stderr, "3\n" );
         xImplReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );

@@ -70,7 +70,7 @@ namespace stoc_inv
 static Sequence< OUString > inv_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(SERVICENAME);
+    seqNames.getArray()[0] = SERVICENAME;
     return seqNames;
 }
 
@@ -668,7 +668,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                     {
                         CannotConvertException aExc;
                         aExc.Context = *this;
-                        aExc.Message = OUString("invocation type mismatch!");
+                        aExc.Message = "invocation type mismatch!";
                         throw aExc;
                     }
                 }
@@ -708,7 +708,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
 
     RuntimeException aExc;
     aExc.Context = *this;
-    aExc.Message = OUString("invocation lacking of introspection access!");
+    aExc.Message = "invocation lacking of introspection access!";
     throw aExc;
 }
 

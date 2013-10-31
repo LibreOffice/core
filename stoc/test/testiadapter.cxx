@@ -855,7 +855,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 {
     IllegalArgumentException aExc;
     aExc.ArgumentPosition = 5;
-    aExc.Message          = OUString("dum dum dum ich tanz im kreis herum...");
+    aExc.Message          = "dum dum dum ich tanz im kreis herum...";
     aExc.Context          = *this;
     throw aExc;
 }
@@ -863,7 +863,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message          = OUString("dum dum dum ich tanz im kreis herum...");
+    aExc.Message          = "dum dum dum ich tanz im kreis herum...";
     aExc.Context          = *this;
     throw aExc;
 }
@@ -871,7 +871,7 @@ sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeE
 void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message          = OUString("dum dum dum ich tanz im kreis herum...");
+    aExc.Message          = "dum dum dum ich tanz im kreis herum...";
     aExc.Context          = *this;
     throw aExc;
 }
