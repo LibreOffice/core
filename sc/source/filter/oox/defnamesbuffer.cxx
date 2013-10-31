@@ -458,7 +458,7 @@ bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
 {
     ScTokenArray* pTokenArray = mpScRangeData->GetCode();
     Sequence< FormulaToken > aFTokenSeq;
-    ScTokenConversion::ConvertToTokenSequence( this->getScDocument(), aFTokenSeq, *pTokenArray );
+    ScTokenConversion::ConvertToTokenSequence(getScDocument(), aFTokenSeq, *pTokenArray);
     return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
 }
 

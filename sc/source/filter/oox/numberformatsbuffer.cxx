@@ -1936,7 +1936,7 @@ sal_Int32 NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNum
 
 void NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
-    ScDocument& rDoc = getScDocument();
+    const ScDocument& rDoc = getScDocument();
     static sal_uLong  nDflt = rDoc.GetFormatTable()->GetStandardFormat( ScGlobal::eLnge );
     sal_uLong nScNumFmt = nDflt;
     if ( maApiData.mnIndex )

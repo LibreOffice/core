@@ -281,23 +281,17 @@ public:
     void                setManualRowHeight( sal_Int32 nRow );
 
     /** Inserts a value cell directly into the Calc sheet. */
-    void                putValue(
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            double fValue ) const;
+    void putValue( const com::sun::star::table::CellAddress& rAddress, double fValue );
 
     /** Inserts a string cell directly into the Calc sheet. */
-    void                putString(
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            const OUString& rText ) const;
+    void putString( const com::sun::star::table::CellAddress& rAddress, const OUString& rText );
     /** Inserts a rich-string cell directly into the Calc sheet. */
-    void                putRichString(
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            const RichString& rString,
-                            const Font* pFirstPortionFont ) const;
+    void putRichString(
+        const com::sun::star::table::CellAddress& rAddress,
+        const RichString& rString, const Font* pFirstPortionFont );
     /** Inserts a formula cell directly into the Calc sheet. */
-    void                putFormulaTokens(
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            const ApiTokenSequence& rTokens ) const;
+    void putFormulaTokens(
+        const com::sun::star::table::CellAddress& rAddress, const ApiTokenSequence& rTokens );
 
     /** Initial conversion before importing the worksheet. */
     void                initializeWorksheetImport();

@@ -69,6 +69,7 @@
 #include "editutil.hxx"
 #include "tokenarray.hxx"
 #include "tablebuffer.hxx"
+#include "documentimport.hxx"
 
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
@@ -355,11 +356,11 @@ private:
     typedef ::std::list< ValidationModel >              ValidationModelList;
 
     /** Inserts all imported hyperlinks into their cell ranges. */
-    void                finalizeHyperlinkRanges() const;
+    void finalizeHyperlinkRanges();
     /** Generates the final URL for the passed hyperlink. */
     OUString            getHyperlinkUrl( const HyperlinkModel& rHyperlink ) const;
     /** Inserts a hyperlinks into the specified cell. */
-    void                insertHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const;
+    void insertHyperlink( const CellAddress& rAddress, const OUString& rUrl );
 
     /** Inserts all imported data validations into their cell ranges. */
     void                finalizeValidationRanges() const;
@@ -977,7 +978,7 @@ void WorksheetGlobals::finalizeDrawingImport()
 
 // private --------------------------------------------------------------------
 
-void WorksheetGlobals::finalizeHyperlinkRanges() const
+void WorksheetGlobals::finalizeHyperlinkRanges()
 {
     for( HyperlinkModelList::const_iterator aIt = maHyperlinks.begin(), aEnd = maHyperlinks.end(); aIt != aEnd; ++aIt )
     {
@@ -1018,7 +1019,7 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
     return aUrl;
 }
 
-void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUString& rUrl ) const
+void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUString& rUrl )
 {
     Reference< XCell > xCell = getCell( rAddress );
     if( xCell.is() ) switch( xCell->getType() )
@@ -1544,11 +1545,11 @@ void WorksheetHelper::setRowModel( const RowModel& rModel )
     mrSheetGlob.setRowModel( rModel );
 }
 
-void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) const
+void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue )
 {
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rAddress );
-    getScDocument().SetValue( aAddress.Col(), aAddress.Row(), aAddress.Tab(), fValue );
+    getDocImport().setNumericCell(aAddress, fValue);
 }
 
 void WorksheetHelper::setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress,
@@ -1557,34 +1558,32 @@ void WorksheetHelper::setCellFormulaValue( const ::com::sun::star::table::CellAd
     getFormulaBuffer().setCellFormulaValue( rAddress, fValue );
 }
 
-void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const
+void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText )
 {
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rAddress );
-    ScDocument& rDoc = getScDocument();
     if ( !rText.isEmpty() )
-        rDoc.SetTextCell(aAddress, rText);
+        getDocImport().setStringCell(aAddress, rText);
 }
 
-void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont ) const
+void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont )
 {
-    ScDocument& rDoc = getScDocument();
     ScEditEngineDefaulter& rEE = getEditEngine();
 
     // The cell will own the text object instance returned from convert().
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rAddress );
-    rDoc.SetEditText(aAddress, rString.convert(rEE, pFirstPortionFont));
+    getDocImport().setEditCell(aAddress, rString.convert(rEE, pFirstPortionFont));
 }
 
-void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens ) const
+void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens )
 {
     ScDocument& rDoc = getScDocument();
     ScTokenArray aTokenArray;
     ScAddress aCellPos;
     ScUnoConversion::FillScAddress( aCellPos, rAddress );
     ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
-    rDoc.SetFormula(aCellPos, aTokenArray);
+    getDocImport().setFormulaCell(aCellPos, aTokenArray);
 }
 
 void WorksheetHelper::initializeWorksheetImport()

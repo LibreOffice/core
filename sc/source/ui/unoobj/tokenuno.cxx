@@ -372,7 +372,7 @@ bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
     return !rTokenArray.Fill(rSequence,rDoc.GetExternalRefManager());
 }
 
-bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
+bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
         uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray )
 {
     bool bError = false;

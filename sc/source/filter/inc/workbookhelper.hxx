@@ -149,7 +149,11 @@ public:
     void                useInternalChartDataTable( bool bInternal );
 
     // document model ---------------------------------------------------------
-    ScDocument& getScDocument() const;
+    ScDocument& getScDocument();
+    const ScDocument& getScDocument() const;
+
+    ScDocumentImport& getDocImport();
+
     ScEditEngineDefaulter& getEditEngine() const;
     /** Returns a reference to the source/target spreadsheet document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >

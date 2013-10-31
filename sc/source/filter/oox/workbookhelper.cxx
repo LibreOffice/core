@@ -662,7 +662,7 @@ void WorkbookGlobals::finalize()
         //stop preventing establishment of listeners as is done in
         //ScDocShell::AfterXMLLoading() for ods
         getScDocument().SetInsertingFromOtherDoc(false);
-        getScDocument().RebuildFormulaGroups();
+        getDocImport().finalize();
 
         if (mxCLKernelThread.is())
             mxCLKernelThread->join();
@@ -755,9 +755,19 @@ void WorkbookHelper::finalizeWorkbookImport()
 
 // document model -------------------------------------------------------------
 
-ScDocument& WorkbookHelper::getScDocument() const
+ScDocument& WorkbookHelper::getScDocument()
 {
     return mrBookGlob.getScDocument();
+}
+
+const ScDocument& WorkbookHelper::getScDocument() const
+{
+    return mrBookGlob.getScDocument();
+}
+
+ScDocumentImport& WorkbookHelper::getDocImport()
+{
+    return mrBookGlob.getDocImport();
 }
 
 ScEditEngineDefaulter& WorkbookHelper::getEditEngine() const
