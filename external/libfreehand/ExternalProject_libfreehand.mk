@@ -16,9 +16,8 @@ $(eval $(call gb_ExternalProject_register_targets,libfreehand,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libfreehand,\
-	boost_headers \
-	libxml2 \
 	wpd \
+	wpg \
 	zlib \
 ))
 
@@ -33,12 +32,10 @@ $(call gb_ExternalProject_get_state_target,libfreehand,build) :
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
-			--without-tools \
-			BOOST_CFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS))" \
-			XML_CFLAGS="$(if $(filter NO,$(SYSTEM_LIBXML)),-I$(call gb_UnpackedTarball_get_dir,xml2)/include,$(LIBXML_CFLAGS))" \
-			XML_LIBS="$(LIBXML_LIBS)" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& $(MAKE) $(if $(VERBOSE)$(verbose),V=1) \
+		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
+		    $(if $(VERBOSE)$(verbose),V=1) \
+		    $(MAKE)) \
 	)
 
 # vim: set noet sw=4 ts=4:
