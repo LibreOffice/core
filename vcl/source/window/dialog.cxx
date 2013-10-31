@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/PathSettings.hpp>
 #include <comphelper/processfactory.hxx>
@@ -44,6 +46,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
 #include <iostream>
+
+#if !HAVE_FEATURE_DESKTOP
+#include <touch/touch.h>
+#endif
 
 // =======================================================================
 
@@ -884,6 +890,8 @@ void Dialog::ImplEndExecuteModal()
 
 short Dialog::Execute()
 {
+#if HAVE_FEATURE_DESKTOP
+
     setDeferredProperties();
 
     if ( !ImplStartExecuteModal() )
@@ -904,7 +912,7 @@ short Dialog::Execute()
     while ( !aDelData.IsDead() && mbInExecute )
         Application::Yield();
 
-    ImplEndExecuteModal();
+    ImplEndExecutModal();
 
 #ifdef DBG_UTIL
     if( pDialogParent  )
@@ -927,6 +935,56 @@ short Dialog::Execute()
     long nRet = mpDialogImpl->mnResult;
     mpDialogImpl->mnResult = -1;
     return (short)nRet;
+
+#else
+
+    MLODialogKind kind;
+
+    switch (GetType())
+    {
+    case WINDOW_MESSBOX:
+        kind = MLODialogMessage;
+        break;
+    case WINDOW_INFOBOX:
+        kind = MLODialogInformation;
+        break;
+    case WINDOW_WARNINGBOX:
+        kind = MLODialogWarning;
+        break;
+    case WINDOW_ERRORBOX:
+        kind = MLODialogError;
+        break;
+    case WINDOW_QUERYBOX:
+        kind = MLODialogQuery;
+        break;
+    default:
+        SAL_WARN("vcl", "Dialog::Execute: Unhandled window type %d" << GetType());
+        kind = MLODialogInformation;
+        break;
+    }
+
+    MLODialogResult result = touch_ui_dialog_modal(kind, ImplGetDialogText(this).getStr());
+
+    switch (result)
+    {
+    case MLODialogOK:
+        return RET_OK;
+    case MLODialogCancel:
+        return RET_CANCEL;
+    case MLODialogNo:
+        return RET_NO;
+    case MLODialogYes:
+        return RET_YES;
+    case MLODialogRetry:
+        return RET_RETRY;
+    case MLODialogIgnore:
+        return RET_IGNORE;
+    default:
+        SAL_WARN("vcl", "Dialog::Execute: Unhandled dialog result %d" << result);
+        return RET_OK;
+    }
+
+#endif
 }
 
 // -----------------------------------------------------------------------
