@@ -335,6 +335,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_TABLE_OP { Text = "MULTIPLE.OPERATIONS" ; };
     String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
     String SC_OPCODE_BETA_INV { Text = "BETAINV" ; };
+    String SC_OPCODE_BETA_DIST_MS { Text = "COM.MICROSOFT.BETA.DIST" ; };
+    String SC_OPCODE_BETA_INV_MS { Text = "COM.MICROSOFT.BETA.INV" ; };
     String SC_OPCODE_WEEK { Text = "ISOWEEKNUM" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "ORG.OPENOFFICE.EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
@@ -689,6 +691,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_TABLE_OP { Text = "TABLE" ; };
     String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
     String SC_OPCODE_BETA_INV { Text = "BETAINV" ; };
+    String SC_OPCODE_BETA_DIST_MS { Text = "BETA.DIST" ; };
+    String SC_OPCODE_BETA_INV_MS { Text = "BETA.INV" ; };
     String SC_OPCODE_WEEK { Text = "WEEKNUM" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
@@ -1903,6 +1907,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_BETA_INV
     {
         Text [ en-US ] = "BETAINV" ;
+    };
+    String SC_OPCODE_BETA_DIST_MS
+    {
+        Text [ en-US ] = "BETA.DIST" ;
+    };
+    String SC_OPCODE_BETA_INV_MS
+    {
+        Text [ en-US ] = "BETA.INV" ;
     };
     String SC_OPCODE_WEEK
     {
