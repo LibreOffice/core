@@ -460,11 +460,11 @@ sal_Bool ExportDialog::GetGraphicStream()
 
             OUString sFormat( maExt );
             uno::Sequence< beans::PropertyValue > aDescriptor( 3 );
-            aDescriptor[0].Name = OUString("OutputStream");
+            aDescriptor[0].Name = "OutputStream";
             aDescriptor[0].Value <<= xOutputStream;
-            aDescriptor[1].Name = OUString("FilterName");
+            aDescriptor[1].Name = "FilterName";
             aDescriptor[1].Value <<= sFormat;
-            aDescriptor[2].Name = OUString("FilterData");
+            aDescriptor[2].Name = "FilterData";
             aDescriptor[2].Value <<= aNewFilterData;
 
             uno::Reference< lang::XComponent > xSourceDoc;

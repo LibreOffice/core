@@ -393,18 +393,18 @@ Sequence< OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()
     throw(RuntimeException)
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = OUString("com.sun.star.image.ImageMapObject" );
+    aSNS.getArray()[0] = "com.sun.star.image.ImageMapObject";
     switch( mnType )
     {
     case IMAP_OBJ_POLYGON:
     default:
-        aSNS.getArray()[1] = OUString("com.sun.star.image.ImageMapPolygonObject" );
+        aSNS.getArray()[1] = "com.sun.star.image.ImageMapPolygonObject";
         break;
     case IMAP_OBJ_RECTANGLE:
-        aSNS.getArray()[1] = OUString("com.sun.star.image.ImageMapRectangleObject" );
+        aSNS.getArray()[1] = "com.sun.star.image.ImageMapRectangleObject";
         break;
     case IMAP_OBJ_CIRCLE:
-        aSNS.getArray()[1] = OUString("com.sun.star.image.ImageMapCircleObject" );
+        aSNS.getArray()[1] = "com.sun.star.image.ImageMapCircleObject";
         break;
     }
     return aSNS;

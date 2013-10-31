@@ -295,7 +295,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     {
         //detect current scheme name
         uno::Sequence < OUString > aCurrent(1);
-        aCurrent.getArray()[0] = OUString("ExtendedColorScheme/CurrentColorScheme");
+        aCurrent.getArray()[0] = "ExtendedColorScheme/CurrentColorScheme";
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     } // if(!sScheme.getLength())
@@ -312,7 +312,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     }
 
     if ( m_sLoadedScheme.isEmpty() )
-        m_sLoadedScheme = OUString("default");
+        m_sLoadedScheme = "default";
 
     if ( sScheme != "default" )
     {
@@ -461,7 +461,7 @@ void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
     uno::Sequence < OUString > aCurrent(1);
-    aCurrent.getArray()[0] = OUString("ExtendedColorScheme/CurrentColorScheme");
+    aCurrent.getArray()[0] = "ExtendedColorScheme/CurrentColorScheme";
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);

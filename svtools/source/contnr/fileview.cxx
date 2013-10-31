@@ -712,7 +712,7 @@ IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl)
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    maQuickSearchText = OUString();
+    maQuickSearchText = "";
     mnSearchIndex = 0;
 
     return 0;
@@ -977,7 +977,7 @@ sal_Bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
     SvtContentEntry* pData = (SvtContentEntry*)pEntry->GetUserData();
 
     if ( pData )
-        aURL = OUString( pData->maURL );
+        aURL = pData->maURL;
 
     if ( aURL.isEmpty() )
         return bRet;
@@ -1703,7 +1703,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mxCmdEnv ( xEnv )
 
 {
-    maAllFilter = OUString("*.*");
+    maAllFilter = "*.*";
     mpView = new ViewTabListBox_Impl( mpAntiImpl, this, nFlags );
     mpView->EnableCellFocus();
 }

@@ -647,7 +647,7 @@ void SvtFrameWindow_Impl::ShowDocInfo( const OUString& rURL )
         uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
             task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
         uno::Sequence < beans::PropertyValue> aProps(1);
-        aProps[0].Name = OUString( "InteractionHandler" );
+        aProps[0].Name = "InteractionHandler";
         aProps[0].Value <<= xInteractionHandler;
         m_xDocProps->loadFromMedium( rURL, aProps );
         pEditWin->fill( m_xDocProps, rURL );
@@ -728,7 +728,7 @@ void SvtFrameWindow_Impl::OpenFile( const OUString& rURL, sal_Bool bPreview, sal
 
                         uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
                             task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
-                        aArgs[3].Name = OUString( "InteractionHandler" );
+                        aArgs[3].Name = "InteractionHandler";
                         aArgs[3].Value <<= xInteractionHandler;
 
                         b = sal_False;
@@ -748,7 +748,7 @@ void SvtFrameWindow_Impl::OpenFile( const OUString& rURL, sal_Bool bPreview, sal
                         {
                             m_xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
                             ViewEmptyWin();
-                            m_aOpenURL = OUString();
+                            m_aOpenURL = "";
                         }
                         else
                             m_aOpenURL = aDispURL;
@@ -761,13 +761,13 @@ void SvtFrameWindow_Impl::OpenFile( const OUString& rURL, sal_Bool bPreview, sal
                 aArgs[0].Name = "AsTemplate";
                 aArgs[0].Value <<= bAsTemplate;
                 xDisp->dispatch( aURL, aArgs );
-                m_aOpenURL = OUString();
+                m_aOpenURL = "";
             }
             else
             {
                 Sequence < PropertyValue > aArgs;
                 xDisp->dispatch( aURL, aArgs );
-                m_aOpenURL = OUString();
+                m_aOpenURL = "";
             }
         }
     }

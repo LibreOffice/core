@@ -19,14 +19,14 @@ void localizeWebserviceURI( OUString& rURI )
     if ( aLang.equalsIgnoreAsciiCase("pt")
          && Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("br") )
     {
-        aLang = OUString("pt-br");
+        aLang = "pt-br";
     }
     if ( aLang.equalsIgnoreAsciiCase("zh") )
     {
         if ( Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("cn") )
-            aLang = OUString("zh-cn");
+            aLang = "zh-cn";
         if ( Application::GetSettings().GetUILanguageTag().getCountry().equalsIgnoreAsciiCase("tw") )
-            aLang = OUString("zh-tw");
+            aLang = "zh-tw";
     }
 
     rURI += aLang;
