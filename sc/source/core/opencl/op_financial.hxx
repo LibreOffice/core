@@ -19,6 +19,8 @@ class RRI: public SlidingFunctionBase
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual bool takeString() const { return false; }
+    virtual bool takeNumeric() const { return true; }
 };
 
 class OpRRI:public RRI

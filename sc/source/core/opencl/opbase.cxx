@@ -28,7 +28,7 @@ void DynamicKernelArgument::GenDecl(std::stringstream &ss) const
 /// When declared as input to a sliding window function
 void DynamicKernelArgument::GenSlidingWindowDecl(std::stringstream &ss) const
 {
-    GenDecl(ss);
+    DynamicKernelArgument::GenDecl(ss);
 }
 
 /// When referenced in a sliding window function

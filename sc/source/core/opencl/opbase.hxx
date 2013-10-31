@@ -121,6 +121,8 @@ public:
         const std::string &/*rhs*/) const {return "";}
     virtual std::string Gen(ArgVector& /*argVector*/){return "";};
     virtual std::string BinFuncName(void)const {return "";};
+    virtual bool takeString() const = 0;
+    virtual bool takeNumeric() const = 0;
     virtual ~OpBase() {}
 };
 
@@ -139,6 +141,8 @@ class Normal: public SlidingFunctionBase
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual bool takeString() const { return false; }
+    virtual bool takeNumeric() const { return true; }
 };
 
 }}

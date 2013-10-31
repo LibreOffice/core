@@ -207,6 +207,10 @@ public:
     {
         ss << "__global unsigned int *"<<mSymName;
     }
+    virtual void GenSlidingWindowDecl(std::stringstream& ss) const
+    {
+        DynamicKernelStringArgument::GenDecl(ss);
+    }
     virtual size_t Marshal(cl_kernel, int, int);
 };
 
@@ -231,8 +235,6 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
-        if (pDVR->GetArrays()[0].mpNumericArray != NULL)
-            throw Unhandled();
         nStrings = pDVR->GetArrayLength();
         vRef = pDVR->GetArrays()[0];
     }
@@ -250,8 +252,15 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
         throw OpenCLError(err);
     for (size_t i = 0; i < nStrings; i++)
     {
-        const OUString tmp = OUString(vRef.mpStringArray[i]);
-        pHashBuffer[i] = tmp.hashCode();
+        if (vRef.mpStringArray[i])
+        {
+            const OUString tmp = OUString(vRef.mpStringArray[i]);
+            pHashBuffer[i] = tmp.hashCode();
+        }
+        else
+        {
+            pHashBuffer[i] = 0;
+        }
     }
     err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
             pHashBuffer, 0, NULL, NULL);
@@ -263,6 +272,52 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
         throw OpenCLError(err);
     return 1;
 }
+
+/// A mixed string/numberic vector
+class DynamicKernelMixedArgument: public DynamicKernelArgument
+{
+public:
+    DynamicKernelMixedArgument(const std::string &s,
+        FormulaTreeNodeRef ft):
+        DynamicKernelArgument(s, ft), mStringArgument(s+"s", ft) {}
+    virtual void GenSlidingWindowDecl(std::stringstream& ss) const
+    {
+        DynamicKernelArgument::GenSlidingWindowDecl(ss);
+        ss << ", ";
+        mStringArgument.GenSlidingWindowDecl(ss);
+    }
+    virtual void GenSlidingWindowFunction(std::stringstream &) {}
+    /// Generate declaration
+    virtual void GenDecl(std::stringstream &ss) const
+    {
+        DynamicKernelArgument::GenDecl(ss);
+        ss << ", ";
+        mStringArgument.GenDecl(ss);
+    }
+    virtual void GenDeclRef(std::stringstream &ss) const
+    {
+        DynamicKernelArgument::GenDeclRef(ss);
+        ss << ",";
+        mStringArgument.GenDeclRef(ss);
+    }
+    virtual std::string GenSlidingWindowDeclRef(bool) const
+    {
+        std::stringstream ss;
+        ss << "(!isNan(" << DynamicKernelArgument::GenSlidingWindowDeclRef(ss);
+        ss << ")?" << DynamicKernelArgument::GenSlidingWindowDeclRef(ss);
+        ss << ":" << mStringArgument.GenSlidingWindowDeclRef(ss);
+        ss << ")";
+        return ss.str();
+    }
+    virtual size_t Marshal(cl_kernel k, int argno, int vw)
+    {
+        int i = DynamicKernelArgument::Marshal(k, argno, vw);
+        i += mStringArgument.Marshal(k, argno+i, vw);
+        return i;
+    }
+protected:
+    DynamicKernelStringArgument mStringArgument;
+};
 
 /// Handling a Double Vector that is used as a sliding window input
 /// to either a sliding window average or sum-of-products
@@ -427,6 +482,8 @@ public:
         ss << ";\n}";
     }
     virtual bool isAverage() const { return false; }
+    virtual bool takeString() const { return false; }
+    virtual bool takeNumeric() const { return true; }
 };
 
 // Strictly binary operators
@@ -452,6 +509,8 @@ public:
                 vSubArguments[1]->GenSlidingWindowDeclRef(false)) << ";\n\t";
         ss << "return tmp;\n}";
     }
+    virtual bool takeString() const { return true; }
+    virtual bool takeNumeric() const { return true; }
 };
 
 class SumOfProduct: public SlidingFunctionBase
@@ -519,6 +578,8 @@ public:
         ss << "return tmp;\n";
         ss << "}";
     }
+    virtual bool takeString() const { return false; }
+    virtual bool takeNumeric() const { return true; }
 };
 
 /// operator traits
@@ -809,18 +870,31 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                         dynamic_cast< const formula::SingleVectorRefToken* >(pChild);
                     assert(pSVR);
                     if (pSVR->GetArray().mpNumericArray &&
-                        !pSVR->GetArray().mpStringArray)
+                        pCodeGen->takeNumeric() &&
+                        pSVR->GetArray().mpStringArray &&
+                        pCodeGen->takeString())
+                    {
+                        mvSubArguments.push_back(
+                                SubArgument(new DynamicKernelMixedArgument(
+                                        ts, ft->Children[i])));
+                    }
+                    else if (pSVR->GetArray().mpNumericArray &&
+                            pCodeGen->takeNumeric())
+                    {
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelArgument(ts,
                                         ft->Children[i])));
-                    else if (!pSVR->GetArray().mpNumericArray &&
-                            pSVR->GetArray().mpStringArray)
+                    }
+                    else if (pSVR->GetArray().mpStringArray &&
+                            pCodeGen->takeString())
+                    {
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelStringArgument(
                                         ts, ft->Children[i])));
+                    }
                     else
                         throw UnhandledToken(pChild,
-                                "Got both numeric and string vector");
+                                "Got unhandled case here");
                 } else if (pChild->GetType() == formula::svDouble) {
                     mvSubArguments.push_back(
                             SubArgument(new DynamicKernelConstantArgument(ts,
