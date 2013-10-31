@@ -57,6 +57,27 @@ void touch_ui_show_keyboard();
 void touch_ui_hide_keyboard();
 bool touch_ui_keyboard_visible();
 
+// Dialogs, work in progress, no clear plan yet what to do
+
+typedef enum {
+    MLODialogMessage,
+    MLODialogInformation,
+    MLODialogWarning,
+    MLODialogError,
+    MLODialogQuery
+} MLODialogKind;
+
+typedef enum {
+    MLODialogOK,
+    MLODialogCancel,
+    MLODialogNo,
+    MLODialogYes,
+    MLODialogRetry,
+    MLODialogIgnore,
+} MLODialogResult;
+
+MLODialogResult touch_ui_dialog_modal(MLODialogKind kind, const char *message);
+
 typedef enum {
     MLOSelectionNone,
     MLOSelectionText,
