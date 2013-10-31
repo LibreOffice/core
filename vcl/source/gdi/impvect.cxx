@@ -275,9 +275,6 @@ private:
 
     void            ImplGetSpace();
 
-    void            ImplCreate();
-    void            ImplCreateInner();
-    void            ImplCreateOuter();
     void            ImplPostProcess( const ImplPointArray& rArr );
 
 public:
