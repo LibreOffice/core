@@ -37,6 +37,6 @@ $(liblibreoffice_OWN_LD_SO) : $(call gb_Library_get_target,libreoffice)
 run_libtest: $(liblibreoffice_OWN_LD_SO)
 	$(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}":$(liblibreoffice_OWN_LD_PATH_DIR)/Library" \
 	$(WORKDIR)/LinkTarget/Executable/libtest \
-		$(INSTROOT)/program $(OUTDIR)/bin/smoketestdoc.sxw \
+		$(INSTROOT)/program $(WORKDIR)/Zip/smoketestdoc.sxw \
 
 # vim: set noet sw=4 ts=4:
