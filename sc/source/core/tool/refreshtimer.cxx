@@ -20,6 +20,14 @@
 #include "refreshtimer.hxx"
 #include "refreshtimerprotector.hxx"
 
+void ScRefreshTimerControl::SetAllowRefresh( sal_Bool b )
+{
+    if ( b && nBlockRefresh )
+        --nBlockRefresh;
+    else if ( !b && nBlockRefresh < (sal_uInt16)(~0) )
+        ++nBlockRefresh;
+}
+
 ScRefreshTimerProtector::ScRefreshTimerProtector( ScRefreshTimerControl * const * pp )
         :
         ppControl( pp )
@@ -38,12 +46,68 @@ ScRefreshTimerProtector::~ScRefreshTimerProtector()
         (*ppControl)->SetAllowRefresh( true );
 }
 
+ScRefreshTimer::ScRefreshTimer() : ppControl(0)
+{
+    SetTimeout( 0 );
+}
+
+ScRefreshTimer::ScRefreshTimer( sal_uLong nSeconds ) : ppControl(0)
+{
+    SetTimeout( nSeconds * 1000 );
+    Start();
+}
+
+ScRefreshTimer::ScRefreshTimer( const ScRefreshTimer& r ) : AutoTimer( r ), ppControl(0)
+{
+}
+
 ScRefreshTimer::~ScRefreshTimer()
 {
     if ( IsActive() )
         Stop();
 }
 
+ScRefreshTimer& ScRefreshTimer::operator=( const ScRefreshTimer& r )
+{
+    SetRefreshControl(0);
+    AutoTimer::operator=( r );
+    return *this;
+}
+
+sal_Bool ScRefreshTimer::operator==( const ScRefreshTimer& r ) const
+{
+    return GetTimeout() == r.GetTimeout();
+}
+
+sal_Bool ScRefreshTimer::operator!=( const ScRefreshTimer& r ) const
+{
+    return !ScRefreshTimer::operator==( r );
+}
+
+void ScRefreshTimer::StartRefreshTimer()
+{
+    Start();
+}
+
+void ScRefreshTimer::SetRefreshControl( ScRefreshTimerControl * const * pp )
+{
+    ppControl = pp;
+}
+
+void ScRefreshTimer::SetRefreshHandler( const Link& rLink )
+{
+    SetTimeoutHdl( rLink );
+}
+
+sal_uLong ScRefreshTimer::GetRefreshDelay() const
+{
+    return GetTimeout() / 1000;
+}
+
+void ScRefreshTimer::StopRefreshTimer()
+{
+    Stop();
+}
 
 void ScRefreshTimer::SetRefreshDelay( sal_uLong nSeconds )
 {
@@ -54,7 +118,6 @@ void ScRefreshTimer::SetRefreshDelay( sal_uLong nSeconds )
     if ( !bActive && nSeconds )
         Start();
 }
-
 
 void ScRefreshTimer::Timeout()
 {
@@ -68,6 +131,12 @@ void ScRefreshTimer::Timeout()
         if ( IsActive() )
             Start();
     }
+}
+
+void ScRefreshTimer::Start()
+{
+    if ( GetTimeout() )
+        AutoTimer::Start();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

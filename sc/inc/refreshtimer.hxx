@@ -22,80 +22,44 @@
 
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
-#include "scdllapi.h"
 
 class ScRefreshTimerControl
 {
-private:
-    ::osl::Mutex   aMutex;
-    sal_uInt16         nBlockRefresh;
+    ::osl::Mutex    aMutex;
+    sal_uInt16      nBlockRefresh;
 
 public:
     ScRefreshTimerControl() : nBlockRefresh(0) {}
-
-    void SetAllowRefresh( sal_Bool b )
-    {
-        if ( b && nBlockRefresh )
-            --nBlockRefresh;
-        else if ( !b && nBlockRefresh < (sal_uInt16)(~0) )
-            ++nBlockRefresh;
-    }
-
+    void SetAllowRefresh( sal_Bool b );
     sal_Bool IsRefreshAllowed() const { return !nBlockRefresh; }
-
     ::osl::Mutex& GetMutex() { return aMutex; }
 };
 
 class ScRefreshTimer : public AutoTimer
 {
-private:
     ScRefreshTimerControl * const * ppControl;
 
-    void Start()
-    {
-        if ( GetTimeout() )
-            AutoTimer::Start();
-    }
-
 public:
-    ScRefreshTimer() : ppControl(0) { SetTimeout( 0 ); }
-
-    ScRefreshTimer( sal_uLong nSeconds ) : ppControl(0)
-    {
-        SetTimeout( nSeconds * 1000 );
-        Start();
-    }
-
-    ScRefreshTimer( const ScRefreshTimer& r ) : AutoTimer( r ), ppControl(0) {}
-
+    ScRefreshTimer();
+    ScRefreshTimer( sal_uLong nSeconds );
+    ScRefreshTimer( const ScRefreshTimer& r );
     virtual ~ScRefreshTimer();
 
-    ScRefreshTimer& operator=( const ScRefreshTimer& r )
-    {
-        SetRefreshControl(0);
-        AutoTimer::operator=( r );
-        return *this;
-    }
+    ScRefreshTimer& operator=( const ScRefreshTimer& r );
+    sal_Bool operator==( const ScRefreshTimer& r ) const;
+    sal_Bool operator!=( const ScRefreshTimer& r ) const;
 
-    sal_Bool operator==( const ScRefreshTimer& r ) const
-        { return GetTimeout() == r.GetTimeout(); }
+    void StartRefreshTimer();
+    void SetRefreshControl( ScRefreshTimerControl * const * pp );
+    void SetRefreshHandler( const Link& rLink );
+    sal_uLong GetRefreshDelay() const;
+    void StopRefreshTimer();
 
-    sal_Bool operator!=( const ScRefreshTimer& r ) const
-        { return !ScRefreshTimer::operator==( r ); }
+    virtual void SetRefreshDelay( sal_uLong nSeconds );
+    virtual void Timeout();
 
-    void StartRefreshTimer() { Start(); }
-
-    void SetRefreshControl( ScRefreshTimerControl * const * pp ) { ppControl = pp; }
-
-    void SetRefreshHandler( const Link& rLink ) { SetTimeoutHdl( rLink ); }
-
-    sal_uLong GetRefreshDelay() const { return GetTimeout() / 1000; }
-
-    void StopRefreshTimer() { Stop(); }
-
-    SC_DLLPUBLIC virtual void SetRefreshDelay( sal_uLong nSeconds );
-
-    SC_DLLPUBLIC virtual void Timeout();
+private:
+    void Start();
 };
 
 #endif // SC_REFRESHTIMER_HXX
