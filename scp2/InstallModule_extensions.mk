@@ -28,7 +28,6 @@ $(eval $(call gb_InstallModule_add_templates,scp2/extensions,\
 ))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/extensions,\
-    scp2/source/extensions/directory_extensions \
     scp2/source/extensions/file_extensions \
 ))
 
