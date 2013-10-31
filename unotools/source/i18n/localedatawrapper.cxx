@@ -120,20 +120,20 @@ const ::com::sun::star::lang::Locale& LocaleDataWrapper::getMyLocale() const
 
 void LocaleDataWrapper::invalidateData()
 {
-    aCurrSymbol = OUString();
-    aCurrBankSymbol = OUString();
+    aCurrSymbol = "";
+    aCurrBankSymbol = "";
     nDateFormat = nLongDateFormat = nDateFormatInvalid;
     nCurrPositiveFormat = nCurrNegativeFormat = nCurrDigits = nCurrFormatInvalid;
     if ( bLocaleDataItemValid )
     {
         for (sal_Int32 j=0; j<LocaleItem::COUNT; ++j)
-            aLocaleItem[j] = OUString();
+            aLocaleItem[j] = "";
         bLocaleDataItemValid = sal_False;
     }
     if ( bReservedWordValid )
     {
         for ( sal_Int16 j=0; j<reservedWords::COUNT; ++j )
-            aReservedWord[j] = OUString();
+            aReservedWord[j] = "";
         bReservedWordValid = sal_False;
     }
     xDefaultCalendar.reset();
@@ -595,7 +595,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
         {
             if (areChecksEnabled())
                 outputCheckMessage(OUString("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles"));
-            aCurrSymbol = OUString("ShellsAndPebbles");
+            aCurrSymbol = "ShellsAndPebbles";
             aCurrBankSymbol = aCurrSymbol;
             nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
             nCurrDigits = 2;

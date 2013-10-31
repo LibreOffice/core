@@ -116,7 +116,7 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys! */
     Sequence< OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = OUString( "Events" );
+    aNotifySeq[0] = "Events";
     EnableNotification( aNotifySeq, sal_True );
 }
 
@@ -256,9 +256,9 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
 {
     Any aRet;
     Sequence< beans::PropertyValue > props(2);
-    props[0].Name = OUString("EventType");
+    props[0].Name = "EventType";
     props[0].Value <<= OUString("Script");
-    props[1].Name = OUString("Script");
+    props[1].Name = "Script";
     EventBindingHash::const_iterator it = m_eventBindingHash.find( aName );
     if( it != m_eventBindingHash.end() )
     {

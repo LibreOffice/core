@@ -86,7 +86,7 @@ std::vector<OUString> getContents(OUString const & url) {
         std::vector<OUString> cs;
         ucbhelper::Content c(content(url));
         css::uno::Sequence<OUString> args(1);
-        args[0] = OUString("Title");
+        args[0] = "Title";
         css::uno::Reference<css::sdbc::XResultSet> res(
             c.createCursor(args, ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS),
             css::uno::UNO_SET_THROW);
@@ -250,7 +250,7 @@ bool utl::UCBContentHelper::MakeFolder(
                     continue;
                 }
                 css::uno::Sequence<OUString> keys(1);
-                keys[0] = OUString("Title");
+                keys[0] = "Title";
                 css::uno::Sequence<css::uno::Any> values(1);
                 values[0] <<= title;
                 if (parent.insertNewContent(info[i].Type, keys, values, result))
