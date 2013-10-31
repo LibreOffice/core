@@ -33,7 +33,14 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			$(OUTDIR)/bin/*.dll $(OUTDIR)/bin/*.exe \
+			$(INSTDIR)/URE/bin/*.dll \
+			$(INSTDIR)/URE/bin/*.exe \
+			$(INSTDIR)/program/*.dll \
+			$(INSTDIR)/program/*.exe \
+			$(INSTDIR)/program/shlxthdl/*.dll \
+			$(INSTDIR)/sdk/cli/*.dll \
+			$(INSTDIR)/sdk/bin/*.exe \
+			$(INSTDIR)/share/extensions/mysql-connector-ooo/*.dll\
 	&& touch $@
 else
 	@echo "Doing nothing on non product builds ..."
