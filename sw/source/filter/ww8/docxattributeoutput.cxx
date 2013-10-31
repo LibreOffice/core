@@ -2707,13 +2707,20 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
 
     if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
     {
-            m_pSerializer->singleElementNS( XML_a, XML_srcRect,
-                          XML_l, I32S(((aGraphicCropStruct.Left) * 100000)/aOriginalSize.Width()),
-                          XML_t, I32S(((aGraphicCropStruct.Top) * 100000)/aOriginalSize.Height()),
-                          XML_r, I32S(((aGraphicCropStruct.Right) * 100000)/aOriginalSize.Width()),
-                          XML_b, I32S(((aGraphicCropStruct.Bottom) * 100000)/aOriginalSize.Height()),
-                          FSEND );
+        double  widthMultiplier  = 100000.0/aOriginalSize.Width();
+        double  heightMultiplier = 100000.0/aOriginalSize.Height();
 
+        double left   = aGraphicCropStruct.Left * widthMultiplier;
+        double right  = aGraphicCropStruct.Right * widthMultiplier;
+        double top    = aGraphicCropStruct.Top * heightMultiplier;
+        double bottom = aGraphicCropStruct.Bottom * heightMultiplier;
+
+        m_pSerializer->singleElementNS( XML_a, XML_srcRect,
+             XML_l, I32S(left),
+             XML_t, I32S(top),
+             XML_r, I32S(right),
+             XML_b, I32S(bottom),
+             FSEND );
     }
 }
 
