@@ -37,16 +37,17 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
-                                            const SpriteCanvasRef&                          rRefDevice ) :
+    CanvasCustomSprite::CanvasCustomSprite( double width,
+                                            double height,
+                                            const SpriteCanvasRef& rRefDevice ) :
         mpSpriteCanvas( rRefDevice ),
-        maSize( ::canvas::tools::roundUp( rSpriteSize.Width ),
-                ::canvas::tools::roundUp( rSpriteSize.Height ) )
+        maSize( ::canvas::tools::roundUp( width ),
+                ::canvas::tools::roundUp( height ) )
     {
         ENSURE_OR_THROW( rRefDevice.get(),
                           "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
-        SAL_INFO( "canvas.cairo", "sprite size: " << ::canvas::tools::roundUp( rSpriteSize.Width ) << ", " << ::canvas::tools::roundUp( rSpriteSize.Height ));
+        SAL_INFO( "canvas.cairo", "sprite size: " << ::canvas::tools::roundUp( width ) << ", " << ::canvas::tools::roundUp( height ));
 
         mpBufferSurface = mpSpriteCanvas->createSurface( maSize );
 
@@ -55,7 +56,7 @@ namespace cairocanvas
                              rRefDevice.get() );
         maCanvasHelper.setSurface( mpBufferSurface, true );
 
-        maSpriteHelper.init( rSpriteSize,
+        maSpriteHelper.init( width, height,
                              rRefDevice );
         maSpriteHelper.setSurface( mpBufferSurface );
 

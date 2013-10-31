@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/geometry/IntegerSize2D.idl>
-#include <com/sun/star/geometry/RealSize2D.idl>
 #include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
 
 module com { module sun { module star { module rendering {
@@ -65,9 +64,11 @@ interface XBitmap : ::com::sun::star::uno::XInterface
 
     /** Query a scaled copy of the original bitmap.
 
-        @param newSize
-        Requested size of the new bitmap. Both of the two size
-        components must be greater than zero.
+        @param width
+        Requested width of the new bitmap. Must be greater than zero.
+
+        @param height
+        Requested height of the new bitmap. Must be greater than zero.
 
         @param beFast
         When set to true, this parameter advises getScaledBitmap to
@@ -83,7 +84,7 @@ interface XBitmap : ::com::sun::star::uno::XInterface
         if the contents of a volatile bitmap have been destroyed, and
         thus cannot be read to generate the scaled bitmap.
      */
-    XBitmap                         getScaledBitmap( [in] ::com::sun::star::geometry::RealSize2D newSize, [in] boolean beFast )
+    XBitmap                         getScaledBitmap( [in] double width, [in] double height, [in] boolean beFast )
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 };

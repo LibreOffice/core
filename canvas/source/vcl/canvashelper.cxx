@@ -943,8 +943,9 @@ namespace vclcanvas
         return ::vcl::unotools::integerSize2DFromSize( mpOutDev->getOutDev().GetOutputSizePixel() );
     }
 
-    uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
-                                                                        sal_Bool                    beFast )
+    uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( double width,
+                                                                        double height,
+                                                                        sal_Bool beFast )
     {
         if( !mpOutDev.get() || !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
@@ -961,7 +962,8 @@ namespace vclcanvas
 
         Bitmap aBitmap( rOutDev.GetBitmap(aEmptyPoint, aBmpSize) );
 
-        aBitmap.Scale( ::vcl::unotools::sizeFromRealSize2D(newSize),
+        aBitmap.Scale( Size(::canvas::tools::roundUp(width),
+                            ::canvas::tools::roundUp(height)),
                        beFast ? BMP_SCALE_DEFAULT : BMP_SCALE_BESTQUALITY );
 
         return uno::Reference< rendering::XBitmap >(

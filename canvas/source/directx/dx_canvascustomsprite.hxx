@@ -96,7 +96,8 @@ namespace dxcanvas
             @param rDevice
             Target DX device
          */
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+        CanvasCustomSprite( double                                          width,
+                            double                                          height,
                             const SpriteCanvasRef&                          rRefDevice,
                             const IDXRenderModuleSharedPtr&                 rRenderModule,
                             const ::canvas::ISurfaceProxyManagerSharedPtr&  rSurfaceProxy,

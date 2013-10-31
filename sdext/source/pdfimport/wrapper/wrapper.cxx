@@ -47,6 +47,7 @@
 #include "com/sun/star/geometry/Matrix2D.hpp"
 #include "com/sun/star/geometry/AffineMatrix2D.hpp"
 #include "com/sun/star/geometry/RealRectangle2D.hpp"
+#include "com/sun/star/geometry/RealSize2D.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
 
 #include "basegfx/point/b2dpoint.hxx"

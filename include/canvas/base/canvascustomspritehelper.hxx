@@ -44,15 +44,20 @@ namespace canvas
 
         /** Init helper
 
-            @param rSpriteSize
+            @param width
+            Requested size of the sprite, as passed to the
+            XSpriteCanvas::createCustomSprite() method
+
+            @param height
             Requested size of the sprite, as passed to the
             XSpriteCanvas::createCustomSprite() method
 
             @param rOwningSpriteCanvas
             The XSpriteCanvas this sprite is displayed on
          */
-        void init( const ::com::sun::star::geometry::RealSize2D&    rSpriteSize,
-                   const SpriteSurface::Reference&                  rOwningSpriteCanvas );
+        void init( double                                    width,
+                   double                                    height,
+                   const SpriteSurface::Reference&           rOwningSpriteCanvas );
 
         /** Object is being disposed, release all internal references
 

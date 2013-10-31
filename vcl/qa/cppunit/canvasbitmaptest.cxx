@@ -110,7 +110,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             xBmp->hasAlpha() == aContainedBmpEx.IsTransparent());
 
     CPPUNIT_ASSERT_MESSAGE( "getScaledBitmap() failed",
-                            xBmp->getScaledBitmap( geometry::RealSize2D(500,500), sal_False ).is());
+                            xBmp->getScaledBitmap( 500, 500, sal_False ).is());
 
     rendering::IntegerBitmapLayout aLayout;
     uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
@@ -247,7 +247,8 @@ private:
     // XBitmap
     virtual geometry::IntegerSize2D SAL_CALL getSize() throw (uno::RuntimeException) { return maSize; }
     virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (uno::RuntimeException) { return mnBitsPerPixel != 8; }
-    virtual uno::Reference< rendering::XBitmap > SAL_CALL getScaledBitmap( const geometry::RealSize2D&,
+    virtual uno::Reference< rendering::XBitmap > SAL_CALL getScaledBitmap( double,
+                                                                           double,
                                                                            sal_Bool ) throw (uno::RuntimeException) { return this; }
 
     // XIntegerReadOnlyBitmap

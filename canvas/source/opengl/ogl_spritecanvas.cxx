@@ -130,11 +130,11 @@ namespace oglcanvas
     }
 
     uno::Reference< rendering::XCustomSprite > SAL_CALL SpriteCanvas::createCustomSprite(
-        const geometry::RealSize2D& spriteSize ) throw (lang::IllegalArgumentException,
+        double width, double height ) throw (lang::IllegalArgumentException,
                                                         uno::RuntimeException)
     {
         return uno::Reference< rendering::XCustomSprite >(
-            new CanvasCustomSprite(spriteSize, this, maDeviceHelper) );
+            new CanvasCustomSprite(width, height, this, maDeviceHelper) );
     }
 
     uno::Reference< rendering::XSprite > SAL_CALL SpriteCanvas::createClonedSprite(

@@ -74,15 +74,12 @@ namespace slideshow
 
                 // determine pixel size of bitmap (choose it one pixel
                 // larger, as polygon rendering takes one pixel more
-                // to the right and to the bottom)
-                const css::geometry::IntegerSize2D aBmpSizePixel(
-                    ::basegfx::fround( aTmpRect.getRange().getX() + 1),
-                    ::basegfx::fround( aTmpRect.getRange().getY() + 1) );
-
-                // create a non-transparent bitmap of appropriate size
+                // to the right and to the bottom),
+                // create a non-transparent bitmap of that size
                 uno::Reference< rendering::XIntegerBitmap > pBitmap(
                     rDestinationCanvas->getDevice()->createCompatibleBitmap(
-                        aBmpSizePixel),
+                        ::basegfx::fround( aTmpRect.getRange().getX() + 1),
+                        ::basegfx::fround( aTmpRect.getRange().getY() + 1) ),
                     uno::UNO_QUERY_THROW);
 
                 ENSURE_OR_THROW( pBitmap.is(),

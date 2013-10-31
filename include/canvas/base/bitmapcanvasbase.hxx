@@ -112,12 +112,13 @@ namespace canvas
             return BaseType::maCanvasHelper.hasAlpha();
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize,
-                                                                                                                   sal_Bool                                      beFast ) throw (::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( double width,
+                                                                                                                   double height,
+                                                                                                                   sal_Bool beFast ) throw (::com::sun::star::uno::RuntimeException)
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            return BaseType::maCanvasHelper.getScaledBitmap( newSize, beFast );
+            return BaseType::maCanvasHelper.getScaledBitmap( width, height, beFast );
         }
 
     };

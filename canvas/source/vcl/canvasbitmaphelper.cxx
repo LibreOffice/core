@@ -105,8 +105,9 @@ namespace vclcanvas
             mpBackBuffer->clear(); // alpha vdev needs special treatment
     }
 
-    uno::Reference< rendering::XBitmap > CanvasBitmapHelper::getScaledBitmap( const geometry::RealSize2D&   newSize,
-                                                                              sal_Bool                      beFast )
+    uno::Reference< rendering::XBitmap > CanvasBitmapHelper::getScaledBitmap( double width,
+                                                                              double height,
+                                                                              sal_Bool beFast )
     {
         ENSURE_OR_THROW( mpDevice,
                           "disposed CanvasHelper" );
@@ -118,7 +119,8 @@ namespace vclcanvas
 
         BitmapEx aRes( mpBackBuffer->getBitmapReference() );
 
-        aRes.Scale( ::vcl::unotools::sizeFromRealSize2D(newSize),
+        aRes.Scale( Size(::canvas::tools::roundUp(width),
+                         ::canvas::tools::roundUp(height)),
                      beFast ? BMP_SCALE_DEFAULT : BMP_SCALE_BESTQUALITY );
 
         return uno::Reference< rendering::XBitmap >(

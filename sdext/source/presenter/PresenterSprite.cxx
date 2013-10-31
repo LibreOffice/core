@@ -129,7 +129,8 @@ void PresenterSprite::ProvideSprite (void)
         && maSize.Width>0
         && maSize.Height>0)
     {
-        mxSprite = mxSpriteFactory->createCustomSprite(maSize);
+        mxSprite = mxSpriteFactory->createCustomSprite(
+            maSize.Width, maSize.Height);
         if (mxSprite.is())
         {
             mxSprite->move(maLocation,

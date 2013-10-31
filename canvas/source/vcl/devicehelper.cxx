@@ -109,13 +109,13 @@ namespace vclcanvas
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
-        const geometry::IntegerSize2D&                     size )
+        sal_Int32 width, sal_Int32 height )
     {
         if( !mpOutDev )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
+            new CanvasBitmap( Size(width, height),
                               false,
                               *rDevice.get(),
                               mpOutDev ) );
@@ -123,20 +123,20 @@ namespace vclcanvas
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
         const uno::Reference< rendering::XGraphicDevice >&  ,
-        const geometry::IntegerSize2D&                       )
+        sal_Int32, sal_Int32 )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
-        const geometry::IntegerSize2D&                     size )
+        sal_Int32 width, sal_Int32 height )
     {
         if( !mpOutDev )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
+            new CanvasBitmap( Size(width, height),
                               true,
                               *rDevice.get(),
                               mpOutDev ) );
@@ -144,7 +144,7 @@ namespace vclcanvas
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
         const uno::Reference< rendering::XGraphicDevice >&  ,
-        const geometry::IntegerSize2D&                       )
+        sal_Int32, sal_Int32 )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }

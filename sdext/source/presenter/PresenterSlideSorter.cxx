@@ -1618,7 +1618,8 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
 
     // Create a new bitmap that will contain the complete label.
     Reference<rendering::XBitmap> xBitmap (
-        mxCanvas->getDevice()->createCompatibleAlphaBitmap(aLabelSize));
+        mxCanvas->getDevice()->createCompatibleAlphaBitmap(
+            aLabelSize.Height, aLabelSize.Width));
 
     if ( ! xBitmap.is())
         return NULL;

@@ -158,7 +158,7 @@ namespace cairocanvas
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const geometry::IntegerSize2D&                      size )
+        sal_Int32 width, sal_Int32 height )
     {
         // disposed?
         if( !mpSurfaceProvider )
@@ -166,7 +166,7 @@ namespace cairocanvas
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap(
-                ::basegfx::unotools::b2ISizeFromIntegerSize2D( size ),
+                ::basegfx::B2ISize( width, height ),
                 SurfaceProviderRef(mpSurfaceProvider),
                 rDevice.get(),
                 false ));
@@ -174,14 +174,14 @@ namespace cairocanvas
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
         const uno::Reference< rendering::XGraphicDevice >&  ,
-        const geometry::IntegerSize2D&                      /*size*/ )
+        sal_Int32, sal_Int32 )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const geometry::IntegerSize2D&                      size )
+        sal_Int32 width, sal_Int32 height )
     {
         // disposed?
         if( !mpSurfaceProvider )
@@ -189,7 +189,7 @@ namespace cairocanvas
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap(
-                ::basegfx::unotools::b2ISizeFromIntegerSize2D( size ),
+                ::basegfx::B2ISize( width, height ),
                 SurfaceProviderRef(mpSurfaceProvider),
                 rDevice.get(),
                 true ));
@@ -197,7 +197,7 @@ namespace cairocanvas
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
         const uno::Reference< rendering::XGraphicDevice >&  ,
-        const geometry::IntegerSize2D&                      /*size*/ )
+        sal_Int32, sal_Int32 )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }

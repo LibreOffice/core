@@ -58,7 +58,8 @@ namespace vclcanvas
     {
     }
 
-    void SpriteHelper::init( const geometry::RealSize2D&               rSpriteSize,
+    void SpriteHelper::init( double                                    width,
+                             double                                    height,
                              const ::canvas::SpriteSurface::Reference& rOwningSpriteCanvas,
                              const BackBufferSharedPtr&                rBackBuffer,
                              const BackBufferSharedPtr&                rBackBufferMask,
@@ -71,7 +72,7 @@ namespace vclcanvas
         mpBackBufferMask    = rBackBufferMask;
         mbShowSpriteBounds  = bShowSpriteBounds;
 
-        init( rSpriteSize, rOwningSpriteCanvas );
+        init( width, height, rOwningSpriteCanvas );
     }
 
     void SpriteHelper::disposing()

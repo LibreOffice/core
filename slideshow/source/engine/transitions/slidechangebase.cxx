@@ -107,9 +107,8 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
         // create a bitmap of appropriate size
         uno::Reference<rendering::XBitmap> pBitmap(
             pCanvas->getDevice()->createCompatibleBitmap(
-                css::geometry::IntegerSize2D(
-                    slideSizePixel.getX(),
-                    slideSizePixel.getY()) ));
+                slideSizePixel.getX(),
+                slideSizePixel.getY()) );
 
         ENSURE_OR_THROW(
             pBitmap.is(),

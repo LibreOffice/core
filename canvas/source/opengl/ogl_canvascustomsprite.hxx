@@ -44,7 +44,10 @@ namespace oglcanvas
     public:
         /** Create a custom sprite
 
-            @param rSpriteSize
+            @param width
+            Size of the sprite in pixel
+
+            @param height
             Size of the sprite in pixel
 
             @param rRefDevice
@@ -56,9 +59,10 @@ namespace oglcanvas
             @param rDevice
             Target DX device
          */
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
-                            const SpriteCanvasRef&                          rRefDevice,
-                            SpriteDeviceHelper&                             rDeviceHelper );
+        CanvasCustomSprite( double                 width,
+                            double                 height,
+                            const SpriteCanvasRef& rRefDevice,
+                            SpriteDeviceHelper&    rDeviceHelper );
 
         virtual void disposeThis();
 

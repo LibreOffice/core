@@ -52,7 +52,10 @@ namespace vclcanvas
 
         /** Late-init the sprite helper
 
-            @param rSpriteSize
+            @param width
+            Size of the sprite
+
+            @param height
             Size of the sprite
 
             @param rSpriteCanvas
@@ -66,7 +69,8 @@ namespace vclcanvas
             @param rBackBufferMask
             Buffer of the sprite content (alpha part)
          */
-        void init( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
+        void init( double                                        width,
+                   double                                        height,
                    const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
                    const BackBufferSharedPtr&                    rBackBuffer,
                    const BackBufferSharedPtr&                    rBackBufferMask,

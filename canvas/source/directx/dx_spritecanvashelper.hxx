@@ -67,7 +67,7 @@ namespace dxcanvas
 
         ::com::sun::star::uno::Reference<
               ::com::sun::star::rendering::XCustomSprite >      createCustomSprite(
-                const ::com::sun::star::geometry::RealSize2D& spriteSize );
+                  double width, double height );
 
         ::com::sun::star::uno::Reference<
               ::com::sun::star::rendering::XSprite >                createClonedSprite(

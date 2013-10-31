@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/geometry/IntegerSize2D.idl>
 #include <com/sun/star/geometry/RealSize2D.idl>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.idl>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.idl>
@@ -117,11 +116,13 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
     /** Create a bitmap whose memory layout and sample model is
         compatible to the graphic device.
 
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
+        @param width
+        Width of the requested bitmap in pixel. Must be greater than 0
+
+        @param height
+        Height of the requested bitmap in pixel. Must be greater than 0
      */
-    XBitmap                         createCompatibleBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+    XBitmap                         createCompatibleBitmap( [in] long width, [in] long height )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -136,22 +137,26 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         hardware-accelerate on certain platforms, without the need to
         keep a safety copy of the content internally.
 
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
+        @param width
+        Width of the requested bitmap in pixel. Must be greater than 0
+
+        @param height
+        Height of the requested bitmap in pixel. Must be greater than 0
      */
-    XVolatileBitmap                 createVolatileBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+    XVolatileBitmap                 createVolatileBitmap( [in] long width, [in] long height )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
     /** Create a bitmap with alpha channel whose memory layout and
         sample model is compatible to the graphic device.
 
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
+        @param width
+        Width of the requested bitmap in pixel. Must be greater than 0
+
+        @param height
+        Height of the requested bitmap in pixel. Must be greater than 0
      */
-    XBitmap                         createCompatibleAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+    XBitmap                         createCompatibleAlphaBitmap( [in] long width, [in] long height )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -167,11 +172,13 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         hardware-accelerate on certain platforms, without the need to
         keep a safety copy of the content internally.
 
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
+        @param width
+        Width of the requested bitmap in pixel. Must be greater than 0
+
+        @param height
+        Height of the requested bitmap in pixel. Must be greater than 0
      */
-    XVolatileBitmap                 createVolatileAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+    XVolatileBitmap                 createVolatileAlphaBitmap( [in] long width, [in] long height )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 

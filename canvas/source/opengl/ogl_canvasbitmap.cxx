@@ -18,17 +18,19 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    CanvasBitmap::CanvasBitmap( const geometry::IntegerSize2D& rSize,
-                                const SpriteCanvasRef&         rDevice,
-                                SpriteDeviceHelper&            rDeviceHelper,
-                                bool                           bHasAlpha ) :
+    CanvasBitmap::CanvasBitmap( sal_Int32              width,
+                                sal_Int32              height,
+                                const SpriteCanvasRef& rDevice,
+                                SpriteDeviceHelper&    rDeviceHelper,
+                                bool                   bHasAlpha ) :
         mpDevice( rDevice ),
         mbHasAlpha( bHasAlpha )
     {
         ENSURE_OR_THROW( mpDevice.is(),
                          "CanvasBitmap::CanvasBitmap(): Invalid surface or device" );
 
-        maCanvasHelper.init( *mpDevice.get(), rDeviceHelper, rSize );
+        maCanvasHelper.init( *mpDevice.get(), rDeviceHelper,
+                             geometry::IntegerSize2D(width, height) );
     }
 
     CanvasBitmap::CanvasBitmap( const CanvasBitmap& rSrc ) :

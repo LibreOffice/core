@@ -336,7 +336,7 @@ public:
 
     css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL
         createCustomSprite (
-            const css::geometry::RealSize2D& spriteSize)
+            double width, double height)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     css::uno::Reference< css::rendering::XSprite > SAL_CALL
@@ -378,8 +378,7 @@ public:
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL getScaledBitmap(
-        const css::geometry::RealSize2D& rNewSize,
-        sal_Bool bFast)
+        double width, double height, sal_Bool bFast)
         throw (css::uno::RuntimeException,
             css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException);

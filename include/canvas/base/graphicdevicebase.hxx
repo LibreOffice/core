@@ -187,52 +187,52 @@ namespace canvas
             return maDeviceHelper.createCompatibleBezierPolyPolygon( this, points );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL createCompatibleBitmap( const ::com::sun::star::geometry::IntegerSize2D& size ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL createCompatibleBitmap( sal_Int32 width, sal_Int32 height ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                          ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyBitmapSize(size,
+            tools::verifyBitmapSize(width, height,
                                     BOOST_CURRENT_FUNCTION,
                                     static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
 
-            return maDeviceHelper.createCompatibleBitmap( this, size );
+            return maDeviceHelper.createCompatibleBitmap( this, width, height );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > SAL_CALL createVolatileBitmap( const ::com::sun::star::geometry::IntegerSize2D& size ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > SAL_CALL createVolatileBitmap( sal_Int32 width, sal_Int32 height ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                                ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyBitmapSize(size,
+            tools::verifyBitmapSize(width, height,
                                     BOOST_CURRENT_FUNCTION,
                                     static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
 
-            return maDeviceHelper.createVolatileBitmap( this, size );
+            return maDeviceHelper.createVolatileBitmap( this, width, height );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL createCompatibleAlphaBitmap( const ::com::sun::star::geometry::IntegerSize2D& size ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL createCompatibleAlphaBitmap( sal_Int32 width, sal_Int32 height ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                               ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyBitmapSize(size,
+            tools::verifyBitmapSize(width, height,
                                     BOOST_CURRENT_FUNCTION,
                                     static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
 
-            return maDeviceHelper.createCompatibleAlphaBitmap( this, size );
+            return maDeviceHelper.createCompatibleAlphaBitmap( this, width, height );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > SAL_CALL createVolatileAlphaBitmap( const ::com::sun::star::geometry::IntegerSize2D& size ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > SAL_CALL createVolatileAlphaBitmap( sal_Int32 width, sal_Int32 height ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                                     ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyBitmapSize(size,
+            tools::verifyBitmapSize(width, height,
                                     BOOST_CURRENT_FUNCTION,
                                     static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
 
-            return maDeviceHelper.createVolatileAlphaBitmap( this, size );
+            return maDeviceHelper.createVolatileAlphaBitmap( this, width, height );
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) throw (::com::sun::star::uno::RuntimeException)

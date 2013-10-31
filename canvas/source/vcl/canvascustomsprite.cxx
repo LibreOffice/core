@@ -48,7 +48,8 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
 
-    CanvasCustomSprite::CanvasCustomSprite( const geometry::RealSize2D&               rSpriteSize,
+    CanvasCustomSprite::CanvasCustomSprite( double                                    width,
+                                            double                                    height,
                                             rendering::XGraphicDevice&                rDevice,
                                             const ::canvas::SpriteSurface::Reference& rOwningSpriteCanvas,
                                             const OutDevProviderSharedPtr&            rOutDevProvider,
@@ -63,11 +64,11 @@ namespace vclcanvas
 
         const ::Size aSize(
             static_cast<sal_Int32>( ::std::max( 1.0,
-                                                ceil( rSpriteSize.Width ))),  // round up to nearest int,
-                                                                              // enforce sprite to have at
-                                                                               // least (1,1) pixel size
+                                                ceil( width ))),  // round up to nearest int,
+                                                                  // enforce sprite to have at
+                                                                  // least (1,1) pixel size
             static_cast<sal_Int32>( ::std::max( 1.0,
-                                                ceil( rSpriteSize.Height ))) );
+                                                ceil( height ))) );
 
         // create content backbuffer in screen depth
         BackBufferSharedPtr pBackBuffer( new BackBuffer( rOutDevProvider->getOutDev() ) );
@@ -107,7 +108,7 @@ namespace vclcanvas
         // setup sprite helper
         // -------------------
 
-        maSpriteHelper.init( rSpriteSize,
+        maSpriteHelper.init( width, height,
                              rOwningSpriteCanvas,
                              pBackBuffer,
                              pBackBufferMask,

@@ -85,7 +85,8 @@ namespace vclcanvas
                                public RepaintTarget
     {
     public:
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
+        CanvasCustomSprite( double                                        width,
+                            double                                        height,
                             ::com::sun::star::rendering::XGraphicDevice&  rDevice,
                             const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
                             const OutDevProviderSharedPtr&                rOutDevProvider,

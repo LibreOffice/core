@@ -38,7 +38,8 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+    CanvasCustomSprite::CanvasCustomSprite( double                                          width,
+                                            double                                          height,
                                             const SpriteCanvasRef&                          rRefDevice,
                                             const IDXRenderModuleSharedPtr&                 rRenderModule,
                                             const ::canvas::ISurfaceProxyManagerSharedPtr&  rSurfaceProxy,
@@ -52,8 +53,8 @@ namespace dxcanvas
         mpSurface.reset(
             new DXSurfaceBitmap(
                 ::basegfx::B2IVector(
-                    ::canvas::tools::roundUp( rSpriteSize.Width ),
-                    ::canvas::tools::roundUp( rSpriteSize.Height )),
+                    ::canvas::tools::roundUp( width ),
+                    ::canvas::tools::roundUp( height )),
                 rSurfaceProxy,
                 rRenderModule,
                 true));
@@ -61,7 +62,7 @@ namespace dxcanvas
         maCanvasHelper.setDevice( *rRefDevice.get() );
         maCanvasHelper.setTarget( mpSurface );
 
-        maSpriteHelper.init( rSpriteSize,
+        maSpriteHelper.init( width, height,
                              rRefDevice,
                              rRenderModule,
                              mpSurface,

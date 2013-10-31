@@ -42,16 +42,20 @@ namespace oglcanvas
     public:
         /** Create a canvas bitmap for the given surface
 
-            @param rSize
+            @param width
+            Size of the bitmap
+
+            @param height
             Size of the bitmap
 
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
-        CanvasBitmap( const ::com::sun::star::geometry::IntegerSize2D& rSize,
-                      const SpriteCanvasRef&                           rDevice,
-                      SpriteDeviceHelper&                              rDeviceHelper,
-                      bool                                             bHasAlpha );
+        CanvasBitmap( sal_Int32              width,
+                      sal_Int32              height,
+                      const SpriteCanvasRef& rDevice,
+                      SpriteDeviceHelper&    rDeviceHelper,
+                      bool                   bHasAlpha );
 
         /** Create verbatim copy (including all recorded actions)
          */

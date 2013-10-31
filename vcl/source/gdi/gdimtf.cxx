@@ -413,7 +413,9 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
             return false;
 
         Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
-        uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
+        uno::Reference<rendering::XBitmap> xBitmap =
+            xCanvas->getDevice()->createCompatibleAlphaBitmap( aSize.Width(),
+                                                               aSize.Height() );
         if( xBitmap.is () )
         {
 #if 0

@@ -117,16 +117,16 @@ namespace canvas
             return BaseType::maCanvasHelper.createSpriteFromBitmaps(animationBitmaps, interpolationMode);
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite > SAL_CALL createCustomSprite( const ::com::sun::star::geometry::RealSize2D& spriteSize ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite > SAL_CALL createCustomSprite( double width, double height ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                               ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifySpriteSize(spriteSize,
+            tools::verifySpriteSize(width, height,
                                     BOOST_CURRENT_FUNCTION,
                                     static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            return BaseType::maCanvasHelper.createCustomSprite(spriteSize);
+            return BaseType::maCanvasHelper.createCustomSprite(width, height);
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite > SAL_CALL createClonedSprite( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >& original ) throw (::com::sun::star::lang::IllegalArgumentException,

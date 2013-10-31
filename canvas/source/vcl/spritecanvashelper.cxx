@@ -223,13 +223,13 @@ namespace vclcanvas
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
-    uno::Reference< rendering::XCustomSprite > SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
+    uno::Reference< rendering::XCustomSprite > SpriteCanvasHelper::createCustomSprite( double width, double height )
     {
         if( !mpRedrawManager || !mpDevice )
             return uno::Reference< rendering::XCustomSprite >(); // we're disposed
 
         return uno::Reference< rendering::XCustomSprite >(
-            new CanvasCustomSprite( spriteSize,
+            new CanvasCustomSprite( width, height,
                                     *mpDevice,
                                     mpOwningSpriteCanvas,
                                     mpOwningSpriteCanvas->getFrontBuffer(),

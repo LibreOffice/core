@@ -51,8 +51,9 @@ namespace cairocanvas
         mbTextureDirty(true)
     {}
 
-    void SpriteHelper::init( const geometry::RealSize2D& rSpriteSize,
-                             const SpriteCanvasRef&      rSpriteCanvas )
+    void SpriteHelper::init( double width,
+                             double height,
+                             const SpriteCanvasRef& rSpriteCanvas )
     {
         ENSURE_OR_THROW( rSpriteCanvas.get(),
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );
@@ -61,7 +62,7 @@ namespace cairocanvas
         mbTextureDirty     = true;
 
         // also init base class
-        CanvasCustomSpriteHelper::init( rSpriteSize,
+        CanvasCustomSpriteHelper::init( width, height,
                                         rSpriteCanvas.get() );
     }
 

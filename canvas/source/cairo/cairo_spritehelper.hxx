@@ -49,7 +49,10 @@ namespace cairocanvas
 
         /** Late-init the sprite helper
 
-            @param rSpriteSize
+            @param width
+            Size of the sprite
+
+            @param height
             Size of the sprite
 
             @param rSpriteCanvas
@@ -67,8 +70,9 @@ namespace cairocanvas
             @param bShowSpriteBounds
             When true, little debug bound rects for sprites are shown
          */
-        void init( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
-                   const SpriteCanvasRef&                        rSpriteCanvas );
+        void init( double width,
+                   double height,
+                   const SpriteCanvasRef& rSpriteCanvas );
 
         void disposing();
 

@@ -456,7 +456,8 @@ void PresenterButton::SetupButtonBitmaps (void)
     if (maButtonSize.Height<=0 && maButtonSize.Width<= 0)
         return;
 
-    mxNormalBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(maButtonSize);
+    mxNormalBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(
+        maButtonSize.Height, maButtonSize.Width);
     Reference<rendering::XCanvas> xCanvas (mxNormalBitmap, UNO_QUERY);
     if (xCanvas.is())
         RenderButton(
@@ -468,7 +469,8 @@ void PresenterButton::SetupButtonBitmaps (void)
             pCenterBitmap,
             pRightBitmap);
 
-    mxMouseOverBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(maButtonSize);
+    mxMouseOverBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(
+        maButtonSize.Height, maButtonSize.Width);
     xCanvas = Reference<rendering::XCanvas>(mxMouseOverBitmap, UNO_QUERY);
     if (mpMouseOverFont.get()!=NULL && !mpMouseOverFont->mxFont.is() && mxCanvas.is())
         mpMouseOverFont->PrepareFont(mxCanvas);

@@ -517,8 +517,8 @@ private:
     {
         css::uno::Reference< css::rendering::XCustomSprite > pSprite(
             mpSpriteCanvas->createCustomSprite(
-                ::basegfx::unotools::size2DFromB2DSize(
-                    rSpriteSizePixel) ) );
+                rSpriteSizePixel.getX(),
+                rSpriteSizePixel.getY()) );
 
         maSpriteContainer.addSprite( pSprite,
                                      nPriority );
@@ -610,9 +610,8 @@ private:
 
                 const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
                 mpSprite = mpSpriteCanvas->createCustomSprite(
-                    geometry::RealSize2D(
                         sal::static_int_cast<sal_Int32>(rSpriteSize.getX()),
-                        sal::static_int_cast<sal_Int32>(rSpriteSize.getY())) );
+                        sal::static_int_cast<sal_Int32>(rSpriteSize.getY()) );
 
                 mpSprite->setPriority(
                     maSpriteContainer.getLayerPriority().getMinimum() );
@@ -963,8 +962,8 @@ css::uno::Reference< css::rendering::XCustomSprite > SlideView::createSprite(
 
     css::uno::Reference< css::rendering::XCustomSprite > pSprite(
         mpCanvas->createCustomSprite(
-            ::basegfx::unotools::size2DFromB2DSize(
-                rSpriteSizePixel) ) );
+            rSpriteSizePixel.getX(),
+            rSpriteSizePixel.getY()) );
 
     maSprites.addSprite( pSprite,
                          nPriority );

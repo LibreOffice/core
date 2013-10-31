@@ -170,7 +170,8 @@ namespace canvas
     {
     }
 
-    void CanvasCustomSpriteHelper::init( const geometry::RealSize2D&        rSpriteSize,
+    void CanvasCustomSpriteHelper::init( double                             width,
+                                         double                             height,
                                          const SpriteSurface::Reference&    rOwningSpriteCanvas )
     {
         ENSURE_OR_THROW( rOwningSpriteCanvas.get(),
@@ -178,11 +179,11 @@ namespace canvas
 
         mpSpriteCanvas = rOwningSpriteCanvas;
         maSize.setX( ::std::max( 1.0,
-                                 ceil( rSpriteSize.Width ) ) ); // round up to nearest int,
-                                                                 // enforce sprite to have at
-                                                                 // least (1,1) pixel size
+                                 ceil( width ) ) ); // round up to nearest int,
+                                                    // enforce sprite to have at
+                                                    // least (1,1) pixel size
         maSize.setY( ::std::max( 1.0,
-                                 ceil( rSpriteSize.Height ) ) );
+                                 ceil( height ) ) );
     }
 
     void CanvasCustomSpriteHelper::disposing()

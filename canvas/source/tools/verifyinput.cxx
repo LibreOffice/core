@@ -693,32 +693,33 @@ namespace canvas
             }
         }
 
-        void verifyBitmapSize( const geometry::IntegerSize2D&           size,
+        void verifyBitmapSize( sal_Int32                                width,
+                               sal_Int32                                height,
                                const char*                              pStr,
                                const uno::Reference< uno::XInterface >& xIf )
         {
             (void)pStr; (void)xIf;
 
-            if( size.Width <= 0 )
+            if( width <= 0 )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyBitmapSize(): size has 0 or negative width (value: " +
-                    OUString::number(size.Width) + ")",
+                    OUString::number(width) + ")",
                     xIf, 0 );
 #else
                 throw lang::IllegalArgumentException();
 #endif
             }
 
-            if( size.Height <= 0 )
+            if( height <= 0 )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyBitmapSize(): size has 0 or negative height (value: " +
-                    OUString::number(size.Height) +
+                    OUString::number(height) +
                     ")",
                     xIf, 0 );
 #else
@@ -727,32 +728,32 @@ namespace canvas
             }
         }
 
-        void verifySpriteSize( const geometry::RealSize2D&              size,
+        void verifySpriteSize( double width, double height,
                                const char*                              pStr,
                                const uno::Reference< uno::XInterface >& xIf )
         {
             (void)pStr; (void)xIf;
 
-            if( size.Width <= 0.0 )
+            if( width <= 0.0 )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifySpriteSize(): size has 0 or negative width (value: " +
-                    OUString::number(size.Width) + ")",
+                    OUString::number(width) + ")",
                     xIf, 0 );
 #else
                 throw lang::IllegalArgumentException();
 #endif
             }
 
-            if( size.Height <= 0.0 )
+            if( height <= 0.0 )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifySpriteSize(): size has 0 or negative height (value: " +
-                    OUString::number(size.Height) + ")",
+                    OUString::number(height) + ")",
                     xIf, 0 );
 #else
                 throw lang::IllegalArgumentException();

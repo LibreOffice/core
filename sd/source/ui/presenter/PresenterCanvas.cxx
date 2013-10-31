@@ -644,7 +644,7 @@ Reference<rendering::XAnimatedSprite> SAL_CALL
 
 Reference<rendering::XCustomSprite> SAL_CALL
     PresenterCanvas::createCustomSprite (
-        const css::geometry::RealSize2D& rSpriteSize)
+        double width, double height)
     throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -653,15 +653,15 @@ Reference<rendering::XCustomSprite> SAL_CALL
     if (xSpriteCanvas.is())
         return new PresenterCustomSprite(
             this,
-            xSpriteCanvas->createCustomSprite(rSpriteSize),
+            xSpriteCanvas->createCustomSprite(width, height),
             mxSharedWindow,
-            rSpriteSize);
+            css::geometry::RealSize2D(width, height));
     else if (mxUpdateCanvas.is())
         return new PresenterCustomSprite(
             this,
-            mxUpdateCanvas->createCustomSprite(rSpriteSize),
+            mxUpdateCanvas->createCustomSprite(width, height),
             mxUpdateWindow,
-            rSpriteSize);
+            css::geometry::RealSize2D(width, height));
     else
         return NULL;
 }
@@ -798,15 +798,13 @@ sal_Bool SAL_CALL PresenterCanvas::hasAlpha (void)
 
 
 Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
-    const css::geometry::RealSize2D& rNewSize,
-    sal_Bool bFast)
+    double,
+    double,
+    sal_Bool)
     throw (css::uno::RuntimeException,
         css::lang::IllegalArgumentException,
         css::rendering::VolatileContentDestroyedException)
 {
-    (void)rNewSize;
-    (void)bFast;
-
     ThrowIfDisposed();
 
     // Not implemented.

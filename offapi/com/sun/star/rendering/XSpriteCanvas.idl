@@ -83,15 +83,19 @@ interface XSpriteCanvas : XCanvas
         A sprite is a back-buffered object with its own, independent
         animation.
 
-        @param spriteSize
-        The required size of the sprite in device
-        coordinates. Everything that is rendered outside this area
-        might be clipped on output. Both components of the size must
-        be greater than zero.
+        @param width
+        The required width of the sprite in device
+        coordinates. Everything that is rendered outside this value
+        might be clipped on output. Must be greater than zero.
+
+        @param height
+        The required height of the sprite in device
+        coordinates. Everything that is rendered outside this value
+        might be clipped on output. Must be greater than zero.
 
         @return an interface to a custom sprite object.
      */
-    XCustomSprite createCustomSprite( [in] ::com::sun::star::geometry::RealSize2D spriteSize )
+    XCustomSprite createCustomSprite( [in] double width, [in] double height )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Create a cloned version of an already existing sprite

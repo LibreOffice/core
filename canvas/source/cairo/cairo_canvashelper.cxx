@@ -1562,8 +1562,9 @@ namespace cairocanvas
         return ::basegfx::unotools::integerSize2DFromB2ISize( maSize );
     }
 
-    uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
-                                                                        sal_Bool                    /*beFast*/ )
+    uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( double width,
+                                                                        double height,
+                                                                        sal_Bool /*beFast*/ )
     {
 #ifdef CAIRO_CANVAS_PERF_TRACE
         struct timespec aTimer;
@@ -1572,9 +1573,11 @@ namespace cairocanvas
 
         if( mpCairo )
         {
-            return uno::Reference< rendering::XBitmap >( new CanvasBitmap( ::basegfx::B2ISize( ::canvas::tools::roundUp( newSize.Width ),
-                                                                                               ::canvas::tools::roundUp( newSize.Height ) ),
-                                                                           mpSurfaceProvider, mpDevice, false ) );
+            return uno::Reference< rendering::XBitmap >(
+                new CanvasBitmap(
+                    ::basegfx::B2ISize( ::canvas::tools::roundUp( width ),
+                                        ::canvas::tools::roundUp( height ) ),
+                    mpSurfaceProvider, mpDevice, false ) );
         }
         else
             SAL_INFO( "canvas.cairo", "CanvasHelper called after it was disposed");

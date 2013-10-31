@@ -148,8 +148,9 @@ namespace dxcanvas
         return basegfx::unotools::integerSize2DFromB2ISize(mpTarget->getSize());
     }
 
-    uno::Reference< rendering::XBitmap > BitmapCanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,
-                                                                              sal_Bool                    /*beFast*/ )
+    uno::Reference< rendering::XBitmap > BitmapCanvasHelper::getScaledBitmap( double,
+                                                                              double,
+                                                                              sal_Bool /*beFast*/ )
     {
         // TODO(F1):
         return uno::Reference< rendering::XBitmap >();

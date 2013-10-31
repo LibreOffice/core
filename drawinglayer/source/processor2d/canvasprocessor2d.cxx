@@ -524,12 +524,14 @@ namespace drawinglayer
 
                 // TODO(E1): in theory, could also get a float bitmap here...
                 uno::Reference< rendering::XIntegerBitmap > xContent(
-                    mxCanvas->getDevice()->createCompatibleAlphaBitmap(aMaskSize),
+                    mxCanvas->getDevice()->createCompatibleAlphaBitmap(
+                        aMaskSize.Width, aMaskSize.Height),
                     uno::UNO_QUERY_THROW);
 
                 // TODO(E1): in theory, could also get a float bitmap here...
                 uno::Reference< rendering::XIntegerBitmap > xMask(
-                    mxCanvas->getDevice()->createCompatibleAlphaBitmap(aMaskSize),
+                    mxCanvas->getDevice()->createCompatibleAlphaBitmap(
+                        aMaskSize.Width, aMaskSize.Height),
                     uno::UNO_QUERY_THROW);
 
                 // buffer current XCanvas output instance, then divert

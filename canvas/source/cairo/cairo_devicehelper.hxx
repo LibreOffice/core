@@ -67,16 +67,16 @@ namespace cairocanvas
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealBezierSegment2D > >& points );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleBitmap(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
+            sal_Int32 width, sal_Int32 height );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileBitmap(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
+            sal_Int32 width, sal_Int32 height );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleAlphaBitmap(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
+            sal_Int32 width, sal_Int32 height );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
+            sal_Int32 width, sal_Int32 height );
         sal_Bool hasFullScreenMode(  );
         sal_Bool enterFullScreenMode( sal_Bool bEnter );
 

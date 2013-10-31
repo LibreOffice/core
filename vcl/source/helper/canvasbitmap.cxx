@@ -444,13 +444,16 @@ geometry::IntegerSize2D SAL_CALL VclCanvasBitmap::getSize() throw (uno::RuntimeE
     return m_aBmpEx.IsTransparent();
 }
 
-uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( const geometry::RealSize2D& newSize,
+uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( double width,
+                                                                                double height,
                                                                                 sal_Bool beFast ) throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     BitmapEx aNewBmp( m_aBitmap );
-    aNewBmp.Scale( sizeFromRealSize2D( newSize ), beFast ? BMP_SCALE_DEFAULT : BMP_SCALE_BESTQUALITY );
+    aNewBmp.Scale( Size( ceil(width),
+                         ceil(height) ),
+                   beFast ? BMP_SCALE_DEFAULT : BMP_SCALE_BESTQUALITY );
     return uno::Reference<rendering::XBitmap>( new VclCanvasBitmap( aNewBmp ) );
 }
 

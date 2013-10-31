@@ -34,11 +34,12 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
-                                            const SpriteCanvasRef&                        rRefDevice,
-                                            SpriteDeviceHelper&                           rDeviceHelper ) :
+    CanvasCustomSprite::CanvasCustomSprite( double                 width,
+                                            double                 height,
+                                            const SpriteCanvasRef& rRefDevice,
+                                            SpriteDeviceHelper&    rDeviceHelper ) :
         mpSpriteCanvas( rRefDevice ),
-        maSize(rSpriteSize),
+        maSize(width, height),
         mxClip(),
         maTransformation(),
         maPosition(),

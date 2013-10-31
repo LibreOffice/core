@@ -666,7 +666,7 @@ namespace canvas
             @param size
             Size to verify
          */
-        CANVASTOOLS_DLLPUBLIC void verifyBitmapSize( const ::com::sun::star::geometry::IntegerSize2D& size,
+        CANVASTOOLS_DLLPUBLIC void verifyBitmapSize( sal_Int32 width, sal_Int32 height,
                                const char*                                      pStr,
                                const ::com::sun::star::uno::Reference<
                                        ::com::sun::star::uno::XInterface >&     xIf );
@@ -674,10 +674,13 @@ namespace canvas
         /** Range checker, which throws ::com::sun::star::lang::IndexOutOfBounds exception, when
             the size is negative or null
 
-            @param size
+            @param width
+            Size to verify
+
+            @param height
             Size to verify
          */
-        CANVASTOOLS_DLLPUBLIC void verifySpriteSize( const ::com::sun::star::geometry::RealSize2D& size,
+        CANVASTOOLS_DLLPUBLIC void verifySpriteSize( double width, double height,
                                const char*                                   pStr,
                                const ::com::sun::star::uno::Reference<
                                        ::com::sun::star::uno::XInterface >&  xIf );

@@ -761,8 +761,7 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
     // create a bitmap of appropriate size
     uno::Reference< rendering::XBitmap > pBitmap(
         pCanvas->getDevice()->createCompatibleBitmap(
-            geometry::IntegerSize2D(
-                rBmpSize.getX(), rBmpSize.getY())) );
+                rBmpSize.getX(), rBmpSize.getY()) );
 
     ENSURE_OR_THROW( pBitmap.is(),
                       "SlideImpl::createCurrentSlideBitmap(): Cannot create page bitmap" );
