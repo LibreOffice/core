@@ -126,7 +126,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             {
                 uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
 
-                const OUString& aGrabBagPropName = OUString("InteropGrabBag");
+                const OUString aGrabBagPropName = "InteropGrabBag";
                 if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
@@ -139,7 +139,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
                     uno::Reference<xml::dom::XDocument> aThemeDom = pDocument->getThemeDom();
 
                     beans::PropertyValue* pValue = aGrabBag.getArray();
-                    pValue[length].Name = OUString("OOXTheme");
+                    pValue[length].Name = "OOXTheme";
                     pValue[length].Value = uno::makeAny( aThemeDom );
 
                     xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );

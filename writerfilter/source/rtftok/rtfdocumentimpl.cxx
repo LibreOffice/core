@@ -361,12 +361,12 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
     if (!m_aAuthor.isEmpty())
     {
         pImpl->setAuthor(m_aAuthor);
-        m_aAuthor = OUString();
+        m_aAuthor = "";
     }
     if (!m_aAuthorInitials.isEmpty())
     {
         pImpl->setAuthorInitials(m_aAuthorInitials);
-        m_aAuthorInitials = OUString();
+        m_aAuthorInitials = "";
     }
     pImpl->seek(nPos);
     SAL_INFO("writerfilter", "substream start");
@@ -1126,7 +1126,7 @@ void RTFDocumentImpl::text(OUString& rString)
 
     if (!m_aIgnoreFirst.isEmpty() && m_aIgnoreFirst.equals(rString))
     {
-        m_aIgnoreFirst = OUString();
+        m_aIgnoreFirst = "";
         return;
     }
 
@@ -2676,7 +2676,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DOBYPARA:
                 {
                     beans::PropertyValue aPropertyValue;
-                    aPropertyValue.Name = OUString("VertOrientRelation");
+                    aPropertyValue.Name = "VertOrientRelation";
                     aPropertyValue.Value <<= text::RelOrientation::FRAME;
                     m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
                 }
