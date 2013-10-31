@@ -345,15 +345,12 @@ sub create_package
             my $scripthelperfilename = $ENV{'SRCDIR'} . "/setup_native/scripts/mac_install.script";
             # my $scripthelperrealfilename = $volume_name;
             my $scripthelperrealfilename = $volume_name_classic_app;
-            my $translationfilename = $installer::globals::macinstallfilename;
 
             # Finding both files in source tree
 
             my $scriptref = $ENV{'SRCDIR'} . "/setup_native/scripts/" . $scriptfilename;
             if (! -f $scriptref) { installer::exiter::exit_program("ERROR: Could not find Apple script $scriptfilename ($scriptref)!", "create_package"); }
             if (! -f $scripthelperfilename) { installer::exiter::exit_program("ERROR: Could not find Apple script $scripthelperfilename!", "create_package"); }
-            my $translationfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$translationfilename, $includepatharrayref, 0);
-            if ($$translationfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script translation file $translationfilename ( includepatharrayref = $includepatharrayref )", "create_package"); }
 
             $scriptfilename = $contentsfolder . "/" . $scriptrealfilename;
             $scripthelperrealfilename = $contentsfolder . "/" . $scripthelperrealfilename;
@@ -364,7 +361,7 @@ sub create_package
             # Replacing variables in script $scriptfilename
             # Localizing script $scriptfilename
             my $scriptfilecontent = installer::files::read_file($scriptfilename);
-            my $translationfilecontent = installer::files::read_file($$translationfileref);
+            my $translationfilecontent = installer::files::read_file($installer::globals::macinstallfilename);
             localize_scriptfile($scriptfilecontent, $translationfilecontent, $languagestringref);
             # replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
             replace_variables_in_scriptfile($scriptfilecontent, $volume_name_classic, $volume_name_classic_app, $allvariables);
