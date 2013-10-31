@@ -155,7 +155,7 @@ lo_initialize(void)
 
     const int argc = sizeof(argv)/sizeof(*argv);
 
-    argv[0] = [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"LibreOffice"] UTF8String];
+    argv[0] = [[[NSBundle mainBundle] executablePath] UTF8String];
 
     NSString *app_root_escaped = [[[NSBundle mainBundle] bundlePath] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
 
