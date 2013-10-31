@@ -23,58 +23,43 @@
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 
-// ---------------
-// - ImpBitmap -
-// ---------------
-
 struct BitmapBuffer;
 class SalBitmap;
 class BitmapPalette;
 class SalGraphics;
 class Bitmap;
-class OutputDevice;
-class Color;
-class AlphaMask;
 
 class ImpBitmap
 {
 private:
-
-    sal_uLong               mnRefCount;
-    sal_uLong               mnChecksum;
+    sal_uLong           mnRefCount;
+    sal_uLong           mnChecksum;
     SalBitmap*          mpSalBitmap;
 
 public:
-
                         ImpBitmap();
                         ~ImpBitmap();
-
-public:
 
     void                ImplSetSalBitmap( SalBitmap* pSalBitmap );
     SalBitmap*          ImplGetSalBitmap() const { return mpSalBitmap; }
 
-public:
-
-    sal_Bool                ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
-    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap );
-    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
-    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
+    sal_Bool            ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
+    sal_Bool            ImplCreate( const ImpBitmap& rImpBitmap );
+    sal_Bool            ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
+    sal_Bool            ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
 
     Size                ImplGetSize() const;
-    sal_uInt16              ImplGetBitCount() const;
+    sal_uInt16          ImplGetBitCount() const;
 
     BitmapBuffer*       ImplAcquireBuffer( sal_Bool bReadOnly );
     void                ImplReleaseBuffer( BitmapBuffer* pBuffer, sal_Bool bReadOnly );
 
-public:
-
-    sal_uLong               ImplGetRefCount() const { return mnRefCount; }
+    sal_uLong           ImplGetRefCount() const { return mnRefCount; }
     void                ImplIncRefCount() { mnRefCount++; }
     void                ImplDecRefCount() { mnRefCount--; }
 
     inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
-    inline sal_uLong        ImplGetChecksum() const { return mnChecksum; }
+    inline sal_uLong    ImplGetChecksum() const { return mnChecksum; }
 };
 
 #endif // INCLUDED_VCL_INC_IMPBMP_HXX
