@@ -1368,6 +1368,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         std::cerr << ut.mMessage << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
+        return true;
 #else
         return false;
 #endif
@@ -1377,6 +1378,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         std::cerr << oce.mError << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
+        return true;
 #else
         return false;
 #endif
@@ -1385,11 +1387,11 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         std::cerr << "Dynamic formula compiler: unhandled compiler error\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
+        return true;
 #else
         return false;
 #endif
     }
-    return true;
 } // namespace opencl
 
 }} // namespace sc

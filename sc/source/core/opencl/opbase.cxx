@@ -79,7 +79,6 @@ size_t DynamicKernelArgument::GetWindowSize(void) const
     {
         throw Unhandled();
     }
-    return 0;
 }
 
 void Normal::GenSlidingWindowFunction(
