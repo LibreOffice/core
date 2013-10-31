@@ -5300,7 +5300,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a population." ;
         };
     };
      // -=*# Resource for function STDEV.P #*=-
@@ -5324,7 +5324,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a population." ;
         };
     };
      // -=*# Resource for function STABWNA #*=-
