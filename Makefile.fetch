@@ -76,6 +76,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	$(foreach item, \
 		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
+		$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
 		$(call fetch_Optional,ETONYEK,ETONYEK_TARBALL) \
 		$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
 		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
