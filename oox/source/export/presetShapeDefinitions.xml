@@ -9164,8 +9164,6 @@
       </cxn>
     </cxnLst>
 
-    <rect l="x1" t="x1" r="x4" b="y4" xmlns="http://schemas.openxmlformats.org/drawingml/2006/main" />
-
     <pathLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <path>
 
@@ -9180,19 +9178,6 @@
         </lnTo>
         <lnTo>
           <pt x="l" y="b" />
-        </lnTo>
-        <close />
-        <moveTo>
-          <pt x="x1" y="x1" />
-        </moveTo>
-        <lnTo>
-          <pt x="x1" y="y4" />
-        </lnTo>
-        <lnTo>
-          <pt x="x4" y="y4" />
-        </lnTo>
-        <lnTo>
-          <pt x="x4" y="x1" />
         </lnTo>
         <close />
       </path>
