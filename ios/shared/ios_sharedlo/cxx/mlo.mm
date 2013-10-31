@@ -204,9 +204,7 @@ mlo_initialize(void)
     
         
     const char *argv[] = {
-        
-    //    "-SAL_LOG=+WARN+INFO",
-        [[bundlePath stringByAppendingPathComponent: @"Viewer"] UTF8String],
+        [[[NSBundle mainBundle] executablePath] UTF8String],
         "-env:URE_INTERNAL_LIB_DIR=file:///",
         [uno_types UTF8String],
         [uno_services UTF8String],"--writer"};
