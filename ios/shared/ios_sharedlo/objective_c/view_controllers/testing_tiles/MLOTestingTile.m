@@ -45,14 +45,11 @@
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
 
-    CGContextSaveGState(context);
     touch_lo_draw_tile(context,
                        self.tester.params.contextWidth,
                        self.tester.params.contextHeight,
                        MLODpxPointByDpxes(self.tester.params.tilePosX,self.tester.params.tilePosY),
                        MLODpxSizeByDpxes(self.tester.params.tileWidth,self.tester.params.tileHeight));
-
-    CGContextRestoreGState(context);
 
     MLODpxSize size = touch_lo_get_content_size();
     NSLog(@"touch_lo_get_content_size: width=%f, height=%f",size.width, size.height);
