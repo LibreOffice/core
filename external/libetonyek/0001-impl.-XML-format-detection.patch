@@ -34,7 +34,7 @@ index 8ca33ad..a1a5477 100644
 +  if (input->atEOS())
 +    return VERSION_UNKNOWN;
 +
-+  const KEY2Tokenizer tokenizer;
++  const KEY2Tokenizer tokenizer = KEY2Tokenizer();
 +  KEYXMLReader reader(input.get(), tokenizer);
 +
 +  if ((KEY2Token::NS_URI_KEY | KEY2Token::presentation) == getId(reader))
