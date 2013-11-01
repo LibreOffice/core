@@ -1861,7 +1861,51 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs,
         sal_Int32 nStrokeWidth = bApplyMapping ? ImplMap( rAttrs.GetWidth() ) : rAttrs.GetWidth();
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth,
                                OUString::number( nStrokeWidth ) );
+    // support for LineJoint
+    switch(rAttrs.GetLineJoin())
+    {
+        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+        case basegfx::B2DLINEJOIN_MITER:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
+            break;
+        }
+        case basegfx::B2DLINEJOIN_BEVEL:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
+            break;
+        }
+        case basegfx::B2DLINEJOIN_ROUND:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
+            break;
+        }
     }
+
+    // support for LineCap
+    switch(rAttrs.GetLineCap())
+    {
+        default: /* com::sun::star::drawing::LineCap_BUTT */
+        {
+            // butt is Svg default, so no need to write until the exporter might write styles.
+            // If this happens, activate here
+            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
+            break;
+        }
+        case com::sun::star::drawing::LineCap_ROUND:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
+            break;
+        }
+        case com::sun::star::drawing::LineCap_SQUARE:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
+            break;
+        }
+    }
+
+    }
+
 }
 
 void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly,
