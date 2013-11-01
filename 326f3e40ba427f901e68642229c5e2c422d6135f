@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZn///+s\u003d",
+        "filename": "odk/examples/OLE/activex/StdAfx2.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-11-01T09:57:30Z",
+      "side": 0,
+      "message": "\"Note that even if we do the definitions centrally, we must not drop the setting from odk/examples/OLE/activex/StdAfx2.h, as the SDK apparently does not set these centrally at all.\"",
+      "revId": "326f3e40ba427f901e68642229c5e2c422d6135f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
