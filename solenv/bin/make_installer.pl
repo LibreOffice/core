@@ -19,7 +19,7 @@
 use strict;
 use warnings;
 
-use lib ("$ENV{SOLARENV}/bin/modules");
+use lib ("$ENV{SRCDIR}/solenv/bin/modules");
 
 use installer qw(main);
 

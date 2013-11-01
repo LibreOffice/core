@@ -129,7 +129,7 @@ endef
 
 # ScpTarget class
 
-gb_ScpTarget_TARGET := $(SOLARENV)/bin/pre2par.pl
+gb_ScpTarget_TARGET := $(SRCDIR)/solenv/bin/pre2par.pl
 gb_ScpTarget_COMMAND := $(PERL) $(gb_ScpTarget_TARGET)
 
 define gb_ScpTarget__command

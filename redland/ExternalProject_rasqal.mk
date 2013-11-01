@@ -60,7 +60,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
-			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_rasqal)/src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib) \
 	)
 endif

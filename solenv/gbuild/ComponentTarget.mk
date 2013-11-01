@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
+gb_ComponentTarget_XSLTCOMMANDFILE := $(SRCDIR)/solenv/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(SRCDIR)/$(1).component
 
 # In the DISABLE_DYNLOADING case we don't need any COMPONENTPREFIX, we

@@ -159,7 +159,7 @@ sub getparameter
     }
 
     # Usage of simple installer (not for Windows):
-    # $PERL -w $SOLARENV/bin/make_installer.pl \
+    # $PERL -w $SRCDIR/solenv/bin/make_installer.pl \
     # -f openoffice.lst -l en-US -p OpenOffice \
     # -buildid $BUILD -rpm \
     # -destdir /tmp/nurk -simple $INSTALL_PATH

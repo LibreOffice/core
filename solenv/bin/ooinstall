@@ -97,7 +97,7 @@ print "Running LibreOffice installer\n";
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
         "perl " .
         (scalar keys(%DB::sub) ? "-d " : "") .
-        "-w $ENV{SOLARENV}/bin/make_installer.pl " .
+        "-w $ENV{SRCDIR}/solenv/bin/make_installer.pl " .
         "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l $langs -p LibreOffice " .
         "-u $tmp_dir " .
         "-buildid $BUILD $destdir $strip $msi " .
@@ -106,7 +106,7 @@ system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
 if ($ENV{BUILD_TYPE} =~ m/ODK/) {
     print "Running SDK installer\n";
     system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
-            "perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
+            "perl -w $ENV{SRCDIR}/solenv/bin/make_installer.pl " .
             "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l en-US -p LibreOffice_SDK " .
             "-u $tmp_dir " .
             "-buildid $BUILD $destdir $strip $msi " .

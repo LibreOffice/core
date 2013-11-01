@@ -151,9 +151,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1) && \
 	$(if $(SOVERSIONSCRIPT),ln -sf $(1) $(ILIBTARGET),:) && \
 	$(if $(filter Executable,$(TARGETTYPE)), \
-		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
+		$(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
-		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl shl $(LAYER) $(1) &&) \
+		$(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl $(LAYER) $(1) &&) \
 	$(if $(MACOSX_CODESIGNING_IDENTITY), \
 		$(if $(filter Executable,$(TARGETTYPE)), \
 			(codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --force $(1) || true) &&)) \

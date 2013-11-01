@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-use lib ("$ENV{SOLARENV}/bin/modules");
+use lib ("$ENV{SRCDIR}/solenv/bin/modules");
 
 use Cwd;
 use pre2par::directory;

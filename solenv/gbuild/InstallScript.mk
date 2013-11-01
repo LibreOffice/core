@@ -9,7 +9,7 @@
 
 # InstallScript class
 
-gb_InstallScript_TARGET := $(SOLARENV)/bin/par2script.pl
+gb_InstallScript_TARGET := $(SRCDIR)/solenv/bin/par2script.pl
 gb_InstallScript_COMMAND := $(PERL) $(gb_InstallScript_TARGET)
 
 gb_InstallScript__make_arglist = $(subst $(WHITESPACE),$(COMMA),$(strip $(1)))

@@ -12,6 +12,11 @@ dnl in order to create a configure script.
 AC_INIT([LibreOffice],[4.2.0.0.alpha0+],[],[],[http://documentfoundation.org/])
 
 AC_PREREQ([2.59])
+
+if test -n "$BUILD_TYPE"; then
+    AC_MSG_ERROR([You have sourced config_host.mk in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
+fi
+
 save_CC=$CC
 save_CXX=$CXX
 
@@ -72,10 +77,6 @@ add_warning()
     fi
     echo "$COLORWARN $@" >> warn
 }
-
-if test -n "$SOLARENV"; then
-    AC_MSG_ERROR([You have sourced config_host.mk in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
-fi
 
 echo "********************************************************************"
 echo "*"

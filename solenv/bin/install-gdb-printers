@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-GDBDIR="${SOLARENV}/gdb"
+GDBDIR="${SRCDIR}/solenv/gdb"
 INSTALLDIR="${TESTINSTALLDIR}"
 DYLIB=so
 if [ "$(uname)" = Darwin ]; then

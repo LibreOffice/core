@@ -180,7 +180,7 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/ios/lo.xcconfig \
         $(BUILDDIR)/lo.xcent \
         $(BUILDDIR)/sysui/desktop/macosx/Info.plist
-	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
+	find $(SRCDIR)/solenv/gdb -name "*.pyc" -exec rm {} \;
 
 #
 # custom command
@@ -331,7 +331,7 @@ tags:
 	@create-tags
 
 docs:
-	@mkdocs.sh $(SRCDIR)/docs $(SOLARENV)/inc/doxygen.cfg
+	@mkdocs.sh $(SRCDIR)/docs $(SRCDIR)/solenv/inc/doxygen.cfg
 
 findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
@@ -345,7 +345,7 @@ findunusedcode:
 	@echo unexport ARCH_FLAGS >> $(SRCDIR)/callcatcher/config_host.mk
 	@echo unexport CFLAGS >> $(SRCDIR)/callcatcher/config_host.mk
 	@echo unexport CXXFLAGS >> $(SRCDIR)/callcatcher/config_host.mk
-	$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile findunusedcode
+	$(GNUMAKE) -f $(SRCDIR)/solenv/bin/callcatcher.Makefile findunusedcode
 	@grep ::.*\( unusedcode.all \
               | grep -v ^Atom \
               | grep -v ^atom:: \

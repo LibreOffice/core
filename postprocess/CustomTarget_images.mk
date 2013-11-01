@@ -36,7 +36,7 @@ $(packimages_DIR)/%.zip : \
 		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(PERL) $(SOLARENV)/bin/packimages.pl \
+		$(PERL) $(SRCDIR)/solenv/bin/packimages.pl \
 			-g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy \
 			$(if $(DEFAULT_THEME),\
@@ -62,7 +62,7 @@ $(packimages_DIR)/commandimagelist.ilst :
 		find $(SRCDIR)/icon-themes/galaxy/cmd -name "*.png" -o -name "*.svg" | \
 			sed "s#$(SRCDIR)/icon-themes/galaxy#%MODULE%#" | \
 			LC_ALL=C sort > $@.$(INPATH) && \
-		$(PERL) $(SOLARENV)/bin/diffmv.pl $@.$(INPATH) $@ \
+		$(PERL) $(SRCDIR)/solenv/bin/diffmv.pl $@.$(INPATH) $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
 
 $(packimages_DIR)/sorted.lst : \
@@ -70,6 +70,7 @@ $(packimages_DIR)/sorted.lst : \
 		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(PERL) $(SOLARENV)/bin/image-sort.pl $< $(INSTROOT)/$(gb_UIConfig_INSTDIR) $@)
+		$(PERL) $(SRCDIR)/solenv/bin/image-sort.pl \
+			$< $(INSTROOT)/$(gb_UIConfig_INSTDIR) $@)
 
 # vim: set noet sw=4 ts=4:

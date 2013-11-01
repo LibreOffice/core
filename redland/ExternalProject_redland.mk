@@ -65,7 +65,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
-			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_redland)/src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib) \
 	)
 endif

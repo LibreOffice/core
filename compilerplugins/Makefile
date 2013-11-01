@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(SOLARENV),)
+ifeq ($(BUILD_TYPE),)
 ifeq ($(gb_Side),)
 gb_Side:=host
 endif

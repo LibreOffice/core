@@ -11,7 +11,7 @@
 
 # Handles creation of image galleries.
 
-gb_Gallery_TRANSLATE := $(SOLARENV)/bin/desktop-translate.pl
+gb_Gallery_TRANSLATE := $(SRCDIR)/solenv/bin/desktop-translate.pl
 gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 
 # BRAND_BASE_DIR is for resource files

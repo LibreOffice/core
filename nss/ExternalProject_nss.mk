@@ -68,7 +68,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(MAKE) -j1 AR=$(AR) RANLIB=$(RANLIB) NMEDIT=$(NM)edit nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
-			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libfreebl3.dylib \
 			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnspr4.dylib \
 			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnss3.dylib \

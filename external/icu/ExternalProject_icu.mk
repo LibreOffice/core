@@ -87,7 +87,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source)\
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
-			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION) \
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION) \
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)) \

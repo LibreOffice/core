@@ -27,7 +27,7 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/install,\
 ))
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: \
-	$(SOLARENV)/bin/make_installer.pl \
+	$(SRCDIR)/solenv/bin/make_installer.pl \
 	$(foreach ulf,$(instsetoo_ULFLIST),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/$(ulf).ulf) \
 	$(if $(filter-out WNT,$(OS)),\
 		$(addprefix $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/,\

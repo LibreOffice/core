@@ -9,7 +9,7 @@
 
 # CliConfigTarget class
 
-gb_CliConfigTarget_TARGET := $(SOLARENV)/bin/clipatchconfig.pl
+gb_CliConfigTarget_TARGET := $(SRCDIR)/solenv/bin/clipatchconfig.pl
 gb_CliConfigTarget_COMMAND := $(PERL) -w $(gb_CliConfigTarget_TARGET)
 
 gb_CliConfigTarget_VERSIONFILE_DEFAULT := $(SRCDIR)/cli_ure/version/version.txt

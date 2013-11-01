@@ -569,7 +569,7 @@ $(call gb_XcdTarget_get_target,main.xcd) : \
 	$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $(dir $@) && \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-			$(SOLARENV)/bin/packregistry.xslt $< \
+			$(SRCDIR)/solenv/bin/packregistry.xslt $< \
 		|  sed $(postprocess_main_SED) > $@ \
 	)
 
@@ -579,7 +579,7 @@ $(call gb_XcdTarget_get_target,%.xcd) : \
 	$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $(dir $@) && \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-			-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
+			-o $@ $(SRCDIR)/solenv/bin/packregistry.xslt $< \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :

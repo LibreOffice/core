@@ -17,7 +17,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach component,$(COMPONENTS),echo "<filename>$(call gb_ComponentTarget_get_target,$(component))</filename>" &&) \
 		echo '</list>' \
 	) > $(1).input && \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $(1) $(SOLARENV)/bin/packcomponents.xslt $(1).input && \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $(1) \
+		$(SRCDIR)/solenv/bin/packcomponents.xslt $(1).input && \
 	rm $(1).input)
 endef
 

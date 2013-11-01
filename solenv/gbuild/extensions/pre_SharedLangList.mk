@@ -17,7 +17,7 @@
 #
 
 # share language list with dmake build system
-include $(SOLARENV)/inc/langlist.mk
+include $(SRCDIR)/solenv/inc/langlist.mk
 
 ifneq ($(WITH_LANG),ALL)
 gb_WITH_LANG=$(WITH_LANG)

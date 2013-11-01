@@ -20,7 +20,7 @@ export AR:=callarchive $(AR)
 endif
 export dbglevel:=2
 
-include $(SOLARENV)/gbuild/gbuild.mk
+include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
 findunusedcode:
 	$(GNUMAKE) BUILDDIR=callcatcher -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild
