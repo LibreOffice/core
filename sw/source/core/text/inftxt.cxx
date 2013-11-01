@@ -1182,17 +1182,22 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pTmpOut );
 
-        pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        Color aFillColor;
 
         if( m_pFnt->GetHighlightColor() != COL_TRANSPARENT )
         {
-            pTmpOut->SetFillColor( m_pFnt->GetHighlightColor() );
+            aFillColor = m_pFnt->GetHighlightColor();
         }
         else
         {
-            if( !m_pFnt->GetBackColor() ) return;
-            pTmpOut->SetFillColor( *m_pFnt->GetBackColor() );
+            if( !m_pFnt->GetBackColor() )
+                return;
+            aFillColor = *m_pFnt->GetBackColor();
         }
+
+        pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+
+        pTmpOut->SetFillColor(aFillColor);
         pTmpOut->SetLineColor();
 
         DrawRect( aIntersect, sal_True, sal_False );
