@@ -2801,14 +2801,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( rPoly.GetSize() )
                     {
-                        const LineInfo& rLineInfo = pA->GetLineInfo();
-
-                        if(rLineInfo.GetWidth())
-                        {
-                            sal_Int32 nStrokeWidth = ImplMap(rLineInfo.GetWidth());
-                            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth, OUString::number( nStrokeWidth ) );
-                        }
-
                         mpContext->AddPaintAttr( mpVDev->GetLineColor(), Color( COL_TRANSPARENT ) );
                         ImplAddLineAttr( pA->GetLineInfo() );
                         ImplWritePolyPolygon( rPoly, sal_True );
