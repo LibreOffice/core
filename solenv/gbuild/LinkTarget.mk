@@ -605,21 +605,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : YACCOBJECTS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
-$(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : VISIBILITY :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSIONSCRIPT :=
 endif
 
 gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := cxx
@@ -640,10 +625,6 @@ endef
 define gb_LinkTarget_add_defs
 $(call gb_LinkTarget_get_target,$(1)) : DEFS += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS += $(2)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : DEFS += $(2)
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS += $(2)
-endif
 endef
 
 define gb_LinkTarget_set_defs
@@ -656,10 +637,6 @@ endef
 # call gb_LinkTarget_add_cflags,linktarget,cflags
 define gb_LinkTarget_add_cflags
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS_APPEND += $(2)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS_APPEND += $(2)
-endif
-
 endef
 
 define gb_LinkTarget_set_cflags
@@ -673,10 +650,6 @@ endef
 define gb_LinkTarget_add_cxxflags
 $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS_APPEND += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS += $(2)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS_APPEND += $(2)
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS += $(2)
-endif
 endef
 
 define gb_LinkTarget_set_cxxflags
@@ -688,9 +661,6 @@ endef
 # call gb_LinkTarget_add_objcxxflags,linktarget,objcxxflags
 define gb_LinkTarget_add_objcxxflags
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS_APPEND += $(2)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS_APPEND += $(2)
-endif
 endef
 
 define gb_LinkTarget_set_objcxxflags
@@ -708,18 +678,12 @@ endef
 # call gb_LinkTarget_add_objcflags,linktarget,objcflags
 define gb_LinkTarget_add_objcflags
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS_APPEND += $(2)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS_APPEND += $(2)
-endif
 
 endef
 
 # call gb_LinkTarget__add_include,linktarget,includes
 define gb_LinkTarget__add_include
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(2)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(2)
-endif
 
 endef
 
@@ -735,9 +699,6 @@ define gb_LinkTarget_set_include
 $(call gb_LinkTarget__check_srcdir_paths,$(1),\
     $(patsubst -I%,%,$(filter -I$(SRCDIR)/%,$(filter-out -I$(WORKDIR)/%,$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $(2)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $(2)
-endif
 
 endef
 
@@ -1244,15 +1205,13 @@ endef
 
 # call gb_LinkTarget_set_targettype,linktarget,targettype
 define gb_LinkTarget_set_targettype
-$(call gb_LinkTarget_get_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE := $(2)
 
 endef
 
 # call gb_LinkTarget_set_x64,linktarget,boolean
 define gb_LinkTarget_set_x64
-$(call gb_LinkTarget_get_target,$(1)) \
-$(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : LIBRARY_X64 := $(2)
 
 endef
 
@@ -1347,8 +1306,6 @@ $(call gb_PrecompiledHeader_get_timestamp,$(call gb_LinkTarget__get_workdir_link
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_PrecompiledHeader_get_dep_target,$(3)) 
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(4))
 endif
 
 endef
@@ -1419,9 +1376,6 @@ gb_LinkTarget_use_externals = \
 # call gb_LinkTarget_set_visibility_default,linktarget
 define gb_LinkTarget_set_visibility_default
 $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY := default
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : VISIBILITY := default
-endif
 ifeq ($(gb_ENABLE_PCH),$(true))
 ifneq ($(strip $$(PCH_NAME)),)
 $(call gb_PrecompiledHeader_get_target,$$(PCH_NAME)) : VISIBILITY := default
@@ -1433,9 +1387,6 @@ endef
 # call gb_LinkTarget_set_warnings_not_errors,linktarget
 define gb_LinkTarget_set_warnings_not_errors
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
-endif
 
 endef
 
