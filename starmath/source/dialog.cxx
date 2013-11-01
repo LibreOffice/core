@@ -231,7 +231,7 @@ SfxTabPage* SmPrintOptionsTabPage::Create(Window* pWindow, const SfxItemSet& rSe
 
 void SmShowFont::Paint(const Rectangle& rRect )
 {
-    Control::Paint( rRect );
+    Window::Paint( rRect );
 
     OUString   Text (GetFont().GetName());
     Size    TextSize(GetTextWidth(Text), GetTextHeight());
@@ -240,6 +240,21 @@ void SmShowFont::Paint(const Rectangle& rRect )
                    (GetOutputSize().Height() - TextSize.Height()) / 2), Text);
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowFont(Window* pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+
+    return new SmShowFont(pParent, nWinStyle);
+}
+
+Size SmShowFont::GetOptimalSize() const
+{
+    return LogicToPixel(Size(111 , 31), MapMode(MAP_APPFONT));
+}
 
 void SmShowFont::SetFont(const Font& rFont)
 {
@@ -249,7 +264,7 @@ void SmShowFont::SetFont(const Font& rFont)
     Invalidate();
     aFont.SetSize(Size(0, 24));
     aFont.SetAlign(ALIGN_TOP);
-    Control::SetFont(aFont);
+    Window::SetFont(aFont);
 
     // keep old text color (new font may have different color)
     SetTextColor( aTxtColor );
@@ -259,7 +274,7 @@ void SmShowFont::SetFont(const Font& rFont)
 IMPL_LINK_INLINE_START( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
 {
     Face.SetName(pComboBox->GetText());
-    aShowFont.SetFont(Face);
+    m_pShowFont->SetFont(Face);
     return 0;
 }
 IMPL_LINK_INLINE_END( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
@@ -279,17 +294,17 @@ IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
 
 IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, EMPTYARG /*pCheckBox*/ )
 {
-    if (aBoldCheckBox.IsChecked())
+    if (m_pBoldCheckBox->IsChecked())
         Face.SetWeight(FontWeight(WEIGHT_BOLD));
     else
         Face.SetWeight(FontWeight(WEIGHT_NORMAL));
 
-    if (aItalicCheckBox.IsChecked())
+    if (m_pItalicCheckBox->IsChecked())
         Face.SetItalic(ITALIC_NORMAL);
     else
         Face.SetItalic(ITALIC_NONE);
 
-    aShowFont.SetFont(Face);
+    m_pShowFont->SetFont(Face);
     return 0;
 }
 
@@ -298,40 +313,22 @@ void SmFontDialog::SetFont(const Font &rFont)
 {
     Face = rFont;
 
-    aFontBox.SetText( Face.GetName() );
-    aBoldCheckBox.Check( IsBold( Face ) );
-    aItalicCheckBox.Check( IsItalic( Face ) );
+    m_pFontBox->SetText( Face.GetName() );
+    m_pBoldCheckBox->Check( IsBold( Face ) );
+    m_pItalicCheckBox->Check( IsItalic( Face ) );
 
-    aShowFont.SetFont(Face);
+    m_pShowFont->SetFont(Face);
 }
 
-IMPL_LINK( SmFontDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+SmFontDialog::SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes)
+    : ModalDialog(pParent, "FontDialog", "modules/smath/ui/fontdialog.ui")
 {
-    // start help system
-    Help* pHelp = Application::GetHelp();
-    if( pHelp )
-    {
-        pHelp->Start( OUString( "HID_SMA_FONTDIALOG" ), &aHelpButton1 );
-    }
-    return 0;
-}
-
-SmFontDialog::SmFontDialog(Window * pParent,
-        OutputDevice *pFntListDevice, bool bHideCheckboxes, bool bFreeRes)
-    : ModalDialog(pParent,SmResId(RID_FONTDIALOG)),
-    aFixedText1     (this, SmResId(1)),
-    aFontBox        (this, SmResId(1)),
-    aBoldCheckBox   (this, SmResId(1)),
-    aItalicCheckBox (this, SmResId(2)),
-    aOKButton1      (this, SmResId(1)),
-    aHelpButton1    (this, SmResId(1)),
-    aCancelButton1  (this, SmResId(1)),
-    aShowFont       (this, SmResId(1)),
-    aFixedText2     (this, SmResId(2))
-{
-    if (bFreeRes)
-        FreeResource();
-    aHelpButton1.SetClickHdl(LINK(this, SmFontDialog, HelpButtonClickHdl));
+    get(m_pFontBox, "font");
+    m_pFontBox->set_height_request(8 * m_pFontBox->GetTextHeight());
+    get(m_pAttrFrame, "attrframe");
+    get(m_pBoldCheckBox, "bold");
+    get(m_pItalicCheckBox, "italic");
+    get(m_pShowFont, "preview");
 
     {
         WaitObject aWait( this );
@@ -339,8 +336,8 @@ SmFontDialog::SmFontDialog(Window * pParent,
         FontList aFontList( pFntListDevice );
 
         sal_uInt16  nCount = aFontList.GetFontNameCount();
-        for (sal_uInt16 i = 0;  i < nCount;  i++)
-            aFontBox.InsertEntry( aFontList.GetFontName(i).GetName() );
+        for (sal_uInt16 i = 0;  i < nCount; ++i)
+            m_pFontBox->InsertEntry( aFontList.GetFontName(i).GetName() );
 
         Face.SetSize(Size(0, 24));
         Face.SetWeight(WEIGHT_NORMAL);
@@ -353,29 +350,21 @@ SmFontDialog::SmFontDialog(Window * pParent,
         InitColor_Impl();
 
         // preview like controls should have a 2D look
-        aShowFont.SetBorderStyle( WINDOW_BORDER_MONO );
+        m_pShowFont->SetBorderStyle( WINDOW_BORDER_MONO );
     }
 
-    aFontBox.SetSelectHdl(LINK(this, SmFontDialog, FontSelectHdl));
-    aFontBox.SetModifyHdl(LINK(this, SmFontDialog, FontModifyHdl));
-    aBoldCheckBox.SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
-    aItalicCheckBox.SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
+    m_pFontBox->SetSelectHdl(LINK(this, SmFontDialog, FontSelectHdl));
+    m_pFontBox->SetModifyHdl(LINK(this, SmFontDialog, FontModifyHdl));
+    m_pBoldCheckBox->SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
+    m_pItalicCheckBox->SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
 
     if (bHideCheckboxes)
     {
-        aBoldCheckBox.Check( false );
-        aBoldCheckBox.Enable( false );
-        aBoldCheckBox.Show( false );
-        aItalicCheckBox.Check( false );
-        aItalicCheckBox.Enable( false );
-        aItalicCheckBox.Show( false );
-        aFixedText2.Show( false );
-
-        Size  aSize( aFontBox.GetSizePixel() );
-        long nComboBoxBottom = aFontBox.GetPosPixel().Y() + aFontBox.GetSizePixel().Height();
-        long nCheckBoxBottom = aItalicCheckBox.GetPosPixel().Y() + aItalicCheckBox.GetSizePixel().Height();
-        aSize.Height() += nCheckBoxBottom - nComboBoxBottom;
-        aFontBox.SetSizePixel( aSize );
+        m_pBoldCheckBox->Check( false );
+        m_pBoldCheckBox->Enable( false );
+        m_pItalicCheckBox->Check( false );
+        m_pItalicCheckBox->Enable( false );
+        m_pAttrFrame->Show(false);
     }
 }
 
@@ -405,8 +394,8 @@ void SmFontDialog::InitColor_Impl()
     Color aTmpColor( nBgCol );
     Wallpaper aWall( aTmpColor );
     Color aTxtColor( nTxtCol );
-    aShowFont.SetBackground( aWall );
-    aShowFont.SetTextColor( aTxtColor );
+    m_pShowFont->SetBackground( aWall );
+    m_pShowFont->SetTextColor( aTxtColor );
 }
 
 void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1293,17 +1282,13 @@ IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, EMPTYARG /*pScrollBar*/
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowSymbol(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    WinBits nWinBits = 0;
+    WinBits nWinStyle = 0;
 
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString("border"));
-    if (aFind != rMap.end())
-    {
-        if (toBool(aFind->second))
-            nWinBits |= WB_BORDER;
-        rMap.erase(aFind);
-    }
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
 
-    return new SmShowSymbol(pParent, nWinBits);
+    return new SmShowSymbol(pParent, nWinStyle);
 }
 
 void SmShowSymbol::Resize()

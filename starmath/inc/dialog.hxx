@@ -74,44 +74,39 @@ public:
 
 /**************************************************************************/
 
-class SmShowFont : public Control
+class SmShowFont : public Window
 {
-    virtual void    Paint(const Rectangle&);
+    virtual void Paint(const Rectangle&);
 
 public:
-    SmShowFont(Window *pParent, const ResId& rResId) :
-        Control(pParent, rResId)
+    SmShowFont(Window *pParent, WinBits nStyle)
+        : Window(pParent, nStyle)
     {
     }
-
+    virtual Size GetOptimalSize() const;
     void SetFont(const Font& rFont);
 };
 
 class SmFontDialog : public ModalDialog
 {
-    FixedText       aFixedText1;
-    ComboBox        aFontBox;
-    CheckBox        aBoldCheckBox;
-    CheckBox        aItalicCheckBox;
-    OKButton        aOKButton1;
-    HelpButton      aHelpButton1;
-    CancelButton    aCancelButton1;
-    SmShowFont      aShowFont;
-    FixedText       aFixedText2;
+    ComboBox*       m_pFontBox;
+    VclContainer*   m_pAttrFrame;
+    CheckBox*       m_pBoldCheckBox;
+    CheckBox*       m_pItalicCheckBox;
+    SmShowFont*     m_pShowFont;
 
     Font    Face;
 
     DECL_LINK(FontSelectHdl, ComboBox *);
     DECL_LINK(FontModifyHdl, ComboBox *);
     DECL_LINK(AttrChangeHdl, CheckBox *);
-    DECL_LINK(HelpButtonClickHdl, Button *);
 
     void            InitColor_Impl();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes, bool bFreeRes = true);
+    SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
 
     const Font& GetFont() const { return Face; }
     void        SetFont(const Font &rFont);
