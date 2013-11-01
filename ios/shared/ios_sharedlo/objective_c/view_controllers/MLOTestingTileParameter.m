@@ -34,18 +34,18 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
         self.widthIsNotHeightExtractor = widthIsNotHeightExtractor;
         self.defaultValue = defaultValue;
         [self initLabel:label];
-        self.dataStepper = [self createStepper];
-        self.stepStepper = [self createStepper];
+        self.dataStepper = [self stepperWithMinValue:-MAXFLOAT];
+        self.stepStepper = [self stepperWithMinValue:1];
         [self initDataTextField];
         [self initStepTextField];
     }
     return self;
 }
 
--(UIStepper *) createStepper{
+-(UIStepper *) stepperWithMinValue:(CGFloat) minValue{
     UIStepper * stepper = [UIStepper new];
     stepper.maximumValue = MAXFLOAT;
-    stepper.minimumValue = -MAXFLOAT;
+    stepper.minimumValue = minValue;
     stepper.stepValue = DEFAULT_STEP_VALUE;
     stepper.autorepeat = YES;
     stepper.continuous = NO;
