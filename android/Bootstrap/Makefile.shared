@@ -83,6 +83,7 @@ LIBS = \
   -Wl,--start-group \
   $(wildcard $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib*.a) \
   $(wildcard $(WORKDIR)/LinkTarget/StaticLibrary/lib*.a) \
+  $(FREEHAND_LIBS) \
   $(HARFBUZZ_LIBS) \
   $(HUNSPELL_LIBS) \
   $(HYPHEN_LIB) \
