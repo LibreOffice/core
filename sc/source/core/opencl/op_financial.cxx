@@ -1963,11 +1963,11 @@ void OpPMT::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "int gid0 = get_global_id(0);\n    ";
     ss<<"double tmp0,tmp1,tmp2;\n    ";
     ss<<"double tmp3=0,tmp4=0;\n    ";
-    unsigned i = vSubArguments.size();
+    size_t i = vSubArguments.size();
     size_t nItems = 0;
     ss <<"\n    ";
     //while (i-- > 1)
-    for (size_t i = 0; i < vSubArguments.size(); i++)
+    for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
