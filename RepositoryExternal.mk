@@ -192,10 +192,6 @@ endef
 
 else
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
-    cppunit \
-))
-
 define gb_LinkTarget__use_cppunit
 $(call gb_LinkTarget_use_external_project,$(1),cppunit)
 
@@ -767,10 +763,6 @@ gb_ExternalProject__use_libxml2:=
 
 else # !SYSTEM_LIBXML
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-	xml2 \
-))
-
 define gb_LinkTarget__use_libxml2
 $(call gb_LinkTarget_use_package,$(1),xml2)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -819,11 +811,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(LIBEXSLT_LIBS))
 endef
 
 else # !SYSTEM_LIBXSLT
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	exslt \
-	xslt \
-))
 
 define gb_LinkTarget__use_libxslt
 $(call gb_LinkTarget_use_package,$(1),xslt)
@@ -990,11 +977,13 @@ endef
 
 ifneq ($(OS),ANDROID)
 
+ifeq ($(COM),MSC)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	raptor2 \
 	rasqal \
 	rdf \
 ))
+endif
 
 define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_use_packages,$(1),raptor rasqal redland)
@@ -1038,13 +1027,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(CAIRO_LIBS))
 endef
 
 else ifeq ($(SYSTEM_CAIRO),NO)
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	cairo \
-	$(if $(filter-out MACOSX WNT,$(OS)), \
-		pixman-1 \
-	) \
-))
 
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_use_package,$(1),cairo)
@@ -1206,21 +1188,6 @@ $(call gb_ExternalProject_use_package,$(1),icu)
 endef
 
 # icudata and icui18n is called icudt and icuin when built with MSVC :-/
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	icudt \
-	icuin \
-))
-else
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	icudata$(gb_ICU_suffix) \
-	icui18n$(gb_ICU_suffix) \
-))
-endif
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	icuuc$(gb_ICU_suffix) \
-))
-
 define gb_LinkTarget__use_icudata
 $(call gb_LinkTarget_use_package,$(1),icu)
 
@@ -1322,13 +1289,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(OPENSSL_LIBS))
 endef
 
 else # !SYSTEM_OPENSSL
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    crypto \
-    ssl \
-))
-endif
 
 define gb_ExternalProject__use_openssl
 $(call gb_ExternalProject_use_package,$(1),openssl)
@@ -1745,10 +1705,6 @@ endef
 
 else
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	lcms2 \
-))
-
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_use_package,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1774,10 +1730,6 @@ $(call gb_LinkTarget_add_defs,$(1),\
 endef
 
 else # !SYSTEM_LPSOLVE
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	lpsolve55 \
-))
 
 define gb_LinkTarget__use_lpsolve
 $(call gb_LinkTarget_use_unpacked,$(1),lpsolve)
@@ -2020,10 +1972,6 @@ endef
 
 else # !SYSTEM_CURL
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	curl \
-))
-
 define gb_LinkTarget__use_curl
 $(call gb_LinkTarget_use_package,$(1),curl)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2248,10 +2196,6 @@ else # !SYSTEM_FIREBIRD
 
 #$(call gb_LinkTarget__use_libatomic_ops,$(1))
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    fbembed \
-))
-
 define gb_LinkTarget__use_libfbembed
 $(call gb_LinkTarget_use_package,$(1),firebird)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2419,11 +2363,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 endif # !GCC
 
 endef
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
-	xpcom \
-	xpcom_core \
-))
 
 endif # DESKTOP
 
@@ -2601,11 +2540,6 @@ endif
 
 endef
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	python$(PYTHON_VERSION_MAJOR) \
-	python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
-))
-
 endif # SYSTEM_PYTHON
 
 # ORCUS
@@ -2739,14 +2673,6 @@ $(call gb_LinkTarget__use_nss3,$(1))
 endef
 
 else
-
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-    nspr4 \
-    nss3 \
-    plc4 \
-    smime3 \
-	ssl3 \
-))
 
 define gb_LinkTarget__use_nss3
 $(call gb_LinkTarget_use_package,$(1),nss)

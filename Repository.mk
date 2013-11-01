@@ -646,21 +646,6 @@ $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 	passive_native \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	xmlsec1 \
-))
-ifeq ($(COM),MSC)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	xmlsec1-mscrypto \
-))
-else
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	xmlsec1-nss \
-))
-endif
-endif
-
 $(eval $(call gb_Helper_register_jars,URE, \
 	java_uno \
 	juh \
