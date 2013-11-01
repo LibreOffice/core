@@ -221,9 +221,6 @@ public:
     // create a new, unique comment ID
     sal_uInt32 GetNextUniqueCommentID();
 
-    // get the author name
-    OUString GetDocumentAuthorName() const;
-
     // for export
     sal_uInt32 GetUniqueCommentID() const { return mnUniqueCommentID; }
 
