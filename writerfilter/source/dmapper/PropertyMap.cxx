@@ -50,7 +50,9 @@ namespace dmapper{
 
 PropertyMap::PropertyMap() :
     m_cFootnoteSymbol( 0 ),
-    m_nFootnoteFontId( -1 )
+    m_nFootnoteFontId( -1 ),
+    m_bAutoBeforeLineSpacing(false),
+    m_bAutoAfterLineSpacing(false)
 {
 }
 
