@@ -606,9 +606,9 @@ int MathType::Parse(SotStorage *pStor)
 
 static void lcl_PrependDummyTerm(OUString &rRet, sal_Int32 &rTextStart)
 {
-    if ((rRet[rTextStart] == '=') &&
-        ((rTextStart == 0) ||
-        (rRet[ rTextStart-1 ] == '{'))
+    if ((rTextStart < rRet.getLength()) &&
+        (rRet[rTextStart] == '=') &&
+        ((rTextStart == 0) || (rRet[ rTextStart-1 ] == '{'))
        )
     {
         rRet = rRet.replaceAt(rTextStart,0," {}");
