@@ -21,8 +21,9 @@
 #include "propacc.hxx"
 
 #include <basic/sbstar.hxx>
-#include <sbunoobj.hxx>
 #include <basic/sbuno.hxx>
+#include <sbunoobj.hxx>
+#include <limits.h>
 
 #include <limits.h>
 
