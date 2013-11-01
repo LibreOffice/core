@@ -48,7 +48,7 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
     stepper.autorepeat = YES;
     stepper.continuous = NO;
     [stepper addObserver:self forKeyPath:@"value"
-                          options: NSKeyValueObservingOptionNew
+                          options: NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                           context:0];
     return stepper;
 }
@@ -57,8 +57,10 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
 {
 
     if (object == self.dataStepper) {
-         NSNumber * floatNumber = change[NSKeyValueChangeNewKey];
-        CGFloat value = [self currentDataValue] + [floatNumber floatValue];
+        NSNumber * newNumber = change[NSKeyValueChangeNewKey];
+        NSNumber * oldNumber = change[NSKeyValueChangeOldKey];
+
+        CGFloat value = [self currentDataValue] + [newNumber floatValue] - [oldNumber floatValue];
 
         if(value == ((NSInteger) value)){
             self.data.text = [[NSNumber numberWithInteger:(NSInteger) value] stringValue];
