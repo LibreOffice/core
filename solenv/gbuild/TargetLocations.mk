@@ -30,17 +30,6 @@ gb_PackagePart_get_destinations = \
 # kind of lame but with just 3 of these why bother with registration etc.
 gb_UnoApi_get_target = $(INSTROOT)/$(if $(filter udkapi,$(1)),$(LIBO_URE_SHARE_FOLDER)/misc/types,$(LIBO_ETC_FOLDER)/types/$(1)).rdb
 
-# instdir target patterns
-
-gb_Executable_get_target = $(gb_Executable__get_linktarget_target)
-
-ifneq ($(CROSS_COMPILING),)
-# Can we assume this is used only for executables registered for "NONE"?
-gb_Executable_get_target_for_build = $(call gb_Executable_get_install_target_for_build,$(1))
-else
-gb_Executable_get_target_for_build = $(gb_Executable__get_linktarget_target)
-endif
-
 # workdir target patterns
 
 gb_AutoInstall_get_target = $(WORKDIR)/AutoInstall/$(1)
@@ -365,11 +354,19 @@ endef
 define gb_Executable__get_workdir_linktargetname
 Executable/$(call gb_Executable_get_filename,$(1))
 endef
-define gb_Executable__get_linktarget_target
-$(call gb_Executable_get_install_target,$(1))
+define gb_Executable_get_target
+$(call gb_Executable__get_dir_for_exe,$(1))/$(call gb_Executable_get_filename,$(1))
 endef
+ifneq ($(CROSS_COMPILING),)
+# Can we assume this is used only for executables registered for "NONE"?
+define gb_Executable_get_target_for_build
+$(call gb_Executable__get_dir_for_exe_for_build,$(1))/$(call gb_Executable_get_filename,$(1))
+endef
+else
+gb_Executable_get_target_for_build = $(gb_Executable_get_target)
+endif # CROSS_COMPILING
 define gb_Executable_get_linktarget
-$(call gb_Executable__get_workdir_linktargetname,$(1))<>$(call gb_Executable__get_linktarget_target,$(1))
+$(call gb_Executable__get_workdir_linktargetname,$(1))<>$(call gb_Executable_get_target,$(1))
 endef
 
 define gb_Library__get_workdir_linktargetname

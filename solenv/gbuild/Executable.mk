@@ -54,8 +54,6 @@ gb_Executable__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb
 gb_Executable__get_dir_for_layer_for_build = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS_FOR_BUILD)))
 gb_Executable__get_dir_for_exe = $(call gb_Executable__get_dir_for_layer,$(call gb_Executable_get_layer,$(1)))
 gb_Executable__get_dir_for_exe_for_build = $(call gb_Executable__get_dir_for_layer_for_build,$(call gb_Executable_get_layer,$(1)))
-gb_Executable_get_install_target = $(call gb_Executable__get_dir_for_exe,$(1))/$(call gb_Executable_get_filename,$(1))
-gb_Executable_get_install_target_for_build = $(call gb_Executable__get_dir_for_exe_for_build,$(1))/$(call gb_Executable_get_filename,$(1))
 
 define gb_Executable_Executable
 $(call gb_Postprocess_register_target,AllExecutables,Executable,$(1))
