@@ -136,11 +136,11 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
 class SdrGraphicUpdater;
 class SdrGraphicLink : public sfx2::SvBaseLink
 {
-    SdrGrafObj*         pGrafObj;
+    SdrGrafObj&         rGrafObj;
     SdrGraphicUpdater*  pGraphicUpdater;
 
 public:
-                        SdrGraphicLink(SdrGrafObj* pObj);
+                        SdrGraphicLink(SdrGrafObj& rObj);
     virtual             ~SdrGraphicLink();
 
     virtual void        Closed();
@@ -219,9 +219,9 @@ void SAL_CALL SdrGraphicUpdater::run(void)
     }
 }
 
-SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj)
+SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
 : ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB )
-, pGrafObj( pObj )
+, rGrafObj( rObj )
 , pGraphicUpdater( NULL )
 {
     SetSynchron( false );
@@ -235,7 +235,7 @@ SdrGraphicLink::~SdrGraphicLink()
 
 void SdrGraphicLink::DataChanged( const Graphic& rGraphic )
 {
-    pGrafObj->ImpSetLinkedGraphic( rGraphic );
+    rGrafObj.ImpSetLinkedGraphic( rGraphic );
 }
 
 void SdrGraphicLink::RemoveGraphicUpdater()
@@ -246,23 +246,23 @@ void SdrGraphicLink::RemoveGraphicUpdater()
 ::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
     const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue )
 {
-    SdrModel*       pModel      = pGrafObj ? pGrafObj->GetModel() : 0;
+    SdrModel*       pModel      = rGrafObj.GetModel();
     sfx2::LinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
 
     if( pLinkManager && rValue.hasValue() )
     {
-        pLinkManager->GetDisplayNames( this, 0, &pGrafObj->aFileName, 0, &pGrafObj->aFilterName );
+        pLinkManager->GetDisplayNames( this, 0, &rGrafObj.aFileName, 0, &rGrafObj.aFilterName );
 
         Graphic aGraphic;
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
         {
-               pGrafObj->NbcSetGraphic( aGraphic );
-            pGrafObj->ActionChanged();
+               rGrafObj.NbcSetGraphic( aGraphic );
+            rGrafObj.ActionChanged();
         }
         else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) != sfx2::LinkManager::RegisterStatusInfoId() )
         {
             // broadcasting, to update slide sorter
-            pGrafObj->BroadcastObjectChange();
+            rGrafObj.BroadcastObjectChange();
         }
     }
     return SUCCESS;
@@ -271,9 +271,9 @@ void SdrGraphicLink::RemoveGraphicUpdater()
 void SdrGraphicLink::Closed()
 {
     // close connection; set pLink of the object to NULL, as link instance is just about getting destructed.
-    pGrafObj->ForceSwapIn();
-    pGrafObj->pGraphicLink=NULL;
-    pGrafObj->ReleaseGraphicLink();
+    rGrafObj.ForceSwapIn();
+    rGrafObj.pGraphicLink=NULL;
+    rGrafObj.ReleaseGraphicLink();
     SvBaseLink::Closed();
 }
 
@@ -283,14 +283,14 @@ void SdrGraphicLink::UpdateAsynchron()
     {
         if ( pGraphicUpdater )
         {
-            if ( pGraphicUpdater->GraphicLinkChanged( pGrafObj->GetFileName() ) )
+            if ( pGraphicUpdater->GraphicLinkChanged( rGrafObj.GetFileName() ) )
             {
                 pGraphicUpdater->Terminate();
-                pGraphicUpdater = new SdrGraphicUpdater( pGrafObj->GetFileName(), pGrafObj->GetFilterName(), *this );
+                pGraphicUpdater = new SdrGraphicUpdater( rGrafObj.GetFileName(), rGrafObj.GetFilterName(), *this );
             }
         }
         else
-            pGraphicUpdater = new SdrGraphicUpdater( pGrafObj->GetFileName(), pGrafObj->GetFilterName(), *this );
+            pGraphicUpdater = new SdrGraphicUpdater( rGrafObj.GetFileName(), rGrafObj.GetFilterName(), *this );
     }
 }
 
@@ -635,7 +635,7 @@ void SdrGrafObj::ImpLinkAnmeldung()
     {
         if (!aFileName.isEmpty())
         {
-            pGraphicLink = new SdrGraphicLink( this );
+            pGraphicLink = new SdrGraphicLink( *this );
             pLinkManager->InsertFileLink(
                 *pGraphicLink, OBJECT_CLIENT_GRF, aFileName, (aFilterName.isEmpty() ? NULL : &aFilterName), NULL);
             pGraphicLink->Connect();
