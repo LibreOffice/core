@@ -2040,7 +2040,7 @@ void ScInterpreter::ScDde()
         //! Dde-Links (zusaetzlich) effizienter am Dokument speichern !!!!!
         //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
 
-        bool bWasError = ( pMyFormulaCell->GetRawError() != 0 );
+        bool bWasError = ( pMyFormulaCell && pMyFormulaCell->GetRawError() != 0 );
 
         if (!pLink)
         {
@@ -2056,19 +2056,23 @@ void ScInterpreter::ScDde()
                                     //! asynchron auswerten ???
             pLink->TryUpdate();     //  TryUpdate ruft Update nicht mehrfach auf
 
-            // StartListening erst nach dem Update, sonst circular reference
-            pMyFormulaCell->StartListening( *pLink );
+            if (pMyFormulaCell)
+            {
+                // StartListening erst nach dem Update, sonst circular reference
+                pMyFormulaCell->StartListening( *pLink );
+            }
         }
         else
         {
-            pMyFormulaCell->StartListening( *pLink );
+            if (pMyFormulaCell)
+                pMyFormulaCell->StartListening( *pLink );
         }
 
         //  Wenn aus dem Reschedule beim Ausfuehren des Links ein Fehler
         //  (z.B. zirkulaere Referenz) entstanden ist, der vorher nicht da war,
         //  das Fehler-Flag zuruecksetzen:
 
-        if ( pMyFormulaCell->GetRawError() && !bWasError )
+        if ( pMyFormulaCell && pMyFormulaCell->GetRawError() && !bWasError )
             pMyFormulaCell->SetErrCode(0);
 
             //  Wert abfragen
