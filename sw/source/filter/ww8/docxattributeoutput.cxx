@@ -5643,10 +5643,32 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     {
         if ( !m_pParagraphSpacingAttrList )
             m_pParagraphSpacingAttrList = m_pSerializer->createAttrList();
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_before ),
-                OString::number( rULSpace.GetUpper() ) );
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
-                OString::number( rULSpace.GetLower() ) );
+        SAL_INFO("sw.ww8", "DocxAttributeOutput::FormatULSpace: setting spacing" << rULSpace.GetUpper() );
+        // check if before auto spacing was set during import and spacing we get from actual object is same
+        // that we set in import. If yes just write beforeAutoSpacing tag.
+        if (m_bParaBeforeAutoSpacing && m_iParaBeforeSpacing == rULSpace.GetUpper())
+        {
+            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_beforeAutospacing ),
+                    "1" );
+        }
+        else
+        {
+            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_before ),
+                    OString::number( rULSpace.GetUpper() ) );
+        }
+        // check if after auto spacing was set during import and spacing we get from actual object is same
+        // that we set in import. If yes just write afterAutoSpacing tag.
+        if (m_bParaAfterAutoSpacing && m_iParaAfterSpacing == rULSpace.GetLower())
+        {
+            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_afterAutospacing ),
+                    "1" );
+        }
+        else
+        {
+            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
+                    OString::number( rULSpace.GetLower()) );
+        }
+
         if (rULSpace.GetContext())
             m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSEND );
     }
@@ -6169,8 +6191,24 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
     {
         if (i->first == "MirrorIndents")
             m_pSerializer->singleElementNS(XML_w, XML_mirrorIndents, FSEND);
+        else if (i->first == "ParaTopMarginBeforeAutoSpacing")
+        {
+            m_bParaBeforeAutoSpacing = true;
+            // get fixed value which was set during import
+            i->second >>= m_iParaBeforeSpacing;
+            m_iParaBeforeSpacing = MM100_TO_TWIP(m_iParaBeforeSpacing);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_iParaBeforeSpacing= " << m_iParaBeforeSpacing);
+        }
+        else if (i->first == "ParaBottomMarginAfterAutoSpacing")
+        {
+            m_bParaAfterAutoSpacing = true;
+            // get fixed value which was set during import
+            i->second >>= m_iParaAfterSpacing;
+            m_iParaAfterSpacing = MM100_TO_TWIP(m_iParaAfterSpacing);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_iParaBeforeSpacing= " << m_iParaAfterSpacing);
+        }
         else
-            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
     }
 }
 
@@ -6222,7 +6260,9 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nextFontId( 1 ),
       m_bBtLr(false),
       m_bFrameBtLr(false),
-      m_pTableStyleExport(new DocxTableStyleExport(rExport.pDoc, pSerializer))
+      m_pTableStyleExport(new DocxTableStyleExport(rExport.pDoc, pSerializer)),
+      m_bParaBeforeAutoSpacing(false),
+      m_bParaAfterAutoSpacing(false)
 {
 }
 

@@ -1833,6 +1833,12 @@ DECLARE_OOXML_TEST(testFdo71646, "fdo71646.docx")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
 }
 
+DECLARE_OOXML_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "beforeAutospacing").match("1"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "afterAutospacing").match("1"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
