@@ -277,12 +277,14 @@ void DocxTableStyleExport::Impl::tableStylePSpacing(uno::Sequence<beans::Propert
             pAttributeList->add(FSNS(XML_w, XML_lineRule), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rSpacing[i].Name == "beforeLines")
             pAttributeList->add(FSNS(XML_w, XML_beforeLines), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
-        else if (rSpacing[i].Name == "beforeAutospacing")
-            pAttributeList->add(FSNS(XML_w, XML_beforeAutospacing), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rSpacing[i].Name == "ParaTopMarginBeforeAutoSpacing")
+            // Auto spacing will be available in grab bag only if it was set to true
+            pAttributeList->add(FSNS(XML_w, XML_beforeAutospacing), "1");
         else if (rSpacing[i].Name == "afterLines")
             pAttributeList->add(FSNS(XML_w, XML_afterLines), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
-        else if (rSpacing[i].Name == "afterAutospacing")
-            pAttributeList->add(FSNS(XML_w, XML_afterAutospacing), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rSpacing[i].Name == "ParaBottomMarginAfterAutoSpacing")
+            // Auto spacing will be available in grab bag only if it was set to true
+            pAttributeList->add(FSNS(XML_w, XML_afterAutospacing), "1");
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_spacing, xAttributeList);
