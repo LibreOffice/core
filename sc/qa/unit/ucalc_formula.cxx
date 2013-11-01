@@ -21,6 +21,7 @@
 #include "scmod.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
+#include "paramisc.hxx"
 
 #include "formula/vectortoken.hxx"
 
@@ -1308,6 +1309,7 @@ void Test::testFormulaRefUpdateNamedExpression()
     m_pDoc->SetValue(ScAddress(3,9,1), 10);
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(2,7,1)));
 
+    // Delete the inserted sheet, which will shift the 'Formula' sheet to the left.
     m_pDoc->DeleteTab(0);
 
     aName = OUString();
@@ -1338,6 +1340,58 @@ void Test::testFormulaRefUpdateNamedExpression()
     pName->GetSymbol(aExpr);
     CPPUNIT_ASSERT_EQUAL(OUString("$B$1:$C$6"), aExpr);
 
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testMultipleOperations()
+{
+    m_pDoc->InsertTab(0, "MultiOp");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    // Insert the reference formula at top row.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1);
+    m_pDoc->SetString(ScAddress(1,0,0), "=A1*10");
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+
+    // Insert variable inputs in A3:A5.
+    m_pDoc->SetValue(ScAddress(0,2,0), 2);
+    m_pDoc->SetValue(ScAddress(0,3,0), 3);
+    m_pDoc->SetValue(ScAddress(0,4,0), 4);
+
+    // Set multiple operations range.
+    ScTabOpParam aParam;
+    aParam.aRefFormulaCell = ScRefAddress(1,0,0,false,false,false);
+    aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
+    aParam.aRefColCell = ScRefAddress(0,0,0,false,false,false);
+    ScMarkData aMark;
+    aMark.SetMarkArea(ScRange(0,2,0,1,4,0)); // Select A3:B5.
+    m_pDoc->InsertTableOp(aParam, 0, 2, 1, 4, aMark);
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(1,2,0));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(1,3,0));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(1,4,0));
+
+    // Clear A3:B5.
+    clearRange(m_pDoc, ScRange(0,2,0,1,4,0));
+
+    // This time, use indirect reference formula cell.
+    m_pDoc->SetString(ScAddress(2,0,0), "=B1"); // C1 simply references B1.
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+
+    // Insert variable inputs in A3:A5.
+    m_pDoc->SetValue(ScAddress(0,2,0), 3);
+    m_pDoc->SetValue(ScAddress(0,3,0), 4);
+    m_pDoc->SetValue(ScAddress(0,4,0), 5);
+
+    // Set multiple operations range again, but this time, we'll use C1 as the reference formula.
+    aParam.aRefFormulaCell.Set(2,0,0,false,false,false);
+    aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
+    m_pDoc->InsertTableOp(aParam, 0, 2, 1, 4, aMark);
+#if 0 // TODO: Make this pass.
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(1,2,0));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(1,3,0));
+    CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(1,4,0));
+#endif
     m_pDoc->DeleteTab(0);
 }
 
