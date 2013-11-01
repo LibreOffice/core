@@ -1812,7 +1812,7 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         // resizes the virtual device so to contain the entrie context
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
         // draw - works in logic coordinates
-        pViewShell->PaintTile(&aDevice, Rectangle(Point(0, 0), Size(tileWidth, tileHeight)));
+        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
         // copy the aDevice content to mpImage
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();
