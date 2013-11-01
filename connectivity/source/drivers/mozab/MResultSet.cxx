@@ -908,7 +908,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             parseParameter( pAtom, matchString );
             // Replace all '*' with '%' : UI Usually does this but not with
             // Parameters for some reason.
-            matchString = matchString.replace( ALT_WILDCARD, WILDCARD );
+            matchString = matchString.replaceAll( ALT_WILDCARD, WILDCARD );
         }
         else
         {
