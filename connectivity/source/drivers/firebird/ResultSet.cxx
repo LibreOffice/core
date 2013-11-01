@@ -417,7 +417,7 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
         case SQL_TYPE_TIME:
             return getTime(nColumnIndex);
         case SQL_TYPE_DATE:
-            return getTime(nColumnIndex);
+            return getDate(nColumnIndex);
         case SQL_INT64:
             return getLong(nColumnIndex);
         case SQL_BLOB:
