@@ -1441,6 +1441,9 @@ void XMLShapeExport::ImpExportConnectorShape(
                     true,           // bUseRelativeCoordinates
                     false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
                     true));         // bHandleRelativeNextPointCompatible
+
+            // write point array
+            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
         }
     }
 
