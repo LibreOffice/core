@@ -1808,10 +1808,11 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         aMapMode.SetScaleX(scaleX);
         aMapMode.SetScaleY(scaleY);
         aDevice.SetMapMode(aMapMode);
+        SetSwVisArea( pViewShell, SwRect(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)) );
         // resizes the virtual device so to contain the entrie context
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
         // draw - works in logic coordinates
-        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
+        pViewShell->PaintTile(&aDevice, Rectangle(Point(0, 0), Size(tileWidth, tileHeight)));
         // copy the aDevice content to mpImage
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();
@@ -1843,8 +1844,8 @@ MLODpxSize touch_lo_get_content_size()
 extern "C"
 MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint)
 {
-    MLODpxSize contentSize = touch_lo_get_content_size();
-    MLORip x = MLORipByDpx(mloDpxPoint.x - (contentSize.width/2.0f));
+    //MLODpxSize contentSize = touch_lo_get_content_size();
+    MLORip x = MLORipByDpx(mloDpxPoint.x /*- (contentSize.width/2.0f)*/);
     MLORip y = MLORipByDpx(mloDpxPoint.y);
     return MLORipPointByRips(x,y);
 }
@@ -1852,8 +1853,8 @@ MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint)
 extern "C"
 MLODpxPoint MLODpxPointByRipPoint(MLORipPoint mloRipPoint)
 {
-    MLODpxSize contentSize = touch_lo_get_content_size();
-    MLODpx x = MLODpxByRip(mloRipPoint.x) + (contentSize.width/2.0f);
+    //MLODpxSize contentSize = touch_lo_get_content_size();
+    MLODpx x = MLODpxByRip(mloRipPoint.x)/* + (contentSize.width/2.0f)*/;
     MLODpx y = MLODpxByRip(mloRipPoint.y);
     return MLODpxPointByDpxes(x,y);
 }
