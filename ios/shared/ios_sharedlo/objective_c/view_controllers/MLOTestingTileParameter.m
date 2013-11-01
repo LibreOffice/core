@@ -185,4 +185,16 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
         extractor([self currentDataValue]);
     }
 }
+-(BOOL)isSupportingMode:(MLOTestingTileParametersMode) mode{
+    return [self getExtractor:mode]!=nil;
+}
+-(void)enterMode:(MLOTestingTileParametersMode)mode{
+    CGFloat alpha = [self isSupportingMode:mode] ? 1.0f: 0.0f;
+    self.label.alpha = alpha;
+    self.data.alpha = alpha;
+    self.dataStepper.alpha = alpha;
+    self.step.alpha =alpha;
+    self.stepStepper.alpha = alpha;
+}
+
 @end

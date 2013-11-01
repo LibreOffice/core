@@ -26,10 +26,12 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
     self = [self init];
     if(self){
         self.tester = tester;
-        self.mode = WIDTH_IS_HEIGHT;
         [self initParams];
         [self initModeButton];
         [self initRenderButton];
+
+        self.mode = WIDTH_IS_NOT_HEIGHT;
+        [self changeMode];
 
     }
 
@@ -96,6 +98,9 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
     }
 
     [self.modeButton setTitle:MLOTestingTileParametersModeString(self.mode) forState:UIControlStateNormal];
+    for(MLOTestingTileParameter * param in self.params){
+        [param enterMode:self.mode];
+    }
 }
 
 

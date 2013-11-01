@@ -19,4 +19,5 @@ typedef void (^MLOTestingTileParameterExtractor)(CGFloat value);
 -(void)extractMode:(MLOTestingTileParametersMode) mode;
 -(void)setParamFrame:(CGRect)  paramFrame;
 -(void)addToSuperview;
+-(void)enterMode:(MLOTestingTileParametersMode)mode;
 @end
