@@ -1116,7 +1116,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
      if( (0 < nBufferSize) && (nBufferSize <= 0xFFFF) && SeekToContent( DFF_Prop_pihlShape, rSt ) )
     {
         SvMemoryStream aMemStream;
-        OUString aStrURL;
         struct HyperLinksTable hlStr;
         sal_uInt16 mnRawRecId,mnRawRecSize;
         aMemStream << sal_uInt16( 0 ) << static_cast< sal_uInt16 >( nBufferSize );
