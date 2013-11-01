@@ -86,7 +86,7 @@ protected:
     void SetThumbnail();
 
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
-    void AddShape(const char* pServiceName );
+    void AddShape(OUString const & serviceName);
     void SetTransformation();
 
     SvXMLImport& GetImport() { return SvXMLImportContext::GetImport(); }

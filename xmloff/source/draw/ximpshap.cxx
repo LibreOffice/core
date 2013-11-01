@@ -475,7 +475,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 
 }
 
-void SdXMLShapeContext::AddShape(const char* pServiceName )
+void SdXMLShapeContext::AddShape(OUString const & serviceName)
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
     if(xServiceFact.is())
@@ -489,14 +489,14 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
                objects after the import into com.sun.star.drawing.GraphicObjectShape.
             */
             uno::Reference< drawing::XShape > xShape;
-            if ( OUString::createFromAscii(pServiceName).compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 &&
+            if ( serviceName == "com.sun.star.drawing.OLE2Shape" &&
                  uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
             {
                 xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"), uno::UNO_QUERY);
             }
             else
             {
-                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
+                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(serviceName), uno::UNO_QUERY);
             }
             if( xShape.is() )
                 AddShape( xShape );
@@ -504,7 +504,7 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
         catch(const uno::Exception& e)
         {
             uno::Sequence<OUString> aSeq( 1 );
-            aSeq[0] = OUString::createFromAscii(pServiceName);
+            aSeq[0] = serviceName;
             GetImport().SetError( XMLERROR_FLAG_ERROR | XMLERROR_API,
                                   aSeq, e.Message, NULL );
         }
@@ -1407,33 +1407,33 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                 }
 
                 // create shape
-                const char* pService;
+                OUString service;
 
                 if(aPolyPolygon.areControlPointsUsed())
                 {
                     if(aPolyPolygon.isClosed())
                     {
-                        pService = "com.sun.star.drawing.ClosedBezierShape";
+                        service = "com.sun.star.drawing.ClosedBezierShape";
                     }
                     else
                     {
-                        pService = "com.sun.star.drawing.OpenBezierShape";
+                        service = "com.sun.star.drawing.OpenBezierShape";
                     }
                 }
                 else
                 {
                     if(aPolyPolygon.isClosed())
                     {
-                        pService = "com.sun.star.drawing.PolyPolygonShape";
+                        service = "com.sun.star.drawing.PolyPolygonShape";
                     }
                     else
                     {
-                        pService = "com.sun.star.drawing.PolyLineShape";
+                        service = "com.sun.star.drawing.PolyLineShape";
                     }
                 }
 
                 // Add, set Style and properties from base shape
-                AddShape(pService);
+                AddShape(service);
 
                 // #89344# test for mxShape.is() and not for mxShapes.is() to support
                 // shape import helper classes WITHOUT XShapes (member mxShapes). This
@@ -1525,7 +1525,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     sal_Bool bIsPresShape = sal_False;
     bool bClearText = false;
 
-    const char *pService = NULL;
+    OUString service;
 
     if( isPresentationShape() )
     {
@@ -1535,59 +1535,59 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             if( IsXMLToken( maPresentationClass, XML_PRESENTATION_SUBTITLE ))
             {
                 // XmlShapeTypePresSubtitleShape
-                pService = "com.sun.star.presentation.SubtitleShape";
+                service = "com.sun.star.presentation.SubtitleShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OUTLINE ) )
             {
                 // XmlShapeTypePresOutlinerShape
-                pService = "com.sun.star.presentation.OutlinerShape";
+                service = "com.sun.star.presentation.OutlinerShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_NOTES ) )
             {
                 // XmlShapeTypePresNotesShape
-                pService = "com.sun.star.presentation.NotesShape";
+                service = "com.sun.star.presentation.NotesShape";
             }
             else if( IsXMLToken( maPresentationClass, XML_HEADER ) )
             {
                 // XmlShapeTypePresHeaderShape
-                pService = "com.sun.star.presentation.HeaderShape";
+                service = "com.sun.star.presentation.HeaderShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_FOOTER ) )
             {
                 // XmlShapeTypePresFooterShape
-                pService = "com.sun.star.presentation.FooterShape";
+                service = "com.sun.star.presentation.FooterShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_PAGE_NUMBER ) )
             {
                 // XmlShapeTypePresSlideNumberShape
-                pService = "com.sun.star.presentation.SlideNumberShape";
+                service = "com.sun.star.presentation.SlideNumberShape";
                 bClearText = true;
             }
             else if( IsXMLToken( maPresentationClass, XML_DATE_TIME ) )
             {
                 // XmlShapeTypePresDateTimeShape
-                pService = "com.sun.star.presentation.DateTimeShape";
+                service = "com.sun.star.presentation.DateTimeShape";
                 bClearText = true;
             }
             else //  IsXMLToken( maPresentationClass, XML_PRESENTATION_TITLE ) )
             {
                 // XmlShapeTypePresTitleTextShape
-                pService = "com.sun.star.presentation.TitleTextShape";
+                service = "com.sun.star.presentation.TitleTextShape";
             }
             bIsPresShape = sal_True;
         }
     }
 
-    if( NULL == pService )
+    if( service.isEmpty() )
     {
         // normal text shape
-        pService = "com.sun.star.drawing.TextShape";
+        service = "com.sun.star.drawing.TextShape";
     }
 
     // Add, set Style and properties from base shape
-    AddShape(pService);
+    AddShape(service);
 
     if( mxShape.is() )
     {
@@ -2299,18 +2299,18 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
 void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
     // create graphic object shape
-    const char *pService;
+    OUString service;
 
     if( IsXMLToken( maPresentationClass, XML_GRAPHIC ) && GetImport().GetShapeImport()->IsPresentationShapesSupported() )
     {
-        pService = "com.sun.star.presentation.GraphicObjectShape";
+        service = "com.sun.star.presentation.GraphicObjectShape";
     }
     else
     {
-        pService = "com.sun.star.drawing.GraphicObjectShape";
+        service = "com.sun.star.drawing.GraphicObjectShape";
     }
 
-    AddShape( pService );
+    AddShape(service);
 
     if(mxShape.is())
     {
@@ -2457,7 +2457,10 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 {
     const sal_Bool bIsPresentation = isPresentationShape();
 
-    AddShape( bIsPresentation ? "com.sun.star.presentation.ChartShape" : "com.sun.star.drawing.OLE2Shape" );
+    AddShape(
+        bIsPresentation
+        ? OUString("com.sun.star.presentation.ChartShape")
+        : OUString("com.sun.star.drawing.OLE2Shape"));
 
     if(mxShape.is())
     {
@@ -2567,7 +2570,7 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
     if( !(GetImport().getImportFlags() & IMPORT_EMBEDDED) && !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
         return;
 
-    const char* pService = "com.sun.star.drawing.OLE2Shape";
+    OUString service("com.sun.star.drawing.OLE2Shape");
 
     sal_Bool bIsPresShape = !maPresentationClass.isEmpty() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
 
@@ -2575,19 +2578,19 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
     {
         if( IsXMLToken( maPresentationClass, XML_PRESENTATION_CHART ) )
         {
-            pService = "com.sun.star.presentation.ChartShape";
+            service = "com.sun.star.presentation.ChartShape";
         }
         else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) )
         {
-            pService = "com.sun.star.presentation.CalcShape";
+            service = "com.sun.star.presentation.CalcShape";
         }
         else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
         {
-            pService = "com.sun.star.presentation.OLE2Shape";
+            service = "com.sun.star.presentation.OLE2Shape";
         }
     }
 
-    AddShape( pService );
+    AddShape(service);
 
     if( mxShape.is() )
     {
@@ -2769,8 +2772,7 @@ SdXMLAppletShapeContext::~SdXMLAppletShapeContext()
 
 void SdXMLAppletShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
-    const char* pService = "com.sun.star.drawing.AppletShape";
-    AddShape( pService );
+    AddShape("com.sun.star.drawing.AppletShape");
 
     if( mxShape.is() )
     {
@@ -2948,27 +2950,27 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
         }
     }
 
-    const char* pService;
+    OUString service;
 
     sal_Bool bIsPresShape = sal_False;
 
     if( mbMedia )
     {
-        pService = "com.sun.star.drawing.MediaShape";
+        service = "com.sun.star.drawing.MediaShape";
 
         bIsPresShape = !maPresentationClass.isEmpty() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
         if( bIsPresShape )
         {
             if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
             {
-                pService = "com.sun.star.presentation.MediaShape";
+                service = "com.sun.star.presentation.MediaShape";
             }
         }
     }
     else
-        pService = "com.sun.star.drawing.PluginShape";
+        service = "com.sun.star.drawing.PluginShape";
 
-    AddShape( pService );
+    AddShape(service);
 
     if( mxShape.is() )
     {
@@ -3205,8 +3207,7 @@ SdXMLFloatingFrameShapeContext::~SdXMLFloatingFrameShapeContext()
 
 void SdXMLFloatingFrameShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
-    const char* pService = "com.sun.star.drawing.FrameShape";
-    AddShape( pService );
+    AddShape("com.sun.star.drawing.FrameShape");
 
     if( mxShape.is() )
     {
@@ -3764,18 +3765,18 @@ SdXMLTableShapeContext::~SdXMLTableShapeContext()
 
 void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
-    const char* pService = "com.sun.star.drawing.TableShape";
+    OUString service("com.sun.star.drawing.TableShape");
 
     sal_Bool bIsPresShape = !maPresentationClass.isEmpty() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
     if( bIsPresShape )
     {
         if( IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) )
         {
-            pService = "com.sun.star.presentation.TableShape";
+            service = "com.sun.star.presentation.TableShape";
         }
     }
 
-    AddShape( pService );
+    AddShape(service);
 
     if( mxShape.is() )
     {
