@@ -6,6 +6,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <swmodeltestbase.hxx>
+
+#if !defined(MACOSX) && !defined(WNT)
+
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -20,143 +24,34 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 
 #include <vcl/svapp.hxx>
-#include <swmodeltestbase.hxx>
 
 class Test : public SwModelTestBase
 {
 public:
-    void testZoom();
-    void testFdo38176();
-    void testFdo49683();
-    void testFdo44174();
-    void testFdo50087();
-    void testFdo50831();
-    void testFdo48335();
-    void testFdo38244();
-    void testMathAccents();
-    void testMathEqarray();
-    void testMathD();
-    void testMathEscaping();
-    void testMathLim();
-    void testMathMatrix();
-    void testMathBox();
-    void testMathMso2007();
-    void testMathNary();
-    void testMathLimupp();
-    void testMathStrikeh();
-    void testMathPlaceholders();
-    void testMathRad();
-    void testMathSepchr();
-    void testMathSubscripts();
-    void testMathVerticalstacks();
-    void testMathRuns();
-    void testFdo53113();
-    void testFdo55939();
-    void testTextFrames();
-    void testFdo53604();
-    void testFdo52286();
-    void testFdo61507();
-    void testFdo30983();
-    void testPlaceholder();
-    void testMnor();
-    void testI120928();
-    void testBookmark();
-    void testHyperlink();
-    void testTextFrameBorders();
-    void testTextframeGradient();
-    void testRecordChanges();
-    void testTextframeTable();
-    void testFdo66682();
-    void testParaShadow();
-    void testCharacterBorder();
-    void testFdo66743();
+    Test() : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format") {}
 
-    CPPUNIT_TEST_SUITE(Test);
-#if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(run);
-#endif
-    CPPUNIT_TEST_SUITE_END();
+    bool mustTestImportOf(const char* filename) const {
+        // Don't test the first import of these, for some reason those tests fail
+        const char* aBlacklist[] = {
+            "math-eqarray.rtf",
+            "math-escaping.rtf",
+            "math-lim.rtf",
+            "math-mso2007.rtf",
+            "math-nary.rtf",
+            "math-rad.rtf",
+            "math-vertical-stacks.rtf",
+            "math-runs.rtf",
+        };
+        std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
-private:
-    void run();
+        // If the testcase is stored in some other format, it's pointless to test.
+        return (OString(filename).endsWith(".rtf") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
+    }
 };
 
-void Test::run()
-{
-    MethodEntry<Test> aMethods[] = {
-        {"zoom.rtf", &Test::testZoom},
-        {"fdo38176.rtf", &Test::testFdo38176},
-        {"fdo49683.rtf", &Test::testFdo49683},
-        {"fdo44174.rtf", &Test::testFdo44174},
-        {"fdo50087.rtf", &Test::testFdo50087},
-        {"fdo50831.rtf", &Test::testFdo50831},
-        {"fdo48335.odt", &Test::testFdo48335},
-        {"fdo38244.rtf", &Test::testFdo38244},
-        {"math-accents.rtf", &Test::testMathAccents},
-        {"math-eqarray.rtf", &Test::testMathEqarray},
-        {"math-d.rtf", &Test::testMathD},
-        {"math-escaping.rtf", &Test::testMathEscaping},
-        {"math-lim.rtf", &Test::testMathLim},
-        {"math-matrix.rtf", &Test::testMathMatrix},
-        {"math-mbox.rtf", &Test::testMathBox},
-        {"math-mso2007.rtf", &Test::testMathMso2007},
-        {"math-nary.rtf", &Test::testMathNary},
-        {"math-limupp.rtf", &Test::testMathLimupp},
-        {"math-strikeh.rtf", &Test::testMathStrikeh},
-        {"math-placeholders.rtf", &Test::testMathPlaceholders},
-        {"math-rad.rtf", &Test::testMathRad},
-        {"math-sepchr.rtf", &Test::testMathSepchr},
-        {"math-subscripts.rtf", &Test::testMathSubscripts},
-        {"math-vertical-stacks.rtf", &Test::testMathVerticalstacks},
-        {"math-runs.rtf", &Test::testMathRuns},
-        {"fdo53113.odt", &Test::testFdo53113},
-        {"fdo55939.odt", &Test::testFdo55939},
-        {"textframes.odt", &Test::testTextFrames},
-        {"fdo53604.odt", &Test::testFdo53604},
-        {"fdo52286.odt", &Test::testFdo52286},
-        {"fdo61507.rtf", &Test::testFdo61507},
-        {"fdo30983.rtf", &Test::testFdo30983},
-        {"placeholder.odt", &Test::testPlaceholder},
-        {"mnor.rtf", &Test::testMnor},
-        {"i120928.rtf", &Test::testI120928},
-        {"bookmark.rtf", &Test::testBookmark},
-        {"hyperlink.rtf", &Test::testHyperlink},
-        {"textframe-borders.rtf", &Test::testTextFrameBorders},
-        {"textframe-gradient.rtf", &Test::testTextframeGradient},
-        {"record-changes.rtf", &Test::testRecordChanges},
-        {"textframe-table.rtf", &Test::testTextframeTable},
-        {"fdo66682.rtf", &Test::testFdo66682},
-        {"para-shadow.rtf", &Test::testParaShadow},
-        {"charborder.odt", &Test::testCharacterBorder},
-        {"fdo66743.rtf", &Test::testFdo66743},
-    };
-    // Don't test the first import of these, for some reason those tests fail
-    const char* aBlacklist[] = {
-        "math-eqarray.rtf",
-        "math-escaping.rtf",
-        "math-lim.rtf",
-        "math-mso2007.rtf",
-        "math-nary.rtf",
-        "math-rad.rtf",
-        "math-vertical-stacks.rtf",
-        "math-runs.rtf",
-    };
-    std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
-    header();
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
-    {
-        MethodEntry<Test>& rEntry = aMethods[i];
-        load("/sw/qa/extras/rtfexport/data/", rEntry.pName);
-        // If the testcase is stored in some other format, it's pointless to test.
-        if (OString(rEntry.pName).endsWith(".rtf") && std::find(vBlacklist.begin(), vBlacklist.end(), rEntry.pName) == vBlacklist.end())
-            (this->*rEntry.pMethod)();
-        reload("Rich Text Format");
-        (this->*rEntry.pMethod)();
-        finish();
-    }
-}
+#define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
-void Test::testZoom()
+DECLARE_RTFEXPORT_TEST(testZoom, "zoom.rtf")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -166,12 +61,12 @@ void Test::testZoom()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 }
 
-void Test::testFdo38176()
+DECLARE_RTFEXPORT_TEST(testFdo38176, "fdo38176.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(9, getLength());
 }
 
-void Test::testFdo49683()
+DECLARE_RTFEXPORT_TEST(testFdo49683, "fdo49683.rtf")
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
@@ -181,7 +76,7 @@ void Test::testFdo49683()
     CPPUNIT_ASSERT_EQUAL(OUString("two"), aKeywords[1]);
 }
 
-void Test::testFdo44174()
+DECLARE_RTFEXPORT_TEST(testFdo44174, "fdo44174.rtf")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -191,7 +86,7 @@ void Test::testFdo44174()
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
 }
 
-void Test::testFdo50087()
+DECLARE_RTFEXPORT_TEST(testFdo50087, "fdo50087.rtf")
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
@@ -200,7 +95,7 @@ void Test::testFdo50087()
     CPPUNIT_ASSERT_EQUAL(OUString("First line.\nSecond line."), xDocumentProperties->getDescription());
 }
 
-void Test::testFdo50831()
+DECLARE_RTFEXPORT_TEST(testFdo50831, "fdo50831.rtf")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -211,7 +106,7 @@ void Test::testFdo50831()
     CPPUNIT_ASSERT_EQUAL(10.f, fValue);
 }
 
-void Test::testFdo48335()
+DECLARE_RTFEXPORT_TEST(testFdo48335, "fdo48335.odt")
 {
     /*
      * The problem was that we exported a fake pagebreak, make sure it's just a soft one now.
@@ -237,7 +132,7 @@ void Test::testFdo48335()
     CPPUNIT_ASSERT_EQUAL(OUString("SoftPageBreak"), aValue);
 }
 
-void Test::testFdo38244()
+DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
 {
     // See ooxmlexport's testFdo38244().
     // Test comment range feature.
@@ -261,56 +156,56 @@ void Test::testFdo38244()
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
-void Test::testMathAccents()
+DECLARE_RTFEXPORT_TEST(testMathAccents, "math-accents.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("acute {a} grave {a} check {a} breve {a} circle {a} widevec {a} widetilde {a} widehat {a} dot {a} widevec {a} widevec {a} widetilde {a} underline {a}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathEqarray()
+DECLARE_RTFEXPORT_TEST(testMathEqarray, "math-eqarray.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("y = left lbrace stack { 0, x < 0 # 1, x = 0 # {x} ^ {2} , x > 0 } right none");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathD()
+DECLARE_RTFEXPORT_TEST(testMathD, "math-d.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("left (x mline y mline z right ) left (1 right ) left [2 right ] left ldbracket 3 right rdbracket left lline 4 right rline left ldline 5 right rdline left langle 6 right rangle left langle a mline b right rangle left ({x} over {y} right )");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathEscaping()
+DECLARE_RTFEXPORT_TEST(testMathEscaping, "math-escaping.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("\xc3\xa1 \\{", 5, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathLim()
+DECLARE_RTFEXPORT_TEST(testMathLim, "math-lim.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("lim from {x \xe2\x86\x92 1} {x}", 22, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathMatrix()
+DECLARE_RTFEXPORT_TEST(testMathMatrix, "math-matrix.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("left [matrix {1 # 2 ## 3 # 4} right ]");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathBox()
+DECLARE_RTFEXPORT_TEST(testMathBox, "math-mbox.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("a");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathMso2007()
+DECLARE_RTFEXPORT_TEST(testMathMso2007, "math-mso2007.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("A = \xcf\x80 {r} ^ {2}", 16, RTL_TEXTENCODING_UTF8);
@@ -350,14 +245,14 @@ void Test::testMathMso2007()
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathNary()
+DECLARE_RTFEXPORT_TEST(testMathNary, "math-nary.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("lllint from {1} to {2} {x + 1} prod from {a} {b} sum to {2} {x}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathLimupp()
+DECLARE_RTFEXPORT_TEST(testMathLimupp, "math-limupp.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("{abcd} overbrace {4}"), aActual);
@@ -366,38 +261,38 @@ void Test::testMathLimupp()
     CPPUNIT_ASSERT_EQUAL(OUString("{xyz} underbrace {3}"), aActual);
 }
 
-void Test::testMathStrikeh()
+DECLARE_RTFEXPORT_TEST(testMathStrikeh, "math-strikeh.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("overstrike {abc}"), aActual);
 }
 
-void Test::testMathPlaceholders()
+DECLARE_RTFEXPORT_TEST(testMathPlaceholders, "math-placeholders.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("sum from <?> to <?> <?>"), aActual);
 }
 
-void Test::testMathRad()
+DECLARE_RTFEXPORT_TEST(testMathRad, "math-rad.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("sqrt {4} nroot {3} {x + 1}"), aActual);
 }
 
-void Test::testMathSepchr()
+DECLARE_RTFEXPORT_TEST(testMathSepchr, "math-sepchr.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("AxByBzC"), aActual);
 }
 
-void Test::testMathSubscripts()
+DECLARE_RTFEXPORT_TEST(testMathSubscripts, "math-subscripts.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("{x} ^ {y} + {e} ^ {x} {x} ^ {b} {x} rsub {b} {a} rsub {c} rsup {b} {x} lsub {2} lsup {1} {{x csup {6} csub {3}} lsub {4} lsup {5}} rsub {2} rsup {1}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testMathVerticalstacks()
+DECLARE_RTFEXPORT_TEST(testMathVerticalstacks, "math-vertical-stacks.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("{a} over {b}"), getFormula(getRun(getParagraph(1), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString("{a} / {b}"), getFormula(getRun(getParagraph(2), 1)));
@@ -405,13 +300,13 @@ void Test::testMathVerticalstacks()
     CPPUNIT_ASSERT_EQUAL(OUString("stack { a # stack { b # c } }"), getFormula(getRun(getParagraph(4), 1)));
 }
 
-void Test::testMathRuns()
+DECLARE_RTFEXPORT_TEST(testMathRuns, "math-runs.rtf")
 {
     // was [](){}, i.e. first curly bracket had an incorrect position
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
-void Test::testFdo53113()
+DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
 {
     /*
      * The problem was that a custom shape was missings its second (and all the other remaining) coordinates.
@@ -443,7 +338,7 @@ void Test::testFdo53113()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(102), aPairs[1].Second.Value.get<sal_Int32>());
 }
 
-void Test::testFdo55939()
+DECLARE_RTFEXPORT_TEST(testFdo55939, "fdo55939.odt")
 {
     // The problem was that the exported RTF was invalid.
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
@@ -454,7 +349,7 @@ void Test::testFdo55939()
     getRun(xParagraph, 3, " Text after the footnote."); // However, this leading space is intentional and OK.
 }
 
-void Test::testTextFrames()
+DECLARE_RTFEXPORT_TEST(testTextFrames, "textframes.odt")
 {
     // The output was simply invalid, so let's check if all 3 frames were imported back.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -462,7 +357,7 @@ void Test::testTextFrames()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
-void Test::testFdo53604()
+DECLARE_RTFEXPORT_TEST(testFdo53604, "fdo53604.odt")
 {
     // Invalid output on empty footnote.
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
@@ -470,14 +365,14 @@ void Test::testFdo53604()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
 }
 
-void Test::testFdo52286()
+DECLARE_RTFEXPORT_TEST(testFdo52286, "fdo52286.odt")
 {
     // The problem was that font size wasn't reduced in sub/super script.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapementHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58), getProperty<sal_Int32>(getRun(getParagraph(2), 2), "CharEscapementHeight"));
 }
 
-void Test::testFdo61507()
+DECLARE_RTFEXPORT_TEST(testFdo61507, "fdo61507.rtf")
 {
     /*
      * Unicode-only characters in \title confused Wordpad. Once the exporter
@@ -494,7 +389,7 @@ void Test::testFdo61507()
     CPPUNIT_ASSERT_EQUAL(6, getLength());
 }
 
-void Test::testFdo30983()
+DECLARE_RTFEXPORT_TEST(testFdo30983, "fdo30983.rtf")
 {
     // These were 'page text area', not 'entire page', i.e. both the horizontal
     // and vertical positions were incorrect.
@@ -502,7 +397,7 @@ void Test::testFdo30983()
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "VertOrientRelation"));
 }
 
-void Test::testPlaceholder()
+DECLARE_RTFEXPORT_TEST(testPlaceholder, "placeholder.odt")
 {
     // Only the field text was exported, make sure we still have a field with the correct Hint text.
     uno::Reference<text::XTextRange> xRun(getRun(getParagraph(1), 2));
@@ -511,7 +406,7 @@ void Test::testPlaceholder()
     CPPUNIT_ASSERT_EQUAL(OUString("place holder"), getProperty<OUString>(xField, "Hint"));
 }
 
-void Test::testMnor()
+DECLARE_RTFEXPORT_TEST(testMnor, "mnor.rtf")
 {
     // \mnor wasn't handled, leading to missing quotes around "divF" and so on.
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
@@ -519,7 +414,7 @@ void Test::testMnor()
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
-void Test::testI120928()
+DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
 {
     // \listpicture and \levelpicture0 was ignored, leading to missing graphic bullet in numbering.
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
@@ -540,21 +435,21 @@ void Test::testI120928()
     CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
 }
 
-void Test::testBookmark()
+DECLARE_RTFEXPORT_TEST(testBookmark, "bookmark.rtf")
 {
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xBookmark(xBookmarksSupplier->getBookmarks()->getByName("firstword"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xBookmark->getAnchor()->getString());
 }
 
-void Test::testHyperlink()
+DECLARE_RTFEXPORT_TEST(testHyperlink, "hyperlink.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 1, "Hello"), "HyperLinkURL"));
     CPPUNIT_ASSERT_EQUAL(OUString("http://en.wikipedia.org/wiki/World"), getProperty<OUString>(getRun(getParagraph(1), 2, "world"), "HyperLinkURL"));
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 3, "!"), "HyperLinkURL"));
 }
 
-void Test::testTextFrameBorders()
+DECLARE_RTFEXPORT_TEST(testTextFrameBorders, "textframe-borders.rtf")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -571,7 +466,7 @@ void Test::testTextFrameBorders()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
 }
 
-void Test::testTextframeGradient()
+DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -592,13 +487,13 @@ void Test::testTextframeGradient()
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 
-void Test::testRecordChanges()
+DECLARE_RTFEXPORT_TEST(testRecordChanges, "record-changes.rtf")
 {
     // \revisions wasn't imported/exported.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, "RecordChanges"));
 }
 
-void Test::testTextframeTable()
+DECLARE_RTFEXPORT_TEST(testTextframeTable, "textframe-table.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextRange->getText();
@@ -609,7 +504,7 @@ void Test::testTextframeTable()
     CPPUNIT_ASSERT_EQUAL(OUString("Last para."), getParagraphOfText(3, xText)->getString());
 }
 
-void Test::testFdo66682()
+DECLARE_RTFEXPORT_TEST(testFdo66682, "fdo66682.rtf")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
@@ -628,7 +523,7 @@ void Test::testFdo66682()
     CPPUNIT_ASSERT_EQUAL(OUString(" "), aSuffix);
 }
 
-void Test::testParaShadow()
+DECLARE_RTFEXPORT_TEST(testParaShadow, "para-shadow.rtf")
 {
     // The problem was that \brdrsh was ignored.
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getParagraph(2), "ParaShadowFormat");
@@ -637,7 +532,7 @@ void Test::testParaShadow()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(60)), aShadow.ShadowWidth);
 }
 
-void Test::testCharacterBorder()
+DECLARE_RTFEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // RTF has just one border attribute (chbrdr) for text border so all side has
@@ -675,7 +570,7 @@ void Test::testCharacterBorder()
     }
 }
 
-void Test::testFdo66743()
+DECLARE_RTFEXPORT_TEST(testFdo66743, "fdo66743.rtf")
 {
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
@@ -683,7 +578,7 @@ void Test::testFdo66743()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd8d8d8), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
