@@ -8785,13 +8785,9 @@ nss - Mozilla's Network Security Services (NSS)
         ;;
     esac
 else
-    if test "$enable_openssl" = "yes"; then
-        AC_DEFINE(USE_TLS_OPENSSL)
-        TLS=OPENSSL
-    else
-        AC_DEFINE(USE_TLS_NSS)
-        TLS=NSS
-    fi
+    # default to using NSS, it results in smaller oox lib
+    AC_DEFINE(USE_TLS_NSS)
+    TLS=NSS
 fi
 AC_MSG_RESULT([$TLS])
 AC_SUBST(TLS)
