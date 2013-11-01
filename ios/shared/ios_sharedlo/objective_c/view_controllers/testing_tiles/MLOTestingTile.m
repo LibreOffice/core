@@ -46,10 +46,6 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     CGContextSaveGState(context);
-    CGContextTranslateCTM(context, 0, self.tester.params.contextHeight);
-    CGContextScaleCTM(context, 1, -1);
-    CGContextScaleCTM(context, 1, 1);
-
     touch_lo_draw_tile(context,
                        self.tester.params.contextWidth,
                        self.tester.params.contextHeight,
