@@ -1,0 +1,26 @@
+HKCR
+{
+	UAccCOM.EnumVariant.1 = s 'EnumVariant Class'
+	{
+		CLSID = s '{152884E0-268B-4481-9AE7-1B372D3AA97F}'
+	}
+	UAccCOM.EnumVariant = s 'EnumVariant Class'
+	{
+		CLSID = s '{152884E0-268B-4481-9AE7-1B372D3AA97F}'
+		CurVer = s 'UAccCOM.EnumVariant.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {152884E0-268B-4481-9AE7-1B372D3AA97F} = s 'EnumVariant Class'
+		{
+			ProgID = s 'UAccCOM.EnumVariant.1'
+			VersionIndependentProgID = s 'UAccCOM.EnumVariant'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Both'
+			}
+			'TypeLib' = s '{19ECB1B0-9376-4FF9-B580-223FC9C200B8}'
+		}
+	}
+}

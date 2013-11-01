@@ -1,0 +1,70 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+import "objidl.idl";
+import "oaidl.idl";
+import "oleacc.idl";
+
+/** @brief This interface gives access to the application's name and version information.
+
+ This interface provides the AT with the information it needs to differentiate
+ this application from other applications, from other versions of this
+ application, or from other versions of this application running on different
+ versions of an accessibility bridge or accessbility toolkit.
+*/
+[object, uuid(D49DED83-5B25-43F4-9B95-93B44595979E)]
+interface IAccessibleApplication : IUnknown
+{
+
+  /** @brief Returns the application name.
+   @param [out] name
+  */
+  [propget] HRESULT appName
+    (
+     [out, retval] BSTR *name
+    );
+
+  /** @brief Returns the application version.
+   @param [out] version
+  */
+  [propget] HRESULT appVersion
+    (
+     [out, retval] BSTR *version
+    );
+
+  /** @brief Returns the toolkit/bridge name.
+   @param [out] name
+  */
+  [propget] HRESULT toolkitName
+    (
+     [out, retval] BSTR *name
+    );
+
+  /** @brief Returns the toolkit/bridge version.
+   @param [out] version
+  */
+  [propget] HRESULT toolkitVersion
+    (
+     [out, retval] BSTR *version
+    );
+
+}
+

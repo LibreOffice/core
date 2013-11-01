@@ -1,0 +1,86 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+import "objidl.idl";
+import "oaidl.idl";
+import "oleacc.idl";
+
+typedef long IA2Color;
+
+/** @brief This interface is implemented by any object that can be rendered
+ on the screen.
+
+ This interface provides the standard mechanism for an assistive technology
+  to retrieve information concerning the graphical representation of an object.
+  Coordinates used by the functions of this interface are specified in
+  different coordinate systems.  Their scale is the same and is equal to
+  that of the screen coordiante system.  In other words all coordinates
+  are measured in pixels.  They differ in their respective origin:
+  <ul>
+   <li>The screen coordinate system has its origin in the upper left
+    corner of the current screen.</li>
+   <li>The origin of the parent coordinate system is the upper left corner
+    of the parent's bounding box.  With no parent the screen coordinate
+    system is used instead.</li>
+  </ul>
+*/
+[object, uuid(1546D4B0-4C98-4bda-89AE-9A64748BDDE4)]
+interface IAccessibleComponent : IUnknown
+{
+
+  /** @brief Returns the location of the upper left corner of the object's
+    bounding box relative to the immediate parent object.
+
+    The coordinates of the bounding box are given relative to the parent's
+    coordinate system. The coordinates of the returned position are relative
+    to this object's parent or relative to the screen on which this object
+    is rendered if it has no parent. If the object is not on any screen
+    the returned position is (0,0).
+
+   @param [out] x
+   @param [out] y
+  */
+  [propget] HRESULT locationInParent
+    (
+     [out] long *x,
+     [out, retval] long *y
+    );
+
+  /** @brief Returns the foreground color of this object.
+   @param [out] foreground
+    The returned color is the foreground color of this object or, if
+    that is not supported, the default foreground color.
+  */
+  [propget] HRESULT foreground
+    (
+     [out, retval] IA2Color *foreground
+    );
+
+   /** @brief Returns the background color of this object.
+    @param [out] background
+     The returned color is the background color of this object or, if
+     that is not supported, the default background color.
+   */
+  [propget] HRESULT background
+    (
+     [out, retval] IA2Color *background
+    );
+}

@@ -547,6 +547,12 @@ inline void Application::EndYield()
     PostUserEvent( Link() );
 }
 
+//IAccessibility2 Implementation 2009-----
+#ifdef WNT
+VCL_DLLPUBLIC bool IsBridgeRegistered();
+#endif
+//-----IAccessibility2 Implementation 2009
+
 #endif // _APP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

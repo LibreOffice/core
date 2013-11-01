@@ -1662,4 +1662,13 @@ Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM 
     return pSVData->mpDefInst->createFolderPicker( xSM );
 }
 
+//IAccessible2 Implementation 2009-----
+#ifdef WNT
+bool IsBridgeRegistered()
+{
+    // TODO(davido): FixMe
+    return false;
+}
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

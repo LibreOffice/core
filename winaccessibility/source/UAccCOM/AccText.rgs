@@ -1,0 +1,23 @@
+HKCR
+{
+	UAccCOM.AccText.1 = s 'AccText Class'
+	{
+		CLSID = s '{6D8AB08B-CCE9-471E-8A41-35773D5263F5}'
+	}
+	UAccCOM.AccText = s 'AccText Class'
+	{
+		CLSID = s '{6D8AB08B-CCE9-471E-8A41-35773D5263F5}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {6D8AB08B-CCE9-471E-8A41-35773D5263F5} = s 'AccText Class'
+		{
+			ProgID = s 'UAccCOM.AccText.1'
+			VersionIndependentProgID = s 'UAccCOM.AccText'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

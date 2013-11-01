@@ -1,0 +1,67 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+/// These constants control the scrolling of an object or substring into a window.
+enum IA2ScrollType {
+
+  /** Scroll the top left of the object or substring to the top left of the
+   window (or as close as possible).
+  */
+  IA2_SCROLL_TYPE_TOP_LEFT,
+
+  /** Scroll the bottom right of the object or substring to the bottom right of
+   the window (or as close as possible).
+  */
+  IA2_SCROLL_TYPE_BOTTOM_RIGHT,
+
+  /** Scroll the top edge of the object or substring to the top edge of the
+   window (or as close as possible).
+  */
+  IA2_SCROLL_TYPE_TOP_EDGE,
+
+  /** Scroll the bottom edge of the object or substring to the bottom edge of
+   the window (or as close as possible).
+  */
+  IA2_SCROLL_TYPE_BOTTOM_EDGE,
+
+  /** Scroll the left edge of the object or substring to the left edge of the
+   window (or as close as possible).
+  */
+  IA2_SCROLL_TYPE_LEFT_EDGE,
+
+  /** Scroll the right edge of the object or substring to the right edge of the
+   window (or as close as possible).
+  */
+  IA2_SCROLL_TYPE_RIGHT_EDGE
+};
+
+/// These constants define which coordinate system a point is located in.
+enum IA2CoordinateType {
+
+  /// The coordinates are relative to the screen.
+  IA2_COORDTYPE_SCREEN_RELATIVE,
+
+  /** The coordinates are relative to the upper left corner of the bounding box
+   of the immediate parent.
+  */
+  IA2_COORDTYPE_PARENT_RELATIVE
+
+};

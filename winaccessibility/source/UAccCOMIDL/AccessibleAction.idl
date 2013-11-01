@@ -1,0 +1,124 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+import "objidl.idl";
+import "oaidl.idl";
+import "oleacc.idl";
+
+/** @brief This interface gives access to actions that can be executed
+  for accessible objects.
+
+ Every accessible object that can be manipulated beyond its methods
+  exported over the accessibility API should support this interface to
+  expose all actions that it can perform.  Each action can be performed
+  or queried for a name, description or associated key bindings.  Actions
+  are needed more for ATs that assist the mobility impaired.  By providing
+  actions directly, the AT can present them to the user without the user having
+  to perform the extra steps to navigate a context menu.
+*/
+[object, uuid(B70D9F59-3B5A-4dba-AB9E-22012F607DF5)]
+interface IAccessibleAction : IUnknown
+{
+
+  /** @brief Returns the number of accessible actions available in this object.
+
+   If there are more than one, the first one is considered the
+    "default" action of the object.
+   @param [out] nActions
+    The returned value of the number of actions is zero if there are
+    no actions.
+  */
+  HRESULT nActions
+    (
+     [out,retval] long* nActions
+    );
+
+  /** @brief Performs the specified Action on the object.
+   @param [in] actionIndex
+    This index specifies the action to perform.  If it lies outside
+    the valid range no action is performed.
+    */
+  HRESULT doAction
+    (
+     [in] long actionIndex
+    );
+
+  /** @brief Returns a description of the specified action of the object.
+   @param [in] actionIndex
+    This index specifies the action of which to return a
+    description.  If it lies outside the valid range an empty string
+    is returned.
+   @param [out] description
+    The returned value is a localized string of the specified action.
+    */
+  [propget] HRESULT description
+    (
+     [in] long actionIndex,
+     [out, retval] BSTR *description
+    );
+
+  /** @brief Returns an array of BSTRs describing one or more key bindings, if there
+   are any, associated with the specified action.
+
+   Note: the client allocates and passes in an array of pointers.  The server
+   allocates the BSTRs and passes back one or more pointers to these BSTRs into
+   the array of pointers allocated by the client.  The client is responsible
+   for deallocating the BSTRs.
+
+   @param [in] actionIndex
+    This index specifies the action of which to return the key bindings.
+   @param [in] nMaxBinding
+    The maximum number of keybindings requested, i.e. the size of the array
+    allocated to hold the results.
+   @param [out] keyBinding
+    An array of BSTRs, one for each key binding.
+   @param [out] nBinding
+    The actual number of key bindings returned.
+  */
+  [propget] HRESULT keyBinding
+    (
+     [in] long actionIndex,
+     [in] long nMaxBinding,
+     [out, size_is(,nMaxBinding), length_is(,*nBinding)] BSTR **keyBinding,
+     [out, retval] long *nBinding
+    );
+
+  /** @brief Returns the non-localized name of specified action.
+   @param [in] actionIndex
+   @param [out] name
+  */
+  [propget] HRESULT name
+    (
+     [in] long actionIndex,
+     [out, retval] BSTR *name
+    );
+
+  /** @brief Returns the localized name of specified action.
+   @param [in] actionIndex
+   @param [out] localizedName
+  */
+  [propget] HRESULT localizedName
+    (
+     [in] long actionIndex,
+     [out, retval] BSTR *localizedName
+    );
+
+}

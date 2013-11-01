@@ -1,0 +1,94 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+import "objidl.idl";
+import "oaidl.idl";
+import "oleacc.idl";
+
+/** @brief This interface gives access to a single numerical value.
+
+ The IAccessibleValue interface represents a single numerical value and should
+  be implemented by any class that supports numerical value like progress bars
+  and spin boxes.  This interface lets you access the value and its upper and
+  lower bounds.
+*/
+[object, uuid(35855B5B-C566-4fd0-A7B1-E65465600394)]
+interface IAccessibleValue : IUnknown
+{
+
+  /** @brief Returns the value of this object as a number.
+
+   The exact return type is implementation dependent.  Typical types are long and
+    double.
+   @param [out] currentValue
+    Returns the current value represented by this object.
+  */
+  [propget] HRESULT currentValue
+    (
+     [out, retval] VARIANT *currentValue
+    );
+
+  /** @brief Sets the value of this object to the given number.
+
+   The argument is clipped to the valid interval whose upper and lower
+    bounds are returned by the methods IAccessibleValue::maximumValue and
+    IAccessibleValue::minimumValue, i.e. if it is   lower than the minimum
+    value the new value will be the minimum and if it is greater than the
+    maximum then the new value will be the maximum.
+
+   @param [out] value
+    The new value represented by this object.  The set of admissible types for
+    this argument is implementation dependent.
+  */
+  HRESULT setCurrentValue
+    (
+     [in] VARIANT value
+    );
+
+  /** @brief Returns the maximal value that can be represented by this object.
+
+   The type of the returned value is implementation dependent.  It does not have
+    to be the same type as that returned by method IAccessibleValue::currentValue.
+
+   @param [out] maximumValue
+    Returns the maximal value in an implementation dependent type. If this object
+    has no upper bound then an empty object is returned.
+  */
+  [propget] HRESULT maximumValue
+    (
+     [out, retval] VARIANT *maximumValue
+    );
+
+  /** @brief Returns the minimal value that can be represented by this object.
+
+   The type of the returned value is implementation dependent.  It does not have
+    to be the same type as that returned by method IAccessibleValue::currentValue.
+
+   @param [out] minimumValue
+    Returns the minimal value in an implementation dependent type. If this object
+    has no upper bound then an empty object is returned.
+  */
+  [propget] HRESULT minimumValue
+    (
+     [out, retval] VARIANT *minimumValue
+    );
+
+};
