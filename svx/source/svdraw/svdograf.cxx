@@ -102,7 +102,7 @@ sal_uInt32 getCacheTimeInMs()
     return 0;
 }
 
-const Graphic ImpLoadLinkedGraphic( const OUString aFileName, const OUString aFilterName )
+const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& aFilterName )
 {
     Graphic aGraphic;
 
