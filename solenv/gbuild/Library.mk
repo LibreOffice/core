@@ -35,13 +35,6 @@ gb_Library_LAYER_DIRS := \
 	OXT:$(WORKDIR)/LinkTarget/ExtensionLibrary \
 	NONE:$(gb_Library_DLLDIR) \
 
-$(dir $(call gb_Library__get_final_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-# doesn't do anything, just used for hooking up component target
-$(call gb_Library__get_final_target,%) :
-	touch $@
-
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/Library/%
 $(WORKDIR)/Clean/Library/% :
@@ -91,8 +84,6 @@ $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_Library_DEFS) \
 )
-$(call gb_Library__get_final_target,$(1)) : $(call gb_Library_get_target,$(1))
-$(call gb_Library__get_final_target,$(1)) :| $(dir $(call gb_Library__get_final_target,$(1))).dir
 $(call gb_Library_get_exports_target,$(1)) : $(call gb_Library_get_target,$(1))
 $(call gb_LinkTarget_get_headers_target,$(2)) : \
 	| $(dir $(call gb_Library_get_ilib_target,$(1))).dir
@@ -100,9 +91,9 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(call gb_Library_get_ilib_target,$(1)))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,$(call gb_Library_get_exports_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
 
-$(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library__get_final_target,$(1)))
+$(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library_get_exports_target,$(1)))
 
 endef
 
@@ -138,8 +129,9 @@ endef
 
 # The dependency from workdir component target to outdir library should ensure
 # that gb_CppunitTest_use_component can transitively depend on the library.
-# But the component target also must be delivered, so a new phony target
-# gb_Library__get_final_target has been invented for that purpose...
+# But the component target also must be delivered; use the target
+# gb_Library_get_exports_target for that purpose, since it is already
+# the "final" target of the Library...
 define gb_Library_set_componentfile
 $(call gb_Library_get_target,$(gb_Library__get_name)) : \
 	COMPONENT := $$(if $$(and $$(COMPONENT),$(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(1))),\
@@ -147,7 +139,7 @@ $(call gb_Library_get_target,$(gb_Library__get_name)) : \
 $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
 	$(call gb_Library_get_runtime_filename,$(gb_Library__get_name)))
-$(call gb_Library__get_final_target,$(gb_Library__get_name)) : \
+$(call gb_Library_get_exports_target,$(gb_Library__get_name)) :| \
 	$(call gb_ComponentTarget_get_target,$(2))
 $(call gb_ComponentTarget_get_target,$(2)) :| \
 	$(call gb_Library_get_target,$(gb_Library__get_name))

@@ -207,8 +207,6 @@ define gb_Library_get_versionlink_target
 $(INSTDIR)/$(SDKDIRNAME)/lib/$(basename $(call gb_Library_get_filename,$(1)))
 endef
 
-gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)
-
 define gb_Library_get_headers_target
 $(patsubst $(1):%,$(WORKDIR)/Headers/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef
