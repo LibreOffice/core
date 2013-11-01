@@ -37,6 +37,7 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
@@ -109,8 +110,6 @@ public class ScAccessiblePreviewCell extends TestCase {
      * Obtains the accessible object for a one of cell in preview mode.
      */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
-        XInterface oObj = null;
         XCell xCell = null;
 
         try {
@@ -160,14 +159,33 @@ public class ScAccessiblePreviewCell extends TestCase {
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
 
-        shortWait();
-
-        AccessibilityTools at = new AccessibilityTools();
-
-        XWindow xWindow = AccessibilityTools.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), xModel);
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL, true);
+        XInterface oObj = null;
+        for (int i = 0;; ++i) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                XAccessible xRoot = AccessibilityTools.getAccessibleObject(
+                    AccessibilityTools.getCurrentWindow(
+                        (XMultiServiceFactory) Param.getMSF(), xModel));
+                if (xRoot != null) {
+                    oObj = AccessibilityTools.getAccessibleObjectForRole(
+                        xRoot, AccessibleRole.TABLE_CELL, true);
+                    if (oObj != null) {
+                        break;
+                    }
+                }
+            } catch (DisposedException e) {
+                log.println("Ignoring DisposedException");
+            }
+            if (i == 20) { // give up after 10 sec
+                throw new RuntimeException(
+                    "Couldn't get AccessibleRole.TABLE_CELL object");
+            }
+            log.println("No TABLE_CELL found yet, retrying");
+        }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
@@ -181,13 +199,5 @@ public class ScAccessiblePreviewCell extends TestCase {
             });
 
         return tEnv;
-    }
-
-    protected void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 }
