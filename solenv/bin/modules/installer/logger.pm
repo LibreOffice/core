@@ -32,6 +32,20 @@ use strict;
 
 my $StartTime = undef;
 
+sub Die ($)
+{
+    my ($message) = @_;
+    print "Stack Trace:\n";
+    my $i = 1;
+    while ((my @call_details = (caller($i++))))
+    {
+        printf("%s:%s in function %s\n", $call_details[1], $call_details[2], $call_details[3]);
+    }
+
+    die $message;
+}
+
+
 =head1 NAME
 
     installer::logger
@@ -158,7 +172,7 @@ sub print ($$;$)
 {
     my ($self, $message, $force) = @_;
 
-    die "newline at start of line" if ($message =~ /^\n.+/);
+    Die "newline at start of line" if ($message =~ /^\n.+/);
 
     $force = 0 unless defined $force;
 
@@ -258,7 +272,7 @@ sub set_filename ($$)
         if ($filename ne "")
         {
             open $self->{'file'}, ">", $self->{'filename'}
-            || die "can not open log file ".$self->{'filename'}." for writing";
+            || Die "can not open log file ".$self->{'filename'}." for writing";
             $self->{'is_print_to_console'} = 0;
 
             # Make all writes synchronous so that we don't loose any messages on an
@@ -386,7 +400,7 @@ sub include_header_into_globallogfile
 
 sub include_timestamp_into_logfile
 {
-    die "deprected";
+    Die "deprected";
     my ($message) = @_;
 
     my $infoline;
@@ -591,7 +605,7 @@ sub set_installation_date
 
 sub print_message
 {
-    die "print_message is deprecated";
+    Die "print_message is deprecated";
 
     my $message = shift;
     chomp $message;

@@ -596,7 +596,7 @@ sub get_size_value
         # Evaluating an error, because of rpm problems with removed LD_LIBRARY_PATH
         if ( $error )
         {
-            installer::logger::print_message( "... trying /usr/bin/rpm ...\n" );
+            $installer::logger::Info->print("... trying /usr/bin/rpm ...\n");
             my $systemcall = "/usr/bin/rpm -qp --queryformat \"\[\%\{FILESIZES\}\\n\]\" $packagename 2\>\&1 |";
             ($rpmout, $error) = make_systemcall_allowing_error($systemcall, 0, 0);
             if ( $error ) { installer::exiter::exit_program("ERROR: rpm failed to query package!", "get_size_value"); }
@@ -734,7 +734,7 @@ sub get_fullpkgname_value
         # Evaluating an error, because of rpm problems with removed LD_LIBRARY_PATH
         if ( $error )
         {
-            installer::logger::print_message( "... trying /usr/bin/rpm ...\n" );
+            $installer::logger::Info->print("... trying /usr/bin/rpm ...\n");
             my $systemcall = "/usr/bin/rpm -qp $packagename |";
             ($returnarray, $error) = make_systemcall_allowing_error($systemcall, 0, 0);
             if ( $error ) { installer::exiter::exit_program("ERROR: rpm failed to query package!", "get_fullpkgname_value"); }
@@ -864,7 +864,7 @@ sub make_systemcall
 
     my @returns = ();
 
-    installer::logger::print_message( "... $systemcall ...\n" );
+    $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
     open (REG, "$systemcall");
     while (<REG>) {push(@returns, $_); }
@@ -908,7 +908,7 @@ sub make_systemcall_allowing_error
 
     my @returns = ();
 
-    installer::logger::print_message( "... $systemcall ...\n" );
+    $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
     open (REG, "$systemcall");
     while (<REG>) {push(@returns, $_); }
