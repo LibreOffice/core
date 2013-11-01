@@ -351,6 +351,8 @@ void DocxExport::ExportDocument_Impl()
 
     WriteTheme();
 
+    WriteCustomXml();
+
     delete pStyles, pStyles = NULL;
     delete m_pSections, m_pSections = NULL;
 }
@@ -780,6 +782,47 @@ void DocxExport::WriteTheme()
         "application/vnd.openxmlformats-officedocument.theme+xml" ) );
     serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
         uno::Sequence< beans::StringPair >() );
+}
+
+void DocxExport::WriteCustomXml()
+{
+    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+        return;
+
+    uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomlist;
+    uno::Sequence< beans::PropertyValue > propList;
+    xPropSet->getPropertyValue( pName ) >>= propList;
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+    {
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXCustomXml" )
+        {
+             propList[nProp].Value >>= customXmlDomlist;
+             break;
+        }
+    }
+
+    for (sal_Int32 j = 1; j < customXmlDomlist.getLength(); j++) {
+
+        uno::Reference<xml::dom::XDocument> customXmlDom = customXmlDomlist[j];
+        if ( customXmlDom.is() )
+        {
+            m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml",
+                    "../customXml/item"+OUString::number(j)+".xml" );
+
+            uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDom, uno::UNO_QUERY );
+            uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
+            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/item"+OUString::number(j)+".xml",
+                "application/xml" ) );
+            serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+                uno::Sequence< beans::StringPair >() );
+        }
+    }
 }
 
 VMLExport& DocxExport::VMLExporter()

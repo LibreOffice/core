@@ -110,6 +110,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sEndnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes");
     static OUString sCommentsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments");
     static OUString sThemeType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
+    static OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
     static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
     static OUString sTarget("Target");
     static OUString sTargetMode("TargetMode");
@@ -147,6 +148,9 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
         case THEME:
             sStreamType = sThemeType;
             break;
+        case CUSTOMXML:
+            sStreamType = sCustomType;
+            break;
         case SETTINGS:
             sStreamType = sSettingsType;
             break;
@@ -175,8 +179,15 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                 else if (aPair.First.compareTo(sId) == 0 &&
                          aPair.Second.compareTo(rId) == 0)
                     bFound = true;
-                else if (aPair.First.compareTo(sTarget) == 0)
-                    sMyTarget = aPair.Second;
+                else if (aPair.First.compareTo(sTarget) == 0){
+                    // checking item[n].xml is not visited already.
+                    if(customTarget != aPair.Second && sStreamType == sCustomType){
+                        bFound = false;
+                    }
+                    else {
+                        sMyTarget = aPair.Second;
+                    }
+                }
                 else if (aPair.First.compareTo(sTargetMode) == 0 &&
                          aPair.Second.compareTo(sExternal) == 0)
                     bExternalTarget = true;
@@ -258,6 +269,11 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
         xResult = mxDocumentStream->getInputStream();
 
     return xResult;
+}
+
+// Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
+uno::Reference<io::XStream> OOXMLStreamImpl::accessDocumentStream(){
+    return mxDocumentStream;
 }
 
 uno::Reference<io::XInputStream> OOXMLStreamImpl::getStorageStream()

@@ -143,6 +143,7 @@ public:
     void testMultiColumnSeparator();
     void testSmartart();
     void testFdo69548();
+    void testCustomXmlGrabBag();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -249,6 +250,7 @@ void Test::run()
         {"multi-column-separator-with-line.docx", &Test::testMultiColumnSeparator},
         {"smartart.docx", &Test::testSmartart},
         {"fdo69548.docx", &Test::testFdo69548},
+        {"customxml.docx", &Test::testCustomXmlGrabBag},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1689,6 +1691,34 @@ void Test::testFdo69548()
 {
     // The problem was that the last space in target URL was removed
     CPPUNIT_ASSERT_EQUAL(OUString("#this is a bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+}
+
+void Test::testCustomXmlGrabBag()
+{
+   // The problem was that CustomXml/item[n].xml files were missing from docx file after saving file.
+   // This test case tests whether customxml files grabbagged properly in correct object.
+
+   uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+   uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+   CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+   sal_Bool CustomXml = sal_False;
+   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   {
+       if (aGrabBag[i].Name == OUString("OOXCustomXml"))
+       {
+           CustomXml = sal_True;
+           uno::Reference<xml::dom::XDocument> aCustomXmlDom;
+           uno::Sequence<uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
+           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aCustomXmlDomList); // PropertyValue of proper type
+           sal_Int32 length = aCustomXmlDomList.getLength();
+           CPPUNIT_ASSERT_EQUAL(sal_Int32(3), length);
+           aCustomXmlDom = aCustomXmlDomList[1];
+           CPPUNIT_ASSERT(aCustomXmlDom.get()); // Reference not empty
+       }
+   }
+   CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

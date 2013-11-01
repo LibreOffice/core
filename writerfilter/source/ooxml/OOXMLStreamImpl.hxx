@@ -24,6 +24,8 @@
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
+extern OUString customTarget;
+
 namespace writerfilter {
 namespace ooxml
 {
@@ -78,6 +80,7 @@ public:
     getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext);
 
     void setInputStream(uno::Reference<io::XInputStream> rxInputStream);
+    uno::Reference<io::XStream> accessDocumentStream();
 };
 }}
 #endif // INCLUDED_OOXML_STREAM_IMPL_HXX
