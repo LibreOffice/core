@@ -453,8 +453,6 @@ bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUStr
     else if ( oArg == "nolockcheck" )
     {
         m_nolockcheck = true;
-        // Workaround for automated testing
-        ::svt::DocumentLockFile::AllowInteraction( false );
     }
 #endif
     else if ( oArg == "help" || aArg == "-h" || aArg == "-?" )
