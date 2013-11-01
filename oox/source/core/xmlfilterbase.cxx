@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #include "oox/core/xmlfilterbase.hxx"
 
 #include <cstdio>
@@ -120,6 +118,7 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
 
     maFastParser.registerNamespace( NMSP_ax );
     maFastParser.registerNamespace( NMSP_xm );
+    maFastParser.registerNamespace( NMSP_markupCompat );    // i123528
 }
 
 // ============================================================================
