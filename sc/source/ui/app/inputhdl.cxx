@@ -967,7 +967,7 @@ void ScInputHandler::ShowTipCursor()
                         findText(*pFormulaDataPara, pFormulaDataPara->end(), aText, aNew, false);
                     if (it != pFormulaDataPara->end())
                     {
-                        if( aFormula[ nPosition ] =='(' )
+                        if( nPosition < aFormula.getLength() && aFormula[ nPosition ] =='(' )
                         {
                             ShowTipBelow( aNew );
                             bFound = true;
