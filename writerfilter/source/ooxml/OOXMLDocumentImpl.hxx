@@ -42,7 +42,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Reference<drawing::XDrawPage> mxDrawPage;
     uno::Reference<xml::sax::XFastShapeContextHandler> mxShapeContext;
     uno::Reference<xml::dom::XDocument> mxThemeDom;
-
+    uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomList;
     bool mbIsSubstream;
 
 protected:
@@ -64,6 +64,7 @@ protected:
                    const sal_Int32 nNoteId);
 
     void setIsSubstream( bool bSubstream ) { mbIsSubstream = bSubstream; };
+    void resolveCustomXmlStream(Stream & rStream);
 
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
@@ -110,7 +111,7 @@ public:
     virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext );
     virtual void setThemeDom(uno::Reference<xml::dom::XDocument> xThemeDom);
     virtual uno::Reference<xml::dom::XDocument> getThemeDom();
-
+    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList();
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX

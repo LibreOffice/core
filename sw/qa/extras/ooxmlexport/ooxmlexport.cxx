@@ -1506,6 +1506,34 @@ DECLARE_OOXML_TEST(testCharHighlight, "char_highlight.docx")
     }
 }
 
+DECLARE_OOXML_TEST(testCustomXmlGrabBag, "customxml.docx")
+{
+   // The problem was that CustomXml/item[n].xml files were missing from docx file after saving file.
+   // This test case tests whether customxml files grabbagged properly in correct object.
+
+   uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+   uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+   CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+   sal_Bool CustomXml = sal_False;
+   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   {
+       if (aGrabBag[i].Name == OUString("OOXCustomXml"))
+       {
+           CustomXml = sal_True;
+           uno::Reference<xml::dom::XDocument> aCustomXmlDom;
+           uno::Sequence<uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
+           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aCustomXmlDomList); // PropertyValue of proper type
+           sal_Int32 length = aCustomXmlDomList.getLength();
+           CPPUNIT_ASSERT_EQUAL(sal_Int32(3), length);
+           aCustomXmlDom = aCustomXmlDomList[1];
+           CPPUNIT_ASSERT(aCustomXmlDom.get()); // Reference not empty
+       }
+   }
+   CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

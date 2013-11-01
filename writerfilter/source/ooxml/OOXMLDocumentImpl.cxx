@@ -21,8 +21,10 @@
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
+#include "OOXMLStreamImpl.hxx"
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLBinaryObjectReference.hxx"
 #include "OOXMLFastDocumentHandler.hxx"
@@ -31,6 +33,8 @@
 
 #include <iostream>
 
+// this extern variable is declared in OOXMLStreamImpl.hxx
+OUString customTarget;
 using ::com::sun::star::xml::sax::SAXException;
 namespace writerfilter {
 namespace ooxml
@@ -374,6 +378,9 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
         mxThemeDom = importSubStream(OOXMLStream::THEME);
         resolveFastSubStream(rStream, OOXMLStream::THEME);
+        // Custom xml's are handled as part of grab bag.
+        resolveCustomXmlStream(rStream);
+
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
         resolveFastSubStream(rStream, OOXMLStream::STYLES);
         resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
@@ -397,6 +404,48 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 #ifdef DEBUG_RESOLVE
     debug_logger->endElement();
 #endif
+}
+
+void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream){
+    // Resolving all item[n].xml files from CustomXml folder.
+    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
+    mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    if (mxRelationshipAccess.is())
+    {
+        OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
+        OUString sTarget("Target");
+        bool bFound = false;
+        sal_Int32 counter = 1;
+        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
+                mxRelationshipAccess->getAllRelationships();
+        uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomListTemp(aSeqs.getLength());
+        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        {
+            uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
+            for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
+            {
+                beans::StringPair aPair = aSeq[i];
+                // Need to resolve only customxml files from document relationships.
+                // Skipping other files.
+                if (aPair.Second.compareTo(sCustomType) == 0)
+                    bFound = true;
+                else if(aPair.First.compareTo(sTarget) == 0 && bFound){
+                    // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
+                    // to ensure customxml target is visited in lcl_getTarget.
+                    customTarget = aPair.Second;
+                }
+            }
+            if(bFound){
+                uno::Reference<xml::dom::XDocument> temp = importSubStream(OOXMLStream::CUSTOMXML);
+                mxCustomXmlDomListTemp[counter] = temp;
+                counter++;
+                resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
+                bFound = false;
+            }
+        }
+        mxCustomXmlDomListTemp.realloc(counter+1);
+        mxCustomXmlDomList = mxCustomXmlDomListTemp;
+    }
 }
 
 uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const OUString & rId)
@@ -459,6 +508,11 @@ void OOXMLDocumentImpl::setThemeDom( uno::Reference<xml::dom::XDocument> xThemeD
 uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getThemeDom( )
 {
     return mxThemeDom;
+}
+
+uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomList( )
+{
+    return mxCustomXmlDomList;
 }
 
 OOXMLDocument *
