@@ -764,6 +764,8 @@ private:
     PageMargins m_pageMargins;
 
     boost::shared_ptr<DocxTableStyleExport> m_pTableStyleExport;
+    bool m_bParaBeforeAutoSpacing,m_bParaAfterAutoSpacing;
+    sal_Int32 m_iParaBeforeSpacing,m_iParaAfterSpacing;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );

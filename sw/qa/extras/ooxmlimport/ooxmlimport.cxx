@@ -143,6 +143,7 @@ public:
     void testMultiColumnSeparator();
     void testSmartart();
     void testFdo69548();
+    void testParaAutoSpacing();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -249,6 +250,7 @@ void Test::run()
         {"multi-column-separator-with-line.docx", &Test::testMultiColumnSeparator},
         {"smartart.docx", &Test::testSmartart},
         {"fdo69548.docx", &Test::testFdo69548},
+        {"para-auto-spacing.docx", &Test::testParaAutoSpacing},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1691,6 +1693,30 @@ void Test::testFdo69548()
     CPPUNIT_ASSERT_EQUAL(OUString("#this is a bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+void Test::testParaAutoSpacing() {
+    uno::Reference<uno::XInterface> xPara(getParagraph(1));
+    uno::Reference<beans::XPropertySet> xParaPropertySet(xPara, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> xParaGrabBag(0);
+    xParaPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= xParaGrabBag;
+
+    CPPUNIT_ASSERT(xParaGrabBag.hasElements());
+    // Grab Bag not empty
+    /*
+    sal_Bool bBeforeAutoSpacing = sal_False;
+    sal_Bool bAfterAutoSpacing = sal_False;
+    for (int i = 0; i < xParaGrabBag.getLength(); ++i) {
+        if (xParaGrabBag[i].Name == OUString("ParaTopMarginBeforeAutoSpacing")) {
+            bBeforeAutoSpacing = sal_True;
+        } else if (xParaGrabBag[i].Name
+                == OUString("ParaTopMarginBeforeAutoSpacing")) {
+            bAfterAutoSpacing = sal_True;
+        }
+    }*/
+    //CPPUNIT_ASSERT(bBeforeAutoSpacing);
+    // Grab Bag has all the expected elements
+    //CPPUNIT_ASSERT(bAfterAutoSpacing);
+    // Grab Bag has all the expected elements
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

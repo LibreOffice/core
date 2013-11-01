@@ -175,7 +175,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
     OUString sStringValue = val.getString();
 
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
-
+    PropertyMap::iterator oldPropValue;
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
     else
@@ -1181,18 +1181,30 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         // See SwWW8ImplReader::GetParagraphAutoSpace() on why these are 100 and 280
         case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "beforeAutospacing", OUString::number(nIntValue));
+            m_pImpl->GetTopContext()->SetAutoBeforeSpacing(true);
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
+            {
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(280) ) );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(280) ),true,true );
+            }
             else
+            {
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ) );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ),true,true );
+            }
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "afterAutospacing", OUString::number(nIntValue));
+            m_pImpl->GetTopContext()->SetAutoAfterSpacing(true);
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
+            {
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(280) ) );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(280) ),true,true );
+            }
             else
+            {
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ) );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ),true,true );
+            }
         break;
         case NS_ooxml::LN_CT_SmartTagRun_uri:
         case NS_ooxml::LN_CT_SmartTagRun_element:

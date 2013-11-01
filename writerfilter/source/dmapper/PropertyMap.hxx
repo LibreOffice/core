@@ -90,6 +90,8 @@ class PropertyMap : public _PropertyMap
     //depending on sprmCSymbol
     sal_Unicode                                                                 m_cFootnoteSymbol; // 0 == invalid
     sal_Int32                                                                   m_nFootnoteFontId; // negative values are invalid ids
+    bool                                                                        m_bAutoBeforeLineSpacing; // 1 == auto before spacing is applied
+    bool                                                                        m_bAutoAfterLineSpacing; // 1 == auto after spacing is applied
     OUString                                                             m_sFootnoteFontName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote >       m_xFootnote;
 
@@ -111,7 +113,10 @@ public:
     void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, bool bGrabBag = false );
     void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
-
+    void SetAutoBeforeSpacing(bool autoSpacing) { m_bAutoBeforeLineSpacing = autoSpacing; }
+    void SetAutoAfterSpacing(bool autoSpacing) { m_bAutoAfterLineSpacing = autoSpacing; }
+    bool HasAutoBeforeSpacing() { return m_bAutoBeforeLineSpacing; }
+    bool HasAutoAfterSpacing() { return m_bAutoAfterLineSpacing; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;
     void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> xF ) { m_xFootnote = xF; }
 

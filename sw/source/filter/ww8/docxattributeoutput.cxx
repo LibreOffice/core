@@ -5505,10 +5505,28 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     {
         if ( !m_pParagraphSpacingAttrList )
             m_pParagraphSpacingAttrList = m_pSerializer->createAttrList();
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_before ),
-                OString::number( rULSpace.GetUpper() ) );
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
-                OString::number( rULSpace.GetLower() ) );
+        SAL_INFO("sw.ww8", "DocxAttributeOutput::FormatULSpace: setting spacing" << rULSpace.GetUpper() );
+        if (m_bParaBeforeAutoSpacing && m_iParaBeforeSpacing == rULSpace.GetUpper())
+        {
+            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_beforeAutospacing ),
+                    "1" );
+        }
+        else
+        {
+            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_before ),
+                    OString::number( rULSpace.GetUpper() ) );
+        }
+        if (m_bParaAfterAutoSpacing && m_iParaAfterSpacing == rULSpace.GetLower())
+        {
+            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_afterAutospacing ),
+                    "1" );
+        }
+        else
+        {
+            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
+                    OString::number( rULSpace.GetLower()) );
+        }
+
         if (rULSpace.GetContext())
             m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSEND );
     }
@@ -6010,8 +6028,22 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
     {
         if (i->first == "MirrorIndents")
             m_pSerializer->singleElementNS(XML_w, XML_mirrorIndents, FSEND);
+        else if (i->first == "ParaTopMarginBeforeAutoSpacing")
+        {
+            m_bParaBeforeAutoSpacing = true;
+            i->second >>= m_iParaBeforeSpacing;
+            m_iParaBeforeSpacing = MM100_TO_TWIP(m_iParaBeforeSpacing);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_iParaBeforeSpacing= " << m_iParaBeforeSpacing);
+        }
+        else if (i->first == "ParaBottomMarginAfterAutoSpacing")
+        {
+            m_bParaAfterAutoSpacing = true;
+            i->second >>= m_iParaAfterSpacing;
+            m_iParaAfterSpacing = MM100_TO_TWIP(m_iParaAfterSpacing);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_iParaBeforeSpacing= " << m_iParaAfterSpacing);
+        }
         else
-            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
     }
 }
 

@@ -125,6 +125,8 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_FIRST_LINE_INDENT:    sName = "ParaFirstLineIndent"; break;
             case PROP_PARA_KEEP_TOGETHER:       sName = "ParaKeepTogether"; break;
             case PROP_PARA_TOP_MARGIN:       sName = "ParaTopMargin"; break;
+            case PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING:       sName = "ParaTopMarginBeforeAutoSpacing"; break;
+            case PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING:       sName = "ParaBottomMarginAfterAutoSpacing"; break;
             case PROP_PARA_CONTEXT_MARGIN:       sName = "ParaContextMargin"; break;
             case PROP_PARA_BOTTOM_MARGIN:       sName = "ParaBottomMargin"; break;
             case PROP_PARA_IS_HYPHENATION:     sName = "ParaIsHyphenation"; break;

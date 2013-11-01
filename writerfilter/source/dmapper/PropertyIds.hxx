@@ -313,6 +313,8 @@ enum PropertyIds
         ,PROP_SURROUND_TEXT_WRAP_SMALL
         ,PROP_PARA_SHADOW_FORMAT
         ,PROP_FOOTNOTE_LINE_RELATIVE_WIDTH
+        ,PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING
+        ,PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
