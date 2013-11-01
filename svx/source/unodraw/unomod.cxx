@@ -171,9 +171,7 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
     throw( uno::Exception, uno::RuntimeException )
 {
-    const OUString aDrawingPrefix("com.sun.star.drawing.");
-
-    if( rServiceSpecifier.startsWith( aDrawingPrefix ) )
+    if( rServiceSpecifier.startsWith("com.sun.star.drawing.") )
     {
         sal_uInt32 nType = UHashMap::getId( rServiceSpecifier );
         if( nType != UHASHMAP_NOTFOUND )
