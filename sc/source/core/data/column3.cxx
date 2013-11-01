@@ -74,13 +74,13 @@ void ScColumn::Broadcast( SCROW nRow )
     pDocument->Broadcast(aHint);
 }
 
-void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows )
+void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, sal_uLong nHint )
 {
     if (rRows.empty())
         return;
 
     // Broadcast the changes.
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab));
+    ScHint aHint(nHint, ScAddress(nCol, 0, nTab));
     std::vector<SCROW>::const_iterator itRow = rRows.begin(), itRowEnd = rRows.end();
     for (; itRow != itRowEnd; ++itRow)
     {
@@ -285,7 +285,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
 
     // Single cell broadcasts on deleted cells.
-    BroadcastCells(aDeleteRowsFunc.getNonEmptyRows());
+    BroadcastCells(aDeleteRowsFunc.getNonEmptyRows(), SC_HINT_DATACHANGED);
 
     // Shift the text attribute array too (before the broadcast).
     maCellTextAttrs.erase(nStartRow, nEndRow);
@@ -628,7 +628,7 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
 
     // Broadcast on only cells that were deleted; no point broadcasting on
     // cells that were already empty before the deletion.
-    BroadcastCells(aDeletedRows);
+    BroadcastCells(aDeletedRows, SC_HINT_DATACHANGED);
 }
 
 bool ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )

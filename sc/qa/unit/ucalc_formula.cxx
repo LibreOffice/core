@@ -1387,11 +1387,10 @@ void Test::testMultipleOperations()
     aParam.aRefFormulaCell.Set(2,0,0,false,false,false);
     aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
     m_pDoc->InsertTableOp(aParam, 0, 2, 1, 4, aMark);
-#if 0 // TODO: Make this pass.
     CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(1,2,0));
     CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(1,3,0));
     CPPUNIT_ASSERT_EQUAL(50.0, m_pDoc->GetValue(1,4,0));
-#endif
+
     m_pDoc->DeleteTab(0);
 }
 

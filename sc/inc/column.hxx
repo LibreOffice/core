@@ -492,7 +492,7 @@ public:
     bool HasBroadcaster() const;
 
     void Broadcast( SCROW nRow );
-    void BroadcastCells( const std::vector<SCROW>& rRows );
+    void BroadcastCells( const std::vector<SCROW>& rRows, sal_uLong nHint );
 
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );

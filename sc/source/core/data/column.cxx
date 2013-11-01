@@ -890,7 +890,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         SwapCellTextAttrs(nRow1, nRow2);
         SwapCellNotes(nRow1, nRow2);
         CellStorageModified();
-        BroadcastCells(aRows);
+        BroadcastCells(aRows, SC_HINT_DATACHANGED);
         return;
     }
 
@@ -938,7 +938,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         SwapCellTextAttrs(nRow1, nRow2);
         SwapCellNotes(nRow1, nRow2);
         CellStorageModified();
-        BroadcastCells(aRows);
+        BroadcastCells(aRows, SC_HINT_DATACHANGED);
         return;
     }
 
@@ -983,7 +983,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         SwapCellTextAttrs(nRow1, nRow2);
         SwapCellNotes(nRow1, nRow2);
         CellStorageModified();
-        BroadcastCells(aRows);
+        BroadcastCells(aRows, SC_HINT_DATACHANGED);
         return;
     }
 
@@ -1117,7 +1117,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     SwapCellTextAttrs(nRow1, nRow2);
     SwapCellNotes(nRow1, nRow2);
     CellStorageModified();
-    BroadcastCells(aRows);
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
 }
 
 namespace {
@@ -2760,7 +2760,7 @@ public:
     {
         std::vector<SCROW> aRows;
         maValueRanges.getRows(aRows);
-        mrColumn.BroadcastCells(aRows);
+        mrColumn.BroadcastCells(aRows, SC_HINT_DATACHANGED);
     }
 };
 
@@ -2792,7 +2792,7 @@ public:
     {
         std::vector<SCROW> aRows;
         maValueRanges.getRows(aRows);
-        mrColumn.BroadcastCells(aRows);
+        mrColumn.BroadcastCells(aRows, SC_HINT_TABLEOPDIRTY);
     }
 };
 
@@ -3173,7 +3173,7 @@ void ScColumn::BroadcastRecalcOnRefMove()
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     RecalcOnRefMoveCollector aFunc;
     sc::ProcessFormula(maCells, aFunc);
-    BroadcastCells(aFunc.getDirtyRows());
+    BroadcastCells(aFunc.getDirtyRows(), SC_HINT_DATACHANGED);
 }
 
 void ScColumn::CalcAll()
