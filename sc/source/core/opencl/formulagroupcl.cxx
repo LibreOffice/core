@@ -23,7 +23,6 @@
 #include "op_math.hxx"
 #include "op_statistical.hxx"
 #include "formulagroupcl_public.hxx"
-#include "formulagroupcl_finacial.hxx"
 
 #include <list>
 #include <map>
@@ -1187,7 +1186,6 @@ public:
         }
         // preambles
         decl << publicFunc;
-        decl << finacialFunc;
         DK->DumpInlineFun(inlineDecl,inlineFun);
         for(std::set<std::string>::iterator set_iter=inlineDecl.begin();
                                          set_iter!=inlineDecl.end();set_iter++)

@@ -69,6 +69,7 @@ public:
 
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 
     virtual std::string BinFuncName(void) const { return "DISC"; }
 };
@@ -80,6 +81,7 @@ public:
 
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 
     virtual std::string BinFuncName(void) const { return "INTRATE"; }
 };
@@ -96,6 +98,7 @@ class Cumipmt: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
 class IRR: public Normal
@@ -124,6 +127,7 @@ class PriceMat: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 class OpSYD: public Normal
 {
@@ -174,6 +178,7 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
 
     virtual std::string BinFuncName(void) const { return "fTbilleq"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
 class OpCumprinc: public Normal
@@ -182,6 +187,7 @@ public:
     virtual std::string GetBottom(void) { return "0"; }
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
     virtual std::string BinFuncName(void) const { return "cumprinc"; }
 };
 
@@ -189,6 +195,7 @@ class OpAccrintm: public Normal
 {
  public:
     virtual std::string GetBottom(void) { return "0"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Accrintm"; }
@@ -200,6 +207,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Yield"; }
+     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
 
@@ -224,6 +232,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Yieldmat"; }
+     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
 class OpPMT: public Normal
@@ -239,6 +248,7 @@ class OpPPMT: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
         const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
     virtual std::string BinFuncName(void) const { return "PPMT"; }
 };
 
@@ -248,6 +258,7 @@ public:
     virtual std::string GetBottom(void) { return "0";}
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
         const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
     virtual std::string BinFuncName(void) const { return "Coupdaybs"; }
 
 };
@@ -258,6 +269,7 @@ public:
     virtual std::string GetBottom(void) { return "0";}
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
         const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
     virtual std::string BinFuncName(void) const { return "Coupdays";}
 
 };
@@ -268,6 +280,7 @@ public:
     virtual std::string GetBottom(void) { return "0";}
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
         const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
     virtual std::string BinFuncName(void) const { return "Coupdaysnc"; }
 
 };
@@ -279,6 +292,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
         const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Received"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
 class OpYielddisc: public Normal
@@ -287,6 +301,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
         const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Yielddisc"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
 class OpTbillprice: public Normal
@@ -295,6 +310,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "fTbillprice"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
 class OpPriceMat:public PriceMat
@@ -324,6 +340,7 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
 
     virtual std::string BinFuncName(void) const { return "fTbillyield"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
 class OpMIRR: public MIRR
