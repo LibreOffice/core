@@ -8,13 +8,12 @@
 
 #import "MLOObject.h"
 
-
 typedef void (^MLOTestingTileParameterExtractor)(CGFloat value);
 
 @class MLOTestingTileParametersViewController;
 @interface MLOTestingTileParameter : MLOObject
--(MLOTestingTileParameter *)initWithParams:(MLOTestingTileParametersViewController *) params label:(NSString *)label extractor:(MLOTestingTileParameterExtractor) extractor defaultValue:(NSInteger) defaultValue;
--(void)extract;
+-(MLOTestingTileParameter *)initWithParams:(MLOTestingTileParametersViewController *) params label:(NSString *)label extractor1:(MLOTestingTileParameterExtractor) extractor extractor2:(MLOTestingTileParameterExtractor) linkedExtractor defaultValue:(NSInteger) defaultValue;
+-(void)extract:(BOOL) isExtractor1;
 -(void)setParamFrame:(CGRect)  paramFrame;
 -(void)addToSuperview;
 @end

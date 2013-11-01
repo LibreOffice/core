@@ -11,7 +11,8 @@
 
 @interface MLOTestingTileParameter ()
 @property MLOTestingTileParametersViewController * params;
-@property (nonatomic,strong) MLOTestingTileParameterExtractor extractor;
+@property (nonatomic,strong) MLOTestingTileParameterExtractor extractor1;
+@property (nonatomic,strong) MLOTestingTileParameterExtractor extractor2;
 @property UILabel * label;
 @property UITextField * data;
 @property UITextField * step;
@@ -24,12 +25,13 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
 
 @implementation MLOTestingTileParameter
 
--(MLOTestingTileParameter *)initWithParams:(MLOTestingTileParametersViewController *) params label:(NSString *)label extractor:(MLOTestingTileParameterExtractor) extractor defaultValue:(NSInteger) defaultValue{
+-(MLOTestingTileParameter *)initWithParams:(MLOTestingTileParametersViewController *) params label:(NSString *)label extractor1:(MLOTestingTileParameterExtractor) extractor1 extractor2:(MLOTestingTileParameterExtractor) extractor2 defaultValue:(NSInteger) defaultValue{
     NSLog(@"Creating tile testing param %@ with default value %d",label,defaultValue);
     self = [self init];
     if(self){
         self.params = params;
-        self.extractor = extractor;
+        self.extractor1 = extractor1;
+        self.extractor2 = extractor2;
         self.defaultValue = defaultValue;
         [self initLabel:label];
         self.dataStepper = [self createStepper];
@@ -167,9 +169,16 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
     return [self.data.text floatValue];
 }
 
--(void)extract{
-    NSLog(@"%@ extract",self);
+-(void)extract:(BOOL) isExtractor1{
 
-    self.extractor([self currentDataValue]);
+    NSLog(@"%@ extract %d",self,isExtractor1?1:2);
+
+    CGFloat dataValue = [self currentDataValue];
+
+    if(isExtractor1){
+        self.extractor1(dataValue);
+    }else{
+        self.extractor2(dataValue);
+    }
 }
 @end
