@@ -26732,15 +26732,6 @@
         <!--Class Rectangle-->
         <!--Class FOPTE-->
         <UML:Class xmi.id="FOPTE" name="FOPTE">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="withindex"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="resolvenoauto"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>6</UML:TaggedValue.dataValue>

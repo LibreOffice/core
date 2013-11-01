@@ -267,37 +267,14 @@ sal_uInt32 DffOPT::get_property_count()
 }
 
 writerfilter::Reference<Properties>::Pointer_t
-DffOPT::get_property(sal_uInt32 nPos)
+DffOPT::get_property(sal_uInt32 /*nPos*/)
 {
-    WW8FOPTE * pTmp = new WW8FOPTE(this, 0x8 + nPos * WW8FOPTE::getSize());
-    pTmp->setIndex(nPos);
-
-    return writerfilter::Reference<Properties>::Pointer_t(pTmp);
+    return writerfilter::Reference<Properties>::Pointer_t();
 }
 
-sal_uInt32 DffOPT::get_extraoffset(sal_uInt32 pos)
+sal_uInt32 DffOPT::get_extraoffset(sal_uInt32 /*pos*/)
 {
-    sal_uInt32 nResult;
-    sal_uInt32 nCount = get_property_count();
-
-    if (pos < nCount)
-    {
-        nResult = 0x8 + nCount * WW8FOPTE::getSize();
-
-        for (sal_uInt32 n = 0; n < pos; ++n)
-        {
-            WW8FOPTE aFOPTE(this, 0x8 + n * WW8FOPTE::getSize());
-
-            if (aFOPTE.get_fComplex())
-            {
-                sal_uInt32 nValue = aFOPTE.get_op();
-                nResult += nValue;
-            }
-        }
-    }
-    else
-        nResult = getCount();
-
+    sal_uInt32 nResult = 0;
     return nResult;
 }
 
@@ -335,11 +312,6 @@ DffBSE::get_blip()
     writerfilter::Reference<Properties>::Pointer_t pResult;
 
     return pResult;
-}
-
-// WW8FOPTE
-void WW8FOPTE::resolveNoAuto(Properties &)
-{
 }
 
 // DffFSP

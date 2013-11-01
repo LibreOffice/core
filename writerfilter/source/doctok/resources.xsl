@@ -75,9 +75,6 @@ OUString getDffOptName(sal_uInt32 nPid);
       <xsl:when test='.//UML:Stereotype[@xmi.idref = "dffrecord"]'>
         <xsl:apply-templates select="." mode="dffrecord"/>
       </xsl:when>
-      <xsl:when test='.//UML:Stereotype[@xmi.idref = "dffopt"]'>
-        <xsl:apply-templates select="." mode="dffopt"/>
-      </xsl:when>
     </xsl:choose>
   </xsl:template>
 
@@ -792,39 +789,6 @@ public:
 </xsl:text>
 </xsl:template>
 
-
-<xsl:template match="UML:Class" mode="dffopt">
-<!--
-  <xsl:variable name="classname">
-  <xsl:text>DffOpt</xsl:text><xsl:value-of select="@name"/>
-  </xsl:variable>
-  <xsl:text>
-/** 
-    Automaticallay generated class:
-  </xsl:text>
-  <xsl:value-of select="$classname"/>
-  <xsl:text>&#xa;
-*/&#xa;
-class </xsl:text>
-<xsl:value-of select="$classname"/>
-<xsl:text> : public WW8FOPTE
-{
-    </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>(WW8FOPTE &amp; rOpt) : WW8FOPTE(rOpt) {}
-
-    virtual string getName() const
-    {
-       return "</xsl:text>
-       <xsl:value-of select="@name"/>
-       <xsl:text>";
-     }&#xa;</xsl:text>
-
-     <xsl:text>
-};
-</xsl:text> 
--->
-</xsl:template>
 
 <xsl:template name="parenttype">
   <xsl:param name='type'/>

@@ -443,27 +443,14 @@ OUString getDffOptName(sal_uInt32)
 
 <xsl:template name="ww8foptegetvalue">
   <xsl:text>
-WW8Value::Pointer_t WW8FOPTE::get_value()
-{
-    WW8Value::Pointer_t pResult;
-    return pResult;
-}</xsl:text>
+</xsl:text>
 </xsl:template>
 
 <xsl:template match='UML:Model/UML:Namespace.ownedElement' mode='ww8foptename'>
   <xsl:text>
-OUString WW8FOPTE::get_name()
-{
-    return getDffOptName(get_pid());
-}</xsl:text>
+</xsl:text>
 <xsl:call-template name="getdffoptname"/>
 <xsl:text>
-
-WW8Value::Pointer_t WW8FOPTE::get_stringValue()
-{
-    WW8Value::Pointer_t pResult;
-    return pResult;
-}
 </xsl:text>
 <xsl:call-template name="ww8foptegetvalue"/>
 </xsl:template>
