@@ -298,7 +298,6 @@ void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrmFmt& rFmt,EscherProp
         if (pINetFmt && !pINetFmt->GetURL().isEmpty())
         {
             SvMemoryStream *rStrm = new SvMemoryStream ;
-            OUString tmpstr = pINetFmt->GetURL();
             WriteHyperlinkWithinFly( *rStrm, pINetFmt );
             sal_uInt8* pBuf = (sal_uInt8*) rStrm->GetData();
             sal_uInt32 nSize = rStrm->Seek( STREAM_SEEK_TO_END );
