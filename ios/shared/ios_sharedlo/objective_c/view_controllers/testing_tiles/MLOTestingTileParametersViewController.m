@@ -17,6 +17,8 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
 @property MLOAppRoleTileTester * tester;
 @property NSArray * params;
 @property UIButton * renderButton;
+@property UIButton * modeButton;
+@property MLOTestingTileParametersMode mode;
 @end
 @implementation MLOTestingTileParametersViewController
 
@@ -24,7 +26,9 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
     self = [self init];
     if(self){
         self.tester = tester;
+        self.mode = WIDTH_IS_HEIGHT;
         [self initParams];
+        [self initModeButton];
         [self initRenderButton];
 
     }
@@ -39,30 +43,30 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
 
 -(void)initParams{
     self.params = @[[self createParam:@"contextWidth"
-                           extractor1:^(CGFloat value){self.contextWidth = value;}
-                           extractor2:^(CGFloat value){self.contextWidth = self.contextHeight = value;}
+            widthIsNotHeightExtractor:^(CGFloat value){self.contextWidth = value;}
+               widthIsHeightExtractor:^(CGFloat value){self.contextWidth = self.contextHeight = value;}
                                 value:CONTEXT_WIDTH_DEFAULT],
 
-                    [self createConditionalParam:@"contextHeight"
-                                       extractor:^(CGFloat value){self.contextHeight = value;}
-                                           value:CONTEXT_HEIGHT_DEFAULT],
+                    [self createParam:@"contextHeight"
+            widthIsNotHeightExtractor:^(CGFloat value){self.contextHeight = value;}
+                                value:CONTEXT_HEIGHT_DEFAULT],
 
-                    [self createNormalParam:@"tilePosX"
-                                  extractor:^(CGFloat value){self.tilePosX = value;}
-                                      value:TILE_POS_X_DEFAULT],
+                    [self createParam:@"tilePosX"
+                         anyExtractor:^(CGFloat value){self.tilePosX = value;}
+                                value:TILE_POS_X_DEFAULT],
 
-                    [self createNormalParam:@"tilePosY"
-                                  extractor:^(CGFloat value){self.tilePosY = value;}
-                                      value:TILE_POS_Y_DEFAULT],
+                    [self createParam:@"tilePosY"
+                         anyExtractor:^(CGFloat value){self.tilePosY = value;}
+                                value:TILE_POS_Y_DEFAULT],
 
                     [self createParam:@"tileWidth"
-                           extractor1:^(CGFloat value){self.tileWidth = value;}
-                           extractor2:^(CGFloat value){self.tileWidth = self.tileHeight = value;}
+            widthIsNotHeightExtractor:^(CGFloat value){self.tileWidth = value;}
+               widthIsHeightExtractor:^(CGFloat value){self.tileWidth = self.tileHeight = value;}
                                 value:TILE_WIDTH_DEFAULT],
 
-                    [self createConditionalParam:@"tileHeight"
-                                       extractor:^(CGFloat value){self.tileHeight = value;}
-                                           value:TILE_HEIGHT_DEFAULT]
+                    [self createParam:@"tileHeight"
+            widthIsNotHeightExtractor:^(CGFloat value){self.tileHeight = value;}
+                                value:TILE_HEIGHT_DEFAULT]
                     ];
 }
 
@@ -73,16 +77,39 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
     self.renderButton =button;
 }
 
-
--(MLOTestingTileParameter *) createNormalParam:(NSString *)name extractor:(MLOTestingTileParameterExtractor) extractor value:(CGFloat)defaultValue{
-      return [self createParam:name extractor1:extractor extractor2:extractor value:defaultValue];}
-
--(MLOTestingTileParameter *) createConditionalParam:(NSString *)name extractor:(MLOTestingTileParameterExtractor) extractor value:(CGFloat)defaultValue{
-    return [self createParam:name extractor1:extractor extractor2:nil value:defaultValue];
+-(void)initModeButton{
+    UIButton * button =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [button addTarget:self action:@selector(changeMode) forControlEvents:UIControlEventTouchDown];
+    [button setTitle:MLOTestingTileParametersModeString(self.mode) forState:UIControlStateNormal];
+    self.modeButton =button;
 }
 
--(MLOTestingTileParameter *) createParam:(NSString *)name extractor1:(MLOTestingTileParameterExtractor) extractor1 extractor2:(MLOTestingTileParameterExtractor) extractor2 value:(CGFloat)defaultValue{
-    return [[MLOTestingTileParameter alloc] initWithParams:self label:name extractor1:extractor1 extractor2:extractor2 defaultValue:defaultValue];
+-(void)changeMode{
+
+    switch (self.mode) {
+        case WIDTH_IS_HEIGHT:
+            self.mode = WIDTH_IS_NOT_HEIGHT;
+            break;
+        case WIDTH_IS_NOT_HEIGHT:
+            self.mode = WIDTH_IS_HEIGHT;
+            break;
+    }
+
+    [self.modeButton setTitle:MLOTestingTileParametersModeString(self.mode) forState:UIControlStateNormal];
+}
+
+
+
+-(MLOTestingTileParameter *) createParam:(NSString *)name anyExtractor:(MLOTestingTileParameterExtractor) anyExtractor value:(CGFloat)defaultValue{
+      return [self createParam:name widthIsNotHeightExtractor:anyExtractor widthIsHeightExtractor:anyExtractor value:defaultValue];
+}
+
+-(MLOTestingTileParameter *) createParam:(NSString *)name widthIsNotHeightExtractor:(MLOTestingTileParameterExtractor) widthIsNotHeightExtractor value:(CGFloat)defaultValue{
+    return [self createParam:name widthIsNotHeightExtractor:widthIsNotHeightExtractor widthIsHeightExtractor:nil value:defaultValue];
+}
+
+-(MLOTestingTileParameter *) createParam:(NSString *)name widthIsNotHeightExtractor:(MLOTestingTileParameterExtractor) extractor1 widthIsHeightExtractor:(MLOTestingTileParameterExtractor) extractor2 value:(CGFloat)defaultValue{
+    return [[MLOTestingTileParameter alloc] initWithParams:self label:name widthIsNotHeightExtractor:extractor1 widthIsHeightExtractor:extractor2 defaultValue:defaultValue];
 }
 
 
@@ -103,9 +130,14 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
                                        paramHeight)];
         originY+=paramHeight;
     }
-    self.renderButton.frame = CGRectMake(0,
+    CGFloat halfWidth = width/2.0f;
+    self.modeButton.frame = CGRectMake(0,
+                                       originY,
+                                       halfWidth,
+                                       RENDER_BUTTON_HEIGHT);
+    self.renderButton.frame = CGRectMake(halfWidth,
                                          originY,
-                                         width,
+                                         halfWidth,
                                          RENDER_BUTTON_HEIGHT);
 
 }
@@ -117,13 +149,14 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
     }
 
     [self.view addSubview:self.renderButton];
+    [self.view addSubview:self.modeButton];
 
 
 }
 -(void)renderTile{
     NSLog(@"%@ renderTile",self);
     for (MLOTestingTileParameter * param in self.params) {
-        [param extract];
+        [param extractMode:self.mode];
     }
     [self.tester.renderer render];
 }

@@ -8,12 +8,15 @@
 
 #import "MLOObject.h"
 
+typedef enum {WIDTH_IS_HEIGHT,WIDTH_IS_NOT_HEIGHT} MLOTestingTileParametersMode;
+#define MLOTestingTileParametersModeString(enum) [@[@"WIDTH_IS_HEIGHT",@"WIDTH_IS_NOT_HEIGHT"] objectAtIndex:enum]
+
 typedef void (^MLOTestingTileParameterExtractor)(CGFloat value);
 
 @class MLOTestingTileParametersViewController;
 @interface MLOTestingTileParameter : MLOObject
--(MLOTestingTileParameter *)initWithParams:(MLOTestingTileParametersViewController *) params label:(NSString *)label extractor1:(MLOTestingTileParameterExtractor) extractor extractor2:(MLOTestingTileParameterExtractor) linkedExtractor defaultValue:(NSInteger) defaultValue;
--(void)extract:(BOOL) isExtractor1;
+-(MLOTestingTileParameter *)initWithParams:(MLOTestingTileParametersViewController *) params label:(NSString *)label widthIsNotHeightExtractor:(MLOTestingTileParameterExtractor) widthIsNotHeightExtractor widthIsHeightExtractor:(MLOTestingTileParameterExtractor) widthIsHeightExtractor defaultValue:(NSInteger) defaultValue;
+-(void)extractMode:(MLOTestingTileParametersMode) mode;
 -(void)setParamFrame:(CGRect)  paramFrame;
 -(void)addToSuperview;
 @end

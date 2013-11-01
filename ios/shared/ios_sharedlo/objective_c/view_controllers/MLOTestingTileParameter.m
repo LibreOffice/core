@@ -11,8 +11,8 @@
 
 @interface MLOTestingTileParameter ()
 @property MLOTestingTileParametersViewController * params;
-@property (nonatomic,strong) MLOTestingTileParameterExtractor extractor1;
-@property (nonatomic,strong) MLOTestingTileParameterExtractor extractor2;
+@property (nonatomic,strong) MLOTestingTileParameterExtractor widthIsHeightExtractor;
+@property (nonatomic,strong) MLOTestingTileParameterExtractor widthIsNotHeightExtractor;
 @property UILabel * label;
 @property UITextField * data;
 @property UITextField * step;
@@ -25,13 +25,13 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
 
 @implementation MLOTestingTileParameter
 
--(MLOTestingTileParameter *)initWithParams:(MLOTestingTileParametersViewController *) params label:(NSString *)label extractor1:(MLOTestingTileParameterExtractor) extractor1 extractor2:(MLOTestingTileParameterExtractor) extractor2 defaultValue:(NSInteger) defaultValue{
+-(MLOTestingTileParameter *)initWithParams:(MLOTestingTileParametersViewController *) params label:(NSString *)label widthIsNotHeightExtractor:(MLOTestingTileParameterExtractor) widthIsNotHeightExtractor widthIsHeightExtractor:(MLOTestingTileParameterExtractor) widthIsHeightExtractor defaultValue:(NSInteger) defaultValue{
     NSLog(@"Creating tile testing param %@ with default value %d",label,defaultValue);
     self = [self init];
     if(self){
         self.params = params;
-        self.extractor1 = extractor1;
-        self.extractor2 = extractor2;
+        self.widthIsHeightExtractor = widthIsHeightExtractor;
+        self.widthIsNotHeightExtractor = widthIsNotHeightExtractor;
         self.defaultValue = defaultValue;
         [self initLabel:label];
         self.dataStepper = [self createStepper];
@@ -169,16 +169,20 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
     return [self.data.text floatValue];
 }
 
--(void)extract:(BOOL) isExtractor1{
+-(MLOTestingTileParameterExtractor) getExtractor:(MLOTestingTileParametersMode) mode{
+    switch (mode) {
+        case WIDTH_IS_HEIGHT:
+            return self.widthIsHeightExtractor;
+        case WIDTH_IS_NOT_HEIGHT:
+            return self.widthIsNotHeightExtractor;
+    }
+}
 
-    NSLog(@"%@ extract %d",self,isExtractor1?1:2);
-
-    CGFloat dataValue = [self currentDataValue];
-
-    if(isExtractor1){
-        self.extractor1(dataValue);
-    }else{
-        self.extractor2(dataValue);
+-(void)extractMode:(MLOTestingTileParametersMode) mode{
+    MLOTestingTileParameterExtractor extractor = [self getExtractor:mode];
+    if(extractor!=nil){
+        NSLog(@"%@ extract %@",self,MLOTestingTileParametersModeString(mode));
+        extractor([self currentDataValue]);
     }
 }
 @end
