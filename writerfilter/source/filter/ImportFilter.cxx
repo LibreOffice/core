@@ -148,6 +148,38 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         }
         catch(const uno::Exception&)
         {
+            SAL_WARN("writerfilter","Failed to save theme dom to documents grab bag");
+        }
+
+        // Adding the saved custom xml DOM to the document's grab bag
+        try
+        {
+              uno::Reference<beans::XPropertySet> xDocProps(m_xDstDoc, uno::UNO_QUERY);
+              if (xDocProps.is())
+              {
+                  uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+                  const OUString& aGrabBagPropName = OUString("InteropGrabBag");
+                  if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
+                  {
+                      uno::Sequence<beans::PropertyValue> aGrabBag;
+
+                      // We want to keep the previous items
+                      xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+                      sal_Int32 length = aGrabBag.getLength();
+                      aGrabBag.realloc(length+1);
+
+                      beans::PropertyValue* pValue = aGrabBag.getArray();
+                      pValue[length].Name = "OOXCustomXml";
+                      pValue[length].Value = uno::makeAny( pDocument->getCustomXmlDomList() );
+
+                      xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
+                  }
+              }
+        }
+        catch(const uno::Exception&)
+        {
+            SAL_WARN("writerfilter","Failed to save custom xml dom to documents grab bag");
         }
 
         writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream( pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT ));
