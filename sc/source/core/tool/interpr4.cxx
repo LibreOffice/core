@@ -4100,7 +4100,8 @@ StackVar ScInterpreter::Interpret()
                 case ocB                : ScB();                        break;
                 case ocNormDist         : ScNormDist();                 break;
                 case ocExpDist          : ScExpDist();                  break;
-                case ocBinomDist        : ScBinomDist();                break;
+                case ocBinomDist        :
+                case ocBinomDist_MS     : ScBinomDist();                break;
                 case ocPoissonDist      : ScPoissonDist();              break;
                 case ocKombin           : ScKombin();                   break;
                 case ocKombin2          : ScKombin2();                  break;
@@ -4123,6 +4124,7 @@ StackVar ScInterpreter::Interpret()
                 case ocGeoMean          : ScGeoMean();                  break;
                 case ocHarMean          : ScHarMean();                  break;
                 case ocWeibull          : ScWeibull();                  break;
+                case ocBinomInv         :
                 case ocKritBinom        : ScCritBinom();                break;
                 case ocNegBinomVert     : ScNegBinomDist();             break;
                 case ocNoName           : ScNoName();                   break;
