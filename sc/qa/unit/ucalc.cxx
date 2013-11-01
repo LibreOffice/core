@@ -2361,6 +2361,8 @@ void Test::testFunctionLists()
         "BETA.INV",
         "BETADIST",
         "BETAINV",
+        "BINOM.DIST",
+        "BINOM.INV",
         "BINOMDIST",
         "CHIDIST",
         "CHIINV",
