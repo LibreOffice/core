@@ -11,4 +11,5 @@
 
 @interface MLOTestingTileParametersViewController : MLOViewController<MLOTestingTileSubviewControllerProtocol>
 @property CGFloat contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight;
+-(void)renderTile;
 @end

@@ -14,8 +14,13 @@
 @property (nonatomic,strong) MLOTestingTileParameterExtractor extractor;
 @property UILabel * label;
 @property UITextField * data;
+@property UITextField * step;
 @property NSInteger defaultValue;
+@property UIStepper * dataStepper;
+@property UIStepper * stepStepper;
 @end
+
+static const CGFloat DEFAULT_STEP_VALUE = 1;
 
 @implementation MLOTestingTileParameter
 
@@ -26,11 +31,57 @@
         self.params = params;
         self.extractor = extractor;
         self.defaultValue = defaultValue;
-
         [self initLabel:label];
-        [self initTextField];
+        self.dataStepper = [self createStepper];
+        self.stepStepper = [self createStepper];
+        [self initDataTextField];
+        [self initStepTextField];
     }
     return self;
+}
+
+-(UIStepper *) createStepper{
+    UIStepper * stepper = [UIStepper new];
+    stepper.maximumValue = MAXFLOAT;
+    stepper.minimumValue = -MAXFLOAT;
+    stepper.stepValue = DEFAULT_STEP_VALUE;
+    stepper.autorepeat = YES;
+    stepper.continuous = NO;
+    [stepper addObserver:self forKeyPath:@"value"
+                          options: NSKeyValueObservingOptionNew
+                          context:0];
+    return stepper;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+
+    if (object == self.dataStepper) {
+         NSNumber * floatNumber = change[NSKeyValueChangeNewKey];
+        CGFloat value = [self currentDataValue] + [floatNumber floatValue];
+
+        if(value == ((NSInteger) value)){
+            self.data.text = [[NSNumber numberWithInteger:(NSInteger) value] stringValue];
+        }else{
+            self.data.text = [[NSNumber numberWithFloat:value] stringValue];
+        }
+        [self.params renderTile];
+    }else if (object == self.stepStepper){
+
+        NSNumber * floatNumber = change[NSKeyValueChangeNewKey];
+        NSInteger value = [floatNumber integerValue];
+        NSNumber * newValue = [NSNumber numberWithInteger:value];
+        self.step.text = [newValue stringValue];
+        self.dataStepper.stepValue = [newValue floatValue];
+    }
+}
+
+
+-(void)initStepTextField{
+
+    self.step =[[UITextField alloc] initWithFrame:CGRECT_ZERO];
+    self.data.textAlignment = NSTextAlignmentLeft;
+    self.step.text = [[NSNumber numberWithInteger:(NSInteger)DEFAULT_STEP_VALUE] stringValue];
 }
 
 -(NSString *)description{
@@ -40,10 +91,10 @@
 -(void) initLabel:(NSString *) label{
     self.label =[[UILabel alloc] initWithFrame:CGRECT_ZERO];
     self.label.text =  label;
-    self.label.textAlignment = NSTextAlignmentRight;
+    self.label.textAlignment = NSTextAlignmentCenter;
 }
 
--(void) initTextField{
+-(void) initDataTextField{
     self.data = [[UITextField alloc] initWithFrame:CGRECT_ZERO];
     [self.data setKeyboardType:UIKeyboardTypeNumberPad];
     self.data.textAlignment = NSTextAlignmentLeft;
@@ -58,31 +109,65 @@
 -(void)setParamFrame:(CGRect)  paramFrame{
     NSLog(@"%@ setParamFrame",self);
 
-    self.label.frame=CGRectMake(paramFrame.origin.x,
-                                paramFrame.origin.y,
-                                paramFrame.size.width/2.0f,
-                                paramFrame.size.height);
-    self.data.frame =CGRectMake(paramFrame.origin.x + paramFrame.size.width/2.0f,
-                                paramFrame.origin.y,
-                                paramFrame.size.width/2.0f,
-                                paramFrame.size.height);
+    CGFloat x = paramFrame.origin.x;
+    CGFloat y = paramFrame.origin.y;
+    CGFloat w = paramFrame.size.width;
+    CGFloat h = paramFrame.size.height;
+
+    CGFloat labelW = w/3.0f;
+    CGFloat otherW = w/6.0f;
+
+    self.label.frame=CGRectMake(x,
+                                y,
+                                labelW,
+                                h);
+    self.data.frame =CGRectMake(x + labelW,
+                                y,
+                                otherW,
+                                h);
+    self.dataStepper.frame = CGRectMake(x + labelW + otherW,
+                                        y,
+                                        otherW,
+                                        h);
+
+    self.step.frame = CGRectMake(x + labelW + 2*otherW,
+                                 y,
+                                 otherW,
+                                 h);
+    self.stepStepper.frame = CGRectMake(x + labelW + 3*otherW,
+                                        y,
+                                        otherW,
+                                        h);
+
 }
 
 -(void)addToSuperview{
     NSLog(@"%@ addToSuperview",self);
     [self.params.view addSubview:self.label];
     [self.params.view addSubview:self.data];
+    [self.params.view addSubview:self.dataStepper];
+    [self.params.view addSubview:self.step];
+    [self.params.view addSubview:self.stepStepper];
 }
 
--(void)extract{
-    NSLog(@"%@ extract",self);
+-(BOOL)isNumber:(NSString *) string{
 
-    if([[NSNumberFormatter new]numberFromString:self.data.text] == nil){
+    return [[NSNumberFormatter new]numberFromString:string] == nil;
+}
+
+-(CGFloat) currentDataValue{
+    if([self isNumber:self.data.text]){
 
         NSLog(@"%@ got illegal value: %@, reseting to %d",self,self.data.text,self.defaultValue);
 
         [self resetValue];
     }
-    self.extractor([self.data.text floatValue]);
+    return [self.data.text floatValue];
+}
+
+-(void)extract{
+    NSLog(@"%@ extract",self);
+
+    self.extractor([self currentDataValue]);
 }
 @end
