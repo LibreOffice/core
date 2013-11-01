@@ -309,6 +309,7 @@ class RATE: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 class OpIntrate: public RATE {
 public:

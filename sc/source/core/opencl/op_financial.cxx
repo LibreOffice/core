@@ -21,6 +21,8 @@
 using namespace formula;
 
 namespace sc { namespace opencl {
+// Definitions of inline functions
+#include "opinlinefun_finacial.cxx"
 
 void RRI::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
@@ -2512,6 +2514,13 @@ void OpTbillprice::GenSlidingWindowFunction(
     ss<<"tmp = 100.0 * ( 1.0 - tmp002 * fFraction );\n";
     ss << "return tmp;\n";
     ss << "}\n";
+}
+ void RATE::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(approxEqualDecl);decls.insert(nKorrValDecl);
+    decls.insert(SCdEpsilonDecl);decls.insert(RoundDecl);
+    funs.insert(approxEqual);funs.insert(Round);
 }
 
 void RATE::GenSlidingWindowFunction(

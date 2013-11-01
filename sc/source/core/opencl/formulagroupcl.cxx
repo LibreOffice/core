@@ -823,6 +823,13 @@ public:
             t = t + mvSubArguments[i]->DumpOpName();
         return t;
     }
+    virtual void DumpInlineFun(std::set<std::string>& decls,
+                                std::set<std::string>& funs) const
+    {
+        mpCodeGen->BinInlineFun(decls,funs);
+        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+            mvSubArguments[i]->DumpInlineFun(decls,funs);
+    }
 private:
     SubArgumentsType mvSubArguments;
     boost::scoped_ptr<SlidingFunctionBase> mpCodeGen;
@@ -1181,6 +1188,18 @@ public:
         // preambles
         decl << publicFunc;
         decl << finacialFunc;
+        DK->DumpInlineFun(inlineDecl,inlineFun);
+        for(std::set<std::string>::iterator set_iter=inlineDecl.begin();
+                                         set_iter!=inlineDecl.end();set_iter++)
+        {
+            decl<<*set_iter;
+        }
+
+        for(std::set<std::string>::iterator set_iter=inlineFun.begin();
+                                         set_iter!=inlineFun.end();set_iter++)
+        {
+            decl<<*set_iter;
+        }
         mSyms.DumpSlidingWindowFunctions(decl);
         mKernelSignature = DK->DumpOpName();
         decl << "__kernel void DynamicKernel" << mKernelSignature;
@@ -1255,6 +1274,8 @@ private:
     cl_program mpProgram;
     cl_kernel mpKernel;
     cl_mem mpResClmem; // Results
+    std::set<std::string> inlineDecl;
+    std::set<std::string> inlineFun;
 };
 
 DynamicKernel::~DynamicKernel()

@@ -16,7 +16,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
-
+#include <set>
 #define ISNAN
 
 namespace sc { namespace opencl {
@@ -101,6 +101,8 @@ public:
     formula::FormulaToken *GetFormulaToken(void) const;
     virtual size_t GetWindowSize(void) const;
     virtual std::string DumpOpName(void) const { return std::string(""); }
+    virtual void DumpInlineFun(std::set<std::string>& ,
+        std::set<std::string>& ) const {}
     const std::string& GetName(void) const { return mSymName; }
 protected:
     const std::string mSymName;
@@ -121,6 +123,8 @@ public:
         const std::string &/*rhs*/) const {return "";}
     virtual std::string Gen(ArgVector& /*argVector*/){return "";};
     virtual std::string BinFuncName(void)const {return "";};
+    virtual void BinInlineFun(std::set<std::string>& ,
+        std::set<std::string>& ) {}
     virtual bool takeString() const = 0;
     virtual bool takeNumeric() const = 0;
     virtual ~OpBase() {}

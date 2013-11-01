@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef SC_OPENCL_OPINLINFUN_finacial
+#define SC_OPENCL_OPINLINFUN_finacial
+std::string approxEqualDecl="bool approxEqual(double a, double b);\n";
+std::string approxEqual =
+"bool approxEqual(double a, double b)\n"
+"{\n"
+    "\tif (a == b)\n"
+        "\t\treturn true;\n"
+    "\tdouble x = a - b;\n"
+    "\treturn (x < 0.0 ? -x : x) < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 *"
+    "16777216.0)));\n"
+"}\n";
+
+std::string nKorrValDecl ="double constant nKorrVal[]"
+"= {0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, "
+"9e-8,9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14, 9e-15};\n";
+
+std::string SCdEpsilonDecl =
+"constant double SCdEpsilon = 1.0E-7;\n";
+
+std::string RoundDecl = "double  Round(double fValue);\n";
+
+std::string Round =
+"double  Round(double fValue)\n"
+"{\n"
+    "\tif (fValue == 0.0)\n"
+    "\t\treturn fValue;\n"
+    "\tdouble fFac = 0;\n"
+    "\tint nExp;\n"
+    "\tif (fValue > 0.0)\n"
+        "\t\tnExp = (floor(log10(fValue)));\n"
+    "\telse\n"
+    "\t\tnExp = 0;\n"
+    "\tint nIndex = 15 - nExp;\n"
+    "\tif (nIndex > 15)\n"
+        "\t\tnIndex = 15;\n"
+    "\telse if (nIndex <= 1)\n"
+        "\t\tnIndex = 0;\n"
+    "\tfValue = floor(fValue + 0.5 + nKorrVal[nIndex]);\n"
+    "\treturn fValue;\n"
+"}\n";
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
