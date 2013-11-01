@@ -11,6 +11,8 @@
 // that the LO layer calls. As this experimental Android app doesn't
 // handle any of that, these do nothing.
 
+#include <android/log.h>
+
 #include <touch/touch.h>
 
 extern "C"
@@ -39,6 +41,35 @@ __attribute__ ((visibility("default")))
 void
 touch_ui_selection_none()
 {
+}
+
+
+static const char *
+dialog_kind_to_string(MLODialogKind kind)
+{
+    switch (kind) {
+    case MLODialogMessage:
+        return "MSG";
+    case MLODialogInformation:
+        return "INF";
+    case MLODialogWarning:
+        return "WRN";
+    case MLODialogError:
+        return "ERR";
+    case MLODialogQuery:
+        return "QRY";
+    default:
+        return "WTF";
+    }
+}
+
+extern "C"
+__attribute__ ((visibility("default")))
+MLODialogResult
+touch_ui_dialog_modal(MLODialogKind kind, const char *message)
+{
+    __android_log_print(ANDROID_LOG_INFO, "===>  %s: %s", dialog_kind_to_string(kind), message);
+    return MLODialogOK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
