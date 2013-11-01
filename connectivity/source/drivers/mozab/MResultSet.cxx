@@ -743,6 +743,10 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchStr
 #endif
 }
 
+#define WILDCARD "%"
+#define ALT_WILDCARD "*"
+static const sal_Unicode MATCHCHAR = '_';
+
 void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                     &queryExpression)
 {
@@ -894,10 +898,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_INVALID_LIKE_STRING, *this );
         }
 
-        const sal_Unicode WILDCARD = '%';
-        const sal_Unicode ALT_WILDCARD = '*';
-        const sal_Unicode MATCHCHAR = '_';
-
         OUString sTableRange;
         if(SQL_ISRULE(pColumn,column_ref))
             m_pSQLIterator->getColumnRange(pColumn,columnName,sTableRange);
@@ -917,7 +917,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         // Determine where '%' character is...
 
-        if ( matchString.equals( OUString( WILDCARD ) ) )
+        if ( matchString.equals( WILDCARD ) )
         {
             // String containing only a '%' and nothing else
             op = MQueryOp::Exists;
