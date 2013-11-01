@@ -6087,6 +6087,54 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Cumulated. C=0 calculates the individual probability, C=1 the cumulated probability." ;
         };
     };
+     // -=*# Resource for function BINOM.DIST #*=-
+    Resource SC_OPCODE_BINOM_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the binomial distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_BINOM_DIST_MS );
+            4;  0;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "X" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The number of successes in a series of trials." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "trials" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The total number of trials." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "SP" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The success probability of a trial." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "C" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Cumulated. C=0 calculates the individual probability, C=1 the cumulated probability." ;
+        };
+    };
      // -=*# Resource for function NEGBINOMVERT #*=-
     Resource SC_OPCODE_NEG_BINOM_VERT
     {
@@ -6139,6 +6187,46 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_KRITBINOM );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "trials" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The total number of trials." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "SP" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The success probability of a trial." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "alpha" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The border probability that is attained or exceeded." ;
+        };
+    };
+     // -=*# Resource for function BINOM.INV #*=-
+    Resource SC_OPCODE_BINOM_INV
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Border arguments of the binomial distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_BINOM_INV_MS );
             3;  0;  0;  0;
             0;
         };

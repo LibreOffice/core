@@ -230,6 +230,8 @@ enum OpCodeEnum
         ocNormDist          = SC_OPCODE_NORM_DIST,
         ocExpDist           = SC_OPCODE_EXP_DIST,
         ocBinomDist         = SC_OPCODE_BINOM_DIST,
+        ocBinomDist_MS      = SC_OPCODE_BINOM_DIST_MS,
+        ocBinomInv          = SC_OPCODE_BINOM_INV,
         ocPoissonDist       = SC_OPCODE_POISSON_DIST,
         ocKombin            = SC_OPCODE_KOMBIN,
         ocKombin2           = SC_OPCODE_KOMBIN_2,

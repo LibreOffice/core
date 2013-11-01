@@ -196,6 +196,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
+    String SC_OPCODE_BINOM_DIST_MS { Text = "COM.MICROSOFT.BINOM.DIST" ; };
     String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
     String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
     String SC_OPCODE_KOMBIN_2 { Text = "COMBINA" ; };
@@ -287,6 +288,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
+    String SC_OPCODE_BINOM_INV { Text = "COM.MICROSOFT.BINOM.INV" ; };
     String SC_OPCODE_KURT { Text = "KURT" ; };
     String SC_OPCODE_HAR_MEAN { Text = "HARMEAN" ; };
     String SC_OPCODE_GEO_MEAN { Text = "GEOMEAN" ; };
@@ -552,6 +554,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
+    String SC_OPCODE_BINOM_DIST_MS { Text = "BINOM.DIST" ; };
     String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
     String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
     String SC_OPCODE_KOMBIN_2 { Text = "COMBINA" ; };
@@ -643,6 +646,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
+    String SC_OPCODE_BINOM_INV { Text = "BINOM.INV" ; };
     String SC_OPCODE_KURT { Text = "KURT" ; };
     String SC_OPCODE_HAR_MEAN { Text = "HARMEAN" ; };
     String SC_OPCODE_GEO_MEAN { Text = "GEOMEAN" ; };
@@ -1351,6 +1355,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "BINOMDIST" ;
     };
+    String SC_OPCODE_BINOM_DIST_MS
+    {
+        Text [ en-US ] = "BINOM.DIST" ;
+    };
     String SC_OPCODE_POISSON_DIST
     {
         Text [ en-US ] = "POISSON" ;
@@ -1715,6 +1723,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_KRIT_BINOM
     {
         Text [ en-US ] = "CRITBINOM" ;
+    };
+    String SC_OPCODE_BINOM_INV
+    {
+        Text [ en-US ] = "BINOM.INV" ;
     };
     String SC_OPCODE_KURT
     {
