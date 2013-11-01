@@ -485,14 +485,9 @@ endif
 # target. When the rule for the headertarget is executed and SELF does not
 # match the target name, we are depending on a linktarget that was never
 # declared. In a full build exclusively in gbuild that should never happen.
-# However, partial gbuild build will not know about how to build lower level
-# linktargets, just as gbuild can not know about linktargets generated in the
-# old build.pl/dmake system. Once all is migrated, gbuild should error out
-# when is is told to depend on a linktarget it does not know about and not
-# only warn.
 define gb_LinkTarget__get_headers_check
 ifneq ($$(SELF),$$*)
-$$(eval $$(call gb_Output_info,LinkTarget $$* not defined: Assuming headers to be there!,ALL))
+$$(eval $$(call gb_Output_error,used LinkTarget $$* not defined))
 endif
 $$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, touch $$@)
 
