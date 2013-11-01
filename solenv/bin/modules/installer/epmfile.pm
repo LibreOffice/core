@@ -2549,7 +2549,7 @@ sub create_packages_without_epm
             {
                 # if ( $i < $maxrpmcalls ) { $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
                 $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig;
-                $installer::logger::Lang->printf($rpmoutput[$j]);
+                $installer::logger::Lang->print($rpmoutput[$j]);
             }
 
             if ($returnvalue)
@@ -2596,7 +2596,7 @@ sub create_packages_without_epm
 
                 foreach my $line (@helperrpmoutput)
                 {
-                    $installer::logger::Lang->printf($helperrpmoutput[$j]);
+                    $installer::logger::Lang->print($helperrpmoutput[$j]);
                 }
 
                 if ($helperreturnvalue)
