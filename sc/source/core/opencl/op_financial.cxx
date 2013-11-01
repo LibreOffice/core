@@ -1837,44 +1837,118 @@ void OpYieldmat::GenSlidingWindowFunction(
     ss << "}";
 }
 
-void OpPMT::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+void OpPMT::GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
-            ss << ",";
+            ss << ", ";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss << "double tmp = 0;\n\t";
-    ss<<"double tFv=0,tType=0;\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-     if(vSubArguments.size()==4)
-        ss<<"tFv="<<vSubArguments[3]->GenSlidingWindowDeclRef()<<";\n\t";
-    else if(vSubArguments.size()==5)
+    ss << ") {\n    ";
+    ss << "double tmp = 0;\n    ";
+    ss << "int gid0 = get_global_id(0);\n    ";
+    ss<<"double tmp0,tmp1,tmp2;\n    ";
+    ss<<"double tmp3=0,tmp4=0;\n    ";
+    unsigned i = vSubArguments.size();
+    size_t nItems = 0;
+    ss <<"\n    ";
+    //while (i-- > 1)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
     {
-        ss<<"tType="<<vSubArguments[4]->GenSlidingWindowDeclRef();
-        ss<<";\n\t";
-        ss<<"tFv="<<vSubArguments[3]->GenSlidingWindowDeclRef();
-        ss<<";\n\t";
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n        ";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n        ";
+#endif
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n        ";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n        ";
+#endif
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " &&  i < "<< nCurWindowSize << "; i++){\n        ";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n        ";
+#endif
+            }
+            else {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n        ";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n        ";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n        ";
+#else
+            nItems += 1;
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n        ";
+#endif
+            nItems += 1;
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+            nItems += 1;
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n            ";
+            ss << "tmp"<<i<<"= 0;\n        ";
+            ss << "else\n            ";
+            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n    }\n    ";
+        }
+        else
+        {
+            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n    ";
+        }
+#else
+    ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+    ss <<";\n    ";
+
+#endif
     }
-    ss<<"if("<<vSubArguments[0]->GenSlidingWindowDeclRef()<<"==0.0)\n\t";
-    ss<<"\treturn ("<<vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss<<"+tFv)/";
-    ss<<vSubArguments[1]->GenSlidingWindowDeclRef()<<";\n\t";
-    ss<<"double abl = pow(1.0+"<<vSubArguments[0]
-        ->GenSlidingWindowDeclRef();
-    ss << ","<<vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss<<");\n\ttmp-=tFv";
-    ss<<";\n\ttmp-="<<vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss<<"*abl;\n\t"<<"tmp =tmp/(1.0+"<<vSubArguments[0]
-        ->GenSlidingWindowDeclRef();
-    ss<<"*tType";
-    ss<<") / ( (abl-1.0)/"<<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ");\n\t";
+    ss<<"if(tmp0==0.0)\n    ";
+    ss<<"    return -(tmp2+tmp3)/tmp1;\n    ";
+    ss<<"double abl = pow(1.0+tmp0,tmp1);\n    tmp-=tmp3";
+    ss<<";\n    tmp-=tmp2*abl;\n    ";
+    ss<<"tmp =tmp/(1.0+tmp0*tmp4";
+    ss<<") / ( (abl-1.0)/tmp0);\n    ";
     ss << "return tmp;\n";
     ss << "}";
 }
