@@ -32,19 +32,8 @@ use strict;
 
 my $StartTime = undef;
 
-sub Die ($)
-{
-    my ($message) = @_;
-    print "Stack Trace:\n";
-    my $i = 1;
-    while ((my @call_details = (caller($i++))))
-    {
-        printf("%s:%s in function %s\n", $call_details[1], $call_details[2], $call_details[3]);
-    }
-
-    die $message;
-}
-
+sub PrintStackTrace ();
+sub Die ($);
 
 =head1 NAME
 
@@ -155,7 +144,12 @@ sub printf ($$@)
 {
     my ($self, $format, @arguments) = @_;
 
-    $self->print(sprintf($format, @arguments), 0);
+    my $message = sprintf($format, @arguments);
+    if ($message =~ /\%/)
+    {
+        PrintStackTrace();
+    }
+    $self->print($message, 0);
 }
 
 
@@ -649,5 +643,29 @@ sub print_error
     print STDERR "**************************************************\n";
     return;
 }
+
+
+=head2 PrintStackTrace()
+    This is for debugging the print and printf methods of the logger class and their use.
+    Therefore we use the Perl print/printf directly and not the logger methods to avoid loops in case of errors.
+=cut
+sub PrintStackTrace ()
+{
+    print "Stack Trace:\n";
+    my $i = 1;
+    while ((my @call_details = (caller($i++))))
+    {
+        printf("%s:%s in function %s\n", $call_details[1], $call_details[2], $call_details[3]);
+    }
+}
+
+sub Die ($)
+{
+    my ($message) = @_;
+    PrintStackTrace();
+    die $message;
+}
+
+
 
 1;
