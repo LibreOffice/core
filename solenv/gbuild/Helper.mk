@@ -187,7 +187,6 @@ $(call gb_Executable_get_command,$(firstword $(1))) $(wordlist 2,$(words $(1)),$
 endef
 
 # define gb_Helper_install registered-target target-to-install target-from-workdir
-# FIXME how is this stuff cleaned???
 define gb_Helper_install
 $(1) :| $(2)
 $(2) : $(3) | $(dir $(2)).dir
