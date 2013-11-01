@@ -1296,20 +1296,29 @@ void Test::testFormulaRefUpdateNamedExpression()
     m_pDoc->SetValue(ScAddress(3,9,0), 20);
     CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(2,7,0)));
 
-#if 0
     // Insert a new sheet before the current.
     m_pDoc->InsertTab(0, "New");
     OUString aName;
     m_pDoc->GetName(1, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Formula"), aName);
+
+    pName = pGlobalNames->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT_MESSAGE("Failed to find named expression 'MyRange' in the global scope.", pName);
+
     m_pDoc->SetValue(ScAddress(3,9,1), 10);
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(2,7,1)));
 
     m_pDoc->DeleteTab(0);
 
+    aName = OUString();
+    m_pDoc->GetName(0, aName);
+    CPPUNIT_ASSERT_EQUAL(OUString("Formula"), aName);
+
+    pName = pGlobalNames->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT_MESSAGE("Failed to find named expression 'MyRange' in the global scope.", pName);
+
     m_pDoc->SetValue(ScAddress(3,9,0), 11);
     CPPUNIT_ASSERT_EQUAL(34.0, m_pDoc->GetValue(ScAddress(2,7,0)));
-#endif
 
     // Clear all and start over.
     clearRange(m_pDoc, ScRange(0,0,0,100,100,0));

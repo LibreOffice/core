@@ -24,6 +24,7 @@
 #include "address.hxx"
 #include "formula/grammar.hxx"
 #include "scdllapi.h"
+#include "calcmacros.hxx"
 
 #include <map>
 #include <vector>
@@ -151,6 +152,10 @@ public:
     SCCOL GetMaxCol() const;
 
     void            CompileUnresolvedXML();
+
+#if DEBUG_FORMULA_COMPILER
+    void Dump() const;
+#endif
 };
 
 inline bool ScRangeData::HasType( RangeType nType ) const

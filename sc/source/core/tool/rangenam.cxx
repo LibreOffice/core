@@ -196,6 +196,18 @@ void ScRangeData::CompileUnresolvedXML()
     }
 }
 
+#if DEBUG_FORMULA_COMPILER
+void ScRangeData::Dump() const
+{
+    cout << "-- ScRangeData" << endl;
+    cout << "  name: " << aName << endl;
+    cout << "  ref position: (col=" << aPos.Col() << ", row=" << aPos.Row() << ", sheet=" << aPos.Tab() << ")" << endl;
+
+    if (pCode)
+        pCode->Dump();
+}
+#endif
+
 void ScRangeData::GuessPosition()
 {
     // set a position that allows "absoluting" of all relative references
@@ -392,6 +404,9 @@ void ScRangeData::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nL
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnInsertedTab(rCxt, aPos);
     if (aRes.mbReferenceModified)
         rCxt.maUpdatedNames.setUpdatedName(nLocalTab, nIndex);
+
+    if (rCxt.mnInsertPos <= aPos.Tab())
+        aPos.IncTab(rCxt.mnSheets);
 }
 
 void ScRangeData::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt, SCTAB nLocalTab )
@@ -399,6 +414,9 @@ void ScRangeData::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt, SCTAB nL
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnDeletedTab(rCxt, aPos);
     if (aRes.mbReferenceModified)
         rCxt.maUpdatedNames.setUpdatedName(nLocalTab, nIndex);
+
+    if (rCxt.mnDeletePos <= aPos.Tab())
+        aPos.IncTab(-rCxt.mnSheets);
 }
 
 void ScRangeData::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocalTab )
@@ -406,6 +424,8 @@ void ScRangeData::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocal
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMovedTab(rCxt, aPos);
     if (aRes.mbReferenceModified)
         rCxt.maUpdatedNames.setUpdatedName(nLocalTab, nIndex);
+
+    aPos.SetTab(rCxt.getNewTab(aPos.Tab()));
 }
 
 void ScRangeData::MakeValidName( OUString& rName )
