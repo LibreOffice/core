@@ -41,9 +41,6 @@ else
 gb_Executable_get_target_for_build = $(gb_Executable__get_linktarget_target)
 endif
 
-# FIXME: cleanup?
-gb_Library_get_target = $(gb_Library__get_linktarget_target)
-
 gb_StaticLibrary_get_target = $(gb_StaticLibrary__get_linktarget_target)
 
 
@@ -381,12 +378,12 @@ endef
 define gb_Library__get_workdir_linktargetname
 Library/$(call gb_Library_get_filename,$(1))
 endef
-define gb_Library__get_linktarget_target
-$(call gb_Library_get_install_target,$(1))
+define gb_Library_get_target
+$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))
 endef
 # this returns a tuple of both the linktargetname, and the target file
 define gb_Library_get_linktarget
-$(call gb_Library__get_workdir_linktargetname,$(1))<>$(call gb_Library__get_linktarget_target,$(1))
+$(call gb_Library__get_workdir_linktargetname,$(1))<>$(call gb_Library_get_target,$(1))
 endef
 
 define gb_StaticLibrary__get_workdir_linktargetname
