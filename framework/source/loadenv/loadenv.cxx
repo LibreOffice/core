@@ -404,7 +404,8 @@ void LoadEnv::startLoading()
     // not started => general error
     // We can't say - what was the reason for.
     if (!bStarted)
-        throw LoadEnvException(LoadEnvException::ID_GENERAL_ERROR);
+        throw LoadEnvException(
+            LoadEnvException::ID_GENERAL_ERROR, "not started");
 }
 
 /*-----------------------------------------------
@@ -1698,7 +1699,9 @@ void LoadEnv::impl_reactForLoadingState()
     if (bThrow)
     {
         if  ( aRequest.isExtractableTo( ::cppu::UnoType< css::uno::Exception >::get() ) )
-            throw LoadEnvException( LoadEnvException::ID_GENERAL_ERROR, "", aRequest );
+            throw LoadEnvException(
+                LoadEnvException::ID_GENERAL_ERROR, "interaction request",
+                aRequest);
     }
 
     // <- SAFE ----------------------------------
