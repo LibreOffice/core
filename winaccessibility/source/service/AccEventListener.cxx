@@ -188,7 +188,7 @@ void AccEventListener::fireStateFocusdChange(bool enable)
  *  @param state    the state id
  *  @param set      true if state is set, false if state is unset
  */
-void AccEventListener::fireStatePropertyChange(short state, bool set )
+void AccEventListener::fireStatePropertyChange(short /*state*/, bool set )
 {
     if( set )
     {
@@ -231,7 +231,7 @@ void AccEventListener::removeMeFromBroadcaster()
 {
     try
     {
-        vos::OGuard aGuard(aRemoveMutex);
+        osl::MutexGuard aGuard(aRemoveMutex);
         if(m_isDisposed)
             return;
         //get accessible context
@@ -259,7 +259,7 @@ void AccEventListener::removeMeFromBroadcaster()
         if (pBroadcaster != NULL)
         {
             //remove the lister from accessible object
-            pBroadcaster->removeEventListener(this);
+            pBroadcaster->removeAccessibleEventListener(this);
             m_isDisposed = true;
             pAgent->NotifyDestroy(pAccessible);
         }
@@ -274,7 +274,7 @@ void AccEventListener::removeMeFromBroadcaster()
 /**
  *  this method is invoked before listener is disposed
  */
-void AccEventListener::disposing( const ::com::sun::star::lang::EventObject& Source )
+void AccEventListener::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
     removeMeFromBroadcaster();
