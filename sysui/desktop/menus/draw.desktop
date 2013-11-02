@@ -30,10 +30,11 @@ StartupNotify=true
 X-GIO-NoFuse=true
 Keywords=Vector;Schema;Diagram;Layout;OpenDocument Graphics;Microsoft Publisher;Corel Draw;cdr;odg;svg;
 InitialPreference=5
-X-Ayatana-Desktop-Shortcuts=X-New
 StartupWMClass=libreoffice-draw
 X-KDE-Protocols=file,http,smb,ftp,webdav
-[X-New Shortcut Group]
-UnityQuicklist=New Drawing
-Exec=${UNIXBASISROOTNAME} --draw %%FILE%%
-TargetEnvironment=Unity
+
+Actions=NewDocument;
+[Desktop Action NewDocument]
+Name=New Drawing
+Exec=${UNIXBASISROOTNAME} --draw
+OnlyShowIn=Unity;

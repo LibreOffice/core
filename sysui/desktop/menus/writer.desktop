@@ -30,10 +30,11 @@ StartupNotify=true
 X-GIO-NoFuse=true
 Keywords=Text;Letter;Fax;Document;OpenDocument Text;Microsoft Word;Microsoft Works;Lotus WordPro;OpenOffice Writer;CV;odt;doc;docx;rtf;
 InitialPreference=5
-X-Ayatana-Desktop-Shortcuts=X-New
 StartupWMClass=libreoffice-writer
 X-KDE-Protocols=file,http,smb,ftp,webdav
-[X-New Shortcut Group]
-UnityQuicklist=New Document
-Exec=${UNIXBASISROOTNAME} --writer %%FILE%%
-TargetEnvironment=Unity
+
+Actions=NewDocument;
+[Desktop Action NewDocument]
+Name=New Document
+Exec=${UNIXBASISROOTNAME} --writer
+OnlyShowIn=Unity;
