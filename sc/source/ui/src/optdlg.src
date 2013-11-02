@@ -775,6 +775,13 @@ TabPage RID_SCPAGE_PRINT
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text [ en-US ] = "~Suppress output of empty pages";
     };
+    CheckBox BTN_FORCEBREAKS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_PRINT:BTN_FORCEBREAKS";
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Always apply manual breaks";
+    };
     FixedLine FL_SHEETS
     {
         Pos = MAP_APPFONT ( 6 , 30 ) ;

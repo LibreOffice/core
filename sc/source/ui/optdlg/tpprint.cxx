@@ -39,7 +39,8 @@ ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
         aPagesFL         ( this, ScResId( FL_PAGES ) ),
         aSkipEmptyPagesCB( this, ScResId( BTN_SKIPEMPTYPAGES ) ),
         aSheetsFL        ( this, ScResId( FL_SHEETS ) ),
-        aSelectedSheetsCB( this, ScResId( BTN_SELECTEDSHEETS ) )
+        aSelectedSheetsCB( this, ScResId( BTN_SELECTEDSHEETS ) ),
+        aForceBreaksCB   ( this, ScResId( BTN_FORCEBREAKS ) )
 {
     FreeResource();
 }
@@ -89,6 +90,8 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     aSkipEmptyPagesCB.Check( aOptions.GetSkipEmpty() );
     aSkipEmptyPagesCB.SaveValue();
     aSelectedSheetsCB.SaveValue();
+    aForceBreaksCB.Check( aOptions.GetForceBreaks() );
+    aForceBreaksCB.SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -99,12 +102,14 @@ sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 
     bool bSkipEmptyChanged = ( aSkipEmptyPagesCB.GetSavedValue() != aSkipEmptyPagesCB.IsChecked() );
     bool bSelectedSheetsChanged = ( aSelectedSheetsCB.GetSavedValue() != aSelectedSheetsCB.IsChecked() );
+    bool bForceBreaksChanged = ( aForceBreaksCB.GetSavedValue() != aForceBreaksCB.IsChecked() );
 
-    if ( bSkipEmptyChanged || bSelectedSheetsChanged )
+    if ( bSkipEmptyChanged || bSelectedSheetsChanged || bForceBreaksChanged )
     {
         ScPrintOptions aOpt;
         aOpt.SetSkipEmpty( aSkipEmptyPagesCB.IsChecked() );
         aOpt.SetAllSheets( !aSelectedSheetsCB.IsChecked() );
+        aOpt.SetForceBreaks( aForceBreaksCB.IsChecked() );
         rCoreAttrs.Put( ScTpPrintItem( SID_SCPRINTOPTIONS, aOpt ) );
         if ( bSelectedSheetsChanged )
         {

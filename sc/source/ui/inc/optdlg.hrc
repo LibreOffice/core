@@ -60,6 +60,7 @@
 #define BTN_SKIPEMPTYPAGES  2
 #define FL_SHEETS           2
 #define BTN_SELECTEDSHEETS  4
+#define BTN_FORCEBREAKS     5
 
 // TP_LCONTENT
 
