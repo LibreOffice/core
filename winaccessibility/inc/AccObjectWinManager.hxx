@@ -27,7 +27,7 @@
 #endif
 #include <map>
 #include <windows.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/dllapi.h>
 #include "ResIDGenerator.hxx"
 #include "UAccCOM2.h"
@@ -95,9 +95,9 @@ private:
     AccObjectManagerAgent*   pAgent;
     static AccObjectWinManager* me;
     ResIDGenerator ResIdGen;
-    mutable ::vos::OMutex aDeleteMutex;
-    mutable ::vos::OMutex aNotifyMutex;
-    mutable ::vos::OMutex maATInterfaceMutex;
+    mutable ::osl::Mutex aDeleteMutex;
+    mutable ::osl::Mutex aNotifyMutex;
+    mutable ::osl::Mutex maATInterfaceMutex;
 
     AccObjectWinManager(AccObjectManagerAgent* Agent=NULL);
     bool m_bBridgeRegistered;

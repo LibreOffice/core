@@ -25,7 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weak.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 class AccObjectManagerAgent;
 using namespace ::com::sun::star::uno;
@@ -47,7 +47,7 @@ protected:
     AccObjectManagerAgent* pAgent;
     //disposed state indicator
     bool  m_isDisposed;
-    mutable ::vos::OMutex aRemoveMutex;
+    mutable ::osl::Mutex aRemoveMutex;
 public:
     AccEventListener( com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccEventListener();
