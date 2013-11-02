@@ -106,13 +106,13 @@ SdIOCompat::SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode, sal_uInt16 nVe
     if (nNewMode == STREAM_WRITE)
     {
         DBG_ASSERT(nVer != SDIOCOMPAT_VERSIONDONTKNOW,
-                   "kann unbekannte Version nicht schreiben");
+                   "can´t write unknown version");
         rNewStream << nVersion;
     }
     else if (nNewMode == STREAM_READ)
     {
         DBG_ASSERT(nVer == SDIOCOMPAT_VERSIONDONTKNOW,
-                   "Lesen mit Angabe der Version ist Quatsch!");
+                   "referring to the version while reading is silly!");
         rNewStream >> nVersion;
     }
 }

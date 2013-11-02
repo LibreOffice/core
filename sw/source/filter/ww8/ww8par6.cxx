@@ -2461,10 +2461,10 @@ void SwWW8ImplReader::StopApo()
         DeleteAnchorStk();
         pAnchorStck = pSFlyPara->pOldAnchorStck;
 
-        // Ist die Fly-Breite durch eine innenliegende Grafik vergroessert
-        // worden ( bei automatischer Breite des Flys ), dann muss die Breite
-        // des SW-Flys entsprechend umgesetzt werden, da der SW keine
-        // automatische Breite kennt.
+        // When inserting a graphic into the fly frame using the auto
+        // function, the extension of the SW-fly has to be set
+        // manually as the SW fly has no auto function to adjust the
+        // frame´s size.
         if( pSFlyPara->nNewNettoWidth > MINFLY )    // BoxUpWidth ?
         {
             long nW = pSFlyPara->nNewNettoWidth;
