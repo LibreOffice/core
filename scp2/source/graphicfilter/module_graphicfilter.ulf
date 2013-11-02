@@ -17,10 +17,10 @@
  */
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT]
-en-US = "Graphics Filters"
+en-US = "Image Filters"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT]
-en-US = "Additional filters required to read alien graphic formats."
+en-US = "Additional filters required to read alien image formats."
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_ADOBE]
 en-US = "Adobe Photoshop Import Filter"
@@ -105,6 +105,3 @@ en-US = "Macromedia Flash (SWF)"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_FLASH]
 en-US = "Macromedia Flash (SWF) Export Filter"
-
-
-

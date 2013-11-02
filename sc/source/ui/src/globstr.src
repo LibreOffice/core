@@ -183,7 +183,7 @@ Resource RID_GLOBSTR
     };
     String STR_UNDO_GRAFEDIT
     {
-        Text [ en-US ] = "Edit graphics" ;
+        Text [ en-US ] = "Edit Image" ;
     };
     String STR_UNDO_LISTNAMES
     {
@@ -1231,7 +1231,7 @@ Resource RID_GLOBSTR
     };
     String STR_VOBJ_OBJECT
     {
-        Text [ en-US ] = "Objects/graphics" ;
+        Text [ en-US ] = "Objects/Image" ;
     };
     String STR_VOBJ_CHART
     {
@@ -1415,7 +1415,7 @@ Resource RID_GLOBSTR
     };
     String STR_GRAPHICNAME
     {
-        Text [ en-US ] = "Graphics" ;
+        Text [ en-US ] = "Image" ;
     };
     String STR_INVALIDNAME
     {

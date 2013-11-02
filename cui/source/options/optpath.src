@@ -37,7 +37,7 @@ String RID_SVXSTR_KEY_WORK_PATH
 };
 String RID_SVXSTR_KEY_GRAPHICS_PATH
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Images" ;
 };
 String RID_SVXSTR_KEY_BITMAP_PATH
 {
