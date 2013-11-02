@@ -1573,12 +1573,6 @@
         <!--Class ListLevel-->
         <!--Class List-->
         <UML:Class xmi.id="List" name="List">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="withindex"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>28</UML:TaggedValue.dataValue>

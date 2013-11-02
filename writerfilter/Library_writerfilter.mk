@@ -127,7 +127,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/doctok/WW8CpAndFc \
     writerfilter/source/doctok/WW8FKPImpl \
     writerfilter/source/doctok/WW8FontTable \
-    writerfilter/source/doctok/WW8ListTable \
     writerfilter/source/doctok/WW8Picture \
     writerfilter/source/doctok/WW8PropertySetImpl \
     writerfilter/source/doctok/WW8ResourceModelImpl \
