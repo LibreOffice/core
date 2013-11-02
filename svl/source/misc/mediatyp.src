@@ -116,17 +116,17 @@ String STR_SVT_MIMETYPE_AUDIO_WEBM
 
 String STR_SVT_MIMETYPE_IMAGE_GIF
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 
 String STR_SVT_MIMETYPE_IMAGE_JPEG
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 
 String STR_SVT_MIMETYPE_IMAGE_PCX
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 
 String STR_SVT_MIMETYPE_IMAGE_BMP
@@ -286,7 +286,7 @@ String STR_SVT_MIMETYPE_APP_TEMPLATE
 
 String STR_SVT_MIMETYPE_IMAGE_GENERIC
 {
-    Text [ en-US ] = "Graphics";
+    Text [ en-US ] = "Image";
 };
 
 String STR_SVT_MIMETYPE_APP_MSEXCEL

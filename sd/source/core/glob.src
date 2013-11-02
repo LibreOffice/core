@@ -117,39 +117,39 @@ String STR_PRESOBJ_MPNOTESTEXT
 };
 String STR_PRESOBJ_TITLE
 {
-    Text [ en-US ] = "Click to add title" ;
+    Text [ en-US ] = "Click to add Title" ;
 };
 String STR_PRESOBJ_OUTLINE
 {
-    Text [ en-US ] = "Click to add text" ;
+    Text [ en-US ] = "Click to add Text" ;
 };
 String STR_PRESOBJ_TEXT
 {
-    Text [ en-US ] = "Click to add text" ;
+    Text [ en-US ] = "Click to add Text" ;
 };
 String STR_PRESOBJ_NOTESTEXT
 {
-    Text [ en-US ] = "Click to add notes" ;
+    Text [ en-US ] = "Click to add Notes" ;
 };
 String STR_PRESOBJ_GRAPHIC
 {
-    Text [ en-US ] = "Double-click to add graphics" ;
+    Text [ en-US ] = "Double-click to add an Image" ;
 };
 String STR_PRESOBJ_OBJECT
 {
-    Text [ en-US ] = "Double-click to add an object" ;
+    Text [ en-US ] = "Double-click to add an Object" ;
 };
 String STR_PRESOBJ_CHART
 {
-    Text [ en-US ] = "Double-click to add a chart" ;
+    Text [ en-US ] = "Double-click to add a Chart" ;
 };
 String STR_PRESOBJ_ORGCHART
 {
-    Text [ en-US ] = "Double-click to add an organization chart" ;
+    Text [ en-US ] = "Double-click to add an Organization Chart" ;
 };
 String STR_PRESOBJ_TABLE
 {
-    Text [ en-US ] = "Double-click to add a spreadsheet" ;
+    Text [ en-US ] = "Double-click to add a Spreadsheet" ;
 };
 String STR_OUTLINEVIEWSHELL
 {

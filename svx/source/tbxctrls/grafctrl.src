@@ -111,7 +111,7 @@ FloatingWindow RID_SVXTBX_GRFFILTER
 
 String RID_SVXSTR_UNDO_GRAFMODE
 {
-    Text [ en-US ] = "Graphics Mode";
+    Text [ en-US ] = "Image Mode";
 };
 String RID_SVXSTR_UNDO_GRAFRED
 {

@@ -151,7 +151,7 @@ String GID_FRAME
 
 String GID_GRAPHIC
 {
-    Text [ en-US ] = "Graphic" ;
+    Text [ en-US ] = "Image" ;
 };
 
 String GID_TABLE
@@ -456,7 +456,7 @@ String STR_NONE
 };
 String RID_SVXSTR_GRAFIKLINK
 {
-    Text [ en-US ] = "Graphic" ;
+    Text [ en-US ] = "Image" ;
 };
 String STR_SFX_FILTERNAME_ALL
 {
@@ -464,7 +464,7 @@ String STR_SFX_FILTERNAME_ALL
 };
 String RID_SVXSTR_EDITGRFLINK
 {
-    Text [ en-US ] = "Link graphics" ;
+    Text [ en-US ] = "Link Image" ;
 };
 // i66948 used in project scripting
 String STR_ERRUNOEVENTBINDUNG
@@ -473,27 +473,27 @@ String STR_ERRUNOEVENTBINDUNG
 };
 String RID_SVXSTR_GRFILTER_OPENERROR
 {
-    Text [ en-US ] = "Graphics file cannot be opened" ;
+    Text [ en-US ] = "Image file cannot be opened" ;
 };
 String RID_SVXSTR_GRFILTER_IOERROR
 {
-    Text [ en-US ] = "Graphics file cannot be read" ;
+    Text [ en-US ] = "Image file cannot be read" ;
 };
 String RID_SVXSTR_GRFILTER_FORMATERROR
 {
-    Text [ en-US ] = "Unknown graphics format" ;
+    Text [ en-US ] = "Unknown image format" ;
 };
 String RID_SVXSTR_GRFILTER_VERSIONERROR
 {
-    Text [ en-US ] = "This version of the graphics file is not supported" ;
+    Text [ en-US ] = "This version of the image file is not supported" ;
 };
 String RID_SVXSTR_GRFILTER_FILTERERROR
 {
-    Text [ en-US ] = "Graphics filter not found" ;
+    Text [ en-US ] = "Image filter not found" ;
 };
 String RID_SVXSTR_GRFILTER_TOOBIG
 {
-    Text [ en-US ] = "Not enough memory to insert graphic" ;
+    Text [ en-US ] = "Not enough memory to insert image" ;
 };
 String RID_SVXSTR_END_REDLINING_WARNING
 {

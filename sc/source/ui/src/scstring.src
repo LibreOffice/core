@@ -53,32 +53,32 @@ String SCSTR_FORMATSHELL
 
 String SCSTR_DRAWSHELL
 {
-    Text [ en-US ] = "Graphics objects" ;
+    Text [ en-US ] = "Image Objects" ;
 };
 
 String SCSTR_DRAWTEXTSHELL
 {
-    Text [ en-US ] = "Text objects" ;
+    Text [ en-US ] = "Text Objects" ;
 };
 
 String SCSTR_DRAWFORMSHELL
 {
-    Text [ en-US ] = "Form objects";
+    Text [ en-US ] = "Form Objects";
 };
 
 String SCSTR_CHARTSHELL
 {
-    Text [ en-US ] = "Chart objects";
+    Text [ en-US ] = "Chart Objects";
 };
 
 String SCSTR_OLEOBJECTSHELL
 {
-    Text [ en-US ] = "OLE objects";
+    Text [ en-US ] = "OLE Objects";
 };
 
 String SCSTR_GRAPHICSHELL
 {
-    Text [ en-US ] = "Graphics";
+    Text [ en-US ] = "Image";
 };
 
 String SCSTR_PAGEBREAKSHELL
@@ -277,7 +277,7 @@ String SCSTR_RENAMEOBJECT
 
 String STR_INSERTGRAPHIC
 {
-    Text [ en-US ] = "Insert Picture" ;
+    Text [ en-US ] = "Insert Image" ;
 };
 
  //      Attribute
@@ -519,37 +519,37 @@ String SCSTR_FORMULA_AUTOCORRECTION
 
 String SCSTR_GRFILTER_OPENERROR
 {
-    Text [ en-US ] = "Graphics file can not be opened" ;
+    Text [ en-US ] = "Image file can not be opened" ;
 };
 
 String SCSTR_GRFILTER_IOERROR
 {
-    Text [ en-US ] = "Graphics file can not be read" ;
+    Text [ en-US ] = "Image file can not be read" ;
 };
 
 String SCSTR_GRFILTER_FORMATERROR
 {
-    Text [ en-US ] = "Unknown graphic format" ;
+    Text [ en-US ] = "Unknown image format" ;
 };
 
 String SCSTR_GRFILTER_VERSIONERROR
 {
-    Text [ en-US ] = "This graphic file version is not supported" ;
+    Text [ en-US ] = "This image file version is not supported" ;
 };
 
 String SCSTR_GRFILTER_FILTERERROR
 {
-    Text [ en-US ] = "Graphics filter not found" ;
+    Text [ en-US ] = "Image filter not found" ;
 };
 
 String SCSTR_GRFILTER_TOOBIG
 {
-    Text [ en-US ] = "Not enough memory available to insert graphics." ;
+    Text [ en-US ] = "Not enough memory available to insert image." ;
 };
 
 String SCSTR_UNDO_GRAFFILTER
 {
-    Text [ en-US ] = "Graphics Filter" ;
+    Text [ en-US ] = "Image Filter" ;
 };
 
 // #98185#

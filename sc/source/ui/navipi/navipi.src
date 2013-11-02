@@ -266,7 +266,7 @@ String SCSTR_CONTENT_DBAREA
 
 String SCSTR_CONTENT_GRAPHIC
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 
 String SCSTR_CONTENT_OLEOBJECT

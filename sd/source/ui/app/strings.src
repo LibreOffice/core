@@ -26,7 +26,7 @@ String STR_DRAW_TOOLBOX
 };
 String STR_GRAPHIC_TOOLBOX
 {
-    Text [ en-US ] = "Draw toolbar/Graphics" ;
+    Text [ en-US ] = "Draw Toolbar/Image" ;
 };
 String STR_SLIDE_TOOLBOX
 {
@@ -42,7 +42,7 @@ String STR_DRAW_OBJ_TOOLBOX
 };
 String STR_GRAPHIC_OBJ_TOOLBOX
 {
-    Text [ en-US ] = "Draw object bar/Graphics" ;
+    Text [ en-US ] = "Draw Object Bar/Image" ;
 };
 String STR_DRAW_OPTIONS_TOOLBOX
 {
@@ -50,7 +50,7 @@ String STR_DRAW_OPTIONS_TOOLBOX
 };
 String STR_GRAPHIC_OPTIONS_TOOLBOX
 {
-    Text [ en-US ] = "Options bar/Graphics" ;
+    Text [ en-US ] = "Options Bar/Image" ;
 };
 String STR_DRAW_COMMONTASK_TOOLBOX
 {
@@ -62,7 +62,7 @@ String STR_SLIDE_OBJ_TOOLBOX
 };
 String STR_BEZIER_TOOLBOX
 {
-    Text [ en-US ] = "Bézier object bar" ;
+    Text [ en-US ] = "Bézier Object Bar" ;
 };
 String STR_GLUEPOINTS_TOOLBOX
 {
@@ -257,7 +257,7 @@ String STR_AUTOLAYOUT_NOTES
 };
 String STR_TRANSFORM
 {
-    Text [ en-US ] = "transform" ;
+    Text [ en-US ] = "Transform" ;
 };
 String STR_LINEEND
 {
@@ -413,7 +413,7 @@ String STR_SCALE_OBJECTS
 };
 String STR_CREATE_PAGES
 {
-    Text [ en-US ] = "Create slides" ;
+    Text [ en-US ] = "Create Slides" ;
 };
 String STR_UNDO_CHANGE_PAGEFORMAT
 {
@@ -429,7 +429,7 @@ String STR_EDIT_OBJ
 };
 String STR_DELETE_PAGES
 {
-    Text [ en-US ] = "Delete slides" ;
+    Text [ en-US ] = "Delete Slides" ;
 };
 String STR_WARN_PRINTFORMAT_FAILURE
 {
@@ -441,27 +441,27 @@ String STR_REMOVE_LINK
 };
 String STR_IMPORT_GRFILTER_OPENERROR
 {
-    Text [ en-US ] = "Graphics file cannot be opened" ;
+    Text [ en-US ] = "Image file cannot be opened" ;
 };
 String STR_IMPORT_GRFILTER_IOERROR
 {
-    Text [ en-US ] = "Graphics file cannot be read" ;
+    Text [ en-US ] = "Image file cannot be read" ;
 };
 String STR_IMPORT_GRFILTER_FORMATERROR
 {
-    Text [ en-US ] = "Unknown graphics format" ;
+    Text [ en-US ] = "Unknown image format" ;
 };
 String STR_IMPORT_GRFILTER_VERSIONERROR
 {
-    Text [ en-US ] = "This graphics file version is not supported" ;
+    Text [ en-US ] = "This image file version is not supported" ;
 };
 String STR_IMPORT_GRFILTER_FILTERERROR
 {
-    Text [ en-US ] = "Graphics filter not found" ;
+    Text [ en-US ] = "Image filter not found" ;
 };
 String STR_IMPORT_GRFILTER_TOOBIG
 {
-    Text [ en-US ] = "Not enough memory to import graphics" ;
+    Text [ en-US ] = "Not enough memory to import image" ;
 };
 String STR_OBJECTS
 {
@@ -505,7 +505,7 @@ String STR_UNDO_INSERT_FILE
 };
 String STR_SCALE_OBJS_TO_PAGE
 {
-    Text [ en-US ] = "Should the graphics be scaled to the new slide format?" ;
+    Text [ en-US ] = "Should the image be scaled to the new slide format?" ;
 };
 String STR_UNDO_INSERT_SPECCHAR
 {
@@ -658,15 +658,15 @@ String STR_LOAD_PRESENTATION_LAYOUT
 };
 String STR_DRAGTYPE_URL
 {
-    Text [ en-US ] = "Insert as hyperlink" ;
+    Text [ en-US ] = "Insert as Hyperlink" ;
 };
 String STR_DRAGTYPE_EMBEDDED
 {
-    Text [ en-US ] = "Insert as copy" ;
+    Text [ en-US ] = "Insert as Copy" ;
 };
 String STR_DRAGTYPE_LINK
 {
-    Text [ en-US ] = "Insert as link" ;
+    Text [ en-US ] = "Insert as Link" ;
 };
 String STR_GLUE_ESCDIR_SMART
 {
@@ -800,7 +800,7 @@ String STR_FILEFORMAT_NAME
 };
 String STR_RELEASE_GRAPHICLINK
 {
-    Text [ en-US ] = "This graphic is linked to a document. Do you want to unlink the graphic in order to edit it?" ;
+    Text [ en-US ] = "This image is linked to a document. Do you want to unlink the image in order to edit it?" ;
 };
 String STR_NEW_CUSTOMSHOW
 {
@@ -1079,7 +1079,7 @@ String STR_FIELD_PLACEHOLDER_NUMBER
 };
 String STR_FIELD_PLACEHOLDER_COUNT
 {
-    Text [ en-US ]="<count>" ;
+    Text [ en-US ] = "<count>" ;
 };
 
 String STR_PLACEHOLDER_DESCRIPTION_NOTES
@@ -1146,7 +1146,7 @@ String STR_TASKPANEL_LAYOUT_MENU_TITLE
 };
 String STR_GRAPHICS_STYLE_FAMILY
 {
-    Text [ en-US ] = "Graphics Styles";
+    Text [ en-US ] = "Image Styles";
 };
 String STR_CELL_STYLE_FAMILY
 {
@@ -1178,7 +1178,7 @@ String STR_NAVIGATOR_SHAPE_BASE_NAME
 };
 String STR_SET_BACKGROUND_PICTURE
 {
-    Text [ en-US ] = "Set Background Picture for Slide ..." ;
+    Text [ en-US ] = "Set Background Image for Slide ..." ;
 };
 
 String STR_ACC_DIALOG_DESC
@@ -1208,7 +1208,7 @@ String STR_INSERT_CHART
 
 String STR_INSERT_PICTURE
 {
-     Text [ en-US ] = "Insert Picture";
+     Text [ en-US ] = "Insert Image";
 };
 
 String STR_INSERT_MOVIE

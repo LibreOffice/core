@@ -26,7 +26,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
 
 String RID_STR_IMPORT_GRAPHIC
 {
-    Text [ en-US ] = "Insert graphics" ;
+    Text [ en-US ] = "Insert Image" ;
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_NAME
@@ -86,12 +86,12 @@ String RID_STR_NEED_NON_NULL_OBJECT
 
 String RID_STR_OPEN_GRAPHICS
 {
-    Text [ en-US ] = "Insert graphics from...";
+    Text [ en-US ] = "Insert Image from...";
 };
 
 String RID_STR_CLEAR_GRAPHICS
 {
-    Text [ en-US ] = "Remove graphics";
+    Text [ en-US ] = "Remove Image";
 };
 
 

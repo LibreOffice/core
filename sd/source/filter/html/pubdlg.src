@@ -34,7 +34,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6 , 9 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ en-US ] = "Assign design";
+        Text [ en-US ] = "Assign Design";
     };
 
     RadioButton PAGE1_NEW_DESIGN
@@ -42,7 +42,7 @@ ModalDialog DLG_PUBLISHING
         HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE1_NEW_DESIGN";
         Pos = MAP_APPFONT( 12, 21 );
         Size = MAP_APPFONT( 153, 10 );
-        Text [ en-US ] = "New design";
+        Text [ en-US ] = "New Design";
     };
 
     RadioButton PAGE1_OLD_DESIGN
@@ -50,7 +50,7 @@ ModalDialog DLG_PUBLISHING
         HelpID = "sd:RadioButton:DLG_PUBLISHING:PAGE1_OLD_DESIGN";
         Pos = MAP_APPFONT( 12, 34 );
         Size = MAP_APPFONT( 153, 10 );
-        Text [ en-US ] = "Existing design";
+        Text [ en-US ] = "Existing Design";
     };
 
     ListBox PAGE1_DESIGNS
@@ -338,7 +338,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6, 9 ) ;
         Size = MAP_APPFONT ( 124, 8 ) ;
-        Text [ en-US ] = "Save graphics as";
+        Text [ en-US ] = "Save Image as";
     };
 
     RadioButton PAGE3_PNG
