@@ -40,6 +40,7 @@ ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
 {
     get( m_pSkipEmptyPagesCB , "suppressCB" );
     get( m_pSelectedSheetsCB , "printCB" );
+    get( m_pForceBreaksCB, "forceBreaksCB" );
 }
 
 ScTpPrintOptions::~ScTpPrintOptions()
@@ -87,6 +88,8 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     m_pSkipEmptyPagesCB->Check( aOptions.GetSkipEmpty() );
     m_pSkipEmptyPagesCB->SaveValue();
     m_pSelectedSheetsCB->SaveValue();
+    m_pForceBreaksCB->Check( aOptions.GetForceBreaks() );
+    m_pForceBreaksCB->SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -97,12 +100,14 @@ sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 
     bool bSkipEmptyChanged = ( m_pSkipEmptyPagesCB->GetSavedValue() != m_pSkipEmptyPagesCB->IsChecked() );
     bool bSelectedSheetsChanged = ( m_pSelectedSheetsCB->GetSavedValue() != m_pSelectedSheetsCB->IsChecked() );
+    bool bForceBreaksChanged = ( m_pForceBreaksCB->GetSavedValue() != m_pForceBreaksCB->IsChecked() );
 
-    if ( bSkipEmptyChanged || bSelectedSheetsChanged )
+    if ( bSkipEmptyChanged || bSelectedSheetsChanged || bForceBreaksChanged )
     {
         ScPrintOptions aOpt;
         aOpt.SetSkipEmpty( m_pSkipEmptyPagesCB->IsChecked() );
         aOpt.SetAllSheets( !m_pSelectedSheetsCB->IsChecked() );
+        aOpt.SetForceBreaks( m_pForceBreaksCB->IsChecked() );
         rCoreAttrs.Put( ScTpPrintItem( SID_SCPRINTOPTIONS, aOpt ) );
         if ( bSelectedSheetsChanged )
         {

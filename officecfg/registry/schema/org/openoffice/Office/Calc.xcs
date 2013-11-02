@@ -1659,6 +1659,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="ForceBreaks" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether manual row and column breaks should be forced, regardless of sheet scale settings.</desc>
+            <label>Force manual breaks</label>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
       <group oor:name="Other">
         <info>

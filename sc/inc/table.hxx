@@ -194,6 +194,7 @@ private:
     bool            bPrintEntireSheet:1;
     bool            bActiveScenario:1;
     bool            mbPageBreaksValid:1;
+    bool            mbForceBreaks:1;
 
 friend class ScDocument;                    // for FillInfo
 friend class ScValueIterator;
