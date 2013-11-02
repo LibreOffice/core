@@ -331,25 +331,24 @@ namespace sfx2
                 else
                 {
                     OUString aStdLibName( "Standard" );
+                    OUString aVBAProject( "VBAProject" );
                     Sequence< OUString > aElements = xContainer->getElementNames();
                     if ( aElements.getLength() )
                     {
-                        if ( aElements.getLength() > 1 || !aElements[0].equals( aStdLibName ) )
-                            bHasMacroLib = sal_True;
-                        else
+                        sal_Int32 nElements = aElements.getLength();
+                        for( sal_Int32 i = 0; i < nElements; ++i )
                         {
-                            // usually a "Standard" library is always present (design)
-                            // for this reason we must check if it's empty
-                            //
-                            // Note: Since #i73229#, this is not true anymore. There's no default
-                            // "Standard" lib anymore. Wouldn't it be time to get completely
-                            // rid of the "Standard" thingie - this shouldn't be necessary
-                            // anymore, should it?
-                            Reference < XNameAccess > xLib;
-                            Any aAny = xContainer->getByName( aStdLibName );
-                            aAny >>= xLib;
-                            if ( xLib.is() )
-                                bHasMacroLib = xLib->hasElements();
+                            OUString aElement = aElements[i];
+                            if( aElement == aStdLibName || aElement == aVBAProject )
+                            {
+                                Reference < XNameAccess > xLib;
+                                Any aAny = xContainer->getByName( aStdLibName );
+                                aAny >>= xLib;
+                                if ( xLib.is() && xLib->hasElements() )
+                                    return sal_True;
+                            }
+                            else
+                                return sal_True;
                         }
                     }
                 }
