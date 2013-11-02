@@ -21,7 +21,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by UAccCOM.rc
 //
-#define WNT
 
 #define IDS_PROJNAME                    100
 #define IDR_MACCESSIBLE                 101
