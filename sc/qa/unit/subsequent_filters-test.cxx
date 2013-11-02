@@ -44,6 +44,7 @@
 #include "docsh.hxx"
 #include "editutil.hxx"
 #include "cellvalue.hxx"
+#include "attrib.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -144,6 +145,8 @@ public:
     void testPrintRangeODS();
     void testOutlineODS();
 
+    void testColumnStyleXLSX();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -210,6 +213,7 @@ public:
     CPPUNIT_TEST(testOptimalHeightReset);
     CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST(testOutlineODS);
+    CPPUNIT_TEST(testColumnStyleXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1989,6 +1993,26 @@ void ScFiltersTest::testOutlineODS()
         bool bVisible = pEntry->IsVisible();
         CPPUNIT_ASSERT_EQUAL(aRow[i].bVisible, bVisible);
     }
+}
+
+void ScFiltersTest::testColumnStyleXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("column-style.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    const ScPatternAttr* pPattern = pDoc->GetPattern(0,0,0);
+    CPPUNIT_ASSERT(pPattern);
+
+    const ScProtectionAttr& rAttr = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION));
+    CPPUNIT_ASSERT(rAttr.GetProtection());
+
+    pPattern = pDoc->GetPattern(0,1,0);
+    CPPUNIT_ASSERT(pPattern);
+
+    const ScProtectionAttr& rAttrNew = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION));
+    CPPUNIT_ASSERT(!rAttrNew.GetProtection());
 }
 
 ScFiltersTest::ScFiltersTest()
