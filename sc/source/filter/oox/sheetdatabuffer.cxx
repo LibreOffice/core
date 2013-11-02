@@ -50,6 +50,7 @@
 #include "document.hxx"
 #include "scitems.hxx"
 #include "formulacell.hxx"
+#include "docpool.hxx"
 
 namespace oox {
 namespace xls {
@@ -463,7 +464,8 @@ void SheetDataBuffer::finalizeImport()
         {
             ScAttrEntry aEntry;
             aEntry.nRow = MAXROW;
-            aEntry.pPattern = rDoc.GetDefPattern();
+            aEntry.pPattern = rDoc.GetPattern(nScCol, 0, getSheetIndex());
+            rDoc.GetPool()->Put(*aEntry.pPattern);
             aAttrs.push_back(aEntry);
         }
 
