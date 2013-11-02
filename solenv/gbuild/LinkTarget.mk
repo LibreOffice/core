@@ -815,6 +815,14 @@ define gb_PrintDeps_info
 $(info LibraryDep: $(1) links against $(2))
 endef
 
+# avoid problem when a module is built partially but other modules that define
+# needed libraries is not yet built: prevent invocation of pattern rule
+# for library with invalid parameters by depending on the header target
+define gb_LinkTarget__lib_dummy_depend
+$(call gb_Library_get_target,$(1)) :| $(call gb_Library_get_headers_target,$(1))
+
+endef
+
 # call gb_LinkTarget__use_libraries,linktarget,requestedlibs,actuallibs,linktargetmakefilename
 define gb_LinkTarget__use_libraries
 
@@ -834,6 +842,7 @@ $(call gb_LinkTarget_get_target,$(1)) : \
 	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
+$(foreach lib,$(2),$(call gb_LinkTarget__lib_dummy_depend,$(lib)))
 
 endef
 
@@ -894,6 +903,15 @@ $$(call gb_Output_error,\
  gb_LinkTarget_add_linked_static_libs: use gb_LinkTarget_use_static_libraries instead.)
 endef
 
+# avoid problem when a module is built partially but other modules that define
+# needed static libraries is not yet built: prevent invocation of pattern rule
+# for static library with invalid parameters by depending on the header target
+define gb_LinkTarget__static_lib_dummy_depend
+$(call gb_StaticLibrary_get_target,$(1)) :| \
+	$(call gb_StaticLibrary_get_headers_target,$(1))
+
+endef
+
 # for a StaticLibrary, dependent libraries are not actually linked in
 # call gb_LinkTarget_use_static_libraries,linktarget,staticlibs
 define gb_LinkTarget_use_static_libraries
@@ -902,6 +920,7 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $$(if $$(filter-ou
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
+$(foreach lib,$(2),$(call gb_LinkTarget__static_lib_dummy_depend,$(lib)))
 
 endef
 
