@@ -36,30 +36,30 @@ class SwWrtShell;
 
 class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
 {
-    SwWrtShell* pSh;
+    SwWrtShell* m_pSh;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >  >     aDics;
+        ::com::sun::star::linguistic2::XDictionary >  >     m_aDics;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
+        ::com::sun::star::linguistic2::XSpellAlternatives > m_xSpellAlt;
 
-    ::com::sun::star::linguistic2::ProofreadingResult xGrammarResult;
-    sal_Int32 nGrammarError;
+    ::com::sun::star::linguistic2::ProofreadingResult m_xGrammarResult;
+    sal_Int32 m_nGrammarError;
 
-    ::com::sun::star::uno::Sequence< OUString >  aSuggestions;
-    OUString sExplanationLink;
+    ::com::sun::star::uno::Sequence< OUString >  m_aSuggestions;
+    OUString m_sExplanationLink;
 
-    LanguageType                nCheckedLanguage;
-    LanguageType                nGuessLangWord;
-    LanguageType                nGuessLangPara;
+    LanguageType                m_nCheckedLanguage;
+    LanguageType                m_nGuessLangWord;
+    LanguageType                m_nGuessLangPara;
 
-    std::map< sal_Int16, OUString > aLangTable_Text;
-    std::map< sal_Int16, OUString > aLangTable_Paragraph;
+    std::map< sal_Int16, OUString > m_aLangTable_Text;
+    std::map< sal_Int16, OUString > m_aLangTable_Paragraph;
 //    std::map< sal_Int16, OUString > aLangTable_Document;
 
-    OUString  aDicNameSingle;
-    bool      bGrammarResults;    // show grammar results? Or show spellcheck results?
+    OUString  m_aDicNameSingle;
+    bool      m_bGrammarResults;    // show grammar results? Or show spellcheck results?
 
-    Image     aInfo16;
+    Image     m_aInfo16;
 
     void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
             ::com::sun::star::uno::Sequence< OUString > aSeq, SwWrtShell* pWrtSh,
