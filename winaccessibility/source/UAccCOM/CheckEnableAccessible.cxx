@@ -19,7 +19,6 @@
  *
  *************************************************************/
 
-#define WNT
 #define _USE_NAMESPACE
 
 #ifndef _SV_SVAPP_HXX

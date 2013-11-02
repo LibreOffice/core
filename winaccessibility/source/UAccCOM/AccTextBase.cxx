@@ -24,7 +24,6 @@
 //////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 #include <string>
-#define WNT
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include "AccTextBase.h"

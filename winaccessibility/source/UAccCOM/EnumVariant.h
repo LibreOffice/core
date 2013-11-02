@@ -22,8 +22,6 @@
 #ifndef __ENUMVARIANT_H_
 #define __ENUMVARIANT_H_
 
-#define WNT
-
 #include "resource.h"       // main symbols
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

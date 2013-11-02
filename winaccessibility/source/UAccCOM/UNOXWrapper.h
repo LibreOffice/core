@@ -22,8 +22,6 @@
 #ifndef __UNOXWRAPPER_H_
 #define __UNOXWRAPPER_H_
 
-#define WNT
-
 #include "resource.h"       // main symbols
 
 
