@@ -4484,7 +4484,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "array" ;
+            Text [ en-US ] = "array_1" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -4492,7 +4492,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "array" ;
+            Text [ en-US ] = "array_2" ;
         };
         String 5 // Description of Parameter 2
         {
