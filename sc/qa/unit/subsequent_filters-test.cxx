@@ -1076,7 +1076,7 @@ void ScFiltersTest::testDataValidityODS()
 
 void ScFiltersTest::testDataTableXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("data-table.", XLS);
+    ScDocShellRef xDocSh = loadDoc("data-table-mortgage.", XLS);
     ScFormulaOptions aOptions;
     aOptions.SetFormulaSepArg(",");
     aOptions.SetFormulaSepArrayCol(",");
