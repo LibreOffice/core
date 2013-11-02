@@ -397,23 +397,17 @@ namespace {
 
 class CellStoreInitializer
 {
-    struct Impl
-    {
-        sc::CellTextAttrStoreType maAttrs;
-        sc::CellTextAttrStoreType::iterator miPos;
-        sal_uInt16 mnScriptNumeric;
-
-        Impl(const sal_uInt32 nMaxRowCount, const sal_uInt16 nScriptNumeric)
-            : maAttrs(nMaxRowCount), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric)
-        {}
-    };
-
     ScDocument& mrDoc;
-    boost::shared_ptr<Impl> mpImpl;
+    sc::CellTextAttrStoreType maAttrs;
+    sc::CellTextAttrStoreType::iterator miPos;
+    sal_uInt16 mnScriptNumeric;
 
 public:
     CellStoreInitializer(ScDocument& rDoc, sal_uInt16 nScriptNumeric) :
-        mrDoc(rDoc), mpImpl(new Impl(MAXROWCOUNT, nScriptNumeric)) {}
+        mrDoc(rDoc),
+        maAttrs(MAXROWCOUNT),
+        miPos(maAttrs.begin()),
+        mnScriptNumeric(nScriptNumeric) {}
 
     void operator() (const sc::CellStoreType::value_type& node)
     {
@@ -423,9 +417,9 @@ public:
         // Fill with default values for non-empty cell segments.
         sc::CellTextAttr aDefault;
         if (node.type == sc::element_type_numeric)
-            aDefault.mnScriptType = mpImpl->mnScriptNumeric;
+            aDefault.mnScriptType = mnScriptNumeric;
         std::vector<sc::CellTextAttr> aDefaults(node.size, aDefault);
-        mpImpl->miPos = mpImpl->maAttrs.set(mpImpl->miPos, node.position, aDefaults.begin(), aDefaults.end());
+        miPos = maAttrs.set(miPos, node.position, aDefaults.begin(), aDefaults.end());
 
         if (node.type == sc::element_type_formula)
         {
@@ -442,7 +436,7 @@ public:
 
     void swap(sc::CellTextAttrStoreType& rAttrs)
     {
-        mpImpl->maAttrs.swap(rAttrs);
+        maAttrs.swap(rAttrs);
     }
 };
 
