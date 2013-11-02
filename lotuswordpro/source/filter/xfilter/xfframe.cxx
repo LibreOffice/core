@@ -92,6 +92,8 @@ XFFrame::~XFFrame()
 
 void    XFFrame::Add(IXFContent *pContent)
 {
+    if (!pContent)
+        return;
     XFContentContainer::Add(pContent);
     if( pContent->GetContentType() == enumXFContentFrame )
     {
