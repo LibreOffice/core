@@ -3244,13 +3244,14 @@ void ScCompiler::AutoCorrectParsedSymbol()
         const sal_Unicode cX = 'X';
         sal_Unicode c1 = aCorrectedSymbol[0];
         sal_Unicode c2 = aCorrectedSymbol[nPos];
-        sal_Unicode c2p = nPos > 0 ? aCorrectedSymbol[nPos-1] : 0;
+        sal_Unicode c2p =
+            (nPos > 0) ? aCorrectedSymbol[static_cast<sal_uInt32>(nPos)-1] : 0;
         if ( c1 == cQuote && c2 != cQuote  )
         {   // "...
             // What's not a word doesn't belong to it.
             // Don't be pedantic: c < 128 should be sufficient here.
             while ( nPos && ((aCorrectedSymbol[nPos] < 128) &&
-                    ((GetCharTableFlags(aCorrectedSymbol[nPos], aCorrectedSymbol[nPos-1]) &
+                    ((GetCharTableFlags(aCorrectedSymbol[nPos], aCorrectedSymbol[static_cast<sal_uInt32>(nPos)-1]) &
                     (SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_DONTCARE)) == 0)) )
                 nPos--;
             if ( nPos == MAXSTRLEN - 2 )

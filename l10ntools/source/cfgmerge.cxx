@@ -143,7 +143,8 @@ CfgParser::~CfgParser()
 
 sal_Bool CfgParser::IsTokenClosed(const OString &rToken)
 {
-    return rToken[rToken.getLength() - 2] == '/';
+    return rToken.getLength() > 1
+        && rToken[static_cast<sal_uInt32>(rToken.getLength()) - 2] == '/';
 }
 
 void CfgParser::AddText(

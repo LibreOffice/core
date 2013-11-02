@@ -722,10 +722,10 @@ SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
         // Get it out, if the end is an LF, but strip CRLF before,
         // because the SvStrm adds a CRLF!
         sal_Int32 nLineLen = aLine.getLength();
-        if (nLineLen && aLine[--nLineLen] == 0x0A)
+        if (nLineLen > 0 && aLine[--*reinterpret_cast<sal_uInt32*>(&nLineLen)] == 0x0A)
         {
             aLine = aLine.copy(0, nLineLen);
-            if (nLineLen && aLine[--nLineLen] == 0x0D)
+            if (nLineLen > 0 && aLine[--*reinterpret_cast<sal_uInt32*>(&nLineLen)] == 0x0D)
             {
                 aLine = aLine.copy(0, nLineLen);
             }

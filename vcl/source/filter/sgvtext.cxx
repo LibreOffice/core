@@ -1132,8 +1132,11 @@ void SgfFontOne::ReadOne( const OString& rID, OString& Dsc )
         i++;
     Dsc = Dsc.copy(i+1);                                // IF-Fontname loeschen inkl. ()
 
-    if ( Dsc.getLength() < 2 || ( Dsc[Dsc.getLength() - 1] !=')' ) )
+    if (Dsc.getLength() < 2 ||
+        (Dsc[static_cast<sal_uInt32>(Dsc.getLength()) - 1] !=')'))
+    {
         return;
+    }
     i = Dsc.getLength()-2;                                // hier ist die ')' des SV-Fontnames
     sal_Int32 j=0;
     while ( i > 0 && ( Dsc[i] != '(' ) )

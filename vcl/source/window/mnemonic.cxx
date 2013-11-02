@@ -279,19 +279,26 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
                     nIndex = rKey.getLength();
                     if( nIndex >= 2 )
                     {
-                        if ( ( rKey[nIndex-2] == '>'    && rKey[nIndex-1] == '>' ) ||
-                             ( rKey[nIndex-2] == 0xFF1E && rKey[nIndex-1] == 0xFF1E ) )
+                        sal_uInt32 const nUIndex(nIndex);
+                        if ((rKey[nUIndex-2] == '>'    && rKey[nUIndex-1] == '>') ||
+                            (rKey[nUIndex-2] == 0xFF1E && rKey[nUIndex-1] == 0xFF1E))
+                        {
                             nIndex -= 2;
+                        }
                     }
                     if( nIndex >= 3 )
                     {
-                        if ( ( rKey[nIndex-3] == '.'    && rKey[nIndex-2] == '.'    && rKey[nIndex-1] == '.' ) ||
-                             ( rKey[nIndex-3] == 0xFF0E && rKey[nIndex-2] == 0xFF0E && rKey[nIndex-1] == 0xFF0E ) )
+                        sal_uInt32 const nUIndex(nIndex);
+                        if ((rKey[nUIndex-3] == '.'    && rKey[nUIndex-2] == '.'    && rKey[nUIndex-1] == '.') ||
+                            (rKey[nUIndex-3] == 0xFF0E && rKey[nUIndex-2] == 0xFF0E && rKey[nUIndex-1] == 0xFF0E))
+                        {
                             nIndex -= 3;
+                        }
                     }
                     if( nIndex >= 1)
                     {
-                        sal_Unicode cLastChar = rKey[ nIndex-1 ];
+                        sal_Unicode cLastChar =
+                            rKey[static_cast<sal_uInt32>(nIndex)-1];
                         if ( (cLastChar == ':') || (cLastChar == 0xFF1A) ||
                             (cLastChar == '.') || (cLastChar == 0xFF0E) ||
                             (cLastChar == '?') || (cLastChar == 0xFF1F) ||
