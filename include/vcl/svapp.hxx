@@ -400,6 +400,8 @@ public:
         createFolderPicker( const com::sun::star::uno::Reference<
                               com::sun::star::uno::XComponentContext >& rServiceManager );
 
+    static bool IsEnableAccessInterface() {return true;}
+
 private:
 
     DECL_STATIC_LINK( Application, PostEventHandler, void* );

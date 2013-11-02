@@ -22,13 +22,13 @@
 
 bool IsInMainThread()
 {
-    if( Application::GetMainThreadIdentifier() == ::vos::OThread::getCurrentIdentifier())
+    if( Application::GetMainThreadIdentifier() == osl::Thread::getCurrentIdentifier())
         return true;
     else
         return false;
 }
 
-vos::IMutex& GetSolarMutex()
+comphelper::SolarMutex& GetSolarMutex()
 {
     return Application::GetSolarMutex();
 }

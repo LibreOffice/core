@@ -49,11 +49,11 @@ extern void handleWindowOpened_impl( long pAcc);
 namespace my_sc_impl
 {
 
-extern Sequence< OUString > SAL_CALL  getSupportedServiceNames_MSAAServiceImpl();
-extern OUString SAL_CALL getImplementationName_MSAAServiceImpl();
-extern Reference< XInterface > SAL_CALL create_MSAAServiceImpl(
-        Reference< XComponentContext > const & xContext )
-    SAL_THROW( () );
+  //extern Sequence< OUString > SAL_CALL  getSupportedServiceNames_MSAAServiceImpl();
+  //static OUString SAL_CALL getImplementationName_MSAAServiceImpl();
+  //static Reference< XInterface > SAL_CALL create_MSAAServiceImpl(
+  //      Reference< XComponentContext > const & xContext )
+  //  SAL_THROW( () );
 /**
    * Method that returns the service name.
    * @param
@@ -272,12 +272,12 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         sal_Char const ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
-    void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
         registry::XRegistryKey * xRegistry )
     {
