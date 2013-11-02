@@ -212,6 +212,7 @@ const sal_uInt16 FUNCFLAG_MACROCALL_NEW     = FUNCFLAG_MACROCALL | FUNCFLAG_MACR
                                                             must exist. */
 const sal_uInt16 FUNCFLAG_BIFFIMPORTONLY    = 0x0800;   /// Only used in BIFF binary import filter.
 const sal_uInt16 FUNCFLAG_BIFFEXPORTONLY    = 0x1000;   /// Only used in BIFF binary export filter.
+const sal_uInt16 FUNCFLAG_INTERNAL          = 0x2000;   /// Function is internal in Calc.
 
 /// Converts a function library index (value of enum FunctionLibraryType) to function flags.
 #define FUNCLIB_TO_FUNCFLAGS( funclib_index ) static_cast< sal_uInt16 >( static_cast< sal_uInt8 >( funclib_index ) << 12 )
@@ -584,8 +585,8 @@ static const FunctionData saFuncTableBiff4[] =
     { "QUOTIENT",               "QUOTIENT",             417,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "DELTA",                  "DELTA",                418,    NOID,   1,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "GESTEP",                 "GESTEP",               419,    NOID,   1,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
-    { "ISEVEN",                 "ISEVEN",               420,    NOID,   1,  1,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
-    { "ISODD",                  "ISODD",                421,    NOID,   1,  1,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
+    { "ISEVEN",                 "ISEVEN",               420,    NOID,   1,  1,  V, { RR }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
+    { "ISODD",                  "ISODD",                421,    NOID,   1,  1,  V, { RR }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
     { "MROUND",                 "MROUND",               422,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ERF",                    "ERF",                  423,    NOID,   1,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ERFC",                   "ERFC",                 424,    NOID,   1,  1,  V, { RR }, FUNCFLAG_EXTERNAL },
@@ -609,10 +610,10 @@ static const FunctionData saFuncTableBiff4[] =
     { "YIELD",                  "YIELD",                442,    NOID,   6,  7,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "DOLLARDE",               "DOLLARDE",             443,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "DOLLARFR",               "DOLLARFR",             444,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
-    { "NOMINAL",                "NOMINAL",              445,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
-    { "EFFECT",                 "EFFECT",               446,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
-    { "CUMPRINC",               "CUMPRINC",             447,    NOID,   6,  6,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
-    { "CUMIPMT",                "CUMIPMT",              448,    NOID,   6,  6,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
+    { "NOMINAL",                "NOMINAL",              445,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
+    { "EFFECT",                 "EFFECT",               446,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
+    { "CUMPRINC",               "CUMPRINC",             447,    NOID,   6,  6,  V, { RR }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
+    { "CUMIPMT",                "CUMIPMT",              448,    NOID,   6,  6,  V, { RR }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
     { "EDATE",                  "EDATE",                449,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "EOMONTH",                "EOMONTH",              450,    NOID,   2,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "YEARFRAC",               "YEARFRAC",             451,    NOID,   2,  3,  V, { RR }, FUNCFLAG_EXTERNAL },
@@ -622,7 +623,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "COUPNCD",                "COUPNCD",              455,    NOID,   3,  4,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "COUPNUM",                "COUPNUM",              456,    NOID,   3,  4,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "COUPPCD",                "COUPPCD",              457,    NOID,   3,  4,  V, { RR }, FUNCFLAG_EXTERNAL },
-    { "DURATION",               "DURATION",             458,    NOID,   5,  6,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
+    { "DURATION",               "DURATION",             458,    NOID,   5,  6,  V, { RR }, FUNCFLAG_EXTERNAL }, // Calc: builtin and add-in (but different!)
     { "MDURATION",              "MDURATION",            459,    NOID,   5,  6,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ODDLPRICE",              "ODDLPRICE",            460,    NOID,   7,  8,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ODDLYIELD",              "ODDLYIELD",            461,    NOID,   8,  9,  V, { RR }, FUNCFLAG_EXTERNAL },
@@ -632,14 +633,14 @@ static const FunctionData saFuncTableBiff4[] =
     { "WEEKNUM",                "WEEKNUM",              465,    NOID,   1,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "AMORDEGRC",              "AMORDEGRC",            466,    NOID,   6,  7,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "AMORLINC",               "AMORLINC",             467,    NOID,   6,  7,  V, { RR }, FUNCFLAG_EXTERNAL },
-    { "CONVERT",                "CONVERT",              468,    NOID,   3,  3,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
+    { "CONVERT",                "CONVERT",              468,    NOID,   3,  3,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in (but different!)
     { "ACCRINT",                "ACCRINT",              469,    NOID,   6,  7,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ACCRINTM",               "ACCRINTM",             470,    NOID,   4,  5,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "WORKDAY",                "WORKDAY",              471,    NOID,   2,  3,  V, { RR, RR, RX, C }, FUNCFLAG_EXTERNAL },
     { "NETWORKDAYS",            "NETWORKDAYS",          472,    NOID,   2,  3,  V, { RR, RR, RX, C }, FUNCFLAG_EXTERNAL },
-    { "GCD",                    "GCD",                  473,    NOID,   1,  MX, V, { RX }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
+    { "GCD",                    "GCD",                  473,    NOID,   1,  MX, V, { RX }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
     { "MULTINOMIAL",            "MULTINOMIAL",          474,    NOID,   1,  MX, V, { RX }, FUNCFLAG_EXTERNAL },
-    { "LCM",                    "LCM",                  475,    NOID,   1,  MX, V, { RX }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
+    { "LCM",                    "LCM",                  475,    NOID,   1,  MX, V, { RX }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
     { "FVSCHEDULE",             "FVSCHEDULE",           476,    NOID,   2,  2,  V, { RR, RX }, FUNCFLAG_EXTERNAL },
 
     // *** macro sheet commands ***
@@ -999,6 +1000,7 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
     xFuncInfo->mbParamPairs = getFlag( rFuncData.mnFlags, FUNCFLAG_PARAMPAIRS );
     xFuncInfo->mbVolatile = getFlag( rFuncData.mnFlags, FUNCFLAG_VOLATILE );
     xFuncInfo->mbExternal = getFlag( rFuncData.mnFlags, FUNCFLAG_EXTERNAL );
+    xFuncInfo->mbInternal = !xFuncInfo->mbExternal || getFlag( rFuncData.mnFlags, FUNCFLAG_INTERNAL );
     bool bMacroCmd = getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCMD );
     xFuncInfo->mbMacroFunc = bMacroCmd || getFlag( rFuncData.mnFlags, FUNCFLAG_MACROFUNC );
     xFuncInfo->mbVarParam = bMacroCmd || (rFuncData.mnMinParamCount != rFuncData.mnMaxParamCount) || getFlag( rFuncData.mnFlags, FUNCFLAG_ALWAYSVAR );
@@ -1349,7 +1351,10 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
     {
         FunctionInfoRef xFuncInfo = *aIt;
         // set API opcode from ODF function name
-        bIsValid &= initFuncOpCode( *xFuncInfo, xFuncInfo->mbExternal ? rExtFuncTokenMap : rIntFuncTokenMap );
+        if (xFuncInfo->mbExternal)
+            bIsValid &= initFuncOpCode( *xFuncInfo, rExtFuncTokenMap );
+        if (xFuncInfo->mbInternal)
+            bIsValid &= initFuncOpCode( *xFuncInfo, rIntFuncTokenMap );
         // insert the function info into the maps
         if( (xFuncInfo->mnApiOpCode != OPCODE_NONAME) && (xFuncInfo->mnApiOpCode != OPCODE_BAD) )
         {
