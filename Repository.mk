@@ -558,6 +558,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		$(if $(DISABLE_ATL),,\
 			inprocserv \
 		) \
+		UAccCOM \
 	) \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
