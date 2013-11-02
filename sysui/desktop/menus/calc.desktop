@@ -30,10 +30,11 @@ StartupNotify=true
 X-GIO-NoFuse=true
 Keywords=Accounting;Stats;OpenDocument Spreadsheet;Chart;Microsoft Excel;Microsoft Works;OpenOffice Calc;ods;xls;xlsx;
 InitialPreference=5
-X-Ayatana-Desktop-Shortcuts=X-New
 StartupWMClass=libreoffice-calc
 X-KDE-Protocols=file,http,smb,ftp,webdav
-[X-New Shortcut Group]
-UnityQuicklist=New Spreadsheet
-Exec=${UNIXBASISROOTNAME} --calc %%FILE%%
-TargetEnvironment=Unity
+
+Actions=NewDocument;
+[Desktop Action NewDocument]
+Name=New Spreadsheet
+Exec=${UNIXBASISROOTNAME} --calc
+OnlyShowIn=Unity;

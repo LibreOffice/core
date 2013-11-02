@@ -30,10 +30,11 @@ StartupNotify=true
 X-GIO-NoFuse=true
 Keywords=Data;SQL;
 InitialPreference=5
-X-Ayatana-Desktop-Shortcuts=X-New
 StartupWMClass=libreoffice-base
 X-KDE-Protocols=file,http,smb,ftp,webdav
-[X-New Shortcut Group]
-UnityQuicklist=New Database
-Exec=${UNIXBASISROOTNAME} --base %%FILE%%
-TargetEnvironment=Unity
+
+Actions=NewDocument;
+[Desktop Action NewDocument]
+Name=New Database
+Exec=${UNIXBASISROOTNAME} --base
+OnlyShowIn=Unity;

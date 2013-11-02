@@ -18,7 +18,7 @@
 [Desktop Entry]
 Version=1.0
 Terminal=false
-NoDisplay=true
+NoDisplay=false
 Icon=math
 Type=Application
 Categories=Office;Education;Science;Math;X-Red-Hat-Base;X-MandrivaLinux-Office-Other;
@@ -31,10 +31,11 @@ StartupNotify=true
 X-GIO-NoFuse=true
 Keywords=Equation;OpenDocument Formula;Formula;odf;MathML
 InitialPreference=5
-X-Ayatana-Desktop-Shortcuts=X-New
 StartupWMClass=libreoffice-math
 X-KDE-Protocols=file,http,smb,ftp,webdav
-[X-New Shortcut Group]
-UnityQuicklist=New Formula
-Exec=${UNIXBASISROOTNAME} --math %%FILE%%
-TargetEnvironment=Unity
+
+Actions=NewDocument;
+[Desktop Action NewDocument]
+Name=New Formula
+Exec=${UNIXBASISROOTNAME} --math
+OnlyShowIn=Unity;
