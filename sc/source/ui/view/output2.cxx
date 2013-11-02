@@ -1690,8 +1690,13 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     {
                         const SfxPoolItem* pItem =  mpDoc->GetAttr( nCellX, nCellY, nTab, ATTR_WRITINGDIR );
                         const SvxFrameDirectionItem* pCurrentWritingMode = (const SvxFrameDirectionItem*) pItem;
-                        if (pCurrentWritingMode->GetValue() == FRMDIR_HORI_LEFT_TOP)
+                        sal_uInt16 aDirection = pCurrentWritingMode->GetValue();
+                        if ( aDirection == FRMDIR_HORI_LEFT_TOP || aDirection == FRMDIR_VERT_TOP_LEFT )
                             eOutHorJust = SVX_HOR_JUSTIFY_LEFT;
+                        else if ( aDirection == FRMDIR_ENVIRONMENT )
+                        {
+                            eOutHorJust = mpDoc->IsLayoutRTL(nTab) ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+                        }
                         else
                             eOutHorJust = SVX_HOR_JUSTIFY_RIGHT;
                     }
