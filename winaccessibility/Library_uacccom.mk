@@ -37,21 +37,20 @@ $(eval $(call gb_Library_add_exception_objects,UAccCOM,\
 	winaccessibility/source/UAccCOM/AccHypertext \
 	winaccessibility/source/UAccCOM/AccImage \
 	winaccessibility/source/UAccCOM/AccRelation \
+	winaccessibility/source/UAccCOM/AccTable \
 	winaccessibility/source/UAccCOM/AccText \
+	winaccessibility/source/UAccCOM/AccTextBase \
 	winaccessibility/source/UAccCOM/AccValue \
+	winaccessibility/source/UAccCOM/CheckEnableAccessible \
 	winaccessibility/source/UAccCOM/EnumVariant \
+	winaccessibility/source/UAccCOM/MAccessible \
 	winaccessibility/source/UAccCOM/StdAfx \
 	winaccessibility/source/UAccCOM/UAccCOM \
 	winaccessibility/source/UAccCOM/UNOXWrapper \
 ))
 
-#	winaccessibility/source/UAccCOM/AccTextBase \
-#	winaccessibility/source/UAccCOM/AccTable \
-#	winaccessibility/source/UAccCOM/MAccessible \
-
-#	/DEF:$(SRCDIR)/winaccessibility/source/UAccCOM/UAccCOM.def \
-
 $(eval $(call gb_Library_add_ldflags,UAccCOM,\
+	/DEF:$(SRCDIR)/winaccessibility/source/UAccCOM/UAccCOM.def \
 	-LIBPATH:$(ATL_LIB) \
 	-delayload:$(call gb_Library_get_filename,cppu) \
 	-delayload:$(call gb_Library_get_filename,sal) \
@@ -64,6 +63,7 @@ $(eval $(call gb_Library_use_libraries,UAccCOM,\
 ))
 
 $(eval $(call gb_Library_use_externals,UAccCOM,\
+	boost_headers \
 	icuuc \
 	icui18n \
 ))

@@ -133,7 +133,7 @@ AccObjectWinManager::~AccObjectWinManager()
 
 long AccObjectWinManager::Get_ToATInterface( HWND hWnd, long lParam, long wParam)
 {
-    vos::OGuard localGuard(maATInterfaceMutex);//
+    osl::MutexGuard localGuard(maATInterfaceMutex);//
 
     IMAccessible* pRetIMAcc = NULL;
 
@@ -215,7 +215,7 @@ AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
    */
 sal_Bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
 {
-    vos::OGuard aGuard(aNotifyMutex);
+    osl::MutexGuard aGuard(aNotifyMutex);
 
     if (!IsInMainThread())
     {
@@ -563,7 +563,7 @@ void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible* pXAcc )
    */
 void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
 {
-    vos::OGuard aGuard( aDeleteMutex );
+    osl::MutexGuard aGuard( aDeleteMutex );
     AccObject* currentObj=NULL;
     AccObject* childObj=NULL;
     XAccessible* pTmpXAcc=NULL;
@@ -592,7 +592,7 @@ void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
    */
 void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
 {
-    vos::OGuard aGuard( aDeleteMutex );
+    osl::MutexGuard aGuard( aDeleteMutex );
     if( pXAcc == NULL )
         return;
     XIdToAccObjHash::iterator temp = XIdAccList.find(pXAcc);
@@ -792,7 +792,7 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
             static_cast< XAccessibleEventListener* >(listener),UNO_QUERY );
         if(pp.is())
         {
-            broadcaster->addEventListener(pp);
+            broadcaster->addAccessibleEventListener(pp);
         }
         else
         {

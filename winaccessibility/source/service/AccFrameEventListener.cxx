@@ -33,7 +33,8 @@ using namespace com::sun::star::accessibility;
 #include <vcl/window.hxx>
 #include <toolkit/awt/Vclxwindow.hxx>
 
-#ifndef _SV_SYSDATA_HXX
+//#ifndef _SV_SYSDATA_HXX
+#if 0
 #if defined( WIN ) || defined( WNT ) || defined( OS2 )
 typedef sal_Int32 HWND;
 typedef sal_Int32 HMENU;
@@ -42,9 +43,9 @@ typedef void *PVOID;
 typedef PVOID HANDLE;
 typedef HANDLE HFONT;
 #endif
-#include <vcl/sysdata.hxx>
 #endif
-
+#include <vcl/sysdata.hxx>
+//#endif
 
 AccFrameEventListener::AccFrameEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
         :AccEventListener(pAcc, Agent)
@@ -115,7 +116,8 @@ void AccFrameEventListener::handleChildChangedEvent(Any oldValue, Any newValue)
             const SystemEnvData* systemdata=window->GetSystemData();
 
             //add this child
-            pAgent->InsertAccObj( pAcc,pAccessible,(HWND)systemdata->hWnd);
+            //TODO(davido): FixMe
+            pAgent->InsertAccObj( pAcc,pAccessible,(long)(HWND)systemdata->hWnd);
             //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(pAcc);
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
