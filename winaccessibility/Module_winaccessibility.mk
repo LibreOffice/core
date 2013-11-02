@@ -13,7 +13,9 @@ ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
 ifneq ($(ENABLE_IA2),)
 $(eval $(call gb_Module_add_targets,winaccessibility,\
+	WinResTarget_uacccom \
 	CustomTarget_ia2_idl \
+	Library_uacccom \
 ))
 endif # ENABLE_IA2
 endif # COM=MSC
