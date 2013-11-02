@@ -98,6 +98,8 @@ oslPipe __osl_createPipeImpl()
     oslPipe pPipeImpl;
 
     pPipeImpl = (oslPipe)calloc(1, sizeof(struct oslPipeImpl));
+    if (pPipeImpl == NULL)
+        return NULL;
     pPipeImpl->m_nRefCount =1;
     pPipeImpl->m_bClosed = sal_False;
 #if defined(LINUX)
@@ -230,7 +232,13 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     }
 
     /* alloc memory */
-    pPipe= __osl_createPipeImpl();
+    pPipe = __osl_createPipeImpl();
+
+    if (pPipe == NULL)
+    {
+        OSL_TRACE("__osl_createPipe socket failed");
+        return NULL;
+    }
 
     /* create socket */
     pPipe->m_Socket = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -467,7 +475,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     else
     {
         /* alloc memory */
-        pAcceptedPipe= __osl_createPipeImpl();
+        pAcceptedPipe = __osl_createPipeImpl();
 
         OSL_ASSERT(pAcceptedPipe);
         if(pAcceptedPipe==NULL)
