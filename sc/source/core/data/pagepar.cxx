@@ -43,7 +43,7 @@ void ScPageTableParam::Reset()
     bCellContent = sal_True;
     bNotes=bGrid=bHeaders=bDrawings=
     bLeftRight=bScaleAll=bScaleTo=bScalePageNum=
-    bFormulas=bNullVals=bSkipEmpty          = false;
+    bFormulas=bNullVals=bSkipEmpty=bForceBreaks = false;
     bTopDown=bScaleNone=bCharts=bObjects    = sal_True;
     nScaleAll = 100;
     nScalePageNum = nScaleWidth = nScaleHeight = 0;
