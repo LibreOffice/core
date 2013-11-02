@@ -285,6 +285,7 @@ const sal_uInt8 EXC_FUNCFLAG_VOLATILE       = 0x01;     /// Result is volatile (
 const sal_uInt8 EXC_FUNCFLAG_IMPORTONLY     = 0x02;     /// Only used in import filter.
 const sal_uInt8 EXC_FUNCFLAG_EXPORTONLY     = 0x04;     /// Only used in export filter.
 const sal_uInt8 EXC_FUNCFLAG_PARAMPAIRS     = 0x08;     /// Optional parameters are expected to appear in pairs.
+const sal_uInt8 EXC_FUNCFLAG_ADDINEQUIV     = 0x10;     /// Function is an add-in equivalent
 
 // selected function IDs
 const sal_uInt16 EXC_FUNCID_IF              = 1;
@@ -311,7 +312,11 @@ struct XclFunctionInfo
     sal_uInt8           mnRetClass;         /// Token class of the return value.
     XclFuncParamInfo    mpParamInfos[ EXC_FUNCINFO_PARAMINFO_COUNT ]; /// Information for all parameters.
     sal_uInt8           mnFlags;            /// Additional flags (EXC_FUNCFLAG_* constants).
-    const sal_Char*     mpcMacroName;       /// Function name, if simulated by a macro call (UTF-8).
+    const sal_Char*     mpcMacroName;       /** Function name, if simulated by
+                                                a macro call (UTF-8) EXC_FUNCFLAG_ADDINEQUIV is 0;
+                                                or programmatical add-in name
+                                                if stored as such and
+                                                EXC_FUNCFLAG_ADDINEQUIV is set. */
 
     /** Returns true, if the function is volatile. */
     inline bool         IsVolatile() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_VOLATILE ); }
@@ -320,9 +325,13 @@ struct XclFunctionInfo
     /** Returns true, if the function parameter count is fixed. */
     inline bool         IsFixedParamCount() const { return (mnXclFunc != EXC_FUNCID_EXTERNCALL) && (mnMinParamCount == mnMaxParamCount); }
     /** Returns true, if the function is simulated by a macro call. */
-    inline bool         IsMacroFunc() const { return mpcMacroName != 0; }
+    inline bool         IsMacroFunc() const { return mpcMacroName != 0 && !(mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
+    /** Returns true, if the function is stored as an add-in call. */
+    inline bool         IsAddInEquivalent() const { return mpcMacroName != 0 && (mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
     /** Returns the name of the external function as string. */
     String              GetMacroFuncName() const;
+    /** Returns the programmatical name of the Add-In function as string. */
+    String              GetAddInEquivalentFuncName() const;
 };
 
 // ----------------------------------------------------------------------------

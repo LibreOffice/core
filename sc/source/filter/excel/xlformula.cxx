@@ -40,6 +40,13 @@ String XclFunctionInfo::GetMacroFuncName() const
     return EMPTY_STRING;
 }
 
+String XclFunctionInfo::GetAddInEquivalentFuncName() const
+{
+    if( IsAddInEquivalent() )
+        return String( mpcMacroName, strlen(mpcMacroName), RTL_TEXTENCODING_UTF8 );
+    return EMPTY_STRING;
+}
+
 // abbreviations for function return token class
 const sal_uInt8 R = EXC_TOKCLASS_REF;
 const sal_uInt8 V = EXC_TOKCLASS_VAL;
@@ -64,6 +71,7 @@ const sal_uInt8 MX    = 30;                 /// Maximum parameter count.
 
 #define EXC_FUNCNAME( ascii )       "_xlfn." ascii
 #define EXC_FUNCNAME_ODF( ascii )   "_xlfnodf." ascii
+#define EXC_FUNCNAME_ADDIN( ascii )   "com.sun.star.sheet.addin." ascii
 
 /** Functions new in BIFF2. */
 static const XclFunctionInfo saFuncTable_2[] =
@@ -309,7 +317,21 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocPercentrank,        329,    2,  3,  V, { RX, VR, VR_E }, 0, 0 },
     { ocModalValue,         330,    1,  MX, V, { VA }, 0, 0 },
     { ocTrimMean,           331,    2,  2,  V, { RX, VR }, 0, 0 },
-    { ocTInv,               332,    2,  2,  V, { VR }, 0, 0 }
+    { ocTInv,               332,    2,  2,  V, { VR }, 0, 0 },
+    // Functions equivalent to add-in functions, use same parameters as
+    // ocExternal but add programmatical function name (here without
+    // "com.sun.star.sheet.addin.") so it can be looked up and stored as
+    // add-in, as older Excel versions only know them as add-in.
+    // These are the functions flagged as AddInMap::bMapDupToInternal=true in
+    // sc/source/core/tool/odffmap.cxx
+    { ocIsEven,             255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getIseven" ) },
+    { ocIsOdd,              255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getIsodd" ) },
+    { ocGCD,                255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getGcd" ) },
+    { ocLCM,                255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getLcm" ) },
+    { ocEffektiv,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getEffect" ) },
+    { ocKumKapZ,            255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getCumprinc" ) },
+    { ocKumZinsZ,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getCumipmt" ) },
+    { ocNominal,            255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getNominal" ) }
 };
 
 /** Functions new in BIFF5/BIFF7. Unsupported functions: DATESTRING, NUMBERSTRING. */
