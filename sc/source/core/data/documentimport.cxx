@@ -19,16 +19,22 @@
 #include "stringutil.hxx"
 #include "compiler.hxx"
 #include "paramisc.hxx"
+#include "listenercontext.hxx"
 
 #include "svl/sharedstringpool.hxx"
 
 struct ScDocumentImportImpl
 {
     ScDocument& mrDoc;
+    sc::StartListeningContext maListenCxt;
     sc::ColumnBlockPositionSet maBlockPosSet;
     sal_uInt16 mnDefaultScriptNumeric;
 
-    ScDocumentImportImpl(ScDocument& rDoc) : mrDoc(rDoc), maBlockPosSet(rDoc), mnDefaultScriptNumeric(SC_SCRIPTTYPE_UNKNOWN) {}
+    ScDocumentImportImpl(ScDocument& rDoc) :
+        mrDoc(rDoc),
+        maListenCxt(rDoc),
+        maBlockPosSet(rDoc),
+        mnDefaultScriptNumeric(SC_SCRIPTTYPE_UNKNOWN) {}
 };
 
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
@@ -398,13 +404,15 @@ namespace {
 class CellStoreInitializer
 {
     ScDocument& mrDoc;
+    sc::StartListeningContext& mrListenCxt;
     sc::CellTextAttrStoreType maAttrs;
     sc::CellTextAttrStoreType::iterator miPos;
     sal_uInt16 mnScriptNumeric;
 
 public:
-    CellStoreInitializer(ScDocument& rDoc, sal_uInt16 nScriptNumeric) :
+    CellStoreInitializer(ScDocument& rDoc, sc::StartListeningContext& rCxt, sal_uInt16 nScriptNumeric) :
         mrDoc(rDoc),
+        mrListenCxt(rCxt),
         maAttrs(MAXROWCOUNT),
         miPos(maAttrs.begin()),
         mnScriptNumeric(nScriptNumeric) {}
@@ -429,7 +437,7 @@ public:
             for (; it != itEnd; ++it)
             {
                 ScFormulaCell& rFC = **it;
-                rFC.StartListeningTo(&mrDoc);
+                rFC.StartListeningTo(mrListenCxt);
             }
         }
     }
@@ -444,7 +452,8 @@ public:
 
 void ScDocumentImport::finalize()
 {
-    // Populate the text width and script type arrays in all columns.
+    // Populate the text width and script type arrays in all columns. Also
+    // activate all formula cells.
     ScDocument::TableContainer::iterator itTab = mpImpl->mrDoc.maTabs.begin(), itTabEnd = mpImpl->mrDoc.maTabs.end();
     for (; itTab != itTabEnd; ++itTab)
     {
@@ -461,7 +470,7 @@ void ScDocumentImport::finalize()
 
 void ScDocumentImport::initColumn(ScColumn& rCol)
 {
-    CellStoreInitializer aFunc(mpImpl->mrDoc, mpImpl->mnDefaultScriptNumeric);
+    CellStoreInitializer aFunc(mpImpl->mrDoc, mpImpl->maListenCxt, mpImpl->mnDefaultScriptNumeric);
     std::for_each(rCol.maCells.begin(), rCol.maCells.end(), aFunc);
     aFunc.swap(rCol.maCellTextAttrs);
     rCol.RegroupFormulaCells();
