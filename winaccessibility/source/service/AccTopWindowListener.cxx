@@ -23,7 +23,8 @@
 #include <vcl/window.hxx>
 #include <toolkit/awt/Vclxwindow.hxx>
 
-#ifndef _SV_SYSDATA_HXX
+//#ifndef _SV_SYSDATA_HXX
+#if 0
 #if defined( WIN ) || defined( WNT ) || defined( OS2 )
 typedef sal_Int32 HWND;
 typedef sal_Int32 HMENU;
@@ -32,8 +33,8 @@ typedef void *PVOID;
 typedef PVOID HANDLE;
 typedef HANDLE HFONT;
 #endif
-#include <vcl/sysdata.hxx>
 #endif
+#include <vcl/sysdata.hxx>
 
 #include "AccTopWindowListener.hxx"
 #include "unomsaaevent.hxx"
@@ -105,7 +106,7 @@ void AccTopWindowListener::handleWindowOpened( com::sun::star::accessibility::XA
     //Only AccessibleContext exist, add all listeners
     if(pAccessibleContext != NULL && systemdata != NULL)
     {
-        accManagerAgent.SaveTopWindowHandle((HWND)systemdata->hWnd,  pAccessible);
+      accManagerAgent.SaveTopWindowHandle((long)(HWND)systemdata->hWnd,  pAccessible);
 
         AddAllListeners(pAccessible,NULL,(HWND)systemdata->hWnd);
 
@@ -181,7 +182,7 @@ void AccTopWindowListener::AddAllListeners(com::sun::star::accessibility::XAcces
         return;
     }
 
-    accManagerAgent.InsertAccObj( pAccessible, pParentXAcc,pWND );
+    accManagerAgent.InsertAccObj( pAccessible, pParentXAcc,(long)(HWND)pWND );
 
     if (!accManagerAgent.IsContainer(pAccessible))
     {
@@ -220,7 +221,7 @@ void AccTopWindowListener::AddAllListeners(com::sun::star::accessibility::XAcces
     }
 }
 
-void AccTopWindowListener::windowClosing( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::windowClosing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
