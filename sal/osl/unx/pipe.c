@@ -98,6 +98,9 @@ oslPipe __osl_createPipeImpl()
     oslPipe pPipeImpl;
 
     pPipeImpl = (oslPipe)calloc(1, sizeof(struct oslPipeImpl));
+    if(pPipeImpl == NULL){
+        return NULL;
+    }
     pPipeImpl->m_nRefCount =1;
     pPipeImpl->m_bClosed = sal_False;
 #if defined(LINUX)
