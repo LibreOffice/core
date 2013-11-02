@@ -6858,6 +6858,9 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
     {
         if ( aStr[ i ] == '~' )
         {
+            if ( nLen <= i+1 )
+                break;
+
             if ( aStr[ i+1 ] != '~' )
             {
                 if ( rMnemonicPos == -1 )
