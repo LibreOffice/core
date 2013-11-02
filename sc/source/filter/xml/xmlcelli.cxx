@@ -1027,7 +1027,6 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
             pFCell->SetHybridDouble(fValue);
             pFCell->ResetDirty();
         }
-        pFCell->StartListeningTo(rXMLImport.GetDocument());
     }
 }
 
@@ -1075,7 +1074,6 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                         SAL_WARN("sc", "matrix cell without matrix");
                 }
             }
-            pFCell->StartListeningTo(rXMLImport.GetDocument());
         }
     }
     else //regular text cells
@@ -1437,7 +1435,6 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         nMatrixCols, nMatrixRows, pMat, new formula::FormulaDoubleToken(fValue));
                     pFCell->ResetDirty();
                 }
-                pFCell->StartListeningTo(rXMLImport.GetDocument());
             }
         }
         else

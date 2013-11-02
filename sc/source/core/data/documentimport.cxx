@@ -395,7 +395,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
 
 namespace {
 
-class CellTextAttrInitializer
+class CellStoreInitializer
 {
     struct Impl
     {
@@ -408,10 +408,12 @@ class CellTextAttrInitializer
         {}
     };
 
+    ScDocument& mrDoc;
     boost::shared_ptr<Impl> mpImpl;
 
 public:
-    CellTextAttrInitializer(sal_uInt16 nScriptNumeric) : mpImpl(new Impl(MAXROWCOUNT, nScriptNumeric)) {}
+    CellStoreInitializer(ScDocument& rDoc, sal_uInt16 nScriptNumeric) :
+        mrDoc(rDoc), mpImpl(new Impl(MAXROWCOUNT, nScriptNumeric)) {}
 
     void operator() (const sc::CellStoreType::value_type& node)
     {
@@ -424,6 +426,18 @@ public:
             aDefault.mnScriptType = mpImpl->mnScriptNumeric;
         std::vector<sc::CellTextAttr> aDefaults(node.size, aDefault);
         mpImpl->miPos = mpImpl->maAttrs.set(mpImpl->miPos, node.position, aDefaults.begin(), aDefaults.end());
+
+        if (node.type == sc::element_type_formula)
+        {
+            // Have all formula cells start listening to the document.
+            sc::formula_block::iterator it = sc::formula_block::begin(*node.data);
+            sc::formula_block::iterator itEnd = sc::formula_block::end(*node.data);
+            for (; it != itEnd; ++it)
+            {
+                ScFormulaCell& rFC = **it;
+                rFC.StartListeningTo(&mrDoc);
+            }
+        }
     }
 
     void swap(sc::CellTextAttrStoreType& rAttrs)
@@ -453,7 +467,7 @@ void ScDocumentImport::finalize()
 
 void ScDocumentImport::initColumn(ScColumn& rCol)
 {
-    CellTextAttrInitializer aFunc(mpImpl->mnDefaultScriptNumeric);
+    CellStoreInitializer aFunc(mpImpl->mrDoc, mpImpl->mnDefaultScriptNumeric);
     std::for_each(rCol.maCells.begin(), rCol.maCells.end(), aFunc);
     aFunc.swap(rCol.maCellTextAttrs);
     rCol.RegroupFormulaCells();

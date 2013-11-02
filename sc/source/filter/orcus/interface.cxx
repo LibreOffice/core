@@ -364,7 +364,6 @@ void ScOrcusSheet::set_shared_formula(
 
     // For now, orcus doesn't support setting cached result. Mark it for re-calculation.
     pCell->SetDirty(true);
-    pCell->StartListeningTo(&mrDoc.getDoc());
 }
 
 void ScOrcusSheet::set_shared_formula(
@@ -388,7 +387,6 @@ void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sinde
 
     // For now, orcus doesn't support setting cached result. Mark it for re-calculation.
     pCell->SetDirty(true);
-    pCell->StartListeningTo(&mrDoc.getDoc());
 }
 
 void ScOrcusSheet::set_array_formula(
