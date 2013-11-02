@@ -781,7 +781,7 @@ void SchXMLChartContext::EndElement()
         //own data or only rectangular range available
 
         if( xNewDoc->hasInternalDataProvider() )
-            SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc, meDataRowSource );
+            SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc );
 
         bool bOlderThan2_3 = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( Reference< frame::XModel >( xNewDoc, uno::UNO_QUERY ));
         bool bOldFileWithOwnDataFromRows = (bOlderThan2_3 && bHasOwnData && (meDataRowSource==chart::ChartDataRowSource_ROWS)); // in this case there are range addresses that are simply wrong.
@@ -818,7 +818,7 @@ void SchXMLChartContext::EndElement()
                     if( !xNewDoc->hasInternalDataProvider() )
                     {
                         xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
-                        SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc, meDataRowSource );
+                        SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc );
                         try
                         {
                             lcl_ApplyDataFromRectangularRangeToDiagram( xNewDoc, msChartAddress, meDataRowSource, mbRowHasLabels, mbColHasLabels, bHasOwnData, msColTrans, msRowTrans );

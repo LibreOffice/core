@@ -73,9 +73,8 @@ private:
                            sal_Int32& nRows, sal_Int32& nColumns );
 
 public:
-    static void applyTableToInternalDataProvider( SchXMLTable rTable,
-                            com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc,
-                            com::sun::star::chart::ChartDataRowSource eDataRowSource );
+    static void applyTableToInternalDataProvider( const SchXMLTable& rTable,
+                            com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );
 
     /** This function reorders local data to fit the correct data structure.
         Call it after the data series got their styles set.
