@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_l10n_targets,accessibility,\
     AllLangResTarget_acc \
 ))
 
+ifneq ($(ENABLE_IA2),TRUE)
 ifneq ($(ENABLE_JAVA),)
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,accessibility,\
@@ -25,6 +26,7 @@ $(eval $(call gb_Module_add_targets,accessibility,\
     Jar_uno_accessbridge \
     Library_java_uno_accessbridge \
 ))
+endif
 endif
 endif
 
