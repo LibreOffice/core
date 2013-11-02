@@ -924,6 +924,8 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     // If pPageData is set, only the breaks are interesting for the
     // pagebreak preview, empty pages are not addressed separately.
 
+    aTableParam.bForceBreaks = pOptions && pOptions->GetForceBreaks();
+
     //------------------------------------------------------
     // TabPage "Parts":
     //------------------------------------------------------
@@ -2751,6 +2753,21 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
         nZoom = 100;
         sal_uInt16 nPagesToFit = aTableParam.nScalePageNum;
 
+        // If manual breaks are forced, calculate minimum # pages required
+        if (aTableParam.bForceBreaks)
+        {
+             sal_uInt16 nMinPages = 0;
+             std::set<SCROW> aRowBreaks;
+             std::set<SCCOL> aColBreaks;
+             pDoc->GetAllRowBreaks(aRowBreaks, nPrintTab, false, true);
+             pDoc->GetAllColBreaks(aColBreaks, nPrintTab, false, true);
+             nMinPages = (aRowBreaks.size() + 1) * (aColBreaks.size() + 1);
+
+             // #i54993# use min forced by breaks if it's > # pages in
+             // scale parameter to avoid bottoming out at <= ZOOM_MIN
+             nPagesToFit = nMinPages > nPagesToFit ? nMinPages : nPagesToFit;
+        }
+
         sal_uInt16 nLastFitZoom = 0, nLastNonFitZoom = 0;
         while (true)
         {
@@ -2792,6 +2809,23 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
         nZoom = 100;
         sal_uInt16 nW = aTableParam.nScaleWidth;
         sal_uInt16 nH = aTableParam.nScaleHeight;
+
+        // If manual breaks are forced, calculate minimum # pages required
+        if (aTableParam.bForceBreaks)
+        {
+             sal_uInt16 nMinPagesW = 0, nMinPagesH = 0;
+             std::set<SCROW> aRowBreaks;
+             std::set<SCCOL> aColBreaks;
+             pDoc->GetAllRowBreaks(aRowBreaks, nPrintTab, false, true);
+             pDoc->GetAllColBreaks(aColBreaks, nPrintTab, false, true);
+             nMinPagesW = aColBreaks.size() + 1;
+             nMinPagesH = aRowBreaks.size() + 1;
+
+             // #i54993# use min forced by breaks if it's > # pages in
+             // scale parameters to avoid bottoming out at <= ZOOM_MIN
+             nW = nMinPagesW > nW ? nMinPagesW : nW;
+             nH = nMinPagesH > nH ? nMinPagesH : nH;
+        }
 
         sal_uInt16 nLastFitZoom = 0, nLastNonFitZoom = 0;
         while (true)
