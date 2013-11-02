@@ -140,6 +140,7 @@ public:
     inline sal_uInt16   GetXclFuncIdx() const { return mrFuncInfo.mnXclFunc; }
     inline bool         IsVolatile() const { return mrFuncInfo.IsVolatile(); }
     inline bool         IsFixedParamCount() const { return mrFuncInfo.IsFixedParamCount(); }
+    inline bool         IsAddInEquivalent() const { return mrFuncInfo.IsAddInEquivalent(); }
     inline bool         IsMacroFunc() const { return mrFuncInfo.IsMacroFunc(); }
     inline sal_uInt8    GetSpaces() const { return mrTokData.mnSpaces; }
     inline const XclExpExtFuncData& GetExtFuncData() const { return maExtFuncData; }
@@ -1361,8 +1362,11 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
     mxData->mbOk = pFuncInfo != 0;
     if( !mxData->mbOk ) return;
 
+    // internal functions equivalent to an existing add-in
+    if( pFuncInfo->IsAddInEquivalent() )
+        aExtFuncData.Set( pFuncInfo->GetAddInEquivalentFuncName(), true, false );
     // functions simulated by a macro call in file format
-    if( pFuncInfo->IsMacroFunc() )
+    else if( pFuncInfo->IsMacroFunc() )
         aExtFuncData.Set( pFuncInfo->GetMacroFuncName(), false, true );
 
     XclExpFuncData aFuncData( rTokData, *pFuncInfo, aExtFuncData );
@@ -1644,8 +1648,11 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
         break;
         default:
         {
-            OSL_ENSURE( rFuncData.IsMacroFunc(), "XclExpFmlaCompImpl::AppendDefaultParam - unknown opcode" );
-            if( rFuncData.IsMacroFunc() )
+            if( rFuncData.IsAddInEquivalent() )
+            {
+                AppendAddInCallToken( rFuncData.GetExtFuncData() );
+            }
+            else if( rFuncData.IsMacroFunc() )
             {
                 // Do not write the OOXML <definedName> element for new _xlfn.
                 // prefixed functions.
@@ -1655,7 +1662,10 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
                     AppendMacroCallToken( rFuncData.GetExtFuncData() );
             }
             else
+            {
+                SAL_WARN( "sc.filter", "XclExpFmlaCompImpl::AppendDefaultParam - unknown opcode" );
                 AppendMissingToken();   // to keep parameter count valid
+            }
         }
     }
 
