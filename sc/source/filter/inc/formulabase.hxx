@@ -499,6 +499,7 @@ struct FunctionInfo
     bool                mbParamPairs;       /// True = optional parameters are expected to appear in pairs.
     bool                mbVolatile;         /// True = volatile function.
     bool                mbExternal;         /// True = external function in Calc.
+    bool                mbInternal;         /// True = internal function in Calc. (Both can be true!)
     bool                mbMacroFunc;        /// True = macro sheet function or command.
     bool                mbVarParam;         /// True = use a tFuncVar token, also if min/max are equal.
 };
