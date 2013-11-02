@@ -35,7 +35,8 @@ ScPrintOptions::ScPrintOptions()
 
 ScPrintOptions::ScPrintOptions( const ScPrintOptions& rCpy ) :
     bSkipEmpty( rCpy.bSkipEmpty ),
-    bAllSheets( rCpy.bAllSheets )
+    bAllSheets( rCpy.bAllSheets ),
+    bForceBreaks( rCpy.bForceBreaks )
 {
 }
 
@@ -47,19 +48,22 @@ void ScPrintOptions::SetDefaults()
 {
     bSkipEmpty = sal_True;
     bAllSheets = false;
+    bForceBreaks = false;
 }
 
 const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
 {
     bSkipEmpty = rCpy.bSkipEmpty;
     bAllSheets = rCpy.bAllSheets;
+    bForceBreaks = rCpy.bForceBreaks;
     return *this;
 }
 
 bool ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
 {
     return bSkipEmpty == rOpt.bSkipEmpty
-        && bAllSheets == rOpt.bAllSheets;
+        && bAllSheets == rOpt.bAllSheets
+        && bForceBreaks == rOpt.bForceBreaks;
 }
 
 bool ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
@@ -105,14 +109,16 @@ SfxPoolItem* ScTpPrintItem::Clone( SfxItemPool * ) const
 
 #define SCPRINTOPT_EMPTYPAGES       0
 #define SCPRINTOPT_ALLSHEETS        1
-#define SCPRINTOPT_COUNT            2
+#define SCPRINTOPT_FORCEBREAKS      2
+#define SCPRINTOPT_COUNT            3
 
 Sequence<OUString> ScPrintCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
         "Page/EmptyPages",          // SCPRINTOPT_EMPTYPAGES
-        "Other/AllSheets"           // SCPRINTOPT_ALLSHEETS
+        "Other/AllSheets",          // SCPRINTOPT_ALLSHEETS
+        "Page/ForceBreaks"          // SCPRINTOPT_FORCEBREAKS
     };
     Sequence<OUString> aNames(SCPRINTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -145,6 +151,9 @@ ScPrintCfg::ScPrintCfg() :
                     case SCPRINTOPT_ALLSHEETS:
                         SetAllSheets( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
+                    case SCPRINTOPT_FORCEBREAKS:
+                        SetForceBreaks( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
                 }
             }
         }
@@ -167,6 +176,9 @@ void ScPrintCfg::Commit()
                 break;
             case SCPRINTOPT_ALLSHEETS:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetAllSheets() );
+                break;
+            case SCPRINTOPT_FORCEBREAKS:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetForceBreaks() );
                 break;
         }
     }

@@ -38,11 +38,14 @@
 #include "segmenttree.hxx"
 #include "columniterator.hxx"
 #include "globalnames.hxx"
+#include "scmod.hxx"
+#include "printopt.hxx"
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 
 #include <algorithm>
 #include <limits>
+#include <iostream>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
@@ -66,7 +69,8 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         if (!bPageSizeValid)
             return;
 
-        if (mbPageBreaksValid)
+        // Always update breaks if force breaks option has changed
+        if (mbPageBreaksValid && mbForceBreaks == SC_MOD()->GetPrintOptions().GetForceBreaks())
             return;
     }
 
@@ -120,24 +124,29 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     }
 
     // get bSkipColBreaks/bSkipRowBreaks flags:
-
+    // fdo#40788 - print range scale settings can cause manual breaks to be
+    // ignored (see below). This behaviour may now be set by the user.
+    mbForceBreaks = SC_MOD()->GetPrintOptions().GetForceBreaks();
     bool bSkipColBreaks = false;
     bool bSkipRowBreaks = false;
 
-    if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SFX_ITEM_SET )
+    if (!mbForceBreaks)
     {
-        OSL_ENSURE( pItem->ISA(SfxUInt16Item), "invalid Item" );
-        bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
-    }
+         if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SFX_ITEM_SET )
+         {
+              OSL_ENSURE( pItem->ISA(SfxUInt16Item), "invalid Item" );
+              bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
+         }
 
-    if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SFX_ITEM_SET )
-    {
-        // #i54993# when fitting to width or height, ignore only manual breaks in that direction
-        const ScPageScaleToItem* pScaleToItem = static_cast<const ScPageScaleToItem*>(pItem);
-        if ( pScaleToItem->GetWidth() > 0 )
-            bSkipColBreaks = true;
-        if ( pScaleToItem->GetHeight() > 0 )
-            bSkipRowBreaks = true;
+         if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SFX_ITEM_SET )
+         {
+              // #i54993# when fitting to width or height, ignore only manual breaks in that direction
+              const ScPageScaleToItem* pScaleToItem = static_cast<const ScPageScaleToItem*>(pItem);
+              if ( pScaleToItem->GetWidth() > 0 )
+                   bSkipColBreaks = true;
+              if ( pScaleToItem->GetHeight() > 0 )
+                   bSkipRowBreaks = true;
+         }
     }
 
     //--------------------------------------------------------------------------

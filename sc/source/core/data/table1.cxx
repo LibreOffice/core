@@ -271,7 +271,8 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     bGlobalKeepQuery(false),
     bPrintEntireSheet(true),
     bActiveScenario(false),
-    mbPageBreaksValid(false)
+    mbPageBreaksValid(false),
+    mbForceBreaks(false)
 {
 
     if (bColInfo)

@@ -29,6 +29,7 @@ class SC_DLLPUBLIC ScPrintOptions
 private:
     sal_Bool    bSkipEmpty;
     sal_Bool    bAllSheets;
+    sal_Bool    bForceBreaks;
 
 public:
                 ScPrintOptions();
@@ -39,6 +40,8 @@ public:
     void    SetSkipEmpty( sal_Bool bVal )       { bSkipEmpty = bVal; }
     sal_Bool    GetAllSheets() const            { return bAllSheets; }
     void    SetAllSheets( sal_Bool bVal )       { bAllSheets = bVal; }
+    sal_Bool    GetForceBreaks() const          { return bForceBreaks; }
+    void    SetForceBreaks( sal_Bool bVal )     { bForceBreaks = bVal; }
 
     void    SetDefaults();
 
