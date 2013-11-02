@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define WNT
 #define _USE_NAMESPACE
 
 #ifndef _SV_SVAPP_HXX

@@ -202,13 +202,13 @@ BSTR CAccRelation::getRelationTypeBSTR(int type)
             {IA2_RELATION_LABELED_BY    ,   6},
             {IA2_RELATION_MEMBER_OF     ,   7},
             {IA2_RELATION_SUBWINDOW_OF  ,   8},
-            {IA2_RELATION_NODE_CHILD_OF,    9},
-            {IA2_RELATION_DESCRIBED_BY  ,   10},
+            {IA2_RELATION_NODE_CHILD_OF ,   9},
+            {IA2_RELATION_DESCRIBED_BY  ,  10},
         };
 
     USES_CONVERSION;
 
-    return (type >= 0 && type <= 10) ? T2BSTR(map[type].string) : _T("");
+    return (type >= 0 && type <= 10) ? map[type].string : _T("");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,8 +28,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#define WNT
-
 #include <com/sun/star/uno/reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include "UNOXWrapper.h"
