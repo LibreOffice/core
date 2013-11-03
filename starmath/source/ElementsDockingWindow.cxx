@@ -32,9 +32,10 @@
 SV_DECL_REF(SmDocShell)
 SV_IMPL_REF(SmDocShell)
 
-SmElement::SmElement(SmNodePointer pNode, OUString aText) :
+SmElement::SmElement(SmNodePointer pNode, OUString aText, OUString aHelpText) :
     mpNode(pNode),
-    maText(aText)
+    maText(aText),
+    maHelpText(aHelpText)
 {}
 
 SmElement::~SmElement()
@@ -46,129 +47,157 @@ SmNodePointer SmElement::getNode()
 }
 
 SmElementSeparator::SmElementSeparator() :
-    SmElement(SmNodePointer(), OUString())
+    SmElement(SmNodePointer(), OUString(), OUString())
 {}
 
-const sal_uInt16 SmElementsControl::aUnaryBinaryOperatorsList[] =
+const sal_uInt16 SmElementsControl::aUnaryBinaryOperatorsList[][2] =
 {
-    RID_PLUSX, RID_MINUSX, RID_PLUSMINUSX, RID_MINUSPLUSX,
-    0xFFFF,
-    RID_XPLUSY, RID_XMINUSY, RID_XCDOTY, RID_XTIMESY,
-    RID_XSYMTIMESY, RID_XOVERY,  RID_XDIVY, RID_XSYMDIVIDEY,
-    RID_XCIRCY, RID_XWIDESLASHY, RID_XWIDEBSLASHY,
-    0xFFFF,
-    RID_NEGX, RID_XANDY, RID_XORY,
+    {RID_PLUSX, RID_PLUSX_HELP}, {RID_MINUSX, RID_MINUSX_HELP},
+    {RID_PLUSMINUSX, RID_PLUSMINUSX_HELP}, {RID_MINUSPLUSX, RID_MINUSPLUSX_HELP},
+    {0xFFFF, 0},
+    {RID_XPLUSY, RID_XPLUSY_HELP}, {RID_XMINUSY, RID_XMINUSY_HELP},
+    {RID_XCDOTY, RID_XCDOTY_HELP}, {RID_XTIMESY, RID_XTIMESY_HELP},
+    {RID_XSYMTIMESY, RID_XSYMTIMESY_HELP}, {RID_XOVERY, RID_XOVERY_HELP},
+    {RID_XDIVY, RID_XDIVY_HELP}, {RID_XSYMDIVIDEY, RID_XSYMDIVIDEY_HELP},
+    {RID_XCIRCY, RID_XCIRCY_HELP}, {RID_XWIDESLASHY, RID_XWIDESLASHY_HELP},
+    {RID_XWIDEBSLASHY, RID_XWIDEBSLASHY_HELP},
+    {0xFFFF, 0},
+    {RID_NEGX, RID_NEGX_HELP}, {RID_XANDY, RID_XANDY_HELP}, {RID_XORY, RID_XORY_HELP},
 };
 
-const sal_uInt16 SmElementsControl::aRelationsList[] =
+const sal_uInt16 SmElementsControl::aRelationsList[][2] =
 {
-    RID_XEQY, RID_XNEQY, RID_XLTY, RID_XLEY,
-    RID_XLESLANTY, RID_XGTY, RID_XGEY, RID_XGESLANTY,
-    0xFFFF,
-    RID_XAPPROXY, RID_XSIMY, RID_XSIMEQY, RID_XEQUIVY,
-    RID_XPROPY, RID_XPARALLELY, RID_XORTHOY, RID_XDIVIDESY,
-    RID_XNDIVIDESY, RID_XTOWARDY,
-    0xFFFF,
-    RID_DLARROW, RID_DLRARROW, RID_DRARROW,
-    0xFFFF,
-    RID_XPRECEDESY, RID_XSUCCEEDSY, RID_XPRECEDESEQUALY, RID_XSUCCEEDSEQUALY,
-    RID_XPRECEDESEQUIVY, RID_XSUCCEEDSEQUIVY, RID_XNOTPRECEDESY, RID_XNOTSUCCEEDSY
+    {RID_XEQY, RID_XEQY_HELP}, {RID_XNEQY, RID_XNEQY_HELP}, {RID_XLTY, RID_XLTY_HELP},
+    {RID_XLEY, RID_XLEY_HELP}, {RID_XLESLANTY, RID_XLESLANTY_HELP}, {RID_XGTY, RID_XGTY_HELP},
+    {RID_XGEY, RID_XGEY_HELP}, {RID_XGESLANTY, RID_XGESLANTY_HELP},
+    {0xFFFF, 0},
+    {RID_XAPPROXY, RID_XAPPROXY_HELP}, {RID_XSIMY, RID_XSIMY_HELP}, {RID_XSIMEQY, RID_XSIMEQY_HELP},
+    {RID_XEQUIVY, RID_XEQUIVY_HELP}, {RID_XPROPY, RID_XPROPY_HELP}, {RID_XPARALLELY, RID_XPARALLELY_HELP},
+    {RID_XORTHOY, RID_XORTHOY_HELP}, {RID_XDIVIDESY, RID_XDIVIDESY_HELP}, {RID_XNDIVIDESY, RID_XNDIVIDESY_HELP},
+    {RID_XTOWARDY, RID_XTOWARDY_HELP},
+    {0xFFFF, 0},
+    {RID_DLARROW, RID_DLARROW_HELP}, {RID_DLRARROW, RID_DLRARROW_HELP}, {RID_DRARROW, RID_DRARROW_HELP},
+    {0xFFFF, 0},
+    {RID_XPRECEDESY, RID_XPRECEDESY_HELP}, {RID_XSUCCEEDSY, RID_XSUCCEEDSY_HELP},
+    {RID_XPRECEDESEQUALY, RID_XPRECEDESEQUALY_HELP}, {RID_XSUCCEEDSEQUALY, RID_XSUCCEEDSEQUALY_HELP},
+    {RID_XPRECEDESEQUIVY, RID_XPRECEDESEQUIVY_HELP}, {RID_XSUCCEEDSEQUIVY, RID_XSUCCEEDSEQUIVY_HELP},
+    {RID_XNOTPRECEDESY, RID_XNOTPRECEDESY_HELP}, {RID_XNOTSUCCEEDSY, RID_XNOTSUCCEEDSY_HELP},
 };
 
-const sal_uInt16 SmElementsControl::aSetOperations[] =
+const sal_uInt16 SmElementsControl::aSetOperations[][2] =
 {
-    RID_XINY, RID_XNOTINY, RID_XOWNSY,
-    0xFFFF,
-    RID_XINTERSECTIONY, RID_XUNIONY, RID_XSETMINUSY, RID_XSLASHY,
-    RID_XSUBSETY, RID_XSUBSETEQY, RID_XSUPSETY, RID_XSUPSETEQY, RID_XNSUBSETY,
-    RID_XNSUBSETEQY, RID_XNSUPSETY, RID_XNSUPSETEQY,
-    0xFFFF,
-    RID_EMPTYSET, RID_ALEPH, RID_SETN, RID_SETZ,
-    RID_SETQ, RID_SETR, RID_SETC
+    {RID_XINY, RID_XINY_HELP}, {RID_XNOTINY, RID_XNOTINY_HELP}, {RID_XOWNSY, RID_XOWNSY_HELP},
+    {0xFFFF, 0},
+    {RID_XINTERSECTIONY, RID_XINTERSECTIONY_HELP}, {RID_XUNIONY, RID_XUNIONY_HELP},
+    {RID_XSETMINUSY, RID_XSETMINUSY_HELP}, {RID_XSLASHY, RID_XSLASHY_HELP},
+    {RID_XSUBSETY, RID_XSUBSETY_HELP}, {RID_XSUBSETEQY, RID_XSUBSETEQY_HELP},
+    {RID_XSUPSETY, RID_XSUPSETY_HELP}, {RID_XSUPSETEQY, RID_XSUPSETEQY_HELP},
+    {RID_XNSUBSETY, RID_XNSUBSETY_HELP}, {RID_XNSUBSETEQY, RID_XNSUBSETEQY_HELP},
+    {RID_XNSUPSETY, RID_XNSUPSETY_HELP}, {RID_XNSUPSETEQY, RID_XNSUPSETEQY_HELP},
+    {0xFFFF, 0},
+    {RID_EMPTYSET, RID_EMPTYSET_HELP}, {RID_ALEPH, RID_ALEPH_HELP}, {RID_SETN, RID_SETN_HELP},
+    {RID_SETZ, RID_SETZ_HELP}, {RID_SETQ, RID_SETQ_HELP}, {RID_SETR, RID_SETR_HELP}, {RID_SETC, RID_SETC_HELP}
 };
 
-const sal_uInt16 SmElementsControl::aFunctions[] =
+const sal_uInt16 SmElementsControl::aFunctions[][2] =
 {
-    RID_ABSX, RID_FACTX, RID_SQRTX, RID_NROOTXY,
-    RID_RSUPX, RID_EX, RID_LNX, RID_EXPX,
-    RID_LOGX,
-    0xFFFF,
-    RID_SINX, RID_COSX, RID_TANX, RID_COTX,
-    RID_SINHX, RID_COSHX, RID_TANHX, RID_COTHX,
-    0xFFFF,
-    RID_ARCSINX, RID_ARCCOSX, RID_ARCTANX, RID_ARCCOTX,
-    RID_ARSINHX, RID_ARCOSHX, RID_ARTANHX, RID_ARCOTHX
+    {RID_ABSX, RID_ABSX_HELP}, {RID_FACTX, RID_FACTX_HELP}, {RID_SQRTX, RID_SQRTX_HELP},
+    {RID_NROOTXY, RID_NROOTXY_HELP}, {RID_RSUPX, RID_RSUPX_HELP}, {RID_EX, RID_EX_HELP},
+    {RID_LNX, RID_LNX_HELP}, {RID_EXPX, RID_EXPX_HELP}, {RID_LOGX, RID_LOGX_HELP},
+    {0xFFFF, 0},
+    {RID_SINX, RID_SINX_HELP}, {RID_COSX, RID_COSX_HELP}, {RID_TANX, RID_TANX_HELP}, {RID_COTX, RID_COTX_HELP},
+    {RID_SINHX, RID_SINHX_HELP}, {RID_COSHX, RID_COSHX_HELP}, {RID_TANHX, RID_TANHX_HELP},
+    {RID_COTHX, RID_COTHX_HELP},
+    {0xFFFF, 0},
+    {RID_ARCSINX, RID_ARCSINX_HELP}, {RID_ARCCOSX, RID_ARCCOSX_HELP}, {RID_ARCTANX, RID_ARCTANX_HELP},
+    {RID_ARCCOTX, RID_ARCCOTX_HELP}, {RID_ARSINHX, RID_ARSINHX_HELP}, {RID_ARCOSHX, RID_ARCOSHX_HELP},
+    {RID_ARTANHX, RID_ARTANHX_HELP}, {RID_ARCOTHX, RID_ARCOTHX_HELP}
 };
 
-const sal_uInt16 SmElementsControl::aOperators[] =
+const sal_uInt16 SmElementsControl::aOperators[][2] =
 {
-    RID_LIMX, RID_SUMX, RID_PRODX, RID_COPRODX,
-    RID_INTX, RID_IINTX, RID_IIINTX, RID_LINTX,
-    RID_LLINTX, RID_LLLINTX,
-    0xFFFF,
-    RID_LIM_FROMX, RID_SUM_FROMX, RID_PROD_FROMX, RID_COPROD_FROMX,
-    RID_INT_FROMX, RID_IINT_FROMX, RID_IIINT_FROMX, RID_LINT_FROMX,
-    RID_LLINT_FROMX, RID_LLLINT_FROMX,
-    0xFFFF,
-    RID_LIM_TOX, RID_SUM_TOX, RID_PROD_TOX, RID_COPROD_TOX,
-    RID_INT_TOX, RID_IINT_TOX, RID_IIINT_TOX, RID_LINT_TOX,
-    RID_LLINT_TOX, RID_LLLINT_TOX,
-    0xFFFF,
-    RID_LIM_FROMTOX, RID_SUM_FROMTOX, RID_PROD_FROMTOX, RID_COPROD_FROMTOX,
-    RID_INT_FROMTOX, RID_IINT_FROMTOX, RID_IIINT_FROMTOX, RID_LINT_FROMTOX,
-    RID_LLINT_FROMTOX, RID_LLLINT_FROMTOX,
-
+    {RID_LIMX, RID_LIMX_HELP}, {RID_SUMX, RID_SUMX_HELP}, {RID_PRODX, RID_PRODX_HELP},
+    {RID_COPRODX, RID_COPRODX_HELP}, {RID_INTX, RID_INTX_HELP}, {RID_IINTX, RID_IINTX_HELP},
+    {RID_IIINTX, RID_IIINTX_HELP}, {RID_LINTX, RID_LINTX_HELP}, {RID_LLINTX, RID_LLINTX_HELP},
+    {RID_LLLINTX, RID_LLLINTX_HELP},
+    {0xFFFF, 0},
+    {RID_LIM_FROMX, RID_LIM_FROMX_HELP}, {RID_SUM_FROMX, RID_SUM_FROMX_HELP}, {RID_PROD_FROMX, RID_PROD_FROMX_HELP},
+    {RID_COPROD_FROMX, RID_COPROD_FROMX_HELP}, {RID_INT_FROMX, RID_INT_FROMX_HELP},
+    {RID_IINT_FROMX, RID_IINT_FROMX_HELP}, {RID_IIINT_FROMX, RID_IIINT_FROMX_HELP},
+    {RID_LINT_FROMX, RID_LINT_FROMX_HELP}, {RID_LLINT_FROMX, RID_LLINT_FROMX_HELP}, {RID_LLLINT_FROMX, RID_LLLINT_FROMX_HELP},
+    {0xFFFF, 0},
+    {RID_LIM_TOX, RID_LIM_TOX_HELP}, {RID_SUM_TOX, RID_SUM_TOX_HELP}, {RID_PROD_TOX, RID_PROD_TOX_HELP},
+    {RID_COPROD_TOX, RID_COPROD_TOX_HELP}, {RID_INT_TOX, RID_INT_TOX_HELP}, {RID_IINT_TOX, RID_IINT_TOX_HELP},
+    {RID_IIINT_TOX, RID_IIINT_TOX_HELP}, {RID_LINT_TOX, RID_LINT_TOX_HELP}, {RID_LLINT_TOX, RID_LLINT_TOX_HELP},
+    {RID_LLLINT_TOX, RID_LLLINT_TOX_HELP},
+    {0xFFFF, 0},
+    {RID_LIM_FROMTOX, RID_LIM_FROMTOX_HELP}, {RID_SUM_FROMTOX, RID_SUM_FROMTOX_HELP},
+    {RID_PROD_FROMTOX, RID_PROD_FROMTOX_HELP}, {RID_COPROD_FROMTOX, RID_COPROD_FROMTOX_HELP},
+    {RID_INT_FROMTOX, RID_INT_FROMTOX_HELP}, {RID_IINT_FROMTOX, RID_IINT_FROMTOX_HELP},
+    {RID_IIINT_FROMTOX, RID_IIINT_FROMTOX_HELP}, {RID_LINT_FROMTOX, RID_LINT_FROMTOX_HELP},
+    {RID_LLINT_FROMTOX, RID_LLINT_FROMTOX_HELP}, {RID_LLLINT_FROMTOX, RID_LLLINT_FROMTOX_HELP}
 };
 
-const sal_uInt16 SmElementsControl::aAttributes[] =
+const sal_uInt16 SmElementsControl::aAttributes[][2] =
 {
-    RID_ACUTEX, RID_GRAVEX, RID_BREVEX, RID_CIRCLEX,
-    RID_DOTX, RID_DDOTX, RID_DDDOTX, RID_BARX,
-    RID_VECX, RID_TILDEX, RID_HATX,
-    0xFFFF,
-    RID_WIDEVECX, RID_WIDETILDEX, RID_WIDEHATX, RID_OVERLINEX,
-    RID_UNDERLINEX, RID_OVERSTRIKEX,
-    0xFFFF,
-    RID_PHANTOMX, RID_BOLDX, RID_ITALX, RID_SIZEXY, RID_FONTXY,
-    0xFFFF,
-    RID_COLORX_BLACK, RID_COLORX_BLUE, RID_COLORX_GREEN,
-    RID_COLORX_RED, RID_COLORX_CYAN, RID_COLORX_MAGENTA, RID_COLORX_YELLOW
+    {RID_ACUTEX, RID_ACUTEX_HELP}, {RID_GRAVEX, RID_GRAVEX_HELP}, {RID_BREVEX, RID_BREVEX_HELP},
+    {RID_CIRCLEX, RID_CIRCLEX_HELP}, {RID_DOTX, RID_DOTX_HELP}, {RID_DDOTX, RID_DDOTX_HELP},
+    {RID_DDDOTX, RID_DDDOTX_HELP}, {RID_BARX, RID_BARX_HELP}, {RID_VECX, RID_VECX_HELP},
+    {RID_TILDEX, RID_TILDEX_HELP}, {RID_HATX, RID_HATX_HELP},
+    {0xFFFF, 0},
+    {RID_WIDEVECX, RID_WIDEVECX_HELP}, {RID_WIDETILDEX, RID_WIDETILDEX_HELP}, {RID_WIDEHATX, RID_WIDEHATX_HELP},
+    {RID_OVERLINEX, RID_OVERLINEX_HELP}, {RID_UNDERLINEX, RID_UNDERLINEX_HELP}, {RID_OVERSTRIKEX, RID_OVERSTRIKEX_HELP},
+    {0xFFFF, 0},
+    {RID_PHANTOMX, RID_PHANTOMX_HELP}, {RID_BOLDX, RID_BOLDX_HELP}, {RID_ITALX, RID_ITALX_HELP},
+    {RID_SIZEXY, RID_SIZEXY_HELP}, {RID_FONTXY, RID_FONTXY_HELP},
+    {0xFFFF, 0},
+    {RID_COLORX_BLACK, RID_COLORX_BLACK_HELP}, {RID_COLORX_BLUE, RID_COLORX_BLUE_HELP},
+    {RID_COLORX_GREEN, RID_COLORX_GREEN_HELP}, {RID_COLORX_RED, RID_COLORX_RED_HELP},
+    {RID_COLORX_CYAN, RID_COLORX_CYAN_HELP}, {RID_COLORX_MAGENTA, RID_COLORX_MAGENTA_HELP},
+    {RID_COLORX_YELLOW, RID_COLORX_YELLOW_HELP}
 };
 
-const sal_uInt16 SmElementsControl::aBrackets[] =
+const sal_uInt16 SmElementsControl::aBrackets[][2] =
 {
-    RID_LRGROUPX,
-    0xFFFF,
-    RID_LRPARENTX, RID_LRBRACKETX, RID_LRDBRACKETX, RID_LRBRACEX,
-    RID_LRANGLEX, RID_LMRANGLEXY, RID_LRCEILX, RID_LRFLOORX,
-    RID_LRLINEX, RID_LRDLINEX,
-    0xFFFF,
-    RID_SLRPARENTX, RID_SLRBRACKETX, RID_SLRDBRACKETX, RID_SLRANGLEX,
-    RID_SLMRANGLEXY, RID_SLRCEILX, RID_SLRFLOORX, RID_SLRLINEX,
-    RID_SLRDLINEX,
-    0XFFFF,
-    RID_XOVERBRACEY, RID_XUNDERBRACEY
+    {RID_LRGROUPX, RID_LRGROUPX_HELP},
+    {0xFFFF, 0},
+    {RID_LRPARENTX, RID_LRPARENTX_HELP}, {RID_LRBRACKETX, RID_LRBRACKETX_HELP},
+    {RID_LRDBRACKETX, RID_LRDBRACKETX_HELP}, {RID_LRBRACEX, RID_LRBRACEX_HELP},
+    {RID_LRANGLEX, RID_LRANGLEX_HELP}, {RID_LMRANGLEXY, RID_LMRANGLEXY_HELP},
+    {RID_LRCEILX, RID_LRCEILX_HELP}, {RID_LRFLOORX, RID_LRFLOORX_HELP},
+    {RID_LRLINEX, RID_LRLINEX_HELP}, {RID_LRDLINEX, RID_LRDLINEX_HELP},
+    {0xFFFF, 0},
+    {RID_SLRPARENTX, RID_SLRPARENTX_HELP}, {RID_SLRBRACKETX, RID_SLRBRACKETX_HELP},
+    {RID_SLRDBRACKETX, RID_SLRDBRACKETX_HELP}, {RID_SLRANGLEX, RID_SLRANGLEX_HELP},
+    {RID_SLMRANGLEXY, RID_SLMRANGLEXY_HELP}, {RID_SLRCEILX, RID_SLRCEILX_HELP},
+    {RID_SLRFLOORX, RID_SLRFLOORX_HELP}, {RID_SLRLINEX, RID_SLRLINEX_HELP},
+    {RID_SLRDLINEX, RID_SLRDLINEX_HELP},
+    {0XFFFF, 0},
+    {RID_XOVERBRACEY, RID_XOVERBRACEY_HELP}, {RID_XUNDERBRACEY, RID_XUNDERBRACEY_HELP},
 };
 
-const sal_uInt16 SmElementsControl::aFormats[] =
+const sal_uInt16 SmElementsControl::aFormats[][2] =
 {
-    RID_RSUPX, RID_RSUBX, RID_LSUPX, RID_LSUBX,
-    RID_CSUPX, RID_CSUBX,
-    0xFFFF,
-    RID_NEWLINE, RID_SBLANK, RID_BLANK, RID_NOSPACE,
-    RID_BINOMXY, RID_STACK, RID_MATRIX,
+    {RID_RSUPX, RID_RSUPX_HELP}, {RID_RSUBX, RID_RSUBX_HELP}, {RID_LSUPX, RID_LSUPX_HELP},
+    {RID_LSUBX, RID_LSUBX_HELP}, {RID_CSUPX, RID_CSUPX_HELP}, {RID_CSUBX, RID_CSUBX_HELP},
+    {0xFFFF, 0},
+    {RID_NEWLINE, RID_NEWLINE_HELP}, {RID_SBLANK, RID_SBLANK_HELP}, {RID_BLANK, RID_BLANK_HELP},
+    {RID_NOSPACE, RID_NOSPACE_HELP}, {RID_BINOMXY, RID_BINOMXY_HELP}, {RID_STACK, RID_STACK_HELP},
+    {RID_MATRIX, RID_MATRIX_HELP},
 };
 
-const sal_uInt16 SmElementsControl::aOthers[] =
+const sal_uInt16 SmElementsControl::aOthers[][2] =
 {
-    RID_INFINITY, RID_PARTIAL, RID_NABLA, RID_EXISTS,
-    RID_NOTEXISTS, RID_FORALL, RID_HBAR, RID_LAMBDABAR,
-    RID_RE, RID_IM, RID_WP,
-    0xFFFF,
-    RID_LEFTARROW, RID_RIGHTARROW, RID_UPARROW, RID_DOWNARROW,
-    0xFFFF,
-    RID_DOTSLOW, RID_DOTSAXIS, RID_DOTSVERT, RID_DOTSUP,
-    RID_DOTSDOWN
+    {RID_INFINITY, RID_INFINITY_HELP}, {RID_PARTIAL, RID_PARTIAL_HELP}, {RID_NABLA, RID_NABLA_HELP},
+    {RID_EXISTS, RID_EXISTS_HELP}, {RID_NOTEXISTS, RID_NOTEXISTS_HELP}, {RID_FORALL, RID_FORALL_HELP},
+    {RID_HBAR, RID_HBAR_HELP}, {RID_LAMBDABAR, RID_LAMBDABAR_HELP}, {RID_RE, RID_RE_HELP},
+    {RID_IM, RID_IM_HELP}, {RID_WP, RID_WP_HELP},
+    {0xFFFF, 0},
+    {RID_LEFTARROW, RID_LEFTARROW_HELP}, {RID_RIGHTARROW, RID_RIGHTARROW_HELP}, {RID_UPARROW, RID_UPARROW_HELP},
+    {RID_DOWNARROW, RID_DOWNARROW_HELP},
+    {0xFFFF, 0},
+    {RID_DOTSLOW, RID_DOTSLOW_HELP}, {RID_DOTSAXIS, RID_DOTSAXIS_HELP}, {RID_DOTSVERT, RID_DOTSVERT_HELP},
+    {RID_DOTSUP, RID_DOTSUP_HELP}, {RID_DOTSDOWN, RID_DOTSDOWN_HELP}
 };
 
 SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId) :
@@ -313,7 +342,7 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
                 {
                     mpCurrentElement = element;
                     Invalidate();
-                    tooltip = element->getText();
+                    tooltip = element->getHelpText();
                 }
             }
         }
@@ -355,7 +384,7 @@ void SmElementsControl::addSeparator()
     maElementList.push_back(pElement);
 }
 
-void SmElementsControl::addElement(OUString aElementVisual, OUString aElementSource)
+void SmElementsControl::addElement(OUString aElementVisual, OUString aElementSource, OUString aHelpText)
 {
     SmNodePointer pNode(SmParser().ParseExpression(aElementVisual));
 
@@ -372,7 +401,7 @@ void SmElementsControl::addElement(OUString aElementVisual, OUString aElementSou
         maMaxElementDimensions.Height() = aSizePixel.Height();
     }
 
-    SmElementPointer pElement(new SmElement(pNode, aElementSource));
+    SmElementPointer pElement(new SmElement(pNode, aElementSource, aHelpText));
     maElementList.push_back(pElement);
 }
 
@@ -383,46 +412,47 @@ void SmElementsControl::setElementSetId(sal_uInt16 aSetId)
     build();
 }
 
-void SmElementsControl::addElements(const sal_uInt16 aElementsArray[], sal_uInt16 aElementsArraySize)
+void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uInt16 aElementsArraySize)
 {
     for (sal_uInt16 i = 0; i < aElementsArraySize ; i++)
     {
-        sal_uInt16 aElementId = aElementsArray[i];
+        sal_uInt16 aElementId = aElementsArray[i][0];
+        sal_uInt16 aElementIdHelp = aElementsArray[i][1];
         if (aElementId == 0xFFFF) {
             addSeparator();
         } else {
             if (aElementId == RID_NEWLINE)
-                addElement(OStringToOUString( "\xe2\x86\xb5", RTL_TEXTENCODING_UTF8 ), SmResId(aElementId));
+                addElement(OStringToOUString( "\xe2\x86\xb5", RTL_TEXTENCODING_UTF8 ), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_SBLANK)
-                addElement(OUString("\"`\""), SmResId(aElementId));
+                addElement(OUString("\"`\""), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_BLANK)
-                addElement(OUString("\"~\""), SmResId(aElementId));
+                addElement(OUString("\"~\""), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_PHANTOMX)
-                addElement(OUString("\"" + stringHide() +"\""), SmResId(aElementId));
+                addElement(OUString("\"" + stringHide() +"\""), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_BOLDX)
-                addElement(OUString("bold B"), SmResId(aElementId));
+                addElement(OUString("bold B"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_ITALX)
-                addElement(OUString("ital I"), SmResId(aElementId));
+                addElement(OUString("ital I"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_SIZEXY)
-                addElement(OUString("\"" + stringSize() + "\""), SmResId(aElementId));
+                addElement(OUString("\"" + stringSize() + "\""), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_FONTXY)
-                addElement(OUString("\"" + stringFont() + "\""), SmResId(aElementId));
+                addElement(OUString("\"" + stringFont() + "\""), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_COLORX_BLACK)
-                addElement(OUString("color black { \"" + colorBlack() + "\" }"), SmResId(aElementId));
+                addElement(OUString("color black { \"" + colorBlack() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_COLORX_BLUE)
-                addElement(OUString("color blue { \"" + colorBlue() + "\" }"), SmResId(aElementId));
+                addElement(OUString("color blue { \"" + colorBlue() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_COLORX_GREEN)
-                addElement(OUString("color green { \"" + colorGreen() + "\" }"), SmResId(aElementId));
+                addElement(OUString("color green { \"" + colorGreen() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_COLORX_RED)
-                addElement(OUString("color red { \"" + colorRed() + "\" }"), SmResId(aElementId));
+                addElement(OUString("color red { \"" + colorRed() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_COLORX_CYAN)
-                addElement(OUString("color cyan { \"" + colorCyan() + "\" }"), SmResId(aElementId));
+                addElement(OUString("color cyan { \"" + colorCyan() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_COLORX_MAGENTA)
-                addElement(OUString("color magenta { \"" + colorMagenta() + "\" }"), SmResId(aElementId));
+                addElement(OUString("color magenta { \"" + colorMagenta() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_COLORX_YELLOW)
-                addElement(OUString("color yellow { \"" + colorYellow() + "\" }"), SmResId(aElementId));
+                addElement(OUString("color yellow { \"" + colorYellow() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
             else
-                addElement(SmResId(aElementId), SmResId(aElementId));
+                addElement(SmResId(aElementId), SmResId(aElementId), SmResId(aElementIdHelp));
         }
     }
 }
@@ -433,45 +463,46 @@ void SmElementsControl::build()
 
     switch(maCurrentSetId)
     {
+        // we need to divide by 2 because of the matrix of two dimensions
         case RID_CATEGORY_UNARY_BINARY_OPERATORS:
-            addElements(aUnaryBinaryOperatorsList, sizeof(aUnaryBinaryOperatorsList) / sizeof(sal_uInt16));
+            addElements(aUnaryBinaryOperatorsList, (sizeof(aUnaryBinaryOperatorsList) / 2) / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_RELATIONS:
-            addElements(aRelationsList, sizeof(aRelationsList) / sizeof(sal_uInt16));
+            addElements(aRelationsList, (sizeof(aRelationsList) / 2) / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_SET_OPERATIONS:
-            addElements(aSetOperations, sizeof(aSetOperations) / sizeof(sal_uInt16));
+            addElements(aSetOperations, (sizeof(aSetOperations) / 2) / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_FUNCTIONS:
-            addElements(aFunctions, sizeof(aFunctions) / sizeof(sal_uInt16));
+            addElements(aFunctions, (sizeof(aFunctions) / 2 ) / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_OPERATORS:
-            addElements(aOperators, sizeof(aOperators) / sizeof(sal_uInt16));
+            addElements(aOperators, (sizeof(aOperators) / 2) / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_ATTRIBUTES:
-            addElements(aAttributes, sizeof(aAttributes) / sizeof(sal_uInt16));
+            addElements(aAttributes, (sizeof(aAttributes) / 2 ) / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_BRACKETS:
-            addElements(aBrackets, sizeof(aBrackets) / sizeof(sal_uInt16));
+            addElements(aBrackets, (sizeof(aBrackets) / 2) / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_FORMATS:
-            addElements(aFormats, sizeof(aFormats) / sizeof(sal_uInt16));
+            addElements(aFormats, (sizeof(aFormats) / 2)  / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_OTHERS:
-            addElements(aOthers, sizeof(aOthers) / sizeof(sal_uInt16));
+            addElements(aOthers, (sizeof(aOthers) / 2) / sizeof(sal_uInt16));
         break;
         case RID_CATEGORY_EXAMPLES:
         {
             OUString aEquation = OUString("C=%pi cdot d = 2 cdot %pi cdot r");
-            addElement(aEquation, aEquation);
+            addElement(aEquation, aEquation, "");
             aEquation = OUString("E=mc^2");
-            addElement(aEquation, aEquation);
+            addElement(aEquation, aEquation, "");
             aEquation = OUString("a^2 + b^2 = c^2");
-            addElement(aEquation, aEquation);
+            addElement(aEquation, aEquation, "");
             aEquation = OUString("f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}");
-            addElement(aEquation, aEquation);
+            addElement(aEquation, aEquation, "");
             aEquation = OUString("f ( x ) = {1} over {%sigma sqrt{2%pi} }e^-{{(x-%mu)^2} over {2%sigma^2}}");
-            addElement(aEquation, aEquation);
+            addElement(aEquation, aEquation, "");
         }
         break;
     }
