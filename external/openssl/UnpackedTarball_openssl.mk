@@ -67,11 +67,11 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
-	$(if $(filter LINUX FREEBSD ANDROID,$(OS)),openssl/openssllnx.patch) \
-	$(if $(filter WNTGCC,$(OS)$(COM)),openssl/opensslmingw.patch) \
-	$(if $(filter MSC,$(COM)),openssl/opensslwnt.patch) \
-	$(if $(filter SOLARIS,$(OS)),openssl/opensslsol.patch) \
-	$(if $(filter IOS,$(OS)),openssl/opensslios.patch) \
+	$(if $(filter LINUX FREEBSD ANDROID,$(OS)),external/openssl/openssllnx.patch) \
+	$(if $(filter WNTGCC,$(OS)$(COM)),external/openssl/opensslmingw.patch) \
+	$(if $(filter MSC,$(COM)),external/openssl/opensslwnt.patch) \
+	$(if $(filter SOLARIS,$(OS)),external/openssl/opensslsol.patch) \
+	$(if $(filter IOS,$(OS)),external/openssl/opensslios.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:

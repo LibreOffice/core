@@ -42,6 +42,7 @@ endif
 
 $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,CURL,curl) \
+	$(call gb_Helper_optional,OPENSSL,openssl) \
 ))
 
 ifeq ($(HAVE_READDIR_R),NO)
