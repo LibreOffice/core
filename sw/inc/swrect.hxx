@@ -18,8 +18,12 @@
  */
 #ifndef _SWRECT_HXX
 #define _SWRECT_HXX
+
+#include <ostream>
+
 #include <sal/log.hxx>
 #include <tools/gen.hxx>
+
 class SvStream;
 
 class SAL_WARN_UNUSED SwRect
@@ -346,6 +350,16 @@ inline SwRect::SwRect( long X, long Y, long W, long H ) :
 {
 }
 
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const SwRect& rectangle )
+{
+    if (rectangle.IsEmpty())
+        return stream << "EMPTY";
+    else
+        return stream << rectangle.SSize()
+                      << "@(" << rectangle.Pos() << ")";
+}
 
 #endif  //_SWRECT_HXX
 
