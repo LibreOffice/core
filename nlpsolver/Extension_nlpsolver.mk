@@ -11,7 +11,7 @@
 
 $(eval $(call gb_Extension_Extension,nlpsolver,nlpsolver/src/com/sun/star/comp/Calc/NLPSolver))
 
-$(eval $(call gb_Extension_use_default_description,nlpsolver))
+$(eval $(call gb_Extension_use_default_description,nlpsolver,nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/description-en-US.txt))
 $(eval $(call gb_Extension_use_default_license,nlpsolver))
 
 $(eval $(call gb_Extension_add_file,nlpsolver,components.rdb,$(SRCDIR)/nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/components.rdb))

@@ -13,7 +13,7 @@ $(eval $(call gb_Extension_Extension,wiki-publisher,swext/mediawiki/src))
 
 $(eval $(call gb_Extension_use_unpacked,wiki-publisher,xsltml))
 
-$(eval $(call gb_Extension_use_default_description,wiki-publisher))
+$(eval $(call gb_Extension_use_default_description,wiki-publisher,swext/mediawiki/src/description-en-US.txt))
 $(eval $(call gb_Extension_use_default_license,wiki-publisher))
 
 ifneq ($(SYSTEM_APACHE_COMMONS),YES)

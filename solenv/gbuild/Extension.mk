@@ -254,9 +254,9 @@ $(foreach lang,$(gb_Extension_ALL_LANGS), \
 
 endef
 
-# Use the default description file
+# Use the given file as description-en-US.txt
 define gb_Extension_use_default_description
-$(call gb_Extension_add_file,$(1),description-en-US.txt,$$(LOCATION)/description-en-US.txt)
+$(call gb_Extension_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2))
 $(call gb_Extension_get_target,$(1)) : DESCRIPTION := $(true)
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(gb_Extension_TRANS_LANGS),description-$(lang).txt)
