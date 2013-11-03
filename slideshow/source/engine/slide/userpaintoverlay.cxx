@@ -145,7 +145,7 @@ namespace slideshow
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
                         SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
-                        css::uno::Reference< css::rendering::XCanvas > pCanvas( (*aIter)->getCanvas() );
+                        css::uno::Reference< css::rendering::XCanvas > pCanvas( (*aIter)->getCanvas().mxCanvas );
 
                         const ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
                         const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
@@ -374,7 +374,7 @@ namespace slideshow
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
                         SlideBitmapSharedPtr pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
-                        css::uno::Reference< css::rendering::XCanvas > pCanvas( (*aIter)->getCanvas() );
+                        css::uno::Reference< css::rendering::XCanvas > pCanvas( (*aIter)->getCanvas().mxCanvas );
 
                         ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
                         const ::basegfx::B2DPoint aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
@@ -425,7 +425,7 @@ namespace slideshow
                         {
                             uno::Reference< rendering::XPolyPolygon2D > pPolyPoly(
                                 basegfx::unotools::xPolyPolygonFromB2DPolygon(
-                                    (*aIter)->getCanvas()->getDevice(),
+                                    (*aIter)->getCanvas().mxCanvas->getDevice(),
                                     aPoly ) );
 
                             if( pPolyPoly.is() )

@@ -299,7 +299,7 @@ namespace slideshow
                     // always assuming full bounds?
 
                     css::uno::Reference< css::rendering::XCanvas > pDestinationCanvas(
-                        maViewShapes.front()->getViewLayer()->getCanvas() );
+                        maViewShapes.front()->getViewLayer()->getCanvas().mxCanvas );
 
 #if 0
                     // TODO-NYI
@@ -1003,7 +1003,7 @@ namespace slideshow
                 // view-agnostic, it might not stay like that.
                 ViewShapeSharedPtr const& pViewShape = maViewShapes.front();
                 css::uno::Reference< css::rendering::XCanvas > const pCanvas(
-                    pViewShape->getViewLayer()->getCanvas() );
+                    pViewShape->getViewLayer()->getCanvas().mxCanvas );
 
 #if 0
                 // TODO-NYI

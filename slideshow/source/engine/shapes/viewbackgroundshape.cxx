@@ -141,7 +141,7 @@ namespace slideshow
         {
             ENSURE_OR_THROW( mpViewLayer,
                              "ViewBackgroundShape::ViewBackgroundShape(): Invalid View" );
-            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(),
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().mxCanvas.is(),
                              "ViewBackgroundShape::ViewBackgroundShape(): Invalid ViewLayer canvas" );
         }
 
@@ -154,7 +154,7 @@ namespace slideshow
         {
             SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::draw()" );
 
-            const css::uno::Reference< css::rendering::XCanvas >& rDestinationCanvas( mpViewLayer->getCanvas() );
+            const css::uno::Reference< css::rendering::XCanvas >& rDestinationCanvas( mpViewLayer->getCanvas().mxCanvas );
 
             if( !prefetch( rDestinationCanvas, rMtf ) )
                 return false;

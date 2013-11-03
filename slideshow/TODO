@@ -1,6 +1,20 @@
 Stuff left doing
 ================
 
+ - add draw/stroke/fillRectangle
+ - Canvas struct - possibly use derived SpriteCanvas, should the case
+   come up often enough (like in slideview, where we have it extra
+   currently)
+ - review drawing method input parameters - do structs make sense?
+   (uno structs are dumb, so people usually convert anyway from
+    language-specific classes, _at the callsite_)
+   candidates:
+   - X*Bitmap.idl
+   - XParametricPolyPolygon2D.idl
+   - XTextLayout.idl
+ - review geometry structs, are there any unused after the above?
+ - remove extraneous throw specs from canvas and slideshow - or does
+   that break dbgutil builds?
  - grep for TODO-NYI
  - migrate emf+ renderer over to primitives
  - implement stateful canvas processor (e.g. for the color changes?)
@@ -8,7 +22,3 @@ Stuff left doing
  - do we need viewstate at the canvas to pass around?
 
  - how much of the wrapper state in cppcanvas _was_ actually useful?
- - review canvas api - e.g. for the createBitmap / createSprite
-   methods, is anyone *not* creating a Size struct on the fly?
-
- - when all of that is done -> git rm cppcanvas

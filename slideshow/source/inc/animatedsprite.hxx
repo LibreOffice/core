@@ -21,7 +21,6 @@
 #define INCLUDED_SLIDESHOW_ANIMATEDSPRITE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -29,6 +28,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
+#include "canvas.hxx"
 #include "viewlayer.hxx"
 
 #include <boost/optional.hpp>
@@ -106,7 +106,7 @@ namespace slideshow
                 canvas is already correctly setup, matching the
                 associated destination canvas.
              */
-            css::uno::Reference< css::rendering::XCanvas > getContentCanvas() const;
+            const Canvas& getContentCanvas() const;
 
             /** Move the sprite in device pixel space.
 

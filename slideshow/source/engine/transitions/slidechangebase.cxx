@@ -102,7 +102,7 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
             getSlideSizePixel( basegfx::B2DSize( mpEnteringSlide->getSlideSize() ),
                                rView ));
 
-        uno::Reference<rendering::XCanvas> pCanvas( rView->getCanvas() );
+        uno::Reference<rendering::XCanvas> pCanvas( rView->getCanvas().mxCanvas );
 
         // create a bitmap of appropriate size
         uno::Reference<rendering::XBitmap> pBitmap(
@@ -200,7 +200,7 @@ void SlideChangeBase::start( const AnimatableShapeSharedPtr&     rShape,
 
     // get the subclasses a chance to do any specific initialization before run
     for ( ViewsVecT::const_iterator aCurr( beginViews() ), aEnd( endViews() ); aCurr != aEnd; ++aCurr )
-        prepareForRun( *aCurr, aCurr->mpView->getCanvas() );
+        prepareForRun( *aCurr, aCurr->mpView->getCanvas().mxCanvas );
 
     // start accompanying sound effect, if any
     if( mpSoundPlayer )
@@ -232,7 +232,7 @@ void SlideChangeBase::end()
             pSlideBitmap->clip( basegfx::B2DPolyPolygon() /* no clipping */ );
             aCurr->mpView->clearAll();
             renderBitmap( pSlideBitmap,
-                          aCurr->mpView->getCanvas() );
+                          aCurr->mpView->getCanvas().mxCanvas );
 
             ++aCurr;
         }
@@ -277,7 +277,7 @@ bool SlideChangeBase::operator()( double nValue )
         // (i.e. pixel).
 
         ViewEntry& rViewEntry( maViewData[i] );
-        const uno::Reference<rendering::XCanvas>& rCanvas( rViewEntry.mpView->getCanvas() );
+        const uno::Reference<rendering::XCanvas>& rCanvas( rViewEntry.mpView->getCanvas().mxCanvas );
         uno::Reference<rendering::XCustomSprite>& rInSprite( rViewEntry.mpInSprite );
         uno::Reference<rendering::XCustomSprite>& rOutSprite( rViewEntry.mpOutSprite );
 
@@ -316,8 +316,9 @@ bool SlideChangeBase::operator()( double nValue )
 
                     // render the content
                     OSL_ASSERT( getLeavingBitmap( rViewEntry ) );
-                    if( getLeavingBitmap( rViewEntry ) )
-                        getLeavingBitmap( rViewEntry )->draw( pOutContentCanvas );
+                    // TODO-NYI
+                    //if( getLeavingBitmap( rViewEntry ) )
+                        //getLeavingBitmap( rViewEntry )->draw( pOutContentCanvas );
                 }
             }
 
@@ -335,7 +336,8 @@ bool SlideChangeBase::operator()( double nValue )
                     // between different canvases!
 
                     // render the content
-                    getEnteringBitmap( rViewEntry )->draw( pInContentCanvas );
+                    // TODO-NYI
+                    //getEnteringBitmap( rViewEntry )->draw( pInContentCanvas );
                 }
             }
         }

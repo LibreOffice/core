@@ -79,7 +79,7 @@ namespace slideshow
         {
             ENSURE_OR_THROW( mxShape.is(), "ViewMediaShape::ViewMediaShape(): Invalid Shape" );
             ENSURE_OR_THROW( mpViewLayer, "ViewMediaShape::ViewMediaShape(): Invalid View" );
-            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().mxCanvas.is(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
             ENSURE_OR_THROW( mxComponentContext.is(), "ViewMediaShape::ViewMediaShape(): Invalid component context" );
 
             UnoViewSharedPtr pUnoView (::boost::dynamic_pointer_cast<UnoView>(rViewLayer));
@@ -177,7 +177,7 @@ namespace slideshow
 
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
-            css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas();
+            css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas().mxCanvas;
 
             if( !pCanvas.is() )
                 return false;
@@ -220,7 +220,7 @@ namespace slideshow
         {
             maBounds = rNewBounds;
 
-            css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas();
+            css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas().mxCanvas;
 
             if( !pCanvas.is() )
                 return false;
@@ -283,10 +283,10 @@ namespace slideshow
         {
             if( !mxPlayer.is() && mxShape.is() )
             {
-                ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas().is(),
+                ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas().mxCanvas.is(),
                                         "ViewMediaShape::update(): Invalid layer canvas" );
 
-                uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas() );
+                uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas().mxCanvas );
 
                 if( xCanvas.is() )
                 {

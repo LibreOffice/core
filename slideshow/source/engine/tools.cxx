@@ -669,23 +669,22 @@ namespace slideshow
                              static_cast< sal_uInt8 >( nColor )        / 255.0 );
         }
 
-        void fillRect( const uno::Reference< rendering::XCanvas >& xCanvas,
-                       const ::basegfx::B2DRectangle&              rRect,
-                       const basegfx::BColor&                      rFillColor )
+        void fillRect( const Canvas&                  rCanvas,
+                       const ::basegfx::B2DRectangle& rRect,
+                       const basegfx::BColor&         rFillColor )
         {
             // TODO-NYI
-            rendering::ViewState aViewState;
             rendering::RenderState aRenderState;
             canvas::tools::initRenderState(aRenderState);
             aRenderState.DeviceColor =
                 rFillColor.colorToDoubleSequence(
-                    xCanvas->getDevice());
+                    rCanvas.mxCanvas->getDevice());
 
-            xCanvas->fillPolyPolygon(
+            rCanvas.mxCanvas->fillPolyPolygon(
                 basegfx::unotools::xPolyPolygonFromB2DPolygon(
-                    xCanvas->getDevice(),
+                    rCanvas.mxCanvas->getDevice(),
                     ::basegfx::tools::createPolygonFromRect( rRect )),
-                aViewState,  aRenderState);
+                rCanvas.maViewState,  aRenderState);
         }
 
         ::basegfx::B2DRectangle getAPIShapeBounds( const uno::Reference< drawing::XShape >& xShape )

@@ -72,7 +72,7 @@ namespace slideshow
         {
             ENSURE_OR_THROW( rxShape.is(), "ViewAppletShape::ViewAppletShape(): Invalid Shape" );
             ENSURE_OR_THROW( mpViewLayer, "ViewAppletShape::ViewAppletShape(): Invalid View" );
-            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(), "ViewAppletShape::ViewAppletShape(): Invalid ViewLayer canvas" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().mxCanvas.is(), "ViewAppletShape::ViewAppletShape(): Invalid ViewLayer canvas" );
             ENSURE_OR_THROW( mxComponentContext.is(), "ViewAppletShape::ViewAppletShape(): Invalid component context" );
 
             uno::Reference<lang::XMultiComponentFactory> xFactory(
@@ -127,11 +127,11 @@ namespace slideshow
 
         bool ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
-            ENSURE_OR_RETURN_FALSE( mpViewLayer && mpViewLayer->getCanvas().is(),
+            ENSURE_OR_RETURN_FALSE( mpViewLayer && mpViewLayer->getCanvas().mxCanvas.is(),
                                     "ViewAppletShape::startApplet(): Invalid or disposed view" );
             try
             {
-                css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas();
+                css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas().mxCanvas;
 
                 uno::Reference< beans::XPropertySet > xPropSet( pCanvas->getDevice(),
                                                                 uno::UNO_QUERY_THROW );
@@ -231,15 +231,15 @@ namespace slideshow
 
         bool ViewAppletShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
-            css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas();
+            const Canvas& rCanvas = mpViewLayer->getCanvas();
 
-            if( !pCanvas.is() )
+            if( !rCanvas.mxCanvas.is() )
                 return false;
 
             if( !mxFrame.is() )
             {
                 // fill the shape background with white
-                fillRect( pCanvas,
+                fillRect( rCanvas,
                           rBounds,
                           basegfx::BColor(1.0) );
             }

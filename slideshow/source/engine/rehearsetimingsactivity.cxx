@@ -306,7 +306,7 @@ void RehearseTimingsActivity::end()
 
 basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr const& rView ) const
 {
-    const Reference<rendering::XBitmap> xBitmap( rView->getCanvas(),
+    const Reference<rendering::XBitmap> xBitmap( rView->getCanvas().mxCanvas,
                                                  UNO_QUERY );
     if( !xBitmap.is() )
         return basegfx::B2DRange();

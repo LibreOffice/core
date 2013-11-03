@@ -65,9 +65,9 @@ namespace slideshow
                              "AnimatedSprite::AnimatedSprite(): Could not create sprite" );
         }
 
-        uno::Reference< rendering::XCanvas > AnimatedSprite::getContentCanvas() const
+        const Canvas& AnimatedSprite::getContentCanvas() const
         {
-            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(),
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().mxCanvas.is(),
                              "AnimatedSprite::getContentCanvas(): No view layer canvas" );
 
             const uno::Reference< rendering::XCanvas > pContentCanvas( mpSprite->getContentCanvas() );
@@ -88,8 +88,7 @@ namespace slideshow
             // apply linear part of canvas view transformation to sprite canvas
             // TODO-NYI
             //pContentCanvas->setTransformation( aLinearTransform );
-
-            return pContentCanvas;
+            //return pContentCanvas;
         }
 
         bool AnimatedSprite::resize( const ::basegfx::B2DSize& rSpriteSizePixel )

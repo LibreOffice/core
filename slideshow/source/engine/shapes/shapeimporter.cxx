@@ -497,7 +497,7 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
     {
         uno::Reference< rendering::XPolyPolygon2D > xPoly=
             basegfx::unotools::xPolyPolygonFromB2DPolygon(
-                (*aIter)->getCanvas()->getDevice(),
+                (*aIter)->getCanvas().mxCanvas->getDevice(),
                 aPoly);
 #if 0
         // TODO-NYI

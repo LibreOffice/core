@@ -92,7 +92,7 @@ void CombTransition::renderComb( double           ,
                                  const ViewEntry& rViewEntry ) const
 {
     const SlideBitmapSharedPtr& pEnteringBitmap = getEnteringBitmap(rViewEntry);
-    const uno::Reference<rendering::XCanvas> pCanvas = rViewEntry.mpView->getCanvas();
+    const uno::Reference<rendering::XCanvas> pCanvas = rViewEntry.mpView->getCanvas().mxCanvas;
 
     if( !pEnteringBitmap || !pCanvas.is() )
         return;

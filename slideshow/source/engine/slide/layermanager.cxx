@@ -608,9 +608,10 @@ namespace slideshow
                     return true; // visible on all views
                 }
 
-                virtual css::uno::Reference< css::rendering::XCanvas > getCanvas() const
+                virtual const Canvas& getCanvas() const
                 {
-                    return mpCanvas;
+                    // TODO-NYI
+                    //return mpCanvas;
                 }
 
                 virtual void clear() const
@@ -657,6 +658,12 @@ namespace slideshow
                 virtual void setClip( const ::basegfx::B2DPolyPolygon& /*rClip*/ )
                 {
                     OSL_FAIL( "BitmapView::setClip(): This method is not supposed to be called!" );
+                }
+
+                virtual basegfx::B2DPolyPolygon getClip() const
+                {
+                    OSL_FAIL( "BitmapView::getClip(): This method is not supposed to be called!" );
+                    return basegfx::B2DPolyPolygon();
                 }
 
                 virtual bool resize( const ::basegfx::B2DRange& /*rArea*/ )

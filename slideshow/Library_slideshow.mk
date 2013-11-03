@@ -76,6 +76,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/animationnodes/propertyanimationnode \
     slideshow/source/engine/animationnodes/sequentialtimecontainer \
     slideshow/source/engine/attributemap \
+    slideshow/source/engine/canvas \
     slideshow/source/engine/color \
     slideshow/source/engine/delayevent \
     slideshow/source/engine/effectrewinder \

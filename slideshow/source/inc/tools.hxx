@@ -27,6 +27,7 @@
 
 #include <basegfx/color/bcolor.hxx>
 
+#include "canvas.hxx"
 #include "shapeattributelayer.hxx"
 #include "shape.hxx"
 #include "rgbcolor.hxx"
@@ -274,9 +275,9 @@ namespace slideshow
 
         /** Fill a plain rectangle on the given canvas with the given color
          */
-        void fillRect( const css::uno::Reference< css::rendering::XCanvas >& rCanvas,
-                       const basegfx::B2DRange&                              rRect,
-                       const basegfx::BColor&                                rFillColor );
+        void fillRect( const Canvas&            rCanvas,
+                       const basegfx::B2DRange& rRect,
+                       const basegfx::BColor&   rFillColor );
 
         /// Gets a random ordinal [0,n)
         inline ::std::size_t getRandomOrdinal( const ::std::size_t n )

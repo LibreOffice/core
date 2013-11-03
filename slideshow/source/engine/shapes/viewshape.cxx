@@ -508,7 +508,7 @@ namespace slideshow
             // sprite needs repaint - output to sprite canvas
             // ==============================================
 
-            css::uno::Reference< css::rendering::XCanvas > pContentCanvas( mpSprite->getContentCanvas() );
+            css::uno::Reference< css::rendering::XCanvas > pContentCanvas( mpSprite->getContentCanvas().mxCanvas );
 
             return draw( pContentCanvas,
                          xShape,
@@ -838,7 +838,7 @@ namespace slideshow
 
         ::basegfx::B2DSize ViewShape::getAntialiasingBorder() const
         {
-            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(),
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().mxCanvas.is(),
                               "ViewShape::getAntialiasingBorder(): Invalid ViewLayer canvas" );
 
 #if 0
@@ -884,7 +884,7 @@ namespace slideshow
                                 int                                       nUpdateFlags,
                                 bool                                      bIsVisible ) const
         {
-            ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas().is(),
+            ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas().mxCanvas.is(),
                                     "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
@@ -902,7 +902,7 @@ namespace slideshow
                                      rArgs.mnShapePriority,
                                      bIsVisible );
             else
-                return render( mpViewLayer->getCanvas(),
+                return render( mpViewLayer->getCanvas().mxCanvas,
                                xShape,
                                xPage,
                                xPrimitives,

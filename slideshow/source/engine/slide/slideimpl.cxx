@@ -308,8 +308,8 @@ public:
         // fully clear view content to background color
         rView->clearAll();
 
-        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( rView ) );
-        css::uno::Reference< css::rendering::XCanvas > pCanvas( rView->getCanvas() );
+        SlideBitmapSharedPtr pBitmap( mrSlide.getCurrentSlideBitmap( rView ) );
+        const Canvas&        rCanvas( rView->getCanvas() );
 
         const ::basegfx::B2DHomMatrix   aViewTransform( rView->getTransformation() );
         const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
@@ -748,7 +748,7 @@ bool SlideImpl::isAnimated()
 SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr&   rView,
                                                           const ::basegfx::B2ISize& rBmpSize ) const
 {
-    ENSURE_OR_THROW( rView && rView->getCanvas().is(),
+    ENSURE_OR_THROW( rView && rView->getCanvas().mxCanvas.is(),
                       "SlideImpl::createCurrentSlideBitmap(): Invalid view" );
     ENSURE_OR_THROW( mpLayerManager,
                       "SlideImpl::createCurrentSlideBitmap(): Invalid layer manager" );
@@ -756,7 +756,7 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
                       "SlideImpl::createCurrentSlideBitmap(): No show loaded" );
 
     uno::Reference< rendering::XCanvas > pCanvas(
-        rView->getCanvas() );
+        rView->getCanvas().mxCanvas );
 
     // create a bitmap of appropriate size
     uno::Reference< rendering::XBitmap > pBitmap(

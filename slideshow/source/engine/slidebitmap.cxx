@@ -50,9 +50,9 @@ namespace slideshow
             ENSURE_OR_THROW( mxBitmap.is(), "SlideBitmap::SlideBitmap(): Invalid bitmap" );
         }
 
-        bool SlideBitmap::draw( const css::uno::Reference< css::rendering::XCanvas >& rCanvas ) const
+        bool SlideBitmap::draw( const Canvas& rCanvas ) const
         {
-            ENSURE_OR_RETURN_FALSE( rCanvas.is(),
+            ENSURE_OR_RETURN_FALSE( rCanvas.mxCanvas.is(),
                                     "SlideBitmap::draw(): Invalid canvas" );
 
             // selectively only copy the transformation from current viewstate,
@@ -74,13 +74,13 @@ namespace slideshow
                     // TODO(P1): Buffer the clip polygon
                     aRenderState.Clip =
                         ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                            rCanvas->getDevice(),
+                            rCanvas.mxCanvas->getDevice(),
                             maClipPoly );
                 }
 
-                rCanvas->drawBitmap( mxBitmap,
-                                     aViewState,
-                                     aRenderState );
+                rCanvas.mxCanvas->drawBitmap( mxBitmap,
+                                              aViewState,
+                                              aRenderState );
             }
             catch( uno::Exception& )
             {
