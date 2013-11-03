@@ -83,7 +83,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	officecfg \
 	oovbaapi \
 	oox \
-	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	$(call gb_Helper_optional,OPENSSL,openssl) \
 	package \
 	padmin \
