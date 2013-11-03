@@ -140,10 +140,6 @@ $(call gb_CppunitTest_get_target,$(1)) : SAL_DIAGNOSE_ABORT := TRUE
 
 endef
 
-define gb_CppunitTest_set_args
-$$(call gb_Output_error,gb_CppunitTest_set_args: use gb_CppunitTest_add_arguments instead.))
-endef
-
 # Add additional command line arguments for the test.
 #
 # You should practically never need to use this, as there are special
@@ -151,10 +147,6 @@ endef
 define gb_CppunitTest_add_arguments
 $(call gb_CppunitTest_get_target,$(1)) : ARGS += $(2)
 
-endef
-
-define gb_CppunitTest_uses_ure
-$$(call gb_Output_error,gb_CppunitTest_uses_ure: use gb_CppunitTest_use_ure instead.))
 endef
 
 define gb_CppunitTest_use_ure
@@ -168,30 +160,10 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,cppuhelper
 
 endef
 
-define gb_CppunitTest_add_type_rdb
-$$(call gb_Output_error,\
- gb_CppunitTest_add_type_rdb: use gb_CppunitTest_use_api instead.)
-endef
-
-define gb_CppunitTest_use_type_rdb
-$$(call gb_Output_error,\
- gb_CppunitTest_use_type_rdb: use gb_CppunitTest_use_api instead.)
-endef
-
 define gb_CppunitTest__use_api
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_UnoApi_get_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES += $(call gb_UnoApi_get_target,$(2))
 
-endef
-
-define gb_CppunitTest_add_type_rdbs
-$$(call gb_Output_error,\
- gb_CppunitTest_add_type_rdbs: use gb_CppunitTest_use_api instead.)
-endef
-
-define gb_CppunitTest_use_type_rdbs
-$$(call gb_Output_error,\
- gb_CppunitTest_use_type_rdbs: use gb_CppunitTest_use_api instead.)
 endef
 
 define gb_CppunitTest_use_api
@@ -210,38 +182,15 @@ $(call gb_CppunitTest_use_api,$(1),udkapi offapi)
 
 endef
 
-define gb_CppunitTest_add_service_rdb
-$$(call gb_Output_error,\
- gb_CppunitTest_add_service_rdb: use gb_CppunitTest_use_rdb instead.)
-endef
-
-define gb_CppunitTest_use_service_rdb
-$$(call gb_Output_error,gb_CppunitTest_use_service_rdb: use gb_CppunitTest_use_rdb instead.))
-endef
-
 define gb_CppunitTest_use_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Rdb_get_target_for_build,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES += $(call gb_Rdb_get_target_for_build,$(2))
 
 endef
 
-define gb_CppunitTest_add_service_rdbs
-$$(call gb_Output_error,\
- gb_CppunitTest_add_service_rdbs: use gb_CppunitTest_use_rdbs instead.)
-endef
-
-define gb_CppunitTest_use_service_rdbs
-$$(call gb_Output_error,gb_CppunitTest_use_service_rdbs: use gb_CppunitTest_use_rdbs instead.))
-endef
-
 define gb_CppunitTest_use_rdbs
 $(foreach rdb,$(2),$(call gb_CppunitTest_use_rdb,$(1),$(rdb)))
 
-endef
-
-define gb_CppunitTest_add_component
-$$(call gb_Output_error,\
- gb_CppunitTest_add_component: use gb_CppunitTest_use_component instead.)
 endef
 
 define gb_CppunitTest_use_component
@@ -264,11 +213,6 @@ $(filter-out \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),, \
 	    dbaccess/util/dba \
 		forms/util/frm),$(1))
-endef
-
-define gb_CppunitTest_add_components
-$$(call gb_Output_error,\
- gb_CppunitTest_add_components: use gb_CppunitTest_use_components instead.)
 endef
 
 define gb_CppunitTest_use_components
@@ -316,13 +260,9 @@ $(eval $(foreach method,\
 	add_cxxobject \
 	add_cxxobjects \
 	add_exception_objects \
-	add_executable_objects \
 	use_executable_objects \
-	add_library_objects \
 	use_library_objects \
-	add_linked_libs \
 	use_libraries \
-	add_linked_static_libs \
 	use_static_libraries \
 	add_objcobject \
 	add_objcobjects \
@@ -330,11 +270,9 @@ $(eval $(foreach method,\
 	add_objcxxobjects \
 	add_asmobject \
 	add_asmobjects \
-	add_package_headers \
 	use_package \
 	use_packages \
 	set_precompiled_header \
-	add_precompiled_header \
 	add_sdi_headers \
 	add_cflags \
 	set_cflags \
@@ -343,7 +281,6 @@ $(eval $(foreach method,\
 	add_objcflags \
 	add_objcxxflags \
 	add_defs \
-	set_defs \
 	set_include \
 	add_ldflags \
 	set_ldflags \
@@ -355,8 +292,6 @@ $(eval $(foreach method,\
 	use_internal_bootstrap_api \
 	use_internal_comprehensive_api \
 	set_library_path_flags \
-	set_objcflags \
-	set_objcxxflags \
 	use_external \
 	use_externals \
 	use_custom_headers \

@@ -627,23 +627,9 @@ $(call gb_LinkTarget_get_target,$(1)) : DEFS += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS += $(2)
 endef
 
-define gb_LinkTarget_set_defs
-$$(call gb_Output_error,\
- gb_LinkTarget_set_defs: use gb_LinkTarget_add_defs instead.)
-endif
-
-endef
-
 # call gb_LinkTarget_add_cflags,linktarget,cflags
 define gb_LinkTarget_add_cflags
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS_APPEND += $(2)
-endef
-
-define gb_LinkTarget_set_cflags
-$$(call gb_Output_error,\
- gb_LinkTarget_set_cflags: use gb_LinkTarget_add_cflags instead.)
-endif
-
 endef
 
 # call gb_LinkTarget_add_cxxflags,linktarget,cxxflags
@@ -652,27 +638,9 @@ $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS_APPEND += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS += $(2)
 endef
 
-define gb_LinkTarget_set_cxxflags
-$$(call gb_Output_error,\
- gb_LinkTarget_set_cxxflags: use gb_LinkTarget_add_cxxflags instead.)
-
-endef
-
 # call gb_LinkTarget_add_objcxxflags,linktarget,objcxxflags
 define gb_LinkTarget_add_objcxxflags
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS_APPEND += $(2)
-endef
-
-define gb_LinkTarget_set_objcxxflags
-$$(call gb_Output_error,\
- gb_LinkTarget_set_objcxxflags: use gb_LinkTarget_add_objcxxflags instead.)
-
-endef
-
-define gb_LinkTarget_set_objcflags
-$$(call gb_Output_error,\
- gb_LinkTarget_set_objcflags: use gb_LinkTarget_add_objcflags instead.)
-
 endef
 
 # call gb_LinkTarget_add_objcflags,linktarget,objcflags
@@ -700,11 +668,6 @@ $(call gb_LinkTarget__check_srcdir_paths,$(1),\
     $(patsubst -I%,%,$(filter -I$(SRCDIR)/%,$(filter-out -I$(WORKDIR)/%,$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $(2)
 
-endef
-
-define gb_LinkTarget_set_include_stl
-$$(call gb_Output_error,\
- gb_LinkTarget_set_include_stl: removed, why is anybody calling it?)
 endef
 
 # call gb_LinkTarget_add_ldflags,linktarget,ldflags
@@ -773,21 +736,6 @@ $(foreach api,$(2),$(call gb_LinkTarget__use_internal_api_one,$(1),$(api),$(3)))
 
 endef
 
-define gb_LinkTarget_add_internal_api
-$$(call gb_Output_error,\
- gb_LinkTarget_add_internal_api: use gb_LinkTarget_use_internal_api instead.)
-endef
-
-define gb_LinkTarget_add_internal_bootstrap_api
-$$(call gb_Output_error,\
- gb_LinkTarget_add_internal_bootstrap_api: use gb_LinkTarget_use_internal_bootstrap_api instead.)
-endef
-
-define gb_LinkTarget_add_internal_comprehensive_api
-$$(call gb_Output_error,\
- gb_LinkTarget_add_internal_comprehensive_api: use gb_LinkTarget_use_internal_comprehensive_api instead.)
-endef
-
 # call gb_LinkTarget_use_internal_api,linktarget,api
 define gb_LinkTarget_use_internal_api
 $(call gb_LinkTarget__use_internal_api,$(1),$(2))
@@ -804,11 +752,6 @@ endef
 define gb_LinkTarget_use_internal_comprehensive_api
 $(call gb_LinkTarget__use_internal_api,$(1),$(2),comprehensive_)
 
-endef
-
-define gb_LinkTarget_add_linked_libs
-$$(call gb_Output_error,\
- gb_LinkTarget_add_linked_libs: use gb_LinkTarget_use_libraries instead.)
 endef
 
 define gb_PrintDeps_info
@@ -896,11 +839,6 @@ $(call gb_LinkTarget__use_libraries,$(1),$(2),$(strip \
 	),$(4))
 endif
 
-endef
-
-define gb_LinkTarget_add_linked_static_libs
-$$(call gb_Output_error,\
- gb_LinkTarget_add_linked_static_libs: use gb_LinkTarget_use_static_libraries instead.)
 endef
 
 # avoid problem when a module is built partially but other modules that define
@@ -1116,11 +1054,6 @@ define gb_LinkTarget_add_exception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
 endef
 
-define gb_LinkTarget_add_linktarget_objects
-$$(call gb_Output_error,\
- gb_LinkTarget_add_linktarget_objects: use gb_LinkTarget__use_linktarget_objects instead.)
-endef
-
 # call gb_LinkTarget__use_linktarget_objects,linktarget,linktargets
 define gb_LinkTarget__use_linktarget_objects
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach linktarget,$(2),$(call gb_LinkTarget_get_target,$(linktarget)))
@@ -1128,11 +1061,6 @@ ifneq ($(OS),IOS)
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS += $(foreach linktarget,$(2),$(call gb_LinkTarget_get_objects_list,$(linktarget)))
 endif
 
-endef
-
-define gb_LinkTarget_add_library_objects
-$$(call gb_Output_error,\
- gb_LinkTarget_add_library_objects: use gb_LinkTarget_use_library_objects instead.)
 endef
 
 # call gb_LinkTarget_use_library_objects,linktarget,libs
@@ -1145,11 +1073,6 @@ $(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_L
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 
-endef
-
-define gb_LinkTarget_add_executable_objects
-$$(call gb_Output_error,\
- gb_LinkTarget_add_executable_objects: use gb_LinkTarget_use_executable_objects instead.)
 endef
 
 # call gb_LinkTarget_use_executable_objects,linktarget,exes
@@ -1241,11 +1164,6 @@ $(call gb_LinkTarget_get_target,$(1)) : ILIBTARGET := $(2)
 
 endef
 
-define gb_LinkTarget_set_auxtargets
-$$(call gb_Output_error,\
- gb_LinkTarget_set_auxtargets: use gb_LinkTarget_add_auxtargets instead.)
-endef
-
 # Add a file that is built by the LinkTarget command and define
 # a dummy touch rule for it so it can be tracked via dependencies.
 # The assumption is that the file is created by linking; in case it does not
@@ -1273,11 +1191,6 @@ $(foreach aux,$(2),$(call gb_LinkTarget_add_auxtarget,$(1),$(aux)))
 
 endef
 
-define gb_LinkTarget_add_custom_headers
-$$(call gb_Output_error,\
- gb_LinkTarget_add_custom_headers: use gb_LinkTarget_use_custom_headers instead.)
-endef
-
 # call gb_LinkTarget__use_custom_headers,linktarget,customtarget
 define gb_LinkTarget__use_custom_headers
 $(call gb_LinkTarget_get_headers_target,$(1)) :| \
@@ -1290,11 +1203,6 @@ endef
 define gb_LinkTarget_use_custom_headers
 $(foreach customtarget,$(2),$(call gb_LinkTarget__use_custom_headers,$(1),$(customtarget)))
 
-endef
-
-define gb_LinkTarget_add_package_headers
-$$(call gb_Output_error,\
- gb_LinkTarget_add_package_headers: use gb_LinkTarget_use_package instead.)
 endef
 
 # add SDI (svidl) headers
@@ -1335,11 +1243,6 @@ ifeq ($(gb_ENABLE_PCH),$(true))
 $(call gb_LinkTarget__set_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
 endif
 
-endef
-
-define gb_LinkTarget_add_precompiled_header
-$$(call gb_Output_error,\
- gb_LinkTarget_add_precompiled_header: use gb_LinkTarget_set_precompiled_header instead.)
 endef
 
 # use a header package, possibly from another module

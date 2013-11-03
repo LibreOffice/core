@@ -53,11 +53,6 @@ $(call gb_Helper_install_final, \
 
 endef
 
-define gb_Rdb_install
-$(error gb_Rdb_install removed use gb_Rdb_Rdb_install instead)
-
-endef
-
 define gb_Rdb_add_component
 $(call gb_Rdb_get_target,$(1)) : $(call gb_ComponentTarget_get_target,$(2))
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS += $(2)

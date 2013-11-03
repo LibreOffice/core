@@ -167,18 +167,7 @@ $(foreach sourcefile,$(2),$(call gb_Jar_add_generated_sourcefile,$(1),$(sourcefi
 
 endef
 
-define gb_JarTest_set_classpath
-$$(call gb_Output_error,\
- gb_JarTest_set_classpath: use gb_JavaClassSet_add_classpath instead.)
-endef
-
 # JARCLASSPATH is the class path that is written to the manifest of the jar
-define gb_Jar_set_jarclasspath
-$$(call gb_Output_error,\
- gb_Jar_set_jarclasspath: use gb_Jar_add_manifest_classpath instead.)
-
-endef
-
 define gb_Jar_add_manifest_classpath
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH += $(2)
 
@@ -193,11 +182,6 @@ $(call gb_Jar_get_target,$(1)) : $(2)
 
 endef
 
-define gb_Jar_add_jar
-$$(call gb_Output_error,\
- gb_Jar_add_jar: use gb_Jar_use_jar instead.)
-endef
-
 # URE jars are not added to manifest classpath; and neither is unoil.jar, which
 # is available at runtime via URE_MORE_JAVA_TYPES:
 gb_Jar_default_jars := $(gb_Jar_URE) unoil
@@ -208,11 +192,6 @@ $(call gb_JavaClassSet_use_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
 $(if $(filter-out $(gb_Jar_default_jars),$(2)),\
   $(call gb_Jar_add_manifest_classpath,$(1),$(2).jar))
 
-endef
-
-define gb_Jar_add_system_jar
-$$(call gb_Output_error,\
- gb_Jar_add_system_jar: use gb_Jar_use_system_jar instead.)
 endef
 
 define gb_Jar_use_system_jar
@@ -229,20 +208,10 @@ $(call gb_Jar_add_manifest_classpath,$(1),$(3))
 
 endef
 
-define gb_Jar_add_jars
-$$(call gb_Output_error,\
- gb_Jar_add_jars: use gb_Jar_use_jars instead.)
-endef
-
 # specify jars with imported modules
 define gb_Jar_use_jars
 $(foreach jar,$(2),$(call gb_Jar_use_jar,$(1),$(jar)))
 
-endef
-
-define gb_Jar_add_system_jars
-$$(call gb_Output_error,\
- gb_Jar_add_system_jars: use gb_Jar_use_system_jars instead.)
 endef
 
 define gb_Jar_use_system_jars
@@ -264,19 +233,9 @@ $(foreach external,$(2),$(call gb_Jar_use_external,$(1),$(external)))
 
 endef
 
-define gb_Jar_add_customtarget_dependency
-$$(call gb_Output_error,\
- gb_Jar_add_customtarget_dependency: use gb_Jar_use_customtarget instead.)
-endef
-
 define gb_Jar_use_customtarget
 $(call gb_JavaClassSet_use_customtarget,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
-endef
-
-define gb_Jar_add_customtarget_dependencies
-$$(call gb_Output_error,\
- gb_Jar_add_customtarget_dependencies: use gb_Jar_use_customtargets instead.)
 endef
 
 define gb_Jar_use_customtargets

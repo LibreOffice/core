@@ -95,11 +95,6 @@ $(foreach sourcefile,$(2),$(call gb_JunitTest_add_sourcefile,$(1),$(sourcefile))
 
 endef
 
-define gb_JunitTest_add_jar
-$$(call gb_Output_error,\
- gb_JunitTest_add_jar: use gb_JunitTest_use_jar instead.)
-endef
-
 define gb_JunitTest_use_jar
 $(call gb_JavaClassSet_use_jar,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
 $(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,$(2))
@@ -107,19 +102,9 @@ $(call gb_JunitTest_get_target,$(1)) : $(call gb_Jar_get_target,$(2))
 
 endef
 
-define gb_JunitTest_add_jars
-$$(call gb_Output_error,\
- gb_JunitTest_add_jars: use gb_JunitTest_use_jars instead.)
-endef
-
 define gb_JunitTest_use_jars
 $(foreach jar,$(2),$(call gb_JunitTest_use_jar,$(1),$(jar)))
 
-endef
-
-define gb_JunitTest_add_jar_classset
-$$(call gb_Output_error,\
- gb_JunitTest_add_jar_classset: use gb_JunitTest_use_jar_classset instead.)
 endef
 
 # see gb_JavaClassSet_use_jar_classset
@@ -153,20 +138,10 @@ $(foreach external,$(2),$(call gb_JunitTest_use_external,$(1),$(external)))
 
 endef
 
-define gb_JunitTest_add_customtarget_dependency
-$$(call gb_Output_error,\
- gb_JunitTest_add_customtarget_dependency: use gb_Jar_use_customtarget instead.)
-endef
-
 define gb_JunitTest_use_customtarget
 $(call gb_JavaClassSet_use_customtarget,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
 $(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(call gb_CustomTarget_get_workdir,$(2))
 
-endef
-
-define gb_JunitTest_add_customtarget_dependencies
-$$(call gb_Output_error,\
- gb_JunitTest_add_customtarget_dependencies: use gb_Jar_use_customtargets instead.)
 endef
 
 define gb_JunitTest_use_customtargets

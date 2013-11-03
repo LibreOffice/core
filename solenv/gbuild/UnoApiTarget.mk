@@ -208,19 +208,11 @@ $(call gb_UnoApiHeadersTarget_get_$(3),$(1)) : UNOAPI_DEPS += -X$(call gb_UnoApi
 
 endef
 
-define gb_UnoApiHeadersTarget_add_rdbfile
-$$(call gb_Output_error,gb_UnoApiHeadersTarget_add_rdbfile: use gb_UnoApiHeadersTarget_use_api instead.)
-endef
-
 define gb_UnoApiHeadersTarget__use_api
 $(call gb_UnoApiHeadersTarget__use_api_for_target,$(1),$(2),target)
 $(call gb_UnoApiHeadersTarget__use_api_for_target,$(1),$(2),bootstrap_target)
 $(call gb_UnoApiHeadersTarget__use_api_for_target,$(1),$(2),comprehensive_target)
 
-endef
-
-define gb_UnoApiHeadersTarget_add_rdbfiles
-$$(call gb_Output_error,gb_UnoApiHeadersTarget_add_rdbfiles: use gb_UnoApiHeadersTarget_use_api instead.)
 endef
 
 define gb_UnoApiHeadersTarget_use_api

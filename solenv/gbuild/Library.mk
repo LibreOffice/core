@@ -97,14 +97,6 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library_get_ex
 
 endef
 
-define gb_Library_add_auxtarget
-$(call gb_Output_error,gb_Library_add_auxtarget should no longer be necessary)
-endef
-
-define gb_Library_add_auxtargets
-$(call gb_Output_error,gb_Library_add_auxtargets should no longer be necessary)
-endef
-
 # we actually (ab)use ILIBTARGET here to store the unversioned symlink -
 # it serves a similar purpose to an MSVC import library, as input for linker
 # call gb_Library__add_soversion_link,library,linkname
@@ -193,22 +185,16 @@ $(eval $(foreach method,\
 	add_generated_cobjects \
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
-	add_library_objects \
 	use_library_objects \
 	add_grammar \
 	add_grammars \
 	add_scanner \
 	add_scanners \
 	add_cflags \
-	set_cflags \
 	add_cxxflags \
-	set_cxxflags \
 	add_objcxxflags \
 	add_objcflags \
-	set_objcflags \
-	set_objcxxflags \
 	add_defs \
-	set_defs \
 	set_include \
 	add_ldflags \
 	set_ldflags \
@@ -221,28 +207,20 @@ $(eval $(foreach method,\
 	use_api \
 	use_sdk_api \
 	use_udk_api \
-	add_internal_api \
 	use_internal_api \
-	add_internal_bootstrap_api \
 	use_internal_bootstrap_api \
-	add_internal_comprehensive_api \
 	use_internal_comprehensive_api \
-	add_linked_libs \
 	use_libraries \
-	add_linked_static_libs \
 	use_static_libraries \
 	use_external \
 	use_externals \
-	add_custom_headers \
 	use_custom_headers \
 	use_package \
 	use_packages \
 	use_unpacked \
 	use_restarget \
-	add_package_headers \
 	add_sdi_headers \
 	set_precompiled_header \
-	add_precompiled_header \
 	export_objects_list \
 	add_nativeres \
 	set_nativeres \

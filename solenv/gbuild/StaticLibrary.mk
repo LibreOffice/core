@@ -71,14 +71,10 @@ $(eval $(foreach method,\
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
 	add_cflags \
-	set_cflags \
 	add_cxxflags \
-	set_cxxflags \
 	add_objcflags \
 	add_objcxxflags \
-	set_objcxxflags \
 	add_defs \
-	set_defs \
 	set_include \
 	add_ldflags \
 	set_ldflags \
@@ -93,9 +89,7 @@ $(eval $(foreach method,\
 	use_internal_comprehensive_api \
 	use_external \
 	use_externals \
-	add_custom_headers \
 	use_custom_headers \
-	add_package_headers \
 	use_package \
 	use_packages \
 	use_unpacked \
@@ -103,7 +97,6 @@ $(eval $(foreach method,\
 	use_static_libraries \
 	add_sdi_headers \
 	set_precompiled_header \
-	add_precompiled_header \
 	set_warnings_not_errors \
 	set_generated_cxx_suffix \
 ,\

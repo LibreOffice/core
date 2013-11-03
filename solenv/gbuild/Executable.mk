@@ -85,10 +85,6 @@ define gb_Executable_set_targettype_gui
 $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1))) : TARGETGUI := $(2)
 endef
 
-define gb_Executable_add_auxtarget
-$(call gb_Output_error,gb_Executable_add_auxtarget should no longer be necessary)
-endef
-
 define gb_Executable_forward_to_Linktarget
 gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Executable_get_linktarget,$$(1)),$$(2),$$(3),Executable_$$(1))
 
@@ -112,15 +108,10 @@ $(eval $(foreach method,\
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
 	add_cflags \
-	set_cflags \
 	add_cxxflags \
-	set_cxxflags \
 	add_objcflags \
 	add_objcxxflags \
-	set_objcflags \
-	set_objcxxflags \
 	add_defs \
-	set_defs \
 	set_include \
 	add_ldflags \
 	set_ldflags \
@@ -132,27 +123,19 @@ $(eval $(foreach method,\
 	use_api \
 	use_sdk_api \
 	use_udk_api \
-	add_internal_api \
 	use_internal_api \
-	add_internal_bootstrap_api \
 	use_internal_bootstrap_api \
-	add_internal_comprehensive_api \
 	use_internal_comprehensive_api \
-	add_linked_libs \
 	use_libraries \
-	add_linked_static_libs \
 	use_static_libraries \
 	use_external \
 	use_externals \
-	add_custom_headers \
 	use_custom_headers \
-	add_package_headers \
 	use_package \
 	use_packages \
 	use_unpacked \
 	add_sdi_headers \
 	set_precompiled_header \
-	add_precompiled_header \
 	add_nativeres \
 	set_warnings_not_errors \
 	set_generated_cxx_suffix \

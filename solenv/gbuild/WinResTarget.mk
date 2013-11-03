@@ -66,10 +66,6 @@ $(call gb_WinResTarget_get_clean_target,%) :
 		rm -f $(call gb_WinResTarget_get_target,$*) \
 			$(call gb_WinResTarget_get_dep_target,$*))
 
-define gb_WinResTarget_set_defs
-$$(call gb_Output_error,gb_WinResTarget_set_defs: use gb_WinResTarget_add_defs instead.)
-endef
-
 define gb_WinResTarget_add_defs
 $(call gb_WinResTarget_get_target,$(1)) : DEFS += $(2)
 
@@ -95,10 +91,6 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE := $(2)
 endif
 
-endef
-
-define gb_WinResTarget_add_file
-$$(call gb_Output_error,gb_WinResTarget_add_file: use gb_WinResTarget_set_rcfile instead.)
 endef
 
 define gb_WinResTarget_set_rcfile
