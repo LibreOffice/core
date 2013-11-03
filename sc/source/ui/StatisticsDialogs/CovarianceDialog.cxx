@@ -25,15 +25,7 @@ ScCovarianceDialog::ScCovarianceDialog(
     ScMatrixComparisonGenerator(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "CovarianceDialog", "modules/scalc/ui/covariancedialog.ui" )
-{
-    get(mpGroupByColumnsRadio,   "groupedby-columns-radio");
-    get(mpGroupByRowsRadio,      "groupedby-rows-radio");
-
-    mpGroupByColumnsRadio->SetToggleHdl( LINK( this, ScCovarianceDialog, GroupByChanged ) );
-    mpGroupByRowsRadio->SetToggleHdl( LINK( this, ScCovarianceDialog, GroupByChanged ) );
-
-    mpGroupByColumnsRadio->Check(true);
-}
+{}
 
 sal_Bool ScCovarianceDialog::Close()
 {
@@ -48,21 +40,6 @@ const OUString& ScCovarianceDialog::getLabel()
 const OUString& ScCovarianceDialog::getTemplate()
 {
     return strCovarianceTemplate;
-}
-
-ScMatrixComparisonGenerator::GroupedBy ScCovarianceDialog::getGroupedBy()
-{
-    return mGroupedBy;
-}
-
-IMPL_LINK_NOARG(ScCovarianceDialog, GroupByChanged)
-{
-    if (mpGroupByColumnsRadio->IsChecked())
-        mGroupedBy = BY_COLUMN;
-    else if (mpGroupByRowsRadio->IsChecked())
-        mGroupedBy = BY_ROW;
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

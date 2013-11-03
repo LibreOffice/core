@@ -22,6 +22,11 @@
 class ScStatisticsInputOutputDialog : public ScAnyRefDlg
 {
 public:
+    enum GroupedBy {
+        BY_COLUMN,
+        BY_ROW
+    };
+
     ScStatisticsInputOutputDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
         Window* pParent, ScViewData* pViewData,
@@ -51,28 +56,27 @@ protected:
     ScRange             mInputRange;
     ScAddress::Details  mAddressDetails;
     ScAddress           mOutputAddress;
+    GroupedBy           mGroupedBy;
 
     static ScRangeList MakeColumnRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd);
     static ScRangeList MakeRowRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd);
-
 
 private:
     // Widgets
     PushButton*         mpButtonApply;
     OKButton*           mpButtonOk;
     CloseButton*        mpButtonClose;
-
+    RadioButton*        mpGroupByColumnsRadio;
+    RadioButton*        mpGroupByRowsRadio;
 
     formula::RefEdit*   mpActiveEdit;
-
-
     ScAddress           mCurrentAddress;
-
     bool                mDialogLostFocus;
 
     void Init();
     void GetRangeFromSelection();
 
+    DECL_LINK( GroupByChanged,   void* );
     DECL_LINK( OkClicked,        PushButton* );
     DECL_LINK( CloseClicked,     PushButton* );
     DECL_LINK( ApplyClicked,     PushButton* );

@@ -31,17 +31,11 @@ public:
 
     virtual ~ScMatrixComparisonGenerator();
 
-    enum GroupedBy {
-        BY_COLUMN,
-        BY_ROW
-    };
-
 protected:
     virtual void CalculateInputAndWriteToOutput();
 
     virtual const OUString& getLabel() = 0;
     virtual const OUString& getTemplate() = 0;
-    virtual GroupedBy       getGroupedBy() = 0;
 
     void writeCorrelationFormulasByColumn(ScAddress aOutputAddress, ScRangeList aRangeList);
     void writeCorrelationFormulasByRow(ScAddress aOutputAddress, ScRangeList aRangeList);

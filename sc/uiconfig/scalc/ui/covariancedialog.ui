@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sat Nov  2 22:31:31 2013 -->
+<!-- Generated with glade 3.16.0 on Sun Nov  3 11:48:59 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
@@ -197,12 +197,11 @@
                             <property name="receives_default">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">groupedby-rows-radio</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">2</property>
+                            <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
                         </child>
@@ -217,9 +216,9 @@
                             <property name="group">groupedby-columns-radio</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">2</property>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
                         </child>

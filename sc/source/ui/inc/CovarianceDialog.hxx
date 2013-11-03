@@ -15,13 +15,6 @@
 
 class ScCovarianceDialog : public ScMatrixComparisonGenerator
 {
-private:
-    RadioButton* mpGroupByColumnsRadio;
-    RadioButton* mpGroupByRowsRadio;
-    GroupedBy    mGroupedBy;
-
-    DECL_LINK( GroupByChanged, void* );
-
 public:
     ScCovarianceDialog(
         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
@@ -32,7 +25,6 @@ public:
 protected:
     virtual const OUString& getLabel();
     virtual const OUString& getTemplate();
-    virtual GroupedBy       getGroupedBy();
 };
 
 #endif

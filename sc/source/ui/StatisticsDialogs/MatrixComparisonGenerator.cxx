@@ -69,7 +69,7 @@ void ScMatrixComparisonGenerator::CalculateInputAndWriteToOutput( )
 
     ScRangeList aRangeList;
 
-    if (getGroupedBy() == BY_COLUMN)
+    if (mGroupedBy == BY_COLUMN)
         aRangeList = MakeColumnRangeList(inTab, aStart, aEnd);
     else
         aRangeList = MakeRowRangeList(inTab, aStart, aEnd);
@@ -85,7 +85,7 @@ void ScMatrixComparisonGenerator::CalculateInputAndWriteToOutput( )
     {
         aAddress = ScAddress(outCol, outRow, outTab);
         OUString aLabel;
-        if (getGroupedBy() == BY_COLUMN)
+        if (mGroupedBy == BY_COLUMN)
             aLabel = strColumnLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
         else
             aLabel = strRowLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
@@ -103,7 +103,7 @@ void ScMatrixComparisonGenerator::CalculateInputAndWriteToOutput( )
         aAddress = ScAddress(outCol, outRow, outTab);
         OUString aLabel;
 
-        if (getGroupedBy() == BY_COLUMN)
+        if (mGroupedBy == BY_COLUMN)
             aLabel = strColumnLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
         else
             aLabel = strRowLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
@@ -119,7 +119,7 @@ void ScMatrixComparisonGenerator::CalculateInputAndWriteToOutput( )
                 mOutputAddress.Row() + 1,
                 inTab);
 
-    if (getGroupedBy() == BY_COLUMN)
+    if (mGroupedBy == BY_COLUMN)
         writeCorrelationFormulasByColumn(aAddress, aRangeList);
     else
         writeCorrelationFormulasByRow(aAddress, aRangeList);

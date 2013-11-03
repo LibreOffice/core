@@ -471,13 +471,14 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/sidebar/CellBorderStylePopup \
     sc/source/ui/sidebar/NumberFormatPropertyPanel \
 	sc/source/ui/sidebar/ScPanelFactory \
-	sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog \
-	sc/source/ui/StatisticsDialogs/SamplingDialog \
-	sc/source/ui/StatisticsDialogs/DescriptiveStatisticsDialog \
-	sc/source/ui/StatisticsDialogs/AnalysisOfVarianceDialog \
-	sc/source/ui/StatisticsDialogs/CorrelationDialog \
-	sc/source/ui/StatisticsDialogs/CovarianceDialog \
-	sc/source/ui/StatisticsDialogs/StatisticsInputOutputDialog \
+    sc/source/ui/StatisticsDialogs/AnalysisOfVarianceDialog \
+    sc/source/ui/StatisticsDialogs/CorrelationDialog \
+    sc/source/ui/StatisticsDialogs/CovarianceDialog \
+    sc/source/ui/StatisticsDialogs/DescriptiveStatisticsDialog \
+    sc/source/ui/StatisticsDialogs/MatrixComparisonGenerator \
+    sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog \
+    sc/source/ui/StatisticsDialogs/SamplingDialog \
+    sc/source/ui/StatisticsDialogs/StatisticsInputOutputDialog \
 	sc/source/ui/undo/areasave \
 	sc/source/ui/undo/refundo \
 	sc/source/ui/undo/target \

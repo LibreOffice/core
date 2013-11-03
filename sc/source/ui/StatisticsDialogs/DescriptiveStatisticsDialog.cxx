@@ -54,7 +54,7 @@ static const StatisticCalculation lclCalcDefinitions[] =
     { 0,                         NULL }
 };
 
-static const OUString lclWildcardRange("%RANGE%");
+static const OUString strWildcardRange("%RANGE%");
 
 }
 
@@ -120,7 +120,7 @@ void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
             {
                 aAddress = ScAddress(outCol, outRow, outTab);
                 aFormulaTemplate = OUString::createFromAscii(lclCalcDefinitions[i].aFormula);
-                aFormulaString = aFormulaTemplate.replaceAll(lclWildcardRange, aReferenceString);
+                aFormulaString = aFormulaTemplate.replaceAll(strWildcardRange, aReferenceString);
                 pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
                 outRow++;
             }

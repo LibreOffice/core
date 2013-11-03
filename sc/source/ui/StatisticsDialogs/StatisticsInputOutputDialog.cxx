@@ -60,6 +60,7 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
+    mGroupedBy      ( BY_COLUMN ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
     mDialogLostFocus( false )
 {
@@ -78,6 +79,9 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     get(mpButtonOk,     "ok");
     get(mpButtonApply,  "apply");
     get(mpButtonClose,  "close");
+
+    get(mpGroupByColumnsRadio,   "groupedby-columns-radio");
+    get(mpGroupByRowsRadio,      "groupedby-rows-radio");
 
     Init();
     GetRangeFromSelection();
@@ -107,6 +111,12 @@ void ScStatisticsInputOutputDialog::Init()
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
 
     mpOutputRangeEdit->GrabFocus();
+
+    mpGroupByColumnsRadio->SetToggleHdl( LINK( this, ScStatisticsInputOutputDialog, GroupByChanged ) );
+    mpGroupByRowsRadio->SetToggleHdl( LINK( this, ScStatisticsInputOutputDialog, GroupByChanged ) );
+
+    mpGroupByColumnsRadio->Check(true);
+    mpGroupByRowsRadio->Check(false);
 }
 
 void ScStatisticsInputOutputDialog::GetRangeFromSelection()
@@ -199,6 +209,16 @@ IMPL_LINK( ScStatisticsInputOutputDialog, GetFocusHandler, Control*, pCtrl )
 IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, LoseFocusHandler )
 {
     mDialogLostFocus = !IsActive();
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, GroupByChanged )
+{
+    if (mpGroupByColumnsRadio->IsChecked())
+        mGroupedBy = BY_COLUMN;
+    else if (mpGroupByRowsRadio->IsChecked())
+        mGroupedBy = BY_ROW;
+
     return 0;
 }
 

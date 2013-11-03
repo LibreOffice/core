@@ -25,15 +25,7 @@ ScCorrelationDialog::ScCorrelationDialog(
     ScMatrixComparisonGenerator(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "CorrelationDialog", "modules/scalc/ui/correlationdialog.ui" )
-{
-    get(mpGroupByColumnsRadio,   "groupedby-columns-radio");
-    get(mpGroupByRowsRadio,      "groupedby-rows-radio");
-
-    mpGroupByColumnsRadio->SetToggleHdl( LINK( this, ScCorrelationDialog, GroupByChanged ) );
-    mpGroupByRowsRadio->SetToggleHdl( LINK( this, ScCorrelationDialog, GroupByChanged ) );
-
-    mpGroupByColumnsRadio->Check(true);
-}
+{}
 
 sal_Bool ScCorrelationDialog::Close()
 {
@@ -48,21 +40,6 @@ const OUString& ScCorrelationDialog::getLabel()
 const OUString& ScCorrelationDialog::getTemplate()
 {
     return strCorrelationTemplate;
-}
-
-ScMatrixComparisonGenerator::GroupedBy ScCorrelationDialog::getGroupedBy()
-{
-    return mGroupedBy;
-}
-
-IMPL_LINK_NOARG(ScCorrelationDialog, GroupByChanged)
-{
-    if (mpGroupByColumnsRadio->IsChecked())
-        mGroupedBy = BY_COLUMN;
-    else if (mpGroupByRowsRadio->IsChecked())
-        mGroupedBy = BY_ROW;
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
