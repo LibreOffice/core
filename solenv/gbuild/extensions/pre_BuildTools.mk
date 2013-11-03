@@ -43,6 +43,6 @@ gb_BUILD_TOOLS = \
 	$(foreach executable, \
 		xsltproc \
 	,$(call gb_ExternalExecutable_get_dependencies,$(executable))) \
-	$(call gb_Helper_optional_for_host,DESKTOP,Package_xmlhelp_xsl) \
+	$(call gb_Helper_optional_for_host,DESKTOP,$(call gb_Package_get_target,xmlhelp_xsl)) \
 
 # vim: set noet sw=4 ts=4:
