@@ -364,7 +364,12 @@ sal_Unicode ScAsciiOptions::GetWeightedFieldSep( const OUString & rFieldSeps, bo
 {
     bool bMergeFieldSeps = false;
     OUString aFieldSeps( bDecodeNumbers ? lcl_decodeSepString( rFieldSeps, bMergeFieldSeps) : rFieldSeps);
-    if (aFieldSeps.getLength() <= 1)
+    if (aFieldSeps.isEmpty())
+    {
+        SAL_WARN( "sc.ui", "ScAsciiOptions::GetWeightedFieldSep - no separator at all, using ',' comma");
+        return ',';
+    }
+    else if (aFieldSeps.getLength() == 1)
         return aFieldSeps[0];
     else
     {
