@@ -22,11 +22,11 @@ endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_StaticLibrary_add_exception_objects,nputils,\
-	np_sdk/npsdk/npwin \
+	external/np_sdk/npsdk/npwin \
 ))
 else
 $(eval $(call gb_StaticLibrary_add_cobjects,nputils,\
-	np_sdk/npsdk/npunix \
+	external/np_sdk/npsdk/npunix \
 ))
 endif
 

@@ -84,7 +84,7 @@ ifeq ($(SYSTEM_NPAPI_HEADERS),YES)
 define gb_LinkTarget__use_npapi_headers
 $(call gb_LinkTarget_set_include,$(1),\
 	$(NPAPI_HEADERS_CFLAGS) \
-	-I$(SRCDIR)/np_sdk \
+	-I$(SRCDIR)/external/np_sdk \
 	$$(INCLUDE) \
 )
 
@@ -94,8 +94,8 @@ else #!SYSTEM_NPAPI_HEADERS
 
 define gb_LinkTarget__use_npapi_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/np_sdk/inc \
-	-I$(SRCDIR)/np_sdk \
+	-I$(SRCDIR)/external/np_sdk/inc \
+	-I$(SRCDIR)/external/np_sdk \
 	$$(INCLUDE) \
 )
 
