@@ -95,6 +95,13 @@ private:
     ScCovarianceDialogWrapper() SAL_DELETED_FUNCTION;
 };
 
+class ScExponentialSmoothingDialogWrapper :
+    public ChildWindowWrapper<SID_EXPONENTIAL_SMOOTHING_DIALOG>
+{
+private:
+    ScExponentialSmoothingDialogWrapper() SAL_DELETED_FUNCTION;
+};
+
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
     public:

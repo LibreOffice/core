@@ -908,6 +908,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+
             }
             break;
         case SID_SAMPLING_DIALOG:
@@ -949,6 +950,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_COVARIANCE_DIALOG:
             {
                 sal_uInt16 nId  = ScCovarianceDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+            }
+            break;
+        case SID_EXPONENTIAL_SMOOTHING_DIALOG:
+            {
+                sal_uInt16 nId  = ScExponentialSmoothingDialogWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 

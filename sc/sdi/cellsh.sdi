@@ -153,6 +153,7 @@ interface CellSelection
     SID_ANALYSIS_OF_VARIANCE_DIALOG     [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_CORRELATION_DIALOG              [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_COVARIANCE_DIALOG               [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_EXPONENTIAL_SMOOTHING_DIALOG    [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_MARKDATAAREA    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_MARKARRAYFORMULA [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_SETINPUTMODE    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]

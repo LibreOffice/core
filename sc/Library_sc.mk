@@ -475,6 +475,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/StatisticsDialogs/CorrelationDialog \
     sc/source/ui/StatisticsDialogs/CovarianceDialog \
     sc/source/ui/StatisticsDialogs/DescriptiveStatisticsDialog \
+    sc/source/ui/StatisticsDialogs/ExponentialSmoothingDialog \
     sc/source/ui/StatisticsDialogs/MatrixComparisonGenerator \
     sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog \
     sc/source/ui/StatisticsDialogs/SamplingDialog \

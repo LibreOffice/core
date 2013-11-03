@@ -67,6 +67,7 @@
 #include "AnalysisOfVarianceDialog.hxx"
 #include "CorrelationDialog.hxx"
 #include "CovarianceDialog.hxx"
+#include "ExponentialSmoothingDialog.hxx"
 
 #include <config_orcus.h>
 
@@ -353,6 +354,12 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_COVARIANCE_DIALOG:
         {
             pResult = new ScCovarianceDialog( pB, pCW, pParent, GetViewData() );
+        }
+        break;
+
+        case SID_EXPONENTIAL_SMOOTHING_DIALOG:
+        {
+            pResult = new ScExponentialSmoothingDialog( pB, pCW, pParent, GetViewData() );
         }
         break;
 

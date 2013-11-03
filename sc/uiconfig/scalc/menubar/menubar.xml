@@ -488,6 +488,7 @@
                     <menu:menuitem menu:id=".uno:AnalysisOfVarianceDialog"/>
                     <menu:menuitem menu:id=".uno:CorrelationDialog"/>
                     <menu:menuitem menu:id=".uno:CovarianceDialog"/>
+                    <menu:menuitem menu:id=".uno:ExponentialSmoothingDialog"/>
                 </menu:menupopup>
             </menu:menu>
         </menu:menupopup>
