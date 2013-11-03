@@ -29,17 +29,23 @@ class SmElement
 {
     SmNodePointer   mpNode;
     OUString        maText;
+    OUString        maHelpText;
 public:
     Point mBoxLocation;
     Size  mBoxSize;
 
-    SmElement(SmNodePointer pNode, OUString aText);
+    SmElement(SmNodePointer pNode, OUString aText, OUString aHelpText);
     virtual ~SmElement();
 
     SmNodePointer getNode();
     OUString      getText()
     {
         return maText;
+    }
+
+    OUString getHelpText()
+    {
+        return maHelpText;
     }
 
     virtual bool isSeparator()
@@ -62,15 +68,15 @@ public:
 class SmElementsControl : public Control
 {
 
-    static const sal_uInt16 aUnaryBinaryOperatorsList[];
-    static const sal_uInt16 aRelationsList[];
-    static const sal_uInt16 aSetOperations[];
-    static const sal_uInt16 aFunctions[];
-    static const sal_uInt16 aOperators[];
-    static const sal_uInt16 aAttributes[];
-    static const sal_uInt16 aBrackets[];
-    static const sal_uInt16 aFormats[];
-    static const sal_uInt16 aOthers[];
+    static const sal_uInt16 aUnaryBinaryOperatorsList[][2];
+    static const sal_uInt16 aRelationsList[][2];
+    static const sal_uInt16 aSetOperations[][2];
+    static const sal_uInt16 aFunctions[][2];
+    static const sal_uInt16 aOperators[][2];
+    static const sal_uInt16 aAttributes[][2];
+    static const sal_uInt16 aBrackets[][2];
+    static const sal_uInt16 aFormats[][2];
+    static const sal_uInt16 aOthers[][2];
 
     Link aSelectHdlLink;
 
@@ -90,9 +96,9 @@ class SmElementsControl : public Control
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
 
-    void addElement(OUString aElementVisual, OUString aElementSource);
+    void addElement(OUString aElementVisual, OUString aElementSource, OUString aHelpText);
 
-    void addElements(const sal_uInt16 aElementsArray[], sal_uInt16 size);
+    void addElements(const sal_uInt16 aElementsArray[][2], sal_uInt16 size);
 
     void addSeparator();
 
