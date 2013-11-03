@@ -79,8 +79,6 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
 }
 
 static void create_services(AvahiClient *c) {
-    char *n, r[128];
-    int ret;
     assert(c);
 
     /* If this is the first time we're called, let's create a new
@@ -97,13 +95,18 @@ static void create_services(AvahiClient *c) {
 
     if (avahi_entry_group_is_empty(group)) {
         fprintf(stderr, "Adding service '%s'\n", avahiService->getName().c_str());
+        char r[128];
         snprintf(r, sizeof(r), "random=%i", rand());
-        if ((ret = avahi_entry_group_add_service(group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0), avahiService->getName().c_str(), kREG_TYPE, NULL, NULL, 1599, "local", r, NULL)) < 0) {
+        int ret = avahi_entry_group_add_service(
+            group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0),
+            avahiService->getName().c_str(), kREG_TYPE, NULL, NULL, 1599, "local", r, NULL
+        );
+        if (ret < 0) {
 
             if (ret == AVAHI_ERR_COLLISION){
                 /* A service name collision with a local service happened. Let's
                  * pick a new name */
-                n = avahi_alternative_service_name(avahiService->getName().c_str());
+                char *n = avahi_alternative_service_name(avahiService->getName().c_str());
                 avahiService->setName(n);
 
                 fprintf(stderr, "Service name collision, renaming service to '%s'\n", avahiService->getName().c_str());
