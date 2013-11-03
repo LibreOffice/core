@@ -78,7 +78,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			ucb \
 			unoxml \
 			vcl \
-			$(call gb_Helper_optional,VIGRA,vigra) \
 			xmloff \
 			xmlscript \
 		) \
