@@ -358,13 +358,12 @@ SvTreeListEntry* SvxRedlinTable::CreateEntry() const
 void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
 {
-    SvLBoxButton* pButton;
     SvLBoxString* pString;
     SvLBoxContextBmp* pContextBmp;
 
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
-        pButton= new SvLBoxButton( pEntry,eButtonKind,0,pCheckButtonData );
+        SvLBoxButton* pButton= new SvLBoxButton( pEntry,eButtonKind,0,pCheckButtonData );
         pEntry->AddItem( pButton );
     }
 
