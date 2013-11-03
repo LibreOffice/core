@@ -63,6 +63,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,MYSQLCPPCONN,mysqlcppconn) \
 	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
+	$(call gb_Helper_optional,NSS,nss) \
 	$(call gb_Helper_optional,ODFGEN,libodfgen) \
 	$(call gb_Helper_optional,ORCUS,liborcus) \
 	$(call gb_Helper_optional,VISIO,libvisio) \
@@ -73,6 +74,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 		$(if $(filter YES,$(WITH_GALLERY_BUILD)), \
 			$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
 			$(call gb_Helper_optional,LCMS2,lcms2) \
+			$(call gb_Helper_optional,NSS,nss) \
 		) \
 	) \
 ))

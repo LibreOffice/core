@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		LIB="$(ILIB)" \
 		XCFLAGS="$(SOLARINC)" \
 		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
-			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py' \
+			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 	,mozilla/security/nss)
 
 
@@ -50,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 			OS_TARGET=WINNT RC="$(WINDRES)" OS_RELEASE="5.0" \
 			IMPORT_LIB_SUFFIX=dll.a \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" \
-			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py" \
+			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py" \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/*.a \
 	,mozilla/security/nss)
 
@@ -63,7 +63,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 			NSS_USE_SYSTEM_SQLITE=1) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(filter YES,$(CROSS_COMPILING)),\
-		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py") \
+		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		NSDISTMODE=copy \
 		$(MAKE) -j1 AR=$(AR) RANLIB=$(RANLIB) NMEDIT=$(NM)edit nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/*.a \
