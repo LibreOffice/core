@@ -12,9 +12,9 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,vigra))
 $(eval $(call gb_UnpackedTarball_set_tarball,vigra,$(VIGRA_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,vigra,\
-	vigra/vigra1.6.0.patch \
+	external/vigra/vigra1.6.0.patch \
 	$(if $(filter GCC,$(COM)), \
-		vigra/vigra1.6.0-unused-parameters.patch) \
+		external/vigra/vigra1.6.0-unused-parameters.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:
