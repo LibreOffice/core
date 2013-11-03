@@ -280,7 +280,8 @@ $(foreach target,$(2),$(call gb_Module_add_subsequentcheck_target,$(1),$(target)
 endef
 
 define gb_Module_add_moduledirs
-$(foreach target,$(2),$(call gb_Module_add_moduledir,$(1),$(target)))
+$(foreach target,$(sort $(2)),$(call gb_Module_add_moduledir,$(1),$(target)))
+
 endef
 
 define gb_Module_make_global_targets
