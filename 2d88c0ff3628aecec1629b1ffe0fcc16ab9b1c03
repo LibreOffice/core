@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///9I\u003d",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-03T13:18:12Z",
+      "side": 1,
+      "message": "Why restrict this to French only? I think we want the combination [[:digit:]][eE]- to not trigger the ordinals in any language.",
+      "revId": "2d88c0ff3628aecec1629b1ffe0fcc16ab9b1c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
