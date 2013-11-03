@@ -70,6 +70,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,ORCUS,liborcus) \
 	$(call gb_Helper_optional,POPPLER,poppler) \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
+	$(call gb_Helper_optional,PYTHON,python3) \
 	$(call gb_Helper_optional,VISIO,libvisio) \
 	$(call gb_Helper_optional,WPD,libwpd) \
 	$(call gb_Helper_optional,WPG,libwpg) \
