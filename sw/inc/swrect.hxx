@@ -145,11 +145,6 @@ public:
     sal_Bool OverStepRight( long ) const;
 };
 
-#ifdef DBG_UTIL
-// Implementation in swrect.cxx
-extern SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
-#endif
-
 typedef void (SwRect:: *SwRectSet)( const long nNew );
 typedef long (SwRect:: *SwRectGet)() const;
 typedef const Point (SwRect:: *SwRectPoint)() const;
