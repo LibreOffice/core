@@ -23,4 +23,4 @@ Icon=formula
 Type=MimeType
 Patterns=*.sxm
 MimeType=application/vnd.sun.xml.math
-Comment=%PRODUCTNAME Formula
+Comment=OpenOffice.org 1.0 Formula

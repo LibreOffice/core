@@ -23,4 +23,4 @@ Icon=spreadsheet
 Type=MimeType
 Patterns=*.sxc
 MimeType=application/vnd.sun.xml.calc
-Comment=%PRODUCTNAME Spreadsheet
+Comment=OpenOffice.org 1.0 Spreadsheet

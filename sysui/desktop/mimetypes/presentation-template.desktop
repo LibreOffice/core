@@ -23,4 +23,4 @@ Icon=presentation-template
 Type=MimeType
 Patterns=*.sti
 MimeType=application/vnd.sun.xml.impress.template
-Comment=%PRODUCTNAME Presentation Template
+Comment=OpenOffice.org 1.0 Presentation Template

@@ -1,32 +1,32 @@
 [text]
-en-US = "%PRODUCTNAME Text Document"
+en-US = "OpenOffice.org 1.0 Text Document"
 
 [text-template]
-en-US = "%PRODUCTNAME Text Document Template"
+en-US = "OpenOffice.org 1.0 Text Document Template"
 
 [master-document]
-en-US = "%PRODUCTNAME Master Document"
+en-US = "OpenOffice.org 1.0 Master Document"
 
 [formula]
-en-US = "%PRODUCTNAME Formula"
+en-US = "OpenOffice.org 1.0 Formula"
 
 [presentation]
-en-US = "%PRODUCTNAME Presentation"
+en-US = "OpenOffice.org 1.0 Presentation"
 
 [presentation-template]
-en-US = "%PRODUCTNAME Presentation Template"
+en-US = "OpenOffice.org 1.0 Presentation Template"
 
 [drawing]
-en-US = "%PRODUCTNAME Drawing"
+en-US = "OpenOffice.org 1.0 Drawing"
 
 [drawing-template]
-en-US = "%PRODUCTNAME Drawing Template"
+en-US = "OpenOffice.org 1.0 Drawing Template"
 
 [spreadsheet]
-en-US = "%PRODUCTNAME Spreadsheet"
+en-US = "OpenOffice.org 1.0 Spreadsheet"
 
 [spreadsheet-template]
-en-US = "%PRODUCTNAME Spreadsheet Template"
+en-US = "OpenOffice.org 1.0 Spreadsheet Template"
 
 [oasis-text]
 en-US = "OpenDocument Text"

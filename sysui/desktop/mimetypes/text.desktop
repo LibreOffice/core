@@ -23,4 +23,4 @@ Icon=text
 Type=MimeType
 Patterns=*.sxw
 MimeType=application/vnd.sun.xml.writer
-Comment=%PRODUCTNAME Text Document
+Comment=OpenOffice.org 1.0 Text Document

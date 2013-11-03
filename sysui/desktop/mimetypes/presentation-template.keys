@@ -1,5 +1,5 @@
 application/vnd.sun.xml.impress.template
-	description=%PRODUCTNAME Presentation Template
+	description=OpenOffice.org 1.0 Presentation Template
 	default_action_type=application
 	short_list_application_ids_for_novice_user_level=openoffice,staroffice,starsuite
 	short_list_application_ids_for_intermediate_user_level=openoffice,staroffice,starsuite

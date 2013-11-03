@@ -23,4 +23,4 @@ Icon=master-document
 Type=MimeType
 Patterns=*.sxg
 MimeType=application/vnd.sun.xml.writer.global
-Comment=%PRODUCTNAME Master Document
+Comment=OpenOffice.org 1.0 Master Document

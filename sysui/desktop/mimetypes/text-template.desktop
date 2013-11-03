@@ -23,4 +23,4 @@ Icon=text-template
 Type=MimeType
 Patterns=*.stw
 MimeType=application/vnd.sun.xml.writer.template
-Comment=%PRODUCTNAME Text Document Template
+Comment=OpenOffice.org 1.0 Text Document Template

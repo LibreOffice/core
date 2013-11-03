@@ -23,4 +23,4 @@ Icon=spreadsheet-template
 Type=MimeType
 Patterns=*.stc
 MimeType=application/vnd.sun.xml.calc.template
-Comment=%PRODUCTNAME Spreadsheet Template
+Comment=OpenOffice.org 1.0 Spreadsheet Template

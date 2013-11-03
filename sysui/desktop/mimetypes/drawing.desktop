@@ -23,4 +23,4 @@ Icon=drawing
 Type=MimeType
 Patterns=*.sxd
 MimeType=application/vnd.sun.xml.draw
-Comment=%PRODUCTNAME Drawing
+Comment=OpenOffice.org 1.0 Drawing

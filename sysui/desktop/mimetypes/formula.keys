@@ -1,5 +1,5 @@
 application/vnd.sun.xml.math
-	description=%PRODUCTNAME Formula
+	description=OpenOffice.org 1.0 Formula
 	default_action_type=application
 	short_list_application_ids_for_novice_user_level=openoffice,staroffice,starsuite
 	short_list_application_ids_for_intermediate_user_level=openoffice,staroffice,starsuite

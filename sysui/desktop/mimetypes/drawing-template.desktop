@@ -23,4 +23,4 @@ Icon=drawing-template
 Type=MimeType
 Patterns=*.std
 MimeType=application/vnd.sun.xml.draw.template
-Comment=%PRODUCTNAME Drawing Template
+Comment=OpenOffice.org 1.0 Drawing Template

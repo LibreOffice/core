@@ -23,4 +23,4 @@ Icon=presentation
 Type=MimeType
 Patterns=*.sxi
 MimeType=application/vnd.sun.xml.impress
-Comment=%PRODUCTNAME Presentation
+Comment=OpenOffice.org 1.0 Presentation
