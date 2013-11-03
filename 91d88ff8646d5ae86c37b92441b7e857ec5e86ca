@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///+I\u003d",
+        "filename": "sc/source/ui/inc/colrowba.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-11-03T03:15:54Z",
+      "side": 0,
+      "message": "Why did you remove this comment? At least if it is not wrong I think it is helpful.",
+      "revId": "91d88ff8646d5ae86c37b92441b7e857ec5e86ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///+E\u003d",
+        "filename": "sc/source/ui/inc/colrowba.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-11-03T03:15:54Z",
+      "side": 0,
+      "message": "See above.",
+      "revId": "91d88ff8646d5ae86c37b92441b7e857ec5e86ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

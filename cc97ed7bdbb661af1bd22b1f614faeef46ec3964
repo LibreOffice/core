@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///+A\u003d",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-11-03T03:15:54Z",
+      "side": 1,
+      "message": "This comment is wrongly translated.\n\nIt should be somethinf like: place for highlighted borders",
+      "revId": "cc97ed7bdbb661af1bd22b1f614faeef46ec3964",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
