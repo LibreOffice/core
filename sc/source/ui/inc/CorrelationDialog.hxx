@@ -11,31 +11,30 @@
 #ifndef CORRELATION_DIALOG_HXX
 #define CORRELATION_DIALOG_HXX
 
-#include "global.hxx"
-#include "address.hxx"
-#include "anyrefdg.hxx"
+#include "MatrixComparisonGenerator.hxx"
 
-#include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
-#include <vcl/lstbox.hxx>
-
-#include "StatisticsInputOutputDialog.hxx"
-
-class ScCorrelationDialog : public ScStatisticsInputOutputDialog
+class ScCorrelationDialog : public ScMatrixComparisonGenerator
 {
+private:
+    RadioButton* mpGroupByColumnsRadio;
+    RadioButton* mpGroupByRowsRadio;
+    GroupedBy    mGroupedBy;
+
+    DECL_LINK( GroupByChanged, void* );
+
 public:
     ScCorrelationDialog(
-        SfxBindings* pB, SfxChildWindow* pCW,
-        Window* pParent, ScViewData* pViewData );
-
-    virtual ~ScCorrelationDialog();
+        SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
+        Window* pParent, ScViewData* pViewData);
 
     virtual sal_Bool Close();
 
 protected:
-    virtual void CalculateInputAndWriteToOutput();
-    void WriteCorrelationFormulas(ScAddress aOutputAddress, ScRangeList aRangeList);
+    virtual const OUString& getLabel();
+    virtual const OUString& getTemplate();
+    virtual GroupedBy       getGroupedBy();
 };
+
 
 #endif
 

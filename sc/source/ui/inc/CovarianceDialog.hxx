@@ -11,30 +11,28 @@
 #ifndef COVARIANCE_DIALOG_HXX
 #define COVARIANCE_DIALOG_HXX
 
-#include "global.hxx"
-#include "address.hxx"
-#include "anyrefdg.hxx"
+#include "MatrixComparisonGenerator.hxx"
 
-#include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
-#include <vcl/lstbox.hxx>
-
-#include "StatisticsInputOutputDialog.hxx"
-
-class ScCovarianceDialog : public ScStatisticsInputOutputDialog
+class ScCovarianceDialog : public ScMatrixComparisonGenerator
 {
+private:
+    RadioButton* mpGroupByColumnsRadio;
+    RadioButton* mpGroupByRowsRadio;
+    GroupedBy    mGroupedBy;
+
+    DECL_LINK( GroupByChanged, void* );
+
 public:
     ScCovarianceDialog(
-        SfxBindings* pB, SfxChildWindow* pCW,
-        Window* pParent, ScViewData* pViewData );
-
-    virtual ~ScCovarianceDialog();
+        SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
+        Window* pParent, ScViewData* pViewData);
 
     virtual sal_Bool Close();
 
 protected:
-    virtual void CalculateInputAndWriteToOutput();
-    void WriteCovarianceFormulas(ScAddress aOutputAddress, ScRangeList aRangeList);
+    virtual const OUString& getLabel();
+    virtual const OUString& getTemplate();
+    virtual GroupedBy       getGroupedBy();
 };
 
 #endif
