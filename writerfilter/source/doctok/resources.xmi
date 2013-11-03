@@ -3144,12 +3144,6 @@
         <!--Class FontTable-->
         <!--Class Font-->
         <UML:Class xmi.id="Font" name="Font">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="withindex"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>40</UML:TaggedValue.dataValue>
