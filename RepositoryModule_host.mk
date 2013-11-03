@@ -65,7 +65,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	instsetoo_native \
 	io \
 	javaunohelper \
-	$(call gb_Helper_optional,JPEG,jpeg) \
 	jurt \
 	jvmaccess \
 	jvmfwk \
