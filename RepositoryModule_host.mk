@@ -132,7 +132,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	tubes \
 	ucb \
 	ucbhelper \
-	$(call gb_Helper_optional,UCPP,ucpp) \
 	udkapi \
 	UnoControls \
 	unodevtools \
