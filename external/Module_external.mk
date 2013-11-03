@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_moduledir,external,msc-externals))
 endif
 
 $(eval $(call gb_Module_add_moduledirs,external,\
+	np_sdk \
 	$(call gb_Helper_optional,AFMS,afms) \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	$(call gb_Helper_optional,BOOST,boost) \
