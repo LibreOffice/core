@@ -118,7 +118,7 @@ String STR_UNDO_DRAGDROP
 };
 String STR_INSERTGRAPHIC
 {
-    Text [ en-US ] = "Insert picture" ;
+    Text [ en-US ] = "Insert Image" ;
 };
 String STR_SLOW
 {
