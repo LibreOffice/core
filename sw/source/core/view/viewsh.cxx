@@ -1796,6 +1796,9 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     Application::AcquireSolarMutex(1);
     if (pViewShell)
     {
+        static bool bUseTileSize = getenv("USETILESIZE") != NULL;
+        static bool bCallSetScale = bUseTileSize && (getenv("CALLSETSCALE") != NULL);
+        static bool bCallSetSwVisArea = bUseTileSize && getenv("CALLSETSWVISAREA") != NULL;
         // TODO create a VirtualDevice based on SystemGraphicsData instead so
         // that we get direct rendering; something like:
         //
@@ -1803,7 +1806,6 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         MapMode aMapMode(aDevice.GetMapMode());
         aMapMode.SetMapUnit(MAP_TWIP);
         aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
-        static bool bCallSetScale = getenv("CALLSETSCALE") != NULL;
         if (bCallSetScale)
         {
             // scaling
@@ -1813,7 +1815,6 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
             aMapMode.SetScaleY(scaleY);
         }
         aDevice.SetMapMode(aMapMode);
-        static bool bCallSetSwVisArea = getenv("CALLSETSWVISAREA") != NULL;
         if (bCallSetSwVisArea)
         {
             SwRect foo = pViewShell->VisArea();
@@ -1825,7 +1826,10 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         // resizes the virtual device so to contain the entrie context
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
         // draw - works in logic coordinates
-        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
+        if (bUseTileSize)
+            pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
+        else
+            pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         // copy the aDevice content to mpImage
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();
