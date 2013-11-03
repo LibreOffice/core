@@ -49,7 +49,7 @@ private:
     SCCOLROW        nMarkEnd;
     bool            bMarkRange;
 
-    bool            bDragging;              // Change size
+    bool            bDragging;              // Resizing
     SCCOLROW        nDragNo;
     long            nDragStart;
     long            nDragPos;
@@ -116,8 +116,6 @@ public:
     long    GetBigWidth() const                 { return nBigWidth; }
     void    SetWidth( long nNew );
 };
-
-
 
 #endif
 

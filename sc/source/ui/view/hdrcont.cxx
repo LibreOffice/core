@@ -32,8 +32,6 @@
 #include "document.hxx"
 #include "markdata.hxx"
 
-// -----------------------------------------------------------------------
-
 #define SC_DRAG_MIN     2
 
 //  passes in paint
@@ -44,8 +42,6 @@
 #define SC_HDRPAINT_BOTTOM      5
 #define SC_HDRPAINT_TEXT        6
 #define SC_HDRPAINT_COUNT       7
-
-//==================================================================
 
 ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
                                     SCCOLROW nNewSize, bool bNewVertical ) :
@@ -77,7 +73,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
     Size aSize = LogicToPixel( Size(
         GetTextWidth(OUString("8888")),
         GetTextHeight() ) );
-    aSize.Width()  += 4;    // Platz fuer hervorgehobene Umrandung
+    aSize.Width()  += 4;    // thickness of highlight border
     aSize.Height() += 3;
     SetSizePixel( aSize );
 
@@ -89,15 +85,15 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
 
 void ScHeaderControl::SetWidth( long nNew )
 {
-    OSL_ENSURE( bVertical, "SetDigits nur fuer Zeilenkoepfe erlaubt" );
+    OSL_ENSURE( bVertical, "SetWidth works only on row headers" );
     if ( nNew != nWidth )
     {
-        Size aSize( nNew, GetSizePixel().Height() );    // Hoehe nicht aendern
+        Size aSize( nNew, GetSizePixel().Height() );
         SetSizePixel( aSize );
 
         nWidth = nNew;
 
-        Invalidate();       // neu zentrieren
+        Invalidate();
     }
 }
 
@@ -130,8 +126,6 @@ void ScHeaderControl::SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEn
     if (!bEnabled)
         bNewSet = false;
 
-    //  Variablen setzen
-
     bool bOldSet       = bMarkRange;
     SCCOLROW nOldStart = nMarkStart;
     SCCOLROW nOldEnd   = nMarkEnd;
@@ -150,26 +144,23 @@ void ScHeaderControl::SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEn
             {
                 if ( nNewEnd != nOldEnd )
                     DoPaint( std::min( nNewEnd, nOldEnd ) + 1, std::max( nNewEnd, nOldEnd ) );
-                // sonst nix
             }
             else if ( nNewEnd == nOldEnd )
                 DoPaint( std::min( nNewStart, nOldStart ), std::max( nNewStart, nOldStart ) - 1 );
             else if ( nNewStart > nOldEnd || nNewEnd < nOldStart )
             {
-                //  zwei Bereiche...
+                //  two areas
                 DoPaint( nOldStart, nOldEnd );
                 DoPaint( nNewStart, nNewEnd );
             }
-            else                //  irgendwie ueberlappend... (kommt eh nicht oft vor)
+            else //  somehow overlapping... (it is not often)
                 DoPaint( std::min( nNewStart, nOldStart ), std::max( nNewEnd, nOldEnd ) );
         }
         else
-            DoPaint( nNewStart, nNewEnd );      //  komplett neu
+            DoPaint( nNewStart, nNewEnd );      //  completely new selection
     }
     else if ( bOldSet )
-        DoPaint( nOldStart, nOldEnd );          //  komplett aufheben
-
-    //  sonst war nix, is nix
+        DoPaint( nOldStart, nOldEnd );          //  cancel selection
 }
 
 long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo )
@@ -238,10 +229,6 @@ void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBase
     else
         DrawRect( Rectangle( nStart, nCenterPos+1, nEnd, nBarSize-1 ) );
 }
-
-//
-//      Paint
-//
 
 void ScHeaderControl::Paint( const Rectangle& rRect )
 {
@@ -666,12 +653,13 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     bIgnoreMove = false;
     SelectWindow();
 
-    bool bFound;
-    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
+    bool bIsBorder;
+    SCCOLROW nHitNo = GetMousePos( rMEvt, bIsBorder );
     if (!IsSelectionAllowed(nHitNo))
         return;
-
-    if ( bFound && rMEvt.IsLeft() && ResizeAllowed() )
+    if ( ! rMEvt.IsLeft() )
+        return;
+    if ( bIsBorder && ResizeAllowed() )
     {
         nDragNo = nHitNo;
         sal_uInt16 nClicks = rMEvt.GetClicks();
@@ -695,7 +683,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             bDragMoved = false;
         }
     }
-    else if (rMEvt.IsLeft())
+    else
     {
         pSelEngine->SetWindow( this );
         Point aPoint;
@@ -706,7 +694,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             aVis.Top() = LONG_MIN, aVis.Bottom() = LONG_MAX;
         pSelEngine->SetVisibleArea( aVis );
 
-        SetMarking( true );     //  muss vor SelMouseButtonDown sein
+        SetMarking( true );     //  must precede SelMouseButtonDown
         pSelEngine->SelMouseButtonDown( rMEvt );
 
         //  In column/row headers a simple click already is a selection.
@@ -782,9 +770,6 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    bool bFound;
-    (void)GetMousePos( rMEvt, bFound );
-
     if ( bDragging )
     {
         long nNewPos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
@@ -801,7 +786,10 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
     }
     else
     {
-        if ( bFound && rMEvt.GetButtons()==0 && ResizeAllowed() )
+        bool bIsBorder;
+        (void)GetMousePos( rMEvt, bIsBorder );
+
+        if ( bIsBorder && rMEvt.GetButtons()==0 && ResizeAllowed() )
             SetPointer( Pointer( bVertical ? POINTER_VSIZEBAR : POINTER_HSIZEBAR ) );
         else
             SetPointer( Pointer( POINTER_ARROW ) );
@@ -999,7 +987,5 @@ OUString ScHeaderControl::GetDragHelp( long /* nVal */ )
 void ScHeaderControl::SetMarking( bool /* bSet */ )
 {
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -92,7 +92,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 OUString ScColBar::GetEntryText( SCCOLROW nEntryNo )
 {
     return UseNumericHeader()
-        ? OUString::number(nEntryNo + 1) //FIXME remove String again
+        ? OUString::number(nEntryNo + 1)
         : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 
@@ -100,7 +100,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
     sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
+    if (nNewSize < 10) nNewSize = 10; // pixels
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -264,7 +264,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
     sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
+    if (nNewSize < 10) nNewSize = 10; // pixels
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -392,6 +392,5 @@ bool ScRowBar::IsMirrored()         // overloaded only for rows
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

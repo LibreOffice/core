@@ -26,9 +26,6 @@
 class ScHeaderFunctionSet;
 class ScHeaderSelectionEngine;
 
-// ---------------------------------------------------------------------------
-
-
 class ScColBar : public ScHeaderControl
 {
     ScViewData*              pViewData;
@@ -44,7 +41,7 @@ public:
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo );
     virtual OUString    GetEntryText( SCCOLROW nEntryNo );
 
-    virtual bool        IsLayoutRTL();                      // only for columns
+    virtual bool        IsLayoutRTL();
 
     virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize );
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
@@ -77,8 +74,8 @@ public:
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo );
     virtual OUString    GetEntryText( SCCOLROW nEntryNo );
 
-    virtual bool        IsMirrored();                       // only for columns
-    virtual SCROW       GetHiddenCount( SCROW nEntryNo );   // only for columns
+    virtual bool        IsMirrored();
+    virtual SCROW       GetHiddenCount( SCROW nEntryNo );
 
     virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize );
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
@@ -93,9 +90,6 @@ public:
     virtual OUString    GetDragHelp( long nVal );
 };
 
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
