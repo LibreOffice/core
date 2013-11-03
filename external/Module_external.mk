@@ -73,6 +73,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,PYTHON,python3) \
 	$(call gb_Helper_optional,REDLAND,redland) \
 	$(call gb_Helper_optional,RHINO,rhino) \
+	$(call gb_Helper_optional,UCPP,ucpp) \
 	$(call gb_Helper_optional,VISIO,libvisio) \
 	$(call gb_Helper_optional,WPD,libwpd) \
 	$(call gb_Helper_optional,WPG,libwpg) \

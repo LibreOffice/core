@@ -7,14 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,ucpp))
+module_directory:=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,ucpp,$(UCPP_TARBALL)))
-
-$(eval $(call gb_UnpackedTarball_set_patchlevel,ucpp,0))
-
-$(eval $(call gb_UnpackedTarball_add_patches,ucpp,\
-    ucpp/ucpp.patch \
-))
+include $(module_directory)/../../solenv/gbuild/partial_build.mk
 
 # vim: set noet sw=4 ts=4:
