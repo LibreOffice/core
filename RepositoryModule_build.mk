@@ -71,6 +71,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			package \
 			sfx2 \
 			sot \
+			svgio \
 			svl \
 			svtools \
 			svx \
