@@ -9,12 +9,12 @@
 #import "MLOViewController.h"
 #import "MLOTestingTileSubviewControllerProtocol.h"
 
-static const CGFloat CONTEXT_WIDTH_DEFAULT = 600;
-static const CGFloat CONTEXT_HEIGHT_DEFAULT = 600;
-static const CGFloat TILE_POS_X_DEFAULT = 500;
-static const CGFloat TILE_POS_Y_DEFAULT = 620;
-static const CGFloat TILE_WIDTH_DEFAULT = 1000;
-static const CGFloat TILE_HEIGHT_DEFAULT = 1020;
+static const CGFloat CONTEXT_WIDTH_DEFAULT = 450;
+static const CGFloat CONTEXT_HEIGHT_DEFAULT = 450;
+static const CGFloat TILE_POS_X_DEFAULT = 400;
+static const CGFloat TILE_POS_Y_DEFAULT = 420;
+static const CGFloat TILE_WIDTH_DEFAULT = 250;
+static const CGFloat TILE_HEIGHT_DEFAULT = 250;
 
 @interface MLOTestingTileParametersViewController : MLOViewController<MLOTestingTileSubviewControllerProtocol>
 @property CGFloat contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight;

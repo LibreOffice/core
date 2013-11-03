@@ -21,7 +21,7 @@
 @property UIStepper * stepStepper;
 @end
 
-static const CGFloat DEFAULT_STEP_VALUE = 1;
+static const CGFloat DEFAULT_STEP_VALUE = 10;
 
 @implementation MLOTestingTileParameter
 
@@ -36,6 +36,10 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
         [self initLabel:label];
         self.dataStepper = [self stepperWithMinValue:-MAXFLOAT];
         self.stepStepper = [self stepperWithMinValue:1];
+        // The step stepper obviously needs a step value of 1,
+        // and an initial value of DEFAULT_STEP_VALUE.
+        self.stepStepper.stepValue = 1;
+        self.stepStepper.value = DEFAULT_STEP_VALUE;
         [self initDataTextField];
         [self initStepTextField];
     }
