@@ -44,13 +44,6 @@
 #include "pormulti.hxx"
 #include "ndhints.hxx"
 
-SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
-{
-    rOs << " {HINTS:";
-    rOs << '}';
-    return rOs;
-}
-
 #if OSL_DEBUG_LEVEL < 2
 
 static void Error()

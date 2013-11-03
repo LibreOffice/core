@@ -196,9 +196,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
 
-/// Output operator for text hints.
-SvStream &operator<<(SvStream &aS, const SwpHints &rHints); //$ ostream
-
 
 /// Inline Implementations
 
