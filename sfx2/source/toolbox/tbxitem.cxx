@@ -313,7 +313,6 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
 {
     SolarMutexGuard aGuard;
 
-    SfxToolBoxControl *pCtrl;
     SfxApplication *pApp = SFX_APP();
 
     SfxSlotPool *pSlotPool;
@@ -324,6 +323,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
     TypeId aSlotType = pSlotPool->GetSlotType( nSlotId );
     if ( aSlotType )
     {
+        SfxToolBoxControl *pCtrl;
         if ( pMod )
         {
             SfxTbxCtrlFactArr_Impl *pFactories = pMod->GetTbxCtrlFactories_Impl();
@@ -841,7 +841,6 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
                 }
                 pImpl->mxUIElement = xUIElement;
 
-                Window*  pParentTbxWindow( pImpl->pBox );
                 Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                 ToolBox* pToolBar( 0 );
                 if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
@@ -849,6 +848,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
 
                 if ( pToolBar )
                 {
+                    Window*  pParentTbxWindow( pImpl->pBox );
                     pToolBar->SetParent( pParentTbxWindow );
                     ::Size aSize = getPersistentFloatingSize( xFrame, rSubToolBarResName );
                     if ( aSize.Width() == 0 || aSize.Height() == 0 )
