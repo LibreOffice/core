@@ -49,7 +49,7 @@ private:
     SCCOLROW        nMarkEnd;
     bool            bMarkRange;
 
-    bool            bDragging;              // Change size
+    bool            bDragging;              // Resizing
     SCCOLROW        nDragNo;
     long            nDragStart;
     long            nDragPos;
@@ -57,8 +57,8 @@ private:
 
     bool            bIgnoreMove;
 
-    long            GetScrPos( SCCOLROW nEntryNo );
-    SCCOLROW        GetMousePos( const MouseEvent& rMEvt, bool& rBorder );
+    long            GetScrPos( SCCOLROW nEntryNo ) const;
+    SCCOLROW        GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) const;
     bool            IsSelectionAllowed(SCCOLROW nPos) const;
     void            ShowDragHelp();
 
@@ -80,21 +80,21 @@ protected:
 
                     // new methods
 
-    virtual SCCOLROW    GetPos() = 0;                               // current position (Scrolling)
-    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) = 0;      // width / height (Pixel)
-    virtual OUString  GetEntryText( SCCOLROW nEntryNo ) = 0;
+    virtual SCCOLROW    GetPos() const = 0;                         // current position (Scrolling)
+    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) const = 0;      // width / height (Pixel)
+    virtual OUString  GetEntryText( SCCOLROW nEntryNo ) const = 0;
 
-    virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo );
-    virtual bool     IsLayoutRTL();
-    virtual bool     IsMirrored();
+    virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo ) const;
+    virtual bool     IsLayoutRTL() const;
+    virtual bool     IsMirrored() const;
 
     virtual void    SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewWidth ) = 0;
     virtual void    HideEntries( SCCOLROW nStart, SCCOLROW nEnd ) = 0;
 
     virtual void    SetMarking( bool bSet );
     virtual void    SelectWindow();
-    virtual bool    IsDisabled();
-    virtual bool    ResizeAllowed();
+    virtual bool    IsDisabled() const;
+    virtual bool    ResizeAllowed() const;
     virtual OUString  GetDragHelp( long nVal );
 
     virtual void    DrawInvert( long nDragPos );
@@ -116,8 +116,6 @@ public:
     long    GetBigWidth() const                 { return nBigWidth; }
     void    SetWidth( long nNew );
 };
-
-
 
 #endif
 
