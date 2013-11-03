@@ -1803,11 +1803,15 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         MapMode aMapMode(aDevice.GetMapMode());
         aMapMode.SetMapUnit(MAP_TWIP);
         aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
-        // scaling
-        Fraction scaleX(tileWidth,contextWidth);
-        Fraction scaleY(tileHeight,contextHeight);
-        aMapMode.SetScaleX(scaleX);
-        aMapMode.SetScaleY(scaleY);
+        static bool bCallSetScale = getenv("CALLSETSCALE") != NULL;
+        if (bCallSetScale)
+        {
+            // scaling
+            Fraction scaleX(tileWidth,contextWidth);
+            Fraction scaleY(tileHeight,contextHeight);
+            aMapMode.SetScaleX(scaleX);
+            aMapMode.SetScaleY(scaleY);
+        }
         aDevice.SetMapMode(aMapMode);
         static bool bCallSetSwVisArea = getenv("CALLSETSWVISAREA") != NULL;
         if (bCallSetSwVisArea)
