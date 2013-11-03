@@ -159,7 +159,6 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
 
 }
 -(void)renderTile{
-    NSLog(@"%@ renderTile",self);
     for (MLOTestingTileParameter * param in self.params) {
         [param extractMode:self.mode];
     }

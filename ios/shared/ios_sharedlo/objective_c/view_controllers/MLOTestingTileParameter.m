@@ -181,7 +181,7 @@ static const CGFloat DEFAULT_STEP_VALUE = 1;
 -(void)extractMode:(MLOTestingTileParametersMode) mode{
     MLOTestingTileParameterExtractor extractor = [self getExtractor:mode];
     if(extractor!=nil){
-        NSLog(@"%@ extract %@",self,MLOTestingTileParametersModeString(mode));
+        // NSLog(@"%@ extract %@",self,MLOTestingTileParametersModeString(mode));
         extractor([self currentDataValue]);
     }
 }
