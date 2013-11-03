@@ -573,7 +573,10 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
         aGlobalLock.unlock();
         // <- SAFE
 
-        Application::Reschedule(true);
+        {
+            SolarMutexGuard g;
+            Application::Reschedule(true);
+        }
 
         // SAFE ->
         aGlobalLock.lock();
