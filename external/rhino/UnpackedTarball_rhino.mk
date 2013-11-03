@@ -14,11 +14,11 @@ $(eval $(call gb_UnpackedTarball_set_tarball,rhino,$(RHINO_TARBALL),,rhino))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,rhino,2))
 
 $(eval $(call gb_UnpackedTarball_add_patches,rhino,\
-	rhino/rhino1_5R5.patch \
-	rhino/rhino1_5R5-find_swing.patch \
-	rhino/rhino1_5R5-updateToolTip.patch \
+	external/rhino/rhino1_5R5.patch \
+	external/rhino/rhino1_5R5-find_swing.patch \
+	external/rhino/rhino1_5R5-updateToolTip.patch \
 ))
 
-$(eval $(call gb_UnpackedTarball_add_file,rhino,toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java,rhino/OfficeScriptInfo.java))
+$(eval $(call gb_UnpackedTarball_add_file,rhino,toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java,external/rhino/OfficeScriptInfo.java))
 
 # vim: set noet sw=4 ts=4:

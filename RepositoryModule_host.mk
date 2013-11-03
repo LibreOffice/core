@@ -94,7 +94,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	remotebridges \
 	reportbuilder \
 	$(call gb_Helper_optional,DBCONNECTIVITY,reportdesign) \
-	$(call gb_Helper_optional,RHINO,rhino) \
 	ridljar \
 	rsc \
 	sal \
