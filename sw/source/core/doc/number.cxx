@@ -408,7 +408,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFmt->SetLSpace( lNumIndent );
             pFmt->SetAbsLSpace( lNumIndent + SwNumRule::GetNumIndent( n ) );
             pFmt->SetFirstLineOffset( lNumFirstLineOffset );
-            pFmt->SetSuffix( aDotStr );
+            pFmt->SetSuffix( "." );
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
             SwNumRule::aBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
@@ -431,7 +431,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFmt->SetListtabPos( cIndentAt[ n ] );
             pFmt->SetFirstLineIndent( cFirstLineIndent );
             pFmt->SetIndentAt( cIndentAt[ n ] );
-            pFmt->SetSuffix( aDotStr );
+            pFmt->SetSuffix( "." );
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
             SwNumRule::aLabelAlignmentBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
@@ -682,7 +682,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 {
                     // Should 1.1.1 --> 2. NoNum --> 1..1 or 1.1 ??
                     //                 if( i != rNum.nMyLevel )
-                    //                    aStr += aDotStr;
+                    //                    aStr += ".";
                     continue;
                 }
 
@@ -696,7 +696,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 else
                     aStr += "0";        // all 0 level are a 0
                 if( i != nLevel && !aStr.isEmpty() )
-                    aStr += aDotStr;
+                    aStr += ".";
             }
 
             // The type doesn't have any number, so don't append

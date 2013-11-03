@@ -1646,7 +1646,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             aFmt.SetCharFmt( pNumCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            aFmt.SetSuffix( aDotStr );
+            aFmt.SetSuffix( "." );
 
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
@@ -1795,7 +1795,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);
             aFmt.SetCharFmt( pNumCFmt );
             aFmt.SetIncludeUpperLevels( 1 );
-            aFmt.SetSuffix( aDotStr );
+            aFmt.SetSuffix( "." );
 
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
@@ -1873,7 +1873,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             aFmt.SetNumberingType(SVX_NUM_ARABIC);
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            aFmt.SetSuffix( aDotStr );
+            aFmt.SetSuffix( "." );
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {

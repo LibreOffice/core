@@ -189,7 +189,7 @@ static bool IsExportNumRule( const SwNumRule& rRule, sal_uInt8* pEnd = 0 )
     for( nLvl = 0; nLvl < nEnd; ++nLvl )
         if( SVX_NUM_NUMBER_NONE != ( pNFmt = &rRule.Get( nLvl ))
                 ->GetNumberingType() || !pNFmt->GetPrefix().isEmpty() ||
-                (!pNFmt->GetSuffix().isEmpty() && !pNFmt->GetSuffix().equals(aDotStr)) )
+                (!pNFmt->GetSuffix().isEmpty() && !pNFmt->GetSuffix().equals(".")) )
             break;
 
     if( pEnd )

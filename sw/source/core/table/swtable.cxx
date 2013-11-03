@@ -1388,7 +1388,7 @@ sal_uInt16 SwTable::_GetBoxNum( OUString& rStr, sal_Bool bFirstPart,
     }
     else
     {
-        const sal_Int32 nPos = rStr.indexOf( aDotStr );
+        const sal_Int32 nPos = rStr.indexOf( "." );
         if ( nPos<0 )
         {
             nRet = 0;
@@ -1916,13 +1916,13 @@ OUString SwTableBox::GetName() const
 
         sTmp = OUString::number( nPos = pLines->GetPos( pLine ) + 1 );
         if( !sNm.isEmpty() )
-            sNm = sTmp + aDotStr + sNm;
+            sNm = sTmp + "." + sNm;
         else
             sNm = sTmp;
 
         sTmp = OUString::number(( nPos = pBoxes->GetPos( pBox )) + 1 );
         if( 0 != ( pBox = pLine->GetUpper()) )
-            sNm = sTmp + aDotStr + sNm;
+            sNm = sTmp + "." + sNm;
         else
             sw_GetTblBoxColStr( nPos, sNm );
 

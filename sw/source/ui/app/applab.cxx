@@ -343,7 +343,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                             sLinkName.append(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName.makeStringAndClear());
                             aSect.SetProtectFlag(true);
-                            pSh->Insert(aDotStr);   // Dummytext to allocate the Section
+                            pSh->Insert(".");   // Dummytext to allocate the Section
                             pSh->SttDoc();
                             pSh->EndDoc(sal_True);  // Select everything in the frame
                             pSh->InsertSection(aSect);

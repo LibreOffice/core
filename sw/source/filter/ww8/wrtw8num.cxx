@@ -770,7 +770,7 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
                 (rRul.Get(nUpper).GetNumberingType() != SVX_NUM_NUMBER_NONE ) ) // Nummerierung drueber ?
             {
                                                     // dann Punkt einfuegen
-                SwWw8_InsertAnlText( aDotStr, rpCh, rCharLen,
+                SwWw8_InsertAnlText( ".", rpCh, rCharLen,
                                     rAnlv.cbTextBefore );
             }
 

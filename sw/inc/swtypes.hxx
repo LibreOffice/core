@@ -81,7 +81,6 @@ const SwTwips lMinBorder = 1134;
 
 // Constant strings.
 SW_DLLPUBLIC extern OUString aEmptyOUStr;  // remove once aEmptyOUStr can be changed to OUString
-SW_DLLPUBLIC extern OUString aDotStr;      // '.'
 
 // For inserting of captions (what and where to insert).
 // It's here because it is not big enough to justify its own hxx
