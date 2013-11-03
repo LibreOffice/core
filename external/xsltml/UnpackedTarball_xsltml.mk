@@ -22,7 +22,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,xsltml,\
 ))
  
 $(eval $(call gb_UnpackedTarball_add_patches,xsltml,\
-	xsltml/xsltml_2.1.2.patch \
+	external/xsltml/xsltml_2.1.2.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
