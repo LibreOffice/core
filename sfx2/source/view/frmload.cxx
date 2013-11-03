@@ -671,7 +671,6 @@ Sequence< OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames() th
 /* Helper for XServiceInfo */
 Sequence< OUString > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames()
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 2 );
     seqServiceNames.getArray() [0] = OUString( "com.sun.star.frame.SynchronousFrameLoader" );
     seqServiceNames.getArray() [1] = OUString( "com.sun.star.frame.OfficeFrameLoader" );
