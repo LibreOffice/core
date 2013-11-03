@@ -26,9 +26,6 @@
 class ScHeaderFunctionSet;
 class ScHeaderSelectionEngine;
 
-// ---------------------------------------------------------------------------
-
-
 class ScColBar : public ScHeaderControl
 {
     ScViewData*              pViewData;
@@ -40,19 +37,19 @@ public:
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
                 ~ScColBar();
 
-    virtual SCCOLROW    GetPos();
-    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo );
-    virtual OUString    GetEntryText( SCCOLROW nEntryNo );
+    virtual SCCOLROW    GetPos() const;
+    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) const;
+    virtual OUString    GetEntryText( SCCOLROW nEntryNo ) const;
 
-    virtual bool        IsLayoutRTL();                      // only for columns
+    virtual bool        IsLayoutRTL() const;
 
     virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize );
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
     virtual void        SetMarking( bool bSet );
     virtual void        SelectWindow();
-    virtual bool        IsDisabled();
-    virtual bool        ResizeAllowed();
+    virtual bool        IsDisabled() const;
+    virtual bool        ResizeAllowed() const;
 
     virtual void        DrawInvert( long nDragPos );
 
@@ -73,29 +70,26 @@ public:
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
                 ~ScRowBar();
 
-    virtual SCCOLROW    GetPos();
-    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo );
-    virtual OUString    GetEntryText( SCCOLROW nEntryNo );
+    virtual SCCOLROW    GetPos() const;
+    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) const;
+    virtual OUString    GetEntryText( SCCOLROW nEntryNo ) const;
 
-    virtual bool        IsMirrored();                       // only for columns
-    virtual SCROW       GetHiddenCount( SCROW nEntryNo );   // only for columns
+    virtual bool        IsMirrored() const;
+    virtual SCROW       GetHiddenCount( SCROW nEntryNo ) const;
 
     virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize );
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
     virtual void        SetMarking( bool bSet );
     virtual void        SelectWindow();
-    virtual bool        IsDisabled();
-    virtual bool        ResizeAllowed();
+    virtual bool        IsDisabled() const;
+    virtual bool        ResizeAllowed() const;
 
     virtual void        DrawInvert( long nDragPos );
 
     virtual OUString    GetDragHelp( long nVal );
 };
 
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

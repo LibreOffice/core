@@ -74,12 +74,12 @@ inline bool ScColBar::UseNumericHeader() const
     return pViewData->GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1;
 }
 
-SCCOLROW ScColBar::GetPos()
+SCCOLROW ScColBar::GetPos() const
 {
     return pViewData->GetPosX(eWhich);
 }
 
-sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
+sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
@@ -89,10 +89,10 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
         return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
 }
 
-OUString ScColBar::GetEntryText( SCCOLROW nEntryNo )
+OUString ScColBar::GetEntryText( SCCOLROW nEntryNo ) const
 {
     return UseNumericHeader()
-        ? OUString::number(nEntryNo + 1) //FIXME remove String again
+        ? OUString::number(nEntryNo + 1)
         : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 
@@ -100,7 +100,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
     sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
+    if (nNewSize < 10) nNewSize = 10; // pixels
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -191,13 +191,13 @@ void ScColBar::SelectWindow()
     pViewSh->ActiveGrabFocus();
 }
 
-bool ScColBar::IsDisabled()
+bool ScColBar::IsDisabled() const
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->IsFormulaMode() || pScMod->IsModalMode();
 }
 
-bool ScColBar::ResizeAllowed()
+bool ScColBar::ResizeAllowed() const
 {
     return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
@@ -217,7 +217,7 @@ OUString ScColBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
-bool ScColBar::IsLayoutRTL()        // overloaded only for columns
+bool ScColBar::IsLayoutRTL() const        // overloaded only for columns
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
@@ -238,12 +238,12 @@ ScRowBar::~ScRowBar()
 {
 }
 
-SCCOLROW ScRowBar::GetPos()
+SCCOLROW ScRowBar::GetPos() const
 {
     return pViewData->GetPosY(eWhich);
 }
 
-sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
+sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
@@ -255,7 +255,7 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
                     nTab ), pViewData->GetPPTY() );
 }
 
-OUString ScRowBar::GetEntryText( SCCOLROW nEntryNo )
+OUString ScRowBar::GetEntryText( SCCOLROW nEntryNo ) const
 {
     return OUString::number( nEntryNo + 1 );
 }
@@ -264,7 +264,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
     sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
+    if (nNewSize < 10) nNewSize = 10; // pixels
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -355,13 +355,13 @@ void ScRowBar::SelectWindow()
     pViewSh->ActiveGrabFocus();
 }
 
-bool ScRowBar::IsDisabled()
+bool ScRowBar::IsDisabled() const
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->IsFormulaMode() || pScMod->IsModalMode();
 }
 
-bool ScRowBar::ResizeAllowed()
+bool ScRowBar::ResizeAllowed() const
 {
     return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
@@ -381,17 +381,16 @@ OUString ScRowBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
 }
 
-SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )   // overloaded only for rows
+SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo ) const   // overloaded only for rows
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
-bool ScRowBar::IsMirrored()         // overloaded only for rows
+bool ScRowBar::IsMirrored() const         // overloaded only for rows
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
