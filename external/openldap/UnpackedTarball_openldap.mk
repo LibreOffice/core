@@ -12,7 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,openldap))
 $(eval $(call gb_UnpackedTarball_set_tarball,openldap,$(OPENLDAP_TARBALL),,openldap))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openldap,\
-	openldap/openldap-2.4.31.patch \
+	external/openldap/openldap-2.4.31.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
