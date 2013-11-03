@@ -144,7 +144,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	uui \
 	vbahelper \
 	vcl \
-	$(call gb_Helper_optional,VIGRA,vigra) \
 	wizards \
 	writerfilter \
 	writerperfect \
