@@ -18,24 +18,6 @@
 #include <visitors.hxx>
 #include <cursor.hxx>
 
-namespace CppUnit {
-template<>
-struct assertion_traits<OUString>
-{
-    static bool equal(const OUString& x, const OUString& y)
-    {
-        return x == y;
-    }
-
-    static std::string toString(const OUString& x)
-    {
-        OStringStream ost;
-        ost << OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();
-        return ost.str();
-    }
-};
-}
-
 SV_DECL_REF(SmDocShell)
 SV_IMPL_REF(SmDocShell)
 
@@ -578,12 +560,10 @@ void Test::testBinVerInUnary()
 
 void Test::testBinHorInSubSup()
 {
-    OUString sInput, sExpected;
-    SmNode* pTree;
+    OUString sInput;
 
     // set up a blank formula
-    sInput += "";
-    pTree = SmParser().Parse(sInput);
+    SmNode* pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
@@ -601,7 +581,7 @@ void Test::testBinHorInSubSup()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    sExpected += " { a rsup { b + c } + d } ";
+    OUString sExpected = " { a rsup { b + c } + d } ";
 //FIXME    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", sExpected, xDocShRef->GetText());
 
     delete pTree;
@@ -609,20 +589,16 @@ void Test::testBinHorInSubSup()
 
 void Test::testUnaryInMixedNumberAsNumerator()
 {
-    OUString sInput, sExpected;
-    SmNode* pTree;
-
     // set up a unary operator
-    sInput += "- 1";
-    pTree = SmParser().Parse(sInput);
+    OUString sInput = "- 1";
+    SmNode* pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
     TestOutputDevice aOutputDevice;
 
     // move forward (more than) enough places to be at the end
-    int i;
-    for (i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 3; ++i)
         aCursor.Move(&aOutputDevice, MoveRight);
 
     // Select the whole Unary Horizontal Node
@@ -641,14 +617,14 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertText("2");
 
     // move forward (more than) enough places to be at the end
-    for (i = 0; i < 8; ++i)
+    for (size_t i = 0; i < 8; ++i)
         aCursor.Move(&aOutputDevice, MoveRight);
 
     // add 4 to the end
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("4");
 
-    sExpected += " { 2 { - 1 over 2 } + 4 } ";
+    OUString sExpected = " { 2 { - 1 over 2 } + 4 } ";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, xDocShRef->GetText());
 
     delete pTree;
