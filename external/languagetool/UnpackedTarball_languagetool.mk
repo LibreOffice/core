@@ -14,9 +14,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,languagetool,$(LANGUAGETOOL_TARBALL
 $(eval $(call gb_UnpackedTarball_set_patchlevel,languagetool,3))
 
 $(eval $(call gb_UnpackedTarball_add_patches,languagetool,\
-    languagetool/JLanguageTool-1.7.0.patch \
-    languagetool/JLanguageTool-1.4.0-no-hc.patch \
-    languagetool/MessageBox-apichange.patch \
+    external/languagetool/JLanguageTool-1.7.0.patch \
+    external/languagetool/JLanguageTool-1.4.0-no-hc.patch \
+    external/languagetool/MessageBox-apichange.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

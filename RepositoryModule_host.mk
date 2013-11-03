@@ -68,7 +68,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	jurt \
 	jvmaccess \
 	jvmfwk \
-	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	librelogo \
 	libxmlsec \
 	lingucomponent \
