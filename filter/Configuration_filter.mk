@@ -304,14 +304,17 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_StarOffice_XML_Writer \
 	writer_WordPerfect_Document \
 	writer_MS_Works_Document \
+	writer_Beagle_Works \
 	writer_ClarisWorks \
 	writer_DocMaker \
 	writer_eDoc_Document \
 	writer_FullWrite_Professional \
+	writer_Great_Works \
 	writer_HanMac_Word_K \
 	writer_LightWayText \
 	writer_Mac_Word \
 	writer_Mac_Works \
+	writer_MacDoc \
 	writer_MacWrite \
 	writer_MacWritePro \
 	writer_Mariner_Write \
@@ -350,14 +353,17 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	StarOffice_XML__Writer_ \
 	WordPerfect \
 	MS_Works \
+	Beagle_Works \
 	ClarisWorks \
 	DocMaker \
 	eDoc_Document \
 	FullWrite_Professional \
+	Great_Works \
 	HanMac_Word_K \
 	LightWayText \
 	Mac_Word \
 	Mac_Works \
+	MacDoc \
 	MacWrite \
 	MacWritePro \
 	Mariner_Write \

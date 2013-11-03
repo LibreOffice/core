@@ -169,7 +169,7 @@ throw( com::sun::star::uno::RuntimeException )
                 sTypeName = "writer_HanMac_Word_K";
                 break;
             case MWAWDocument::MWAW_T_HANMACWORDJ:
-                // sTypeName = "writer_HanMac_Word_J";
+                sTypeName = "writer_HanMac_Word_J";
                 break;
             case MWAWDocument::MWAW_T_LIGHTWAYTEXT:
                 sTypeName = "writer_LightWayText";
