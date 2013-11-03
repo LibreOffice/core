@@ -16,6 +16,24 @@
       "revId": "cc97ed7bdbb661af1bd22b1f614faeef46ec3964",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///9A\u003d",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-11-03T13:39:21Z",
+      "side": 1,
+      "message": "I changed intentionally, but I\u0027ll fix that.",
+      "parentUuid": "AAAAaH///+A\u003d",
+      "revId": "cc97ed7bdbb661af1bd22b1f614faeef46ec3964",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

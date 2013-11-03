@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAaH///88\u003d",
+        "filename": "sc/source/ui/inc/colrowba.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-11-03T13:39:21Z",
+      "side": 0,
+      "message": "I removed that because it is useless. The class is ScColBar: the column header bar.",
+      "parentUuid": "AAAAaH///+I\u003d",
+      "revId": "91d88ff8646d5ae86c37b92441b7e857ec5e86ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAaH///+E\u003d",
         "filename": "sc/source/ui/inc/colrowba.hxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-11-03T03:15:54Z",
       "side": 0,
       "message": "See above.",
+      "revId": "91d88ff8646d5ae86c37b92441b7e857ec5e86ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///84\u003d",
+        "filename": "sc/source/ui/inc/colrowba.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-11-03T13:39:21Z",
+      "side": 0,
+      "message": "Same as above. ;)",
+      "parentUuid": "AAAAaH///+E\u003d",
       "revId": "91d88ff8646d5ae86c37b92441b7e857ec5e86ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
