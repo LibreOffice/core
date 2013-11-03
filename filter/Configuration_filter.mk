@@ -176,6 +176,8 @@ filter_XcuFilterUiCleanTarget = $(WORKDIR)/Clean/XcuFilterUiTarget/filter_ui.xcu
 filter_XCU_filter := org/openoffice/TypeDetection/Filter.xcu
 filter_XcuResTarget_get_target = \
  $(call gb_XcuResTarget_get_target,fcfg_langpack/$(1)/$(filter_XCU_filter))
+filter_XcuResTarget_get_clean_target = \
+ $(call gb_XcuResTarget_get_clean_target,fcfg_langpack/$(1)/$(filter_XCU_filter))
 
 $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),FIU,1)
