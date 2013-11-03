@@ -90,7 +90,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	readlicense_oo \
-	$(call gb_Helper_optional,REDLAND,redland) \
 	registry \
 	remotebridges \
 	reportbuilder \
