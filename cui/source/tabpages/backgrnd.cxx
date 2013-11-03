@@ -1243,7 +1243,7 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
         m_pBitmapContainer->Show();
 
         m_pFileFrame->Show();
-        m_pBtnLink->Show(!bLinkOnly && ! nHtmlMode & HTMLMODE_ON);
+        m_pBtnLink->Show(!bLinkOnly && !(nHtmlMode & HTMLMODE_ON));
 
         m_pTypeFrame->Show();
 
