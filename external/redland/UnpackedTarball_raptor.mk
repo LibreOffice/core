@@ -12,14 +12,14 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,raptor))
 $(eval $(call gb_UnpackedTarball_set_tarball,raptor,$(RAPTOR_TARBALL),,redland))
 
 # configure generated files for MSVC
-$(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor2.h,redland/raptor/raptor2.h))
-$(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor_config.h,redland/raptor/raptor_config.h))
+$(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor2.h,external/redland/raptor/raptor2.h))
+$(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor_config.h,external/redland/raptor/raptor_config.h))
 
 $(eval $(call gb_UnpackedTarball_add_patches,raptor,\
-	redland/raptor/raptor-freebsd.patch.1 \
-	$(if $(filter WNTGCC,$(OS)$(COM)),redland/raptor/raptor-mingw.patch.1) \
-	$(if $(filter-out WNT,$(OS)),redland/raptor/raptor-bundled-soname.patch.1) \
-	$(if $(filter ANDROID,$(OS)),redland/raptor/raptor-android.patch.1) \
+	external/redland/raptor/raptor-freebsd.patch.1 \
+	$(if $(filter WNTGCC,$(OS)$(COM)),external/redland/raptor/raptor-mingw.patch.1) \
+	$(if $(filter-out WNT,$(OS)),external/redland/raptor/raptor-bundled-soname.patch.1) \
+	$(if $(filter ANDROID,$(OS)),external/redland/raptor/raptor-android.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:
