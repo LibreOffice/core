@@ -581,7 +581,7 @@ void Test::testBinHorInSubSup()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    OUString sExpected = " { a rsup { b + c } + d } ";
+//FIXME    OUString sExpected = " { a rsup { b + c } + d } ";
 //FIXME    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", sExpected, xDocShRef->GetText());
 
     delete pTree;
