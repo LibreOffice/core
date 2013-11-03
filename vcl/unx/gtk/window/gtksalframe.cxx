@@ -656,7 +656,6 @@ gboolean ensure_dbus_setup( gpointer data )
         gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "/org/libreoffice" );
         gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
         gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
-        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu" );
 
         // Publish the menu model and the action group.
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
@@ -665,9 +664,15 @@ gboolean ensure_dbus_setup( gpointer data )
         pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusWindowPath, pActionGroup, NULL);
         pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, NULL, NULL );
 
+        // fdo#70885 we don't want app menu under Unity
+        bool bDesktopIsUnity = (SalGetDesktopEnvironment() == "UNITY");
+
+        if (!bDesktopIsUnity)
+            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu" );
+
         //app menu, to-do translations, block normal menus when active, honor use appmenu settings
         ResMgr* pMgr = ImplGetResMgr();
-        if( pMgr )
+        if( pMgr && !bDesktopIsUnity )
         {
             GMenu *menu = g_menu_new ();
             GMenuItem* item;

@@ -291,6 +291,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
             return DESKTOP_GNOME;
+        if ( aOver.equalsIgnoreAsciiCase( "unity" ) )
+            return DESKTOP_UNITY;
         if ( aOver.equalsIgnoreAsciiCase( "xfce" ) )
             return DESKTOP_XFCE;
         if ( aOver.equalsIgnoreAsciiCase( "mate" ) )
@@ -351,12 +353,18 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 
     const char *pSession;
     OString aDesktopSession;
-
     if ( ( pSession = getenv( "DESKTOP_SESSION" ) ) )
         aDesktopSession = OString( pSession, strlen( pSession ) );
 
+    const char *pDesktop;
+    OString aCurrentDesktop;
+    if ( ( pDesktop = getenv( "XDG_CURRENT_DESKTOP" ) ) )
+        aCurrentDesktop = OString( pDesktop, strlen( pDesktop ) );
+
     // fast environment variable checks
-    if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome" ) )
+    if ( aCurrentDesktop.equalsIgnoreAsciiCase( "unity" ) )
+        ret = DESKTOP_UNITY;
+    else if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome" ) )
         ret = DESKTOP_GNOME;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "mate" ) )
         ret = DESKTOP_MATE;

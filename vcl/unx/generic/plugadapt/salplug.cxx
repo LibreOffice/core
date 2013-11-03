@@ -184,6 +184,7 @@ static SalInstance* autodetect_plugin()
     if ( desktop == DESKTOP_NONE )
         pList = pHeadlessFallbackList;
     else if ( desktop == DESKTOP_GNOME ||
+              desktop == DESKTOP_UNITY ||
               desktop == DESKTOP_XFCE  ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
@@ -286,7 +287,7 @@ const OUString& SalGetDesktopEnvironment()
 {
     // Order to match desktops.hxx' DesktopType
     static const char * const desktop_strings[] = {
-        "none", "unknown", "GNOME",
+        "none", "unknown", "GNOME", "UNITY",
         "XFCE", "MATE", "TDE",
         "KDE", "KDE4" };
     static OUString aRet;
