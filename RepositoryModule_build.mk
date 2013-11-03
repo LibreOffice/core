@@ -67,7 +67,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			editeng \
 			framework \
 			linguistic \
-			nss \
 			package \
 			sfx2 \
 			sot \

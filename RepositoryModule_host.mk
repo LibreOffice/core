@@ -77,7 +77,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,MARIADBC,mysqlc) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	np_sdk \
-	$(call gb_Helper_optional,NSS,nss) \
 	o3tl \
 	$(call gb_Helper_optional,ODK,odk) \
 	offapi \
