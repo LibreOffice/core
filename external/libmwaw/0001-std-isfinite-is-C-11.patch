@@ -8,27 +8,6 @@ Subject: [PATCH] std::isfinite is C++11
  src/lib/CWDbaseContent.cxx |  5 +++--
  2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index b350b91..286939d 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -357,6 +357,16 @@ AC_SUBST(ZLIB_CFLAGS)
- AC_SUBST(ZLIB_LIBS)
- AM_CONDITIONAL([WITH_LIBMWAW_ZIP], [test "x$with_zip" != "xno"])
- 
-+# ==================
-+# Find boost headers
-+# ==================
-+AC_CHECK_HEADERS(
-+        boost/math/special_functions/fpclassify.hpp,
-+    [],
-+    [AC_MSG_ERROR([Required boost headers not found.])],
-+    []
-+)
-+
- # =============
- # Documentation
- # =============
 diff --git a/src/lib/CWDbaseContent.cxx b/src/lib/CWDbaseContent.cxx
 index f27148d..7198103 100644
 --- a/src/lib/CWDbaseContent.cxx
