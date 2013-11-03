@@ -16,6 +16,24 @@
       "revId": "136ec15f55a004a5b637ecff19a399181a97f9e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///8w\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-11-03T13:50:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAaH////w\u003d",
+      "revId": "136ec15f55a004a5b637ecff19a399181a97f9e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
