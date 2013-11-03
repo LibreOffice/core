@@ -153,7 +153,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	xmlreader \
 	xmlscript \
 	xmlsecurity \
-	$(call gb_Helper_optional,ZLIB,zlib) \
 ))
 
 ifneq ($(MERGELIBS),)
