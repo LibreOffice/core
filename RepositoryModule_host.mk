@@ -85,7 +85,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	oox \
 	package \
 	padmin \
-	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	postprocess \
 	psprint_config \
 	$(call gb_Helper_optional,PYTHON,python3) \
