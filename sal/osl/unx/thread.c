@@ -76,7 +76,7 @@
 typedef struct osl_thread_impl_st
 {
     pthread_t           m_hThread;
-    sal_uInt16          m_Ident; /* @@@ see TODO @@@ */
+    sal_Int32           m_Ident; /* @@@ see TODO @@@ */
     short               m_Flags;
     oslWorkerFunction   m_WorkerFunction;
     void*               m_pData;
@@ -183,7 +183,8 @@ static void osl_thread_cleanup_Impl (Thread_Impl * pImpl)
     pthread_mutex_unlock (&(pImpl->m_Lock));
 
     /* release oslThreadIdentifier @@@ see TODO @@@ */
-    removeThreadId (thread);
+    if (pImpl->m_Ident > 0)
+        removeThreadId (thread);
 
     if (attached)
     {
@@ -206,7 +207,8 @@ static void* osl_thread_start_Impl (void* pData)
     pthread_mutex_lock (&(pImpl->m_Lock));
 
     /* request oslThreadIdentifier @@@ see TODO @@@ */
-    pImpl->m_Ident = insertThreadId (pImpl->m_hThread);
+    pImpl->m_Ident  = -1;
+    //pImpl->m_Ident = insertThreadId (pImpl->m_hThread);
 
     /* signal change from STARTUP to ACTIVE state */
     pImpl->m_Flags &= ~THREADIMPL_FLAGS_STARTUP;
@@ -641,8 +643,10 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
     sal_uInt16   Ident;
 
-    if (pImpl)
+    if (pImpl && pImpl->m_Ident > 0)
+    {
         Ident = pImpl->m_Ident;
+    }
     else
     {
         /* current thread */
@@ -652,6 +656,8 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
         if (Ident == 0)
             /* @@@ see TODO: alien pthread_self() @@@ */
             Ident = insertThreadId (current);
+        if (pImpl)
+            pImpl->m_Ident = Ident;
     }
 
     return ((oslThreadIdentifier)(Ident));
