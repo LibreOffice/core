@@ -1773,6 +1773,7 @@ void SwViewShell::PaintTile(OutputDevice *pOut, const Rectangle &rRect)
 extern "C"
 void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLODpxPoint tileDpxPosition, MLODpxSize tileDpxSize)
 {
+    // SAL_DEBUG("touch_lo_draw_tile(" << contextWidth << ", " << contextHeight << ", (" << tileDpxPosition.x << "," << tileDpxPosition.y << "), " << tileDpxSize.width << "x" << tileDpxSize.height << ")");
     MLORipPoint tileRipPosition = MLORipPointByDpxPoint(tileDpxPosition);
     MLORipSize rileRipSize = MLORipSizeByDpxSize(tileDpxSize);
     MLORip tileRipPosX = tileRipPosition.x;
@@ -1808,7 +1809,15 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         aMapMode.SetScaleX(scaleX);
         aMapMode.SetScaleY(scaleY);
         aDevice.SetMapMode(aMapMode);
-        SetSwVisArea( pViewShell, SwRect(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)) );
+        static bool bCallSetSwVisArea = getenv("CALLSETSWVISAREA") != NULL;
+        if (bCallSetSwVisArea)
+        {
+            // SwRect foo = pViewShell->VisArea();
+            // SAL_DEBUG("old VisArea: " << foo);
+            SetSwVisArea( pViewShell, SwRect(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)) );
+            // foo = pViewShell->VisArea();
+            // SAL_DEBUG("new VisArea: " << foo);
+        }
         // resizes the virtual device so to contain the entrie context
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
         // draw - works in logic coordinates
