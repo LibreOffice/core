@@ -31,8 +31,8 @@
 }
 
 +(CGRect)resized:(MLOAppRoleTileTester *)tester{
-    return CGRectMake(  (tester.renderer.view.frame.size.width -tester.params.contextWidth)/2.0f,
-                        (tester.renderer.view.frame.size.height -tester.params.contextHeight)/2.0f,
+    return CGRectMake(  10,
+                        10,
                         tester.params.contextWidth,
                         tester.params.contextHeight);
 }
