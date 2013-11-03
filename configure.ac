@@ -7714,7 +7714,7 @@ libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.0])
 dnl ===================================================================
 dnl Check for system libmwaw
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.1])
+libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.2])
 
 dnl ===================================================================
 dnl Check for system libvisio

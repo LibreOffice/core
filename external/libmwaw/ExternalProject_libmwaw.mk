@@ -18,6 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,libmwaw,\
 $(eval $(call gb_ExternalProject_use_externals,libmwaw,\
 	boost_headers \
 	wpd \
+	wpg \
 ))
 
 $(call gb_ExternalProject_get_state_target,libmwaw,build) :
