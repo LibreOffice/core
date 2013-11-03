@@ -69,7 +69,7 @@ else
 
 define gb_LinkTarget__use_mesa_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/Mesa/inc \
+	-I$(SRCDIR)/external/Mesa/inc \
 	$$(INCLUDE) \
 )
 
