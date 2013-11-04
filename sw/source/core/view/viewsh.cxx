@@ -1780,10 +1780,12 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     MLORip tileRipPosY = tileRipPosition.y;
     MLORip tileRipWidth = rileRipSize.width;
     MLORip tileRipHeight = rileRipSize.height;
+    // tilePosX/Y and tileWidth/Height tell the part of the document,
+    // in twip units, to render
     int tilePosX = tileRipPosX;
     int tilePosY = tileRipPosY;
-    int tileWidth  = tileRipWidth;
-    int tileHeight = tileRipHeight;
+    long tileWidth  = tileRipWidth;
+    long tileHeight = tileRipHeight;
     // Currently we expect that only one document is open, so we are using the
     // current shell.  Should it turn out that we need to have more documents
     // open, we need to add a documentHandle that would hold the right
@@ -1797,7 +1799,6 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     if (pViewShell)
     {
         static bool bUseTileSize = getenv("USETILESIZE") != NULL;
-        static bool bCallSetScale = bUseTileSize && (getenv("CALLSETSCALE") != NULL);
         static bool bCallSetSwVisArea = bUseTileSize && getenv("CALLSETSWVISAREA") != NULL;
         // TODO create a VirtualDevice based on SystemGraphicsData instead so
         // that we get direct rendering; something like:
@@ -1806,14 +1807,12 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         MapMode aMapMode(aDevice.GetMapMode());
         aMapMode.SetMapUnit(MAP_TWIP);
         aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
-        if (bCallSetScale)
-        {
-            // scaling
-            Fraction scaleX(tileWidth,contextWidth);
-            Fraction scaleY(tileHeight,contextHeight);
-            aMapMode.SetScaleX(scaleX);
-            aMapMode.SetScaleY(scaleY);
-        }
+        // Scaling. Must convert from pixels to twips. We know
+        // that VirtualDevises use a DPI of 96.
+        Fraction scaleX = Fraction(contextWidth,96) * Fraction(1440L) / Fraction(tileWidth);
+        Fraction scaleY = Fraction(contextHeight,96) * Fraction(1440L) / Fraction(tileHeight);
+        aMapMode.SetScaleX(scaleX);
+        aMapMode.SetScaleY(scaleY);
         aDevice.SetMapMode(aMapMode);
         if (bCallSetSwVisArea)
         {
