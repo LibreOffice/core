@@ -1127,6 +1127,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpINTRATE));
                 }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                   "com.sun.star.sheet.addin.Analysis.getPrice"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts,
+                                      ft->Children[i], new OpPrice));
+                }
                 break;
             default:
                 throw UnhandledToken(pChild, "unhandled opcode");
