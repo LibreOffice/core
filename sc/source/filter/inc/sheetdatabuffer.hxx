@@ -176,9 +176,8 @@ private:
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const ApiTokenSequence& rTokens ) const;
     /** Inserts the passed table operation into the sheet. */
-    void                finalizeTableOperation(
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
-                            const DataTableModel& rModel ) const;
+    void finalizeTableOperation(
+        const ::com::sun::star::table::CellRangeAddress& rRange, const DataTableModel& rModel );
 
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
     void                applyCellMerging( const ::com::sun::star::table::CellRangeAddress& rRange );

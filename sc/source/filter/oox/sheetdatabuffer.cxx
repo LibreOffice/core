@@ -51,6 +51,8 @@
 #include "scitems.hxx"
 #include "formulacell.hxx"
 #include "docpool.hxx"
+#include "paramisc.hxx"
+#include "documentimport.hxx"
 
 namespace oox {
 namespace xls {
@@ -565,71 +567,79 @@ void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, cons
         xTokens->setArrayTokens( rTokens );
 }
 
-void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel ) const
+void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel )
 {
+    if (rModel.mbRef1Deleted)
+        return;
+
+    if (rModel.maRef1.isEmpty())
+        return;
+
+    if (rRange.StartColumn <= 0 || rRange.StartRow <= 0)
+        return;
+
     sal_Int16 nSheet = getSheetIndex();
-    bool bOk = false;
-    if( !rModel.mbRef1Deleted && !rModel.maRef1.isEmpty() && (rRange.StartColumn > 0) && (rRange.StartRow > 0) )
+
+    CellAddress aRef1;
+    if (!getAddressConverter().convertToCellAddress(aRef1, rModel.maRef1, nSheet, true))
+        return;
+
+    ScDocumentImport& rDoc = getDocImport();
+    ScTabOpParam aParam;
+
+    ScRange aScRange;
+    ScUnoConversion::FillScRange(aScRange, rRange);
+
+    if (rModel.mb2dTable)
     {
-        CellRangeAddress aOpRange = rRange;
-        CellAddress aRef1;
-        if( getAddressConverter().convertToCellAddress( aRef1, rModel.maRef1, nSheet, true ) ) try
-        {
-            if( rModel.mb2dTable )
-            {
-                CellAddress aRef2;
-                if( !rModel.mbRef2Deleted && getAddressConverter().convertToCellAddress( aRef2, rModel.maRef2, nSheet, true ) )
-                {
-                    // API call expects input values inside operation range
-                    --aOpRange.StartColumn;
-                    --aOpRange.StartRow;
-                    // formula range is top-left cell of operation range
-                    CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn, aOpRange.StartRow, aOpRange.StartColumn, aOpRange.StartRow );
-                    // set multiple operation
-                    Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
-                    xMultOp->setTableOperation( aFormulaRange, TableOperationMode_BOTH, aRef2, aRef1 );
-                    bOk = true;
-                }
-            }
-            else if( rModel.mbRowTable )
-            {
-                // formula range is column to the left of operation range
-                CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn - 1, aOpRange.StartRow, aOpRange.StartColumn - 1, aOpRange.EndRow );
-                // API call expects input values (top row) inside operation range
-                --aOpRange.StartRow;
-                // set multiple operation
-                Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
-                xMultOp->setTableOperation( aFormulaRange, TableOperationMode_ROW, aRef1, aRef1 );
-                bOk = true;
-            }
-            else
-            {
-                // formula range is row above operation range
-                CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn, aOpRange.StartRow - 1, aOpRange.EndColumn, aOpRange.StartRow - 1 );
-                // API call expects input values (left column) inside operation range
-                --aOpRange.StartColumn;
-                // set multiple operation
-                Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
-                xMultOp->setTableOperation( aFormulaRange, TableOperationMode_COLUMN, aRef1, aRef1 );
-                bOk = true;
-            }
-        }
-        catch( Exception& )
-        {
-        }
+        // Two-variable data table.
+        if (rModel.mbRef2Deleted)
+            return;
+
+        if (rModel.maRef2.isEmpty())
+            return;
+
+        CellAddress aRef2;
+        if (!getAddressConverter().convertToCellAddress(aRef2, rModel.maRef2, nSheet, true))
+            return;
+
+        aParam.meMode = ScTabOpParam::Both;
+
+        aParam.aRefFormulaCell.Set(rRange.StartColumn-1, rRange.StartRow-1, nSheet, false, false, false);
+        aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
+
+        aScRange.aStart.IncRow(-1);
+        aScRange.aStart.IncCol(-1);
+
+        // Ref1 is row input cell and Ref2 is column input cell.
+        aParam.aRefRowCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
+        aParam.aRefColCell.Set(aRef2.Column, aRef2.Row, aRef2.Sheet, false, false, false);
+        rDoc.setTableOpCells(aScRange, aParam);
+
+        return;
     }
 
-    // on error: fill cell range with #REF! error codes
-    if( !bOk ) try
+    // One-variable data table.
+
+    if (rModel.mbRowTable)
     {
-        Reference< XCellRangeData > xCellRangeData( getCellRange( rRange ), UNO_QUERY_THROW );
-        size_t nWidth = static_cast< size_t >( rRange.EndColumn - rRange.StartColumn + 1 );
-        size_t nHeight = static_cast< size_t >( rRange.EndRow - rRange.StartRow + 1 );
-        Matrix< Any > aErrorCells( nWidth, nHeight, Any( getFormulaParser().convertErrorToFormula( BIFF_ERR_REF ) ) );
-        xCellRangeData->setDataArray( ContainerHelper::matrixToSequenceSequence( aErrorCells ) );
+        // One-variable row input cell (horizontal).
+        aParam.meMode = ScTabOpParam::Row;
+        aParam.aRefRowCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
+        aParam.aRefFormulaCell.Set(rRange.StartColumn-1, rRange.StartRow, nSheet, false, true, false);
+        aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
+        aScRange.aStart.IncRow(-1);
+        rDoc.setTableOpCells(aScRange, aParam);
     }
-    catch( Exception& )
+    else
     {
+        // One-variable column input cell (vertical).
+        aParam.meMode = ScTabOpParam::Column;
+        aParam.aRefColCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
+        aParam.aRefFormulaCell.Set(rRange.StartColumn, rRange.StartRow-1, nSheet, true, false, false);
+        aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
+        aScRange.aStart.IncCol(-1);
+        rDoc.setTableOpCells(aScRange, aParam);
     }
 }
 
