@@ -152,7 +152,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         try
         {
             ::com::sun::star::beans::PropertyValue aValue;
-            aValue.Name     = OUString("Referer");
+            aValue.Name     = "Referer";
             aValue.Value <<= pPlugin->getRefererURL();
 
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
@@ -227,10 +227,10 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
         try
         {
             ::com::sun::star::beans::PropertyValue aValues[2];
-            aValues[0].Name = OUString("Referer");
+            aValues[0].Name = "Referer";
             aValues[0].Value <<= pPlugin->getRefererURL();
 
-            aValues[1].Name = OUString("PostString");
+            aValues[1].Name = "PostString";
             aValues[1].Value <<= OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
@@ -307,7 +307,7 @@ void FileSink::closeOutput() throw()
         try
         {
             ::com::sun::star::beans::PropertyValue aValue;
-            aValue.Name = OUString("Referer");
+            aValue.Name = "Referer";
             aValue.Value <<= pPlugin->getRefererURL();
 
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );

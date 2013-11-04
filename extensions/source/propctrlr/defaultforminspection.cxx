@@ -94,7 +94,7 @@ namespace pcr
     Sequence< OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.form.inspection.DefaultFormComponentInspectorModel");
+        aSupported[0] = "com.sun.star.form.inspection.DefaultFormComponentInspectorModel";
         return aSupported;
     }
 

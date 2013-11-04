@@ -125,8 +125,8 @@ Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
     if( aResult.getLength() == 0)
     {
         aResult.realloc(2);
-        aResult[0] = OUString("String");
-        aResult[1] = OUString("StringList");
+        aResult[0] = "String";
+        aResult[1] = "StringList";
     }
     return aResult;
 }

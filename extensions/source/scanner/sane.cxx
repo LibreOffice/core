@@ -172,7 +172,7 @@ void Sane::Init()
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
-        sSaneLibName = OUString("libsane" SAL_DLLEXTENSION ".1" );
+        sSaneLibName = "libsane" SAL_DLLEXTENSION ".1";
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
     // try reasonable places that might not be in the library search path

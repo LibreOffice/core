@@ -227,7 +227,7 @@ OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
 uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
 {
     uno::Sequence<OUString> aServices(1) ;
-    aServices[0] = OUString("com.sun.star.configuration.backend.LdapUserProfileBe") ;
+    aServices[0] = "com.sun.star.configuration.backend.LdapUserProfileBe";
     return aServices ;
 }
 

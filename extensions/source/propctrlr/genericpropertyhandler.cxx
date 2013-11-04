@@ -283,14 +283,14 @@ namespace pcr
     void UrlClickHandler::impl_dispatch_throw( const OUString& _rURL )
     {
         Reference< XURLTransformer > xTransformer( URLTransformer::create(m_xContext) );
-        URL aURL; aURL.Complete = OUString( ".uno:OpenHyperlink" );
+        URL aURL; aURL.Complete = ".uno:OpenHyperlink";
         xTransformer->parseStrict( aURL );
 
         Reference< XDesktop2 > xDispProv = Desktop::create( m_xContext );
         Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
 
         Sequence< PropertyValue > aDispatchArgs(1);
-        aDispatchArgs[0].Name   = OUString("URL");
+        aDispatchArgs[0].Name   = "URL";
         aDispatchArgs[0].Value  <<= _rURL;
 
         xDispatch->dispatch( aURL, aDispatchArgs );
@@ -347,7 +347,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
-        aSupported[0] = OUString( "com.sun.star.inspection.GenericPropertyHandler" );
+        aSupported[0] = "com.sun.star.inspection.GenericPropertyHandler";
         return aSupported;
     }
 
@@ -667,7 +667,7 @@ namespace pcr
         if ( !aDescriptor.Control.is() )
             PropertyHandlerHelper::describePropertyLine( pos->second, aDescriptor, _rxControlFactory );
 
-        aDescriptor.Category = OUString( "General" );
+        aDescriptor.Category = "General";
         return aDescriptor;
     }
 

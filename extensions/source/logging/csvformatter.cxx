@@ -103,13 +103,13 @@ namespace logging
 //= private helpers
 namespace
 {
-    const sal_Unicode quote_char = OUString("\"").toChar();
-    const sal_Unicode comma_char = OUString(",").toChar();
-    const OUString dos_newline = OUString("\r\n");
+    const sal_Unicode quote_char = '"';
+    const sal_Unicode comma_char = ',';
+    const OUString dos_newline = "\r\n";
 
     inline bool needsQuoting(const OUString& str)
     {
-        static const OUString quote_trigger_chars = OUString( "\",\n\r");
+        static const OUString quote_trigger_chars = "\",\n\r";
         sal_Int32 len = str.getLength();
         for(sal_Int32 i=0; i<len; i++)
             if(quote_trigger_chars.indexOf(str[i])!=-1)
@@ -146,7 +146,7 @@ namespace
     ::com::sun::star::uno::Sequence< OUString> initialColumns()
     {
         com::sun::star::uno::Sequence< OUString> result = ::com::sun::star::uno::Sequence< OUString>(1);
-        result[0] = OUString("message");
+        result[0] = "message";
         return result;
     };
 }
@@ -335,7 +335,7 @@ namespace logging
     Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames_static()
     {
         Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = OUString( "com.sun.star.logging.CsvFormatter" );
+        aServiceNames[0] = "com.sun.star.logging.CsvFormatter";
         return aServiceNames;
     }
 

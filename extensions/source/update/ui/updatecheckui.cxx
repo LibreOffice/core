@@ -307,7 +307,7 @@ Image UpdateCheckUI::GetBubbleImage( OUString &rURL )
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
             uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-            aMediaProps[0].Name = OUString("URL");
+            aMediaProps[0].Name = "URL";
             aMediaProps[0].Value <<= rURL;
 
             uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );

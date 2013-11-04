@@ -77,7 +77,7 @@ namespace pcr
     ::comphelper::StringSequence MasterDetailLinkDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = OUString("com.sun.star.form.MasterDetailLinkDialog");
+        aSupported[0] = "com.sun.star.form.MasterDetailLinkDialog";
         return aSupported;
     }
 

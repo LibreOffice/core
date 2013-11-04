@@ -216,7 +216,7 @@ sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sSer
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
     ::com::sun::star::uno::Sequence< OUString > lNames(1);
-    lNames[0] = OUString("com.sun.star.frame.Bibliography");
+    lNames[0] = "com.sun.star.frame.Bibliography";
     return lNames;
 }
 

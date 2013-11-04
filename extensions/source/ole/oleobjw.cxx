@@ -486,7 +486,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
         {
             if ( pInfo && m_sTypeName.getLength() == 0 )
             {
-                 m_sTypeName = OUString("IDispatch");
+                 m_sTypeName = "IDispatch";
                 CComBSTR sName;
 
                 if ( SUCCEEDED( pInfo->GetDocumentation( -1, &sName, NULL, NULL, NULL  ) ) )

@@ -283,7 +283,7 @@ namespace pcr
                 aScriptEvent.ScriptCode = aNewStyleSpec.makeStringAndClear();
 
                 // also, this new-style spec requires the script code to be "Script" instead of "StarBasic"
-                aScriptEvent.ScriptType = OUString(  "Script"  );
+                aScriptEvent.ScriptType = "Script";
             }
             return aScriptEvent;
         }
@@ -437,9 +437,9 @@ namespace pcr
 
         Any aRet;
         Sequence< PropertyValue > aScriptDescriptor( 2 );
-        aScriptDescriptor[0].Name = OUString("EventType");
+        aScriptDescriptor[0].Name = "EventType";
         aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;
-        aScriptDescriptor[1].Name = OUString("Script");
+        aScriptDescriptor[1].Name = "Script";
         aScriptDescriptor[1].Value <<= aDescriptor.ScriptCode;
 
         return makeAny( aScriptDescriptor );
@@ -539,7 +539,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
-        aSupported[0] = OUString(  "com.sun.star.form.inspection.EventHandler"  );
+        aSupported[0] = "com.sun.star.form.inspection.EventHandler";
         return aSupported;
     }
 
@@ -871,7 +871,7 @@ namespace pcr
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.sHelpId );
         aDescriptor.PrimaryButtonId = OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
         aDescriptor.HasPrimaryButton = sal_True;
-        aDescriptor.Category = OUString(  "Events"  );
+        aDescriptor.Category = "Events";
         return aDescriptor;
     }
 

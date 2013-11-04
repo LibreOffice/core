@@ -66,7 +66,7 @@ namespace dbp
     Sequence< OUString > OGroupBoxSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);
-        aReturn[0] = OUString("com.sun.star.sdb.GroupBoxAutoPilot");
+        aReturn[0] = "com.sun.star.sdb.GroupBoxAutoPilot";
         return aReturn;
     }
 
@@ -83,7 +83,7 @@ namespace dbp
     Sequence< OUString > OListComboSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);
-        aReturn[0] = OUString("com.sun.star.sdb.ListComboBoxAutoPilot");
+        aReturn[0] = "com.sun.star.sdb.ListComboBoxAutoPilot";
         return aReturn;
     }
 
@@ -100,7 +100,7 @@ namespace dbp
     Sequence< OUString > OGridSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);
-        aReturn[0] = OUString("com.sun.star.sdb.GridControlAutoPilot");
+        aReturn[0] = "com.sun.star.sdb.GridControlAutoPilot";
         return aReturn;
     }
 

@@ -584,7 +584,7 @@ namespace pcr
     Sequence< OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.inspection.ObjectInspector");
+        aSupported[0] = "com.sun.star.inspection.ObjectInspector";
         return aSupported;
     }
 
@@ -651,7 +651,7 @@ namespace pcr
             return;
 
         OUString sOldSelection = m_sPageSelection;
-        m_sPageSelection = OUString();
+        m_sPageSelection = "";
 
         const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
         if ( (sal_uInt16)-1 != nCurrentPage )
@@ -1422,7 +1422,7 @@ namespace pcr
             OSL_FAIL("OPropertyBrowserController::Commit : caught an exception !");
         }
 
-        m_sCommittingProperty = OUString();
+        m_sCommittingProperty = "";
     }
 
     //--------------------------------------------------------------------

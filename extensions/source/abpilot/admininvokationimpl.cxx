@@ -67,8 +67,8 @@ namespace abp
         try
         {
             // the service name of the administration dialog
-            const static OUString s_sAdministrationServiceName = OUString("com.sun.star.sdb.DatasourceAdministrationDialog");
-            const static OUString s_sDataSourceTypeChangeDialog = OUString("com.sun.star.sdb.DataSourceTypeChangeDialog");
+            const static OUString s_sAdministrationServiceName = "com.sun.star.sdb.DatasourceAdministrationDialog";
+            const static OUString s_sDataSourceTypeChangeDialog = "com.sun.star.sdb.DataSourceTypeChangeDialog";
 
             // the parameters for the call
             Sequence< Any > aArguments(3);

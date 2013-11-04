@@ -124,7 +124,7 @@ namespace abp
     ::comphelper::StringSequence OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot");
+        aSupported[0] = "com.sun.star.ui.dialogs.AddressBookSourcePilot";
         return aSupported;
     }
 
@@ -180,7 +180,7 @@ namespace abp
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lProtocol(1);
-        lProtocol[0].Name    = OUString("Deactivate");
+        lProtocol[0].Name    = "Deactivate";
         lProtocol[0].Value <<= sal_True;
         return makeAny( lProtocol );
     }

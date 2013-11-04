@@ -123,7 +123,7 @@ namespace pcr
     {
         Sequence< OUString > aSupported( m_aServiceDescriptor.GetSupportedServiceNames() );
         aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported[ aSupported.getLength() - 1 ] = OUString(  "com.sun.star.inspection.ObjectInspector"  );
+        aSupported[ aSupported.getLength() - 1 ] = "com.sun.star.inspection.ObjectInspector";
         return aSupported;
     }
 
@@ -137,7 +137,7 @@ namespace pcr
     Sequence< OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.form.PropertyBrowserController");
+        aSupported[0] = "com.sun.star.form.PropertyBrowserController";
         return aSupported;
     }
 
@@ -265,7 +265,7 @@ namespace pcr
     Sequence< OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.awt.PropertyBrowserController");
+        aSupported[0] = "com.sun.star.awt.PropertyBrowserController";
         return aSupported;
     }
 

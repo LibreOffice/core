@@ -56,7 +56,7 @@ Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException )
 Sequence< OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.plugin.PluginModel");
+    aSNS[0] = "com.sun.star.plugin.PluginModel";
     return aSNS;
 }
 

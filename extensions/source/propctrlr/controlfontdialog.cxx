@@ -99,7 +99,7 @@ namespace pcr
     ::comphelper::StringSequence OControlFontDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = OUString("com.sun.star.form.ControlFontDialog");
+        aSupported[0] = "com.sun.star.form.ControlFontDialog";
         return aSupported;
     }
 
@@ -109,7 +109,7 @@ namespace pcr
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xGridModel))
         {
             PropertyValue aArg;
-            aArg.Name = OUString("IntrospectedObject");
+            aArg.Name = "IntrospectedObject";
             aArg.Value <<= xGridModel;
             Sequence< Any > aNewArguments(1);
             aNewArguments[0] <<= aArg;

@@ -256,8 +256,8 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw()
     if( Sane::IsSane() )
     {
         Sequence< ScannerContext > aRet(1);
-        aRet.getArray()[0].ScannerName      = OUString("SANE");
-        aRet.getArray()[0].InternalData     = 0;
+        aRet[0].ScannerName      = "SANE";
+        aRet[0].InternalData     = 0;
         return aRet;
     }
 

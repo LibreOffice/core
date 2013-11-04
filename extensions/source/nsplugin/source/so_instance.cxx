@@ -224,11 +224,11 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         // prepare to load document
         debug_fprintf(NSP_LOG_APPEND, "try to load document\n");
         Sequence< ::com::sun::star::beans::PropertyValue > setPropValues(3);
-        setPropValues[0].Name = OUString("ViewOnly");
+        setPropValues[0].Name = "ViewOnly";
         setPropValues[0].Value <<= sal_True;
-        setPropValues[1].Name = OUString("ReadOnly");
+        setPropValues[1].Name = "ReadOnly";
         setPropValues[1].Value <<= sal_True;
-        setPropValues[2].Name = OUString("InputStream");
+        setPropValues[2].Name = "InputStream";
         setPropValues[2].Value <<= xInputStream;
         /*
         setPropValues[ 3 ].Name = "FilterName";
@@ -240,11 +240,11 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         // load document
          Sequence< ::com::sun::star::beans::PropertyValue > setPropValues2(3);
-        setPropValues2[0].Name = OUString("ViewOnly");
+        setPropValues2[0].Name = "ViewOnly";
         setPropValues2[0].Value <<= sal_True;
-        setPropValues2[1].Name = OUString("ReadOnly");
+        setPropValues2[1].Name = "ReadOnly";
         setPropValues2[1].Value <<= sal_True;
-        setPropValues2[2].Name = OUString("AsTemplate");
+        setPropValues2[2].Name = "AsTemplate";
         setPropValues2[2].Value <<= sal_False;
         m_xComponent = xLoader->loadComponentFromURL(
             m_sURL,
@@ -281,7 +281,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         //try to enable toolbar and tool windows
         Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
-        propertyValue[0].Name = OUString("FunctionBarVisible");
+        propertyValue[0].Name = "FunctionBarVisible";
         propertyValue[0].Value <<= sal_True;
         m_xDispatcher->executeDispatch(m_xDispatchProvider,
                 OUString(".uno:FunctionBarVisible"),
