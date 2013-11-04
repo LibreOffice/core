@@ -608,6 +608,23 @@ formula::FormEditData* ScFormulaDlg::getFormEditData() const
 void ScFormulaDlg::setCurrentFormula(const OUString& _sReplacement)
 {
     ScModule* pScMod = SC_MOD();
+    {
+        //fdo#69971 We need the EditEngine Modification handler of the inputbar that we
+        //are feeding to be disabled while this dialog is open. Otherwise we end up in
+        //a situation where...
+        //a) this ScFormulaDlg changes the editengine
+        //b) the modify callback gets called
+        //c) which also modifies the editengine
+        //d) on return from that modify handler the editengine attempts to use
+        //   old node pointers which were replaced and removed by c
+        //
+        //We turn it off in the ctor and back on in the dtor, but if calc has
+        //to repaint, e.g. when switching to another window and back, then in
+        //ScMultiTextWnd::Paint a new editengine will have been created via
+        //GetEditView with its default Modification handler enabled. So ensure
+        //its off when we will access it via InputReplaceSelection
+        pScMod->InputEnterHandler();
+    }
     pScMod->InputReplaceSelection(_sReplacement);
 }
 void ScFormulaDlg::setSelection(xub_StrLen _nStart,xub_StrLen _nEnd)
