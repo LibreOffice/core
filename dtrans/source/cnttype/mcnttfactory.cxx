@@ -44,7 +44,7 @@ namespace
     Sequence< OUString > SAL_CALL MimeContentTypeFactory_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString("com.sun.star.datatransfer.MimeContentTypeFactory");
+        aRet[0] = "com.sun.star.datatransfer.MimeContentTypeFactory";
         return aRet;
     }
 }

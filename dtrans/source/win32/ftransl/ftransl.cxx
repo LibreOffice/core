@@ -69,7 +69,7 @@ namespace MODULE_PRIVATE
     Sequence< OUString > SAL_CALL DataFormatTranslator_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString("com.sun.star.datatransfer.DataFormatTranslator");
+        aRet[0] = "com.sun.star.datatransfer.DataFormatTranslator";
         return aRet;
     }
 }

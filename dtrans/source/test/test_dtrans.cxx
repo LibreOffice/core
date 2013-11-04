@@ -227,7 +227,7 @@ StringTransferable::StringTransferable( ) :
     */
 
     //df.MimeType = L"text/plain; charset=windows1252";
-    df.MimeType = OUString("text/html");
+    df.MimeType = "text/html";
     df.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
 
     m_seqDFlv[0] = df;
