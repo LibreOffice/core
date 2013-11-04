@@ -90,8 +90,8 @@ OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 Sequence< OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
-    aSNS[1] = OUString("com.sun.star.sdbcx.Driver");
+    aSNS[0] = "com.sun.star.sdbc.Driver";
+    aSNS[1] = "com.sun.star.sdbcx.Driver";
     return aSNS;
 }
 //------------------------------------------------------------------
@@ -155,8 +155,8 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBooleanValues(2);
-        aBooleanValues[0] = OUString( "false" );
-        aBooleanValues[1] = OUString( "true" );
+        aBooleanValues[0] = "false";
+        aBooleanValues[1] = "true";
 
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("IgnoreDriverPrivileges")

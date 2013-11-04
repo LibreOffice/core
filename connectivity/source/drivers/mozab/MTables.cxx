@@ -47,11 +47,11 @@ using namespace dbtools;
 sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 {
     OUString aName,aSchema;
-    aSchema = OUString("%");
+    aSchema = "%";
     aName = _rName;
 
     Sequence< OUString > aTypes(1);
-    aTypes[0] = OUString("%");
+    aTypes[0] = "%";
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 

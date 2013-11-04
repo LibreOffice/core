@@ -37,9 +37,9 @@ OUString SAL_CALL OIndexColumn::getImplementationName(  ) throw (::com::sun::sta
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = OUString("com.sun.star.sdbcx.IndexDescription");
+        aSupported[0] = "com.sun.star.sdbcx.IndexDescription";
     else
-        aSupported[0] = OUString("com.sun.star.sdbcx.Index");
+        aSupported[0] = "com.sun.star.sdbcx.Index";
 
     return aSupported;
 }

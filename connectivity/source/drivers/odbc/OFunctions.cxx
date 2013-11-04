@@ -91,16 +91,16 @@ sal_Bool LoadLibrary_ODBC3(OUString &_rPath)
     if (bLoaded)
         return sal_True;
 #ifdef WNT
-    _rPath = OUString("ODBC32.DLL");
+    _rPath = "ODBC32.DLL";
 #endif
 #ifdef UNX
  #ifdef MACOSX
-     _rPath = OUString("libiodbc.dylib");
+     _rPath = "libiodbc.dylib";
  #else
-    _rPath = OUString("libodbc.so.1");
+    _rPath = "libodbc.so.1";
     pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
     if ( !pODBCso )
-        _rPath = OUString("libodbc.so");
+        _rPath = "libodbc.so";
  #endif   /* MACOSX */
 #endif
 

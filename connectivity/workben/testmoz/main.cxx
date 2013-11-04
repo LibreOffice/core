@@ -387,9 +387,9 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
             char hostname[40],basedn[40];
             scanf("%s %s",hostname,basedn);
             aValue.realloc(2);
-            aValue[0].Name = OUString("HostName");
+            aValue[0].Name = "HostName";
             aValue[0].Value <<= OUString::createFromAscii(hostname);
-            aValue[1].Name = OUString("BaseDN");
+            aValue[1].Name = "BaseDN";
             aValue[1].Value <<= OUString::createFromAscii(basedn);
             break;
         case 3:
@@ -399,9 +399,9 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
             //Default LDAP AB
             url=OUString("sdbc:address:ldap://");
             aValue.realloc(2);
-            aValue[0].Name = OUString("HostName");
+            aValue[0].Name = "HostName";
             aValue[0].Value <<= OUString("sun-ds");
-            aValue[1].Name = OUString("BaseDN");
+            aValue[1].Name = "BaseDN";
             aValue[1].Value <<= OUString("dc=sun,dc=com");
             break;
         default:

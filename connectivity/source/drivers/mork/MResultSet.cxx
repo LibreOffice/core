@@ -71,8 +71,8 @@ OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException
  Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(2);
-    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
+    aSupported[0] = "com.sun.star.sdbc.ResultSet";
+    aSupported[1] = "com.sun.star.sdbcx.ResultSet";
     return aSupported;
 }
 
@@ -734,11 +734,11 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchStr
     OSQLParseNode *pMark = pNode->getChild(0);
 
     // Initialize to empty string
-    rMatchString = OUString("");
+    rMatchString = "";
 
     OUString aParameterName;
     if (SQL_ISPUNCTUATION(pMark,"?")) {
-        aParameterName = OUString("?");
+        aParameterName = "?";
     }
     else if (SQL_ISPUNCTUATION(pMark,":")) {
         aParameterName = pNode->getChild(1)->getTokenValue();
@@ -940,7 +940,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             // String containing only a '%' and nothing else
             op = MQueryOp::Exists;
             // Will be ignored for Exists case, but clear anyway.
-            matchString = OUString("");
+            matchString = "";
         }
         else if ( matchString.indexOf ( WILDCARD ) == -1 &&
              matchString.indexOf ( MATCHCHAR ) == -1 )
@@ -1369,7 +1369,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
             if (xTableColumn.is())
                 xTableColumn->getPropertyValue(sName) >>= sTableColumnName;
             else
-                sTableColumnName = OUString();
+                sTableColumnName = "";
 
             // look if we have such a select column
             // TODO: would like to have a O(log n) search here ...

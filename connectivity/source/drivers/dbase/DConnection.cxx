@@ -45,7 +45,7 @@ DBG_NAME(ODbaseConnection)
 ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
 {
     DBG_CTOR(ODbaseConnection,NULL);
-    m_aFilenameExtension = OUString("dbf");
+    m_aFilenameExtension = "dbf";
 }
 //-----------------------------------------------------------------------------
 ODbaseConnection::~ODbaseConnection()

@@ -510,8 +510,8 @@ namespace connectivity
     Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSNS( 2 );
-        aSNS[0] = OUString("com.sun.star.sdbc.Driver");
-        aSNS[1] = OUString("com.sun.star.sdbcx.Driver");
+        aSNS[0] = "com.sun.star.sdbc.Driver";
+        aSNS[1] = "com.sun.star.sdbcx.Driver";
         return aSNS;
     }
     //------------------------------------------------------------------
@@ -829,7 +829,7 @@ namespace connectivity
         //..............................................................
         OUString lcl_getSystemLocale( const Reference< XComponentContext >& _rxContext )
         {
-            OUString sLocaleString = OUString(  "en-US"  );
+            OUString sLocaleString = "en-US";
             try
             {
                 //.........................................................

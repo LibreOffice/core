@@ -104,25 +104,25 @@ ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
     switch(eDayOfWeek)
     {
         case MONDAY:
-            sRet = OUString("Monday");
+            sRet = "Monday";
             break;
         case TUESDAY:
-            sRet = OUString("Tuesday");
+            sRet = "Tuesday";
             break;
         case WEDNESDAY:
-            sRet = OUString("Wednesday");
+            sRet = "Wednesday";
             break;
         case THURSDAY:
-            sRet = OUString("Thursday");
+            sRet = "Thursday";
             break;
         case FRIDAY:
-            sRet = OUString("Friday");
+            sRet = "Friday";
             break;
         case SATURDAY:
-            sRet = OUString("Saturday");
+            sRet = "Saturday";
             break;
         case SUNDAY:
-            sRet = OUString("Sunday");
+            sRet = "Sunday";
             break;
         default:
             OSL_FAIL("Error in enum values for date");
@@ -140,40 +140,40 @@ ORowSetValue OOp_MonthName::operate(const ORowSetValue& lhs) const
     switch(aD.Month)
     {
         case 1:
-            sRet = OUString("January");
+            sRet = "January";
             break;
         case 2:
-            sRet = OUString("February");
+            sRet = "February";
             break;
         case 3:
-            sRet = OUString("March");
+            sRet = "March";
             break;
         case 4:
-            sRet = OUString("April");
+            sRet = "April";
             break;
         case 5:
-            sRet = OUString("May");
+            sRet = "May";
             break;
         case 6:
-            sRet = OUString("June");
+            sRet = "June";
             break;
         case 7:
-            sRet = OUString("July");
+            sRet = "July";
             break;
         case 8:
-            sRet = OUString("August");
+            sRet = "August";
             break;
         case 9:
-            sRet = OUString("September");
+            sRet = "September";
             break;
         case 10:
-            sRet = OUString("October");
+            sRet = "October";
             break;
         case 11:
-            sRet = OUString("November");
+            sRet = "November";
             break;
         case 12:
-            sRet = OUString("December");
+            sRet = "December";
             break;
     }
     return sRet;

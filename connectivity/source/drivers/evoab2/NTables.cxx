@@ -50,7 +50,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
     OUString aSchema(  "%" );
 
     Sequence< OUString > aTypes(1);
-    aTypes[0] = OUString("TABLE");
+    aTypes[0] = "TABLE";
     OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);

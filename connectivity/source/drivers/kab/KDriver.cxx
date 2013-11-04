@@ -233,7 +233,7 @@ void KabImplModule::impl_throwGenericSQLException( const OUString& _rMessage )
 {
     SQLException aError;
     aError.Message = _rMessage;
-    aError.SQLState = OUString(  "S1000"  );
+    aError.SQLState = "S1000";
     aError.ErrorCode = 0;
     throw aError;
 }
@@ -249,7 +249,7 @@ void KabImplModule::impl_throwKdeTooNewException()
             "$major$",OUString::number(MIN_KDE_VERSION_MAJOR),
             "$minor$",OUString::number(MIN_KDE_VERSION_MINOR)
          );
-    aError.SQLState = OUString(  "S1000"  );
+    aError.SQLState = "S1000";
     aError.ErrorCode = 0;
 
     SQLContext aDetails;
@@ -351,7 +351,7 @@ Sequence< OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (Runti
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< OUString > aSNS( 1 );
-    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
+    aSNS[0] = "com.sun.star.sdbc.Driver";
 
     return aSNS;
 }

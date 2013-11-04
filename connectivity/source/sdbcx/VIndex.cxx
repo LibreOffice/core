@@ -49,9 +49,9 @@ OUString SAL_CALL OIndex::getImplementationName(  ) throw (::com::sun::star::uno
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = OUString("com.sun.star.sdbcx.IndexDescriptor");
+        aSupported[0] = "com.sun.star.sdbcx.IndexDescriptor";
     else
-        aSupported[0] = OUString("com.sun.star.sdbcx.Index");
+        aSupported[0] = "com.sun.star.sdbcx.Index";
 
     return aSupported;
 }

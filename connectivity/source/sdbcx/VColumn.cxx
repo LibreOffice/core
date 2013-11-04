@@ -44,9 +44,9 @@ OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::un
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = OUString("com.sun.star.sdbcx.ColumnDescription");
+        aSupported[0] = "com.sun.star.sdbcx.ColumnDescription";
     else
-        aSupported[0] = OUString("com.sun.star.sdbcx.Column");
+        aSupported[0] = "com.sun.star.sdbcx.Column";
 
     return aSupported;
 }

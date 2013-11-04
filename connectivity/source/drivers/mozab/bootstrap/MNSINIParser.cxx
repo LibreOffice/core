@@ -82,7 +82,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
                     sectionName =  OStringToOUString(
                         line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
                     if (sectionName.isEmpty())
-                        sectionName = OUString("no name section");
+                        sectionName = "no name section";
 
                     ini_Section *aSection = &mAllSection[sectionName];
                     aSection->sName = sectionName;

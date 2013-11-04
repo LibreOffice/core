@@ -38,9 +38,9 @@ OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (::com::sun::star:
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = OUString("com.sun.star.sdbcx.KeyColumnDescription");
+        aSupported[0] = "com.sun.star.sdbcx.KeyColumnDescription";
     else
-        aSupported[0] = OUString("com.sun.star.sdbcx.KeyColumn");
+        aSupported[0] = "com.sun.star.sdbcx.KeyColumn";
 
     return aSupported;
 }

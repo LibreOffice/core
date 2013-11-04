@@ -63,7 +63,7 @@ OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeExceptio
 Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
+    aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
 //------------------------------------------------------------------
@@ -136,8 +136,8 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBooleanValues(2);
-        aBooleanValues[0] = OUString(  "false"  );
-        aBooleanValues[1] = OUString(  "true"  );
+        aBooleanValues[0] = "false";
+        aBooleanValues[1] = "true";
 
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("JavaDriverClass")

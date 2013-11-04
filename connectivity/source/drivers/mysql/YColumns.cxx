@@ -55,7 +55,7 @@ OMySQLColumn::OMySQLColumn( sal_Bool    _bCase)
 // -------------------------------------------------------------------------
 void OMySQLColumn::construct()
 {
-    m_sAutoIncrement = OUString("auto_increment");
+    m_sAutoIncrement = "auto_increment";
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
 }
 // -----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ void OMySQLColumn::construct()
 Sequence< OUString > SAL_CALL OMySQLColumn::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< OUString > aSupported(1);
-    aSupported[0] = OUString("com.sun.star.sdbcx.Column");
+    aSupported[0] = "com.sun.star.sdbcx.Column";
 
     return aSupported;
 }

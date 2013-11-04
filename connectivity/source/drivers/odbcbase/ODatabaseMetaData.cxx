@@ -51,7 +51,7 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
         {
             m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
             OUString sVersion = getDriverVersion();
-            m_bOdbc3        =  sVersion != OUString("02.50") && sVersion != OUString("02.00");
+            m_bOdbc3        =  sVersion != "02.50" && sVersion != "02.00";
         }
         catch(SQLException& )
         { // doesn't matter here
@@ -1188,8 +1188,7 @@ OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeExcep
     OUString aValue = m_pConnection->getURL();
     if ( aValue.isEmpty() )
     {
-        aValue = OUString("sdbc:odbc:");
-        aValue += getURLImpl();
+        aValue = "sdbc:odbc:" + getURLImpl();
     }
     return aValue;
 }

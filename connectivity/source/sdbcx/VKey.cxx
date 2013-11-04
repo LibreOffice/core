@@ -47,9 +47,9 @@ OUString SAL_CALL OKey::getImplementationName(  ) throw (::com::sun::star::uno::
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = OUString("com.sun.star.sdbcx.KeyDescription");
+        aSupported[0] = "com.sun.star.sdbcx.KeyDescription";
     else
-        aSupported[0] = OUString("com.sun.star.sdbcx.Key");
+        aSupported[0] = "com.sun.star.sdbcx.Key";
 
     return aSupported;
 }

@@ -148,7 +148,7 @@ static sal_Int32 readLogLevelFromConfiguration()
     OUString fileName;
     osl_getModuleURLFromAddress(
         (void*) readLogLevelFromConfiguration, (rtl_uString **) &fileName );
-    fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
+    fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 );
     fileName += "postgresql-sdbc.ini";
     rtl::Bootstrap bootstrapHandle( fileName );
 
@@ -558,7 +558,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                     free(err);
                 }
                 else
-                    errorMessage = OUString("#no error message#");
+                    errorMessage = "#no error message#";
                 OUStringBuffer buf( 128 );
                 buf.appendAscii( "Error in database URL '" );
                 buf.append( url );

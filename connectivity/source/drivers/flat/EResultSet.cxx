@@ -52,8 +52,8 @@ OUString SAL_CALL OFlatResultSet::getImplementationName(  ) throw ( RuntimeExcep
 Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< OUString > aSupported(2);
-    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
+    aSupported[0] = "com.sun.star.sdbc.ResultSet";
+    aSupported[1] = "com.sun.star.sdbcx.ResultSet";
     return aSupported;
 }
 

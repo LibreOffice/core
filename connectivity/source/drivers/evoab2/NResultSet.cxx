@@ -72,7 +72,7 @@ OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeExce
  Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< OUString > aSupported(1);
-    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
+    aSupported[0] = "com.sun.star.sdbc.ResultSet";
     return aSupported;
 }
 

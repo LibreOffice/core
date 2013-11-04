@@ -479,23 +479,23 @@ void OCalcTable::fillColumns()
                 }
                 break;
             case DataType::DECIMAL:
-                aTypeName = OUString("DECIMAL");
+                aTypeName = "DECIMAL";
                 break;
             case DataType::BIT:
-                aTypeName = OUString("BOOL");
+                aTypeName = "BOOL";
                 break;
             case DataType::DATE:
-                aTypeName = OUString("DATE");
+                aTypeName = "DATE";
                 break;
             case DataType::TIME:
-                aTypeName = OUString("TIME");
+                aTypeName = "TIME";
                 break;
             case DataType::TIMESTAMP:
-                aTypeName = OUString("TIMESTAMP");
+                aTypeName = "TIMESTAMP";
                 break;
             default:
                 SAL_WARN( "connectivity.drivers","missing type name");
-                aTypeName = OUString();
+                aTypeName = "";
         }
 
         // check if the column name already exists

@@ -81,8 +81,8 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBoolean(2);
-        aBoolean[0] = OUString("0");
-        aBoolean[1] = OUString("1");
+        aBoolean[0] = "0";
+        aBoolean[1] = "1";
 
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("CharSet")

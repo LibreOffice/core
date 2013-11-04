@@ -43,7 +43,7 @@ void MacabCatalog::refreshTables()
 {
     TStringVector aVector;
     Sequence< OUString > aTypes(1);
-    aTypes[0] = OUString("%");
+    aTypes[0] = "%";
     Reference< XResultSet > xResult = m_xMetaData->getTables(
         Any(),
         OUString("%"),
@@ -84,7 +84,7 @@ void MacabCatalog::refreshUsers()
 // -------------------------------------------------------------------------
 const OUString& MacabCatalog::getDot()
 {
-    static const OUString sDot = OUString(".");
+    static const OUString sDot = ".";
     return sDot;
 }
 // -----------------------------------------------------------------------------

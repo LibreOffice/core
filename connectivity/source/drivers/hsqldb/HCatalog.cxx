@@ -71,7 +71,7 @@ void OHCatalog::refreshTables()
 void OHCatalog::refreshViews()
 {
     Sequence< OUString > aTypes(1);
-    aTypes[0] = OUString("VIEW");
+    aTypes[0] = "VIEW";
 
     sal_Bool bSupportsViews = sal_False;
     try

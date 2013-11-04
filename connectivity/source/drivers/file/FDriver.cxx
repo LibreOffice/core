@@ -70,8 +70,8 @@ OUString OFileDriver::getImplementationName_Static(  ) throw(RuntimeException)
 Sequence< OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
-    aSNS[1] = OUString("com.sun.star.sdbcx.Driver");
+    aSNS[0] = "com.sun.star.sdbc.Driver";
+    aSNS[1] = "com.sun.star.sdbcx.Driver";
     return aSNS;
 }
 
@@ -122,8 +122,8 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBoolean(2);
-        aBoolean[0] = OUString("0");
-        aBoolean[1] = OUString("1");
+        aBoolean[0] = "0";
+        aBoolean[1] = "1";
 
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("CharSet")

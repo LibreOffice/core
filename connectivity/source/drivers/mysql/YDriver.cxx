@@ -137,17 +137,12 @@ namespace connectivity
         {
             OUString sNewUrl = _sUrl.copy(11);
             if ( isOdbcUrl( _sUrl ) )
-                sNewUrl = OUString("sdbc:") + sNewUrl;
+                sNewUrl = "sdbc:" + sNewUrl;
             else if ( isNativeUrl( _sUrl ) )
-                sNewUrl = OUString("sdbc:") + sNewUrl;
+                sNewUrl = "sdbc:" + sNewUrl;
             else
             {
-                sNewUrl = sNewUrl.copy(5);
-
-                OUString sTempUrl = OUString("jdbc:mysql://");
-
-                sTempUrl += sNewUrl;
-                sNewUrl = sTempUrl;
+                sNewUrl = "jdbc:mysql://" + sNewUrl.copy(5);
             }
             return sNewUrl;
         }
@@ -340,8 +335,8 @@ namespace connectivity
             return Sequence< DriverPropertyInfo >();
 
         Sequence< OUString > aBoolean(2);
-        aBoolean[0] = OUString("0");
-        aBoolean[1] = OUString("1");
+        aBoolean[0] = "0";
+        aBoolean[1] = "1";
 
 
         aDriverInfo.push_back(DriverPropertyInfo(
@@ -478,8 +473,8 @@ namespace connectivity
     Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSNS( 2 );
-        aSNS[0] = OUString("com.sun.star.sdbc.Driver");
-        aSNS[1] = OUString("com.sun.star.sdbcx.Driver");
+        aSNS[0] = "com.sun.star.sdbc.Driver";
+        aSNS[1] = "com.sun.star.sdbcx.Driver";
         return aSNS;
     }
     //------------------------------------------------------------------

@@ -68,7 +68,7 @@ OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeException)
 Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
+    aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
 
@@ -122,8 +122,8 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBooleanValues(2);
-        aBooleanValues[0] = OUString(  "false"  );
-        aBooleanValues[1] = OUString(  "true"  );
+        aBooleanValues[0] = "false";
+        aBooleanValues[1] = "true";
 
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString("CharSet")

@@ -907,8 +907,8 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     m_aValueRange[12] = aMap;
 
     ::std::map< sal_Int32,OUString> aMap2;
-    aMap2[0] = OUString("YES");
-    aMap2[1] = OUString("NO");
+    aMap2[0] = "YES";
+    aMap2[1] = "NO";
     m_aIntValueRange[18] = aMap2;
 
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
@@ -1040,9 +1040,9 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
     m_aValueRange[8] = aMap2;
 
     ::std::map< sal_Int32,OUString> aMap3;
-    aMap3[0]                    = OUString();
-    aMap3[DB_COLLATION_ASC]     = OUString("A");
-    aMap3[DB_COLLATION_DESC]    = OUString("D");
+    aMap3[0]                    = "";
+    aMap3[DB_COLLATION_ASC]     = "A";
+    aMap3[DB_COLLATION_DESC]    = "D";
 
     m_aIntValueRange[21] = aMap3;
 
@@ -1063,8 +1063,8 @@ void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
     m_aColMapping.push_back(7);
 
     ::std::map< sal_Int32,OUString> aMap;
-    aMap[0] = OUString("YES");
-    aMap[1] = OUString("NO");
+    aMap[0] = "YES";
+    aMap[1] = "NO";
     m_aIntValueRange[7] = aMap;
 
 

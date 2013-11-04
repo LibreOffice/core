@@ -52,9 +52,9 @@ OUString SAL_CALL OTable::getImplementationName(  ) throw (::com::sun::star::uno
 {
     ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = OUString("com.sun.star.sdbcx.TableDescriptor");
+        aSupported[0] = "com.sun.star.sdbcx.TableDescriptor";
     else
-        aSupported[0] = OUString("com.sun.star.sdbcx.Table");
+        aSupported[0] = "com.sun.star.sdbcx.Table";
 
     return aSupported;
 }

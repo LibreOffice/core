@@ -65,7 +65,7 @@ void AdoDriverTest::setUp()
     m_xAdoComponent = getMultiServiceFactory()->createInstance("com.sun.star.comp.sdbc.ado.ODriver");
     CPPUNIT_ASSERT_MESSAGE("no ado component!", m_xAdoComponent.is());
 
-    OUString url = OUString("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=") +
+    OUString url = "sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=" +
         getPathFromWorkdir("/CppunitTest/TS001018407.mdb");
 
     Sequence< PropertyValue > info;

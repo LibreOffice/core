@@ -440,7 +440,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
 
         // Insert table into map
         if ( aTableName.isEmpty() )
-            aTableName = OUString("AddressBook");
+            aTableName = "AddressBook";
 
         OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
 
@@ -624,7 +624,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
     ::std::vector< OUString > tables;
     ::std::vector< OUString > tabletypes;
-    OUString matchAny = OUString("%");
+    OUString matchAny = "%";
 
     if ( !getTableStrings( _pCon, tables,tabletypes ) )
         return sal_False;
@@ -643,7 +643,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                        0 != ::comphelper::findValue( types, aTableType, sal_True ).getLength() ||
                        0 != ::comphelper::findValue( types, matchAny, sal_True ).getLength())) {
             if ( aTableName.isEmpty() ) {
-                aTableName = OUString("AddressBook");
+                aTableName = "AddressBook";
             }
 
             OSL_TRACE( "TableName = %s ; TableType = %s", OUtoCStr(aTableName), OUtoCStr(aTableType) );

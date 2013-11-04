@@ -87,7 +87,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     }
     m_aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    m_sPassword = OUString();
+    m_sPassword = "";
     const char* pPwd        = "password";
 
     const PropertyValue *pIter  = info.getConstArray();
@@ -114,16 +114,16 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     }
     //  open read-only as long as updating isn't implemented
     Sequence<PropertyValue> aArgs(2);
-    aArgs[0].Name = OUString("Hidden");
+    aArgs[0].Name = "Hidden";
     aArgs[0].Value <<= (sal_Bool) sal_True;
-    aArgs[1].Name = OUString("ReadOnly");
+    aArgs[1].Name = "ReadOnly";
     aArgs[1].Value <<= (sal_Bool) sal_True;
 
     if ( !m_sPassword.isEmpty() )
     {
         const sal_Int32 nPos = aArgs.getLength();
         aArgs.realloc(nPos+1);
-        aArgs[nPos].Name = OUString("Password");
+        aArgs[nPos].Name = "Password";
         aArgs[nPos].Value <<= m_sPassword;
     }
 

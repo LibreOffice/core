@@ -373,7 +373,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
 
     aParseParam.pParser = &_rParser;
 
-    _out_rString = OUString();
+    _out_rString = "";
     OUStringBuffer sBuffer;
     bool bSuccess = false;
     try
@@ -794,7 +794,7 @@ sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
         const OSQLParseNode* pTableNode = _pTableNode;
         // clear the parameter given
         _rCatalog = Any();
-        _rSchema = _rTable = OUString();
+        _rSchema = _rTable = "";
         // see rule catalog_name: in sqlbison.y
         if (SQL_ISRULE(pTableNode,catalog_name))
         {
@@ -1242,8 +1242,8 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
                     if ( xFormats.is() )
                     {
                         ::com::sun::star::lang::Locale aLocale;
-                        aLocale.Language = OUString("en");
-                        aLocale.Country = OUString("US");
+                        aLocale.Language = "en";
+                        aLocale.Country = "US";
                         OUString sFormat("YYYY-MM-DD");
                         m_nDateFormatKey = xFormats->queryKey(sFormat,aLocale,sal_False);
                         if ( m_nDateFormatKey == sal_Int32(-1) )
@@ -1286,12 +1286,12 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
     SQLyylval.pParseNode = NULL;
     //  SQLyypvt = NULL;
     m_pParseTree = NULL;
-    m_sErrorMessage= OUString();
+    m_sErrorMessage = "";
 
     // Start the parser
     if (SQLyyparse() != 0)
     {
-        m_sFieldName= OUString();
+        m_sFieldName = "";
         m_xField.clear();
         m_xFormatter.clear();
         m_nFormatKey = 0;
@@ -1312,7 +1312,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
     {
         (*s_pGarbageCollector)->clear();
 
-        m_sFieldName= OUString();
+        m_sFieldName = "";
         m_xField.clear();
         m_xFormatter.clear();
         m_nFormatKey = 0;
@@ -1754,14 +1754,14 @@ sal_Bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNode
             {
                  if (rParam.aMetaData.shouldEscapeDateTime())
                  {
-                     suQuote = OUString("#");
+                     suQuote = "#";
                  }
             }
             else
             {
                  if (rParam.aMetaData.shouldEscapeDateTime())
                  {
-                     // suQuote = OUString("'");
+                     // suQuote = "'";
                      return sal_False;
                  }
             }

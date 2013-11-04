@@ -284,9 +284,9 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     case testLDAP:
         url=OUString("sdbc:address:ldap://");
         aValue.realloc(2);
-        aValue[0].Name = OUString("HostName");
+        aValue[0].Name = "HostName";
         aValue[0].Value <<= OUString("sun-ds");
-        aValue[1].Name = OUString("BaseDN");
+        aValue[1].Name = "BaseDN";
         aValue[1].Value <<= OUString("dc=sun,dc=com");
         break;
     case testMozilla:
