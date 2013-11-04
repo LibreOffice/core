@@ -123,7 +123,9 @@ protected:
         if (mustTestImportOf(filename))
         {
             header();
+            preTest(filename);
             load(mpTestDocumentPath, filename);
+            postTest(filename);
             verify();
             finish();
         }
@@ -158,6 +160,19 @@ protected:
      {
         return true;
      }
+    /**
+     * Override this function if some special filename-specific setup is needed
+     */
+    virtual void preTest(const char* /*filename*/)
+    {
+    }
+
+    /**
+     * Override this function if some special filename-specific teardown is needed
+     */
+    virtual void postTest(const char* /*filename*/)
+    {
+    }
 
 private:
     void dumpLayout()
