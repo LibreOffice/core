@@ -373,10 +373,10 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
 Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = OUString("com.sun.star.chart.ChartArea");
-    aServices[ 1 ] = OUString("com.sun.star.drawing.LineProperties");
-    aServices[ 2 ] = OUString("com.sun.star.drawing.FillProperties");
-    aServices[ 3 ] = OUString("com.sun.star.xml.UserDefinedAttributesSupplier");
+    aServices[ 0 ] = "com.sun.star.chart.ChartArea";
+    aServices[ 1 ] = "com.sun.star.drawing.LineProperties";
+    aServices[ 2 ] = "com.sun.star.drawing.FillProperties";
+    aServices[ 3 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
 
     return aServices;
 }

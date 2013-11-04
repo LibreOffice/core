@@ -627,7 +627,7 @@ sal_Bool ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
             {
                 // the strings aPosRange/aNegRange have to be set to a non-empty
                 // arbitrary string to generate error-bar sequences
-                aPosRange = OUString("x");
+                aPosRange = "x";
                 aNegRange = aPosRange;
             }
             else
