@@ -282,7 +282,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                     case ::com::sun::star::uno::TypeClass_SEQUENCE :
                     //case ::com::sun::star::uno::TypeClass_ARRAY :
                     {
-                        sValue = OUString("");
+                        sValue = "";
                         if( OUString("[]long") ==aProp.getValueTypeName() ||
                                 OUString("[]short")==aProp.getValueTypeName() )
                         {
@@ -337,7 +337,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                                 sValue = aHyp;
                             }
                         }else
-                            sValue = OUString("");
+                            sValue = "";
                     }
                 }
             }

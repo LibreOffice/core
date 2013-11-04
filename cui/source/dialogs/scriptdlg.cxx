@@ -587,7 +587,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             return;
         }
 
-        OUString sName("Editable")  ;
+        OUString sName("Editable");
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -598,7 +598,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             m_pEditButton->Disable();
         }
 
-        sName = OUString("Deletable")  ;
+        sName = "Deletable";
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -609,7 +609,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             m_pDelButton->Disable();
         }
 
-        sName = OUString("Creatable")  ;
+        sName = "Creatable";
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -620,7 +620,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             m_pCreateButton->Disable();
         }
 
-        sName = OUString("Renamable")  ;
+        sName = "Renamable";
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -1310,7 +1310,7 @@ OUString GetErrorMessage(
     OUString language = unknown;
     OUString script = unknown;
     OUString line = unknown;
-    OUString type = OUString();
+    OUString type = "";
     OUString message = eScriptError.Message;
 
         if ( !eScriptError.language.isEmpty() )

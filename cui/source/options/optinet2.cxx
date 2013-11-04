@@ -201,7 +201,7 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet)
     OUString aConfigRoot( "org.openoffice.Inet/Settings" );
 
     beans::NamedValue aProperty;
-    aProperty.Name  = OUString( "nodepath" );
+    aProperty.Name  = "nodepath";
     aProperty.Value = makeAny( aConfigRoot );
 
     Sequence< Any > aArgumentList( 1 );
@@ -556,7 +556,7 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
      if( nPos <= nTop+nCount-1 ) // if find the matching entry, get its content.
          aHelpText = GetEntry(nPos);
     if( aHelpText.getLength() && GetTextWidth(aHelpText)<GetOutputSizePixel().Width() )
-        aHelpText = OUString(); // if the entry is quite short, clear the helping tip content.
+        aHelpText = ""; // if the entry is quite short, clear the helping tip content.
     aItemRect = Rectangle(Point(0,0),GetSizePixel());
     aPt = Point(OutputToScreenPixel( aItemRect.TopLeft() ));
     aItemRect.Left()   = aPt.X();
@@ -1274,7 +1274,7 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
             0 );
         OUString sPath = m_pMailerURLED->GetText();
         if ( sPath.isEmpty() )
-            sPath = OUString("/usr/bin");
+            sPath = "/usr/bin";
 
         OUString sUrl;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sPath, sUrl);

@@ -635,8 +635,8 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     if( pBtn == pImpl->pDeletePB )
     {
         // delete pressed
-        sEventType = OUString( "Script" );
-        sEventURL = OUString();
+        sEventType =  "Script" ;
+        sEventURL = "";
         if(!pThis->bAppEvents)
             pThis->bDocModified = true;
     }
@@ -653,7 +653,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         short ret = pAssignDlg->Execute();
         if( ret )
         {
-            sEventType = OUString("UNO");
+            sEventType = "UNO";
             sEventURL = pAssignDlg->getURL();
             if(!pThis->bAppEvents)
                 pThis->bDocModified = true;
@@ -669,7 +669,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
             short ret = pDlg->Execute();
             if ( ret )
             {
-                sEventType = OUString("Script");
+                sEventType = "Script";
                 sEventURL = pDlg->GetScriptURL();
                 if(!pThis->bAppEvents)
                     pThis->bDocModified = true;
@@ -872,7 +872,7 @@ SvxMacroAssignDlg::~SvxMacroAssignDlg()
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
 {
     OUString aMethodName = maMethodEdit.GetText();
-    maURL = OUString();
+    maURL = "";
     if( !aMethodName.isEmpty() )
     {
         maURL = aVndSunStarUNO;

@@ -177,7 +177,7 @@ SvxChartOptions::SvxChartOptions() :
     mbIsInitialized( sal_False )
 {
     maPropertyNames.realloc( 1 );
-    maPropertyNames[ 0 ] = OUString("DefaultColor/Series");
+    maPropertyNames[ 0 ] = "DefaultColor/Series";
 }
 
 SvxChartOptions::~SvxChartOptions()
