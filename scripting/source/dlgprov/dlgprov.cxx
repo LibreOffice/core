@@ -74,7 +74,7 @@ namespace comp_DialogModelProvider
     uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
     {
         uno::Sequence< OUString > s(1);
-        s[0] = OUString("com.sun.star.awt.UnoControlDialogModelProvider");
+        s[0] = "com.sun.star.awt.UnoControlDialogModelProvider";
         return s;
     }
 
@@ -190,9 +190,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
             if ( !pNames )
             {
                 static Sequence< OUString > aNames(3);
-                aNames.getArray()[0] = OUString( "com.sun.star.awt.DialogProvider"  );
-                aNames.getArray()[1] = OUString( "com.sun.star.awt.DialogProvider2"  );
-                aNames.getArray()[2] = OUString( "com.sun.star.awt.ContainerWindowProvider"  );
+                aNames[0] = "com.sun.star.awt.DialogProvider";
+                aNames[1] = "com.sun.star.awt.DialogProvider2";
+                aNames[2] = "com.sun.star.awt.ContainerWindowProvider";
                 pNames = &aNames;
             }
         }

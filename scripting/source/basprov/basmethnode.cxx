@@ -76,7 +76,7 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = OUString("vnd.sun.star.script:");
+                    m_sURI = "vnd.sun.star.script:";
                     m_sURI += pBasic->GetName();
                     m_sURI += ".";
                     m_sURI += pModule->GetName();
@@ -259,15 +259,15 @@ namespace basprov
                     Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create( m_xContext ) );
 
                     Sequence < PropertyValue > aArgs(7);
-                    aArgs[0].Name = OUString("Document");
+                    aArgs[0].Name = "Document";
                     aArgs[0].Value <<= sDocURL;
                     aArgs[1].Name = OUString("LibName");
                     aArgs[1].Value <<= sLibName;
-                    aArgs[2].Name = OUString("Name");
+                    aArgs[2].Name = "Name";
                     aArgs[2].Value <<= sModName;
-                    aArgs[3].Name = OUString("Type");
+                    aArgs[3].Name = "Type";
                     aArgs[3].Value <<= OUString("Module");
-                    aArgs[4].Name = OUString("Line");
+                    aArgs[4].Name = "Line";
                     aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
                     xHelper->executeDispatch( xProv, OUString(".uno:BasicIDEAppear"), OUString(), 0, aArgs );
                 }

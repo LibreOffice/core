@@ -550,7 +550,7 @@ public:
         {
             m_vNodes.push_back( new DefaultBrowseNode( xCtx, nodes[ i ] ) );
         }
-        m_Name = OUString("Root");
+        m_Name = "Root";
     }
 
     ~DefaultRootBrowseNode()

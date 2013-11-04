@@ -81,7 +81,7 @@ namespace stringresource
 static Sequence< OUString > getSupportedServiceNames_StringResourceImpl()
 {
     Sequence< OUString > names(1);
-    names[0] = OUString( "com.sun.star.resource.StringResource" );
+    names[0] = "com.sun.star.resource.StringResource";
     return names;
 }
 
@@ -1052,7 +1052,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             {
                 xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
-                aPropName = OUString("UseCommonStoragePasswordEncryption");
+                aPropName = "UseCommonStoragePasswordEncryption";
                 xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
             }
 
@@ -2271,7 +2271,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
 static Sequence< OUString > getSupportedServiceNames_StringResourceWithStorageImpl()
 {
     Sequence< OUString > names(1);
-    names[0] = OUString( "com.sun.star.resource.StringResourceWithStorage" );
+    names[0] = "com.sun.star.resource.StringResourceWithStorage";
     return names;
 }
 
@@ -2598,7 +2598,7 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
 static Sequence< OUString > getSupportedServiceNames_StringResourceWithLocationImpl()
 {
     Sequence< OUString > names(1);
-    names[0] = OUString( "com.sun.star.resource.StringResourceWithLocation" );
+    names[0] = "com.sun.star.resource.StringResourceWithLocation";
     return names;
 }
 

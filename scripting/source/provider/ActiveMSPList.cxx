@@ -45,9 +45,9 @@ namespace func_provider
 
 ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
 {
-    userDirString = OUString("user");
-    shareDirString =  OUString("share");
-    bundledDirString = OUString("bundled");
+    userDirString = "user";
+    shareDirString = "share";
+    bundledDirString = "bundled";
 }
 
 ActiveMSPList::~ActiveMSPList()

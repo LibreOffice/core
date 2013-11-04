@@ -356,8 +356,7 @@ eventMethodToDescriptor( const OUString& rEventMethod, ScriptEventDescriptor& ev
 
         // set this it VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
-        evtDesc.ScriptType = OUString(
-            "VBAInterop" );
+        evtDesc.ScriptType = OUString( "VBAInterop" );
         return true;
     }
     return false;
@@ -650,7 +649,7 @@ OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, ::getCppuType( &m_xModel ) );
-    msProject = OUString("Standard");
+    msProject = "Standard";
 }
 
 void
@@ -868,7 +867,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     OSL_TRACE("evt.MethodName is  %s", OUStringToOString( evt.MethodName, RTL_TEXTENCODING_UTF8 ).getStr() );
     OSL_TRACE("Argument[0] is  %s", OUStringToOString( comphelper::anyToString( evt.Arguments[0] ), RTL_TEXTENCODING_UTF8 ).getStr() );
     OSL_TRACE("Getting Control");
-    OUString sName = OUString( "UserForm" );
+    OUString sName = "UserForm";
     OSL_TRACE("Getting Name");
 
     uno::Reference< awt::XDialog > xDlg( aEvent.Source, uno::UNO_QUERY );
