@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="streams"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="io"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.io.Pump">
     <service name="com.sun.star.io.Pump"/>
@@ -42,5 +42,17 @@
   </implementation>
   <implementation name="com.sun.star.comp.io.stm.Pipe">
     <service name="com.sun.star.io.Pipe"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.io.Acceptor">
+    <service name="com.sun.star.connection.Acceptor"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.io.Connector">
+    <service name="com.sun.star.connection.Connector"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.io.TextInputStream">
+    <service name="com.sun.star.io.TextInputStream"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.io.TextOutputStream">
+    <service name="com.sun.star.io.TextOutputStream"/>
   </implementation>
 </component>

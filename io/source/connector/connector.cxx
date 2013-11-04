@@ -208,22 +208,5 @@ namespace stoc_connector
 
 
 }
-using namespace stoc_connector;
-
-static const struct ImplementationEntry g_entries[] =
-{
-    {
-        connector_CreateInstance, connector_getImplementationName ,
-        connector_getSupportedServiceNames, createSingleComponentFactory ,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL connector_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
