@@ -39,8 +39,8 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
-    aRet[0] = OUString("com.sun.star.embed.OOoEmbeddedObjectFactory");
-    aRet[1] = OUString("com.sun.star.comp.embed.OOoEmbeddedObjectFactory");
+    aRet[0] = "com.sun.star.embed.OOoEmbeddedObjectFactory";
+    aRet[1] = "com.sun.star.comp.embed.OOoEmbeddedObjectFactory";
     return aRet;
 }
 
@@ -471,8 +471,8 @@ uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedService
 uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
-    aRet[0] = OUString("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory");
-    aRet[1] = OUString("com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory");
+    aRet[0] = "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory";
+    aRet[1] = "com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory";
     return aRet;
 }
 

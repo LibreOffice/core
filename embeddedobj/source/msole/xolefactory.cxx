@@ -37,8 +37,8 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
-    aRet[0] = OUString("com.sun.star.embed.OLEEmbeddedObjectFactory");
-    aRet[1] = OUString("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
+    aRet[0] = "com.sun.star.embed.OLEEmbeddedObjectFactory";
+    aRet[1] = "com.sun.star.comp.embed.OLEEmbeddedObjectFactory";
     return aRet;
 }
 

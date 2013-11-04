@@ -43,8 +43,8 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
-    aRet[0] = OUString("com.sun.star.embed.EmbeddedObjectCreator");
-    aRet[1] = OUString("com.sun.star.comp.embed.EmbeddedObjectCreator");
+    aRet[0] = "com.sun.star.embed.EmbeddedObjectCreator";
+    aRet[1] = "com.sun.star.comp.embed.EmbeddedObjectCreator";
     return aRet;
 }
 
@@ -92,7 +92,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     {
         // use system fallback
         // TODO: in future users factories can be tested
-        aEmbedFactory = OUString( "com.sun.star.embed.OLEEmbeddedObjectFactory" );
+        aEmbedFactory = "com.sun.star.embed.OLEEmbeddedObjectFactory";
     }
 
     uno::Reference < uno::XInterface > xFact( m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext) );
@@ -186,7 +186,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Any aAny = xPropSet->getPropertyValue("MediaType");
             aAny >>= aMediaType;
             if ( aMediaType == "application/vnd.sun.star.oleobject" )
-                aEmbedFactory = OUString( "com.sun.star.embed.OLEEmbeddedObjectFactory" );
+                aEmbedFactory = "com.sun.star.embed.OLEEmbeddedObjectFactory";
         }
         catch ( const uno::Exception& )
         {

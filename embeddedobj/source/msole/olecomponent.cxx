@@ -246,11 +246,11 @@ OUString GetFlavorSuffixFromAspect( DWORD nAsp )
     OUString aResult;
 
     if ( nAsp == DVASPECT_THUMBNAIL )
-        aResult = OUString( ";Aspect=THUMBNAIL" );
+        aResult = ";Aspect=THUMBNAIL";
     else if ( nAsp == DVASPECT_ICON )
-        aResult = OUString( ";Aspect=ICON" );
+        aResult = ";Aspect=ICON";
     else if ( nAsp == DVASPECT_DOCPRINT )
-        aResult = OUString( ";Aspect=DOCPRINT" );
+        aResult = ";Aspect=DOCPRINT";
 
     // no suffix for DVASPECT_CONTENT
 
@@ -292,7 +292,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
 
         if ( aMedium.tymed == TYMED_MFPICT ) // Win Metafile
         {
-            aFormat = OUString("image/x-wmf");
+            aFormat = "image/x-wmf";
             METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( aMedium.hMetaFilePict );
             if ( pMF )
             {
@@ -323,7 +323,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_ENHMF ) // Enh Metafile
         {
-            aFormat = OUString("image/x-emf");
+            aFormat = "image/x-emf";
             nBufSize = GetEnhMetaFileBits( aMedium.hEnhMetaFile, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
@@ -337,7 +337,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_GDI ) // Bitmap
         {
-            aFormat = OUString("image/x-MS-bmp");
+            aFormat = "image/x-MS-bmp";
             nBufSize = GetBitmapBits( aMedium.hBitmap, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) ) )
@@ -408,7 +408,7 @@ OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
         {
             if ( *pStr == '&' )
             {
-                aResult += OUString( "~" );
+                aResult += "~";
                 while( *( ++pStr ) == '&' );
             }
             else

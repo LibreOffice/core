@@ -109,8 +109,8 @@ uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_In
 uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
-    aRet[0] = OUString("com.sun.star.embed.MSOLEObjectSystemCreator");
-    aRet[1] = OUString("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
+    aRet[0] = "com.sun.star.embed.MSOLEObjectSystemCreator";
+    aRet[1] = "com.sun.star.comp.embed.MSOLEObjectSystemCreator";
     return aRet;
 }
 
@@ -215,7 +215,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                 throw uno::RuntimeException();
 
             uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-            aMediaDescr[0].Name = OUString( "URL" );
+            aMediaDescr[0].Name = "URL";
             aMediaDescr[0].Value <<= aFileURL;
 
             // TODO: use config helper for type detection
@@ -258,9 +258,9 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                         getCppuType( ( const uno::Sequence< sal_Int8 >* ) 0 ) );
 
                     aObjectInfo.Options.realloc( 2 );
-                    aObjectInfo.Options[0].Name = OUString( "Icon" );
+                    aObjectInfo.Options[0].Name = "Icon";
                     aObjectInfo.Options[0].Value <<= aMetafile;
-                    aObjectInfo.Options[1].Name = OUString( "IconFormat" );
+                    aObjectInfo.Options[1].Name = "IconFormat";
                     aObjectInfo.Options[1].Value <<= aFlavor;
                 }
 

@@ -103,12 +103,12 @@ Interceptor::Interceptor( DocumentHolder* pDocHolder )
       m_pDisposeEventListeners(0),
       m_pStatCL(0)
 {
-    m_aInterceptedURL[0] = OUString(".uno:Save");
-    m_aInterceptedURL[1] = OUString(".uno:SaveAll");
-    m_aInterceptedURL[2] = OUString(".uno:CloseDoc");
-    m_aInterceptedURL[3] = OUString(".uno:CloseWin");
-    m_aInterceptedURL[4] = OUString(".uno:CloseFrame");
-    m_aInterceptedURL[5] = OUString(".uno:SaveAs");
+    m_aInterceptedURL[0] = ".uno:Save";
+    m_aInterceptedURL[1] = ".uno:SaveAll";
+    m_aInterceptedURL[2] = ".uno:CloseDoc";
+    m_aInterceptedURL[3] = ".uno:CloseWin";
+    m_aInterceptedURL[4] = ".uno:CloseFrame";
+    m_aInterceptedURL[5] = ".uno:SaveAs";
 
 }
 
@@ -166,7 +166,7 @@ Interceptor::dispatch(
             if ( nInd == aNewArgs.getLength() )
             {
                 aNewArgs.realloc( nInd + 1 );
-                aNewArgs[nInd].Name = OUString( "SaveTo" );
+                aNewArgs[nInd].Name = "SaveTo";
                 aNewArgs[nInd].Value <<= sal_True;
             }
 
@@ -194,7 +194,7 @@ Interceptor::addStatusListener(
     {   // Save
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
-        aStateEvent.FeatureDescriptor = OUString("Update");
+        aStateEvent.FeatureDescriptor = "Update";
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
         aStateEvent.State <<= (OUString( "($1) ") + m_pDocHolder->GetTitle() );
@@ -218,7 +218,7 @@ Interceptor::addStatusListener(
     {   // Close and return
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
-        aStateEvent.FeatureDescriptor = OUString("Close and Return");
+        aStateEvent.FeatureDescriptor = "Close and Return";
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
         aStateEvent.State <<= (OUString( "($2) ") + m_pDocHolder->GetTitle() );
@@ -240,7 +240,7 @@ Interceptor::addStatusListener(
     {   // SaveAs
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
-        aStateEvent.FeatureDescriptor = OUString("SaveCopyTo");
+        aStateEvent.FeatureDescriptor = "SaveCopyTo";
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
         aStateEvent.State <<= (OUString( "($3)"));

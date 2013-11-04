@@ -164,11 +164,11 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     m_aOutplaceFrameProps.realloc( 3 );
     beans::NamedValue aArg;
 
-    aArg.Name = OUString("TopWindow");
+    aArg.Name = "TopWindow";
     aArg.Value <<= sal_True;
     m_aOutplaceFrameProps[0] <<= aArg;
 
-    aArg.Name = OUString("MakeVisible");
+    aArg.Name = "MakeVisible";
     aArg.Value <<= sal_False;
     m_aOutplaceFrameProps[1] <<= aArg;
 
@@ -183,7 +183,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     }
     m_refCount--;
 
-    aArg.Name = OUString("ParentFrame");
+    aArg.Name = "ParentFrame";
     aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
     m_aOutplaceFrameProps[2] <<= aArg;
 }
@@ -453,14 +453,14 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
         uno::Sequence< uno::Any > aArgs( 2 );
         beans::NamedValue aArg;
 
-        aArg.Name    = OUString("ContainerWindow");
+        aArg.Name    = "ContainerWindow";
         aArg.Value <<= xOwnWindow;
         aArgs[0] <<= aArg;
 
         uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
         if ( xContFrame.is() )
         {
-            aArg.Name    = OUString("ParentFrame");
+            aArg.Name    = "ParentFrame";
             aArg.Value <<= xContFrame;
             aArgs[1] <<= aArg;
         }
@@ -974,13 +974,13 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
             if (    xServiceInfo.is()
                 &&  xServiceInfo->supportsService("com.sun.star.report.ReportDefinition") )
             {
-                sUrl = OUString(".component:DB/ReportDesign");
+                sUrl = ".component:DB/ReportDesign";
             }
             else if( xServiceInfo.is()
                 &&   xServiceInfo->supportsService("com.sun.star.chart2.ChartDocument"))
-                sUrl = OUString("private:factory/schart");
+                sUrl = "private:factory/schart";
             else
-                sUrl = OUString("private:object");
+                sUrl = "private:object";
 
             xComponentLoader->loadComponentFromURL( sUrl,
                                                         OUString( "_self" ),
