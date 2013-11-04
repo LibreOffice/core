@@ -1798,8 +1798,6 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     Application::AcquireSolarMutex(1);
     if (pViewShell)
     {
-        static bool bUseTileSize = getenv("USETILESIZE") != NULL;
-        static bool bCallSetSwVisArea = bUseTileSize && getenv("CALLSETSWVISAREA") != NULL;
         // TODO create a VirtualDevice based on SystemGraphicsData instead so
         // that we get direct rendering; something like:
         //
@@ -1814,23 +1812,12 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         aMapMode.SetScaleX(scaleX);
         aMapMode.SetScaleY(scaleY);
         aDevice.SetMapMode(aMapMode);
-        if (bCallSetSwVisArea)
-        {
-            SwRect foo = pViewShell->VisArea();
-            SAL_INFO("sw", "old VisArea: " << foo);
-            SetSwVisArea( pViewShell, SwRect(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)) );
-            foo = pViewShell->VisArea();
-            SAL_INFO("sw", "new VisArea: " << foo);
-        }
         // resizes the virtual device so to contain the entrie context
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
         // scroll the requested area into view if necessary
         pViewShell->MakeVisible(SwRect(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         // draw - works in logic coordinates
-        if (bUseTileSize)
-            pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
-        else
-            pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         // copy the aDevice content to mpImage
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();
