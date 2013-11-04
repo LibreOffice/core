@@ -129,6 +129,146 @@ void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
+
+void OpWeibull::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_" << BinFuncName() << "(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double x,alpha,beta,kum;\n";
+    if(vSubArguments.size() != 4)
+    {
+        ss << "    return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    assert(tmpCur0);
+    if(tmpCur0->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR0 =
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
+#ifdef ISNAN
+        ss << "    int buffer_x_len = ";
+        ss << tmpCurDVR0->GetArrayLength() << ";\n";
+        ss << "    if(gid0>=buffer_x_len || isNan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+        ss << "        x = 0.0;\n";
+        ss << "    else\n";
+#endif
+        ss << "        x = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+    }
+    else if(tmpCur0->GetType() == formula::svDouble)
+    {
+        ss << "    x=" <<tmpCur0->GetDouble() << ";\n";
+    }
+    else
+    {
+        ss << "return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    assert(tmpCur1);
+    if(tmpCur1->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR1 =
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur1);
+#ifdef ISNAN
+        ss << "    int buffer_alpha_len = ";
+        ss << tmpCurDVR1->GetArrayLength() << ";\n";
+        ss << "    if(gid0>=buffer_alpha_len || isNan(";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+        ss << "        alpha = 0.0;\n";
+        ss << "    else\n";
+#endif
+        ss << "        alpha = ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+    }
+    else if(tmpCur1->GetType() == formula::svDouble)
+    {
+        ss << "    alpha=" <<tmpCur1->GetDouble() << ";\n";
+    }
+    else
+    {
+        ss << "return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+
+    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    assert(tmpCur2);
+    if(tmpCur2->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR2 =
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur2);
+#ifdef ISNAN
+        ss << "    int buffer_beta_len = ";
+        ss << tmpCurDVR2->GetArrayLength() << ";\n";
+        ss << "    if(gid0>=buffer_beta_len || isNan(";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << "))\n";
+        ss << "        beta = 0.0;\n";
+        ss << "    else\n";
+#endif
+        ss << "        beta = ";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
+    }
+    else if(tmpCur2->GetType() == formula::svDouble)
+    {
+        ss << "    beta=" <<tmpCur2->GetDouble() << ";\n";
+    }
+    else
+    {
+        ss << "    return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+    FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
+    assert(tmpCur3);
+    if(tmpCur3->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR3 =
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur3);
+#ifdef ISNAN
+        ss << "    int buffer_kum_len = ";
+        ss << tmpCurDVR3->GetArrayLength() << ";\n";
+        ss << "    if(gid0>=buffer_kum_len || isNan(";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef() << "))\n";
+        ss << "        kum = 0.0;\n";
+        ss << "    else\n";
+#endif
+        ss << "        kum = ";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef() << ";\n";
+    }
+    else if(tmpCur3->GetType() == formula::svDouble)
+    {
+        ss << "    kum=" <<tmpCur3->GetDouble() << ";\n";
+    }
+    else
+    {
+        ss << "    return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+    ss << "    if(alpha<=0.0||beta<=0.0||kum<0.0)\n";
+    ss << "        return DBL_MAX;\n";
+    ss << "    else if(kum==0.0)\n";
+    ss << "    {\n";
+    ss << "        tmp=alpha/pow(beta,alpha)*pow(x,alpha-1.0)";
+    ss << "*exp(-pow(x/beta,alpha));\n";
+    ss << "    }\n";
+    ss << "    else\n";
+    ss << "        tmp=1.0-exp(-pow(x/beta,alpha));\n";
+    ss << "    return tmp;\n";
+    ss << "}\n";
+}
+
 void OpFisher::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
 {
