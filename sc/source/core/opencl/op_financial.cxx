@@ -3388,6 +3388,150 @@ void OpTbillyield::GenSlidingWindowFunction(
     ss << "}\n";
 }
 
+void OpPV::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName, SubArguments &
+vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double result = " <<"0"<<";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double zins;\n";
+    ss << "    double zzr;\n";
+    ss << "    double rmz;\n";
+    ss << "    double zw;\n";
+    ss << "    double flag;\n";
+
+#ifdef ISNAN
+     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+     const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+     formula::SingleVectorRefToken *>(tmpCur0);
+
+     FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+     const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+     formula::SingleVectorRefToken *>(tmpCur1);
+
+     FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+     const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+     formula::SingleVectorRefToken *>(tmpCur2);
+
+     const formula::SingleVectorRefToken*tmpCurDVR3;
+     const formula::SingleVectorRefToken*tmpCurDVR4;
+
+    if(vSubArguments.size()>3)
+    {
+        FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
+        tmpCurDVR3= dynamic_cast<const formula::SingleVectorRefToken *>(
+tmpCur3);
+        ss<< "    int buffer_zw_len = ";
+        ss<< tmpCurDVR3->GetArrayLength();
+        ss << ";\n";
+        }
+
+    if(vSubArguments.size()>4)
+    {
+        FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
+        tmpCurDVR4= dynamic_cast<const formula::SingleVectorRefToken *>(
+tmpCur4);
+        ss<< "    int buffer_flag_len = ";
+        ss<< tmpCurDVR4->GetArrayLength();
+        ss << ";\n";
+    }
+
+    ss<< "    int buffer_zins_len = ";
+    ss<< tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+
+    ss<< "    int buffer_zzr_len = ";
+    ss<< tmpCurDVR1->GetArrayLength();
+    ss << ";\n";
+
+    ss<< "    int buffer_rmz_len = ";
+    ss<< tmpCurDVR2->GetArrayLength();
+    ss << ";\n";
+
+#endif
+
+#ifdef ISNAN
+    ss<<"    if(gid0>=buffer_zins_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss<<"))\n";
+    ss<<"        zins = 0;\n    else \n";
+#endif
+    ss<<"        zins = ";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss<<";\n";
+
+#ifdef ISNAN
+    ss<<"    if(gid0>=buffer_zzr_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss<<"))\n";
+    ss<<"        zzr = 0;\n    else \n";
+#endif
+    ss<<"        zzr = ";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss<<";\n";
+
+#ifdef ISNAN
+    ss<<"    if(gid0>=buffer_rmz_len || isNan(";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss<<"))\n";
+    ss<<"        rmz = 0;\n    else \n";
+#endif
+    ss<<"        rmz = ";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss<<";\n";
+
+    if(vSubArguments.size()>3)
+    {
+#ifdef ISNAN
+        ss<<"    if(gid0>=buffer_zw_len || isNan(";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss<<"))\n";
+        ss<<"        zw = 0;\n    else \n";
+#endif
+        ss<<"        zw = ";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss<<";\n";
+    }else
+    {
+        ss<<"    zw = 0;\n";
+    }
+
+    if(vSubArguments.size()>4)
+    {
+#ifdef ISNAN
+        ss<<"    if(gid0>=buffer_flag_len || isNan(";
+        ss << vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss<<"))\n";
+        ss<<"        flag = 0;\n    else \n";
+#endif
+        ss<<"        flag = ";
+        ss << vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss<<";\n";
+    }else
+    {
+        ss<<"        flag = 0;\n";
+    }
+    ss << "    if(zins == 0)\n";
+    ss << "        result=zw+rmz*zzr;\n";
+    ss << "    else if(flag > 0)\n";
+    ss << "        result=(zw*pow(1+zins,-zzr))+";
+    ss << "(rmz*(1-pow(1+zins,-zzr+1))/zins)+rmz;\n";
+    ss << "    else\n";
+    ss << "        result=(zw*pow(1+zins,-zzr))+";
+    ss << "(rmz*(1-pow(1+zins,-zzr))/zins);\n";
+    ss << "    return -result;\n";
+    ss << "}";
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
