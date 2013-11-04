@@ -10,11 +10,7 @@
 $(eval $(call gb_Module_Module,io))
 
 $(eval $(call gb_Module_add_targets,io,\
-    Library_acceptor \
-    Library_connector \
-    Library_streams \
-    Library_textinstream \
-    Library_textoutstream \
+    Library_io \
 ))
 
 # vim:set noet sw=4 ts=4:

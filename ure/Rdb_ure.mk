@@ -10,10 +10,8 @@
 $(eval $(call gb_Rdb_Rdb_install,ure/services,$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb))
 
 $(eval $(call gb_Rdb_add_components,ure/services,\
-	$(if $(filter IOS,$(OS)),, \
-        io/source/acceptor/acceptor \
-        io/source/connector/connector) \
     binaryurp/source/binaryurp \
+    io/source/io \
     stoc/util/bootstrap \
     stoc/source/inspect/introspection \
     stoc/source/invocation_adapterfactory/invocadapt \
@@ -22,9 +20,6 @@ $(eval $(call gb_Rdb_add_components,ure/services,\
     stoc/source/proxy_factory/proxyfac \
     stoc/source/corereflection/reflection \
     stoc/util/stocservices \
-    io/source/stm/streams \
-    io/source/TextInputStream/textinstream \
-    io/source/TextOutputStream/textoutstream \
     remotebridges/source/unourl_resolver/uuresolver \
 ))
 
