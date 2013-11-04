@@ -768,7 +768,8 @@ static void presence_changed_cb( TpContact* /* contact */,
 AccountContactPairV TeleManager::getContacts()
 {
     AccountContactPairV pairs;
-
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     for (GList *accounts = tp_account_manager_get_valid_accounts (pImpl->mpAccountManager);
             accounts != NULL; accounts = g_list_delete_link (accounts, accounts))
     {
@@ -804,7 +805,7 @@ AccountContactPairV TeleManager::getContacts()
         }
         g_ptr_array_unref (contacts);
     }
-
+    #pragma GCC diagnostic pop
     return pairs;
 }
 
