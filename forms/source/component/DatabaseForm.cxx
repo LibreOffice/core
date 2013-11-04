@@ -918,7 +918,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             if (!xContainer.is())
                 break;
 
-            aName += OUString(static_cast<sal_Unicode>('.'));
+            aName += ".";
 
             Reference<XPropertySet>  xSet;
             sal_Int32 nCount = xContainer->getCount();
@@ -2162,7 +2162,7 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
     if (xDisp.is())
     {
         Sequence<PropertyValue> aArgs(2);
-        aArgs.getArray()[0].Name = OUString("Referer");
+        aArgs.getArray()[0].Name = "Referer";
         aArgs.getArray()[0].Value <<= aReferer;
 
         // build a sequence from the to-be-submitted string
@@ -2171,7 +2171,7 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
         Sequence< sal_Int8 > aPostData((const sal_Int8*)a8BitData.getStr(), a8BitData.getLength());
         Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
 
-        aArgs.getArray()[1].Name = OUString("PostData");
+        aArgs.getArray()[1].Name = "PostData";
         aArgs.getArray()[1].Value <<= xPostData;
 
         xDisp->dispatch(aURL, aArgs);
@@ -2256,7 +2256,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             if (xDisp.is())
             {
                 Sequence<PropertyValue> aArgs(1);
-                aArgs.getArray()->Name = OUString("Referer");
+                aArgs.getArray()->Name = "Referer";
                 aArgs.getArray()->Value <<= aReferer;
                 xDisp->dispatch(aURL, aArgs);
             }
@@ -2289,15 +2289,15 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
                 return;
 
             Sequence<PropertyValue> aArgs(3);
-            aArgs.getArray()[0].Name = OUString("Referer");
+            aArgs.getArray()[0].Name = "Referer";
             aArgs.getArray()[0].Value <<= aReferer;
-            aArgs.getArray()[1].Name = OUString("ContentType");
+            aArgs.getArray()[1].Name = "ContentType";
             aArgs.getArray()[1].Value <<= aContentType;
 
             // build a sequence from the to-be-submitted string
             Reference< XInputStream > xPostData = new SequenceInputStream(aData);
 
-            aArgs.getArray()[2].Name = OUString("PostData");
+            aArgs.getArray()[2].Name = "PostData";
             aArgs.getArray()[2].Value <<= xPostData;
 
             xDisp->dispatch(aURL, aArgs);
@@ -2540,7 +2540,7 @@ void SAL_CALL ODatabaseForm::getGroup( sal_Int32 nGroup, Sequence<Reference<XCon
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     _rGroup.realloc(0);
-    _rName = OUString();
+    _rName = "";
 
     if ((nGroup < 0) || (nGroup >= m_pGroupManager->getGroupCount()))
         return;
@@ -3799,7 +3799,7 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getCurrentServiceNames_Static()
     OUString* pServices = aServices.getArray();
 
     *pServices++ = FRM_SUN_FORMCOMPONENT;
-    *pServices++ = OUString("com.sun.star.form.FormComponents");
+    *pServices++ = "com.sun.star.form.FormComponents";
     *pServices++ = FRM_SUN_COMPONENT_FORM;
     *pServices++ = FRM_SUN_COMPONENT_HTMLFORM;
     *pServices++ = FRM_SUN_COMPONENT_DATAFORM;

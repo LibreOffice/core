@@ -47,7 +47,7 @@ OUString SAL_CALL CLibxml2XFormsExtension::getImplementationName_Static()
 Sequence< OUString > SAL_CALL CLibxml2XFormsExtension::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aSequence(1);
-    aSequence[0] = OUString("com.sun.star.xml.xpath.XPathExtension");
+    aSequence[0] = "com.sun.star.xml.xpath.XPathExtension";
     return aSequence;
 }
 

@@ -202,9 +202,8 @@ StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeExcept
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
-    OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = OUString("com.sun.star.awt.UnoControlModel");
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_GRIDCONTROL;
+    aSupported[aSupported.getLength()-2] = "com.sun.star.awt.UnoControlModel";
+    aSupported[aSupported.getLength()-1] = FRM_SUN_COMPONENT_GRIDCONTROL;
     return aSupported;
 }
 

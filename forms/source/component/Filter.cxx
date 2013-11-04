@@ -159,22 +159,22 @@ namespace frm
         switch (m_nControlClass)
         {
             case FormComponentType::RADIOBUTTON:
-                aServiceName = OUString("radiobutton");
+                aServiceName = "radiobutton";
                 break;
             case FormComponentType::CHECKBOX:
-                aServiceName = OUString("checkbox");
+                aServiceName = "checkbox";
                 break;
             case FormComponentType::COMBOBOX:
-                aServiceName = OUString("combobox");
+                aServiceName = "combobox";
                 break;
             case FormComponentType::LISTBOX:
-                aServiceName = OUString("listbox");
+                aServiceName = "listbox";
                 break;
             default:
                 if (m_bMultiLine)
-                    aServiceName = OUString("MultiLineEdit");
+                    aServiceName = "MultiLineEdit";
                 else
-                    aServiceName = OUString("Edit");
+                    aServiceName = "Edit";
         }
         return aServiceName;
     }
@@ -635,7 +635,7 @@ namespace frm
                     OSL_ENSURE( ( itemPos != m_aDisplayItemToValueItem.end() ) || m_aText.isEmpty(),
                         "OFilterControl::setText: this text is not in my display list!" );
                     if ( itemPos == m_aDisplayItemToValueItem.end() )
-                        m_aText = OUString();
+                        m_aText = "";
 
                     if ( m_aText.isEmpty() )
                     {
@@ -897,8 +897,8 @@ namespace frm
     Sequence< OUString > SAL_CALL OFilterControl::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aNames( 2 );
-        aNames[ 0 ] = OUString( "com.sun.star.form.control.FilterControl" );
-        aNames[ 1 ] = OUString( "com.sun.star.awt.UnoControl" );
+        aNames[ 0 ] = "com.sun.star.form.control.FilterControl";
+        aNames[ 1 ] = "com.sun.star.awt.UnoControl";
         return aNames;
     }
 

@@ -259,7 +259,7 @@ void ensureClassInfos()
     // ========================================================================
     // = various
     aServices.realloc(1);
-    aServices.getArray()[0] = OUString("com.sun.star.form.Forms");
+    aServices.getArray()[0] = "com.sun.star.form.Forms";
     REGISTER_CLASS_CORE(OFormsCollection);
 
     REGISTER_CLASS1(ImageProducer, SRV_AWT_IMAGEPRODUCER);
@@ -268,7 +268,7 @@ void ensureClassInfos()
     // = XForms core
 #define REGISTER_XFORMS_CLASS(name) \
     aServices.realloc(1); \
-    aServices.getArray()[0] = OUString( "com.sun.star.xforms." #name ); \
+    aServices[0] = "com.sun.star.xforms." #name ; \
     REGISTER_CLASS_CORE(name)
 
     REGISTER_XFORMS_CLASS(Model);

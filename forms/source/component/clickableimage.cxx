@@ -306,7 +306,7 @@ namespace frm
 
                     Sequence<PropertyValue> aArgs(1);
                     PropertyValue& rProp = aArgs.getArray()[0];
-                    rProp.Name = OUString("Referer");
+                    rProp.Name = "Referer";
                     rProp.Value <<= xModel->getURL();
 
                     if (xDisp.is())
@@ -321,13 +321,13 @@ namespace frm
                     if ( xDisp.is() )
                     {
                         Sequence<PropertyValue> aProps(3);
-                        aProps[0].Name  = OUString("URL");
+                        aProps[0].Name  = "URL";
                         aProps[0].Value <<= aURL.Complete;
 
-                        aProps[1].Name  = OUString("FrameName");
+                        aProps[1].Name  = "FrameName";
                         aProps[1].Value = xSet->getPropertyValue(PROPERTY_TARGET_FRAME);
 
-                        aProps[2].Name  = OUString("Referer");
+                        aProps[2].Name  = "Referer";
                         aProps[2].Value <<= xModel->getURL();
 
                         xDisp->dispatch( aHyperLink, aProps );

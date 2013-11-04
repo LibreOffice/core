@@ -120,8 +120,8 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
 {
     StringSequence aReturn(2);
 
-    aReturn.getArray()[0] = OUString("com.sun.star.form.Forms");
-    aReturn.getArray()[1] = OUString("com.sun.star.form.FormComponents");
+    aReturn[0] = "com.sun.star.form.Forms";
+    aReturn[1] = "com.sun.star.form.FormComponents";
 
     return aReturn;
 }

@@ -759,7 +759,7 @@ Sequence< OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() t
 {
     Sequence< OUString > aServiceNames( 2 );
     aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
-    aServiceNames[ 1 ] = OUString("com.sun.star.form.FormControlModel");
+    aServiceNames[ 1 ] = "com.sun.star.form.FormControlModel";
     return aServiceNames;
 }
 
@@ -1671,7 +1671,7 @@ StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(Run
 Sequence< OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString > aOwnServiceNames( 1 );
-    aOwnServiceNames[ 0 ] = OUString("com.sun.star.form.DataAwareControlModel");
+    aOwnServiceNames[ 0 ] = "com.sun.star.form.DataAwareControlModel";
 
     return ::comphelper::concatSequences(
         OControlModel::getSupportedServiceNames_Static(),
