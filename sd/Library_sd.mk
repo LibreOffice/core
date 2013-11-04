@@ -46,7 +46,7 @@ $(eval $(call gb_Library_set_include,sd,\
 
 ifneq ($(SYSTEM_BLUEZ),YES)
 $(eval $(call gb_Library_add_cxxflags,sd,\
-	-I$(SRCDIR)/bluez_bluetooth/inc \
+	-I$(SRCDIR)/external/bluez_bluetooth/inc \
 ))
 endif
 
