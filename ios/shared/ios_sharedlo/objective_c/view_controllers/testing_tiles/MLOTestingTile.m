@@ -43,6 +43,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    NSTimeInterval startTime = CACurrentMediaTime();
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     MLODpxPoint tilePosition =MLODpxPointByDpxes(self.tester.params.tilePosX,self.tester.params.tilePosY);
@@ -62,6 +63,7 @@
                        tilePosition,
                        tileSize);
 
+    NSLog(@"tile rendering took %f seconds",CACurrentMediaTime() - startTime);
     MLODpxSize size = touch_lo_get_content_size();
     NSLog(@"touch_lo_get_content_size: width=%f, height=%f",size.width, size.height);
 }
