@@ -467,13 +467,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
-	acceptor \
 	binaryurp \
 	bootstrap \
-	connector \
 	introspection \
 	invocadapt \
 	invocation \
+	io \
 	$(if $(ENABLE_JAVA),javaloader) \
 	$(if $(ENABLE_JAVA),javavm) \
 	$(if $(ENABLE_JAVA),jvmaccess) \
@@ -485,10 +484,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 	sal_textenc \
 	stocservices \
 	store \
-	streams \
 	$(if $(ENABLE_JAVA),sunjavaplugin) \
-	textinstream \
-	textoutstream \
 	unoidl \
 	uuresolver \
 	xmlreader \
