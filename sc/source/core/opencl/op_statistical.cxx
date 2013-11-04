@@ -939,6 +939,83 @@ void OpRsq::GenSlidingWindowFunction(
     ss << "}\n";
 }
 
+void OpMedian::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int i;\n";
+    ss << "    unsigned int startFlag = 0;\n";
+    ss << "    unsigned int endFlag = 0;\n";
+    ss << "    double dataIna;\n";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (const formula::DoubleVectorRefToken* pCurDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
+        {
+            size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+            ss << "startFlag = ";
+            if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
+            {
+                ss << "gid0; endFlag = "<< nCurWindowSize <<"-gid0;\n";
+            }
+            else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+            {
+                ss << "gid0; endFlag = gid0+"<< nCurWindowSize <<";\n";
+            }
+            else
+            {
+                ss << "gid0; endFlag = gid0+"<< nCurWindowSize <<";\n";
+            }
+        }
+        else
+        {
+            ss<<"startFlag=gid0;endFlag=gid0;\n";
+        }
+    }
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::DoubleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::DoubleVectorRefToken *>(tmpCur0);
+    ss << "int buffer_fIna_len = ";
+    ss << tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef ISNAN
+    ss<<"if((i+gid0)>=buffer_fIna_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss<<"))\n";
+    ss<<"    dataIna = 0;\n";
+#endif
+    ss << "    int nSize =endFlag- startFlag ;\n";
+    ss << "    if (nSize & 1)\n";
+    ss << "    {\n";
+    ss << "        tmp = "<<vSubArguments[0]->GetNameAsString();
+    ss << "        [startFlag+nSize/2];\n";
+    ss << "    }\n";
+    ss << "    else\n";
+    ss << "    {\n";
+    ss << "        tmp =("<<vSubArguments[0]->GetNameAsString();
+    ss << "        [startFlag+nSize/2]+";
+    ss <<          vSubArguments[0]->GetNameAsString();
+    ss << "        [startFlag+nSize/2-1])/2;\n";
+    ss << "    }\n";
+    ss <<"     return tmp;\n";
+    ss << "}\n";
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
