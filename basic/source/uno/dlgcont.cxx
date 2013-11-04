@@ -140,7 +140,7 @@ bool writeOasis2OOoLibraryElement(
 
     xml::sax::InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId = OUString("virtual file");
+    source.sSystemId = "virtual file";
 
     xParser->parseStream( source );
 
@@ -468,9 +468,9 @@ Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceName
 Sequence< OUString > SfxDialogLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = OUString("com.sun.star.script.DocumentDialogLibraryContainer");
+    aServiceNames[0] = "com.sun.star.script.DocumentDialogLibraryContainer";
     // plus, for compatibility:
-    aServiceNames[1] = OUString("com.sun.star.script.DialogLibraryContainer");
+    aServiceNames[1] = "com.sun.star.script.DialogLibraryContainer";
     return aServiceNames;
 }
 

@@ -160,7 +160,7 @@ void SbiScanner::scanGoto()
         OUString aTemp = aLine.copy(n, 2);
         if(aTemp.equalsIgnoreAsciiCase("to"))
         {
-            aSym = OUString("goto");
+            aSym = "goto";
             pLine += n + 2 - nCol;
             nCol = n + 2;
         }
@@ -210,7 +210,7 @@ bool SbiScanner::NextSym()
     sal_Unicode buf[ BUF_SIZE ], *p = buf;
 
     eScanType = SbxVARIANT;
-    aSym = OUString();
+    aSym = "";
     bHash = bSymbol = bNumber = bSpaces = false;
 
     // read in line?
@@ -433,7 +433,7 @@ bool SbiScanner::NextSym()
             default :
                 // treated as an operator
                 --pLine; --nCol; nCol1 = nCol-1;
-                aSym = OUString("&");
+                aSym = "&";
                 return true;
         }
         bNumber = true;
@@ -537,7 +537,7 @@ PrevLineCommentLbl:
                                     ( aSym.startsWith("'") || aSym.equalsIgnoreAsciiCase( "REM" ) ) ) )
     {
         bPrevLineExtentsComment = false;
-        aSym = OUString("REM");
+        aSym = "REM";
         sal_Int32 nLen = rtl_ustr_getLength(pLine);
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
             bPrevLineExtentsComment = true;
@@ -568,7 +568,7 @@ eoln:
         nLine = nOldLine;
         nCol1 = nOldCol1;
         nCol2 = nOldCol2;
-        aSym = OUString("\n");
+        aSym = "\n";
         nColLock = 0;
         return true;
     }

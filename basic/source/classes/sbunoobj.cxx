@@ -3620,7 +3620,7 @@ SbxVariable* SbUnoService::Find( const OUString& rName, SbxClassType )
                 {
                     if( xCtor->isDefaultConstructor() )
                     {
-                        aName = OUString("create");
+                        aName = "create";
                     }
                 }
 

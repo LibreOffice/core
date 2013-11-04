@@ -286,13 +286,13 @@ const OUString& SbiTokenizer::Symbol( SbiToken t )
     switch( t )
     {
     case NEG   :
-        aSym = OUString("-");
+        aSym = "-";
         return aSym;
     case EOS   :
-        aSym = OUString(":/CRLF");
+        aSym = ":/CRLF";
         return aSym;
     case EOLN  :
-        aSym = OUString("CRLF");
+        aSym = "CRLF";
         return aSym;
     default:
         break;
@@ -309,7 +309,7 @@ const OUString& SbiTokenizer::Symbol( SbiToken t )
     const sal_Unicode *p = aSym.getStr();
     if (*p <= ' ')
     {
-        aSym = OUString("???");
+        aSym = "???";
     }
     return aSym;
 }

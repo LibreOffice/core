@@ -2729,7 +2729,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
 
     delete pRTLData->pWildCard;
     pRTLData->pWildCard = NULL;
-    pRTLData->sFullNameToBeChecked = OUString();
+    pRTLData->sFullNameToBeChecked = "";
 
     OUString aFileParam = rFileParam;
     sal_Int32 nLastWild = aFileParam.lastIndexOf( cWild1 );
@@ -2767,7 +2767,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     if( nLastDelim < 0 )
     {
         aPureFileName = aFileParam;
-        aFileParam = OUString();
+        aFileParam = "";
     }
     else
     {
@@ -2941,11 +2941,11 @@ RTLFUNC(Dir)
                         {
                             if( pRTLData->nCurDirPos == -2 )
                             {
-                                aPath = OUString("." );
+                                aPath = ".";
                             }
                             else if( pRTLData->nCurDirPos == -1 )
                             {
-                                aPath = OUString(".." );
+                                aPath = "..";
                             }
                             pRTLData->nCurDirPos++;
                         }
@@ -3057,11 +3057,11 @@ RTLFUNC(Dir)
                     {
                         if( pRTLData->nCurDirPos == -2 )
                         {
-                            aPath = OUString("." );
+                            aPath = ".";
                         }
                         else if( pRTLData->nCurDirPos == -1 )
                         {
-                            aPath = OUString(".." );
+                            aPath = "..";
                         }
                         pRTLData->nCurDirPos++;
                     }
@@ -3825,7 +3825,7 @@ OUString getObjectTypeName( SbxVariable* pVar )
         SbxBase* pObj = pVar->GetObject();
         if( !pObj )
         {
-           sRet = OUString("Nothing");
+           sRet = "Nothing";
         }
         else
         {

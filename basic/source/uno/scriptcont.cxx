@@ -115,7 +115,7 @@ void SfxScriptLibraryContainer::clearLibraryPassword( const OUString& rLibraryNa
         SfxLibrary* pImplLib = getImplLib( rLibraryName );
         pImplLib->mbDoc50Password = false;
         pImplLib->mbPasswordProtected = sal_False;
-        pImplLib->maPassword = OUString();
+        pImplLib->maPassword = "";
     }
     catch(const NoSuchElementException& ) {}
 }
@@ -493,7 +493,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
         {
             pImplLib->mbPasswordProtected = sal_False;
             pImplLib->mbPasswordVerified = sal_False;
-            pImplLib->maPassword = OUString();
+            pImplLib->maPassword = "";
 
             maModifiable.setModified( sal_True );
             pImplLib->implSetModified( sal_True );
@@ -1215,9 +1215,9 @@ Sequence< OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceName
 Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = OUString("com.sun.star.script.DocumentScriptLibraryContainer" );
+    aServiceNames[0] = "com.sun.star.script.DocumentScriptLibraryContainer";
     // plus, for compatibility:
-    aServiceNames[1] = OUString("com.sun.star.script.ScriptLibraryContainer" );
+    aServiceNames[1] = "com.sun.star.script.ScriptLibraryContainer";
     return aServiceNames;
 }
 

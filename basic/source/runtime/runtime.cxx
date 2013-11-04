@@ -2654,7 +2654,7 @@ void SbiRuntime::StepENDCASE()
 void SbiRuntime::StepSTDERROR()
 {
     pError = NULL; bError = true;
-    pInst->aErrorMsg = OUString();
+    pInst->aErrorMsg = "";
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
@@ -2663,7 +2663,7 @@ void SbiRuntime::StepSTDERROR()
 
 void SbiRuntime::StepNOERROR()
 {
-    pInst->aErrorMsg = OUString();
+    pInst->aErrorMsg = "";
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
@@ -3144,7 +3144,7 @@ void SbiRuntime::StepERRHDL( sal_uInt32 nOp1 )
     StepJUMP( nOp1 );
     pError = pCode;
     pCode = p;
-    pInst->aErrorMsg = OUString();
+    pInst->aErrorMsg = "";
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
@@ -3174,7 +3174,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
 
     if( nOp1 > 1 )
         StepJUMP( nOp1 );
-    pInst->aErrorMsg = OUString();
+    pInst->aErrorMsg = "";
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
@@ -3398,7 +3398,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             PushVar( p );
             StepARGV();
             nOp1 = nOp1 | 0x8000; // indicate params are present
-            aName = OUString("Evaluate");
+            aName = "Evaluate";
         }
         if( bLocal )
         {
@@ -3954,7 +3954,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             }
                             else if( xIndexAccess.is() )
                             {
-                                sDefaultMethod = OUString( "getByIndex" );
+                                sDefaultMethod = "getByIndex";
                             }
                             if ( !sDefaultMethod.isEmpty() )
                             {
@@ -4183,7 +4183,7 @@ void SbiRuntime::StepCALL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         pArgs = refArgv;
     }
     DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, false );
-    aLibName = OUString();
+    aLibName = "";
     if( nOp1 & 0x8000 )
     {
         PopArgv();
@@ -4201,7 +4201,7 @@ void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         pArgs = refArgv;
     }
     DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, true );
-    aLibName = OUString();
+    aLibName = "";
     if( nOp1 & 0x8000 )
     {
         PopArgv();

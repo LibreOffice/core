@@ -594,11 +594,11 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
 {
     if( bUser )
     {
-        rStr = OUString("$(USER)/basic/");
+        rStr = "$(USER)/basic/";
     }
     else
     {
-        rStr = OUString("$(INST)/" LIBO_SHARE_FOLDER "/basic/");
+        rStr = "$(INST)/" LIBO_SHARE_FOLDER "/basic/";
     }
     rStr += rLibName;
     rStr += "/";
@@ -1049,20 +1049,20 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     OUString aCheckFileName;
 
                     // Check if script.xlb exists
-                    aCheckFileName = OUString("script");
+                    aCheckFileName = "script";
                     checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                           aPrevUserBasicStandardInetObj,
                                           aCheckFileName, aXlbExtension, mxSFI );
 
                     // Check if dialog.xlb exists
-                    aCheckFileName = OUString("dialog");
+                    aCheckFileName = "dialog";
                     checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                           aPrevUserBasicStandardInetObj,
                                           aCheckFileName, aXlbExtension, mxSFI );
 
                     // Check if module1.xba exists
                     OUString aXbaExtension("xba");
-                    aCheckFileName = OUString("Module1");
+                    aCheckFileName = "Module1";
                     checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                           aPrevUserBasicStandardInetObj,
                                           aCheckFileName, aXbaExtension, mxSFI );
@@ -2027,7 +2027,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             xTargetLibrariesStor->dispose();
             i_rStorage->removeElement( sTempTargetStorName );
             xTargetLibrariesStor.clear();
-            sTempTargetStorName = OUString();
+            sTempTargetStorName = "";
 
             // adjust target
             xTargetLibrariesStor = xSourceLibrariesStor;
