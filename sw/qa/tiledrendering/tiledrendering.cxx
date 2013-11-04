@@ -105,8 +105,8 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
     int contextHeight = mpContextHeight->GetValue();
     int tilePosX = mpTilePosX->GetValue();
     int tilePosY = mpTilePosY->GetValue();
-    int tileWidth = mpTileWidth->GetValue();
-    int tileHeight = mpTileHeight->GetValue();
+    long tileWidth = mpTileWidth->GetValue();
+    long tileHeight = mpTileHeight->GetValue();
 
     // do the same thing we are doing in touch_lo_draw_tile()
     SwWrtShell *pViewShell = GetActiveWrtShell();
@@ -124,12 +124,24 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
         MapMode aMapMode(aDevice.GetMapMode());
         aMapMode.SetMapUnit(MAP_TWIP);
         aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
+
+        // Scaling. Must convert from pixels to twips. We know
+        // that VirtualDevises use a DPI of 96.
+        Fraction scaleX = Fraction(contextWidth,96) * Fraction(1440L) / Fraction(tileWidth);
+        Fraction scaleY = Fraction(contextHeight,96) * Fraction(1440L) / Fraction(tileHeight);
+        aMapMode.SetScaleX(scaleX);
+        aMapMode.SetScaleY(scaleY);
+
         aDevice.SetMapMode(aMapMode);
 
-        aDevice.SetOutputSizePixel(aDevice.PixelToLogic(Size(contextWidth, contextHeight)));
+        // resizes the virtual device so to contain the entrie context
+        aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
 
-        // draw
-        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
+        // scroll the requested area into view if necessary
+        pViewShell->MakeVisible(SwRect(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+
+        // draw - works in logic coordinates
+        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
 
         // debug
         // aDevice.SetFillColor(Color(COL_RED));
