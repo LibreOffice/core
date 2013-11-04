@@ -2115,20 +2115,27 @@ static void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
 
 void ScInputHandler::SyncViews( EditView* pSourceView )
 {
-    ESelection aSel;
-
     if (pSourceView)
     {
-        aSel = pSourceView->GetSelection();
+        bool bSelectionForTopView = false;
         if (pTopView && pTopView != pSourceView)
-            pTopView->SetSelection( aSel );
+            bSelectionForTopView = true;
+        bool bSelectionForTableView = false;
         if (pTableView && pTableView != pSourceView)
-            lcl_SetTopSelection( pTableView, aSel );
+            bSelectionForTableView = true;
+        if (bSelectionForTopView || bSelectionForTableView)
+        {
+            ESelection aSel(pSourceView->GetSelection());
+            if (bSelectionForTopView)
+                pTopView->SetSelection(aSel);
+            if (bSelectionForTableView)
+                lcl_SetTopSelection(pTableView, aSel);
+        }
     }
     // Only sync selection from topView if we are actually editiing there
     else if (pTopView && pTableView)
     {
-        aSel = pTopView->GetSelection();
+        ESelection aSel(pTopView->GetSelection());
         lcl_SetTopSelection( pTableView, aSel );
     }
 }
