@@ -176,6 +176,10 @@ void lcl_TableStyleRColor(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence
             pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rColor[i].Name == "themeColor")
             pAttributeList->add(FSNS(XML_w, XML_themeColor), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rColor[i].Name == "themeTint")
+            pAttributeList->add(FSNS(XML_w, XML_themeTint), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rColor[i].Name == "themeShade")
+            pAttributeList->add(FSNS(XML_w, XML_themeShade), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, XML_color, xAttributeList);
@@ -214,6 +218,8 @@ void lcl_TableStyleRRFonts(sax_fastparser::FSHelperPtr pSerializer, uno::Sequenc
             pAttributeList->add(FSNS(XML_w, XML_eastAsiaTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rRFonts[i].Name == "asciiTheme")
             pAttributeList->add(FSNS(XML_w, XML_asciiTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rRFonts[i].Name == "cstheme")
+            pAttributeList->add(FSNS(XML_w, XML_cstheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rRFonts[i].Name == "hAnsiTheme")
             pAttributeList->add(FSNS(XML_w, XML_hAnsiTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
     }

@@ -972,6 +972,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_cstheme:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "cstheme", ThemeTable::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme(nIntValue) ));
         break;
@@ -1444,8 +1445,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Color_themeTint:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeTint", OUString::number(nIntValue, 16));
+        break;
         case NS_ooxml::LN_CT_Color_themeShade:
-            //unsupported
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeShade", OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_DocGrid_linePitch:
         {

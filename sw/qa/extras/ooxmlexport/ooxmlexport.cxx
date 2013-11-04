@@ -1341,6 +1341,16 @@ DECLARE_OOXML_TEST(testCalendar2, "calendar2.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblPr/w:tblBorders/w:insideV", "themeTint", "99");
 }
 
+DECLARE_OOXML_TEST(testQuicktables, "quicktables.docx")
+{
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+
+    // These were missing in the Calendar3 table style.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:rPr/w:rFonts", "cstheme", "majorBidi");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:rPr/w:color", "themeTint", "80");
+    CPPUNIT_ASSERT(getXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:color", "themeShade").equalsIgnoreAsciiCase("BF"));
+}
+
 DECLARE_OOXML_TEST(testSmartart, "smartart.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
