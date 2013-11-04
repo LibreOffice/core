@@ -257,7 +257,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	file \
 	filterconfig \
 	$(if $(filter $(ENABLE_FIREBIRD_SDBC),TRUE),firebird_sdbc) \
-	fpicker \
 	fps_office \
 	for \
 	forui \
