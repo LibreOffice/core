@@ -20,6 +20,7 @@
 
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <SdtHelper.hxx>
+#include <TDefTableHandler.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <ModelEventListener.hxx>
@@ -1440,6 +1441,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_FtnEdnRef_id:
             // footnote or endnote reference id - not needed
         case NS_ooxml::LN_CT_Color_themeColor:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
+        break;
         case NS_ooxml::LN_CT_Color_themeTint:
         case NS_ooxml::LN_CT_Color_themeShade:
             //unsupported
@@ -2196,10 +2199,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     case NS_sprm::LN_CFSmallCaps: /*sprmCFSmallCaps*/
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? style::CaseMap::SMALLCAPS : style::CaseMap::NONE));
+                        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "smallCaps", OUString::number(nIntValue));
                     break;
                     case NS_sprm::LN_CFCaps: /*sprmCFCaps*/
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? style::CaseMap::UPPERCASE : style::CaseMap::NONE));
+                        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "caps", OUString::number(nIntValue));
                     break;
                     case NS_sprm::LN_CFEmboss: /*sprmCFEmboss*/
                         rContext->Insert(ePropertyId,
@@ -2305,6 +2310,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 nResult = static_cast<sal_Int16>(nIntValue);
             }
             rContext->Insert(PROP_CHAR_CHAR_KERNING, uno::makeAny(nResult));
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "spacing", OUString::number(nIntValue));
         }
         break;
     case NS_sprm::LN_CHpsKern:  // sprmCHpsKern    auto kerning is bound to a minimum font size in Word - but not in Writer :-(

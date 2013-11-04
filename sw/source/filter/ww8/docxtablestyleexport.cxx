@@ -174,6 +174,8 @@ void lcl_TableStyleRColor(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence
     {
         if (rColor[i].Name == "val")
             pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rColor[i].Name == "themeColor")
+            pAttributeList->add(FSNS(XML_w, XML_themeColor), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, XML_color, xAttributeList);
@@ -285,7 +287,7 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
     pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
 
     uno::Sequence<beans::PropertyValue> aRFonts, aLang, aColor;
-    OUString aB, aI, aSz, aSzCs;
+    OUString aB, aI, aSz, aSzCs, aCaps, aSmallCaps, aSpacing;
     for (sal_Int32 i = 0; i < rRPr.getLength(); ++i)
     {
         if (rRPr[i].Name == "rFonts")
@@ -302,12 +304,24 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
             aSz = rRPr[i].Value.get<OUString>();
         else if (rRPr[i].Name == "szCs")
             aSzCs = rRPr[i].Value.get<OUString>();
+        else if (rRPr[i].Name == "caps")
+            aCaps = rRPr[i].Value.get<OUString>();
+        else if (rRPr[i].Name == "smallCaps")
+            aSmallCaps = rRPr[i].Value.get<OUString>();
+        else if (rRPr[i].Name == "spacing")
+            aSpacing = rRPr[i].Value.get<OUString>();
     }
     lcl_TableStyleRRFonts(pSerializer, aRFonts);
     lcl_TableStyleRLang(pSerializer, aLang);
     lcl_handleBoolean(aB, XML_b, pSerializer);
     lcl_handleBoolean(aI, XML_i, pSerializer);
+    lcl_handleBoolean(aCaps, XML_caps, pSerializer);
+    lcl_handleBoolean(aSmallCaps, XML_smallCaps, pSerializer);
     lcl_TableStyleRColor(pSerializer, aColor);
+    if (!aSpacing.isEmpty())
+        pSerializer->singleElementNS(XML_w, XML_spacing,
+                FSNS(XML_w, XML_val), OUStringToOString(aSpacing, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
     if (!aSz.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_sz,
                 FSNS(XML_w, XML_val), OUStringToOString(aSz, RTL_TEXTENCODING_UTF8).getStr(),
