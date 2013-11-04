@@ -20,6 +20,7 @@
 #include <PropertyMap.hxx>
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
+#include <TDefTableHandler.hxx>
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <sal/macros.h>
@@ -129,8 +130,12 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
             m_nColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_themeFill:
-        case NS_ooxml::LN_CT_Shd_themeFillTint:
+            createGrabBag("themeFill", uno::makeAny(TDefTableHandler::getThemeColorTypeString(nIntValue)));
+        break;
         case NS_ooxml::LN_CT_Shd_themeFillShade:
+            createGrabBag("themeFillShade", uno::makeAny(OUString::number(nIntValue, 16)));
+        break;
+        case NS_ooxml::LN_CT_Shd_themeFillTint:
             // ignored
             break;
         default:

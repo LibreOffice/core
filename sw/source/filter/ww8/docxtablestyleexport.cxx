@@ -158,6 +158,10 @@ void lcl_TableStyleShd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
             pAttributeList->add(FSNS(XML_w, XML_color), msfilter::util::ConvertColor(rShd[i].Value.get<sal_Int32>(), /*bAutoColor =*/ true));
         else if (rShd[i].Name == "fill")
             pAttributeList->add(FSNS(XML_w, XML_fill), msfilter::util::ConvertColor(rShd[i].Value.get<sal_Int32>(), /*bAutoColor =*/ true));
+        else if (rShd[i].Name == "themeFill")
+            pAttributeList->add(FSNS(XML_w, XML_themeFill), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rShd[i].Name == "themeFillShade")
+            pAttributeList->add(FSNS(XML_w, XML_themeFillShade), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);
@@ -255,6 +259,24 @@ void lcl_TableStylePSpacing(sax_fastparser::FSHelperPtr pSerializer, uno::Sequen
     pSerializer->singleElementNS(XML_w, XML_spacing, xAttributeList);
 }
 
+/// Export of w:ind in a table style's pPr.
+void lcl_TableStylePInd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rInd)
+{
+    if (!rInd.hasElements())
+        return;
+
+    sax_fastparser::FastAttributeList* pAttributeList = pSerializer->createAttrList();
+    for (sal_Int32 i = 0; i < rInd.getLength(); ++i)
+    {
+        if (rInd[i].Name == "rightChars")
+            pAttributeList->add(FSNS(XML_w, XML_rightChars), OUStringToOString(rInd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rInd[i].Name == "right")
+            pAttributeList->add(FSNS(XML_w, XML_right), OUStringToOString(rInd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+    }
+    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
+    pSerializer->singleElementNS(XML_w, XML_ind, xAttributeList);
+}
+
 /// Export of w:tblInd in a table style.
 void lcl_TableStyleTblInd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTblInd)
 {
@@ -293,7 +315,7 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
     pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
 
     uno::Sequence<beans::PropertyValue> aRFonts, aLang, aColor;
-    OUString aB, aI, aSz, aSzCs, aCaps, aSmallCaps, aSpacing;
+    OUString aB, aBCs, aI, aSz, aSzCs, aCaps, aSmallCaps, aSpacing;
     for (sal_Int32 i = 0; i < rRPr.getLength(); ++i)
     {
         if (rRPr[i].Name == "rFonts")
@@ -302,6 +324,8 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
             aLang = rRPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rRPr[i].Name == "b")
             aB = rRPr[i].Value.get<OUString>();
+        else if (rRPr[i].Name == "bCs")
+            aBCs = rRPr[i].Value.get<OUString>();
         else if (rRPr[i].Name == "i")
             aI = rRPr[i].Value.get<OUString>();
         else if (rRPr[i].Name == "color")
@@ -320,6 +344,7 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
     lcl_TableStyleRRFonts(pSerializer, aRFonts);
     lcl_TableStyleRLang(pSerializer, aLang);
     lcl_handleBoolean(aB, XML_b, pSerializer);
+    lcl_handleBoolean(aBCs, XML_bCs, pSerializer);
     lcl_handleBoolean(aI, XML_i, pSerializer);
     lcl_handleBoolean(aCaps, XML_caps, pSerializer);
     lcl_handleBoolean(aSmallCaps, XML_smallCaps, pSerializer);
@@ -348,20 +373,26 @@ void lcl_TableStylePPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
 
     pSerializer->startElementNS(XML_w, XML_pPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aSpacing;
+    uno::Sequence<beans::PropertyValue> aSpacing, aInd;
     bool bWordWrap = false;
-    OUString aJc;
+    OUString aJc, aSnapToGrid;
     for (sal_Int32 i = 0; i < rPPr.getLength(); ++i)
     {
         if (rPPr[i].Name == "spacing")
             aSpacing = rPPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rPPr[i].Name == "ind")
+            aInd = rPPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rPPr[i].Name == "wordWrap")
             bWordWrap = true;
         else if (rPPr[i].Name == "jc")
             aJc = rPPr[i].Value.get<OUString>();
+        else if (rPPr[i].Name == "snapToGrid")
+            aSnapToGrid = rPPr[i].Value.get<OUString>();
     }
     if (bWordWrap)
         pSerializer->singleElementNS(XML_w, XML_wordWrap, FSEND);
+    lcl_TableStylePInd(pSerializer, aInd);
+    lcl_handleBoolean(aSnapToGrid, XML_snapToGrid, pSerializer);
     lcl_TableStylePSpacing(pSerializer, aSpacing);
     if (!aJc.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_jc,

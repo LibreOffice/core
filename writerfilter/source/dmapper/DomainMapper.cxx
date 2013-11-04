@@ -1082,6 +1082,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_RIGHT_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
             }
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "right", OUString::number(nIntValue));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
             if (m_pImpl->GetTopContext())
@@ -1095,6 +1096,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+            break;
+        case NS_ooxml::LN_CT_Ind_rightChars:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "rightChars", OUString::number(nIntValue));
             break;
 
         case NS_ooxml::LN_CT_EastAsianLayout_id:
@@ -2172,6 +2176,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                             xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_WEIGHT), aBold);
                         if (nSprmId == NS_sprm::LN_CFBold)
                             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "b", OUString::number(nIntValue));
+                        else if (nSprmId == NS_sprm::LN_CFBoldBi)
+                            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "bCs", OUString::number(nIntValue));
                     }
                     break;
                     case 61: /*sprmCFItalic*/
@@ -3033,6 +3039,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lang", m_pImpl->m_aSubInteropGrabBag);
         else if (nSprmId == NS_ooxml::LN_EG_RPrBase_color)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "color", m_pImpl->m_aSubInteropGrabBag);
+        else if (nSprmId == NS_ooxml::LN_CT_PPrBase_ind)
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ind", m_pImpl->m_aSubInteropGrabBag);
     break;
     case NS_ooxml::LN_CT_PPrBase_wordWrap:
         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "wordWrap", "");
@@ -3178,6 +3186,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     }
     break;
 
+    case NS_ooxml::LN_CT_PPrBase_snapToGrid:
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "snapToGrid", OUString::number(nIntValue));
+    break;
     case NS_ooxml::LN_CT_PPrBase_pStyle:
     {
         mbIsBIDI = false;
