@@ -7,11 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_extra_fonts,fonts-pack))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_extra_fonts,fonts-pack))
 
-$(eval $(call gb_ExternalPackage_use_unpacked,extras_extra_fonts,fonts-pack))
+$(eval $(call gb_ExternalPackage_use_unpacked,accessories_extra_fonts,fonts-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_extra_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_extra_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	decorative/BETSY2.ttf \
 	decorative/Berylibi.ttf \
 	decorative/Beryliub.ttf \

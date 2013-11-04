@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonofficorr,templates-pack))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_accessoriestemplatescommonpersonal,templates-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonofficorr,$(LIBO_SHARE_FOLDER)/template/common/officorr,\
-	templates/common/officorr/dummy_common_templates.txt \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_accessoriestemplatescommonpersonal,$(LIBO_SHARE_FOLDER)/template/common/personal,\
+	templates/common/personal/szivesoldal.otg \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-#$(eval $(call gb_Package_Package,extras_accessoriesgallerydrawspeople,$(call gb_UnpackedTarball_get_dir,gallery-pack)/accessories/Draws/People))
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgallerydrawspeople,gallery-pack))
+#$(eval $(call gb_Package_Package,accessories_accessoriesgallerydrawspeople,$(call gb_UnpackedTarball_get_dir,gallery-pack)/accessories/Draws/People))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_accessoriesgallerydrawspeople,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallerydrawspeople,$(LIBO_SHARE_FOLDER)/gallery/Draws/People,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_accessoriesgallerydrawspeople,$(LIBO_SHARE_FOLDER)/gallery/Draws/People,\
 	accessories/Draws/People/Baboo1.png \
 	accessories/Draws/People/Jac1.png \
 	accessories/Draws/People/Jac2.png \
