@@ -1828,6 +1828,7 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
                              context,
                              contextWidth,
                              contextHeight);
+        aBitmap.ReleaseAccess(readAccess);
     }
     Application::ReleaseSolarMutex();
 }
