@@ -497,13 +497,7 @@ void Clipboard::CreateSlideTransferable (
         if (bDrag)
         {
             pTransferable->SetView (&mrSlideSorter.GetView());
-            sal_Int8 nDragSourceActions (DND_ACTION_COPY);
-            // The move action is available only when not all pages would be
-            // moved.  Otherwise an empty document would remain.  Crash.
-            sal_Int32 nRemainingPages = mrSlideSorter.GetModel().GetPageCount() - aBookmarkList.size();
-            if (nRemainingPages > 0)
-                nDragSourceActions |= DND_ACTION_MOVE;
-            pTransferable->StartDrag (pActionWindow, nDragSourceActions);
+            pTransferable->StartDrag (pActionWindow, DND_ACTION_COPY | DND_ACTION_MOVE);
         }
         else
             pTransferable->CopyToClipboard (pActionWindow);
