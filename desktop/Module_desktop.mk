@@ -40,16 +40,16 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_migrationoo3 \
     Library_unopkgapp \
     Package_scripts \
-    Pagein_calc \
-    Pagein_common \
-    Pagein_draw \
-    Pagein_impress \
-    Pagein_writer \
 ))
 
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,desktop,\
+    Pagein_calc \
+    Pagein_common \
+    Pagein_draw \
+    Pagein_impress \
+    Pagein_writer \
     CustomTarget_soffice \
     Package_soffice_sh \
 ))
