@@ -2089,7 +2089,6 @@ void OpPMT::GenSlidingWindowFunction(std::stringstream &ss,
      ss<<"double tmp2=0;\n    ";
      ss<<"double tmp3=0;\n    ";
      ss<<"double tmp4=0,tmp5=0;\n    ";
-     unsigned i = vSubArguments.size();
      size_t nItems = 0;
      ss <<"\n    ";
      //while (i-- > 1)
