@@ -93,6 +93,10 @@
 
 #include <officecfg/Office/Common.hxx>
 
+#include <vcl/FilterConfigItem.hxx>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+
 // flags that specify requested operation
 #define EXPORT_REQUESTED            1
 #define PDFEXPORT_REQUESTED         2
@@ -114,6 +118,7 @@ const char aFilterDataString[] = "FilterData";
 const char aFilterFlagsString[] = "FilterFlags";
 
 using namespace ::com::sun::star;
+using namespace css::system;
 
 namespace {
 //-------------------------------------------------------------------------
@@ -1703,6 +1708,17 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
             aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
         else
             aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
+    }
+
+    // Launch PDF viewer
+    if ( nStoreMode & PDFEXPORT_REQUESTED ) {
+        FilterConfigItem aItem( "Office.Common/Filter/PDF/Export/" );
+        sal_Bool aViewPDF = aItem.ReadBool( "ViewPDFAfterExport", sal_False );
+
+        if ( aViewPDF==sal_True ) {
+            uno::Reference<XSystemShellExecute> xSystemShellExecute(SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
+            xSystemShellExecute->execute( aURL.GetMainURL( INetURLObject::NO_DECODE ), "", SystemShellExecuteFlags::URIS_ONLY );
+        }
     }
 
     return bDialogUsed;
