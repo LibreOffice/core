@@ -121,6 +121,7 @@ public:
     void testFinancialISPMTFormula();
     void testFinacialPriceFormula();
     void testFinancialDurationFormula();
+    void testFinancialCoupnumFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -173,6 +174,7 @@ public:
     CPPUNIT_TEST(testFinancialISPMTFormula);
     CPPUNIT_TEST(testFinacialPriceFormula);
     CPPUNIT_TEST(testFinancialDurationFormula);
+    CPPUNIT_TEST(testFinancialCoupnumFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1074,6 +1076,29 @@ void ScOpenclTest::testFinancialAccrintmFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-74]
+void ScOpenclTest::testFinancialCoupnumFormula()
+{
+   if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupnum.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupnum.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(4, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(4, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
 //[AMLOEXT-57]
 void ScOpenclTest::testStatisticalFormulaNegbinomdist()
 {
