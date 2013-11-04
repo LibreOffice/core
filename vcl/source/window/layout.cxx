@@ -2043,7 +2043,7 @@ short MessageDialog::Execute()
         m_pImage->set_valign(VCL_ALIGN_START);
         m_pImage->Show();
 
-        WinBits nWinStyle = WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_WORDBREAK | WB_NOLABEL | WB_NOTABSTOP;
+        WinBits nWinStyle = WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_NOLABEL | WB_NOTABSTOP;
 
         bool bHasSecondaryText = !m_sSecondaryString.isEmpty();
 
