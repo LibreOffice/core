@@ -566,7 +566,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	bluez_bluetooth \
 	libreoffice \
 	pyuno \
 	pyuno_wrapper \
