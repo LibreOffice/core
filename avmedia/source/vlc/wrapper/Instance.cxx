@@ -49,7 +49,7 @@ namespace wrapper
         operator=( other );
     }
 
-    const Instance& Instance::operator=( const Instance& other )
+    Instance& Instance::operator=( const Instance& other )
     {
         libvlc_release( mInstance );
         mInstance = other.mInstance;

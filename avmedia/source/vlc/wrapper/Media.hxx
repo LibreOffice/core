@@ -27,7 +27,7 @@ namespace wrapper
         static bool LoadSymbols();
         Media( const rtl::OUString& url, Instance& instance );
         Media( const Media& other );
-        const Media& operator=( const Media& other );
+        Media& operator=( const Media& other );
 
         int getDuration() const;
 

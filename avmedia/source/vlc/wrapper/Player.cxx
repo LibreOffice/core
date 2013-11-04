@@ -117,7 +117,7 @@ namespace wrapper
         operator=( other );
     }
 
-    const Player& Player::operator=( const Player& other )
+    Player& Player::operator=( const Player& other )
     {
         libvlc_media_player_release( mPlayer );
         mPlayer = other.mPlayer;

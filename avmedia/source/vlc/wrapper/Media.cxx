@@ -74,7 +74,7 @@ Media::Media( const Media& other )
     operator=( other );
 }
 
-const Media& Media::operator=( const Media& other )
+Media& Media::operator=( const Media& other )
 {
     libvlc_media_release( mMedia );
     mMedia = other.mMedia;

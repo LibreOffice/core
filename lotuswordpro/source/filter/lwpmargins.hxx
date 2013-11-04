@@ -78,7 +78,7 @@ public:
         m_nBottom = pStrm->QuickReadInt32();
         pStrm->SkipExtra();
     }
-    inline void operator = (const LwpMargins& rOther);
+    inline LwpMargins& operator = (const LwpMargins& rOther);
     inline double GetMarginsValue(const sal_uInt8& nWhichSide);
 private:
     sal_Int32       m_nLeft;
@@ -87,12 +87,13 @@ private:
     sal_Int32       m_nBottom;
 };
 
-inline void LwpMargins::operator = (const LwpMargins& rOther)
+inline LwpMargins& LwpMargins::operator = (const LwpMargins& rOther)
 {
     m_nLeft = rOther.m_nLeft;
     m_nTop = rOther.m_nTop;
     m_nRight = rOther.m_nRight;
     m_nBottom = rOther.m_nBottom;
+    return *this;
 }
 
 inline double LwpMargins::GetMarginsValue(const sal_uInt8& nWhichSide)

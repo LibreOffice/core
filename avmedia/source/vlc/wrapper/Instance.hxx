@@ -24,7 +24,7 @@ namespace wrapper
         static bool LoadSymbols();
         Instance( int argc, const char * const argv[] );
         Instance( const Instance& other );
-        const Instance& operator=( const Instance& other );
+        Instance& operator=( const Instance& other );
         virtual ~Instance();
 
         inline operator libvlc_instance_t*()

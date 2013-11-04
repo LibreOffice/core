@@ -75,7 +75,7 @@ public:
 
     PropValue() : m_aValue(), m_bGrabBag() {}
 
-    const PropValue& operator=(const PropValue& rProp) { m_aValue = rProp.m_aValue; m_bGrabBag = rProp.m_bGrabBag; return *this; }
+    PropValue& operator=(const PropValue& rProp) { m_aValue = rProp.m_aValue; m_bGrabBag = rProp.m_bGrabBag; return *this; }
 
     const uno::Any& getValue() const { return m_aValue; }
     bool hasGrabBag() const { return m_bGrabBag; }

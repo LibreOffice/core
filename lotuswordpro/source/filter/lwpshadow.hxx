@@ -83,7 +83,7 @@ public:
     LwpColor GetColor();
 
     //add by , 01/26/2005
-    inline void operator = (const LwpShadow& rOther);
+    inline LwpShadow& operator = (const LwpShadow& rOther);
     //end add
 
 private:
@@ -108,11 +108,12 @@ inline LwpColor LwpShadow::GetColor()
     return m_aColor;
 }
 
-inline void LwpShadow::operator = (const LwpShadow& rOther)
+inline LwpShadow& LwpShadow::operator = (const LwpShadow& rOther)
 {
     m_aColor = rOther.m_aColor;
     m_nDirX = rOther.m_nDirX;
     m_nDirY = rOther.m_nDirY;
+    return *this;
 }
 #endif
 
