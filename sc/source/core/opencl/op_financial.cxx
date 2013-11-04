@@ -2761,7 +2761,7 @@ void OpCoupnum::GenSlidingWindowFunction(std::stringstream &ss,
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
       if (i)
-      ss << ",";
+          ss << ",";
       vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n    ";
