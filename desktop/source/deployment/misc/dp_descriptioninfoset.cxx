@@ -390,7 +390,7 @@ void DescriptionInfoset::checkBlacklist() const
 
         css::uno::Sequence< css::uno::Any > args = css::uno::Sequence< css::uno::Any >(1);
         css::beans::PropertyValue prop;
-        prop.Name = OUString("nodepath");
+        prop.Name = "nodepath";
         prop.Value <<= OUString("/org.openoffice.Office.ExtensionDependencies/Extensions");
         args[0] <<= prop;
 

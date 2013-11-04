@@ -1708,9 +1708,9 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
             css::uno::Sequence< css::beans::NamedValue > args(2);
-            args[0].Name = OUString("uri");
+            args[0].Name = "uri";
             args[0].Value <<= expandUnoRcUrl(url);
-            args[1].Name = OUString("component-context");
+            args[1].Name = "component-context";
             args[1].Value <<= context;
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
@@ -1724,7 +1724,7 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
             css::uno::Sequence< css::beans::NamedValue > args(1);
-            args[0].Name = OUString("uri");
+            args[0].Name = "uri";
             args[0].Value <<= expandUnoRcUrl(url);
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),

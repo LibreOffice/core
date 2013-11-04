@@ -208,7 +208,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     0, makeURL( url, "parcel-descriptor.xml" ),
                     xCmdEnv, false /* no throw */ ))
             {
-                mediaType = OUString("application/vnd.sun.star.framework-script");
+                mediaType = "application/vnd.sun.star.framework-script";
             }
         }
         if (mediaType.isEmpty())
@@ -225,7 +225,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             if (subType.equalsIgnoreAsciiCase("vnd.sun.star.framework-script"))
             {
-                OUString lang = OUString("Script");
+                OUString lang = "Script";
                 OUString sParcelDescURL = makeURL(
                     url, "parcel-descriptor.xml" );
 

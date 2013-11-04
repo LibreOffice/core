@@ -228,12 +228,12 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (create_ucb_content(
                     0, makeURL( url, "script.xlb" ),
                     xCmdEnv, false /* no throw */ ))
-                mediaType = OUString("application/vnd.sun.star.basic-library");
+                mediaType = "application/vnd.sun.star.basic-library";
             // probe for dialog.xlb:
             else if (create_ucb_content(
                          0, makeURL( url, "dialog.xlb" ),
                          xCmdEnv, false /* no throw */ ))
-                mediaType = OUString("application/vnd.sun.star.dialog-library");
+                mediaType = "application/vnd.sun.star.dialog-library";
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
@@ -250,7 +250,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             OUString dialogURL( makeURL( url, "dialog.xlb" ) );
             if (! create_ucb_content(
                     0, dialogURL, xCmdEnv, false /* no throw */ )) {
-                dialogURL = OUString();
+                dialogURL = "";
             }
 
             if (subType.equalsIgnoreAsciiCase("vnd.sun.star.basic-library"))
@@ -258,7 +258,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 OUString scriptURL( makeURL( url, "script.xlb"));
                 if (! create_ucb_content(
                         0, scriptURL, xCmdEnv, false /* no throw */ )) {
-                    scriptURL = OUString();
+                    scriptURL = "";
                 }
 
                 return new PackageImpl(

@@ -389,7 +389,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     &metaInfContent, makeURL( url, "META-INF" ),
                     xCmdEnv, false /* no throw */ ))
                 {
-                     mediaType = OUString("application/vnd.sun.star.package-bundle");
+                     mediaType = "application/vnd.sun.star.package-bundle";
                 }
                 //No support of legacy bundles, because every folder could be one.
             }
@@ -398,10 +398,9 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 const OUString title( StrTitle::getTitle( ucbContent ) );
                 if (title.endsWithIgnoreAsciiCase(".oxt") ||
                     title.endsWithIgnoreAsciiCase(".uno.pkg"))
-                    mediaType = OUString("application/vnd.sun.star.package-bundle");
+                    mediaType = "application/vnd.sun.star.package-bundle";
                 else if (title.endsWithIgnoreAsciiCase(".zip"))
-                    mediaType =
-                        OUString("application/vnd.sun.star.legacy-package-bundle");
+                    mediaType = "application/vnd.sun.star.legacy-package-bundle";
             }
         }
         if (mediaType.isEmpty())

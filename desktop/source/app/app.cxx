@@ -846,8 +846,7 @@ OUString    Desktop::CreateErrorMsgString(
         case ::utl::Bootstrap::INVALID_VERSION_FILE_ENTRY:
         {
             // This needs to be improved, see #i67575#:
-            aMsg = OUString(
-                "Invalid version file entry"  );
+            aMsg = "Invalid version file entry";
             bFileInfo = sal_False;
         }
         break;
@@ -1548,7 +1547,7 @@ int Desktop::Main()
         pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
 
         css::document::EventObject aEvent;
-        aEvent.EventName = OUString("OnStartApp");
+        aEvent.EventName = "OnStartApp";
         pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
 
         SetSplashScreenProgress(50);
@@ -1766,7 +1765,7 @@ int Desktop::doShutdown()
     if (pExecGlobals->xGlobalBroadcaster.is())
     {
         css::document::EventObject aEvent;
-        aEvent.EventName = OUString("OnCloseApp");
+        aEvent.EventName = "OnCloseApp";
         pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
     }
 
@@ -2049,7 +2048,7 @@ void Desktop::EnableOleAutomation()
 void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 {
     Sequence < com::sun::star::beans::PropertyValue > args(1);
-    args[0].Name = OUString("Hidden");
+    args[0].Name = "Hidden";
     args[0].Value <<= sal_True;
     Reference < XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
@@ -2362,7 +2361,7 @@ void Desktop::OpenClients()
             Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
 
             css::util::URL aCmd;
-            aCmd.Complete = OUString("vnd.sun.star.autorecovery:/disableRecovery");
+            aCmd.Complete = "vnd.sun.star.autorecovery:/disableRecovery";
             xParser->parseStrict(aCmd);
 
             xRecovery->dispatch(aCmd, css::uno::Sequence< css::beans::PropertyValue >());
@@ -2796,26 +2795,26 @@ void Desktop::OpenSplashScreen()
         // Determine application name from command line parameters
         OUString aAppName;
         if ( rCmdLine.IsWriter() )
-            aAppName = OUString( "writer" );
+            aAppName = "writer";
         else if ( rCmdLine.IsCalc() )
-            aAppName = OUString( "calc" );
+            aAppName = "calc";
         else if ( rCmdLine.IsDraw() )
-            aAppName = OUString( "draw" );
+            aAppName = "draw";
         else if ( rCmdLine.IsImpress() )
-            aAppName = OUString( "impress" );
+            aAppName = "impress";
         else if ( rCmdLine.IsBase() )
-            aAppName = OUString( "base" );
+            aAppName = "base";
         else if ( rCmdLine.IsGlobal() )
-            aAppName = OUString( "global" );
+            aAppName = "global";
         else if ( rCmdLine.IsMath() )
-            aAppName = OUString( "math" );
+            aAppName = "math";
         else if ( rCmdLine.IsWeb() )
-            aAppName = OUString( "web" );
+            aAppName = "web";
 
         // Which splash to use
         OUString aSplashService( "com.sun.star.office.SplashScreen" );
         if ( rCmdLine.HasSplashPipe() )
-            aSplashService = OUString("com.sun.star.office.PipeSplashScreen");
+            aSplashService = "com.sun.star.office.PipeSplashScreen";
 
         bVisible = sal_True;
         Sequence< Any > aSeq( 2 );

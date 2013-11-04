@@ -490,7 +490,7 @@ void BackendImpl::implProcessHelp(
                             if( nLastSlash != -1 )
                                 aLang = aLangURL.copy( nLastSlash + 1 );
                             else
-                                aLang = OUString("en" );
+                                aLang = "en";
 
                             OUString aMod("help");
 

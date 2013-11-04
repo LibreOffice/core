@@ -314,10 +314,10 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             const OUString title( StrTitle::getTitle( ucbContent ) );
             if (title.endsWithIgnoreAsciiCase( ".xcu" )) {
-                mediaType = OUString("application/vnd.sun.star.configuration-data");
+                mediaType = "application/vnd.sun.star.configuration-data";
             }
             if (title.endsWithIgnoreAsciiCase( ".xcs" )) {
-                mediaType = OUString("application/vnd.sun.star.configuration-schema");
+                mediaType = "application/vnd.sun.star.configuration-schema";
             }
         }
         if (mediaType.isEmpty())

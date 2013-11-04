@@ -210,13 +210,13 @@ bool needToSyncRepository(OUString const & name)
     OUString file;
     if ( name == "bundled" )
     {
-        folder = OUString("$BUNDLED_EXTENSIONS");
-        file = OUString ("$BUNDLED_EXTENSIONS_USER/lastsynchronized");
+        folder = "$BUNDLED_EXTENSIONS";
+        file = "$BUNDLED_EXTENSIONS_USER/lastsynchronized";
     }
     else if ( name == "shared" )
     {
-        folder = OUString("$UNO_SHARED_PACKAGES_CACHE/uno_packages");
-        file = OUString("$SHARED_EXTENSIONS_USER/lastsynchronized");
+        folder = "$UNO_SHARED_PACKAGES_CACHE/uno_packages";
+        file = "$SHARED_EXTENSIONS_USER/lastsynchronized";
     }
     else
     {
