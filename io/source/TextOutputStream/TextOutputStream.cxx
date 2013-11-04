@@ -278,22 +278,4 @@ Sequence< OUString > OTextOutputStream::getSupportedServiceNames(void) throw()
 
 }
 
-using namespace io_TextOutputStream;
-
-static const struct ImplementationEntry g_entries[] =
-{
-    {
-        TextOutputStream_CreateInstance, TextOutputStream_getImplementationName ,
-        TextOutputStream_getSupportedServiceNames, createSingleComponentFactory ,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL textoutstream_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
