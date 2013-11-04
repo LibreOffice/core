@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotosbuildings,gallery-pack))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_accessoriesgalleryphotosbuildings,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosbuildings,$(LIBO_SHARE_FOLDER)/gallery/Photos/Buildings,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_accessoriesgalleryphotosbuildings,$(LIBO_SHARE_FOLDER)/gallery/Photos/Buildings,\
 	accessories/Photos/Buildings/ArkSoft0408010009.jpg \
 	accessories/Photos/Buildings/ArkSoft0408010023.jpg \
 	accessories/Photos/Buildings/ArkSoft0408010026.jpg \

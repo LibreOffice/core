@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonlabels,templates-pack))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_accessoriestemplatescommonlabels,templates-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonlabels,$(LIBO_SHARE_FOLDER)/template/common/labels,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_accessoriestemplatescommonlabels,$(LIBO_SHARE_FOLDER)/template/common/labels,\
 	templates/common/labels/24_port_patch_text.otg \
 	templates/common/labels/arrows-black-base.ott \
 	templates/common/labels/WL-OL1000.ott \

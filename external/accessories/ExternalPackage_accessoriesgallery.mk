@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgallery,gallery-pack))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_accessoriesgallery,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallery,$(LIBO_SHARE_FOLDER)/gallery,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_accessoriesgallery,$(LIBO_SHARE_FOLDER)/gallery,\
 	accessories/sg1010.sdg \
 	accessories/sg1010.sdv \
 	accessories/sg1010.thm \

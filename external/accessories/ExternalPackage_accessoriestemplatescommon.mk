@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommon,templates-pack))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_accessoriestemplatescommon,templates-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommon,$(LIBO_SHARE_FOLDER)/template/common,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_accessoriestemplatescommon,$(LIBO_SHARE_FOLDER)/template/common,\
 	templates/common/dummy_common_templates.txt \
 	templates/common/svn-commit.2.tmp \
 	templates/common/svn-commit.tmp \

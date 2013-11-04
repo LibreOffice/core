@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonlayout,templates-pack))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_accessoriestemplatescommonlayout,templates-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonlayout,$(LIBO_SHARE_FOLDER)/template/common/layout,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_accessoriestemplatescommonlayout,$(LIBO_SHARE_FOLDER)/template/common/layout,\
 	templates/common/layout/31407-squares.otp \
 	templates/common/layout/abstract-015_1.jpg.otp \
 	templates/common/layout/abstract-015_2.jpg.otp \

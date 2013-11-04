@@ -7,11 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonmisc,templates-pack))
+$(eval $(call gb_ExternalPackage_ExternalPackage,accessories_accessoriestemplatescommonforms,templates-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonmisc,$(LIBO_SHARE_FOLDER)/template/common/misc,\
-	templates/common/misc/White_Notebook_Paper_legal.ott \
-	templates/common/misc/Yellow_Pad_Legal.ott \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,accessories_accessoriestemplatescommonforms,$(LIBO_SHARE_FOLDER)/template/common/forms,\
+	templates/common/forms/dummy_common_templates.txt \
 ))
 
 # vim: set noet sw=4 ts=4:
