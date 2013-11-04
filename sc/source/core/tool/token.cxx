@@ -1370,6 +1370,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocLaufz:
             case ocSinHyp:
             case ocAbs:
+            case ocBW:
             // Don't change the state.
             break;
             default:
