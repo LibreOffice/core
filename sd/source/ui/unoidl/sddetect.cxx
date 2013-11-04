@@ -189,7 +189,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    OUString aPrefix = OUString("private:factory/");
+    OUString aPrefix = "private:factory/";
     if( aURL.startsWith( aPrefix ) )
     {
         if( SvtModuleOptions().IsImpress() )
@@ -313,7 +313,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
                                 if ( !bRepairAllowed )
                                 {
-                                    aTypeName = OUString();
+                                    aTypeName = "";
                                     pFilter = 0;
                                 }
                             }
@@ -324,7 +324,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                         }
                         catch( Exception& )
                         {
-                            aTypeName = OUString();
+                            aTypeName = "";
                             pFilter = 0;
                         }
 
@@ -497,7 +497,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     }
 
     if (!pFilter)
-        aTypeName = OUString();
+        aTypeName = "";
 
     return aTypeName;
 }

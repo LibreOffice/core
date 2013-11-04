@@ -121,8 +121,7 @@ Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()
     throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = OUString("com.sun.star.ui.dialog.FilterOptionsDialog");
+    aRet[0] = "com.sun.star.ui.dialog.FilterOptionsDialog";
     return aRet;
 }
 

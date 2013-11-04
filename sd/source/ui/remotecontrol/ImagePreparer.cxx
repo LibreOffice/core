@@ -386,7 +386,7 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, OUString aUr
         if ( !bHasBaseURL )
         {
             aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = OUString( "DocumentBaseURL" );
+            aArgs[nEnd-1].Name = "DocumentBaseURL";
             aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( sal_True );
         }
 

@@ -393,7 +393,7 @@ namespace {
         {
             // load the writer PrinterOptions into the custom tab
             beans::PropertyValue aOptionsUIFile;
-            aOptionsUIFile.Name = OUString("OptionsUIFile");
+            aOptionsUIFile.Name = "OptionsUIFile";
             if( mbImpress )
                 aOptionsUIFile.Value <<= OUString("modules/simpress/ui/printeroptions.ui");
             else
@@ -1495,7 +1495,7 @@ private:
             if (mpOptions->IsDate())
             {
                 aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getDate( Date( Date::SYSTEM ) );
-                aInfo.msTimeDate += OUString((sal_Unicode)' ');
+                aInfo.msTimeDate += " ";
             }
 
             if (mpOptions->IsTime())
@@ -2002,7 +2002,7 @@ private:
             if (mpOptions->IsPrintPageName())
             {
                 rInfo.msPageString = pPage->GetName();
-                rInfo.msPageString += OUString(sal_Unicode(' '));
+                rInfo.msPageString += " ";
             }
             else
                 rInfo.msPageString = "";
