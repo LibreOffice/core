@@ -1825,6 +1825,8 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         }
         // resizes the virtual device so to contain the entrie context
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
+        // scroll the requested area into view if necessary
+        pViewShell->MakeVisible(SwRect(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         // draw - works in logic coordinates
         if (bUseTileSize)
             pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
