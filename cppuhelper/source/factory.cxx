@@ -810,9 +810,9 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             {
                 aActivatorName = aLocation.copy( 0, nPos );
                 if( aActivatorName.compareToAscii( "java" ) == 0 )
-                    aActivatorName = OUString("com.sun.star.loader.Java");
+                    aActivatorName = "com.sun.star.loader.Java";
                 else if( aActivatorName.compareToAscii( "module" ) == 0 )
-                    aActivatorName = OUString("com.sun.star.loader.SharedLibrary");
+                    aActivatorName = "com.sun.star.loader.SharedLibrary";
                 aLocation = aLocation.copy( nPos + 3 );
             }
         }

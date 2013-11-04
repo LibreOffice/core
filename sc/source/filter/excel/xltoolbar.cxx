@@ -283,7 +283,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
                  else
                  {
                      beans::PropertyValue aProp;
-                     aProp.Name =  OUString("ItemDescriptorContainer");
+                     aProp.Name = "ItemDescriptorContainer";
                      aProp.Value <<= xMenuDesc;
                      props.push_back( aProp );
                  }
@@ -294,7 +294,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
         {
             // insert spacer
             uno::Sequence< beans::PropertyValue > sProps( 1 );
-            sProps[ 0 ].Name =  OUString("Type");
+            sProps[ 0 ].Name = "Type";
             sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }

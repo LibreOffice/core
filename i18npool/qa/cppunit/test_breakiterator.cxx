@@ -75,8 +75,8 @@ void TestBreakIterator::testLineBreaking()
     {
         OUString aTest("(some text here)");
 
-        aLocale.Language = OUString("en");
-        aLocale.Country = OUString("US");
+        aLocale.Language = "en";
+        aLocale.Country = "US";
 
         {
             //Here we want the line break to leave text here) on the next line
@@ -97,8 +97,8 @@ void TestBreakIterator::testLineBreaking()
         OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
         OUString aTest(OUStringBuffer(aWord).append(' ').append(aWord).makeStringAndClear());
 
-        aLocale.Language = OUString("he");
-        aLocale.Country = OUString("IL");
+        aLocale.Language = "he";
+        aLocale.Country = "IL";
 
         {
             //Here we want the line break to happen at the whitespace
@@ -111,8 +111,8 @@ void TestBreakIterator::testLineBreaking()
     {
         OUString aTest("foo /bar/baz");
 
-        aLocale.Language = OUString("en");
-        aLocale.Country = OUString("US");
+        aLocale.Language = "en";
+        aLocale.Country = "US";
 
         {
             //Here we want the line break to leave /bar/ba clumped together on the next line
@@ -126,8 +126,8 @@ void TestBreakIterator::testLineBreaking()
     {
         OUString aTest("aaa]aaa");
 
-        aLocale.Language = OUString("en");
-        aLocale.Country = OUString("US");
+        aLocale.Language = "en";
+        aLocale.Country = "US";
 
         {
             //Here we want the line break to move the whole lot to the next line
@@ -142,8 +142,8 @@ void TestBreakIterator::testLineBreaking()
 void TestBreakIterator::testWordBoundaries()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("en");
-    aLocale.Country = OUString("US");
+    aLocale.Language = "en";
+    aLocale.Country = "US";
 
     i18n::Boundary aBounds;
 
@@ -245,8 +245,7 @@ void TestBreakIterator::testWordBoundaries()
             if (aBreakTests[i] == 0x200B)
                 continue;
 #endif
-            OUString aTest("Word");
-            aTest += OUString(aBreakTests[i]) + OUString("Word");
+            OUString aTest = "Word" + OUString(aBreakTests[i]) + "Word";
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
             switch (mode)
             {
@@ -275,8 +274,7 @@ void TestBreakIterator::testWordBoundaries()
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
         for (size_t i = 0; i < SAL_N_ELEMENTS(aJoinTests); ++i)
         {
-            OUString aTest("Word");
-            aTest += OUString(aJoinTests[i]) + OUString("Word");
+            OUString aTest = "Word" + OUString(aJoinTests[i]) + "Word";
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
             switch (mode)
             {
@@ -381,8 +379,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=13451
     {
-        aLocale.Language = OUString("ca");
-        aLocale.Country = OUString("ES");
+        aLocale.Language = "ca";
+        aLocale.Country = "ES";
 
         OUString aTest("mirar-se comprar-vos donem-nos les mans aneu-vos-en!");
 
@@ -406,12 +404,12 @@ void TestBreakIterator::testWordBoundaries()
         switch (j)
         {
             case 0:
-                aLocale.Language = OUString("en");
-                aLocale.Country = OUString("US");
+                aLocale.Language = "en";
+                aLocale.Country = "US";
                 break;
             case 1:
-                aLocale.Language = OUString("ca");
-                aLocale.Country = OUString("ES");
+                aLocale.Language = "ca";
+                aLocale.Country = "ES";
                 break;
             default:
                 CPPUNIT_ASSERT(false);
@@ -444,12 +442,12 @@ void TestBreakIterator::testWordBoundaries()
         switch (j)
         {
             case 0:
-                aLocale.Language = OUString("en");
-                aLocale.Country = OUString("US");
+                aLocale.Language = "en";
+                aLocale.Country = "US";
                 break;
             case 1:
-                aLocale.Language = OUString("grc");
-                aLocale.Country = OUString();
+                aLocale.Language = "grc";
+                aLocale.Country = "";
                 break;
             default:
                 CPPUNIT_ASSERT(false);
@@ -521,8 +519,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=107843
     {
-        aLocale.Language = OUString("en");
-        aLocale.Country = OUString("US");
+        aLocale.Language = "en";
+        aLocale.Country = "US";
 
         const sal_Unicode TEST[] =
         {
@@ -539,8 +537,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=113785
     {
-        aLocale.Language = OUString("en");
-        aLocale.Country = OUString("US");
+        aLocale.Language = "en";
+        aLocale.Country = "US";
 
         const sal_Unicode TEST[] =
         {
@@ -566,8 +564,8 @@ void TestBreakIterator::testWordBoundaries()
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("bn");
-    aLocale.Country = OUString("IN");
+    aLocale.Language = "bn";
+    aLocale.Country = "IN";
 
     {
         const sal_Unicode BA_HALANT_LA[] = { 0x09AC, 0x09CD, 0x09AF };
@@ -611,8 +609,8 @@ void TestBreakIterator::testGraphemeIteration()
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
 
-    aLocale.Language = OUString("ta");
-    aLocale.Country = OUString("IN");
+    aLocale.Language = "ta";
+    aLocale.Country = "IN";
 
     {
         const sal_Unicode KA_VIRAMA_SSA[] = { 0x0B95, 0x0BCD, 0x0BB7 };
@@ -688,8 +686,8 @@ void TestBreakIterator::testGraphemeIteration()
         CPPUNIT_ASSERT_MESSAGE("Should be considered 1 grapheme", nGraphemeCount == 1);
     }
 
-    aLocale.Language = OUString("hi");
-    aLocale.Country = OUString("IN");
+    aLocale.Language = "hi";
+    aLocale.Country = "IN";
 
     {
         const sal_Unicode SHA_VOWELSIGNII[] = { 0x936, 0x940 };
@@ -713,8 +711,8 @@ void TestBreakIterator::testGraphemeIteration()
 void TestBreakIterator::testWeak()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("en");
-    aLocale.Country = OUString("US");
+    aLocale.Language = "en";
+    aLocale.Country = "US";
 
     {
         const sal_Unicode WEAKS[] =
@@ -754,8 +752,8 @@ void TestBreakIterator::testWeak()
 void TestBreakIterator::testAsian()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("en");
-    aLocale.Country = OUString("US");
+    aLocale.Language = "en";
+    aLocale.Country = "US";
 
     {
         const sal_Unicode ASIANS[] =
@@ -790,8 +788,8 @@ void TestBreakIterator::testAsian()
 void TestBreakIterator::testThai()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("th");
-    aLocale.Country = OUString("TH");
+    aLocale.Language = "th";
+    aLocale.Country = "TH";
 
     //See http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
     {
@@ -843,8 +841,8 @@ void TestBreakIterator::testThai()
 void TestBreakIterator::testNorthernThai()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("nod");
-    aLocale.Country = OUString("TH");
+    aLocale.Language = "nod";
+    aLocale.Country = "TH";
 
     const sal_Unicode NORTHERN_THAI1[] = { 0x0E01, 0x0E38, 0x0E4A, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
     OUString aTest(NORTHERN_THAI1, SAL_N_ELEMENTS(NORTHERN_THAI1));
@@ -864,8 +862,8 @@ void TestBreakIterator::testNorthernThai()
 void TestBreakIterator::testKhmer()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("km");
-    aLocale.Country = OUString("KH");
+    aLocale.Language = "km";
+    aLocale.Country = "KH";
 
     const sal_Unicode KHMER[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
 
@@ -885,8 +883,8 @@ void TestBreakIterator::testKhmer()
 void TestBreakIterator::testJapanese()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("ja");
-    aLocale.Country = OUString("JP");
+    aLocale.Language = "ja";
+    aLocale.Country = "JP";
     i18n::Boundary aBounds;
 
     {

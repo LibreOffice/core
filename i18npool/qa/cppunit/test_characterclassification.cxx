@@ -43,8 +43,8 @@ private:
 void TestCharacterClassification::testTitleCase()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("en");
-    aLocale.Country = OUString("US");
+    aLocale.Language = "en";
+    aLocale.Country = "US";
 
     {
         //basic example
@@ -74,8 +74,8 @@ void TestCharacterClassification::testTitleCase()
 void TestCharacterClassification::testStringType()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("en");
-    aLocale.Country = OUString("US");
+    aLocale.Language = "en";
+    aLocale.Country = "US";
 
     {
         //simple case

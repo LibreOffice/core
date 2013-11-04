@@ -273,19 +273,19 @@ OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
     case NUMCHAR_1:
     case NUMCHAR_01:
     case NUMCHAR_Chinese4:
-        strNumChar =  OUString("1");
+        strNumChar = "1";
         break;
     case NUMCHAR_A :
-        strNumChar =  OUString("A");
+        strNumChar = "A";
         break;
     case NUMCHAR_a:
-        strNumChar = OUString("a");
+        strNumChar = "a";
         break;
     case NUMCHAR_I:
-        strNumChar = OUString("I");
+        strNumChar = "I";
         break;
     case NUMCHAR_i:
-        strNumChar = OUString("i");
+        strNumChar = "i";
         break;
     case NUMCHAR_other:
         uC = static_cast<UChar32>(pParaNumber->GetNumberChar());

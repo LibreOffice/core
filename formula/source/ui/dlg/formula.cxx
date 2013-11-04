@@ -433,9 +433,9 @@ uno::Reference< sheet::XFormulaOpCodeMapper > FormulaDlg_Impl::GetFormulaOpCodeM
         m_pBinaryOpCodesEnd = m_aBinaryOpCodes.getConstArray() + m_aBinaryOpCodes.getLength();
 
         uno::Sequence< OUString > aArgs(3);
-        aArgs[TOKEN_OPEN]   = OUString("(");
-        aArgs[TOKEN_CLOSE]  = OUString(")");
-        aArgs[TOKEN_SEP]    = OUString(";");
+        aArgs[TOKEN_OPEN]   = "(";
+        aArgs[TOKEN_CLOSE]  = ")";
+        aArgs[TOKEN_SEP]    = ";";
         m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings(aArgs,sheet::FormulaLanguage::ODFF);
 
         m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::SPECIAL);
@@ -822,7 +822,7 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
     //  2. Page or Edit: show selected function
 
     xub_StrLen nFStart     = pData->GetFStart();
-    OUString aFormula      = OUString(m_pHelper->getCurrentFormula()) + " )";
+    OUString aFormula      = m_pHelper->getCurrentFormula() + " )";
     xub_StrLen nNextFStart = nFStart;
     xub_StrLen nNextFEnd   = 0;
 
@@ -1033,7 +1033,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
     const IFunctionDescription* pDesc = pFuncPage->GetFuncDesc(nFunc);
     m_pHelper->insertEntryToLRUList(pDesc);
 
-    OUString aFuncName = OUString( pFuncPage->GetSelFunctionName() ) + "()";
+    OUString aFuncName = pFuncPage->GetSelFunctionName() + "()";
     m_pHelper->setCurrentFormula(aFuncName);
     pMEdit->ReplaceSelected(aFuncName);
 
@@ -1167,7 +1167,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
         for(sal_uInt16 i=0; i<=nEd; i++)
         {
             if ( m_aArguments[i].isEmpty() )
-                m_aArguments[i] = OUString(" ");
+                m_aArguments[i] = " ";
         }
         if(!pParaWin->GetArgument(nEd).isEmpty())
             m_aArguments[nEd] = pParaWin->GetArgument(nEd);
@@ -1183,7 +1183,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
 
         for(sal_uInt16 i=nClearPos; i<nArgs; i++)
         {
-            m_aArguments[i] = OUString();
+            m_aArguments[i] = "";
         }
     }
 }
@@ -1424,7 +1424,7 @@ void FormulaDlg_Impl::RefInputStartAfter( RefEdit* /*pEdit*/, RefButton* /*pButt
 
     if( pTheRefEdit )
     {
-        OUString aStr = OUString(aTitle2) + " " + aFtEditName.GetText() + "( ";
+        OUString aStr = aTitle2 + " " + aFtEditName.GetText() + "( ";
 
         if( pParaWin->GetActiveLine() > 0 )
             aStr += "...; ";
@@ -1467,7 +1467,7 @@ void FormulaDlg_Impl::Update()
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     const OUString sExpression = pMEdit->GetText();
-    aOldFormula = OUString();
+    aOldFormula = "";
     UpdateTokenArray(sExpression);
     FormulaCursorHdl(&aMEFormula);
     CalcStruct(sExpression);

@@ -380,10 +380,10 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     {
         case -1:
         case 1: //mozilla
-            url=OUString("sdbc:address:mozilla://");
+            url = "sdbc:address:mozilla://";
             break;
         case 2:
-            url=OUString("sdbc:address:ldap://");
+            url = "sdbc:address:ldap://";
             char hostname[40],basedn[40];
             scanf("%s %s",hostname,basedn);
             aValue.realloc(2);
@@ -397,7 +397,7 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
             break;
         case 5:
             //Default LDAP AB
-            url=OUString("sdbc:address:ldap://");
+            url = "sdbc:address:ldap://";
             aValue.realloc(2);
             aValue[0].Name = "HostName";
             aValue[0].Value <<= OUString("sun-ds");

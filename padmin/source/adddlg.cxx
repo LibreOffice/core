@@ -82,11 +82,11 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
 {
     if( m_aPDFBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString("pdf=");
+        rInfo.m_aFeatures = "pdf=";
     }
     else if( m_aFaxBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString("fax");
+        rInfo.m_aFeatures = "fax";
     }
     else
         rInfo.m_aFeatures = "";
@@ -683,7 +683,7 @@ void APFaxDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
     {
-        rInfo.m_aDriverName = OUString("SGENPRT");
+        rInfo.m_aDriverName = "SGENPRT";
     }
 }
 
@@ -716,9 +716,9 @@ bool APPdfDriverPage::check()
 void APPdfDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
-        rInfo.m_aDriverName = OUString("SGENPRT");
+        rInfo.m_aDriverName = "SGENPRT";
     else if( isDist() )
-        rInfo.m_aDriverName = OUString("ADISTILL");
+        rInfo.m_aDriverName = "ADISTILL";
 }
 
 //--------------------------------------------------------------------
@@ -1004,7 +1004,7 @@ void AddPrinterDialog::addPrinter()
             }
             else if( m_pChooseDevicePage->isFax() )
             {
-                aInfo.m_aFeatures = OUString("fax=");
+                aInfo.m_aFeatures = "fax=";
                 if( m_pFaxNamePage->isFaxSwallow() )
                     aInfo.m_aFeatures += "swallow";
             }

@@ -159,8 +159,7 @@ namespace io_acceptor
         m_pipe = Pipe( m_sPipeName.pData , osl_Pipe_CREATE , osl::Security() );
         if( ! m_pipe.is() )
         {
-            OUString error = OUString("io.acceptor: Couldn't setup pipe ");
-            error += m_sPipeName;
+            OUString error = "io.acceptor: Couldn't setup pipe " + m_sPipeName;
             throw ConnectionSetupException( error, Reference< XInterface > () );
         }
     }
@@ -174,8 +173,7 @@ namespace io_acceptor
         }
         if( ! pipe.is() )
         {
-            OUString error = OUString("io.acceptor: pipe already closed");
-            error += m_sPipeName;
+            OUString error = "io.acceptor: pipe already closed" + m_sPipeName;
             throw ConnectionSetupException( error, Reference< XInterface > () );
         }
         PipeConnection *pConn = new PipeConnection( m_sConnectionDescription );
@@ -194,8 +192,7 @@ namespace io_acceptor
         }
         else
         {
-            OUString error = OUString("io.acceptor: Couldn't setup pipe ");
-            error += m_sPipeName;
+            OUString error = "io.acceptor: Couldn't setup pipe " + m_sPipeName;
             throw ConnectionSetupException( error, Reference< XInterface > ());
         }
     }

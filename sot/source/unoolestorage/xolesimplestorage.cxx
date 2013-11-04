@@ -76,7 +76,7 @@ OLESimpleStorage::~OLESimpleStorage()
 uno::Sequence< OUString > SAL_CALL OLESimpleStorage::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.embed.OLESimpleStorage");
+    aRet[0] = "com.sun.star.embed.OLESimpleStorage";
     return aRet;
 }
 

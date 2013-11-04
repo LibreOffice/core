@@ -79,8 +79,8 @@ namespace
     css::uno::Sequence< OUString > SAL_CALL VistaFilePicker_getSupportedServiceNames()
     {
         css::uno::Sequence< OUString > aRet(2);
-        aRet[0] = OUString("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = OUString("com.sun.star.ui.dialogs.SystemFilePicker");
+        aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
+        aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
         return aRet;
     }
 }

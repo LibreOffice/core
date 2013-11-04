@@ -327,7 +327,7 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
     if ( !xModel.is() )
         throw uno::RuntimeException();
 
-    maStatus = OUString();
+    maStatus = "";
     mbSuccess = false;
 
     if ( mnEpsilonLevel < EPS_TIGHT || mnEpsilonLevel > EPS_BAGGY )
@@ -572,7 +572,7 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
 uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
 {
     uno::Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = OUString("com.sun.star.sheet.Solver" );
+    aServiceNames[ 0 ] = "com.sun.star.sheet.Solver";
     return aServiceNames;
 }
 

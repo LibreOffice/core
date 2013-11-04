@@ -83,7 +83,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     m_aUIProperties.realloc( nNumProps );
 
     // load the math PrinterOptions into the custom tab
-    m_aUIProperties[nIdx].Name = OUString("OptionsUIFile");
+    m_aUIProperties[nIdx].Name = "OptionsUIFile";
     m_aUIProperties[nIdx++].Value <<= OUString("modules/smath/ui/printeroptions.ui");
 
     // create Section for formula (results in an extra tab page in dialog)

@@ -139,9 +139,9 @@ namespace {
                                        uno::makeAny(aLabel));
 
             uno::Sequence<OUString> aListboxItems(3);
-            aListboxItems[DRAW_INDEX]    = OUString( "Drawing" );
-            aListboxItems[IMPRESS_INDEX] = OUString( "Presentation" );
-            aListboxItems[WRITER_INDEX]  = OUString( "Text Document" );
+            aListboxItems[DRAW_INDEX]    = "Drawing";
+            aListboxItems[IMPRESS_INDEX] = "Presentation";
+            aListboxItems[WRITER_INDEX]  = "Text Document";
 
             m_xListbox->addItems(aListboxItems,0);
             m_xListbox->selectItemPos(0,sal_True);
@@ -167,7 +167,7 @@ namespace {
         virtual uno::Sequence< OUString > SAL_CALL getSupportedMethodNames(  ) throw (uno::RuntimeException)
         {
             uno::Sequence< OUString > aMethods(1);
-            aMethods[0] = OUString( "SelectionChanged" );
+            aMethods[0] = "SelectionChanged";
             return aMethods;
         }
     };
@@ -434,14 +434,14 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
         {
             if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text" ) )
                 || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text-master" ) ) )
-                aOutFilterName = OUString( "writer_pdf_addstream_import" );
+                aOutFilterName = "writer_pdf_addstream_import";
             else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.presentation" )
-                aOutFilterName = OUString( "impress_pdf_addstream_import" );
+                aOutFilterName = "impress_pdf_addstream_import";
             else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.graphics" ) )
                      || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.drawing" ) ) )
-                aOutFilterName = OUString( "draw_pdf_addstream_import" );
+                aOutFilterName = "draw_pdf_addstream_import";
             else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.spreadsheet" )
-                aOutFilterName = OUString( "calc_pdf_addstream_import" );
+                aOutFilterName = "calc_pdf_addstream_import";
         }
     }
 
@@ -456,7 +456,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
                 rFilterData[ nFilterNamePos ].Name =
                     OUString( "FilterName" );
             }
-            aOutTypeName = OUString("pdf_Portable_Document_Format");
+            aOutTypeName = "pdf_Portable_Document_Format";
 
             OSL_TRACE( "setting filter name %s, input stream %s\n",
                        OUStringToOString( aOutFilterName, RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -466,7 +466,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             if( xEmbedStream.is() )
             {
                 rFilterData.realloc( ++nAttribs );
-                rFilterData[nAttribs-1].Name = OUString( "EmbeddedSubstream" );
+                rFilterData[nAttribs-1].Name = "EmbeddedSubstream";
                 rFilterData[nAttribs-1].Value <<= xEmbedStream;
             }
             if( !aPwd.isEmpty() )
@@ -475,7 +475,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
                 {
                     nPwdPos = nAttribs;
                     rFilterData.realloc( ++nAttribs );
-                    rFilterData[ nPwdPos ].Name = OUString( "Password" );
+                    rFilterData[ nPwdPos ].Name = "Password";
                 }
                 rFilterData[ nPwdPos ].Value <<= aPwd;
             }
@@ -486,7 +486,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             {
                 nFilterNamePos = nAttribs;
                 rFilterData.realloc( ++nAttribs );
-                rFilterData[ nFilterNamePos ].Name = OUString( "FilterName" );
+                rFilterData[ nFilterNamePos ].Name = "FilterName";
             }
 
             const sal_Int32 nDocumentType = 0; //const sal_Int32 nDocumentType = queryDocumentTypeDialog(m_xContext,aURL);
@@ -512,7 +512,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
                     OSL_FAIL("Unexpected case");
             }
 
-            aOutTypeName = OUString("pdf_Portable_Document_Format");
+            aOutTypeName = "pdf_Portable_Document_Format";
         }
     }
 

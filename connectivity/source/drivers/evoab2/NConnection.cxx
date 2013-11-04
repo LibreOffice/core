@@ -44,17 +44,17 @@ OUString implGetExceptionMsg( Exception& e, const OUString& aExceptionType_ )
 {
      OUString aExceptionType = aExceptionType_;
      if( aExceptionType.isEmpty() )
-         aExceptionType =  OUString("Unknown") ;
+         aExceptionType = "Unknown";
 
      OUString aTypeLine( "\nType: "  );
      aTypeLine += aExceptionType;
 
      OUString aMessageLine( "\nMessage: "  );
-         aMessageLine += OUString( e.Message );
+     aMessageLine += e.Message;
 
      OUString aMsg(aTypeLine);
      aMsg += aMessageLine;
-         return aMsg;
+     return aMsg;
 }
 
  // Exception type unknown

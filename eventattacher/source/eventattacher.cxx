@@ -626,7 +626,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
         nIndex++;
 
     OUString aListenerName = (aListenerType[nIndex] == 'X') ? aListenerType.copy(nIndex+1) : aListenerType;
-    OUString aAddListenerName = OUString("add") + aListenerName;
+    OUString aAddListenerName = "add" + aListenerName;
 
     // Send Methods to the correct addListener-Method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
@@ -818,7 +818,7 @@ void EventAttacherImpl::removeListener
     if( aListenerName[nIndex] == 'X' )
         // erase X from the interface name
         aListenerName = aListenerName.copy( nIndex +1 );
-    aRemoveListenerName = OUString( "remove" ) + aListenerName;
+    aRemoveListenerName = "remove" + aListenerName;
 
     // Search methods for the correct removeListener method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );

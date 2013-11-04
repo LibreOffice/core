@@ -318,11 +318,11 @@ OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) con
                     {
                         switch (pEntry->eState)
                         {
-                            case SFX_ITEM_UNKNOWN : sRet=OUString("Unknown");   break;
-                            case SFX_ITEM_DISABLED: sRet=OUString("Disabled"); break;
-                            case SFX_ITEM_DONTCARE: sRet=OUString("DontCare"); break;
-                            case SFX_ITEM_SET     : sRet=OUString("Set");      break;
-                            case SFX_ITEM_DEFAULT : sRet=OUString("Default");  break;
+                            case SFX_ITEM_UNKNOWN : sRet = "Unknown";  break;
+                            case SFX_ITEM_DISABLED: sRet = "Disabled"; break;
+                            case SFX_ITEM_DONTCARE: sRet = "DontCare"; break;
+                            case SFX_ITEM_SET     : sRet = "Set";      break;
+                            case SFX_ITEM_DEFAULT : sRet = "Default";  break;
                         } // switch
                     } break;
                     case ITEMBROWSER_TYPECOL_ID: sRet = pEntry->GetItemTypeStr(); break;

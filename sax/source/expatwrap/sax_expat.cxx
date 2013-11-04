@@ -200,7 +200,7 @@ Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
 Sequence< OUString >    SaxExpatParser::getSupportedServiceNames_Static(void) throw ()
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( SERVICE_NAME );
+    aRet[0] = SERVICE_NAME;
     return aRet;
 }
 
@@ -638,7 +638,7 @@ Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) throw ()
 {
 
     Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString( SERVICE_NAME );
+    seq[0] = SERVICE_NAME;
     return seq;
 }
 
@@ -653,73 +653,73 @@ OUString getErrorMessage( XML_Error xmlE, OUString sSystemId , sal_Int32 nLine )
 {
     OUString Message;
     if( XML_ERROR_NONE == xmlE ) {
-        Message = OUString("No");
+        Message = "No";
     }
     else if( XML_ERROR_NO_MEMORY == xmlE ) {
-        Message = OUString("no memory");
+        Message = "no memory";
     }
     else if( XML_ERROR_SYNTAX == xmlE ) {
-        Message = OUString("syntax");
+        Message = "syntax";
     }
     else if( XML_ERROR_NO_ELEMENTS == xmlE ) {
-        Message = OUString("no elements");
+        Message = "no elements";
     }
     else if( XML_ERROR_INVALID_TOKEN == xmlE ) {
-        Message = OUString("invalid token");
+        Message = "invalid token";
     }
     else if( XML_ERROR_UNCLOSED_TOKEN == xmlE ) {
-        Message = OUString("unclosed token");
+        Message = "unclosed token";
     }
     else if( XML_ERROR_PARTIAL_CHAR == xmlE ) {
-        Message = OUString("partial char");
+        Message = "partial char";
     }
     else if( XML_ERROR_TAG_MISMATCH == xmlE ) {
-        Message = OUString("tag mismatch");
+        Message = "tag mismatch";
     }
     else if( XML_ERROR_DUPLICATE_ATTRIBUTE == xmlE ) {
-        Message = OUString("duplicate attribute");
+        Message = "duplicate attribute";
     }
     else if( XML_ERROR_JUNK_AFTER_DOC_ELEMENT == xmlE ) {
-        Message = OUString("junk after doc element");
+        Message = "junk after doc element";
     }
     else if( XML_ERROR_PARAM_ENTITY_REF == xmlE ) {
-        Message = OUString("parameter entity reference");
+        Message = "parameter entity reference";
     }
     else if( XML_ERROR_UNDEFINED_ENTITY == xmlE ) {
-        Message = OUString("undefined entity");
+        Message = "undefined entity";
     }
     else if( XML_ERROR_RECURSIVE_ENTITY_REF == xmlE ) {
-        Message = OUString("recursive entity reference");
+        Message = "recursive entity reference";
     }
     else if( XML_ERROR_ASYNC_ENTITY == xmlE ) {
-        Message = OUString("async entity");
+        Message = "async entity";
     }
     else if( XML_ERROR_BAD_CHAR_REF == xmlE ) {
-        Message = OUString("bad char reference");
+        Message = "bad char reference";
     }
     else if( XML_ERROR_BINARY_ENTITY_REF == xmlE ) {
-        Message = OUString("binary entity reference");
+        Message = "binary entity reference";
     }
     else if( XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF == xmlE ) {
-        Message = OUString("attribute external entity reference");
+        Message = "attribute external entity reference";
     }
     else if( XML_ERROR_MISPLACED_XML_PI == xmlE ) {
-        Message = OUString("misplaced xml processing instruction");
+        Message = "misplaced xml processing instruction";
     }
     else if( XML_ERROR_UNKNOWN_ENCODING == xmlE ) {
-        Message = OUString("unknown encoding");
+        Message = "unknown encoding";
     }
     else if( XML_ERROR_INCORRECT_ENCODING == xmlE ) {
-        Message = OUString("incorrect encoding");
+        Message = "incorrect encoding";
     }
     else if( XML_ERROR_UNCLOSED_CDATA_SECTION == xmlE ) {
-        Message = OUString("unclosed cdata section");
+        Message = "unclosed cdata section";
     }
     else if( XML_ERROR_EXTERNAL_ENTITY_HANDLING == xmlE ) {
-        Message = OUString("external entity reference");
+        Message = "external entity reference";
     }
     else if( XML_ERROR_NOT_STANDALONE == xmlE ) {
-        Message = OUString("not standalone");
+        Message = "not standalone";
     }
 
     OUString str("[");

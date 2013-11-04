@@ -39,7 +39,7 @@ static void out( const sal_Char * pText )
 sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
-    const OUString dash = OUString("-");
+    const OUString dash = "-";
     if(aArg.indexOf(dash) != 0)
         return sal_False;
 

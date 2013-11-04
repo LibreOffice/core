@@ -403,7 +403,7 @@ bool getJavaProps(const OUString & exePath,
 
     //prepare the arguments
     sal_Int32 cArgs = 3;
-    OUString arg1 = OUString("-classpath");// + sClassPath;
+    OUString arg1 = "-classpath";// + sClassPath;
     OUString arg2 = sClassPath;
     OUString arg3("JREProperties");
     OUString arg4 = "noaccessibility";
@@ -744,7 +744,7 @@ bool getJREInfoFromBinPath(
                     && (index + sMapPath.getLength() == sBinPath.getLength())
                     && sBinPath[index - 1] == '/')
                 {
-                    sHome = OUString(sBinPath.getStr(), index - 1);
+                    sHome = sBinPath.copy(index - 1);
                 }
             }
             if (!sHome.isEmpty())

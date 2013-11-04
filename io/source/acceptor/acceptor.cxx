@@ -137,7 +137,7 @@ namespace io_acceptor
             m_sLastDescription != sConnectionDescription )
         {
             // instantiate another acceptor for different ports
-            OUString sMessage = OUString("acceptor::accept called multiple times with different conncetion strings\n" );
+            OUString sMessage = "acceptor::accept called multiple times with different conncetion strings\n";
             throw ConnectionSetupException( sMessage, Reference< XInterface > () );
         }
 
@@ -177,7 +177,7 @@ namespace io_acceptor
                         aHost = aDesc.getParameter(
                             OUString("host"));
                     else
-                        aHost = OUString("localhost");
+                        aHost = "localhost";
                     sal_uInt16 nPort = static_cast< sal_uInt16 >(
                         aDesc.getParameter(
                             OUString("port")).
@@ -205,8 +205,7 @@ namespace io_acceptor
                 }
                 else
                 {
-                    OUString delegatee = OUString("com.sun.star.connection.Acceptor.");
-                    delegatee += aDesc.getName();
+                    OUString delegatee = "com.sun.star.connection.Acceptor." + aDesc.getName();
 
                     OSL_TRACE(
                         "trying to get service %s\n",
@@ -282,7 +281,7 @@ namespace io_acceptor
     Sequence< OUString > acceptor_getSupportedServiceNames()
     {
         Sequence< OUString > seqNames(1);
-        seqNames.getArray()[0] = OUString(SERVICE_NAME);
+        seqNames.getArray()[0] = SERVICE_NAME;
         return seqNames;
     }
 

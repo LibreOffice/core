@@ -123,7 +123,7 @@ uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
 
     xml::AttributeData aData;
     aData.Namespace = mpContainer->GetAttrNamespace(nAttr);
-    aData.Type = OUString("CDATA");
+    aData.Type = "CDATA";
     aData.Value = mpContainer->GetAttrValue(nAttr);
 
     uno::Any aAny;

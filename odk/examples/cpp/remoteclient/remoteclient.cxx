@@ -209,7 +209,7 @@ Sequence< OUString > getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString("com.sun.star.bridge.example.RemoteClientSample");
+            seqNames[0] = "com.sun.star.bridge.example.RemoteClientSample";
             pNames = &seqNames;
         }
     }

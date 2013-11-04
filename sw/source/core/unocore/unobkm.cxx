@@ -241,7 +241,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     UnoActionContext aCont(m_pImpl->m_pDoc);
     if (m_pImpl->m_sMarkName.isEmpty())
     {
-         m_pImpl->m_sMarkName =  OUString("Bookmark");
+         m_pImpl->m_sMarkName = "Bookmark";
     }
     if ((eType == IDocumentMarkAccess::BOOKMARK) &&
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_pImpl->m_sMarkName))

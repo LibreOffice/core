@@ -2525,13 +2525,13 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
         xPropSet->getPropertyValue("VisibleArea") >>= aVisArea;
 
         sal_uInt16 i = 0;
-        pProps[i].Name = OUString("VisibleAreaTop");
+        pProps[i].Name = "VisibleAreaTop";
         pProps[i++].Value <<= aVisArea.Y;
-        pProps[i].Name = OUString("VisibleAreaLeft");
+        pProps[i].Name = "VisibleAreaLeft";
         pProps[i++].Value <<= aVisArea.X;
-        pProps[i].Name = OUString("VisibleAreaWidth");
+        pProps[i].Name = "VisibleAreaWidth";
         pProps[i++].Value <<= aVisArea.Width;
-        pProps[i].Name = OUString("VisibleAreaHeight");
+        pProps[i].Name = "VisibleAreaHeight";
         pProps[i++].Value <<= aVisArea.Height;
     }
 }

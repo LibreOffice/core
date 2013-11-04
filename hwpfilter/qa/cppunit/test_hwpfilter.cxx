@@ -54,7 +54,7 @@ namespace
         unsigned int, unsigned int, unsigned int)
     {
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
-        aDescriptor[0].Name = OUString("URL");
+        aDescriptor[0].Name = "URL";
         aDescriptor[0].Value <<= rURL;
         return m_xFilter->filter(aDescriptor);
     }

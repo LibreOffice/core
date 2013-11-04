@@ -542,27 +542,27 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
           case 92500: case 92501: case 92504: case 92505:
           {
 #if defined(WNT)
-              FNam=OUString("Times New Roman");  // CG Times ist unter Windows Times New Roman
+              FNam = "Times New Roman";  // CG Times ist unter Windows Times New Roman
 #else
-              FNam=OUString("Times");            // ansonsten ist das einfach Times
+              FNam = "Times";            // ansonsten ist das einfach Times
 #endif
               StdBrei=40;
               aFont.SetFamily(FAMILY_ROMAN);
           } break;
           case 94021: case 94022: case 94023: case 94024: {
 #if defined(WNT)
-              FNam=OUString("Arial");            // Univers ist unter Windows Arial
+              FNam = "Arial";            // Univers ist unter Windows Arial
 #else
-              FNam=OUString("Helvetica");        // und ansonsten Helvetica
+              FNam = "Helvetica";        // und ansonsten Helvetica
 #endif
               aFont.SetFamily(FAMILY_SWISS);
               StdBrei=47;
           } break;
           case 93950: case 93951: case 93952: case 93953: {
 #if defined(WNT)
-              FNam=OUString("Courier New");      // Der Vector-Courierfont unter Windows heisst Courier New
+              FNam = "Courier New";      // Der Vector-Courierfont unter Windows heisst Courier New
 #else
-              FNam=OUString("Courier");          // ansonsten ist und bleibt Courier immer Courier
+              FNam = "Courier";          // ansonsten ist und bleibt Courier immer Courier
 #endif
               aFont.SetFamily(FAMILY_ROMAN);
               aFont.SetPitch(PITCH_FIXED);

@@ -97,7 +97,7 @@ bool HelpIndexer::scanForFiles(OUString const & path) {
 
     osl::Directory dir(path);
     if (osl::FileBase::E_None != dir.open()) {
-        d_error = OUString("Error reading directory ") + path;
+        d_error = "Error reading directory " + path;
         return true;
     }
 
@@ -116,8 +116,7 @@ bool HelpIndexer::scanForFiles(OUString const & path) {
 bool HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
     // Add the help path as an indexed, untokenized field.
 
-    OUString path = OUString("#HLP#") +
-        d_module + OUString("/") + fileName;
+    OUString path = "#HLP#" + d_module + "/" + fileName;
     std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
     doc->add(*_CLNEW Field(_T("path"), &aPath[0], Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 

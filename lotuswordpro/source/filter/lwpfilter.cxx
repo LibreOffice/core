@@ -194,7 +194,7 @@ sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) t
 Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) throw()
 {
     Sequence< OUString > seq(1);
-    seq.getArray()[0] = OUString( STR_SERVICE_NAME );
+    seq[0] = STR_SERVICE_NAME;
     return seq;
 }
 
@@ -240,7 +240,7 @@ OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = OUString("AsTemplate");
+                        aDescriptor[nPropertyCount].Name = "AsTemplate";
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
                     return OUString("wordpro_template");
@@ -262,7 +262,7 @@ OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence
             if(rc != osl::FileBase::E_None)
             {
                 SAXException except;
-                except.Message = OUString(  "GDocting system path from URL failed!");
+                except.Message = "GDocting system path from URL failed!";
                 throw except;
             }
             */
@@ -274,7 +274,7 @@ OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = OUString("AsTemplate");
+                        aDescriptor[nPropertyCount].Name = "AsTemplate";
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
                     return OUString("wordpro_template");

@@ -248,11 +248,11 @@ OUString findPlugin(
             OUString url;
 #ifdef UNX
 #if defined(MACOSX)
-            OUString path = OUString("DYLD_LIBRARY_PATH");
+            OUString path = "DYLD_LIBRARY_PATH";
 #elif defined(AIX)
-            OUString path = OUString("LIBPATH");
+            OUString path = "LIBPATH";
 #else
-            OUString path = OUString("LD_LIBRARY_PATH");
+            OUString path = "LD_LIBRARY_PATH";
 #endif
             OUString env_path;
             oslProcessError err = osl_getEnvironment(path.pData, &env_path.pData);

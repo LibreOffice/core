@@ -532,15 +532,15 @@ void SmElementsControl::build()
         break;
         case RID_CATEGORY_EXAMPLES:
         {
-            OUString aEquation = OUString("C=%pi cdot d = 2 cdot %pi cdot r");
+            OUString aEquation = "C=%pi cdot d = 2 cdot %pi cdot r";
             addElement(aEquation, aEquation, "");
-            aEquation = OUString("E=mc^2");
+            aEquation = "E=mc^2";
             addElement(aEquation, aEquation, "");
-            aEquation = OUString("a^2 + b^2 = c^2");
+            aEquation = "a^2 + b^2 = c^2";
             addElement(aEquation, aEquation, "");
-            aEquation = OUString("f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}");
+            aEquation = "f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}";
             addElement(aEquation, aEquation, "");
-            aEquation = OUString("f ( x ) = {1} over {%sigma sqrt{2%pi} }e^-{{(x-%mu)^2} over {2%sigma^2}}");
+            aEquation = "f ( x ) = {1} over {%sigma sqrt{2%pi} }e^-{{(x-%mu)^2} over {2%sigma^2}}";
             addElement(aEquation, aEquation, "");
         }
         break;

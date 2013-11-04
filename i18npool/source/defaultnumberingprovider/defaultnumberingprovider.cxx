@@ -666,25 +666,25 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                 break;
           case NUMBER_LOWER_ZH:
                 natNum = NativeNumberMode::NATNUM7;
-                locale.Language = OUString("zh");
+                locale.Language = "zh";
                 break;
           case NUMBER_UPPER_ZH_TW:
-                locale.Country = OUString("TW");
+                locale.Country = "TW";
           case NUMBER_UPPER_ZH:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString("zh");
+                locale.Language = "zh";
                 break;
           case NUMBER_TRADITIONAL_JA:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString("ja");
+                locale.Language = "ja";
                 break;
           case NUMBER_UPPER_KO:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString("ko");
+                locale.Language = "ko";
                 break;
           case NUMBER_HANGUL_KO:
                 natNum = NativeNumberMode::NATNUM11;
-                locale.Language = OUString("ko");
+                locale.Language = "ko";
                 break;
 
           case CIRCLE_NUMBER:
@@ -950,9 +950,9 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         OUString result;
         Locale aLocale(OUString("en"), OUString(), OUString());
         Sequence<beans::PropertyValue> aProperties(2);
-        aProperties[0].Name = OUString("NumberingType");
+        aProperties[0].Name = "NumberingType";
         aProperties[0].Value <<= aSupportedTypes[index].nType;
-        aProperties[1].Name = OUString("Value");
+        aProperties[1].Name = "Value";
         for (sal_Int32 j = 1; j <= 3; j++) {
             aProperties[1].Value <<= j;
             result += makeNumberingString( aProperties, aLocale );
@@ -975,7 +975,7 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
 
         Sequence< Any > aArgs(1);
         beans::PropertyValue aPath;
-        aPath.Name = OUString("nodepath");
+        aPath.Name = "nodepath";
         aPath.Value <<= OUString("/org.openoffice.Office.Common/I18N"),
         aArgs[0] <<= aPath;
 

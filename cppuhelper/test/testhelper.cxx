@@ -61,7 +61,7 @@ SAL_IMPLEMENT_MAIN()
 
         ContextEntry_Init aEntry;
         aEntry.bLateInitService = false;
-        aEntry.name = OUString("bla, bla");
+        aEntry.name = "bla, bla";
         aEntry.value = makeAny( (sal_Int32)5 );
         Reference< XComponentContext > xContext( createComponentContext( &aEntry, 1, xInitialContext ) );
         OSL_ASSERT( xContext->getServiceManager() != xMgr ); // must be wrapped one

@@ -1281,7 +1281,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     // <- SAFE
 
     css::util::URL aCmd;
-    aCmd.Complete = OUString(".uno:JumpToMark");
+    aCmd.Complete = ".uno:JumpToMark";
 
     css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
     xParser->parseStrict(aCmd);

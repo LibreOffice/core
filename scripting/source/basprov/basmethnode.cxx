@@ -261,7 +261,7 @@ namespace basprov
                     Sequence < PropertyValue > aArgs(7);
                     aArgs[0].Name = "Document";
                     aArgs[0].Value <<= sDocURL;
-                    aArgs[1].Name = OUString("LibName");
+                    aArgs[1].Name = "LibName";
                     aArgs[1].Value <<= sLibName;
                     aArgs[2].Name = "Name";
                     aArgs[2].Value <<= sModName;

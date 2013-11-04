@@ -340,31 +340,31 @@ OUString LwpDrawObj::GetArrowName(sal_uInt8 nArrowStyle)
     {
     default:
     case AH_ARROW_FULLARROW:
-        aArrowName = OUString("Symmetric arrow");
+        aArrowName = "Symmetric arrow";
         break;
     case AH_ARROW_HALFARROW:
-        aArrowName = OUString("Arrow concave");
+        aArrowName = "Arrow concave";
         break;
     case AH_ARROW_LINEARROW:
-        aArrowName = OUString("arrow100");
+        aArrowName = "arrow100";
         break;
     case AH_ARROW_INVFULLARROW:
-        aArrowName = OUString("reverse arrow");
+        aArrowName = "reverse arrow";
         break;
     case AH_ARROW_INVHALFARROW:
-        aArrowName = OUString("reverse concave arrow");
+        aArrowName = "reverse concave arrow";
         break;
     case AH_ARROW_INVLINEARROW:
-        aArrowName = OUString("reverse line arrow");
+        aArrowName = "reverse line arrow";
         break;
     case AH_ARROW_TEE:
-        aArrowName = OUString("Dimension lines");
+        aArrowName = "Dimension lines";
         break;
     case AH_ARROW_SQUARE:
-        aArrowName = OUString("Square");
+        aArrowName = "Square";
         break;
     case AH_ARROW_CIRCLE:
-        aArrowName = OUString("Circle");
+        aArrowName = "Circle";
         break;
     }
 

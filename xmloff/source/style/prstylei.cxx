@@ -199,7 +199,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                     if( !sParent.isEmpty() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
                     else
-                        sParent =  OUString("Standard");
+                        sParent = "Standard";
                     pProps->Value <<= sParent;
                     ++pProps;
                     pProps->Name = "ParaConditionalStyleName";

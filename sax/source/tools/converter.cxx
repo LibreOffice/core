@@ -777,7 +777,7 @@ bool Converter::convertDuration(double& rfTime,
                 nSecs = nTemp;
                 nTemp = 0;
                 bIsFraction = true;
-                sDoubleStr = OUString("0.");
+                sDoubleStr = "0.";
             }
             else if ( c == sal_Unicode('S') )
             {
@@ -785,7 +785,7 @@ bool Converter::convertDuration(double& rfTime,
                 {
                     nSecs = nTemp;
                     nTemp = 0;
-                    sDoubleStr = OUString("0.0");
+                    sDoubleStr = "0.0";
                 }
             }
             else

@@ -1790,7 +1790,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                     try{
                         aCheckId = xModuleManager->identify( xf );
                     } catch(const uno::Exception&)
-                        { aCheckId = OUString(); }
+                        { aCheckId = ""; }
 
                     if ( aModuleId.equals( aCheckId ) )
                     {
@@ -4983,7 +4983,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         sal_Unicode aChar = aDirectory[ aCount-1 ];
         if ( aChar != '/')
         {
-            aDirectory += OUString( "/"  );
+            aDirectory += "/";
         }
     }
     else
@@ -4991,7 +4991,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         aBtnImport.Enable( sal_False );
     }
 
-    aDirectory += OUString( "soffice.cfg/import"  );
+    aDirectory += "soffice.cfg/import";
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
           ::com::sun::star::embed::FileSystemStorageFactory::create( xComponentContext ) );
@@ -5006,11 +5006,11 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     uno::Sequence< uno::Any > aProp( 2 );
     beans::PropertyValue aPropValue;
 
-    aPropValue.Name = OUString( "UserConfigStorage"  );
+    aPropValue.Name = "UserConfigStorage";
     aPropValue.Value <<= xStorage;
     aProp[ 0 ] <<= aPropValue;
 
-    aPropValue.Name = OUString( "OpenMode"  );
+    aPropValue.Name = "OpenMode";
     aPropValue.Value <<= com::sun::star::embed::ElementModes::READWRITE;
     aProp[ 1 ] <<= aPropValue;
 
@@ -5256,7 +5256,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
     uno::Reference< graphic::XGraphic > xGraphic;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = OUString("URL" );
+    aMediaProps[0].Name = "URL";
     aMediaProps[0].Value <<= aURL;
 
     com::sun::star::awt::Size aSize;
@@ -5333,7 +5333,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     sal_Int32 aIndex;
     OUString aIconName;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = OUString("URL" );
+    aMediaProps[0].Name = "URL";
     uno::Reference< css::ui::XUIConfigurationPersistence >
         xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
 
@@ -5434,7 +5434,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     ++m_nNextId;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = OUString("URL" );
+    aMediaProps[0].Name = "URL";
 
     uno::Reference< graphic::XGraphic > xGraphic;
     com::sun::star::awt::Size aSize;

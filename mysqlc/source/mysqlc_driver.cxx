@@ -95,7 +95,7 @@ Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< OUString > aSNS(1);
-    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
+    aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
 /* }}} */
@@ -185,7 +185,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     }
 
     // find the factory symbol
-    const OUString sSymbolName = OUString( "sql_mysql_get_driver_instance"  );
+    const OUString sSymbolName = "sql_mysql_get_driver_instance";
     typedef void* (* FGetMySQLDriver)();
 
     const FGetMySQLDriver pFactoryFunction = (FGetMySQLDriver)( osl_getFunctionSymbol( m_hCppConnModule, sSymbolName.pData ) );

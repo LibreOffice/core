@@ -177,11 +177,11 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
     osl_getModuleURLFromFunctionAddress(
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
         (rtl_uString **) &fileName );
-    fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
+    fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 );
 #if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
     fileName += "../" LIBO_ETC_FOLDER "/";
 #endif
-    fileName += OUString(  SAL_CONFIGFILE("pyuno" ));
+    fileName += SAL_CONFIGFILE("pyuno" );
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;
@@ -913,12 +913,12 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             }
             else
             {
-                str = OUString("Couldn't find uno._uno_extract_printable_stacktrace");
+                str = "Couldn't find uno._uno_extract_printable_stacktrace";
             }
         }
         else
         {
-            str = OUString("Could not load uno.py, no stacktrace available");
+            str = "Could not load uno.py, no stacktrace available";
             if ( !e.Message.isEmpty() )
             {
                 str += OUString (" (Error loading uno.py: ");
@@ -931,7 +931,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
     else
     {
         // it may occur, that no traceback is given (e.g. only native code below)
-        str = OUString(  "no traceback available"  );
+        str = "no traceback available";
     }
 
     if( isInstanceOfStructOrException( excValue.get() ) )

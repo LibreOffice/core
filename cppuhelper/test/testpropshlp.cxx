@@ -277,10 +277,10 @@ void test_PropertyArrayHelper()
         Sequence< OUString > aS( 4 );
         sal_Int32 Handles[4];
         // muss sortiert sein
-        aS.getArray()[0] = OUString("a");
-        aS.getArray()[1] = OUString("d");
-        aS.getArray()[2] = OUString("f");
-        aS.getArray()[3] = OUString("t");
+        aS[0] = "a";
+        aS[1] = "d";
+        aS[2] = "f";
+        aS[3] = "t";
         sal_Int32 nHitCount = a1.fillHandles( Handles, aS );
         OSL_ENSURE( nHitCount == 3, "wrong number of hits " );
         OSL_ENSURE( Handles[0] == getPropertyTable1()[0].Handle, "Handle not correct" );
@@ -806,9 +806,9 @@ void test_PropertySetHelper()
 
             xPS->addPropertyChangeListener( OUString("INT16"), xPS_L );
             Sequence<OUString> szPN( 3 );
-            szPN.getArray()[0] = OUString("BOOL");
-            szPN.getArray()[1] = OUString("INT32");
-            szPN.getArray()[2] = OUString("Does not exist"); // must ne ignored by the addPropertiesChangeListener method
+            szPN[0] = "BOOL";
+            szPN[1] = "INT32";
+            szPN[2] = "Does not exist"; // must ne ignored by the addPropertiesChangeListener method
             pPS->addPropertiesChangeListener( szPN, x1 );
 
             szPN = Sequence<OUString>();
@@ -851,8 +851,8 @@ void test_PropertySetHelper()
 
             xPS->addPropertyChangeListener( OUString("INT16"), xPS_L );
             Sequence<OUString> szPN( 2 );
-            szPN.getArray()[0] = OUString("BOOL");
-            szPN.getArray()[1] = OUString("INT32");
+            szPN[0] = "BOOL";
+            szPN[1] = "INT32";
             pPS->addPropertiesChangeListener( szPN, x1 );
             szPN = Sequence<OUString>();
             pPS->addPropertiesChangeListener( szPN, x1 );
@@ -1022,9 +1022,9 @@ void test_PropertySetHelper()
             OSL_ENSURE( 66 == n32, "PropertySetHelper: wrong INT32 value" );
 
             Sequence< OUString >valueNames = Sequence<OUString>( 3 );
-            valueNames.getArray()[0] = OUString("BOOL");
-            valueNames.getArray()[1] = OUString("INT16");
-            valueNames.getArray()[2] = OUString("INT32");
+            valueNames[0] = "BOOL";
+            valueNames[1] = "INT16";
+            valueNames[2] = "INT32";
             Sequence< Any > aValues = pPS->getPropertyValues( valueNames );
 
             b = *((sal_Bool*)aValues.getConstArray()[0].getValue());
@@ -1095,10 +1095,10 @@ void test_PropertySetHelper()
 
             pPS->addVetoableChangeListener( OUString("INT16") , x2 );
             Sequence<OUString> szPN( 4 );
-            szPN.getArray()[0] = OUString("BOOL");
-            szPN.getArray()[1] = OUString("INT32");
-            szPN.getArray()[2] = OUString("Does not exist"); // must ne ignored by the addPropertiesChangeListener method
-            szPN.getArray()[3] = OUString("INT16");
+            szPN[0] = "BOOL";
+            szPN[1] = "INT32";
+            szPN[2] = "Does not exist"; // must ne ignored by the addPropertiesChangeListener method
+            szPN[3] = "INT16";
             pPS->addPropertiesChangeListener( szPN, x1 );
 
             pPS_L->nCount = 6;
@@ -1114,8 +1114,8 @@ void test_PropertySetHelper()
             pPS_L->pExceptedListenerValues[5] <<= (sal_Int32) 44; // new value  bound
 
             szPN = Sequence<OUString>( 2 );
-            szPN.getArray()[0] = OUString("INT16");
-            szPN.getArray()[1] = OUString("INT32");
+            szPN[0] = "INT16";
+            szPN[1] = "INT32";
             Sequence< Any > aValues( 2 );
             aValues.getArray()[0] <<= (sal_Int16) 22;
             aValues.getArray()[1] <<= (sal_Int16) 44;
@@ -1136,8 +1136,8 @@ void test_PropertySetHelper()
 
 
             //vetoable exception with multible
-            szPN.getArray()[0] = OUString("INT16");
-            szPN.getArray()[1] = OUString("INT16");
+            szPN[0] = "INT16";
+            szPN[1] = "INT16";
             pPS->nINT32 = 0;
             pPS->nINT16 = 0;
             pPS_L->nCount = 4;

@@ -282,7 +282,7 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     switch( nIndex)
     {
     case testLDAP:
-        url=OUString("sdbc:address:ldap://");
+        url = "sdbc:address:ldap://";
         aValue.realloc(2);
         aValue[0].Name = "HostName";
         aValue[0].Value <<= OUString("sun-ds");
@@ -290,16 +290,16 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
         aValue[1].Value <<= OUString("dc=sun,dc=com");
         break;
     case testMozilla:
-        url=OUString("sdbc:address:mozilla://");
+        url = "sdbc:address:mozilla://";
         break;
     case testOp:
-        url=OUString("sdbc:address:outlook://");
+        url = "sdbc:address:outlook://";
         break;
     case testOe:
-        url=OUString("sdbc:address:outlookexp://");
+        url = "sdbc:address:outlookexp://";
         break;
     default:
-        url=OUString("sdbc:address:mozilla://");
+        url = "sdbc:address:mozilla://";
         break;
     }
     pConnection =

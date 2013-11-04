@@ -1675,7 +1675,7 @@ void UCBStorage_Impl::Init()
     {
         // Hack! Avoid access to the manifest file until mediatype is not available in the first segment of a
         // disk spanned file
-        m_aContentType = m_aOriginalContentType = OUString( "application/vnd.sun.xml.impress" );
+        m_aContentType = m_aOriginalContentType = "application/vnd.sun.xml.impress";
     }
     else if ( m_pContent )
     {
@@ -1794,11 +1794,10 @@ void UCBStorage_Impl::ReadContent()
 
     // create cursor for access to children
     Sequence< OUString > aProps(4);
-    OUString* pProps = aProps.getArray();
-    pProps[0] = OUString("Title");
-    pProps[1] = OUString("IsFolder");
-    pProps[2] = OUString("MediaType");
-    pProps[3] = OUString("Size");
+    aProps[0] = "Title";
+    aProps[1] = "IsFolder";
+    aProps[2] = "MediaType";
+    aProps[3] = "Size";
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
@@ -2017,9 +2016,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
     if ( !m_bIsRoot )
         aPath += m_aName;
     aPath += "/";
-    aProps[0].Name = OUString("MediaType");
+    aProps[0].Name = "MediaType";
     aProps[0].Value <<= (OUString ) m_aContentType;
-    aProps[1].Name = OUString("FullPath");
+    aProps[1].Name = "FullPath";
     aProps[1].Value <<= (OUString ) aPath;
     rSequence[ nProps++ ] = aProps;
 
@@ -2040,9 +2039,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
             // properties of streams
             OUString aElementPath( aPath );
             aElementPath += pElement->m_aName;
-            aProps[0].Name = OUString("MediaType");
+            aProps[0].Name = "MediaType";
             aProps[0].Value <<= (OUString ) pElement->GetContentType();
-            aProps[1].Name = OUString("FullPath");
+            aProps[1].Name = "FullPath";
             aProps[1].Value <<= (OUString ) aElementPath;
             rSequence[ nProps++ ] = aProps;
         }
@@ -2088,11 +2087,9 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                     continue;
 
                 Sequence < OUString > aNames(1);
-                OUString* pNames = aNames.getArray();
-                pNames[0] = OUString(  "Title"  );
+                aNames[0] = "Title";
                 Sequence < Any > aValues(1);
-                Any* pValues = aValues.getArray();
-                pValues[0] = makeAny( OUString( m_aName ) );
+                aValues[0] = makeAny( OUString( m_aName ) );
 
                 Content aNewFolder;
                 if ( !pContent->insertNewContent( rCurr.Type, aNames, aValues, aNewFolder ) )
@@ -2190,7 +2187,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         if ( pElement->m_xStream->m_bIsOLEStorage )
                         {
                             // OLE storage should be stored encrytped, if the storage uses encryption
-                            pElement->m_xStream->m_aContentType = OUString("application/vnd.sun.star.oleobject");
+                            pElement->m_xStream->m_aContentType = "application/vnd.sun.star.oleobject";
                             Any aValue;
                             aValue <<= (sal_Bool)sal_True;
                             pElement->m_xStream->m_pContent->setPropertyValue("Encrypted", aValue );
@@ -3192,8 +3189,7 @@ OUString UCBStorage::CreateLinkFile( const OUString& rName )
     // assemble a new folder name in the destination folder
     INetURLObject aObj( rName );
     OUString aTmpName = aObj.GetName();
-    OUString aTitle = OUString( "content." );
-    aTitle += aTmpName;
+    OUString aTitle = "content." + aTmpName;
 
     // create a folder and store its URL
     Content aFolder( aFolderURL, Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -3231,8 +3227,7 @@ OUString UCBStorage::CreateLinkFile( const OUString& rName )
         OUString aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
 
         // store it as key/value pair
-        OUString aLink = OUString("ContentURL=");
-        aLink += aURL;
+        OUString aLink = "ContentURL=" + aURL;
         write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*pStream, aLink, RTL_TEXTENCODING_UTF8);
         pStream->Flush();
 

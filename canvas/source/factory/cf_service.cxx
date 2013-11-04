@@ -204,11 +204,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
         // Ugh. Looks like configuration is borked. Fake minimal
         // setup.
         Sequence<OUString> aServices(1);
-        aServices[0] = OUString("com.sun.star.comp.rendering.Canvas.VCL");
+        aServices[0] = "com.sun.star.comp.rendering.Canvas.VCL";
         m_aAvailableImplementations.push_back( std::make_pair(OUString("com.sun.star.rendering.Canvas"),
                                                               aServices) );
 
-        aServices[0] = OUString("com.sun.star.comp.rendering.SpriteCanvas.VCL");
+        aServices[0] = "com.sun.star.comp.rendering.SpriteCanvas.VCL";
         m_aAvailableImplementations.push_back( std::make_pair(OUString("com.sun.star.rendering.SpriteCanvas"),
                                                               aServices) );
     }

@@ -1451,7 +1451,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     uno::Reference< beans::XPropertySet > xLayerPropSet(xDrawnInSlideshow, uno::UNO_QUERY);
 
     //Layer Name which enables to catch annotations
-    OUString layerName = OUString("DrawnInSlideshow");
+    OUString layerName = "DrawnInSlideshow";
     uno::Any aPropLayer;
 
     aPropLayer <<= layerName;
