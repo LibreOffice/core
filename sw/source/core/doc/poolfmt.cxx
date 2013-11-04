@@ -67,7 +67,7 @@ using namespace ::com::sun::star;
 
 const sal_uInt16 PT_3   =  3 * 20;      //  3 pt
 const sal_uInt16 PT_6   =  6 * 20;      //  6 pt
-const sal_uInt16 PT_7   =  7 * 20;      //  6 pt
+const sal_uInt16 PT_7   =  7 * 20;      //  7 pt
 const sal_uInt16 PT_10  = 10 * 20;      // 10 pt
 const sal_uInt16 PT_12  = 12 * 20;      // 12 pt
 const sal_uInt16 PT_14  = 14 * 20;      // 14 pt
@@ -79,8 +79,8 @@ const sal_uInt16 PT_24  = 24 * 20;      // 24 pt
 
 static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
     // we do everything procentual now:
-    115, 100, 100, 85, 85,
-    75,   75,  75, 75, 75,  // normal
+    130, 115, 100, 100, 85,
+    85,   75,  75, 75, 75,  // normal
     PT_24, PT_18, PT_14, PT_12, PT_10,
     PT_7, PT_7, PT_7, PT_7, PT_7            // HTML mode
 };
@@ -487,25 +487,33 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, false );
             break;
         case RES_POOLCOLL_HEADLINE2:        // Headinline 2
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, true );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, false );
             break;
         case RES_POOLCOLL_HEADLINE3:        // Headinline 3
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, false );
+            {
+                Color aCol( COL_GRAY );
+                aSet.Put( SvxColorItem ( aCol, RES_CHRATR_COLOR ) );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, false );
+            }
             break;
         case RES_POOLCOLL_HEADLINE4:        // Headinline 4
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, true );
+            {
+                Color aCol( COL_GRAY );
+                aSet.Put( SvxColorItem ( aCol, RES_CHRATR_COLOR ) );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, true );
+            }
             break;
         case RES_POOLCOLL_HEADLINE5:        // Headinline 5
             lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, false );
             break;
         case RES_POOLCOLL_HEADLINE6:        // Headinline 6
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, false );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, true );
             break;
         case RES_POOLCOLL_HEADLINE7:        // Headinline 7
             lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, false );
             break;
         case RES_POOLCOLL_HEADLINE8:        // Headinline 8
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, false );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, true );
             break;
         case RES_POOLCOLL_HEADLINE9:        // Headinline 9
             lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, false );
@@ -547,6 +555,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             break;
 
         case RES_POOLCOLL_FOOTNOTE:             // paragraph style Footnote
+            aSet.Put( SvxEscapementItem( DFLT_ESC_AUTO_SUPER, 58, RES_CHRATR_ESCAPEMENT ) );
         case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
