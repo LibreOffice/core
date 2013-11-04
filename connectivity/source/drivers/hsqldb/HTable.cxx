@@ -385,10 +385,10 @@ void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, 
         OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        OUString sComposedName =
-            ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInDataManipulation ) +
-            sComposedName + " RENAME TO " +
-            ::dbtools::composeTableName( getMetaData(), sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation );
+        sSql +=
+            ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInDataManipulation )
+            + " RENAME TO "
+            + ::dbtools::composeTableName( getMetaData(), sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation );
 
         executeStatement(sSql);
 
