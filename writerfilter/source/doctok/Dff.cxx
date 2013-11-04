@@ -198,69 +198,9 @@ sal_uInt32 DffRecord::getShapeId()
     return nResult;
 }
 
-class DffOPTHandler : public Properties
-{
-    map<int, WW8ValueSharedPointer_t> mMap;
-    int nId;
-
-public:
-    DffOPTHandler() : nId(0) {}
-    virtual ~DffOPTHandler() {}
-
-    virtual void attribute(Id name, Value & val)
-    {
-        switch (name)
-        {
-        case NS_rtf::LN_shppid:
-            nId = val.getInt();
-            break;
-        case NS_rtf::LN_shpvalue:
-            {
-                WW8Value & rTmpVal = dynamic_cast<WW8Value &>(val);
-                WW8ValueSharedPointer_t
-                    pVal(dynamic_cast<WW8Value *>(rTmpVal.clone()));
-                mMap[nId] = pVal;
-            }
-        }
-    }
-
-    virtual void sprm(Sprm & /*sprm_*/)
-    {
-    }
-
-    WW8ValueSharedPointer_t & getValue(int nId_)
-    {
-        return mMap[nId_];
-    }
-
-};
-
 sal_uInt32 DffRecord::getShapeBid()
 {
     sal_uInt32 nResult = 0;
-
-    if (getShapeType() == 75)
-    {
-        Records_t aRecords = findRecords(0xf00b);
-
-        if (!aRecords.empty())
-        {
-            DffOPTHandler aHandler;
-            DffOPT * pOpts = dynamic_cast<DffOPT*>((*aRecords.begin()).get());
-
-            sal_uInt32 nCount = pOpts->get_property_count();
-
-            for (sal_uInt32 n = 0; n < nCount; ++n)
-            {
-                pOpts->get_property(n)->resolve(aHandler);
-            }
-
-            WW8ValueSharedPointer_t pVal = aHandler.getValue(260);
-
-            if (pVal.get() != NULL)
-                nResult = pVal->getInt();
-        }
-    }
 
     return nResult;
 }
