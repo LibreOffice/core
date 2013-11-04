@@ -97,6 +97,18 @@ public:
     virtual std::string BinFuncName(void) const { return "ISPMT"; }
 };
 
+class OpDuration: public Normal
+{
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+
+    virtual void GenSlidingWindowFunction(std::stringstream& ss,
+            const std::string sSymName, SubArguments& vSubArguments);
+
+    virtual std::string BinFuncName(void) const { return "Duration"; }
+};
+
+
 class Fvschedule: public Normal
 {
 public:

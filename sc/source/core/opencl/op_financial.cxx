@@ -531,6 +531,48 @@ void OpISPMT::GenSlidingWindowFunction(std::stringstream& ss,
         ss << "}";
 }
 
+void OpDuration::GenSlidingWindowFunction(std::stringstream& ss,
+    const std::string sSymName, SubArguments& vSubArguments)
+{
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n";
+        ss << "    double tmp = " << GetBottom() << ";\n";
+        ss << "    int gid0 = get_global_id(0);\n";
+        ss << "    double arg0 = " << GetBottom() << ";\n";
+        ss << "    double arg1 = " << GetBottom() << ";\n";
+        ss << "    double arg2 = " << GetBottom() << ";\n";
+        unsigned i = vSubArguments.size();
+        while (i--)
+        {
+            FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
+            assert(pCur);
+            if(pCur->GetType() == formula::svSingleVectorRef)
+            {
+#ifdef  ISNAN
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if(gid0 >= " << pSVR->GetArrayLength() << " || isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        arg" << i << " = " <<GetBottom() << ";\n";
+            ss << "    else\n";
+#endif
+            ss << "        arg" << i << " = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            }
+        }
+        ss << "    tmp = log(arg2 / arg1) / log(arg0 + 1.0);\n";
+        ss << "    return tmp;\n";
+        ss << "}";
+}
 
 void Fvschedule::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
