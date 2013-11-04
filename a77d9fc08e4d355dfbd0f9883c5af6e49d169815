@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///04\u003d",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1696,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-04T17:02:17Z",
+      "side": 1,
+      "message": "Could this all be moved to the ooxmlexport suite? Given that you fixed docx export code as well, that\u0027s where you can test both import and export filters.",
+      "revId": "a77d9fc08e4d355dfbd0f9883c5af6e49d169815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///00\u003d",
+        "filename": "writerfilter/source/filter/ImportFilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-04T17:02:17Z",
+      "side": 1,
+      "message": "No need to use explicit OUString() here, plain \u0027Name \u003d \"OOXCustomXml\"\u0027 also works.",
+      "revId": "a77d9fc08e4d355dfbd0f9883c5af6e49d169815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
