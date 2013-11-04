@@ -116,7 +116,7 @@ else
 
 define gb_LinkTarget__use_odbc_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/unixODBC/inc \
+	-I$(SRCDIR)/external/unixODBC/inc \
 	$$(INCLUDE) \
 )
 
