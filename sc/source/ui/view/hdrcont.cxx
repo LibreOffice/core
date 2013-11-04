@@ -563,9 +563,9 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
 SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) const
 {
     bool        bFound = false;
-    SCCOLROW    nCount = 1;
     SCCOLROW    nPos = GetPos();
     SCCOLROW    nHitNo = nPos;
+    SCCOLROW    nEntryNo = 1 + nPos;
     long    nScrPos;
     long    nMousePos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
     long    nDif;
@@ -579,22 +579,20 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) 
     nScrPos = GetScrPos( nPos ) - nLayoutSign;
     do
     {
-        SCCOLROW nEntryNo = nCount + nPos;
-
         if (nEntryNo > nSize)
             nScrPos = nEndPos + nLayoutSign;
         else
             nScrPos += GetEntrySize( nEntryNo - 1 ) * nLayoutSign;      //! GetHiddenCount() ??
 
         nDif = nMousePos - nScrPos;
-        if (nDif >= -2 && nDif <= 2 && nCount > 0)
+        if (nDif >= -2 && nDif <= 2)
         {
             bFound = true;
             nHitNo=nEntryNo-1;
         }
         else if (nDif * nLayoutSign >= 0 && nEntryNo < nSize)
             nHitNo = nEntryNo;
-        ++nCount;
+        ++nEntryNo;
     }
     while ( nScrPos * nLayoutSign < nEndPos * nLayoutSign && nDif * nLayoutSign > 0 );
 
