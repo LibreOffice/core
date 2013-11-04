@@ -109,6 +109,8 @@ public:
     void testRepeatedColumnsODS();
     void testDataValidityODS();
     void testDataTableMortgageXLS();
+    void testDataTableOneVarXLSX();
+    void testDataTableMultiTableXLSX();
 
     void testDataBarODS();
     void testDataBarXLSX();
@@ -174,6 +176,8 @@ public:
     CPPUNIT_TEST(testRepeatedColumnsODS);
     CPPUNIT_TEST(testDataValidityODS);
     CPPUNIT_TEST(testDataTableMortgageXLS);
+    CPPUNIT_TEST(testDataTableOneVarXLSX);
+    CPPUNIT_TEST(testDataTableMultiTableXLSX);
     CPPUNIT_TEST(testBrokenQuotesCSV);
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
@@ -1077,6 +1081,8 @@ void ScFiltersTest::testDataValidityODS()
 void ScFiltersTest::testDataTableMortgageXLS()
 {
     ScDocShellRef xDocSh = loadDoc("data-table/mortgage.", XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
+
     ScFormulaOptions aOptions;
     aOptions.SetFormulaSepArg(",");
     aOptions.SetFormulaSepArrayCol(",");
@@ -1121,6 +1127,87 @@ void ScFiltersTest::testDataTableMortgageXLS()
 
     if (!checkFormula(*pDoc, ScAddress(4,10,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)"))
         CPPUNIT_FAIL("Wrong formula!");
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDataTableOneVarXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("data-table/one-variable.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
+
+    ScFormulaOptions aOptions;
+    aOptions.SetFormulaSepArg(",");
+    aOptions.SetFormulaSepArrayCol(",");
+    aOptions.SetFormulaSepArrayRow(";");
+    xDocSh->SetFormulaOptions(aOptions);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Right now, we have a bug that prevents Calc from re-calculating these
+    // cells automatically upon file load. We can remove this call if/when we
+    // fix the aforementioned bug.
+    pDoc->CalcAll();
+
+    // B5:B11 should have multiple operations formula cells.  Just check the
+    // top and bottom cells.
+
+    if (!checkFormula(*pDoc, ScAddress(1,4,0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A5)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1,4,0)));
+
+    if (!checkFormula(*pDoc, ScAddress(1,10,0), "MULTIPLE.OPERATIONS(B$4,$A$2,$A11)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    CPPUNIT_ASSERT_EQUAL(14.0, pDoc->GetValue(ScAddress(1,10,0)));
+
+    // Likewise, E5:I5 should have multiple operations formula cells.  Just
+    // check the left- and right-most cells.
+
+    if (!checkFormula(*pDoc, ScAddress(4,4,0), "MULTIPLE.OPERATIONS($D5,$B$2,E$4)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(4,4,0)));
+
+    if (!checkFormula(*pDoc, ScAddress(8,4,0), "MULTIPLE.OPERATIONS($D5,$B$2,I$4)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    CPPUNIT_ASSERT_EQUAL(50.0, pDoc->GetValue(ScAddress(8,4,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDataTableMultiTableXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("data-table/multi-table.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
+
+    ScFormulaOptions aOptions;
+    aOptions.SetFormulaSepArg(",");
+    aOptions.SetFormulaSepArrayCol(",");
+    aOptions.SetFormulaSepArrayRow(";");
+    xDocSh->SetFormulaOptions(aOptions);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Right now, we have a bug that prevents Calc from re-calculating these
+    // cells automatically upon file load. We can remove this call if/when we
+    // fix the aforementioned bug.
+    pDoc->CalcAll();
+
+    // B4:M15 should have multiple operations formula cells.  We'll just check
+    // the top-left and bottom-right ones.
+
+    if (!checkFormula(*pDoc, ScAddress(1,3,0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A4,$D$1,B$3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1,3,0)));
+
+    if (!checkFormula(*pDoc, ScAddress(12,14,0), "MULTIPLE.OPERATIONS($A$3,$E$1,$A15,$D$1,M$3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    CPPUNIT_ASSERT_EQUAL(144.0, pDoc->GetValue(ScAddress(12,14,0)));
 
     xDocSh->DoClose();
 }
