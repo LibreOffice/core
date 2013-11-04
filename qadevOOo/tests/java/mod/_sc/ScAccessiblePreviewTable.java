@@ -39,6 +39,7 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
@@ -113,7 +114,6 @@ public class ScAccessiblePreviewTable extends TestCase {
      */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XInterface oObj = null;
         XCell xCell = null;
 
         try {
@@ -163,16 +163,34 @@ public class ScAccessiblePreviewTable extends TestCase {
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
 
-        shortWait();
-
-        AccessibilityTools at = new AccessibilityTools();
-
-        XWindow xWindow = AccessibilityTools.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), xModel);
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        AccessibilityTools.printAccessibleTree(log,xRoot, Param.getBool(PropertyName.DEBUG_IS_ACTIVE));
-
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
+        XAccessible xRoot;
+        XInterface oObj;
+        for (int i = 0;; ++i) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                xRoot = AccessibilityTools.getAccessibleObject(
+                    AccessibilityTools.getCurrentContainerWindow(
+                        (XMultiServiceFactory)Param.getMSF(), xModel));
+                if (xRoot != null) {
+                    oObj = AccessibilityTools.getAccessibleObjectForRole(
+                        xRoot, AccessibleRole.TABLE);
+                    if (oObj != null) {
+                        break;
+                    }
+                }
+            } catch (DisposedException e) {
+                log.println("Ignoring DisposedException");
+            }
+            if (i == 20) { // give up after 10 sec
+                throw new RuntimeException(
+                    "Couldn't get AccessibleRole.TABLE/PUSH_BUTTON object");
+            }
+            log.println("No TABLE/PUSH_BUTTON found yet, retrying");
+        }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
@@ -194,13 +212,5 @@ public class ScAccessiblePreviewTable extends TestCase {
             });
 
         return tEnv;
-    }
-
-    protected void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 }
