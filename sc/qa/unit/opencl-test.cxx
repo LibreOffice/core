@@ -117,6 +117,7 @@ public:
     void testFinacialYIELDDISCFormula();
     void testFinacialYIELDMATFormula();
     void testFinacialPMTFormula();
+    void testFinacialPPMTFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -164,6 +165,7 @@ public:
     CPPUNIT_TEST(testFinacialYIELDFormula);
     CPPUNIT_TEST(testFinacialYIELDDISCFormula);
     CPPUNIT_TEST(testFinacialYIELDMATFormula);
+    CPPUNIT_TEST(testFinacialPPMTFormula);
     CPPUNIT_TEST(testFinacialPMTFormula);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1557,7 +1559,28 @@ void ScOpenclTest:: testFinacialPMTFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-
+//[AMLOEXT-119]
+void ScOpenclTest:: testFinacialPPMTFormula()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/PPMT.", XLS);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/PPMT.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
