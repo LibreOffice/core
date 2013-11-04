@@ -22,6 +22,113 @@ using namespace formula;
 
 namespace sc { namespace opencl {
 
+void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_" << BinFuncName() << "(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double x,mu,sigma;\n";
+    if(vSubArguments.size() != 3)
+    {
+        ss << "    return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    assert(tmpCur0);
+    if(tmpCur0->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR0 =
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
+#ifdef ISNAN
+        ss << "    int buffer_x_len = ";
+        ss << tmpCurDVR0->GetArrayLength() << ";\n";
+        ss << "    if(gid0>=buffer_x_len || isNan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+        ss << "        x = 0.0;\n";
+        ss << "    else\n";
+#endif
+        ss << "        x = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+    }
+    else if(tmpCur0->GetType() == formula::svDouble)
+    {
+        ss << "    x=" <<tmpCur0->GetDouble() << ";\n";
+    }
+    else
+    {
+        ss << "    return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    assert(tmpCur1);
+    if(tmpCur1->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR1 =
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur1);
+#ifdef ISNAN
+        ss << "    int buffer_mu_len = ";
+        ss << tmpCurDVR1->GetArrayLength() << ";\n";
+        ss << "    if(gid0>=buffer_mu_len || isNan(";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+        ss << "        mu = 0.0;\n";
+        ss << "    else\n";
+#endif
+        ss << "        mu = ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+    }
+    else if(tmpCur1->GetType() == formula::svDouble)
+    {
+        ss << "    mu=" <<tmpCur1->GetDouble() << ";\n";
+    }
+    else
+    {
+        ss << "    return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+
+    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    assert(tmpCur2);
+    if(tmpCur2->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR2 =
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur2);
+#ifdef ISNAN
+        ss << "    int buffer_sigma_len = ";
+        ss << tmpCurDVR2->GetArrayLength() << ";\n";
+        ss << "    if(gid0>=buffer_sigma_len || isNan(";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << "))\n";
+        ss << "        sigma = 0.0;\n";
+        ss << "    else\n";
+#endif
+        ss << "        sigma = ";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
+    }
+    else if(tmpCur2->GetType() == formula::svDouble)
+    {
+        ss << "    sigma=" <<tmpCur2->GetDouble() << ";\n";
+    }
+    else
+    {
+        ss << "    return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+    ss << "    if(" << "sigma" << "<=0)\n";
+    ss << "        tmp=DBL_MAX;\n";
+    ss << "    else\n";
+    ss << "        tmp=(" << "x" << "-" << "mu" << ")/" << "sigma" << ";\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
+
 void OpFisher::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
 {
