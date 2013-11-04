@@ -146,9 +146,16 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
         }
         else
         {
-            pResult =  component_getFactoryHelper( pImplementationName, reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ), reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ), serviceDecl );
+            pResult = comphelper::service_decl::component_getFactoryHelper(
+                pImplementationName,
+                static_cast<css::lang::XMultiServiceFactory *>(
+                    _pServiceManager),
+                static_cast<css::registry::XRegistryKey *>(pRegistryKey),
+                serviceDecl );
             if ( !pResult )
-                pResult = ::cppu::component_getFactoryHelper( pImplementationName, _pServiceManager, pRegistryKey, s_aServiceEntries );
+                pResult = cppu::component_getFactoryHelper(
+                    pImplementationName, _pServiceManager, pRegistryKey,
+                    s_aServiceEntries );
         }
 
         if ( xFactory.is() )
