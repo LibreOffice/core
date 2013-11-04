@@ -141,13 +141,13 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         if ( xPopup.is() )
         {
             uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
-            aPopupMenu[0].Name = OUString("CommandURL");
+            aPopupMenu[0].Name = "CommandURL";
             aPopupMenu[0].Value = uno::makeAny( OUString("vnd.openoffice.org:") + rName );
-            aPopupMenu[1].Name = OUString("Label");
+            aPopupMenu[1].Name = "Label";
             aPopupMenu[1].Value <<= rName;
-            aPopupMenu[2].Name = OUString("ItemDescriptorContainer");
+            aPopupMenu[2].Name = "ItemDescriptorContainer";
             aPopupMenu[2].Value = uno::makeAny( xMenuDesc );
-            aPopupMenu[3].Name = OUString("Type" );
+            aPopupMenu[3].Name = "Type";
             aPopupMenu[3].Value <<= sal_Int32( 0 );
 
             xPopup->insertByIndex( xPopup->getCount(), uno::makeAny( aPopupMenu ) );
@@ -276,7 +276,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     bBeginGroup = rHeader.isBeginGroup();
     controlGeneralInfo.ImportToolBarControlData( helper, props );
     beans::PropertyValue aProp;
-    aProp.Name = OUString("Visible") ;
+    aProp.Name = "Visible";
     aProp.Value = uno::makeAny( rHeader.isVisible() ); // where is the visible attribute stored
     props.push_back( aProp );
     if ( rHeader.getTct() == 0x01
@@ -327,7 +327,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
     else if ( rHeader.getTct() == 0x0a )
     {
-        aProp.Name = OUString("CommandURL") ;
+        aProp.Name = "CommandURL";
         OUString sMenuBar("private:resource/menubar/");
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
@@ -338,7 +338,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
 
     short icontext =  ( rHeader.getTbct() & 0x03 );
-    aProp.Name = OUString("Style") ;
+    aProp.Name = "Style";
     if ( bIsMenuBar )
     {
         nStyle |= ui::ItemStyle::TEXT;
@@ -474,7 +474,7 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         // if ( rHeader.getTct() == 0x01 && rHeader.getTcID() == 0x01 ) // not defined, probably this is a command
         if ( !extraInfo.getOnAction().isEmpty() )
         {
-            aProp.Name = OUString("CommandURL");
+            aProp.Name = "CommandURL";
             ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
             if ( aMacroInf.mbFound )
                 aProp.Value = helper.createCommandFromMacro( aMacroInf.msResolvedMacro );
@@ -483,15 +483,15 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
             sControlData.push_back( aProp );
         }
 
-        aProp.Name = OUString("Label");
+        aProp.Name = "Label";
         aProp.Value = uno::makeAny( customText.getString().replace('&','~') );
         sControlData.push_back( aProp );
 
-        aProp.Name = OUString("Type");
+        aProp.Name = "Type";
         aProp.Value = uno::makeAny( ui::ItemType::DEFAULT );
         sControlData.push_back( aProp );
 
-        aProp.Name = OUString("Tooltip");
+        aProp.Name = "Tooltip";
         aProp.Value = uno::makeAny( tooltip.getString() );
         sControlData.push_back( aProp );
 /*

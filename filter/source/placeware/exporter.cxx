@@ -483,17 +483,17 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
     // create the gif
 
     Sequence< PropertyValue > aFilterData( 2 );
-    aFilterData[0].Name = OUString("Width");
+    aFilterData[0].Name = "Width";
     aFilterData[0].Value <<= (sal_Int32)704;
-    aFilterData[1].Name = OUString("Translucent");
+    aFilterData[1].Name = "Translucent";
     aFilterData[1].Value <<= (sal_Bool)sal_False;
 
     Sequence< PropertyValue > aDescriptor( 3 );
-    aDescriptor[0].Name = OUString("FilterName");
+    aDescriptor[0].Name = "FilterName";
     aDescriptor[0].Value <<= OUString("GIF");
-    aDescriptor[1].Name = OUString("URL");
+    aDescriptor[1].Name = "URL";
     aDescriptor[1].Value <<= OUString( pEntry->getTempURL() );
-    aDescriptor[2].Name = OUString("FilterData");
+    aDescriptor[2].Name = "FilterData";
     aDescriptor[2].Value <<= aFilterData;
     mxGraphicExporter->setSourceDocument( xComp );
     mxGraphicExporter->filter( aDescriptor );

@@ -196,7 +196,7 @@ void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )
     delete m_pFilterInfo;
     m_pFilterInfo = new filter_info_impl( rFilterInfo );
 
-    m_sImportRecentFile = OUString();
+    m_sImportRecentFile = "";
 
     initDialog();
 
@@ -400,7 +400,7 @@ void XMLFilterTestDialog::onExportBrowse()
             Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, 0);
             OUString aFrame( "_default" );
             Sequence< PropertyValue > aArguments(1);
-            aArguments[0].Name = OUString( "InteractionHandler" );
+            aArguments[0].Name = "InteractionHandler";
             aArguments[0].Value <<= xInter;
             Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, aFrame, 0, aArguments ) );
             if( xComp.is() )
@@ -446,15 +446,15 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                 int i = 0;
 
 
-                aSourceData[i  ].Name = OUString( "OutputStream" );
+                aSourceData[i  ].Name = "OutputStream";
                 aSourceData[i++].Value <<= xIS;
 
-                aSourceData[i].Name = OUString( "Indent" );
+                aSourceData[i].Name = "Indent";
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
 
                 if( bUseDocType )
                     {
-                        aSourceData[i  ].Name = OUString("DocType_Public");
+                        aSourceData[i  ].Name = "DocType_Public";
                         aSourceData[i++].Value <<= m_pFilterInfo->maDocType;
                     }
 
@@ -499,7 +499,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                             xExporter2->setSourceDocument( xComp );
 
                             Sequence< PropertyValue > aDescriptor( 1 );
-                            aDescriptor[0].Name = OUString( "FileName" );
+                            aDescriptor[0].Name = "FileName";
                             aDescriptor[0].Value <<= aTempFileURL;
 
                             if( xFilter->filter( aDescriptor ) )
@@ -583,9 +583,9 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
         OUString aFrame( "_default" );
         Sequence< PropertyValue > aArguments(2);
-        aArguments[0].Name = OUString( "FilterName" );
+        aArguments[0].Name = "FilterName";
         aArguments[0].Value <<= m_pFilterInfo->maFilterName;
-        aArguments[1].Name = OUString( "InteractionHandler" );
+        aArguments[1].Name = "InteractionHandler";
         aArguments[1].Value <<= xInter;
 
         xLoader->loadComponentFromURL( rURL, aFrame, 0, aArguments );
@@ -607,13 +607,13 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 Sequence< PropertyValue > aSourceData( 3 );
                 int i = 0;
 
-                aSourceData[i  ].Name = OUString( "InputStream" );
+                aSourceData[i  ].Name = "InputStream";
                 aSourceData[i++].Value <<= xIS;
 
-                aSourceData[i  ].Name = OUString( "FileName" );
+                aSourceData[i  ].Name = "FileName";
                 aSourceData[i++].Value <<= rURL;
 
-                aSourceData[i  ].Name = OUString( "Indent" );
+                aSourceData[i  ].Name = "Indent";
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
 
                 Reference< XWriter > xWriter = Writer::create( mxContext );

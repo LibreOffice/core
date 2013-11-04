@@ -281,7 +281,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
         }
     }
     else
-        rGradientId = OUString();
+        rGradientId = "";
 }
 
 void SVGAttributeWriter::SetFontAttr( const Font& rFont )
@@ -1273,7 +1273,7 @@ void SVGTextWriter::implExportHyperlinkIds()
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "HyperlinkIdList" );
         SvXMLElementExport aDescElem( mrExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_False );
         mrExport.GetDocHandler()->characters( msHyperlinkIdList.trim() );
-        msHyperlinkIdList = OUString();
+        msHyperlinkIdList = "";
     }
 }
 
@@ -1304,7 +1304,7 @@ void SVGTextWriter::implWriteBulletChars()
                 const BulletListItemInfo& rInfo = it->second;
 
                 // Add positioning attribute through a translation
-                sPosition = OUString("translate(") +
+                sPosition = "translate(" +
                             OUString::number( rInfo.aPos.X() ) +
                             "," + OUString::number( rInfo.aPos.Y() ) + ")";
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sPosition );
@@ -2049,8 +2049,8 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
 
                 // The origin of a pattern is positioned at (aRect.Left(), aRect.Top()).
                 // So we need to adjust the pattern coordinate.
-                OUString aTransform = OUString("translate") +
-                                      "(" + OUString::number( -aRect.Left() ) +
+                OUString aTransform = "translate(" +
+                                      OUString::number( -aRect.Left() ) +
                                       "," + OUString::number( -aRect.Top() ) +
                                       ")";
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
