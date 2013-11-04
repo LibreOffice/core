@@ -27,10 +27,6 @@
 
 #include "vcl/svapp.hxx"
 
-#ifdef WNT
-#include <windows.h>
-#endif
-
 using css::uno::Reference;
 using css::uno::Sequence;
 
