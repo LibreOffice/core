@@ -69,7 +69,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	jvmaccess \
 	jvmfwk \
 	librelogo \
-	libxmlsec \
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
