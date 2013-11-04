@@ -108,7 +108,7 @@ public:
     void testMergedCellsODS();
     void testRepeatedColumnsODS();
     void testDataValidityODS();
-    void testDataTableXLS();
+    void testDataTableMortgageXLS();
 
     void testDataBarODS();
     void testDataBarXLSX();
@@ -173,7 +173,7 @@ public:
     CPPUNIT_TEST(testMergedCellsODS);
     CPPUNIT_TEST(testRepeatedColumnsODS);
     CPPUNIT_TEST(testDataValidityODS);
-    CPPUNIT_TEST(testDataTableXLS);
+    CPPUNIT_TEST(testDataTableMortgageXLS);
     CPPUNIT_TEST(testBrokenQuotesCSV);
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
@@ -1074,9 +1074,9 @@ void ScFiltersTest::testDataValidityODS()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testDataTableXLS()
+void ScFiltersTest::testDataTableMortgageXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("data-table-mortgage.", XLS);
+    ScDocShellRef xDocSh = loadDoc("data-table/mortgage.", XLS);
     ScFormulaOptions aOptions;
     aOptions.SetFormulaSepArg(",");
     aOptions.SetFormulaSepArrayCol(",");
