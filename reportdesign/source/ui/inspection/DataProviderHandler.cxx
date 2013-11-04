@@ -95,7 +95,7 @@ OUString DataProviderHandler::getImplementationName_Static(  ) throw(uno::Runtim
 uno::Sequence< OUString > DataProviderHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
-    aSupported[0] = OUString("com.sun.star.report.inspection.DataProviderHandler");
+    aSupported[0] = "com.sun.star.report.inspection.DataProviderHandler";
     return aSupported;
 }
 
@@ -489,23 +489,23 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
 {
     uno::Sequence<uno::Any> aSeq(6);
     beans::PropertyValue aParam;
-    aParam.Name = OUString("ParentWindow");
+    aParam.Name = "ParentWindow";
     aParam.Value <<= m_xContext->getValueByName("DialogParentWindow");
     aSeq[0] <<= aParam;
-    aParam.Name = OUString("Detail");
+    aParam.Name = "Detail";
     aParam.Value <<= m_xDataProvider;
     aSeq[1] <<= aParam;
-    aParam.Name = OUString("Master");
+    aParam.Name = "Master";
     aParam.Value <<= m_xReportComponent->getSection()->getReportDefinition();
     aSeq[2] <<= aParam;
 
-    aParam.Name = OUString("Explanation");
+    aParam.Name = "Explanation";
     aParam.Value <<= OUString(ModuleRes(RID_STR_EXPLANATION));
     aSeq[3] <<= aParam;
-    aParam.Name = OUString("DetailLabel");
+    aParam.Name = "DetailLabel";
     aParam.Value <<= OUString(ModuleRes(RID_STR_DETAILLABEL));
     aSeq[4] <<= aParam;
-    aParam.Name = OUString("MasterLabel");
+    aParam.Name = "MasterLabel";
     aParam.Value <<= OUString(ModuleRes(RID_STR_MASTERLABEL));
     aSeq[5] <<= aParam;
 
@@ -522,10 +522,10 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 {
     uno::Sequence<uno::Any> aSeq(2);
     beans::PropertyValue aParam;
-    aParam.Name = OUString("ParentWindow");
+    aParam.Name = "ParentWindow";
     aParam.Value <<= m_xContext->getValueByName("DialogParentWindow");
     aSeq[0] <<= aParam;
-    aParam.Name = OUString("ChartModel");
+    aParam.Name = "ChartModel";
     aParam.Value <<= m_xChartModel;
     aSeq[1] <<= aParam;
 

@@ -275,7 +275,7 @@ OUString GeometryHandler::getImplementationName_Static(  ) throw(uno::RuntimeExc
 uno::Sequence< OUString > GeometryHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
-    aSupported[0] = OUString("com.sun.star.report.inspection.GeometryHandler");
+    aSupported[0] = "com.sun.star.report.inspection.GeometryHandler";
     return aSupported;
 }
 
@@ -319,7 +319,7 @@ void SAL_CALL GeometryHandler::removeEventListener(const uno::Reference< lang::X
 void SAL_CALL GeometryHandler::inspect( const uno::Reference< uno::XInterface > & _rxInspectee ) throw (uno::RuntimeException, lang::NullPointerException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_sScope = m_sDefaultFunction = OUString();
+    m_sScope = m_sDefaultFunction = "";
     m_bNewFunction = false;
     m_nDataFieldType = 0;
     m_xFunction.clear();
@@ -479,7 +479,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                 OUString sDataField;
                 aPropertyValue >>= sDataField;
 
-                m_sScope = m_sDefaultFunction = OUString();
+                m_sScope = m_sDefaultFunction = "";
                 m_xFunction.clear();
                 const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
                 if ( !sDataField.isEmpty() )
@@ -500,7 +500,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
 
                 const OUString sOldFunctionName = m_sDefaultFunction;
                 const OUString sOldScope = m_sScope;
-                m_sDefaultFunction = m_sScope = OUString();
+                m_sDefaultFunction = m_sScope = "";
 
                 if ( m_nDataFieldType == COUNTER )
                 {
@@ -525,7 +525,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                 {
                     if ( m_nDataFieldType == FUNCTION )
                     {
-                        m_sDefaultFunction = OUString();
+                        m_sDefaultFunction = "";
                         if ( m_bNewFunction )
                             removeFunction();
                         m_xFunction.clear();
@@ -533,7 +533,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                         beans::PropertyChangeEvent aEvent;
                         aEvent.PropertyName = PROPERTY_SCOPE;
                         aEvent.OldValue <<= m_sScope;
-                        m_sScope = OUString();
+                        m_sScope = "";
                         aEvent.NewValue <<= m_sScope;
                         aGuard.clear();
                         m_aPropertyListeners.notify( aEvent, &beans::XPropertyChangeListener::propertyChange );
@@ -553,7 +553,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                     {
                         const OUString sOldFunctionName = m_sDefaultFunction;
                         const OUString sOldScope = m_sScope;
-                        m_sScope = m_sDefaultFunction = OUString();
+                        m_sScope = m_sDefaultFunction = "";
                         m_xFunction.clear();
                         if ( nNewDataType == COUNTER )
                             impl_isCounterFunction_throw(sFunction,m_sScope);
@@ -591,7 +591,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
             break;
         case PROPERTY_ID_SCOPE:
             if ( !(Value >>= m_sScope) )
-                m_sScope = OUString();
+                m_sScope = "";
             else
             {
                 if ( m_bNewFunction )
@@ -1551,7 +1551,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const OUString & Actuati
 // -----------------------------------------------------------------------------
 bool GeometryHandler::impl_dialogFilter_nothrow( OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
 {
-    _out_rSelectedClause = OUString();
+    _out_rSelectedClause = "";
     bool bSuccess = false;
     ::dbtools::SQLExceptionInfo aErrorInfo;
     uno::Reference< awt::XWindow > xInspectorWindow;
@@ -2192,7 +2192,7 @@ void SAL_CALL GeometryHandler::propertyChange(const beans::PropertyChangeEvent& 
         const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
         const OUString sOldFunctionName = m_sDefaultFunction;
         const OUString sOldScope = m_sScope;
-        m_sDefaultFunction = m_sScope = OUString();
+        m_sDefaultFunction = m_sScope = "";
         m_nDataFieldType = impl_getDataFieldType_throw();
         if ( UNDEF_DATA == m_nDataFieldType )
             m_nDataFieldType = nOldDataFieldType;

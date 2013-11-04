@@ -101,7 +101,7 @@ OUString SAL_CALL OReportEngineJFree::getImplementationName(  ) throw(uno::Runti
 uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = OUString("com.sun.star.report.ReportEngine");
+    aServices[0] = "com.sun.star.report.ReportEngine";
 
     return aServices;
 }
@@ -188,9 +188,9 @@ OUString OReportEngineJFree::getNewOutputName()
 
             uno::Sequence< beans::NamedValue > aConvertedProperties(8);
             sal_Int32 nPos = 0;
-            aConvertedProperties[nPos].Name = OUString("InputStorage");
+            aConvertedProperties[nPos].Name = "InputStorage";
             aConvertedProperties[nPos++].Value <<= xTemp;
-            aConvertedProperties[nPos].Name = OUString("OutputStorage");
+            aConvertedProperties[nPos].Name = "OutputStorage";
 
             OUString sFileURL;
             OUString sName = m_xReport->getCaption();
@@ -302,15 +302,15 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
         {
             uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
             sal_Int32 nLen = 0;
-            aArgs[nLen].Name = OUString("AsTemplate");
+            aArgs[nLen].Name = "AsTemplate";
             aArgs[nLen++].Value <<= sal_False;
 
-            aArgs[nLen].Name = OUString("ReadOnly");
+            aArgs[nLen].Name = "ReadOnly";
             aArgs[nLen++].Value <<= sal_True;
 
             if ( _bHidden )
             {
-                aArgs[nLen].Name = OUString("Hidden");
+                aArgs[nLen].Name = "Hidden";
                 aArgs[nLen++].Value <<= sal_True;
             }
 

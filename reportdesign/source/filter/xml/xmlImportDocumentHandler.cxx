@@ -91,7 +91,7 @@ OUString ImportDocumentHandler::getImplementationName_Static(  ) throw(uno::Runt
 uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
-    aSupported[0] = OUString("com.sun.star.report.ImportDocumentHandler");
+    aSupported[0] = "com.sun.star.report.ImportDocumentHandler";
     return aSupported;
 }
 

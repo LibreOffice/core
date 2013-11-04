@@ -225,7 +225,7 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
         aDescriptor[ ::svx::daColumnName ] >>= sName;
         if ( !sName.isEmpty() )
         {
-            sName = OUString("[") + sName + OUString("]");
+            sName = "[" + sName + "]";
             m_pEdit->SetText(sName);
         }
     }

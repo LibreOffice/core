@@ -263,7 +263,7 @@ OUString OReportController::getImplementationName_Static() throw( RuntimeExcepti
 Sequence< OUString> OReportController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.ReportDesign");
+    aSupported[0] = "com.sun.star.sdb.ReportDesign";
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -1363,22 +1363,22 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     switch(_nId)
                     {
                         case SID_DRAWTBX_CS_SYMBOL:
-                            sType = OUString("smiley");
+                            sType = "smiley";
                             break;
                         case SID_DRAWTBX_CS_ARROW:
-                            sType = OUString("left-right-arrow");
+                            sType = "left-right-arrow";
                             break;
                         case SID_DRAWTBX_CS_FLOWCHART:
-                            sType = OUString("flowchart-internal-storage");
+                            sType = "flowchart-internal-storage";
                             break;
                         case SID_DRAWTBX_CS_CALLOUT:
-                            sType = OUString("round-rectangular-callout");
+                            sType = "round-rectangular-callout";
                             break;
                         case SID_DRAWTBX_CS_STAR:
-                            sType = OUString("star5");
+                            sType = "star5";
                             break;
                         default:
-                            sType = OUString("diamond");
+                            sType = "diamond";
                     }
                 }
                 else
@@ -1742,7 +1742,7 @@ void OReportController::impl_initialize( )
 
         if ( m_bShowProperties && m_nPageNum == -1 )
         {
-            m_sLastActivePage = OUString("Data");
+            m_sLastActivePage = "Data";
             getDesignView()->setCurrentPage(m_sLastActivePage);
             uno::Sequence< beans::PropertyValue> aArgs;
             executeUnChecked(SID_SELECT_REPORT,aArgs);
@@ -2795,10 +2795,10 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( 
             if ( getView() )
             {
                 util::URL aCommand;
-                aCommand.Complete = OUString( ".uno:" ) + *commandName;
+                aCommand.Complete = ".uno:" + *commandName;
 
                 Sequence< PropertyValue > aCommandArgs(1);
-                aCommandArgs[0].Name = OUString( "Value" );
+                aCommandArgs[0].Name = "Value";
                 aCommandArgs[0].Value = rCommandValue;
 
                 executeUnChecked( aCommand, aCommandArgs );
@@ -2886,7 +2886,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                     if ( !m_bShowProperties )
                         executeUnChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue>());
 
-                    m_sLastActivePage = OUString("Data");
+                    m_sLastActivePage = "Data";
                     getDesignView()->setCurrentPage(m_sLastActivePage);
                     nCommand = SID_SELECT_REPORT;
                 }
@@ -3146,7 +3146,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
         OUString sCustomShapeType = getDesignView()->GetInsertObjString();
         if ( sCustomShapeType.isEmpty() )
-            sCustomShapeType = OUString("diamond");
+            sCustomShapeType = "diamond";
         pSectionWindow->getReportSection().createDefault(sCustomShapeType,pNewControl);
         pNewControl->SetLogicRect(Rectangle(3000,500,6000,3500)); // switch height and width
     }

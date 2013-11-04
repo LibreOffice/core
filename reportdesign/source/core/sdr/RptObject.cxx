@@ -664,7 +664,7 @@ void OUnoObject::impl_initializeModel_nothrow()
         if ( xFormatted.is() )
         {
             const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
-            const OUString sTreatAsNumberProperty = OUString( "TreatAsNumber" );
+            const OUString sTreatAsNumberProperty = "TreatAsNumber";
             xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( sal_False ) );
             xModelProps->setPropertyValue( PROPERTY_VERTICALALIGN,m_xReportComponent->getPropertyValue(PROPERTY_VERTICALALIGN));
         }
@@ -836,7 +836,7 @@ bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 {
     sal_uInt16 nResId = 0;
-    OUString aDefaultName = OUString("HERE WE HAVE TO INSERT OUR NAME!");
+    OUString aDefaultName = "HERE WE HAVE TO INSERT OUR NAME!";
     if ( _pObj->supportsService( SERVICE_FIXEDTEXT ) )
     {
         nResId = RID_STR_CLASS_FIXEDTEXT;

@@ -107,7 +107,7 @@ Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames(void) 
 Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.document.ExtendedTypeDetection");
+    aSNS[0] = "com.sun.star.document.ExtendedTypeDetection";
     return aSNS;
 }
 // -----------------------------------------------------------------------------

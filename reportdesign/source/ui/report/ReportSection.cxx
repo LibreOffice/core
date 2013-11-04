@@ -492,7 +492,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
                 if ( nId == SID_ATTR_CHAR_COLOR_BACKGROUND )
                 {
                     aArgs.realloc(1);
-                    aArgs[0].Name = OUString("Selection");
+                    aArgs[0].Name = "Selection";
                     aArgs[0].Value <<= m_xSection;
                 }
                 rController.executeChecked(nId,aArgs);
@@ -833,10 +833,10 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                 aCurrent[nLength].Name = PROPERTY_POSITION;
                 aCurrent[nLength++].Value <<= AWTPoint(aDropPos);
                 // give also the DND Action (Shift|Ctrl) Key to really say what we want
-                aCurrent[nLength].Name = OUString("DNDAction");
+                aCurrent[nLength].Name = "DNDAction";
                 aCurrent[nLength++].Value <<= _rEvt.mnAction;
 
-                aCurrent[nLength].Name = OUString("Section");
+                aCurrent[nLength].Name = "Section";
                 aCurrent[nLength++].Value <<= getSection();
                 pIter->Value <<= aCurrent;
             }

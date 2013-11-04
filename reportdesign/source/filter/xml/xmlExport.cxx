@@ -85,7 +85,7 @@ namespace rptxml
     Sequence< OUString > ORptExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
     //---------------------------------------------------------------------
@@ -102,7 +102,7 @@ namespace rptxml
     Sequence< OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -121,7 +121,7 @@ namespace rptxml
     Sequence< OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -139,7 +139,7 @@ namespace rptxml
     Sequence< OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -157,7 +157,7 @@ namespace rptxml
     Sequence< OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -324,7 +324,7 @@ OUString SAL_CALL ORptExport::getImplementationName(  ) throw(uno::RuntimeExcept
 uno::Sequence< OUString > ORptExport::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = OUString("com.sun.star.document.ExportFilter");
+    aServices.getArray()[0] = "com.sun.star.document.ExportFilter";
 
     return aServices;
 }
@@ -1021,7 +1021,7 @@ OUString ORptExport::convertFormula(const OUString& _sFormula)
 {
     OUString sFormula = _sFormula;
     if ( _sFormula.equalsAsciiL("rpt:",4) )
-        sFormula = OUString();
+        sFormula = "";
     return sFormula;
 }
 // -----------------------------------------------------------------------------
@@ -1539,48 +1539,48 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 switch(nGroupOn)
                 {
                     case report::GroupOn::PREFIX_CHARACTERS:
-                        sFunction = OUString("LEFT");
-                        sPrefix = OUString(";") + OUString::number(xGroup->getGroupInterval());
+                        sFunction = "LEFT";
+                        sPrefix = ";" + OUString::number(xGroup->getGroupInterval());
                         break;
                     case report::GroupOn::YEAR:
-                        sFunction = OUString("YEAR");
+                        sFunction = "YEAR";
                         break;
                     case report::GroupOn::QUARTAL:
-                        sFunction   = OUString("INT((MONTH");
-                        sPostfix    = OUString("-1)/3)+1");
-                        sFunctionName = OUString("QUARTAL_") + sExpression;
+                        sFunction   = "INT((MONTH";
+                        sPostfix    = "-1)/3)+1";
+                        sFunctionName = "QUARTAL_" + sExpression;
                         break;
                     case report::GroupOn::MONTH:
-                        sFunction = OUString("MONTH");
+                        sFunction = "MONTH";
                         break;
                     case report::GroupOn::WEEK:
-                        sFunction = OUString("WEEK");
+                        sFunction = "WEEK";
                         break;
                     case report::GroupOn::DAY:
-                        sFunction = OUString("DAY");
+                        sFunction = "DAY";
                         break;
                     case report::GroupOn::HOUR:
-                        sFunction = OUString("HOUR");
+                        sFunction = "HOUR";
                         break;
                     case report::GroupOn::MINUTE:
-                        sFunction = OUString("MINUTE");
+                        sFunction = "MINUTE";
                         break;
                     case report::GroupOn::INTERVAL:
                         {
-                            sFunction = OUString("INT");
+                            sFunction = "INT";
                             uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
                             xCountFunction->setInitialFormula(beans::Optional< OUString>(sal_True,OUString("rpt:0")));
-                            OUString sCountName = sFunction + OUString("_count_") + sExpression;
+                            OUString sCountName = sFunction + "_count_" + sExpression;
                             xCountFunction->setName(sCountName);
                             xCountFunction->setFormula(OUString("rpt:[") + sCountName + OUString("] + 1"));
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
                             // The reference to sCountName in the formula of sFunctionName refers to the *old* value
                             // so we need to expand the the formula of sCountName
-                            sPrefix = OUString(" + 1) / ") + OUString::number(xGroup->getGroupInterval());
-                            sFunctionName = sFunction + OUString("_") + sExpression;
-                            sFunction = sFunction + OUString("(");
-                            sInitialFormula = OUString("rpt:0");
+                            sPrefix = " + 1) / " + OUString::number(xGroup->getGroupInterval());
+                            sFunctionName = sFunction + "_" + sExpression;
+                            sFunction = sFunction + "(";
+                            sInitialFormula = "rpt:0";
                         }
                         break;
                     default:

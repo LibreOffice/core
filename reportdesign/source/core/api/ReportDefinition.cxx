@@ -505,13 +505,13 @@ namespace
             {
                 uno::Sequence < beans::PropertyValue > aArgs( 3);
                 sal_Int32 nLen = 0;
-                aArgs[nLen].Name = OUString("AsTemplate");
+                aArgs[nLen].Name = "AsTemplate";
                 aArgs[nLen++].Value <<= sal_False;
 
-                aArgs[nLen].Name = OUString("ReadOnly");
+                aArgs[nLen].Name = "ReadOnly";
                 aArgs[nLen++].Value <<= sal_True;
 
-                aArgs[nLen].Name = OUString("Hidden");
+                aArgs[nLen].Name = "Hidden";
                 aArgs[nLen++].Value <<= sal_True;
 
                 ::comphelper::MimeConfigurationHelper aHelper(m_xContext);
@@ -1397,7 +1397,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
     sal_Int32 nPos = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nPos+1);
     beans::PropertyValue aPropVal;
-    aPropVal.Name = OUString("Storage");
+    aPropVal.Name = "Storage";
     aPropVal.Value <<= _xStorageToLoadFrom;
     aDelegatorArguments[nPos] <<= aPropVal;
 
@@ -1514,7 +1514,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             if( !bWarn )
             {
                 bWarn = sal_True;
-                sWarnFile = OUString("settings.xml");
+                sWarnFile = "settings.xml";
             }
         }
     }
@@ -1530,7 +1530,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             if( !bWarn )
             {
                 bWarn = sal_True;
-                sWarnFile = OUString("meta.xml");
+                sWarnFile = "meta.xml";
             }
         }
     }
@@ -1546,7 +1546,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             if( !bWarn )
             {
                 bWarn = sal_True;
-                sWarnFile = OUString("styles.xml");
+                sWarnFile = "styles.xml";
             }
         }
     }
@@ -1560,7 +1560,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
                 aDelegatorArguments, aProps, _xStorageToSaveTo ) )
         {
             bErr = sal_True;
-            sErrFile = OUString("content.xml");
+            sErrFile = "content.xml";
         }
     }
 

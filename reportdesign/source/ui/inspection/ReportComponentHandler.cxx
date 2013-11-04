@@ -76,7 +76,7 @@ OUString ReportComponentHandler::getImplementationName_Static(  ) throw(uno::Run
 uno::Sequence< OUString > ReportComponentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
-    aSupported[0] = OUString("com.sun.star.report.inspection.ReportComponentHandler");
+    aSupported[0] = "com.sun.star.report.inspection.ReportComponentHandler";
     return aSupported;
 }
 

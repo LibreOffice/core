@@ -119,8 +119,8 @@ OUString SAL_CALL OFormattedField::getImplementationName(  ) throw(uno::RuntimeE
 uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(2);
-    aServices.getArray()[0] = SERVICE_FORMATTEDFIELD;
-    aServices.getArray()[1] = OUString("com.sun.star.awt.UnoControlFormattedFieldModel");
+    aServices[0] = SERVICE_FORMATTEDFIELD;
+    aServices[1] = "com.sun.star.awt.UnoControlFormattedFieldModel";
 
     return aServices;
 }

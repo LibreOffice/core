@@ -92,7 +92,7 @@ namespace rptui
     Sequence< OUString > DefaultComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.report.inspection.DefaultComponentInspectorModel");
+        aSupported[0] = "com.sun.star.report.inspection.DefaultComponentInspectorModel";
         return aSupported;
     }
 
