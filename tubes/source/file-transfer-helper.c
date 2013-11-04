@@ -642,8 +642,11 @@ check_hash_incoming (EmpathyFTHandler *handler)
 
       g_signal_emit (handler, signals[HASHING_STARTED], 0);
 
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
       g_io_scheduler_push_job (do_hash_job_incoming, hash_data, NULL,
                                G_PRIORITY_DEFAULT, priv->cancellable);
+      #pragma GCC diagnostic pop
     }
 }
 
@@ -1037,9 +1040,11 @@ again:
   if (bytes_read > 0)
     {
       g_checksum_update (hash_data->checksum, hash_data->buffer, bytes_read);
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
       g_io_scheduler_job_send_to_mainloop_async (job, emit_hashing_progress,
           hash_data, NULL);
-
+      #pragma GCC diagnostic pop
       g_free (hash_data->buffer);
       hash_data->buffer = NULL;
 
@@ -1054,8 +1059,11 @@ out:
   if (error != NULL)
     hash_data->error = error;
 
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   g_io_scheduler_job_send_to_mainloop_async (job, hash_job_done,
       hash_data, NULL);
+  #pragma GCC diagnostic pop
 
   return FALSE;
 }
@@ -1079,8 +1087,11 @@ do_hash_job_incoming (GIOSchedulerJob *job,
   if (error != NULL)
     {
       hash_data->error = error;
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
       g_io_scheduler_job_send_to_mainloop_async (job, hash_job_done,
           hash_data, NULL);
+      #pragma GCC diagnostic pop
       return FALSE;
     }
 
@@ -1124,8 +1135,11 @@ ft_handler_read_async_cb (GObject *source,
 
   g_signal_emit (handler, signals[HASHING_STARTED], 0);
 
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   g_io_scheduler_push_job (do_hash_job, hash_data, NULL,
       G_PRIORITY_DEFAULT, priv->cancellable);
+  #pragma GCC diagnostic pop
 }
 
 static void
@@ -1378,8 +1392,10 @@ channel_prepared_cb (
       callbacks_data_free (cb_data);
       return;
     }
-
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   properties = tp_channel_borrow_immutable_properties (TP_CHANNEL (channel));
+  #pragma GCC diagnostic pop
 
   priv->content_hash = g_strdup (
       tp_asv_get_string (properties, "ContentHash"));
