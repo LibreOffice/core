@@ -412,6 +412,7 @@ touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeigh
     CGRect targetRect = CGRectMake( 0, 0, targetWidth, targetHeight );
     CGContextDrawImage( context, targetRect, sourceImage );
     CGImageRelease(sourceImage);
+    CGDataProviderRelease(provider);
 }
 
 extern "C"
