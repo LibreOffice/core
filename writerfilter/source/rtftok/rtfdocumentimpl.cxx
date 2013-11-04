@@ -1466,18 +1466,36 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_SHPTXT:
         case RTF_DPTXBXTEXT:
-            m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
-            checkFirstRun();
-            dispatchFlag(RTF_PARD);
-            m_bNeedPap = true;
-            if (nKeyword == RTF_SHPTXT)
             {
-                if (!m_aStates.top().pCurrentBuffer)
-                    m_pSdrImport->resolve(m_aStates.top().aShape, false);
+                bool bPictureFrame = false;
+                for (size_t i = 0; i < m_aStates.top().aShape.aProperties.size(); ++i)
+                {
+                    std::pair<OUString, OUString>& rProperty = m_aStates.top().aShape.aProperties[i];
+                    if (rProperty.first == "shapeType" && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))
+                    {
+                        bPictureFrame = true;
+                        break;
+                    }
+                }
+                if (bPictureFrame)
+                    // Skip text on picture frames.
+                    m_aStates.top().nDestinationState = DESTINATION_SKIP;
                 else
                 {
-                    RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aShape));
-                    m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_STARTSHAPE, pValue));
+                    m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
+                    checkFirstRun();
+                    dispatchFlag(RTF_PARD);
+                    m_bNeedPap = true;
+                    if (nKeyword == RTF_SHPTXT)
+                    {
+                        if (!m_aStates.top().pCurrentBuffer)
+                            m_pSdrImport->resolve(m_aStates.top().aShape, false);
+                        else
+                        {
+                            RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aShape));
+                            m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_STARTSHAPE, pValue));
+                        }
+                    }
                 }
             }
             break;
