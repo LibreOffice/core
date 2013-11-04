@@ -192,7 +192,7 @@ OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyV
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = OUString("oxt_OpenOffice_Extension");
+        sTypeName = "oxt_OpenOffice_Extension";
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }

@@ -240,7 +240,7 @@ SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link& aNotifyL
     // Enable notification mechanism
     // We need it to get information about changes outside these class on our configuration branch
     Sequence< OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = OUString( "SharePoints" );
+    aNotifySeq[0] = "SharePoints";
     EnableNotification( aNotifySeq, sal_True );
 }
 
@@ -347,7 +347,7 @@ const OUString& SubstitutePathVariables_Impl::GetDNSDomainName()
         if ( nIndex >= 0 && aTemp.getLength() > nIndex+1 )
             m_aDNSDomain = aTemp.copy( nIndex+1 ).toAsciiLowerCase();
         else
-            m_aDNSDomain = OUString();
+            m_aDNSDomain = "";
 
         m_bDNSDomainRetrieved = sal_True;
     }
@@ -524,7 +524,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
         aEnvUsePropNameTemplate += m_aLevelSep;
 
         for ( sal_Int32 nProperty = 0; nProperty < aEnvironmentVariable.getLength(); nProperty++ )
-            aEnvUsedPropertySeq[nProperty] = OUString( aEnvUsePropNameTemplate + aEnvironmentVariable[nProperty] );
+            aEnvUsedPropertySeq[nProperty] = aEnvUsePropNameTemplate + aEnvironmentVariable[nProperty];
 
         Sequence< Any > aEnvUsedValueSeq;
         aEnvUsedValueSeq = GetProperties( aEnvUsedPropertySeq );
@@ -1113,7 +1113,7 @@ throw ( NoSuchElementException, RuntimeException )
 void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariables& aPreDefPathVariables )
 {
 
-    aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = OUString("$BRAND_BASE_DIR");
+    aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = "$BRAND_BASE_DIR";
     rtl::Bootstrap::expandMacros(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 

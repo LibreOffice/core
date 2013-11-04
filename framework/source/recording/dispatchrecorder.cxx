@@ -316,8 +316,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
     OUStringBuffer aArgumentBuffer(1000);
     OUString       sArrayName;
     // this value is used to name the arrays of aArgumentBuffer
-    sArrayName = OUString("args");
-    sArrayName += OUString::number(m_nRecordingID);
+    sArrayName = "args" + OUString::number(m_nRecordingID);
 
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
 

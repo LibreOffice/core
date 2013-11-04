@@ -207,7 +207,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
         }
 
         // We have to map commands which uses special characters like '/',':','?','\','<'.'>','|'
-        OUString aExt = OUString(".png");
+        OUString aExt = ".png";
         m_aImageCommandNameVector.resize(aCmdImageSeq.getLength() );
         m_aImageNameVector.resize( aCmdImageSeq.getLength() );
 
@@ -571,8 +571,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
                 pList->pImageItemList->push_back( pItem );
             }
 
-            pList->aURL = OUString("Bitmaps/");
-            pList->aURL += OUString::createFromAscii(BITMAP_FILE_NAMES[nImageType]);
+            pList->aURL = "Bitmaps/" + OUString::createFromAscii(BITMAP_FILE_NAMES[nImageType]);
 
             uno::Reference< XTransactedObject > xTransaction;
             uno::Reference< XOutputStream >     xOutputStream;

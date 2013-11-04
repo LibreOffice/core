@@ -236,7 +236,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         Reference< XMultiServiceFactory > theConfigProvider = theDefaultProvider::get( m_xContext );
         Sequence< Any > theArgs(1);
         NamedValue v;
-        v.Name = OUString("NodePath");
+        v.Name = "NodePath";
         v.Value <<= OUString("org.openoffice.Setup/Office");
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(

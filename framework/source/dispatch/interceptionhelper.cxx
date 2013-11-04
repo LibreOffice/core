@@ -120,7 +120,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     else
     {
         aInfo.lURLPattern.realloc(1);
-        aInfo.lURLPattern[0] = OUString("*");
+        aInfo.lURLPattern[0] = "*";
     }
 
     // SAFE {

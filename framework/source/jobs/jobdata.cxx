@@ -401,15 +401,15 @@ OUString JobData::getEnvironmentDescriptor() const
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
-            sDescriptor = OUString("EXECUTOR");
+            sDescriptor = "EXECUTOR";
             break;
 
         case E_DISPATCH :
-            sDescriptor = OUString("DISPATCH");
+            sDescriptor = "DISPATCH";
             break;
 
         case E_DOCUMENTEVENT :
-            sDescriptor = OUString("DOCUMENTEVENT");
+            sDescriptor = "DOCUMENTEVENT";
             break;
         default:
             break;
@@ -712,10 +712,10 @@ void JobData::impl_reset()
     WriteGuard aWriteLock(m_aLock);
     m_eMode        = E_UNKNOWN_MODE;
     m_eEnvironment = E_UNKNOWN_ENVIRONMENT;
-    m_sAlias       = OUString();
-    m_sService     = OUString();
-    m_sContext     = OUString();
-    m_sEvent       = OUString();
+    m_sAlias       = "";
+    m_sService     = "";
+    m_sContext     = "";
+    m_sEvent       = "";
     m_lArguments   = css::uno::Sequence< css::beans::NamedValue >();
     aWriteLock.unlock();
     /* } SAFE */

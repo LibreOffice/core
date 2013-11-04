@@ -129,11 +129,11 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     switch (nCommand)
     {
         case SHOWDIALOG_ID_PREFERENCES :
-                sCommand = OUString(".uno:OptionsTreeDialog");
+                sCommand = ".uno:OptionsTreeDialog";
                 break;
 
         case SHOWDIALOG_ID_ABOUT :
-                sCommand = OUString(".uno:About");
+                sCommand = ".uno:About";
                 break;
 
         default :

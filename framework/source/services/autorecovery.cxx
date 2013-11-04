@@ -370,7 +370,7 @@ DispatchParams& DispatchParams::operator=(const DispatchParams& rCopy)
 //-----------------------------------------------
 void DispatchParams::forget()
 {
-    m_sSavePath       = OUString();
+    m_sSavePath       = "";
     m_nWorkingEntryID = -1;
     m_xProgress.clear();
     m_xHoldRefForAsyncOpAlive.clear();
@@ -1047,7 +1047,7 @@ void AutoRecovery::implts_readConfig()
                 continue;
 
             AutoRecovery::TDocumentInfo aInfo;
-            aInfo.NewTempURL = OUString();
+            aInfo.NewTempURL = "";
             aInfo.Document   = css::uno::Reference< css::frame::XModel >();
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL       ;
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL   ;
@@ -1140,16 +1140,15 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         css::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(OUString(TYPE_PROP_EXTENSIONS), css::uno::Sequence< OUString >());
         if (lExtensions.getLength())
         {
-            rInfo.Extension  = OUString(".");
-            rInfo.Extension += lExtensions[0];
+            rInfo.Extension  = lExtensions[0];
         }
         else
-            rInfo.Extension = OUString(".unknown");
+            rInfo.Extension = ".unknown";
     }
     catch(const css::uno::Exception&)
     {
-        rInfo.DefaultFilter = OUString();
-        rInfo.Extension     = OUString();
+        rInfo.DefaultFilter = "";
+        rInfo.Extension     = "";
     }
 }
 
@@ -1900,8 +1899,8 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     OUString sRemoveURL1 = rInfo.OldTempURL;
     OUString sRemoveURL2 = rInfo.NewTempURL;
-    rInfo.OldTempURL = OUString();
-    rInfo.NewTempURL = OUString();
+    rInfo.OldTempURL = "";
+    rInfo.NewTempURL = "";
 
     ::comphelper::MediaDescriptor lDescriptor(rInfo.Document->getArgs());
     rInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), OUString());
@@ -2394,7 +2393,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     else
     {
         // safe the state about error ...
-        rInfo.NewTempURL     = OUString();
+        rInfo.NewTempURL     = "";
         rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
         rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
         rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
@@ -2407,8 +2406,8 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // Ignore any error here. We have a new temp file, which is up to date.
     // The only thing is: we fill the disk with temp files, if we cant remove old ones :-)
     OUString sRemoveFile      = rInfo.OldTempURL;
-                    rInfo.OldTempURL = rInfo.NewTempURL;
-                    rInfo.NewTempURL = OUString();
+    rInfo.OldTempURL = rInfo.NewTempURL;
+    rInfo.NewTempURL = "";
 
     implts_flushConfigItem(rInfo);
 

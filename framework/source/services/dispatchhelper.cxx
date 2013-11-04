@@ -120,7 +120,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     css::uno::Sequence< css::beans::PropertyValue > aArguments( lArguments );
     sal_Int32 nLength = lArguments.getLength();
     aArguments.realloc( nLength + 1 );
-    aArguments[ nLength ].Name = OUString("SynchronMode");
+    aArguments[ nLength ].Name = "SynchronMode";
     aArguments[ nLength ].Value <<= (sal_Bool) sal_True;
 
     css::uno::Any aResult;

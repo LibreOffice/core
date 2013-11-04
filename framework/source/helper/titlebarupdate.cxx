@@ -159,31 +159,31 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
              aModuleId == "com.sun.star.text.GlobalDocument" ||
              aModuleId == "com.sun.star.text.WebDocument" ||
              aModuleId == "com.sun.star.xforms.XMLFormDocument" )
-            sDesktopName = OUString("Writer");
+            sDesktopName = "Writer";
         else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
-            sDesktopName = OUString("Calc");
+            sDesktopName = "Calc";
         else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
-            sDesktopName = OUString("Impress");
+            sDesktopName = "Impress";
         else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
-            sDesktopName = OUString("Draw");
+            sDesktopName = "Draw";
         else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
-            sDesktopName = OUString("Math");
+            sDesktopName = "Math";
         else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" ||
                   aModuleId == "com.sun.star.sdb.OfficeDatabaseDocument" ||
                   aModuleId == "com.sun.star.sdb.RelationDesign" ||
                   aModuleId == "com.sun.star.sdb.QueryDesign" ||
                   aModuleId == "com.sun.star.sdb.TableDesign" ||
                   aModuleId == "com.sun.star.sdb.DataSourceBrowser" )
-            sDesktopName = OUString("Base");
+            sDesktopName = "Base";
         else
-            sDesktopName = OUString("Startcenter");
+            sDesktopName = "Startcenter";
 #if defined(WNT)
         // We use a hardcoded product name matching the registry keys so applications can be associated with file types
         sApplicationID = "TheDocumentFoundation.LibreOffice.";
         sApplicationID += sDesktopName;
 #else
         sApplicationID = utl::ConfigManager::getProductName().toAsciiLowerCase();
-        sApplicationID += OUString(sal_Unicode('-'));
+        sApplicationID += "-";
         sApplicationID += sDesktopName.toAsciiLowerCase();
 #endif
 #endif

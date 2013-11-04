@@ -116,7 +116,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( m_xContext );
         css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         URL aURL;
-        aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionSave");
+        aURL.Complete = "vnd.sun.star.autorecovery:/doSessionSave";
         xURLTransformer->parseStrict(aURL);
 
         // in case of asynchronous call the notification will trigger saveDone()
@@ -148,7 +148,7 @@ void SessionListener::QuitSessionQuietly()
         css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( m_xContext );
         css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         URL aURL;
-        aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionQuietQuit");
+        aURL.Complete = "vnd.sun.star.autorecovery:/doSessionQuietQuit";
         xURLTransformer->parseStrict(aURL);
 
         Sequence< PropertyValue > args(1);
@@ -229,7 +229,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
         css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( m_xContext );
 
         URL aURL;
-        aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionRestore");
+        aURL.Complete = "vnd.sun.star.autorecovery:/doSessionRestore";
         css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(m_xContext));
         xURLTransformer->parseStrict(aURL);
         Sequence< PropertyValue > args;
