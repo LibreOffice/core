@@ -212,7 +212,7 @@ OUString SAL_CALL FrameGrabber::getImplementationName(  )
 sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return cppu::supportsService(this, ServiceName);;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames()
