@@ -2179,7 +2179,6 @@ void OpPMT::GenSlidingWindowFunction(std::stringstream &ss,
 void OpPrice::GenSlidingWindowFunction(std::stringstream &ss,
           const std::string sSymName, SubArguments &vSubArguments)
 {
-    ArgVector argVector;
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -2298,7 +2297,6 @@ void OpPPMT::BinInlineFun(std::set<std::string>& decls,
 void OpPPMT::GenSlidingWindowFunction(std::stringstream &ss,
         const std::string sSymName, SubArguments &vSubArguments)
 {
-    ArgVector argVector;
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
