@@ -1383,14 +1383,49 @@ void ScInterpreter::ScCritBinom()
             PushIllegalArgument();
         else
         {
+            double fFactor;
             double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
-            double fFactor = pow(q,n);
-            if (fFactor <= ::std::numeric_limits<double>::min())
+            if ( q > p )                          // work from the side where the cumulative curve is
             {
-                fFactor = pow(p, n);
-                if (fFactor <= ::std::numeric_limits<double>::min())
-                    PushNoValue();
+                // work from 0 upwards
+                fFactor = pow(q,n);
+                if (fFactor > ::std::numeric_limits<double>::min())
+                {
+                    double fSum = fFactor;
+                    sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                    for (i = 0; i < max && fSum < alpha; i++)
+                    {
+                        fFactor *= (n-i)/(i+1)*p/q;
+                        fSum += fFactor;
+                    }
+                    PushDouble(i);
+                }
                 else
+                {
+                    // accumulate BinomDist until accumulated BinomDist reaches alpha
+                    double fSum = 0.0, x;
+                    sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                    for (i = 0; i < max && fSum < alpha; i++)
+                    {
+                        x = GetBetaDistPDF( p, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
+                        if ( !nGlobalError )
+                        {
+                            fSum += x;
+                        }
+                        else
+                        {
+                            PushNoValue();
+                            return;
+                        }
+                    }
+                    PushDouble( i - 1 );
+                }
+            }
+            else
+            {
+                // work from n backwards
+                fFactor = pow(p, n);
+                if (fFactor > ::std::numeric_limits<double>::min())
                 {
                     double fSum = 1.0 - fFactor;
                     sal_uInt32 max = static_cast<sal_uInt32> (n), i;
@@ -1401,17 +1436,27 @@ void ScInterpreter::ScCritBinom()
                     }
                     PushDouble(n-i);
                 }
-            }
-            else
-            {
-                double fSum = fFactor;
-                sal_uInt32 max = static_cast<sal_uInt32> (n), i;
-                for (i = 0; i < max && fSum < alpha; i++)
+                else
                 {
-                    fFactor *= (n-i)/(i+1)*p/q;
-                    fSum += fFactor;
+                    // accumulate BinomDist until accumulated BinomDist reaches alpha
+                    double fSum = 0.0, x;
+                    sal_uInt32 max = static_cast<sal_uInt32> (n), i;
+                    alpha = 1 - alpha;
+                    for (i = 0; i < max && fSum < alpha; i++)
+                    {
+                        x = GetBetaDistPDF( q, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
+                        if ( !nGlobalError )
+                        {
+                            fSum += x;
+                        }
+                        else
+                        {
+                            PushNoValue();
+                            return;
+                        }
+                    }
+                    PushDouble( n - i + 1 );
                 }
-                PushDouble(i);
             }
         }
     }
