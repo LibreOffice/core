@@ -236,7 +236,7 @@ bool sha512(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
     if (status != SECSuccess)
         return false;
 
-    sal_uInt32 outputLength = 0;
+    unsigned int outputLength = 0;
 
     status = PK11_DigestFinal(mContext, &output[0], &outputLength, SHA512_LENGTH);
     if (status != SECSuccess || outputLength != SHA512_LENGTH)
