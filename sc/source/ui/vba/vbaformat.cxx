@@ -785,7 +785,7 @@ ScVbaFormat<Ifc1>::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = OUString("ooo.vba.excel.Format" );
+                aServiceNames[ 0 ] = "ooo.vba.excel.Format";
         }
         return aServiceNames;
 }

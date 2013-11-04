@@ -67,9 +67,9 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow)
 {
     // Defaults to the old separator values.
-    rSepArg = OUString(";");
-    rSepArrayCol = OUString(";");
-    rSepArrayRow = OUString("|");
+    rSepArg = ";";
+    rSepArrayCol = ";";
+    rSepArrayRow = "|";
 
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
@@ -108,12 +108,12 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
         // if the decimal and list separators are equal, set the
         // parameter separator to be ';', unless they are both
         // semicolon in which case don't change the decimal separator.
-        rSepArg = OUString(";");
+        rSepArg = ";";
 
-    rSepArrayCol = OUString(",");
+    rSepArrayCol = ",";
     if (cDecSep == sal_Unicode(','))
-        rSepArrayCol = OUString(".");
-    rSepArrayRow = OUString(";");
+        rSepArrayCol = ".";
+    rSepArrayRow = ";";
 }
 
 const LocaleDataWrapper& ScFormulaOptions::GetLocaleDataWrapper()

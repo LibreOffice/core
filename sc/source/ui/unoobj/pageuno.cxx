@@ -59,8 +59,7 @@ uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
     uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = OUString("com.sun.star.sheet.SpreadsheetDrawPage");
+    aRet[0] = "com.sun.star.sheet.SpreadsheetDrawPage";
     return aRet;
 }
 

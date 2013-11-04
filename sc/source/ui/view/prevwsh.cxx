@@ -957,7 +957,7 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
         pSeq[0].Value <<= sBuffer.makeStringAndClear();
         pSeq[1].Name = OUString(SC_ZOOMVALUE);
         pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());
-        pSeq[2].Name = OUString("PageNumber");
+        pSeq[2].Name = "PageNumber";
         pSeq[2].Value <<= pPreview->GetPageNo();
     }
 }

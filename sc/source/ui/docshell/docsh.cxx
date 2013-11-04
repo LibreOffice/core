@@ -198,7 +198,7 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
         *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE : SOT_FORMATSTR_ID_STARCALC_8;
-        *pFullTypeName  = OUString("calc8");
+        *pFullTypeName  = "calc8";
         *pShortTypeName = ScResId(SCSTR_SHORT_SCDOC_NAME).toString();
     }
     else
@@ -832,14 +832,14 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             uno::Reference< frame::XStorable > xStor( GetModel(), uno::UNO_QUERY_THROW );
                                             // TODO/LATER: More entries from the MediaDescriptor might be interesting for the merge
                                             uno::Sequence< beans::PropertyValue > aValues(1);
-                                            aValues[0].Name = OUString( "FilterName");
+                                            aValues[0].Name = "FilterName";
                                             aValues[0].Value <<= OUString( GetMedium()->GetFilter()->GetFilterName() );
 
                                             SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
                                             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
                                             {
                                                 aValues.realloc( 2 );
-                                                aValues[1].Name = OUString("Password");
+                                                aValues[1].Name = "Password";
                                                 aValues[1].Value <<= pPasswordItem->GetValue();
                                             }
 
@@ -1908,7 +1908,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         switch ( eType )
         {
             case CELLTYPE_NONE:
-                aString = OUString();
+                aString = "";
                 bString = false;
                 break;
             case CELLTYPE_FORMULA :
@@ -1992,7 +1992,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 break;
             default:
                 OSL_FAIL( "ScDocShell::AsciiSave: unknown CellType" );
-                aString = OUString();
+                aString = "";
                 bString = false;
         }
 

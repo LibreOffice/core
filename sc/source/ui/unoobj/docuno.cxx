@@ -238,7 +238,7 @@ ScPrintUIOptions::ScPrintUIOptions()
     m_aUIProperties.realloc(nNumProps);
 
     // load the writer PrinterOptions into the custom tab
-    m_aUIProperties[nIdx].Name = OUString("OptionsUIFile");
+    m_aUIProperties[nIdx].Name = "OptionsUIFile";
     m_aUIProperties[nIdx++].Value <<= OUString("modules/scalc/ui/printeroptions.ui");
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
@@ -265,13 +265,13 @@ ScPrintUIOptions::ScPrintUIOptions()
     // create a choice for the content to create
     uno::Sequence< OUString > aChoices( 3 ), aHelpIds( 3 ), aWidgetIds( 3 );
     aChoices[0] = aStrings.GetString( 3 );
-    aHelpIds[0] = OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" );
+    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
     aWidgetIds[0] = "printallsheets";
     aChoices[1] = aStrings.GetString( 4 );
-    aHelpIds[1] = OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" );
+    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
     aWidgetIds[1] = "printselectedsheets";
     aChoices[2] = aStrings.GetString( 5 );
-    aHelpIds[2] = OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" );
+    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
     aWidgetIds[2] = "printselectedcells";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds, "PrintContent",
@@ -289,10 +289,10 @@ ScPrintUIOptions::ScPrintUIOptions()
     aHelpIds.realloc( 2 );
     aWidgetIds.realloc( 2 );
     aChoices[0] = aStrings.GetString( 7 );
-    aHelpIds[0] = OUString( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0" );
+    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0";
     aWidgetIds[0] = "printallpages";
     aChoices[1] = aStrings.GetString( 8 );
-    aHelpIds[1] = OUString( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1" );
+    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1";
     aWidgetIds[1] = "printpages";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds,

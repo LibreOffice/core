@@ -40,12 +40,12 @@ MSOExcelCommandConvertor::MSOExcelCommandConvertor()
 /*
     // mso command id to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-    msoToOOcmd[ 0x20b ] = OUString(".uno:CloseDoc");
-    msoToOOcmd[ 0x50 ] = OUString(".uno:Open");
+    msoToOOcmd[ 0x20b ] = ".uno:CloseDoc";
+    msoToOOcmd[ 0x50 ] = ".uno:Open";
 
    // mso tcid to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-   tcidToOOcmd[ 0x9d9 ] = OUString(".uno:Print");
+   tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
 */
 }
 

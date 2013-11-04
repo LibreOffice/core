@@ -300,7 +300,7 @@ ScVbaWorkbook::SaveCopyAs( const OUString& sFileName ) throw ( uno::RuntimeExcep
     osl::FileBase::getFileURLFromSystemPath( sFileName, aURL );
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
     uno::Sequence<  beans::PropertyValue > storeProps(1);
-    storeProps[0].Name = OUString( "FilterName" );
+    storeProps[0].Name = "FilterName";
     storeProps[0].Value <<= OUString( "MS Excel 97" );
     xStor->storeToURL( aURL, storeProps );
 }
@@ -391,7 +391,7 @@ ScVbaWorkbook::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Workbook" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.Workbook";
     }
     return aServiceNames;
 }

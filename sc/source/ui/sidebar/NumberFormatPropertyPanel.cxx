@@ -154,7 +154,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
 {
     OUString      aFormat;
-    OUString      sBreak = OUString(",");
+    OUString      sBreak = ",";
     bool          bThousand     =    mpBtnThousand->IsEnabled()
         && mpBtnThousand->IsChecked();
     bool          bNegRed       =    mpBtnNegRed->IsEnabled()
@@ -304,7 +304,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 }*/
                 sal_uInt16 aLen = aCode.getLength();
                 OUString* sFormat = new OUString[4];
-                OUString  sTmpStr = OUString();
+                OUString  sTmpStr = "";
                 sal_uInt16 nCount = 0;
                 sal_uInt16 nStrCount = 0;
                 while( nCount < aLen )
@@ -313,7 +313,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     if(cChar == sal_Unicode(','))
                     {
                         sFormat[nStrCount] = sTmpStr;
-                        sTmpStr = OUString();
+                        sTmpStr = "";
                         nStrCount++;
                     }
                     else

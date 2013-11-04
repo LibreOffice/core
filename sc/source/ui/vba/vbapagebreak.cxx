@@ -100,7 +100,7 @@ ScVbaPageBreak<Ifc1>::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.PageBreak" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.PageBreak";
     }
     return aServiceNames;
 }
@@ -121,7 +121,7 @@ ScVbaHPageBreak::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.HPageBreak" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.HPageBreak";
     }
     return aServiceNames;
 }
@@ -154,7 +154,7 @@ ScVbaVPageBreak::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString( "ooo.vba.excel.VPageBreak" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.VPageBreak";
     }
     return aServiceNames;
 }

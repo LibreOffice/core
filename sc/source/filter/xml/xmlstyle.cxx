@@ -734,9 +734,9 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                     aOperator == sheet::ConditionOperator_NOT_BETWEEN)
                                                 {
                                                     if (aOperator == sheet::ConditionOperator_BETWEEN)
-                                                        sCondition = OUString("cell-content-is-between(");
+                                                        sCondition = "cell-content-is-between(";
                                                     else
-                                                        sCondition = OUString("cell-content-is-not-between(");
+                                                        sCondition = "cell-content-is-not-between(";
                                                     sCondition += xSheetCondition->getFormula1();
                                                     sCondition += ",";
                                                     sCondition += xSheetCondition->getFormula2();
@@ -744,7 +744,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 }
                                                 else
                                                 {
-                                                    sCondition = OUString("cell-content()");
+                                                    sCondition = "cell-content()";
                                                     switch (aOperator)
                                                     {
                                                         case sheet::ConditionOperator_LESS:

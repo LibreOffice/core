@@ -268,7 +268,7 @@ ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
 {
     uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxContext), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aMediaDesc(1);
-    aMediaDesc[ 0 ].Name = OUString("URL" );
+    aMediaDesc[ 0 ].Name = "URL";
     aMediaDesc[ 0 ].Value <<= rFileName;
     OUString sType = xTypeDetect->queryTypeByDescriptor( aMediaDesc, sal_True );
     return sType;
@@ -304,7 +304,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         // 6 Custom character (see the Delimiter argument
         // no format means use the current delimiter
         sProps.realloc( 3 );
-        sProps[ nIndex ].Name = OUString("FilterOptions" );
+        sProps[ nIndex ].Name = "FilterOptions";
         sal_Int16 delims[] = { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };
         static OUString sRestOfFormat(",34,0,1" );
 
@@ -343,11 +343,11 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
 
         sFormat = OUString::number( nDelim ) + sRestOfFormat;
         sProps[ nIndex++ ].Value <<= sFormat;
-        sProps[ nIndex ].Name = OUString("FilterName");
+        sProps[ nIndex ].Name = "FilterName";
         sProps[ nIndex++ ].Value <<= OUString( "Text - txt - csv (StarCalc)" );
         // Ensure WORKAROUND_CSV_TXT_BUG_i60158 gets called in typedetection.cxx so
         // csv is forced for deep detected 'writerxxx' types
-        sProps[ nIndex ].Name = OUString("DocumentService");
+        sProps[ nIndex ].Name = "DocumentService";
         sProps[ nIndex ].Value <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
     }
     else if ( !isSpreadSheetFile( sType ) )
@@ -374,7 +374,7 @@ ScVbaWorkbooks::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = OUString("ooo.vba.excel.Workbooks");
+        sNames[0] = "ooo.vba.excel.Workbooks";
     }
     return sNames;
 }

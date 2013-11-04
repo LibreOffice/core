@@ -1134,7 +1134,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     OUString aCode = ((const SfxStringItem*)pItem)->GetValue();
                     sal_uInt16 aLen = aCode.getLength();
                     OUString* sFormat = new OUString[4];
-                    OUString sTmpStr = OUString();
+                    OUString sTmpStr = "";
                     sal_uInt16 nCount(0);
                     sal_uInt16 nStrCount(0);
 
@@ -1145,7 +1145,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                         if(cChar == sal_Unicode(','))
                         {
                             sFormat[nStrCount] = sTmpStr;
-                            sTmpStr = OUString();
+                            sTmpStr = "";
                             nStrCount++;
                         }
                         else
@@ -2451,7 +2451,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 
                         pFormatter->GetFormatSpecialInfo(nNumberFormat,bThousand, bNegRed, nPrecision, nLeadZeroes);
                         OUString aFormat;
-                        static OUString sBreak = OUString(",");
+                        static OUString sBreak = ",";
                         const OUString sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
                         const OUString sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
                         const OUString sPrecision = OUString::number(nPrecision);

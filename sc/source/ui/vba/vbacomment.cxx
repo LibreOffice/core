@@ -225,7 +225,7 @@ ScVbaComment::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.ScVbaComment" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.ScVbaComment";
     }
     return aServiceNames;
 }

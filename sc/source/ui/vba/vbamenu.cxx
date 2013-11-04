@@ -60,7 +60,7 @@ ScVbaMenu::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Menu" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.Menu";
     }
     return aServiceNames;
 }

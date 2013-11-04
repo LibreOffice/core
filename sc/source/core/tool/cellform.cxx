@@ -58,7 +58,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
         {
             double nValue = rCell.mfValue;
             if (!bNullVals && nValue == 0.0)
-                rString = OUString();
+                rString = "";
             else
             {
                 if( eForceTextFmt == ftCheck )
@@ -96,7 +96,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                         (!pFCell->GetDocument()->GetMacroInterpretLevel()
                         || pFCell->IsRunning()) )
                 {
-                    rString = OUString("...");
+                    rString = "...";
                 }
                 else
                 {
@@ -105,12 +105,12 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                     if (nErrCode != 0)
                         rString = ScGlobal::GetErrorString(nErrCode);
                     else if ( pFCell->IsEmptyDisplayedAsString() )
-                        rString = OUString();
+                        rString = "";
                     else if ( pFCell->IsValue() )
                     {
                         double fValue = pFCell->GetValue();
                         if ( !bNullVals && fValue == 0.0 )
-                            rString = OUString();
+                            rString = "";
                         else if ( pFCell->IsHybridValueCell() )
                             rString = pFCell->GetString().getString();
                         else
@@ -126,7 +126,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
         }
         break;
         default:
-            rString = OUString();
+            rString = "";
             break;
     }
 }
@@ -157,7 +157,7 @@ OUString ScCellFormat::GetString(
         case CELLTYPE_VALUE:
         {
             double nValue = rDoc.GetValue(rPos);
-            if (!bNullVals && nValue == 0.0) aString = OUString();
+            if (!bNullVals && nValue == 0.0) aString = "";
             else
             {
                 if (eForceTextFmt == ftCheck)
@@ -193,18 +193,18 @@ OUString ScCellFormat::GetString(
                     (!pFCell->GetDocument()->GetMacroInterpretLevel()
                      || pFCell->IsRunning()))
                 {
-                    aString = OUString("...");
+                    aString = "...";
                 }
                 else
                 {
                     sal_uInt16 nErrCode = pFCell->GetErrCode();
 
                     if (nErrCode != 0) aString = ScGlobal::GetErrorString(nErrCode);
-                    else if (pFCell->IsEmptyDisplayedAsString()) aString = OUString();
+                    else if (pFCell->IsEmptyDisplayedAsString()) aString = "";
                     else if (pFCell->IsValue())
                     {
                         double fValue = pFCell->GetValue();
-                        if (!bNullVals && fValue == 0.0) aString = OUString();
+                        if (!bNullVals && fValue == 0.0) aString = "";
                         else if (pFCell->IsHybridValueCell()) aString = pFCell->GetString().getString();
                         else rFormatter.GetOutputString(fValue, nFormat, aString, ppColor, bUseStarFormat);
                     }

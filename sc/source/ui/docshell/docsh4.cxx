@@ -2345,7 +2345,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         SC_MOD()->SetInSharedDocLoading( true );
         uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence < beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString( "Hidden" );
+        aArgs[0].Name = "Hidden";
         aArgs[0].Value <<= sal_True;
 
         if ( GetMedium() )
@@ -2354,7 +2354,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
             {
                 aArgs.realloc( 2 );
-                aArgs[1].Name = OUString("Password");
+                aArgs[1].Name = "Password";
                 aArgs[1].Value <<= pPasswordItem->GetValue();
             }
         }

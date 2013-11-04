@@ -520,7 +520,7 @@ ScXMLExport::ScXMLExport(
         // This name is reserved for the external ref cache tables.  This
         // should not conflict with user-defined styles since this name is
         // used for a table style which is not available in the UI.
-        sExternalRefTabStyleName = OUString("ta_extref");
+        sExternalRefTabStyleName = "ta_extref";
         GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_TABLE, sExternalRefTabStyleName);
 
         sAttrName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NAME));
@@ -4721,7 +4721,7 @@ void ScXMLExport::WriteConsolidation()
             ScXMLConverter::GetStringFromFunction( sStrData, pCons->eFunction );
             AddAttribute( XML_NAMESPACE_TABLE, XML_FUNCTION, sStrData );
 
-            sStrData = OUString();
+            sStrData = "";
             for( sal_Int32 nIndex = 0; nIndex < pCons->nDataAreaCount; ++nIndex )
                 ScRangeStringConverter::GetStringFromArea( sStrData, *pCons->ppDataAreas[ nIndex ], pDoc, FormulaGrammar::CONV_OOO, true );
             AddAttribute( XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE_ADDRESSES, sStrData );
@@ -4768,39 +4768,39 @@ void ScXMLExport::GetChangeTrackViewSettings(uno::Sequence<beans::PropertyValue>
             beans::PropertyValue* pChangeProps(aChangeProps.getArray());
             if (pChangeProps)
             {
-                pChangeProps[SC_SHOW_CHANGES].Name = OUString("ShowChanges");
+                pChangeProps[SC_SHOW_CHANGES].Name = "ShowChanges";
                 pChangeProps[SC_SHOW_CHANGES].Value <<= pViewSettings->ShowChanges();
-                pChangeProps[SC_SHOW_ACCEPTED_CHANGES].Name = OUString("ShowAcceptedChanges");
+                pChangeProps[SC_SHOW_ACCEPTED_CHANGES].Name = "ShowAcceptedChanges";
                 pChangeProps[SC_SHOW_ACCEPTED_CHANGES].Value <<= pViewSettings->IsShowAccepted();
-                pChangeProps[SC_SHOW_REJECTED_CHANGES].Name = OUString("ShowRejectedChanges");
+                pChangeProps[SC_SHOW_REJECTED_CHANGES].Name = "ShowRejectedChanges";
                 pChangeProps[SC_SHOW_REJECTED_CHANGES].Value <<= pViewSettings->IsShowRejected();
-                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME].Name = OUString("ShowChangesByDatetime");
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME].Name = "ShowChangesByDatetime";
                 pChangeProps[SC_SHOW_CHANGES_BY_DATETIME].Value <<= pViewSettings->HasDate();
-                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_MODE].Name = OUString("ShowChangesByDatetimeMode");
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_MODE].Name = "ShowChangesByDatetimeMode";
                 pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_MODE].Value <<= static_cast<sal_Int16>(pViewSettings->GetTheDateMode());
                 util::DateTime aDateTime;
                 ScXMLConverter::ConvertCoreToAPIDateTime(pViewSettings->GetTheFirstDateTime(), aDateTime);
-                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME].Name = OUString("ShowChangesByDatetimeFirstDatetime");
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME].Name = "ShowChangesByDatetimeFirstDatetime";
                 pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_FIRST_DATETIME].Value <<= aDateTime;
                 ScXMLConverter::ConvertCoreToAPIDateTime(pViewSettings->GetTheLastDateTime(), aDateTime);
-                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME].Name = OUString("ShowChangesByDatetimeSecondDatetime");
+                pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME].Name = "ShowChangesByDatetimeSecondDatetime";
                 pChangeProps[SC_SHOW_CHANGES_BY_DATETIME_SECOND_DATETIME].Value <<= aDateTime;
-                pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR].Name = OUString("ShowChangesByAuthor");
+                pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR].Name = "ShowChangesByAuthor";
                 pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR].Value <<= pViewSettings->HasAuthor();
-                pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR_NAME].Name = OUString("ShowChangesByAuthorName");
+                pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR_NAME].Name = "ShowChangesByAuthorName";
                 pChangeProps[SC_SHOW_CHANGES_BY_AUTHOR_NAME].Value <<= OUString (pViewSettings->GetTheAuthorToShow());
-                pChangeProps[SC_SHOW_CHANGES_BY_COMMENT].Name = OUString("ShowChangesByComment");
+                pChangeProps[SC_SHOW_CHANGES_BY_COMMENT].Name = "ShowChangesByComment";
                 pChangeProps[SC_SHOW_CHANGES_BY_COMMENT].Value <<= pViewSettings->HasComment();
-                pChangeProps[SC_SHOW_CHANGES_BY_COMMENT_TEXT].Name = OUString("ShowChangesByCommentText");
+                pChangeProps[SC_SHOW_CHANGES_BY_COMMENT_TEXT].Name = "ShowChangesByCommentText";
                 pChangeProps[SC_SHOW_CHANGES_BY_COMMENT_TEXT].Value <<= OUString (pViewSettings->GetTheComment());
-                pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Name = OUString("ShowChangesByRanges");
+                pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Name = "ShowChangesByRanges";
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Value <<= pViewSettings->HasRange();
                 OUString sRangeList;
                 ScRangeStringConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), GetDocument(), FormulaGrammar::CONV_OOO);
-                pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Name = OUString("ShowChangesByRangesList");
+                pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Name = "ShowChangesByRangesList";
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Value <<= sRangeList;
 
-                pProps[nChangePos].Name = OUString("TrackedChangesViewSettings");
+                pProps[nChangePos].Name = "TrackedChangesViewSettings";
                 pProps[nChangePos].Value <<= aChangeProps;
             }
         }
@@ -4823,13 +4823,13 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
                 {
                     Rectangle aRect(pEmbeddedObj->GetVisArea());
                     sal_uInt16 i(0);
-                    pProps[i].Name = OUString("VisibleAreaTop");
+                    pProps[i].Name = "VisibleAreaTop";
                     pProps[i].Value <<= static_cast<sal_Int32>(aRect.getY());
-                    pProps[++i].Name = OUString("VisibleAreaLeft");
+                    pProps[++i].Name = "VisibleAreaLeft";
                     pProps[i].Value <<= static_cast<sal_Int32>(aRect.getX());
-                    pProps[++i].Name = OUString("VisibleAreaWidth");
+                    pProps[++i].Name = "VisibleAreaWidth";
                     pProps[i].Value <<= static_cast<sal_Int32>(aRect.getWidth());
-                    pProps[++i].Name = OUString("VisibleAreaHeight");
+                    pProps[++i].Name = "VisibleAreaHeight";
                     pProps[i].Value <<= static_cast<sal_Int32>(aRect.getHeight());
                 }
             }
@@ -4884,19 +4884,19 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
                 rProps.realloc(nCount + nPropsToAdd);
                 if (!aTrackedChangesKey.isEmpty())
                 {
-                    rProps[nCount].Name = OUString("TrackedChangesProtectionKey");
+                    rProps[nCount].Name = "TrackedChangesProtectionKey";
                     rProps[nCount].Value <<= aTrackedChangesKey.makeStringAndClear();
                     ++nCount;
                 }
                 if( bVBACompat )
                 {
-                    rProps[nCount].Name = OUString("VBACompatibilityMode");
+                    rProps[nCount].Name = "VBACompatibilityMode";
                     rProps[nCount].Value <<= bVBACompat;
                     ++nCount;
                 }
                 if( xCodeNameAccess.is() )
                 {
-                    rProps[nCount].Name = OUString("ScriptConfiguration");
+                    rProps[nCount].Name = "ScriptConfiguration";
                     rProps[nCount].Value <<= xCodeNameAccess;
                     ++nCount;
                 }

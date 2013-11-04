@@ -471,7 +471,7 @@ void ScXMLContentValidationContext::SetErrorMessage(const OUString& sTitle, cons
 
 void ScXMLContentValidationContext::SetErrorMacro(const sal_Bool bExecute)
 {
-    sErrorMessageType = OUString("macro");
+    sErrorMessageType = "macro";
     bDisplayError = bExecute;
 }
 

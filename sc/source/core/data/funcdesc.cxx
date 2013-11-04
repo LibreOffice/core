@@ -453,18 +453,18 @@ ScFunctionList::ScFunctionList() :
     sal_uInt16 nNextId = SC_OPCODE_LAST_OPCODE_ID + 1; // FuncID for AddIn functions
 
     // Interpretation of AddIn list
-    OUString aDefArgNameValue   = OUString("value");
-    OUString aDefArgNameString  = OUString("string");
-    OUString aDefArgNameValues  = OUString("values");
-    OUString aDefArgNameStrings = OUString("strings");
-    OUString aDefArgNameCells   = OUString("cells");
-    OUString aDefArgNameNone    = OUString("none");
-    OUString aDefArgDescValue   = OUString("a value");
-    OUString aDefArgDescString  = OUString("a string");
-    OUString aDefArgDescValues  = OUString("array of values");
-    OUString aDefArgDescStrings = OUString("array of strings");
-    OUString aDefArgDescCells   = OUString("range of cells");
-    OUString aDefArgDescNone    = OUString("none");
+    OUString aDefArgNameValue   = "value";
+    OUString aDefArgNameString  = "string";
+    OUString aDefArgNameValues  = "values";
+    OUString aDefArgNameStrings = "strings";
+    OUString aDefArgNameCells   = "cells";
+    OUString aDefArgNameNone    = "none";
+    OUString aDefArgDescValue   = "a value";
+    OUString aDefArgDescString  = "a string";
+    OUString aDefArgDescValues  = "array of values";
+    OUString aDefArgDescStrings = "array of strings";
+    OUString aDefArgDescCells   = "range of cells";
+    OUString aDefArgDescNone    = "none";
 
     OUString aArgName, aArgDesc;
     const FuncCollection& rFuncColl = *ScGlobal::GetFuncCollection();

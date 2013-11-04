@@ -698,7 +698,7 @@ void
 ScVbaWorksheet::CheckSpelling( const uno::Any& /*CustomDictionary*/,const uno::Any& /*IgnoreUppercase*/,const uno::Any& /*AlwaysSuggest*/, const uno::Any& /*SpellingLang*/ ) throw (uno::RuntimeException)
 {
     // #TODO# #FIXME# unused params above, can we do anything with those
-    OUString url = OUString( ".uno:SpellDialog");
+    OUString url = ".uno:SpellDialog";
     uno::Reference< frame::XModel > xModel( getModel() );
     dispatchRequests(xModel,url);
 }
@@ -1051,7 +1051,7 @@ ScVbaWorksheet::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Worksheet" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.Worksheet";
     }
     return aServiceNames;
 }

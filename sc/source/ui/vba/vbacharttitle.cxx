@@ -39,7 +39,7 @@ ScVbaChartTitle::getServiceNames()
     {
         uno::Sequence< OUString > BaseServiceNames = ChartTitleBase::getServiceNames();
         aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Chart" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.Chart";
         for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
             aServiceNames[ index ] = BaseServiceNames[ index ];
     }

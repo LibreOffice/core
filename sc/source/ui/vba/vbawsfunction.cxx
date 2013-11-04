@@ -304,7 +304,7 @@ ScVbaWSFunction::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.WorksheetFunction" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.WorksheetFunction";
     }
     return aServiceNames;
 }

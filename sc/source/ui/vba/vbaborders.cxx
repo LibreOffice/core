@@ -154,7 +154,7 @@ protected:
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = OUString("ooo.vba.excel.Border" );
+            aServiceNames[ 0 ] = "ooo.vba.excel.Border";
         }
         return aServiceNames;
     }
@@ -559,7 +559,7 @@ ScVbaBorders::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Borders" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.Borders";
     }
     return aServiceNames;
 }

@@ -399,11 +399,11 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     aName = pDocHierarchItem->GetValue();
             }
             else
-                aName = OUString( "dummyObjectName" );
+                aName = "dummyObjectName";
 
             if( !aName.isEmpty() )
             {
-                sPropName = OUString("StreamRelPath");
+                sPropName = "StreamRelPath";
                 xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
             }
         }
@@ -777,7 +777,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     uno::Sequence<beans::PropertyValue> aDescriptor(1);
     beans::PropertyValue* pProps = aDescriptor.getArray();
-    pProps[0].Name = OUString( "FileName" );
+    pProps[0].Name = "FileName";
     pProps[0].Value <<= sFileName;
 
     /** property map for export info set */
@@ -835,7 +835,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
             if( !aName.isEmpty() )
             {
-                sPropName = OUString("StreamRelPath");
+                sPropName = "StreamRelPath";
                 xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
             }
         }

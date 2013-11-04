@@ -1572,7 +1572,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
             sal_Int32 nLength = aSeq.getLength();
             if ( nLength == 0 )
             {
-                aSelectedPage = OUString();
+                aSelectedPage = "";
                 bHasSelectedPage = false;
                 bDone = sal_True;
             }
@@ -1862,13 +1862,13 @@ OUString SAL_CALL ScDPHierarchy::getName() throw(uno::RuntimeException)
     switch (nHier)
     {
         case SC_DAPI_HIERARCHY_FLAT:
-            aRet = OUString("flat");
+            aRet = "flat";
             break;  //! name ???????
         case SC_DAPI_HIERARCHY_QUARTER:
-            aRet = OUString("Quarter");
+            aRet = "Quarter";
             break;  //! name ???????
         case SC_DAPI_HIERARCHY_WEEK:
-            aRet = OUString("Week");
+            aRet = "Week";
             break;  //! name ???????
         default:
             OSL_FAIL( "ScDPHierarchy::getName: unexpected hierarchy" );
@@ -2156,16 +2156,16 @@ OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException)
             switch ( nLev )
             {
                 case SC_DAPI_LEVEL_YEAR:
-                    aRet = OUString("Year");
+                    aRet = "Year";
                     break;
                 case SC_DAPI_LEVEL_QUARTER:
-                    aRet = OUString("Quarter");
+                    aRet = "Quarter";
                     break;
                 case SC_DAPI_LEVEL_MONTH:
-                    aRet = OUString("Month");
+                    aRet = "Month";
                     break;
                 case SC_DAPI_LEVEL_DAY:
-                    aRet = OUString("Day");
+                    aRet = "Day";
                     break;
                 default:
                     OSL_FAIL( "ScDPLevel::getName: unexpected level" );
@@ -2177,13 +2177,13 @@ OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException)
             switch ( nLev )
             {
                 case SC_DAPI_LEVEL_YEAR:
-                    aRet = OUString("Year");
+                    aRet = "Year";
                     break;
                 case SC_DAPI_LEVEL_WEEK:
-                    aRet = OUString("Week");
+                    aRet = "Week";
                     break;
                 case SC_DAPI_LEVEL_WEEKDAY:
-                    aRet = OUString("Weekday");
+                    aRet = "Weekday";
                     break;
                 default:
                     OSL_FAIL( "ScDPLevel::getName: unexpected level" );

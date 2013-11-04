@@ -39,7 +39,7 @@ ScVbaAxisTitle::getServiceNames()
     {
         uno::Sequence< OUString > BaseServiceNames = AxisTitleBase::getServiceNames();
         aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.AxisTitle" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.AxisTitle";
         for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
             aServiceNames[ index ] = BaseServiceNames[ index ];
     }

@@ -161,7 +161,7 @@ ScVbaFormatCondition::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = OUString("ooo.vba.excel.FormatCondition" );
+        aServiceNames[ 0 ] = "ooo.vba.excel.FormatCondition";
     }
     return aServiceNames;
 }

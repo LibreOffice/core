@@ -279,9 +279,8 @@ uno::Sequence< OUString> SAL_CALL
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = OUString("com.sun.star.sheet.AccessibleCell");
+    aSequence[nOldSize] = "com.sun.star.sheet.AccessibleCell";
 
     return aSequence;
 }

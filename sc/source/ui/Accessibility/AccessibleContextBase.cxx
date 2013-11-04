@@ -494,8 +494,8 @@ uno::Sequence< OUString> SAL_CALL
     OUString* pServiceNames = aServiceNames.getArray();
     if (pServiceNames)
     {
-        pServiceNames[0] = OUString("com.sun.star.accessibility.Accessible");
-        pServiceNames[1] = OUString("com.sun.star.accessibility.AccessibleContext");
+        pServiceNames[0] = "com.sun.star.accessibility.Accessible";
+        pServiceNames[1] = "com.sun.star.accessibility.AccessibleContext";
     }
 
     return aServiceNames;
@@ -552,7 +552,7 @@ void ScAccessibleContextBase::ChangeName()
     aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.OldValue <<= msName;
 
-    msName = OUString(); // reset the name so it will be hold again
+    msName = ""; // reset the name so it will be hold again
     getAccessibleName(); // create the new name
 
     aEvent.NewValue <<= msName;
