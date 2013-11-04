@@ -133,7 +133,7 @@ OUString OTableController::getImplementationName_Static() throw( RuntimeExceptio
 Sequence< OUString> OTableController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.TableDesign");
+    aSupported[0] = "com.sun.star.sdb.TableDesign";
     return aSupported;
 }
 
@@ -446,7 +446,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     {
         if(!bAlter || bNew)
         {
-            m_sName = OUString();
+            m_sName = "";
             stopTableListening();
             m_xTable = NULL;
         }
@@ -1241,7 +1241,7 @@ void OTableController::alterColumns()
 
                     SQLException aNewException;
                     aNewException.Message = sError;
-                    aNewException.SQLState = OUString("S1000");
+                    aNewException.SQLState = "S1000";
                     aNewException.NextException = ::cppu::getCaughtException();
 
                     throw aNewException;

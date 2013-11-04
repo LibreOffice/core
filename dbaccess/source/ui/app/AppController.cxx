@@ -172,7 +172,7 @@ OUString OApplicationController::getImplementationName_Static() throw( RuntimeEx
 Sequence< OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.application.DefaultViewController");
+    aSupported[0] = "com.sun.star.sdb.application.DefaultViewController";
     return aSupported;
 }
 
@@ -1111,10 +1111,10 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         switch(_nId)
                         {
                             case SID_HELP_INDEX:
-                                aURL.Complete = OUString(".uno:HelpIndex");
+                                aURL.Complete = ".uno:HelpIndex";
                                 break;
                             case SID_OPENDOC:
-                                aURL.Complete = OUString(".uno:Open");
+                                aURL.Complete = ".uno:Open";
                                 break;
                         }
 
@@ -1655,16 +1655,16 @@ namespace
         switch(_eType)
         {
             case E_TABLE:
-                sToolbar = OUString("private:resource/toolbar/tableobjectbar");
+                sToolbar = "private:resource/toolbar/tableobjectbar";
                 break;
             case E_QUERY:
-                sToolbar = OUString("private:resource/toolbar/queryobjectbar");
+                sToolbar = "private:resource/toolbar/queryobjectbar";
                 break;
             case E_FORM:
-                sToolbar = OUString("private:resource/toolbar/formobjectbar");
+                sToolbar = "private:resource/toolbar/formobjectbar";
                 break;
             case E_REPORT:
-                sToolbar = OUString("private:resource/toolbar/reportobjectbar");
+                sToolbar = "private:resource/toolbar/reportobjectbar";
                 break;
             case E_NONE:
                 break;
@@ -2498,7 +2498,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     m_aAsyncDrop.nAction        = _rEvt.mnAction;
     m_aAsyncDrop.bError         = sal_False;
     m_aAsyncDrop.bHtml          = sal_False;
-    m_aAsyncDrop.aUrl           = OUString();
+    m_aAsyncDrop.aUrl           = "";
 
     // loop through the available formats and see what we can do ...
     // first we have to check if it is our own format, if not we have to copy the stream :-(

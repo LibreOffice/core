@@ -130,9 +130,9 @@ OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException
 Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(3);
-    aSupported[0] = OUString("com.sun.star.form.control.InteractionGridControl");
-    aSupported[1] = OUString("com.sun.star.form.control.GridControl");
-    aSupported[2] = OUString("com.sun.star.awt.UnoControl");
+    aSupported[0] = "com.sun.star.form.control.InteractionGridControl";
+    aSupported[1] = "com.sun.star.form.control.GridControl";
+    aSupported[2] = "com.sun.star.awt.UnoControl";
     return aSupported;
 }
 

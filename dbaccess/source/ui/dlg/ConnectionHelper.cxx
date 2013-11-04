@@ -608,7 +608,7 @@ DBG_NAME(OConnectionHelper)
             OUString sContentType;
             if ( INET_PROT_FILE == eProtocol )
             {
-                sContentType = OUString("application/vnd.sun.staroffice.fsys-folder");
+                sContentType = "application/vnd.sun.staroffice.fsys-folder";
                 // the file UCP currently does not support the ContentType property
             }
             else
@@ -619,7 +619,7 @@ DBG_NAME(OConnectionHelper)
 
             // the properties which need to be set on the new content
             Sequence< OUString > aNewDirectoryProperties(1);
-            aNewDirectoryProperties[0] = OUString("Title");
+            aNewDirectoryProperties[0] = "Title";
 
             // the values to be set
             Sequence< Any > aNewDirectoryAttributes(1);

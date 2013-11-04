@@ -1061,9 +1061,9 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
             {
                 com::sun::star::ucb::Command aCommand;
                 if ( m_ePreviewMode == E_DOCUMENT )
-                    aCommand.Name = OUString("preview");
+                    aCommand.Name = "preview";
                 else
-                    aCommand.Name = OUString("getDocumentInfo");
+                    aCommand.Name = "getDocumentInfo";
 
                 Any aPreview = xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
                 if ( m_ePreviewMode == E_DOCUMENT )

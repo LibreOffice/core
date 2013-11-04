@@ -647,7 +647,7 @@ namespace
                 OUString rFieldName = pEntryField->GetField();
                 if ( !rFieldName.isEmpty() && pEntryField->IsVisible() )
                 {
-                    aTmpStr = OUString();
+                    aTmpStr = "";
                     const OUString rAlias = pEntryField->GetAlias();
                     const OUString rFieldAlias = pEntryField->GetFieldAlias();
 
@@ -741,7 +741,7 @@ namespace
 
             for (sal_uInt16 i=0 ; i < nMaxCriteria ; i++)
             {
-                aHavingStr = aWhereStr = OUString();
+                aHavingStr = aWhereStr = "";
 
                 for(aIter = _rFieldList.begin();aIter != aEnd;++aIter)
                 {
@@ -762,9 +762,7 @@ namespace
                             bCritsOnAsterikWarning = sal_True;
                             continue;
                         }
-                        aWork = OUString();
-
-                        aWork += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
+                        aWork = quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
 
                         if ( (pEntryField->GetFunctionType() & (FKT_OTHER|FKT_NUMERIC)) || (aFieldName.toChar() == '*') )
                             aWork += aFieldName;
@@ -774,7 +772,7 @@ namespace
                         if ( pEntryField->isAggreateFunction() || pEntryField->IsGroupBy() )
                         {
                             if (aHavingStr.isEmpty())            // no more criteria
-                                aHavingStr += OUString('(');         // bracket
+                                aHavingStr += "(";               // bracket
                             else
                                 aHavingStr += C_AND;
 
@@ -782,9 +780,9 @@ namespace
                             {
                                 OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"No function name for aggregate given!");
                                 aHavingStr += pEntryField->GetFunction();
-                                aHavingStr += OUString('(');         // bracket
+                                aHavingStr += "(";              // bracket
                                 aHavingStr += aWork;
-                                aHavingStr += OUString(')');         // bracket
+                                aHavingStr += ")";             // bracket
                             }
                             else
                                 aHavingStr += aWork;
@@ -816,11 +814,11 @@ namespace
                         else
                         {
                             if ( aWhereStr.isEmpty() )           // no more criteria
-                                aWhereStr += OUString('(');          // bracket
+                                aWhereStr += "(";                // bracket
                             else
                                 aWhereStr += C_AND;
 
-                            aWhereStr += OUString(' ');
+                            aWhereStr += " ";
                             // aCriteria could have some german numbers so I have to be sure here
                             OUString aTmp = aCriteria;
                             OUString aErrorMsg;
@@ -850,7 +848,7 @@ namespace
                     else if ( !i && pEntryField->isCondition() )
                     {
                         if (aWhereStr.isEmpty())         // no more criteria
-                            aWhereStr += OUString('(');          // bracket
+                            aWhereStr += "(";            // bracket
                         else
                             aWhereStr += C_AND;
                         aWhereStr += pEntryField->GetField();
@@ -858,7 +856,7 @@ namespace
                 }
                 if (!aWhereStr.isEmpty())
                 {
-                    aWhereStr += OUString(')');                      // close bracket for the AND branch
+                    aWhereStr += ")";                          // close bracket for the AND branch
                     if (!rRetStr.isEmpty())                            // are there conditions on the field?
                         rRetStr.append(C_OR);
                     else                                        // open bracket for the OR branch
@@ -867,7 +865,7 @@ namespace
                 }
                 if (!aHavingStr.isEmpty())
                 {
-                    aHavingStr += OUString(')');                     // close bracket for the AND branch
+                    aHavingStr +=  ")";                        // close bracket for the AND branch
                     if (!rHavingStr.isEmpty())                         // are there conditions on the field?
                         rHavingStr.append(C_OR);
                     else                                        // Open bracket for the OR branch
@@ -955,9 +953,9 @@ namespace
                         aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
                         aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
                     }
-                    aWorkStr += OUString(' ');
+                    aWorkStr += " ";
                     aWorkStr += OUString( ";ASC;DESC" ).getToken( (sal_uInt16)eOrder, ';' );
-                    aWorkStr += OUString(',');
+                    aWorkStr += ",";
                 }
             }
 
@@ -974,8 +972,7 @@ namespace
                     eErrorCode = eStatementTooLong;
                 else
                 {
-                    _rsRet = OUString(" ORDER BY ");
-                    _rsRet += aWorkStr;
+                    _rsRet = " ORDER BY " + aWorkStr;
                 }
             }
         }
@@ -1017,7 +1014,7 @@ namespace
         {
             _rTableNames[sTabName] = sal_True;
             _rsTableListStr += sTabName;
-            _rsTableListStr += OUString(',');
+            _rsTableListStr += ",";
         }
     }
     OUString GenerateFromClause( const Reference< XConnection>& _xConnection,
@@ -1128,7 +1125,7 @@ namespace
             if(!pEntryTab->ExistsAConn())
             {
                 aTableListStr += BuildTable(_xConnection,pEntryTab);
-                aTableListStr += OUString(',');
+                aTableListStr += ",";
             }
         }
 
@@ -1191,7 +1188,7 @@ namespace
                     {
                         aGroupByNames.insert(::std::map< OUString,bool>::value_type(sGroupByPart,true));
                         aGroupByStr += sGroupByPart;
-                        aGroupByStr += OUString(',');
+                        aGroupByStr += ",";
                     }
                 }
             }
@@ -2222,7 +2219,7 @@ namespace
                                 {   // we got an aggregate function but without column name inside
                                     // so we set the whole argument of the function as field name
                                     nFunctionType |= FKT_NUMERIC;
-                                    sFieldName = OUString();
+                                    sFieldName = "";
                                     pParamRef->parseNodeToStr(  sFieldName,
                                                         xConnection,
                                                         &rController.getParser().getContext(),
@@ -2759,7 +2756,7 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
         if (bAllTables || (pCurrentWin->GetAliasName() == sAliasName))
         {
             strCurrentPrefix = pCurrentWin->GetAliasName();
-            strCurrentPrefix += OUString('.');
+            strCurrentPrefix += ".";
 
             pCurrentWin->EnumValidFields(aFields);
 

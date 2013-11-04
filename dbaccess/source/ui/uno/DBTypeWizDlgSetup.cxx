@@ -85,7 +85,7 @@ OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeExce
 ::comphelper::StringSequence ODBTypeWizDialogSetup::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.DatabaseWizardDialog");
+    aSupported[0] = "com.sun.star.sdb.DatabaseWizardDialog";
     return aSupported;
 }
 

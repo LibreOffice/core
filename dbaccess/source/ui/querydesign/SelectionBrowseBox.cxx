@@ -678,7 +678,7 @@ sal_Bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRe
         if (pParseNode == NULL)
             pParseNode = rParser.parseTree( devnull, _sFieldName, false );
         if (pParseNode != NULL && SQL_ISRULE(pParseNode, select_statement))
-            _sFieldName = OUString("(") + _sFieldName + ")";
+            _sFieldName = "(" + _sFieldName + ")";
     }
 
     OSQLParseNode* pParseNode = NULL;
@@ -1076,7 +1076,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     }
                     else
                     {
-                        sFunctionName = OUString();
+                        sFunctionName = "";
                         pEntry->SetFunction(OUString());
                         pEntry->SetFunctionType(pEntry->GetFunctionType() & ~FKT_AGGREGATE );
                     }

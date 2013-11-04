@@ -150,11 +150,11 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                 {
                     Sequence< Any > aValues(2);
                     PropertyValue aValue;
-                    aValue.Name = OUString("ResourceName");
+                    aValue.Name = "ResourceName";
                     aValue.Value <<= sSubFolder;
                     aValues[0] <<= aValue;
 
-                    aValue.Name = OUString("ResourceType");
+                    aValue.Name = "ResourceType";
                     aValue.Value <<= OUString("folder");
                     aValues[1] <<= aValue;
 

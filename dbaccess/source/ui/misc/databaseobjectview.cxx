@@ -114,15 +114,15 @@ namespace dbaui
                     NamedValue      aProp;
                     sal_Int32       nArg = 0;
 
-                    aProp.Name    = OUString("ParentFrame");
+                    aProp.Name    = "ParentFrame";
                     aProp.Value <<= m_xParentFrame;
                     lArgs[nArg++] <<= aProp;
 
-                    aProp.Name    = OUString("TopWindow");
+                    aProp.Name    = "TopWindow";
                     aProp.Value <<= sal_True;
                     lArgs[nArg++] <<= aProp;
 
-                    aProp.Name    = OUString("SupportPersistentWindowState");
+                    aProp.Name    = "SupportPersistentWindowState";
                     aProp.Value <<= sal_True;
                     lArgs[nArg++] <<= aProp;
 

@@ -56,7 +56,7 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         const OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = OUString();
+        aProperty.Name = "";
         aProperty.Value = Any();
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
@@ -75,10 +75,10 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
                 aProperty.Name = PROPERTY_TYPE;
                 break;
             case XML_TOK_SHOW:
-                aProperty.Name = OUString("Show");
+                aProperty.Name = "Show";
                 break;
             case XML_TOK_ACTUATE:
-                aProperty.Name = OUString("Actuate");
+                aProperty.Name = "Actuate";
                 break;
         }
         if ( !aProperty.Name.isEmpty() )

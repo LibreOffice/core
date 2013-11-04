@@ -69,7 +69,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
                 sPortNumber = sValue;
                 break;
             case XML_TOK_LOCAL_SOCKET:
-                aProperty.Name = OUString("LocalSocket");
+                aProperty.Name = "LocalSocket";
                 aProperty.Value <<= sValue;
                 rImport.addInfo(aProperty);
                 break;

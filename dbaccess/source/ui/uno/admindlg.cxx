@@ -70,7 +70,7 @@ OUString ODataSourcePropertyDialog::getImplementationName_Static() throw(Runtime
 ::comphelper::StringSequence ODataSourcePropertyDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.DatasourceAdministrationDialog");
+    aSupported[0] = "com.sun.star.sdb.DatasourceAdministrationDialog";
     return aSupported;
 }
 

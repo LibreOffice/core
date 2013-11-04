@@ -70,7 +70,7 @@ OUString ODBTypeWizDialog::getImplementationName_Static() throw(RuntimeException
 ::comphelper::StringSequence ODBTypeWizDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.DataSourceTypeChangeDialog");
+    aSupported[0] = "com.sun.star.sdb.DataSourceTypeChangeDialog";
     return aSupported;
 }
 

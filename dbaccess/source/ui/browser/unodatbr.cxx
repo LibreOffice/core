@@ -196,7 +196,7 @@ OUString SbaTableQueryBrowser::getImplementationName_Static() throw(RuntimeExcep
 ::comphelper::StringSequence SbaTableQueryBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.DataSourceBrowser");
+    aSupported[0] = "com.sun.star.sdb.DataSourceBrowser";
     return aSupported;
 }
 
@@ -629,7 +629,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 Any* pValueIter = aValues.getArray();
                 if ( m_bPreview )
                 {
-                    *pStringIter++  = OUString("AlwaysShowCursor");
+                    *pStringIter++  = "AlwaysShowCursor";
                     *pValueIter++   <<= sal_False;
                     *pStringIter++  = PROPERTY_BORDER;
                     *pValueIter++   <<= sal_Int16(0);
@@ -643,16 +643,16 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 *pValueIter++   = pData->xObjectProperties->getPropertyValue(PROPERTY_TEXTRELIEF);
                 if ( m_bPreview )
                 {
-                    *pStringIter++  = OUString("HasNavigationBar");
+                    *pStringIter++  = "HasNavigationBar";
                     *pValueIter++       <<= sal_False;
-                    *pStringIter++  = OUString("HasRecordMarker");
+                    *pStringIter++  = "HasRecordMarker";
                     *pValueIter++       <<= sal_False;
                 }
                 *pStringIter++  = PROPERTY_ROW_HEIGHT;
                 *pValueIter++   = pData->xObjectProperties->getPropertyValue(PROPERTY_ROW_HEIGHT);
                 if ( m_bPreview )
                 {
-                    *pStringIter++  = OUString("Tabstop");
+                    *pStringIter++  = "Tabstop";
                     *pValueIter++       <<= sal_False;
                 }
                 *pStringIter++  = PROPERTY_TEXTCOLOR;
@@ -713,7 +713,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     case DataType::BIT:
                     case DataType::BOOLEAN:
                     {
-                        aCurrentModelType = OUString("CheckBox");
+                        aCurrentModelType = "CheckBox";
                         aInitialValues.push_back( NamedValue( OUString( "VisualEffect" ), makeAny( VisualEffect::FLAT ) ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
 
@@ -735,7 +735,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                     case DataType::LONGVARBINARY:
-                        aCurrentModelType = OUString("TextField");
+                        aCurrentModelType = "TextField";
                         sDefaultProperty = PROPERTY_DEFAULTTEXT;
                         break;
 
@@ -744,7 +744,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                         bFormattedIsNumeric = sal_False;
                         // NO break!
                     default:
-                        aCurrentModelType = OUString("FormattedField");
+                        aCurrentModelType = "FormattedField";
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
 
                         if ( xSupplier.is() )
@@ -1109,7 +1109,7 @@ namespace
             return true;
         }
         _rDisplayName = _rDS;
-        _rUniqueId = OUString();
+        _rUniqueId = "";
         return false;
     }
 
@@ -1636,7 +1636,7 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
 {
     SbaXDataBrowserController::LoadFinished(_bWasSynch);
 
-    m_sQueryCommand = OUString();
+    m_sQueryCommand = "";
     m_bQueryEscapeProcessing = sal_False;
 
     if (isValid() && !loadingCancelled())
@@ -2681,7 +2681,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                                             Reference<XParametersSupplier> xParSup(xAnalyzer,UNO_QUERY);
                                             if ( xParSup->getParameters()->getCount() > 0 )
                                             {
-                                                OUString sFilter = OUString(" WHERE ");
+                                                OUString sFilter = " WHERE ";
                                                 sFilter = sFilter + xAnalyzer->getFilter();
                                                 OUString sReplace(sSql);
                                                 sReplace = sReplace.replaceFirst(sFilter,OUString());
@@ -3150,18 +3150,18 @@ void SbaTableQueryBrowser::impl_initialize()
 
             OUString* pStringIter = aProperties.getArray();
             Any* pValueIter = aValues.getArray();
-            *pStringIter++  = OUString("AlwaysShowCursor");
+            *pStringIter++  = "AlwaysShowCursor";
             *pValueIter++   <<= sal_False;
             *pStringIter++  = PROPERTY_BORDER;
             *pValueIter++   <<= sal_Int16(0);
 
-            *pStringIter++  = OUString("HasNavigationBar");
-            *pValueIter++       <<= sal_False;
-            *pStringIter++  = OUString("HasRecordMarker");
-            *pValueIter++       <<= sal_False;
+            *pStringIter++  = "HasNavigationBar";
+            *pValueIter++   <<= sal_False;
+            *pStringIter++  = "HasRecordMarker";
+            *pValueIter++   <<= sal_False;
 
-            *pStringIter++  = OUString("Tabstop");
-            *pValueIter++       <<= sal_False;
+            *pStringIter++  = "Tabstop";
+            *pValueIter++   <<= sal_False;
 
             Reference< XMultiPropertySet >  xFormMultiSet(getFormComponent(), UNO_QUERY);
             if ( xFormMultiSet.is() )
@@ -3563,7 +3563,7 @@ Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
 
 sal_Bool SbaTableQueryBrowser::implGetQuerySignature( OUString& _rCommand, sal_Bool& _bEscapeProcessing )
 {
-    _rCommand = OUString();
+    _rCommand = "";
     _bEscapeProcessing = sal_False;
 
     try

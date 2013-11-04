@@ -112,7 +112,7 @@ namespace dbaxml
     Sequence< OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -127,7 +127,7 @@ namespace dbaxml
     Sequence< OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
-        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -396,13 +396,13 @@ void ODBExport::exportDataSource()
                     sal_Int32 nValue = 0;
                     aValue >>= nValue;
                     if ( sValue == "0" )
-                        sValue = OUString("equal-integer");
+                        sValue = "equal-integer";
                     else if ( sValue == "1" )
-                        sValue = OUString("is-boolean");
+                        sValue = "is-boolean";
                     else if ( sValue == "2" )
-                        sValue = OUString("equal-boolean");
+                        sValue = "equal-boolean";
                     else if ( sValue == "3" )
-                        sValue = OUString("equal-use-only-zero");
+                        sValue = "equal-use-only-zero";
                     if ( sValue == "equal-integer" )
                         continue;
                     eToken = XML_BOOLEAN_COMPARISON_MODE;
@@ -570,7 +570,7 @@ void ODBExport::exportConnectionData()
                 {
                     OUString sExtension;
                     if ( eType == dbaccess::DST_MSACCESS )
-                        sExtension = OUString("mdb");
+                        sExtension = "mdb";
                     else
                     {
                         Reference< XPropertySet > xDataSourceSettings;
@@ -857,9 +857,9 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
     sal_Bool bIsForm = sal_True;
     _xProp->getPropertyValue("IsForm") >>= bIsForm;
     if ( bIsForm )
-        sValue = OUString("forms/") + sValue;
+        sValue = "forms/" + sValue;
     else
-        sValue = OUString("reports/") + sValue;
+        sValue = "reports/" + sValue;
 
     AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,sValue);
     sal_Bool bAsTemplate = sal_False;
@@ -1305,7 +1305,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
             {
                 sal_Int32 nLength = aProps.getLength();
                 aProps.realloc(nLength + 1);
-                aProps[nLength].Name = OUString("Queries");
+                aProps[nLength].Name = "Queries";
                 Sequence< OUString> aSeq = xCollection->getElementNames();
                 const OUString* pIter = aSeq.getConstArray();
                 const OUString* pEnd   = pIter + aSeq.getLength();
@@ -1345,7 +1345,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
             if ( aPropValues.getLength() )
             {
                 aProps.realloc(nLength + 1);
-                aProps[nLength].Name = OUString("layout-settings");
+                aProps[nLength].Name = "layout-settings";
                 aProps[nLength].Value = aValue;
             }
         }

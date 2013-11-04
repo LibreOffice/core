@@ -1917,7 +1917,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     {
                         xColumn = NULL;
                         bReFetchName = sal_True;
-                        sColumnLabel = OUString();
+                        sColumnLabel = "";
                     }
                     if(!xColumn.is())
                     {
@@ -2219,7 +2219,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
         m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,NULL,NULL,NULL,m_nInAppend);
         xTables = m_pTables;
         Sequence< OUString> aTableFilter(1);
-        aTableFilter[0] = OUString("%");
+        aTableFilter[0] = "%";
         m_pTables->construct(aTableFilter,Sequence< OUString>());
     }
 
@@ -2300,7 +2300,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
     // the last use the command as it is
     sal_Bool bDoEscapeProcessing = m_bUseEscapeProcessing;
 
-    m_aActiveCommand = OUString();
+    m_aActiveCommand = "";
     OUString sCommand;
 
     if ( m_aCommand.isEmpty() )
@@ -2325,7 +2325,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
             }
             else
             {
-                sCommand = OUString("SELECT * FROM ");
+                sCommand = "SELECT * FROM ";
                 OUString sCatalog, sSchema, sTable;
                 ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
                 sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );

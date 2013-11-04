@@ -139,13 +139,13 @@ namespace dbaxml
                         {
                             uno::Sequence < beans::PropertyValue > aArgs( 3);
                             sal_Int32 nLen = 0;
-                            aArgs[nLen].Name = OUString("AsTemplate");
+                            aArgs[nLen].Name = "AsTemplate";
                             aArgs[nLen++].Value <<= sal_False;
 
-                            aArgs[nLen].Name = OUString("ReadOnly");
+                            aArgs[nLen].Name = "ReadOnly";
                             aArgs[nLen++].Value <<= sal_True;
 
-                            aArgs[nLen].Name = OUString("Hidden");
+                            aArgs[nLen].Name = "Hidden";
                             aArgs[nLen++].Value <<= sal_True;
 
                             ::comphelper::MimeConfigurationHelper aHelper( m_xContext );

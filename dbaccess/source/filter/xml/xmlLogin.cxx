@@ -92,7 +92,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                     {
                         bUserFound = true;
                         PropertyValue aProperty;
-                        aProperty.Name = OUString("UseSystemUser");
+                        aProperty.Name = "UseSystemUser";
                         aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
                         rImport.addInfo(aProperty);
                     }

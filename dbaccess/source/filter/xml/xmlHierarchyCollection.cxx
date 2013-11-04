@@ -78,11 +78,11 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
             Sequence< Any > aArguments(2);
             PropertyValue aValue;
             // set as folder
-            aValue.Name = OUString("Name");
+            aValue.Name = "Name";
             aValue.Value <<= m_sName;
             aArguments[0] <<= aValue;
             //parent
-            aValue.Name = OUString("Parent");
+            aValue.Name = "Parent";
             aValue.Value <<= _xParentContainer;
             aArguments[1] <<= aValue;
 

@@ -292,7 +292,7 @@ DBG_NAME(OTableSubscriptionPage)
                     sal_Bool bModified = ( xModi.is() && xModi->isModified() );
 
                     Sequence< OUString > aNewTableFilter(1);
-                    aNewTableFilter[0] = OUString("%");
+                    aNewTableFilter[0] = "%";
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aNewTableFilter));
 
                     xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< OUString >() ) );
@@ -338,7 +338,7 @@ DBG_NAME(OTableSubscriptionPage)
             else
             {
                 // in addition, we need some infos about the connection used
-                m_sCatalogSeparator = OUString(".");    // (default)
+                m_sCatalogSeparator = ".";    // (default)
                 m_bCatalogAtStart = sal_True;   // (default)
                 try
                 {
@@ -498,7 +498,7 @@ DBG_NAME(OTableSubscriptionPage)
                                     if (bCatalogWildcard)
                                         sCatalog = sWildcard;
                                     else
-                                        sCatalog = OUString();
+                                        sCatalog = "";
                                     sCatalog += m_sCatalogSeparator;
                                     sCatalog += m_aTablesList.GetEntryText( pCatalog );
                                 }
@@ -525,7 +525,7 @@ DBG_NAME(OTableSubscriptionPage)
                 aTableFilter[nOldLen] = sComposedName;
 
                 // reset the composed name
-                sComposedName = OUString();
+                sComposedName = "";
             }
 
             if (bCatalogWildcard)
@@ -567,7 +567,7 @@ DBG_NAME(OTableSubscriptionPage)
             if (m_aTablesList.isWildcardChecked(m_aTablesList.getAllObjectsEntry()))
             {
                 aTableFilter.realloc(1);
-                aTableFilter[0] = OUString("%", 1, RTL_TEXTENCODING_ASCII_US);
+                aTableFilter[0] = "%";
             }
             else
             {

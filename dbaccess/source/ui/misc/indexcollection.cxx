@@ -150,9 +150,9 @@ namespace dbaui
             }
 
             // set the properties
-            static const OUString s_sUniquePropertyName = OUString("IsUnique");
-            static const OUString s_sSortPropertyName = OUString("IsAscending");
-            static const OUString s_sNamePropertyName = OUString("Name");
+            static const OUString s_sUniquePropertyName = "IsUnique";
+            static const OUString s_sSortPropertyName = "IsAscending";
+            static const OUString s_sNamePropertyName = "Name";
             // the index' own props
             xIndexDescriptor->setPropertyValue(s_sUniquePropertyName, ::cppu::bool2any(_rPos->bUnique));
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
@@ -252,10 +252,10 @@ namespace dbaui
 
     void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, Reference< XPropertySet > _rxDescriptor) SAL_THROW((Exception))
     {
-        static const OUString s_sPrimaryIndexPropertyName = OUString("IsPrimaryKeyIndex");
-        static const OUString s_sUniquePropertyName = OUString("IsUnique");
-        static const OUString s_sSortPropertyName = OUString("IsAscending");
-        static const OUString s_sCatalogPropertyName = OUString("Catalog");
+        static const OUString s_sPrimaryIndexPropertyName = "IsPrimaryKeyIndex";
+        static const OUString s_sUniquePropertyName = "IsUnique";
+        static const OUString s_sSortPropertyName = "IsAscending";
+        static const OUString s_sCatalogPropertyName = "Catalog";
 
         _rIndex.bPrimaryKey = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sPrimaryIndexPropertyName));
         _rIndex.bUnique = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sUniquePropertyName));

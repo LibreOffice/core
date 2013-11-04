@@ -70,7 +70,7 @@ OUString OUserSettingsDialog::getImplementationName_Static() throw(RuntimeExcept
 ::comphelper::StringSequence OUserSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.UserAdministrationDialog");
+    aSupported = "com.sun.star.sdb.UserAdministrationDialog";
     return aSupported;
 }
 

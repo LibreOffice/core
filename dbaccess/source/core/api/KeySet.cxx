@@ -567,7 +567,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    OUStringBuffer aSql = OUString("UPDATE " + m_aComposedTableName + " SET ");
+    OUStringBuffer aSql = "UPDATE " + m_aComposedTableName + " SET ";
     // list all cloumns that should be set
     static OUString aPara(" = ?,");
     OUString aQuote  = getIdentifierQuoteString();

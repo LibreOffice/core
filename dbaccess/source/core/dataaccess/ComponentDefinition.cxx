@@ -174,8 +174,8 @@ OUString SAL_CALL OComponentDefinition::getImplementationName(  ) throw(RuntimeE
 Sequence< OUString > OComponentDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aServices(2);
-    aServices.getArray()[0] = OUString("com.sun.star.sdb.TableDefinition");
-    aServices.getArray()[1] = OUString("com.sun.star.ucb.Content");
+    aServices[0] = "com.sun.star.sdb.TableDefinition";
+    aServices[1] = "com.sun.star.ucb.Content";
 
     return aServices;
 }

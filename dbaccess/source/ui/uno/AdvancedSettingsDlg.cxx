@@ -96,7 +96,7 @@ namespace dbaui
     ::comphelper::StringSequence OAdvancedSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = OUString("com.sun.star.sdb.AdvancedDatabaseSettingsDialog");
+        aSupported[0] = "com.sun.star.sdb.AdvancedDatabaseSettingsDialog";
         return aSupported;
     }
 

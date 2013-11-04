@@ -140,8 +140,8 @@ Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) th
 Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = OUString("com.sun.star.frame.FrameLoader");
-    aSNS.getArray()[1] = OUString("com.sun.star.sdb.ContentLoader");
+    aSNS[0] = "com.sun.star.frame.FrameLoader";
+    aSNS[1] = "com.sun.star.sdb.ContentLoader";
     return aSNS;
 }
 

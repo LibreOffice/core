@@ -67,7 +67,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = OUString();
+        aProperty.Name = "";
         aProperty.Value = Any();
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
@@ -156,7 +156,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 aProperty.Value <<= sValue.toInt32();
                 break;
             case XML_TOK_JAVA_CLASSPATH:
-                aProperty.Name = OUString("JavaDriverClassPath");
+                aProperty.Name = "JavaDriverClassPath";
                 break;
         }
         if ( !aProperty.Name.isEmpty() )

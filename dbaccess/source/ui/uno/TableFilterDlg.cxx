@@ -70,7 +70,7 @@ OUString OTableFilterDialog::getImplementationName_Static() throw(RuntimeExcepti
 ::comphelper::StringSequence OTableFilterDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.TableFilterDialog");
+    aSupported[0] = "com.sun.star.sdb.TableFilterDialog";
     return aSupported;
 }
 

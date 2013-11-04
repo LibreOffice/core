@@ -88,7 +88,7 @@ OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeE
 ::comphelper::StringSequence SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = OUString("com.sun.star.sdb.FormGridView");
+    aSupported[0] = "com.sun.star.sdb.FormGridView";
     return aSupported;
 }
 
@@ -170,7 +170,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         if (sControlType.isEmpty())
         {
             SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
-            sControlType = OUString("TextField");
+            sControlType = "TextField";
         }
         OSL_ENSURE(aControlProps.getLength(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
 
@@ -273,7 +273,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
             m_xUrlTransformer->parseStrict( aNewUrl );
 
         // set a new mark
-        aNewUrl.Mark = OUString("DB/FormGridView");
+        aNewUrl.Mark = "DB/FormGridView";
             // this controller is instantiated when somebody dispatches the ".component:DB/FormGridView" in any
             // frame, so we use "FormGridView" as mark that a dispatch request came from this view
 

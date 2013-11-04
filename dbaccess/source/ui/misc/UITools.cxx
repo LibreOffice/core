@@ -1387,8 +1387,7 @@ Reference<XPropertySet> createView( const OUString& _rName, const Reference< XCo
     }
     else
     {
-        sCommand = OUString( "SELECT * FROM " );
-        sCommand += composeTableNameForSelect( _rxConnection, _rxSourceObject );
+        sCommand =  "SELECT * FROM " + composeTableNameForSelect( _rxConnection, _rxSourceObject );
     }
     return createView( _rName, _rxConnection, sCommand );
 }
@@ -1465,11 +1464,11 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
         Sequence< Any > aArguments(3);
         PropertyValue aValue;
         // set as folder
-        aValue.Name = OUString("Name");
+        aValue.Name = "Name";
         aValue.Value <<= sNewName;
         aArguments[0] <<= aValue;
         //parent
-        aValue.Name = OUString("Parent");
+        aValue.Name = "Parent";
         aValue.Value <<= xNameAccess;
         aArguments[1] <<= aValue;
 

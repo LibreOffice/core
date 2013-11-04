@@ -80,8 +80,8 @@ namespace dbaui
     Sequence< OUString > OTableWindowAccess::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
         Sequence< OUString > aSupported(2);
-        aSupported[0] = OUString("com.sun.star.accessibility.Accessible");
-        aSupported[1] = OUString("com.sun.star.accessibility.AccessibleContext");
+        aSupported[0] = "com.sun.star.accessibility.Accessible";
+        aSupported[1] = "com.sun.star.accessibility.AccessibleContext";
         return aSupported;
     }
     OUString OTableWindowAccess::getImplementationName_Static(void) throw( RuntimeException )

@@ -209,7 +209,7 @@ Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(void) th
 Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.document.ExtendedTypeDetection");
+    aSNS[0] = "com.sun.star.document.ExtendedTypeDetection";
     return aSNS;
 }
 
@@ -304,7 +304,7 @@ Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) th
 Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.frame.FrameLoader");
+    aSNS[0] = "com.sun.star.frame.FrameLoader";
     return aSNS;
 }
 
@@ -573,7 +573,7 @@ IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, /*NOTINTERESTEDIN*/ )
     {
         Sequence< Any > aWizArgs(1);
         PropertyValue aValue;
-        aValue.Name = OUString("DatabaseLocation");
+        aValue.Name = "DatabaseLocation";
         aValue.Value <<= m_sCurrentURL;
         aWizArgs[0] <<= aValue;
 

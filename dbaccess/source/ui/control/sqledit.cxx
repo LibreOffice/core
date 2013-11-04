@@ -95,8 +95,8 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
         m_notifier = n;
     }
     css::uno::Sequence< OUString > s(2);
-    s[0] = OUString("FontHeight");
-    s[1] = OUString("FontName");
+    s[0] = "FontHeight";
+    s[1] = "FontName";
     n->addPropertiesChangeListener(s, m_listener.get());
     m_ColorConfig.AddListener(this);
 
