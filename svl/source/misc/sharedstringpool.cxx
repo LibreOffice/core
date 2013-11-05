@@ -17,6 +17,8 @@ SharedStringPool::SharedStringPool( const CharClass* pCharClass ) : mpCharClass(
 
 SharedString SharedStringPool::intern( const OUString& rStr )
 {
+    osl::MutexGuard aGuard(&maMutex);
+
     InsertResultType aRes = findOrInsert(maStrPool, rStr);
     if (aRes.first == maStrPool.end())
         // Insertion failed.
@@ -63,6 +65,8 @@ inline sal_Int32 getRefCount( const rtl_uString* p )
 
 void SharedStringPool::purge()
 {
+    osl::MutexGuard aGuard(&maMutex);
+
     StrHashType aNewStrPool;
     StrHashType::iterator it = maStrPool.begin(), itEnd = maStrPool.end();
     for (; it != itEnd; ++it)
@@ -98,11 +102,13 @@ void SharedStringPool::purge()
 
 size_t SharedStringPool::getCount() const
 {
+    osl::MutexGuard aGuard(&maMutex);
     return maStrPool.size();
 }
 
 size_t SharedStringPool::getCountIgnoreCase() const
 {
+    osl::MutexGuard aGuard(&maMutex);
     return maStrPoolUpper.size();
 }
 

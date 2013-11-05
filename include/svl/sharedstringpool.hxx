@@ -11,6 +11,7 @@
 #define INCLUDED_SVL_SHAREDSTRINGPOOL_HXX
 
 #include "svl/sharedstring.hxx"
+#include "osl/mutex.hxx"
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
@@ -30,6 +31,7 @@ class SVL_DLLPUBLIC SharedStringPool
     typedef std::pair<StrHashType::iterator, bool> InsertResultType;
     typedef boost::unordered_map<const rtl_uString*, OUString> StrStoreType;
 
+    mutable osl::Mutex maMutex;
     StrHashType maStrPool;
     StrHashType maStrPoolUpper;
     StrStoreType maStrStore;
