@@ -15,7 +15,6 @@
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
-#include <filter/msfilter/util.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -155,9 +154,9 @@ void lcl_TableStyleShd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
         if (rShd[i].Name == "val")
             pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rShd[i].Name == "color")
-            pAttributeList->add(FSNS(XML_w, XML_color), msfilter::util::ConvertColor(rShd[i].Value.get<sal_Int32>(), /*bAutoColor =*/ true));
+            pAttributeList->add(FSNS(XML_w, XML_color), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rShd[i].Name == "fill")
-            pAttributeList->add(FSNS(XML_w, XML_fill), msfilter::util::ConvertColor(rShd[i].Value.get<sal_Int32>(), /*bAutoColor =*/ true));
+            pAttributeList->add(FSNS(XML_w, XML_fill), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rShd[i].Name == "themeFill")
             pAttributeList->add(FSNS(XML_w, XML_themeFill), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rShd[i].Name == "themeFillShade")

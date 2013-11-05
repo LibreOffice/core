@@ -1364,6 +1364,9 @@ DECLARE_OOXML_TEST(testQuicktables, "quicktables.docx")
 
     // MediumList2-Accent1.
     CPPUNIT_ASSERT(getXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumList2-Accent1']/w:tblStylePr[@w:type='band1Vert']/w:tcPr/w:shd", "themeFillTint").equalsIgnoreAsciiCase("3F"));
+
+    // MediumShading2-Accent5.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumShading2-Accent5']/w:tblStylePr[@w:type='firstRow']/w:tcPr/w:tcBorders/w:top", "color", "auto");
 }
 
 DECLARE_OOXML_TEST(testSmartart, "smartart.docx")

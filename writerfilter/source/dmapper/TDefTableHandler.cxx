@@ -336,7 +336,7 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Border_color:
         case NS_rtf::LN_ICO:        // 0x2873
-            appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue), RTL_TEXTENCODING_UTF8));
+            appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8));
             m_nLineColor = nIntValue;
         break;
         case NS_rtf::LN_DPTSPACE:   // 0x2874
