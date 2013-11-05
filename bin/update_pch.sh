@@ -56,7 +56,7 @@ function list_file_includes()
     ifdepth=0
     # filter out only preprocessor lines, get the first and second "words" after the #,
     # also replace " with @ (would cause trouble when doing echo of the line)
-    cat "$1" | grep '^\s*#' | sed 's/^\s*#/#/' | sed 's/^\(#\w*\s+\w*\)\s+.*/\1/' | sed 's/"/@/g' | \
+    cat "$1" | grep -E '^\s*#' | sed 's/^\s*#/#/' | sed 's/^\(#\w*\s+\w*\)\s+.*/\1/' | sed 's/"/@/g' | \
         while read line; do
             # skip everything surrounded by any #if
             if echo "$line" | grep -q "#if" ; then
@@ -132,7 +132,7 @@ function filter_ignore()
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
 # - jerror.h and jpeglib.h are not self-contained
 # - service1.hxx/service2.hxx are inside comments in frameworks/
-    grep -e '\.h[">]$' -e '\.hpp[">]$' -e '\.hdl[">]$' -e '\.hxx[">]$' -e '^[^\.]*>$' | \
+    grep -E -e '\.h[">]$' -e '\.hpp[">]$' -e '\.hdl[">]$' -e '\.hxx[">]$' -e '^[^\.]*>$' | \
     grep -v -F -e '#include "gperffasttoken.hxx"' | \
     grep -v -F -e '#include <svtools/sores.hxx>' | \
     grep -v -F -e '#include <editeng/eeitemid.hxx>' | \
