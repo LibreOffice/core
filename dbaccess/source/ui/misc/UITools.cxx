@@ -507,8 +507,11 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nMaximumScale    = aValue;
+            assert(nPos == 15);
+            // 16 and 17 are unused
             nPos = 18;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
+            pInfo->nNumPrecRadix    = aValue;
 
             // check if values are less than zero like it happens in a oracle jdbc driver
             if( pInfo->nPrecision < 0)
@@ -517,6 +520,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                 pInfo->nMinimumScale = 0;
             if( pInfo->nMaximumScale < 0)
                 pInfo->nMaximumScale = 0;
+            if( pInfo->nNumPrecRadix <= 1)
+                pInfo->nNumPrecRadix = 10;
 
             OUString aName;
             switch(pInfo->nType)

@@ -267,6 +267,9 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 ++nPos;
                 aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->nMaximumScale  = aValue;
+                nPos = 18;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                m_pTypeInfo->nNumPrecRadix  = aValue;
 
                 // check if values are less than zero like it happens in a oracle jdbc driver
                 if( m_pTypeInfo->nPrecision < 0)
@@ -275,6 +278,8 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                     m_pTypeInfo->nMinimumScale = 0;
                 if( m_pTypeInfo->nMaximumScale < 0)
                     m_pTypeInfo->nMaximumScale = 0;
+                if( m_pTypeInfo->nNumPrecRadix <= 1)
+                    m_pTypeInfo->nNumPrecRadix = 10;
                 break;
             }
         }

@@ -73,6 +73,7 @@ const sal_uInt16 TYPE_BIT       = 31;
         OUString aLocalTypeName;
 
         sal_Int32       nPrecision;     // length of type
+        sal_Int32       nNumPrecRadix;  // indicating the radix, which is usually 2 or 10
         sal_Int32       nType;          // database type
 
         sal_Int16       nMaximumScale;  // decimal places after decimal point
@@ -88,6 +89,7 @@ const sal_uInt16 TYPE_BIT       = 31;
 
         OTypeInfo()
                 :nPrecision(0)
+                ,nNumPrecRadix(10)
                 ,nType(::com::sun::star::sdbc::DataType::OTHER)
                 ,nMaximumScale(0)
                 ,nMinimumScale(0)
