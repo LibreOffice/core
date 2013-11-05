@@ -144,6 +144,7 @@ public:
     void testStatisticalFormulaNormdist();
     void testMathFormulaArcCos();
     void testMathFormulaSqrt();
+    void testMathFormulaArcCosHyp();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -219,6 +220,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaNormdist);
     CPPUNIT_TEST(testMathFormulaArcCos);
     CPPUNIT_TEST(testMathFormulaSqrt);
+    CPPUNIT_TEST(testMathFormulaArcCosHyp);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2126,6 +2128,31 @@ void ScOpenclTest:: testFinancialDuration_ADDFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-125]
+void ScOpenclTest::testMathFormulaArcCosHyp()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh =
+        loadDoc("opencl/math/ArcCosHyp.", ODS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes =
+        loadDoc("opencl/math/ArcCosHyp.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Verify ACosH Function
+    for (SCROW i = 1; i <= 1000; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
