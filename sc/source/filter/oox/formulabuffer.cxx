@@ -54,13 +54,11 @@ void FormulaBuffer::finalizeImport()
     ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
 
     ScDocument& rDoc = getScDocument();
-    Reference< XIndexAccess > xSheets( getDocument()->getSheets(), UNO_QUERY_THROW );
     rDoc.SetAutoNameCache( new ScAutoNameCache( &rDoc ) );
-    for ( sal_Int32 nTab = 0, nElem = xSheets->getCount(); nTab < nElem; ++nTab )
+    for (SCTAB nTab = 0, nElem = rDoc.GetTableCount(); nTab < nElem; ++nTab)
     {
         double fPosition = static_cast< double> (nTab + 1) /static_cast<double>(nElem);
         xFormulaBar->setPosition( fPosition );
-        mxCurrSheet = getSheetFromDoc( nTab );
 
         applySharedFormulas(nTab);
 
@@ -122,7 +120,7 @@ void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair 
     }
 }
 
-void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
+void FormulaBuffer::applySharedFormulas( SCTAB nTab )
 {
     SheetToFormulaEntryMap::const_iterator itShared = maSharedFormulas.find(nTab);
     if (itShared == maSharedFormulas.end())

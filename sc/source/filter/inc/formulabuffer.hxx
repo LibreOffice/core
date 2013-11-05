@@ -74,30 +74,26 @@ class FormulaBuffer : public WorkbookHelper
         TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const ::com::sun::star::table::CellRangeAddress& rCellRangeAddress ) : maTokenAndAddress( rTokenAndAddress ), maCellRangeAddress( rCellRangeAddress ) {}
     };
 
-    typedef ::std::map< sal_Int32, std::vector< TokenAddressItem > > FormulaDataMap;
-    typedef ::std::map< sal_Int32, std::vector< TokenRangeAddressItem > > ArrayFormulaDataMap;
+    typedef ::std::map< SCTAB, std::vector<TokenAddressItem> > FormulaDataMap;
+    typedef ::std::map< SCTAB, std::vector<TokenRangeAddressItem> > ArrayFormulaDataMap;
     // sheet -> list of shared formula descriptions
-    typedef ::std::map< sal_Int32, std::vector< SharedFormulaDesc > > SheetToSharedFormulaid;
+    typedef ::std::map< SCTAB, std::vector<SharedFormulaDesc> > SheetToSharedFormulaid;
     // sheet -> stuff needed to create shared formulae
-    typedef ::std::map< sal_Int32, std::vector< SharedFormulaEntry > >  SheetToFormulaEntryMap;
-    // sharedId -> tokedId
-    typedef ::std::map< sal_Int32, sal_Int32 > SharedIdToTokenIndex;
-    typedef ::std::map< sal_Int32, SharedIdToTokenIndex > SheetToSharedIdToTokenIndex;
-    typedef ::std::pair< ::com::sun::star::table::CellAddress, double > ValueAddressPair;
-    typedef ::std::map< sal_Int32, std::vector< ValueAddressPair > > FormulaValueMap;
+    typedef ::std::map< SCTAB, std::vector<SharedFormulaEntry> >  SheetToFormulaEntryMap;
 
-    com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > mxCurrSheet;
+    typedef ::std::pair< ::com::sun::star::table::CellAddress, double > ValueAddressPair;
+    typedef ::std::map< SCTAB, std::vector<ValueAddressPair> > FormulaValueMap;
+
     FormulaDataMap maCellFormulas;
     ArrayFormulaDataMap maCellArrayFormulas;
     SheetToFormulaEntryMap maSharedFormulas;
     SheetToSharedFormulaid maSharedFormulaIds;
-    SheetToSharedIdToTokenIndex maTokenIndexes;
     FormulaValueMap maCellFormulaValues;
 
     void                applyArrayFormulas(  const std::vector< TokenRangeAddressItem >& rVector );
     void                applyCellFormulas(  const std::vector< TokenAddressItem >& rVector );
     void                applyCellFormulaValues( const std::vector< ValueAddressPair >& rVector );
-    void applySharedFormulas( sal_Int32 nTab );
+    void applySharedFormulas( SCTAB nTab );
 
 public:
     explicit            FormulaBuffer( const WorkbookHelper& rHelper );
