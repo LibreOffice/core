@@ -346,6 +346,7 @@
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/security.hxx>
+#include <osl/thread.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>

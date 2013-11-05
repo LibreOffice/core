@@ -160,11 +160,10 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <editeng/adjustitem.hxx>

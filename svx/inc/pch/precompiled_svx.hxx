@@ -221,7 +221,6 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
@@ -234,6 +233,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cstring>

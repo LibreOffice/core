@@ -179,6 +179,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
@@ -336,6 +337,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cstdio>
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxenum.hxx>
@@ -374,6 +376,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <svl/languageoptions.hxx>
+#include <svl/outstrm.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
@@ -382,17 +385,22 @@
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
 #include <time.h>
+#include <tools/gen.hxx>
 #include <tools/globname.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/multisel.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <vector>
 #include <xmloff/SchXMLSeriesHelper.hxx>

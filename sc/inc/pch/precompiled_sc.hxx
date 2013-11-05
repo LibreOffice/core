@@ -102,6 +102,7 @@
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/localfilehelper.hxx"
 #include "unotools/pathoptions.hxx"
+#include "unotools/textsearch.hxx"
 #include "unotools/ucbhelper.hxx"
 #include "vcl/lineinfo.hxx"
 #include "vcl/msgbox.hxx"
@@ -937,6 +938,7 @@
 #include <tools/shl.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+#include <tools/string.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>

@@ -162,6 +162,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <doctok/resourceids.hxx>
 #include <doctok/resources.hxx>
 #include <doctok/sprmids.hxx>

@@ -22,7 +22,9 @@
 #include "editeng/boxitem.hxx"
 #include "editeng/editobj.hxx"
 #include "editeng/editstat.hxx"
+#include "editeng/editview.hxx"
 #include "editeng/fhgtitem.hxx"
+#include "editeng/flditem.hxx"
 #include "editeng/fontitem.hxx"
 #include "editeng/forbiddencharacterstable.hxx"
 #include "editeng/frmdiritem.hxx"
@@ -298,6 +300,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cstdio>
@@ -444,6 +447,7 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
+#include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/crc.h>

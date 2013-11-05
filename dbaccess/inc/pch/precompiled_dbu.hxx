@@ -328,6 +328,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <editeng/justifyitem.hxx>
 #include <framework/actiontriggerhelper.hxx>

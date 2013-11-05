@@ -16,14 +16,21 @@
 
 #include "formula/vectortoken.hxx"
 #include "sal/config.h"
+#include <algorithm>
 #include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <cmath>
 #include <config_folders.h>
+#include <iostream>
+#include <list>
+#include <map>
+#include <memory>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

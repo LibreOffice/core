@@ -286,6 +286,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cstdio>
 #include <cstring>
@@ -359,6 +360,7 @@
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
 #include <tools/line.hxx>
+#include <tools/lineend.hxx>
 #include <tools/poly.hxx>
 #include <tools/rc.h>
 #include <tools/rc.hxx>

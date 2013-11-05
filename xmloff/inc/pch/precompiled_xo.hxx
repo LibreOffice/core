@@ -24,10 +24,15 @@
 #include "tools/debug.hxx"
 #include <algorithm>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b3dpolypolygon.hxx>
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/tools/unotools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>

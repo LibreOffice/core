@@ -22,7 +22,6 @@
 #include "editeng/unolingu.hxx"
 #include "i18nlangtag/languagetag.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
 #include "sal/config.h"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
@@ -621,6 +620,7 @@
 #include <osl/interlck.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <rsc/rscsfx.hxx>
 #include <rtl/bootstrap.hxx>
@@ -997,9 +997,9 @@
 #include <tools/shl.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
+#include <touch/touch-impl.h>
 #include <touch/touch.h>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>

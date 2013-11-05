@@ -16,6 +16,7 @@
 
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/document/XDocumentProperties.hpp"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/script/Converter.hpp"
 #include "com/sun/star/script/XTypeConverter.hpp"
 #include "com/sun/star/task/OfficeRestartManager.hpp"
@@ -34,6 +35,7 @@
 #include "sal/types.h"
 #include "svl/filenotation.hxx"
 #include "svl/inettype.hxx"
+#include "svl/pickerhistoryaccess.hxx"
 #include "svl/urihelper.hxx"
 #include "svl/urlbmk.hxx"
 #include "tools/datetime.hxx"
@@ -283,6 +285,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>

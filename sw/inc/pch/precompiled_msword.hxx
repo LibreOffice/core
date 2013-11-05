@@ -23,10 +23,12 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basic/basmgr.hxx>
+#include <boost/optional.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_set.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -82,6 +84,7 @@
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/xml/dom/XAttr.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -93,6 +96,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -161,6 +165,7 @@
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
+#include <filter/msfilter/util.hxx>
 #include <fstream>
 #include <functional>
 #include <i18nlangtag/lang.h>
@@ -187,6 +192,7 @@
 #include <osl/time.h>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -222,6 +228,7 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svx/fmglob.hxx>
+#include <svx/hlnkitem.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdmodel.hxx>
@@ -262,6 +269,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>

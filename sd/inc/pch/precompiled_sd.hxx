@@ -380,6 +380,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/proptypehlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cstddef>

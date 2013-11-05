@@ -563,6 +563,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -794,6 +795,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <utility>
+#include <vcl/FilterConfigItem.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
