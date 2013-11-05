@@ -65,6 +65,7 @@ static const sal_Unicode* lcl_ParseQuotedName( const sal_Unicode* p, OUString& r
     if (*p != '\'')
         return p;
 
+    OUStringBuffer aBuf;
     const sal_Unicode* pStart = p;
     sal_Unicode cPrev = 0;
     for (++p; *p; ++p)
@@ -74,19 +75,22 @@ static const sal_Unicode* lcl_ParseQuotedName( const sal_Unicode* p, OUString& r
             if (cPrev == '\'')
             {
                 // double single-quote equals one single quote.
-                rName += OUString(*p);
+                aBuf.append(*p);
                 cPrev = 0;
                 continue;
             }
         }
         else if (cPrev == '\'')
+        {
             // We are past the closing quote.  We're done!
+            rName = aBuf.makeStringAndClear();
             return p;
+        }
         else
-            rName += OUString(*p);
+            aBuf.append(*p);
         cPrev = *p;
     }
-    rName = "";
+
     return pStart;
 }
 
