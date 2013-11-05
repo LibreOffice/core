@@ -977,6 +977,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme(nIntValue) ));
         break;
         case NS_ooxml::LN_CT_Spacing_before:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "before", OUString::number(nIntValue));
             if (m_pImpl->GetTopContext())
                 // Don't overwrite NS_ooxml::LN_CT_Spacing_beforeAutospacing.
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);

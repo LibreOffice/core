@@ -242,6 +242,8 @@ void lcl_TableStylePSpacing(sax_fastparser::FSHelperPtr pSerializer, uno::Sequen
     {
         if (rSpacing[i].Name == "after")
             pAttributeList->add(FSNS(XML_w, XML_after), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rSpacing[i].Name == "before")
+            pAttributeList->add(FSNS(XML_w, XML_before), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rSpacing[i].Name == "line")
             pAttributeList->add(FSNS(XML_w, XML_line), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rSpacing[i].Name == "lineRule")
