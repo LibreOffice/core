@@ -32,6 +32,7 @@
 #include "types.hxx"
 #include "rangelst.hxx"
 #include "formula/token.hxx"
+#include "osl/mutex.hxx"
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
@@ -340,6 +341,7 @@ private:
     DocItem* getDocItem(sal_uInt16 nFileId) const;
 
 private:
+    mutable osl::Mutex maMtxDocs;
     mutable DocDataType maDocs;
 };
 
@@ -682,7 +684,7 @@ public:
      *
      * @return true if the document still contains references to an unsaved file
      */
-    bool containsUnsavedReferences() { return !maUnsavedDocShells.empty(); }
+    bool containsUnsavedReferences() const { return !maUnsavedDocShells.empty(); }
 
     void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
 

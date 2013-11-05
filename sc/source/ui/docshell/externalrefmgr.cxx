@@ -494,6 +494,8 @@ ScExternalRefCache::~ScExternalRefCache() {}
 
 const OUString* ScExternalRefCache::getRealTableName(sal_uInt16 nFileId, const OUString& rTabName) const
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocDataType::const_iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
     {
@@ -515,6 +517,8 @@ const OUString* ScExternalRefCache::getRealTableName(sal_uInt16 nFileId, const O
 
 const OUString* ScExternalRefCache::getRealRangeName(sal_uInt16 nFileId, const OUString& rRangeName) const
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocDataType::const_iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
     {
@@ -535,6 +539,8 @@ const OUString* ScExternalRefCache::getRealRangeName(sal_uInt16 nFileId, const O
 ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
     sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocDataType::const_iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
     {
@@ -564,6 +570,8 @@ ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
 ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
     sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocDataType::iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
         // specified document is not cached.
@@ -673,6 +681,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
 ScExternalRefCache::TokenArrayRef ScExternalRefCache::getRangeNameTokens(sal_uInt16 nFileId, const OUString& rName)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocItem* pDoc = getDocItem(nFileId);
     if (!pDoc)
         return TokenArrayRef();
@@ -688,6 +698,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getRangeNameTokens(sal_uIn
 
 void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, TokenArrayRef pArray)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     DocItem* pDoc = getDocItem(nFileId);
     if (!pDoc)
         return;
@@ -912,6 +924,8 @@ SCsTAB ScExternalRefCache::getTabSpan( sal_uInt16 nFileId, const OUString& rStar
 
 void ScExternalRefCache::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     using ::std::sort;
     using ::std::unique;
 
@@ -986,6 +1000,8 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
 
 void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     if (bReferenced)
     {
         maReferenced.reset(0);
@@ -1174,11 +1190,14 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
 
 void ScExternalRefCache::clearCache(sal_uInt16 nFileId)
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
     maDocs.erase(nFileId);
 }
 
 ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) const
 {
+    osl::MutexGuard aGuard(&maMtxDocs);
+
     using ::std::pair;
     DocDataType::iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
