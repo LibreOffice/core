@@ -90,11 +90,11 @@ void FormulaBuffer::finalizeImport()
 void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
 {
     ScDocumentImport& rDoc = getDocImport();
+    ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
     for ( std::vector< TokenAddressItem >::const_iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
     {
         ScAddress aPos;
         ScUnoConversion::FillScAddress(aPos, it->maCellAddress);
-        ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
         ScCompiler aCompiler(&rDoc.getDoc(), aPos);
         aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
         ScTokenArray* pCode = aCompiler.CompileString(it->maTokenStr);

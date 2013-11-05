@@ -47,28 +47,19 @@ ScAddress::Details::Details ( const ScDocument* pDoc,
 {
 }
 
-/**
- * Parse from the opening single quote to the closing single quote.  Inside
- * the quotes, a single quote character is encoded by double single-quote
- * characters.
- *
- * @param p pointer to the first character to begin parsing.
- * @param rName (reference) parsed name within the quotes.  If the name is
- *              empty, either the parsing failed or it's an empty quote.
- *
- * @return pointer to the character immediately after the closing single
- *         quote.
- */
-static const sal_Unicode* lcl_ParseQuotedName( const sal_Unicode* p, OUString& rName )
-{
-    rName = "";
-    if (*p != '\'')
-        return p;
+namespace {
 
-    OUStringBuffer aBuf;
-    const sal_Unicode* pStart = p;
+const sal_Unicode* parseQuotedNameWithBuffer( const sal_Unicode* pStart, const sal_Unicode* p, OUString& rName )
+{
+    // The current character must be on the 2nd quote.
+
+    // Push all the characters up to the current, but skip the very first
+    // character which is the opening quote.
+    OUStringBuffer aBuf(OUString(pStart+1, p-pStart-1));
+
+    ++p; // Skip the 2nd quote.
     sal_Unicode cPrev = 0;
-    for (++p; *p; ++p)
+    for (; *p; ++p)
     {
         if (*p == '\'')
         {
@@ -92,6 +83,52 @@ static const sal_Unicode* lcl_ParseQuotedName( const sal_Unicode* p, OUString& r
     }
 
     return pStart;
+}
+
+/**
+ * Parse from the opening single quote to the closing single quote.  Inside
+ * the quotes, a single quote character is encoded by double single-quote
+ * characters.
+ *
+ * @param p pointer to the first character to begin parsing.
+ * @param rName (reference) parsed name within the quotes.  If the name is
+ *              empty, either the parsing failed or it's an empty quote.
+ *
+ * @return pointer to the character immediately after the closing single
+ *         quote.
+ */
+const sal_Unicode* parseQuotedName( const sal_Unicode* p, OUString& rName )
+{
+    if (*p != '\'')
+        return p;
+
+    const sal_Unicode* pStart = p;
+    sal_Unicode cPrev = 0;
+    for (++p; *p; ++p)
+    {
+        if (*p == '\'')
+        {
+            if (cPrev == '\'')
+            {
+                // double single-quote equals one single quote.
+                return parseQuotedNameWithBuffer(pStart, p, rName);
+            }
+        }
+        else if (cPrev == '\'')
+        {
+            // We are past the closing quote.  We're done!  Skip the opening
+            // and closing quotes.
+            rName = OUString(pStart+1, p - pStart-2);
+            return p;
+        }
+
+        cPrev = *p;
+    }
+
+    rName = "";
+    return pStart;
+}
+
 }
 
 static long int
@@ -265,7 +302,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
     }
     else if( *p == '\'')
     {
-        p = lcl_ParseQuotedName(p, aTabName);
+        p = parseQuotedName(p, aTabName);
         if (aTabName.isEmpty())
             return NULL;
     }
@@ -415,7 +452,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // single quote text inside the quoted text.
         if (*p == '\'')
         {
-            p = lcl_ParseQuotedName(p, rExternDocName);
+            p = parseQuotedName(p, rExternDocName);
             if (!*p || *p != ']' || rExternDocName.isEmpty())
             {
                 rExternDocName = "";
@@ -447,7 +484,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // Excel does not allow [ and ] characters in sheet names though.
         // But, more sickness comes with MOOXML as there may be
         // '[1]Sheet 4'!$A$1  where [1] is the external doc's index.
-        p = lcl_ParseQuotedName(p, rExternDocName);
+        p = parseQuotedName(p, rExternDocName);
         if (!*p || *p != '!')
         {
             rExternDocName = "";
@@ -1003,7 +1040,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
     {
         const sal_Unicode* pStart = p;
         OUString aTmp;
-        p = lcl_ParseQuotedName(p, aTmp);
+        p = parseQuotedName(p, aTmp);
         aDocName = aTmp;
         if (*p++ == SC_COMPILER_FILE_TAB_SEP)
             bExtDoc = true;
@@ -1036,7 +1073,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
             // Tokens that start at ' can have anything in them until a final
             // ' but '' marks an escaped '.  We've earlier guaranteed that a
             // string containing '' will be surrounded by '.
-            p = lcl_ParseQuotedName(p, aTab);
+            p = parseQuotedName(p, aTab);
         }
         else
         {
