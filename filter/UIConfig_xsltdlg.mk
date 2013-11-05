@@ -10,6 +10,7 @@
 $(eval $(call gb_UIConfig_UIConfig,filter))
 
 $(eval $(call gb_UIConfig_add_uifiles,filter,\
+    filter/uiconfig/ui/impswfdialog \
     filter/uiconfig/ui/pdfgeneralpage \
     filter/uiconfig/ui/pdflinkspage \
     filter/uiconfig/ui/pdfoptionsdialog \

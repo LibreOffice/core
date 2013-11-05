@@ -41,33 +41,21 @@ class Window;
 class ImpSWFDialog : public ModalDialog
 {
 private:
-    FixedInfo           maFiDescr;
-    NumericField        maNumFldQuality;
-    FixedInfo           maFiExportAllDescr;
-    CheckBox            maCheckExportAll;
-    FixedInfo           maFiExportBackgroundsDescr;
-    CheckBox            maCheckExportBackgrounds;
-    FixedInfo           maFiExportBackgroundObjectsDescr;
-    CheckBox            maCheckExportBackgroundObjects;
-    FixedInfo           maFiExportSlideContentsDescr;
-    CheckBox            maCheckExportSlideContents;
-    FixedInfo           maFiExportSoundDescr;
-    CheckBox            maCheckExportSound;
-    FixedInfo           maFiExportOLEAsJPEGDescr;
-    CheckBox            maCheckExportOLEAsJPEG;
-    FixedInfo           maFiExportMultipleFilesDescr;
-    CheckBox            maCheckExportMultipleFiles;
-
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
+    NumericField * mpNumFldQuality;
+    CheckBox *     mpCheckExportAll;
+    CheckBox *     mpCheckExportBackgrounds;
+    CheckBox *     mpCheckExportBackgroundObjects;
+    CheckBox *     mpCheckExportSlideContents;
+    CheckBox *     mpCheckExportSound;
+    CheckBox *     mpCheckExportOLEAsJPEG;
+    CheckBox *     mpCheckExportMultipleFiles;
 
     FilterConfigItem    maConfigItem;
 
     DECL_LINK( OnToggleCheckbox, CheckBox* );
 
 public:
-    ImpSWFDialog( Window* pParent, ResMgr& rResMgr,
+    ImpSWFDialog( Window* pParent,
                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
     ~ImpSWFDialog();
 
