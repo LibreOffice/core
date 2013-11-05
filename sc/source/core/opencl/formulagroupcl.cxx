@@ -1205,6 +1205,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpAmorlinc));
                 }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getMduration"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                        new OpMDuration));
+                }
                 break;
             default:
                 throw UnhandledToken(pChild, "unhandled opcode");

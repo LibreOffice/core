@@ -684,6 +684,67 @@ void OpDuration_ADD::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
+void OpMDuration::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(GetDurationDecl);decls.insert(lcl_GetcoupnumDecl);
+    decls.insert(GetYearFracDecl);decls.insert(DaysToDateDecl);
+    decls.insert(GetNullDateDecl);decls.insert(DateToDaysDecl);
+    decls.insert(DaysInMonthDecl);decls.insert(IsLeapYearDecl);
+    funs.insert(GetDuration);funs.insert(lcl_Getcoupnum);
+    funs.insert(GetYearFrac);funs.insert(DaysToDate);
+    funs.insert(GetNullDate);funs.insert(DateToDays);
+    funs.insert(DaysInMonth);funs.insert(IsLeapYear);
+}
+
+void OpMDuration::GenSlidingWindowFunction(std::stringstream& ss,
+    const std::string sSymName, SubArguments& vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() << ";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double arg0 = " << GetBottom() << ";\n";
+    ss << "    double arg1 = " << GetBottom() << ";\n";
+    ss << "    double arg2 = " << GetBottom() << ";\n";
+    ss << "    double arg3 = " << GetBottom() << ";\n";
+    ss << "    double arg4 = " << GetBottom() << ";\n";
+    ss << "    double arg5 = " << GetBottom() << ";\n";
+    unsigned j = vSubArguments.size();
+    while (j--)
+        {
+        FormulaToken* pCur = vSubArguments[j]->GetFormulaToken();
+        assert(pCur);
+        if(pCur->GetType() == formula::svSingleVectorRef)
+            {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if(gid0 >= " << pSVR->GetArrayLength() << " || isNan(";
+            ss << vSubArguments[j]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        arg" << j << " = " <<GetBottom() << ";\n";
+            ss << "    else\n";
+#endif
+            ss << "        arg" << j << " = ";
+            ss << vSubArguments[j]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            }
+        }
+    ss << "    int nNullDate = GetNullDate();\n";
+    ss << "    tmp = GetDuration( nNullDate, (int)arg0, (int)arg1, arg2,";
+    ss << " arg3, (int)arg4, (int)arg5);\n";
+    ss << "    tmp /= 1.0 + arg3 / (int)arg4;\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
 void Fvschedule::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
 {
