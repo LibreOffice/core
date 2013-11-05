@@ -339,6 +339,15 @@ public:
     virtual std::string BinFuncName(void) const { return "Coupnum"; }
 
 };
+class OpDDB:public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+
+     virtual std::string BinFuncName(void) const { return "DDB"; }
+};
+
 class OpAmordegrc:public Normal
 {
 public:
