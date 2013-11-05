@@ -403,19 +403,39 @@ namespace {
 
 class CellStoreInitializer
 {
+    // The pimpl pattern here is intentional.
+    //
+    // The problem with having the attributes in CellStoreInitializer
+    // directly is that, as a functor, it might be copied around. In
+    // that case miPos in _copied_ object points ot maAttrs in the
+    // original object, not in the copy. So later, deep in mdds, we end
+    // up comparing iterators from different sequences.
+    //
+    // This could be solved by defining copy constructor and operator=,
+    // but given the limited usage of the class, I think it is simpler
+    // to let copies share the state.
+    struct Impl
+    {
+        sc::CellTextAttrStoreType maAttrs;
+        sc::CellTextAttrStoreType::iterator miPos;
+        sal_uInt16 mnScriptNumeric;
+
+        Impl(const sal_uInt32 nMaxRowCount, const sal_uInt16 nScriptNumeric)
+            : maAttrs(nMaxRowCount), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric)
+        {}
+    };
+
     ScDocument& mrDoc;
     sc::StartListeningContext& mrListenCxt;
-    sc::CellTextAttrStoreType maAttrs;
-    sc::CellTextAttrStoreType::iterator miPos;
-    sal_uInt16 mnScriptNumeric;
 
 public:
     CellStoreInitializer(ScDocument& rDoc, sc::StartListeningContext& rCxt, sal_uInt16 nScriptNumeric) :
         mrDoc(rDoc),
         mrListenCxt(rCxt),
-        maAttrs(MAXROWCOUNT),
-        miPos(maAttrs.begin()),
-        mnScriptNumeric(nScriptNumeric) {}
+        mpImpl(new Impl(MAXROWCOUNT, nScriptNumeric))
+    {}
+
+    boost::shared_ptr<Impl> mpImpl;
 
     void operator() (const sc::CellStoreType::value_type& node)
     {
@@ -425,9 +445,9 @@ public:
         // Fill with default values for non-empty cell segments.
         sc::CellTextAttr aDefault;
         if (node.type == sc::element_type_numeric)
-            aDefault.mnScriptType = mnScriptNumeric;
+            aDefault.mnScriptType = mpImpl->mnScriptNumeric;
         std::vector<sc::CellTextAttr> aDefaults(node.size, aDefault);
-        miPos = maAttrs.set(miPos, node.position, aDefaults.begin(), aDefaults.end());
+        mpImpl->miPos = mpImpl->maAttrs.set(mpImpl->miPos, node.position, aDefaults.begin(), aDefaults.end());
 
         if (node.type == sc::element_type_formula)
         {
@@ -444,7 +464,7 @@ public:
 
     void swap(sc::CellTextAttrStoreType& rAttrs)
     {
-        maAttrs.swap(rAttrs);
+        mpImpl->maAttrs.swap(rAttrs);
     }
 };
 
