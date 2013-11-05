@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawDocShell.hxx"
 
 #include "app.hrc"
@@ -30,15 +29,11 @@
 #include <svx/dialmgr.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
-#ifdef _OUTLINER_HXX
-#include <editeng/outliner.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <svl/style.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-
 
 #include "strings.hrc"
 #include "glob.hrc"
