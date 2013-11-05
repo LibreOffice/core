@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BOOTSTRP_XMLPARSE_HXX
-#define BOOTSTRP_XMLPARSE_HXX
+#ifndef INCLUDED_L10NTOOLS_INC_XMLPARSE_HXX
+#define INCLUDED_L10NTOOLS_INC_XMLPARSE_HXX
 
 #include "sal/config.h"
 
@@ -386,6 +386,6 @@ public:
     const XMLError &GetError() const { return m_aErrorInformation; }
 };
 
-#endif // BOOTSTRP_XMLPARSE_HXX
+#endif // INCLUDED_L10NTOOLS_INC_XMLPARSE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

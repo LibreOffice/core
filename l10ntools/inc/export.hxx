@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXPORT_HXX
-#define _EXPORT_HXX
+#ifndef INCLUDED_L10NTOOLS_INC_EXPORT_HXX
+#define INCLUDED_L10NTOOLS_INC_EXPORT_HXX
 
 #include "sal/config.h"
 #include "po.hxx"
@@ -423,6 +423,6 @@ private:
     inline void Pop( std::queue<QueueEntry>& aQueue );
 
 };
-#endif // _EXPORT_HXX
+#endif // INCLUDED_L10NTOOLS_INC_EXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

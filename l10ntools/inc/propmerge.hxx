@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _PROPMERGE_INCLUDED
-#define _PROPMERGE_INCLUDED
+#ifndef INCLUDED_L10NTOOLS_INC_PROPMERGE_HXX
+#define INCLUDED_L10NTOOLS_INC_PROPMERGE_HXX
 
 #include <rtl/string.hxx>
 #include <vector>
@@ -39,5 +39,5 @@ public:
     void Merge( const OString &rMergeSrc, const OString &rDestinationFile );
 };
 
-#endif // _PROPMERGE_INCLUDED
+#endif // INCLUDED_L10NTOOLS_INC_PROPMERGE_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

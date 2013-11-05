@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CFG_MERGE_HXX
-#define _CFG_MERGE_HXX
+#ifndef INCLUDED_L10NTOOLS_INC_CFGMERGE_HXX
+#define INCLUDED_L10NTOOLS_INC_CFGMERGE_HXX
 
 #include "sal/config.h"
 

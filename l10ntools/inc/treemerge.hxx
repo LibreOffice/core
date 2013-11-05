@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _TREEMERGE_INCLUDED
-#define _TREEMERGE_INCLUDED
+#ifndef INCLUDED_L10NTOOLS_INC_TREEMERGE_HXX
+#define INCLUDED_L10NTOOLS_INC_TREEMERGE_HXX
 
 #include <libxml/tree.h>
 #include <rtl/string.hxx>
@@ -42,6 +42,6 @@ public:
         const OString &rXhpRoot );
 };
 
-#endif // _TREEMERGE_INCLUDED
+#endif // INCLUDED_L10NTOOLS_INC_TREEMERGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

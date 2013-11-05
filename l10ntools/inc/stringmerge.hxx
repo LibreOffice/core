@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _STRINGMERGE_INCLUDED
-#define _STRINGMERGE_INCLUDED
+#ifndef INCLUDED_L10NTOOLS_INC_STRINGMERGE_HXX
+#define INCLUDED_L10NTOOLS_INC_STRINGMERGE_HXX
 
 #include <libxml/tree.h>
 #include <rtl/string.hxx>
@@ -37,5 +37,5 @@ public:
         const OString &rMergeSrc, const OString &rDestinationFile );
 };
 
-#endif //_STRINGMERGE_INCLUDED
+#endif // INCLUDED_L10NTOOLS_INC_STRINGMERGE_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

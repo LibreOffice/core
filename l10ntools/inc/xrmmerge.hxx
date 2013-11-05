@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XRMMERGE_INCLUDED
-#define XRMMERGE_INCLUDED
+#ifndef INCLUDED_L10NTOOLS_INC_XRMMERGE_HXX
+#define INCLUDED_L10NTOOLS_INC_XRMMERGE_HXX
 
 #include "sal/config.h"
 
@@ -134,6 +134,6 @@ public:
     virtual ~XRMResMerge();
 };
 
-#endif // XRMMERGE_INCLUDED
+#endif // INCLUDED_L10NTOOLS_INC_XRMMERGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

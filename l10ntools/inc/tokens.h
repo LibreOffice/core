@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOKENS_H
-#define _TOKENS_H
+#ifndef INCLUDED_L10NTOOLS_INC_TOKENS_H
+#define INCLUDED_L10NTOOLS_INC_TOKENS_H
 
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */

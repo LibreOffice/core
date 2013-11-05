@@ -9,8 +9,8 @@
 
 // Methods used by all of executables
 
-#ifndef INCLUDED_L10NTOOLS_SOURCE_COMMON_HXX
-#define INCLUDED_L10NTOOLS_SOURCE_COMMON_HXX
+#ifndef INCLUDED_L10NTOOLS_INC_COMMON_HXX
+#define INCLUDED_L10NTOOLS_INC_COMMON_HXX
 
 #include "sal/config.h"
 

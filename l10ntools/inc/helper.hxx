@@ -9,8 +9,8 @@
 
 // Helper string methods
 
-#ifndef INCLUDED_L10NTOOLS_SOURCE_HELPER_HXX
-#define INCLUDED_L10NTOOLS_SOURCE_HELPER_HXX
+#ifndef INCLUDED_L10NTOOLS_INC_HELPER_HXX
+#define INCLUDED_L10NTOOLS_INC_HELPER_HXX
 
 #include "sal/config.h"
 #include "sal/types.h"
