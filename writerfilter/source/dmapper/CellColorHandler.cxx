@@ -136,7 +136,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
             createGrabBag("themeFillShade", uno::makeAny(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillTint:
-            // ignored
+            createGrabBag("themeFillTint", uno::makeAny(OUString::number(nIntValue, 16)));
             break;
         default:
             OSL_FAIL( "unknown attribute");

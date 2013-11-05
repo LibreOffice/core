@@ -162,6 +162,8 @@ void lcl_TableStyleShd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
             pAttributeList->add(FSNS(XML_w, XML_themeFill), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rShd[i].Name == "themeFillShade")
             pAttributeList->add(FSNS(XML_w, XML_themeFillShade), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rShd[i].Name == "themeFillTint")
+            pAttributeList->add(FSNS(XML_w, XML_themeFillTint), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);
