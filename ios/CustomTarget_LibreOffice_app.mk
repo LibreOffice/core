@@ -12,7 +12,10 @@ $(eval $(call gb_CustomTarget_CustomTarget,ios/LibreOffice_app))
 # looking for the "iarmv7" or "i386" in the -arch option that is part
 # of $(CC)
 
-ifneq ($(filter i386,$(CC)),)
+ifneq ($(filter arm64,$(CC)),)
+xcode_sdk=iphoneos
+xcode_arch=arm64
+else ifneq ($(filter i386,$(CC)),)
 xcode_sdk=iphonesimulator
 xcode_arch=i386
 else
