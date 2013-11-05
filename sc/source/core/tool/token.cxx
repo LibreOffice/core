@@ -1377,6 +1377,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocStandard:
             case ocWeibull:
             case ocMedian:
+            case ocGDA:
             // Don't change the state.
             break;
             default:
