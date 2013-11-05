@@ -89,16 +89,6 @@ void FormulaBuffer::finalizeImport()
     xFormulaBar->setPosition( 1.0 );
 }
 
-void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress )
-{
-    ScTokenArray aTokenArray;
-    ScAddress aCellPos;
-    ScUnoConversion::FillScAddress( aCellPos, rAddress );
-    ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
-    ScFormulaCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
-    getDocImport().setFormulaCell(aCellPos, pNewCell);
-}
-
 void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
 {
     ScDocumentImport& rDoc = getDocImport();

@@ -95,7 +95,6 @@ class FormulaBuffer : public WorkbookHelper
     FormulaValueMap maCellFormulaValues;
 
     void                applyArrayFormulas(  const std::vector< TokenRangeAddressItem >& rVector );
-    void                applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress );
     void                applyCellFormulas(  const std::vector< TokenAddressItem >& rVector );
     void                applyCellFormulaValues( const std::vector< ValueAddressPair >& rVector );
     void applySharedFormulas( sal_Int32 nTab );
