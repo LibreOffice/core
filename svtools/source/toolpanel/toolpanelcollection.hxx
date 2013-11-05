@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLPANELCOLLECTION_HXX
-#define TOOLPANELCOLLECTION_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELCOLLECTION_HXX
+#define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELCOLLECTION_HXX
 
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 
@@ -59,6 +59,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // TOOLPANELCOLLECTION_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELCOLLECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TABBARGEOMETRY_HXX
-#define TABBARGEOMETRY_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TABBARGEOMETRY_HXX
+#define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TABBARGEOMETRY_HXX
 
 #include "svtools/toolpanel/tabalignment.hxx"
 
@@ -126,6 +126,6 @@ namespace svt
 } // namespace svt
 //......................................................................................................................
 
-#endif // TABBARGEOMETRY_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TABBARGEOMETRY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

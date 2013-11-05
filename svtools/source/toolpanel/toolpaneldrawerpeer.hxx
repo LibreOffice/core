@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_TOOLPANELDRAWERPEER_HXX
-#define SVT_TOOLPANELDRAWERPEER_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDRAWERPEER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDRAWERPEER_HXX
 
 #include <toolkit/awt/vclxwindow.hxx>
 
@@ -46,6 +46,6 @@ namespace svt
 } // namespace svt
 //......................................................................................................................
 
-#endif // SVT_TOOLPANELDRAWERPEER_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDRAWERPEER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

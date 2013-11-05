@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _EXPORTDIALOG_HXX_
-#define _EXPORTDIALOG_HXX_
+#ifndef INCLUDED_SVTOOLS_SOURCE_FILTER_EXPORTDIALOG_HXX
+#define INCLUDED_SVTOOLS_SOURCE_FILTER_EXPORTDIALOG_HXX
 
 #include <vcl/fltcall.hxx>
 #include <vcl/dialog.hxx>
@@ -183,6 +183,6 @@ public:
 
 
 
-#endif // _EXPORTDIALOG_HXX_
+#endif // INCLUDED_SVTOOLS_SOURCE_FILTER_EXPORTDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

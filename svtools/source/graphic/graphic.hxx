@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GOODIES_GRAPHIC_HXX
-#define _GOODIES_GRAPHIC_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_GRAPHIC_GRAPHIC_HXX
+#define INCLUDED_SVTOOLS_SOURCE_GRAPHIC_GRAPHIC_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

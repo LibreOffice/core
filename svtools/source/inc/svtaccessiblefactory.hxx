@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
-#define SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_INC_SVTACCESSIBLEFACTORY_HXX
+#define INCLUDED_SVTOOLS_SOURCE_INC_SVTACCESSIBLEFACTORY_HXX
 
 #include <svtools/accessiblefactory.hxx>
 
@@ -61,6 +61,6 @@ namespace svt
 }   // namespace svt
 //........................................................................
 
-#endif // SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_INC_SVTACCESSIBLEFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

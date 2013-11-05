@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MCVMATH_HXX
-#define _MCVMATH_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_DIALOGS_MCVMATH_HXX
+#define INCLUDED_SVTOOLS_SOURCE_DIALOGS_MCVMATH_HXX
 
 #include <tools/solar.h>
 
@@ -206,6 +206,6 @@ Fix ImpMultBig2( const Fix& a, const Fix& b );
 sal_uInt16 ImpSqrt( sal_uLong nRadi );
 FixCpx ImpExPI( sal_uInt16 nPhi );
 
-#endif // _MCVMATH_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_DIALOGS_MCVMATH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

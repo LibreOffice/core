@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVIMPLBOX_HXX
-#define _SVIMPLBOX_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_INC_SVIMPBOX_HXX
+#define INCLUDED_SVTOOLS_SOURCE_INC_SVIMPBOX_HXX
 
 #include <vcl/seleng.hxx>
 #include <vcl/scrbar.hxx>
@@ -424,6 +424,6 @@ inline void SvImpLBox::TreeInserted( SvTreeListEntry* pInsTree )
     EntryInserted( pInsTree );
 }
 
-#endif // #ifndef _SVIMPLBOX_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_INC_SVIMPBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

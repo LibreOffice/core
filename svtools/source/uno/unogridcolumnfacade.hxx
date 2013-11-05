@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_GRIDCOLUMNFACADE_HXX
-#define SVTOOLS_GRIDCOLUMNFACADE_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_UNOGRIDCOLUMNFACADE_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_UNOGRIDCOLUMNFACADE_HXX
 
 #include "svtools/table/tablemodel.hxx"
 #include "svtools/table/tablecontrol.hxx"
@@ -101,6 +101,6 @@ namespace svt { namespace table
 } } // svt::table
 // .....................................................................................................................
 
-#endif // SVTOOLS_GRIDCOLUMNFACADE_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_UNO_UNOGRIDCOLUMNFACADE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

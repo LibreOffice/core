@@ -17,8 +17,8 @@
  * the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVT_SOURCE_UNO_FILEPICKER_HXX
-#define INCLUDED_SVT_SOURCE_UNO_FILEPICKER_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_FPICKER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_FPICKER_HXX
 
 #include "sal/config.h"
 

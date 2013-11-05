@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GOODIES_RENDERER_HXX
-#define _GOODIES_RENDERER_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_INC_RENDERER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_INC_RENDERER_HXX
 
 #include <tools/gen.hxx>
 #include <comphelper/propertysethelper.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_GRIDCONTROL_HXX_
-#define _SVT_GRIDCONTROL_HXX_
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_SVTXGRIDCONTROL_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_SVTXGRIDCONTROL_HXX
 
 #include <unocontroltablemodel.hxx>
 #include <svtools/table/tablecontrol.hxx>
@@ -112,6 +112,6 @@ private:
     void    impl_checkColumnIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_columnIndex ) const;
     void    impl_checkRowIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_rowIndex ) const;
 };
-#endif // _SVT_GRIDCONTROL_HXX_
+#endif // INCLUDED_SVTOOLS_SOURCE_UNO_SVTXGRIDCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

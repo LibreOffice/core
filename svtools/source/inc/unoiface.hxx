@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_UNOIFACE_HXX
-#define _SVT_UNOIFACE_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_INC_UNOIFACE_HXX
+#define INCLUDED_SVTOOLS_SOURCE_INC_UNOIFACE_HXX
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
@@ -430,6 +430,6 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-#endif  // _SVT_UNOIFACE_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_INC_UNOIFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

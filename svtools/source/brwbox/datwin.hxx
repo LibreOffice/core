@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXDATWIN_HXX
-#define _SFXDATWIN_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_BRWBOX_DATWIN_HXX
+#define INCLUDED_SVTOOLS_SOURCE_BRWBOX_DATWIN_HXX
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_TOOLPANELDECKPEER_HXX
-#define SVT_TOOLPANELDECKPEER_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDECKPEER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDECKPEER_HXX
 
 #include "svtaccessiblefactory.hxx"
 
@@ -56,6 +56,6 @@ namespace svt
 } // namespace svt
 //......................................................................................................................
 
-#endif // SVT_TOOLPANELDECKPEER_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDECKPEER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

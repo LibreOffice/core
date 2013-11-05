@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_UNO_WIZARD_HXX
-#define SVT_UNO_WIZARD_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_UNOWIZARD_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_UNOWIZARD_HXX
 
 #include "svtools/genericunodialog.hxx"
 
@@ -103,6 +103,6 @@ namespace svt { namespace uno
 } } // namespace svt::uno
 //......................................................................................................................
 
-#endif // SVT_UNO_WIZARD_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_UNO_UNOWIZARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

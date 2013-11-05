@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TREE_CONTROL_PEER_HXX_
-#define _TREE_CONTROL_PEER_HXX_
+#ifndef INCLUDED_SVTOOLS_SOURCE_UNO_TREECONTROLPEER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_UNO_TREECONTROLPEER_HXX
 
 #include <com/sun/star/awt/tree/XTreeControl.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
@@ -169,6 +169,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicProvider > mxGraphicProvider;
 };
 
-#endif // _TREE_CONTROL_PEER_HXX_
+#endif // INCLUDED_SVTOOLS_SOURCE_UNO_TREECONTROLPEER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
-#define SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
+#define INCLUDED_SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -265,6 +265,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

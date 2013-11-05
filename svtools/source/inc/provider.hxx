@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GOODIES_PROVIDER_HXX
-#define _GOODIES_PROVIDER_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_INC_PROVIDER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_INC_PROVIDER_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

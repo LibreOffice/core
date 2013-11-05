@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DUMMYPANEL_HXX
-#define DUMMYPANEL_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_DUMMYPANEL_HXX
+#define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_DUMMYPANEL_HXX
 
 #include "svtools/toolpanel/toolpanel.hxx"
 #include "svtools/toolpanel/refbase.hxx"
@@ -60,6 +60,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // DUMMYPANEL_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_DUMMYPANEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

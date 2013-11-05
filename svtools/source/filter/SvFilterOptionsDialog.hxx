@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FILTER_OPTIONS_DIALOG_HXX_
-#define _SV_FILTER_OPTIONS_DIALOG_HXX_
+#ifndef INCLUDED_SVTOOLS_SOURCE_FILTER_SVFILTEROPTIONSDIALOG_HXX
+#define INCLUDED_SVTOOLS_SOURCE_FILTER_SVFILTEROPTIONSDIALOG_HXX
 
 #include <tools/fldunit.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -94,6 +94,6 @@ public:
 };
 
 
-#endif // _SV_FILTER_OPTIONS_DIALOG_HXX_
+#endif // INCLUDED_SVTOOLS_SOURCE_FILTER_SVFILTEROPTIONSDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
