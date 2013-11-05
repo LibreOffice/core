@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_QUERYFILTER_HXX
-#define DBAUI_QUERYFILTER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYFILTER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYFILTER_HXX
 
 #include <vcl/dialog.hxx>
 
@@ -128,6 +128,6 @@ namespace dbaui
 
 }
 
-#endif // DBAUI_QUERYFILTER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

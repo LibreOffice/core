@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_QUERYTABWINUNDOACT_HXX
-#define DBAUI_QUERYTABWINUNDOACT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABWINUNDOACT_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABWINUNDOACT_HXX
 
 #include "QueryDesignUndoAction.hxx"
 #include <vector>
@@ -64,6 +64,6 @@ namespace dbaui
     };
 
 }
-#endif // DBAUI_QUERYTABWINUNDOACT_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABWINUNDOACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

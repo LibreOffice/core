@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_JOINCONTROLLER_HXX
-#define DBAUI_JOINCONTROLLER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_JOINCONTROLLER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_JOINCONTROLLER_HXX
 
 #include "singledoccontroller.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -153,6 +153,6 @@ namespace dbaui
         AddTableDialogContext&  impl_getDialogContext() const;
     };
 }
-#endif // DBAUI_JOINCONTROLLER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_JOINCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

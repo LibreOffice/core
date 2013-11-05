@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MACROMIGRATIONPAGES_HXX
-#define DBACCESS_MACROMIGRATIONPAGES_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MACROMIGRATIONPAGES_HXX
+#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MACROMIGRATIONPAGES_HXX
 
 #include "migrationprogress.hxx"
 #include "rangeprogressbar.hxx"
@@ -156,6 +156,6 @@ namespace dbmm
 
 } // namespace dbmm
 
-#endif // DBACCESS_MACROMIGRATIONPAGES_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MACROMIGRATIONPAGES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

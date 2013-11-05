@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_QYDLGTAB_HXX
-#define DBAUI_QYDLGTAB_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_ADTABDLG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_ADTABDLG_HXX
 
 #include <vcl/dialog.hxx>
 
@@ -111,6 +111,6 @@ namespace dbaui
         void impl_switchTo( ObjectList _eList );
     };
 }
-#endif // DBAUI_QYDLGTAB_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_ADTABDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

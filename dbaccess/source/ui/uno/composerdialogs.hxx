@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
-#define DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -123,6 +123,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

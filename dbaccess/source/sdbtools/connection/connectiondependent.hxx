@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_CONNECTION_DEPENDENT_HXX
-#define DBACCESS_CONNECTION_DEPENDENT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_CONNECTIONDEPENDENT_HXX
+#define INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_CONNECTIONDEPENDENT_HXX
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -133,6 +133,6 @@ namespace sdbtools
 
 } // namespace sdbtools
 
-#endif // DBACCESS_CONNECTION_DEPENDENT_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_CONNECTIONDEPENDENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

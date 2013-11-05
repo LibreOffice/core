@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBUI_TABLECOPYHELPER_HXX
-#define DBUI_TABLECOPYHELPER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECOPYHELPER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECOPYHELPER_HXX
 
 #include "AppElementType.hxx"
 #include "commontypes.hxx"
@@ -182,6 +182,6 @@ namespace dbaui
 
     };
 }   // namespace dbaui
-#endif // DBUI_TABLECOPYHELPER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECOPYHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

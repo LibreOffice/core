@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TEXTCONNECTIONSETTINGS_HXX
-#define TEXTCONNECTIONSETTINGS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TEXTCONNECTIONSETTINGS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TEXTCONNECTIONSETTINGS_HXX
 
 #include "propertystorage.hxx"
 
@@ -59,6 +59,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // TEXTCONNECTIONSETTINGS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TEXTCONNECTIONSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

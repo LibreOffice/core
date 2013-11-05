@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_HELPERCOLLECTIONS_HXX
-#define DBA_HELPERCOLLECTIONS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_HELPERCOLLECTIONS_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_HELPERCOLLECTIONS_HXX
 
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <connectivity/dbtools.hxx>
@@ -105,6 +105,6 @@ namespace dbaccess
         }
     };
 }
-#endif // DBA_HELPERCOLLECTIONS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_HELPERCOLLECTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

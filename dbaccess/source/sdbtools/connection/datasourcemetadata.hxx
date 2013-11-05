@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_DATASOURCEMETADATA_HXX
-#define DBACCESS_DATASOURCEMETADATA_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_DATASOURCEMETADATA_HXX
+#define INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_DATASOURCEMETADATA_HXX
 
 #include "connectiondependent.hxx"
 
@@ -71,6 +71,6 @@ namespace sdbtools
 
 } // namespace sdbtools
 
-#endif // DBACCESS_DATASOURCEMETADATA_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_DATASOURCEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_FILEPICKER_INTERACTION_HXX
-#define DBAUI_FILEPICKER_INTERACTION_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_FINTERACTION_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_FINTERACTION_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -53,6 +53,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // DBAUI_FILEPICKER_INTERACTION_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_FINTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

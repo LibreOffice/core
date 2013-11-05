@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MIGRATIONERROR_HXX
-#define DBACCESS_MIGRATIONERROR_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONERROR_HXX
+#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONERROR_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -154,6 +154,6 @@ namespace dbmm
 
 } // namespace dbmm
 
-#endif // DBACCESS_MIGRATIONERROR_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONERROR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

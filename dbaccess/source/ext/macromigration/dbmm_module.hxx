@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MACROMIGRATION_MODULE_HXX
-#define DBACCESS_MACROMIGRATION_MODULE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_DBMM_MODULE_HXX
+#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_DBMM_MODULE_HXX
 
 #include <unotools/componentresmodule.hxx>
 
@@ -29,6 +29,6 @@ namespace dbmm
 
 } // namespace dbmm
 
-#endif // DBACCESS_MACROMIGRATION_MODULE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_DBMM_MODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

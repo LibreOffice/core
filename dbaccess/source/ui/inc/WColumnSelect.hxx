@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
-#define DBAUI_WIZ_COLUMNSELECT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_WCOLUMNSELECT_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_WCOLUMNSELECT_HXX
 
 #include "WTabPage.hxx"
 #include "WCopyTable.hxx"
@@ -84,6 +84,6 @@ namespace dbaui
         virtual ~OWizColumnSelect();
     };
 }
-#endif // DBAUI_WIZ_COLUMNSELECT_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WCOLUMNSELECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

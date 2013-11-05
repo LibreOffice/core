@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBX_BRWVIEW_HXX
-#define _SBX_BRWVIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_BRWVIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_BRWVIEW_HXX
 
 #include <vcl/window.hxx>
 
@@ -100,6 +100,6 @@ namespace dbaui
         ~BrowserViewStatusDisplay( );
     };
 }
-#endif // _SBX_BRWVIEW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_BRWVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

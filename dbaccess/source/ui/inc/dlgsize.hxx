@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DBAUI_DLGSIZE_HXX
-#define _DBAUI_DLGSIZE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSIZE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSIZE_HXX
 
 #include <vcl/dialog.hxx>
 
@@ -54,6 +54,6 @@ namespace dbaui
     };
 }   // namespace dbaui
 
-#endif // _DBAUI_DLGSIZE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSIZE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

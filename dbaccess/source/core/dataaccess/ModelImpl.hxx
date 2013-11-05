@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
-#define _DBA_COREDATAACCESS_MODELIMPL_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_MODELIMPL_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_MODELIMPL_HXX
 
 #include "apitools.hxx"
 #include "bookmarkcontainer.hxx"

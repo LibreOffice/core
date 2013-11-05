@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DBA_COREAPI_STATEMENT_HXX_
-#define _DBA_COREAPI_STATEMENT_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_STATEMENT_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_STATEMENT_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
@@ -180,6 +180,6 @@ private:
     bool            impl_ensureComposer_nothrow() const;
 };
 
-#endif // _DBA_COREAPI_STATEMENT_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_STATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

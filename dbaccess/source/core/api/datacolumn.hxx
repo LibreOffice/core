@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACORE_DATACOLUMN_HXX_
-#define _DBACORE_DATACOLUMN_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_DATACOLUMN_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_DATACOLUMN_HXX
 
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

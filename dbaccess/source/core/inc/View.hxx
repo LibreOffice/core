@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_VIEW_HXX
-#define DBACCESS_VIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEW_HXX
 
 #include "connectivity/sdbcx/VView.hxx"
 
@@ -69,6 +69,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // DBACCESS_VIEW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

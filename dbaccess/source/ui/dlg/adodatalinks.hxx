@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_ADO_DATALINK_HXX_
-#define _DBAUI_ADO_DATALINK_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_ADODATALINKS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_ADODATALINKS_HXX
 
 #include <osl/module.h>
 #include "commontypes.hxx"

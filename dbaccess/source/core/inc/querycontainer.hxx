@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_CORE_QUERYCONTAINER_HXX_
-#define _DBA_CORE_QUERYCONTAINER_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCONTAINER_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCONTAINER_HXX
 
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/stl_types.hxx>
@@ -171,6 +171,6 @@ namespace dbaccess
     };
 }   // namespace dbaccess
 
-#endif // _DBA_CORE_QUERYCONTAINER_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

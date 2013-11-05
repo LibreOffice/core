@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_RTABLECONNECTION_HXX
-#define DBAUI_RTABLECONNECTION_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLECONNECTION_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLECONNECTION_HXX
 
 #include "TableConnection.hxx"
 #include "RTableConnectionData.hxx"
@@ -39,6 +39,6 @@ namespace dbaui
         using OTableConnection::Draw;
     };
 }
-#endif // DBAUI_RTABLECONNECTION_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLECONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_CORE_SHARED_CONNECTION_HXX
-#define DBA_CORE_SHARED_CONNECTION_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_SHAREDCONNECTION_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_SHAREDCONNECTION_HXX
 
 #include "connectivity/ConnectionWrapper.hxx"
 #include <cppuhelper/component.hxx>
@@ -127,6 +127,6 @@ namespace dbaccess
 
 }   // namespace dbaccess
 
-#endif // DBA_CORE_SHARED_CONNECTION_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_SHAREDCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
-#define DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNFIELDUNDOACT_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNFIELDUNDOACT_HXX
 
 #include "GeneralUndo.hxx"
 #include "dbu_qry.hrc"
@@ -137,6 +137,6 @@ namespace dbaui
         OTabFieldMovedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDMOVED) { }
     };
 }
-#endif // DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNFIELDUNDOACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

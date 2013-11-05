@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
-#define _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTDEFINITION_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTDEFINITION_HXX
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -368,6 +368,6 @@ private:
 
 }   // namespace dbaccess
 
-#endif // _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTDEFINITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DBA_COREAPI_CALLABLESTATEMENT_HXX_
-#define _DBA_COREAPI_CALLABLESTATEMENT_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_CALLABLESTATEMENT_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_CALLABLESTATEMENT_HXX
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XOutParameters.hpp>
@@ -77,6 +77,6 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray > SAL_CALL getArray( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
 }
-#endif // _DBA_COREAPI_CALLABLESTATEMENT_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_CALLABLESTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

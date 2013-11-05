@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_CORE_API_OPTIMISTICSET_HXX
-#define DBACCESS_CORE_API_OPTIMISTICSET_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_OPTIMISTICSET_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_OPTIMISTICSET_HXX
 
 #include "KeySet.hxx"
 #include <cppuhelper/implbase1.hxx>
@@ -82,6 +82,6 @@ namespace dbaccess
         const ::std::map<sal_Int32,sal_Int32>& getJoinedKeyColumns() const { return m_aJoinedKeyColumns; }
     };
 }
-#endif // DBACCESS_CORE_API_OPTIMISTICSET_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_OPTIMISTICSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

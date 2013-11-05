@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_PROPERTYSETFORWARD_HXX
-#define DBA_PROPERTYSETFORWARD_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_PROPERTYFORWARD_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_PROPERTYFORWARD_HXX
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -67,6 +67,6 @@ namespace dbaccess
 
 }   // namespace dbaccess
 
-#endif // DBA_PROPERTYSETFORWARD_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_PROPERTYFORWARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

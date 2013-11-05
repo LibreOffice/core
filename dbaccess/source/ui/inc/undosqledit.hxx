@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_UNDOSQLEDIT_HXX
-#define DBAUI_UNDOSQLEDIT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_UNDOSQLEDIT_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_UNDOSQLEDIT_HXX
 
 #include "GeneralUndo.hxx"
 #include "dbu_control.hrc"
@@ -42,6 +42,6 @@ namespace dbaui
         void SetOriginalText(const OUString& strText) { m_strNextText =strText; }
     };
 }
-#endif // DBAUI_UNDOSQLEDIT_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UNDOSQLEDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_TABLEWINDOWTITLE_HXX
-#define DBAUI_TABLEWINDOWTITLE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWTITLE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWTITLE_HXX
 
 #include <vcl/fixed.hxx>
 
@@ -45,6 +45,6 @@ namespace dbaui
         virtual void StateChanged( StateChangedType nStateChange );
     };
 }
-#endif // DBAUI_TABLEWINDOWTITLE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWTITLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

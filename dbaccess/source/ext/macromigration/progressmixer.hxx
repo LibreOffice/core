@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_PROGRESSMIXER_HXX
-#define DBACCESS_PROGRESSMIXER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_PROGRESSMIXER_HXX
+#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_PROGRESSMIXER_HXX
 
 #include <sal/types.h>
 
@@ -82,6 +82,6 @@ namespace dbmm
 
 } // namespace dbmm
 
-#endif // DBACCESS_PROGRESSMIXER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_PROGRESSMIXER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

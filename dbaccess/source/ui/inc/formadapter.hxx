@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBA_FORMADAPTER_HXX
-#define _SBA_FORMADAPTER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_FORMADAPTER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_FORMADAPTER_HXX
 
 #include "sbamultiplex.hxx"
 
@@ -433,6 +433,6 @@ namespace dbaui
         void StartListening();
     };
 }
-#endif // _SBA_FORMADAPTER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_FORMADAPTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

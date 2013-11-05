@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DBADMINIMPL_HXX_
-#define _DBAUI_DBADMINIMPL_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_DBADMINIMPL_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_DBADMINIMPL_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -169,6 +169,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // _DBAUI_DBADMINIMPL_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DBADMINIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MIGRATIONENGINE_HXX
-#define DBACCESS_MIGRATIONENGINE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONENGINE_HXX
+#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONENGINE_HXX
 
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 
@@ -75,6 +75,6 @@ namespace dbmm
 
 } // namespace dbmm
 
-#endif // DBACCESS_MIGRATIONENGINE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONENGINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

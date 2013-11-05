@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_CORE_TABLE_HXX_
-#define _DBA_CORE_TABLE_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLE_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLE_HXX
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -148,6 +148,6 @@ namespace dbaccess
         using OTable_Base::getFastPropertyValue;
     };
 }
-#endif // _DBA_CORE_TABLE_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

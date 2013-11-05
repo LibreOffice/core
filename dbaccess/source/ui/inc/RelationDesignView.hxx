@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_RELATIONDESIGNVIEW_HXX
-#define DBAUI_RELATIONDESIGNVIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDESIGNVIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDESIGNVIEW_HXX
 
 #include "JoinDesignView.hxx"
 #include <vector>
@@ -45,7 +45,7 @@ namespace dbaui
         virtual void GetFocus();
     };
 }
-#endif // DBAUI_RELATIONDESIGNVIEW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDESIGNVIEW_HXX
 
 
 

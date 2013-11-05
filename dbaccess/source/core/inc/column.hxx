@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_COREAPI_COLUMN_HXX_
-#define _DBA_COREAPI_COLUMN_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_COLUMN_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_COLUMN_HXX
 
 #include "columnsettings.hxx"
 
@@ -244,6 +244,6 @@ namespace dbaccess
         using OColumns_BASE::setParent;
     };
 }
-#endif // _DBA_COREAPI_COLUMN_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_COLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

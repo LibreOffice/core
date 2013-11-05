@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_TABLEDESIGNCONTROL_HXX
-#define DBAUI_TABLEDESIGNCONTROL_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNCONTROL_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNCONTROL_HXX
 
 #include <svtools/tabbar.hxx>
 #include <svtools/editbrowsebox.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBASHARED_APITOOLS_HXX_
-#define _DBASHARED_APITOOLS_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_INC_APITOOLS_HXX
+#define INCLUDED_DBACCESS_SOURCE_INC_APITOOLS_HXX
 
 #include <cppuhelper/component.hxx>
 #include <osl/mutex.hxx>
@@ -358,6 +358,6 @@ public:
     }                                                                             \
     _rGuard.reset();
 
-#endif // _DBASHARED_APITOOLS_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_INC_APITOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

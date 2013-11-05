@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MODULE_SDBT_HXX
-#define DBACCESS_MODULE_SDBT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_SDBTOOLS_INC_MODULE_SDBT_HXX
+#define INCLUDED_DBACCESS_SOURCE_SDBTOOLS_INC_MODULE_SDBT_HXX
 
 #include <unotools/componentresmodule.hxx>
 
@@ -29,6 +29,6 @@ namespace sdbtools
 
 } // namespace sdbtools
 
-#endif // DBACCESS_MODULE_SDBT_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_INC_MODULE_SDBT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

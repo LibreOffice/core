@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBA_BWRCTRLR_HXX
-#define _SBA_BWRCTRLR_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_BRWCTRLR_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_BRWCTRLR_HXX
 
 #include <dbaccess/genericcontroller.hxx>
 #include "moduledbu.hxx"
@@ -346,6 +346,6 @@ namespace dbaui
     };
 }
 
-#endif // _SBA_BWRCTRLR_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_BRWCTRLR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

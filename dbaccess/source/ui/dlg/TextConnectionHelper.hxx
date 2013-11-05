@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_TEXTCONNECTIONHELPER_HXX
-#define DBAUI_TEXTCONNECTIONHELPER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_TEXTCONNECTIONHELPER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_TEXTCONNECTIONHELPER_HXX
 
 #include "ConnectionPageSetup.hxx"
 #include "adminpages.hxx"

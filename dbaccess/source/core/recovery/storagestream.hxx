@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef STORAGESTREAM_HXX
-#define STORAGESTREAM_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_STORAGESTREAM_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_STORAGESTREAM_HXX
 
 #include <dbaccess/dbaccessdllapi.h>
 
@@ -90,6 +90,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // STORAGESTREAM_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_STORAGESTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

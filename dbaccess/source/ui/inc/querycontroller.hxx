@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_QUERYCONTROLLER_HXX
-#define DBAUI_QUERYCONTROLLER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYCONTROLLER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYCONTROLLER_HXX
 
 #include "JoinController.hxx"
 #include "JoinTableView.hxx"
@@ -242,6 +242,6 @@ namespace dbaui
         using OQueryController_PBase::getFastPropertyValue;
     };
 }
-#endif // DBAUI_QUERYCONTROLLER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

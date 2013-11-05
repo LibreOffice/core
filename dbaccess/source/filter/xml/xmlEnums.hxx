@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_XMLENUMS_HXX
-#define DBA_XMLENUMS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLENUMS_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLENUMS_HXX
 
 #define PROGRESS_BAR_STEP 20
 
@@ -159,6 +159,6 @@ namespace dbaxml
         XML_TOK_DEFAULT_CELL_STYLE_NAME
     };
 } // namespace dbaxml
-#endif // DBA_XMLENUMS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLENUMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

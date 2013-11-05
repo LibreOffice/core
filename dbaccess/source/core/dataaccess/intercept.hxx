@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBA_INTERCEPT_HXX
-#define DBA_INTERCEPT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_INTERCEPT_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_INTERCEPT_HXX
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -154,6 +154,6 @@ private:
 
 }   // namespace dbaccess
 
-#endif //DBA_INTERCEPT_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_INTERCEPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

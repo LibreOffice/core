@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_DBEXCHANGE_HXX
-#define DBAUI_DBEXCHANGE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBEXCHANGE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DBEXCHANGE_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -79,7 +79,7 @@ namespace dbaui
     };
 }
 
-#endif //  DBAUI_DBEXCHANGE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DBEXCHANGE_HXX
 
 
 

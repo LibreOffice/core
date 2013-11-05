@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DSSELECT_HXX_
-#define _DBAUI_DSSELECT_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_DSSELECT_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_DSSELECT_HXX
 
 #include "dsntypes.hxx"
 #include "odbcconfig.hxx"
@@ -75,6 +75,6 @@ protected:
 
 }   // namespace dbaui
 
-#endif // _DBAUI_DSSELECT_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DSSELECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

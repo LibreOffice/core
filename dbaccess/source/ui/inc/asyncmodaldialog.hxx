@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_ASYNCMODALDIALOG_HXX
-#define DBACCESS_ASYNCMODALDIALOG_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_ASYNCMODALDIALOG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_ASYNCMODALDIALOG_HXX
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
@@ -45,6 +45,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // DBACCESS_ASYNCMODALDIALOG_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_ASYNCMODALDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

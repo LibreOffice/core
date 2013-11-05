@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DATASOURCECONNECTOR_HXX_
-#define _DBAUI_DATASOURCECONNECTOR_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DATASOURCECONNECTOR_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DATASOURCECONNECTOR_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -76,6 +76,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // _DBAUI_DATASOURCECONNECTOR_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DATASOURCECONNECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

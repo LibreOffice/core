@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
-#define _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_PREPAREDSTATEMENT_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_PREPAREDSTATEMENT_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
@@ -103,6 +103,6 @@ namespace dbaccess
         virtual void SAL_CALL clearParameters(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
 }
-#endif // _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_PREPAREDSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_TABLESSINGLEDLG_HXX_
-#define _DBAUI_TABLESSINGLEDLG_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLESSINGLEDLG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLESSINGLEDLG_HXX
 
 #include <sfx2/basedlgs.hxx>
 #include "IItemSetHelper.hxx"
@@ -72,6 +72,6 @@ class ODbDataSourceAdministrationHelper;
 
 }   // namespace dbaui
 
-#endif // _DBAUI_TABLESSINGLEDLG_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLESSINGLEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

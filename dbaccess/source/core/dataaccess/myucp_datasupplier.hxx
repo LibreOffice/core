@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBA_DATASUPPLIER_HXX
-#define DBA_DATASUPPLIER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_MYUCP_DATASUPPLIER_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_MYUCP_DATASUPPLIER_HXX
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
@@ -63,6 +63,6 @@ public:
 
 }
 
-#endif // DBA_DATASUPPLIER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_MYUCP_DATASUPPLIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

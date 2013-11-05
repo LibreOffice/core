@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_QUERYDESIGNUNDOACTION_HXX
-#define DBAUI_QUERYDESIGNUNDOACTION_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNUNDOACTION_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNUNDOACTION_HXX
 
 #include "GeneralUndo.hxx"
 
@@ -34,6 +34,6 @@ namespace dbaui
         OQueryDesignUndoAction(OJoinTableView* pOwner, sal_uInt16 nCommentID) : OCommentUndoAction(nCommentID), m_pOwner(pOwner) { }
     };
 }
-#endif // DBAUI_QUERYDESIGNUNDOACTION_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNUNDOACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_WIZARD_CPAGE_HXX
-#define DBAUI_WIZARD_CPAGE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_WCPAGE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_WCPAGE_HXX
 
 #include "WTabPage.hxx"
 
@@ -90,6 +90,6 @@ namespace dbaui
         void setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName );
     };
 }
-#endif // DBAUI_WIZARD_CPAGE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WCPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

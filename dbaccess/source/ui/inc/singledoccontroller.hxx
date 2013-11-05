@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
-#define DBAUI_SINGLEDOCCONTROLLER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SINGLEDOCCONTROLLER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_SINGLEDOCCONTROLLER_HXX
 
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 
@@ -75,6 +75,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // DBAUI_SINGLEDOCCONTROLLER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SINGLEDOCCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

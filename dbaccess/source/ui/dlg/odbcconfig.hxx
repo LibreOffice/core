@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_ODBC_CONFIG_HXX_
-#define _DBAUI_ODBC_CONFIG_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_ODBCCONFIG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_ODBCCONFIG_HXX
 
 #include "commontypes.hxx"
 
@@ -118,6 +118,6 @@ public:
 
 }   // namespace dbaui
 
-#endif // _DBAUI_ODBC_CONFIG_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ODBCCONFIG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_INDEXDIALOG_HXX_
-#define _DBAUI_INDEXDIALOG_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXDIALOG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXDIALOG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -163,6 +163,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // _DBAUI_INDEXDIALOG_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

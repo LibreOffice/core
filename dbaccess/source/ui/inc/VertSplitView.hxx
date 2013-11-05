@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_VERTSPLITVIEW_HXX
-#define DBAUI_VERTSPLITVIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_VERTSPLITVIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_VERTSPLITVIEW_HXX
 
 #include <vcl/window.hxx>
 
@@ -47,6 +47,6 @@ namespace dbaui
         virtual void Resize();
     };
 }
-#endif // DBAUI_VERTSPLITVIEW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_VERTSPLITVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

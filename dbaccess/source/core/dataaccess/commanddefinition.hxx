@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
-#define _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDDEFINITION_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDDEFINITION_HXX
 
 #include "commandbase.hxx"
 #include "apitools.hxx"
@@ -145,6 +145,6 @@ private:
 
 }   // namespace dbaccess
 
-#endif // _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDDEFINITION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#define _DBAUI_MODULE_DBU_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_MODULEDBU_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_MODULEDBU_HXX
 
 #include <osl/mutex.hxx>
 #include <tools/resid.hxx>
@@ -81,6 +81,6 @@ public:
 
 }   // namespace dbaui
 
-#endif // _DBAUI_MODULE_DBU_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_MODULEDBU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

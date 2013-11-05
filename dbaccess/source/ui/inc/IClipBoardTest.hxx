@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
-#define DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_ICLIPBOARDTEST_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_ICLIPBOARDTEST_HXX
 #include <sal/types.h>
 
 namespace dbaui
@@ -39,6 +39,6 @@ namespace dbaui
         ~IClipboardTest() {}
     };
 }
-#endif // DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_ICLIPBOARDTEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

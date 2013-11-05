@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_ADMINCONTROLS_HXX
-#define DBACCESS_ADMINCONTROLS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINCONTROLS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINCONTROLS_HXX
 
 #include "adminpages.hxx"
 
@@ -66,6 +66,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // DBACCESS_ADMINCONTROLS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINCONTROLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

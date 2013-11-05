@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_CONNECTIONTOOLS_HXX
-#define DBACCESS_CONNECTIONTOOLS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_CONNECTIONTOOLS_HXX
+#define INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_CONNECTIONTOOLS_HXX
 
 #include "module_sdbt.hxx"
 
@@ -87,6 +87,6 @@ namespace sdbtools
 
 } // namespace sdbtools
 
-#endif // DBACCESS_CONNECTIONTOOLS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_CONNECTIONTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

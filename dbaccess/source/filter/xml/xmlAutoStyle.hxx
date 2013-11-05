@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_XMLAUTOSTYLE_HXX
-#define DBA_XMLAUTOSTYLE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLAUTOSTYLE_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLAUTOSTYLE_HXX
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmltypes.hxx>
@@ -44,6 +44,6 @@ namespace dbaxml
         virtual ~OXMLAutoStylePoolP();
     };
 } // dbaxml
-#endif // DBA_XMLAUTOSTYLE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLAUTOSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

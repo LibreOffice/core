@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_INDEXES_HXX_
-#define DBACCESS_INDEXES_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_CINDEXES_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_CINDEXES_HXX
 
 #include "connectivity/TIndexes.hxx"
 
@@ -45,6 +45,6 @@ namespace dbaccess
     };
 }
 
-#endif // DBACCESS_INDEXES_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_CINDEXES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

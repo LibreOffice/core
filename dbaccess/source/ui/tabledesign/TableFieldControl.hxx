@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_TABLEFIELDCONTROL_HXX
-#define DBAUI_TABLEFIELDCONTROL_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDCONTROL_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDCONTROL_HXX
 
 #include "FieldDescControl.hxx"
 
@@ -55,6 +55,6 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection();
     };
 }
-#endif // DBAUI_TABLEFIELDCONTROL_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

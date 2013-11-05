@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_CORE_DATASETTINGS_HXX_
-#define _DBA_CORE_DATASETTINGS_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_DATASETTINGS_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_DATASETTINGS_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -77,6 +77,6 @@ protected:
 
 }   // namespace dbaccess
 
-#endif // _DBA_CORE_DATASETTINGS_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_DATASETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_UI_DBTREEVIEW_HXX
-#define DBACCESS_UI_DBTREEVIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEVIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEVIEW_HXX
 
 #include <vcl/window.hxx>
 
@@ -59,6 +59,6 @@ namespace dbaui
     };
 }
 
-#endif // DBACCESS_UI_DBTREEVIEW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

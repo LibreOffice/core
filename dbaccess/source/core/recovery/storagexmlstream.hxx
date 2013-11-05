@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef STORAGEXMLSTREAM_HXX
-#define STORAGEXMLSTREAM_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_STORAGEXMLSTREAM_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_STORAGEXMLSTREAM_HXX
 
 #include "storagestream.hxx"
 
@@ -89,6 +89,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // STORAGEXMLSTREAM_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_STORAGEXMLSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACCESS_DSNTYPES_HXX_
-#define _DBACCESS_DSNTYPES_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_INC_DSNTYPES_HXX
+#define INCLUDED_DBACCESS_SOURCE_INC_DSNTYPES_HXX
 
 #include <comphelper/stl_types.hxx>
 #include "dbadllapi.hxx"
@@ -216,6 +216,6 @@ protected:
 
 }   // namespace dbaccess
 
-#endif // _DBACCESS_DSNTYPES_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_INC_DSNTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

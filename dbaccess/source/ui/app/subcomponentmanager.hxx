@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_SUBCOMPONENTMANAGER_HXX
-#define DBACCESS_SUBCOMPONENTMANAGER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_SUBCOMPONENTMANAGER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_APP_SUBCOMPONENTMANAGER_HXX
 
 #include "AppElementType.hxx"
 
@@ -118,6 +118,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // DBACCESS_SUBCOMPONENTMANAGER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_APP_SUBCOMPONENTMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MIGRATIONLOG_HXX
-#define DBACCESS_MIGRATIONLOG_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONLOG_HXX
+#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONLOG_HXX
 
 #include "dbmm_types.hxx"
 
@@ -106,6 +106,6 @@ namespace dbmm
 
 } // namespace dbmm
 
-#endif // DBACCESS_MIGRATIONLOG_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONLOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

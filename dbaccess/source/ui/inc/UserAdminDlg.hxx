@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_USERADMINDLG_HXX
-#define DBAUI_USERADMINDLG_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_USERADMINDLG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_USERADMINDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include "dsntypes.hxx"
@@ -78,6 +78,6 @@ namespace dbaui
     };
 }   // namespace dbaui
 
-#endif // DBAUI_USERADMINDLG_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_USERADMINDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

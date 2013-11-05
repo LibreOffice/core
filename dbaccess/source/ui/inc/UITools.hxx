@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_TOOLS_HXX
-#define DBAUI_TOOLS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_UITOOLS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_UITOOLS_HXX
 
 #include <connectivity/dbexception.hxx>
 #include <comphelper/stl_types.hxx>
@@ -413,6 +413,6 @@ namespace dbaui
     void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark );
 
 }
-#endif // DBAUI_TOOLS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UITOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

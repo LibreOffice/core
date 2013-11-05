@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_XMLHIERARCHYCOLLECTION_HXX
-#define DBA_XMLHIERARCHYCOLLECTION_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLHIERARCHYCOLLECTION_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLHIERARCHYCOLLECTION_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include "xmlEnums.hxx"
@@ -61,6 +61,6 @@ namespace dbaxml
     };
 } // namespace dbaxml
 
-#endif // DBA_XMLHIERARCHYCOLLECTION_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLHIERARCHYCOLLECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

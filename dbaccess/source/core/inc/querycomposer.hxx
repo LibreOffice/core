@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
-#define DBACCESS_CORE_API_QUERYCOMPOSER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCOMPOSER_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCOMPOSER_HXX
 
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
@@ -94,6 +94,6 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getParameters(  ) throw(::com::sun::star::uno::RuntimeException);
     };
 }
-#endif // DBACCESS_CORE_API_QUERYCOMPOSER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCOMPOSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

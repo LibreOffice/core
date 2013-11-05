@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DBA_COREAPI_RESULTSET_HXX_
-#define _DBA_COREAPI_RESULTSET_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTSET_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTSET_HXX
 
 #include "column.hxx"
 #include <connectivity/warningscontainer.hxx>
@@ -226,6 +226,6 @@ namespace dbaccess
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 }
-#endif // _DBA_COREAPI_RESULTSET_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

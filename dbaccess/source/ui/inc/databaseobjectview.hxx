@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_DATABASE_OBJECT_VIEW_HXX
-#define DBACCESS_DATABASE_OBJECT_VIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DATABASEOBJECTVIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DATABASEOBJECTVIEW_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -237,6 +237,6 @@ namespace dbaui
     };
 }   // namespace dbaui
 
-#endif // DBACCESS_DATABASE_OBJECT_VIEW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DATABASEOBJECTVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

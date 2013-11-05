@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DSNITEM_HXX_
-#define _DBAUI_DSNITEM_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_DSNITEM_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_DSNITEM_HXX
 
 #include <svl/poolitem.hxx>
 
@@ -47,6 +47,6 @@ namespace dbaui
     };
 }   // namespace dbaui
 
-#endif // _DBAUI_DSNITEM_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DSNITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

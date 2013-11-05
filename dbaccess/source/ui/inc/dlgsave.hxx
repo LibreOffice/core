@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_DLGSAVE_HXX
-#define DBAUI_DLGSAVE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
 
 #include "apitools.hxx"
 #include <vcl/dialog.hxx>
@@ -78,7 +78,7 @@ namespace dbaui
     };
 }
 
-#endif // DBAUI_DLGSAVE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
 
 
 

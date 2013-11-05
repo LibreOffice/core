@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
-#define DBAUI_TABLEFIELDDESCGENPAGE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_FIELDDESCGENWIN_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_FIELDDESCGENWIN_HXX
 
 #include <vcl/tabpage.hxx>
 #include "IClipBoardTest.hxx"
@@ -71,6 +71,6 @@ namespace dbaui
         inline OTableFieldControl*  getFieldControl() const { return m_pFieldControl; }
     };
 }
-#endif // DBAUI_TABLEFIELDDESCGENPAGE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_FIELDDESCGENWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

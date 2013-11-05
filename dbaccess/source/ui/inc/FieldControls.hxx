@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_FIELDCONTROLS_HXX
-#define DBAUI_FIELDCONTROLS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDCONTROLS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDCONTROLS_HXX
 
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
@@ -170,6 +170,6 @@ namespace dbaui
         m_strHelpText = ModuleRes(nHelpId);
     }
 }
-#endif // DBAUI_FIELDCONTROLS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDCONTROLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

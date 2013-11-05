@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_COREAPI_QUERY_HXX_
-#define _DBA_COREAPI_QUERY_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_QUERY_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_QUERY_HXX
 
 #include "querydescriptor.hxx"
 #include <cppuhelper/implbase3.hxx>
@@ -151,6 +151,6 @@ private:
 
 }   // namespace dbaccess
 
-#endif // _DBA_COREAPI_QUERY_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_QUERY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

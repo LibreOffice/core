@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_TABLEROW_HXX
-#define DBAUI_TABLEROW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROW_HXX
 
 #include <comphelper/stl_types.hxx>
 #include <tools/stream.hxx>
@@ -74,6 +74,6 @@ namespace dbaui
         friend SvStream& operator>>( SvStream& rStr, OTableRow& _rRow );
     };
 }
-#endif // DBAUI_TABLEROW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_MARKTREE_HXX_
-#define _DBAUI_MARKTREE_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_MARKTREE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_MARKTREE_HXX
 
 #include "dbtreelistbox.hxx"
 
@@ -62,6 +62,6 @@ private:
 
 }   // namespace dbaui
 
-#endif // _DBAUI_MARKTREE_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_MARKTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

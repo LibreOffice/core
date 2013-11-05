@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOO_DATASOURCEREGISTRATIONS_HXX
-#define OOO_DATASOURCEREGISTRATIONS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEREGISTRATIONS_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEREGISTRATIONS_HXX
 
 #include <com/sun/star/uno/XAggregation.hpp>
 
@@ -30,6 +30,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // OOO_DATASOURCEREGISTRATIONS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEREGISTRATIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

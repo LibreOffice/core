@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBA_UNODATBR_HXX_
-#define _SBA_UNODATBR_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_UNODATBR_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_UNODATBR_HXX
 
 #include "brwctrlr.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -477,6 +477,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // _SBA_UNODATBR_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UNODATBR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

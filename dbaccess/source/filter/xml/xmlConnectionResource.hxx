@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_XMLCONNECTIONRESOURCE_HXX_INCLUDED
-#define DBA_XMLCONNECTIONRESOURCE_HXX_INCLUDED
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLCONNECTIONRESOURCE_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLCONNECTIONRESOURCE_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -37,6 +37,6 @@ namespace dbaxml
     };
 } // namespace dbaxml
 
-#endif // DBA_XMLCONNECTIONRESOURCE_HXX_INCLUDED
+#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLCONNECTIONRESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

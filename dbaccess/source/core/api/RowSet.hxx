@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_CORE_API_ROWSET_HXX
-#define DBACCESS_CORE_API_ROWSET_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSET_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSET_HXX
 
 #include "apitools.hxx"
 #include "RowSetBase.hxx"
@@ -531,6 +531,6 @@ namespace dbaccess
     };
 
 }
-#endif // DBACCESS_CORE_API_ROWSET_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_ITEMSETHELPER_HXX
-#define DBAUI_ITEMSETHELPER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_IITEMSETHELPER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_IITEMSETHELPER_HXX
 
 #include <sal/types.h>
 #include <comphelper/uno3.hxx>
@@ -69,6 +69,6 @@ namespace dbaui
         ~IDatabaseSettingsDialog() {}
     };
 }
-#endif // DBAUI_ITEMSETHELPER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_IITEMSETHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

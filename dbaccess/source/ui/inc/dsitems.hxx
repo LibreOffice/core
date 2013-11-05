@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#define _DBAUI_DATASOURCEITEMS_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DSITEMS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DSITEMS_HXX
 
 typedef sal_Int32   ItemID;
 
@@ -92,6 +92,6 @@ typedef sal_Int32   ItemID;
 #define DSID_FIRST_ITEM_ID  DSID_NAME
 #define DSID_LAST_ITEM_ID   DSID_RESPECTRESULTSETTYPE
 
-#endif // _DBAUI_DATASOURCEITEMS_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DSITEMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
-#define DBACCESS_UI_BROWSER_ID_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_BROWSERIDS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_BROWSERIDS_HXX
 
 #include <svx/svxids.hrc>
 #include "dbaccess_slotid.hrc"
@@ -107,6 +107,6 @@
 #define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT
 
 
-#endif // DBACCESS_UI_BROWSER_ID_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_BROWSERIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

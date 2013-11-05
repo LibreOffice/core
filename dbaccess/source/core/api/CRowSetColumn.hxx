@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBACCESS_CORE_API_CROWSETCOLUMN_HXX
-#define DBACCESS_CORE_API_CROWSETCOLUMN_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_CROWSETCOLUMN_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_CROWSETCOLUMN_HXX
 
 #include "RowSetRow.hxx"
 #include <connectivity/CommonTools.hxx>
@@ -47,6 +47,6 @@ namespace dbaccess
 
 }
 
-#endif // DBACCESS_CORE_API_CROWSETCOLUMN_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_CROWSETCOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

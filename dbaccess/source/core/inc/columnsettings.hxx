@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COLUMNSETTINGS_HXX
-#define COLUMNSETTINGS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_COLUMNSETTINGS_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_COLUMNSETTINGS_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -94,6 +94,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // COLUMNSETTINGS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_COLUMNSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

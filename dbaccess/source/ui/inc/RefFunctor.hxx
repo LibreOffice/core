@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_REFFUNCTOR_HXX
-#define DBAUI_REFFUNCTOR_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_REFFUNCTOR_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_REFFUNCTOR_HXX
 
 #include <rtl/ref.hxx>
 #ifndef INCLUDED_FUNCTIONAL
@@ -40,6 +40,6 @@ namespace dbaui
         }
     };
 } // namespace dbaui
-#endif //DBAUI_REFFUNCTOR_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_REFFUNCTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

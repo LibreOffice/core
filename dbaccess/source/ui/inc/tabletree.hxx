@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_TABLETREE_HXX_
-#define _DBAUI_TABLETREE_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
 
 #include "marktree.hxx"
 
@@ -178,6 +178,6 @@ protected:
 
 }   // namespace dbaui
 
-#endif // _DBAUI_TABLETREE_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

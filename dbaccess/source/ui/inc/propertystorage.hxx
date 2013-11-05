@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PROPERTYSTORAGE_HXX
-#define PROPERTYSTORAGE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSTORAGE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSTORAGE_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -73,6 +73,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // PROPERTYSTORAGE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSTORAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

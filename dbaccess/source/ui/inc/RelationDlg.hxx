@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_RELATIONDIALOG_HXX
-#define DBAUI_RELATIONDIALOG_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
 
 #include <vcl/dialog.hxx>
 
@@ -96,6 +96,6 @@ namespace dbaui
         DECL_LINK( OKClickHdl, Button* );
     };
 }
-#endif // DBAUI_RELATIONDIALOG_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

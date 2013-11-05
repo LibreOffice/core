@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_QUERYTABLECONNECTION_HXX
-#define DBAUI_QUERYTABLECONNECTION_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLECONNECTION_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLECONNECTION_HXX
 
 #include "TableConnection.hxx"
 #include "QTableConnectionData.hxx"
@@ -44,6 +44,6 @@ namespace dbaui
 
     };
 }
-#endif // DBAUI_QUERYTABLECONNECTION_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLECONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

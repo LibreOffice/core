@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_JOINDESIGNVIEW_HXX
-#define DBAUI_JOINDESIGNVIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_JOINDESIGNVIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_JOINDESIGNVIEW_HXX
 
 #include <dbaccess/dataview.hxx>
 #include <vector>
@@ -66,7 +66,7 @@ namespace dbaui
         DECL_LINK( SplitHdl, void* );
     };
 }
-#endif // DBAUI_JOINDESIGNVIEW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_JOINDESIGNVIEW_HXX
 
 
 

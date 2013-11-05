@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_UNODIRECTSQL_HXX
-#define DBAUI_UNODIRECTSQL_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_UNODIRECTSQL_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_UNO_UNODIRECTSQL_HXX
 
 #include <svtools/genericunodialog.hxx>
 #include "apitools.hxx"
@@ -62,6 +62,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // DBAUI_UNODIRECTSQL_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_UNODIRECTSQL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

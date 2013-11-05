@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
-#define DBAUI_WIZ_COPYTABLEDIALOG_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_WCOPYTABLE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_WCOPYTABLE_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -411,6 +411,6 @@ namespace dbaui
     };
 }
 
-#endif // DBAUI_WIZ_COPYTABLEDIALOG_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WCOPYTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

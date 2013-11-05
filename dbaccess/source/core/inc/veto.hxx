@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_VETO_HXX
-#define DBACCESS_VETO_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_VETO_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_VETO_HXX
 
 #include <com/sun/star/util/XVeto.hpp>
 
@@ -55,6 +55,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // DBACCESS_VETO_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_VETO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_TABLEFILTERDLG_HXX
-#define _DBAUI_TABLEFILTERDLG_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_TABLEFILTERDLG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_UNO_TABLEFILTERDLG_HXX
 
 #ifndef _DBAUI_UNOADMIN_
 #include "unoadmin.hxx"
@@ -62,6 +62,6 @@ protected:
 
 }   // namespace dbaui
 
-#endif // _DBAUI_TABLEFILTERDLG_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_TABLEFILTERDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

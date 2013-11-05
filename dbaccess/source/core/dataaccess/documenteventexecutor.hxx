@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_DOCUMENTEVENTEXECUTOR_HXX
-#define DBACCESS_DOCUMENTEVENTEXECUTOR_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTEVENTEXECUTOR_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTEVENTEXECUTOR_HXX
 
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -55,6 +55,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // DBACCESS_DOCUMENTEVENTEXECUTOR_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTEVENTEXECUTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

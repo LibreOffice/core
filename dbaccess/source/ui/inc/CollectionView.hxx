@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_COLLECTIONVIEW_HXX
-#define DBAUI_COLLECTIONVIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_COLLECTIONVIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_COLLECTIONVIEW_HXX
 
 #include <svtools/fileview.hxx>
 #include <vcl/button.hxx>
@@ -69,6 +69,6 @@ namespace dbaui
     };
 }   // namespace dbaui
 
-#endif //DBAUI_COLLECTIONVIEW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_COLLECTIONVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

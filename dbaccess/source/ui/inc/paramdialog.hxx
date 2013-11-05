@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_PARAMDIALOG_HXX_
-#define _DBAUI_PARAMDIALOG_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_PARAMDIALOG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_PARAMDIALOG_HXX
 
 #include "commontypes.hxx"
 
@@ -105,6 +105,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // _DBAUI_PARAMDIALOG_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_PARAMDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

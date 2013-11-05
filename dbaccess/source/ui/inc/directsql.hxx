@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACCESS_UI_DIRECTSQL_HXX_
-#define _DBACCESS_UI_DIRECTSQL_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DIRECTSQL_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DIRECTSQL_HXX
 
 #include <vcl/dialog.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
@@ -122,6 +122,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // _DBACCESS_UI_DIRECTSQL_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DIRECTSQL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef QUERYPROPERTIESDIALOG_HXX
-#define QUERYPROPERTIESDIALOG_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYPROPERTIESDIALOG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYPROPERTIESDIALOG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -57,6 +57,6 @@ inline sal_Int64 QueryPropertiesDialog::getLimit() const
 
 } ///dbaui namespace
 
-#endif ///QUERYPROPERTIESDIALOG_HXX
+#endif /// INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYPROPERTIESDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

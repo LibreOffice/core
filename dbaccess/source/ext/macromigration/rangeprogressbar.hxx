@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_RANGEPROGRESSBAR_HXX
-#define DBACCESS_RANGEPROGRESSBAR_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_RANGEPROGRESSBAR_HXX
+#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_RANGEPROGRESSBAR_HXX
 
 #include <vcl/prgsbar.hxx>
 
@@ -79,6 +79,6 @@ namespace dbmm
 
 } // namespace dbmm
 
-#endif // DBACCESS_RANGEPROGRESSBAR_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_RANGEPROGRESSBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

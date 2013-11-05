@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_COLUMNCONTROLWINDOW_HXX
-#define DBAUI_COLUMNCONTROLWINDOW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_COLUMNCONTROLWINDOW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_COLUMNCONTROLWINDOW_HXX
 
 #include "FieldDescControl.hxx"
 #include "TypeInfo.hxx"
@@ -65,6 +65,6 @@ namespace dbaui
         TOTypeInfoSP getDefaultTyp() const;
     };
 }   // namespace dbaui
-#endif // DBAUI_COLUMNCONTROLWINDOW_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_COLUMNCONTROLWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

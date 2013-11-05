@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBACCESS_TOOLBOXCONTROLLER_HXX
-#define DBACCESS_TOOLBOXCONTROLLER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TOOLBOXCONTROLLER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TOOLBOXCONTROLLER_HXX
 
 #include <svtools/toolboxcontroller.hxx>
 #include <comphelper/stl_types.hxx>
@@ -59,6 +59,6 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException);
     };
 } // dbaui
-#endif //DBACCESS_TOOLBOXCONTROLLER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TOOLBOXCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

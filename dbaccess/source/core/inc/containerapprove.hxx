@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_CONTAINERAPPROVE_HXX
-#define DBACCESS_CONTAINERAPPROVE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_CONTAINERAPPROVE_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_CONTAINERAPPROVE_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
 
@@ -60,6 +60,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // DBACCESS_CONTAINERAPPROVE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_CONTAINERAPPROVE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

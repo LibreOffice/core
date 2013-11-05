@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBUI_TABLECONTROLLER_HXX
-#define DBUI_TABLECONTROLLER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECONTROLLER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECONTROLLER_HXX
 
 #include "singledoccontroller.hxx"
 #include "moduledbu.hxx"
@@ -140,7 +140,7 @@ namespace dbaui
         virtual void impl_initialize();
     };
 }
-#endif // DBUI_TABLECONTROLLER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECONTROLLER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

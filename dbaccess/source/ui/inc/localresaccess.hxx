@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
-#define _DBAUI_LOCALRESACCESS_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_LOCALRESACCESS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_LOCALRESACCESS_HXX
 
 #include <svtools/localresaccess.hxx>
 #include "moduledbu.hxx"
@@ -42,6 +42,6 @@ public:
 
 }   // namespace dbaui
 
-#endif // _DBAUI_LOCALRESACCESS_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_LOCALRESACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

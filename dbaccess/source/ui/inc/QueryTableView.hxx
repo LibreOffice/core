@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
-#define DBAUI_QUERYTABLEVIEW_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYTABLEVIEW_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYTABLEVIEW_HXX
 
 #include "JoinTableView.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>

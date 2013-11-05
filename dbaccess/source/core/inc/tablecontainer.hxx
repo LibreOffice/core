@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_CORE_TABLECONTAINER_HXX_
-#define _DBA_CORE_TABLECONTAINER_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLECONTAINER_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLECONTAINER_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/stl_types.hxx>
@@ -99,6 +99,6 @@ namespace dbaccess
         virtual ~OTableContainer();
     };
 }
-#endif // _DBA_CORE_TABLECONTAINER_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

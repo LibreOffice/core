@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _LIMITBOXCONTROLLER_HXX_
-#define _LIMITBOXCONTROLLER_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_LIMITBOXCONTROLLER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_LIMITBOXCONTROLLER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svtools/toolboxcontroller.hxx>
@@ -64,6 +64,6 @@ class LimitBoxController: public svt::ToolboxController,
 
 } ///dbaui namespace
 
-#endif /// _LIMITBOXCONTROLLER_HXX_
+#endif /// INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_LIMITBOXCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

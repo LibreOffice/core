@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_SQLNAMEEDIT_HXX
-#define DBAUI_SQLNAMEEDIT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
 
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
@@ -94,6 +94,6 @@ namespace dbaui
     };
 
 }
-#endif // DBAUI_SQLNAMEEDIT_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SQLNAMEEDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

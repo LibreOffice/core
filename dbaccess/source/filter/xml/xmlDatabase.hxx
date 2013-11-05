@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_XMLDATABASE_HXX
-#define DBA_XMLDATABASE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLDATABASE_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLDATABASE_HXX
 
 #include <xmloff/xmlictxt.hxx>
 
@@ -41,6 +41,6 @@ namespace dbaxml
     };
 } // namespace dbaxml
 
-#endif // DBA_XMLDATABASE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLDATABASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

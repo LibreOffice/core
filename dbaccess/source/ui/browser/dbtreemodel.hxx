@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_DBTREEMODEL_HXX
-#define DBAUI_DBTREEMODEL_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEMODEL_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEMODEL_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "unodatbr.hxx"
@@ -56,6 +56,6 @@ namespace dbaui
     };
 }
 
-#endif // DBAUI_DBTREEMODEL_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

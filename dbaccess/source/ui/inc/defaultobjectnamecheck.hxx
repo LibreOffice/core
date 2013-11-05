@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
-#define DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
 
 #include "objectnamecheck.hxx"
 
@@ -122,6 +122,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

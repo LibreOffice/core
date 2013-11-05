@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_CORE_API_KEYSET_HXX
-#define DBACCESS_CORE_API_KEYSET_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_KEYSET_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_KEYSET_HXX
 
 #include "CacheSet.hxx"
 
@@ -233,6 +233,6 @@ namespace dbaccess
         virtual sal_Bool last_checked( sal_Bool i_bFetchRow);
     };
 }
-#endif // DBACCESS_CORE_API_KEYSET_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_KEYSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

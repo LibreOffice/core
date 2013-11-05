@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
-#define _DBA_COREDATAACCESS_DATASOURCE_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATASOURCE_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATASOURCE_HXX
 
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

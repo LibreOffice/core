@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_USERADMIN_HXX
-#define DBAUI_USERADMIN_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
@@ -80,6 +80,6 @@ public:
     virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
 };
 }
-#endif // DBAUI_USERADMIN_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

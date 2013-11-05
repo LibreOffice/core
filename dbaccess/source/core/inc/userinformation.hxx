@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_CORE_USERINFORMATION_HXX_
-#define _DBA_CORE_USERINFORMATION_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_USERINFORMATION_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_USERINFORMATION_HXX
 
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -34,6 +34,6 @@ public:
     ::com::sun::star::lang::Locale      getUserLanguage() const { return m_aUserLocale; }
 };
 
-#endif // _DBA_CORE_USERINFORMATION_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_USERINFORMATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

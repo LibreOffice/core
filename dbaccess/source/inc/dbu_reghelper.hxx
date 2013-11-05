@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBU_REGHELPER_HXX_
-#define _DBU_REGHELPER_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_INC_DBU_REGHELPER_HXX
+#define INCLUDED_DBACCESS_SOURCE_INC_DBU_REGHELPER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -36,6 +36,6 @@ namespace dbaui
 
 }
 
-#endif // _DBU_REGHELPER_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_INC_DBU_REGHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_TABLEGRANTCONTROL_HXX
-#define DBAUI_TABLEGRANTCONTROL_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEGRANTCTRL_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEGRANTCTRL_HXX
 
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -102,6 +102,6 @@ private:
 
 }
 
-#endif // DBAUI_TABLEGRANTCONTROL_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEGRANTCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

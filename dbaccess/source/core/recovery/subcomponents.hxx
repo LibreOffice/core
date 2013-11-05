@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SUBCOMPONENTS_HXX
-#define SUBCOMPONENTS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SUBCOMPONENTS_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SUBCOMPONENTS_HXX
 
 #include <dbaccess/dbaccessdllapi.h>
 
@@ -69,6 +69,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // SUBCOMPONENTS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SUBCOMPONENTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

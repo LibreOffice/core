@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_WIZ_TABBPAGE_HXX
-#define DBAUI_WIZ_TABBPAGE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_WTABPAGE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_WTABPAGE_HXX
 
 #include <vcl/tabpage.hxx>
 
@@ -42,6 +42,6 @@ namespace dbaui
         sal_Bool            IsFirstTime() const { return m_bFirstTime; }
     };
 }
-#endif // DBAUI_WIZ_TABBPAGE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTABPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

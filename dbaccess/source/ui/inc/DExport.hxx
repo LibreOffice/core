@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_DATABASEEXPORT_HXX
-#define DBAUI_DATABASEEXPORT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DEXPORT_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_DEXPORT_HXX
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>

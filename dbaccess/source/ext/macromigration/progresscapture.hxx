@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_PROGRESSCAPTURE_HXX
-#define DBACCESS_PROGRESSCAPTURE_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_PROGRESSCAPTURE_HXX
+#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_PROGRESSCAPTURE_HXX
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
@@ -60,6 +60,6 @@ namespace dbmm
 
 } // namespace dbmm
 
-#endif // DBACCESS_PROGRESSCAPTURE_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_PROGRESSCAPTURE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

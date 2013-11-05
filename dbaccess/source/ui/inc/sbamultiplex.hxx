@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBA_MULTIPLEX_HXX
-#define _SBA_MULTIPLEX_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SBAMULTIPLEX_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_INC_SBAMULTIPLEX_HXX
 
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/form/XUpdateListener.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_TABLESPAGE_HXX_
-#define _DBAUI_TABLESPAGE_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_TABLESPAGE_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_TABLESPAGE_HXX
 
 #include "adminpages.hxx"
 #include <com/sun/star/i18n/XCollator.hpp>
@@ -99,6 +99,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // _DBAUI_TABLESPAGE_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_TABLESPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

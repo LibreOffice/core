@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBA30D_IAPPLICATIONCONTROLLER_HXX
-#define DBA30D_IAPPLICATIONCONTROLLER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_IAPPLICATIONCONTROLLER_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_APP_IAPPLICATIONCONTROLLER_HXX
 
 #include <dbaccess/IController.hxx>
 #include "AppElementType.hxx"
@@ -85,6 +85,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // DBA30D_IAPPLICATIONCONTROLLER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_APP_IAPPLICATIONCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

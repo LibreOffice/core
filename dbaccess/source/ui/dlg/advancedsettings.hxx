@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_ADVANCEDSETTINGS_HXX
-#define DBACCESS_ADVANCEDSETTINGS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_ADVANCEDSETTINGS_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_DLG_ADVANCEDSETTINGS_HXX
 
 #include "adminpages.hxx"
 #include "dsmeta.hxx"
@@ -134,6 +134,6 @@ namespace dbaui
 
 } // namespace dbaui
 
-#endif // DBACCESS_ADVANCEDSETTINGS_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADVANCEDSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

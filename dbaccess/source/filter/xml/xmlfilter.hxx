@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBA_XMLFILTER_HXX
-#define DBA_XMLFILTER_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLFILTER_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLFILTER_HXX
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -158,6 +158,6 @@ public:
 };
 
 } // dbaxml
-#endif // DBA_XMLFILTER_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
