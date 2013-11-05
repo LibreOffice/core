@@ -2521,7 +2521,8 @@ void SmMatrixNode::CreateTextFromNode(OUString &rText)
         for (sal_uInt16 j = 0;  j < nNumCols; j++)
         {
             SmNode *pNode = GetSubNode(i * nNumCols + j);
-            pNode->CreateTextFromNode(rText);
+            if (pNode)
+                pNode->CreateTextFromNode(rText);
             if (j != nNumCols-1)
                 rText += "# ";
         }

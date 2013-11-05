@@ -2248,10 +2248,11 @@ void SmXMLRowContext_Impl::EndElement()
 {
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    sal_uLong nSize = rNodeStack.size()-nElementCount;
 
-    if (nSize > 0)
+    if (rNodeStack.size() > nElementCount)
     {
+        sal_uLong nSize = rNodeStack.size() - nElementCount;
+
         aRelationArray.resize(nSize);
         for (sal_uLong j=nSize;j > 0;j--)
         {
