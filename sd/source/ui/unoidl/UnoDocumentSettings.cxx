@@ -119,8 +119,7 @@ namespace sd
                        const uno::Reference< embed::XStorage > &xStorage );
         void AssignURL( XPropertyListType t, const Any* pValue, bool *pOk, bool *pChanged );
         void ExtractURL( XPropertyListType t, Any* pValue );
-        Reference< XModel >     mxModel;
-        SdXImpressDocument*     mpModel;
+        rtl::Reference<SdXImpressDocument> mxModel;
     };
 
     Reference< XInterface > SAL_CALL DocumentSettings_createInstance( SdXImpressDocument* pModel )
@@ -217,8 +216,7 @@ using namespace ::sd;
 
 DocumentSettings::DocumentSettings( SdXImpressDocument* pModel )
 :   PropertySetHelper( createSettingsInfoImpl( !pModel->IsImpressDocument() ) ),
-    mxModel( pModel ),
-    mpModel( pModel )
+    mxModel( pModel )
 {
 }
 
@@ -229,7 +227,7 @@ DocumentSettings::~DocumentSettings() throw()
 bool DocumentSettings::LoadList( XPropertyListType t, const OUString &rInPath,
                                  const uno::Reference< embed::XStorage > &xStorage )
 {
-    SdDrawDocument* pDoc = mpModel->GetDoc();
+    SdDrawDocument* pDoc = mxModel->GetDoc();
 
     sal_Int32 nSlash = rInPath.lastIndexOf('/');
     OUString aPath, aName;
@@ -327,7 +325,7 @@ uno::Sequence<beans::PropertyValue>
     uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
 
     bool bHasEmbed = false;
-    SdDrawDocument* pDoc = mpModel->GetDoc();
+    SdDrawDocument* pDoc = mxModel->GetDoc();
     for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ )
     {
         XPropertyListRef pList = pDoc->GetPropertyList( (XPropertyListType) i );
@@ -396,8 +394,8 @@ throw (UnknownPropertyException, PropertyVetoException,
 {
     ::SolarMutexGuard aGuard;
 
-    SdDrawDocument* pDoc = mpModel->GetDoc();
-    ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
+    SdDrawDocument* pDoc = mxModel->GetDoc();
+    ::sd::DrawDocShell* pDocSh = mxModel->GetDocShell();
     if( NULL == pDoc || NULL == pDocSh )
     {
         throw RuntimeException("Document or Shell missing",
@@ -940,12 +938,12 @@ throw (UnknownPropertyException, PropertyVetoException,
     }
 
     if( bChanged || bOptionsChanged )
-        mpModel->SetModified( sal_True );
+        mxModel->SetModified( sal_True );
 }
 
 void DocumentSettings::ExtractURL( XPropertyListType t, Any* pValue )
 {
-    XPropertyListRef pList = mpModel->GetDoc()->GetPropertyList( t );
+    XPropertyListRef pList = mxModel->GetDoc()->GetPropertyList( t );
     if( !pList.is() )
         return;
 
@@ -963,8 +961,8 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     ::SolarMutexGuard aGuard;
 
-    SdDrawDocument* pDoc = mpModel->GetDoc();
-    ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
+    SdDrawDocument* pDoc = mxModel->GetDoc();
+    ::sd::DrawDocShell* pDocSh = mxModel->GetDocShell();
     if( NULL == pDoc || NULL == pDocSh )
     {
         throw RuntimeException("Document or Shell missing",
@@ -1009,7 +1007,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
                 ExtractURL( XBITMAP_LIST, pValue );
                 break;
             case HANDLE_FORBIDDENCHARS:
-                *pValue <<= mpModel->getForbiddenCharsTable();
+                *pValue <<= mxModel->getForbiddenCharsTable();
                 break;
             case HANDLE_APPLYUSERDATA:
                 *pValue <<= pDocSh->IsUseUserData();
@@ -1264,7 +1262,7 @@ Sequence< OUString > SAL_CALL DocumentSettings::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSeq( 2 );
     aSeq[0] = "com.sun.star.document.Settings" ;
-    if( mpModel->IsImpressDocument() )
+    if( mxModel->IsImpressDocument() )
     {
         aSeq[1] = "com.sun.star.presentation.DocumentSettings" ;
     }
