@@ -211,12 +211,17 @@ namespace dmapper {
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_tcMar:
+            //
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if (pProperties.get())
                     {
                         CellMarginHandlerPtr pCellMarginHandler(new CellMarginHandler);
+                        if (m_pCurrentInteropGrabBag)
+                            pCellMarginHandler->enableInteropGrabBag("tcMar");
                         pProperties->resolve(*pCellMarginHandler);
+                        if (m_pCurrentInteropGrabBag)
+                            m_pCurrentInteropGrabBag->push_back(pCellMarginHandler->getInteropGrabBag());
                         TablePropertyMapPtr pCellProperties(new TablePropertyMap);
                         if (pCellMarginHandler->m_bTopMarginValid)
                             pCellProperties->Insert(PROP_TOP_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nTopMargin));

@@ -71,12 +71,12 @@ DocxStringTokenMap const aTblCellMarTokens[] = {
 };
 
 /// Export of w:tblCellMar in a table style.
-void lcl_TableStyleTblCellMar(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTblCellMar)
+void lcl_TableStyleTblCellMar(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTblCellMar, sal_Int32 nType = XML_tblCellMar)
 {
     if (!rTblCellMar.hasElements())
         return;
 
-    pSerializer->startElementNS(XML_w, XML_tblCellMar, FSEND);
+    pSerializer->startElementNS(XML_w, nType, FSEND);
     for (sal_Int32 i = 0; i < rTblCellMar.getLength(); ++i)
     {
         if (sal_Int32 nToken = DocxStringGetToken(aTblCellMarTokens, rTblCellMar[i].Name))
@@ -88,7 +88,7 @@ void lcl_TableStyleTblCellMar(sax_fastparser::FSHelperPtr pSerializer, uno::Sequ
                     FSEND);
         }
     }
-    pSerializer->endElementNS(XML_w, XML_tblCellMar);
+    pSerializer->endElementNS(XML_w, nType);
 }
 
 static DocxStringTokenMap const aTcBorderTokens[] = {
@@ -448,7 +448,7 @@ void lcl_TableStyleTcPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<b
 
     pSerializer->startElementNS(XML_w, XML_tcPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aShd, aTcBorders;
+    uno::Sequence<beans::PropertyValue> aShd, aTcBorders, aTcMar;
     OUString aVAlign;
     for (sal_Int32 i = 0; i < rTcPr.getLength(); ++i)
     {
@@ -456,10 +456,13 @@ void lcl_TableStyleTcPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<b
             aShd = rTcPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rTcPr[i].Name == "tcBorders")
             aTcBorders = rTcPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rTcPr[i].Name == "tcMar")
+            aTcMar = rTcPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rTcPr[i].Name == "vAlign")
             aVAlign = rTcPr[i].Value.get<OUString>();
     }
     lcl_TableStyleTcBorders(pSerializer, aTcBorders);
+    lcl_TableStyleTblCellMar(pSerializer, aTcMar, XML_tcMar);
     lcl_TableStyleShd(pSerializer, aShd);
     if (!aVAlign.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_vAlign,
