@@ -184,7 +184,7 @@ Dialog* SWFDialog::createDialog( Window* pParent )
         {
         }
 */
-        ImpSWFDialog* pDlg = new ImpSWFDialog( pParent, *mpResMgr, maFilterData );
+        ImpSWFDialog* pDlg = new ImpSWFDialog( pParent, maFilterData );
         pRet = pDlg;
     }
 

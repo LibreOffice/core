@@ -20,7 +20,6 @@ $(eval $(call gb_Module_Module,filter))
 
 $(eval $(call gb_Module_add_targets,filter,\
 	AllLangResTarget_eps \
-	AllLangResTarget_flash \
 	AllLangResTarget_pdffilter \
 	AllLangResTarget_t602filter \
 	AllLangResTarget_xsltdlg \
