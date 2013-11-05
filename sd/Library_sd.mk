@@ -93,7 +93,6 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(OS), LINUX)
 $(eval $(call gb_Library_use_externals,sd,\
 	bluez_bluetooth_headers \
 	boost_headers \
@@ -103,14 +102,6 @@ $(eval $(call gb_Library_use_externals,sd,\
 		avahi \
 	) \
 ))
-else
-$(eval $(call gb_Library_use_externals,sd,\
-	bluez_bluetooth_headers \
-	boost_headers \
-	libxml2 \
-	dbus \
-))
-endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,sd,\
