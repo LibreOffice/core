@@ -462,7 +462,7 @@ namespace frm
         const FeatureURL* pFeatures = lcl_getFeatureTable();
         while ( pFeatures->pAsciiURL )
         {
-            if ( _rCompleteURL.compareToAscii( pFeatures->pAsciiURL ) == 0 )
+            if ( _rCompleteURL.equalsAscii( pFeatures->pAsciiURL ) )
                 return pFeatures->nFormFeature;
             ++pFeatures;
         }

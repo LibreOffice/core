@@ -98,7 +98,7 @@ void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMo
             const ImplAttributeNameConversion* p = gImplConversionList;
             while( p->mpAPIName )
             {
-                if( rString.compareToAscii( p->mpAPIName ) == 0 )
+                if( rString.equalsAscii( p->mpAPIName ) )
                     break;
                 p++;
             }

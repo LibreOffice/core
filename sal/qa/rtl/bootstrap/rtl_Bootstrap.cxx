@@ -207,7 +207,7 @@ namespace rtl_Bootstrap
                 aBootstrap.getFrom( suValuename, suValue );
                 sal_Char *  pStr = getenv("ENABLE_JAVA");
                 //      printUString( suGetname );
-                CPPUNIT_ASSERT_MESSAGE("get the value of environment variable.", suValue.compareToAscii( pStr ) == 0 );
+                CPPUNIT_ASSERT_MESSAGE("get the value of environment variable.", suValue.equalsAscii( pStr ) );
             }
         /* Notes on Windows:
            void getFrom_001_1()
@@ -219,7 +219,7 @@ namespace rtl_Bootstrap
            aBootstrap.getFrom( suValuename, suValue );
            sal_Char *  pStr = getenv("SRC_ROOT");
            //   printUString( suGetname );
-           CPPUNIT_ASSERT_MESSAGE("get the value of environment variable.", suValue.compareToAscii( pStr ) == 0 );
+           CPPUNIT_ASSERT_MESSAGE("get the value of environment variable.", suValue.equalsAscii( pStr ) );
            }
            The result on Windows:
            # # the SRC_ROOT is e:\Qadev\cvs\m19

@@ -137,7 +137,7 @@ namespace dbaccess
         const DocumentEventData* pEventData = lcl_getDocumentEventData();
         while ( pEventData->pAsciiEventName )
         {
-            if ( _rEventName.compareToAscii( pEventData->pAsciiEventName ) == 0 )
+            if ( _rEventName.equalsAscii( pEventData->pAsciiEventName ) )
                 return pEventData->bNeedsSyncNotify;
             ++pEventData;
         }

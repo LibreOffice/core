@@ -185,7 +185,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
         int i = 0;
         for( i = 0; i < pEnumDesc->nEnumValues ; i ++ )
         {
-            if( (*((OUString *)&pEnumDesc->ppEnumNames[i])).compareToAscii( stringValue ) == 0 )
+            if( (*((OUString *)&pEnumDesc->ppEnumNames[i])).equalsAscii( stringValue ) )
             {
                 break;
             }

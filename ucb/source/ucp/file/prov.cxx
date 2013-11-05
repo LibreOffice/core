@@ -55,7 +55,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     if ( fileaccess::shell::getImplementationName_static().
-            compareToAscii( pImplName ) == 0 )
+            equalsAscii( pImplName ) )
     {
         xFactory = FileProvider::createServiceFactory( xSMgr );
     }
@@ -153,7 +153,7 @@ FileProvider::initialize(
         OUString config;
         if( aArguments.getLength() > 0 &&
             (aArguments[0] >>= config) &&
-            config.compareToAscii("NoConfig") == 0 )
+            config.equalsAscii("NoConfig") )
             m_pMyShell = new shell( m_xContext, this, sal_False );
         else
             m_pMyShell = new shell( m_xContext, this, sal_True );
@@ -536,9 +536,9 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
            WrappedTargetException,
            RuntimeException )
 {
-    if( aPropertyName.compareToAscii( "FileSystemNotation" ) == 0 ||
-        aPropertyName.compareToAscii( "HomeDirectory" ) == 0      ||
-        aPropertyName.compareToAscii( "HostName" ) == 0 )
+    if( aPropertyName.equalsAscii( "FileSystemNotation" ) ||
+        aPropertyName.equalsAscii( "HomeDirectory" )      ||
+        aPropertyName.equalsAscii( "HostName" ) )
         return;
     else
         throw UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
@@ -554,19 +554,19 @@ FileProvider::getPropertyValue(
            RuntimeException )
 {
     initProperties();
-    if( aPropertyName.compareToAscii( "FileSystemNotation" ) == 0 )
+    if( aPropertyName.equalsAscii( "FileSystemNotation" ) )
     {
         Any aAny;
         aAny <<= m_FileSystemNotation;
         return aAny;
     }
-    else if( aPropertyName.compareToAscii( "HomeDirectory" ) == 0 )
+    else if( aPropertyName.equalsAscii( "HomeDirectory" ) )
     {
         Any aAny;
         aAny <<= m_HomeDirectory;
         return aAny;
     }
-    else if( aPropertyName.compareToAscii( "HostName" ) == 0 )
+    else if( aPropertyName.equalsAscii( "HostName" ) )
     {
         Any aAny;
         aAny <<= m_HostName;

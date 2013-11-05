@@ -420,7 +420,7 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
                 ( str[idx + 2] == 'f' || str[idx + 2] == 'F' )    &&
                 ( str[idx + 3] == 'g' || str[idx + 3] == 'G' )    &&
                 ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).compareToAscii( "picture" ) != 0 ) {
-              if(! m_bShowBasic && fileName.compareToAscii("sbasic") == 0 )
+              if(! m_bShowBasic && fileName.equalsAscii("sbasic") )
                 continue;
               m_avModules.push_back( fileName );
             }
@@ -633,21 +633,21 @@ Databases::getCollator( const OUString& Language,
         OUString countryStr = country(Language);
         if( countryStr.isEmpty() )
         {
-            if( langStr.compareToAscii("de") == 0 )
+            if( langStr.equalsAscii("de") )
                 countryStr = "DE";
-            else if( langStr.compareToAscii("en") == 0 )
+            else if( langStr.equalsAscii("en")  )
                 countryStr = "US";
-            else if( langStr.compareToAscii("es") == 0 )
+            else if( langStr.equalsAscii("es")  )
                 countryStr = "ES";
-            else if( langStr.compareToAscii("it") == 0 )
+            else if( langStr.equalsAscii("it")  )
                 countryStr = "IT";
-            else if( langStr.compareToAscii("fr") == 0 )
+            else if( langStr.equalsAscii("fr")  )
                 countryStr = "FR";
-            else if( langStr.compareToAscii("sv") == 0 )
+            else if( langStr.equalsAscii("sv")  )
                 countryStr = "SE";
-            else if( langStr.compareToAscii("ja") == 0 )
+            else if( langStr.equalsAscii("ja")  )
                 countryStr = "JP";
-            else if( langStr.compareToAscii("ko") == 0 )
+            else if( langStr.equalsAscii("ko")  )
                 countryStr = "KR";
         }
         /* FIXME-BCP47: all this does not look right for language tag context,
@@ -1065,7 +1065,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
 
         sal_Bool bHighContrastMode = sal_False;
         OUString aCSS( m_aCSS );
-        if ( aCSS.compareToAscii( "default" ) == 0 )
+        if ( aCSS.equalsAscii( "default" ) )
         {
             // #i50760: "default" needs to adapt HC mode
             uno::Reference< awt::XToolkit2 > xToolkit =

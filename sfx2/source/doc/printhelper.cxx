@@ -334,7 +334,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         const beans::PropertyValue &rProp = rPrinter.getConstArray()[n];
 
         // Name-Property?
-        if ( rProp.Name.compareToAscii( "Name" ) == 0 )
+        if ( rProp.Name.equalsAscii( "Name" ) )
         {
             OUString aPrinterName;
             if ( ! ( rProp.Value >>= aPrinterName ) )
@@ -359,7 +359,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         const beans::PropertyValue &rProp = rPrinter.getConstArray()[i];
 
         // PaperOrientation-Property?
-        if ( rProp.Name.compareToAscii( "PaperOrientation" ) == 0 )
+        if ( rProp.Name.equalsAscii( "PaperOrientation" ) )
         {
             view::PaperOrientation eOrient;
             if ( ( rProp.Value >>= eOrient ) == sal_False )
@@ -377,7 +377,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
 
         // PaperFormat-Property?
-        else if ( rProp.Name.compareToAscii( "PaperFormat" ) == 0 )
+        else if ( rProp.Name.equalsAscii( "PaperFormat" ) )
         {
             if ( ( rProp.Value >>= nPaperFormat ) == sal_False )
             {
@@ -394,7 +394,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
 
         // PaperSize-Property?
-        else if ( rProp.Name.compareToAscii( "PaperSize" ) == 0 )
+        else if ( rProp.Name.equalsAscii( "PaperSize" ) )
         {
             awt::Size aTempSize ;
             if ( ( rProp.Value >>= aTempSize ) == sal_False )
@@ -408,7 +408,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
 
         // PrinterTray-Property
-        else if ( rProp.Name.compareToAscii( "PrinterPaperTray" ) == 0 )
+        else if ( rProp.Name.equalsAscii( "PrinterPaperTray" ) )
         {
             OUString aTmp;
             if ( ( rProp.Value >>= aTmp ) == sal_False )
@@ -617,7 +617,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         const beans::PropertyValue &rProp = rOptions.getConstArray()[n];
 
         // FileName-Property?
-        if ( rProp.Name.compareToAscii( "FileName" ) == 0 )
+        if ( rProp.Name.equalsAscii( "FileName" ) )
         {
             // unpack th URL and check for a valid and well known protocol
             OUString sTemp;
@@ -692,7 +692,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         }
 
         // CopyCount-Property
-        else if ( rProp.Name.compareToAscii( "CopyCount" ) == 0 )
+        else if ( rProp.Name.equalsAscii( "CopyCount" ) )
         {
             sal_Int32 nCopies = 0;
             if ( ( rProp.Value >>= nCopies ) == sal_False )
@@ -704,8 +704,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
         // Collate-Property
         // Sort-Property (deprecated)
-        else if ( rProp.Name.compareToAscii( "Collate" ) == 0 ||
-                ( rProp.Name.compareToAscii( "Sort" ) == 0 ) )
+        else if ( rProp.Name.equalsAscii( "Collate" ) ||
+                  rProp.Name.equalsAscii( "Sort" ) )
         {
             sal_Bool bTemp = sal_Bool();
             if ( rProp.Value >>= bTemp )
@@ -718,7 +718,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         }
 
         // Pages-Property
-        else if ( rProp.Name.compareToAscii( "Pages" ) == 0 )
+        else if ( rProp.Name.equalsAscii( "Pages" ) )
         {
             OUString sTemp;
             if( rProp.Value >>= sTemp )
@@ -731,7 +731,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         }
 
         // MonitorVisible
-        else if ( rProp.Name.compareToAscii( "MonitorVisible" ) == 0 )
+        else if ( rProp.Name.equalsAscii( "MonitorVisible" ) )
         {
             if( !(rProp.Value >>= bMonitor) )
                 throw ::com::sun::star::lang::IllegalArgumentException();
@@ -740,7 +740,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         }
 
         // Wait
-        else if ( rProp.Name.compareToAscii( "Wait" ) == 0 )
+        else if ( rProp.Name.equalsAscii( "Wait" ) )
         {
             if ( !(rProp.Value >>= bWaitUntilEnd) )
                 throw ::com::sun::star::lang::IllegalArgumentException();
@@ -748,7 +748,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             aCheckedArgs[nProps++].Value <<= bWaitUntilEnd;
         }
 
-        else if ( rProp.Name.compareToAscii( "DuplexMode" ) == 0 )
+        else if ( rProp.Name.equalsAscii( "DuplexMode" ) )
         {
             if ( !(rProp.Value >>= nDuplexMode ) )
                 throw ::com::sun::star::lang::IllegalArgumentException();

@@ -305,7 +305,7 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, OUString aUr
         for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
         {
             const beans::PropertyValue& rFilterProp = aProps[nFilterProp];
-            if ( rFilterProp.Name.compareToAscii("FilterService") == 0 )
+            if ( rFilterProp.Name.equalsAscii("FilterService") )
             {
                 rFilterProp.Value >>= aFilterImplName;
                 break;

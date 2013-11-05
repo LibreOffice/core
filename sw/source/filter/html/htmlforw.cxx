@@ -1248,7 +1248,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( i < nValCnt )
                 {
                     const OUString& rVal = pValues[i];
-                    if( rVal.compareToAscii( "$$$empty$$$" ) == 0 )
+                    if( rVal.equalsAscii( "$$$empty$$$" ) )
                         bEmptyVal = sal_True;
                     else
                         sVal = rVal;

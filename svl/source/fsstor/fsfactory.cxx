@@ -189,7 +189,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL fsstorage_component_getFactory (
     if (pServiceManager)
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory;
-        if (FSStorageFactory::impl_staticGetImplementationName().compareToAscii (pImplementationName) == 0)
+        if (FSStorageFactory::impl_staticGetImplementationName().equalsAscii(pImplementationName))
         {
             xFactory = cppu::createOneInstanceFactory (
                 reinterpret_cast< lang::XMultiServiceFactory* >(pServiceManager),

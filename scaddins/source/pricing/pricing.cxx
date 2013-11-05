@@ -612,24 +612,24 @@ bool getinput_greek(bs::types::Greeks& greek, const uno::Any& anyval) {
         return false;
     }
 
-    if(str.compareToAscii("value")==0 || str.compareToAscii("price")==0 ||
-       str.compareToAscii("v")==0 || str.compareToAscii("p")==0 ) {
+    if(str.equalsAscii("value") || str.equalsAscii("price") ||
+       str.equalsAscii("v") || str.equalsAscii("p") ) {
         greek=bs::types::Value;
-    } else if(str.compareToAscii("delta")==0||str.compareToAscii("d")==0) {
+    } else if(str.equalsAscii("delta") || str.equalsAscii("d")) {
         greek=bs::types::Delta;
-    } else if(str.compareToAscii("gamma")==0||str.compareToAscii("g")==0) {
+    } else if(str.equalsAscii("gamma") || str.equalsAscii("g")) {
         greek=bs::types::Gamma;
-    } else if(str.compareToAscii("theta")==0||str.compareToAscii("t")==0) {
+    } else if(str.equalsAscii("theta") || str.equalsAscii("t")) {
         greek=bs::types::Theta;
-    } else if(str.compareToAscii("vega")==0||str.compareToAscii("e")==0) {
+    } else if(str.equalsAscii("vega") || str.equalsAscii("e")) {
         greek=bs::types::Vega;
-    } else if(str.compareToAscii("volga")==0||str.compareToAscii("o")==0) {
+    } else if(str.equalsAscii("volga") || str.equalsAscii("o")) {
         greek=bs::types::Volga;
-    } else if(str.compareToAscii("vanna")==0||str.compareToAscii("a")==0) {
+    } else if(str.equalsAscii("vanna") || str.equalsAscii("a")) {
         greek=bs::types::Vanna;
-    } else if(str.compareToAscii("rho")==0||str.compareToAscii("r")==0) {
+    } else if(str.equalsAscii("rho") || str.equalsAscii("r")) {
         greek=bs::types::Rho_d;
-    } else if(str.compareToAscii("rhof")==0||str.compareToAscii("f")==0) {
+    } else if(str.equalsAscii("rhof") || str.equalsAscii("f")) {
         greek=bs::types::Rho_f;
     } else {
         return false;

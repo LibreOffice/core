@@ -237,7 +237,7 @@ handleAmbigousFilterRequest_(
         aPackedSet >>= lProps;
         for( nStep=0; nStep<lProps.getLength(); ++nStep )
         {
-            if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
+            if( lProps[nStep].Name.equalsAscii("UIName") )
             {
                 OUString sTemp;
                 lProps[nStep].Value >>= sTemp;
@@ -259,7 +259,7 @@ handleAmbigousFilterRequest_(
         aPackedSet >>= lProps;
         for( nStep=0; nStep<lProps.getLength(); ++nStep )
         {
-            if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
+            if( lProps[nStep].Name.equalsAscii("UIName") )
             {
                 OUString sTemp;
                 lProps[nStep].Value >>= sTemp;

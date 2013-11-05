@@ -763,7 +763,7 @@ sal_Bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocum
 {
     if  (   ( i_rLogicalDocumentURL == getURL() )
         &&  ( i_rMediaDescriptor.getLength() == 1 )
-        &&  ( i_rMediaDescriptor[0].Name.compareToAscii( "BreakMacroSignature" ) == 0 )
+        &&  ( i_rMediaDescriptor[0].Name.equalsAscii( "BreakMacroSignature" ) )
         )
     {
         // this is a BAD hack of the Basic importer code ... there should be a dedicated API for this,

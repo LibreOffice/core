@@ -973,13 +973,13 @@ void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyV
             for(sal_Int32 i = 0; i < nCount; i++, pSeq++)
             {
                 OUString sName(pSeq->Name);
-                if(sName.compareToAscii(SC_ZOOMVALUE) == 0)
+                if(sName.equalsAscii(SC_ZOOMVALUE))
                 {
                     sal_Int32 nTemp = 0;
                     if (pSeq->Value >>= nTemp)
                         pPreview->SetZoom(sal_uInt16(nTemp));
                 }
-                else if (sName.compareToAscii("PageNumber") == 0)
+                else if (sName.equalsAscii("PageNumber"))
                 {
                     sal_Int32 nTemp = 0;
                     if (pSeq->Value >>= nTemp)

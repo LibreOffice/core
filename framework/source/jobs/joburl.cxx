@@ -390,14 +390,14 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
                 (aURL.isValid()                          ) &&
                 (aURL.getEvent(sEvent)                   ) &&
                 (!sEvent.isEmpty()                       ) &&
-                (sEvent.compareToAscii(pExpectedEvent)==0)
+                (sEvent.equalsAscii(pExpectedEvent))
               );
 
         if (bOK && pExpectedEventArgs!=NULL)
         {
             bOK = (
                     (aURL.getEventArgs(sEventArgs)                   ) &&
-                    (sEventArgs.compareToAscii(pExpectedEventArgs)==0)
+                    (sEventArgs.equalsAscii(pExpectedEventArgs))
                   );
         };
     }
@@ -426,14 +426,14 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
                 (aURL.isValid()                          ) &&
                 (aURL.getAlias(sAlias)                   ) &&
                 (!sAlias.isEmpty()                       ) &&
-                (sAlias.compareToAscii(pExpectedAlias)==0)
+                (sAlias.equalsAscii(pExpectedAlias))
               );
 
         if (bOK && pExpectedAliasArgs!=NULL)
         {
             bOK = (
                     (aURL.getAliasArgs(sAliasArgs)                   ) &&
-                    (sAliasArgs.compareToAscii(pExpectedAliasArgs)==0)
+                    (sAliasArgs.equalsAscii(pExpectedAliasArgs))
                   );
         };
     }
@@ -462,14 +462,14 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
                 (aURL.isValid()                              ) &&
                 (aURL.getService(sService)                   ) &&
                 (!sService.isEmpty()                         ) &&
-                (sService.compareToAscii(pExpectedService)==0)
+                (sService.equalsAscii(pExpectedService))
               );
 
         if (bOK && pExpectedServiceArgs!=NULL)
         {
             bOK = (
                     (aURL.getServiceArgs(sServiceArgs)                   ) &&
-                    (sServiceArgs.compareToAscii(pExpectedServiceArgs)==0)
+                    (sServiceArgs.equalsAscii(pExpectedServiceArgs))
                   );
         };
     }

@@ -331,8 +331,8 @@ Any SAL_CALL FTPContent::execute(
                 aRet = p->getRequest();
             }
 
-//              if(aCommand.Name.compareToAscii(
-//                  "getPropertyValues") == 0 &&
+//              if(aCommand.Name.equalsAscii(
+//                  "getPropertyValues") &&
 //                 action != NOACTION) {
 //                  // It is not allowed to throw if
 //                  // command is getPropertyValues
@@ -416,7 +416,7 @@ Any SAL_CALL FTPContent::execute(
                 break;
             }
 
-            if(aCommand.Name.compareToAscii("getPropertyValues") == 0) {
+            if(aCommand.Name.equalsAscii("getPropertyValues")) {
                 Sequence<Property> Properties;
                 if(!(aCommand.Argument >>= Properties))
                 {
@@ -429,7 +429,7 @@ Any SAL_CALL FTPContent::execute(
 
                 aRet <<= getPropertyValues(Properties,Environment);
             }
-            else if(aCommand.Name.compareToAscii("setPropertyValues") == 0)
+            else if(aCommand.Name.equalsAscii("setPropertyValues") )
             {
                 Sequence<PropertyValue> propertyValues;
 
@@ -443,15 +443,15 @@ Any SAL_CALL FTPContent::execute(
 
                 aRet <<= setPropertyValues(propertyValues);
             }
-            else if(aCommand.Name.compareToAscii("getCommandInfo") == 0) {
+            else if(aCommand.Name.equalsAscii("getCommandInfo")) {
                 // Note: Implemented by base class.
                 aRet <<= getCommandInfo(Environment);
             }
-            else if(aCommand.Name.compareToAscii("getPropertySetInfo") == 0) {
+            else if(aCommand.Name.equalsAscii("getPropertySetInfo")) {
                 // Note: Implemented by base class.
                 aRet <<= getPropertySetInfo(Environment);
             }
-            else if(aCommand.Name.compareToAscii( "insert" ) == 0)
+            else if(aCommand.Name.equalsAscii( "insert" ))
             {
                 InsertCommandArgument aInsertArgument;
                 if ( ! ( aCommand.Argument >>= aInsertArgument ) ) {
@@ -463,11 +463,11 @@ Any SAL_CALL FTPContent::execute(
                 }
                 insert(aInsertArgument,Environment);
             }
-            else if(aCommand.Name.compareToAscii("delete") == 0) {
+            else if(aCommand.Name.equalsAscii("delete")) {
                 m_aFTPURL.del();
                 deleted();
             }
-            else if(aCommand.Name.compareToAscii( "open" ) == 0) {
+            else if(aCommand.Name.equalsAscii( "open" )) {
                 OpenCommandArgument2 aOpenCommand;
                 if ( !( aCommand.Argument >>= aOpenCommand ) ) {
                     aRet <<= IllegalArgumentException(
@@ -571,7 +571,7 @@ Any SAL_CALL FTPContent::execute(
 
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
-            } else if(aCommand.Name.compareToAscii("createNewContent") == 0) {
+            } else if(aCommand.Name.equalsAscii("createNewContent")) {
                 ContentInfo aArg;
                 if (!(aCommand.Argument >>= aArg)) {
                     ucbhelper::cancelCommandExecution(
@@ -816,35 +816,35 @@ Reference< XRow > FTPContent::getPropertyValues(
 
     for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
         const OUString& Name = seqProp[i].Name;
-        if(Name.compareToAscii("Title") == 0)
+        if(Name.equalsAscii("Title"))
             xRow->appendString(seqProp[i],aDirEntry.m_aName);
-        else if(Name.compareToAscii("CreatableContentsInfo") == 0)
+        else if(Name.equalsAscii("CreatableContentsInfo"))
             xRow->appendObject(seqProp[i],
                                makeAny(queryCreatableContentsInfo()));
         else if(aDirEntry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN) {
-            if(Name.compareToAscii("ContentType") == 0)
+            if(Name.equalsAscii("ContentType"))
                 xRow->appendString(seqProp[i],
                                    aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR
                                    ? FTP_FOLDER
                                    : FTP_FILE );
-            else if(Name.compareToAscii("IsReadOnly") == 0)
+            else if(Name.equalsAscii("IsReadOnly"))
                 xRow->appendBoolean(seqProp[i],
                                     aDirEntry.m_nMode
                                     & INETCOREFTP_FILEMODE_WRITE
                                     ? 0
                                     : 1 );
-            else if(Name.compareToAscii("IsDocument") == 0)
+            else if(Name.equalsAscii("IsDocument"))
                 xRow->appendBoolean(seqProp[i],
                                     ! sal_Bool(aDirEntry.m_nMode &
                                                INETCOREFTP_FILEMODE_ISDIR));
-            else if(Name.compareToAscii("IsFolder") == 0)
+            else if(Name.equalsAscii("IsFolder"))
                 xRow->appendBoolean(seqProp[i],
                                     sal_Bool(aDirEntry.m_nMode &
                                              INETCOREFTP_FILEMODE_ISDIR));
-            else if(Name.compareToAscii("Size") == 0)
+            else if(Name.equalsAscii("Size"))
                 xRow->appendLong(seqProp[i],
                                  aDirEntry.m_nSize);
-            else if(Name.compareToAscii("DateCreated") == 0)
+            else if(Name.equalsAscii("DateCreated"))
                 xRow->appendTimestamp(seqProp[i],
                                       aDirEntry.m_aDate);
             else

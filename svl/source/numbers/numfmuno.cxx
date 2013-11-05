@@ -384,7 +384,7 @@ OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
 sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ( ServiceName.compareToAscii(SERVICENAME_NUMBERFORMATTER) == 0 );
+    return ServiceName.equalsAscii(SERVICENAME_NUMBERFORMATTER);
 }
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
@@ -676,7 +676,7 @@ OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
 sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ( ServiceName.compareToAscii(SERVICENAME_NUMBERFORMATS) == 0 );
+    return ServiceName.equalsAscii(SERVICENAME_NUMBERFORMATS);
 }
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
@@ -933,7 +933,7 @@ OUString SAL_CALL SvNumberFormatObj::getImplementationName()
 sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ( ServiceName.compareToAscii(SERVICENAME_NUMBERFORMAT) == 0 );
+    return ServiceName.equalsAscii(SERVICENAME_NUMBERFORMAT);
 }
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
@@ -1092,7 +1092,7 @@ OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
 sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ( ServiceName.compareToAscii(SERVICENAME_NUMBERSETTINGS) == 0 );
+    return ServiceName.equalsAscii(SERVICENAME_NUMBERSETTINGS);
 }
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()

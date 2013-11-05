@@ -978,11 +978,11 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         OUString aLogStr( extractParam( rArgs, OUString("log") ) );
         if (aLogStr.getLength())
         {
-            if (aLogStr.compareToAscii( "stderr" ) == 0)
+            if (aLogStr.equalsAscii( "stderr" ) )
             {
                 stream = stderr;
             }
-            else if (aLogStr.compareToAscii( "stdout" ) == 0)
+            else if (aLogStr.equalsAscii( "stdout" ) )
             {
                 stream = stdout;
             }

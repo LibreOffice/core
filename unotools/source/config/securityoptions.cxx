@@ -498,27 +498,27 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
 {
     sal_Int32   nHandle;
 
-    if( rName.compareToAscii( CSTR_SECUREURL ) == 0 )
+    if( rName.equalsAscii( CSTR_SECUREURL ) )
         nHandle = PROPERTYHANDLE_SECUREURL;
-    else if( rName.compareToAscii( CSTR_DOCWARN_SAVEORSEND ) == 0 )
+    else if( rName.equalsAscii( CSTR_DOCWARN_SAVEORSEND ) )
         nHandle = PROPERTYHANDLE_DOCWARN_SAVEORSEND;
-    else if( rName.compareToAscii( CSTR_DOCWARN_SIGNING ) == 0 )
+    else if( rName.equalsAscii( CSTR_DOCWARN_SIGNING ) )
         nHandle = PROPERTYHANDLE_DOCWARN_SIGNING;
-    else if( rName.compareToAscii( CSTR_DOCWARN_PRINT ) == 0 )
+    else if( rName.equalsAscii( CSTR_DOCWARN_PRINT ) )
         nHandle = PROPERTYHANDLE_DOCWARN_PRINT;
-    else if( rName.compareToAscii( CSTR_DOCWARN_CREATEPDF ) == 0 )
+    else if( rName.equalsAscii( CSTR_DOCWARN_CREATEPDF ) )
         nHandle = PROPERTYHANDLE_DOCWARN_CREATEPDF;
-    else if( rName.compareToAscii( CSTR_DOCWARN_REMOVEPERSONALINFO ) == 0 )
+    else if( rName.equalsAscii( CSTR_DOCWARN_REMOVEPERSONALINFO ) )
         nHandle = PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO;
-    else if( rName.compareToAscii( CSTR_DOCWARN_RECOMMENDPASSWORD ) == 0 )
+    else if( rName.equalsAscii( CSTR_DOCWARN_RECOMMENDPASSWORD ) )
         nHandle = PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD;
-    else if( rName.compareToAscii( CSTR_CTRLCLICK_HYPERLINK ) == 0 )
+    else if( rName.equalsAscii( CSTR_CTRLCLICK_HYPERLINK ) )
         nHandle = PROPERTYHANDLE_CTRLCLICK_HYPERLINK;
-    else if( rName.compareToAscii( CSTR_MACRO_SECLEVEL ) == 0 )
+    else if( rName.equalsAscii( CSTR_MACRO_SECLEVEL ) )
         nHandle = PROPERTYHANDLE_MACRO_SECLEVEL;
-    else if( rName.compareToAscii( CSTR_MACRO_TRUSTEDAUTHORS ) == 0 )
+    else if( rName.equalsAscii( CSTR_MACRO_TRUSTEDAUTHORS ) )
         nHandle = PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS;
-    else if( rName.compareToAscii( CSTR_MACRO_DISABLE ) == 0 )
+    else if( rName.equalsAscii( CSTR_MACRO_DISABLE ) )
         nHandle = PROPERTYHANDLE_MACRO_DISABLE;
 
     // xmlsec05 deprecated

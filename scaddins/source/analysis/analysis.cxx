@@ -283,7 +283,7 @@ OUString SAL_CALL AnalysisAddIn::getImplementationName() throw( uno::RuntimeExce
 
 sal_Bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName ) throw( uno::RuntimeException )
 {
-    return aName.compareToAscii( ADDIN_SERVICE ) == 0 || aName.compareToAscii( MY_SERVICE ) == 0;
+    return aName.equalsAscii( ADDIN_SERVICE ) || aName.equalsAscii( MY_SERVICE );
 }
 
 
@@ -1284,7 +1284,7 @@ OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const uno::An
         case uno::TypeClass_STRING:
             {
             const OUString*   pSuff = ( const OUString* ) rSuff.getValue();
-            bi = pSuff->compareToAscii( "i" ) == 0 || pSuff->isEmpty();
+            bi = pSuff->equalsAscii( "i" ) || pSuff->isEmpty();
             if( !bi && pSuff->compareToAscii( "j" ) != 0 )
                 throw lang::IllegalArgumentException();
             }

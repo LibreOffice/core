@@ -38,7 +38,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdbc2_component_getFactory(const sal_Char* _
 {
     void* pRet = NULL;
 
-    if (::drivermanager::OSDBCDriverManager::getImplementationName_static().compareToAscii(_pImplName) == 0)
+    if (::drivermanager::OSDBCDriverManager::getImplementationName_static().equalsAscii(_pImplName))
     {
         Reference< XSingleServiceFactory > xFactory(
             ::cppu::createOneInstanceFactory(

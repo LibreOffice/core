@@ -236,15 +236,15 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
     uno::Any aRet;
     if(!IsValid())
         throw uno::RuntimeException();
-    if(Name.compareToAscii("CharacterStyles") == 0 )
+    if(Name.equalsAscii("CharacterStyles") )
         aRet = getByIndex(0);
-    else if(Name.compareToAscii("ParagraphStyles") == 0)
+    else if(Name.equalsAscii("ParagraphStyles") )
         aRet = getByIndex(1);
-    else if(Name.compareToAscii("FrameStyles") == 0 )
+    else if(Name.equalsAscii("FrameStyles") )
         aRet = getByIndex(3);
-    else if(Name.compareToAscii("PageStyles") == 0 )
+    else if(Name.equalsAscii("PageStyles") )
         aRet = getByIndex(2);
-    else if(Name.compareToAscii("NumberingStyles") == 0 )
+    else if(Name.equalsAscii("NumberingStyles") )
         aRet = getByIndex(4);
     else
         throw container::NoSuchElementException();
@@ -265,11 +265,11 @@ uno::Sequence< OUString > SwXStyleFamilies::getElementNames(void) throw( uno::Ru
 
 sal_Bool SwXStyleFamilies::hasByName(const OUString& Name) throw( uno::RuntimeException )
 {
-    if( Name.compareToAscii("CharacterStyles") == 0 ||
-        Name.compareToAscii("ParagraphStyles") == 0 ||
-        Name.compareToAscii("FrameStyles") == 0 ||
-        Name.compareToAscii("PageStyles") == 0 ||
-        Name.compareToAscii("NumberingStyles") == 0 )
+    if( Name.equalsAscii("CharacterStyles") ||
+        Name.equalsAscii("ParagraphStyles") ||
+        Name.equalsAscii("FrameStyles") ||
+        Name.equalsAscii("PageStyles") ||
+        Name.equalsAscii("NumberingStyles") )
         return sal_True;
     else
         return sal_False;
@@ -3611,11 +3611,11 @@ uno::Any SwXAutoStyles::getByName(const OUString& Name)
         throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
     uno::Any aRet;
-    if(Name.compareToAscii("CharacterStyles") == 0 )
+    if(Name.equalsAscii("CharacterStyles") )
         aRet = getByIndex(0);
-    else if(Name.compareToAscii("RubyStyles") == 0 )
+    else if(Name.equalsAscii("RubyStyles") )
         aRet = getByIndex(1);
-    else if(Name.compareToAscii("ParagraphStyles") == 0 )
+    else if(Name.equalsAscii("ParagraphStyles") )
         aRet = getByIndex(2);
     else
         throw container::NoSuchElementException();
@@ -3636,9 +3636,9 @@ uno::Sequence< OUString > SwXAutoStyles::getElementNames(void)
 sal_Bool SwXAutoStyles::hasByName(const OUString& Name)
             throw( uno::RuntimeException )
 {
-    if( Name.compareToAscii("CharacterStyles") == 0 ||
-        Name.compareToAscii("RubyStyles") == 0 ||
-        Name.compareToAscii("ParagraphStyles") == 0 )
+    if( Name.equalsAscii("CharacterStyles") ||
+        Name.equalsAscii("RubyStyles") ||
+        Name.equalsAscii("ParagraphStyles") )
         return sal_True;
     else
         return sal_False;

@@ -1883,7 +1883,7 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
             bAutomatic = sal_True;
         }
     }
-    else if ( nLang == LANGUAGE_SYSTEM && aSymbol.compareToAscii("CCC") == 0 )
+    else if ( nLang == LANGUAGE_SYSTEM && aSymbol.equalsAscii("CCC") )
     {
         //  "CCC" is used for automatic long symbol
         bAutomatic = sal_True;
@@ -2055,7 +2055,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 
         //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
         //! allow blanks in conditions
-        if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond.compareToAscii( ">=0" ) == 0 )
+        if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond.equalsAscii( ">=0" ) )
             bDefaultCond = sal_True;
 
         if ( nType == XML_TOK_STYLES_TEXT_STYLE && nIndex == 2 )

@@ -131,13 +131,13 @@ static const char *lcl_getFormFieldmarkName(OUString &name)
 {
     static const char sCheckbox[]=ODF_FORMCHECKBOX;
     static const char sFormDropDown[]=ODF_FORMDROPDOWN;
-    if (name.compareToAscii("msoffice.field.FORMCHECKBOX")==0 ||
-            name.compareToAscii("ecma.office-open-xml.field.FORMCHECKBOX")==0)
+    if (name.equalsAscii("msoffice.field.FORMCHECKBOX") ||
+            name.equalsAscii("ecma.office-open-xml.field.FORMCHECKBOX") )
         return sCheckbox;
-    else if (name.compareToAscii(ODF_FORMCHECKBOX)==0)
+    else if (name.equalsAscii(ODF_FORMCHECKBOX) )
         return sCheckbox;
-    if (name.compareToAscii(ODF_FORMDROPDOWN)==0 ||
-            name.compareToAscii("ecma.office-open-xml.field.FORMDROPDOWN")==0)
+    if (name.equalsAscii(ODF_FORMDROPDOWN) ||
+            name.equalsAscii("ecma.office-open-xml.field.FORMDROPDOWN") )
         return sFormDropDown;
     else
         return NULL;
@@ -146,10 +146,10 @@ static const char *lcl_getFormFieldmarkName(OUString &name)
 static OUString lcl_getFieldmarkName(OUString &name)
 {
     static const char sFormtext[]=ODF_FORMTEXT;
-    if (name.compareToAscii("msoffice.field.FORMTEXT")==0 ||
-            name.compareToAscii("ecma.office-open-xml.field.FORMTEXT")==0)
+    if (name.equalsAscii("msoffice.field.FORMTEXT") ||
+            name.equalsAscii("ecma.office-open-xml.field.FORMTEXT") )
         return OUString::createFromAscii(sFormtext);
-    else if (name.compareToAscii(ODF_FORMTEXT)==0)
+    else if (name.equalsAscii(ODF_FORMTEXT) )
         return OUString::createFromAscii(sFormtext);
     else
         return name;

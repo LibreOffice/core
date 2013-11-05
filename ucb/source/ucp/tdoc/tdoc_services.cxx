@@ -44,7 +44,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucptdoc1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     if ( ContentProvider::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = ContentProvider::createServiceFactory( xSMgr );
     }
@@ -54,7 +54,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucptdoc1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( DocumentContentFactory::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = DocumentContentFactory::createServiceFactory( xSMgr );
     }

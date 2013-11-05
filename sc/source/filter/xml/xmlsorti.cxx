@@ -179,7 +179,7 @@ void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString
     if (sDataType.getLength() > 8)
     {
         OUString sTemp = sDataType.copy(0, 8);
-        if (sTemp.compareToAscii(SC_USERLIST) == 0)
+        if (sTemp.equalsAscii(SC_USERLIST))
         {
             bEnabledUserList = true;
             sTemp = sDataType.copy(8);

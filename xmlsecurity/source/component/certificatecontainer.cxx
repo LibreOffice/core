@@ -96,7 +96,7 @@ sal_Bool SAL_CALL
 CertificateContainer::supportsService( const OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if ( ServiceName.compareToAscii("com.sun.star.security.CertificateContainer") == 0 )
+    if ( ServiceName.equalsAscii("com.sun.star.security.CertificateContainer") )
         return sal_True;
     else
         return sal_False;

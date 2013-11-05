@@ -45,7 +45,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     if ( CachedContentResultSetFactory::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = CachedContentResultSetFactory::createServiceFactory( xSMgr );
     }
@@ -55,7 +55,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( CachedContentResultSetStubFactory::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = CachedContentResultSetStubFactory::createServiceFactory( xSMgr );
     }
@@ -65,7 +65,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( CachedDynamicResultSetFactory::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = CachedDynamicResultSetFactory::createServiceFactory( xSMgr );
     }
@@ -75,7 +75,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( CachedDynamicResultSetStubFactory::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = CachedDynamicResultSetStubFactory::createServiceFactory( xSMgr );
     }

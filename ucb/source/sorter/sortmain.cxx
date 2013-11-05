@@ -40,7 +40,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL srtrs1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     if ( SortedDynamicResultSetFactory::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = SortedDynamicResultSetFactory::createServiceFactory( xSMgr );
     }

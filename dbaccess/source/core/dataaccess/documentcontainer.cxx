@@ -397,7 +397,7 @@ Sequence< OUString > SAL_CALL ODocumentContainer::getAvailableServiceNames(  ) t
 Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
-    if ( aCommand.Name.compareToAscii( "open" ) == 0 )
+    if ( aCommand.Name.equalsAscii( "open" ) )
     {
         // open command for a folder content
         OpenCommandArgument2 aOpenCommand;

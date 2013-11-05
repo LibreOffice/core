@@ -187,7 +187,7 @@ sal_Bool DirectoryTraveller::visit (const iter& it)
     if (it.m_nAttrib & STORE_ATTRIB_ISDIR)
     {
         OUString  aName (it.m_pszName, it.m_nLength);
-        if (aName.compareToAscii ("XTextViewCursorSupplier") == 0)
+        if (aName.equalsAscii("XTextViewCursorSupplier"))
         {
             m_nCount += 1 - 1;
         }

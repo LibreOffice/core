@@ -1756,7 +1756,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
         OUString* pRet = aRet.getArray();
         for ( sal_Int32 i = 0; i < aRet.getLength(); ++i )
         {
-            if ( pRet[i].compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 )
+            if ( pRet[i].equalsAscii( "com.sun.star.drawing.OLE2Shape" ) )
             {
                 pRet[i] = pRet[aRet.getLength() - 1];
                 aRet.realloc( aRet.getLength() - 1 ); // <pRet> no longer valid.

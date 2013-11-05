@@ -94,7 +94,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
             for (sal_Int32 nPos=0; nPos<nPropCount; ++nPos)
             {
                 const beans::PropertyValue& rProp = aPropSeq[nPos];
-                if ( rProp.Name.compareToAscii( SC_UNO_EVENTTYPE ) == 0 )
+                if ( rProp.Name.equalsAscii( SC_UNO_EVENTTYPE ) )
                 {
                     OUString aEventType;
                     if ( rProp.Value >>= aEventType )
@@ -104,7 +104,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
                             throw lang::IllegalArgumentException();
                     }
                 }
-                else if ( rProp.Name.compareToAscii( SC_UNO_SCRIPT ) == 0 )
+                else if ( rProp.Name.equalsAscii( SC_UNO_SCRIPT ) )
                     rProp.Value >>= aScript;
             }
         }

@@ -49,7 +49,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpdav1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     if ( ::webdav_ucp::ContentProvider::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = ::webdav_ucp::ContentProvider::createServiceFactory( xSMgr );
     }

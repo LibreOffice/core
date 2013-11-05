@@ -1368,7 +1368,7 @@ OUString SAL_CALL PasswordContainer::getImplementationName(  ) throw(uno::Runtim
 
 sal_Bool SAL_CALL PasswordContainer::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    if ( ServiceName.compareToAscii("com.sun.star.task.PasswordContainer") == 0 )
+    if ( ServiceName.equalsAscii("com.sun.star.task.PasswordContainer") )
         return sal_True;
     else
         return sal_False;
@@ -1461,7 +1461,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL passwordcontainer_component_getFactory (
     if (pServiceManager)
     {
         Reference< XSingleServiceFactory > xFactory;
-        if (PasswordContainer::impl_getStaticImplementationName().compareToAscii (pImplementationName) == 0)
+        if (PasswordContainer::impl_getStaticImplementationName().equalsAscii(pImplementationName))
         {
             xFactory = PasswordContainer::impl_createFactory (
                 reinterpret_cast< XMultiServiceFactory* >(pServiceManager));

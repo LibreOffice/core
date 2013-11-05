@@ -41,7 +41,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucphier1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     if ( HierarchyContentProvider::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = HierarchyContentProvider::createServiceFactory( xSMgr );
     }
@@ -51,7 +51,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucphier1_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( HierarchyDataSource::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = HierarchyDataSource::createServiceFactory( xSMgr );
     }

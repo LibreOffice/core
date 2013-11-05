@@ -86,7 +86,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Cha
     //////////////////////////////////////////////////////////////////////
 
     else if ( uui::PasswordContainerInteractionHandler::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory =
             uui::PasswordContainerInteractionHandler::createServiceFactory( xSMgr );

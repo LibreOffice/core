@@ -714,7 +714,7 @@ bool PrinterInfoManager::writePrinterConfig()
         while( nIndex != -1 && ! bAutoQueue )
         {
             OUString aToken( it->second.m_aInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( !aToken.isEmpty() && aToken.compareToAscii( "autoqueue" ) == 0 )
+            if( aToken.equalsAscii( "autoqueue" ) )
                 bAutoQueue = true;
         }
         if( bAutoQueue )

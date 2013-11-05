@@ -46,7 +46,7 @@ public:
         const OUString & rName)
         throw(css::uno::RuntimeException)
         {
-            return (rName.compareToAscii("com.sun.star.config.SpecialConfigManager") == 0);
+            return rName.equalsAscii("com.sun.star.config.SpecialConfigManager");
         }
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()

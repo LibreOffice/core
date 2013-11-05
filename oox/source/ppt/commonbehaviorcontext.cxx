@@ -89,7 +89,7 @@ namespace oox { namespace ppt {
                 const ImplAttributeNameConversion *attrConv = gImplConversionList;
                 while( attrConv->mpMSName != NULL )
                 {
-                    if(msCurrentAttribute.compareToAscii( attrConv->mpMSName ) == 0 )
+                    if(msCurrentAttribute.equalsAscii( attrConv->mpMSName ) )
                     {
                         Attribute attr;
                         attr.name = OUString::intern( attrConv->mpAPIName,

@@ -1140,7 +1140,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 const struct ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
                 while( p->mpAPIName )
                 {
-                    if( sTemp.compareToAscii( p->mpAPIName ) == 0 )
+                    if( sTemp.equalsAscii( p->mpAPIName ) )
                     {
                         sTemp = GetXMLToken( p->meXMLToken );
                         eAttributeName = p->meXMLToken;

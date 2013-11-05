@@ -118,8 +118,8 @@ sal_Bool MorkDriver::acceptsURL(OUString const & url)
         aAddrbookScheme = aAddrbookURI.copy(0, nLen);
     }
 
-    if ((aAddrbookScheme.compareToAscii( "thunderbird" ) == 0) ||
-        (aAddrbookScheme.compareToAscii( "mozilla" ) == 0))
+    if (aAddrbookScheme.equalsAscii( "thunderbird" ) ||
+        aAddrbookScheme.equalsAscii( "mozilla" ) )
     {
         return true;
     }

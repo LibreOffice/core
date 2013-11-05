@@ -58,28 +58,24 @@ namespace tools_urlobj
             INetURLObject aUrl( OUString( "file://10.10.1.1/sampledir/sample.file" ) );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii
-                            ( "smb://10.10.1.1/sampledir/sample.file" ) ==
-                            0 );
+                            equalsAscii
+                            ( "smb://10.10.1.1/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii
-                            ( "file://10.10.1.1/sampledir/sample.file" ) ==
-                            0 );
+                            equalsAscii
+                            ( "file://10.10.1.1/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            compareToAscii( "10.10.1.1" ) == 0 );
+                            equalsAscii( "10.10.1.1" ) );
             CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            compareToAscii( "/sampledir/sample.file" ) == 0 );
+                            equalsAscii( "/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.getName(  ).
-                            compareToAscii( "sample.file" ) == 0 );
-            CPPUNIT_ASSERT( aUrl.getBase(  ).compareToAscii( "sample" ) ==
-                            0 );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ).compareToAscii( "file" ) ==
-                            0 );
+                            equalsAscii( "sample.file" ) );
+            CPPUNIT_ASSERT( aUrl.getBase(  ).equalsAscii( "sample" ) );
+            CPPUNIT_ASSERT( aUrl.getExtension(  ).equalsAscii( "file" ) );
         }
 
         void urlobjTest_002(  )
@@ -90,26 +86,22 @@ namespace tools_urlobj
                              INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii
-                            ( "smb://137.65.170.24/c$/Img0001.jpg" ) == 0 );
+                            equalsAscii( "smb://137.65.170.24/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii
-                            ( "file://137.65.170.24/c$/Img0001.jpg" ) == 0 );
+                            equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) ;
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            compareToAscii( "137.65.170.24" ) == 0 );
+                            equalsAscii( "137.65.170.24" ) );
             CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            compareToAscii( "/c$/Img0001.jpg" ) == 0 );
+                            equalsAscii( "/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.getName(  ).
-                            compareToAscii( "Img0001.jpg" ) == 0 );
-            CPPUNIT_ASSERT( aUrl.getBase(  ).compareToAscii( "Img0001" ) ==
-                            0 );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ).compareToAscii( "jpg" ) ==
-                            0 );
+                            equalsAscii( "Img0001.jpg" ) );
+            CPPUNIT_ASSERT( aUrl.getBase(  ).equalsAscii( "Img0001" ) );
+            CPPUNIT_ASSERT( aUrl.getExtension(  ).equalsAscii( "jpg" ) );
         }
 
 
@@ -121,22 +113,18 @@ namespace tools_urlobj
                              INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii
-                            ( "smb://hive-winxp-x86/pmladek/test2.odt" ) ==
-                            0 );
+                            equalsAscii( "smb://hive-winxp-x86/pmladek/test2.odt" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii
-                            ( "file://hive-winxp-x86/pmladek/test2.odt" ) ==
-                            0 );
+                            equalsAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            compareToAscii( "hive-winxp-x86" ) == 0 );
+                            equalsAscii( "hive-winxp-x86" ) );
             CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            compareToAscii( "/pmladek/test2.odt" ) == 0 );
+                            equalsAscii( "/pmladek/test2.odt" ) );
         }
 
         void urlobjTest_004(  )
@@ -144,28 +132,22 @@ namespace tools_urlobj
             INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii
-                            ( "smb://10.10.1.1/sampledir/sample.file" ) ==
-                            0 );
+                            equalsAscii( "smb://10.10.1.1/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii
-                            ( "file://10.10.1.1/sampledir/sample.file" ) ==
-                            0 );
+                            equalsAscii( "file://10.10.1.1/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            compareToAscii( "10.10.1.1" ) == 0 );
+                            equalsAscii( "10.10.1.1" ) );
             CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            compareToAscii( "/sampledir/sample.file" ) == 0 );
+                            equalsAscii( "/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.getName(  ).
-                            compareToAscii( "sample.file" ) == 0 );
-            CPPUNIT_ASSERT( aUrl.getBase(  ).compareToAscii( "sample" ) ==
-                            0 );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ).compareToAscii( "file" ) ==
-                            0 );
+                            equalsAscii( "sample.file" ) );
+            CPPUNIT_ASSERT( aUrl.getBase(  ).equalsAscii( "sample" ) );
+            CPPUNIT_ASSERT( aUrl.getExtension(  ).equalsAscii( "file" ) );
         }
 
         void urlobjTest_005(  )
@@ -175,21 +157,21 @@ namespace tools_urlobj
                               INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii( "smb://137.65.170.24/c$/Img0001.jpg" ) == 0 );
+                            equalsAscii( "smb://137.65.170.24/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii( "file://137.65.170.24/c$/Img0001.jpg" ) == 0 );
+                            equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            compareToAscii( "137.65.170.24" ) == 0 );
+                            equalsAscii( "137.65.170.24" ) );
             CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            compareToAscii( "/c$/Img0001.jpg" ) == 0 );
-            CPPUNIT_ASSERT( aUrl.getName(  ).compareToAscii( "Img0001.jpg" ) == 0 );
-            CPPUNIT_ASSERT( aUrl.getBase(  ).compareToAscii( "Img0001" ) == 0 );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ).compareToAscii( "jpg" ) == 0 );
+                            equalsAscii( "/c$/Img0001.jpg" ) );
+            CPPUNIT_ASSERT( aUrl.getName(  ).equalsAscii( "Img0001.jpg" ) );
+            CPPUNIT_ASSERT( aUrl.getBase(  ).equalsAscii( "Img0001" ) );
+            CPPUNIT_ASSERT( aUrl.getExtension(  ).equalsAscii( "jpg" ) );
         }
 
 
@@ -200,18 +182,18 @@ namespace tools_urlobj
                               INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii( "smb://hive-winxp-x86/pmladek/test2.odt" ) == 0 );
+                            equalsAscii( "smb://hive-winxp-x86/pmladek/test2.odt" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            compareToAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) == 0 );
+                            equalsAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            compareToAscii( "hive-winxp-x86" ) == 0 );
+                            equalsAscii( "hive-winxp-x86" ) );
             CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            compareToAscii( "/pmladek/test2.odt" ) == 0 );
+                            equalsAscii( "/pmladek/test2.odt" ) );
         }
 
         void urlobjCmisTest(  )

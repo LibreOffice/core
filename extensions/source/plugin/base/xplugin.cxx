@@ -898,7 +898,7 @@ PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
         {
             for( int i = 0; i < aDescrs.getLength(); i++ )
             {
-                if( pDescrs[i].Mimetype.compareToAscii( m_pArgv[nArg] ) == 0 )
+                if( pDescrs[i].Mimetype.equalsAscii( m_pArgv[nArg] ) )
                     return pDescrs[i];
             }
         }

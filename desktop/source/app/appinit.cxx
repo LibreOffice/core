@@ -231,7 +231,7 @@ void Desktop::destroyAcceptor(const OUString& aAcceptString)
 {
     // special case stop all acceptors
     AcceptorMap &rMap = acceptorMap::get();
-    if (aAcceptString.compareToAscii("all") == 0) {
+    if (aAcceptString.equalsAscii("all")) {
         rMap.clear();
 
     } else {

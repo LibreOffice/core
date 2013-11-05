@@ -439,7 +439,7 @@ Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::get
 
 ::sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const OUString& aMode ) throw (RuntimeException)
 {
-    return aMode.compareToAscii( "DataMode" ) == 0;
+    return aMode.equalsAscii( "DataMode" );
 }
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & /*Model*/) throw( RuntimeException )

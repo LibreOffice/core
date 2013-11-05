@@ -387,9 +387,9 @@ void ScXMLConditionContext::GetOperator(
         rParam.bRegExp = true;
         rEntry.eOp = SC_NOT_EQUAL;
     }
-    else if (aOpStr.compareToAscii("=") == 0)
+    else if (aOpStr.equalsAscii("="))
         rEntry.eOp = SC_EQUAL;
-    else if (aOpStr.compareToAscii("!=") == 0)
+    else if (aOpStr.equalsAscii("!="))
         rEntry.eOp = SC_NOT_EQUAL;
     else if (IsXMLToken(aOpStr, XML_BOTTOM_PERCENT))
         rEntry.eOp = SC_BOTPERC;
@@ -397,13 +397,13 @@ void ScXMLConditionContext::GetOperator(
         rEntry.eOp = SC_BOTVAL;
     else if (IsXMLToken(aOpStr, XML_EMPTY))
         rEntry.SetQueryByEmpty();
-    else if (aOpStr.compareToAscii(">") == 0)
+    else if (aOpStr.equalsAscii(">"))
         rEntry.eOp = SC_GREATER;
-    else if (aOpStr.compareToAscii(">=") == 0)
+    else if (aOpStr.equalsAscii(">="))
         rEntry.eOp = SC_GREATER_EQUAL;
-    else if (aOpStr.compareToAscii("<") == 0)
+    else if (aOpStr.equalsAscii("<"))
         rEntry.eOp = SC_LESS;
-    else if (aOpStr.compareToAscii("<=") == 0)
+    else if (aOpStr.equalsAscii("<="))
         rEntry.eOp = SC_LESS_EQUAL;
     else if (IsXMLToken(aOpStr, XML_NOEMPTY))
         rEntry.SetQueryByNonEmpty();
@@ -827,21 +827,21 @@ void ScXMLDPConditionContext::getOperatorXML(
         bUseRegularExpressions = true;
         aFilterOperator = SC_NOT_EQUAL;
     }
-    else if (sTempOperator.compareToAscii("=") == 0)
+    else if (sTempOperator.equalsAscii("="))
         aFilterOperator = SC_EQUAL;
-    else if (sTempOperator.compareToAscii("!=") == 0)
+    else if (sTempOperator.equalsAscii("!="))
         aFilterOperator = SC_NOT_EQUAL;
     else if (IsXMLToken(sTempOperator, XML_BOTTOM_PERCENT))
         aFilterOperator = SC_BOTPERC;
     else if (IsXMLToken(sTempOperator, XML_BOTTOM_VALUES))
         aFilterOperator = SC_BOTVAL;
-    else if (sTempOperator.compareToAscii(">") == 0)
+    else if (sTempOperator.equalsAscii(">"))
         aFilterOperator = SC_GREATER;
-    else if (sTempOperator.compareToAscii(">=") == 0)
+    else if (sTempOperator.equalsAscii(">="))
         aFilterOperator = SC_GREATER_EQUAL;
-    else if (sTempOperator.compareToAscii("<") == 0)
+    else if (sTempOperator.equalsAscii("<"))
         aFilterOperator = SC_LESS;
-    else if (sTempOperator.compareToAscii("<=") == 0)
+    else if (sTempOperator.equalsAscii("<="))
         aFilterOperator = SC_LESS_EQUAL;
     else if (IsXMLToken(sTempOperator, XML_TOP_PERCENT))
         aFilterOperator = SC_TOPPERC;

@@ -115,13 +115,13 @@ Reference< XDispatch > SAL_CALL Addon::queryDispatch( const URL& aURL, const ::r
                 throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
-    if ( aURL.Protocol.compareToAscii("org.openoffice.Office.addon.example:") == 0 )
+    if ( aURL.Protocol.equalsAscii("org.openoffice.Office.addon.example:") )
     {
-        if ( aURL.Path.compareToAscii( "Function1" ) == 0 )
+        if ( aURL.Path.equalsAscii( "Function1" ) )
             xRet = this;
-        else if ( aURL.Path.compareToAscii( "Function2" ) == 0 )
+        else if ( aURL.Path.equalsAscii( "Function2" ) )
             xRet = this;
-        else if ( aURL.Path.compareToAscii( "Help" ) == 0 )
+        else if ( aURL.Path.equalsAscii( "Help" ) )
             xRet = this;
     }
 
@@ -134,21 +134,21 @@ Reference< XDispatch > SAL_CALL Addon::queryDispatch( const URL& aURL, const ::r
   */
 void SAL_CALL Addon::dispatch( const URL& aURL, const Sequence < PropertyValue >& lArgs ) throw (RuntimeException)
 {
-    if ( aURL.Protocol.compareToAscii("org.openoffice.Office.addon.example:") == 0 )
+    if ( aURL.Protocol.equalsAscii("org.openoffice.Office.addon.example:") )
     {
-        if ( aURL.Path.compareToAscii( "Function1" ) == 0 )
+        if ( aURL.Path.equalsAscii( "Function1" ) )
         {
             ShowMessageBox( mxToolkit, mxFrame,
                             OUString( "SDK Add-On example" ),
                             OUString( "Function 1 activated" ) );
         }
-        else if ( aURL.Path.compareToAscii( "Function2" ) == 0 )
+        else if ( aURL.Path.equalsAscii( "Function2" ) )
         {
             ShowMessageBox( mxToolkit, mxFrame,
                             OUString( "SDK Add-On example" ),
                             OUString( "Function 2 activated" ) );
         }
-        else if ( aURL.Path.compareToAscii( "Help" ) == 0 )
+        else if ( aURL.Path.equalsAscii( "Help" ) )
         {
             // Show info box
             ShowMessageBox( mxToolkit, mxFrame,

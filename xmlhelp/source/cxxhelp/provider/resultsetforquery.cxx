@@ -126,7 +126,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
     vector< OUString > aCompleteResultVector;
     OUString scope = m_aURLParameter.get_scope();
-    bool bCaptionsOnly = ( scope.compareToAscii( "Heading" ) == 0 );
+    bool bCaptionsOnly = scope.equalsAscii( "Heading" );
     sal_Int32 hitCount = m_aURLParameter.get_hitCount();
 
     IndexFolderIterator aIndexFolderIt( *pDatabases, m_aURLParameter.get_module(), m_aURLParameter.get_language() );

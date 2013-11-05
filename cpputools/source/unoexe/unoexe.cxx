@@ -200,16 +200,16 @@ static Reference< XInterface > loadComponent(
 
         OUString aExt( rLocation.copy( nDot +1 ) );
 
-        if (aExt.compareToAscii( "dll" ) == 0 ||
-            aExt.compareToAscii( "exe" ) == 0 ||
-            aExt.compareToAscii( "dylib" ) == 0 ||
-            aExt.compareToAscii( "so" ) == 0)
+        if (aExt.equalsAscii( "dll" ) ||
+            aExt.equalsAscii( "exe" ) ||
+            aExt.equalsAscii( "dylib" ) ||
+            aExt.equalsAscii( "so" ) )
         {
             createInstance(
                 xLoader, xContext, OUString("com.sun.star.loader.SharedLibrary") );
         }
-        else if (aExt.compareToAscii( "jar" ) == 0 ||
-                 aExt.compareToAscii( "class" ) == 0)
+        else if (aExt.equalsAscii( "jar" ) ||
+                 aExt.equalsAscii( "class" ) )
         {
             createInstance(
                 xLoader, xContext, OUString("com.sun.star.loader.Java") );

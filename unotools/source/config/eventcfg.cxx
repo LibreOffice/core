@@ -245,7 +245,7 @@ void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, cons
     sal_Int32 nPropCount = props.getLength();
     for( sal_Int32 index = 0 ; index < nPropCount ; ++index )
     {
-        if ( props[ index ].Name.compareToAscii( "Script" ) == 0 )
+        if ( props[ index ].Name.equalsAscii( "Script" ) )
             props[ index ].Value >>= macroURL;
     }
     m_eventBindingHash[ aName ] = macroURL;

@@ -860,7 +860,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
                 if (sValue.getLength() > 8)
                 {
                     OUString sTemp = sValue.copy(0, 8);
-                    if (sTemp.compareToAscii(SC_USERLIST) == 0)
+                    if (sTemp.equalsAscii(SC_USERLIST))
                     {
                         pDatabaseRangeContext->SetSubTotalsEnabledUserList(true);
                         sTemp = sValue.copy(8);

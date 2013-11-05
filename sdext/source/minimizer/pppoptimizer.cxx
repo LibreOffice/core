@@ -55,9 +55,9 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispat
     const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
-    if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) == 0 )
+    if ( aURL.Protocol.equalsAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) )
     {
-//      if ( aURL.Path.compareToAscii( "Function1" ) == 0 )
+//      if ( aURL.Path.equalsAscii( "Function1" ) )
         xRet = this;
     }
     return xRet;
@@ -85,9 +85,9 @@ Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizer:
 void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyValue >& lArguments )
     throw( RuntimeException )
 {
-    if ( mxController.is() && ( rURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) == 0 ) )
+    if ( mxController.is() && rURL.Protocol.equalsAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) )
     {
-        if ( rURL.Path.compareToAscii( "optimize" ) == 0 )
+        if ( rURL.Path.equalsAscii( "optimize" ) )
         {
             Reference< XModel > xModel( mxController->getModel() );
             if ( xModel.is() )

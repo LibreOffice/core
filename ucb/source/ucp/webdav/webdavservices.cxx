@@ -47,7 +47,7 @@ extern "C" void * SAL_CALL component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     if ( ::http_dav_ucp::ContentProvider::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = ::http_dav_ucp::ContentProvider::createServiceFactory( xSMgr );
     }

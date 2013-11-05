@@ -613,7 +613,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
 
         // if the module is ignore case/kana/width, load caseignore for equals/compareString mothed
         for (sal_Int16 i = 0; i < 3; i++) {
-            if (implName.compareToAscii(TMlist[i].implName) == 0) {
+            if (implName.equalsAscii(TMlist[i].implName)) {
                 if (i == 0) // current module is caseignore
                     body->loadModule(TMlist[0].tm, rLocale); // caseingore need to setup module name
                 if (! caseignore.is()) {

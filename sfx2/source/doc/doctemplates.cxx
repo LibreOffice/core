@@ -2450,9 +2450,9 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     if ( rUITitle.isEmpty() )
     {
         // reserved FS names that should not be used
-        if ( rTitle.compareToAscii( "wizard" ) == 0 )
+        if ( rTitle.equalsAscii( "wizard" ) )
             return;
-        else if ( rTitle.compareToAscii( "internal" ) == 0 )
+        else if ( rTitle.equalsAscii( "internal" ) )
             return;
 
         aTitle = getLongName( rTitle );
@@ -2515,7 +2515,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                 OUString aType;
                 OUString aHierURL;
 
-                if ( aChildTitle.compareToAscii( "sfx.tlx" ) == 0 || aChildTitle == "groupuinames.xml" )
+                if ( aChildTitle.equalsAscii( "sfx.tlx" ) || aChildTitle == "groupuinames.xml" )
                     continue;
 
                 sal_Bool bDocHasTitle = sal_False;

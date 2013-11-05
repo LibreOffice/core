@@ -128,7 +128,7 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
                 return new DiagramGraphicDataContext( *this, mpShapePtr );
             else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/chart" )
                 return new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart );
-            else if ( sUri.compareToAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) == 0 )
+            else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) )
                 return new table::TableContext( *this, mpShapePtr );
             else
             {

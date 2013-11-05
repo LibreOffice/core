@@ -1297,7 +1297,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
 
     for ( j = 0; j < getNumberOfChildren(); j++ ) {
         LocaleNode * currNode = getChildAt (j);
-        if( currNode->getName().compareToAscii("Collator") == 0 )
+        if( currNode->getName().equalsAscii("Collator") )
         {
             OUString str;
             str = currNode->getAttr().getValueByName("unoid");
@@ -1310,7 +1310,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
 
             nbOfCollations++;
         }
-        if( currNode->getName().compareToAscii("CollationOptions") == 0 )
+        if( currNode->getName().equalsAscii("CollationOptions") )
         {
             LocaleNode* pCollationOptions = currNode;
             nbOfCollationOptions = sal::static_int_cast<sal_Int16>( pCollationOptions->getNumberOfChildren() );
@@ -1411,7 +1411,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     sal_Int16 i;
     for (i = 0; i< getNumberOfChildren();i++) {
         LocaleNode * currNode = getChildAt (i);
-        if( currNode->getName().compareToAscii("IndexKey") == 0 )
+        if( currNode->getName().equalsAscii("IndexKey") )
         {
             OUString str;
             str = currNode->getAttr().getValueByName("unoid");
@@ -1428,13 +1428,13 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
 
             nbOfIndexs++;
         }
-        if( currNode->getName().compareToAscii("UnicodeScript") == 0 )
+        if( currNode->getName().equalsAscii("UnicodeScript") )
         {
             of.writeParameter("unicodeScript", currNode->getValue(), nbOfUnicodeScripts );
             nbOfUnicodeScripts++;
 
         }
-        if( currNode->getName().compareToAscii("FollowPageWord") == 0 )
+        if( currNode->getName().equalsAscii("FollowPageWord") )
         {
             of.writeParameter("followPageWord", currNode->getValue(), nbOfPageWords);
             nbOfPageWords++;

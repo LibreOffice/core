@@ -54,28 +54,28 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL unoxml_component_getFactory(const sal_Char *
         Reference< XMultiServiceFactory >  xServiceManager(
             reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
 
-        if (CDocumentBuilder::_getImplementationName().compareToAscii( pImplementationName ) == 0 )
+        if (CDocumentBuilder::_getImplementationName().equalsAscii( pImplementationName )  )
         {
             xFactory = Reference< XSingleServiceFactory >(
                 cppu::createOneInstanceFactory(
                     xServiceManager, CDocumentBuilder::_getImplementationName(),
                     CDocumentBuilder::_getInstance, CDocumentBuilder::_getSupportedServiceNames()));
         }
-        else if (CSAXDocumentBuilder::_getImplementationName().compareToAscii( pImplementationName ) == 0 )
+        else if (CSAXDocumentBuilder::_getImplementationName().equalsAscii( pImplementationName ) )
         {
             xFactory = Reference< XSingleServiceFactory >(
                 cppu::createSingleFactory(
                     xServiceManager, CSAXDocumentBuilder::_getImplementationName(),
                     CSAXDocumentBuilder::_getInstance, CSAXDocumentBuilder::_getSupportedServiceNames()));
         }
-        else if (CXPathAPI::_getImplementationName().compareToAscii( pImplementationName ) == 0 )
+        else if (CXPathAPI::_getImplementationName().equalsAscii( pImplementationName ) )
         {
             xFactory = Reference< XSingleServiceFactory >(
                 cppu::createSingleFactory(
                     xServiceManager, CXPathAPI::_getImplementationName(),
                     CXPathAPI::_getInstance, CXPathAPI::_getSupportedServiceNames()));
         }
-        else if (CTestListener::_getImplementationName().compareToAscii( pImplementationName ) == 0 )
+        else if (CTestListener::_getImplementationName().equalsAscii( pImplementationName ) )
         {
             xFactory = Reference< XSingleServiceFactory >(
                 cppu::createSingleFactory(

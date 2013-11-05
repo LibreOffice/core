@@ -2737,7 +2737,7 @@ void SchXMLExportHelper_Impl::exportSeries(
 
                                 if( xLabelSeq.is()) {
                                     OUString aRange = xLabelSeq->getSourceRangeRepresentation();
-                                    if ( nSeriesIdx == 0 && aRange.compareToAscii("label 1") == 0)
+                                    if ( nSeriesIdx == 0 && aRange.equalsAscii("label 1"))
                                         modifyLabelRange = true;
                                     if (modifyLabelRange)
                                         aRange = "label " + OUString::number(aRange.copy( OUString("label").getLength()).toInt32() - 1);

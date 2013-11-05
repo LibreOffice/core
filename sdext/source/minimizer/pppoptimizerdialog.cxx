@@ -92,7 +92,7 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizerDialog::query
     const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
-    if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PresentationMinimizer:" ) == 0 )
+    if ( aURL.Protocol.equalsAscii( "vnd.com.sun.star.comp.PresentationMinimizer:" ) )
         xRet = this;
 
     return xRet;
@@ -122,9 +122,9 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
     throw( RuntimeException )
 {
 
-    if ( mxController.is() && ( rURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PresentationMinimizer:" ) == 0 ) )
+    if ( mxController.is() && rURL.Protocol.equalsAscii( "vnd.com.sun.star.comp.PresentationMinimizer:" ) )
     {
-        if ( rURL.Path.compareToAscii( "execute" ) == 0 )
+        if ( rURL.Path.equalsAscii( "execute" ) )
         {
             try
             {
@@ -157,7 +157,7 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
 
             }
         }
-        else if ( rURL.Path.compareToAscii( "statusupdate" ) == 0 )
+        else if ( rURL.Path.equalsAscii( "statusupdate" ) )
         {
             if ( mpOptimizerDialog )
                 mpOptimizerDialog->UpdateStatus( rArguments );

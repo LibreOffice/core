@@ -38,7 +38,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbpool2_component_getFactory(const sal_Char*
 {
     void* pRet = NULL;
 
-    if (OPoolCollection::getImplementationName_Static().compareToAscii(_pImplName) == 0)
+    if (OPoolCollection::getImplementationName_Static().equalsAscii(_pImplName))
     {
         Reference< XSingleServiceFactory > xFactory(
             ::cppu::createOneInstanceFactory(

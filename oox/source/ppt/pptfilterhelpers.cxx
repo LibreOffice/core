@@ -77,7 +77,7 @@ namespace oox { namespace ppt {
 
         while( p->mpName )
         {
-            if( rName.compareToAscii( p->mpName ) == 0 )
+            if( rName.equalsAscii( p->mpName ) )
                 return p;
 
             p++;

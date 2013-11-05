@@ -39,7 +39,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpchelp_component_getFactory(
     // Create factory, if implementation name matches.
 
     if ( ::chelp::ContentProvider::getImplementationName_Static().
-             compareToAscii( pImplName ) == 0 )
+             equalsAscii( pImplName ) )
     {
         xFactory = ::chelp::ContentProvider::createServiceFactory( xSMgr );
     }

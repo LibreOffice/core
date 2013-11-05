@@ -44,7 +44,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     if ( UniversalContentBroker::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = UniversalContentBroker::createServiceFactory( xSMgr );
     }
@@ -54,7 +54,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( UcbStore::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = UcbStore::createServiceFactory( xSMgr );
     }
@@ -64,7 +64,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( UcbPropertiesManager::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = UcbPropertiesManager::createServiceFactory( xSMgr );
     }
@@ -74,7 +74,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( UcbContentProviderProxyFactory::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = UcbContentProviderProxyFactory::createServiceFactory( xSMgr );
     }
@@ -84,7 +84,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
     //////////////////////////////////////////////////////////////////////
 
     else if ( ucb_cmdenv::UcbCommandEnvironment::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
+                equalsAscii( pImplName ) )
     {
         xFactory = ucb_cmdenv::UcbCommandEnvironment::createServiceFactory( xSMgr );
     }

@@ -184,7 +184,7 @@ IndexEntrySupplier::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL
 IndexEntrySupplier::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.compareToAscii(implementationName) == 0;
+    return rServiceName.equalsAscii(implementationName);
 }
 
 Sequence< OUString > SAL_CALL

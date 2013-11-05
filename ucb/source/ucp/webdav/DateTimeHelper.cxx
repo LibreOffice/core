@@ -108,19 +108,19 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
 /*
 sal_Int32 DateTimeHelper::convertDayToInt (const OUString& day)
 {
-    if (day.compareToAscii ("Sun") == 0)
+    if (day.equalsAscii("Sun"))
         return 0;
-    else if (day.compareToAscii ("Mon") == 0)
+    else if (day.equalsAscii("Mon"))
         return 1;
-    else if (day.compareToAscii ("Tue") == 0)
+    else if (day.equalsAscii("Tue"))
         return 2;
-    else if (day.compareToAscii ("Wed") == 0)
+    else if (day.equalsAscii("Wed"))
         return 3;
-    else if (day.compareToAscii ("Thu") == 0)
+    else if (day.equalsAscii("Thu"))
         return 4;
-    else if (day.compareToAscii ("Fri") == 0)
+    else if (day.equalsAscii("Fri"))
         return 5;
-    else if (day.compareToAscii ("Sat") == 0)
+    else if (day.equalsAscii("Sat"))
         return 6;
     else
         return -1;
@@ -129,29 +129,29 @@ sal_Int32 DateTimeHelper::convertDayToInt (const OUString& day)
 
 sal_Int32 DateTimeHelper::convertMonthToInt (const OUString& month)
 {
-    if (month.compareToAscii ("Jan") == 0)
+    if (month.equalsAscii("Jan"))
         return 1;
-    else if (month.compareToAscii ("Feb") == 0)
+    else if (month.equalsAscii("Feb"))
         return 2;
-    else if (month.compareToAscii ("Mar") == 0)
+    else if (month.equalsAscii("Mar"))
         return 3;
-    else if (month.compareToAscii ("Apr") == 0)
+    else if (month.equalsAscii("Apr"))
         return 4;
-    else if (month.compareToAscii ("May") == 0)
+    else if (month.equalsAscii("May"))
         return 5;
-    else if (month.compareToAscii ("Jun") == 0)
+    else if (month.equalsAscii("Jun"))
         return 6;
-    else if (month.compareToAscii ("Jul") == 0)
+    else if (month.equalsAscii("Jul"))
         return 7;
-    else if (month.compareToAscii ("Aug") == 0)
+    else if (month.equalsAscii("Aug"))
         return 8;
-    else if (month.compareToAscii ("Sep") == 0)
+    else if (month.equalsAscii("Sep"))
         return 9;
-    else if (month.compareToAscii ("Oct") == 0)
+    else if (month.equalsAscii("Oct"))
         return 10;
-    else if (month.compareToAscii ("Nov") == 0)
+    else if (month.equalsAscii("Nov"))
         return 11;
-    else if (month.compareToAscii ("Dec") == 0)
+    else if (month.equalsAscii("Dec"))
         return 12;
     else
         return 0;

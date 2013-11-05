@@ -158,8 +158,7 @@ namespace {
                                                        const OUString& MethodName ) throw (lang::WrappedTargetException, uno::RuntimeException)
         {
             (void)MethodName;
-            OSL_ENSURE( MethodName.compareToAscii("SelectionChanged") == 0,
-                        "Invalid event name" );
+            OSL_ENSURE( MethodName.equalsAscii("SelectionChanged"), "Invalid event name" );
             selectionChanged(getSelectedItem());
             return sal_True;
         }

@@ -898,7 +898,7 @@ OUString SAL_CALL NativeNumberSupplier::getImplementationName() throw( RuntimeEx
 sal_Bool SAL_CALL
 NativeNumberSupplier::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.compareToAscii(implementationName) == 0;
+    return rServiceName.equalsAscii(implementationName);
 }
 
 Sequence< OUString > SAL_CALL

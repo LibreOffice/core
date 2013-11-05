@@ -138,7 +138,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
         throw beans::UnknownPropertyException();
     if(!pEntry->nWID)
     {
-        if(aPropertyName.compareToAscii(SC_UNO_STANDARDDEC) == 0)
+        if(aPropertyName.equalsAscii(SC_UNO_STANDARDDEC) )
         {
             ScDocument* pDoc = pDocShell->GetDocument();
             if (pDoc)
@@ -154,7 +154,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             else
                 throw uno::RuntimeException();
         }
-        else if (aPropertyName.compareToAscii(SC_UNO_TABSTOPDIS) == 0)
+        else if (aPropertyName.equalsAscii(SC_UNO_TABSTOPDIS) )
         {
             ScDocument* pDoc = pDocShell->GetDocument();
             if (pDoc)
@@ -234,7 +234,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
 
     if (!pEntry->nWID)
     {
-        if(aPropertyName.compareToAscii(SC_UNO_STANDARDDEC) == 0)
+        if(aPropertyName.equalsAscii(SC_UNO_STANDARDDEC) )
         {
             ScDocument* pDoc = pDocShell->GetDocument();
             if (pDoc)
@@ -250,7 +250,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
             else
                 throw uno::RuntimeException();
         }
-        else if (aPropertyName.compareToAscii(SC_UNO_TABSTOPDIS) == 0)
+        else if (aPropertyName.equalsAscii(SC_UNO_TABSTOPDIS) )
         {
             ScDocument* pDoc = pDocShell->GetDocument();
             if (pDoc)

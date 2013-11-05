@@ -829,7 +829,7 @@ void transferProperties(
 
         uno::Any aValue;
 
-        if ( rCurrProp.Name.compareToAscii( "Title" ) == 0 )
+        if ( rCurrProp.Name.equalsAscii( "Title" ) )
         {
             // Supply new title, if given.
             if ( !bHasTitle )
@@ -838,7 +838,7 @@ void transferProperties(
                 aValue <<= rContext.aArg.NewTitle;
             }
         }
-        else if ( rCurrProp.Name.compareToAscii( "TargetURL" ) == 0 )
+        else if ( rCurrProp.Name.equalsAscii( "TargetURL" ) )
         {
             // Supply source URL as link target for the new link to create.
             if ( !bHasTargetURL )

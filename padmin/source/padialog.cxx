@@ -695,7 +695,7 @@ void PADialog::UpdateDevice()
             OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
             if( !aToken.isEmpty() )
             {
-                if( aToken.compareToAscii( "autoqueue" ) == 0 )
+                if( aToken.equalsAscii( "autoqueue" ) )
                     bAutoQueue = true;
                 else if( aToken.startsWith("pdf=") )
                     bPdf = true;

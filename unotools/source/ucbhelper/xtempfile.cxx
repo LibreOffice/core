@@ -482,7 +482,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL utl_component_getFactory(
         reinterpret_cast< css::lang::XMultiServiceFactory * >( pServiceManager ) );
     css::uno::Reference< css::lang::XSingleComponentFactory > xFactory;
 
-    if (OTempFileService::getImplementationName_Static().compareToAscii( pImplName ) == 0)
+    if (OTempFileService::getImplementationName_Static().equalsAscii( pImplName ) )
         xFactory = OTempFileService::createServiceFactory_Static();
 
     if ( xFactory.is() )

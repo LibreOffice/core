@@ -4181,7 +4181,7 @@ bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndo
 void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomShapeType,dbaui::FeatureState& _rState) const
 {
     _rState.bEnabled = isEditable();
-    _rState.bChecked = getDesignView()->GetInsertObj() == OBJ_CUSTOMSHAPE && getDesignView()->GetInsertObjString().compareToAscii(_pCustomShapeType) == 0;
+    _rState.bChecked = getDesignView()->GetInsertObj() == OBJ_CUSTOMSHAPE && getDesignView()->GetInsertObjString().equalsAscii(_pCustomShapeType);
 }
 
 // -----------------------------------------------------------------------------

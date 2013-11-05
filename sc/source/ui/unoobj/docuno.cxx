@@ -2179,7 +2179,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
 
     // handle sheet events
     //! separate method with ScMarkData? Then change HasChangesListeners back.
-    if ( rOperation.compareToAscii("cell-change") == 0 && pDocShell )
+    if ( rOperation.equalsAscii("cell-change") && pDocShell )
     {
         ScMarkData aMarkData;
         aMarkData.MarkFromRangeList( rRanges, false );

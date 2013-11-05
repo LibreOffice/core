@@ -91,7 +91,7 @@ const transition* transition::find( const OUString& rName )
 
     while( p->mpName )
     {
-        if( rName.compareToAscii( p->mpName ) == 0 )
+        if( rName.equalsAscii( p->mpName ) )
             return p;
 
         p++;
@@ -698,7 +698,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
     {
         while( p->mpMSName )
         {
-            if( aAttributeName.compareToAscii( p->mpMSName ) == 0 )
+            if( aAttributeName.equalsAscii( p->mpMSName ) )
                 break;
 
             p++;

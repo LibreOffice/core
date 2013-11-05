@@ -95,7 +95,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL hatchwindowfactory_component_getFactory (
     if (pServiceManager)
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory;
-        if (OHatchWindowFactory::impl_staticGetImplementationName().compareToAscii (pImplementationName ) == 0)
+        if (OHatchWindowFactory::impl_staticGetImplementationName().equalsAscii(pImplementationName ))
         {
             xFactory = cppu::createOneInstanceFactory(
                 reinterpret_cast< lang::XMultiServiceFactory* >(pServiceManager),
@@ -103,7 +103,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL hatchwindowfactory_component_getFactory (
                 OHatchWindowFactory::impl_staticCreateSelfInstance,
                 OHatchWindowFactory::impl_staticGetSupportedServiceNames());
         }
-        else if (ODocumentCloser::impl_staticGetImplementationName().compareToAscii (pImplementationName ) == 0)
+        else if (ODocumentCloser::impl_staticGetImplementationName().equalsAscii(pImplementationName ))
         {
             xFactory = cppu::createSingleFactory(
                 reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),

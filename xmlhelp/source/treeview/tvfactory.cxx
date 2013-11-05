@@ -93,8 +93,8 @@ TVFactory::supportsService(
     throw( RuntimeException )
 {
     return
-        ServiceName.compareToAscii( "com.sun.star.help.TreeView" ) == 0 ||
-        ServiceName.compareToAscii( "com.sun.star.ucb.HiearchyDataSource" ) == 0;
+        ServiceName.equalsAscii( "com.sun.star.help.TreeView" ) ||
+        ServiceName.equalsAscii( "com.sun.star.ucb.HiearchyDataSource" );
 }
 
 Sequence< OUString > SAL_CALL
@@ -230,7 +230,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL treeview_component_getFactory(
 
     // File Content Provider.
 
-    if ( TVFactory::getImplementationName_static().compareToAscii( pImplName ) == 0 )
+    if ( TVFactory::getImplementationName_static().equalsAscii( pImplName ) )
     {
         xFactory = TVFactory::createServiceFactory( xSMgr );
     }

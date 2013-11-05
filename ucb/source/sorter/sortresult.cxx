@@ -902,8 +902,8 @@ void SAL_CALL SortedResultSet::setPropertyValue(
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
-    if ( ( PropertyName.compareToAscii( "RowCount" ) == 0 ) ||
-         ( PropertyName.compareToAscii( "IsRowCountFinal" ) == 0 ) )
+    if ( PropertyName.equalsAscii( "RowCount" ) ||
+         PropertyName.equalsAscii( "IsRowCountFinal" ) )
         throw IllegalArgumentException();
     else
         throw UnknownPropertyException();
@@ -919,11 +919,11 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
 
     Any aRet;
 
-    if ( PropertyName.compareToAscii( "RowCount" ) == 0 )
+    if ( PropertyName.equalsAscii( "RowCount" ) )
     {
         aRet <<= maS2O.Count();
     }
-    else if ( PropertyName.compareToAscii( "IsRowCountFinal" ) == 0 )
+    else if ( PropertyName.equalsAscii( "IsRowCountFinal" ) )
     {
         sal_Bool    bOrgFinal = false;
         Any         aOrgRet;
@@ -2043,9 +2043,9 @@ Property SAL_CALL
 SRSPropertySetInfo::getPropertyByName( const OUString& Name )
     throw( UnknownPropertyException, RuntimeException )
 {
-    if ( Name.compareToAscii( "RowCount" ) == 0 )
+    if ( Name.equalsAscii( "RowCount" ) )
         return maProps[0];
-    else if ( Name.compareToAscii( "IsRowCountFinal" ) == 0 )
+    else if ( Name.equalsAscii( "IsRowCountFinal" ) )
         return maProps[1];
     else
         throw UnknownPropertyException();
@@ -2056,9 +2056,9 @@ sal_Bool SAL_CALL
 SRSPropertySetInfo::hasPropertyByName( const OUString& Name )
     throw( RuntimeException )
 {
-    if ( Name.compareToAscii( "RowCount" ) == 0 )
+    if ( Name.equalsAscii( "RowCount" ) )
         return sal_True;
-    else if ( Name.compareToAscii( "IsRowCountFinal" ) == 0 )
+    else if ( Name.equalsAscii( "IsRowCountFinal" ) )
         return sal_True;
     else
         return sal_False;

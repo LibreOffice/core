@@ -49,13 +49,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL package2_component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< XSingleServiceFactory > xFactory;
 
-    if (ManifestReader::static_getImplementationName().compareToAscii( pImplName ) == 0)
+    if (ManifestReader::static_getImplementationName().equalsAscii( pImplName ) )
         xFactory = ManifestReader::createServiceFactory ( xSMgr );
-    else if (ManifestWriter::static_getImplementationName().compareToAscii( pImplName ) == 0)
+    else if (ManifestWriter::static_getImplementationName().equalsAscii( pImplName ) )
         xFactory = ManifestWriter::createServiceFactory ( xSMgr );
-    else if (ZipPackage::static_getImplementationName().compareToAscii( pImplName ) == 0)
+    else if (ZipPackage::static_getImplementationName().equalsAscii( pImplName ) )
         xFactory = ZipPackage::createServiceFactory ( xSMgr );
-    else if ( OZipFileAccess::impl_staticGetImplementationName().compareToAscii( pImplName ) == 0 )
+    else if ( OZipFileAccess::impl_staticGetImplementationName().equalsAscii( pImplName ) )
         xFactory = ::cppu::createSingleFactory( xSMgr,
                                            OZipFileAccess::impl_staticGetImplementationName(),
                                            OZipFileAccess::impl_staticCreateSelfInstance,

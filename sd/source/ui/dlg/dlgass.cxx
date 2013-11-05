@@ -807,9 +807,9 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
         OUString sFactoryName;
         for( sal_Int32 i=0; i<nPropCount; ++i )
         {
-            if( lProps[i].Name.compareToAscii( "DocumentService" ) == 0 &&
+            if( lProps[i].Name.equalsAscii( "DocumentService" ) &&
                 (lProps[i].Value >>= sFactoryName) &&
-                sFactoryName.compareToAscii( "com.sun.star.presentation.PresentationDocument" ) == 0 )
+                sFactoryName.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
             {
                 // yes, it's an impress document
                 INetURLObject aURL;

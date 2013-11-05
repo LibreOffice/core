@@ -305,11 +305,11 @@ TVRead::getByName( const OUString& aName )
 {
     bool found( true );
     Any aAny;
-    if( aName.compareToAscii( "Title" ) == 0 )
+    if( aName.equalsAscii( "Title" ) )
         aAny <<= Title;
-    else if( aName.compareToAscii( "TargetURL" ) == 0 )
+    else if( aName.equalsAscii( "TargetURL" ) )
         aAny <<= TargetURL;
-    else if( aName.compareToAscii( "Children" ) == 0 )
+    else if( aName.equalsAscii( "Children" ) )
     {
         cppu::OWeakObject* p = Children.get();
         aAny <<= Reference< XInterface >( p );
@@ -340,9 +340,9 @@ sal_Bool SAL_CALL
 TVRead::hasByName( const OUString& aName )
     throw( RuntimeException )
 {
-    if( aName.compareToAscii( "Title" ) == 0        ||
-        aName.compareToAscii( "TargetURL" ) == 0    ||
-        aName.compareToAscii( "Children" ) == 0 )
+    if( aName.equalsAscii( "Title" )     ||
+        aName.equalsAscii( "TargetURL" ) ||
+        aName.equalsAscii( "Children" ) )
         return true;
 
     return false;
@@ -359,7 +359,7 @@ TVRead::getByHierarchicalName( const OUString& aName )
     OUString name( aName );
 
     if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1  &&
-        name.copy( 0,idx ).compareToAscii( "Children" ) == 0 )
+        name.copy( 0,idx ).equalsAscii( "Children" ) )
         return Children->getByHierarchicalName( name.copy( 1 + idx ) );
 
     return getByName( name );
@@ -373,7 +373,7 @@ TVRead::hasByHierarchicalName( const OUString& aName )
     OUString name( aName );
 
        if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1  &&
-        name.copy( 0,idx ).compareToAscii( "Children" ) == 0 )
+        name.copy( 0,idx ).equalsAscii( "Children" ) )
         return Children->hasByHierarchicalName( name.copy( 1 + idx ) );
 
     return hasByName( name );
@@ -775,7 +775,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
                 ( str[idx_ + 4] == 'e' || str[idx_ + 4] == 'E' ) )
               {
                 OUString baseName = aFileName.copy(0,idx_).toAsciiLowerCase();
-                if(! showBasic && baseName.compareToAscii("sbasic") == 0 )
+                if(! showBasic && baseName.equalsAscii("sbasic") )
                   continue;
                 osl::File aFile( aFileUrl );
                 if( osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )

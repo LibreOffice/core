@@ -898,7 +898,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
     bool bDoSort = false;
 
     ucb::OpenCommandArgument2 aOpenArg;
-    if (rName.compareToAscii("search") == 0)
+    if (rName.equalsAscii("search"))
     {
         ucb::SearchCommandArgument aArgument;
         if (!parseSearchArgument(rInput, aArgument.Info))

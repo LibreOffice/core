@@ -245,7 +245,7 @@ EDriverType MozabDriver::impl_classifyURL( const OUString& url )
 
     for ( size_t i=0; i < sizeof( aSchemeMap ) / sizeof( aSchemeMap[0] ); ++i )
     {
-        if ( aAddrbookScheme.compareToAscii( aSchemeMap[i].pScheme ) == 0 )
+        if ( aAddrbookScheme.equalsAscii( aSchemeMap[i].pScheme ) )
             return aSchemeMap[i].eType;
     }
 
