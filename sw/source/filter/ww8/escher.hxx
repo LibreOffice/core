@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ESCHER_HXX
-#define _ESCHER_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_ESCHER_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_ESCHER_HXX
 
 #include <filter/msfilter/escherex.hxx>
 

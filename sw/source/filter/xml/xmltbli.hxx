@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLTBLI_HXX
-#define _XMLTBLI_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLTBLI_HXX
+#define INCLUDED_SW_SOURCE_FILTER_XML_XMLTBLI_HXX
 
 #include <xmloff/XMLTextTableContext.hxx>
 

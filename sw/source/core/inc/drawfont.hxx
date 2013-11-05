@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DRAWFONT_HXX
-#define _DRAWFONT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_DRAWFONT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_DRAWFONT_HXX
 
 #include <tools/solar.h>
 #include <tools/debug.hxx>

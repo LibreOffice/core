@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWFLDREF_HXX
-#define _SWFLDREF_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_FLDUI_FLDREF_HXX
+#define INCLUDED_SW_SOURCE_UI_FLDUI_FLDREF_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>

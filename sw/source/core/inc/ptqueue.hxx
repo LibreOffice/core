@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PTQUEUE_HXX
-#define _PTQUEUE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_PTQUEUE_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_PTQUEUE_HXX
 
 //Leider vertragen wir es nicht so gut, wenn wir mehr als ein Paint
 //gleichzeitig verarbeiten sollen. Insbesondere beim Drucken kommt dies

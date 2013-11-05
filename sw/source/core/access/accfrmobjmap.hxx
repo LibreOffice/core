@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCFRMOBJMAP_HXX
-#define _ACCFRMOBJMAP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJMAP_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJMAP_HXX
 
 #include <accfrmobj.hxx>
 #include <svx/svdtypes.hxx>

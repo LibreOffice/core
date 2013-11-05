@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ISTYLEACCESS_HXX
-#define _ISTYLEACCESS_HXX
+#ifndef INCLUDED_SW_INC_ISTYLEACCESS_HXX
+#define INCLUDED_SW_INC_ISTYLEACCESS_HXX
 
 #include <vector>
 #include <svl/stylepool.hxx>
@@ -56,6 +56,6 @@ public:
     virtual void clearCaches() = 0;
 };
 
-#endif // _ISTYLEACCESS_HXX
+#endif // INCLUDED_SW_INC_ISTYLEACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

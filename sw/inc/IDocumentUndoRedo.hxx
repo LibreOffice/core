@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IDOCUMENTUNDOREDO_HXX_INCLUDED
-#define IDOCUMENTUNDOREDO_HXX_INCLUDED
+#ifndef INCLUDED_SW_INC_IDOCUMENTUNDOREDO_HXX
+#define INCLUDED_SW_INC_IDOCUMENTUNDOREDO_HXX
 
 #include <sal/types.h>
 

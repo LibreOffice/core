@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_COLUMNS_HXX
-#define SW_VBA_COLUMNS_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBACOLUMNS_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBACOLUMNS_HXX
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XColumns.hpp>
@@ -61,6 +61,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
-#endif /* SW_VBA_COLUMNS_HXX */
+#endif // INCLUDED_SW_SOURCE_UI_VBA_VBACOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

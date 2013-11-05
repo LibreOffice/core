@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOMAILMERGE_HXX_
-#define _UNOMAILMERGE_HXX_
+#ifndef INCLUDED_SW_SOURCE_UI_INC_UNOMAILMERGE_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_UNOMAILMERGE_HXX
 
 #include <functional>
 #include <cppuhelper/implbase5.hxx>

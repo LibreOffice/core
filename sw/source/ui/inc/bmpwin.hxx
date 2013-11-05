@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BMPWIN_HXX
-#define _BMPWIN_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_BMPWIN_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_BMPWIN_HXX
 
 #include <vcl/graph.hxx>
 #include <vcl/bitmapex.hxx>

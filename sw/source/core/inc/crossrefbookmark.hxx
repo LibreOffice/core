@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CROSSREFBOOKMRK_HXX
-#define _CROSSREFBOOKMRK_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_CROSSREFBOOKMARK_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_CROSSREFBOOKMARK_HXX
 
 #include <IMark.hxx>
 #include <bookmrk.hxx>

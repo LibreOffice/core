@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FRMATR_HXX
-#define _FRMATR_HXX
+#ifndef INCLUDED_SW_INC_FRMATR_HXX
+#define INCLUDED_SW_INC_FRMATR_HXX
 
 #include <hintids.hxx>
 #include <format.hxx>
@@ -86,6 +86,6 @@ inline const SvxMacroItem &SwFmt::GetMacro(sal_Bool bInP) const
 inline const SvxFrameDirectionItem  &SwFmt::GetFrmDir(sal_Bool bInP) const
     { return aSet.GetFrmDir(bInP); }
 
-#endif //_FRMATR_HXX
+#endif // INCLUDED_SW_INC_FRMATR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

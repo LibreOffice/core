@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOXWRAP_HXX
-#define _TOXWRAP_HXX
+#ifndef INCLUDED_SW_INC_TOXWRAP_HXX
+#define INCLUDED_SW_INC_TOXWRAP_HXX
 
 #include <tools/solar.h>
 #include <com/sun/star/lang/Locale.hpp>

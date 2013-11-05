@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SORT_HXX
-#define _SORT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCSORT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_DOCSORT_HXX
 
 #include <ndindex.hxx>
 #include <vector>

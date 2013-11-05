@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NDNOTXT_HXX
-#define _NDNOTXT_HXX
+#ifndef INCLUDED_SW_INC_NDNOTXT_HXX
+#define INCLUDED_SW_INC_NDNOTXT_HXX
 
 #include "node.hxx"
 
@@ -100,6 +100,6 @@ inline const SwNoTxtNode *SwNode::GetNoTxtNode() const
     return ND_NOTXTNODE & nNodeType ? (const SwNoTxtNode*)this : 0;
 }
 
-#endif  // _NDNOTXT_HXX
+#endif // INCLUDED_SW_INC_NDNOTXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

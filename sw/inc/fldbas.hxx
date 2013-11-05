@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_FLDBAS_HXX
-#define SW_FLDBAS_HXX
+#ifndef INCLUDED_SW_INC_FLDBAS_HXX
+#define INCLUDED_SW_INC_FLDBAS_HXX
 
 #include <i18nlangtag/lang.h>
 #include "swdllapi.h"
@@ -429,6 +429,6 @@ public:
     OUString                GetExpandedFormula() const;
 };
 
-#endif // SW_FLDBAS_HXX
+#endif // INCLUDED_SW_INC_FLDBAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

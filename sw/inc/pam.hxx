@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PAM_HXX
-#define _PAM_HXX
+#ifndef INCLUDED_SW_INC_PAM_HXX
+#define INCLUDED_SW_INC_PAM_HXX
 
 #include <stddef.h>
 #include <sal/types.h>
@@ -307,6 +307,6 @@ bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, bool bChkSection )
 bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
 
 
-#endif  // _PAM_HXX
+#endif // INCLUDED_SW_INC_PAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

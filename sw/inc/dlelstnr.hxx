@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DLELSTNR_HXX_
-#define _DLELSTNR_HXX_
+#ifndef INCLUDED_SW_INC_DLELSTNR_HXX
+#define INCLUDED_SW_INC_DLELSTNR_HXX
 
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>

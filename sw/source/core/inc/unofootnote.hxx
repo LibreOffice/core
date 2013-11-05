@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOFOOTNOTE_HXX
-#define SW_UNOFOOTNOTE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOFOOTNOTE_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNOFOOTNOTE_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -213,6 +213,6 @@ public:
 
 };
 
-#endif // SW_UNOFOOTNOTE_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNOFOOTNOTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

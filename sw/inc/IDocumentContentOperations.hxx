@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
- #define IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
+ #ifndef INCLUDED_SW_INC_IDOCUMENTCONTENTOPERATIONS_HXX
+ #define INCLUDED_SW_INC_IDOCUMENTCONTENTOPERATIONS_HXX
 
  #include <sal/types.h>
 
@@ -175,6 +175,6 @@
     virtual ~IDocumentContentOperations() {};
 };
 
-#endif // IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
+#endif // INCLUDED_SW_INC_IDOCUMENTCONTENTOPERATIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

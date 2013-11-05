@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_GLOBALS_HXX
-#define SW_VBA_GLOBALS_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAGLOBALS_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBAGLOBALS_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -70,6 +70,6 @@ public:
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();
 };
-#endif /* SW_VBA_GLOBALS_HXX */
+#endif // INCLUDED_SW_SOURCE_UI_VBA_VBAGLOBALS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ATTRHINT_HXX
-#define _ATTRHINT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_ATTRHINT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_ATTRHINT_HXX
 
 #include <svl/hint.hxx>
 

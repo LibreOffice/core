@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COLFRM_HXX
-#define _COLFRM_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_COLFRM_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_COLFRM_HXX
 
 #include <tools/mempool.hxx>
 #include "ftnboss.hxx"
@@ -35,6 +35,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwColumnFrm)
 };
 
-#endif  //_COLFRM_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_COLFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

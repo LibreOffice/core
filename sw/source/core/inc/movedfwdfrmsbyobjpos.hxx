@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _MOVEDFWDFRMSBYOBJPOS_HXX
-#define _MOVEDFWDFRMSBYOBJPOS_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_MOVEDFWDFRMSBYOBJPOS_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_MOVEDFWDFRMSBYOBJPOS_HXX
 
 #include <map>
 #include <sal/types.h>

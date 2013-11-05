@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CANCELLABLEJOB_HXX
-#define _CANCELLABLEJOB_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_DOCNODE_CANCELLABLEJOB_HXX
+#define INCLUDED_SW_SOURCE_CORE_DOCNODE_CANCELLABLEJOB_HXX
 
 #include "sal/config.h"
 #include "cppuhelper/implbase1.hxx"

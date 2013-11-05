@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ATRHNDL_HXX
-#define _ATRHNDL_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_ATRHNDL_HXX
+#define INCLUDED_SW_SOURCE_CORE_TEXT_ATRHNDL_HXX
 
 #define INITIAL_NUM_ATTR 3
 #define NUM_ATTRIBUTE_STACKS 43

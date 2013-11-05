@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IDOCUMENTMARKACCESS_HXX_INCLUDED
-#define IDOCUMENTMARKACCESS_HXX_INCLUDED
+#ifndef INCLUDED_SW_INC_IDOCUMENTMARKACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTMARKACCESS_HXX
 
 #include <sal/types.h>
 #include <IMark.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWFRMSH_HXX
-#define _SWFRMSH_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_FRMSH_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_FRMSH_HXX
 
 #include "basesh.hxx"
 

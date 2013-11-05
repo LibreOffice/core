@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCFRAME_HXX
-#define _ACCFRAME_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAME_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAME_HXX
 
 #include <swrect.hxx>
 

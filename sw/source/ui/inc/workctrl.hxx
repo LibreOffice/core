@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _WORKCTRL_HXX
-#define _WORKCTRL_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_WORKCTRL_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_WORKCTRL_HXX
 
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/toolbox.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWGLOBDOCSH_HXX
-#define _SWGLOBDOCSH_HXX
+#ifndef INCLUDED_SW_INC_GLOBDOC_HXX
+#define INCLUDED_SW_INC_GLOBDOC_HXX
 
 #include <swdll.hxx>
 #include "docsh.hxx"

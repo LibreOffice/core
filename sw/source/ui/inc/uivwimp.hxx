@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UIVWIMP_HXX
-#define _UIVWIMP_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_UIVWIMP_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_UIVWIMP_HXX
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <view.hxx>

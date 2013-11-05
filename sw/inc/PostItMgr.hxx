@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef POSTITMGR_HXX
-#define POSTITMGR_HXX
+#ifndef INCLUDED_SW_INC_POSTITMGR_HXX
+#define INCLUDED_SW_INC_POSTITMGR_HXX
 
 #include <list>
 #include <vector>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PAGEDESCHINT_HXX
-#define _PAGEDESCHINT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_PAGEDESCHINT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_PAGEDESCHINT_HXX
 
 #include <svl/hint.hxx>
 

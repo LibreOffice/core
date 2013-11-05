@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWBLOCKS_HXX
-#define _SWBLOCKS_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWBLOCKS_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWBLOCKS_HXX
 
 #include <tools/datetime.hxx>
 #include <o3tl/sorted_vector.hxx>

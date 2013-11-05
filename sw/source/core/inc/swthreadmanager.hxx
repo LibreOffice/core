@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWTHREADMANAGER_HXX
-#define _SWTHREADMANAGER_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWTHREADMANAGER_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWTHREADMANAGER_HXX
 
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>

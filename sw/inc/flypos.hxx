@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FLYPOS_HXX
-#define _FLYPOS_HXX
+#ifndef INCLUDED_SW_INC_FLYPOS_HXX
+#define INCLUDED_SW_INC_FLYPOS_HXX
 
 #include <swdllapi.h>
 #include <boost/shared_ptr.hpp>
@@ -51,6 +51,6 @@ typedef ::boost::shared_ptr< SwPosFlyFrm > SwPosFlyFrmPtr;
 struct SwPosFlyFrmCmp { bool operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const; };
 typedef ::std::set< SwPosFlyFrmPtr, SwPosFlyFrmCmp > SwPosFlyFrms;
 
-#endif // _FLYPOS_HXX
+#endif // INCLUDED_SW_INC_FLYPOS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

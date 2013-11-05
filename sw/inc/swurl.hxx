@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWURL_HXX
-#define _SWURL_HXX
+#ifndef INCLUDED_SW_INC_SWURL_HXX
+#define INCLUDED_SW_INC_SWURL_HXX
 
 #include <rtl/ustring.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_CELLFRM_HXX
-#define SW_CELLFRM_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_CELLFRM_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_CELLFRM_HXX
 
 #include <tools/mempool.hxx>
 #include "layfrm.hxx"

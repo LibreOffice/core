@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLEXP_HXX
-#define _XMLEXP_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLEXP_HXX
+#define INCLUDED_SW_SOURCE_FILTER_XML_XMLEXP_HXX
 
 #include <xmloff/xmlexp.hxx>
 #include "xmlitmap.hxx"
@@ -158,6 +158,6 @@ inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const
 }
 
 
-#endif  //  _XMLEXP_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

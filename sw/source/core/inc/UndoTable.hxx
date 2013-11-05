@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_TABLE_HXX
-#define SW_UNDO_TABLE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
 #include <undobj.hxx>
 #include <memory>
@@ -376,6 +376,6 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
-#endif // SW_UNDO_TABLE_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

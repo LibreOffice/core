@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_TEXTAPI_HXX
-#define SW_TEXTAPI_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_TEXTAPI_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_TEXTAPI_HXX
 
 #include <editeng/unoedsrc.hxx>
 #include <editeng/unotext.hxx>

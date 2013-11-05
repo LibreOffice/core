@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FCHRFMT_HXX
-#define _FCHRFMT_HXX
+#ifndef INCLUDED_SW_INC_FCHRFMT_HXX
+#define INCLUDED_SW_INC_FCHRFMT_HXX
 
 
 #include <svl/poolitem.hxx>

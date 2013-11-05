@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWEVENT_HXX
-#define _SWEVENT_HXX
+#ifndef INCLUDED_SW_INC_SWEVENT_HXX
+#define INCLUDED_SW_INC_SWEVENT_HXX
 
 #include <tools/solar.h>
 #include <sfx2/sfx.hrc>

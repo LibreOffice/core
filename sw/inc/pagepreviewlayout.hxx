@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PAGEPREVIEWLAYOUT_HXX
-#define _PAGEPREVIEWLAYOUT_HXX
+#ifndef INCLUDED_SW_INC_PAGEPREVIEWLAYOUT_HXX
+#define INCLUDED_SW_INC_PAGEPREVIEWLAYOUT_HXX
 
 // template class <std::vector>
 #include <vector>
@@ -579,6 +579,6 @@ public:
     sal_uInt16 GetNumberOfPreviewPages() { return sal::static_int_cast< sal_uInt16 >(maPreviewPages.size()); }
 };
 
-#endif // _PAGEPREVIEWLAYOUT_HXX
+#endif // INCLUDED_SW_INC_PAGEPREVIEWLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

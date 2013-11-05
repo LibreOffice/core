@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCPAGE_HXX
-#define _ACCPAGE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPAGE_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPAGE_HXX
 
 #include "acccontext.hxx"
 

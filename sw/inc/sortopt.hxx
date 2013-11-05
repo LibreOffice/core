@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SORTOPT_HXX
-#define _SORTOPT_HXX
+#ifndef INCLUDED_SW_INC_SORTOPT_HXX
+#define INCLUDED_SW_INC_SORTOPT_HXX
 
 #include <rtl/ustring.hxx>
 #include "swdllapi.h"
@@ -55,6 +55,6 @@ struct SW_DLLPUBLIC SwSortOptions
     bool            bIgnoreCase;
 };
 
-#endif  // _SORTOPT_HXX
+#endif // INCLUDED_SW_INC_SORTOPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

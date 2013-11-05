@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LIST_HXX_INCLUDED
-#define LIST_HXX_INCLUDED
+#ifndef INCLUDED_SW_INC_LIST_HXX
+#define INCLUDED_SW_INC_LIST_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -59,6 +59,6 @@ class SwList
 
         SwListImpl* mpListImpl;
 };
-#endif // LIST_HXX_INCLUDED
+#endif // INCLUDED_SW_INC_LIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOEVENT_HXX
-#define _UNOEVENT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOEVENT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNOEVENT_HXX
 
 #include <svtools/unoevent.hxx>
 #include <svl/macitem.hxx>

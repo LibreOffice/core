@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NODE2LAY_HXX
-#define _NODE2LAY_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_NODE2LAY_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_NODE2LAY_HXX
 
 #include <tools/solar.h>
 

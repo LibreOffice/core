@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOMETA_HXX
-#define SW_UNOMETA_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOMETA_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNOMETA_HXX
 
 #include <deque>
 
@@ -359,6 +359,6 @@ void getPrefixAndSuffix(
             ::com::sun::star::rdf::XMetadatable>& xMetaField,
         OUString *const o_pPrefix, OUString *const o_pSuffix);
 
-#endif // SW_UNOMETA_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNOMETA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

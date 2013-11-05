@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SW_XTEXT_DEFAULTS_HXX
-#define _SW_XTEXT_DEFAULTS_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWXTEXTDEFAULTS_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWXTEXTDEFAULTS_HXX
 
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

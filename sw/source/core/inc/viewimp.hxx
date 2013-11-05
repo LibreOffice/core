@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VIEWIMP_HXX
-#define SW_VIEWIMP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_VIEWIMP_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_VIEWIMP_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
@@ -333,6 +333,6 @@ inline void SwViewImp::AddAccessibleObj( const SdrObject *pObj )
     SwRect aEmptyRect;
     MoveAccessible( 0, pObj, aEmptyRect );
 }
-#endif // SW_VIEWIMP_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_VIEWIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_ROOTFRM_HXX
-#define SW_ROOTFRM_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_ROOTFRM_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_ROOTFRM_HXX
 
 #include "layfrm.hxx"
 #include <viewsh.hxx>
@@ -370,6 +370,6 @@ inline  void SwRootFrm::SetVirtPageNum( const sal_Bool bOf) const
     ((SwRootFrm*)this)->bIsVirtPageNum = bOf;
 }
 
-#endif  // SW_ROOTFRM_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_ROOTFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

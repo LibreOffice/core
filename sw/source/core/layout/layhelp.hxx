@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_LAYHELP_HXX
-#define SW_LAYHELP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_LAYOUT_LAYHELP_HXX
+#define INCLUDED_SW_SOURCE_CORE_LAYOUT_LAYHELP_HXX
 
 #include <swrect.hxx>
 #include <vector>

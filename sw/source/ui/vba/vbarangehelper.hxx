@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_RANGEHELPER_HXX
-#define SW_VBA_RANGEHELPER_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBARANGEHELPER_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBARANGEHELPER_HXX
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextViewCursor.hpp>
@@ -35,6 +35,6 @@ public:
     static css::uno::Reference< css::text::XTextContent > findBookmarkByPosition( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, const css::uno::Reference< css::text::XTextRange >& xTextRange ) throw ( css::uno::RuntimeException );
 
 };
-#endif /* SW_VBA_RANGEHELPER_HXX */
+#endif // INCLUDED_SW_SOURCE_UI_VBA_VBARANGEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

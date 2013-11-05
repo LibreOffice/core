@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACORRECT_HXX
-#define _ACORRECT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_ACORRECT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_ACORRECT_HXX
 
 #include <editeng/svxacorr.hxx>
 #include <swundo.hxx>

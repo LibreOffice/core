@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _LAYOUTER_HXX
-#define _LAYOUTER_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
 
 #include "swtypes.hxx"
 
@@ -141,7 +141,7 @@ public:
 
 extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm );
 
-#endif  //_LAYOUTER_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

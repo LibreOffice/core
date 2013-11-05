@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SWNAVIGATIONSH_HXX
-#define _SWNAVIGATIONSH_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_NAVSH_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_NAVSH_HXX
 
 #include "frmsh.hxx"
 

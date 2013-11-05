@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ROLBCK_HXX
-#define _ROLBCK_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX
 
 #include <tools/solar.h>
 #include <svl/itemset.hxx>
@@ -425,6 +425,6 @@ public:
     void ChangeNodeIndex( sal_uLong nNew ) { m_nNodeIndex = nNew; }
 };
 
-#endif // _ROLBCK_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

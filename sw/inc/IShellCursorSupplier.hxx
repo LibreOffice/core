@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ISHELLCURSORSUPPLIER_HXX
-#define ISHELLCURSORSUPPLIER_HXX
+#ifndef INCLUDED_SW_INC_ISHELLCURSORSUPPLIER_HXX
+#define INCLUDED_SW_INC_ISHELLCURSORSUPPLIER_HXX
 
 
 class SwPaM;
@@ -40,6 +40,6 @@ public:
 
 } // namespace sw
 
-#endif // ISHELLCURSORSUPPLIER_HXX
+#endif // INCLUDED_SW_INC_ISHELLCURSORSUPPLIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

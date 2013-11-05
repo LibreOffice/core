@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SIDEBARWINDOWSCONSTS_HXX
-#define _SIDEBARWINDOWSCONSTS_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_SIDEBARWINDOWSCONSTS_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_SIDEBARWINDOWSCONSTS_HXX
 
 namespace sw { namespace sidebarwindows {
 

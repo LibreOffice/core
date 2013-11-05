@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NOTEURL_HXX
-#define _NOTEURL_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_NOTEURL_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_NOTEURL_HXX
 
 #include "swrect.hxx"
 #include <boost/ptr_container/ptr_vector.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BREAKIT_HXX
-#define _BREAKIT_HXX
+#ifndef INCLUDED_SW_INC_BREAKIT_HXX
+#define INCLUDED_SW_INC_BREAKIT_HXX
 
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.h>

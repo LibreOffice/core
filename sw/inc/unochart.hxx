@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOCHART_HXX
-#define _UNOCHART_HXX
+#ifndef INCLUDED_SW_INC_UNOCHART_HXX
+#define INCLUDED_SW_INC_UNOCHART_HXX
 
 #include <map>
 #include <set>

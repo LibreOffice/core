@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SW_CHAR_DLG_MODES_HXX
-#define SW_CHAR_DLG_MODES_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_CHRDLGMODES_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_CHRDLGMODES_HXX
 
 // DialogModes for SwCharDlg
 #define DLG_CHAR_STD    0
@@ -16,6 +16,6 @@
 #define DLG_CHAR_ENV    2
 #define DLG_CHAR_ANN    3
 
-#endif // SW_CHAR_DLG_MODES_HXX
+#endif // INCLUDED_SW_SOURCE_UI_INC_CHRDLGMODES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

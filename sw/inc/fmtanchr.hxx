@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FMTANCHR_HXX
-#define _FMTANCHR_HXX
+#ifndef INCLUDED_SW_INC_FMTANCHR_HXX
+#define INCLUDED_SW_INC_FMTANCHR_HXX
 
 #include "swdllapi.h"
 #include <hintids.hxx>

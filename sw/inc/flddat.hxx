@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_FLDDAT_HXX
-#define SW_FLDDAT_HXX
+#ifndef INCLUDED_SW_INC_FLDDAT_HXX
+#define INCLUDED_SW_INC_FLDDAT_HXX
 
 #include "fldbas.hxx"
 
@@ -126,6 +126,6 @@ public:
         virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
 };
 
-#endif // SW_FLDDAT_HXX
+#endif // INCLUDED_SW_INC_FLDDAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

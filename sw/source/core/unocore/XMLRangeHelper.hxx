@@ -21,8 +21,8 @@
 //!! This file is an exact copy of the same file in chart2 project
 //!!
 
-#ifndef XMLRANGEHELPER_HXX
-#define XMLRANGEHELPER_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_UNOCORE_XMLRANGEHELPER_HXX
+#define INCLUDED_SW_SOURCE_CORE_UNOCORE_XMLRANGEHELPER_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -66,7 +66,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange );
 } //  namespace XMLRangeHelper
 //} //  namespace chart
 
-// XMLRANGEHELPER_HXX
+// INCLUDED_SW_SOURCE_CORE_UNOCORE_XMLRANGEHELPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

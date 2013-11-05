@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _GRFATR_HXX
-#define _GRFATR_HXX
+#ifndef INCLUDED_SW_INC_GRFATR_HXX
+#define INCLUDED_SW_INC_GRFATR_HXX
 
 #include <hintids.hxx>
 #include <tools/gen.hxx>
@@ -359,6 +359,6 @@ inline const SwDrawModeGrf &SwFmt::GetDrawModeGrf(sal_Bool bInP) const
     { return aSet.GetDrawModeGrf(bInP); }
 
 
-#endif  // _GRFATR_HXX
+#endif // INCLUDED_SW_INC_GRFATR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

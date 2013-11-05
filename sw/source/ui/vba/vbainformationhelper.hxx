@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_INFORMATIONHELPER_HXX
-#define SW_VBA_INFORMATIONHELPER_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAINFORMATIONHELPER_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBAINFORMATIONHELPER_HXX
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextViewCursor.hpp>
@@ -32,6 +32,6 @@ public:
     //static double verticalPositionRelativeToPageBoundary( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor, const css::uno::Reference< css::beans::XPropertySet >& xStyleProps ) throw( css::uno::RuntimeException );
 
 };
-#endif /* SW_VBA_INFORMATIONHELPER_HXX */
+#endif // INCLUDED_SW_SOURCE_UI_VBA_VBAINFORMATIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

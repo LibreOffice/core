@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_UNOBASECLASS_HXX
-#define SW_UNOBASECLASS_HXX
+#ifndef INCLUDED_SW_INC_UNOBASECLASS_HXX
+#define INCLUDED_SW_INC_UNOBASECLASS_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -151,6 +151,6 @@ namespace sw {
 
 } // namespace sw
 
-#endif // SW_UNOBASECLASS_HXX
+#endif // INCLUDED_SW_INC_UNOBASECLASS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

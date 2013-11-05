@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CSS1KYWD_HXX
-#define _CSS1KYWD_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_CSS1KYWD_HXX
+#define INCLUDED_SW_SOURCE_FILTER_HTML_CSS1KYWD_HXX
 
 #include <sal/types.h>
 

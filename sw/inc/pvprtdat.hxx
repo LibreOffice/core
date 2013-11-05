@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PVPRTDAT_HXX
-#define _PVPRTDAT_HXX
+#ifndef INCLUDED_SW_INC_PVPRTDAT_HXX
+#define INCLUDED_SW_INC_PVPRTDAT_HXX
 
 
 #include <tools/solar.h>

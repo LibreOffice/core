@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ANCHOROVERLAYOBJECT_HXX
-#define _ANCHOROVERLAYOBJECT_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_DOCVW_ANCHOROVERLAYOBJECT_HXX
+#define INCLUDED_SW_SOURCE_UI_DOCVW_ANCHOROVERLAYOBJECT_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 

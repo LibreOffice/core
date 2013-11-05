@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTSTATISTICS_HXX_INCLUDED
- #define IDOCUMENTSTATISTICS_HXX_INCLUDED
+ #ifndef INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
+ #define INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
 
  struct SwDocStat;
 
@@ -62,6 +62,6 @@ protected:
     virtual ~IDocumentStatistics() {};
  };
 
- #endif // IDOCUMENTSTATISTICS_HXX_INCLUDED
+ #endif // INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

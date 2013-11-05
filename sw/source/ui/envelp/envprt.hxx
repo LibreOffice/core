@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENVPRT_HXX
-#define _ENVPRT_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_ENVELP_ENVPRT_HXX
+#define INCLUDED_SW_SOURCE_UI_ENVELP_ENVPRT_HXX
 
 
 #include <sfx2/tabdlg.hxx>

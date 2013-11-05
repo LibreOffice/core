@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFEXPORTFILTER_HXX_
-#define _RTFEXPORTFILTER_HXX_
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORTFILTER_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORTFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -71,6 +71,6 @@ OUString RtfExport_getImplementationName();
 
 #define IMPL_NAME_RTFEXPORT "com.sun.star.comp.Writer.RtfExport"
 
-#endif // _RTFEXPORTFILTER_HXX_
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORTFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

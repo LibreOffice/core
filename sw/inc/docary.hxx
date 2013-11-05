@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DOCARY_HXX
-#define _DOCARY_HXX
+#ifndef INCLUDED_SW_INC_DOCARY_HXX
+#define INCLUDED_SW_INC_DOCARY_HXX
 
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <vector>
@@ -189,6 +189,6 @@ public:
 class SwOLENodes : public std::vector<SwOLENode*> {};
 
 
-#endif  //_DOCARY_HXX
+#endif // INCLUDED_SW_INC_DOCARY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

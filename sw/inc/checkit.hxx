@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHECKIT_HXX
-#define _CHECKIT_HXX
+#ifndef INCLUDED_SW_INC_CHECKIT_HXX
+#define INCLUDED_SW_INC_CHECKIT_HXX
 
 #include <com/sun/star/uno/Reference.h>
 

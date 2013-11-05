@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOCXEXPORTFILTER_HXX_
-#define _DOCXEXPORTFILTER_HXX_
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXEXPORTFILTER_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXEXPORTFILTER_HXX
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
@@ -55,6 +55,6 @@ private:
     }
 };
 
-#endif // _DOCXEXPORTFILTER_HXX_
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXEXPORTFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

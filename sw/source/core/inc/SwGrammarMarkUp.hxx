@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWGRAMMARMARKUP_HXX
-#define _SWGRAMMARMARKUP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWGRAMMARMARKUP_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWGRAMMARMARKUP_HXX
 
 #include <wrong.hxx>
 #include <vector>

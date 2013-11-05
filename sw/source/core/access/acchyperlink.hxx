@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCHYPERLINK_HXX
-#define _ACCHYPERLINK_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCHYPERLINK_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCHYPERLINK_HXX
 
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <rtl/ref.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AUTHRATR_HXX
-#define _AUTHRATR_HXX
+#ifndef INCLUDED_SW_INC_AUTHRATR_HXX
+#define INCLUDED_SW_INC_AUTHRATR_HXX
 
 #include <tools/solar.h>
 #include <tools/color.hxx>

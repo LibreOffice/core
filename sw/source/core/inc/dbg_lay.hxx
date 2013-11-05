@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBG_LAY_HXX
-#define _DBG_LAY_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_DBG_LAY_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_DBG_LAY_HXX
 
 #define PROT_FILE_INIT  0x00000000
 #define PROT_INIT       0x00000001

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FORMAT_HXX
-#define _FORMAT_HXX
+#ifndef INCLUDED_SW_INC_FORMAT_HXX
+#define INCLUDED_SW_INC_FORMAT_HXX
 
 #include <tools/solar.h>
 #include "swdllapi.h"
@@ -337,6 +337,6 @@ inline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInPare
 
 #undef inline
 
-#endif // _FORMAT_HXX
+#endif // INCLUDED_SW_INC_FORMAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef WW_SORTEDARRAY_HXX
-#define WW_SORTEDARRAY_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_SORTEDARRAY_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_SORTEDARRAY_HXX
 
 #include <algorithm>
 

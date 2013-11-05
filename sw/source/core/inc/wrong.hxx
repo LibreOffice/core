@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WRONG_HXX
-#define _WRONG_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_WRONG_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_WRONG_HXX
 
 #include <com/sun/star/container/XStringKeyMap.hpp>
 

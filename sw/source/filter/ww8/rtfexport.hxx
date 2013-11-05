@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFEXPORT_HXX_
-#define _RTFEXPORT_HXX_
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX
 
 #include "wrtww8.hxx"
 
@@ -189,6 +189,6 @@ private:
     RtfRedlineTbl m_aRedlineTbl;
 };
 
-#endif // _RTFEXPORT_HXX_
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

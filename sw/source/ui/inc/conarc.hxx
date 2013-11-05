@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONARC_HXX
-#define _CONARC_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_CONARC_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_CONARC_HXX
 
 #include "drawbase.hxx"
 
@@ -45,6 +45,6 @@ public:
 
 
 
-#endif      // _CONARC_HXX
+#endif // INCLUDED_SW_SOURCE_UI_INC_CONARC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

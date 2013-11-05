@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOPARAFRAMEENUM_HXX
-#define SW_UNOPARAFRAMEENUM_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX
 
 #include <deque>
 
@@ -110,6 +110,6 @@ public:
 
 };
 
-#endif // SW_UNOPARAFRAMEENUM_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

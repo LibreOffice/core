@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PAMTYP_HXX
-#define _PAMTYP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_PAMTYP_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_PAMTYP_HXX
 
 #include <unotools/textsearch.hxx>
 #include <node.hxx>

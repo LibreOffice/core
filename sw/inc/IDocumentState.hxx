@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTSTATE_HXX_INCLUDED
- #define IDOCUMENTSTATE_HXX_INCLUDED
+ #ifndef INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
+ #define INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
 
  #include <tools/solar.h>
 
@@ -60,6 +60,6 @@
     virtual ~IDocumentState() {};
  };
 
- #endif // IDOCUMENTSTATE_HXX_INCLUDED
+ #endif // INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

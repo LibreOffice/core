@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CELLATR_HXX
-#define CELLATR_HXX
+#ifndef INCLUDED_SW_INC_CELLATR_HXX
+#define INCLUDED_SW_INC_CELLATR_HXX
 
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>

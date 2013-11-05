@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWSELECTIONLIST_HXX
-#define _SWSELECTIONLIST_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWSELECTIONLIST_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWSELECTIONLIST_HXX
 
 #include <list>
 
@@ -86,6 +86,6 @@ public:
     bool checkContext( const SwFrm* pCheck );
 };
 
-#endif  //_SWSELECTIONLIST_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_SWSELECTIONLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

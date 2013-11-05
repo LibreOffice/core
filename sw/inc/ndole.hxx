@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef NDOLE_HXX
-#define NDOLE_HXX
+#ifndef INCLUDED_SW_INC_NDOLE_HXX
+#define INCLUDED_SW_INC_NDOLE_HXX
 
 #include <ndnotxt.hxx>
 
@@ -153,6 +153,6 @@ inline const SwOLENode *SwNode::GetOLENode() const
      return ND_OLENODE == nNodeType ? (const SwOLENode*)this : 0;
 }
 
-#endif  // _NDOLE_HXX
+#endif  // _ INCLUDED_SW_INC_NDOLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

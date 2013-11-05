@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOCXFOOTNOTES_HXX
-#define DOCXFOOTNOTES_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXFOOTNOTES_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXFOOTNOTES_HXX
 
 #include <vector>
 
@@ -84,6 +84,6 @@ public:
 
 } // namespace docx
 
-#endif // DOCXFOOTNOTES_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXFOOTNOTES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

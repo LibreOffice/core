@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PARATR_HXX
-#define _PARATR_HXX
+#ifndef INCLUDED_SW_INC_PARATR_HXX
+#define INCLUDED_SW_INC_PARATR_HXX
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include "swdllapi.h"

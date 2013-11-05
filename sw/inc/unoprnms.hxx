@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOPRNMS_HXX
-#define _UNOPRNMS_HXX
+#ifndef INCLUDED_SW_INC_UNOPRNMS_HXX
+#define INCLUDED_SW_INC_UNOPRNMS_HXX
 
 #include <sal/types.h>
 #include <tools/solar.h>

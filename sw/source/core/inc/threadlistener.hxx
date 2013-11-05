@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _THREADLISTENER_HXX
-#define _THREADLISTENER_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_THREADLISTENER_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_THREADLISTENER_HXX
 
 #include <ifinishedthreadlistener.hxx>
 #include <ithreadlistenerowner.hxx>

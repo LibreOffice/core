@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWREGION_HXX
-#define _SWREGION_HXX
+#ifndef INCLUDED_SW_INC_SWREGION_HXX
+#define INCLUDED_SW_INC_SWREGION_HXX
 
 #include <vector>
 
@@ -47,6 +47,6 @@ public:
     inline void ChangeOrigin( const SwRect &rRect ) { aOrigin = rRect; }
 };
 
-#endif  //_SWREGION_HXX
+#endif // INCLUDED_SW_INC_SWREGION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

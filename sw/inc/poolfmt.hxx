@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _POOLFMT_HXX
-#define _POOLFMT_HXX
+#ifndef INCLUDED_SW_INC_POOLFMT_HXX
+#define INCLUDED_SW_INC_POOLFMT_HXX
 
 #include <limits.h>
 #include <tools/solar.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BOOKMRK_HXX
-#define _BOOKMRK_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_BOOKMRK_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_BOOKMRK_HXX
 
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/Metadatable.hxx>

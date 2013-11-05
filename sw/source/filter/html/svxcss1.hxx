@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVXCSS1_HXX
-#define _SVXCSS1_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_SVXCSS1_HXX
+#define INCLUDED_SW_SOURCE_FILTER_HTML_SVXCSS1_HXX
 
 #include <svl/itemset.hxx>
 #include <editeng/svxenum.hxx>

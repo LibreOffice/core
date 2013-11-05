@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IODETECT_HXX_
-#define _IODETECT_HXX_
+#ifndef INCLUDED_SW_INC_IODETECT_HXX
+#define INCLUDED_SW_INC_IODETECT_HXX
 
 #include <osl/endian.h>
 #include <rtl/ustring.hxx>

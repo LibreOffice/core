@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SW_TEXTCURSORHELPER_HXX
-#define _SW_TEXTCURSORHELPER_HXX
+#ifndef INCLUDED_SW_INC_TEXTCURSORHELPER_HXX
+#define INCLUDED_SW_INC_TEXTCURSORHELPER_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -44,7 +44,7 @@ protected:
     ~OTextCursorHelper() {}
 };
 
-#endif // _SW_TEXTCURSORHELPER_HXX
+#endif // INCLUDED_SW_INC_TEXTCURSORHELPER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

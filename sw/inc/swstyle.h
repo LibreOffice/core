@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWSTYLE_H
-#define _SWSTYLE_H
+#ifndef INCLUDED_SW_INC_SWSTYLE_H
+#define INCLUDED_SW_INC_SWSTYLE_H
 
 
 #define SWSTYLEBIT_TEXT           0x0001

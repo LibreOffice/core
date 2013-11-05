@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VBA_FONT_HXX
-#define VBA_FONT_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAFONT_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBAFONT_HXX
 
 #include <vbahelper/vbafontbase.hxx>
 #include <ooo/vba/word/XFont.hpp>

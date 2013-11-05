@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOBOOKMARK_HXX
-#define SW_UNOBOOKMARK_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOBOOKMARK_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNOBOOKMARK_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -273,6 +273,6 @@ public:
     SwXODFCheckboxField( ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0) : SwXFieldmark(true,
             pBkm, pDoc) {}
 };
-#endif // SW_UNOBOOKMARK_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNOBOOKMARK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WW8SCAN_HXX
-#define _WW8SCAN_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8SCAN_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_WW8SCAN_HXX
 
 #ifndef LONG_MAX
 #include <limits.h>

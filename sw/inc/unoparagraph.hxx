@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOPARAGRAPH_HXX
-#define SW_UNOPARAGRAPH_HXX
+#ifndef INCLUDED_SW_INC_UNOPARAGRAPH_HXX
+#define INCLUDED_SW_INC_UNOPARAGRAPH_HXX
 
 #include <memory>
 
@@ -347,6 +347,6 @@ public:
 
 };
 
-#endif // SW_UNOPARAGRAPH_HXX
+#endif // INCLUDED_SW_INC_UNOPARAGRAPH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_OVERWRITE_HXX
-#define SW_UNDO_OVERWRITE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX
 
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
@@ -88,6 +88,6 @@ public:
     sal_Bool HasData() const { return aChanges.size() > 0; }
 };
 
-#endif // SW_UNDO_OVERWRITE_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

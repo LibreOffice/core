@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VIEWSH_HXX
-#define SW_VIEWSH_HXX
+#ifndef INCLUDED_SW_INC_VIEWSH_HXX
+#define INCLUDED_SW_INC_VIEWSH_HXX
 
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -614,6 +614,6 @@ inline const SfxItemPool& SwViewShell::GetAttrPool() const
 
 
 
-#endif // SW_VIEWSH_HXX
+#endif // INCLUDED_SW_INC_VIEWSH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

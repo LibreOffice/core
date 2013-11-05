@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWFLDTDLG_HXX
-#define _SWFLDTDLG_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_FLDTDLG_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_FLDTDLG_HXX
 #include <sfx2/tabdlg.hxx>
 
 class SfxBindings;

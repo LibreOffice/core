@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TBLSEL_HXX
-#define _TBLSEL_HXX
+#ifndef INCLUDED_SW_INC_TBLSEL_HXX
+#define INCLUDED_SW_INC_TBLSEL_HXX
 
 #include <swtable.hxx>
 #include <swrect.hxx>
@@ -224,6 +224,6 @@ SW_DLLPUBLIC void ForEach_FndLineCopyCol(SwTableLines& rLines, _FndPara* pFndPar
 
 
 
-#endif  //  _TBLSEL_HXX
+#endif // INCLUDED_SW_INC_TBLSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

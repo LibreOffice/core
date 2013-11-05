@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CALBCK_HXX
-#define _CALBCK_HXX
+#ifndef INCLUDED_SW_INC_CALBCK_HXX
+#define INCLUDED_SW_INC_CALBCK_HXX
 
 #include <tools/rtti.hxx>
 #include "swdllapi.h"

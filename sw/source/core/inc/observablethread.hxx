@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OBSERVABLETHREAD_HXX
-#define _OBSERVABLETHREAD_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_OBSERVABLETHREAD_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_OBSERVABLETHREAD_HXX
 
 #include <osl/thread.hxx>
 #include <rtl/ref.hxx>

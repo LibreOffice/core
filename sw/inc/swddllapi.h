@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SWDDLLAPI_H
-#define INCLUDED_SWDDLLAPI_H
+#ifndef INCLUDED_SW_INC_SWDDLLAPI_H
+#define INCLUDED_SW_INC_SWDDLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define SWD_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_SWDDLLAPI_H */
+#endif // INCLUDED_SW_INC_SWDDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

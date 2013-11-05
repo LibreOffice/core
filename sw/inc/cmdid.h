@@ -22,8 +22,8 @@ Attention : "In this file C++ style // comments are not allowed as it will be
 included in c-context files, so c++ style stuff will cause problems.
 ******************************************************************************/
 
-#ifndef INCLUDED_SW_CMDID_H
-#define INCLUDED_SW_CMDID_H
+#ifndef INCLUDED_SW_INC_CMDID_H
+#define INCLUDED_SW_INC_CMDID_H
 
 #include <sfx2/sfx.hrc>
 #include <unomid.h>
@@ -942,6 +942,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define MAC_EVENT_IMAGE_ABORT       0x0a            //
 #define MAC_EVENT_IMAGE_ERROR       0x0b            //
 
-#endif /* INCLUDED_SW_CMDID_H */
+#endif // INCLUDED_SW_INC_CMDID_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

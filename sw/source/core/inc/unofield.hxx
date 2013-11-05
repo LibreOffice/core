@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOFIELD_HXX
-#define SW_UNOFIELD_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOFIELD_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNOFIELD_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

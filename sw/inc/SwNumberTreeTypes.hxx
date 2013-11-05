@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_NUMBER_TREE_TYPES_HXX
-#define _SW_NUMBER_TREE_TYPES_HXX
+#ifndef INCLUDED_SW_INC_SWNUMBERTREETYPES_HXX
+#define INCLUDED_SW_INC_SWNUMBERTREETYPES_HXX
 
 #include <vector>
 
@@ -28,6 +28,6 @@ namespace SwNumberTree
     typedef std::vector<tSwNumTreeNumber> tNumberVector;
 }
 
-#endif // _SW_NUMBER_TREE_TYPES_HXX
+#endif // INCLUDED_SW_INC_SWNUMBERTREETYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

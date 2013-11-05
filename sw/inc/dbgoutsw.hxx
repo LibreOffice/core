@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __DBGOUTSW_HXX
-#define __DBGOUTSW_HXX
+#ifndef INCLUDED_SW_INC_DBGOUTSW_HXX
+#define INCLUDED_SW_INC_DBGOUTSW_HXX
 
 #ifdef DBG_UTIL
 
@@ -103,6 +103,6 @@ const char * dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & 
 SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken);
 SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens);
 #endif // DBG_UTIL
-#endif // __DBGOUTSW_HXX
+#endif // INCLUDED_SW_INC_DBGOUTSW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

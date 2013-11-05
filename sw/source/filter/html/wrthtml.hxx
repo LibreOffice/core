@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _WRTHTML_HXX
-#define _WRTHTML_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
+#define INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
@@ -655,6 +655,6 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
 
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 
-#endif  //  _WRTHTML_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

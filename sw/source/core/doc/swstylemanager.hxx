@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWSTYLEMANAGER_HXX
-#define _SWSTYLEMANAGER_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
+#define INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
 
 class IStyleAccess;
 class SfxItemSet;
 
 IStyleAccess *createStyleManager( SfxItemSet* pIgnorableParagraphItems = 0 );
-#endif  //_SWSTYLEMANAGER_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_DOC_SWSTYLEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

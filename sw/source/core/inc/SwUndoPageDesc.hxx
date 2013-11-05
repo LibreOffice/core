@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_PAGE_DESC_HXX
-#define SW_UNDO_PAGE_DESC_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWUNDOPAGEDESC_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWUNDOPAGEDESC_HXX
 
 #include <undobj.hxx>
 #include <pagedesc.hxx>

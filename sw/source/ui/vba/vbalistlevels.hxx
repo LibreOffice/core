@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_LISTLEVELS_HXX
-#define SW_VBA_LISTLEVELS_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBALISTLEVELS_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBALISTLEVELS_HXX
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XListLevels.hpp>
@@ -48,6 +48,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
-#endif /* SW_VBA_LISTLEVELS_HXX */
+#endif // INCLUDED_SW_SOURCE_UI_VBA_VBALISTLEVELS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

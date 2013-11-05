@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_DELETE_HXX
-#define SW_UNDO_DELETE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX
 
 #include <undobj.hxx>
 #include <rtl/ustring.hxx>
@@ -100,6 +100,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
 };
 
-#endif // SW_UNDO_DELETE_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

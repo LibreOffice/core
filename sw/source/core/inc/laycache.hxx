@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LAYCACHE_HXX
-#define _LAYCACHE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_LAYCACHE_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_LAYCACHE_HXX
 
 #include <tools/solar.h>
 

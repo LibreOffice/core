@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
-#define _ENHANCEDPDFEXPORTHELPER_HXX
+#ifndef INCLUDED_SW_INC_ENHANCEDPDFEXPORTHELPER_HXX
+#define INCLUDED_SW_INC_ENHANCEDPDFEXPORTHELPER_HXX
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include <i18nlangtag/lang.h>

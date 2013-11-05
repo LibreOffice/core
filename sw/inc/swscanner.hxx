@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWSCANNER_HXX
-#define _SWSCANNER_HXX
+#ifndef INCLUDED_SW_INC_SWSCANNER_HXX
+#define INCLUDED_SW_INC_SWSCANNER_HXX
 
 #include <i18nlangtag/lang.h>
 #include <modeltoviewhelper.hxx>

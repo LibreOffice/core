@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FMTHDFT_HXX
-#define _FMTHDFT_HXX
+#ifndef INCLUDED_SW_INC_FMTHDFT_HXX
+#define INCLUDED_SW_INC_FMTHDFT_HXX
 
 #include <hintids.hxx>
 #include <format.hxx>

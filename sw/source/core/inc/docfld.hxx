@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOCFLD_HXX
-#define _DOCFLD_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCFLD_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_DOCFLD_HXX
 
 #include <calc.hxx>
 #include <doc.hxx>

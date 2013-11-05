@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOFLATPARA_HXX
-#define _UNOFLATPARA_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOFLATPARA_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNOFLATPARA_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

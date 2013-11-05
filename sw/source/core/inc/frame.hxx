@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_FRAME_HXX
-#define SW_FRAME_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_FRAME_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_FRAME_HXX
 
 #include <vector>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

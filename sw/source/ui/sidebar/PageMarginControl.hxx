@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SW_SIDEBAR_PAGE_MARGIN_CONTROL_HXX_
-#define _SW_SIDEBAR_PAGE_MARGIN_CONTROL_HXX_
+#ifndef INCLUDED_SW_SOURCE_UI_SIDEBAR_PAGEMARGINCONTROL_HXX
+#define INCLUDED_SW_SOURCE_UI_SIDEBAR_PAGEMARGINCONTROL_HXX
 
 #include <svx/sidebar/PopupControl.hxx>
 

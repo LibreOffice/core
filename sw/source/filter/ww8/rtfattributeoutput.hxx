@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFATTRIBUTEOUTPUT_HXX_
-#define _RTFATTRIBUTEOUTPUT_HXX_
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
 
 #include "attributeoutputbase.hxx"
 #include "rtfexport.hxx"
@@ -620,6 +620,6 @@ public:
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;
 };
 
-#endif // _RTFATTRIBUTEOUTPUT_HXX_
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

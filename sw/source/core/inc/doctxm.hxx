@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOCTXM_HXX
-#define _DOCTXM_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCTXM_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_DOCTXM_HXX
 
 #include <tools/gen.hxx>
 #include <tox.hxx>

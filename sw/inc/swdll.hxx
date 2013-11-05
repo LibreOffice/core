@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_SWDLL_HXX
-#define SW_SWDLL_HXX
+#ifndef INCLUDED_SW_INC_SWDLL_HXX
+#define INCLUDED_SW_INC_SWDLL_HXX
 
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/module.hxx>

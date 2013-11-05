@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PORTAB_HXX
-#define _PORTAB_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORTAB_HXX
+#define INCLUDED_SW_SOURCE_CORE_TEXT_PORTAB_HXX
 
 #include "porglue.hxx"
 

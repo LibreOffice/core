@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOTEXT_HXX
-#define SW_UNOTEXT_HXX
+#ifndef INCLUDED_SW_INC_UNOTEXT_HXX
+#define INCLUDED_SW_INC_UNOTEXT_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -358,6 +358,6 @@ public:
                 ::com::sun::star::uno::RuntimeException);
 };
 
-#endif // SW_UNOTEXT_HXX
+#endif // INCLUDED_SW_INC_UNOTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

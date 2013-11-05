@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOTEXTCURSOR_HXX
-#define SW_UNOTEXTCURSOR_HXX
+#ifndef INCLUDED_SW_INC_UNOTEXTCURSOR_HXX
+#define INCLUDED_SW_INC_UNOTEXTCURSOR_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -375,6 +375,6 @@ public:
 
 };
 
-#endif // SW_UNOTEXTCURSOR_HXX
+#endif // INCLUDED_SW_INC_UNOTEXTCURSOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

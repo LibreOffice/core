@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FMTFOLLOWTEXTFLOW_HXX
-#define _FMTFOLLOWTEXTFLOW_HXX
+#ifndef INCLUDED_SW_INC_FMTFOLLOWTEXTFLOW_HXX
+#define INCLUDED_SW_INC_FMTFOLLOWTEXTFLOW_HXX
 
 
 #include <svl/eitem.hxx>

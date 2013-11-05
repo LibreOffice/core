@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
-#define IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
+#ifndef INCLUDED_SW_INC_IDOCUMENTLAYOUTACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTLAYOUTACCESS_HXX
 
 #include <swtypes.hxx>
 
@@ -71,6 +71,6 @@ protected:
     virtual ~IDocumentLayoutAccess() {};
  };
 
- #endif // IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
+ #endif // INCLUDED_SW_INC_IDOCUMENTLAYOUTACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

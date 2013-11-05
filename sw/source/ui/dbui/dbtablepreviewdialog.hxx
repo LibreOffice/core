@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DBTABLEPREVIEWDIALOG_HXX
-#define _DBTABLEPREVIEWDIALOG_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_DBUI_DBTABLEPREVIEWDIALOG_HXX
+#define INCLUDED_SW_SOURCE_UI_DBUI_DBTABLEPREVIEWDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>

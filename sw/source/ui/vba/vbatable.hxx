@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_VBA_TABLE_HXX
-#define SW_VBA_TABLE_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBATABLE_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBATABLE_HXX
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>

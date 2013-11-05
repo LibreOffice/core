@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NDTYP_HXX
-#define _NDTYP_HXX
+#ifndef INCLUDED_SW_INC_NDTYP_HXX
+#define INCLUDED_SW_INC_NDTYP_HXX
 
 #include <tools/solar.h>
 

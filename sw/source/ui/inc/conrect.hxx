@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_CONRECT_HXX
-#define _SW_CONRECT_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_CONRECT_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_CONRECT_HXX
 
 #include "drawbase.hxx"
 
@@ -48,6 +48,6 @@ class ConstRectangle : public SwDrawBase
 
 
 
-#endif      // _SW_CONRECT_HXX
+#endif // INCLUDED_SW_SOURCE_UI_INC_CONRECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

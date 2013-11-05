@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _LAYACT_HXX
-#define _LAYACT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_LAYACT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_LAYACT_HXX
 #include "swtypes.hxx"
 #include "swrect.hxx"
 
@@ -228,6 +228,6 @@ inline void SwLayAction::SetCheckPageNum( sal_uInt16 nNew )
         nCheckPageNum = nNew;
 }
 
-#endif  //_LAYACT_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_LAYACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

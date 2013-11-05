@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLTEXTI_HXX
-#define _XMLTEXTI_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTI_HXX
+#define INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTI_HXX
 
 #include <xmloff/txtimp.hxx>
 
@@ -117,6 +117,6 @@ public:
         const ::com::sun::star::uno::Sequence<sal_Int8> & rKey );
 };
 
-#endif  //  _XMLTEXTI_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

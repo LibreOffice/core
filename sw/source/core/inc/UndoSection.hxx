@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_SECTION_HXX
-#define SW_UNDO_SECTION_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOSECTION_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNDOSECTION_HXX
 
 #include <undobj.hxx>
 #include <memory>
@@ -65,6 +65,6 @@ SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const&);
 
 SW_DLLPRIVATE SwUndo * MakeUndoUpdateSection(SwSectionFmt const&, bool const);
 
-#endif // SW_UNDO_SECTION_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOSECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PARCSS1_HXX
-#define _PARCSS1_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_PARCSS1_HXX
+#define INCLUDED_SW_SOURCE_FILTER_HTML_PARCSS1_HXX
 
 // tokens of the CSS1 parser
 enum CSS1Token

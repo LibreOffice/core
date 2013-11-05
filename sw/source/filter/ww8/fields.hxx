@@ -18,8 +18,8 @@
  */
 
 /// @HTML
-#ifndef WW_FIELDS_HXX
-#define WW_FIELDS_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_FIELDS_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_FIELDS_HXX
 
 namespace ww
 {

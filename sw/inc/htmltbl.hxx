@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HTMLTBL_HXX
-#define _HTMLTBL_HXX
+#ifndef INCLUDED_SW_INC_HTMLTBL_HXX
+#define INCLUDED_SW_INC_HTMLTBL_HXX
 
 
 #include <vcl/timer.hxx>

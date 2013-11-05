@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _GUESS_HXX
-#define _GUESS_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_GUESS_HXX
+#define INCLUDED_SW_SOURCE_CORE_TEXT_GUESS_HXX
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
 #include "txttypes.hxx"

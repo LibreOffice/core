@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_INSERT_HXX
-#define SW_UNDO_INSERT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOINSERT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNDOINSERT_HXX
 
 #include <undobj.hxx>
 #include <rtl/ustring.hxx>
@@ -211,6 +211,6 @@ public:
     void SetDrawObj( sal_uInt8 nLayerId );
 };
 
-#endif // SW_UNDO_INSERT_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOINSERT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

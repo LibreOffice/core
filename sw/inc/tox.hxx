@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_TOX_HXX
-#define SW_TOX_HXX
+#ifndef INCLUDED_SW_INC_TOX_HXX
+#define INCLUDED_SW_INC_TOX_HXX
 
 #include <cppuhelper/weakref.hxx>
 
@@ -761,6 +761,6 @@ inline void SwTOXBase::SetOptions(sal_uInt16 nOpt)
 }
 
 
-#endif  // SW_TOX_HXX
+#endif // INCLUDED_SW_INC_TOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

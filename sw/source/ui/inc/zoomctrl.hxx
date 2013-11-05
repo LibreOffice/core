@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ZOOMCTRL_HXX
-#define _ZOOMCTRL_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_ZOOMCTRL_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_ZOOMCTRL_HXX
 
 #include <svx/zoomctrl.hxx>
 

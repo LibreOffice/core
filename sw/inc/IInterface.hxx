@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IINTERFACE_HXX_INCLUDED
- #define IINTERFACE_HXX_INCLUDED
+ #ifndef INCLUDED_SW_INC_IINTERFACE_HXX
+ #define INCLUDED_SW_INC_IINTERFACE_HXX
 
  #include <sal/types.h>
 

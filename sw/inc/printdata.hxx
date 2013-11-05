@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_PRINTDATA_HXX
-#define SW_PRINTDATA_HXX
+#ifndef INCLUDED_SW_INC_PRINTDATA_HXX
+#define INCLUDED_SW_INC_PRINTDATA_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -314,6 +314,6 @@ void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb);
 
 } ///< namespace sw
 
-#endif  // SW_PRINTDATA_HXX
+#endif // INCLUDED_SW_INC_PRINTDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

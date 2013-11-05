@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OBJSTMPCONSIDERWRAPINFL_HXX
-#define _OBJSTMPCONSIDERWRAPINFL_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_LAYOUT_OBJSTMPCONSIDERWRAPINFL_HXX
+#define INCLUDED_SW_SOURCE_CORE_LAYOUT_OBJSTMPCONSIDERWRAPINFL_HXX
 
 #include <vector>
 

@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _WW8TOOLBAR_HXX
-#define _WW8TOOLBAR_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8TOOLBAR_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_WW8TOOLBAR_HXX
 
 #include <filter/msfilter/mstoolbar.hxx>
 

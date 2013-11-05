@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SW_COMMENT_RULER_HXX
-#define SW_COMMENT_RULER_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_SWRULER_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_SWRULER_HXX
 
 #include <svx/ruler.hxx>
 

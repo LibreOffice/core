@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCCELL_HXX
-#define _ACCCELL_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCCELL_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCCELL_HXX
 
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>

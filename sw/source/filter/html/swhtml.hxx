@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWHTML_HXX
-#define _SWHTML_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_SWHTML_HXX
+#define INCLUDED_SW_SOURCE_FILTER_HTML_SWHTML_HXX
 
 #include <config_features.h>
 

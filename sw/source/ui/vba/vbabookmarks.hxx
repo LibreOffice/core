@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_BOOKMARKS_HXX
-#define SW_VBA_BOOKMARKS_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBABOOKMARKS_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBABOOKMARKS_HXX
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XBookmarks.hpp>
@@ -64,6 +64,6 @@ public:
     virtual sal_Bool SAL_CALL Exists( const OUString& rName ) throw (css::uno::RuntimeException);
 };
 
-#endif /* SW_VBA_BOOKMARKS_HXX */
+#endif // INCLUDED_SW_SOURCE_UI_VBA_VBABOOKMARKS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

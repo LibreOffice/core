@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_UNDO_FLY_STR_ATTR_HXX
-#define SW_UNDO_FLY_STR_ATTR_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOFLYSTRATTR_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNDOFLYSTRATTR_HXX
 
 #include <undobj.hxx>
 #include <swundo.hxx>
@@ -44,6 +44,6 @@ class SwUndoFlyStrAttr : public SwUndo
         const OUString msNewStr;
 };
 
-#endif // SW_UNDO_FLY_STR_ATTR_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOFLYSTRATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IGRAMMARCONTACT_HXX_INCLUDED
-#define IGRAMMARCONTACT_HXX_INCLUDED
+#ifndef INCLUDED_SW_INC_IGRAMMARCONTACT_HXX
+#define INCLUDED_SW_INC_IGRAMMARCONTACT_HXX
 
 struct SwPosition;
 class SwTxtNode;
@@ -75,6 +75,6 @@ IGrammarContact* getGrammarContact( const SwTxtNode& );
 */
 void finishGrammarCheck( SwTxtNode& );
 
-#endif // IGRAMMARCONTACT_HXX_INCLUDED
+#endif // INCLUDED_SW_INC_IGRAMMARCONTACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

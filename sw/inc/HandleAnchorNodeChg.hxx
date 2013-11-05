@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _HANDLEANCHORNODECHG_HXX
-#define _HANDLEANCHORNODECHG_HXX
+#ifndef INCLUDED_SW_INC_HANDLEANCHORNODECHG_HXX
+#define INCLUDED_SW_INC_HANDLEANCHORNODECHG_HXX
 
 class SwFlyFrmFmt;
 class SwFmtAnchor;

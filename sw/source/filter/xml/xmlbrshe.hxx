@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLBRSHE_HXX
-#define _XMLBRSHE_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHE_HXX
+#define INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHE_HXX
 
 #include <rtl/ustring.hxx>
 #include <xmloff/attrlist.hxx>
@@ -44,6 +44,6 @@ public:
 };
 
 
-#endif  //  _XMLBRSHE_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

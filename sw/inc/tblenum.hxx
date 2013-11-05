@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TBLENUM_HXX
-#define _TBLENUM_HXX
+#ifndef INCLUDED_SW_INC_TBLENUM_HXX
+#define INCLUDED_SW_INC_TBLENUM_HXX
 
 
 // For changing table columns/rows widths/heights.

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_WORD_VBA_TABLEHELPER_HXX
-#define SW_WORD_VBA_TABLEHELPER_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBATABLEHELPER_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBATABLEHELPER_HXX
 
 #include <com/sun/star/text/XTextTable.hpp>
 #include "wordvbahelper.hxx"

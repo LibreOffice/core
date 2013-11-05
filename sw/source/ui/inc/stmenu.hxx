@@ -19,8 +19,8 @@
 
 // SMARTTAGS
 
-#ifndef _STMENU_HXX
-#define _STMENU_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_STMENU_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_STMENU_HXX
 
 #include <vcl/menu.hxx>
 

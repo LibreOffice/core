@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWSWERROR_H
-#define _SWSWERROR_H
+#ifndef INCLUDED_SW_INC_SWERROR_H
+#define INCLUDED_SW_INC_SWERROR_H
 
 #include <tools/errcode.hxx>
 

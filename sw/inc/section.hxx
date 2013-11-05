@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SECTION_HXX
-#define SECTION_HXX
+#ifndef INCLUDED_SW_INC_SECTION_HXX
+#define INCLUDED_SW_INC_SECTION_HXX
 
 #include <boost/utility.hpp>
 
@@ -387,6 +387,6 @@ inline SwSection* SwSectionFmt::GetParentSection() const
 }
 
 
-#endif /* _SECTION_HXX */
+#endif /* _ INCLUDED_SW_INC_SECTION_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

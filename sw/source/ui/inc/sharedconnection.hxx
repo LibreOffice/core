@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UI_SHARED_CONNECTION_HXX
-#define SW_UI_SHARED_CONNECTION_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_SHAREDCONNECTION_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_SHAREDCONNECTION_HXX
 
 #include <unotools/sharedunocomponent.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection >   SharedConnection;
 
-#endif // SW_UI_SHARED_CONNECTION_HXX
+#endif // INCLUDED_SW_SOURCE_UI_INC_SHAREDCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

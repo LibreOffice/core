@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef WW8_TABLE_INFO_HXX
-#define WW8_TABLE_INFO_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8TABLEINFO_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_WW8TABLEINFO_HXX
 #include <boost/unordered_map.hpp>
 #include <string>
 #include <map>
@@ -352,6 +352,6 @@ public:
 };
 
 }
-#endif // WW8_TABLE_INFO_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_WW8TABLEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

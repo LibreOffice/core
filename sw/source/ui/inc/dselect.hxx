@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SW_DSELECT_HXX
-#define _SW_DSELECT_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_DSELECT_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_DSELECT_HXX
 
 #include "drawbase.hxx"
 
@@ -40,6 +40,6 @@ class DrawSelection : public SwDrawBase
 
 
 
-#endif      // _SW_DSELECT_HXX
+#endif // INCLUDED_SW_SOURCE_UI_INC_DSELECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

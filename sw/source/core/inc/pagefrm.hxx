@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PAGEFRM_HXX
-#define _PAGEFRM_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
 
 #include <viewsh.hxx>
 #include "ftnboss.hxx"
@@ -440,6 +440,6 @@ inline sal_Bool SwPageFrm::IsInvalidFly() const
 
 
 
-#endif  //_PAGEFRM_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

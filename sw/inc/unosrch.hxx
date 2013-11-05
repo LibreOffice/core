@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOSRCH_HXX
-#define _UNOSRCH_HXX
+#ifndef INCLUDED_SW_INC_UNOSRCH_HXX
+#define INCLUDED_SW_INC_UNOSRCH_HXX
 
 #include <com/sun/star/util/XPropertyReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

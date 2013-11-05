@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRMTOOL_HXX
-#define _FRMTOOL_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_FRMTOOL_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_FRMTOOL_HXX
 
 #include "swtypes.hxx"
 #include "layfrm.hxx"

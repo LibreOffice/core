@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FNTCACHE_HXX
-#define _FNTCACHE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
 
 #include <vcl/font.hxx>
 #include <tools/mempool.hxx>

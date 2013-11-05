@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MULTMRK_HXX
-#define _MULTMRK_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_MULTMRK_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_MULTMRK_HXX
 
 
 #include <svx/stddlg.hxx>
@@ -50,6 +50,6 @@ public:
 };
 
 
-#endif // _MULTMRK_HXX
+#endif // INCLUDED_SW_SOURCE_UI_INC_MULTMRK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

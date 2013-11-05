@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOFIELDCOLL_HXX
-#define SW_UNOFIELDCOLL_HXX
+#ifndef INCLUDED_SW_INC_UNOFIELDCOLL_HXX
+#define INCLUDED_SW_INC_UNOFIELDCOLL_HXX
 
 #include <boost/scoped_ptr.hpp>
 

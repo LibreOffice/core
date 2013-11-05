@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_FMTFLD_HXX
-#define SW_FMTFLD_HXX
+#ifndef INCLUDED_SW_INC_FMTFLD_HXX
+#define INCLUDED_SW_INC_FMTFLD_HXX
 
 #include <list>
 

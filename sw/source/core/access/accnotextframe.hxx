@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCNOTEXTFRAME_HXX
-#define _ACCNOTEXTFRAME_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCNOTEXTFRAME_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCNOTEXTFRAME_HXX
 
 #include "accframebase.hxx"
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>

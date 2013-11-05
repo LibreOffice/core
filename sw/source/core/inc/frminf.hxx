@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRMINF_HXX
-#define _FRMINF_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_FRMINF_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_FRMINF_HXX
 
 #include "swtypes.hxx"
 

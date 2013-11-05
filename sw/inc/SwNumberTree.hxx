@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_NUMBER_TREE_HXX
-#define _SW_NUMBER_TREE_HXX
+#ifndef INCLUDED_SW_INC_SWNUMBERTREE_HXX
+#define INCLUDED_SW_INC_SWNUMBERTREE_HXX
 
 #include <set>
 #include <vector>
@@ -693,6 +693,6 @@ struct SwNumberTreeNodeIsLessThan
     bool operator()(const SwNumberTreeNode * _pNode) const
     { return SwNumberTreeNodeLessThan(_pNode, pNode); }
 };
-#endif // _SW_NUMBER_TREE_HXX
+#endif // INCLUDED_SW_INC_SWNUMBERTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

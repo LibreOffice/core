@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWFONT_HXX
-#define _SWFONT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWFONT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWFONT_HXX
 
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>

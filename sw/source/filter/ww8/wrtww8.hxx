@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WRTWW8_HXX
-#define _WRTWW8_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
 
 #include <tools/solar.h>
 #include <tools/gen.hxx>
@@ -1582,6 +1582,6 @@ public:
     void setIPat(sal_uInt16 ipat) { m_ipat = ipat; }
 };
 
-#endif  //  _WRTWW8_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

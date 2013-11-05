@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef W1STRUCT_HXX
-#define W1STRUCT_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW1_W1STRUCT_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW1_W1STRUCT_HXX
 
 // star view
 #include <string.h>

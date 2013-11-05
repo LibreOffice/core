@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_XMLTEXTBLOCKS_HXX
-#define _SW_XMLTEXTBLOCKS_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWXMLTEXTBLOCKS_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWXMLTEXTBLOCKS_HXX
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>

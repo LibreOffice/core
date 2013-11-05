@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWATRSET_HXX
-#define _SWATRSET_HXX
+#ifndef INCLUDED_SW_INC_SWATRSET_HXX
+#define INCLUDED_SW_INC_SWATRSET_HXX
 #include <tools/solar.h>
 #include <tools/mempool.hxx>
 #include <svl/itemset.hxx>

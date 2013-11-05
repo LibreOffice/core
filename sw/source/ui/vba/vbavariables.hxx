@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_VARIABLES_HXX
-#define SW_VBA_VARIABLES_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAVARIABLES_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBAVARIABLES_HXX
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XVariables.hpp>
@@ -50,6 +50,6 @@ public:
     virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rValue ) throw (css::uno::RuntimeException);
 };
 
-#endif /* SW_VBA_VARIABLES_HXX */
+#endif // INCLUDED_SW_SOURCE_UI_VBA_VBAVARIABLES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

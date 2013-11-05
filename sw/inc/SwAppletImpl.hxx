@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_APPLET_IMPL_HXX
-#define _SW_APPLET_IMPL_HXX
+#ifndef INCLUDED_SW_INC_SWAPPLETIMPL_HXX
+#define INCLUDED_SW_INC_SWAPPLETIMPL_HXX
 
 #include <config_features.h>
 

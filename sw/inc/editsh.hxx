@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _EDITSH_HXX
-#define _EDITSH_HXX
+#ifndef INCLUDED_SW_INC_EDITSH_HXX
+#define INCLUDED_SW_INC_EDITSH_HXX
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

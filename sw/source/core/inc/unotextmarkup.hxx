@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOTEXTMARKUP_HXX
-#define _UNOTEXTMARKUP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNOTEXTMARKUP_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNOTEXTMARKUP_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>

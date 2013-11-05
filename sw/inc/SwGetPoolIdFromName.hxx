@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _GETPOOLIDFROMNAMEENUM_HXX
-#define _GETPOOLIDFROMNAMEENUM_HXX
+#ifndef INCLUDED_SW_INC_SWGETPOOLIDFROMNAME_HXX
+#define INCLUDED_SW_INC_SWGETPOOLIDFROMNAME_HXX
 
 /* When using the NameMapper to translate pool ids to UI or programmatic
  * names, this enum is used to define which family is required */

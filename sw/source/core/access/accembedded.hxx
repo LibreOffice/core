@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCEMBEDDED_HXX
-#define _ACCEMBEDDED_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCEMBEDDED_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCEMBEDDED_HXX
 
 #include "accnotextframe.hxx"
 

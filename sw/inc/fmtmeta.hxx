@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_FMTMETA_HXX
-#define SW_FMTMETA_HXX
+#ifndef INCLUDED_SW_INC_FMTMETA_HXX
+#define INCLUDED_SW_INC_FMTMETA_HXX
 
 #include <cppuhelper/weakref.hxx>
 
@@ -216,6 +216,6 @@ public:
 
 } // namespace sw
 
-#endif // SW_FMTMETA_HXX
+#endif // INCLUDED_SW_INC_FMTMETA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

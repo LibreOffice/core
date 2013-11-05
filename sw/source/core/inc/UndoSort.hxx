@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_SORT_HXX
-#define SW_UNDO_SORT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOSORT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNDOSORT_HXX
 
 #include <undobj.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -81,6 +81,6 @@ public:
     void Insert( sal_uLong nOrgPos, sal_uLong nNewPos );
 };
 
-#endif // SW_UNDO_SORT_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOSORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

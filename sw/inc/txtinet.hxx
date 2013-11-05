@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TXTINET_HXX
-#define _TXTINET_HXX
+#ifndef INCLUDED_SW_INC_TXTINET_HXX
+#define INCLUDED_SW_INC_TXTINET_HXX
 
 #include <txatbase.hxx>
 #include <txtatr.hxx>

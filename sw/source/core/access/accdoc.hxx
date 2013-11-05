@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCDOC_HXX
-#define _ACCDOC_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCDOC_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCDOC_HXX
 
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

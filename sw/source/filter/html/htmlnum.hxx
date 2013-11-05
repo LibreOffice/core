@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _HTMLNUM_HXX
-#define _HTMLNUM_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLNUM_HXX
+#define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLNUM_HXX
 
 #include <swtypes.hxx>
 #include <string.h>

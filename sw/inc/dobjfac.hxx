@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DOBJFAC_HXX
-#define _DOBJFAC_HXX
+#ifndef INCLUDED_SW_INC_DOBJFAC_HXX
+#define INCLUDED_SW_INC_DOBJFAC_HXX
 
 #include <tools/link.hxx>
 
@@ -35,6 +35,6 @@ public:
 extern SwObjectFactory aSwObjectFactory;
 
 
-#endif // _DOBJFAC_HXX
+#endif // INCLUDED_SW_INC_DOBJFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

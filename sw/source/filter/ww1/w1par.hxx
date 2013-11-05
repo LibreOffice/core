@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _W1PAR_HXX
-#define _W1PAR_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW1_W1PAR_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW1_W1PAR_HXX
 
 #include <fltshell.hxx>
 #include <w1class.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOCXEXPORT_HXX_
-#define _DOCXEXPORT_HXX_
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXEXPORT_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXEXPORT_HXX
 
 #include "wrtww8.hxx"
 
@@ -239,6 +239,6 @@ private:
     DocxExport& operator=( const DocxExport& );
 };
 
-#endif // _DOCXEXPORT_HXX_
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

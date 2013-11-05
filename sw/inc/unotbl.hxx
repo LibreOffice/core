@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNOTBL_HXX
-#define SW_UNOTBL_HXX
+#ifndef INCLUDED_SW_INC_UNOTBL_HXX
+#define INCLUDED_SW_INC_UNOTBL_HXX
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

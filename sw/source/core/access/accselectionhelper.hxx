@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCSELECTIONHELPER_HXX_
-#define _ACCSELECTIONHELPER_HXX_
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCSELECTIONHELPER_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCSELECTIONHELPER_HXX
 
 class SwAccessibleContext;
 class SwFEShell;

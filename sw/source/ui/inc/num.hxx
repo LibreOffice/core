@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NUM_HXX
-#define _NUM_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_NUM_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_NUM_HXX
 
 
 #include <sfx2/tabdlg.hxx>
@@ -162,6 +162,6 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
                     SwWrtShell &);
         ~SwSvxNumBulletTabDialog();
 };
-#endif // _NUM_HXX
+#endif // INCLUDED_SW_SOURCE_UI_INC_NUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

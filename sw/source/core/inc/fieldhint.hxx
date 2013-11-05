@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FIELDHINT_HXX
-#define _FIELDHINT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_FIELDHINT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_FIELDHINT_HXX
 
 #include <svl/hint.hxx>
 

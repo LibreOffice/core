@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RTF_HXX
-#define _RTF_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_INC_RTF_HXX
+#define INCLUDED_SW_SOURCE_FILTER_INC_RTF_HXX
 
 #include <tools/solar.h>
 
@@ -43,7 +43,7 @@ public:
     sal_uInt16 GetValue()   const { return Value.nVal; }
 };
 
-#endif // _RTF_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_INC_RTF_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_SPELL_DIALOG_CHILD_WINDOW_HXX
-#define SW_SPELL_DIALOG_CHILD_WINDOW_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_SWSPELLDIALOGCHILDWINDOW_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_SWSPELLDIALOGCHILDWINDOW_HXX
 
 #include <svx/SpellDialogChildWindow.hxx>
 #include <view.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VIEWOPT_HXX
-#define _VIEWOPT_HXX
+#ifndef INCLUDED_SW_INC_VIEWOPT_HXX
+#define INCLUDED_SW_INC_VIEWOPT_HXX
 
 #include <config_features.h>
 

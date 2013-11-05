@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _LAYOUTDUMP_HXX
-#define _LAYOUTDUMP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_DUMPFILTER_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_DUMPFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>

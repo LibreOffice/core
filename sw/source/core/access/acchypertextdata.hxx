@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCHYPERTEXTDATA_HXX
-#define _ACCHYPERTEXTDATA_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCHYPERTEXTDATA_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCHYPERTEXTDATA_HXX
 
 #include <cppuhelper/weakref.hxx>
 #include <map>

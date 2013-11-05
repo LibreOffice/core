@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWSERV_HXX
-#define _SWSERV_HXX
+#ifndef INCLUDED_SW_INC_SWSERV_HXX
+#define INCLUDED_SW_INC_SWSERV_HXX
 
 #include <sfx2/linksrc.hxx>
 #include <IMark.hxx>
@@ -81,6 +81,6 @@ public:
 SV_DECL_REF( SwServerObject )
 #endif
 
-#endif  // _SWSERV_HXX
+#endif // INCLUDED_SW_INC_SWSERV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _MODOPT_HXX
-#define _MODOPT_HXX
+#ifndef INCLUDED_SW_INC_MODCFG_HXX
+#define INCLUDED_SW_INC_MODCFG_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <tools/wintypes.hxx>

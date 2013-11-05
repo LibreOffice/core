@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CALLNK_HXX
-#define _CALLNK_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX
+#define INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX
 
 #include <tools/solar.h>
 
@@ -45,6 +45,6 @@ public:
     static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
 };
 
-#endif  // _CALLNK_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

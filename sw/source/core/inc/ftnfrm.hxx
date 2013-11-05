@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FTNFRM_HXX
-#define _FTNFRM_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_FTNFRM_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_FTNFRM_HXX
 
 #include "layfrm.hxx"
 

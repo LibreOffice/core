@@ -16,12 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_SVX_GRFCROP_HXX
 #define INCLUDED_SVX_GRFCROP_HXX
 
 #include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
-
 
 #define GRFCROP_VERSION_SWDEFAULT       0
 #define GRFCROP_VERSION_MOVETOSVX       1
@@ -68,7 +68,6 @@ public:
         }
 };
 
-
-#endif  // _GRFATR_HXX
+#endif  // INCLUDED_SVX_GRFCROP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

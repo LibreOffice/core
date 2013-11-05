@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLITMPR_HXX
-#define _XMLITMPR_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLEXPIT_HXX
+#define INCLUDED_SW_SOURCE_FILTER_XML_XMLEXPIT_HXX
 
 #include <tools/solar.h>
 #include "xmlitmap.hxx"
@@ -123,6 +123,6 @@ SvXMLExportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
     mrMapEntries = rMapEntries;
 }
 
-#endif  //  _XMLITMPR_HXX
+#endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLEXPIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

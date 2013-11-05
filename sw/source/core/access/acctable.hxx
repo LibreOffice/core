@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCTABLE_HXX
-#define _ACCTABLE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCTABLE_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCTABLE_HXX
 
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

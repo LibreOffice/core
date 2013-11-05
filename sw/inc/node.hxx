@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_NODE_HXX
-#define SW_NODE_HXX
+#ifndef INCLUDED_SW_INC_NODE_HXX
+#define INCLUDED_SW_INC_NODE_HXX
 
 #include <vector>
 

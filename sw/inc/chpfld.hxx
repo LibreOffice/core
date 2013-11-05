@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_CHPFLD_HXX
-#define SW_CHPFLD_HXX
+#ifndef INCLUDED_SW_INC_CHPFLD_HXX
+#define INCLUDED_SW_INC_CHPFLD_HXX
 
 #include "fldbas.hxx"
 
@@ -82,6 +82,6 @@ inline void SwChapterField::SetLevel(sal_uInt8 nLev) { nLevel = nLev; }
 inline OUString SwChapterField::GetNumber() const { return sNumber; }
 inline OUString SwChapterField::GetTitle() const { return sTitle; }
 
-#endif // SW_CHPFLD_HXX
+#endif // INCLUDED_SW_INC_CHPFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SRTDLG_HXX
-#define _SRTDLG_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_SRTDLG_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_SRTDLG_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>

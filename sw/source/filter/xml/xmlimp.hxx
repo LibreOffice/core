@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_XMLIMP_HXX
-#define SW_XMLIMP_HXX
+#ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLIMP_HXX
+#define INCLUDED_SW_SOURCE_FILTER_XML_XMLIMP_HXX
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 

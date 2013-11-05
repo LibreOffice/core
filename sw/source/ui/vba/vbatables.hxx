@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_VBA_TABLES_HXX
-#define SW_VBA_TABLES_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBATABLES_HXX
+#define INCLUDED_SW_SOURCE_UI_VBA_VBATABLES_HXX
 
 #include <ooo/vba/word/XTables.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>

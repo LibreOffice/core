@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_AUTHFLD_HXX
-#define SW_AUTHFLD_HXX
+#ifndef INCLUDED_SW_INC_AUTHFLD_HXX
+#define INCLUDED_SW_INC_AUTHFLD_HXX
 
 #include "swdllapi.h"
 #include <fldbas.hxx>

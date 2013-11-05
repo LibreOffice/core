@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _POREXP_HXX
-#define _POREXP_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_POREXP_HXX
+#define INCLUDED_SW_SOURCE_CORE_TEXT_POREXP_HXX
 
 #include "portxt.hxx"
 

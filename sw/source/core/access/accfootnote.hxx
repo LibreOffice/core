@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCFOOTNOTE_HXX
-#define _ACCFOOTNOTE_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFOOTNOTE_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFOOTNOTE_HXX
 
 #include <sal/types.h>
 #include <acccontext.hxx>

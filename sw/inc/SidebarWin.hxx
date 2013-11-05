@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SIDEBARWIN_HXX
-#define _SIDEBARWIN_HXX
+#ifndef INCLUDED_SW_INC_SIDEBARWIN_HXX
+#define INCLUDED_SW_INC_SIDEBARWIN_HXX
 
 #include <postithelper.hxx>
 #include <SidebarWindowsTypes.hxx>

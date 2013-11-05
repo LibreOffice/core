@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_XMLBLOCKIMPORT_HXX
-#define _SW_XMLBLOCKIMPORT_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWXMLBLOCKIMPORT_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_SWXMLBLOCKIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
 

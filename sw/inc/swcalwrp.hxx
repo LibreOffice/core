@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWCALWRP_HXX
-#define _SWCALWRP_HXX
+#ifndef INCLUDED_SW_INC_SWCALWRP_HXX
+#define INCLUDED_SW_INC_SWCALWRP_HXX
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>

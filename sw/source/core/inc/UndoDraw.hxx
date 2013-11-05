@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_DRAW_HXX
-#define SW_UNDO_DRAW_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDODRAW_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_UNDODRAW_HXX
 
 #include <undobj.hxx>
 #include <svx/svdundo.hxx>
@@ -129,6 +129,6 @@ public:
     void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, const SdrMark& );
 };
 
-#endif // SW_UNDO_DRAW_HXX
+#endif // INCLUDED_SW_SOURCE_CORE_INC_UNDODRAW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

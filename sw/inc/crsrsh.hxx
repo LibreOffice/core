@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_CRSRSH_HXX
-#define SW_CRSRSH_HXX
+#ifndef INCLUDED_SW_INC_CRSRSH_HXX
+#define INCLUDED_SW_INC_CRSRSH_HXX
 
 #include <com/sun/star/i18n/WordType.hpp>
 

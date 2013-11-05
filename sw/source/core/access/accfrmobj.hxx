@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCFRMOBJ_HXX
-#define _ACCFRMOBJ_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJ_HXX
+#define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJ_HXX
 
 #include <sal/types.h>
 

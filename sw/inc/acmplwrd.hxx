@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_ACMPLWRD_HXX
-#define SW_ACMPLWRD_HXX
+#ifndef INCLUDED_SW_INC_ACMPLWRD_HXX
+#define INCLUDED_SW_INC_ACMPLWRD_HXX
 
 #include <deque>
 

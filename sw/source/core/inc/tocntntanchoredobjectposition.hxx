@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TOCNTNTANCHOREDOBJECTPOSITION_HXX
-#define _TOCNTNTANCHOREDOBJECTPOSITION_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_TOCNTNTANCHOREDOBJECTPOSITION_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_TOCNTNTANCHOREDOBJECTPOSITION_HXX
 #include <anchoredobjectposition.hxx>
 
 class SwFrm;

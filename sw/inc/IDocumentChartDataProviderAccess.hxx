@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTCHARTDATAPROVIDER_HXX_INCLUDED
- #define IDOCUMENTCHARTDATAPROVIDER_HXX_INCLUDED
+ #ifndef INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
+ #define INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
 
 #include "com/sun/star/uno/Reference.hxx"
 
@@ -57,6 +57,6 @@ class SwChartLockController_Helper;
     virtual ~IDocumentChartDataProviderAccess() {};
  };
 
- #endif // IDOCUMENTCHARTDATAPROVIDER_HXX_INCLUDED
+ #endif // INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

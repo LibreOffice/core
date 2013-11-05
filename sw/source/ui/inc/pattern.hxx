@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PATTERN_HXX
-#define _PATTERN_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_PATTERN_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_PATTERN_HXX
 
 #include <sfx2/basedlgs.hxx>
 

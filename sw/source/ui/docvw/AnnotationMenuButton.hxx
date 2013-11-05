@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ANNOTATIONMENUBUTTON_HXX
-#define _ANNOTATIONMENUBUTTON_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_DOCVW_ANNOTATIONMENUBUTTON_HXX
+#define INCLUDED_SW_SOURCE_UI_DOCVW_ANNOTATIONMENUBUTTON_HXX
 
 #include <vcl/menubtn.hxx>
 

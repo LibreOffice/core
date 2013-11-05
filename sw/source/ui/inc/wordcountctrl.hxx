@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _WORDCOUNTCTRL_HXX
-#define _WORDCOUNTCTRL_HXX
+#ifndef INCLUDED_SW_SOURCE_UI_INC_WORDCOUNTCTRL_HXX
+#define INCLUDED_SW_SOURCE_UI_INC_WORDCOUNTCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
 
