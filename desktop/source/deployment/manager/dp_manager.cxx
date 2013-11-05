@@ -1363,6 +1363,8 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                     url, OUString(), false, OUString(), xCmdEnv );
                 if (xPackage.is())
                 {
+                    OUString id = dp_misc::getIdentifier( xPackage );
+
                     //Prepare the database entry
                     ActivePackages::Data dbData;
 
@@ -1373,11 +1375,10 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                         dbData.fileName = title;
                     dbData.mediaType = xPackage->getPackageType()->getMediaType();
                     dbData.version = xPackage->getVersion();
-                    OSL_ENSURE(!dbData.version.isEmpty(),
-                               "Extension Manager: bundled and shared extensions must have "
-                               "an identifier and a version");
-
-                    OUString id = dp_misc::getIdentifier( xPackage );
+                    SAL_WARN_IF(
+                        dbData.version.isEmpty(), "desktop.deployment",
+                        "bundled/shared extension " << id << " at <" << url
+                            << "> has no explicit version");
 
                     //We provide a special command environment that will prevent
                     //showing a license if simple-licens/@accept-by = "admin"
