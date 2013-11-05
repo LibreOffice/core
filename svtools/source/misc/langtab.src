@@ -374,6 +374,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Nogai" ; LANGUAGE_USER_NOGAI ; > ;
         < "Karakalpak Latin" ; LANGUAGE_USER_KARAKALPAK_LATIN ; > ;
         < "Ladin" ; LANGUAGE_USER_LADIN ; > ;
+        < "French (Burkina Faso)" ; LANGUAGE_USER_FRENCH_BURKINA_FASO ; > ;
     };
 };
 

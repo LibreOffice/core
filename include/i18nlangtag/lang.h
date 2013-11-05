@@ -688,6 +688,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KARAKALPAK_LATIN      0x068C
 #define LANGUAGE_USER_LADIN                 0x068D
 #define LANGUAGE_USER_TIBETAN_BHUTAN        0x8451  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_TIBETAN)) */
+#define LANGUAGE_USER_FRENCH_BURKINA_FASO   0x800C  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 
 
 /* Primary language ID range for on-the-fly assignment. */
