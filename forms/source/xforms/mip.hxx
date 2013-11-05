@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MIP_HXX
-#define _MIP_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_MIP_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_MIP_HXX
 
 #include <rtl/ustring.hxx>
 

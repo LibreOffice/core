@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_FORMATTED_FIELD_WRAPPER_HXX_
-#define _FRM_FORMATTED_FIELD_WRAPPER_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELDWRAPPER_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELDWRAPPER_HXX
 
 #include "FormComponent.hxx"
 #include <cppuhelper/implbase3.hxx>
@@ -90,6 +90,6 @@ protected:
 }
 //.........................................................................
 
-#endif // _FRM_FORMATTED_FIELD_WRAPPER_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELDWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

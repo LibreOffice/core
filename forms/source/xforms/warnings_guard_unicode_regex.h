@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WARNINGS_GUARD_UNICODE_REGEX_H
-#define INCLUDED_WARNINGS_GUARD_UNICODE_REGEX_H
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_WARNINGS_GUARD_UNICODE_REGEX_H
+#define INCLUDED_FORMS_SOURCE_XFORMS_WARNINGS_GUARD_UNICODE_REGEX_H
 
 // Because the GCC system_header mechanism doesn't work in .c/.cxx compilation
 // units and more important affects the rest of the current include file, the
@@ -37,6 +37,6 @@
 #pragma warning(pop)
 #endif
 
-#endif // INCLUDED_WARNINGS_GUARD_UNICODE_REGEX_H
+#endif // INCLUDED_FORMS_SOURCE_XFORMS_WARNINGS_GUARD_UNICODE_REGEX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MODEL_HXX
-#define _MODEL_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_MODEL_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_MODEL_HXX
 
 #include <cppuhelper/implbase4.hxx>
 #include <propertysetbase.hxx>

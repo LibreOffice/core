@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PRODUCE_HXX
-#define _PRODUCE_HXX
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_IMGPROD_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_IMGPROD_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -96,6 +96,6 @@ public:
 
 };
 
-#endif // _PRODUCE_HXX
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_IMGPROD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __XFORMSEVENT_HXX
-#define __XFORMSEVENT_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_XFORMSEVENT_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_XFORMSEVENT_HXX
 
 #include <sal/types.h>
 #include <cppuhelper/implbase1.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_SERVICES_HXX_
-#define _FRM_SERVICES_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
+#define INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
 
 #include <rtl/ustring.hxx>
 #include "frm_strings.hxx"
@@ -216,6 +216,6 @@ namespace frm
 }   // namespace frm
 //.........................................................................
 
-#endif // _FRM_SERVICES_HXX_
+#endif // INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

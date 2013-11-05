@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_IMAGE_BUTTON_HXX_
-#define _FRM_IMAGE_BUTTON_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_IMAGEBUTTON_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_IMAGEBUTTON_HXX
 
 #include "clickableimage.hxx"
 #include <com/sun/star/awt/XMouseListener.hpp>
@@ -95,6 +95,6 @@ public:
 }   // namespace frm
 //.........................................................................
 
-#endif // _FRM_IMAGE_BUTTON_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_IMAGEBUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

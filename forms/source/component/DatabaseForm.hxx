@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_DATABASEFORM_HXX_
-#define _FRM_DATABASEFORM_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_DATABASEFORM_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_DATABASEFORM_HXX
 
 #include "propertybaghelper.hxx"
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -554,7 +554,7 @@ inline void ODatabaseForm::submitNBC(const ::com::sun::star::uno::Reference< ::c
 }   // namespace frm
 //.........................................................................
 
-#endif // _FRM_DATABASEFORM_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_DATABASEFORM_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_FILE_HXX_
-#define _FORMS_FILE_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FILE_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_FILE_HXX
 
 #include "FormComponent.hxx"
 
@@ -91,6 +91,6 @@ protected:
 }   // namespace frm
 //.........................................................................
 
-#endif // _FORMS_FILE_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_FILE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

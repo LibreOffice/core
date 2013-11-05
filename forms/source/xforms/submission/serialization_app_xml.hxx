@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SERIALIZATION_APP_XML_HXX
-#define __SERIALIZATION_APP_XML_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SERIALIZATION_APP_XML_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SERIALIZATION_APP_XML_HXX
 
 #include <com/sun/star/io/XPipe.hpp>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_FORMATTEDFIELD_HXX_
-#define _FORMS_FORMATTEDFIELD_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELD_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELD_HXX
 
 #include "EditBase.hxx"
 #include <tools/link.hxx>
@@ -187,6 +187,6 @@ namespace frm
 }
 //.........................................................................
 
-#endif // _FORMS_FORMATTEDFIELD_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_FIXEDTEXT_HXX_
-#define _FORMS_FIXEDTEXT_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FIXEDTEXT_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_FIXEDTEXT_HXX
 
 #include "FormComponent.hxx"
 
@@ -59,6 +59,6 @@ protected:
 }
 //.........................................................................
 
-#endif // _FORMS_FIXEDTEXT_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_FIXEDTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

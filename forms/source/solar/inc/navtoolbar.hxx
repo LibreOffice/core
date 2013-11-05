@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_SOLAR_CONTROL_NAVTOOLBAR_HXX
-#define FORMS_SOLAR_CONTROL_NAVTOOLBAR_HXX
+#ifndef INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
+#define INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
 
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
@@ -183,6 +183,6 @@ namespace frm
 }   // namespace frm
 //.........................................................................
 
-#endif // FORMS_SOLAR_CONTROL_NAVTOOLBAR_HXX
+#endif // INCLUDED_FORMS_SOURCE_SOLAR_INC_NAVTOOLBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

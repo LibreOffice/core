@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_RADIOBUTTON_HXX_
-#define _FORMS_RADIOBUTTON_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_RADIOBUTTON_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_RADIOBUTTON_HXX
 
 #include "refvaluecomponent.hxx"
 
@@ -101,6 +101,6 @@ protected:
 }
 //.........................................................................
 
-#endif // _FORMS_RADIOBUTTON_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_RADIOBUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

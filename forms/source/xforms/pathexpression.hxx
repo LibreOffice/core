@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PATHEXPRESSION_HXX
-#define _PATHEXPRESSION_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_PATHEXPRESSION_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_PATHEXPRESSION_HXX
 
 #include "computedexpression.hxx"
 

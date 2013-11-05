@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SUBMISSION_GET_HXX
-#define __SUBMISSION_GET_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_GET_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_GET_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 

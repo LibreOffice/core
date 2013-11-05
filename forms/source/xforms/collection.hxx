@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COLLECTION_HXX
-#define _COLLECTION_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_COLLECTION_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_COLLECTION_HXX
 
 #include "enumeration.hxx"
 

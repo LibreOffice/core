@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_IMAGE_CONTROL_HXX_
-#define _FRM_IMAGE_CONTROL_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_IMAGECONTROL_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_IMAGECONTROL_HXX
 
 #include "FormComponent.hxx"
 #include "imgprod.hxx"
@@ -198,6 +198,6 @@ private:
 }   // namespace frm
 //.........................................................................
 
-#endif // _FRM_IMAGE_CONTROL_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_IMAGECONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

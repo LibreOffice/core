@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMMANDDESCRIPTIONPROVIDER_HXX
-#define COMMANDDESCRIPTIONPROVIDER_HXX
+#ifndef INCLUDED_FORMS_SOURCE_INC_COMMANDDESCRIPTIONPROVIDER_HXX
+#define INCLUDED_FORMS_SOURCE_INC_COMMANDDESCRIPTIONPROVIDER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -56,6 +56,6 @@ namespace frm
 } // namespace frm
 //........................................................................
 
-#endif // COMMANDDESCRIPTIONPROVIDER_HXX
+#endif // INCLUDED_FORMS_SOURCE_INC_COMMANDDESCRIPTIONPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

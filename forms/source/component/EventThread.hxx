@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_EVENT_THREAD_HXX_
-#define _FRM_EVENT_THREAD_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_EVENTTHREAD_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_EVENTTHREAD_HXX
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -112,6 +112,6 @@ private:
 }   // namespace frm
 //.........................................................................
 
-#endif // _FRM_EVENT_THREAD_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_EVENTTHREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

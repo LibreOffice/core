@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NAMEDCOLLECTION_HXX
-#define _NAMEDCOLLECTION_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_NAMEDCOLLECTION_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_NAMEDCOLLECTION_HXX
 
 #include <collection.hxx>
 #include <cppuhelper/implbase1.hxx>

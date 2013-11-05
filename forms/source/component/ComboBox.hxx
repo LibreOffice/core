@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_COMBOBOX_HXX_
-#define _FORMS_COMBOBOX_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_COMBOBOX_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_COMBOBOX_HXX
 
 #include "FormComponent.hxx"
 #include "errorbroadcaster.hxx"
@@ -162,6 +162,6 @@ public:
 }
 //.........................................................................
 
-#endif // _FORMS_COMBOBOX_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_COMBOBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

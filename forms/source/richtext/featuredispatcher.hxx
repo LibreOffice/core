@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
-#define FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
+#ifndef INCLUDED_FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
+#define INCLUDED_FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -93,6 +93,6 @@ namespace frm
 } // namespace frm
 //........................................................................
 
-#endif // FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
+#endif // INCLUDED_FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_BASELISTBOX_HXX_
-#define _FORMS_BASELISTBOX_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_BASELISTBOX_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_BASELISTBOX_HXX
 
 //.........................................................................
 namespace frm
@@ -31,6 +31,6 @@ const sal_uInt16 BOUNDCOLUMN     =  0x0001;
 }
 //.........................................................................
 
-#endif // _FORMS_BASELISTBOX_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_BASELISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

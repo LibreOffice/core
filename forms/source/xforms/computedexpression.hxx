@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPUTEDEXPRESSION_HXX
-#define _COMPUTEDEXPRESSION_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_COMPUTEDEXPRESSION_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_COMPUTEDEXPRESSION_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>

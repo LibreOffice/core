@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OFFAPI_COM_SUN_STAR_XFORMS_DATATYPEREPOSITORY_HXX
-#define OFFAPI_COM_SUN_STAR_XFORMS_DATATYPEREPOSITORY_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_DATATYPEREPOSITORY_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_DATATYPEREPOSITORY_HXX
 
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -84,6 +84,6 @@ namespace xforms
 } // namespace xforms
 //........................................................................
 
-#endif // OFFAPI_COM_SUN_STAR_XFORMS_DATATYPEREPOSITORY_HXX
+#endif // INCLUDED_FORMS_SOURCE_XFORMS_DATATYPEREPOSITORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

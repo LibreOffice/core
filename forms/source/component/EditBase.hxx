@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_EDITBASE_HXX_
-#define _FORMS_EDITBASE_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_EDITBASE_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_EDITBASE_HXX
 
 #include "FormComponent.hxx"
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -99,6 +99,6 @@ protected:
 }
 //.........................................................................
 
-#endif // _FORMS_EDITBASE_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_EDITBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

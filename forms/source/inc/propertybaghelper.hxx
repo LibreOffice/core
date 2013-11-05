@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_PROPERTYBAGHELPER_HXX
-#define FORMS_PROPERTYBAGHELPER_HXX
+#ifndef INCLUDED_FORMS_SOURCE_INC_PROPERTYBAGHELPER_HXX
+#define INCLUDED_FORMS_SOURCE_INC_PROPERTYBAGHELPER_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -155,6 +155,6 @@ namespace frm
 } // namespace frm
 //........................................................................
 
-#endif // FORMS_PROPERTYBAGHELPER_HXX
+#endif // INCLUDED_FORMS_SOURCE_INC_PROPERTYBAGHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

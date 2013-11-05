@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
-#define FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
 
 #include "FormComponent.hxx"
 #include "frm_module.hxx"
@@ -90,6 +90,6 @@ namespace frm
 } // namespacefrm
 //........................................................................
 
-#endif // FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

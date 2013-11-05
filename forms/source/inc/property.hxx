@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_PROPERTY_HXX_
-#define _FRM_PROPERTY_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_INC_PROPERTY_HXX
+#define INCLUDED_FORMS_SOURCE_INC_PROPERTY_HXX
 
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -226,6 +226,6 @@ public:
 }
 //... namespace frm .......................................................
 
-#endif // _FRM_PROPERTY_HXX_
+#endif // INCLUDED_FORMS_SOURCE_INC_PROPERTY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

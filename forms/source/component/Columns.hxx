@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_COLUMNS_HXX
-#define _FRM_COLUMNS_HXX
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
 
 #include "cloneable.hxx"
 #include "frm_strings.hxx"
@@ -201,7 +201,7 @@ DECL_COLUMN(ComboBoxColumn)
 DECL_COLUMN(ListBoxColumn)
 DECL_COLUMN(FormattedFieldColumn)
 
-#endif // _FRM_COLUMNS_HXX
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
 
 //.........................................................................
 }   // namespace frm

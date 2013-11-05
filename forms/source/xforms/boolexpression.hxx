@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BOOLEXPRESSION_HXX
-#define _BOOLEXPRESSION_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_BOOLEXPRESSION_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_BOOLEXPRESSION_HXX
 
 #include "computedexpression.hxx"
 

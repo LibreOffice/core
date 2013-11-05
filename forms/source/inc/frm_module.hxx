@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FRM_MODULE_HXX
-#define FRM_MODULE_HXX
+#ifndef INCLUDED_FORMS_SOURCE_INC_FRM_MODULE_HXX
+#define INCLUDED_FORMS_SOURCE_INC_FRM_MODULE_HXX
 
 #define FORMS_MODULE_INCLUDE_CONTEXT
     #define FORMS_MODULE_NAMESPACE frm
     #include "forms_module.hxx"
 #undef FORMS_MODULE_INCLUDE_CONTEXT
 
-#endif // FRM_MODULE_HXX
+#endif // INCLUDED_FORMS_SOURCE_INC_FRM_MODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

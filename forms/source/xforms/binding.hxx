@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BINDING_HXX
-#define _BINDING_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_BINDING_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_BINDING_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 

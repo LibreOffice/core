@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_INTERFACE_CONTAINER_HXX_
-#define _FRM_INTERFACE_CONTAINER_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
+#define INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 
 #include <boost/unordered_map.hpp>
 #include <comphelper/stl_types.hxx>
@@ -315,6 +315,6 @@ public:
 }   // namespace frm
 //.........................................................................
 
-#endif          // _FRM_INTERFACE_CONTAINER_HXX_
+#endif // INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

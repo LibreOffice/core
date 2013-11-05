@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENUMERATION_HXX
-#define _ENUMERATION_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_ENUMERATION_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_ENUMERATION_HXX
 
 
 #include <cppuhelper/implbase1.hxx>

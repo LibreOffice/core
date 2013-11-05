@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_SOURCE_XFORMS_DATATYPES_HXX
-#define FORMS_SOURCE_XFORMS_DATATYPES_HXX
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_DATATYPES_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_DATATYPES_HXX
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -410,6 +410,6 @@ namespace xforms
 } // namespace xforms
 //........................................................................
 
-#endif // FORMS_SOURCE_XFORMS_DATATYPES_HXX
+#endif // INCLUDED_FORMS_SOURCE_XFORMS_DATATYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

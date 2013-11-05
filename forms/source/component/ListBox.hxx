@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_LISTBOX_HXX_
-#define _FORMS_LISTBOX_HXX_
+#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_LISTBOX_HXX
+#define INCLUDED_FORMS_SOURCE_COMPONENT_LISTBOX_HXX
 
 #include "FormComponent.hxx"
 #include "cachedrowset.hxx"
@@ -335,6 +335,6 @@ private:
 }
 //.........................................................................
 
-#endif // _FORMS_LISTBOX_HXX_
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_LISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

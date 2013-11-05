@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
-#define FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
+#ifndef INCLUDED_FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
+#define INCLUDED_FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
 
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -91,6 +91,6 @@ namespace frm
 } // namespace frm
 //........................................................................
 
-#endif // FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
+#endif // INCLUDED_FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
