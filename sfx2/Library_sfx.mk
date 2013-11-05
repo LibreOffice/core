@@ -20,6 +20,7 @@
 $(eval $(call gb_Library_Library,sfx))
 
 $(eval $(call gb_Library_use_packages,sfx,\
+    svx_inc \
     sfx2_inc \
     sfx2_sdi \
 ))
