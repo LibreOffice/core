@@ -4254,6 +4254,126 @@ void OpVDB::GenSlidingWindowFunction(
     }
 
 }
+
+void OpXirr::GenSlidingWindowFunction(std::stringstream &ss,
+             const std::string sSymName, SubArguments &vSubArguments)
+{
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
+         formula::DoubleVectorRefToken *>(tmpCur);
+    size_t nCurWindowSize = pCurDVR->GetArrayLength() <
+    pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
+    pCurDVR->GetRefRowSize() ;
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    int doubleIndex = gid0;\n";
+    ss << "    int singleIndex = gid0;\n";
+    ss << "    double result = 0;\n";
+    ss << "    int i=0;\n";
+    if(vSubArguments.size()<2)
+    {
+        ss << "    result = -DBL_MAX;\n";
+        ss << "    return result;\n";
+    }else
+    {
+        GenTmpVariables(ss,vSubArguments);
+        if(vSubArguments.size() == 2)
+        {
+            ss << "    double tmp2  = 0.1;\n";
+        }else
+        {
+            CheckSubArgumentIsNan(ss,vSubArguments,2);
+        }
+        ss << "    if(tmp2<=-1)\n";
+        ss << "        result = -DBL_MAX;\n";
+        ss << "    else\n";
+        ss << "    {\n";
+        ss << "        double fMaxEps = 1e-10;\n";
+        ss << "        int nMaxIter = 50;\n";
+        ss << "        double fNewRate, fRateEps, fResultValue, fResultValue2;\n";
+        ss << "        int nIter = 0;\n";
+        ss << "        int bContLoop;\n";
+        ss << "        int windowsSize = ";
+        ss << nCurWindowSize;
+        ss << ";\n";
+        CheckSubArgumentIsNan(ss,vSubArguments,0);
+        CheckSubArgumentIsNan(ss,vSubArguments,1);
+        ss << "        double D_0 = tmp1;\n";
+        ss << "        double V_0 = tmp0;\n";
+        ss << "        double fResultRate = tmp2;\n";
+        ss << "        double r;\n";
+        ss << "        double fResult;\n";
+        ss << "        do\n";
+        ss << "        {\n";
+        ss << "            fResultValue = V_0;\n";
+        ss << "            r = fResultRate + 1;\n";
+        ss << "            for (i = ";
+        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+           ss << "gid0+1; i < "<< nCurWindowSize <<"; i++)\n";
+        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+           ss << "1; i < gid0+"<< nCurWindowSize <<"; i++)\n";
+        } else {
+           ss << "1; i < "<< nCurWindowSize <<"; i++)\n";
+        }
+        ss << "            {\n";
+        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
+           ss<< "                doubleIndex =i+gid0;\n";
+        }else
+        {
+           ss<< "                doubleIndex =i;\n";
+        }
+        CheckSubArgumentIsNan(ss,vSubArguments,0);
+        CheckSubArgumentIsNan(ss,vSubArguments,1);
+        ss << "                fResultValue += tmp0/pow(r,(tmp1 - D_0)/365.0);\n";
+        ss << "            }\n";
+        ss << "            fResultValue2 = 0;\n";
+
+        ss << "            for (i = ";
+        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+           ss << "gid0+1; i < "<< nCurWindowSize <<"; i++)\n";
+        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+           ss << "1; i < gid0+"<< nCurWindowSize <<"; i++)\n";
+        } else {
+           ss << "1; i < "<< nCurWindowSize <<"; i++)\n";
+        }
+        ss << "            {\n";
+        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
+           ss<< "                doubleIndex =i+gid0;\n";
+        }else
+        {
+           ss<< "                doubleIndex =i;\n";
+        }
+        CheckSubArgumentIsNan(ss,vSubArguments,0);
+        CheckSubArgumentIsNan(ss,vSubArguments,1);
+        ss << "                double E_i = (tmp1 - D_0)/365.0;\n";
+        ss << "                fResultValue2 -= E_i * tmp0 / pow(r,E_i + 1.0);\n";
+        ss << "            }\n";
+        ss << "            fNewRate = fResultRate - fResultValue / fResultValue2;\n";
+        ss << "            fRateEps = fabs( fNewRate - fResultRate );\n";
+        ss << "            fResultRate = fNewRate;\n";
+        ss << "            bContLoop = (fRateEps > fMaxEps) && (fabs( fResultValue ) > fMaxEps);\n";
+        ss << "        }\n";
+        ss << "        while( bContLoop && (++nIter < nMaxIter) );\n";
+        ss << "        if( bContLoop )\n";
+        ss << "            result = -DBL_MAX;\n";
+        ss << "        result = fResultRate;\n";
+        ss << "    }\n";
+        ss << "    return result;\n";
+        ss << "}";
+    }
+
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1243,6 +1243,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpMDuration));
                 }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getXirr"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                        new OpXirr));
+                }
                 break;
             default:
                 throw UnhandledToken(pChild, "unhandled opcode");
