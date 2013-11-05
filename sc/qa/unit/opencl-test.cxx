@@ -136,6 +136,7 @@ public:
     void testFinancialAmorlincFormula();
     void testFinancialDDBFormula();
     void testFinancialFVFormula();
+    void testFinancialMDurationFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -203,6 +204,7 @@ public:
     CPPUNIT_TEST(testFinancialAmorlincFormula);
     CPPUNIT_TEST(testFinancialDDBFormula);
     CPPUNIT_TEST(testFinancialFVFormula);
+    CPPUNIT_TEST(testFinancialMDurationFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1989,6 +1991,28 @@ void ScOpenclTest:: testFinancialDuration_ADDFormula()
     enableOpenCL();
     pDoc->CalcAll();
     ScDocShellRef xDocShRes = loadDoc("opencl/financial/Duration_ADD.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-126]
+void ScOpenclTest:: testFinancialMDurationFormula()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/MDuration.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/MDuration.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
