@@ -36,7 +36,7 @@ void OpCos::GenSlidingWindowFunction(std::stringstream &ss,
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ")\n{\n\t";
+    ss << ") {\n\t";
     ss <<"int gid0=get_global_id(0);\n\t";
     ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n\t";

@@ -436,7 +436,7 @@ public:
             else
             {
 #ifdef  ISNAN
-                ss << "nCount += 1;\n\t\t";
+                ss << "nCount += 1;\n\t";
 #endif
                 nItems += 1;
             }
@@ -1248,7 +1248,7 @@ public:
         mSyms.DumpSlidingWindowFunctions(decl);
         mKernelSignature = DK->DumpOpName();
         decl << "__kernel void DynamicKernel" << mKernelSignature;
-        decl << "(\n__global double *result, ";
+        decl << "(__global double *result, ";
         DK->GenSlidingWindowDecl(decl);
         decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
             DK->GenSlidingWindowDeclRef(false) << ";\n}\n";
