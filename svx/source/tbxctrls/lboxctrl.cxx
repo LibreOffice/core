@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef   _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #include <sal/types.h>
 #include <vcl/lstbox.hxx>
 #include <vcl/toolbox.hxx>
