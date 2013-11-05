@@ -119,8 +119,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     mnIxfeIndex( 0 ),
     mnLastRecId(0),
     mbBiff2HasXfs(false),
-    mbBiff2HasXfsValid(false),
-    mbRunCLKernelThread(true)
+    mbBiff2HasXfsValid(false)
 {
     nBdshtTab = 0;
 

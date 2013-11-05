@@ -31,7 +31,6 @@
 #include "colrowst.hxx"
 #include "excdefs.hxx"
 #include "rtl/ref.hxx"
-#include "clkernelthread.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -92,8 +91,6 @@ protected:
     };
     typedef boost::unordered_map<SCCOL, LastFormula> LastFormulaMapType;
 
-    rtl::Reference<sc::CLBuildKernelThread> mxCLKernelThread;
-
     static const double     fExcToTwips;        // Umrechnung 1/256 Zeichen -> Twips
 
     RootData*               pExcRoot;
@@ -128,7 +125,6 @@ protected:
 
     bool mbBiff2HasXfs:1;      /// Select XF formatting or direct formatting in BIFF2.
     bool mbBiff2HasXfsValid:1; /// False = mbBiff2HasXfs is undetermined yet.
-    bool mbRunCLKernelThread:1;
 
     void SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt16 nXF, ScFormulaCell* pCell );
     LastFormula* GetLastFormula( SCCOL nCol );

@@ -763,9 +763,6 @@ FltError ImportExcel::Read( void )
             eLastErr = SCWARN_IMPORT_COLUMN_OVERFLOW;
     }
 
-    if (mxCLKernelThread.is())
-        mxCLKernelThread->join();
-
     return eLastErr;
 }
 
@@ -1320,9 +1317,6 @@ FltError ImportExcel8::Read( void )
         if( GetBiff() == EXC_BIFF8 )
             GetPivotTableManager().MaybeRefreshPivotTables();
     }
-
-    if (mxCLKernelThread.is())
-        mxCLKernelThread->join();
 
     return eLastErr;
 }
