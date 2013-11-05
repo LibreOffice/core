@@ -406,7 +406,8 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 #endif
 }
 
-void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream){
+void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
+{
     // Resolving all item[n].xml files from CustomXml folder.
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
     mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
@@ -429,13 +430,15 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream){
                 // Skipping other files.
                 if (aPair.Second.compareTo(sCustomType) == 0)
                     bFound = true;
-                else if(aPair.First.compareTo(sTarget) == 0 && bFound){
+                else if(aPair.First.compareTo(sTarget) == 0 && bFound)
+                {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure customxml target is visited in lcl_getTarget.
                     customTarget = aPair.Second;
                 }
             }
-            if(bFound){
+            if(bFound)
+            {
                 uno::Reference<xml::dom::XDocument> temp = importSubStream(OOXMLStream::CUSTOMXML);
                 mxCustomXmlDomListTemp[counter] = temp;
                 counter++;

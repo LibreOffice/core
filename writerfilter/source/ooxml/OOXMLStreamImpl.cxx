@@ -179,12 +179,15 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                 else if (aPair.First.compareTo(sId) == 0 &&
                          aPair.Second.compareTo(rId) == 0)
                     bFound = true;
-                else if (aPair.First.compareTo(sTarget) == 0){
+                else if (aPair.First.compareTo(sTarget) == 0)
+                {
                     // checking item[n].xml is not visited already.
-                    if(customTarget != aPair.Second && sStreamType == sCustomType){
+                    if(customTarget != aPair.Second && sStreamType == sCustomType)
+                    {
                         bFound = false;
                     }
-                    else {
+                    else
+                    {
                         sMyTarget = aPair.Second;
                     }
                 }
@@ -272,7 +275,8 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
 }
 
 // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
-uno::Reference<io::XStream> OOXMLStreamImpl::accessDocumentStream(){
+uno::Reference<io::XStream> OOXMLStreamImpl::accessDocumentStream()
+{
     return mxDocumentStream;
 }
 

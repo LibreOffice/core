@@ -806,7 +806,8 @@ void DocxExport::WriteCustomXml()
         }
     }
 
-    for (sal_Int32 j = 1; j < customXmlDomlist.getLength(); j++) {
+    for (sal_Int32 j = 1; j < customXmlDomlist.getLength(); j++)
+    {
 
         uno::Reference<xml::dom::XDocument> customXmlDom = customXmlDomlist[j];
         if ( customXmlDom.is() )
