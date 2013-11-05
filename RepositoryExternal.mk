@@ -29,38 +29,6 @@
 
 # External headers
 
-ifeq ($(SYSTEM_MARIADB),YES)
-
-define gb_LinkTarget__use_mariadb
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-    $(MARIADB_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(MARIADB_LIBS))
-
-endef
-gb_ExternalProject__use_mariadb :=
-
-else # !SYSTEM_MARIADB
-
-define gb_LinkTarget__use_mariadb
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(MARIADB_CFLAGS) \
-)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	mariadblib \
-)
-
-endef
-define gb_ExternalProject__use_mariadb
-$(call gb_ExternalProject_use_static_libraries,$(1),mariadblib)
-
-endef
-
-endif # SYSTEM_MARIADB
-
-
 ifeq ($(SYSTEM_MESA_HEADERS),YES)
 
 gb_LinkTarget__use_mesa_headers :=
@@ -218,6 +186,38 @@ define gb_LinkTarget__use_iconv
 $(call gb_LinkTarget_add_libs,$(1),-liconv)
 
 endef
+
+ifeq ($(SYSTEM_MARIADB),YES)
+
+define gb_LinkTarget__use_mariadb
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(MARIADB_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(MARIADB_LIBS))
+
+endef
+gb_ExternalProject__use_mariadb :=
+
+else # !SYSTEM_MARIADB
+
+define gb_LinkTarget__use_mariadb
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(MARIADB_CFLAGS) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	mariadblib \
+)
+
+endef
+define gb_ExternalProject__use_mariadb
+$(call gb_ExternalProject_use_static_libraries,$(1),mariadblib)
+
+endef
+
+endif # SYSTEM_MARIADB
+
 
 ifeq ($(SYSTEM_MARIADB),YES)
 
