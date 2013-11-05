@@ -233,7 +233,7 @@ void MessBox::ImplPosControls()
     long            nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
     long            nMaxLineWidth;
     long            nWidth;
-    WinBits         nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL;
+    WinBits         nWinStyle = WB_LEFT | WB_NOLABEL;
     sal_uInt16          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
 
     delete mpVCLMultiLineEdit;
