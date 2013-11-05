@@ -143,6 +143,7 @@ public:
     void testFinacialNPERFormula();
     void testStatisticalFormulaNormdist();
     void testMathFormulaArcCos();
+    void testMathFormulaSqrt();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -217,6 +218,7 @@ public:
     CPPUNIT_TEST(testFinacialNPERFormula);
     CPPUNIT_TEST(testStatisticalFormulaNormdist);
     CPPUNIT_TEST(testMathFormulaArcCos);
+    CPPUNIT_TEST(testMathFormulaSqrt);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1264,6 +1266,28 @@ void ScOpenclTest::testMathFormulaTanH()
     enableOpenCL();
     pDoc->CalcAll();
     ScDocShellRef xDocShRes = loadDoc("opencl/math/tanh.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 15; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-62]
+void ScOpenclTest::testMathFormulaSqrt()
+{
+    if (!detectOpenCLDevice())
+            return;
+    ScDocShellRef xDocSh = loadDoc("opencl/math/sqrt.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/sqrt.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 15; ++i)
