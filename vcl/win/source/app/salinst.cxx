@@ -1044,7 +1044,6 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
     if (osl::FileBase::E_None == rc)
     {
-#if WINVER >= 0x0600
         if ( aSalShlData.mbW7 )
         {
             typedef HRESULT ( WINAPI *SHCREATEITEMFROMPARSINGNAME )( PCWSTR, IBindCtx*, REFIID, void **ppv );
@@ -1104,9 +1103,6 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
                 }
             }
         }
-#else
-        (void) rDocumentService;
-#endif
         // For whatever reason, we could not use the SHARD_APPIDINFO semantics
         SHAddToRecentDocs(SHARD_PATHW, (PCWSTR) system_path.getStr());
     }
