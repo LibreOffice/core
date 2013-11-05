@@ -995,6 +995,142 @@ std::string GetDuration=
 "    fDur /= nFreq;\n"
 "    return fDur;\n""}\n";
 
+std::string ScGetGDADecl=
+"double ScGetGDA(double fWert, double fRest, double fDauer, double fPeriode,"
+"double fFaktor);\n";
+
+std::string ScGetGDA=
+"double ScGetGDA(double fWert, double fRest, double fDauer, double fPeriode,"
+"double fFaktor)\n"
+"{\n"
+"    double fGda, fZins, fAlterWert, fNeuerWert;\n"
+"    fZins = fFaktor / fDauer;\n"
+"    if (fZins >= 1.0)\n"
+"    {\n"
+"        fZins = 1.0;\n"
+"        if (fPeriode == 1.0)\n"
+"            fAlterWert = fWert;\n"
+"        else\n"
+"            fAlterWert = 0.0;\n"
+"    }\n"
+"    else\n"
+"        fAlterWert = fWert * pow(1.0 - fZins, fPeriode - 1.0);\n"
+"    fNeuerWert = fWert * pow(1.0 - fZins, fPeriode);\n"
+
+"    if (fNeuerWert < fRest)\n"
+"        fGda = fAlterWert - fRest;\n"
+"    else\n"
+"        fGda = fAlterWert - fNeuerWert;\n"
+"    if (fGda < 0.0)\n"
+"        fGda = 0.0;\n"
+"    return fGda;\n"
+"}\n";
+
+std::string DblMinDecl=
+"inline double DblMin( double a, double b );\n";
+
+std::string DblMin=
+"inline double DblMin( double a, double b )\n"
+"{\n"
+"    return (a < b) ? a : b;\n"
+"}\n";
+
+std::string ScInterVDBDecl=
+"double ScInterVDB(double fWert,double fRest,double fDauer, double fDauer1,"
+"double fPeriode,double fFaktor);\n";
+
+std::string ScInterVDB=
+"double ScInterVDB(double fWert,double fRest,double fDauer, double fDauer1,"
+"double fPeriode,double fFaktor)\n"
+"{\n"
+"    double fVdb=0;\n"
+"    double fIntEnd   = ceil(fPeriode);\n"
+"    int nLoopEnd   = fIntEnd;\n"
+
+"    double fTerm, fLia;\n"
+"    double fRestwert = fWert - fRest;\n"
+"    int bNowLia = 0;\n"
+"    double fGda;\n"
+"    int i;\n"
+"    fLia=0;\n"
+"    for ( i = 1; i <= nLoopEnd; i++)\n"
+"    {\n"
+"        if(!bNowLia)\n"
+"        {\n"
+"            fGda = ScGetGDA(fWert, fRest, fDauer, (double) i, fFaktor);\n"
+"            fLia = fRestwert/ (fDauer1 - (double) (i-1));\n"
+"            if (fLia > fGda)\n"
+"            {\n"
+"                fTerm = fLia;\n"
+"                bNowLia = 1;\n"
+"            }\n"
+"            else\n"
+"            {\n"
+"                fTerm = fGda;\n"
+"                fRestwert =fRestwert- fGda;\n"
+"            }\n"
+"        }\n"
+"        else\n"
+"        {\n"
+"            fTerm = fLia;\n"
+"        }\n"
+
+"        if ( i == nLoopEnd)\n"
+"            fTerm *= ( fPeriode + 1.0 - fIntEnd );\n"
+
+"        fVdb += fTerm;\n"
+"    }\n"
+"    return fVdb;\n"
+"}\n";
+
+std::string VDBImplementDecl=
+"double VDBImplement(double fWert,double fRest, double fDauer, double fAnfang"
+", double fEnde, double fFaktor,int bFlag);\n";
+
+std::string VDBImplement=
+"double VDBImplement(double fWert,double fRest, double fDauer, double fAnfang"
+", double fEnde, double fFaktor,int bFlag)\n"
+"{\n"
+"    double result=0;\n"
+"    double fIntStart = floor(fAnfang);\n"
+"    double fIntEnd   = ceil(fEnde);\n"
+"    int nLoopStart = (int) fIntStart;\n"
+"    int nLoopEnd   = (int) fIntEnd;\n"
+"    if (bFlag)\n"
+"    {\n"
+"        for (int i = nLoopStart + 1; i <= nLoopEnd; i++)\n"
+"        {\n"
+"            double fTerm = ScGetGDA(fWert, fRest, fDauer, (double) i, fFaktor"
+");\n"
+"            if ( i == nLoopStart+1 )\n"
+"                fTerm *= ( DblMin( fEnde, fIntStart + 1.0 ) - fAnfang );\n"
+"            else if ( i == nLoopEnd )\n"
+"                fTerm *= ( fEnde + 1.0 - fIntEnd );\n"
+"            result += fTerm;\n"
+"        }\n"
+"    }\n"
+"    else\n"
+"    {\n"
+"        double fDauer1=fDauer;\n"
+"        if(!isequal(fAnfang,floor(fAnfang)))\n"
+"        {\n"
+"            if(fFaktor>1)\n"
+"            {\n"
+"                if(fAnfang>fDauer/2 || isequal(fAnfang,fDauer/2))\n"
+"                {\n"
+"                    double fPart=fAnfang-fDauer/2;\n"
+"                    fAnfang=fDauer/2;\n"
+"                    fEnde-=fPart;\n"
+"                    fDauer1+=1;\n"
+"                }\n"
+"            }\n"
+"        }\n"
+"        fWert-=ScInterVDB(fWert,fRest,fDauer,fDauer1,fAnfang,fFaktor);\n"
+"        result=ScInterVDB(fWert,fRest,fDauer,fDauer-fAnfang,fEnde-fAnfang,"
+"fFaktor);\n"
+"    }\n"
+"    return result;\n"
+"}\n";
 
 #endif
 

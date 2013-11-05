@@ -4135,7 +4135,57 @@ tmpCur4);
     ss << "    return -result;\n";
     ss << "}";
 }
+ void OpVDB::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(ScGetGDADecl);decls.insert(DblMinDecl);
+    decls.insert(ScInterVDBDecl);decls.insert(VDBImplementDecl);
+    funs.insert(ScGetGDA);funs.insert(DblMin);
+    funs.insert(ScInterVDB);funs.insert(VDBImplement);
+}
 
+void OpVDB::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    int singleIndex = gid0;\n";
+    ss << "    double result = 0;\n";
+    if(vSubArguments.size()<5)
+    {
+        ss << "    result = -DBL_MAX;\n";
+        ss << "    return result;\n";
+    }else
+    {
+        GenTmpVariables(ss,vSubArguments);
+        CheckAllSubArgumentIsNan(ss,vSubArguments);
+        if(vSubArguments.size() <= 6)
+        {
+            ss << "    int tmp6  = 0;\n";
+        }
+        if(vSubArguments.size() == 5)
+        {
+            ss << "    double tmp5= 2.0;\n";
+        }
+        ss << "    if(tmp3 < 0 || tmp4<tmp3 || tmp4>tmp2 || tmp0<0 ||tmp1>tmp0";
+        ss << "|| tmp5 <=0)\n";
+        ss << "        result = -DBL_MAX;\n";
+        ss << "    else\n";
+        ss << "        result =";
+        ss << "VDBImplement(tmp0,tmp1,tmp2,tmp3,tmp4,tmp5,tmp6);\n";
+        ss << "    return result;\n";
+        ss << "}";
+    }
+
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
