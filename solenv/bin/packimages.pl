@@ -75,6 +75,17 @@ for my $path (@custom_path) {
 }
 check_links(\%links);
 
+# rebuild if links.txt has been modified
+for my $path (@custom_path) {
+    my $links_file = $path."/links.txt";
+    if ((-e $links_file ) && ( -e $out_file )){
+        if ((stat($out_file))[9] < (stat($links_file))[9]){
+            $do_rebuild = 1;
+            print_message("$links_file has been modified.") if $verbose;
+        }
+    }
+}
+
 my $zip_hash_ref = create_zip_list($global_hash_ref, $module_hash_ref, $custom_hash_ref);
 remove_links_from_zip_list($zip_hash_ref, \%links);
 
