@@ -424,7 +424,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             const beans::PropertyValue* pFilterProperties = aFilterProperties.getConstArray();
             for(int nProp = 0; nProp < aFilterProperties.getLength(); nProp++)
             {
-                if(!pFilterProperties[nProp].Name.compareToAscii("UIName"))
+                if(pFilterProperties[nProp].Name.equalsAscii("UIName"))
                 {
                     pFilterProperties[nProp].Value >>= sUIName2;
                     break;
@@ -433,7 +433,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             if( !sUIName2.isEmpty() )
             {
                 sal_uInt16 nFilter = aFilterLB.InsertEntry( sUIName2 );
-                if( 0 == sFilter.compareToAscii("writer8") )
+                if( sFilter.equalsAscii("writer8") )
                     nODT = nFilter;
                 aFilterLB.SetEntryData( nFilter, new OUString( sFilter ) );
             }

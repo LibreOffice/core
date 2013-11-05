@@ -462,28 +462,28 @@ void MyPersistObject::setPropertyValue(
             WrappedTargetException,
             RuntimeException)
 {
-    if( 0 == aPropertyName.compareToAscii("long")  ) {
+    if( aPropertyName.equalsAscii("long")  ) {
         aValue >>= m_l;
     }
-    else if ( 0 == aPropertyName.compareToAscii("float") ) {
+    else if ( aPropertyName.equalsAscii("float") ) {
         aValue >>= m_f;
     }
-    else if( 0 == aPropertyName.compareToAscii("double") ) {
+    else if( aPropertyName.equalsAscii("double") ) {
         aValue >>= m_d;
     }
-    else if( 0  == aPropertyName.compareToAscii("bool") ) {
+    else if( aPropertyName.equalsAscii("bool") ) {
         aValue >>= m_b;
     }
-    else if( 0 == aPropertyName.compareToAscii("byte" ) ) {
+    else if( aPropertyName.equalsAscii("byte" ) ) {
         aValue >>= m_byte;
     }
-    else if( 0 == aPropertyName.compareToAscii("char") ) {
+    else if( aPropertyName.equalsAscii("char") ) {
         aValue >>= m_c;
     }
-    else if( 0 == aPropertyName.compareToAscii("string") ) {
+    else if( aPropertyName.equalsAscii("string") ) {
         aValue >>= m_s;
     }
-    else if( 0 == aPropertyName.compareToAscii("object") ) {
+    else if( aPropertyName.equalsAscii("object") ) {
         if( aValue.getValueType() == getCppuType( (Reference< XPersistObject> *)0 ) )
         {
             aValue >>= m_ref;
@@ -502,28 +502,28 @@ Any MyPersistObject::getPropertyValue(const OUString& aPropertyName)
             RuntimeException)
 {
     Any aValue;
-    if( 0 == aPropertyName.compareToAscii("long" )  ) {
+    if( aPropertyName.equalsAscii("long" )  ) {
         aValue <<= m_l;
     }
-    else if ( 0 == aPropertyName.compareToAscii("float") ) {
+    else if ( aPropertyName.equalsAscii("float") ) {
         aValue <<= m_f;
     }
-    else if( 0 == aPropertyName.compareToAscii("double") ) {
+    else if( aPropertyName.equalsAscii("double") ) {
         aValue <<= m_d;
     }
-    else if( 0 == aPropertyName.compareToAscii("bool") ) {
+    else if( aPropertyName.equalsAscii("bool") ) {
         aValue <<= m_b;
     }
-    else if( 0 == aPropertyName.compareToAscii("byte") ) {
+    else if( aPropertyName.equalsAscii("byte") ) {
         aValue <<= m_byte;
     }
-    else if( 0 == aPropertyName.compareToAscii("char" ) ) {
+    else if( aPropertyName.equalsAscii("char" ) ) {
         aValue <<= m_c;
     }
-    else if( 0 == aPropertyName.compareToAscii("string") ) {
+    else if( aPropertyName.equalsAscii("string") ) {
         aValue <<= m_s;
     }
-    else if( 0 == aPropertyName.compareToAscii("object" ) )
+    else if( aPropertyName.equalsAscii("object" ) )
     {
         aValue <<= m_ref;
     }
@@ -699,8 +699,8 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
     throw ( IllegalArgumentException,
             RuntimeException)
 {
-    if( 0 == TestName.compareToAscii("com.sun.star.io.ObjectInputStream") ||
-        0 == TestName.compareToAscii("com.sun.star.io.ObjectOutputStream" ) )  {
+    if( TestName.equalsAscii("com.sun.star.io.ObjectInputStream") ||
+        TestName.equalsAscii("com.sun.star.io.ObjectOutputStream") )  {
 
         try
         {

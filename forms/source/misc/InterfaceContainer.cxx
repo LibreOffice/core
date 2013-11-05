@@ -363,15 +363,15 @@ struct TransformEventTo52Format : public ::std::unary_function< ScriptEventDescr
 {
     void operator()( ScriptEventDescriptor& _rDescriptor )
     {
-        if ( 0 == _rDescriptor.ScriptType.compareToAscii( "StarBasic" ) )
+        if ( _rDescriptor.ScriptType.equalsAscii( "StarBasic" ) )
         {   // it's a starbasic macro
             sal_Int32 nPrefixLength = _rDescriptor.ScriptCode.indexOf( ':' );
             if ( 0 <= nPrefixLength )
             {   // the macro name does not already contain a :
 #ifdef DBG_UTIL
                 const OUString sPrefix = _rDescriptor.ScriptCode.copy( 0, nPrefixLength );
-                DBG_ASSERT( 0 == sPrefix.compareToAscii( "document" )
-                        ||  0 == sPrefix.compareToAscii( "application" ),
+                DBG_ASSERT( sPrefix.equalsAscii( "document" )
+                        ||  sPrefix.equalsAscii( "application" ),
                         "TransformEventTo52Format: invalid (unknown) prefix!" );
 #endif
                 // cut the prefix
@@ -386,14 +386,12 @@ struct TransformEventTo60Format : public ::std::unary_function< ScriptEventDescr
 {
     void operator()( ScriptEventDescriptor& _rDescriptor )
     {
-        if ( 0 == _rDescriptor.ScriptType.compareToAscii( "StarBasic" ) )
+        if ( _rDescriptor.ScriptType.equalsAscii( "StarBasic" ) )
         {   // it's a starbasic macro
             if ( _rDescriptor.ScriptCode.indexOf( ':' ) < 0 )
             {   // the macro name does not already contain a :
                 // -> default the type to "document"
-                OUString sNewScriptCode( "document:" );
-                sNewScriptCode += _rDescriptor.ScriptCode;
-                _rDescriptor.ScriptCode = sNewScriptCode;
+                _rDescriptor.ScriptCode = "document:" + _rDescriptor.ScriptCode;
             }
         }
     }

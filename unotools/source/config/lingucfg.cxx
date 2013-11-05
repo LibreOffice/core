@@ -290,7 +290,7 @@ sal_Bool SvtLinguConfigItem::GetHdlByName(
     {
         while (pEntry && pEntry->pFullPropName != NULL)
         {
-            if (0 == rPropertyName.compareToAscii( pEntry->pFullPropName ))
+            if (rPropertyName.equalsAscii( pEntry->pFullPropName ))
             {
                 rnHdl = pEntry->nHdl;
                 break;
@@ -303,7 +303,7 @@ sal_Bool SvtLinguConfigItem::GetHdlByName(
     {
         while (pEntry && pEntry->pPropName != NULL)
         {
-            if (0 == rPropertyName.compareToAscii( pEntry->pPropName ))
+            if (rPropertyName.equalsAscii( pEntry->pPropName ))
             {
                 rnHdl = pEntry->nHdl;
                 break;

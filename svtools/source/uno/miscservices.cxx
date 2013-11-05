@@ -130,14 +130,14 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
                 SvFilterOptionsDialog_CreateInstance,
                 aServiceNames);
         }
-        else if( 0 == GraphicProvider::getImplementationName_Static().compareToAscii( pImplementationName ) )
+        else if( GraphicProvider::getImplementationName_Static().equalsAscii( pImplementationName ) )
         {
             xFactory =  ::cppu::createOneInstanceFactory(xSMgr,
                 GraphicProvider::getImplementationName_Static(),
                 GraphicProvider_CreateInstance,
                 GraphicProvider::getSupportedServiceNames_Static() );
         }
-        else if( 0 == GraphicRendererVCL::getImplementationName_Static().compareToAscii( pImplementationName ) )
+        else if( GraphicRendererVCL::getImplementationName_Static().equalsAscii( pImplementationName ) )
         {
             xFactory = ::cppu::createOneInstanceFactory(xSMgr,
                 GraphicRendererVCL::getImplementationName_Static(),

@@ -64,10 +64,10 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
     const PropertyValue* pEnd   = pBegin + aArgs.getLength();
     for ( ; pBegin != pEnd; ++pBegin )
     {
-        if ( 0 == ( *pBegin ).Name.compareToAscii( "HelpKeyword" ) )
+        if ( pBegin->Name.equalsAscii( "HelpKeyword" ) )
         {
             OUString sHelpKeyword;
-            if ( ( ( *pBegin ).Value >>= sHelpKeyword ) && !sHelpKeyword.isEmpty() )
+            if ( ( pBegin->Value >>= sHelpKeyword ) && !sHelpKeyword.isEmpty() )
             {
                 sKeyword = sHelpKeyword;
                 bHasKeyword = !sKeyword.isEmpty();

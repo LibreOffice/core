@@ -67,7 +67,7 @@ OUString getParentName( const OUString& aFileName )
     if( aParent.endsWith(":") && aParent.getLength() == 6 )
         aParent += "/";
 
-    if( 0 == aParent.compareToAscii( "file://" ) )
+    if( aParent.equalsAscii( "file://" ) )
         aParent = "file:///";
 
     return aParent;

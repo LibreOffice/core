@@ -69,7 +69,7 @@ void * component_getFactoryHelper(
     for( sal_Int32 i = 0 ; entries[i].create ; i ++ )
     {
         OUString implName = entries[i].getImplementationName();
-        if( 0 == implName.compareToAscii( pImplName ) )
+        if( implName.equalsAscii( pImplName ) )
         {
             xFactory = entries[i].createFactory(
                 entries[i].create,

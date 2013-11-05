@@ -1286,8 +1286,8 @@ namespace xmloff
         // * it's the image-data attribute
         // * it's the target-location attribute, and we're dealign with an object which has the respective property
         sal_Bool bMakeAbsolute =
-                ( 0 == _rLocalName.compareToAscii( s_pImageDataAttributeName ) )
-            ||  (   ( 0 == _rLocalName.compareToAscii( s_pTargetLocationAttributeName ) )
+                _rLocalName.equalsAscii( s_pImageDataAttributeName )
+            ||  (   _rLocalName.equalsAscii( s_pTargetLocationAttributeName )
                 &&  (   ( OControlElement::BUTTON == m_eElementType )
                     ||  ( OControlElement::IMAGE == m_eElementType )
                     )
@@ -1300,7 +1300,7 @@ namespace xmloff
             // only resolve image related url
             // we don't want say form url targets to be resolved
             // using ResolveGraphicObjectURL
-            if ( 0 == _rLocalName.compareToAscii( s_pImageDataAttributeName ) )
+            if ( _rLocalName.equalsAscii( s_pImageDataAttributeName ) )
                 sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, sal_False );
             else
                 sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );

@@ -329,7 +329,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL postgresql_sdbc_component_getFactory(
     for( sal_Int32 i = 0 ; g_entries[i].create ; i ++ )
     {
         OUString implName = g_entries[i].getImplementationName();
-        if( 0 == implName.compareToAscii( pImplName ) )
+        if( implName.equalsAscii( pImplName ) )
         {
             Reference< XComponentContext > defaultContext(
                 comphelper::getComponentContext( xSmgr ) );

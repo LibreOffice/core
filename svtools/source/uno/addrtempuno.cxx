@@ -215,7 +215,7 @@ namespace svt
         PropertyValue aVal;
         if (_rValue >>= aVal)
         {
-            if (0 == aVal.Name.compareToAscii("DataSource"))
+            if (aVal.Name.equalsAscii("DataSource"))
             {
 #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
@@ -225,7 +225,7 @@ namespace svt
                 return;
             }
 
-            if (0 == aVal.Name.compareToAscii("DataSourceName"))
+            if (aVal.Name.equalsAscii("DataSourceName"))
             {
 #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
@@ -235,7 +235,7 @@ namespace svt
                 return;
             }
 
-            if (0 == aVal.Name.compareToAscii("Command"))
+            if (aVal.Name.equalsAscii("Command"))
             {
 #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =

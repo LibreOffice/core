@@ -1950,7 +1950,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         aAny >>= xPropSet;
 
         // save interesting field masters
-        if (0 == sFieldMasterType.compareToAscii(FIELD_SERVICE_SETEXP))
+        if (sFieldMasterType.equalsAscii(FIELD_SERVICE_SETEXP))
         {
             sal_Int32 nType = GetIntProperty(sPropertySubType, xPropSet);
 
@@ -1964,11 +1964,11 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 aVarName.push_back( sFieldMaster );
             }
         }
-        else if (0 == sFieldMasterType.compareToAscii(FIELD_SERVICE_USER))
+        else if (sFieldMasterType.equalsAscii(FIELD_SERVICE_USER))
         {
             aUserName.push_back( sFieldMaster );
         }
-        else if (0 == sFieldMasterType.compareToAscii(FIELD_SERVICE_DDE))
+        else if (sFieldMasterType.equalsAscii(FIELD_SERVICE_DDE))
         {
             aDdeName.push_back( sFieldMaster );
         }

@@ -1512,7 +1512,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
                         if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
                         {
-                            if( 0 == xAttrList->getValueByIndex( n ).compareToAscii( "application/vnd.sun.star.media" ) )
+                            if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) )
                                 bMedia = true;
 
                             // leave this loop

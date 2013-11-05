@@ -102,12 +102,12 @@ DBG_NAME(ODirectSQLDialog)
         PropertyValue aProperty;
         if (_rValue >>= aProperty)
         {
-            if (0 == aProperty.Name.compareToAscii("InitialSelection"))
+            if (aProperty.Name.equalsAscii("InitialSelection"))
             {
                 OSL_VERIFY( aProperty.Value >>= m_sInitialSelection );
                 return;
             }
-            else if (0 == aProperty.Name.compareToAscii("ActiveConnection"))
+            else if (aProperty.Name.equalsAscii("ActiveConnection"))
             {
                 m_xActiveConnection.set( aProperty.Value, UNO_QUERY );
                 OSL_ENSURE( m_xActiveConnection.is(), "ODirectSQLDialog::implInitialize: invalid connection!" );

@@ -330,61 +330,61 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
 
     OGeometryControlModel_Base* pNewModel = NULL;
 
-    if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlEditModel ) == 0 )
+    if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlEditModel ) )
         pNewModel = new OGeometryControlModel< UnoControlEditModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFormattedFieldModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlFormattedFieldModel ) )
         pNewModel = new OGeometryControlModel< UnoControlFormattedFieldModel >( m_xContext);
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFileControlModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlFileControlModel ) )
         pNewModel = new OGeometryControlModel< UnoControlFileControlModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlButtonModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlButtonModel ) )
         pNewModel = new OGeometryControlModel< UnoControlButtonModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlImageControlModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlImageControlModel ) )
         pNewModel = new OGeometryControlModel< UnoControlImageControlModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRadioButtonModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlRadioButtonModel ) )
         pNewModel = new OGeometryControlModel< UnoControlRadioButtonModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCheckBoxModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlCheckBoxModel ) )
         pNewModel = new OGeometryControlModel< UnoControlCheckBoxModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlFixedHyperlinkModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoControlFixedHyperlinkModel ) )
         pNewModel = new OGeometryControlModel< UnoControlFixedHyperlinkModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlFixedTextModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoControlFixedTextModel ) )
         pNewModel = new OGeometryControlModel< UnoControlFixedTextModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlGroupBoxModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlGroupBoxModel ) )
         pNewModel = new OGeometryControlModel< UnoControlGroupBoxModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlListBoxModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlListBoxModel ) )
         pNewModel = new OGeometryControlModel< UnoControlListBoxModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlComboBoxModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlComboBoxModel ) )
         pNewModel = new OGeometryControlModel< UnoControlComboBoxModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlDateFieldModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlDateFieldModel ) )
         pNewModel = new OGeometryControlModel< UnoControlDateFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlTimeFieldModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlTimeFieldModel ) )
         pNewModel = new OGeometryControlModel< UnoControlTimeFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlNumericFieldModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlNumericFieldModel ) )
         pNewModel = new OGeometryControlModel< UnoControlNumericFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCurrencyFieldModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlCurrencyFieldModel ) )
         pNewModel = new OGeometryControlModel< UnoControlCurrencyFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlPatternFieldModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlPatternFieldModel ) )
         pNewModel = new OGeometryControlModel< UnoControlPatternFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlProgressBarModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlProgressBarModel ) )
         pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlScrollBarModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlScrollBarModel ) )
         pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedLineModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlFixedLineModel ) )
         pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRoadmapModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlRoadmapModel ) )
         pNewModel = new OGeometryControlModel< UnoControlRoadmapModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_TreeControlModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_TreeControlModel ) )
         pNewModel = new OGeometryControlModel< UnoTreeModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_GridControlModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_GridControlModel ) )
         pNewModel = new OGeometryControlModel< UnoGridModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlTabPageContainerModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoControlTabPageContainerModel ) )
         pNewModel = new OGeometryControlModel< UnoControlTabPageContainerModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoMultiPageModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoMultiPageModel ) )
         pNewModel = new OGeometryControlModel< UnoMultiPageModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlTabPageModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoControlTabPageModel ) )
         pNewModel = new OGeometryControlModel< UnoControlTabPageModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoPageModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoPageModel ) )
         pNewModel = new OGeometryControlModel< UnoPageModel >( m_xContext );
-    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoFrameModel ) == 0 )
+    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoFrameModel ) )
         pNewModel = new OGeometryControlModel< UnoFrameModel >( m_xContext );
 
     if ( !pNewModel )
@@ -1071,7 +1071,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
 {
     SolarMutexGuard aGuard;
 
-    DBG_ASSERT( 0 == _rEvent.PropertyName.compareToAscii( "TabIndex" ),
+    DBG_ASSERT( _rEvent.PropertyName.equalsAscii( "TabIndex" ),
         "UnoControlDialogModel::propertyChange: not listening for this property!" );
 
     // the accessor for the changed element

@@ -151,7 +151,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr,sal_Int32 nTim
     {
         OUString aVal;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this,getTextEncoding());
-        m_bReadOnly = !aVal.compareToAscii("Y");
+        m_bReadOnly = aVal.equalsAscii("Y");
     }
     catch(Exception&)
     {
@@ -210,49 +210,49 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
     const PropertyValue *pEnd   = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!pBegin->Name.compareToAscii(pTimeout))
+        if( pBegin->Name.equalsAscii(pTimeout))
             OSL_VERIFY( pBegin->Value >>= nTimeout );
-        else if(!pBegin->Name.compareToAscii(pSilent))
+        else if( pBegin->Name.equalsAscii(pSilent))
             OSL_VERIFY( pBegin->Value >>= bSilent );
-        else if(!pBegin->Name.compareToAscii(pPrivName))
+        else if( pBegin->Name.equalsAscii(pPrivName))
             OSL_VERIFY( pBegin->Value >>= m_bIgnoreDriverPrivileges );
-        else if(!pBegin->Name.compareToAscii(pVerColName))
+        else if( pBegin->Name.equalsAscii(pVerColName))
             OSL_VERIFY( pBegin->Value >>= m_bPreventGetVersionColumns );
-        else if(!pBegin->Name.compareToAscii(pParaName))
+        else if( pBegin->Name.equalsAscii(pParaName))
             OSL_VERIFY( pBegin->Value >>= m_bParameterSubstitution );
-        else if(!pBegin->Name.compareToAscii(pRetrieving))
+        else if( pBegin->Name.equalsAscii(pRetrieving))
         {
             sal_Bool bAutoRetrievingEnabled = sal_False;
             OSL_VERIFY( pBegin->Value >>= bAutoRetrievingEnabled );
             enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
         }
-        else if(!pBegin->Name.compareToAscii(pRetriStmt))
+        else if( pBegin->Name.equalsAscii(pRetriStmt))
         {
             OUString sGeneratedValueStatement;
             OSL_VERIFY( pBegin->Value >>= sGeneratedValueStatement );
             setAutoRetrievingStatement(sGeneratedValueStatement);
         }
-        else if(!pBegin->Name.compareToAscii(pUser))
+        else if( pBegin->Name.equalsAscii(pUser))
         {
             OSL_VERIFY( pBegin->Value >>= aUID );
             aDSN = aDSN + ";UID=" + aUID;
         }
-        else if(!pBegin->Name.compareToAscii(pPwd))
+        else if( pBegin->Name.equalsAscii(pPwd))
         {
             OSL_VERIFY( pBegin->Value >>= aPWD );
             aDSN = aDSN + ";PWD=" + aPWD;
         }
-        else if(!pBegin->Name.compareToAscii(pUseCatalog))
+        else if( pBegin->Name.equalsAscii(pUseCatalog))
         {
              OSL_VERIFY( pBegin->Value >>= m_bUseCatalog );
         }
-        else if(!pBegin->Name.compareToAscii(pSysDrv))
+        else if( pBegin->Name.equalsAscii(pSysDrv))
         {
             OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
             aDSN += ";";
             aDSN += aSysDrvSettings;
         }
-        else if(0 == pBegin->Name.compareToAscii(pCharSet))
+        else if( pBegin->Name.equalsAscii(pCharSet))
         {
             OUString sIanaName;
             OSL_VERIFY( pBegin->Value >>= sIanaName );

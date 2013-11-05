@@ -109,18 +109,13 @@ namespace svxform
         const Ascii2Int16* pSearch = _pMap;
         while ( pSearch && pSearch->pAscii )
         {
-            if ( 0 == _rAsciiValue.compareToAscii( pSearch->pAscii ) )
+            if ( _rAsciiValue.equalsAscii( pSearch->pAscii ) )
                 // found
                 return pSearch->nValue;
             ++pSearch;
         }
 
-        OSL_FAIL(
-            (   OString( "lcl_implMapAsciiValue: could not convert the ascii value " )
-            +=  OString( _rAsciiValue.getStr(), _rAsciiValue.getLength(), RTL_TEXTENCODING_ASCII_US )
-            +=  OString( " !" )
-            ).getStr()
-        );
+        OSL_FAIL("lcl_implMapAsciiValue: could not convert the ascii value " + _rAsciiValue + " !");
         return -1;
     }
 

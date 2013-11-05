@@ -168,7 +168,7 @@ sal_uInt16 SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
     // iterate over known event names
     for(sal_Int16 i = 0; i < mnMacroItems; i++)
     {
-        if (0 == rName.compareToAscii(mpSupportedMacroItems[i].mpEventName))
+        if( rName.equalsAscii(mpSupportedMacroItems[i].mpEventName))
         {
             return mpSupportedMacroItems[i].mnEvent;
         }

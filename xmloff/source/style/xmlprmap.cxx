@@ -183,7 +183,7 @@ sal_Int32 XMLPropertySetMapper::FindEntryIndex(
         const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
         if( rEntry.nXMLNameSpace == nNameSpace &&
             rEntry.sXMLAttributeName.equals( sXMLName ) &&
-            0 == rEntry.sAPIPropertyName.compareToAscii( sApiName ) )
+            rEntry.sAPIPropertyName.equalsAscii( sApiName ) )
             return nIndex;
         else
             nIndex++;

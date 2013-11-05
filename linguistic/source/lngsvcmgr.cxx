@@ -1550,22 +1550,22 @@ uno::Sequence< OUString > SAL_CALL
     uno::Sequence< OUString > aRes;
     const SvcInfoArray *pInfoArray = 0;
 
-    if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
+    if (rServiceName.equalsAscii( SN_SPELLCHECKER ))
     {
         GetAvailableSpellSvcs_Impl();
         pInfoArray = pAvailSpellSvcs;
     }
-    else if (0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ))
+    else if (rServiceName.equalsAscii( SN_GRAMMARCHECKER ))
     {
         GetAvailableGrammarSvcs_Impl();
         pInfoArray = pAvailGrammarSvcs;
     }
-    else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
+    else if (rServiceName.equalsAscii( SN_HYPHENATOR ))
     {
         GetAvailableHyphSvcs_Impl();
         pInfoArray = pAvailHyphSvcs;
     }
-    else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
+    else if (rServiceName.equalsAscii( SN_THESAURUS ))
     {
         GetAvailableThesSvcs_Impl();
         pInfoArray = pAvailThesSvcs;
@@ -1609,13 +1609,13 @@ uno::Sequence< lang::Locale > SAL_CALL
     uno::Sequence< lang::Locale > aRes;
 
     uno::Sequence< lang::Locale >  *pAvailLocales     = NULL;
-    if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
+    if (rServiceName.equalsAscii( SN_SPELLCHECKER ))
         pAvailLocales       = &aAvailSpellLocales;
-    else if (0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ))
+    else if (rServiceName.equalsAscii( SN_GRAMMARCHECKER ))
         pAvailLocales       = &aAvailGrammarLocales;
-    else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
+    else if (rServiceName.equalsAscii( SN_HYPHENATOR ))
         pAvailLocales       = &aAvailHyphLocales;
-    else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
+    else if (rServiceName.equalsAscii( SN_THESAURUS ))
         pAvailLocales       = &aAvailThesLocales;
 
     // Nowadays (with OOo lingu in SO) we want to know immediately about
@@ -1669,7 +1669,7 @@ void SAL_CALL
     LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     if (!LinguIsUnspecified( nLanguage))
     {
-        if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
+        if (rServiceName.equalsAscii( SN_SPELLCHECKER ))
         {
             if (!xSpellDsp.is())
                 GetSpellCheckerDsp_Impl();
@@ -1686,7 +1686,7 @@ void SAL_CALL
                             linguistic2::LinguServiceEventFlags::SPELL_WRONG_WORDS_AGAIN );
             }
         }
-        else if (0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ))
+        else if (rServiceName.equalsAscii( SN_GRAMMARCHECKER ))
         {
             if (!xGrammarDsp.is())
                 GetGrammarCheckerDsp_Impl();
@@ -1702,7 +1702,7 @@ void SAL_CALL
                             linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN );
             }
         }
-        else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
+        else if (rServiceName.equalsAscii( SN_HYPHENATOR ))
         {
             if (!xHyphDsp.is())
                 GetHyphenatorDsp_Impl();
@@ -1718,7 +1718,7 @@ void SAL_CALL
                             linguistic2::LinguServiceEventFlags::HYPHENATE_AGAIN );
             }
         }
-        else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
+        else if (rServiceName.equalsAscii( SN_THESAURUS ))
         {
             if (!xThesDsp.is())
                 GetThesaurusDsp_Impl();
@@ -1910,7 +1910,7 @@ uno::Sequence< OUString > SAL_CALL
     uno::Sequence< uno::Any > aValues;
     uno::Sequence< OUString > aNames( 1 );
     OUString *pNames = aNames.getArray();
-    if ( 0 == rServiceName.compareToAscii( SN_SPELLCHECKER ) )
+    if ( rServiceName.equalsAscii( SN_SPELLCHECKER ) )
     {
         OUString aNode( "ServiceManager/SpellCheckerList");
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
@@ -1925,7 +1925,7 @@ uno::Sequence< OUString > SAL_CALL
                 aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
         }
     }
-    else if ( 0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ) )
+    else if ( rServiceName.equalsAscii( SN_GRAMMARCHECKER ) )
     {
         OUString aNode( "ServiceManager/GrammarCheckerList");
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
@@ -1940,7 +1940,7 @@ uno::Sequence< OUString > SAL_CALL
                 aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
         }
     }
-    else if ( 0 == rServiceName.compareToAscii( SN_HYPHENATOR ) )
+    else if ( rServiceName.equalsAscii( SN_HYPHENATOR ) )
     {
         OUString aNode( "ServiceManager/HyphenatorList");
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
@@ -1955,7 +1955,7 @@ uno::Sequence< OUString > SAL_CALL
                 aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
         }
     }
-    else if ( 0 == rServiceName.compareToAscii( SN_THESAURUS ) )
+    else if ( rServiceName.equalsAscii( SN_THESAURUS ) )
     {
         OUString aNode( "ServiceManager/ThesaurusList");
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
@@ -2093,7 +2093,7 @@ void * SAL_CALL LngSvcMgr_getFactory(
 {
 
     void * pRet = 0;
-    if ( !LngSvcMgr::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( LngSvcMgr::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(

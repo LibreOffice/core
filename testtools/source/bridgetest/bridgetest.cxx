@@ -969,7 +969,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
                 if (rExc.ArgumentPosition == 5 &&
 #if OSL_DEBUG_LEVEL == 0
                     // java stack traces trash Message
-                    rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0 &&
+                    rExc.Message.equalsAscii( STRING_TEST_CONSTANT ) &&
 #endif
                     rExc.Context == xLBT->getInterface())
                 {
@@ -996,7 +996,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
                     // java stack traces trash Message
-                && rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0
+                && rExc.Message.equalsAscii( STRING_TEST_CONSTANT )
 #endif
                 )
             {
@@ -1016,7 +1016,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
         if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
             // java stack traces trash Message
-            && rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0
+            && rExc.Message.equalsAscii( STRING_TEST_CONSTANT )
 #endif
             )
         {
@@ -1157,7 +1157,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         Reference< XInterface > xOriginal;
         bool remote;
         sal_Int32 i;
-        if( rArgs.getLength() > 1 && 0 == rArgs[0].compareToAscii( "-u" ) )
+        if( rArgs.getLength() > 1 && rArgs[0].equalsAscii( "-u" ) )
         {
             remote = true;
             i = 2;

@@ -196,21 +196,21 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         m_sPassword = OUString( "");
         m_bUseSSL   = sal_False;
 
-    if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_MOZILLA ) ) == 0 ) {
+    if ( aAddrbookScheme.equalsAscii( getSdbcScheme( SDBC_MOZILLA ) ) ) {
         m_sMozillaURI = OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::Mozilla;
         if(!sAdditionalInfo.isEmpty())
             m_sMozillaProfile = sAdditionalInfo;
     }
     else
-    if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_THUNDERBIRD ) ) == 0 ) {
+    if ( aAddrbookScheme.equalsAscii( getSdbcScheme( SDBC_THUNDERBIRD ) ) ) {
         //Yes. I am sure it is SCHEME_MOZILLA
         m_sMozillaURI = OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::ThunderBird;
         if(!sAdditionalInfo.isEmpty())
             m_sMozillaProfile = sAdditionalInfo;
     }
-    else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_LDAP ) ) == 0 ) {
+    else if ( aAddrbookScheme.equalsAscii( getSdbcScheme( SDBC_LDAP ) ) ) {
         OUString sBaseDN;
         sal_Int32     nPortNumber = -1;
 
@@ -243,31 +243,31 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         {
             OSL_TRACE( "info[%d].Name = %s", pInfo - info.getConstArray(), OUtoCStr( pInfo->Name ) );
 
-            if ( 0 == pInfo->Name.compareToAscii("HostName") )
+            if ( pInfo->Name.equalsAscii("HostName") )
             {
                 pInfo->Value >>= m_sHostName;
             }
-            else if ( 0 == pInfo->Name.compareToAscii("BaseDN") )
+            else if ( pInfo->Name.equalsAscii("BaseDN") )
             {
                 pInfo->Value >>= sBaseDN;
             }
-            else if ( 0 == pInfo->Name.compareToAscii("user") )
+            else if ( pInfo->Name.equalsAscii("user") )
             {
                 pInfo->Value >>= m_sBindDN;
             }
-            else if ( 0 == pInfo->Name.compareToAscii("password") )
+            else if ( pInfo->Name.equalsAscii("password") )
             {
                 pInfo->Value >>= m_sPassword;
             }
-            else if ( 0 == pInfo->Name.compareToAscii("UseSSL") )
+            else if ( pInfo->Name.equalsAscii("UseSSL") )
             {
                 pInfo->Value >>= m_bUseSSL;
             }
-            else if ( 0 == pInfo->Name.compareToAscii("PortNumber") )
+            else if ( pInfo->Name.equalsAscii("PortNumber") )
             {
                 OSL_VERIFY( pInfo->Value >>= nPortNumber );
             }
-            else if ( 0 == pInfo->Name.compareToAscii("MaxRowCount") )
+            else if ( pInfo->Name.equalsAscii("MaxRowCount") )
             {
                 pInfo->Value >>= m_nMaxResultRecords;
             }
@@ -295,11 +295,11 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         m_sMozillaURI += OUString( "?(or(DisplayName,=,DontDoThisAtHome)))");
 
     }
-    else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_OUTLOOK_MAPI ) ) == 0 ) {
+    else if ( aAddrbookScheme.equalsAscii( getSdbcScheme( SDBC_OUTLOOK_MAPI ) ) ) {
         m_sMozillaURI       = OUString::createFromAscii( getSchemeURI( SCHEME_OUTLOOK_MAPI ) );
         m_eSDBCAddressType = SDBCAddress::Outlook;
     }
-    else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_OUTLOOK_EXPRESS ) ) == 0 ) {
+    else if ( aAddrbookScheme.equalsAscii( getSdbcScheme( SDBC_OUTLOOK_EXPRESS ) ) ) {
         m_sMozillaURI       = OUString::createFromAscii( getSchemeURI( SCHEME_OUTLOOK_EXPRESS ) );
         m_eSDBCAddressType = SDBCAddress::OutlookExp;
     }

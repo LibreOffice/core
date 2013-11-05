@@ -114,27 +114,27 @@ namespace pcr
         PropertyValue aProperty;
         if (_rValue >>= aProperty)
         {
-            if (0 == aProperty.Name.compareToAscii("Detail"))
+            if (aProperty.Name.equalsAscii("Detail"))
             {
                 OSL_VERIFY( aProperty.Value >>= m_xDetail );
                 return;
             }
-            else if (0 == aProperty.Name.compareToAscii("Master"))
+            else if (aProperty.Name.equalsAscii("Master"))
             {
                 OSL_VERIFY( aProperty.Value >>= m_xMaster );
                 return;
             }
-            else if (0 == aProperty.Name.compareToAscii("Explanation"))
+            else if (aProperty.Name.equalsAscii("Explanation"))
             {
                 OSL_VERIFY( aProperty.Value >>= m_sExplanation );
                 return;
             }
-            else if (0 == aProperty.Name.compareToAscii("DetailLabel"))
+            else if (aProperty.Name.equalsAscii("DetailLabel"))
             {
                 OSL_VERIFY( aProperty.Value >>= m_sDetailLabel );
                 return;
             }
-            else if (0 == aProperty.Name.compareToAscii("MasterLabel"))
+            else if (aProperty.Name.equalsAscii("MasterLabel"))
             {
                 OSL_VERIFY( aProperty.Value >>= m_sMasterLabel );
                 return;

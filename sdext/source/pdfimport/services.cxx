@@ -122,7 +122,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL pdfimport_component_getFactory(
     const ComponentDescription* pComponents = lcl_getComponents();
     while ( pComponents->pAsciiServiceName != NULL )
     {
-        if ( 0 == sImplementationName.compareToAscii( pComponents->pAsciiImplementationName ) )
+        if ( sImplementationName.equalsAscii( pComponents->pAsciiImplementationName ) )
         {
             Sequence< OUString > sServices(1);
             sServices[0] = OUString::createFromAscii( pComponents->pAsciiServiceName );

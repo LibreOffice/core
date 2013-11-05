@@ -103,7 +103,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // properties not added because they're already present in another form
     OSL_ENSURE(
-        0 == OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION)).compareToAscii(
+        OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION)).equalsAscii(
             OAttributeMetaData::getFormAttributeName(faAction)),
         "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (1)!");
         // if this fails, we would have to add a translation from faAction->PROPERTY_TARGETURL
@@ -111,7 +111,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         // and CCA_TARGET_LOCATION and faAction should be represented by the same attribute
 
     OSL_ENSURE(
-        0 == OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_NAME)).compareToAscii(
+        OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_NAME)).equalsAscii(
             OAttributeMetaData::getFormAttributeName(faName)),
         "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (2)!");
         // the same for faName, CCA_NAME and PROPERTY_NAME
@@ -484,7 +484,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
     const Reference< xml::sax::XAttributeList >&)
 {
     SvXMLImportContext* pContext = NULL;
-    if ( 0 == _rLocalName.compareToAscii( "form" ) )
+    if ( _rLocalName.equalsAscii( "form" ) )
     {
         if ( m_xCurrentPageFormsSupp.is() )
             pContext = new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xCurrentPageFormsSupp->getForms() );

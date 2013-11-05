@@ -169,7 +169,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUS
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
-    if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:memorygraphic" ) ) )
+    if( rResourceURL.getToken( 0, '/', nIndex ).equalsAscii( "private:memorygraphic" ) )
     {
         sal_Int64 nGraphicAddress = rResourceURL.getToken( 0, '/', nIndex ).toInt64();
 
@@ -192,7 +192,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
-    if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:graphicrepository" ) ) )
+    if( rResourceURL.getToken( 0, '/', nIndex ).equalsAscii( "private:graphicrepository" ) )
     {
         OUString sPathName( rResourceURL.copy( nIndex ) );
         BitmapEx aBitmap;
@@ -213,7 +213,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
-    if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:standardimage" ) ) )
+    if( rResourceURL.getToken( 0, '/', nIndex ).equalsAscii( "private:standardimage" ) )
     {
         OUString sImageName( rResourceURL.copy( nIndex ) );
         if ( sImageName == "info" )
@@ -277,7 +277,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
-    if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:resource" ) ) )
+    if( rResourceURL.getToken( 0, '/', nIndex ).equalsAscii( "private:resource" ) )
     {
         OString aResMgrName(OUStringToOString(
             rResourceURL.getToken(0, '/', nIndex), RTL_TEXTENCODING_ASCII_US));
@@ -293,8 +293,8 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
             {
                 BitmapEx aBmpEx;
 
-                if( ( 0 == aResourceType.compareToAscii( "bitmap" ) ) ||
-                    ( 0 == aResourceType.compareToAscii( "bitmapex" ) ) )
+                if( aResourceType.equalsAscii( "bitmap" ) ||
+                    aResourceType.equalsAscii( "bitmapex" ) )
                 {
                     aResId.SetRT( RSC_BITMAP );
 
@@ -303,7 +303,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
                         aBmpEx = BitmapEx( aResId );
                     }
                 }
-                else if( 0 == aResourceType.compareToAscii( "image" ) )
+                else if( aResourceType.equalsAscii( "image" ) )
                 {
                     aResId.SetRT( RSC_IMAGE );
 
@@ -313,7 +313,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
                         aBmpEx = aImage.GetBitmapEx();
                     }
                 }
-                else if( 0 == aResourceType.compareToAscii( "imagelist" ) )
+                else if( aResourceType.equalsAscii( "imagelist" ) )
                 {
                     aResId.SetRT( RSC_IMAGELIST );
 

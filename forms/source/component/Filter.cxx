@@ -792,19 +792,19 @@ namespace frm
                 continue;
             }
 
-            if ( 0 == pName->compareToAscii( "MessageParent" ) )
+            if ( pName->equalsAscii( "MessageParent" ) )
             {
                 // the message parent
                 *pValue >>= m_xMessageParent;
                 OSL_ENSURE( m_xMessageParent.is(), "OFilterControl::initialize: invalid MessageParent!" );
             }
-            else if ( 0 == pName->compareToAscii( "NumberFormatter" ) )
+            else if ( pName->equalsAscii( "NumberFormatter" ) )
             {
                 // the number format. This argument is optional.
                 *pValue >>= m_xFormatter;
                 OSL_ENSURE( m_xFormatter.is(), "OFilterControl::initialize: invalid NumberFormatter!" );
             }
-            else if ( 0 == pName->compareToAscii( "ControlModel" ) )
+            else if ( pName->equalsAscii( "ControlModel" ) )
             {
                 // the control model for which we act as filter control
                 if ( !(*pValue >>= xControlModel ) )

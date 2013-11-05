@@ -36,7 +36,7 @@ Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (Runtim
 {
     Any retVal;
 
-    if ( 0 == Name.compareToAscii( DESKTOP_ENVIRONMENT_NAME ) )
+    if ( Name.equalsAscii( DESKTOP_ENVIRONMENT_NAME ) )
     {
         retVal = makeAny( Application::GetDesktopEnvironment() );
     }

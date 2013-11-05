@@ -282,11 +282,11 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
     for ( ; pIter != pEnd; ++pIter )
     {
-        if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Frame" ) ) )
+        if ( ( *pIter >>= aValue ) && aValue.Name.equalsAscii( "Frame" ) )
         {
             xFrame.set(aValue.Value,UNO_QUERY_THROW);
         }
-        else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Preview" ) ) )
+        else if ( ( *pIter >>= aValue ) && aValue.Name.equalsAscii( "Preview" ) )
         {
             aValue.Value >>= m_bPreview;
             m_bReadOnly = sal_True;
