@@ -8784,6 +8784,10 @@ nss - Mozilla's Network Security Services (NSS)
     ])
         ;;
     esac
+elif test $_os = iOS -o $_os = Android; then
+    # We don't build NSS for iOS and Android
+    AC_DEFINE(USE_TLS_OPENSSL)
+    TLS=OPENSSL
 else
     # default to using NSS, it results in smaller oox lib
     AC_DEFINE(USE_TLS_NSS)
