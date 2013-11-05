@@ -490,9 +490,7 @@ void ScFilterDlg::FillFieldLists()
             {
                 OUStringBuffer aBuf;
                 aBuf.append(aStrColumn);
-                aBuf.append(sal_Unicode(' '));
-                aBuf.append(ScColToAlpha(col));
-                aFieldName = aBuf.makeStringAndClear();
+                aFieldName = aBuf.makeStringAndClear().replaceAll("%1", ScColToAlpha( col ));
             }
             aLbField1.InsertEntry( aFieldName, i );
             aLbField2.InsertEntry( aFieldName, i );
