@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_DBTYPEWIZDLG_HXX
-#define DBAUI_DBTYPEWIZDLG_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLG_HXX
+#define INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLG_HXX
 
-#ifndef _DBAUI_UNOADMIN_
 #include "unoadmin.hxx"
-#endif
 
 namespace dbaui
 {
@@ -62,6 +60,6 @@ protected:
 
 }   // namespace dbaui
 
-#endif // DBAUI_DBTYPEWIZDLG_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

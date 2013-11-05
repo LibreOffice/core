@@ -20,9 +20,7 @@
 #include "dbustrings.hrc"
 #include <toolkit/awt/vclxwindow.hxx>
 #include "dbu_reghelper.hxx"
-#ifndef _DBAUI_UNOADMIN_
 #include "unoadmin.hxx"
-#endif
 #include "dbadmin.hxx"
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>

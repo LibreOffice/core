@@ -86,6 +86,6 @@ namespace dbaui
     };
 }   // namespace dbaui
 
-#endif // _DBAUI_DETAILPAGES_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_CONNECTIONPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

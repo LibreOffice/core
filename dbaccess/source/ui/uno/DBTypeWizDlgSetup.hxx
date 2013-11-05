@@ -20,9 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLGSETUP_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLGSETUP_HXX
 
-#ifndef _DBAUI_UNOADMIN_
 #include "unoadmin.hxx"
-#endif
 
 namespace dbaui
 {
@@ -66,6 +64,6 @@ protected:
 
 }   // namespace dbaui
 
-#endif // DBAUI_DBTYPEWIZDLG_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLGSETUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

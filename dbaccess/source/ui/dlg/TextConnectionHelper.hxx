@@ -102,6 +102,6 @@ namespace dbaui
 
 }   // namespace dbaui
 
-#endif // DBAUI_DBWIZ2_HXX
+#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_TEXTCONNECTIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACORE_RESULTCOLUMN_HXX_
-#define _DBACORE_RESULTCOLUMN_HXX_
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTCOLUMN_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTCOLUMN_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <column.hxx>
@@ -85,6 +85,6 @@ namespace dbaccess
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 }
-#endif // _DBACORE_RESULTCOLUMN_HXX_
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTCOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

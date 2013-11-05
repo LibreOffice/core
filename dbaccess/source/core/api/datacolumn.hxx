@@ -105,6 +105,7 @@ namespace dbaccess
         virtual void SAL_CALL updateNumericObject( const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
 }
-#endif // _DBACORE_RESULTCOLUMN_HXX_
+
+#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_DATACOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
