@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __FRAMEWORK_UIELEMENT_POPUPMENU_TOOLBARCONTROLLER_HXX__
-#define __FRAMEWORK_UIELEMENT_POPUPMENU_TOOLBARCONTROLLER_HXX__
+#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_POPUPTOOLBARCONTROLLER_HXX
+#define INCLUDED_FRAMEWORK_INC_UIELEMENT_POPUPTOOLBARCONTROLLER_HXX
 
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>

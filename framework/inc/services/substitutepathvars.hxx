@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
-#define __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_SUBSTITUTEPATHVARS_HXX
+#define INCLUDED_FRAMEWORK_INC_SERVICES_SUBSTITUTEPATHVARS_HXX
 
 /** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...
@@ -287,6 +287,6 @@ class SubstitutePathVariables : private ThreadHelpBase, // Struct for right init
 
 }
 
-#endif // __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_SERVICES_SUBSTITUTEPATHVARS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

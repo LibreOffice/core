@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
-#define __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
+#define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 
 #include <threadhelp/inoncopyable.h>
 #include <threadhelp/itransactionmanager.h>
@@ -153,6 +153,6 @@ class TransactionGuard : private INonCopyable
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

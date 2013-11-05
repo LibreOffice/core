@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HXX_
-#define __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_ITEMCONTAINER_HXX
+#define INCLUDED_FRAMEWORK_INC_UIELEMENT_ITEMCONTAINER_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -95,6 +95,6 @@ class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper1< ::com::sun
 
 }
 
-#endif // #ifndef __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_ITEMCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

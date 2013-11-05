@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIFACTORY_STATUSBARFACTORY_HXX_
-#define __FRAMEWORK_UIFACTORY_STATUSBARFACTORY_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_STATUSBARFACTORY_HXX
+#define INCLUDED_FRAMEWORK_INC_UIFACTORY_STATUSBARFACTORY_HXX
 
 #include <stdtypes.h>
 
@@ -46,6 +46,6 @@ class StatusBarFactory :  public MenuBarFactory
 
 }
 
-#endif // __FRAMEWORK_UIFACTORY_STATUSBARFACTORY_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_UIFACTORY_STATUSBARFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

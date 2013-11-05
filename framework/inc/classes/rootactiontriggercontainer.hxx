@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_ROOTACTIONTRIGGERCONTAINER_HXX_
-#define __FRAMEWORK_CLASSES_ROOTACTIONTRIGGERCONTAINER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_ROOTACTIONTRIGGERCONTAINER_HXX
+#define INCLUDED_FRAMEWORK_INC_CLASSES_ROOTACTIONTRIGGERCONTAINER_HXX
 
 #include <helper/propertysetcontainer.hxx>
 #include <vcl/menu.hxx>
@@ -113,6 +113,6 @@ class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
 
 }
 
-#endif // __FRAMEWORK_CLASSES_ROOTACTIONTRIGGERCONTAINER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_CLASSES_ROOTACTIONTRIGGERCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

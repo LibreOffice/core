@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_TABWIN_TABWINDOW_HXX_
-#define __FRAMEWORK_TABWIN_TABWINDOW_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_TABWIN_TABWINDOW_HXX
+#define INCLUDED_FRAMEWORK_INC_TABWIN_TABWINDOW_HXX
 
 #include <stdtypes.h>
 #include <threadhelp/threadhelpbase.hxx>
@@ -175,6 +175,6 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
 }
 
-#endif // __FRAMEWORK_TABWIN_TABWINDOW_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_TABWIN_TABWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FWKDLLAPI_H
-#define INCLUDED_FWKDLLAPI_H
+#ifndef INCLUDED_FRAMEWORK_INC_FWKDLLAPI_H
+#define INCLUDED_FRAMEWORK_INC_FWKDLLAPI_H
 
 #include "sal/types.h"
 
 #include <fwidllapi.h>
 
-#endif /* INCLUDED_FWKDLLAPI_H */
+#endif // INCLUDED_FRAMEWORK_INC_FWKDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

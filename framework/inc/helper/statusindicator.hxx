@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_HELPER_STATUSINDICATOR_HXX_
-#define __FRAMEWORK_HELPER_STATUSINDICATOR_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
+#define INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 
 //_______________________________________________
 // include files of own module
@@ -119,6 +119,6 @@ class StatusIndicator : private ThreadHelpBase                  // Order of base
 
 } // namespace framework
 
-#endif // __FRAMEWORK_HELPER_STATUSINDICATOR_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_DISPATCH_STARTMODULEDISPATCHER_HXX_
-#define __FRAMEWORK_DISPATCH_STARTMODULEDISPATCHER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_STARTMODULEDISPATCHER_HXX
+#define INCLUDED_FRAMEWORK_INC_DISPATCH_STARTMODULEDISPATCHER_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
@@ -174,6 +174,6 @@ class StartModuleDispatcher : // baseclasses ... order is necessary for right in
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_DISPATCH_STARTMODULEDISPATCHER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_DISPATCH_STARTMODULEDISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
-#define __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
+#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
+#define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
 
 #include <accelerators/storageholder.hxx>
 #include <threadhelp/threadhelpbase.hxx>
@@ -506,6 +506,6 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
 } // namespace framework
 
-#endif // __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
+#endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

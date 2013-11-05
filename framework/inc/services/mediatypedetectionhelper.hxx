@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
-#define __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_MEDIATYPEDETECTIONHELPER_HXX
+#define INCLUDED_FRAMEWORK_INC_SERVICES_MEDIATYPEDETECTIONHELPER_HXX
 
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
@@ -125,6 +125,6 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
 
 }       // namespace framework
 
-#endif  // #ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_SERVICES_MEDIATYPEDETECTIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

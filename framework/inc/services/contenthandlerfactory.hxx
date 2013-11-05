@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
-#define __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_CONTENTHANDLERFACTORY_HXX
+#define INCLUDED_FRAMEWORK_INC_SERVICES_CONTENTHANDLERFACTORY_HXX
 
 #include <classes/filtercache.hxx>
 #include <macros/generic.hxx>
@@ -166,6 +166,6 @@ class ContentHandlerFactory :   // interfaces
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_SERVICES_CONTENTHANDLERFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

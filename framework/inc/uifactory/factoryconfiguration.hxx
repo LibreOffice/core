@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIFACTORY_FACTORYCONFIGURATION_HXX_
-#define __FRAMEWORK_UIFACTORY_FACTORYCONFIGURATION_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
+#define INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
@@ -105,6 +105,6 @@ private:
 };
 
 } // namespace framework
-#endif // __FRAMEWORK_UIFACTORY_FACTORYCONFIGURATION_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX_
-#define __FRAMEWORK_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX
+#define INCLUDED_FRAMEWORK_INC_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -79,6 +79,6 @@ class DropdownToolbarController : public IListBoxListener,
 
 }
 
-#endif // __FRAMEWORK_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

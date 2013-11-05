@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_LAYOUTMANAGER_HELPERS_HXX_
-#define __FRAMEWORK_LAYOUTMANAGER_HELPERS_HXX_
+#ifndef INCLUDED_FRAMEWORK_SOURCE_LAYOUTMANAGER_HELPERS_HXX
+#define INCLUDED_FRAMEWORK_SOURCE_LAYOUTMANAGER_HELPERS_HXX
 
 #include <macros/generic.hxx>
 #include <stdtypes.h>
@@ -74,6 +74,6 @@ void impl_addWindowListeners( const ::com::sun::star::uno::Reference< ::com::sun
 
 }
 
-#endif // __FRAMEWORK_LAYOUTMANAGER_HELPERS_HXX_
+#endif // INCLUDED_FRAMEWORK_SOURCE_LAYOUTMANAGER_HELPERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

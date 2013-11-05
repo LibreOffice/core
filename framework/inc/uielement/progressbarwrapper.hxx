@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
-#define _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_PROGRESSBARWRAPPER_HXX
+#define INCLUDED_FRAMEWORK_INC_UIELEMENT_PROGRESSBARWRAPPER_HXX
 
 #include <helper/uielementwrapperbase.hxx>
 #include <threadhelp/threadhelpbase.hxx>
@@ -82,6 +82,6 @@ class ProgressBarWrapper : public UIElementWrapperBase
 
 }       //  namespace framework
 
-#endif // _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_PROGRESSBARWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

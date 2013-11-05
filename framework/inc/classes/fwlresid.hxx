@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_FwlResId_HXX_
-#define __FRAMEWORK_CLASSES_FwlResId_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_FWLRESID_HXX
+#define INCLUDED_FRAMEWORK_INC_CLASSES_FWLRESID_HXX
 
 #include <tools/resid.hxx>
 

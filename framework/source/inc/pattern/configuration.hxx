@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_PATTERN_CONFIGURATION_HXX_
-#define __FRAMEWORK_PATTERN_CONFIGURATION_HXX_
+#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_CONFIGURATION_HXX
+#define INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_CONFIGURATION_HXX
 
 #include <services.h>
 #include <general.h>
@@ -144,6 +144,6 @@ class ConfigurationHelper
     } // namespace pattern
 } // namespace framework
 
-#endif // __FRAMEWORK_PATTERN_CONFIGURATION_HXX_
+#endif // INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_CONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

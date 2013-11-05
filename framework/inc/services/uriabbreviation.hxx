@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_URIABBREVIATION_HXX_
-#define __FRAMEWORK_SERVICES_URIABBREVIATION_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_URIABBREVIATION_HXX
+#define INCLUDED_FRAMEWORK_INC_SERVICES_URIABBREVIATION_HXX
 
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -55,6 +55,6 @@ private:
 
 } //    namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_URIABBREVIATION_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_SERVICES_URIABBREVIATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

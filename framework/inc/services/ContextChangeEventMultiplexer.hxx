@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __FRAMEWORK_SERVICES_CONTEXT_CHANGE_EVENT_MULTIPLEXER_HXX_
-#define __FRAMEWORK_SERVICES_CONTEXT_CHANGE_EVENT_MULTIPLEXER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_CONTEXTCHANGEEVENTMULTIPLEXER_HXX
+#define INCLUDED_FRAMEWORK_INC_SERVICES_CONTEXTCHANGEEVENTMULTIPLEXER_HXX
 
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 

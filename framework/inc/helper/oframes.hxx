@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
-#define __FRAMEWORK_HELPER_OFRAMES_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_HELPER_OFRAMES_HXX
+#define INCLUDED_FRAMEWORK_INC_HELPER_OFRAMES_HXX
 
 #include <classes/framecontainer.hxx>
 #include <threadhelp/threadhelpbase.hxx>

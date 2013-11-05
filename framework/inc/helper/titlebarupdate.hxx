@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
-#define __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_HELPER_TITLEBARUPDATE_HXX
+#define INCLUDED_FRAMEWORK_INC_HELPER_TITLEBARUPDATE_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
@@ -170,6 +170,6 @@ class TitleBarUpdate : // baseclasses (order necessary for right initialization!
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_HELPER_TITLEBARUPDATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

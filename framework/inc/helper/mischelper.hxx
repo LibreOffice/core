@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MISC_HELPER_HXX_
-#define __MISC_HELPER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_HELPER_MISCHELPER_HXX
+#define INCLUDED_FRAMEWORK_INC_HELPER_MISCHELPER_HXX
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -289,6 +289,6 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star:
 
 } // namespace framework
 
-#endif // __MISC_HELPER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_HELPER_MISCHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

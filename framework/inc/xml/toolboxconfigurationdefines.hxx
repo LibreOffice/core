@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATIONDEFINES_HXX_
-#define __FRAMEWORK_XML_TOOLBOXCONFIGURATIONDEFINES_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_XML_TOOLBOXCONFIGURATIONDEFINES_HXX
+#define INCLUDED_FRAMEWORK_INC_XML_TOOLBOXCONFIGURATIONDEFINES_HXX
 
 #define XMLNS_TOOLBAR               "http://openoffice.org/2001/toolbar"
 #define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
@@ -69,6 +69,6 @@
 #define ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY    "dropdownonly"
 #define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
 
-#endif // __FRAMEWORK_XML_TOOLBOXCONFIGURATIONDEFINES_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_XML_TOOLBOXCONFIGURATIONDEFINES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

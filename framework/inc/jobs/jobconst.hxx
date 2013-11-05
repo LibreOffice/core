@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_JOBS_JOBCONST_HXX_
-#define __FRAMEWORK_JOBS_JOBCONST_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOBCONST_HXX
+#define INCLUDED_FRAMEWORK_INC_JOBS_JOBCONST_HXX
 
 #include <stdtypes.h>
 #include <general.h>
@@ -50,6 +50,6 @@ class FWI_DLLPUBLIC JobConst
 
 } // namespace framework
 
-#endif // __FRAMEWORK_JOBS_JOBCONST_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_JOBS_JOBCONST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIELEMENT_COMPLEXTOOLBARCONTROLLER_HXX_
-#define __FRAMEWORK_UIELEMENT_COMPLEXTOOLBARCONTROLLER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_COMPLEXTOOLBARCONTROLLER_HXX
+#define INCLUDED_FRAMEWORK_INC_UIELEMENT_COMPLEXTOOLBARCONTROLLER_HXX
 
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -96,6 +96,6 @@ class ComplexToolbarController : public svt::ToolboxController
 
 }
 
-#endif // __FRAMEWORK_UIELEMENT_COMPLEXTOOLBARCONTROLLER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_COMPLEXTOOLBARCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

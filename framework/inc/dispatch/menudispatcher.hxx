@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_DISPATCH_MENUDISPATCHER_HXX_
-#define __FRAMEWORK_DISPATCH_MENUDISPATCHER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_MENUDISPATCHER_HXX
+#define INCLUDED_FRAMEWORK_INC_DISPATCH_MENUDISPATCHER_HXX
 
 #include <classes/taskcreator.hxx>
 #include <services/frame.hxx>
@@ -260,6 +260,6 @@ class MenuDispatcher   :        // baseclasses
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_DISPATCH_MENUDISPATCHER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_DISPATCH_MENUDISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
-#define __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_FRAMECONTAINER_HXX
+#define INCLUDED_FRAMEWORK_INC_CLASSES_FRAMECONTAINER_HXX
 
 /** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...
@@ -106,6 +106,6 @@ class FrameContainer : private ThreadHelpBase
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_CLASSES_FRAMECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

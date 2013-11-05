@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
-#define __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_PROPERTYSETHELPER_HXX
+#define INCLUDED_FRAMEWORK_INC_CLASSES_PROPERTYSETHELPER_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/transactionbase.hxx>
@@ -228,6 +228,6 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_CLASSES_PROPERTYSETHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

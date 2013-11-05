@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_ACTIONTRIGGERCONTAINER_HXX_
-#define __FRAMEWORK_CLASSES_ACTIONTRIGGERCONTAINER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_ACTIONTRIGGERCONTAINER_HXX
+#define INCLUDED_FRAMEWORK_INC_CLASSES_ACTIONTRIGGERCONTAINER_HXX
 
 #include <helper/propertysetcontainer.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -68,6 +68,6 @@ class FWE_DLLPUBLIC ActionTriggerContainer :    public PropertySetContainer,
 
 }
 
-#endif // __FRAMEWORK_CLASSES_ACTIONTRIGGERCONTAINER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_CLASSES_ACTIONTRIGGERCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

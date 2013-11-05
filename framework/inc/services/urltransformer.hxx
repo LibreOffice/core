@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
-#define __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_URLTRANSFORMER_HXX
+#define INCLUDED_FRAMEWORK_INC_SERVICES_URLTRANSFORMER_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -187,6 +187,6 @@ class URLTransformer    :   public ::cppu::WeakImplHelper2< ::com::sun::star::ut
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_SERVICES_URLTRANSFORMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
-#define __FRAMEWORK_SERVICES_FRAME_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_FRAME_HXX
+#define INCLUDED_FRAMEWORK_INC_SERVICES_FRAME_HXX
 
 #include <classes/framecontainer.hxx>
 #include <classes/propertysethelper.hxx>
@@ -445,6 +445,6 @@ class Frame :   // interfaces
 
 }       // namespace framework
 
-#endif  // #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_SERVICES_FRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

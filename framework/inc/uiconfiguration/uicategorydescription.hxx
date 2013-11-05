@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIELEMENT_UICOMMANDCATEGORY_HXX_
-#define __FRAMEWORK_UIELEMENT_UICOMMANDCATEGORY_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_UICATEGORYDESCRIPTION_HXX
+#define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_UICATEGORYDESCRIPTION_HXX
 
 /** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_XML_XMLNAMESPACES_HXX_
-#define __FRAMEWORK_XML_XMLNAMESPACES_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_XML_XMLNAMESPACES_HXX
+#define INCLUDED_FRAMEWORK_INC_XML_XMLNAMESPACES_HXX
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
@@ -56,6 +56,6 @@ class FWE_DLLPUBLIC XMLNamespaces
 
 }
 
-#endif // __FRAMEWORK_XML_XMLNAMESPACES_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_XML_XMLNAMESPACES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

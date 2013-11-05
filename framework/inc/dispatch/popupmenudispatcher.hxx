@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_DISPATCH_POPUPMENUDISPATCHER_HXX_
-#define __FRAMEWORK_DISPATCH_POPUPMENUDISPATCHER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_POPUPMENUDISPATCHER_HXX
+#define INCLUDED_FRAMEWORK_INC_DISPATCH_POPUPMENUDISPATCHER_HXX
 
 #include <services/frame.hxx>
 #include <macros/xinterface.hxx>
@@ -152,6 +152,6 @@ class PopupMenuDispatcher :     // baseclasses
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_DISPATCH_POPUPMENUDISPATCHER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_DISPATCH_POPUPMENUDISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

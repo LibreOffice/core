@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_DISPATCH_SYSTEMEXEC_HXX_
-#define __FRAMEWORK_DISPATCH_SYSTEMEXEC_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_SYSTEMEXEC_HXX
+#define INCLUDED_FRAMEWORK_INC_DISPATCH_SYSTEMEXEC_HXX
 
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
@@ -108,6 +108,6 @@ class SystemExec :     // baseclasses
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_DISPATCH_SYSTEMEXEC_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_DISPATCH_SYSTEMEXEC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

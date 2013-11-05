@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_HELPER_NETWORKDOMAIN_HXX_
-#define __FRAMEWORK_HELPER_NETWORKDOMAIN_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_HELPER_NETWORKDOMAIN_HXX
+#define INCLUDED_FRAMEWORK_INC_HELPER_NETWORKDOMAIN_HXX
 
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>
@@ -35,6 +35,6 @@ class FWI_DLLPUBLIC NetworkDomain
 
 }
 
-#endif // __FRAMEWORK_HELPER_NETWORKDOMAIN_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_HELPER_NETWORKDOMAIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

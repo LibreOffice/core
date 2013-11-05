@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIFACTORY_WINDOWCONTENTFACTORYMANAGER_HXX_
-#define __FRAMEWORK_UIFACTORY_WINDOWCONTENTFACTORYMANAGER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_WINDOWCONTENTFACTORYMANAGER_HXX
+#define INCLUDED_FRAMEWORK_INC_UIFACTORY_WINDOWCONTENTFACTORYMANAGER_HXX
 
 /** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...
@@ -69,6 +69,6 @@ class WindowContentFactoryManager : private ThreadHelpBase                      
 
 } // namespace framework
 
-#endif // __FRAMEWORK_UIFACTORY_WINDOWCONTENTFACTORYMANAGER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_UIFACTORY_WINDOWCONTENTFACTORYMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

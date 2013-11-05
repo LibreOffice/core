@@ -19,8 +19,8 @@
 
 /*TODO outline this implementation :-) */
 
-#ifndef __FRAMEWORK_PROTOCOLS_H_
-#define __FRAMEWORK_PROTOCOLS_H_
+#ifndef INCLUDED_FRAMEWORK_INC_PROTOCOLS_H
+#define INCLUDED_FRAMEWORK_INC_PROTOCOLS_H
 
 #include <rtl/ustring.hxx>
 
@@ -171,6 +171,6 @@ class ProtocolCheck
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_PROTOCOLS_H_
+#endif // INCLUDED_FRAMEWORK_INC_PROTOCOLS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

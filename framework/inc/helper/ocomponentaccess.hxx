@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
-#define __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
+#define INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -237,6 +237,6 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

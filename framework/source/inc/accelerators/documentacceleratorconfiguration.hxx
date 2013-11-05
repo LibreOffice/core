@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX_
-#define __FRAMEWORK_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX_
+#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX
+#define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX
 
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/istoragelistener.hxx>
@@ -106,6 +106,6 @@ class DocumentAcceleratorConfiguration : public DocumentAcceleratorConfiguration
 
 } // namespace framework
 
-#endif // __FRAMEWORK_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX_
+#endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

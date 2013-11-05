@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_INTERACTION_QUIETINTERACTION_HXX_
-#define __FRAMEWORK_INTERACTION_QUIETINTERACTION_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_INTERACTION_QUIETINTERACTION_HXX
+#define INCLUDED_FRAMEWORK_INC_INTERACTION_QUIETINTERACTION_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_TARGETHELPER_HXX_
-#define __FRAMEWORK_TARGETHELPER_HXX_
+#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_TARGETHELPER_HXX
+#define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_TARGETHELPER_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -104,6 +104,6 @@ class TargetHelper
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_TARGETHELPER_HXX_
+#endif // INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_TARGETHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

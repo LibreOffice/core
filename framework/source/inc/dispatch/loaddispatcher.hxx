@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_DISPATCH_LOADDISPATCHER_HXX_
-#define __FRAMEWORK_DISPATCH_LOADDISPATCHER_HXX_
+#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
+#define INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
 
 #include <loadenv/loadenv.hxx>
 
@@ -131,6 +131,6 @@ class LoadDispatcher : private ThreadHelpBase
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_DISPATCH_LOADDISPATCHER_HXX_
+#endif // INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX_
-#define __FRAMEWORK_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX_
+#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX
+#define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX
 
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
@@ -100,6 +100,6 @@ class ModuleAcceleratorConfiguration : ModuleAcceleratorConfiguration_BASE
 
 } // namespace framework
 
-#endif // __FRAMEWORK_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX_
+#endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

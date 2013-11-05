@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_STDTYPES_H_
-#define __FRAMEWORK_STDTYPES_H_
+#ifndef INCLUDED_FRAMEWORK_INC_STDTYPES_H
+#define INCLUDED_FRAMEWORK_INC_STDTYPES_H
 
 #include <vector>
 #include <queue>
@@ -175,6 +175,6 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString                
 
 }       // namespace framework
 
-#endif  // #ifndef __FRAMEWORK_STDTYPES_H_
+#endif // INCLUDED_FRAMEWORK_INC_STDTYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

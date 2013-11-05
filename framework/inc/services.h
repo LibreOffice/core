@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_H_
-#define __FRAMEWORK_SERVICES_H_
+#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_H
+#define INCLUDED_FRAMEWORK_INC_SERVICES_H
 
 #include <macros/generic.hxx>
 
@@ -108,6 +108,6 @@ namespace framework{
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_H_
+#endif // INCLUDED_FRAMEWORK_INC_SERVICES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

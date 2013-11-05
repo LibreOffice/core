@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_SAXNAMESPACEFILTER_HXX_
-#define __FRAMEWORK_SERVICES_SAXNAMESPACEFILTER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_XML_SAXNAMESPACEFILTER_HXX
+#define INCLUDED_FRAMEWORK_INC_XML_SAXNAMESPACEFILTER_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <threadhelp/threadhelpbase.hxx>
@@ -94,6 +94,6 @@ class FWE_DLLPUBLIC SaxNamespaceFilter : public ThreadHelpBase, // Struct for ri
 
 }
 
-#endif // __FRAMEWORK_SERVICES_SAXNAMESPACEFILTER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_XML_SAXNAMESPACEFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

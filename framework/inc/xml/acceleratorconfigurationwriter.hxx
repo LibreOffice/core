@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
-#define _FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
+#define INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
 
 #include <accelerators/acceleratorcache.hxx>
 #include <accelerators/keymapping.hxx>
@@ -98,6 +98,6 @@ class AcceleratorConfigurationWriter : private ThreadHelpBase
 
 } // namespace framework
 
-#endif // _FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

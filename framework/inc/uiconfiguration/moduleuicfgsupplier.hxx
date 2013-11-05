@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX_
-#define __FRAMEWORK_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX
+#define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX
 
 
 /** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
@@ -96,6 +96,6 @@ namespace framework
    };
 }
 
-#endif // __FRAMEWORK_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

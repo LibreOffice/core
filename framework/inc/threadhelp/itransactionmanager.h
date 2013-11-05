@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_
-#define __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_
+#ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_ITRANSACTIONMANAGER_H
+#define INCLUDED_FRAMEWORK_INC_THREADHELP_ITRANSACTIONMANAGER_H
 
 #include <general.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -128,6 +128,6 @@ class ITransactionManager
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_
+#endif // INCLUDED_FRAMEWORK_INC_THREADHELP_ITRANSACTIONMANAGER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

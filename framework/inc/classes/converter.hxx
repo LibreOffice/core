@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_CONVERTER_HXX_
-#define __FRAMEWORK_CLASSES_CONVERTER_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_CONVERTER_HXX
+#define INCLUDED_FRAMEWORK_INC_CLASSES_CONVERTER_HXX
 
 #include <general.h>
 #include <stdtypes.h>
@@ -46,6 +46,6 @@ class FWI_DLLPUBLIC Converter
 
 }       // namespace framework
 
-#endif  // #ifndef __FRAMEWORK_CLASSES_CONVERTER_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_CLASSES_CONVERTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

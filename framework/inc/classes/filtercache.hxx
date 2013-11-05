@@ -24,8 +24,8 @@
       => CheckedIterator will be obsolete!
  */
 
-#ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
-#define __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
+#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHE_HXX
+#define INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHE_HXX
 
 #include <classes/filtercachedata.hxx>
 #include <threadhelp/threadhelpbase.hxx>
@@ -327,6 +327,6 @@ class FilterCache   :   private ThreadHelpBase
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
