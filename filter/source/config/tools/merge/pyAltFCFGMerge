@@ -550,6 +550,7 @@ class Merger:
         aPackage = codecs.open(sPackage, 'w', "utf-8")
         printOut("write temp package \"" + sPackage)
         aPackage.write(sBuffer)
+        aPackage.close()
 
     # Reads the fragment files with the file names lFragments in directory aDir,
     # formats them and returns a string that contains the merged fragments.
@@ -577,6 +578,7 @@ class Merger:
                 raise Exception("fragment \"" + sFragPath + "\" does not exists.")
             printOut("merge fragment \"" + sFragPath + "\" ...")
             data = aFragmentFile.read()
+            aFragmentFile.close()
             data = data.replace("$(share_subdir_name)", sShareSubdirName)
             sBuffer = sBuffer + data
             sBuffer = sBuffer + "\n"
