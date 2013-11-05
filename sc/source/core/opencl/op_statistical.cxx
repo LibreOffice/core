@@ -1015,7 +1015,87 @@ void OpMedian::GenSlidingWindowFunction(
     ss <<"     return tmp;\n";
     ss << "}\n";
 }
-
+void OpKurt:: GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+        FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
+        assert(pCur);
+        const formula::DoubleVectorRefToken* pCurDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"( ";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n";
+        ss << "    int gid0 = get_global_id(0);\n";
+        ss << "    double fSum = 0.0;\n";
+        ss << "    double vSum = 0.0;\n";
+        ss << "    int length="<<nCurWindowSize<<";\n";
+        ss << "    double tmp = 0;\n";
+        ss << "    for (int i = 0; i <" << nCurWindowSize << "; i++)\n";
+        ss << "    {\n";
+        ss << "        double arg0 = ";
+        ss<< vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+#ifdef ISNAN
+        ss<< "        if(isNan(arg0)||((gid0+i)>=";
+        ss<<pCurDVR->GetArrayLength();
+        ss<< "))\n";
+        ss<< "        {\n";
+        ss<< "            length--;\n";
+        ss<< "            continue;\n";
+        ss<< "        }\n";
+#endif
+        ss<< "        fSum += arg0;\n";
+        ss<< "    }\n";
+        ss<< "    double fMean = fSum / length;\n";
+        ss<< "    for (int i = 0; i <" << nCurWindowSize << "; i++)\n";
+        ss<< "    {\n";
+        ss<< "        double arg0 = ";
+        ss<< vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<< ";\n";
+#ifdef ISNAN
+        ss<< "        if(isNan(arg0)||((gid0+i)>=";
+        ss<< pCurDVR->GetArrayLength();
+        ss<< "))\n";
+        ss<< "        {\n";
+        ss<< "            continue;\n";
+        ss<< "        }\n";
+#endif
+        ss<< "        vSum += (arg0 - fMean) * (arg0 - fMean);\n";
+        ss<< "    }\n";
+        ss<< "    double fStdDev = sqrt(vSum / (length - 1.0));\n";
+        ss<< "    double dx = 0.0;\n";
+        ss<< "    double xpower4 = 0.0;\n";
+        ss<< "    for (int i = 0; i <" << nCurWindowSize << "; i++)\n";
+        ss<< "    {\n";
+        ss<< "        double arg0 = ";
+        ss<< vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<< ";\n";
+#ifdef ISNAN
+        ss<< "        if(isNan(arg0)||((gid0+i)>=";
+        ss<< pCurDVR->GetArrayLength();
+        ss<< "))\n";
+        ss<< "        {\n";
+        ss<< "            continue;\n";
+        ss<< "        }\n";
+#endif
+        ss<< "        dx = (arg0 -fMean) / fStdDev;\n";
+        ss<< "        xpower4 = xpower4 + (dx * dx * dx * dx);\n";
+        ss<< "    }\n";
+        ss<< "    double k_d = (length - 2.0) * (length - 3.0);\n";
+        ss<< "    double k_l = length * (length + 1.0) /";
+        ss<< "((length - 1.0) * k_d);\n";
+        ss<< "    double k_t = 3.0 * (length - 1.0) * (length - 1.0) / k_d;\n";
+        ss<< "    tmp = xpower4 * k_l - k_t;\n";
+        ss<< "    return tmp;\n";
+        ss<< "}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
