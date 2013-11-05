@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_CONTROLLER_HXX
-#define SDEXT_PRESENTER_CONTROLLER_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERCONTROLLER_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERCONTROLLER_HXX
 
 #include "PresenterAccessibility.hxx"
 #include "PresenterPaneContainer.hxx"

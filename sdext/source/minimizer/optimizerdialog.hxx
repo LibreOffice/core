@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OPTIMIZERDIALOG_HXX
-#define OPTIMIZERDIALOG_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
+#define INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
 #include "optimizerdialog.hrc"
 #include <vector>
 #include "unodialog.hxx"
@@ -233,6 +233,6 @@ private:
 };
 
 
-#endif // OPTIMIZERDIALOG_HXX
+#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

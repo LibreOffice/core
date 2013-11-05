@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IPDF_PNGHELPER_HXX
-#define _IPDF_PNGHELPER_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PNGHELPER_HXX
+#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PNGHELPER_HXX
 
 #include "sal/types.h"
 #include "pdfioutdev_gpl.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PPPOPTIMIZERDIALOG_HXX
-#define PPPOPTIMIZERDIALOG_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
+#define INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/document/XExporter.hpp>
@@ -98,6 +98,6 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > PPPOptimizerDi
 
 // -----------------------------------------------------------------------------
 
-#endif // PPPOPTIMIZERDIALOG_HXX
+#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

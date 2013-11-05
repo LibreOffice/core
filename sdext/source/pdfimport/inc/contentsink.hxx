@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PDFI_CONTENTSINK_HXX
-#define INCLUDED_PDFI_CONTENTSINK_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX
+#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -171,6 +171,6 @@ namespace pdfi
     typedef boost::shared_ptr<ContentSink> ContentSinkSharedPtr;
 }
 
-#endif /* INCLUDED_PDFI_CONTENTSINK_HXX */
+#endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

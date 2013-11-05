@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_PRESENTER_FRAMEWORK_OBSERVER_HXX
-#define SDEXT_PRESENTER_PRESENTER_FRAMEWORK_OBSERVER_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERFRAMEWORKOBSERVER_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERFRAMEWORKOBSERVER_HXX
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>

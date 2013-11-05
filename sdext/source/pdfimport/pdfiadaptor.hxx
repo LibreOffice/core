@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PDFIADAPTOR_HXX
-#define INCLUDED_PDFIADAPTOR_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
+#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
 
 #include "xmlemitter.hxx"
 #include "treevisitorfactory.hxx"

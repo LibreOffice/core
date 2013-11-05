@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FILEOPEN_DIALOG_HXX_
-#define _FILEOPEN_DIALOG_HXX_
+#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_FILEOPENDIALOG_HXX
+#define INCLUDED_SDEXT_SOURCE_MINIMIZER_FILEOPENDIALOG_HXX
 
 #include <vector>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -59,6 +59,6 @@ public :
         OUString getFilterName() const;
 };
 
-#endif  // _FILEOPEN_DIALOG_HXX_
+#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_FILEOPENDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

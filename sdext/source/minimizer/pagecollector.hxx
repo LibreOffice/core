@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PAGECOLLECTOR_HXX
-#define PAGECOLLECTOR_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX
+#define INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -38,6 +38,6 @@ class PageCollector
     static void CollectMasterPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, std::vector< MasterPageEntity >& );
 };
 
-#endif // PAGECOLLECTOR_HXX
+#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

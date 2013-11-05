@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_TEXT_VIEW_HXX
-#define SDEXT_PRESENTER_TEXT_VIEW_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERTEXTVIEW_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERTEXTVIEW_HXX
 
 #include "PresenterTheme.hxx"
 #include <com/sun/star/accessibility/XAccessibleText.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_BITMAP_CONTAINER_HXX
-#define SDEXT_PRESENTER_BITMAP_CONTAINER_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERBITMAPCONTAINER_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERBITMAPCONTAINER_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>

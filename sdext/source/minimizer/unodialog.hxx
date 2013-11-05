@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UNODIALOG_HXX
-#define UNODIALOG_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_UNODIALOG_HXX
+#define INCLUDED_SDEXT_SOURCE_MINIMIZER_UNODIALOG_HXX
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -127,6 +127,6 @@ public :
     sal_Bool                                                                        mbStatus;
 };
 
-#endif // UNODIALOG_HXX
+#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_UNODIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

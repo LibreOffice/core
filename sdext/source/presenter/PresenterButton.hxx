@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_PRESENTER_BUTTON_HXX
-#define SDEXT_PRESENTER_PRESENTER_BUTTON_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERBUTTON_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERBUTTON_HXX
 
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterTheme.hxx"

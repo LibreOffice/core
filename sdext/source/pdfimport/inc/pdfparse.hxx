@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PDFI_PDFPARSE_HXX
-#define INCLUDED_PDFI_PDFPARSE_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_PDFPARSE_HXX
+#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_PDFPARSE_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

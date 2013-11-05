@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PDFI_FILTERDET_HXX
-#define INCLUDED_PDFI_FILTERDET_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_FILTERDET_HXX
+#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_FILTERDET_HXX
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

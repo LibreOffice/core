@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IMPOPTIMIZER_HXX
-#define IMPOPTIMIZER_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_IMPOPTIMIZER_HXX
+#define INCLUDED_SDEXT_SOURCE_MINIMIZER_IMPOPTIMIZER_HXX
 
 #include "pppoptimizertoken.hxx"
 #include "optimizationstats.hxx"

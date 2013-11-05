@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_PRESENTER_PANE_BORDER_MANAGER_HXX
-#define SDEXT_PRESENTER_PRESENTER_PANE_BORDER_MANAGER_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEBORDERMANAGER_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEBORDERMANAGER_HXX
 
 // The body of this file is only used when PresenterWindowManager defines
 // the preprocessor symbol ENABLE_PANE_RESIZING, which by default is not the

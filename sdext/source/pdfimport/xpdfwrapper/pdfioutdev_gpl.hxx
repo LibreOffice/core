@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PDFI_OUTDEV_HXX
-#define INCLUDED_PDFI_OUTDEV_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
+#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
 
 #include <sal/types.h>
 
@@ -278,6 +278,6 @@ extern FILE* g_binary_out;
 typedef Guchar Output_t;
 typedef std::vector< Output_t > OutputBuffer;
 
-#endif /* INCLUDED_PDFI_OUTDEV_HXX */
+#endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

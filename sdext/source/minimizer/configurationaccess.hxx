@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONFIGURATION_ACCESS_HXX_
-#define _CONFIGURATION_ACCESS_HXX_
+#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX
+#define INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX
 #include <vector>
 #include "pppoptimizertoken.hxx"
 #include <com/sun/star/awt/Size.hpp>
@@ -127,6 +127,6 @@ class ConfigurationAccess
             const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xRoot, const OUString& sPathToNode );
 };
 
-#endif  // _CONFIGURATION_ACCESS_HXX_
+#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

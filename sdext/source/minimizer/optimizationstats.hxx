@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OPTIMIZATIONSTATS_HXX
-#define OPTIMIZATIONSTATS_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZATIONSTATS_HXX
+#define INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZATIONSTATS_HXX
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -52,6 +52,6 @@ class OptimizationStats
 };
 
 
-#endif // OPTIMIZATIONSTATS_HXX
+#endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZATIONSTATS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

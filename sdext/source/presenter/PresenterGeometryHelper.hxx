@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_PRESENTER_GEOMETRY_HELPER_HXX
-#define SDEXT_PRESENTER_PRESENTER_GEOMETRY_HELPER_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERGEOMETRYHELPER_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERGEOMETRYHELPER_HXX
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

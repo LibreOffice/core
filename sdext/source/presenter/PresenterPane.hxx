@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PRESENTER_PRESENTER_PANE_HXX
-#define SD_PRESENTER_PRESENTER_PANE_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANE_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANE_HXX
 
 #include "PresenterPaneBase.hxx"
 #include <com/sun/star/awt/XMouseListener.hpp>

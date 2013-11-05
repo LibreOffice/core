@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_PRESENTER_SCROLL_BAR_HXX
-#define SDEXT_PRESENTER_PRESENTER_SCROLL_BAR_HXX
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSCROLLBAR_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSCROLLBAR_HXX
 
 #include "PresenterBitmapContainer.hxx"
 #include <com/sun/star/awt/Point.hpp>
