@@ -24,7 +24,10 @@
 #include "tokenuno.hxx"
 #include "tokenarray.hxx"
 #include "sharedformulagroups.hxx"
+#include "externalrefmgr.hxx"
 #include "oox/token/tokens.hxx"
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -98,12 +101,19 @@ void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& 
 
 void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
 {
-    ScDocument& rDoc = getScDocument();
+    ScDocumentImport& rDoc = getDocImport();
     for ( std::vector< TokenAddressItem >::const_iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
     {
-        const ::com::sun::star::table::CellAddress& rAddress = it->maCellAddress;
-        ApiTokenSequence aTokens = getFormulaParser().importFormula( rAddress, it->maTokenStr );
-        applyCellFormula( rDoc, aTokens, rAddress );
+        ScAddress aPos;
+        ScUnoConversion::FillScAddress(aPos, it->maCellAddress);
+        ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
+        ScCompiler aCompiler(&rDoc.getDoc(), aPos);
+        aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+        boost::scoped_ptr<ScTokenArray> pCode(aCompiler.CompileString(it->maTokenStr));
+        if (!pCode)
+            continue;
+
+        rDoc.setFormulaCell(aPos, *pCode);
     }
 }
 
