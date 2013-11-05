@@ -81,7 +81,7 @@ sub resolve_filelist_flag
                         # get_Destination_Directory_For_Item_From_Directorylist
                         $newfile{'DoNotMessWithSymlinks'} = 1;
                         $newfile{'Target'} = readlink($path);
-                        push @links, \%newfile;
+                        push ( @{$links}, \%newfile );
                     }
                     else
                     {
@@ -106,7 +106,7 @@ sub resolve_filelist_flag
         }
     }
 
-    return (\@newfiles, \@links);
+    return (\@newfiles, $links);
 }
 
 sub read_filelist
