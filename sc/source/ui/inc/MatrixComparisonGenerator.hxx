@@ -36,9 +36,6 @@ protected:
 
     virtual const OUString& getLabel() = 0;
     virtual const OUString& getTemplate() = 0;
-
-    void writeCorrelationFormulasByColumn(ScAddress aOutputAddress, ScRangeList aRangeList);
-    void writeCorrelationFormulasByRow(ScAddress aOutputAddress, ScRangeList aRangeList);
 };
 
 #endif

@@ -23,6 +23,9 @@
 
 class ScAnalysisOfVarianceDialog : public ScStatisticsInputOutputDialog
 {
+private:
+    NumericField* mpAlpha;
+
 public:
     ScAnalysisOfVarianceDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
@@ -31,8 +34,6 @@ public:
     virtual ~ScAnalysisOfVarianceDialog();
 
     virtual sal_Bool Close();
-
-    NumericField* mpAlpha;
 
 protected:
     virtual void CalculateInputAndWriteToOutput();

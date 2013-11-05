@@ -23,6 +23,9 @@
 
 class ScExponentialSmoothingDialog : public ScStatisticsInputOutputDialog
 {
+private:
+    NumericField* mpSmoothingFactor;
+
 public:
     ScExponentialSmoothingDialog(
         SfxBindings* pB, SfxChildWindow* pCW,

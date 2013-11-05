@@ -1,0 +1,81 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#ifndef TABLEFILLINGANDNAVIGATIONTOOLS_HXX
+#define TABLEFILLINGANDNAVIGATIONTOOLS_HXX
+
+#include "address.hxx"
+#include "rangelst.hxx"
+
+#include "docsh.hxx"
+#include "document.hxx"
+#include "docfunc.hxx"
+#include "formulacell.hxx"
+
+#include <list>
+
+class FormulaTemplate
+{
+private:
+    OUString            mTemplate;
+    ScDocument*         mDocument;
+    ScAddress::Details  mAddressDetails;
+public:
+    FormulaTemplate(ScDocument* aDocument, ScAddress::Details aAddressDetails);
+
+    void        setTemplate(OUString aTemplate);
+    void        setTemplate(const char* aTemplate);
+    OUString&   getTemplate();
+    void        applyRange(OUString aVariable, ScRange aRange);
+    void        applyRangeList(OUString aVariable, ScRangeList aRangeList);
+    void        applyAddress(OUString aVariable, ScAddress aAddress);
+    void        applyString(OUString aVariable, OUString aValue);
+};
+
+class AddressWalker
+{
+public:
+    std::list<ScAddress> mAddressStack;
+
+    ScAddress mCurrentAddress;
+    ScAddress mMinimumAddress;
+    ScAddress mMaximumAddress;
+    bool      mTrackRange;
+
+    AddressWalker(ScAddress aInitialAddress, bool aTrackRange = true);
+
+    ScAddress current(SCCOL aRelativeCol = 0, SCROW aRelativeRow = 0, SCTAB aRelativeTab = 0);
+    void      reset();
+    void      resetColumn();
+    void      resetRow();
+    void      nextColumn();
+    void      nextRow();
+    void      push(SCCOL aRelativeCol = 0, SCROW aRelativeRow = 0, SCTAB aRelativeTab = 0);
+    void      pop();
+};
+
+class AddressWalkerWriter : public AddressWalker
+{
+public:
+    ScDocShell* mpDocShell;
+    ScDocument* mpDocument;
+
+    AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument);
+
+    void writeFormula(OUString aFormula);
+    void writeString(OUString aString);
+    void writeString(const char* aCharArray);
+    void writeValue(double aValue);
+};
+
+#endif
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

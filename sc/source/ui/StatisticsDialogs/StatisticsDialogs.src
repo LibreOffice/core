@@ -15,6 +15,13 @@ Resource RID_STATISTICS_DLGS
 
     /* AnalysisOfVarianceDialog */
 
+    String STR_EXPONENTIAL_SMOOTHING_UNDO_NAME
+    {
+        Text [ en-US ] = "Exponential Smoothing";
+    };
+
+    /* AnalysisOfVarianceDialog */
+
     String STR_ANALYSIS_OF_VARIANCE_UNDO_NAME
     {
         Text [ en-US ] = "Analysis of Variance";

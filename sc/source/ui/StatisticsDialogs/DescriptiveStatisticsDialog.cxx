@@ -11,6 +11,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/undo.hxx>
+#include <boost/random.hpp>
 
 #include "formulacell.hxx"
 #include "rangelst.hxx"
@@ -23,8 +24,7 @@
 #include "random.hxx"
 #include "docfunc.hxx"
 #include "StatisticsDialogs.hrc"
-
-#include <boost/random.hpp>
+#include "TableFillingAndNavigationTools.hxx"
 
 #include "DescriptiveStatisticsDialog.hxx"
 
@@ -32,8 +32,8 @@ namespace
 {
 
 struct StatisticCalculation {
-    sal_Int16 aCalculationNameId;
-    const char*     aFormula;
+    sal_Int16   aCalculationNameId;
+    const char* aFormula;
 };
 
 static const StatisticCalculation lclCalcDefinitions[] =
@@ -76,61 +76,47 @@ sal_Bool ScDescriptiveStatisticsDialog::Close()
 
 void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
 {
-    OUString aUndo(SC_RESSTR(STR_DESCRIPTIVE_STATISTICS_UNDO_NAME));
+    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, STR_DESCRIPTIVE_STATISTICS_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
 
-    ScAddress aStart = mInputRange.aStart;
-    ScAddress aEnd   = mInputRange.aEnd;
-
-    SCTAB outTab = mOutputAddress.Tab();
-    SCCOL outCol = mOutputAddress.Col();
-    SCROW outRow = mOutputAddress.Row();
-
     OUString aReferenceString;
-    ScAddress aAddress;
 
-    for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument);
+    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+
+    SCROW inTab = mInputRange.aStart.Tab();
+
+    for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
     {
-        outCol = mOutputAddress.Col();
+        OUString aLabel(SC_STRLOAD(RID_STATISTICS_DLGS, lclCalcDefinitions[i].aCalculationNameId));
+        aOutput.writeString(aLabel);
+        aOutput.nextRow();
+    }
+    aOutput.nextColumn();
+
+    for (SCCOL inCol = mInputRange.aStart.Col(); inCol <= mInputRange.aEnd.Col(); inCol++)
+    {
+        aOutput.resetRow();
+
+        ScRange aColumnRange(
+            ScAddress(inCol, mInputRange.aStart.Row(), inTab),
+            ScAddress(inCol, mInputRange.aEnd.Row(), inTab)
+        );
 
         for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
         {
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aCalculationName(SC_RESSTR(lclCalcDefinitions[i].aCalculationNameId));
-            pDocShell->GetDocFunc().SetStringCell(aAddress, aCalculationName, true);
-            outRow++;
+            aTemplate.setTemplate(lclCalcDefinitions[i].aFormula);
+            aTemplate.applyRange(strWildcardRange, aColumnRange);
+            aOutput.writeFormula(aTemplate.getTemplate());
+            aOutput.nextRow();
         }
-        outCol++;
-
-        for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
-        {
-            outRow = mOutputAddress.Row();
-            ScRange aColumnRange (
-                ScAddress(inCol, mInputRange.aStart.Row(), inTab),
-                ScAddress(inCol, mInputRange.aEnd.Row(), inTab)
-            );
-
-            aReferenceString = aColumnRange.Format(SCR_ABS, mDocument, mAddressDetails);
-            OUString aFormulaString;
-            OUString aFormulaTemplate;
-
-            for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
-            {
-                aAddress = ScAddress(outCol, outRow, outTab);
-                aFormulaTemplate = OUString::createFromAscii(lclCalcDefinitions[i].aFormula);
-                aFormulaString = aFormulaTemplate.replaceAll(strWildcardRange, aReferenceString);
-                pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-                outRow++;
-            }
-            outCol++;
-        }
-        outTab++;
+        aOutput.nextColumn();
     }
 
-    ScRange aOutputRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
     pUndoManager->LeaveListAction();
+    ScRange aOutputRange(aOutput.mMinimumAddress, aOutput.mMaximumAddress);
     pDocShell->PostPaint( aOutputRange, PAINT_GRID );
 }
 

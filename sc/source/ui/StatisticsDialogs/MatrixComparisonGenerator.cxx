@@ -19,11 +19,11 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "reffact.hxx"
-#include "scresid.hxx"
+#include "strload.hxx"
 #include "random.hxx"
 #include "docfunc.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
+#include "StatisticsDialogs.hrc"
+#include "TableFillingAndNavigationTools.hxx"
 
 #include "MatrixComparisonGenerator.hxx"
 
@@ -35,12 +35,36 @@ namespace
     static const OUString strWildcardNumber("%NUMBER%");
     static const OUString strColumnLabelTemplate("Column %NUMBER%");
     static const OUString strRowLabelTemplate("Row %NUMBER%");
+
+    void lclWriteCorrelationFormulas(
+            AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,
+            ScRangeList aRangeList, const OUString& aTemplateString)
+    {
+        OUString aFormulaString;
+
+        for (size_t i = 0; i < aRangeList.size(); i++)
+        {
+            aOutput.resetRow();
+            for (size_t j = 0; j < aRangeList.size(); j++)
+            {
+                if (j >= i)
+                {
+                    aTemplate.setTemplate(aTemplateString);
+                    aTemplate.applyRange(strWildcard1, *aRangeList[i]);
+                    aTemplate.applyRange(strWildcard2, *aRangeList[j]);
+                    aOutput.writeFormula(aTemplate.getTemplate());
+                }
+                aOutput.nextRow();
+            }
+            aOutput.nextColumn();
+        }
+    }
 }
 
 ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
                                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                                     Window* pParent, ScViewData* pViewData, const OString& rID,
-                                    const OUString& rUiXmlDescription ) :
+                                    const OUString& rUiXmlDescription) :
     ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, pViewData, rID, rUiXmlDescription)
 {}
 
@@ -49,153 +73,64 @@ ScMatrixComparisonGenerator::~ScMatrixComparisonGenerator()
 
 void ScMatrixComparisonGenerator::CalculateInputAndWriteToOutput( )
 {
-    OUString aUndo(SC_STRLOAD( RID_STATISTICS_DLGS, STR_CORRELATION_UNDO_NAME));
+    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, STR_CORRELATION_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
 
-    ScAddress aStart = mInputRange.aStart;
-    ScAddress aEnd   = mInputRange.aEnd;
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
+    FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
-    SCTAB outTab = mOutputAddress.Tab();
-    SCCOL outCol = mOutputAddress.Col();
-    SCROW outRow = mOutputAddress.Row();
-
-    ScAddress aAddress;
-    SCCOL aMaxCol = 0;
-    SCROW aMaxRow = 0;
-
-    SCTAB inTab = aStart.Tab();
+    SCTAB inTab = mInputRange.aStart.Tab();
 
     ScRangeList aRangeList;
 
     if (mGroupedBy == BY_COLUMN)
-        aRangeList = MakeColumnRangeList(inTab, aStart, aEnd);
+        aRangeList = MakeColumnRangeList(inTab, mInputRange.aStart, mInputRange.aEnd);
     else
-        aRangeList = MakeRowRangeList(inTab, aStart, aEnd);
+        aRangeList = MakeRowRangeList(inTab, mInputRange.aStart, mInputRange.aEnd);
 
     // labels
-    aAddress = ScAddress(outCol, outRow, outTab);
-    pDocShell->GetDocFunc().SetStringCell(aAddress, getLabel(), true);
-    outCol++;
-    aMaxCol = outCol > aMaxCol ? outCol : aMaxCol;
+    output.writeString(getLabel());
+    output.nextColumn();
 
     // write labels to columns
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        aAddress = ScAddress(outCol, outRow, outTab);
         OUString aLabel;
         if (mGroupedBy == BY_COLUMN)
             aLabel = strColumnLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
         else
             aLabel = strRowLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
 
-        pDocShell->GetDocFunc().SetStringCell(aAddress, aLabel, true);
-        outCol++;
-        aMaxCol = outCol > aMaxCol ? outCol : aMaxCol;
+        output.writeString(aLabel);
+        output.nextColumn();
     }
 
     // write labels to rows
-    outCol = mOutputAddress.Col();
-    outRow++;
+    output.resetColumn();
+    output.nextRow();
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        aAddress = ScAddress(outCol, outRow, outTab);
         OUString aLabel;
-
         if (mGroupedBy == BY_COLUMN)
             aLabel = strColumnLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
         else
             aLabel = strRowLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
 
-        pDocShell->GetDocFunc().SetStringCell(aAddress, aLabel, true);
-        outRow++;
-        aMaxRow = outRow > aMaxRow ? outRow : aMaxRow;
+        output.writeString(aLabel);
+        output.nextRow();
     }
 
     // write correlation formulas
-    aAddress = ScAddress(
-                mOutputAddress.Col() + 1,
-                mOutputAddress.Row() + 1,
-                inTab);
+    output.reset();
+    output.push(1, 1);
 
-    if (mGroupedBy == BY_COLUMN)
-        writeCorrelationFormulasByColumn(aAddress, aRangeList);
-    else
-        writeCorrelationFormulasByRow(aAddress, aRangeList);
+    lclWriteCorrelationFormulas(output, aTemplate, aRangeList, getTemplate());
 
-    ScAddress aLastAddress = ScAddress(
-                                mOutputAddress.Col() + aMaxCol,
-                                mOutputAddress.Row() + aMaxRow,
-                                outTab);
-
-    ScRange aOutputRange(mOutputAddress, aLastAddress);
+    ScRange aOutputRange(output.mMinimumAddress, output.mMaximumAddress);
     pUndoManager->LeaveListAction();
     pDocShell->PostPaint(aOutputRange, PAINT_GRID);
-}
-
-void ScMatrixComparisonGenerator::writeCorrelationFormulasByColumn(ScAddress aOutputAddress, ScRangeList aRangeList)
-{
-    ScDocShell* pDocShell = mViewData->GetDocShell();
-    ScAddress aAddress;
-
-    SCTAB outTab = aOutputAddress.Tab();
-    SCCOL outCol = aOutputAddress.Col();
-
-    OUString aFormulaString;
-    const OUString& aTemplate = getTemplate();
-
-    for (size_t i = 0; i < aRangeList.size(); i++)
-    {
-        SCROW outRow = aOutputAddress.Row();
-        for (size_t j = 0; j < aRangeList.size(); j++)
-        {
-            if (j >= i)
-            {
-                OUString aString1(aRangeList[i]->Format(SCR_ABS, mDocument, mAddressDetails));
-                OUString aString2(aRangeList[j]->Format(SCR_ABS, mDocument, mAddressDetails));
-
-                aAddress = ScAddress(outCol, outRow, outTab);
-                aFormulaString = aTemplate.replaceAll(strWildcard1, aString1);
-                aFormulaString = aFormulaString.replaceAll(strWildcard2, aString2);
-                pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-            }
-            outRow++;
-        }
-        outCol++;
-    }
-}
-
-void ScMatrixComparisonGenerator::writeCorrelationFormulasByRow(ScAddress aOutputAddress, ScRangeList aRangeList)
-{
-    ScDocShell* pDocShell = mViewData->GetDocShell();
-    ScAddress aAddress;
-
-    SCTAB outTab = aOutputAddress.Tab();
-    SCCOL outCol = aOutputAddress.Col();
-
-    OUString aFormulaString;
-    const OUString& aTemplate = getTemplate();
-
-    for (size_t i = 0; i < aRangeList.size(); i++)
-    {
-        SCROW outRow = aOutputAddress.Row();
-        for (size_t j = 0; j < aRangeList.size(); j++)
-        {
-            if (j >= i)
-            {
-                OUString aString1(aRangeList[i]->Format(SCR_ABS, mDocument, mAddressDetails));
-                OUString aString2(aRangeList[j]->Format(SCR_ABS, mDocument, mAddressDetails));
-
-                aAddress = ScAddress(outCol, outRow, outTab);
-                aFormulaString = aTemplate.replaceAll(strWildcard1, aString1);
-                aFormulaString = aFormulaString.replaceAll(strWildcard2, aString2);
-                pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-            }
-            outRow++;
-        }
-        outCol++;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

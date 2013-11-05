@@ -19,56 +19,23 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "reffact.hxx"
-#include "scresid.hxx"
+#include "strload.hxx"
+#include "random.hxx"
 #include "docfunc.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
+#include "StatisticsDialogs.hrc"
+#include "TableFillingAndNavigationTools.hxx"
 
 #include "ExponentialSmoothingDialog.hxx"
-
-namespace
-{
-    static const OUString strWildcardRange("%RANGE%");
-
-    class Template
-    {
-    public:
-        OUString            mTemplate;
-        ScDocument*         mDocument;
-        ScAddress::Details  mAddressDetails;
-
-        Template(ScDocument* aDocument, ScAddress::Details aAddressDetails) :
-            mDocument(aDocument),
-            mAddressDetails(aAddressDetails)
-        {}
-
-        void setTemplate(OUString aTemplate)
-        {
-            mTemplate = aTemplate;
-        }
-
-        OUString& getTemplate()
-        {
-            return mTemplate;
-        }
-
-        void applyRange(OUString aVariable, ScRange& aRange)
-        {
-            OUString aRangeString = aRange.Format(SCR_ABS, mDocument, mAddressDetails);
-
-            mTemplate = mTemplate.replaceAll(aVariable, aRangeString);
-        }
-
-    };
-}
 
 ScExponentialSmoothingDialog::ScExponentialSmoothingDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     Window* pParent, ScViewData* pViewData ) :
     ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "DescriptiveStatisticsDialog", "modules/scalc/ui/descriptivestatisticsdialog.ui" )
-{}
+            "ExponentialSmoothingDialog", "modules/scalc/ui/exponentialsmoothingdialog.ui" )
+{
+    get(mpSmoothingFactor, "smoothing-factor-spin");
+}
 
 ScExponentialSmoothingDialog::~ScExponentialSmoothingDialog()
 {}
@@ -80,7 +47,7 @@ sal_Bool ScExponentialSmoothingDialog::Close()
 
 void ScExponentialSmoothingDialog::CalculateInputAndWriteToOutput( )
 {
-    OUString aUndo("Exponential");
+    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, STR_EXPONENTIAL_SMOOTHING_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
@@ -88,29 +55,24 @@ void ScExponentialSmoothingDialog::CalculateInputAndWriteToOutput( )
     ScAddress aStart = mInputRange.aStart;
     ScAddress aEnd   = mInputRange.aEnd;
 
-    SCTAB outTab = mOutputAddress.Tab();
-    SCCOL outCol = mOutputAddress.Col();
-    SCROW outRow = mOutputAddress.Row();
-
-    ScAddress aAddress;
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
+    FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
     SCROW inTab = aStart.Tab();
 
-    Template aTemplate(mDocument, mAddressDetails);
+    // Smoothing factor
+    double aSmoothingFactor = mpSmoothingFactor->GetValue() / 100.0;
 
-    // Dampning factor
-    ScAddress aDampFactorAddress(outCol, outRow, outTab);
-    pDocShell->GetDocFunc().SetValueCell(aDampFactorAddress, 0.2, true);
-    OUString aDampFactorAddressString = aDampFactorAddress.Format(SCR_ABS, mDocument, mAddressDetails);
-    outRow++;
+    ScAddress aSmoothingFactorAddress = output.current();
+    output.writeValue(aSmoothingFactor);
+    output.nextRow();
 
     // Exponential Smoothing
-    SCROW firstOutRow = outRow;
+    output.push();
 
     for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
     {
-        outRow = firstOutRow;
-        aAddress = ScAddress(outCol, outRow, outTab);
+        output.resetRow();
 
         SCROW inRow = aStart.Row();
 
@@ -120,46 +82,36 @@ void ScExponentialSmoothingDialog::CalculateInputAndWriteToOutput( )
                     ScAddress(inCol, mInputRange.aStart.Row(), inTab),
                     ScAddress(inCol, mInputRange.aEnd.Row(), inTab));
 
-            OUString aAverageFormulaTemplate = OUString("=AVERAGE(%RANGE%)");
-            OUString aColumnRangeString = aColumnRange.Format(SCR_ABS, mDocument, mAddressDetails);
-            OUString aAverageFormulaString = aAverageFormulaTemplate.replaceAll(OUString("%RANGE%"), aColumnRangeString);
-
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aAverageFormulaString), true);
+            aTemplate.setTemplate("=AVERAGE(%RANGE%)");
+            aTemplate.applyRange("%RANGE%", aColumnRange);
+            output.writeFormula(aTemplate.getTemplate());
         }
         else
         {
             ScAddress aFirstValueAddress(inCol, mInputRange.aStart.Row(), inTab);
-            OUString aFirstValueAddressString = aFirstValueAddress.Format(SCR_ABS, mDocument, mAddressDetails);
-            OUString aFirstValueFormulaTemplate = OUString("=%RANGE%");
-            OUString aFistValueString = aFirstValueFormulaTemplate.replaceAll(OUString("%RANGE%"), aFirstValueAddressString);
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFistValueString), true);
+
+            aTemplate.setTemplate("=%VAR%");
+            aTemplate.applyAddress("%VAR%", aFirstValueAddress);
+            output.writeFormula(aTemplate.getTemplate());
         }
 
-        outRow++;
+        output.nextRow();
 
         for (inRow = aStart.Row() + 1; inRow <= aEnd.Row(); inRow++)
         {
-            ScAddress aPreviousInputAddress(inCol,   inRow  - 1, inTab);
-            ScAddress aPreviousOutputAddress(outCol, outRow - 1, outTab);
+            aTemplate.setTemplate("=%VALUE% * %PREVIOUS_INPUT% + (1 - %VALUE%) * %PREVIOUS_OUTPUT%");
+            aTemplate.applyAddress("%PREVIOUS_INPUT%",  ScAddress(inCol, inRow - 1, inTab));
+            aTemplate.applyAddress("%PREVIOUS_OUTPUT%", output.current(0, -1));
+            aTemplate.applyAddress("%VALUE%",           aSmoothingFactorAddress);
 
-            OUString aPreviousInputAddressString  = aPreviousInputAddress.Format(SCR_ABS, mDocument, mAddressDetails);
-            OUString aPreviousOutputAddressString = aPreviousOutputAddress.Format(SCR_ABS, mDocument, mAddressDetails);
-
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aFormulaTemplate = OUString("=%VALUE% * %PREVIOUS_INPUT% + (1 - %VALUE%) * %PREVIOUS_OUTPUT%");
-            OUString aFormulaString = aFormulaTemplate;
-            aFormulaString = aFormulaString.replaceAll(OUString("%PREVIOUS_INPUT%"), aPreviousInputAddressString);
-            aFormulaString = aFormulaString.replaceAll(OUString("%PREVIOUS_OUTPUT%"), aPreviousOutputAddressString);
-            aFormulaString = aFormulaString.replaceAll(OUString("%VALUE%"), aDampFactorAddressString);
-
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-            outRow++;
+            output.writeFormula(aTemplate.getTemplate());
+            output.nextRow();
         }
-        outCol++;
+        output.nextColumn();
     }
 
-    ScRange aOutputRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
     pUndoManager->LeaveListAction();
+    ScRange aOutputRange(output.mMinimumAddress, output.mMaximumAddress);
     pDocShell->PostPaint( aOutputRange, PAINT_GRID );
 }
 

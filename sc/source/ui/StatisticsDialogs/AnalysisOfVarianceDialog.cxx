@@ -23,12 +23,12 @@
 #include "random.hxx"
 #include "docfunc.hxx"
 #include "StatisticsDialogs.hrc"
+#include "TableFillingAndNavigationTools.hxx"
 
 #include "AnalysisOfVarianceDialog.hxx"
 
 namespace
 {
-
 
 static const char* lclBasicStatisticsLabels[] =
 {
@@ -45,9 +45,9 @@ static const char* lclAnovaLabels[] =
     "Source of Variation", "SS", "df", "MS", "F", "P-value", "F critical", NULL
 };
 
-static const OUString lclWildcardNumber("%NUMBER%");
-static const OUString lclColumnLabelTemplate("Column %NUMBER%");
-static const OUString lclWildcardRange("%RANGE%");
+static const OUString strWildcardNumber("%NUMBER%");
+static const OUString strColumnLabelTemplate("Column %NUMBER%");
+static const OUString strWildcardRange("%RANGE%");
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,
@@ -75,7 +75,7 @@ ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "AnalysisOfVarianceDialog", "modules/scalc/ui/analysisofvariancedialog.ui" )
 {
-    get(mpAlpha,        "alpha-spin");
+    get(mpAlpha, "alpha-spin");
 }
 
 ScAnalysisOfVarianceDialog::~ScAnalysisOfVarianceDialog()
@@ -97,202 +97,166 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
     ScAddress aStart = mInputRange.aStart;
     ScAddress aEnd   = mInputRange.aEnd;
 
-    SCTAB outTab = mOutputAddress.Tab();
-    SCCOL outCol = mOutputAddress.Col();
-    SCROW outRow = mOutputAddress.Row();
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
+    FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
-    OUString aReferenceString;
-    ScAddress aAddress;
+    SCROW inTab = aStart.Tab();
 
-    for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
+    // Write labels
+    for(sal_Int32 i = 0; lclBasicStatisticsLabels[i] != NULL; i++)
     {
-        outCol = mOutputAddress.Col();
+        output.writeString(lclBasicStatisticsLabels[i]);
+        output.nextColumn();
+    }
+    output.nextRow();
 
-        // Write labels
-        for(sal_Int32 i = 0; lclBasicStatisticsLabels[i] != NULL; i++)
+    ScRangeList aRangeList;
+
+    // Write statistic formulas for columns
+    for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
+    {
+        output.resetColumn();
+        aTemplate.setTemplate(strColumnLabelTemplate);
+        aTemplate.applyString(strWildcardNumber, OUString::number(inCol - aStart.Col() + 1));
+        pDocShell->GetDocFunc().SetStringCell(output.current(), aTemplate.getTemplate(), true);
+        output.nextColumn();
+
+        ScRange aColumnRange(
+            ScAddress(inCol, aStart.Row(), inTab),
+            ScAddress(inCol, aEnd.Row(), inTab)
+        );
+
+        aRangeList.Append(aColumnRange);
+
+        for(sal_Int32 i = 0; lclBasicStatisticsFormula[i] != NULL; i++)
         {
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aCalculationName(OUString::createFromAscii(lclBasicStatisticsLabels[i]));
-            pDocShell->GetDocFunc().SetStringCell(aAddress, aCalculationName, true);
-            outCol++;
+            aTemplate.setTemplate(lclBasicStatisticsFormula[i]);
+            aTemplate.applyRange(strWildcardRange, aColumnRange);
+            output.writeFormula(aTemplate.getTemplate());
+            output.nextColumn();
         }
-        outRow++;
-
-        ScRangeList aRangeList;
-
-        // Write statistic formulas for columns
-        for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
-        {
-            outCol = mOutputAddress.Col();
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aNumberString = OUString::number(inCol - aStart.Col() + 1);
-            OUString aGroupName = lclColumnLabelTemplate.replaceAll(lclWildcardNumber, aNumberString);
-            pDocShell->GetDocFunc().SetStringCell(aAddress, aGroupName, true);
-            outCol++;
-
-            ScRange aColumnRange (
-                ScAddress(inCol, aStart.Row(), inTab),
-                ScAddress(inCol, aEnd.Row(), inTab)
-            );
-            aRangeList.Append(aColumnRange);
-
-            aReferenceString = aColumnRange.Format(SCR_ABS, mDocument, mAddressDetails);
-            OUString aFormulaString;
-            OUString aFormulaTemplate;
-
-            for(sal_Int32 i = 0; lclBasicStatisticsFormula[i] != NULL; i++)
-            {
-                aAddress = ScAddress(outCol, outRow, outTab);
-                aFormulaTemplate = OUString::createFromAscii(lclBasicStatisticsFormula[i]);
-                aFormulaString = aFormulaTemplate.replaceAll(lclWildcardRange, aReferenceString);
-                pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-                outCol++;
-            }
-            outRow++;
-        }
-
-        outRow++; // Blank row
-
-        // Write ANOVA labels
-        outCol = mOutputAddress.Col();
-        for(sal_Int32 i = 0; lclAnovaLabels[i] != NULL; i++)
-        {
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aCalculationName(OUString::createFromAscii(lclAnovaLabels[i]));
-            pDocShell->GetDocFunc().SetStringCell(aAddress, aCalculationName, true);
-            outCol++;
-        }
-        outRow++;
-
-        // Between Groups
-        {
-            // Label
-            outCol = mOutputAddress.Col();
-            aAddress = ScAddress(outCol, outRow, outTab);
-            pDocShell->GetDocFunc().SetStringCell(aAddress, OUString("Between Groups"), true);
-            outCol++;
-
-            // Sum of Squares
-            aAddress = ScAddress(outCol, outRow, outTab);
-            ScAddress aAddressTotal(outCol, outRow+2, outTab);
-            OUString aReferenceTotal(aAddressTotal.Format(SCR_ABS, mDocument, mAddressDetails));
-            ScAddress aAddressWithin(outCol, outRow+1, outTab);
-            OUString aReferenceWithin(aAddressWithin.Format(SCR_ABS, mDocument, mAddressDetails));
-            OUString aFormulaString = "=" + aReferenceTotal + "-" + aReferenceWithin;
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-            outCol++;
-
-            // Degree of freedom
-            aAddress = ScAddress(outCol, outRow, outTab);
-            aAddressTotal = ScAddress(outCol, outRow+2, outTab);
-            aReferenceTotal = aAddressTotal.Format(SCR_ABS, mDocument, mAddressDetails);
-            aAddressWithin = ScAddress(outCol, outRow+1, outTab);
-            aReferenceWithin = aAddressWithin.Format(SCR_ABS, mDocument, mAddressDetails);
-            aFormulaString = "=" + aReferenceTotal + "-" + aReferenceWithin;
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-            outCol++;
-
-            // MS
-            OUString aSSRef(ScAddress(outCol-2, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
-            OUString aDFRef(ScAddress(outCol-1, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
-            aFormulaString = "=" + aSSRef + "/" + aDFRef;
-            aAddress = ScAddress(outCol, outRow, outTab);
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-            outCol++;
-
-            // F
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aMSBetween(ScAddress(outCol-1, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
-            OUString aMSWithin(ScAddress(outCol-1, outRow+1, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
-            aFormulaString = "=" + aMSBetween + "/" + aMSWithin;
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-            outCol++;
-
-            // P-value
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aFValue(ScAddress(outCol-1, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
-            OUString aDFBetween(ScAddress(outCol-3, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
-            OUString aDFWithin(ScAddress(outCol-3, outRow+1, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
-            aFormulaString = "=FDIST("+ aFValue + ";" + aDFBetween + ";" + aDFWithin + ")";
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-            outCol++;
-
-            // F critical
-            double aAlphaValue = mpAlpha->GetValue() / 100.0;
-            OUString aAlphaString = rtl::math::doubleToUString(
-                                        aAlphaValue, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                        ScGlobal::pLocaleData->getNumDecimalSep()[0], true);
-            aAddress = ScAddress(outCol, outRow, outTab);
-            aFormulaString = "=FINV(" + aAlphaString + ";" + aDFBetween + ";" + aDFWithin + ")";
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-        }
-        outRow++;
-
-        // Within Groups
-        {
-            // Label
-            outCol = mOutputAddress.Col();
-            aAddress = ScAddress(outCol, outRow, outTab);
-            pDocShell->GetDocFunc().SetStringCell(aAddress, OUString("Within Groups"), true);
-            outCol++;
-
-            // Sum of Squares
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aSum("=SUM(%RANGE%)");
-            OUString aDevSQ("DEVSQ(%RANGE%)");
-            OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, aDevSQ, lclWildcardRange, mDocument, mAddressDetails);
-            OUString aSS = aSum.replaceAll(lclWildcardRange, aSSPart);
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aSS), true);
-            outCol++;
-
-            // Degree of freedom
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aCountMinusOne("COUNT(%RANGE%)-1");
-            OUString aDFPart = lclCreateMultiParameterFormula(aRangeList, aCountMinusOne, lclWildcardRange, mDocument, mAddressDetails);
-            OUString aDF = aSum.replaceAll(lclWildcardRange, aDFPart);
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aDF), true);
-            outCol++;
-
-            // MS
-            ScAddress aAddressSS(outCol-2, outRow, outTab);
-            OUString aSSRef(aAddressSS.Format(SCR_ABS, mDocument, mAddressDetails));
-            ScAddress aAddressDF(outCol-1, outRow, outTab);
-            OUString aDFRef(aAddressDF.Format(SCR_ABS, mDocument, mAddressDetails));
-            OUString aFormulaString = "=" + aSSRef + "/" + aDFRef;
-            aAddress = ScAddress(outCol, outRow, outTab);
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
-        }
-        outRow++;
-
-        // Total
-        {
-            // Label
-            outCol = mOutputAddress.Col();
-            aAddress = ScAddress(outCol, outRow, outTab);
-            pDocShell->GetDocFunc().SetStringCell(aAddress, OUString("Total"), true);
-            outCol++;
-
-            // Sum of Squares
-            OUString aDevSQ("DEVSQ(%RANGE%)");
-            aRangeList.Format( aReferenceString, SCR_ABS, mDocument );
-            OUString aFormulaString = aDevSQ.replaceAll(lclWildcardRange, aReferenceString);
-
-            aAddress = ScAddress(outCol, outRow, outTab);
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, "=" + aFormulaString), true);
-            outCol++;
-
-            // Degree of freedom
-            aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aCount("COUNT(%RANGE%)");
-            OUString aSumMinusOne("=SUM(%RANGE%)-1");
-            OUString aDFPart = lclCreateMultiParameterFormula(aRangeList, aCount, lclWildcardRange, mDocument, mAddressDetails);
-            OUString aDF = aSumMinusOne.replaceAll(lclWildcardRange, aDFPart);
-            pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aDF), true);
-        }
-        outRow++;
+        output.nextRow();
     }
 
-    ScRange aOutputRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
+    output.nextRow(); // Blank row
+
+    // Write ANOVA labels
+    output.resetColumn();
+    for(sal_Int32 i = 0; lclAnovaLabels[i] != NULL; i++)
+    {
+        output.writeString(lclAnovaLabels[i]);
+        output.nextColumn();
+    }
+    output.nextRow();
+
+    // Between Groups
+    {
+        // Label
+        output.resetColumn();
+        output.writeString("Between Groups");
+        output.nextColumn();
+
+        // Sum of Squares
+        aTemplate.setTemplate("=%TOTAL% - %WITHIN%");
+        aTemplate.applyAddress("%TOTAL%", output.current(0, 2));
+        aTemplate.applyAddress("%WITHIN%", output.current(0, 1));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // Degree of freedom
+        aTemplate.setTemplate("=%TOTAL% - %WITHIN%");
+        aTemplate.applyAddress("%TOTAL%", output.current(0, 2));
+        aTemplate.applyAddress("%WITHIN%", output.current(0, 1));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // MS
+        aTemplate.setTemplate("=%SS_REF% / %DF_REF%");
+        aTemplate.applyAddress("%SS_REF%", output.current(-2, 0));
+        aTemplate.applyAddress("%DF_REF%", output.current(-1, 0));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // F
+        aTemplate.setTemplate("=%MS_BETWEEN% / %MS_WITHIN%");
+        aTemplate.applyAddress("%MS_BETWEEN%", output.current(-1, 0));
+        aTemplate.applyAddress("%MS_WITHIN%",  output.current(-1, 1));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // P-value
+        aTemplate.setTemplate("=FDIST(%F_VAL%; %DF_BETWEEN%; %DF_WITHIN%");
+        aTemplate.applyAddress("%F_VAL%",       output.current(-1, 0));
+        aTemplate.applyAddress("%DF_BETWEEN%",  output.current(-3, 0));
+        aTemplate.applyAddress("%DF_WITHIN%",   output.current(-3, 1));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // F critical
+        double aAlphaValue = mpAlpha->GetValue() / 100.0;
+        OUString aAlphaString = rtl::math::doubleToUString(
+                                    aAlphaValue, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                                    ScGlobal::pLocaleData->getNumDecimalSep()[0], true);
+
+        aTemplate.setTemplate("=FINV(%ALPHA%; %DF_BETWEEN%; %DF_WITHIN%");
+        aTemplate.applyString("%ALPHA%",       aAlphaString);
+        aTemplate.applyAddress("%DF_BETWEEN%", output.current(-4, 0));
+        aTemplate.applyAddress("%DF_WITHIN%",  output.current(-4, 1));
+        output.writeFormula(aTemplate.getTemplate());
+    }
+    output.nextRow();
+
+    // Within Groups
+    {
+        // Label
+        output.resetColumn();
+        output.writeString("Within Groups");
+        output.nextColumn();
+
+        // Sum of Squares
+        OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, OUString("DEVSQ(%RANGE%)"), strWildcardRange, mDocument, mAddressDetails);
+        aTemplate.setTemplate("=SUM(%RANGE%)");
+        aTemplate.applyString(strWildcardRange, aSSPart);
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // Degree of freedom
+        OUString aDFPart = lclCreateMultiParameterFormula(aRangeList, OUString("COUNT(%RANGE%)-1"), strWildcardRange, mDocument, mAddressDetails);
+        aTemplate.setTemplate("=SUM(%RANGE%)");
+        aTemplate.applyString(strWildcardRange, aDFPart);
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // MS
+        aTemplate.setTemplate("=%SS% / %DF%");
+        aTemplate.applyAddress("%SS%", output.current(-2, 0));
+        aTemplate.applyAddress("%DF%", output.current(-1, 0));
+        output.writeFormula(aTemplate.getTemplate());
+    }
+    output.nextRow();
+
+    // Total
+    {
+        // Label
+        output.resetColumn();
+        output.writeString("Total");
+        output.nextColumn();
+
+        // Sum of Squares
+        aTemplate.setTemplate("=DEVSQ(%RANGE%)");
+        aTemplate.applyRangeList(strWildcardRange, aRangeList);
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // Degree of freedom
+        OUString aDFPart = lclCreateMultiParameterFormula(aRangeList, "COUNT(%RANGE%)", strWildcardRange, mDocument, mAddressDetails);
+        aTemplate.setTemplate("=SUM(%RANGE%) - 1");
+        aTemplate.applyString(strWildcardRange, aDFPart);
+        output.writeFormula(aTemplate.getTemplate());
+    }
+    output.nextRow();
+
+    ScRange aOutputRange(output.mMinimumAddress, output.mMaximumAddress);
     pUndoManager->LeaveListAction();
     pDocShell->PostPaint( aOutputRange, PAINT_GRID );
 }
