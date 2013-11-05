@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _LINGUISTIC_CONVDIC_HXX_
-#define _LINGUISTIC_CONVDIC_HXX_
+#ifndef INCLUDED_LINGUISTIC_SOURCE_CONVDIC_HXX
+#define INCLUDED_LINGUISTIC_SOURCE_CONVDIC_HXX
 
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/XConversionPropertyType.hpp>

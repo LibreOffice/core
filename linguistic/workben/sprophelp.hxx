@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGU2_PROPHELP_HXX_
-#define _LINGU2_PROPHELP_HXX_
+#ifndef INCLUDED_LINGUISTIC_WORKBEN_SPROPHELP_HXX
+#define INCLUDED_LINGUISTIC_WORKBEN_SPROPHELP_HXX
 
 #include <tools/solar.h>
 

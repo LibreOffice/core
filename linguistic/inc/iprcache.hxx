@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_IPRCACHE_HXX_
-#define _LINGUISTIC_IPRCACHE_HXX_
+#ifndef INCLUDED_LINGUISTIC_INC_IPRCACHE_HXX
+#define INCLUDED_LINGUISTIC_INC_IPRCACHE_HXX
 
 
 #include <uno/lbnames.h>

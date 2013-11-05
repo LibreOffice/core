@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_DEFS_HXX_
-#define _LINGUISTIC_DEFS_HXX_
+#ifndef INCLUDED_LINGUISTIC_SOURCE_DEFS_HXX
+#define INCLUDED_LINGUISTIC_SOURCE_DEFS_HXX
 
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>

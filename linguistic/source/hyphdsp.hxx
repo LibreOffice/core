@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_HYPHDSP_HXX_
-#define _LINGUISTIC_HYPHDSP_HXX_
+#ifndef INCLUDED_LINGUISTIC_SOURCE_HYPHDSP_HXX
+#define INCLUDED_LINGUISTIC_SOURCE_HYPHDSP_HXX
 
 
 #include <com/sun/star/lang/XComponent.hpp>

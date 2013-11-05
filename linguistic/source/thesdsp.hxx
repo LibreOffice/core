@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_THESDSP_HXX_
-#define _LINGUISTIC_THESDSP_HXX_
+#ifndef INCLUDED_LINGUISTIC_SOURCE_THESDSP_HXX
+#define INCLUDED_LINGUISTIC_SOURCE_THESDSP_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
