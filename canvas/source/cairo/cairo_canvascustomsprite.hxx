@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_CANVASCUSTOMSPRITE_HXX
-#define INCLUDED_SOURCE_CAIRO_CAIRO_CANVASCUSTOMSPRITE_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVASCUSTOMSPRITE_HXX
+#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVASCUSTOMSPRITE_HXX
 
 #include <cppuhelper/compbase4.hxx>
 #include <comphelper/uno3.hxx>
@@ -145,6 +145,6 @@ namespace cairocanvas
     };
 }
 
-#endif // INCLUDED_SOURCE_CAIRO_CAIRO_CANVASCUSTOMSPRITE_HXX
+#endif // INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVASCUSTOMSPRITE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

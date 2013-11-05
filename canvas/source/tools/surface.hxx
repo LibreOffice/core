@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOURCE_TOOLS_SURFACE_HXX
-#define INCLUDED_SOURCE_TOOLS_SURFACE_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_TOOLS_SURFACE_HXX
+#define INCLUDED_CANVAS_SOURCE_TOOLS_SURFACE_HXX
 
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/point/b2dpoint.hxx>

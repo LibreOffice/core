@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SOURCE_OPENGL_OGL_CANVASCUSTOMSPRITE_HXX
-#define INCLUDED_SOURCE_OPENGL_OGL_CANVASCUSTOMSPRITE_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASCUSTOMSPRITE_HXX
+#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASCUSTOMSPRITE_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/uno3.hxx>

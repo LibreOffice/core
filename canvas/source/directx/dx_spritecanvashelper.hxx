@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOURCE_DIRECTX_DX_SPRITECANVASHELPER_HXX
-#define INCLUDED_SOURCE_DIRECTX_DX_SPRITECANVASHELPER_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SPRITECANVASHELPER_HXX
+#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SPRITECANVASHELPER_HXX
 
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -150,6 +150,6 @@ namespace dxcanvas
     };
 }
 
-#endif // INCLUDED_SOURCE_DIRECTX_DX_SPRITECANVASHELPER_HXX
+#endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SPRITECANVASHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

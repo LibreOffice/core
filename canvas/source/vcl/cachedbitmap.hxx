@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOURCE_VCL_CACHEDBITMAP_HXX
-#define INCLUDED_SOURCE_VCL_CACHEDBITMAP_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_VCL_CACHEDBITMAP_HXX
+#define INCLUDED_CANVAS_SOURCE_VCL_CACHEDBITMAP_HXX
 
 #include <canvas/base/cachedprimitivebase.hxx>
 
@@ -67,6 +67,6 @@ namespace vclcanvas
     };
 }
 
-#endif // INCLUDED_SOURCE_VCL_CACHEDBITMAP_HXX
+#endif // INCLUDED_CANVAS_SOURCE_VCL_CACHEDBITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

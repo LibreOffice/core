@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOURCE_DIRECTX_DX_SURFACEBITMAP_HXX
-#define INCLUDED_SOURCE_DIRECTX_DX_SURFACEBITMAP_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SURFACEBITMAP_HXX
+#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SURFACEBITMAP_HXX
 
 #include <canvas/rendering/isurfaceproxy.hxx>
 #include <canvas/rendering/isurfaceproxymanager.hxx>

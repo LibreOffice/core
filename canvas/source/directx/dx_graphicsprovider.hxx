@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOURCE_DIRECTX_DX_GRAPHICSPROVIDER_HXX
-#define INCLUDED_SOURCE_DIRECTX_DX_GRAPHICSPROVIDER_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GRAPHICSPROVIDER_HXX
+#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GRAPHICSPROVIDER_HXX
 
 #include "dx_winstuff.hxx"
 
@@ -42,6 +42,6 @@ namespace dxcanvas
     typedef ::boost::shared_ptr< GraphicsProvider > GraphicsProviderSharedPtr;
 }
 
-#endif // INCLUDED_SOURCE_DIRECTX_DX_GRAPHICSPROVIDER_HXX
+#endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GRAPHICSPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

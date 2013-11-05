@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOURCE_DIRECTX_DX_RENDERMODULE_HXX
-#define INCLUDED_SOURCE_DIRECTX_DX_RENDERMODULE_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_RENDERMODULE_HXX
+#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_RENDERMODULE_HXX
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2irectangle.hxx>

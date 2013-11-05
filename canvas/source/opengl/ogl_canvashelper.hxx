@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SOURCE_OPENGL_OGL_CANVASHELPER_HXX
-#define INCLUDED_SOURCE_OPENGL_OGL_CANVASHELPER_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASHELPER_HXX
+#define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASHELPER_HXX
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 

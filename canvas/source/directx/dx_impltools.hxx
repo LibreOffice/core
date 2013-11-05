@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOURCE_DIRECTX_DX_IMPLTOOLS_HXX
-#define INCLUDED_SOURCE_DIRECTX_DX_IMPLTOOLS_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_IMPLTOOLS_HXX
+#define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_IMPLTOOLS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -128,6 +128,6 @@ namespace dxcanvas
     }
 }
 
-#endif // INCLUDED_SOURCE_DIRECTX_DX_IMPLTOOLS_HXX
+#endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_IMPLTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
