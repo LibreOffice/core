@@ -41507,9 +41507,6 @@
         <!--DFF FSPGR-->
         <!--DFF OPT-->
         <UML:Class xmi.id="OPT" name="OPT">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf00b</UML:TaggedValue.dataValue>

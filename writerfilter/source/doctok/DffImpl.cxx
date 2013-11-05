@@ -259,25 +259,6 @@ ShapeTypeToString::ShapeTypeToString()
     mMap[202]="TextBox";
 }
 
-// DffOPT
-
-sal_uInt32 DffOPT::get_property_count()
-{
-    return getInstance();
-}
-
-writerfilter::Reference<Properties>::Pointer_t
-DffOPT::get_property(sal_uInt32 /*nPos*/)
-{
-    return writerfilter::Reference<Properties>::Pointer_t();
-}
-
-sal_uInt32 DffOPT::get_extraoffset(sal_uInt32 /*pos*/)
-{
-    sal_uInt32 nResult = 0;
-    return nResult;
-}
-
 //DffDGG
 
 sal_uInt32 DffDGG::get_fidcl_count()
