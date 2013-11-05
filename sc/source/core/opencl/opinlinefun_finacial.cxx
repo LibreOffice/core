@@ -964,6 +964,38 @@ std::string GetDiffDate360=
 "nDay2, nMonth2, nYear2, bUSAMethod );\n"
 "}\n";
 
+std::string GetDurationDecl=
+"double GetDuration( \n"
+"                int nNullDate, int nSettle, int nMat, double fCoup,\n"
+"                double fYield, int nFreq, int nBase );\n";
+
+std::string GetDuration=
+"double GetDuration( \n"
+"                int nNullDate, int nSettle, int nMat, double fCoup,\n"
+"                double fYield, int nFreq, int nBase )\n"
+"{\n"
+"    double fYearfrac = GetYearFrac( nNullDate, nSettle, nMat, nBase );\n"
+"    double fNumOfCoups = lcl_Getcoupnum(nNullDate,nSettle,nMat,nFreq);\n"
+"    double fDur = 0.0;\n"
+"    double f100 = 100.0;\n"
+"    fCoup *= f100 / nFreq;\n"
+"    fYield /= nFreq;\n"
+"    fYield += 1.0;\n"
+"    double nDiff = fYearfrac * nFreq - fNumOfCoups;\n"
+"    int  t;\n"
+"    for( t = 1 ; t < fNumOfCoups ; t++ )\n"
+"        fDur += ( t + nDiff ) * ( fCoup ) / pow( fYield, t + nDiff );\n"
+"    fDur += ( fNumOfCoups + nDiff ) * ( fCoup + f100 ) /"
+" pow( fYield, fNumOfCoups + nDiff );\n"
+"    double  p = 0.0;\n"
+"    for( t = 1 ; t < fNumOfCoups ; t++ )\n"
+"      p += fCoup / pow( fYield, t + nDiff );\n"
+"    p += ( fCoup + f100 ) / pow( fYield, fNumOfCoups + nDiff );\n"
+"    fDur /= p;\n"
+"    fDur /= nFreq;\n"
+"    return fDur;\n""}\n";
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
