@@ -67,7 +67,7 @@ public:
     void setStringCell(const ScAddress& rPos, const OUString& rStr);
     void setEditCell(const ScAddress& rPos, EditTextObject* pEditText);
     void setFormulaCell(const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar);
-    void setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray);
+    void setFormulaCell(const ScAddress& rPos, ScTokenArray* pArray);
     void setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell);
 
     void setMatrixCells(

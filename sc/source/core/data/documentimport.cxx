@@ -202,7 +202,7 @@ void ScDocumentImport::setFormulaCell(
         rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
 }
 
-void ScDocumentImport::setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray)
+void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScTokenArray* pArray)
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
     if (!pTab)
@@ -216,7 +216,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, const ScTokenArray&
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos =
-        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rArray));
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, pArray));
 }
 
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell)

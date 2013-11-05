@@ -1583,7 +1583,7 @@ void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTo
     ScAddress aCellPos;
     ScUnoConversion::FillScAddress( aCellPos, rAddress );
     ScTokenConversion::ConvertToTokenArray(rDoc.getDoc(), aTokenArray, rTokens);
-    rDoc.setFormulaCell(aCellPos, aTokenArray);
+    rDoc.setFormulaCell(aCellPos, new ScTokenArray(aTokenArray));
 }
 
 void WorksheetHelper::initializeWorksheetImport()

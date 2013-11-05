@@ -153,6 +153,15 @@ public:
 
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos );
 
+    /**
+     * Transfer the ownership of the passed token array instance to the
+     * formula cell being constructed.  The caller <i>must not</i> pass a NULL
+     * token array pointer.
+     */
+    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, ScTokenArray* pArray,
+                   const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
+                   sal_uInt8 cMatInd = MM_NONE );
+
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    sal_uInt8 cMatInd = MM_NONE );

@@ -487,6 +487,54 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 ScFormulaCell::ScFormulaCell(
+    ScDocument* pDoc, const ScAddress& rPos, ScTokenArray* pArray,
+    const FormulaGrammar::Grammar eGrammar, sal_uInt8 cMatInd ) :
+    eTempGrammar( eGrammar),
+    pCode(pArray),
+    pDocument( pDoc ),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    nSeenInIteration(0),
+    cMatrixFlag ( cMatInd ),
+    nFormatType ( NUMBERFORMAT_NUMBER ),
+    bDirty( true ),
+    bChanged( false ),
+    bRunning( false ),
+    bCompile( false ),
+    bSubTotal( false ),
+    bIsIterCell( false ),
+    bInChangeTrack( false ),
+    bTableOpDirty( false ),
+    bNeedListening( false ),
+    mbNeedsNumberFormat( false ),
+    aPos( rPos )
+{
+    assert(pArray); // Never pass a NULL pointer here.
+
+    // Generate RPN token array.
+    if (pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen())
+    {
+        ScCompiler aComp( pDocument, aPos, *pCode);
+        aComp.SetGrammar(eTempGrammar);
+        bSubTotal = aComp.CompileTokenArray();
+        nFormatType = aComp.GetNumFormatType();
+    }
+    else
+    {
+        pCode->Reset();
+        if (pCode->GetNextOpCodeRPN(ocSubTotal))
+            bSubTotal = true;
+    }
+
+    if (bSubTotal)
+        pDocument->AddSubTotalCell(this);
+
+    pCode->GenHash();
+}
+
+ScFormulaCell::ScFormulaCell(
     ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
     const FormulaGrammar::Grammar eGrammar, sal_uInt8 cMatInd ) :
     eTempGrammar( eGrammar),

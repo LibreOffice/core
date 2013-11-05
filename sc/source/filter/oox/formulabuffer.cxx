@@ -27,8 +27,6 @@
 #include "externalrefmgr.hxx"
 #include "oox/token/tokens.hxx"
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
@@ -99,11 +97,11 @@ void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rV
         ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
         ScCompiler aCompiler(&rDoc.getDoc(), aPos);
         aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
-        boost::scoped_ptr<ScTokenArray> pCode(aCompiler.CompileString(it->maTokenStr));
+        ScTokenArray* pCode = aCompiler.CompileString(it->maTokenStr);
         if (!pCode)
             continue;
 
-        rDoc.setFormulaCell(aPos, *pCode);
+        rDoc.setFormulaCell(aPos, pCode);
     }
 }
 
