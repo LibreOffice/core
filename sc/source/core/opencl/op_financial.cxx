@@ -2458,6 +2458,74 @@ void OpPrice::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "return tmp;\n";
     ss << "}";
 }
+void OpNPER::GenSlidingWindowFunction(std::stringstream &ss,
+      const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    for (unsigned n = 0; n < vSubArguments.size(); n++)
+    {
+        ss<<"    double tmp"<<n<<"=";
+        ss<<vSubArguments[n]->GenSlidingWindowDeclRef();
+        ss<<";\n";
+    }
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]
+    ->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    ss<<"    if("<<tmpCurDVR0->GetArrayLength()<<"<=gid0||";
+    ss <<"isNan(tmp0))\n";
+    ss<<"        tmp0= 0;\n";
+    FormulaToken *tmpCur1 = vSubArguments[1]
+    ->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    ss<<"    if("<<tmpCurDVR1->GetArrayLength()<<"<=gid0||";
+    ss <<"isNan(tmp1))\n";
+    ss<<"        tmp1= 0;\n";
+    FormulaToken *tmpCur2 = vSubArguments[2]
+    ->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur2);
+    ss<<"    if("<<tmpCurDVR2->GetArrayLength()<<"<=gid0||";
+    ss <<"isNan(tmp2))\n";
+    ss<<"        tmp2= 0;\n";
+    FormulaToken *tmpCur3 = vSubArguments[3]
+    ->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur3);
+    ss<<"    if("<<tmpCurDVR3->GetArrayLength()<<"<=gid0||";
+    ss <<"isNan(tmp3))\n";
+    ss<<"        tmp3= 0;\n";
+    FormulaToken *tmpCur4 = vSubArguments[4]
+    ->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur4);
+    ss<<"    if("<<tmpCurDVR4->GetArrayLength()<<"<=gid0||";
+    ss <<"isNan(tmp4))\n";
+    ss<<"        tmp4= 0;\n";
+#endif
+    ss <<"    if (tmp0 == 0.0)\n";
+    ss <<"        tmp=(-(tmp2 + tmp3)/tmp1);\n";
+    ss <<"    else if (tmp4 > 0.0)\n";
+    ss <<"        tmp=log(-(tmp0*tmp3-tmp1*(1.0+tmp0))/";
+    ss <<"(tmp0*tmp2+tmp1*(1.0+tmp0)))/log(1.0+tmp0);\n";
+    ss <<"    else\n";
+    ss <<"        tmp=log(-(tmp0*tmp3-tmp1)/(tmp0*tmp2+tmp1))";
+    ss <<"/log(1.0+tmp0);\n";
+    ss <<"    return tmp;\n";
+    ss <<"}";
+}
 void OpPPMT::BinInlineFun(std::set<std::string>& decls,
         std::set<std::string>& funs)
 {
