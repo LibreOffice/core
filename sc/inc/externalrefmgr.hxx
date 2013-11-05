@@ -669,14 +669,6 @@ public:
      */
     bool isFileLoadable(const OUString& rFile) const;
 
-    /**
-     * If in maUnsavedDocShells move it to maDocShells and create a correct
-     * external reference entry
-     *
-     * @param Pointer to the newly saved DocumentShell
-     */
-    void transformUnsavedRefToSavedRef( SfxObjectShell* pShell );
-
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     /**
@@ -762,6 +754,13 @@ private:
 
     sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument* pSrcDoc);
 
+    /**
+     * If in maUnsavedDocShells move it to maDocShells and create a correct
+     * external reference entry
+     *
+     * @param Pointer to the newly saved DocumentShell
+     */
+    void transformUnsavedRefToSavedRef( SfxObjectShell* pShell );
 
 private:
     ScDocument* mpDoc;
