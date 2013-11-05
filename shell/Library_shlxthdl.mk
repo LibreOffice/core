@@ -18,7 +18,6 @@ $(eval $(call gb_Library_add_defs,shlxthdl,\
 	-DISOLATION_AWARE_ENABLED \
 	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-D_NTSDK \
 	-D_UNICODE \
 	-UNOMINMAX \
 ))

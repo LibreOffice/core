@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef _MSC_VER /* avoid 'std::bad_alloc' unresolved externals */
-#define _CRTIMP
-#define _NTSDK
-#endif
-
 #include <algorithm>
 #include <new>
 #include <string.h>

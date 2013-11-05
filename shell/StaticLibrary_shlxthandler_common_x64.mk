@@ -24,7 +24,6 @@ $(eval $(call gb_StaticLibrary_add_defs,shlxthandler_common_x64,\
 	-DISOLATION_AWARE_ENABLED \
 	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-D_NTSDK \
 	-D_UNICODE \
 ))
 $(eval $(call gb_StaticLibrary_add_defs,shlxthandler_common_x64,\
