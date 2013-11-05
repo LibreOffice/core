@@ -793,8 +793,12 @@ private:
 
     NumFmtMap maNumFormatMap;
 
-    /** original source file index. */
-    ::std::vector<SrcFileData> maSrcFiles;
+    /**
+     * List of external source document meta-data, used to keep track of
+     * external document identifiers.
+     */
+    std::vector<SrcFileData> maSrcFiles;
+    mutable osl::Mutex maMtxSrcFiles;
 
     /** Status whether in reference marking state. See isInReferenceMarking(). */
     bool mbInReferenceMarking:1;

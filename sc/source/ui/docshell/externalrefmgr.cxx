@@ -1594,6 +1594,7 @@ void ScExternalRefManager::getAllCachedNumberFormats(vector<sal_uInt32>& rNumFmt
 
 sal_uInt16 ScExternalRefManager::getExternalFileCount() const
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
     return static_cast< sal_uInt16 >( maSrcFiles.size() );
 }
 
@@ -2360,6 +2361,7 @@ void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const OUString& 
 
 void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
     if (nFileId >= maSrcFiles.size())
         return;
 
@@ -2404,6 +2406,8 @@ void ScExternalRefManager::convertToAbsName(OUString& rFile) const
 
 sal_uInt16 ScExternalRefManager::getExternalFileId(const OUString& rFile)
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
+
     vector<SrcFileData>::const_iterator itrBeg = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
     vector<SrcFileData>::const_iterator itr = find_if(itrBeg, itrEnd, FindSrcFileByName(rFile));
     if (itr != itrEnd)
@@ -2420,6 +2424,8 @@ sal_uInt16 ScExternalRefManager::getExternalFileId(const OUString& rFile)
 
 const OUString* ScExternalRefManager::getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal)
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
+
     if (nFileId >= maSrcFiles.size())
         return NULL;
 
@@ -2436,11 +2442,14 @@ const OUString* ScExternalRefManager::getExternalFileName(sal_uInt16 nFileId, bo
 
 bool ScExternalRefManager::hasExternalFile(sal_uInt16 nFileId) const
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
     return nFileId < maSrcFiles.size();
 }
 
 bool ScExternalRefManager::hasExternalFile(const OUString& rFile) const
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
+
     vector<SrcFileData>::const_iterator itrBeg = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
     vector<SrcFileData>::const_iterator itr = find_if(itrBeg, itrEnd, FindSrcFileByName(rFile));
     return itr != itrEnd;
@@ -2539,6 +2548,8 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
 
 void ScExternalRefManager::switchSrcFile(sal_uInt16 nFileId, const OUString& rNewFile, const OUString& rNewFilter)
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
+
     maSrcFiles[nFileId].maFileName = rNewFile;
     maSrcFiles[nFileId].maRelativeName = OUString();
     maSrcFiles[nFileId].maRealFileName = OUString();
@@ -2553,6 +2564,8 @@ void ScExternalRefManager::switchSrcFile(sal_uInt16 nFileId, const OUString& rNe
 
 void ScExternalRefManager::setRelativeFileName(sal_uInt16 nFileId, const OUString& rRelUrl)
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
+
     if (nFileId >= maSrcFiles.size())
         return;
     maSrcFiles[nFileId].maRelativeName = rRelUrl;
@@ -2560,6 +2573,8 @@ void ScExternalRefManager::setRelativeFileName(sal_uInt16 nFileId, const OUStrin
 
 void ScExternalRefManager::setFilterData(sal_uInt16 nFileId, const OUString& rFilterName, const OUString& rOptions)
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
+
     if (nFileId >= maSrcFiles.size())
         return;
     maSrcFiles[nFileId].maFilterName = rFilterName;
@@ -2578,11 +2593,13 @@ void ScExternalRefManager::clear()
 
 bool ScExternalRefManager::hasExternalData() const
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
     return !maSrcFiles.empty();
 }
 
 void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
     for (vector<SrcFileData>::iterator itr = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
           itr != itrEnd; ++itr)
     {
@@ -2598,6 +2615,7 @@ void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
 
 void ScExternalRefManager::updateAbsAfterLoad()
 {
+    osl::MutexGuard aGuard(&maMtxSrcFiles);
     OUString aOwn( getOwnDocumentName() );
     for (vector<SrcFileData>::iterator itr = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
           itr != itrEnd; ++itr)
