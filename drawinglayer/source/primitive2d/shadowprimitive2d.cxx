@@ -73,8 +73,13 @@ namespace drawinglayer
             if(getChildren().hasElements())
             {
                 // create a modifiedColorPrimitive containing the shadow color and the content
-                const basegfx::BColorModifier aBColorModifier(getShadowColor());
-                const Primitive2DReference xRefA(new ModifiedColorPrimitive2D(getChildren(), aBColorModifier));
+                const basegfx::BColorModifierSharedPtr aBColorModifier(
+                    new basegfx::BColorModifier_replace(
+                        getShadowColor()));
+                const Primitive2DReference xRefA(
+                    new ModifiedColorPrimitive2D(
+                        getChildren(),
+                        aBColorModifier));
                 const Primitive2DSequence aSequenceB(&xRefA, 1L);
 
                 // build transformed primitiveVector with shadow offset and add to target

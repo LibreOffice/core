@@ -20,73 +20,370 @@
 #ifndef INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX
 #define INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX
 
-#include <basegfx/color/bcolor.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/color/bcolor.hxx>
+#include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>
+#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-    /** Descriptor for type of color modification
-    */
-    enum BColorModifyMode
-    {
-        BCOLORMODIFYMODE_REPLACE,               // replace all color with local color
-        BCOLORMODIFYMODE_INTERPOLATE,           // interpolate color between given and local with local value
-        BCOLORMODIFYMODE_GRAY,                  // convert color to gray
-        BCOLORMODIFYMODE_BLACKANDWHITE,         // convert color to B&W, local value is treshhold
-        BCOLORMODIFYMODE_INVERT,                // invert color
-        BCOLORMODIFYMODE_LUMINANCE_TO_ALPHA     // convert color to alpha value (used for Svg Mask)
-    };
+    /** base class to define color modifications
 
-    /** Class to hold a color, value and mode for a color modification. Color modification is
-        done calling the getModifiedColor() method
+        The basic idea is to have instances of color modifiers where each
+        of these can be asked to get a modified version of a color. This
+        can be as easy as to return a fixed color, but may also do any
+        other computation based on the given source color and the local
+        algorythm to apply.
+
+        This base implementation defines the abstract base class. Every
+        derivation offers another color blending effect, when needed with
+        parameters for that blending defined as members.
+
+        As long as aw080 is not applied, an operator== is needed to implement
+        the operator== of the primitive based on this instances.
+
+        For the exact definitions of the color blending applied refer to the
+        implementation of the method getModifiedColor
+
+        BColorModifier is not copyable (no copy constructor, no assigment
+        operator); local values cannot be changed after construction. The
+        instances are cheap and the idea is to create them on demand. To
+        be able to reuse these as much as possible, a define for a
+        ::boost::shared_ptr named BColorModifierSharedPtr exists below.
+        All usages should handle instances of BColorModifier encapsulated
+        into these shared pointers.
     */
-    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier : private boost::noncopyable
     {
+    private:
     protected:
-        ::basegfx::BColor                           maBColor;
-        double                                      mfValue;
-        BColorModifyMode                            meMode;
+        // noone is allowed to incarnate the abstract base class
+        // except derivations
+        BColorModifier() {}
 
     public:
-        BColorModifier(
-            const ::basegfx::BColor& rBColor,
-            double fValue = 0.5,
-            BColorModifyMode eMode = BCOLORMODIFYMODE_REPLACE)
-        :   maBColor(rBColor),
-            mfValue(fValue),
-            meMode(eMode)
-        {}
+        // noone should directly destroy it; all incarnations should be
+        // handled in a boost::shared_ptr of type BColorModifierSharedPtr
+        virtual ~BColorModifier();
 
-        // compare operator(s)
-        bool operator==(const BColorModifier& rCompare) const
-        {
-            return (maBColor == rCompare.maBColor && mfValue == rCompare.mfValue && meMode == rCompare.meMode);
-        }
-
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const = 0;
         bool operator!=(const BColorModifier& rCompare) const
         {
             return !(operator==(rCompare));
         }
 
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const = 0;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /** convert color to gray
+    */
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_gray : public BColorModifier
+    {
+    private:
+    protected:
+    public:
+        BColorModifier_gray()
+        :   BColorModifier()
+        {
+        }
+
+        virtual ~BColorModifier_gray();
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /** invert color
+
+        returns a color where red green and blue are inverted using 1.0 - n
+    */
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_invert : public BColorModifier
+    {
+    private:
+    protected:
+    public:
+        BColorModifier_invert()
+        :   BColorModifier()
+        {
+        }
+
+        virtual ~BColorModifier_invert();
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /** convert to alpha based on luminance
+
+        returns a color where red green and blue are first weighted and added
+        to build a luminance value which is then inverted and used for red,
+        green and blue. The weights are  r * 0.2125 + g * 0.7154 + b * 0.0721.
+        This derivation is used for the svg importer and does exactly what SVG
+        defines for this needed case.
+    */
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_luminance_to_alpha : public BColorModifier
+    {
+    private:
+    protected:
+    public:
+        BColorModifier_luminance_to_alpha()
+        :   BColorModifier()
+        {
+        }
+
+        virtual ~BColorModifier_luminance_to_alpha();
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /** replace color
+
+        does not use the source color at all, but always returns the
+        given color, replacing everything. Useful e.g. for unified shadow
+        creation
+    */
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_replace : public BColorModifier
+    {
+    private:
+        ::basegfx::BColor           maBColor;
+
+    protected:
+    public:
+        BColorModifier_replace(const ::basegfx::BColor& rBColor)
+        :   BColorModifier(),
+            maBColor(rBColor)
+        {
+        }
+
+        virtual ~BColorModifier_replace();
+
+        // data access
+        const ::basegfx::BColor& getBColor() const { return maBColor; }
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /** interpolate color
+
+        returns an interpolated color mixed by the given value (f) in the range
+        [0.0 .. 1.0] and the given color (col) as follows:
+
+        col * (1 - f) + aSourceColor * f
+    */
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_interpolate : public BColorModifier
+    {
+    private:
+        ::basegfx::BColor           maBColor;
+        double                      mfValue;
+
+    protected:
+    public:
+        BColorModifier_interpolate(const ::basegfx::BColor& rBColor, double fValue)
+        :   BColorModifier(),
+            maBColor(rBColor),
+            mfValue(fValue)
+        {
+        }
+
+        virtual ~BColorModifier_interpolate();
+
         // data access
         const ::basegfx::BColor& getBColor() const { return maBColor; }
         double getValue() const { return mfValue; }
-        BColorModifyMode getMode() const { return meMode; }
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const;
 
         // compute modified color
-        ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
     };
+} // end of namespace basegfx
 
-    /** Class to hold a stack of BColorModifiers and to get the modified color with
-        applying all existing entry changes
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /** convert color to black and white
+
+        returns black when the luminance of the given color is less than
+        the given treshhold value in the range [0.0 .. 1.0], else white
+    */
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_black_and_white : public BColorModifier
+    {
+    private:
+        double                      mfValue;
+
+    protected:
+    public:
+        BColorModifier_black_and_white(double fValue)
+        :   BColorModifier(),
+            mfValue(fValue)
+        {
+        }
+
+        virtual ~BColorModifier_black_and_white();
+
+        // data access
+        double getValue() const { return mfValue; }
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /** gamma correction
+
+        Input is a gamma correction value in the range ]0.0 .. 10.0]; the
+        color values get correted using
+
+        col(r,g,b) = clamp(pow(col(r,g,b), 1.0 / gamma), 0.0, 1.0)
+    */
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_gamma : public BColorModifier
+    {
+    private:
+        double                      mfValue;
+        double                      mfInvValue;
+
+        /// bitfield
+        bool                        mbUseIt : 1;
+
+    protected:
+    public:
+        BColorModifier_gamma(double fValue);
+
+        virtual ~BColorModifier_gamma();
+
+        // data access
+        double getValue() const { return mfValue; }
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /** Red, Green, Blue, Luminance and Contrast correction
+
+        Input are percent values from [-1.0 .. 1-0] which correspond to -100% to 100%
+        correction of Red, Green, Blue, Luminance or Contrast. 0.0 means no change of
+        the corresponding channel. All these are combined (but can be used single) to
+        - be able to cover a bigger change range utilizing the cmobination
+        - allow execution by a small, common, precalculated table
+    */
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier_RGBLuminanceContrast : public BColorModifier
+    {
+    private:
+        double                      mfRed;
+        double                      mfGreen;
+        double                      mfBlue;
+        double                      mfLuminance;
+        double                      mfContrast;
+
+        double                      mfContrastOff;
+        double                      mfRedOff;
+        double                      mfGreenOff;
+        double                      mfBlueOff;
+
+        /// bitfield
+        bool                        mbUseIt : 1;
+
+    protected:
+    public:
+        BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast);
+
+        virtual ~BColorModifier_RGBLuminanceContrast();
+
+        // data access
+        double getRed() const { return mfRed; }
+        double getGreen() const { return mfGreen; }
+        double getBlue() const { return mfBlue; }
+        double getLuminance() const { return mfLuminance; }
+        double getContrast() const { return mfContrast; }
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+    };
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    /// typedef to allow working with shared instances of BColorModifier
+    /// for the whole mechanism
+    typedef ::boost::shared_ptr< BColorModifier > BColorModifierSharedPtr;
+
+    /** Class to hold a stack of BColorModifierSharedPtrs and to get the modified color with
+        applying all existing entry changes as defined in the stack. Instances of BColorModifier
+        can be pushed and popped to change the stack.
+
+        All references to BColorModifier members use shared pointers, thus instances of
+        BColorModifierStack can be copied by the default mechanisms if needed.
     */
     class BASEGFX_DLLPUBLIC BColorModifierStack
     {
     protected:
-        ::std::vector< BColorModifier >             maBColorModifiers;
+        ::std::vector< BColorModifierSharedPtr >        maBColorModifiers;
 
     public:
         sal_uInt32 count() const
@@ -94,33 +391,17 @@ namespace basegfx
             return maBColorModifiers.size();
         }
 
-        const BColorModifier& getBColorModifier(sal_uInt32 nIndex) const
+        const BColorModifierSharedPtr& getBColorModifier(sal_uInt32 nIndex) const
         {
             OSL_ENSURE(nIndex < count(), "BColorModifierStack: Access out of range (!)");
             return maBColorModifiers[nIndex];
         }
 
-        ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& rSource) const
-        {
-            if(count())
-            {
-                ::basegfx::BColor aRetval(rSource);
-                ::std::vector< BColorModifier >::const_iterator aEnd(maBColorModifiers.end());
+        // get the color in it's modified form by applying all existing BColorModifiers,
+        // from back to front (the newest first)
+        ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& rSource) const;
 
-                while(aEnd != maBColorModifiers.begin())
-                {
-                    aRetval = (--aEnd)->getModifiedColor(aRetval);
-                }
-
-                return aRetval;
-            }
-            else
-            {
-                return rSource;
-            }
-        }
-
-        void push(const BColorModifier& rNew)
+        void push(const BColorModifierSharedPtr& rNew)
         {
             maBColorModifiers.push_back(rNew);
         }
@@ -131,6 +412,8 @@ namespace basegfx
         }
     };
 } // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
 
 #endif // INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX
 

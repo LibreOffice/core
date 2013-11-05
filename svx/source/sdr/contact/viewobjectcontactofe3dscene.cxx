@@ -108,8 +108,14 @@ namespace sdr
                 if(isPrimitiveGhosted(rDisplayInfo))
                 {
                     const ::basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-                    const ::basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, ::basegfx::BCOLORMODIFYMODE_INTERPOLATE);
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetval, aBColorModifier));
+                    const ::basegfx::BColorModifierSharedPtr aBColorModifier(
+                        new basegfx::BColorModifier_interpolate(
+                            aRGBWhite,
+                            0.5));
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                            xRetval,
+                            aBColorModifier));
 
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }

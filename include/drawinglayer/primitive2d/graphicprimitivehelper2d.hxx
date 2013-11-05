@@ -21,6 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <svtools/grfmgr.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -44,6 +45,22 @@ namespace drawinglayer
         Primitive2DSequence create2DDecompositionOfGraphic(
             const Graphic& rGraphic,
             const basegfx::B2DHomMatrix& rTransform);
+
+        /** Helper to embed given sequence of primitives to evtl. a stack
+            of ModifiedColorPrimitive2D's to get all the needed modifications
+            applied.
+        */
+        Primitive2DSequence create2DColorModifierEmbeddingsAsNeeded(
+            const Primitive2DSequence& rChildren,
+            GraphicDrawMode aGraphicDrawMode = GRAPHICDRAWMODE_STANDARD,
+            double fLuminance = 0.0,        // [-1.0 .. 1.0]
+            double fContrast = 0.0,         // [-1.0 .. 1.0]
+            double fRed = 0.0,              // [-1.0 .. 1.0]
+            double fGreen = 0.0,            // [-1.0 .. 1.0]
+            double fBlue = 0.0,             // [-1.0 .. 1.0]
+            double fGamma = 1.0,            // ]0.0 .. 10.0]
+            bool bInvert = false);
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

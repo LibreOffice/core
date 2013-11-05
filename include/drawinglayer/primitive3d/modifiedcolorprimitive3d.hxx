@@ -42,16 +42,16 @@ namespace drawinglayer
         {
         private:
             /// The ColorModifier to use
-            basegfx::BColorModifier                 maColorModifier;
+            basegfx::BColorModifierSharedPtr    maColorModifier;
 
         public:
             /// constructor
             ModifiedColorPrimitive3D(
                 const Primitive3DSequence& rChildren,
-                const basegfx::BColorModifier& rColorModifier);
+                const basegfx::BColorModifierSharedPtr& rColorModifier);
 
             /// data read access
-            const basegfx::BColorModifier& getColorModifier() const { return maColorModifier; }
+            const basegfx::BColorModifierSharedPtr& getColorModifier() const { return maColorModifier; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;

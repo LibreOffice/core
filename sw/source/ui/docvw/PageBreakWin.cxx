@@ -188,8 +188,12 @@ void SwPageBreakWin::Paint( const Rectangle& )
 
     Primitive2DSequence aGhostedSeq( 1 );
     double nFadeRate = double( m_nFadeRate ) / 100.0;
+    const basegfx::BColorModifierSharedPtr aBColorModifier(
+        new basegfx::BColorModifier_interpolate(
+            Color( COL_WHITE ).getBColor(),
+            1.0 - nFadeRate));
     aGhostedSeq[0] = Primitive2DReference( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                aSeq, BColorModifier( Color( COL_WHITE ).getBColor(), 1.0 - nFadeRate, BCOLORMODIFYMODE_INTERPOLATE ) ) );
+                aSeq, aBColorModifier ) );
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;

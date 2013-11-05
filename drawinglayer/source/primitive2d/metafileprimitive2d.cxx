@@ -1057,7 +1057,9 @@ namespace
                     rTargetHolders.Current().append(
                         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                             aSubContent,
-                            basegfx::BColorModifier(basegfx::BColor(0.0, 0.0, 0.0))));
+                            basegfx::BColorModifierSharedPtr(
+                                new basegfx::BColorModifier_replace(
+                                    basegfx::BColor(0.0, 0.0, 0.0)))));
                 }
                 else // if(rPropertyHolders.Current().isRasterOpInvert())
                 {

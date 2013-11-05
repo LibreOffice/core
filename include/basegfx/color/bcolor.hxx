@@ -190,18 +190,20 @@ namespace basegfx
         }
 
         // clamp color to [0.0..1.0] values in all three intensity components
-        void clamp()
+        BColor& clamp()
         {
             mfX = basegfx::clamp(mfX, 0.0, 1.0);
             mfY = basegfx::clamp(mfY, 0.0, 1.0);
             mfZ = basegfx::clamp(mfZ, 0.0, 1.0);
+            return *this;
         }
 
-        void invert()
+        BColor& invert()
         {
             mfX = 1.0 - mfX;
             mfY = 1.0 - mfY;
             mfZ = 1.0 - mfZ;
+            return *this;
         }
 
         static const BColor& getEmptyBColor()

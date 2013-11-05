@@ -24,8 +24,10 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // helper class for animated graphics
@@ -321,6 +323,139 @@ namespace drawinglayer
 
             return aRetval;
         }
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        Primitive2DSequence create2DColorModifierEmbeddingsAsNeeded(
+            const Primitive2DSequence& rChildren,
+            GraphicDrawMode aGraphicDrawMode,
+            double fLuminance,
+            double fContrast,
+            double fRed,
+            double fGreen,
+            double fBlue,
+            double fGamma,
+            bool bInvert)
+        {
+            Primitive2DSequence aRetval;
+
+            if(!rChildren.getLength())
+            {
+                // no child content, done
+                return aRetval;
+            }
+
+            // set child content as retval; that is what will be used as child content in all
+            // embeddings from here
+            aRetval = rChildren;
+
+            if(GRAPHICDRAWMODE_WATERMARK == aGraphicDrawMode)
+            {
+                // this is solved by applying fixed values additionally to luminance
+                // and contrast, do it here and reset DrawMode to GRAPHICDRAWMODE_STANDARD
+                // original in svtools uses:
+                // #define WATERMARK_LUM_OFFSET        50
+                // #define WATERMARK_CON_OFFSET        -70
+                fLuminance = basegfx::clamp(fLuminance + 0.5, -1.0, 1.0);
+                fContrast = basegfx::clamp(fContrast - 0.7, -1.0, 1.0);
+                aGraphicDrawMode = GRAPHICDRAWMODE_STANDARD;
+            }
+
+            // DrawMode (GRAPHICDRAWMODE_WATERMARK already handled)
+            switch(aGraphicDrawMode)
+            {
+                case GRAPHICDRAWMODE_GREYS:
+                {
+                    // convert to grey
+                    const Primitive2DReference aPrimitiveGrey(
+                        new ModifiedColorPrimitive2D(
+                            aRetval,
+                            basegfx::BColorModifierSharedPtr(
+                                new basegfx::BColorModifier_gray())));
+
+                    aRetval = Primitive2DSequence(&aPrimitiveGrey, 1);
+                    break;
+                }
+                case GRAPHICDRAWMODE_MONO:
+                {
+                    // convert to mono (black/white with threshold 0.5)
+                    const Primitive2DReference aPrimitiveBlackAndWhite(
+                        new ModifiedColorPrimitive2D(
+                            aRetval,
+                            basegfx::BColorModifierSharedPtr(
+                                new basegfx::BColorModifier_black_and_white(0.5))));
+
+                    aRetval = Primitive2DSequence(&aPrimitiveBlackAndWhite, 1);
+                    break;
+                }
+                case GRAPHICDRAWMODE_WATERMARK:
+                {
+                    OSL_ENSURE(false, "OOps, GRAPHICDRAWMODE_WATERMARK should already be handled (see above)");
+                    // fallthrough intended
+                }
+                default: // case GRAPHICDRAWMODE_STANDARD:
+                {
+                    // nothing to do
+                    break;
+                }
+            }
+
+            // mnContPercent, mnLumPercent, mnRPercent, mnGPercent, mnBPercent
+            // handled in a single call
+            if(!basegfx::fTools::equalZero(fLuminance)
+                || !basegfx::fTools::equalZero(fContrast)
+                || !basegfx::fTools::equalZero(fRed)
+                || !basegfx::fTools::equalZero(fGreen)
+                || !basegfx::fTools::equalZero(fBlue))
+            {
+                const Primitive2DReference aPrimitiveRGBLuminannceContrast(
+                    new ModifiedColorPrimitive2D(
+                        aRetval,
+                        basegfx::BColorModifierSharedPtr(
+                            new basegfx::BColorModifier_RGBLuminanceContrast(
+                                fRed,
+                                fGreen,
+                                fBlue,
+                                fLuminance,
+                                fContrast))));
+
+                aRetval = Primitive2DSequence(&aPrimitiveRGBLuminannceContrast, 1);
+            }
+
+            // gamma (boolean)
+            if(!basegfx::fTools::equal(fGamma, 1.0))
+            {
+                const Primitive2DReference aPrimitiveGamma(
+                    new ModifiedColorPrimitive2D(
+                        aRetval,
+                        basegfx::BColorModifierSharedPtr(
+                            new basegfx::BColorModifier_gamma(
+                                fGamma))));
+
+                aRetval = Primitive2DSequence(&aPrimitiveGamma, 1);
+            }
+
+            // invert (boolean)
+            if(bInvert)
+            {
+                const Primitive2DReference aPrimitiveInvert(
+                    new ModifiedColorPrimitive2D(
+                        aRetval,
+                        basegfx::BColorModifierSharedPtr(
+                            new basegfx::BColorModifier_invert())));
+
+                aRetval = Primitive2DSequence(&aPrimitiveInvert, 1);
+            }
+
+            return aRetval;
+        }
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

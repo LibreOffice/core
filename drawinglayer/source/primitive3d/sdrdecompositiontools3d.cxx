@@ -247,8 +247,13 @@ namespace drawinglayer
                     if(::com::sun::star::drawing::TextureKind2_LUMINANCE == aSdr3DObjectAttribute.getTextureKind())
                     {
                         // use modified color primitive to force textures to gray
-                        const basegfx::BColorModifier aBColorModifier(basegfx::BColor(), 0.0, basegfx::BCOLORMODIFYMODE_GRAY);
-                        const Primitive3DReference xRef2(new ModifiedColorPrimitive3D(aRetval, aBColorModifier));
+                        const basegfx::BColorModifierSharedPtr aBColorModifier(
+                            new basegfx::BColorModifier_gray());
+                        const Primitive3DReference xRef2(
+                            new ModifiedColorPrimitive3D(
+                                aRetval,
+                                aBColorModifier));
+
                         aRetval = Primitive3DSequence(&xRef2, 1L);
                     }
                 }

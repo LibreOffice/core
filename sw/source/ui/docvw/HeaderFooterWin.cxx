@@ -358,8 +358,12 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     // TODO Ghost it all if needed
     drawinglayer::primitive2d::Primitive2DSequence aGhostedSeq( 1 );
     double nFadeRate = double( m_nFadeRate ) / 100.0;
+    const basegfx::BColorModifierSharedPtr aBColorModifier(
+        new basegfx::BColorModifier_interpolate(
+            Color( COL_WHITE ).getBColor(),
+            1.0 - nFadeRate));
     aGhostedSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                aSeq, BColorModifier( Color( COL_WHITE ).getBColor(), 1.0 - nFadeRate, BCOLORMODIFYMODE_INTERPOLATE ) ) );
+                aSeq, aBColorModifier ) );
 
     pProcessor->process( aGhostedSeq );
     delete pProcessor;

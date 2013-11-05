@@ -32,7 +32,7 @@ namespace drawinglayer
     {
         ModifiedColorPrimitive2D::ModifiedColorPrimitive2D(
             const Primitive2DSequence& rChildren,
-            const basegfx::BColorModifier& rColorModifier)
+            const basegfx::BColorModifierSharedPtr& rColorModifier)
         :   GroupPrimitive2D(rChildren),
             maColorModifier(rColorModifier)
         {
@@ -44,7 +44,17 @@ namespace drawinglayer
             {
                 const ModifiedColorPrimitive2D& rCompare = (ModifiedColorPrimitive2D&)rPrimitive;
 
-                return (getColorModifier() == rCompare.getColorModifier());
+                if(getColorModifier().get() == rCompare.getColorModifier().get())
+                {
+                    return true;
+                }
+
+                if(!getColorModifier().get() || !rCompare.getColorModifier().get())
+                {
+                    return false;
+                }
+
+                return *getColorModifier().get() == *rCompare.getColorModifier().get();
             }
 
             return false;
