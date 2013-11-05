@@ -102,28 +102,28 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     const PropertyValue *pEnd   = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!pBegin->Name.compareToAscii(pTimeout))
+        if(pBegin->Name.equalsAscii(pTimeout))
             pBegin->Value >>= nTimeout;
-        else if(!pBegin->Name.compareToAscii(pSilent))
+        else if(pBegin->Name.equalsAscii(pSilent))
             pBegin->Value >>= bSilent;
-        else if(!pBegin->Name.compareToAscii(pUser))
+        else if(pBegin->Name.equalsAscii(pUser))
         {
             pBegin->Value >>= aUID;
-            aDSN = aDSN + ::rtl::OUString(";UID=") + aUID;
+            aDSN = aDSN + ";UID=" + aUID;
         }
-        else if(!pBegin->Name.compareToAscii(pPwd))
+        else if(pBegin->Name.equalsAscii(pPwd))
         {
             pBegin->Value >>= aPWD;
-            aDSN = aDSN + ::rtl::OUString(";PWD=") + aPWD;
+            aDSN = aDSN + ";PWD=" + aPWD;
         }
-        else if(!pBegin->Name.compareToAscii(pUseCatalog))
+        else if(pBegin->Name.equalsAscii(pUseCatalog))
         {
             pBegin->Value >>= m_bUseCatalog;
         }
-        else if(!pBegin->Name.compareToAscii(pSysDrv))
+        else if(pBegin->Name.equalsAscii(pSysDrv))
         {
             pBegin->Value >>= aSysDrvSettings;
-            aDSN += ::rtl::OUString(";");
+            aDSN += ";";
             aDSN += aSysDrvSettings;
         }
     }

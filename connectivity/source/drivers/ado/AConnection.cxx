@@ -115,13 +115,13 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     const PropertyValue *pEnd   = pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if(!pIter->Name.compareToAscii("Timeout"))
+        if(pIter->Name.equalsAscii("Timeout"))
             pIter->Value >>= nTimeout;
-        else if(!pIter->Name.compareToAscii("Silent"))
+        else if(pIter->Name.equalsAscii("Silent"))
             pIter->Value >>= bSilent;
-        else if(!pIter->Name.compareToAscii("user"))
+        else if(pIter->Name.equalsAscii("user"))
             pIter->Value >>= aUID;
-        else if(!pIter->Name.compareToAscii("password"))
+        else if(pIter->Name.equalsAscii("password"))
             pIter->Value >>= aPWD;
     }
     try

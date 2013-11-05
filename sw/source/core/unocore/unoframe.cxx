@@ -815,18 +815,17 @@ OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException )
 
 sal_Bool SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return !rServiceName.compareToAscii("com.sun.star.text.BaseFrame")||
-                !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
-                    !rServiceName.compareToAscii("com.sun.star.document.LinkTarget");
+    return rServiceName.equalsAscii("com.sun.star.text.BaseFrame") ||
+           rServiceName.equalsAscii("com.sun.star.text.TextContent") ||
+           rServiceName.equalsAscii("com.sun.star.document.LinkTarget");
 }
 
 uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(3);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.BaseFrame";
-    pArray[1] = "com.sun.star.text.TextContent";
-    pArray[2] = "com.sun.star.document.LinkTarget";
+    aRet[0] = "com.sun.star.text.BaseFrame";
+    aRet[1] = "com.sun.star.text.TextContent";
+    aRet[2] = "com.sun.star.document.LinkTarget";
     return aRet;
 }
 

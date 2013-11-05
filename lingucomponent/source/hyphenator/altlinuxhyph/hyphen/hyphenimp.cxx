@@ -885,7 +885,7 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;
-    if ( !Hyphenator::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( Hyphenator::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(

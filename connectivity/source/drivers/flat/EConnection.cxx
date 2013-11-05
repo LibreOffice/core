@@ -67,33 +67,33 @@ void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValu
     const PropertyValue *pEnd    = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!pBegin->Name.compareToAscii("HeaderLine"))
+        if(pBegin->Name.equalsAscii("HeaderLine"))
             OSL_VERIFY( pBegin->Value >>= m_bHeaderLine );
-        else if(!pBegin->Name.compareToAscii("FieldDelimiter"))
+        else if(pBegin->Name.equalsAscii("FieldDelimiter"))
         {
             OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cFieldDelimiter = aVal.toChar();
         }
-        else if(!pBegin->Name.compareToAscii("StringDelimiter"))
+        else if(pBegin->Name.equalsAscii("StringDelimiter"))
         {
             OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cStringDelimiter = aVal.toChar();
         }
-        else if(!pBegin->Name.compareToAscii("DecimalDelimiter"))
+        else if(pBegin->Name.equalsAscii("DecimalDelimiter"))
         {
             OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cDecimalDelimiter = aVal.toChar();
         }
-        else if(!pBegin->Name.compareToAscii("ThousandDelimiter"))
+        else if(pBegin->Name.equalsAscii("ThousandDelimiter"))
         {
             OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cThousandDelimiter = aVal.toChar();
         }
-        else if ( !pBegin->Name.compareToAscii("MaxRowScan") )
+        else if ( pBegin->Name.equalsAscii("MaxRowScan") )
         {
             pBegin->Value >>= m_nMaxRowsToScan;
         }

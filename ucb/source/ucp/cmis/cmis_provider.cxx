@@ -114,7 +114,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpcmis1_component_getFactory( c
         (reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    if ( !::cmis::ContentProvider::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( ::cmis::ContentProvider::getImplementationName_Static().equalsAscii( pImplName ) )
         xFactory = ::cmis::ContentProvider::createServiceFactory( xSMgr );
 
     if ( xFactory.is() )

@@ -231,10 +231,9 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
 
     const bool bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
     const bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
-                        ( !rSearchOpt.searchString.compareToAscii( "^$" ) ||
-                          !rSearchOpt.searchString.compareToAscii( "$^" ) );
-    const bool bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
-                      !rSearchOpt.searchString.compareToAscii( "$" );
+                        ( rSearchOpt.searchString.equalsAscii( "^$" ) ||
+                          rSearchOpt.searchString.equalsAscii( "$^" ) );
+    const bool bChkParaEnd = bRegSearch && rSearchOpt.searchString.equalsAscii( "$" );
 
     // LanguageType eLastLang = 0;
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))

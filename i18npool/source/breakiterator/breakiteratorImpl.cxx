@@ -616,7 +616,7 @@ BreakIteratorImpl::getImplementationName(void) throw( RuntimeException )
 sal_Bool SAL_CALL
 BreakIteratorImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cBreakIterator);
+    return rServiceName.equalsAscii(cBreakIterator);
 }
 
 Sequence< OUString > SAL_CALL

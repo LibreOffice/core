@@ -71,10 +71,10 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
     // create some dispatch ...
     if(m_pView && aURL.Complete.startsWith(".uno:DataSourceBrowser/"))
     {
-        if(!aURL.Complete.compareToAscii(cURLFormLetter) ||
-            !aURL.Complete.compareToAscii(cURLInsertContent) ||
-                !aURL.Complete.compareToAscii(cURLInsertColumns)||
-                    !aURL.Complete.compareToAscii(cURLDocumentDataSource))
+        if(aURL.Complete.equalsAscii(cURLFormLetter) ||
+            aURL.Complete.equalsAscii(cURLInsertContent) ||
+                aURL.Complete.equalsAscii(cURLInsertColumns)||
+                    aURL.Complete.equalsAscii(cURLDocumentDataSource))
         {
             if(!m_xDispatch.is())
                 m_xDispatch = new SwXDispatch(*m_pView);
@@ -209,17 +209,17 @@ void SwXDispatch::dispatch(
         throw uno::RuntimeException();
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
-    if(!aURL.Complete.compareToAscii(cURLInsertContent))
+    if(aURL.Complete.equalsAscii(cURLInsertContent))
     {
         ::svx::ODataAccessDescriptor aDescriptor(aArgs);
         SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
         pNewDBMgr->MergeNew(aMergeDesc);
     }
-    else if(!aURL.Complete.compareToAscii(cURLInsertColumns))
+    else if(aURL.Complete.equalsAscii(cURLInsertColumns))
     {
         pNewDBMgr->InsertText(rSh, aArgs);
     }
-    else if(!aURL.Complete.compareToAscii(cURLFormLetter))
+    else if(aURL.Complete.equalsAscii(cURLFormLetter))
     {
         SfxUsrAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, uno::makeAny(aArgs));
         m_pView->GetViewFrame()->GetDispatcher()->Execute(
@@ -227,11 +227,11 @@ void SwXDispatch::dispatch(
             SFX_CALLMODE_ASYNCHRON,
             &aDBProperties, 0L);
     }
-    else if(!aURL.Complete.compareToAscii(cURLDocumentDataSource))
+    else if(aURL.Complete.equalsAscii(cURLDocumentDataSource))
     {
         OSL_FAIL("SwXDispatch::dispatch: this URL is not to be dispatched!");
     }
-    else if(!aURL.Complete.compareToAscii(cInternalDBChangeNotification))
+    else if(aURL.Complete.equalsAscii(cInternalDBChangeNotification))
     {
         frame::FeatureStateEvent aEvent;
         aEvent.IsEnabled = sal_True;
@@ -250,7 +250,7 @@ void SwXDispatch::dispatch(
         for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
         {
             StatusStruct_Impl aStatus = *aListIter;
-            if(!aStatus.aURL.Complete.compareToAscii(cURLDocumentDataSource))
+            if(aStatus.aURL.Complete.equalsAscii(cURLDocumentDataSource))
             {
                 aEvent.FeatureURL = aStatus.aURL;
                 aStatus.xListener->statusChanged( aEvent );
@@ -280,7 +280,7 @@ void SwXDispatch::addStatusListener(
     aEvent.FeatureURL = aURL;
 
     // one of the URLs requires a special state ....
-    if (!aURL.Complete.compareToAscii(cURLDocumentDataSource))
+    if (aURL.Complete.equalsAscii(cURLDocumentDataSource))
     {
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
 
@@ -352,7 +352,7 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::Runti
         {
             StatusStruct_Impl aStatus = *aListIter;
             aEvent.FeatureURL = aStatus.aURL;
-            if (0 != aStatus.aURL.Complete.compareToAscii(cURLDocumentDataSource))
+            if (!aStatus.aURL.Complete.equalsAscii(cURLDocumentDataSource))
                 // the document's data source does not depend on the selection, so it's state does not change here
                 aStatus.xListener->statusChanged( aEvent );
         }

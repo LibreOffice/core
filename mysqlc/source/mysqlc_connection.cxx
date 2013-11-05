@@ -152,19 +152,19 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
 
     m_settings.connectionURL = url;
     for (;pIter != pEnd;++pIter) {
-        if (!pIter->Name.compareToAscii("user")) {
+        if (pIter->Name.equalsAscii("user")) {
             OSL_VERIFY( pIter->Value >>= aUser );
-        } else if (!pIter->Name.compareToAscii("password")) {
+        } else if (pIter->Name.equalsAscii("password")) {
             OSL_VERIFY( pIter->Value >>= aPass );
-        } else if (!pIter->Name.compareToAscii("LocalSocket")) {
+        } else if (pIter->Name.equalsAscii("LocalSocket")) {
             OSL_VERIFY( pIter->Value >>= sUnixSocket );
             unixSocketPassed = true;
-        } else if (!pIter->Name.compareToAscii("NamedPipe")) {
+        } else if (pIter->Name.equalsAscii("NamedPipe")) {
             OSL_VERIFY( pIter->Value >>= sNamedPipe );
             namedPipePassed = true;
-        } else if ( !pIter->Name.compareToAscii("PublicConnectionURL")) {
+        } else if ( pIter->Name.equalsAscii("PublicConnectionURL")) {
             OSL_VERIFY( pIter->Value >>= m_settings.connectionURL );
-        } else if ( !pIter->Name.compareToAscii("NewURL")) {    // legacy name for "PublicConnectionURL"
+        } else if ( pIter->Name.equalsAscii("NewURL")) {    // legacy name for "PublicConnectionURL"
             OSL_VERIFY( pIter->Value >>= m_settings.connectionURL );
         }
     }

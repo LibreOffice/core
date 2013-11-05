@@ -105,7 +105,7 @@ void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyVa
         const PropertyValue *pEnd       = pIter + info.getLength();
         for(;pIter != pEnd;++pIter)
         {
-                if(!pIter->Name.compareToAscii(pPwd))
+                if(pIter->Name.equalsAscii(pPwd))
                 {
                         pIter->Value >>= sPassword;
                         break;

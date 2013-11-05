@@ -682,7 +682,7 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;
-    if ( !Thesaurus::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( Thesaurus::getImplementationName_Static().equalsAscii( pImplName ) )
     {
 
         Reference< XSingleServiceFactory > xFactory =

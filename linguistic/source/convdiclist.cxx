@@ -670,7 +670,7 @@ void * SAL_CALL ConvDicList_getFactory(
         XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;
-    if ( !ConvDicList::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( ConvDicList::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         uno::Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(

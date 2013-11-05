@@ -146,12 +146,12 @@ public:
         aExport = tools::exportToSvgD( aPoly, true, true, false );
         const char* sExportString = "m10 10h-20v-20h20z";
         CPPUNIT_ASSERT_MESSAGE("exporting rectangle to SVG-D",
-                               !aExport.compareToAscii(sExportString) );
+                               aExport.equalsAscii(sExportString) );
         CPPUNIT_ASSERT_MESSAGE("importing simple rectangle from SVG-D (round-trip",
                                tools::importFromSvgD( aPoly, aExport, false, 0 ));
         aExport = tools::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_MESSAGE("exporting rectangle to SVG-D (round-trip)",
-                               !aExport.compareToAscii(sExportString));
+                               aExport.equalsAscii(sExportString));
 
         CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D",
                                tools::importFromSvgD( aPoly, aPath1, false, 0 ));
@@ -175,7 +175,7 @@ public:
             "m11430 0c-8890 3810 5715 6985 5715 6985"
             "l-17145-1905c0 0 22860-10160 16510 6350"
             "s-3810-11430-3810-11430z";
-        CPPUNIT_ASSERT_MESSAGE("exporting bezier polygon to SVG-D", !aExport.compareToAscii(sExportStringSimpleBezier));
+        CPPUNIT_ASSERT_MESSAGE("exporting bezier polygon to SVG-D", aExport.equalsAscii(sExportStringSimpleBezier));
 
         // Adaptions for B2DPolygon bezier change (see #i77162#):
         //
@@ -205,12 +205,12 @@ public:
         CPPUNIT_ASSERT_MESSAGE("re-importing '@' from SVG-D", tools::importFromSvgD( aReImport, aExport, false, 0));
         CPPUNIT_ASSERT_MESSAGE("re-imported '@' needs to be identical", aReImport == aPoly);
 
-        CPPUNIT_ASSERT_MESSAGE("exporting '@' to SVG-D", !aExport.compareToAscii(sExportString1));
+        CPPUNIT_ASSERT_MESSAGE("exporting '@' to SVG-D", aExport.equalsAscii(sExportString1));
         CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D (round-trip",
                                tools::importFromSvgD( aPoly, aExport, false, 0 ));
         aExport = tools::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_MESSAGE("exporting '@' to SVG-D (round-trip)",
-                               !aExport.compareToAscii(sExportString1));
+                               aExport.equalsAscii(sExportString1));
 
 
         CPPUNIT_ASSERT_MESSAGE("importing complex polygon from SVG-D",
@@ -238,12 +238,12 @@ public:
             "11-95-3-100 3-101 11-95 17-90 24-85 30-79 38-75 21-35 23-35 25-32 26-32 28-30 29"
             "-28 30-26 31-24 33-22 34-20 35-18 36-16 37-15 39-12 40-11z";
         CPPUNIT_ASSERT_MESSAGE("exporting complex polygon to SVG-D",
-                               !aExport.compareToAscii(sExportString2));
+                               aExport.equalsAscii(sExportString2));
         CPPUNIT_ASSERT_MESSAGE("importing complex polygon from SVG-D (round-trip",
                                tools::importFromSvgD( aPoly, aExport, false, 0 ));
         aExport = tools::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_MESSAGE("exporting complex polygon to SVG-D (round-trip)",
-                               !aExport.compareToAscii(sExportString2));
+                               aExport.equalsAscii(sExportString2));
 
         const B2DPolygon aRect(
             tools::createPolygonFromRect( B2DRange(0.0,0.0,4000.0,4000.0) ));
@@ -251,7 +251,7 @@ public:
 
         const char* sExportStringRect = "M0 0H4000V4000H0Z";
         CPPUNIT_ASSERT_MESSAGE("exporting to rectangle svg-d string",
-                               !aExport.compareToAscii(sExportStringRect));
+                               aExport.equalsAscii(sExportStringRect));
     }
 
     // Change the following lines only, if you add, remove or rename

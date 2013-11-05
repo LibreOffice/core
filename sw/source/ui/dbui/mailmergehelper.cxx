@@ -657,11 +657,11 @@ uno::Any SwConnectionContext::getValueByName( const OUString& rName )
                                                 throw (uno::RuntimeException)
 {
     uno::Any aRet;
-    if( !rName.compareToAscii( "ServerName" ))
+    if( rName.equalsAscii( "ServerName" ))
         aRet <<= m_sMailServer;
-    else if( !rName.compareToAscii( "Port" ))
+    else if( rName.equalsAscii( "Port" ))
         aRet <<= (sal_Int32) m_nPort;
-    else if( !rName.compareToAscii( "ConnectionType" ))
+    else if( rName.equalsAscii( "ConnectionType" ))
         aRet <<= m_sConnectionType;
     return aRet;
 }

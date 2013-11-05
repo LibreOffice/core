@@ -1698,13 +1698,13 @@ OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException 
 
 sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii("com.sun.star.text.TextViewCursor") ||
-            !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties") ||
-            !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian") ||
-            !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex") ||
-            !rServiceName.compareToAscii("com.sun.star.style.ParagraphProperties") ||
-            !rServiceName.compareToAscii("com.sun.star.style.ParagraphPropertiesAsian") ||
-            !rServiceName.compareToAscii("com.sun.star.style.ParagraphPropertiesComplex");
+    return rServiceName.equalsAscii("com.sun.star.text.TextViewCursor") ||
+            rServiceName.equalsAscii("com.sun.star.style.CharacterProperties") ||
+            rServiceName.equalsAscii("com.sun.star.style.CharacterPropertiesAsian") ||
+            rServiceName.equalsAscii("com.sun.star.style.CharacterPropertiesComplex") ||
+            rServiceName.equalsAscii("com.sun.star.style.ParagraphProperties") ||
+            rServiceName.equalsAscii("com.sun.star.style.ParagraphPropertiesAsian") ||
+            rServiceName.equalsAscii("com.sun.star.style.ParagraphPropertiesComplex");
 }
 
 Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( RuntimeException )

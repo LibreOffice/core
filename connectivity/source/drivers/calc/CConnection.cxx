@@ -94,7 +94,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     const PropertyValue *pEnd   = pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if(!pIter->Name.compareToAscii(pPwd))
+        if(pIter->Name.equalsAscii(pPwd))
         {
             pIter->Value >>= m_sPassword;
             break;

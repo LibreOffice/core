@@ -1205,13 +1205,13 @@ void ODatabaseMetaDataResultSet::openImportedKeys(const Any& catalog, const OUSt
                                   const OUString& table) throw(SQLException, RuntimeException)
 {
 
-    openForeignKeys(Any(),NULL,NULL,catalog,!schema.compareToAscii("%") ? &schema : NULL,&table);
+    openForeignKeys(Any(),NULL,NULL,catalog, schema.equalsAscii("%") ? &schema : NULL, &table);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openExportedKeys(const Any& catalog, const OUString& schema,
                                   const OUString& table) throw(SQLException, RuntimeException)
 {
-    openForeignKeys(catalog,!schema.compareToAscii("%") ? &schema : NULL,&table,Any(),NULL,NULL);
+    openForeignKeys(catalog, schema.equalsAscii("%") ? &schema : NULL, &table,Any(),NULL,NULL);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUString& schema,

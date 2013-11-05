@@ -668,7 +668,7 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;
-    if ( !SpellChecker::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( SpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(

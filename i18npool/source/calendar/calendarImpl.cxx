@@ -349,7 +349,7 @@ const sal_Char cCalendar[] = "com.sun.star.i18n.LocaleCalendar";
 sal_Bool SAL_CALL
 CalendarImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cCalendar);
+    return rServiceName.equalsAscii(cCalendar);
 }
 
 Sequence< OUString > SAL_CALL

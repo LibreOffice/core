@@ -196,7 +196,7 @@ extern "C"
         const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, void * /*pRegistryKey*/ )
     {
         void * pRet = 0;
-        if (!BibliographyLoader::getImplementationName_Static().compareToAscii( pImplName ) )
+        if (BibliographyLoader::getImplementationName_Static().equalsAscii( pImplName ) )
         {
             // create the factory
             Reference< XSingleServiceFactory > xFactory =

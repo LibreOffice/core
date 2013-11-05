@@ -275,7 +275,7 @@ sal_Bool SAL_CALL
 NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
                 throw( ::com::sun::star::uno::RuntimeException )
 {
-    return !rServiceName.compareToAscii(cNumFormat);
+    return rServiceName.equalsAscii(cNumFormat);
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL

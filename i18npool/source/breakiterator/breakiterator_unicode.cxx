@@ -450,7 +450,7 @@ BreakIterator_Unicode::getImplementationName(void) throw( uno::RuntimeException 
 sal_Bool SAL_CALL
 BreakIterator_Unicode::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return !rServiceName.compareToAscii(cBreakIterator);
+    return rServiceName.equalsAscii(cBreakIterator);
 }
 
 uno::Sequence< OUString > SAL_CALL

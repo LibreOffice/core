@@ -764,7 +764,7 @@ void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;
-    if ( !DicList::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( DicList::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         uno::Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(

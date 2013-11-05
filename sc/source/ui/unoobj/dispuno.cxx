@@ -107,8 +107,8 @@ uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDi
     uno::Reference<frame::XDispatch> xResult;
     // create some dispatch ...
     if ( pViewShell && (
-        !aURL.Complete.compareToAscii(cURLInsertColumns) ||
-        !aURL.Complete.compareToAscii(cURLDocDataSource) ) )
+        aURL.Complete.equalsAscii(cURLInsertColumns) ||
+        aURL.Complete.equalsAscii(cURLDocDataSource) ) )
     {
         if (!m_xMyDispatch.is())
             m_xMyDispatch = new ScDispatch( pViewShell );
@@ -233,7 +233,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
     SolarMutexGuard aGuard;
 
     sal_Bool bDone = false;
-    if ( pViewShell && !aURL.Complete.compareToAscii(cURLInsertColumns) )
+    if ( pViewShell && aURL.Complete.equalsAscii(cURLInsertColumns) )
     {
         ScViewData* pViewData = pViewShell->GetViewData();
         ScAddress aPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
@@ -290,7 +290,7 @@ void SAL_CALL ScDispatch::addStatusListener(
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.FeatureURL = aURL;
 
-    if ( !aURL.Complete.compareToAscii(cURLDocDataSource) )
+    if ( aURL.Complete.equalsAscii(cURLDocDataSource) )
     {
         uno::Reference<frame::XStatusListener>* pObj =
                 new uno::Reference<frame::XStatusListener>( xListener );
@@ -321,7 +321,7 @@ void SAL_CALL ScDispatch::removeStatusListener(
 {
     SolarMutexGuard aGuard;
 
-    if ( !aURL.Complete.compareToAscii(cURLDocDataSource) )
+    if ( aURL.Complete.equalsAscii(cURLDocDataSource) )
     {
         sal_uInt16 nCount = aDataSourceListeners.size();
         for ( sal_uInt16 n=nCount; n--; )

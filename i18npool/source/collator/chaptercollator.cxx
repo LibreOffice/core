@@ -85,7 +85,7 @@ ChapterCollator::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL
 ChapterCollator::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cChapCollator);
+    return rServiceName.equalsAscii(cChapCollator);
 }
 
 Sequence< OUString > SAL_CALL

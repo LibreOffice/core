@@ -423,14 +423,14 @@ namespace
                 const AsciiPropertyValue* pSetting = _pKnownSettings;
                 for ( ; pSetting->AsciiName; ++pSetting )
                 {
-                    if ( !pDataSourceSetting->Name.compareToAscii( pSetting->AsciiName ) )
+                    if ( pDataSourceSetting->Name.equalsAscii( pSetting->AsciiName ) )
                     {   // the particular data source setting is known
 
                         const DriverPropertyInfo* pAllowedDriverSetting = aDriverInfo.getConstArray();
                         const DriverPropertyInfo* pDriverSettingsEnd = pAllowedDriverSetting + aDriverInfo.getLength();
                         for ( ; pAllowedDriverSetting != pDriverSettingsEnd; ++pAllowedDriverSetting )
                         {
-                            if ( !pAllowedDriverSetting->Name.compareToAscii( pSetting->AsciiName ) )
+                            if ( pAllowedDriverSetting->Name.equalsAscii( pSetting->AsciiName ) )
                             {   // the driver also allows this setting
                                 bAllowSetting = sal_True;
                                 break;

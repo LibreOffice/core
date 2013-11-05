@@ -484,7 +484,7 @@ void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory *pServiceManager, void * )
 {
     void * pRet = 0;
-    if ( !LinguProps::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( LinguProps::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(

@@ -408,58 +408,58 @@ PaperInfo PaperInfo::getDefaultPaperForLocale(
 
     if (
         //United States, Letter
-        !rLocale.Country.compareToAscii("US") ||
+        rLocale.Country.equalsAscii("US") ||
         //Puerto Rico:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    http://sources.redhat.com/ml/libc-hacker/2001-07/msg00046.html
-        !rLocale.Country.compareToAscii("PR") ||
+        rLocale.Country.equalsAscii("PR") ||
         //Canada:
         //    http://sources.redhat.com/ml/libc-hacker/2001-07/msg00053.html
-        !rLocale.Country.compareToAscii("CA") ||
+        rLocale.Country.equalsAscii("CA") ||
         //Venuzuela:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00019.html
-        !rLocale.Country.compareToAscii("VE") ||
+        rLocale.Country.equalsAscii("VE") ||
         //Chile:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00240.html
-        !rLocale.Country.compareToAscii("CL") ||
+        rLocale.Country.equalsAscii("CL") ||
         //Mexico:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    http://qa.openoffice.org/issues/show_bug.cgi?id=49739
-        !rLocale.Country.compareToAscii("MX") ||
+        rLocale.Country.equalsAscii("MX") ||
         //Colombia:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    http://qa.openoffice.org/issues/show_bug.cgi?id=69703
-        !rLocale.Country.compareToAscii("CO") ||
+        rLocale.Country.equalsAscii("CO") ||
         //Philippines:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    http://ubuntuliving.blogspot.com/2008/07/default-paper-size-in-evince.html
         //    http://www.gov.ph/faqs/driverslicense.asp
-        !rLocale.Country.compareToAscii("PH") ||
+        rLocale.Country.equalsAscii("PH") ||
         //Belize:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://www.belize.gov.bz/ct.asp?xItem=1666&ctNode=486&mp=27
-        !rLocale.Country.compareToAscii("BZ") ||
+        rLocale.Country.equalsAscii("BZ") ||
         //Costa Rica:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://sources.redhat.com/bugzilla/show_bug.cgi?id=11258
-        !rLocale.Country.compareToAscii("CR") ||
+        rLocale.Country.equalsAscii("CR") ||
         //Guatemala:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://sources.redhat.com/bugzilla/show_bug.cgi?id=10936
-        !rLocale.Country.compareToAscii("GT") ||
+        rLocale.Country.equalsAscii("GT") ||
         //Nicaragua:
         //    http://unicode.org/cldr/trac/ticket/2585
-        !rLocale.Country.compareToAscii("NI") ||
+        rLocale.Country.equalsAscii("NI") ||
         //Panama:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://www.minsa.gob.pa/minsa/tl_files/documents/baner_informativo/INSTRUMENTO%20DE%20INVESTIGACION%20DE%20RAAV%202009.pdf
-        !rLocale.Country.compareToAscii("PA") ||
+        rLocale.Country.equalsAscii("PA") ||
         //El Salvador:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://www.tse.gob.sv
-        !rLocale.Country.compareToAscii("SV")
+        rLocale.Country.equalsAscii("SV")
        )
     {
         eType = PAPER_LETTER;

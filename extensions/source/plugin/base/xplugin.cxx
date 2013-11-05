@@ -311,7 +311,7 @@ void XPlugin_Impl::handleSpecialArgs()
 {
     // special handling for real audio which needs a lot of parameters
     // or won't function at all
-    if( ! m_aDescription.Mimetype.compareToAscii( "audio/x-pn-realaudio-plugin" ) && m_nArgs < 1 )
+    if( m_aDescription.Mimetype.equalsAscii( "audio/x-pn-realaudio-plugin" ) && m_nArgs < 1 )
     {
         OUString aURL;
         if( m_xModel.is() )
@@ -355,7 +355,7 @@ void XPlugin_Impl::handleSpecialArgs()
         }
     }
     // #69333# special for pdf
-    else if( ! m_aDescription.Mimetype.compareToAscii( "application/pdf" ) )
+    else if( m_aDescription.Mimetype.equalsAscii( "application/pdf" ) )
         m_aPluginMode = PluginMode::FULL;
 
     // see if we have a TYPE tag
@@ -839,7 +839,7 @@ void XPlugin_Impl::propertyChange( const com::sun::star::beans::PropertyChangeEv
 {
     Guard< Mutex > aGuard( m_aMutex );
 
-    if( ! rEvent.PropertyName.compareToAscii( "URL" ) )
+    if( rEvent.PropertyName.equalsAscii( "URL" ) )
     {
         OUString aStr;
         rEvent.NewValue >>= aStr;

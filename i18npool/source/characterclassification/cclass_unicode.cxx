@@ -270,7 +270,7 @@ OUString SAL_CALL cclass_Unicode::getImplementationName() throw( RuntimeExceptio
 
 sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cClass);
+    return rServiceName.equalsAscii(cClass);
 }
 
 Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames() throw( RuntimeException )

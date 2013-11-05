@@ -1257,7 +1257,7 @@ void Binding::handleEvent( const XEvent_t& xEvent )
     OUString sType(xEvent->getType());
     //OUString sEventMIPChanged("xforms-generic");
     //if(sType.equals(sEventMIPChanged)) {
-    if(!sType.compareToAscii("xforms-generic")) {
+    if(sType.equalsAscii("xforms-generic")) {
 
         // the modification of the 'mnDeferModifyNotifications'-member
         // is necessary to prevent infinite notication looping.

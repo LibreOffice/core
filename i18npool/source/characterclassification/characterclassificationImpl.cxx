@@ -205,7 +205,7 @@ sal_Bool SAL_CALL
 CharacterClassificationImpl::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cClass);
+    return rServiceName.equalsAscii(cClass);
 }
 
 Sequence< OUString > SAL_CALL

@@ -142,7 +142,7 @@ InputSequenceCheckerImpl::getImplementationName(void) throw( RuntimeException )
 sal_Bool SAL_CALL
 InputSequenceCheckerImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(serviceName);
+    return rServiceName.equalsAscii(serviceName);
 }
 
 Sequence< OUString > SAL_CALL

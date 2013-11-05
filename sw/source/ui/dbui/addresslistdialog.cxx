@@ -123,7 +123,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProp
                     else if(aInfo[nInfo].Name == "CharSet")
                         aInfo[nInfo].Value >>= sCharSet;
                 }
-                if(!sCharSet.compareToAscii( cUTF8 ))
+                if(sCharSet.equalsAscii( cUTF8 ))
                 {
                     sURL = sDBURL.copy(10);
                     //#i97577# at this point the 'URL' can also be a file name!

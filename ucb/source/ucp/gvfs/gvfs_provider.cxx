@@ -152,7 +152,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpgvfs1_component_getFactory( c
         (reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    if ( !::gvfs::ContentProvider::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( ::gvfs::ContentProvider::getImplementationName_Static().equalsAscii( pImplName ) )
         xFactory = ::gvfs::ContentProvider::createServiceFactory( xSMgr );
 
     if ( xFactory.is() ) {

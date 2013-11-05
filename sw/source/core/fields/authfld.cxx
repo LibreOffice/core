@@ -652,7 +652,7 @@ bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
 static sal_Int16 lcl_Find(const OUString& rFieldName)
 {
     for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
-        if(!rFieldName.compareToAscii(aFieldNames[i]))
+        if(rFieldName.equalsAscii(aFieldNames[i]))
             return i;
     return -1;
 }

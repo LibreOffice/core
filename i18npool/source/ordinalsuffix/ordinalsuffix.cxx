@@ -142,7 +142,7 @@ OUString SAL_CALL OrdinalSuffix::getImplementationName(void) throw( RuntimeExcep
 
 sal_Bool SAL_CALL OrdinalSuffix::supportsService( const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cOrdinalSuffix);
+    return rServiceName.equalsAscii(cOrdinalSuffix);
 }
 
 Sequence< OUString > SAL_CALL OrdinalSuffix::getSupportedServiceNames(void) throw( RuntimeException )

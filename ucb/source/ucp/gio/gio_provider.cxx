@@ -103,7 +103,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpgio1_component_getFactory( co
 #if !GLIB_CHECK_VERSION(2,36,0)
     g_type_init();
 #endif
-    if ( !::gio::ContentProvider::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( ::gio::ContentProvider::getImplementationName_Static().equalsAscii( pImplName ) )
         xFactory = ::gio::ContentProvider::createServiceFactory( xSMgr );
 
     if ( xFactory.is() )

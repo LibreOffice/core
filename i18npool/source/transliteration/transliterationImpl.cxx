@@ -643,7 +643,7 @@ TransliterationImpl::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL
 TransliterationImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cTrans);
+    return rServiceName.equalsAscii(cTrans);
 }
 
 Sequence< OUString > SAL_CALL

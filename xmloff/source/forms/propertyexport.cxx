@@ -391,7 +391,7 @@ namespace xmloff
         DBG_CHECK_PROPERTY( PROPERTY_TARGETFRAME, OUString );
 
         OUString sTargetFrame = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETFRAME));
-        if (0 != sTargetFrame.compareToAscii("_blank"))
+        if( ! sTargetFrame.equalsAscii("_blank") )
         {   // an empty string and "_blank" have the same meaning and don't have to be written
             AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(CCA_TARGET_FRAME)
                         ,OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME)

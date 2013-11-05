@@ -405,8 +405,8 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
     // try to parse the font name and decide whether it might be a
     // japanese font. Who invented this PITA ?
     OUString aPSNameLastToken( aPSName.copy( aPSName.lastIndexOf( '-' )+1 ) );
-    if( ! aPSNameLastToken.compareToAscii( "H" )    ||
-        ! aPSNameLastToken.compareToAscii( "V" )  )
+    if( aPSNameLastToken.equalsAscii( "H" )    ||
+        aPSNameLastToken.equalsAscii( "V" )  )
     {
         static const char* pEncs[] =
             {
@@ -430,7 +430,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
                 if( nIndex == -1 )
                     break;
                 nOffset = 0;
-                if( ! aToken.compareToAscii( pEncs[enc] ) )
+                if( aToken.equalsAscii( pEncs[enc] ) )
                 {
                     m_aEncoding = aEncs[ enc ];
                     m_bFontEncodingOnly = true;

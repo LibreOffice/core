@@ -1144,7 +1144,7 @@ void * SAL_CALL GrammarCheckingIterator_getFactory(
     void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
-    if ( !GrammarCheckingIterator_getImplementationName().compareToAscii( pImplName ) )
+    if ( GrammarCheckingIterator_getImplementationName().equalsAscii( pImplName ) )
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(

@@ -292,7 +292,7 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
             m_aPdfDirectoryText.Show( sal_True );
             m_aConfigureBox.SelectEntryPos( m_nPdfEntry );
         }
-        else if( ! aToken.compareToAscii( "external_dialog" ) )
+        else if( aToken.equalsAscii( "external_dialog" ) )
         {
             m_aExternalCB.Check();
             m_bWasExternalDialog = true;

@@ -1174,7 +1174,7 @@ Calendar_gregorian::getImplementationName(void) throw( RuntimeException )
 sal_Bool SAL_CALL
 Calendar_gregorian::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cCalendar);
+    return rServiceName.equalsAscii(cCalendar);
 }
 
 Sequence< OUString > SAL_CALL
