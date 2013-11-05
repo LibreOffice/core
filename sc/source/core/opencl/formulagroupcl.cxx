@@ -1191,6 +1191,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpAmordegrc));
                 }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                   "com.sun.star.sheet.addin.Analysis.getAmorlinc"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                        new OpAmorlinc));
+                }
                 break;
             default:
                 throw UnhandledToken(pChild, "unhandled opcode");
