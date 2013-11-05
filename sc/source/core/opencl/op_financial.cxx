@@ -2892,6 +2892,177 @@ void OpCoupnum::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "return tmp;\n";
     ss << "}";
 }
+void OpAmordegrc::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(nKorrValDecl); decls.insert(RoundDecl);
+    decls.insert(IsLeapYearDecl);decls.insert(DaysInMonthDecl);
+    decls.insert(DaysToDateDecl); decls.insert(DateToDaysDecl);
+    decls.insert(GetNullDateDecl); decls.insert(GetYearFracDecl);
+    funs.insert(Round);
+    funs.insert(IsLeapYear);funs.insert(DaysInMonth);
+    funs.insert(DaysToDate);funs.insert(DateToDays);
+    funs.insert(GetNullDate);funs.insert(GetYearFrac);
+}
+void OpAmordegrc::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+      if (i)
+        ss << ",";
+      vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n    ";
+    ss << "int gid0 = get_global_id(0);\n";
+    ss << "    double tmp = " << GetBottom() <<";\n";
+    ss << "    double fCost,fRestVal,fPer,fRate;\n";
+    ss << "    int nDate,nFirstPer,nBase;\n";
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur2);
+    FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur3);
+    FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur4);
+    FormulaToken *tmpCur5 = vSubArguments[5]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR5= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur5);
+    FormulaToken *tmpCur6 = vSubArguments[6]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR6= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur6);
+    ss<< "    int buffer_Cost_len = ";
+    ss<< tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_Date_len = ";
+    ss<< tmpCurDVR1->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_FirstPer_len = ";
+    ss<< tmpCurDVR2->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_RestVal_len = ";
+    ss<< tmpCurDVR3->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_Per_len = ";
+    ss<< tmpCurDVR4->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_Rate_len = ";
+    ss<< tmpCurDVR5->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_Base_len = ";
+    ss<< tmpCurDVR6->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_Cost_len || isNan(";
+    ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        fCost = 0;\n    else\n";
+ #endif
+    ss << "        fCost=";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_Date_len || isNan(";
+    ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nDate = 0;\n    else\n";
+#endif
+    ss << "        nDate=(int)";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_FirstPer_len || isNan(";
+    ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nFirstPer = 0;\n    else\n";
+#endif
+    ss << "        nFirstPer=(int)";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_RestVal_len || isNan(";
+    ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        fRestVal = 0;\n    else\n";
+#endif
+    ss << "        fRestVal=";
+    ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_Per_len || isNan(";
+    ss <<vSubArguments[4]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        fPer = 0;\n    else\n";
+#endif
+    ss << "        fPer = ";
+    ss << vSubArguments[4]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_Rate_len || isNan(";
+    ss <<vSubArguments[5]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        fRate = 0;\n    else\n";
+#endif
+    ss << "        fRate=";
+    ss << vSubArguments[5]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_Base_len || isNan(";
+    ss <<vSubArguments[6]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nBase = 0;\n    else\n";
+#endif
+    ss << "        nBase = (int)";
+    ss << vSubArguments[6]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss <<"    uint nPer = convert_int( fPer );\n";
+    ss <<"    double fUsePer = 1.0 / fRate;\n";
+    ss <<"    double fAmorCoeff;\n";
+    ss <<"    if( fUsePer < 3.0 )\n";
+    ss <<"        fAmorCoeff = 1.0;\n";
+    ss <<"    else if( fUsePer < 5.0 )\n";
+    ss <<"        fAmorCoeff = 1.5;\n";
+    ss <<"    else if( fUsePer <= 6.0 )\n";
+    ss <<"        fAmorCoeff = 2.0;\n";
+    ss <<"    else\n";
+    ss <<"        fAmorCoeff = 2.5;\n";
+    ss <<"    fRate *= fAmorCoeff;\n";
+    ss <<"    tmp = Round( GetYearFrac( GetNullDate(),";
+    ss <<"nDate, nFirstPer, nBase ) * fRate * fCost);\n";
+    ss <<"    fCost = fCost-tmp;\n";
+    ss <<"    double fRest = fCost - fRestVal;\n";
+    ss <<"    for( uint n = 0 ; n < nPer ; n++ )\n";
+    ss <<"    {\n";
+    ss <<"        tmp = Round( fRate * fCost);\n";
+    ss <<"        fRest -= tmp;\n";
+    ss <<"        if( fRest < 0.0 )\n";
+    ss <<"        {\n";
+    ss <<"            switch( nPer - n )\n";
+    ss <<"            {\n";
+    ss <<"                case 0:\n";
+    ss <<"                case 1:\n";
+    ss <<"                    tmp = Round( fCost * 0.5);\n";
+    ss <<"                default:\n";
+    ss <<"                    tmp = 0.0;\n";
+    ss <<"            }\n";
+    ss <<"        }\n";
+    ss <<"        fCost -= tmp;\n";
+    ss <<"    }\n";
+    ss <<"    return tmp;\n";
+    ss <<"}";
+}
 
 void OpReceived::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
