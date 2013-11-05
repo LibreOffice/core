@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOM_ATTR_HXX
-#define DOM_ATTR_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_DOM_ATTR_HXX
+#define INCLUDED_UNOXML_SOURCE_DOM_ATTR_HXX
 
 #include <memory>
 

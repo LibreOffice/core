@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOM_SAXBUILDER_HXX
-#define DOM_SAXBUILDER_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_DOM_SAXBUILDER_HXX
+#define INCLUDED_UNOXML_SOURCE_DOM_SAXBUILDER_HXX
 
 #include <stack>
 #include <map>

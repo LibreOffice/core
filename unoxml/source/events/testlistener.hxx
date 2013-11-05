@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EVENT_TESTLISTENER_HXX
-#define EVENT_TESTLISTENER_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_EVENTS_TESTLISTENER_HXX
+#define INCLUDED_UNOXML_SOURCE_EVENTS_TESTLISTENER_HXX
 
 #include <sal/types.h>
 

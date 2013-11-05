@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CNODES_HXX
-#define _CNODES_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_RDF_CNODES_HXX
+#define INCLUDED_UNOXML_SOURCE_RDF_CNODES_HXX
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>

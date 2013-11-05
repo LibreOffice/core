@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOM_CHILDLIST_HXX
-#define DOM_CHILDLIST_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_DOM_CHILDLIST_HXX
+#define INCLUDED_UNOXML_SOURCE_DOM_CHILDLIST_HXX
 
 #include <sal/types.h>
 #include <rtl/ref.hxx>

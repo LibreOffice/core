@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LIBRDF_REPOSITORY_HXX
-#define _LIBRDF_REPOSITORY_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_RDF_LIBRDF_REPOSITORY_HXX
+#define INCLUDED_UNOXML_SOURCE_RDF_LIBRDF_REPOSITORY_HXX
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>

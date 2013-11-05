@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EVENT_MUTATIONEVENT_HXX
-#define EVENT_MUTATIONEVENT_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_EVENTS_MUTATIONEVENT_HXX
+#define INCLUDED_UNOXML_SOURCE_EVENTS_MUTATIONEVENT_HXX
 
 #include <sal/types.h>
 

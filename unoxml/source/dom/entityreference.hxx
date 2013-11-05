@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOM_ENTITYREFERENCE_HXX
-#define DOM_ENTITYREFERENCE_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_DOM_ENTITYREFERENCE_HXX
+#define INCLUDED_UNOXML_SOURCE_DOM_ENTITYREFERENCE_HXX
 
 #include <libxml/tree.h>
 

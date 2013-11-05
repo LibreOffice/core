@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOM_ENTITIESMAP_HXX
-#define DOM_ENTITIESMAP_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_DOM_ENTITIESMAP_HXX
+#define INCLUDED_UNOXML_SOURCE_DOM_ENTITIESMAP_HXX
 
 #include <sal/types.h>
 #include <rtl/ref.hxx>

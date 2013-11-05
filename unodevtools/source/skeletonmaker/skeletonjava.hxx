@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNODEVTOOLS_SKELETONJAVA_HXX
-#define INCLUDED_UNODEVTOOLS_SKELETONJAVA_HXX
+#ifndef INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONJAVA_HXX
+#define INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONJAVA_HXX
 
 #include <fstream>
 
@@ -50,6 +50,6 @@ void generateSkeleton(ProgramOptions const & options, rtl::Reference< TypeManage
 
 } }
 
-#endif // INCLUDED_UNODEVTOOLS_SKELETONJAVA_HXX
+#endif // INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONJAVA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

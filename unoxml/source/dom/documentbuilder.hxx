@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOM_DOCUMENTBUILDER_HXX
-#define DOM_DOCUMENTBUILDER_HXX
+#ifndef INCLUDED_UNOXML_SOURCE_DOM_DOCUMENTBUILDER_HXX
+#define INCLUDED_UNOXML_SOURCE_DOM_DOCUMENTBUILDER_HXX
 
 #include <sal/types.h>
 

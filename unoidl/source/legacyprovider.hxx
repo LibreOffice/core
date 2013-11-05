@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOIDL_LEGACYPROVIDER_HXX
-#define INCLUDED_UNOIDL_LEGACYPROVIDER_HXX
+#ifndef INCLUDED_UNOIDL_SOURCE_LEGACYPROVIDER_HXX
+#define INCLUDED_UNOIDL_SOURCE_LEGACYPROVIDER_HXX
 
 #include "sal/config.h"
 
