@@ -142,6 +142,22 @@ gb_LinkTarget__use_sane_headers :=
 
 endif
 
+ifeq ($(SYSTEM_BLUEZ),YES)
+
+gb_LinkTarget__use_bluez_bluetooth_headers :=
+
+else # !SYSTEM_BLUEZ
+
+define gb_LinkTarget__use_bluez_bluetooth_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(SRCDIR)/external/bluez_bluetooth/inc \
+	$$(INCLUDE) \
+)
+
+endef
+
+endif # SYSTEM_BLUEZ
+
 # External libraries
 
 ifeq ($(SYSTEM_CPPUNIT),YES)

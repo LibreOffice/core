@@ -44,12 +44,6 @@ $(eval $(call gb_Library_set_include,sd,\
 	-I$(WORKDIR)/SdiTarget/sd/sdi \
 ))
 
-ifneq ($(SYSTEM_BLUEZ),YES)
-$(eval $(call gb_Library_add_cxxflags,sd,\
-	-I$(SRCDIR)/external/bluez_bluetooth/inc \
-))
-endif
-
 $(eval $(call gb_Library_add_defs,sd,\
 	-DSD_DLLIMPLEMENTATION \
 ))
@@ -101,6 +95,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
 
 ifeq ($(OS), LINUX)
 $(eval $(call gb_Library_use_externals,sd,\
+	bluez_bluetooth_headers \
 	boost_headers \
 	libxml2 \
 	dbus \
@@ -110,6 +105,7 @@ $(eval $(call gb_Library_use_externals,sd,\
 ))
 else
 $(eval $(call gb_Library_use_externals,sd,\
+	bluez_bluetooth_headers \
 	boost_headers \
 	libxml2 \
 	dbus \
