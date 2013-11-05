@@ -29,6 +29,7 @@
 #include "formula/formuladllapi.h"
 #include "formula/types.hxx"
 #include "svl/sharedstring.hxx"
+#include "osl/interlck.h"
 
 namespace formula
 {
@@ -107,12 +108,18 @@ public:
             bool                IsFunction() const; // pure functions, no operators
             bool                IsExternalRef() const;
             sal_uInt8           GetParamCount() const;
-    inline  void                IncRef() const          { nRefCnt++; }
-    inline  void                DecRef() const
-                                    {
-                                        if (!--nRefCnt)
-                                            const_cast<FormulaToken*>(this)->Delete();
-                                    }
+
+    inline void IncRef() const
+    {
+        osl_atomic_increment(&nRefCnt);
+    }
+
+    inline void DecRef() const
+    {
+        if (!osl_atomic_decrement(&nRefCnt))
+            const_cast<FormulaToken*>(this)->Delete();
+    }
+
     inline  sal_uInt16          GetRef() const          { return nRefCnt; }
     inline OpCode               GetOpCode() const       { return eOp; }
 
