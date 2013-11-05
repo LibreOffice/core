@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SMPLMAILSUPPL_HXX_
-#define _SMPLMAILSUPPL_HXX_
+#ifndef INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILSUPPL_HXX
+#define INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILSUPPL_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>

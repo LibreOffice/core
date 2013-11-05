@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SHELLEXEC_HXX_
-#define _SHELLEXEC_HXX_
+#ifndef INCLUDED_SHELL_SOURCE_UNIX_EXEC_SHELLEXEC_HXX
+#define INCLUDED_SHELL_SOURCE_UNIX_EXEC_SHELLEXEC_HXX
 
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>

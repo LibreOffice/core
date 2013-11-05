@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PROPSHEETS_HXX_INCLUDED
-#define PROPSHEETS_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_PROPSHEETS_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_PROPSHEETS_HXX
 
 #include "internal/metainforeader.hxx"
 

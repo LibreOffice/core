@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ZIPFILE_HXX_INCLUDED
-#define ZIPFILE_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_ZIPFILE_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_ZIPFILE_HXX
 
 #ifndef _WINDOWS
 #define _WINDOWS

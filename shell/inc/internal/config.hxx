@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONFIG_HXX_INCLUDED
-#define CONFIG_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
 
 #ifdef _MSC_VER
 #pragma warning (disable : 4786 4503 4917)

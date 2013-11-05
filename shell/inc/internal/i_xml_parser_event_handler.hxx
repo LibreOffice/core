@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef I_XML_PARSER_EVENT_HANDLER_HXX_INCLUDED
-#define I_XML_PARSER_EVENT_HANDLER_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_I_XML_PARSER_EVENT_HANDLER_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_I_XML_PARSER_EVENT_HANDLER_HXX
 
 #include <string>
 #include <map>

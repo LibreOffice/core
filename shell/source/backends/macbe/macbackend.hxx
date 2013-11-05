@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MACBACKEND_HXX_
-#define _MACBACKEND_HXX_
+#ifndef INCLUDED_SHELL_SOURCE_BACKENDS_MACBE_MACBACKEND_HXX
+#define INCLUDED_SHELL_SOURCE_BACKENDS_MACBE_MACBACKEND_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -126,6 +126,6 @@ protected:
     ~MacOSXBackend(void);
 };
 
-#endif // _MACBACKEND_HXX_
+#endif // INCLUDED_SHELL_SOURCE_BACKENDS_MACBE_MACBACKEND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

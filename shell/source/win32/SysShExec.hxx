@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SYSSHEXEC_HXX_
-#define _SYSSHEXEC_HXX_
+#ifndef INCLUDED_SHELL_SOURCE_WIN32_SYSSHEXEC_HXX
+#define INCLUDED_SHELL_SOURCE_WIN32_SYSSHEXEC_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>

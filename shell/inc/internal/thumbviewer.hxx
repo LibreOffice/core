@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef THUMBVIEWER_HXX_INCLUDED
-#define THUMBVIEWER_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_THUMBVIEWER_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_THUMBVIEWER_HXX
 
 #if defined _MSC_VER
 #pragma warning(push, 1)

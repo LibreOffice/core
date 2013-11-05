@@ -18,8 +18,8 @@
  */
 
 
-#ifndef ITAG_HXX_INCLUDED
-#define ITAG_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_ITAG_HXX
+#define INCLUDED_SHELL_SOURCE_WIN32_OOOFILEREADER_ITAG_HXX
 
 #include "internal/config.hxx"
 #include "internal/types.hxx"

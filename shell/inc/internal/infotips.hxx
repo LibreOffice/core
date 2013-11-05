@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INFOTIPS_HXX_INCLUDED
-#define INFOTIPS_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_INFOTIPS_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_INFOTIPS_HXX
 
 #if defined _MSC_VER
 #pragma warning(push, 1)

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RESOURCE_H_INCLUDED
-#define RESOURCE_H_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_RESOURCE_H
+#define INCLUDED_SHELL_INC_INTERNAL_RESOURCE_H
 
 #define MANIFEST_RESOURCE_ID               2
 #define IDD_PROPPAGE_STATISTICS          101

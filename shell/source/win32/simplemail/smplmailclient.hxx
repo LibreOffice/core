@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SMPLMAILCLIENT_HXX_
-#define _SMPLMAILCLIENT_HXX_
+#ifndef INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILCLIENT_HXX
+#define INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILCLIENT_HXX
 
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SHELL_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
-#define SHELL_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
+#ifndef INCLUDED_SHELL_SOURCE_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
+#define INCLUDED_SHELL_SOURCE_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -56,5 +56,5 @@ namespace shell { namespace sessioninstall
     };
 }}
 
-#endif // SHELL_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
+#endif // INCLUDED_SHELL_SOURCE_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

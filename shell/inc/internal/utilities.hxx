@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UTILITIES_HXX_INCLUDED
-#define UTILITIES_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_UTILITIES_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_UTILITIES_HXX
 
 #include <malloc.h>
 #if defined _MSC_VER

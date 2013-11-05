@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CMDLINE_HXX_
-#define _CMDLINE_HXX_
+#ifndef INCLUDED_SHELL_SOURCE_TOOLS_LNGCONVEX_CMDLINE_HXX
+#define INCLUDED_SHELL_SOURCE_TOOLS_LNGCONVEX_CMDLINE_HXX
 
 #include "defs.hxx"
 

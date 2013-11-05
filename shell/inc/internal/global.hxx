@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef GLOBAL_HXX_INCLUDED
-#define GLOBAL_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_GLOBAL_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_GLOBAL_HXX
 
 #if defined _MSC_VER
 #pragma warning(push, 1)

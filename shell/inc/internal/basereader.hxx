@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASEREADER_HXX_INCLUDED
-#define BASEREADER_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_BASEREADER_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_BASEREADER_HXX
 
 #include "internal/global.hxx"
 #include "internal/types.hxx"

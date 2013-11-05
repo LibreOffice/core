@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RECENTLY_USED_FILE_HXX
-#define INCLUDED_RECENTLY_USED_FILE_HXX
+#ifndef INCLUDED_SHELL_SOURCE_UNIX_SYSSHELL_RECENTLY_USED_FILE_HXX
+#define INCLUDED_SHELL_SOURCE_UNIX_SYSSHELL_RECENTLY_USED_FILE_HXX
 
 #include <stdio.h>
 #include <unistd.h>
@@ -56,6 +56,6 @@ private:
     FILE* file_;
 };
 
-#endif // INCLUDED_RECENTLY_USED_FILE_HXX
+#endif // INCLUDED_SHELL_SOURCE_UNIX_SYSSHELL_RECENTLY_USED_FILE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

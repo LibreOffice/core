@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ISO8601_CONVERTER_HXX_INCLUDED
-#define ISO8601_CONVERTER_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_ISO8601_CONVERTER_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_ISO8601_CONVERTER_HXX
 
 #include <string>
 

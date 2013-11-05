@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CMDMAILSUPPL_HXX_
-#define _CMDMAILSUPPL_HXX_
+#ifndef INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILSUPPL_HXX
+#define INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILSUPPL_HXX
 
 #include <cppuhelper/implbase3.hxx>
 #include <osl/mutex.hxx>

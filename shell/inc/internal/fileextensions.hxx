@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FILEEXTENSIONS_HXX_INCLUDED
-#define FILEEXTENSIONS_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_FILEEXTENSIONS_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_FILEEXTENSIONS_HXX
 
 #include "internal/global.hxx"
 

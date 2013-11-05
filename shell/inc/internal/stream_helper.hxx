@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef STREAM_HELPER_HXX_INCLUDED
-#define STREAM_HELPER_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_STREAM_HELPER_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_STREAM_HELPER_HXX
 
 #include "internal/types.hxx"
 

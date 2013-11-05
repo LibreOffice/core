@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef REGISTRY_HXX_INCLUDED
-#define REGISTRY_HXX_INCLUDED
+#ifndef INCLUDED_SHELL_INC_INTERNAL_REGISTRY_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_REGISTRY_HXX
 
 //-----------------------------
 // registry helper functions

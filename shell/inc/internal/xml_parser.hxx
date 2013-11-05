@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XML_PARSER_HXX_
-#define _XML_PARSER_HXX_
+#ifndef INCLUDED_SHELL_INC_INTERNAL_XML_PARSER_HXX
+#define INCLUDED_SHELL_INC_INTERNAL_XML_PARSER_HXX
 
 #include <expat.h>
 #include <stdexcept>
