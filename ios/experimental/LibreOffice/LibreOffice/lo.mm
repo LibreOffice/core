@@ -168,7 +168,7 @@ lo_initialize(void)
     uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"oovbaapi.rdb"]];
 
     uno_types = [uno_types stringByAppendingString: @" file://"];
-    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"udkapi.rdb"]];
+    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"types.rdb"]];
 
     assert(strcmp(argv[2], "placeholder-uno-types") == 0);
     argv[2] = [uno_types UTF8String];
