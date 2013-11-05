@@ -7699,7 +7699,7 @@ libo_CHECK_SYSTEM_MODULE([libfreehand],[FREEHAND],[libfreehand-0.0],["-I${WORKDI
 dnl ===================================================================
 dnl Check for system libodfgen
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.0])
+libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.0 >= 0.0.3])
 
 dnl ===================================================================
 dnl Check for system libcdr
