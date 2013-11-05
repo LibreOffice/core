@@ -211,7 +211,7 @@ void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem
 
         ScCompiler aComp(&rDocImport.getDoc(), aPos);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
-        ScTokenArray* pArray = aComp.CompileString(it->maTokenAndAddress.maTokenStr);
+        boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(it->maTokenAndAddress.maTokenStr));
         if (pArray)
             rDocImport.setMatrixCells(aRange, *pArray, formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
     }

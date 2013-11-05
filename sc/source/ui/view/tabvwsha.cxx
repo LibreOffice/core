@@ -53,6 +53,8 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 sal_Bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
 {
     OUString aStr;
@@ -565,7 +567,7 @@ bool ScTabViewShell::IsRefInputMode() const
                             ScCompiler aComp( pDoc, aPos );
                             aComp.SetGrammar(pDoc->GetGrammar());
                             aComp.SetCloseBrackets( false );
-                            ScTokenArray* pArr = aComp.CompileString( aString );
+                            boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aString));
                             if ( pArr && pArr->MayReferenceFollow() )
                             {
                                 return true;

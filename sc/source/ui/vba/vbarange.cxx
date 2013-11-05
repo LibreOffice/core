@@ -172,6 +172,9 @@
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
+
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 using ::std::vector;
@@ -901,7 +904,7 @@ protected:
                     ScCompiler aCompiler( m_pDoc, aCellRanges.front()->aStart );
                     aCompiler.SetGrammar(m_eGrammar);
                     // compile the string in the format passed in
-                    aCompiler.CompileString( sFormula );
+                    boost::scoped_ptr<ScTokenArray> pArray(aCompiler.CompileString(sFormula));
                     // set desired convention to that of the document
                     aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
                     OUString sConverted;
@@ -944,7 +947,7 @@ public:
             ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
             ScCompiler aCompiler( m_pDoc, aCellRanges.front()->aStart );
             aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_DEFAULT);
-            aCompiler.CompileString( sVal );
+            boost::scoped_ptr<ScTokenArray> pArray(aCompiler.CompileString(sVal));
             // set desired convention
             aCompiler.SetGrammar( m_eGrammar );
             OUString sConverted;

@@ -431,7 +431,14 @@ public:
     bool            IsCorrected() { return bCorrected; }
     const OUString& GetCorrectedFormula() { return aCorrectedFormula; }
 
-    // Use convention from this->aPos by default
+    /**
+     * Tokenize formula expression string into an array of tokens.
+     *
+     * @param rFormula formula expression to tokenize.
+     *
+     * @return heap allocated token array object. The caller <i>must</i>
+     *         manage the life cycle of this object.
+     */
     ScTokenArray* CompileString( const OUString& rFormula );
     ScTokenArray* CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
     const ScDocument* GetDoc() const { return pDoc; }

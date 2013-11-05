@@ -64,6 +64,7 @@
 #include "dociter.hxx"
 #include "reffind.hxx"
 #include "compiler.hxx"
+#include "tokenarray.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -257,9 +258,11 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
                     OUString aNew = aFinder.GetText();
                     ScCompiler aComp( pDoc, aPos);
                     aComp.SetGrammar(pDoc->GetGrammar());
-                    ScTokenArray* pArr = aComp.CompileString( aNew );
-                    ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
-                                                pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
+                    boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aNew));
+                    ScFormulaCell* pNewCell =
+                        new ScFormulaCell(
+                            pDoc, aPos, pArr.get(), formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
+
                     pDoc->SetFormulaCell(aPos, pNewCell);
                     bOk = true;
                 }

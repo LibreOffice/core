@@ -43,6 +43,8 @@
 #include "rangeutl.hxx"
 #include "tokenarray.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings)
  : m_pDlg(_pDlg)
  , pRefEdit (NULL)
@@ -186,10 +188,9 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
             SCTAB nTab = pViewData->GetTabNo();
             ScAddress aPos( nCol, nRow, nTab );
 
-            ScTokenArray* pScTokA=pRefComp->CompileString(rStr);
-            //pRefComp->CompileTokenArray();
+            boost::scoped_ptr<ScTokenArray> pScTokA(pRefComp->CompileString(rStr));
 
-            if(pTabViewShell!=NULL && pScTokA!=NULL)
+            if (pTabViewShell && pScTokA)
             {
                 pTabViewShell->DoneRefMode( false );
                 pTabViewShell->ClearHighlightRanges();
@@ -225,7 +226,6 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                     pToken = static_cast<const ScToken*>(pScTokA->GetNextReference());
                 }
             }
-            if(pScTokA!=NULL) delete pScTokA;
         }
     }
 }
