@@ -59,7 +59,6 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     , aStrNone(SC_RESSTR(SCSTR_NONE))
     , aStrEmpty(SC_RESSTR(SCSTR_FILTER_EMPTY))
     , aStrNotEmpty(SC_RESSTR(SCSTR_FILTER_NOTEMPTY))
-    , aStrRow(SC_RESSTR(SCSTR_ROW))
     , aStrColumn(SC_RESSTR(SCSTR_COLUMN))
     , pOptionsMgr(NULL)
     , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))

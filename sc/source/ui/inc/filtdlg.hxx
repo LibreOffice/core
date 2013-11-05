@@ -113,7 +113,6 @@ private:
 
     const OUString aStrEmpty;
     const OUString aStrNotEmpty;
-    const OUString aStrRow;
     const OUString aStrColumn;
 
     ScFilterOptionsMgr* pOptionsMgr;

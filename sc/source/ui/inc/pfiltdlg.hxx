@@ -84,7 +84,6 @@ private:
     const OUString aStrNone;
     const OUString aStrEmpty;
     const OUString aStrNotEmpty;
-    const OUString aStrRow;
     const OUString aStrColumn;
 
     const sal_uInt16    nWhichQuery;
