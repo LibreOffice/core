@@ -131,6 +131,7 @@ public:
     void testStatisticalFormulaStandard();
     void testStatisticalFormulaWeibull();
     void testStatisticalFormulaMedian();
+    void testFinancialDuration_ADDFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -193,6 +194,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaStandard);
     CPPUNIT_TEST(testStatisticalFormulaWeibull);
     CPPUNIT_TEST(testStatisticalFormulaMedian);
+    CPPUNIT_TEST(testFinancialDuration_ADDFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1902,7 +1904,28 @@ void ScOpenclTest:: testFinacialPPMTFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-
+//[AMLOEXT-121]
+void ScOpenclTest:: testFinancialDuration_ADDFormula()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Duration_ADD.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Duration_ADD.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
 {
