@@ -1809,9 +1809,7 @@ endef
 
 else # ENABLE_AVAHI
 
-define gb_LinkTarget__use_AVAHI
-
-endef
+define gb_LinkTarget__use_avahi :=
 
 endif # ENABLE_AVAHI
 
