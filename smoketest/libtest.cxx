@@ -10,10 +10,18 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
+#include <math.h>
+#include <time.h>
 #include <liblibreoffice.hxx>
+
+long getTimeMS();
 
 int main (int argc, char **argv)
 {
+    long start, end;
+
+    start = getTimeMS();
+
     if( argc < 2 )
         return -1;
     LibLibreOffice *pOffice = lo_init( argv[1] );
@@ -25,6 +33,11 @@ int main (int argc, char **argv)
         fprintf( stderr, "failed to initialize\n" );
         return -1;
     }
+
+    end = getTimeMS();
+    fprintf( stderr, "init time: %ld ms\n", (end-start) );
+    start = end;
+
     fprintf( stderr, "start to load document '%s'\n", argv[2] );
     LODocument *pDocument = pOffice->documentLoad( argv[2] );
     if( !pDocument )
@@ -35,6 +48,10 @@ int main (int argc, char **argv)
         free (pError);
         return -1;
     }
+
+    end = getTimeMS();
+    fprintf( stderr, "load time: %ld ms\n", (end-start) );
+    start = end;
 
     if( argc > 3 )
     {
@@ -49,14 +66,25 @@ int main (int argc, char **argv)
             free (pError);
         }
         else
+        {
             fprintf( stderr, "Save succeeded\n" );
+            end = getTimeMS();
+            fprintf( stderr, "save time: %ld ms\n", (end-start) );
+        }
     }
-    fprintf( stderr, "all tests passed." );
+    fprintf( stderr, "all tests passed.\n" );
 
     delete pDocument;
     delete pOffice;
 
     return 0;
+}
+
+long getTimeMS() {
+    struct timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
+    long ms = round(t.tv_nsec / 1.0e6) + t.tv_sec * 1000;
+    return ms;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

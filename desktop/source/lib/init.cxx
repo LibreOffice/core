@@ -166,19 +166,23 @@ LibLibreOffice_Impl::documentLoad( const char *docUrl )
 
 bool LibLODocument_Impl::saveAs (const char *url, const char *format)
 {
-    OUString sURL = getUString( url );
     OUString sFormat = getUString( format );
+
+    OUString sUrl = getUString( url );
+    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
+
+    osl_getProcessWorkingDir(&sWorkingDir.pData);
+    osl::FileBase::getFileURLFromSystemPath( sUrl, sDocPathUrl );
+    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
 
     try {
         uno::Reference< frame::XModel > xDocument( mxComponent, uno::UNO_QUERY_THROW );
         uno::Sequence< beans::PropertyValue > aSeq = xDocument->getArgs();
 
-        OUString aFilterName, aDocumentService;
+        OUString aDocumentService;
         for( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
         {
-            if( aSeq[i].Name == "FilterName" )
-                aSeq[i].Value >>= aFilterName;
-            else if( aSeq[i].Name == "DocumentService" )
+            if( aSeq[i].Name == "DocumentService" )
                 aSeq[i].Value >>= aDocumentService;
             OUString aValue;
             aSeq[i].Value >>= aValue;
@@ -198,16 +202,34 @@ bool LibLODocument_Impl::saveAs (const char *url, const char *format)
         else // for the sake of argument only writer documents ...
             pMap = (const ExtensionMap *)aWriterExtensionMap;
 
-        if( format )
+        if( ! format )
         {
-            for( sal_Int32 i = 0; pMap[i].extn; i++ )
+            // sniff from the extension
+            sal_Int32 idx = sUrl.lastIndexOf( "." );
+            if( idx > 0 )
             {
-                if( sFormat.equalsIgnoreAsciiCaseAscii( pMap[i].extn ) )
-                {
-                    aFilterName = getUString( pMap[i].filterName );
-                    break;
-                }
+                sFormat = sUrl.copy( idx + 1 );
             }
+            else
+            {
+                gImpl->maLastExceptionMsg = "input filename without a suffix";
+                return false;
+            }
+        }
+
+        OUString aFilterName;
+        for( sal_Int32 i = 0; pMap[i].extn; i++ )
+        {
+            if( sFormat.equalsIgnoreAsciiCaseAscii( pMap[i].extn ) )
+            {
+                aFilterName = getUString( pMap[i].filterName );
+                break;
+            }
+        }
+        if( ! aFilterName.getLength() )
+        {
+            gImpl->maLastExceptionMsg = "no output filter found for provided suffix";
+            return false;
         }
 
         aSeq.realloc(2);
@@ -217,7 +239,7 @@ bool LibLODocument_Impl::saveAs (const char *url, const char *format)
         aSeq[1].Value <<= aFilterName;
 
         uno::Reference< frame::XStorable > xStorable( mxComponent, uno::UNO_QUERY_THROW );
-        xStorable->storeToURL( sURL, aSeq );
+        xStorable->storeToURL( sAbsoluteDocUrl, aSeq );
 
         return true;
     } catch (const uno::Exception &ex) {
