@@ -347,7 +347,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int3
     if (nStartPos < 0)
         nStartPos = 0;
     sal_Int32 strLen = Text.getLength();
-    if (nStartPos > strLen)
+    if (nStartPos >= strLen)
         return -1;
 
     sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text.iterateCodePoints(&nStartPos, 0))) ? 2 : 1;
