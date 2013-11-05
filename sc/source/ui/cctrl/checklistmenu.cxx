@@ -970,7 +970,7 @@ void ScCheckListMenuWindow::getSectionPosSize(
         break;
         case CHECK_TOGGLE_ALL:
         {
-            long h = nLabelHeight*3/2; // check box height is heuristically 150% of the text height.
+            long h = std::min(maChkToggleAll.CalcMinimumSize().Height(), 26L);
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
             rPos.X() += 5;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
