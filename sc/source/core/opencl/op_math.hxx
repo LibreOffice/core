@@ -30,7 +30,13 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Csc"; }
 };
-
+class OpSumIfs: public CheckVariables
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "SumIfs"; }
+};
 class OpSinh: public Normal
 {
 public:

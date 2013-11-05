@@ -104,6 +104,67 @@ void Normal::GenSlidingWindowFunction(
     ss << "}";
 }
 
+void CheckVariables::GenTmpVariables(
+    std::stringstream & ss, SubArguments & vSubArguments)
+{
+    for(unsigned i=0;i<vSubArguments.size();i++)
+    {
+         ss << "    double tmp";
+         ss << i;
+         ss <<";\n";
+    }
+}
+
+void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
+    SubArguments &vSubArguments,  int argumentNum)
+{
+    int i = argumentNum;
+#ifdef ISNAN
+     if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+     formula::svSingleVectorRef)
+     {
+         const formula::SingleVectorRefToken*pTmpDVR1= dynamic_cast<const
+         formula::SingleVectorRefToken *>(vSubArguments[i]->GetFormulaToken());
+         ss<< "    if(singleIndex>=";
+         ss<< pTmpDVR1->GetArrayLength();
+         ss<<" ||";
+     }
+     if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+     formula::svDoubleVectorRef)
+     {
+         const formula::DoubleVectorRefToken*pTmpDVR2= dynamic_cast<const
+         formula::DoubleVectorRefToken *>(vSubArguments[i]->GetFormulaToken());
+         ss<< "    if(doubleIndex>=";
+         ss<< pTmpDVR2->GetArrayLength();
+         ss<<" ||";
+     }
+     if(vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble)
+     {
+         ss<< "    if(";
+     }
+    ss<< "isNan(";
+    ss<< vSubArguments[i]->GenSlidingWindowDeclRef();
+    ss<<"))\n";
+    ss<< "        tmp";
+    ss<< i;
+    ss <<"=0;\n    else \n";
+#endif
+    ss <<"        tmp";
+    ss <<i;
+    ss << "=";
+    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+    ss<<";\n";
+}
+void CheckVariables::CheckAllSubArgumentIsNan(
+    std::stringstream & ss, SubArguments & vSubArguments)
+{
+    ss<<"    int k = gid0;\n";
+     for(unsigned i=0;i<vSubArguments.size();i++)
+    {
+        CheckSubArgumentIsNan(ss,vSubArguments,i);
+    }
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

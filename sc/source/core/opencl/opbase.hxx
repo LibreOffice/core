@@ -149,6 +149,16 @@ public:
     virtual bool takeNumeric() const { return true; }
 };
 
+class CheckVariables:public Normal
+{
+public:
+    void GenTmpVariables(std::stringstream &ss, SubArguments &vSubArguments);
+    void CheckSubArgumentIsNan(std::stringstream &ss,
+            SubArguments &vSubArguments, int argumentNum);
+    void CheckAllSubArgumentIsNan(std::stringstream &ss,
+            SubArguments &vSubArguments);
+};
+
 }}
 
 #endif
