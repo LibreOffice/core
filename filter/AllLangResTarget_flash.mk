@@ -24,8 +24,7 @@ $(eval $(call gb_AllLangResTarget_add_srs,flash,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,filter/flash))
 
-$(eval $(call gb_SrsTarget_add_files,filter/flash,\
-	filter/source/flash/impswfdialog.src \
+$(eval $(call gb_SrsTarget_add_files,filter/flash\
 ))
 
 # vim: set noet sw=4 ts=4:
