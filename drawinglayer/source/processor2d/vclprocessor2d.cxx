@@ -662,7 +662,7 @@ namespace drawinglayer
                 {
                     case GRAPHIC_GDIMETAFILE:
                     {
-                        // metafiles are potentially transparent, cannot optimize´, not done
+                        // metafiles are potentially transparent, cannot optimize, not done
                         break;
                     }
                     case GRAPHIC_BITMAP:
@@ -674,9 +674,10 @@ namespace drawinglayer
 
                             if(nBColorModifierStackCount)
                             {
-                                const basegfx::BColorModifier& rTopmostModifier = maBColorModifierStack.getBColorModifier(nBColorModifierStackCount - 1);
+                                const basegfx::BColorModifierSharedPtr& rTopmostModifier = maBColorModifierStack.getBColorModifier(nBColorModifierStackCount - 1);
+                                const basegfx::BColorModifier_replace* pReplacer = dynamic_cast< const basegfx::BColorModifier_replace* >(rTopmostModifier.get());
 
-                                if(basegfx::BCOLORMODIFYMODE_REPLACE == rTopmostModifier.getMode())
+                                if(pReplacer)
                                 {
                                     // the bitmap fill is in unified color, so we can replace it with
                                     // a single polygon fill. The form of the fill depends on tiling
@@ -687,7 +688,7 @@ namespace drawinglayer
 
                                         aLocalPolyPolygon.transform(maCurrentTransformation);
                                         mpOutputDevice->SetLineColor();
-                                        mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
+                                        mpOutputDevice->SetFillColor(Color(pReplacer->getBColor()));
                                         mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
                                     }
                                     else
@@ -719,7 +720,7 @@ namespace drawinglayer
                                         {
                                             aTarget.transform(maCurrentTransformation);
                                             mpOutputDevice->SetLineColor();
-                                            mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
+                                            mpOutputDevice->SetFillColor(Color(pReplacer->getBColor()));
                                             mpOutputDevice->DrawPolyPolygon(aTarget);
                                         }
                                     }

@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
 
@@ -45,7 +43,7 @@ namespace drawinglayer
             For the possibilities of color modifications, please refer
             to the basegfx::BColorModifier definitions in basegfx. For
             processing there is tooling in basegfx to build a stack of
-            BColorModifiers to always be able to proccess the correct
+            BColorModifierSharedPtrs to always be able to proccess the correct
             colors.
 
             If a renderer does not handle this primitive, the content will
@@ -55,16 +53,16 @@ namespace drawinglayer
         {
         private:
             /// The ColorModifier to use
-            basegfx::BColorModifier                 maColorModifier;
+            basegfx::BColorModifierSharedPtr        maColorModifier;
 
         public:
             /// constructor
             ModifiedColorPrimitive2D(
                 const Primitive2DSequence& rChildren,
-                const basegfx::BColorModifier& rColorModifier);
+                const basegfx::BColorModifierSharedPtr& rColorModifier);
 
             /// data read access
-            const basegfx::BColorModifier& getColorModifier() const { return maColorModifier; }
+            const basegfx::BColorModifierSharedPtr& getColorModifier() const { return maColorModifier; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
