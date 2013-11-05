@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
@@ -116,17 +115,9 @@
 #include <uiitems.hxx>
 #include <wordcountdialog.hxx>
 #include <tools/diagnose_ex.h>
-
-#ifndef _NBDTMGFACT_HXX
 #include <svx/nbdtmgfact.hxx>
-#endif
-#ifndef _NBDTMG_HXX
 #include <svx/nbdtmg.hxx>
-#endif
-
-
 #include <numrule.hxx>
-
 
 using namespace ::com::sun::star;
 using namespace svx::sidebar;

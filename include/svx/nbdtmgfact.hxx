@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NBDTMGFACT_HXX
-#define _NBDTMGFACT_HXX
+#ifndef INCLUDED_SVX_NBDTMGFACT_HXX
+#define INCLUDED_SVX_NBDTMGFACT_HXX
 #include "nbdtmg.hxx"
 namespace svx { namespace sidebar { namespace NBOutlineTypeMgrFact {
     SVX_DLLPUBLIC NBOTypeMgrBase* CreateInstance(const NBOType aType);

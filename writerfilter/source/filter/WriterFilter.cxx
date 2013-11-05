@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <WriterFilter.hxx>
 #include <WriterFilterDetection.hxx>
 #include <RtfFilter.hxx>

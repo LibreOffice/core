@@ -18,9 +18,7 @@
  */
 
 #include <anchoredobjectposition.hxx>
-#ifndef _ENVIRONMENTOFANCHOREDOBJECT
 #include <environmentofanchoredobject.hxx>
-#endif
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
