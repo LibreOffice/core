@@ -73,6 +73,62 @@ bool equals( const formula::VectorRefArray& rArray, size_t nPos, const OUString&
 
 }
 
+void Test::testFormulaParseReference()
+{
+    OUString aTab1("90's Music"), aTab2("90's and 70's"), aTab3("All Others"), aTab4("NoQuote");
+    m_pDoc->InsertTab(0, "Dummy"); // just to shift the sheet indices...
+    m_pDoc->InsertTab(1, aTab1); // name with a single quote.
+    m_pDoc->InsertTab(2, aTab2); // name with 2 single quotes.
+    m_pDoc->InsertTab(3, aTab3); // name without single quotes.
+    m_pDoc->InsertTab(4, aTab4); // name that doesn't require to be quoted.
+
+    OUString aTabName;
+    m_pDoc->GetName(1, aTabName);
+    CPPUNIT_ASSERT_EQUAL(aTab1, aTabName);
+    m_pDoc->GetName(2, aTabName);
+    CPPUNIT_ASSERT_EQUAL(aTab2, aTabName);
+    m_pDoc->GetName(3, aTabName);
+    CPPUNIT_ASSERT_EQUAL(aTab3, aTabName);
+    m_pDoc->GetName(4, aTabName);
+    CPPUNIT_ASSERT_EQUAL(aTab4, aTabName);
+
+    ScAddress aPos;
+    ScAddress::ExternalInfo aExtInfo;
+    sal_uInt16 nRes = aPos.Parse("'90''s Music'.D10", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), aPos.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(3), aPos.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), aPos.Row());
+    CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
+
+    nRes = aPos.Parse("'90''s and 70''s'.C100", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), aPos.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), aPos.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(99), aPos.Row());
+    CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
+
+    nRes = aPos.Parse("'All Others'.B3", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(3), aPos.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aPos.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), aPos.Row());
+    CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
+
+    nRes = aPos.Parse("NoQuote.E13", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aPos.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(4), aPos.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), aPos.Row());
+    CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
+
+    m_pDoc->DeleteTab(4);
+    m_pDoc->DeleteTab(3);
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFetchVectorRefArray()
 {
     m_pDoc->InsertTab(0, "Test");
