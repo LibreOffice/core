@@ -1056,7 +1056,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             aArr.AddOpCode( ocClose );
             aArr.AddOpCode( ocStop );
             ScFormulaCell* pCell = new ScFormulaCell(
-                pDocument, ScAddress(nResCols[nResult], iEntry->nDestRow, nTab), &aArr);
+                pDocument, ScAddress(nResCols[nResult], iEntry->nDestRow, nTab), aArr);
 
             SetFormulaCell(nResCols[nResult], iEntry->nDestRow, pCell);
 

@@ -173,7 +173,7 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
 
             ScAddress aPos;
             ScUnoConversion::FillScAddress(aPos, rAddr);
-            ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pArray);
+            ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, *pArray);
             rDoc.setFormulaCell(aPos, pCell);
             if (it->maCellValue.isEmpty())
             {

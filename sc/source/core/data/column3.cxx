@@ -700,7 +700,7 @@ class CopyCellsFromClipHandler
         aArr.AddSingleReference(aRef);
 
         mrDestCol.SetFormulaCell(
-            maDestBlockPos, nDestRow, new ScFormulaCell(&mrDestCol.GetDoc(), aDestPos, &aArr));
+            maDestBlockPos, nDestRow, new ScFormulaCell(&mrDestCol.GetDoc(), aDestPos, aArr));
     }
 
     void duplicateNotes(SCROW nStartRow, size_t nDataSize, bool bCloneCaption )
@@ -968,7 +968,7 @@ void ScColumn::CopyFromClip(
 
             ScTokenArray aArr;
             aArr.AddSingleReference( aRef );
-            SetFormulaCell(nDestRow, new ScFormulaCell(pDocument, aDestPos, &aArr));
+            SetFormulaCell(nDestRow, new ScFormulaCell(pDocument, aDestPos, aArr));
         }
 
         return;
@@ -1117,7 +1117,7 @@ public:
                 miNewCellsPos = maNewCells.set(
                     miNewCellsPos, nRow-mnRowOffset,
                     new ScFormulaCell(
-                        &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nRow, mrDestColumn.GetTab()), &aArr));
+                        &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nRow, mrDestColumn.GetTab()), aArr));
             }
             break;
             case sc::element_type_string:
@@ -1174,7 +1174,7 @@ public:
                 miNewCellsPos = maNewCells.set(
                     miNewCellsPos, nRow-mnRowOffset,
                     new ScFormulaCell(
-                        &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nRow, mrDestColumn.GetTab()), &aArr));
+                        &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nRow, mrDestColumn.GetTab()), aArr));
             }
             break;
             case sc::element_type_formula:
@@ -1203,7 +1203,7 @@ public:
                 miNewCellsPos = maNewCells.set(
                     miNewCellsPos, nRow-mnRowOffset,
                     new ScFormulaCell(
-                        &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nRow, mrDestColumn.GetTab()), &aArr));
+                        &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nRow, mrDestColumn.GetTab()), aArr));
             }
             break;
             case sc::element_type_string:
@@ -1282,7 +1282,7 @@ public:
                     miNewCellsPos = maNewCells.set(
                         miNewCellsPos, nDestRow-mnRowOffset,
                         new ScFormulaCell(
-                            &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nDestRow, mrDestColumn.GetTab()), &aArr));
+                            &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nDestRow, mrDestColumn.GetTab()), aArr));
                 }
                 break;
                 default:
@@ -1709,7 +1709,7 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
     ScAddress aPos(nCol, nRow, nTab);
 
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
-    ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, &rArray, eGram);
+    ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rArray, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         pCell->SetNeedNumberFormat(true);

@@ -121,7 +121,7 @@ void XclImpPCItem::WriteToSource( XclImpRoot& rRoot, const ScAddress& rScPos ) c
         sal_uInt8 nErrCode = static_cast< sal_uInt8 >( *pnError );
         const ScTokenArray* pScTokArr = rRoot.GetOldFmlaConverter().GetBoolErr(
             XclTools::ErrorToEnum( fValue, EXC_BOOLERR_ERROR, nErrCode ) );
-        ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), rScPos, pScTokArr);
+        ScFormulaCell* pCell = pScTokArr ? new ScFormulaCell(&rDoc.getDoc(), rScPos, *pScTokArr) : new ScFormulaCell(&rDoc.getDoc(), rScPos);
         pCell->SetHybridDouble( fValue );
         rDoc.setFormulaCell(rScPos, pCell);
     }

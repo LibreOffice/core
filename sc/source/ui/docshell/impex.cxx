@@ -1842,7 +1842,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             else
                             {
                                 ScFormulaCell* pFCell = new ScFormulaCell(
-                                        pDoc, aPos, pCode, eGrammar, MM_NONE);
+                                        pDoc, aPos, *pCode, eGrammar, MM_NONE);
                                 pDoc->SetFormulaCell(aPos, pFCell);
                             }
                             delete pCode;   // ctor/InsertMatrixFormula did copy TokenArray

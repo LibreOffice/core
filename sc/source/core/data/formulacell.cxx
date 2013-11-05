@@ -429,6 +429,31 @@ void ScFormulaCellGroup::compileCode(
 
 // ============================================================================
 
+ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
+    eTempGrammar(formula::FormulaGrammar::GRAM_DEFAULT),
+    pCode(new ScTokenArray),
+    pDocument(pDoc),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    nSeenInIteration(0),
+    cMatrixFlag(MM_NONE),
+    nFormatType(NUMBERFORMAT_NUMBER),
+    bDirty(false),
+    bChanged(false),
+    bRunning(false),
+    bCompile(false),
+    bSubTotal(false),
+    bIsIterCell(false),
+    bInChangeTrack(false),
+    bTableOpDirty(false),
+    bNeedListening(false),
+    mbNeedsNumberFormat(false),
+    aPos(rPos)
+{
+}
+
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const OUString& rFormula,
                               const FormulaGrammar::Grammar eGrammar,
@@ -461,22 +486,20 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
         pCode = new ScTokenArray;
 }
 
-// Used by import filters
-
-ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                              const ScTokenArray* pArr,
-                              const FormulaGrammar::Grammar eGrammar, sal_uInt8 cInd ) :
+ScFormulaCell::ScFormulaCell(
+    ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
+    const FormulaGrammar::Grammar eGrammar, sal_uInt8 cMatInd ) :
     eTempGrammar( eGrammar),
-    pCode( pArr ? new ScTokenArray( *pArr ) : new ScTokenArray ),
+    pCode(new ScTokenArray(rArray)),
     pDocument( pDoc ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
     pNextTrack(0),
     nSeenInIteration(0),
-    cMatrixFlag ( cInd ),
+    cMatrixFlag ( cMatInd ),
     nFormatType ( NUMBERFORMAT_NUMBER ),
-    bDirty( NULL != pArr ), // -> Because of the use of the Auto Pilot Function was: cInd != 0
+    bDirty( true ),
     bChanged( false ),
     bRunning( false ),
     bCompile( false ),
@@ -2319,7 +2342,10 @@ void setOldCodeToUndo(
     if (pUndoDoc->GetCellType(aUndoPos) == CELLTYPE_FORMULA)
         return;
 
-    ScFormulaCell* pFCell = new ScFormulaCell(pUndoDoc, aUndoPos, pOldCode, eTempGrammar, cMatrixFlag);
+    ScFormulaCell* pFCell =
+        new ScFormulaCell(
+            pUndoDoc, aUndoPos, pOldCode ? *pOldCode : ScTokenArray(), eTempGrammar, cMatrixFlag);
+
     pFCell->SetResultToken(NULL);  // to recognize it as changed later (Cut/Paste!)
     pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
 }
@@ -2919,8 +2945,9 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     {
         if (pUndoDoc)
         {
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld,
-                    eTempGrammar, cMatrixFlag);
+            ScFormulaCell* pFCell = new ScFormulaCell(
+                    pUndoDoc, aPos, pOld ? *pOld : ScTokenArray(), eTempGrammar, cMatrixFlag);
+
             pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
             pUndoDoc->SetFormulaCell(aPos, pFCell);
         }

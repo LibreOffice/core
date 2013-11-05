@@ -6661,7 +6661,7 @@ void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rT
         ScTokenArray aTokenArray;
         (void)ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, rTokens );
 
-        ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aCellPos, &aTokenArray );
+        ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, aCellPos, aTokenArray);
         (void)pDocSh->GetDocFunc().SetFormulaCell(aCellPos, pNewCell, false);
     }
 }

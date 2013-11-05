@@ -216,7 +216,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, const ScTokenArray&
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos =
-        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, &rArray));
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rArray));
 }
 
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell)
@@ -254,7 +254,7 @@ void ScDocumentImport::setMatrixCells(
     sc::CellStoreType& rCells = pTab->aCol[rBasePos.Col()].maCells;
 
     // Set the master cell.
-    ScFormulaCell* pCell = new ScFormulaCell(&mpImpl->mrDoc, rBasePos, &rArray, eGram, MM_FORMULA);
+    ScFormulaCell* pCell = new ScFormulaCell(&mpImpl->mrDoc, rBasePos, rArray, eGram, MM_FORMULA);
 
     pBlockPos->miCellPos =
         rCells.set(pBlockPos->miCellPos, rBasePos.Row(), pCell);
@@ -283,7 +283,7 @@ void ScDocumentImport::setMatrixCells(
         aRefData.SetAddress(rBasePos, aPos);
         t->GetSingleRef() = aRefData;
         boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
-        pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, pTokArr.get(), eGram, MM_REFERENCE);
+        pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, MM_REFERENCE);
         pBlockPos->miCellPos =
             rCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
     }
@@ -303,7 +303,7 @@ void ScDocumentImport::setMatrixCells(
             aRefData.SetAddress(rBasePos, aPos);
             t->GetSingleRef() = aRefData;
             boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
-            pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, pTokArr.get(), eGram, MM_REFERENCE);
+            pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, MM_REFERENCE);
             pBlockPos->miCellPos =
                 rColCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
         }

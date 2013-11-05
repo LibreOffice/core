@@ -272,7 +272,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     ScFormulaCell* pCell;
     ScAddress aPos( nCol1, nRow1, nTab1 );
     if (pArr)
-        pCell = new ScFormulaCell( this, aPos, pArr, eGram, MM_FORMULA );
+        pCell = new ScFormulaCell(this, aPos, *pArr, eGram, MM_FORMULA);
     else
         pCell = new ScFormulaCell( this, aPos, rFormula, eGram, MM_FORMULA );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1, bDirtyFlag );
@@ -336,7 +336,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 aRefData.SetAddress(aBasePos, aPos);
                 t->GetSingleRef() = aRefData;
                 boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
-                pCell = new ScFormulaCell( this, aPos, pTokArr.get(), eGram, MM_REFERENCE );
+                pCell = new ScFormulaCell(this, aPos, *pTokArr, eGram, MM_REFERENCE);
                 pTab->SetFormulaCell(nCol, nRow, pCell);
             }
         }

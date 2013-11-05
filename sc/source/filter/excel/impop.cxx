@@ -390,7 +390,7 @@ void ImportExcel::ReadBoolErr()
 
         double fValue;
         const ScTokenArray* pScTokArr = ErrorToFormula( nType, nValue, fValue );
-        ScFormulaCell* pCell = new ScFormulaCell( pD, aScPos, pScTokArr );
+        ScFormulaCell* pCell = pScTokArr ? new ScFormulaCell(pD, aScPos, *pScTokArr) : new ScFormulaCell(pD, aScPos);
         pCell->SetHybridDouble( fValue );
         GetDoc().SetFormulaCell(aScPos, pCell);
     }

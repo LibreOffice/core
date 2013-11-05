@@ -261,7 +261,7 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
                     boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aNew));
                     ScFormulaCell* pNewCell =
                         new ScFormulaCell(
-                            pDoc, aPos, pArr.get(), formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
+                            pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
 
                     pDoc->SetFormulaCell(aPos, pNewCell);
                     bOk = true;

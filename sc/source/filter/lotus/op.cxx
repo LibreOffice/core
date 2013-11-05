@@ -169,7 +169,7 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
     {
-        ScFormulaCell* pCell = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
+        ScFormulaCell* pCell = new ScFormulaCell(pLotusRoot->pDoc, aAddress, *pErg);
         pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
         pDoc->EnsureTable(nTab);
         pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
@@ -413,7 +413,7 @@ void OP_Formula123( SvStream& r, sal_uInt16 n )
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
-        ScFormulaCell* pCell = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
+        ScFormulaCell* pCell = new ScFormulaCell(pLotusRoot->pDoc, aAddress, *pErg);
         pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
         pDoc->EnsureTable(nTab);
         pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);

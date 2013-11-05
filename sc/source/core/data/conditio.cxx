@@ -414,13 +414,13 @@ void ScConditionEntry::MakeCells( const ScAddress& rPos )           // Formelzel
     {
         if ( pFormula1 && !pFCell1 && !bRelRef1 )
         {
-            pFCell1 = new ScFormulaCell( mpDoc, rPos, pFormula1 );
+            pFCell1 = new ScFormulaCell(mpDoc, rPos, *pFormula1);
             pFCell1->StartListeningTo( mpDoc );
         }
 
         if ( pFormula2 && !pFCell2 && !bRelRef2 )
         {
-            pFCell2 = new ScFormulaCell( mpDoc, rPos, pFormula2 );
+            pFCell2 = new ScFormulaCell(mpDoc, rPos, *pFormula2);
             pFCell2->StartListeningTo( mpDoc );
         }
     }
@@ -630,7 +630,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     ScFormulaCell* pEff1 = pFCell1;
     if ( bRelRef1 )
     {
-        pTemp1 = new ScFormulaCell( mpDoc, rPos, pFormula1 );    // ohne Listening
+        pTemp1 = pFormula1 ? new ScFormulaCell(mpDoc, rPos, *pFormula1) : new ScFormulaCell(mpDoc, rPos);
         pEff1 = pTemp1;
     }
     if ( pEff1 )
@@ -660,7 +660,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     ScFormulaCell* pEff2 = pFCell2; //@ 1!=2
     if ( bRelRef2 )
     {
-        pTemp2 = new ScFormulaCell( mpDoc, rPos, pFormula2 );    // ohne Listening
+        pTemp2 = pFormula2 ? new ScFormulaCell(mpDoc, rPos, *pFormula2) : new ScFormulaCell(mpDoc, rPos);
         pEff2 = pTemp2;
     }
     if ( pEff2 )

@@ -174,7 +174,7 @@ void ImportExcel::Formula(
 
     if (pResult)
     {
-        pCell = new ScFormulaCell(&rDoc.getDoc(), aScPos, pResult);
+        pCell = new ScFormulaCell(&rDoc.getDoc(), aScPos, *pResult);
         rDoc.getDoc().EnsureTable(aScPos.Tab());
         rDoc.setFormulaCell(aScPos, pCell);
         SetLastFormula(aScPos.Col(), aScPos.Row(), fCurVal, nXF, pCell);

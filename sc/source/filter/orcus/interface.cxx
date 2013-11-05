@@ -358,7 +358,7 @@ void ScOrcusSheet::set_shared_formula(
 
     maFormulaGroups.set(sindex, pArray);
 
-    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, pArray);
+    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, *pArray);
     mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();
 
@@ -381,7 +381,7 @@ void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sinde
     if (!pArray)
         return;
 
-    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, pArray);
+    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, *pArray);
     mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();
 

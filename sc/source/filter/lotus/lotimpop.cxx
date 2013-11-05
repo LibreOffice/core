@@ -290,7 +290,7 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     aConv.SetWK3();
     aConv.Convert( pErg, nRest );
 
-    ScFormulaCell* pCell = new ScFormulaCell( pD, aAddr, pErg );
+    ScFormulaCell* pCell = pErg ? new ScFormulaCell(pD, aAddr, *pErg) : new ScFormulaCell(pD, aAddr);
     pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
     pD->EnsureTable(aAddr.Tab());
     pD->SetFormulaCell(aAddr, pCell);

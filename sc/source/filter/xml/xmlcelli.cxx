@@ -1366,7 +1366,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
                 pCode->AddStringXML( aFormulaNmsp );
 
             rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
-            ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode.get(), eGrammar, MM_NONE);
+            ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, *pCode, eGrammar, MM_NONE);
             SetFormulaCell(pNewCell);
             rDoc.setFormulaCell(rCellPos, pNewCell);
             pNewCell->SetNeedNumberFormat( true );

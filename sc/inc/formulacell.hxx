@@ -151,10 +151,11 @@ public:
 
     ScFormulaCell* Clone() const;
 
-    /** Empty formula cell, or with a preconstructed token array. */
-    ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL,
-                    const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                    sal_uInt8 = MM_NONE );
+    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos );
+
+    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
+                   const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
+                   sal_uInt8 cMatInd = MM_NONE );
 
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
                    const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
