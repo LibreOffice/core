@@ -48,5 +48,5 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_MOZAB_CATALOG_HXX_
+#endif // _CONNECTIVITY_EVOAB_CATALOG_HXX_
 
