@@ -3615,7 +3615,8 @@ void SwWW8ImplReader::Read_FldVanish( sal_uInt16, const sal_uInt8*, short nLen )
     for (;;)
     {
         nFnd = sFieldName.indexOf(0x15);
-        if (nFnd<0)
+        //found field end, we can stop now
+        if (nFnd != -1)
             break;
         OUString sTemp;
         nFieldLen = pSBase->WW8ReadString( *pStrm, sTemp,
