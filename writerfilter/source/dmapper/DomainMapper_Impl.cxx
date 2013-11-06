@@ -1821,11 +1821,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 */
 void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::XShape > xShape)
 {
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_xEmbedded, uno::UNO_QUERY_THROW);
-        awt::Size aSize = xShape->getSize( );
-        xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_WIDTH), uno::makeAny(sal_Int32(aSize.Width)));
-        xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_HEIGHT), uno::makeAny(sal_Int32(aSize.Height)));
+    if (!xShape.is())
+        return;
+
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_xEmbedded, uno::UNO_QUERY_THROW);
+    awt::Size aSize = xShape->getSize( );
+    xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_WIDTH), uno::makeAny(sal_Int32(aSize.Width)));
+    xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_HEIGHT), uno::makeAny(sal_Int32(aSize.Height)));
 }
 
 
