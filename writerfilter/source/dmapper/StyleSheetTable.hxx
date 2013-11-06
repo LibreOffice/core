@@ -50,6 +50,7 @@ enum StyleType
 struct StyleSheetTable_Impl;
 class StyleSheetEntry
 {
+    std::vector<beans::PropertyValue> m_aInteropGrabBag;
 public:
     OUString sStyleIdentifierI;
     OUString sStyleIdentifierD;
@@ -65,6 +66,9 @@ public:
     OUString sConvertedStyleName;
     std::vector<beans::PropertyValue> aLatentStyles; ///< Attributes of latentStyles
     std::vector<beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
+
+    void AppendInteropGrabBag(beans::PropertyValue aValue);
+    beans::PropertyValue GetInteropGrabBag();
 
     StyleSheetEntry();
     virtual ~StyleSheetEntry();
@@ -124,8 +128,6 @@ private:
     StyleSheetTable* m_pStyleSheet;
     TblStylePrs m_aStyles;
 
-    std::vector<beans::PropertyValue> m_aInteropGrabBag;
-
 public:
 
     short m_nColBandSize;
@@ -142,9 +144,6 @@ public:
     // @param mask      mask describing which properties to return
     // @param pStack    already processed StyleSheetEntries
     PropertyMapPtr GetProperties( sal_Int32 nMask, StyleSheetEntryDequePtr pStack = StyleSheetEntryDequePtr());
-
-    void AppendInteropGrabBag(beans::PropertyValue aValue);
-    beans::PropertyValue GetInteropGrabBag();
 
     TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
     virtual ~TableStyleSheetEntry( );

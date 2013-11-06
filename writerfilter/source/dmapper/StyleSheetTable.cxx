@@ -173,7 +173,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
     return pProps;
 }
 
-beans::PropertyValue TableStyleSheetEntry::GetInteropGrabBag()
+beans::PropertyValue StyleSheetEntry::GetInteropGrabBag()
 {
     beans::PropertyValue aRet;
     aRet.Name = sStyleIdentifierI;
@@ -187,7 +187,7 @@ beans::PropertyValue TableStyleSheetEntry::GetInteropGrabBag()
     return aRet;
 }
 
-void TableStyleSheetEntry::AppendInteropGrabBag(beans::PropertyValue aValue)
+void StyleSheetEntry::AppendInteropGrabBag(beans::PropertyValue aValue)
 {
     m_aInteropGrabBag.push_back(aValue);
 }
