@@ -61,8 +61,8 @@ $(packimages_DIR)/commandimagelist.ilst :
 	$(call gb_Helper_abbreviate_dirs, \
 		find $(SRCDIR)/icon-themes/galaxy/cmd -name "*.png" -o -name "*.svg" | \
 			sed "s#$(SRCDIR)/icon-themes/galaxy#%MODULE%#" | \
-			LC_ALL=C sort > $@.$(INPATH) && \
-		$(PERL) $(SRCDIR)/solenv/bin/diffmv.pl $@.$(INPATH) $@ \
+			LC_ALL=C sort > $@.tmp && \
+		$(PERL) $(SRCDIR)/solenv/bin/diffmv.pl $@.tmp $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
 
 $(packimages_DIR)/sorted.lst : \

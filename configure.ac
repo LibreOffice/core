@@ -3690,7 +3690,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     # this is an extra var so it can have different default on different MSVC
     # versions (in case there are version specific problems with it)
     MSVC_USE_DEBUG_RUNTIME="TRUE"
-    PROEXT=""
 
     AC_MSG_RESULT([yes])
     # cppunit and graphite expose STL in public headers
@@ -3725,12 +3724,10 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
 else
     ENABLE_DBGUTIL=""
     MSVC_USE_DEBUG_RUNTIME=""
-    PROEXT=".pro"
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DBGUTIL)
 AC_SUBST(MSVC_USE_DEBUG_RUNTIME)
-AC_SUBST(PROEXT)
 
 dnl Set the ENABLE_DEBUG variable.
 dnl ===================================================================
@@ -4325,9 +4322,8 @@ if test "$enable_headless" = "yes"; then
     GUIBASE=not-used
 fi
 
-INPATH="${OUTPATH}${PROEXT}"
-WORKDIR="${BUILDDIR}/workdir/${INPATH}"
-INSTDIR="${BUILDDIR}/instdir/${INPATH}"
+WORKDIR="${BUILDDIR}/workdir"
+INSTDIR="${BUILDDIR}/instdir"
 INSTROOT="${INSTDIR}${INSTROOTSUFFIX}"
 SOLARINC="-I. -I$SRC_ROOT/include $SOLARINC"
 AC_SUBST(COM)
@@ -4336,7 +4332,6 @@ AC_SUBST(RTL_OS)
 AC_SUBST(RTL_ARCH)
 AC_SUBST(EPM_FLAGS)
 AC_SUBST(GUIBASE)
-AC_SUBST(INPATH)
 AC_SUBST([INSTDIR])
 AC_SUBST([INSTROOT])
 AC_SUBST(OS)
@@ -4462,9 +4457,9 @@ if test "$cross_compiling" = "yes"; then
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
-    . ./bin/get_config_variables CC CXX INPATH INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXSLT WORKDIR
+    . ./bin/get_config_variables CC CXX INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS PATH SDKDIRNAME SYSTEM_LIBXSLT WORKDIR
 
-    for V in CC CXX INPATH LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS SDKDIRNAME SYSTEM_LIBXSLT; do
+    for V in CC CXX LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS SDKDIRNAME SYSTEM_LIBXSLT; do
         VV='$'$V
         VV=`eval "echo $VV"`
         if test -n "$VV"; then
@@ -4476,7 +4471,7 @@ if test "$cross_compiling" = "yes"; then
     for V in INSTDIR INSTROOT WORKDIR; do
         VV='$'$V
         VV=`eval "echo $VV"`
-        VV=`echo $VV | sed -e 's,/CONF-FOR-BUILD,,g'`
+        VV=`echo $VV | sed -e "s,/CONF-FOR-BUILD/\([[a-z]]*\),/\1_for_build,g"`
         if test -n "$VV"; then
             line="${V}_FOR_BUILD='$VV'"
             echo "$line" >>build-config
@@ -4489,15 +4484,18 @@ if test "$cross_compiling" = "yes"; then
     )
     test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
     test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
-    perl -pi -e 's,/CONF-FOR-BUILD,,g' config_build.mk
+    perl -pi -e 's,/(workdir|instdir)(/|$),/\1_for_build\2,g;' \
+             -e 's,/CONF-FOR-BUILD,,g;' config_build.mk
+
     eval `cat CONF-FOR-BUILD/build-config`
+
     AC_MSG_RESULT([checking for BUILD platform configuration... done])
+
     rm -rf CONF-FOR-BUILD
 else
     OS_FOR_BUILD="$OS"
     CC_FOR_BUILD="$CC"
     CXX_FOR_BUILD="$CXX"
-    INPATH_FOR_BUILD="$INPATH"
     INSTDIR_FOR_BUILD="$INSTDIR"
     INSTROOT_FOR_BUILD="$INSTROOT"
     LIBO_BIN_FOLDER_FOR_BUILD="$LIBO_BIN_FOLDER"
@@ -4507,7 +4505,6 @@ else
     WORKDIR_FOR_BUILD="$WORKDIR"
 fi
 AC_SUBST(OS_FOR_BUILD)
-AC_SUBST(INPATH_FOR_BUILD)
 AC_SUBST(INSTDIR_FOR_BUILD)
 AC_SUBST(INSTROOT_FOR_BUILD)
 AC_SUBST(LIBO_BIN_FOLDER_FOR_BUILD)
@@ -12242,7 +12239,7 @@ AC_SUBST(DOCDIR)
 INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
 AC_SUBST(INSTALLDIR)
 
-TESTINSTALLDIR="${BUILDDIR}/test-install/${INPATH}"
+TESTINSTALLDIR="${BUILDDIR}/test-install"
 AC_SUBST(TESTINSTALLDIR)
 
 
@@ -12700,7 +12697,7 @@ _EOF
 if test $_os != WINNT -a "$CROSS_COMPILING" != YES; then
     cat << _EOF
 After the build has finished, your can immediately run it using:
-instdir/${INPATH}/program/soffice
+instdir/program/soffice
 
 If you want to run the smoketest, issue:
 $GNUMAKE check

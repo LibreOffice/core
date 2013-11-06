@@ -108,7 +108,6 @@ which dot > /dev/null 2>&1 || {
 }
 
 # suck setup
-setup "INPATH"
 setup "SOLARINC"
 shopt -s nullglob
 

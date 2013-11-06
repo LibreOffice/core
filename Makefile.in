@@ -233,7 +233,7 @@ bootstrap: compilerplugins
 #
 # Note: if invoked as "make check" this will also run subsequentcheck!
 #
-build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
 ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
 	mkdir -p $(INSTDIR) && install-gdb-printers -a $(INSTDIR) -c
 endif
@@ -243,7 +243,7 @@ ifeq ($(OS),IOS)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
 endif
 
-build-nocheck: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+build-nocheck: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build
 
 cross-toolset: bootstrap fetch
@@ -339,7 +339,7 @@ findunusedcode:
 	@mkdir -p $(SRCDIR)/callcatcher/config_host
 	@cp config_host/* callcatcher/config_host
 	@cp config_host.mk* callcatcher
-	@sed -e s,$$INPATH,callcatcher,g config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/callcatcher/config_host.mk
+	@cat config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/callcatcher/config_host.mk
 	@sed -i -e s,g++,"callcatcher g++",g $(SRCDIR)/callcatcher/config_host.mk
 	@sed -i -e s,gcc,"callcatcher gcc",g $(SRCDIR)/callcatcher/config_host.mk
 	@echo unexport ARCH_FLAGS >> $(SRCDIR)/callcatcher/config_host.mk

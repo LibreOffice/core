@@ -469,7 +469,7 @@
 				GCC_PREFIX_HEADER = "LibreOffice/LibreOffice-Prefix.pch";
 				INFOPLIST_FILE = "LibreOffice/LibreOffice-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				LIBRARY_SEARCH_PATHS = "../../../workdir/$(LO_INPATH)/LinkTarget/Library";
+				LIBRARY_SEARCH_PATHS = "../../../workdir/LinkTarget/Library";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -482,7 +482,7 @@
 				GCC_PREFIX_HEADER = "LibreOffice/LibreOffice-Prefix.pch";
 				INFOPLIST_FILE = "LibreOffice/LibreOffice-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				LIBRARY_SEARCH_PATHS = "../../../workdir/$(LO_INPATH)/LinkTarget/Library";
+				LIBRARY_SEARCH_PATHS = "../../../workdir/LinkTarget/Library";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

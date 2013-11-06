@@ -63,7 +63,7 @@ determine_binary_package_name()
     csha=$(get_config_sha)
     gsha=$(get_library_gbuild_sha "${module?}")
     if [ -n "${csha?}" -a -n "${gsha}" ] ; then
-        binfile="${csha?}_${gsha?}_${tarball?}.${INPATH?}.tar.gz"
+        binfile="${csha?}_${gsha?}_${tarball?}.${PLATFORM?}.tar.gz"
     fi
     echo "${binfile}"
 
@@ -125,7 +125,7 @@ while [ "${1}" != "" ]; do
                 shift;
                 arg="$1"
             fi
-            INPATH="$arg"
+            PLATFORM="$arg"
             ;;
         -q)
             V=0
