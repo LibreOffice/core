@@ -1119,6 +1119,56 @@ void OpVariationen::GenSlidingWindowFunction(
     ss << "   return tmp;\n";
     ss << "}\n";
 }
+void OpVariationen2::GenSlidingWindowFunction(
+    std::stringstream &ss,const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+       if (i)
+         ss << ",";
+       vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss <<"    int gid0=get_global_id(0);\n";
+    ss <<"    double inA;\n";
+    ss <<"    double inB;\n";
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    ss << "int buffer_fIna_len = ";
+    ss << tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+    ss << "    int buffer_fInb_len = ";
+    ss << tmpCurDVR1->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef ISNAN
+    ss << "    if((gid0)>=buffer_fIna_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "    inA = 0;\nelse \n";
+#endif
+    ss << "        inA = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss << "if((gid0)>=buffer_fInb_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "inB = 0;\nelse \n";
+#endif
+    ss << "    inB = "<<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    double tmp = pow(inA,inB);\n";
+    ss << "    return tmp;\n";
+    ss << "}\n";
+}
 void OpNorminv::GenSlidingWindowFunction(
     std::stringstream &ss,const std::string sSymName,
     SubArguments &vSubArguments)
