@@ -17,7 +17,6 @@
 ..\source\drivers\dbase\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\jdbc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\odbc\*.xml %_DEST%\xml%_EXT%\*.xml
-..\source\drivers\mozab\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\evoab2\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\calc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\mysql\*.xml %_DEST%\xml%_EXT%\*.xml
@@ -46,8 +45,6 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool\DataAccess
 ..\%__SRC%\misc\jdbc.component %_DEST%\xml%_EXT%\jdbc.component
 ..\%__SRC%\misc\kab1.component %_DEST%\xml%_EXT%\kab1.component
 ..\%__SRC%\misc\macab1.component %_DEST%\xml%_EXT%\macab1.component
-..\%__SRC%\misc\mozab.component %_DEST%\xml%_EXT%\mozab.component
-..\%__SRC%\misc\mozbootstrap.component %_DEST%\xml%_EXT%\mozbootstrap.component
 ..\%__SRC%\misc\mysql.component %_DEST%\xml%_EXT%\mysql.component
 ..\%__SRC%\misc\odbc.component %_DEST%\xml%_EXT%\odbc.component
 ..\%__SRC%\misc\sdbc2.component %_DEST%\xml%_EXT%\sdbc2.component

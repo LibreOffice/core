@@ -8,9 +8,6 @@ cn  connectivity\source\cpool                       nmake   -   all cn_cpool cn_
 cn  connectivity\source\resource                    nmake   -   all cn_res cn_inc NULL
 cn  connectivity\source\sdbcx                       nmake   -   all cn_sdbcx cn_inc NULL
 cn  connectivity\source\drivers\ado                 nmake   -   all cn_ado cn_dbtools cn_inc NULL
-cn  connectivity\source\drivers\mozab\mozillasrc    nmake   -   all cn_mozab_mozillasrc cn_file cn_inc NULL
-cn  connectivity\source\drivers\mozab\bootstrap     nmake   -   all cn_mozab_bootstrap cn_mozab_mozillasrc cn_inc NULL
-cn  connectivity\source\drivers\mozab               nmake   -   all cn_mozab cn_mozab_bootstrap cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\kab                 nmake   -   all cn_kab cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\macab               nmake   -   all cn_macab cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\evoab2              nmake   -   all cn_evoab2 cn_dbtools cn_file cn_inc NULL
@@ -29,4 +26,4 @@ cn  connectivity\source\simpledbt                   nmake   -   all cn_simpledbt
 cn  connectivity\source\dbtools                     nmake   -   all cn_dbtools cn_simpledbt cn_cmtools cn_parse cn_res cn_sdbcx cn_inc cn_res NULL
 cn  connectivity\qa\connectivity\tools              nmake   -   all cn_qa_tools cn_inc NULL
 cn  connectivity\qa                                 nmake   -   all cn_qa cn_inc NULL
-cn  connectivity\util                               nmake   -   all cn_util cn_ado cn_mozab cn_kab cn_evoab2 cn_calc cn_odbc cn_mysql cn_jdbc cn_adabas cn_flat cn_dbase cn_hsqldb cn_macab NULL
+cn  connectivity\util                               nmake   -   all cn_util cn_ado cn_kab cn_evoab2 cn_calc cn_odbc cn_mysql cn_jdbc cn_adabas cn_flat cn_dbase cn_hsqldb cn_macab NULL

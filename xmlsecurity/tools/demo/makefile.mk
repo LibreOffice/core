@@ -137,8 +137,7 @@ REGISTERLIBS=					\
     dynamicloader.uno$(DLLPOST) \
     namingservice.uno$(DLLPOST) \
     bootstrap.uno$(DLLPOST)	\
-    sax.uno$(DLLPOST)			\
-    $(DLLPRE)mozab2$(DLLPOST)
+    sax.uno$(DLLPOST)
 
 $(BIN)$/demo.rdb: \
         makefile.mk \

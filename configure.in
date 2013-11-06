@@ -59,8 +59,7 @@ AC_ARG_ENABLE(online-update,
 [  --disable-online-update Disables the Online Update feature.
 ],,enable_online_update=yes)
 AC_ARG_ENABLE(ldap,
-[  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
-                          or OpenLDAP LDAP SDK
+[  --disable-ldap          Disables the use of LDAP backend via OpenLDAP
 ],,)
 AC_ARG_ENABLE(fetch-external,
 [  --disable-fetch-external Disables fetching external tarballs from web sources.
@@ -70,8 +69,7 @@ AC_ARG_WITH(external-tar,
 [ TARFILE_LOCATION="$withval"
 ])
 AC_ARG_WITH(openldap,
-[  --with-openldap         Enables the use of the OpenLDAP LDAP SDK instead
-                          of the Netscape/Mozilla one
+[  --with-openldap         Enables the use of the OpenLDAP
 ],,)
 AC_ARG_ENABLE(lockdown,
 [  --enable-lockdown       Enables the gconf integration work in OOo

@@ -33,7 +33,6 @@
 
 #include <xmlsecurity/biginteger.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
-#include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 
 using namespace ::com::sun::star;
 

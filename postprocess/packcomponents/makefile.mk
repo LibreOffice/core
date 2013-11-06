@@ -359,14 +359,6 @@ my_components += directx5canvas
 my_components += adabas
 .END
 
-#.IF "$(OS)" != "MACOSX" && "$(SYSTEM_MOZILLA)" != "YES" && \
-#    "$(WITH_MOZILLA)" != "NO"
-#my_components += mozab
-#.ELIF "$(OS)" == "OS2"
-#.ELSE
-my_components += mozbootstrap
-#.END
-
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "OS2"
 my_components += desktopbe1
 .END
