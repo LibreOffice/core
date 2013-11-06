@@ -3839,7 +3839,7 @@ AC_SUBST(x_OBJCXXFLAGS)
 AC_SUBST(x_LDFLAGS)
 
 #
-# determine CPU, CPUNAME, GUIBASE, ...
+# determine CPUNAME, GUIBASE, ...
 #
 LIB64="lib"
 SOLARINC=
@@ -3848,7 +3848,6 @@ case "$host_os" in
 
 aix*)
     COM=GCC
-    CPU=P
     CPUNAME=POWERPC
     GUIBASE=unx
     OS=AIX
@@ -3869,14 +3868,12 @@ cygwin*)
     case "$host_cpu" in
     i*86|x86_64)
         if test "$BITNESS_OVERRIDE" = 64; then
-            CPU=X
             CPUNAME=X86_64
             RTL_ARCH=X86_64
             LIB64="lib/x64"
             PLATFORMID=windows_x86_64
             OUTPATH=wntmscx$COMEX
         else
-            CPU=I
             CPUNAME=INTEL
             RTL_ARCH=x86
             PLATFORMID=windows_x86
@@ -3899,7 +3896,6 @@ darwin*)
 
     case "$host_cpu" in
     arm*)
-        CPU=R
         CPUNAME=ARM
         RTL_ARCH=ARM_EABI
         PLATFORMID=ios_arm
@@ -3911,7 +3907,6 @@ darwin*)
         if test "$BITNESS_OVERRIDE" = 64; then
             AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
         fi
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=macosx_x86
@@ -3919,13 +3914,11 @@ darwin*)
         ;;
     x86_64)
         if test "$BITNESS_OVERRIDE" = 64; then
-            CPU=X
             CPUNAME=X86_64
             RTL_ARCH=X86_64
             PLATFORMID=macosx_x86_64
             OUTPATH=unxmacxx
         else
-            CPU=I
             CPUNAME=INTEL
             RTL_ARCH=x86
             PLATFORMID=macosx_x86
@@ -3948,13 +3941,11 @@ dragonfly*)
 
     case "$host_cpu" in
     i*86)
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=dragonfly_x86
         ;;
     x86_64)
-        CPU=X
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=dragonfly_x86_64
@@ -3975,14 +3966,12 @@ freebsd*)
 
     case "$host_cpu" in
     i*86)
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=freebsd_x86
         OUTPATH=unxfbsdi
         ;;
     x86_64)
-        CPU=X
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=freebsd_x86_64
@@ -4003,14 +3992,12 @@ kfreebsd*)
     case "$host_cpu" in
 
     i*86)
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=kfreebsd_x86
         OUTPATH=unxkfgi6
         ;;
     x86_64)
-        CPU=X
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         LIB64="lib64"
@@ -4033,14 +4020,12 @@ linux-gnu*)
     case "$host_cpu" in
 
     alpha)
-        CPU=L
         CPUNAME=AXP
         RTL_ARCH=ALPHA
         PLATFORMID=linux_alpha
         OUTPATH=unxlngaxp
         ;;
     arm*)
-        CPU=R
         CPUNAME=ARM
         EPM_FLAGS="-a arm"
         OUTPATH=unxlngr
@@ -4054,7 +4039,6 @@ linux-gnu*)
         esac
         ;;
     hppa)
-        CPU=H
         CPUNAME=HPPA
         RTL_ARCH=HPPA
         EPM_FLAGS="-a hppa"
@@ -4062,21 +4046,18 @@ linux-gnu*)
         OUTPATH=unxlnghppa
         ;;
     i*86)
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=linux_x86
         OUTPATH=unxlngi6
         ;;
     ia64)
-        CPU=A
         CPUNAME=IA64
         RTL_ARCH=IA64
         PLATFORMID=linux_ia64
         OUTPATH=unxlnga
         ;;
     mips)
-        CPU=M
         CPUNAME=GODSON
         RTL_ARCH=MIPS_EB
         EPM_FLAGS="-a mips"
@@ -4084,7 +4065,6 @@ linux-gnu*)
         OUTPATH=unxlngmips
         ;;
     mips64)
-        CPU=M
         CPUNAME=GODSON
         RTL_ARCH=MIPS_EB
         EPM_FLAGS="-a mips64"
@@ -4092,7 +4072,6 @@ linux-gnu*)
         OUTPATH=unxlngmips
         ;;
     mips64el)
-        CPU=M
         CPUNAME=GODSON
         RTL_ARCH=MIPS_EL
         EPM_FLAGS="-a mips64el"
@@ -4100,7 +4079,6 @@ linux-gnu*)
         OUTPATH=unxlngmips
         ;;
     mipsel)
-        CPU=M
         CPUNAME=GODSON
         RTL_ARCH=MIPS_EL
         EPM_FLAGS="-a mipsel"
@@ -4108,21 +4086,18 @@ linux-gnu*)
         OUTPATH=unxlngmips
         ;;
     m68k)
-        CPU=6
         CPUNAME=M68K
         RTL_ARCH=M68K
         PLATFORMID=linux_m68k
         OUTPATH=unxlngm68k
         ;;
     powerpc)
-        CPU=P
         CPUNAME=POWERPC
         RTL_ARCH=PowerPC
         PLATFORMID=linux_powerpc
         OUTPATH=unxlngppc
         ;;
     powerpc64)
-        CPU=P
         CPUNAME=POWERPC64
         RTL_ARCH=PowerPC_64
         LIB64="lib64"
@@ -4130,21 +4105,18 @@ linux-gnu*)
         OUTPATH=unxlngppc64
         ;;
     sparc)
-        CPU=S
         CPUNAME=SPARC
         RTL_ARCH=SPARC
         PLATFORMID=linux_sparc
         OUTPATH=unxlngs
         ;;
     s390)
-        CPU=3
         CPUNAME=S390
         RTL_ARCH=S390
         PLATFORMID=linux_s390
         OUTPATH=unxlngs390
         ;;
     s390x)
-        CPU=3
         CPUNAME=S390X
         RTL_ARCH=S390x
         LIB64="lib64"
@@ -4152,7 +4124,6 @@ linux-gnu*)
         OUTPATH=unxlngs390x
         ;;
     x86_64)
-        CPU=X
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         LIB64="lib64"
@@ -4175,21 +4146,18 @@ linux-android*)
     case "$host_cpu" in
 
     arm|armel)
-        CPU=R
         CPUNAME=ARM
         RTL_ARCH=ARM_EABI
         PLATFORMID=android_arm_eabi
         OUTPATH=unxandr
         ;;
     mips|mipsel)
-        CPU=M
         CPUNAME=GODSON # Weird, but maybe that's the LO convention?
         RTL_ARCH=MIPS_EL
         PLATFORMID=android_mips_el
         OUTPATH=unxandm
         ;;
     i*86)
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=android_x86
@@ -4211,14 +4179,12 @@ mingw*)
     case "$host_cpu" in
     i*86|x86_64)
         if test "$BITNESS_OVERRIDE" = 64; then
-            CPU=X
             CPUNAME=X86_64
             RTL_ARCH=X86_84
             PLATFORMID=windows_x86_64
             OUTPATH=wntgccx$COMEX
             SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgccx"
         else
-            CPU=I
             CPUNAME=INTEL
             RTL_ARCH=x86
             PLATFORMID=windows_x86
@@ -4244,25 +4210,21 @@ mingw*)
 
     case "$host_cpu" in
     i*86)
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=netbsd_x86
         ;;
     powerpc)
-        CPU=P
         CPUNAME=POWERPC
         RTL_ARCH=PowerPC
         PLATFORMID=netbsd_powerpc
         ;;
     sparc)
-        CPU=S
         CPUNAME=SPARC
         RTL_ARCH=SPARC
         PLATFORMID=netbsd_sparc
         ;;
     x86_64)
-        CPU=X
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=netbsd_x86_64
@@ -4283,13 +4245,11 @@ openbsd*)
 
     case "$host_cpu" in
     i*86)
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=openbsd_x86
         ;;
     x86_64)
-        CPU=X
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=openbsd_x86_64
@@ -4313,21 +4273,18 @@ solaris*)
 
     case "$host_cpu" in
     i*86)
-        CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=solaris_x86
         OUTPATH=unxsogi
         ;;
     sparc)
-        CPU=S
         CPUNAME=SPARC
         RTL_ARCH=SPARC
         PLATFORMID=solaris_sparc
         OUTPATH=unxsogs
         ;;
     sparc64)
-        CPU=U
         CPUNAME=SPARC64
         RTL_ARCH=SPARC64
         PLATFORMID=solaris_sparc64
@@ -4360,7 +4317,6 @@ INSTDIR="${BUILDDIR}/instdir/${INPATH}"
 INSTROOT="${INSTDIR}${INSTROOTSUFFIX}"
 SOLARINC="-I. -I$SRC_ROOT/include $SOLARINC"
 AC_SUBST(COM)
-AC_SUBST(CPU)
 AC_SUBST(CPUNAME)
 AC_SUBST(RTL_OS)
 AC_SUBST(RTL_ARCH)
@@ -4445,7 +4401,7 @@ if test "$cross_compiling" = "yes"; then
     cp configure CONF-FOR-BUILD
     test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
     (
-    unset COM GUIBASE OS CPU CPUNAME
+    unset COM GUIBASE OS CPUNAME
     unset CC CXX SYSBASE CFLAGS
     unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
     unset CPPUNIT_CFLAGS CPPUNIT_LIBS

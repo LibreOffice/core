@@ -14,7 +14,7 @@ $(eval $(call gb_CustomTarget_register_targets,external/jawt,\
 	libjawt.dll.a \
 ))
 
-ifeq ($(OS)$(CPU),WNTX)
+ifeq ($(OS)-$(CPUNAME),WNT-X86_64)
 $(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo EXPORTS > $@

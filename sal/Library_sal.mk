@@ -206,7 +206,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/backtrace \
 ))
 endif
-ifneq ($(filter $(OS)$(CPU),SOLARISU SOLARISS NETBSDS LINUXS),)
+ifneq ($(filter $(CPUNAME),SPARC64 SPARC),)
 $(eval $(call gb_Library_add_asmobjects,sal,\
 	sal/osl/unx/asm/interlck_sparc \
 ))

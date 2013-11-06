@@ -16,7 +16,7 @@ $(eval $(call gb_Module_add_targets,bridges,\
 		Library_java_uno \
 		$(if $(filter MACOSX,$(OS)),Package_jnilib_java_uno) \
 	) \
-	$(if $(filter R,$(CPU)),\
+	$(if $(filter ARM,$(CPUNAME)),\
 		$(if $(filter IOS,$(OS)),\
 			CustomTarget_gcc3_ios_arm) \
 		$(if $(filter ANDROID LINUX,$(OS)),\

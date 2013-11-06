@@ -19,7 +19,7 @@ $(call gb_ExternalProject_get_state_target,nss,configure):
 	$(if $(filter MSC,$(COM)),LIB="$(ILIB)") \
 	mozilla/nsprpub/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		$(if $(filter MSCX,$(COM)$(CPU)),--enable-64bit) \
+		$(if $(filter MSC-X86_64,$(COM)-$(CPUNAME)),--enable-64bit) \
 	,,nss_configure.log)
 
 ifeq ($(OS),WNT)
@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	$(call gb_ExternalProject_run,build,\
 		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
 		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
-		$(if $(filter X,$(CPU)),USE_64=1) \
+		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		LIB="$(ILIB)" \
 		XCFLAGS="$(SOLARINC)" \
 		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
@@ -58,7 +58,7 @@ endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X,$(CPU)),USE_64=1)) \
+		$(if $(filter FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter MACOSX,$(OS)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
 			NSS_USE_SYSTEM_SQLITE=1) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \

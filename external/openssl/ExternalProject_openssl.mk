@@ -19,10 +19,10 @@ $(eval $(call gb_ExternalProject_register_targets,openssl,\
 
 OPENSSL_PLATFORM := \
   $(if $(filter LINUX FREEBSD ANDROID,$(OS)),\
-    $(if $(filter I,$(CPU)),\
+    $(if $(filter INTEL,$(CPUNAME)),\
       $(if $(filter GNU/kFreeBSD,$(shell uname)),debian-kfreebsd-i386,linux-elf)\
     ,\
-      $(if $(filter X,$(CPU)),\
+      $(if $(filter X86_64,$(CPUNAME)),\
         $(if $(filter GNU/kFreeBSD,$(shell uname)),\
           debian-kfreebsd-amd64\
         ,\
@@ -34,10 +34,8 @@ OPENSSL_PLATFORM := \
     )\
   ,\
     $(if $(filter SOLARIS,$(OS)),\
-      $(if $(filter INTEL,$(CPUNAME)),\
-        $(if $(filter X,$(CPU)),solaris64-x86_64-cc,solaris-x86-cc)\
-      ,\
-        solaris-sparcv9-cc\
+      $(if $(filter INTEL,$(CPUNAME)),solaris-x86-cc,\
+        $(if $(filter X86_64,$(CPUNAME)),solaris64-x86_64-cc,solaris-sparcv9-cc)\
       )\
     ,\
       $(if $(filter IOS,$(OS)),\
@@ -47,11 +45,11 @@ OPENSSL_PLATFORM := \
           $(if $(filter GCC,$(COM)),\
             mingw\
           ,\
-            $(if $(filter I,$(CPU)),VC-WIN32,VC-WIN64A)\
+            $(if $(filter INTEL,$(CPUNAME)),VC-WIN32,VC-WIN64A)\
           )\
         ,\
           $(if $(filter MACOSX,$(OS)),\
-            $(if $(filter I,$(CPU)),darwin-i386-cc,darwin64-x86_64-cc)\
+            $(if $(filter INTEL,$(CPUNAME)),darwin-i386-cc,darwin64-x86_64-cc)\
           )\
         )\
       )\

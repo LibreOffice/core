@@ -9,28 +9,7 @@
 +	@printf '%s\n' 'LIBPQ_DEP_LIBS+=$(SHLIB_LINK)' > '$@'
 --- misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak	2011-12-14 14:28:59.000000000 +0100
 +++ misc/build/postgresql-9.1.1.patched/src/interfaces/libpq/win32.mak	2011-12-15 09:11:37.000000000 +0100
-@@ -11,30 +11,29 @@
- 
- # CPU="i386" or CPU environment of nmake.exe (AMD64 or IA64)
- 
--!IF ("$(CPU)" == "")||("$(CPU)" == "i386")
--CPU=i386
-+!IF ("$(CPU)" == "")||("$(CPU)" == "I")
-+MACHINE=i386
- !MESSAGE Building the Win32 static library...
- !MESSAGE
--!ELSEIF ("$(CPU)" == "IA64")||("$(CPU)" == "AMD64")
-+!ELSEIF ("$(CPU)" == "X")
-+MACHINE=AMD64
- ADD_DEFINES=/D "WIN64" /Wp64 /GS
- ADD_SECLIB=bufferoverflowU.lib
- !MESSAGE Building the Win64 static library...
- !MESSAGE
- !ELSE
- !MESSAGE Please check a CPU=$(CPU) ?
--!MESSAGE CPU=i386 or AMD64 or IA64
-+!MESSAGE CPU=I or X
- !ERROR Make aborted.
+@@ -11,14 +11,12 @@
  !ENDIF
  
  !IFDEF DEBUG
@@ -45,15 +24,6 @@
  LOPT=
 -DEBUGDEF=/D NDEBUG
  OUTFILENAME=libpq
- !ENDIF
- 
-@@ -54,7 +53,7 @@
- !ENDIF
- 
- !IF "$(KFW_LIB_PATH)" == ""
--KFW_LIB_PATH=C:\kfw-2.6.5\lib\$(CPU)
-+KFW_LIB_PATH=C:\kfw-2.6.5\lib\$(MACHINE)
- !MESSAGE Using default Kerberos Library directory: $(KFW_LIB_PATH)
  !ENDIF
  
 @@ -67,18 +66,11 @@
@@ -92,15 +62,6 @@
   /D "_CRT_SECURE_NO_DEPRECATE" $(ADD_DEFINES)
  
  !IFDEF USE_SSL
-@@ -205,7 +198,7 @@
- LINK32=link.exe
- LINK32_FLAGS=kernel32.lib user32.lib advapi32.lib shfolder.lib wsock32.lib ws2_32.lib secur32.lib $(SSL_LIBS)  $(KFW_LIB) $(ADD_SECLIB) \
-  /nologo /subsystem:windows /dll $(LOPT) /incremental:no \
-- /pdb:"$(OUTDIR)\libpqdll.pdb" /machine:$(CPU) \
-+ /pdb:"$(OUTDIR)\libpqdll.pdb" /machine:$(MACHINE) \
-  /out:"$(OUTDIR)\$(OUTFILENAME).dll"\
-  /implib:"$(OUTDIR)\$(OUTFILENAME)dll.lib"  \
-  /libpath:"$(SSL_LIB_PATH)" /libpath:"$(KFW_LIB_PATH)" \
 @@ -222,7 +215,7 @@
  <<
  
