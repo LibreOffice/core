@@ -286,6 +286,52 @@ std::string lcl_GetCouppcd=
 "    return DateToDays( nRealDay, rMonth, rYear ) - nNullDate;\n"
 "}\n";
 
+std::string lcl_GetCoupncdDecl=
+"int lcl_GetCoupncd(int nNullDate,int nSettle, int nMat,int nFreq,"
+"int *bLastDayMode,int *bLastDay,int *b30Days,int *bUSMode);\n";
+
+std::string lcl_GetCoupncd=
+"int lcl_GetCoupncd(int nNullDate,int nSettle, int nMat,int nFreq,"
+"int *bLastDayMode,int *bLastDay,int *b30Days,int *bUSMode)\n"
+"{\n"
+"    int aDate = nMat;int rDay=0,rMonth=0, rYear=0;int mDay=0,mMonth=0,\n"
+"    mYear=0;\n"
+"    int sDay=0,sMonth=0, sYear=0;\n"
+"    DaysToDate(aDate+nNullDate,&rDay, &rMonth, &rYear );\n"
+"    DaysToDate(nMat+nNullDate,&mDay, &mMonth, &mYear );\n"
+"    DaysToDate(nSettle+nNullDate,&sDay, &sMonth, &sYear );\n"
+"    rYear= sYear;\n"
+"    nSettle=nSettle+nNullDate;\n"
+"    aDate=DateToDays( rDay,rMonth,rYear );\n"
+"    if( aDate > nSettle )\n"
+"        rYear+= -1;\n"
+"    int d=DateToDays( rDay,rMonth,rYear );\n"
+"        int nMonthCount=12 / nFreq;\n"
+"    while(d <= nSettle )\n"
+"    {\n"
+"        int nNewMonth = nMonthCount + rMonth;\n"
+"        rMonth=rMonth+ 12 / nFreq ;\n"
+"        if( nNewMonth > 12 )\n"
+"        {\n"
+"            --nNewMonth;\n"
+"            rYear+=nNewMonth / 12;\n"
+"            rMonth = nNewMonth % 12 + 1;\n"
+"        }\n"
+"        else if( nNewMonth < 1 )\n"
+"        {\n"
+"            rYear+= nNewMonth / 12 - 1;\n"
+"            rMonth = nNewMonth % 12 + 12;\n"
+"        }\n"
+"        else\n"
+"            rMonth =  nNewMonth;\n"
+"        d=DateToDays( rDay,rMonth,rYear );\n"
+"    }\n"
+"    int nLastDay = DaysInMonth( rMonth, rYear );\n"
+"    int nRealDay = ((*bLastDayMode) && (*bLastDay)) ? nLastDay :"
+"min( nLastDay, rDay );\n"
+"    return DateToDays( nRealDay, rMonth, rYear ) - nNullDate;\n"
+"}\n";
+
 std::string addMonthsDecl=
 "void addMonths(int b30Days,int bLastDay,int *nDay,int nOrigDay,"
 "int *nMonth,int nMonthCount,int *year);\n";
