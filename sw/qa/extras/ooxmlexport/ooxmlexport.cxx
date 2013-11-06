@@ -1548,6 +1548,13 @@ DECLARE_OOXML_TEST(testFdo69644, "fdo69644.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
+DECLARE_OOXML_TEST(testCp1000015, "cp1000015.odt")
+{
+    // Redline and hyperlink end got exported in an incorrect order.
+    getParagraph(1, "Hello.");
+    getParagraph(2, "http://www.google.com/");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
