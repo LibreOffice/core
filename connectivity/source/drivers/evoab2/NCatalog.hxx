@@ -44,6 +44,6 @@ namespace connectivity
         };
     }
 }
-#endif // _CONNECTIVITY_MOZAB_CATALOG_HXX_
+#endif // _CONNECTIVITY_EVOAB_CATALOG_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
