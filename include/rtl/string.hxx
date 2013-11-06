@@ -362,7 +362,8 @@ public:
       @since LibreOffice 3.5
     */
     sal_Char operator [](sal_Int32 index) const {
-        assert(index >= 0 && index < getLength());
+        // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
+        assert(index >= 0 && static_cast<sal_uInt32>(index) < static_cast<sal_uInt32>(getLength()));
         return getStr()[index];
     }
 
