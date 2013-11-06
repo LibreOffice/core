@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _WIN32_WINNT 0x0500
-
 #ifdef WNT
 /************************************************************************
  * Win32 surface backend for OpenOffice.org Cairo Canvas                *

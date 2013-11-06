@@ -34,6 +34,12 @@ $(eval $(call gb_Library_use_system_win32_libs,ado,\
 	uuid \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_defs,ado,\
+	-D_WIN32_WINNT=0x0502 \
+))
+endif
+
 ifeq ($(WINDOWS_SDK_VERSION),80)
 $(eval $(call gb_Library_add_defs,ado,\
 	-DNTDDI_VERSION=0x0601 \

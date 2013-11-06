@@ -30,7 +30,7 @@
 
 #define STRICT
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0403
+#define _WIN32_WINNT 0x0502
 #endif
 #define _ATL_APARTMENT_THREADED
 #define _ATL_STATIC_REGISTRY

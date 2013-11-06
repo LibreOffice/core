@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define WINVER 0x0500
-
 #include <string.h>
 
 #include <svsys.h>
