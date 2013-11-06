@@ -129,6 +129,12 @@ class OpMedian:public Normal{
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "OpMedian"; }
 };
+class OpNormsdist:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "OpNormsdist"; }
+};
 class OpKurt: public Normal
 {
 public:

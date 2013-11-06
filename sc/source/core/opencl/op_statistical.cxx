@@ -1021,7 +1021,42 @@ void OpNormdist::GenSlidingWindowFunction(
     ss << "return tmp;\n";
     ss << "}\n";
 }
-
+void OpNormsdist::GenSlidingWindowFunction(
+    std::stringstream &ss,const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    double x;\n";
+    ss << "    int gid0=get_global_id(0);\n";
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    ss << "int buffer_x_len = ";
+    ss << tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef ISNAN
+    ss <<"    if((gid0)>=buffer_x_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        x = 0;\nelse \n";
+#endif
+    ss << "       x = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    double tmp = 0.5 *erfc(-x * 0.7071067811865475);\n";
+    ss << "    return tmp;\n";
+    ss << "}\n";
+}
 void OpMedian::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName,
     SubArguments &vSubArguments)
