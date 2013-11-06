@@ -1089,7 +1089,7 @@ namespace cmis
                 libcmis::DocumentPtr pVersion = *it;
                 aVersions[i].Id = STD_TO_OUSTR( pVersion->getId( ) );
                 aVersions[i].Author = STD_TO_OUSTR( pVersion->getCreatedBy( ) );
-                aVersions[i].TimeStamp = lcl_boostToUnoTime( pVersion->getCreationDate( ) );
+                aVersions[i].TimeStamp = lcl_boostToUnoTime( pVersion->getLastModificationDate( ) );
                 aVersions[i].Comment = STD_TO_OUSTR( pVersion->getStringProperty("cmis:checkinComment") );
             }
             return aVersions;
