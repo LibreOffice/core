@@ -606,13 +606,11 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     OUString sTxt;
     if (bVer67)
     {
-        sTxt = OUString( (sal_Char*)pTxt,  SVBT8ToByte( rAV.cbTextBefore )
-                                 + SVBT8ToByte( rAV.cbTextAfter  ), eCharSet );
+        sTxt = OUString((sal_Char*)pTxt, SVBT8ToByte(rAV.cbTextBefore) + SVBT8ToByte(rAV.cbTextAfter), eCharSet);
     }
     else
     {
-        for(sal_Int32 i = SVBT8ToByte(rAV.cbTextBefore);
-            i < SVBT8ToByte(rAV.cbTextAfter); ++i, pTxt += 2)
+        for(sal_Int32 i = 0; i < SVBT8ToByte(rAV.cbTextBefore) + SVBT8ToByte(rAV.cbTextAfter); ++i, pTxt += 2)
         {
             sTxt += OUString(SVBT16ToShort(*(SVBT16*)pTxt));
         }
