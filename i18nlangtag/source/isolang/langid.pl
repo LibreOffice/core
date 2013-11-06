@@ -56,20 +56,13 @@ sub Usage()
         "If option --single is given, only the first match will be processed.\n\n";
 }
 
-my $SOLARVERSION = $ENV{"SOLARVERSION"};
-my $INPATH       = $ENV{"INPATH"};
-my $SRC_ROOT     = $ENV{"SRC_ROOT"};
-my $UPDMINOREXT  = $ENV{"UPDMINOREXT"};
-if (!defined($SOLARVERSION) || !defined($INPATH) || !defined($SRC_ROOT))
+my $SRC_ROOT = $ENV{"SRC_ROOT"};
+if (!defined($SRC_ROOT))
 {
-    print "\nNeed \$SOLARVERSION, \$INPATH and \$SRC_ROOT, please set your OOo environment!\n";
+    print "\nNeed \$SRC_ROOT, please set your LibreOffice environment!\n";
     Usage();
     exit 1;
 }
-if (!defined($UPDMINOREXT)) {
-    $UPDMINOREXT  = '';
-}
-my $SOLENVINC = "$SOLARVERSION/$INPATH/inc$UPDMINOREXT";
 
 my $LANGUAGE_MASK_PRIMARY = 0x03ff;
 
@@ -99,13 +92,9 @@ sub grepFile($$$$@)
     my $found = 0;
     my $areopen = 0;
     my $arecloser = '';
-    my $file;
     # Try module under current working directory first to catch local
-    # modifications. A Not yet delivered lang.h is a special case.
-    if ("$path/$module/$name" eq "$SOLENVINC/i18nlangtag/lang.h") {
-        $file = "./include/$module/lang.h"; }
-    else {
-        $file = "./$module/$name"; }
+    # modifications.
+    my $file = "./$module/$name";
     if (!($found = open( IN, $file)))
     {
         # Then with the given path.
@@ -113,13 +102,6 @@ sub grepFile($$$$@)
         if (!($found = open( IN, $file)))
         {
             print "No $file\n";
-            $file = "$path/$module.lnk/$name";
-            if (!($found = open( IN, $file))) {
-                print "No $file.\n";
-                $file = "$path/$module.link/$name";
-                if (!($found = open( IN, $file))) {
-                    print "No $file either.\n"; }
-            }
         }
     }
     if ($found)
@@ -232,7 +214,7 @@ sub main()
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
-            $SOLENVINC, "i18nlangtag", "lang.h", ());
+            "$SRC_ROOT", "i18nlangtag", "lang.h", ());
     }
     else
     {
@@ -241,7 +223,7 @@ sub main()
         my $buf = sprintf( "0x%04X", $lcid);
         @resultlist = grepFile(
             '^\s*#\s*define\s+\w+\s+' . $buf,
-            $SOLENVINC, "i18nlangtag", "lang.h", ());
+            "$SRC_ROOT", "i18nlangtag", "lang.h", ());
     }
     for $result (@resultlist)
     {
@@ -294,7 +276,7 @@ sub main()
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
-            $SOLENVINC, "i18nlangtag", "lang.h", ());
+            "$SRC_ROOT", "i18nlangtag", "lang.h", ());
         my @lcidlist;
         for $result (@resultlist)
         {
@@ -330,16 +312,7 @@ sub main()
                     push( @langcoungreplist, '\b' . $lang . '\b');
                 }
                 my $file = "$SRC_ROOT/i18npool/source/localedata/data/$loca.xml";
-                my $found;
-                if (!($found = open( LD, $file)))
-                {
-                    $file = "$SRC_ROOT/i18npool.lnk/source/localedata/data/$loca.xml";
-                    if (!($found = open( LD, $file)))
-                    {
-                        $file = "$SRC_ROOT/i18npool.link/source/localedata/data/$loca.xml";
-                        $found = open( LD, $file);
-                    }
-                }
+                my $found = open( LD, $file);
                 if ($found)
                 {
                     print "Found $file:\n";
@@ -356,7 +329,7 @@ sub main()
                     close( LD);
                 }
                 else {
-                    print "No $SRC_ROOT/i18npool/source/localedata/data/$loca.xml\n"; }
+                    print "No $file\n"; }
             }
         }
 
