@@ -1400,6 +1400,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocLogInv:
             case ocArcCot:
             case ocCosHyp:
+            case ocKritBinom:
             // Don't change the state.
             break;
             default:
