@@ -52,13 +52,6 @@ NSS_INC = $(MOZ_NSS_CFLAGS)
 NSPR_INC = $(MOZ_INC)$/nspr
 .ENDIF
 
-.IF "$(GUI)"=="UNX"
-.IF "$(COMNAME)"=="sunpro5"
-CFLAGS += -features=tmplife
-#This flag is needed to build mozilla 1.7 code
-.ENDIF		# "$(COMNAME)"=="sunpro5"
-.ENDIF
-
 .IF "$(GUI)" == "WNT"
 .IF "$(DBG_LEVEL)" == "0"
 INCPRE += \

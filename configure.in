@@ -603,10 +603,6 @@ AC_ARG_WITH(system-mdds,
 AC_ARG_WITH(system-vigra,
 [  --with-system-vigra     Use vigra already on system
 ],,)
-AC_ARG_ENABLE(Xaw,
-[  --disable-Xaw           Disables the use of Xaw for the Netscape/Mozilla
-                           plugin
-],,)
 AC_ARG_ENABLE(hunspell,
 [  --enable-hunspell       Determines whether to enable the Hunspell library.
                           If enabled, the library will be built unless you
@@ -5002,28 +4998,6 @@ else
 fi
 AC_SUBST(XLIB)
 AC_SUBST(XAU_LIBS)
-
-if test "$_os" != "WINNT" -a "$_os" != "OS2" -a "$_os" != "Darwin"; then
-   dnl ===================================================================
-   dnl Check for using Xaw
-   dnl ===================================================================
-   AC_MSG_CHECKING([whether to use Xaw])
-   if test "$enable_Xaw" = "no"; then
-       DISABLE_XAW=TRUE
-       AC_MSG_RESULT([no])
-       AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt include headers not found])],
-         [#include <X11/Intrinsic.h>])
-   else
-       AC_MSG_RESULT([yes])
-       AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])],
-         [#include <X11/Intrinsic.h>])
-       AC_CHECK_LIB(Xaw, main, [],
-           [AC_MSG_ERROR(Xaw library not found or functional)], [])
-   fi
-fi
-AC_SUBST(DISABLE_XAW)
-
-
 
 dnl ===================================================================
 dnl Check if fontconfig/fontconfig.h is available 
