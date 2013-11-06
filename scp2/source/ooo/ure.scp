@@ -195,74 +195,6 @@ End
 
 // Public Dynamic Libraries:
 
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcr80_Ure
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_URE_DL_DIR;
-#ifndef _STLP_DEBUG
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcp80_Ure
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_URE_DL_DIR;
-#ifndef _STLP_DEBUG
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcm80_Ure
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_URE_DL_DIR;
-#ifndef _STLP_DEBUG
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Msvcm80crt_Manifest_Ure
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_URE_DL_DIR;
-#ifndef _STLP_DEBUG
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
-#endif
-
 File gid_File_Dl_Cppu
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -1042,38 +974,6 @@ End
 
 #endif
 
-#ifdef WNT
-#if defined(M1310)
-File gid_File_Dl_Msvcr71
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-#if defined _STLP_DEBUG
-    Name = SCP2_URE_DL_NORMAL("msvcr71d");
-#else
-    Name = SCP2_URE_DL_NORMAL("msvcr71");
-#endif
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "074DE395-C6EB-47F7-A587-6311F89C14B4";
-End
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1310)
-File gid_File_Dl_Msvcp71
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-#if defined _STLP_DEBUG
-    Name = SCP2_URE_DL_NORMAL("msvcp71d");
-#else
-    Name = SCP2_URE_DL_NORMAL("msvcp71");
-#endif
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "1AF2708A-AAE2-4F25-ADF5-E61A549A51C2";
-End
-#endif
-#endif
-
 #if defined WNT
 File gid_File_Dl_Uwinapi
     TXT_FILE_BODY;
@@ -1249,13 +1149,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Lib_Mingw_GccS_Ure,
             gid_File_Lib_Mingw_Stdcpp_Ure,
             gid_File_Lib_Mingwm10_Ure,
-            gid_File_Dl_Msvcr71,
-            gid_File_Dl_Msvcp71,
             gid_File_Dl_Uwinapi,
-            gid_File_Lib_Msvcr80_Ure,
-            gid_File_Lib_Msvcp80_Ure,
-            gid_File_Lib_Msvcm80_Ure,
-            gid_File_Msvcm80crt_Manifest_Ure,
             gid_File_Java_UnoloaderJar,
             gid_File_Java_JuhJar,
             gid_File_Java_JurtJar,

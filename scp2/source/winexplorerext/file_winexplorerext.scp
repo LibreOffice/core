@@ -89,15 +89,6 @@ End
 
 #endif
 
-#if defined M1310
-File gid_File_Lib_Shlxthdl_Msvcr71
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Shlxthdl;
-    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
-    Styles = (PACKED);
-End
-#endif
-
 File gid_File_Lib_Shlxtmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);

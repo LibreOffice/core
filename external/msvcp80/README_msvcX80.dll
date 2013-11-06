@@ -1,2 +1,0 @@
-Put the msvcp80.dll and msvcr80.dll in this directory for Windows builds using
-a VS 2005 compiler.

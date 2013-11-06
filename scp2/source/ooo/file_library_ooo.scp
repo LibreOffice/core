@@ -947,60 +947,6 @@ End
 #endif
 #endif
 
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcr80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Common_Ure;
-//    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcp80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Common_Ure;
-//    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcm80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Common_Ure;
-//    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
 #if defined(WNT) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
@@ -1027,24 +973,6 @@ End
 
 #endif
 
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Msvcm80crt_Manifest
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Common_Ure;
-//    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
 #endif
 
 #if defined(OS2)
@@ -1855,24 +1783,6 @@ End
 STD_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimpc)
 #else
 STD_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
-#endif
-
-#if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA && \
-    !(defined M1400 && defined PROF_EDITION && !defined _STLP_DEBUG)
-        // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
-        // gid_Brand_File_Lib_Msvcr80
-File gid_File_Moz_Msvcp80
-    TXT_FILE_BODY;
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = SCP2_URE_DL_NORMAL("msvcp80");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-End
-File gid_File_Moz_Msvcr80
-    TXT_FILE_BODY;
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = SCP2_URE_DL_NORMAL("msvcr80");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-End
 #endif
 
 #if defined(WNT)

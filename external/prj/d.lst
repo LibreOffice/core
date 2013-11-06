@@ -17,18 +17,6 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 
 ..\gdiplus\gdiplus.dll %_DEST%\bin%_EXT%\gdiplus.dll
 
-..\msvcp70\msvcp70.dll %_DEST%\bin%_EXT%\msvcp70.dll
-..\msvcp70\msvcr70.dll %_DEST%\bin%_EXT%\msvcr70.dll
-
-..\msvcp71\msvcp71*.dll %_DEST%\bin%_EXT%
-..\msvcp71\msvcr71*.dll %_DEST%\bin%_EXT%
-
-..\msvcp80\msvcm80*.dll %_DEST%\bin%_EXT%
-..\msvcp80\msvcp80*.dll %_DEST%\bin%_EXT%
-..\msvcp80\msvcr80*.dll %_DEST%\bin%_EXT%
-..\msvcp80\Microsoft.VC80.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.CRT.manifest
-..\msvcp80\Microsoft.VC80.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.DebugCRT.manifest
-
 ..\msvcp90\msvcm90*.dll %_DEST%\bin%_EXT%
 ..\msvcp90\msvcp90*.dll %_DEST%\bin%_EXT%
 ..\msvcp90\msvcr90*.dll %_DEST%\bin%_EXT%
