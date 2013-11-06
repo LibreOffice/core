@@ -25,7 +25,7 @@
       <ThousandSeparator> </ThousandSeparator>
       <DecimalSeparator>,</DecimalSeparator>
       <TimeSeparator>:</TimeSeparator>
-      <Time100SecSeparator>.</Time100SecSeparator>
+      <Time100SecSeparator>,</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
       <LongDateDaySeparator> </LongDateDaySeparator>
@@ -33,10 +33,10 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>«</QuotationStart>
-      <QuotationEnd>»</QuotationEnd>
-      <DoubleQuotationStart>„</DoubleQuotationStart>
-      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>«</DoubleQuotationStart>
+      <DoubleQuotationEnd>»</DoubleQuotationEnd>
     </Markers>
     <TimeAM>am</TimeAM>
     <TimePM>pm</TimePM>
@@ -175,10 +175,10 @@
       <FormatCode>[HH]:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME" formatindex="44">
-      <FormatCode>MM:SS.00</FormatCode>
+      <FormatCode>MM:SS,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
-      <FormatCode>[HH]:MM:SS.00</FormatCode>
+      <FormatCode>[HH]:MM:SS,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
       <FormatCode>DD/MM/YY HH:MM</FormatCode>
