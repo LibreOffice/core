@@ -8061,7 +8061,6 @@ void ScInterpreter::ScSearch()
     }
 }
 
-
 void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
@@ -8074,11 +8073,13 @@ void ScInterpreter::ScMid()
         else
         {
             sal_Int32 nCharacters = std::min<sal_Int32>(static_cast<sal_Int32>(fAnz), aStr.getLength() - fAnfang + 1);
-            PushString(aStr.copy(static_cast<sal_Int32>(fAnfang-1), nCharacters));
+            OUString sRes;
+            if (nCharacters > 0)
+                sRes = aStr.copy(static_cast<sal_Int32>(fAnfang-1), nCharacters);
+            PushString(sRes);
         }
     }
 }
-
 
 void ScInterpreter::ScText()
 {
