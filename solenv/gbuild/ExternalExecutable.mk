@@ -115,7 +115,7 @@ endef
 define gb_ExternalExecutable__set_internal
 gb_ExternalExecutable_$(1)_EXECUTABLE := $(2)
 gb_ExternalExecutable_$(1)_DEPENDENCIES := $(if $(findstring $(WORKDIR_FOR_BUILD),$(2)),,$(2))
-gb_ExternalExecutable_$(1)_PRECOMMAND := $(subst $$,$$$$,$(gb_Helper_set_ld_path))
+gb_ExternalExecutable_$(1)_PRECOMMAND := $(subst $$,$$$$,$(gb_Helper_set_ld_path)) $(BUILDTOOLTRACE)
 
 endef
 
@@ -138,7 +138,7 @@ endef
 #
 # gb_ExternalExecutable_set_precommand executable precommand
 define gb_ExternalExecutable_set_precommand
-gb_ExternalExecutable_$(1)_PRECOMMAND := $(2)
+gb_ExternalExecutable_$(1)_PRECOMMAND := $(2) $(BUILDTOOLTRACE)
 
 endef
 

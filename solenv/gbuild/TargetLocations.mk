@@ -346,7 +346,7 @@ endef
 #
 # gb_Executable_get_command executable
 define gb_Executable_get_command
-$(gb_Helper_set_ld_path) $(2) $(call gb_Executable_get_target_for_build,$(1))
+$(gb_Helper_set_ld_path) $(BUILDTOOLTRACE) $(2) $(call gb_Executable_get_target_for_build,$(1))
 endef
 
 define gb_Executable__get_workdir_linktargetname
