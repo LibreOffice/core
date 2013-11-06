@@ -20,7 +20,6 @@
 
 #include "defaultgriddatamodel.hxx"
 
-#include <comphelper/stlunosequence.hxx>
 #include <comphelper/componentguard.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/servicenames.hxx>
@@ -45,9 +44,6 @@ namespace toolkit
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::util::XCloneable;
-
-    using ::comphelper::stl_begin;
-    using ::comphelper::stl_end;
 
     //==================================================================================================================
     //= DefaultGridDataModel
@@ -190,7 +186,7 @@ namespace toolkit
         // create new data row
         RowData newRow( i_assumedColCount > 0 ? i_assumedColCount : i_rowData.getLength() );
         RowData::iterator cellData = newRow.begin();
-        for ( const Any* pData = stl_begin( i_rowData ); pData != stl_end( i_rowData ); ++pData, ++cellData )
+        for ( const Any* pData = i_rowData.begin(); pData != i_rowData.end(); ++pData, ++cellData )
             cellData->first = *pData;
 
         // insert data row
@@ -349,8 +345,8 @@ namespace toolkit
             rDataRow[ columnIndex ].first = i_values[ col ];
         }
 
-        sal_Int32 const firstAffectedColumn = *::std::min_element( stl_begin( i_columnIndexes ), stl_end( i_columnIndexes ) );
-        sal_Int32 const lastAffectedColumn = *::std::max_element( stl_begin( i_columnIndexes ), stl_end( i_columnIndexes ) );
+        sal_Int32 const firstAffectedColumn = *::std::min_element( i_columnIndexes.begin(), i_columnIndexes.end() );
+        sal_Int32 const lastAffectedColumn = *::std::max_element( i_columnIndexes.begin(), i_columnIndexes.end() );
         broadcast(
             GridDataEvent( *this, firstAffectedColumn, lastAffectedColumn, i_rowIndex, i_rowIndex ),
             &XGridDataListener::dataChanged,

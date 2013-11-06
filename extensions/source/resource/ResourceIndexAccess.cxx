@@ -11,7 +11,6 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <comphelper/stlunosequence.hxx>
 #include <osl/mutex.hxx>
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
@@ -23,9 +22,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-
-using ::comphelper::stl_begin;
-using ::comphelper::stl_end;
 
 namespace
 {
@@ -108,7 +104,7 @@ Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
 {
     const Sequence<OUString> aNames(getElementNames());
     Reference<XIndexAccess> xResult;
-    switch(::std::find(stl_begin(aNames), stl_end(aNames), aName)-stl_begin(aNames))
+    switch(::std::find(aNames.begin(), aNames.end(), aName) - aNames.begin())
     {
         case 0:
             xResult = Reference<XIndexAccess>(new ResourceStringIndexAccess(m_pResMgr));
@@ -139,7 +135,7 @@ Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
     throw (RuntimeException)
 {
     const Sequence<OUString> aNames(getElementNames());
-    return (::std::find(stl_begin(aNames), stl_end(aNames), aName) != stl_end(aNames));
+    return (::std::find(aNames.begin(), aNames.end(), aName) != aNames.end());
 }
 
 Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)

@@ -98,7 +98,6 @@
 #include "MultiPropertySetHelper.hxx"
 #include <xmloff/formlayerexport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
-#include <comphelper/stlunosequence.hxx>
 #include <xmloff/odffields.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -382,7 +381,7 @@ void FieldParamExporter::Export()
     const Type aSeqType = ::getCppuType((Sequence<OUString>*)0);
     const Type aIntType = ::getCppuType((sal_Int32*)0);
     Sequence<OUString> vParameters(m_xFieldParams->getElementNames());
-    for(const OUString* pCurrent=::comphelper::stl_begin(vParameters); pCurrent!=::comphelper::stl_end(vParameters); ++pCurrent)
+    for(const OUString* pCurrent = vParameters.begin(); pCurrent != vParameters.end(); ++pCurrent)
     {
         const Any aValue = m_xFieldParams->getByName(*pCurrent);
         const Type aValueType = aValue.getValueType();
@@ -423,7 +422,7 @@ void FieldParamExporter::Export()
         {
             Sequence<OUString> vValue;
             aValue >>= vValue;
-            for(OUString* pSeqCurrent = ::comphelper::stl_begin(vValue); pSeqCurrent != ::comphelper::stl_end(vValue); ++pSeqCurrent)
+            for(OUString* pSeqCurrent = vValue.begin(); pSeqCurrent != vValue.end(); ++pSeqCurrent)
             {
                 ExportParameter(*pCurrent, *pSeqCurrent);
             }

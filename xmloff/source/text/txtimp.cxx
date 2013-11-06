@@ -58,7 +58,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <txtlists.hxx>
 #include <xmloff/odffields.hxx>
-#include <comphelper/stlunosequence.hxx>
 
 using ::com::sun::star::ucb::XAnyCompare;
 
@@ -869,7 +868,7 @@ namespace
         if(!vListEntries.empty())
         {
             Sequence<OUString> vListEntriesSeq(vListEntries.size());
-            copy(vListEntries.begin(), vListEntries.end(), ::comphelper::stl_begin(vListEntriesSeq));
+            copy(vListEntries.begin(), vListEntries.end(), vListEntriesSeq.begin());
             vOutParams[OUString(ODF_FORMDROPDOWN_LISTENTRY)] = makeAny(vListEntriesSeq);
         }
         for(::std::map<OUString, Any>::const_iterator pCurrent = vOutParams.begin();

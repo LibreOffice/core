@@ -9,14 +9,12 @@
 
 #include <SyncDbusSessionHelper.hxx>
 
-#include <comphelper/stlunosequence.hxx>
 #include <gio/gio.h>
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::comphelper;
 using namespace ::std;
 using namespace ::rtl;
 
@@ -71,7 +69,7 @@ namespace shell { namespace sessioninstall
         vector< OString > vPackagesOString;
         vPackagesOString.reserve(vPackages.getLength());
         boost::shared_ptr<GVariantBuilder> pBuilder(g_variant_builder_new(G_VARIANT_TYPE ("as")), GVariantBuilderDeleter());
-        for( const OUString* pPackage = stl_begin(vPackages); pPackage != stl_end(vPackages); ++pPackage)
+        for( const OUString* pPackage = vPackages.begin(); pPackage != vPackages.end(); ++pPackage)
         {
             vPackagesOString.push_back(OUStringToOString(*pPackage, RTL_TEXTENCODING_ASCII_US));
             g_variant_builder_add(pBuilder.get(), "s", vPackagesOString.back().getStr());

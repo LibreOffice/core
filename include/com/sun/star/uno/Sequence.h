@@ -163,6 +163,15 @@ public:
     */
     inline E * SAL_CALL getArray();
 
+    /** These functions now allows to use Sequence in standard algorightm, like std::find
+        and others. These functions returns, a reference to first element, a const reference to
+        first element, a reference to the last element, and a const reference to last element.
+    */
+    inline E * begin();
+    inline E const * begin() const;
+    inline E * end();
+    inline E const * end() const;
+
     /** Non-const index operator: Obtains a reference to element indexed at
         given position.
         The implementation does not check for array bounds!
