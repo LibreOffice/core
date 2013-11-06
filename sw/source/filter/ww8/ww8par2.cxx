@@ -344,12 +344,13 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
         if (pTNd && !pTNd->GetTxt().isEmpty() && !sChar.isEmpty())
         {
-            if (pTNd->GetTxt()[0] == sChar[0])
+            const OUString &rTxt = pTNd->GetTxt();
+            if (rTxt[0] == sChar[0])
             {
                 pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 pPaM->SetMark();
                 // Strip out tabs we may have inserted on export #i24762#
-                if (pTNd->GetTxt()[1] == 0x09)
+                if (rTxt.getLength() > 1 && rTxt[1] == 0x09)
                     pPaM->GetMark()->nContent++;
                 pPaM->GetMark()->nContent++;
                 pReffingStck->Delete(*pPaM);
