@@ -140,7 +140,9 @@ class SvTokenStream
     int             GetNextChar();
     int             GetFastNextChar()
                     {
-                        return aBufStr[nBufPos++];
+                        return (nBufPos < aBufStr.getLength())
+                            ? aBufStr[nBufPos++]
+                            : '\0';
                     }
 
     void            FillTokenList();

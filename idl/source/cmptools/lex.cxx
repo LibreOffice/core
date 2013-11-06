@@ -151,9 +151,9 @@ void SvTokenStream::FillTokenList()
 int SvTokenStream::GetNextChar()
 {
     int nChar;
-    if( aBufStr.getLength() < nBufPos )
+    while (aBufStr.getLength() <= nBufPos)
     {
-        if( rInStream.ReadLine( aBufStr ) )
+        if (rInStream.ReadLine(aBufStr))
         {
             nLine++;
             nColumn = 0;
