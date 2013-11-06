@@ -648,6 +648,9 @@ void DocxAttributeOutput::EndRun()
     WritePostponedMath();
     WritePendingPlaceholder();
 
+    // if there is some redlining in the document, output it
+    EndRedline();
+
     if ( m_closeHyperlinkInThisRun )
     {
         if ( m_startedHyperlink )
@@ -665,9 +668,6 @@ void DocxAttributeOutput::EndRun()
             delete m_Fields.front().pField;
         m_Fields.erase( m_Fields.begin( ) );
     }
-
-    // if there is some redlining in the document, output it
-    EndRedline();
 }
 
 void DocxAttributeOutput::WriteCommentRanges()
