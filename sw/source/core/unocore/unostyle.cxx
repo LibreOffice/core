@@ -1678,6 +1678,13 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         break;
 
+        case FN_UNO_STYLE_INTEROP_GRAB_BAG:
+        {
+            rBase.mxNewBase->GetItemSet();
+            rBase.mxNewBase->SetGrabBagItem(rValue);
+        }
+        break;
+
         case RES_PAPER_BIN:
         {
             SfxPrinter *pPrinter = pDoc->getPrinter( true );
@@ -2176,6 +2183,14 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             bHidden = xBase->IsHidden();
         }
         aRet.setValue(&bHidden, ::getBooleanCppuType());
+    }
+    else if (FN_UNO_STYLE_INTEROP_GRAB_BAG == rEntry.nWID)
+    {
+        if (pBase)
+        {
+            rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*(SwDocStyleSheet*)pBase));
+            xBase->GetGrabBagItem(aRet);
+        }
     }
     else if(pBase)
     {
