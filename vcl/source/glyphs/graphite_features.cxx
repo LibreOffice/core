@@ -219,7 +219,7 @@ gr_uint32 GrFeatureParser::getCharId(const OString & id, size_t offset, size_t l
 {
     FeatId charId;
     charId.num = 0;
-#ifdef WORDS_BIGENDIAN
+#ifdef OSL_BIGENDIAN
     for (size_t i = 0; i < length; i++)
     {
         charId.label[i] = id[offset+i];
