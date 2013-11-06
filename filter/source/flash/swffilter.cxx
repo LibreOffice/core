@@ -285,16 +285,20 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
 
     // AS: sPath is the parent directory, where everything else exists (like the sxi,
     //  the -swf-files folder, the -audio files, etc.
-    int lastslash = sOriginalPath.lastIndexOf('/');
+    sal_Int32 lastslash = sOriginalPath.lastIndexOf('/');
     OUString sPath( sOriginalPath.copy(0, lastslash) );
 
     OUString sPresentation(xStorable->getLocation());
 
     lastslash = sPresentation.lastIndexOf('/') + 1;
-    int lastdot = sPresentation.lastIndexOf('.');
+    sal_Int32 lastdot = sPresentation.lastIndexOf('.');
 
     // AS: The name of the presentation, without 3 character extension.
-    OUString sPresentationName = sPresentation.copy(lastslash, lastdot - lastslash);
+    OUString sPresentationName;
+    if (lastdot < 0)  // fdo#71309 in case file has no name
+        sPresentationName = sPresentation.copy(lastslash);
+    else
+        sPresentationName = sPresentation.copy(lastslash, lastdot - lastslash);
 
     OUString fullpath, swfdirpath, backgroundfilename, objectsfilename;
 
