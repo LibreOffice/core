@@ -146,6 +146,7 @@ public:
     void testMathFormulaSqrt();
     void testMathFormulaArcCosHyp();
     void testFinancialXirrFormula();
+    void testFinacialNPVFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -223,6 +224,7 @@ public:
     CPPUNIT_TEST(testMathFormulaSqrt);
     CPPUNIT_TEST(testMathFormulaArcCosHyp);
     CPPUNIT_TEST(testFinancialXirrFormula);
+    CPPUNIT_TEST(testFinacialNPVFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2102,6 +2104,28 @@ void ScOpenclTest:: testFinacialPPMTFormula()
     enableOpenCL();
     pDoc->CalcAll();
     ScDocShellRef xDocShRes = loadDoc("opencl/financial/PPMT.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-120]
+void ScOpenclTest:: testFinacialNPVFormula()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/NPV.", XLS);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/NPV.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
