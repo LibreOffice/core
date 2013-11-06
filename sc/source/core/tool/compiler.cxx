@@ -239,6 +239,11 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
     }
 }
 
+void ScCompiler::SetNumberFormatter( SvNumberFormatter* pFormatter )
+{
+    mpFormatter = pFormatter;
+}
+
 ScCompiler::EncodeUrlMode ScCompiler::GetEncodeUrlMode() const
 {
     return meEncodeUrlMode;
@@ -1640,6 +1645,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         : FormulaCompiler(rArr),
         pDoc( pDocument ),
         aPos( rPos ),
+        mpFormatter(pDoc->GetFormatTable()),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
@@ -1656,6 +1662,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         :
         pDoc( pDocument ),
         aPos( rPos ),
+        mpFormatter(pDoc->GetFormatTable()),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
@@ -2517,40 +2524,37 @@ bool ScCompiler::IsOpCode2( const OUString& rName )
 bool ScCompiler::IsValue( const OUString& rSym )
 {
     double fVal;
-    sal_uInt32 nIndex = ( mxSymbols->isEnglish() ?
-        pDoc->GetFormatTable()->GetStandardIndex( LANGUAGE_ENGLISH_US ) : 0 );
+    sal_uInt32 nIndex = mxSymbols->isEnglish() ? mpFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) : 0;
 
-    if (pDoc->GetFormatTable()->IsNumberFormat( rSym, nIndex, fVal ) )
-    {
-        sal_uInt16 nType = pDoc->GetFormatTable()->GetType(nIndex);
-
-        // Don't accept 3:3 as time, it is a reference to entire row 3 instead.
-        // Dates should never be entered directly and automatically converted
-        // to serial, because the serial would be wrong if null-date changed.
-        // Usually it wouldn't be accepted anyway because the date separator
-        // clashed with other separators or operators.
-        if (nType & (NUMBERFORMAT_TIME | NUMBERFORMAT_DATE))
-            return false;
-
-        if (nType == NUMBERFORMAT_LOGICAL)
-        {
-            const sal_Unicode* p = aFormula.getStr() + nSrcPos;
-            while( *p == ' ' )
-                p++;
-            if (*p == '(')
-                return false;   // Boolean function instead.
-        }
-
-        if( nType == NUMBERFORMAT_TEXT )
-            // HACK: number too big!
-            SetError( errIllegalArgument );
-        ScRawToken aToken;
-        aToken.SetDouble( fVal );
-        pRawToken = aToken.Clone();
-        return true;
-    }
-    else
+    if (!mpFormatter->IsNumberFormat(rSym, nIndex, fVal))
         return false;
+
+    sal_uInt16 nType = mpFormatter->GetType(nIndex);
+
+    // Don't accept 3:3 as time, it is a reference to entire row 3 instead.
+    // Dates should never be entered directly and automatically converted
+    // to serial, because the serial would be wrong if null-date changed.
+    // Usually it wouldn't be accepted anyway because the date separator
+    // clashed with other separators or operators.
+    if (nType & (NUMBERFORMAT_TIME | NUMBERFORMAT_DATE))
+        return false;
+
+    if (nType == NUMBERFORMAT_LOGICAL)
+    {
+        const sal_Unicode* p = aFormula.getStr() + nSrcPos;
+        while( *p == ' ' )
+            p++;
+        if (*p == '(')
+            return false;   // Boolean function instead.
+    }
+
+    if( nType == NUMBERFORMAT_TEXT )
+        // HACK: number too big!
+        SetError( errIllegalArgument );
+    ScRawToken aToken;
+    aToken.SetDouble( fVal );
+    pRawToken = aToken.Clone();
+    return true;
 }
 
 bool ScCompiler::IsString()

@@ -312,6 +312,8 @@ private:
     ScDocument* pDoc;
     ScAddress   aPos;
 
+    SvNumberFormatter* mpFormatter;
+
     // For CONV_XL_OOX, may be set via API by MOOXML filter.
     ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
 
@@ -400,6 +402,7 @@ public:
 
     void            SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
 
+    void SetNumberFormatter( SvNumberFormatter* pFormatter );
     EncodeUrlMode   GetEncodeUrlMode() const;
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()
