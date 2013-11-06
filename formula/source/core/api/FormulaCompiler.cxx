@@ -24,6 +24,8 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 
+#include "osl/mutex.hxx"
+
 #include <svl/zforlist.hxx>
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
@@ -39,8 +41,7 @@ namespace formula
 
     static const sal_Char* pInternal[ 1 ] = { "TTT" };
 
-namespace
-{
+namespace {
 
 class FormulaCompilerRecursionGuard
 {
@@ -247,6 +248,13 @@ const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr, sal_Unicode c )
     }
     return NULL;
 }
+
+struct OpCodeMapData
+{
+    FormulaCompiler::NonConstOpCodeMapPtr mxSymbolMap;
+    osl::Mutex maMtx;
+};
+
 
 } // namespace
 
@@ -625,21 +633,25 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
 
 void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bDestroy = false )
 {
-    static FormulaCompiler::NonConstOpCodeMapPtr s_SymbolMap;
+    static OpCodeMapData aSymbolMap;
+    osl::MutexGuard aGuard(&aSymbolMap.maMtx);
+
     if ( bDestroy )
     {
-        s_SymbolMap.reset();
+        aSymbolMap.mxSymbolMap.reset();
     }
-    else if ( !s_SymbolMap.get() )
+    else if (!aSymbolMap.mxSymbolMap)
     {
         // Core
-        s_SymbolMap.reset( new FormulaCompiler::OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, true,
-                    FormulaGrammar::GRAM_NATIVE_UI));
+        aSymbolMap.mxSymbolMap.reset(
+            new FormulaCompiler::OpCodeMap(
+                SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI));
         OModuleClient aModuleClient;
-        OpCodeList aOpCodeListNative( RID_STRLIST_FUNCTION_NAMES, s_SymbolMap );
+        OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
         // No AddInMap for native core mapping.
     }
-    xMap = s_SymbolMap;
+
+    xMap = aSymbolMap.mxSymbolMap;
 }
 
 const OUString& FormulaCompiler::GetNativeSymbol( OpCode eOp )
@@ -661,34 +673,38 @@ void FormulaCompiler::InitSymbolsNative() const
 
 void FormulaCompiler::InitSymbolsEnglish() const
 {
-    static NonConstOpCodeMapPtr s_sSymbol;
-    if ( !s_sSymbol.get() )
-        loadSymbols( RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, s_sSymbol);
-    mxSymbolsEnglish = s_sSymbol;
+    static OpCodeMapData aMap;
+    osl::MutexGuard aGuard(&aMap.maMtx);
+    if (!aMap.mxSymbolMap)
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
+    mxSymbolsEnglish = aMap.mxSymbolMap;
 }
 
 void FormulaCompiler::InitSymbolsPODF() const
 {
-    static NonConstOpCodeMapPtr s_sSymbol;
-    if ( !s_sSymbol.get() )
-        loadSymbols( RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_PODF, s_sSymbol);
-    mxSymbolsPODF = s_sSymbol;
+    static OpCodeMapData aMap;
+    osl::MutexGuard aGuard(&aMap.maMtx);
+    if (!aMap.mxSymbolMap)
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap);
+    mxSymbolsPODF = aMap.mxSymbolMap;
 }
 
 void FormulaCompiler::InitSymbolsODFF() const
 {
-    static NonConstOpCodeMapPtr s_sSymbol;
-    if ( !s_sSymbol.get() )
-        loadSymbols( RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, s_sSymbol);
-    mxSymbolsODFF = s_sSymbol;
+    static OpCodeMapData aMap;
+    osl::MutexGuard aGuard(&aMap.maMtx);
+    if (!aMap.mxSymbolMap)
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, aMap.mxSymbolMap);
+    mxSymbolsODFF = aMap.mxSymbolMap;
 }
 
 void FormulaCompiler::InitSymbolsEnglishXL() const
 {
-    static NonConstOpCodeMapPtr s_sSymbol;
-    if ( !s_sSymbol.get() )
-        loadSymbols( RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, s_sSymbol);
-    mxSymbolsEnglishXL = s_sSymbol;
+    static OpCodeMapData aMap;
+    osl::MutexGuard aGuard(&aMap.maMtx);
+    if (!aMap.mxSymbolMap)
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
+    mxSymbolsEnglishXL = aMap.mxSymbolMap;
 
     // TODO: For now, just replace the separators to the Excel English
     // variants. Later, if we want to properly map Excel functions with Calc
