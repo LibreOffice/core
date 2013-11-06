@@ -172,13 +172,11 @@ public:
     static int releaseOpenclRunEnv();
     static int initOpenclRunEnv( GPUEnv *gpu );
     static int releaseOpenclEnv( GPUEnv *gpuInfo );
-    static int compileKernelFile( GPUEnv *gpuInfo, const char *buildOption );
     static int initOpenclRunEnv( int argc );
     static int cachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * clFileName );
     static int generatBinFromKernelSource( cl_program program, const char * clFileName );
     static int writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
     static std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context);
-    static int compileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
     static bool buildProgramFromSource(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
     static bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
 

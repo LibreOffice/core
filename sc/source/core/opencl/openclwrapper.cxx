@@ -615,29 +615,6 @@ bool OpenclDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
     return buildProgram(buildOption, gpuInfo, idx);
 }
 
-int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
-{
-    int idx;
-    const char* filename = "kernel.cl";
-    fprintf(stderr, "compileKernelFile ... \n");
-    if ( cachedOfKernerPrg(gpuInfo, filename) == 1 )
-    {
-        return 1;
-    }
-
-    idx = gpuInfo->mnFileCount;
-
-    bool bSuccess = buildProgramFromBinary(buildOption, gpuInfo, filename, idx);
-    if(!bSuccess)
-        bSuccess = buildProgramFromSource(buildOption, gpuInfo, filename, idx);
-
-    strcpy( gpuInfo->mArryKnelSrcFile[idx], filename );
-
-    gpuInfo->mnFileCount += 1;
-
-    return bSuccess;
-}
-
 int OpenclDevice::initOpenclRunEnv( int argc )
 {
     if ( MAX_CLKERNEL_NUM <= 0 )
