@@ -285,9 +285,13 @@ std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const 
             OString fileName = createFileName(gpuEnv.mpArryDevsID[i], clFileName);
             osl::File* pNewFile = new osl::File(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
             if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
+            {
                 aGeneratedFiles.push_back(boost::shared_ptr<osl::File>(pNewFile));
+                printf("opencl-wrapper: opening binary for reading [%s] success\n", fileName.getStr());
+            }
             else
             {
+                printf("opencl-wrapper: opening binary for reading [%s] fail\n", fileName.getStr());
                 delete pNewFile;
                 break;
             }
@@ -365,10 +369,10 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
             if ( !writeBinaryToFile( fileName,
                         binaries[i], binarySizes[i] ) )
             {
-                printf("opencl-wrapper: write binary[%s] failds\n", fileName.getStr());
+                printf("opencl-wrapper: write binary [%s] fail\n", fileName.getStr());
             }
             else
-                printf("opencl-wrapper: write binary[%s] succesfully\n", fileName.getStr());
+                printf("opencl-wrapper: write binary [%s] success\n", fileName.getStr());
         }
     }
 
