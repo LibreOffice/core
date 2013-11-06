@@ -80,6 +80,7 @@ public:
     void testFinacialMIRRFormula();
     void testFinacialRateFormula();
     void testFinancialAccrintmFormula();
+    void testFinancialAccrintFormula();
     void testCompilerNested();
     void testFinacialSLNFormula();
     void testStatisticalFormulaGammaLn();
@@ -255,6 +256,7 @@ public:
     CPPUNIT_TEST(testFinancialDBFormula);
     CPPUNIT_TEST(testFinancialCouppcdFormula);
     CPPUNIT_TEST(testFinancialCoupncdFormula);
+    CPPUNIT_TEST(testFinancialAccrintFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2695,6 +2697,28 @@ void ScOpenclTest::testFinancialCoupncdFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(4, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(4, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-138]
+void ScOpenclTest::testFinancialAccrintFormula()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Accrint.", XLS);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Accrint.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(7, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(7, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
