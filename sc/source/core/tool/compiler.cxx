@@ -2606,7 +2606,7 @@ bool ScCompiler::IsPredetectedReference(const OUString& rName)
                 return false;       // $#REF!.AB42 or $#REF!42 or $#REF!#REF!
             c = rName[nPos-2];              // before $#REF!
         }
-        sal_Unicode c2 = rName[nPos+5];     // after #REF!
+        sal_Unicode c2 = nPos+5 < rName.getLength() ? rName[nPos+5] : 0;     // after #REF!
         switch (c)
         {
             case '.':
