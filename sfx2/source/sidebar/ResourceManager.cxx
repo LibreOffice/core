@@ -24,7 +24,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/stlunosequence.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>

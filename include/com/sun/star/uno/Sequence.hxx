@@ -44,7 +44,6 @@ template< class E >
 typelib_TypeDescriptionReference * Sequence< E >::s_pType = 0;
 /// @endcond
 
-//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence() SAL_THROW(())
 {
@@ -55,7 +54,6 @@ inline Sequence< E >::Sequence() SAL_THROW(())
     // no bad_alloc, because empty sequence is statically allocated in cppu
 }
 
-//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence( const Sequence< E > & rSeq ) SAL_THROW(())
 {
@@ -63,7 +61,6 @@ inline Sequence< E >::Sequence( const Sequence< E > & rSeq ) SAL_THROW(())
     _pSequence = rSeq._pSequence;
 }
 
-//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence(
     uno_Sequence * pSequence, __sal_NoAcquire ) SAL_THROW(())
@@ -71,7 +68,6 @@ inline Sequence< E >::Sequence(
 {
 }
 
-//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
@@ -84,7 +80,6 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
         throw ::std::bad_alloc();
 }
 
-//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
 {
@@ -97,7 +92,6 @@ inline Sequence< E >::Sequence( sal_Int32 len )
         throw ::std::bad_alloc();
 }
 
-//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::~Sequence() SAL_THROW(())
 {
@@ -106,7 +100,6 @@ inline Sequence< E >::~Sequence() SAL_THROW(())
         this, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
 }
 
-//______________________________________________________________________________
 template< class E >
 inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) SAL_THROW(())
 {
@@ -116,7 +109,6 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) 
     return *this;
 }
 
-//______________________________________________________________________________
 template< class E >
 inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
     SAL_THROW(())
@@ -131,7 +123,6 @@ inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
         (uno_ReleaseFunc)cpp_release );
 }
 
-//______________________________________________________________________________
 template< class E >
 inline sal_Bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const
     SAL_THROW(())
@@ -139,7 +130,6 @@ inline sal_Bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const
     return (! operator == ( rSeq ));
 }
 
-//______________________________________________________________________________
 template< class E >
 inline E * Sequence< E >::getArray()
 {
@@ -153,7 +143,16 @@ inline E * Sequence< E >::getArray()
     return reinterpret_cast< E * >( _pSequence->elements );
 }
 
-//______________________________________________________________________________
+template<class E> E * Sequence<E>::begin() { return getArray(); }
+
+template<class E> E const * Sequence<E>::begin() const
+{ return getConstArray(); }
+
+template<class E> E * Sequence<E>::end() { return begin() + getLength(); }
+
+template<class E> E const * Sequence<E>::end() const
+{ return begin() + getLength(); }
+
 template< class E >
 inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
 {
@@ -161,7 +160,6 @@ inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
     return getArray()[ nIndex ];
 }
 
-//______________________________________________________________________________
 template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
     SAL_THROW(())
@@ -170,7 +168,6 @@ inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
     return reinterpret_cast< const E * >( _pSequence->elements )[ nIndex ];
 }
 
-//______________________________________________________________________________
 template< class E >
 inline void Sequence< E >::realloc( sal_Int32 nSize )
 {
@@ -183,7 +180,6 @@ inline void Sequence< E >::realloc( sal_Int32 nSize )
         throw ::std::bad_alloc();
 }
 
-//------------------------------------------------------------------------------
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence ) SAL_THROW(())
 {

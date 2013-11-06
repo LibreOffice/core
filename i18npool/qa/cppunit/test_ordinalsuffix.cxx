@@ -9,7 +9,6 @@
 #include <algorithm>
 #include <com/sun/star/i18n/XOrdinalSuffix.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <comphelper/stlunosequence.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 
 using namespace com::sun::star;
@@ -53,15 +52,15 @@ void TestOrdinalSuffix::testFrench()
 
     //1er
     aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
-    pStart = comphelper::stl_begin(aSuffixes);
-    pEnd = comphelper::stl_end(aSuffixes);
+    pStart = aSuffixes.begin();
+    pEnd = aSuffixes.end();
     pFind = std::find(pStart, pEnd, OUString("er"));
     CPPUNIT_ASSERT(pFind != pEnd);
 
     //2e, 3e, etc.
     aSuffixes = m_xOrdinal->getOrdinalSuffix(2, aLocale);
-    pStart = comphelper::stl_begin(aSuffixes);
-    pEnd = comphelper::stl_end(aSuffixes);
+    pStart = aSuffixes.begin();
+    pEnd = aSuffixes.end();
     pFind = std::find(pStart, pEnd, OUString("e"));
     CPPUNIT_ASSERT(pFind != pEnd);
 }
@@ -74,22 +73,22 @@ void TestOrdinalSuffix::testEnglish()
 
     //1st
     aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
-    pStart = comphelper::stl_begin(aSuffixes);
-    pEnd = comphelper::stl_end(aSuffixes);
+    pStart = aSuffixes.begin();
+    pEnd = aSuffixes.end();
     pFind = std::find(pStart, pEnd, OUString("st"));
     CPPUNIT_ASSERT(pFind != pEnd);
 
     //2nd
     aSuffixes = m_xOrdinal->getOrdinalSuffix(2, aLocale);
-    pStart = comphelper::stl_begin(aSuffixes);
-    pEnd = comphelper::stl_end(aSuffixes);
+    pStart = aSuffixes.begin();
+    pEnd = aSuffixes.end();
     pFind = std::find(pStart, pEnd, OUString("nd"));
     CPPUNIT_ASSERT(pFind != pEnd);
 
     //3rd
     aSuffixes = m_xOrdinal->getOrdinalSuffix(3, aLocale);
-    pStart = comphelper::stl_begin(aSuffixes);
-    pEnd = comphelper::stl_end(aSuffixes);
+    pStart = aSuffixes.begin();
+    pEnd = aSuffixes.end();
     pFind = std::find(pStart, pEnd, OUString("rd"));
     CPPUNIT_ASSERT(pFind != pEnd);
 }
