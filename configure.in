@@ -325,7 +325,7 @@ AC_ARG_ENABLE(layout,
 [  --enable-layout         Enable the compilation and use of layout dialogs
 ],,)
 AC_ARG_ENABLE(nss_module,
-[  --disable-nss-module    Whether to use provided NSS module     
+[  --disable-nss-module    Whether to use the system provided NSS module     
 ],,enable_nss_module=yes)
 AC_ARG_ENABLE(kde,
 [  --enable-kde            Determines whether to use Qt/KDE vclplug on platforms
@@ -403,7 +403,7 @@ AC_ARG_WITH(external-thes-dir,
 
 AC_ARG_WITH(system-libs,
 [  --with-system-libs      Use libs already on system -- enables all
-                          --with-system-* flags except mozilla and
+                          --with-system-* flags except 
                           odbc/sane/xrender-header(s)
 ],,)
 AC_ARG_WITH(system-headers,
@@ -4785,7 +4785,7 @@ if test "$enable_nss_module" != "no"; then
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for Mozilla build tooling])
       if test -z "$MOZILLABUILD" ; then
-AC_MSG_ERROR([Mozilla build tooling not found.
+AC_MSG_ERROR([Mozilla build tooling not found. It is needed for NSS.
 Use the --with-mozilla-build option after installling the tools obtained
 from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
       else

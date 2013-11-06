@@ -1695,7 +1695,30 @@ SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
 #endif
 #endif
 
-#ifndef WITHOUT_MOZILLA
+
+#ifdef BUNDLE_NSS_LIBS
+
+STD_LIB_FILE( gid_File_Lib_Freebl3, freebl3)
+STD_LIB_FILE( gid_File_Lib_Nspr4, nspr4)
+STD_LIB_FILE( gid_File_Lib_Nss3, nss3)
+STD_LIB_FILE( gid_File_Lib_Nsckbi, nssckbi)
+STD_LIB_FILE( gid_File_Lib_Nssdbm3, nssdbm3)
+STD_LIB_FILE( gid_File_Lib_Nssutil3, nssutil3)
+STD_LIB_FILE( gid_File_Lib_Plc4, plc4)
+STD_LIB_FILE( gid_File_Lib_Plds4, plds4)
+STD_LIB_FILE( gid_File_Lib_Smime3, smime3)
+STD_LIB_FILE( gid_File_Lib_Softokn3, softokn3)
+STD_LIB_FILE( gid_File_Lib_Ssl3, ssl3)
+
+#ifndef MACOSX // #i108575# use system sqlite3 on MacOSX
+STD_LIB_FILE( gid_File_Lib_Sqlite3, sqlite3)
+#endif
+
+#endif // BUNDLE_NSS_LIBS
+
+
+#ifdef ENABLE_XMLSEC
+
 File gid_File_Lib_XSec_Framework
     TXT_FILE_BODY;
 	#ifdef UNX
@@ -1730,6 +1753,7 @@ File gid_File_Lib_XSec_XMLSecurity
 End
 
 #ifdef WNT
+
 File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
     #ifdef _gcc3
@@ -1751,10 +1775,11 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
-#endif
 
-//i20156 - end
-#endif
+#endif // WNT 
+
+#endif // ENABLE_XMLSEC
+
 
 File gid_File_Lib_Migrationoo2
     TXT_FILE_BODY;

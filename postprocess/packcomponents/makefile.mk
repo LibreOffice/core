@@ -301,7 +301,7 @@ my_components += ScriptProviderForJavaScript
 my_components += ldapbe2
 .END
 
-.IF "$(WITH_MOZILLA)" != "NO"
+.IF "$(ENABLE_NSS_MODULE)" != "NO"
 my_components += \
     xmlsecurity \
     xsec_fw \

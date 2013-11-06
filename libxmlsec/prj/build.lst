@@ -1,3 +1,7 @@
+<<<<<<< Updated upstream
 ls  libxmlsec   : stlport soltools LIBXML2:libxml2 NSS:nss SO:moz_prebuilt NULL
+=======
+ls  libxmlsec   : stlport soltools LIBXML2:libxml2 NSS:nss NULL
+>>>>>>> Stashed changes
 ls	libxmlsec			    usr1	-	all	ls_mkout NULL
 ls	libxmlsec			    nmake	-	all	ls_xmlsec1 NULL
