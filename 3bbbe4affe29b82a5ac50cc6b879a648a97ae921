@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///vo\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-11-06T16:44:13Z",
+      "side": 1,
+      "message": "I don\u0027t see how this does any incompatible changes to our stable interface, so it should not be marked \"[API CHANGE]\".",
+      "revId": "3bbbe4affe29b82a5ac50cc6b879a648a97ae921",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
