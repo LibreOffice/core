@@ -24,6 +24,14 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#include <com/sun/star/chart2/data/XDataSequence.hpp>
+#include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 
 using namespace ::com::sun::star;
 
@@ -36,6 +44,7 @@ public:
     void testN759180();
     void testN778859();
     void testFdo64512();
+    void testFdo71075();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -43,6 +52,8 @@ public:
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testFdo64512);
+    CPPUNIT_TEST(testFdo71075);
+
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -225,6 +236,51 @@ void SdFiltersTest::testFdo64512()
         xNode->getTarget(), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "inner node not referencing svg shape",
                             xTargetShape != xSvgShape );
+}
+
+// Unit test for importing charts
+void SdFiltersTest::testFdo71075()
+{
+    double values[] = { 12.0, 13.0, 14.0 };
+    ::com::sun::star::uno::Any aAny;
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+    aAny = xPropSet->getPropertyValue( OUString("Model") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", aAny.hasValue() );
+
+    uno::Reference< chart::XChartDocument > xChartDoc;
+    aAny >>= xChartDoc;
+    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChartDoc.is() );
+    uno::Reference< chart2::XChartDocument > xChart2Doc( xChartDoc, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChart2Doc.is() );
+
+    uno::Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( xChart2Doc->getFirstDiagram(), uno::UNO_QUERY );
+    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
+    uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[0], uno::UNO_QUERY );
+
+    uno::Reference< chart2::XDataSeriesContainer > xDSCnt( xCTCnt->getChartTypes()[0], uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load data series", xDSCnt.is() );
+    uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
+    CPPUNIT_ASSERT_MESSAGE( "Invalid Series count", aSeriesSeq.getLength() == 1);
+    uno::Reference< chart2::data::XDataSource > xSource( aSeriesSeq[0], uno::UNO_QUERY );
+    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(xSource->getDataSequences());
+    CPPUNIT_ASSERT_MESSAGE( "Invalid Series count", aSeqCnt.getLength() == 1);
+    uno::Reference< chart2::data::XDataSequence > xValueSeq( aSeqCnt[0]->getValues() );
+    CPPUNIT_ASSERT_MESSAGE( "Invalid Data count", xValueSeq->getData().getLength() == sizeof(values)/(sizeof(double)));
+    uno::Reference< chart2::data::XNumericalDataSequence > xNumSeq( xValueSeq, uno::UNO_QUERY );
+    uno::Sequence< double > aValues( xNumSeq->getNumericalData());
+    for(sal_Int32 i=0;i<xValueSeq->getData().getLength();i++)
+        CPPUNIT_ASSERT_MESSAGE( "Invalid Series count", aValues.getConstArray()[i] == values[i]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
