@@ -156,6 +156,7 @@ public:
     void testFinancialIPMTFormula();
     void testStatisticalFormulaConfidence();
     void testStatisticalFormulaIntercept();
+    void testFinacialODDLPRICEFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -243,6 +244,7 @@ public:
     CPPUNIT_TEST(testFinancialIPMTFormula);
     CPPUNIT_TEST(testStatisticalFormulaConfidence);
     CPPUNIT_TEST(testStatisticalFormulaIntercept);
+    CPPUNIT_TEST(testFinacialODDLPRICEFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1364,6 +1366,28 @@ void ScOpenclTest::testFinacialDollarfrFormula()
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
         //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-67]
+void ScOpenclTest::testFinacialODDLPRICEFormula()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Oddlprice.", XLS);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Oddlprice.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 1; i <= 10; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(8, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(8, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
