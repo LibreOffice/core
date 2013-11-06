@@ -516,7 +516,7 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 
     nSavPtr = nNext;
 
-    if ( aData[nFnd]=='\\' && nFnd+1<aData.getLength() && aData[nFnd+1]!='\\' )
+    if (nFnd+1<aData.getLength() && aData[nFnd+1]!='\\' && aData[nFnd]=='\\')
     {
         const sal_Int32 nRet = aData[++nFnd];
         nNext = ++nFnd;             // und dahinter setzen
