@@ -276,6 +276,14 @@ class OpAccrintm: public Normal
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Accrintm"; }
 };
+class OpAccrint: public Normal
+{
+ public:
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "Accrint"; }
+};
 
 class OpYield: public Normal
 {

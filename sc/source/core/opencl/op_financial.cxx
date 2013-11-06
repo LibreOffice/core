@@ -1753,6 +1753,137 @@ void OpCumprinc::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "return tmp;\n";
     ss << "}";
 }
+void OpAccrint::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(IsLeapYearDecl); decls.insert(DaysInMonthDecl);
+    decls.insert(DaysToDateDecl); decls.insert(DateToDaysDecl);
+    decls.insert(GetNullDateDecl); decls.insert(GetDiffDateDecl);
+    funs.insert(IsLeapYear);funs.insert(DaysInMonth);
+    funs.insert(DaysToDate);funs.insert(DateToDays);
+    funs.insert(GetNullDate);funs.insert(GetDiffDate);
+}
+void OpAccrint::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int nStartDate,nEndDate,mode,freq;\n";
+    ss << "    int nDays1stYear=0;\n";
+    ss << "    double fVal,fRate;\n";
+#ifdef ISNAN
+    FormulaToken* tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    FormulaToken* tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    FormulaToken* tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur2);
+    FormulaToken* tmpCur3 = vSubArguments[3]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur3);
+    FormulaToken* tmpCur4 = vSubArguments[4]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur4);
+    FormulaToken* tmpCur5 = vSubArguments[5]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR5= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur5);
+    FormulaToken* tmpCur6 = vSubArguments[6]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR6= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur6);
+    ss<< "    int buffer_nIssue_len = ";
+    ss<< tmpCurDVR0->GetArrayLength();
+    ss<< ";\n";
+    ss<< "    int buffer_nSettle_len = ";
+    ss<< tmpCurDVR2->GetArrayLength();
+    ss<< ";\n";
+    ss<< "    int buffer_fRate_len = ";
+    ss<< tmpCurDVR3->GetArrayLength();
+    ss<< ";\n";
+    ss<< "    int buffer_fVal_len = ";
+    ss<< tmpCurDVR4->GetArrayLength();
+    ss<< ";\n";
+    ss<< "    int buffer_nFreq_len = ";
+    ss<< tmpCurDVR5->GetArrayLength();
+    ss<< ";\n";
+    ss<< "    int buffer_nMode_len = ";
+    ss<< tmpCurDVR6->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef ISNAN
+    ss<<"    if(gid0 >= buffer_nIssue_len || isNan(";
+    ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nStartDate = 0;\n    else\n";
+#endif
+    ss <<"        nStartDate=(int)";
+    ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_nSettle_len || isNan(";
+    ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nEndDate = 0;\n    else\n";
+#endif
+    ss <<"        nEndDate=(int)";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_fRate_len || isNan(";
+    ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        fRate = 0;\n    else\n";
+#endif
+    ss <<"        fRate=";
+    ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_fVal_len || isNan(";
+    ss <<vSubArguments[4]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        fVal = 0;\n    else\n";
+#endif
+    ss <<"        fVal=";
+    ss << vSubArguments[4]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_nFreq_len || isNan(";
+    ss <<vSubArguments[5]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        freq = 0;\n    else\n";
+#endif
+    ss <<"        freq= (int)";
+    ss << vSubArguments[5]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_nMode_len || isNan(";
+    ss <<vSubArguments[6]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        mode = 0;\n    else\n";
+#endif
+    ss <<"        mode = (int)";
+    ss << vSubArguments[6]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+    ss <<"    int nNullDate=GetNullDate();\n";
+    ss <<"    int nTotalDays = GetDiffDate(nNullDate,nStartDate,";
+    ss <<"nEndDate, mode,&nDays1stYear);\n";
+    ss <<"    tmp = fVal*fRate*convert_double(nTotalDays)";
+    ss <<"/convert_double(nDays1stYear);\n";
+    ss <<"    return tmp;\n";
+    ss <<"}";
+}
 
 void OpAccrintm::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
