@@ -17,6 +17,7 @@
 #include "interpre.hxx"
 #include "formula/vectortoken.hxx"
 #include <sstream>
+#include "opinlinefun_statistical.cxx"
 
 using namespace formula;
 
@@ -850,6 +851,87 @@ void OpHarMean::GenSlidingWindowFunction(
     ss << "nVal += (1.0/arg0);\n\t}\n\t";
     ss<<"tmp = length/nVal;\n\t";
     ss << "return tmp;\n";
+    ss << "}";
+}
+
+void OpConfidence::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(gaussinvDecl);
+    funs.insert(gaussinv);
+}
+
+void OpConfidence::GenSlidingWindowFunction(std::stringstream& ss,
+    const std::string sSymName, SubArguments& vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() <<";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double alpha = " << GetBottom() <<";\n";
+    ss << "    double sigma = " << GetBottom() <<";\n";
+    ss << "    double size = " << GetBottom() <<";\n";
+#ifdef  ISNAN
+    FormulaToken* tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken* >(tmpCur0);
+    FormulaToken* tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken* >(tmpCur1);
+    FormulaToken* tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken* >(tmpCur2);
+    ss << "    int buffer_alpha_len = ";
+    ss << tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+    ss << "    int buffer_sigma_len = ";
+    ss << tmpCurDVR1->GetArrayLength();
+    ss << ";\n";
+    ss << "    int buffer_size_len = ";
+    ss << tmpCurDVR2->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef  ISNAN
+    ss << "    if((gid0)>=buffer_alpha_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "        alpha = 0;\n    else\n";
+#endif
+    ss << "        alpha = ";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef  ISNAN
+    ss << "    if((gid0)>=buffer_sigma_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "        sigma = 0;\n    else\n";
+#endif
+    ss << "        sigma = ";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef  ISNAN
+    ss << "    if((gid0)>=buffer_size_len || isNan(";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "        size = 0;\n    else\n";
+#endif
+    ss << "        size = ";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    double rn = floor(size);\n";
+    ss << "    if(sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0";
+    ss << "|| rn < 1.0)\n";
+    ss << "        tmp = -DBL_MAX;\n";
+    ss << "    else\n";
+    ss << "        tmp = gaussinv(1.0 - alpha / 2.0) * sigma / sqrt( rn );\n";
+    ss << "    return tmp;\n";
     ss << "}";
 }
 

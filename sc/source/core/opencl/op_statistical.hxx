@@ -172,6 +172,19 @@ class OpVariationen2:public Normal{
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "OpVariationen2";}
 };
+
+class OpConfidence: public Normal
+{
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+
+    virtual void GenSlidingWindowFunction(std::stringstream& ss,
+            const std::string sSymName, SubArguments& vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,
+        std::set<std::string>& );
+
+    virtual std::string BinFuncName(void) const { return "Confidence"; }
+};
 }}
 
 #endif

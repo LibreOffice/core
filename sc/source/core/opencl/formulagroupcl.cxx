@@ -1128,6 +1128,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpIPMT));
                  break;
+            case ocConfidence:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i], new OpConfidence));
+                break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))
