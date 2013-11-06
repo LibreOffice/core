@@ -17,38 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "ins_paste.hrc"
 #include "ins_paste.hxx"
 
-// --------------------
-// - SdInsertPasteDlg -
-// --------------------
-
-SdInsertPasteDlg::SdInsertPasteDlg( Window* pWindow ) :
-    ModalDialog( pWindow, SdResId( DLG_INSERT_PASTE ) ),
-    aFlPosition( this, SdResId( FL_POSITION ) ),
-    aRbBefore( this, SdResId( RB_BEFORE ) ),
-    aRbAfter( this, SdResId( RB_AFTER ) ),
-    aBtnOK( this, SdResId( BTN_OK ) ),
-    aBtnCancel( this, SdResId( BTN_CANCEL ) ),
-    aBtnHelp( this, SdResId( BTN_HELP ) )
+SdInsertPasteDlg::SdInsertPasteDlg(Window* pWindow)
+    : ModalDialog( pWindow, "InsertSlidesDialog",
+        "modules/simpress/ui/insertslides.ui")
 {
-    FreeResource();
-    aRbAfter.Check( sal_True );
+    get(m_pRbBefore, "before");
+    get(m_pRbAfter, "after");
+    m_pRbAfter->Check( sal_True );
 }
 
-// -----------------------------------------------------------------------------
-
-SdInsertPasteDlg::~SdInsertPasteDlg()
+bool SdInsertPasteDlg::IsInsertBefore() const
 {
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SdInsertPasteDlg::IsInsertBefore() const
-{
-    return( aRbBefore.IsChecked() );
+    return( m_pRbBefore->IsChecked() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

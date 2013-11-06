@@ -34,20 +34,12 @@
 class SD_DLLPUBLIC SdInsertPasteDlg : public ModalDialog
 {
 private:
-
-    FixedLine       aFlPosition;
-    RadioButton     aRbBefore;
-    RadioButton     aRbAfter;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton* m_pRbBefore;
+    RadioButton* m_pRbAfter;
 
 public:
-
-                    SdInsertPasteDlg( Window* pWindow );
-                    ~SdInsertPasteDlg();
-
-    sal_Bool            IsInsertBefore() const;
+    SdInsertPasteDlg( Window* pWindow );
+    bool IsInsertBefore() const;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_INS_PASTE_HXX
