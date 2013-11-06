@@ -570,7 +570,7 @@ void ScConditionEntry::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
 
 static bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
 {
-    //  verglichen wird nur das nicht-UPN Array
+    //  verglichen wird nur das nicht-RPN Array
 
     if ( pArr1 && pArr2 )
     {

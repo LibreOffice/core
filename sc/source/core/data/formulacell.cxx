@@ -559,7 +559,7 @@ ScFormulaCell::ScFormulaCell(
     mbNeedsNumberFormat( false ),
     aPos( rPos )
 {
-    // UPN-Array generation
+    // RPN array generation
     if( pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen() )
     {
         ScCompiler aComp( pDocument, aPos, *pCode);
@@ -995,7 +995,7 @@ void ScFormulaCell::CalcAfterLoad()
         bDirty = true;
         bNewCompiled = true;
     }
-    // The UPN array is not created when a Calc 3.0-Doc has been read as the Range Names exist until now.
+    // The RPN array is not created when a Calc 3.0-Doc has been read as the Range Names exist until now.
     if( pCode->GetLen() && !pCode->GetCodeLen() && !pCode->GetCodeError() )
     {
         ScCompiler aComp(pDocument, aPos, *pCode);
@@ -1312,7 +1312,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
     if( !pCode->GetCodeLen() && !pCode->GetCodeError() )
     {
-        // #i11719# no UPN and no error and no token code but result string present
+        // #i11719# no RPN and no error and no token code but result string present
         // => interpretation of this cell during name-compilation and unknown names
         // => can't exchange underlying code array in CompileTokenArray() /
         // Compile() because interpreter's token iterator would crash or pCode
@@ -1326,7 +1326,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             pCode->SetCodeError( errNoCode );
             // This is worth an assertion; if encountered in daily work
             // documents we might need another solution. Or just confirm correctness.
-            OSL_FAIL( "ScFormulaCell::Interpret: no UPN, no error, no token, but hybrid formula string" );
+            OSL_FAIL( "ScFormulaCell::Interpret: no RPN, no error, no token, but hybrid formula string" );
             return;
         }
         CompileTokenArray();
@@ -1593,7 +1593,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     else
     {
         // Cells with compiler errors should not be marked dirty forever
-        OSL_ENSURE( pCode->GetCodeError(), "no UPN-Code und no errors ?!?!" );
+        OSL_ENSURE( pCode->GetCodeError(), "no RPN code und no errors ?!?!" );
         bDirty = false;
         bTableOpDirty = false;
     }
