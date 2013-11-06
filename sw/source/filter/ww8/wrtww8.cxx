@@ -85,7 +85,6 @@
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/stlunosequence.hxx>
 #include <comphelper/string.hxx>
 #include <doctok/sprmids.hxx>
 
@@ -3673,7 +3672,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         {
             uno::Sequence< OUString > vListEntries;
             pListEntries->second >>= vListEntries;
-            copy(::comphelper::stl_begin(vListEntries), ::comphelper::stl_end(vListEntries), back_inserter(aListItems));
+            copy(vListEntries.begin(), vListEntries.end(), back_inserter(aListItems));
         }
     }
 

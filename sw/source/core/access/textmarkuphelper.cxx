@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <algorithm>
-#include <comphelper/stlunosequence.hxx>
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
@@ -207,8 +206,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 
     uno::Sequence< ::com::sun::star::accessibility::TextSegment > aTextMarkups(
                                                     aTmpTextMarkups.size() );
-    ::std::copy( aTmpTextMarkups.begin(), aTmpTextMarkups.end(),
-                 ::comphelper::stl_begin( aTextMarkups ) );
+    ::std::copy( aTmpTextMarkups.begin(), aTmpTextMarkups.end(), aTextMarkups.begin() );
 
     return aTextMarkups;
 }

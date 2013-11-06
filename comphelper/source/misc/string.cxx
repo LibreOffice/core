@@ -31,7 +31,6 @@
 #include <sal/types.h>
 
 #include <comphelper/string.hxx>
-#include <comphelper/stlunosequence.hxx>
 #include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -248,9 +247,7 @@ OUString convertCommaSeparated(
 {
     OUStringBuffer buf;
     ::comphelper::intersperse(
-        ::comphelper::stl_begin(i_rSeq), ::comphelper::stl_end(i_rSeq),
-        ::comphelper::OUStringBufferAppender(buf),
-        OUString( ", " ));
+        i_rSeq.begin(), i_rSeq.end(), ::comphelper::OUStringBufferAppender(buf), OUString( ", " ));
     return buf.makeStringAndClear();
 }
 
@@ -268,7 +265,7 @@ uno::Sequence< OUString >
       }
     } while (idx >= 0);
     uno::Sequence< OUString > kws(vec.size());
-    std::copy(vec.begin(), vec.end(), stl_begin(kws));
+    std::copy(vec.begin(), vec.end(), kws.begin());
     return kws;
 }
 

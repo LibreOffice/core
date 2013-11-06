@@ -66,7 +66,6 @@
 #include "comphelper/storagehelper.hxx"
 #include "comphelper/mediadescriptor.hxx"
 #include "comphelper/sequenceasvector.hxx"
-#include "comphelper/stlunosequence.hxx"
 #include "sot/storage.hxx"
 #include "sfx2/docfile.hxx"
 #include "sax/tools/converter.hxx"
@@ -2306,9 +2305,7 @@ void SfxDocumentMetaData::createUserDefined()
         {
             const css::uno::Sequence<css::uno::Reference<css::uno::XInterface> >
                 listeners(m_NotifyListeners.getElements());
-            for (css::uno::Reference< css::uno::XInterface > const * iter =
-                                ::comphelper::stl_begin(listeners);
-                        iter != ::comphelper::stl_end(listeners); ++iter) {
+            for (css::uno::Reference< css::uno::XInterface > const * iter = listeners.begin(); iter != listeners.end(); ++iter) {
                 xMB->addModifyListener(
                     css::uno::Reference< css::util::XModifyListener >(*iter,
                         css::uno::UNO_QUERY));

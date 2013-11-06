@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 #include <com/sun/star/awt/grid/XSortableGridData.hpp>
 
-#include <comphelper/stlunosequence.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
