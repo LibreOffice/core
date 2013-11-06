@@ -13,6 +13,8 @@
 #include <utility>
 #include "oox/helper/refmap.hxx"
 #include "oox/helper/refvector.hxx"
+#include "salhelper/thread.hxx"
+#include "osl/mutex.hxx"
 #include "workbookhelper.hxx"
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -29,6 +31,21 @@ namespace oox { namespace xls {
 
 class FormulaBuffer : public WorkbookHelper
 {
+    class FinalizeThread : public salhelper::Thread
+    {
+        FormulaBuffer& mrParent;
+        size_t mnThreadCount;
+    public:
+        FinalizeThread( FormulaBuffer& rParent, size_t nThreadCount );
+        virtual ~FinalizeThread();
+
+    protected:
+        virtual void execute();
+    };
+
+    friend class FinalizeThread;
+
+public:
     /**
      * Represents a shared formula definition.
      */
@@ -74,6 +91,20 @@ class FormulaBuffer : public WorkbookHelper
         TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const ::com::sun::star::table::CellRangeAddress& rCellRangeAddress ) : maTokenAndAddress( rTokenAndAddress ), maCellRangeAddress( rCellRangeAddress ) {}
     };
 
+    typedef std::pair<com::sun::star::table::CellAddress, double> ValueAddressPair;
+
+    struct SheetItem
+    {
+        std::vector<TokenAddressItem>* mpCellFormulas;
+        std::vector<TokenRangeAddressItem>* mpArrayFormulas;
+        std::vector<ValueAddressPair>* mpCellFormulaValues;
+        std::vector<SharedFormulaEntry>* mpSharedFormulaEntries;
+        std::vector<SharedFormulaDesc>* mpSharedFormulaIDs;
+
+        SheetItem();
+    };
+
+private:
     typedef ::std::map< SCTAB, std::vector<TokenAddressItem> > FormulaDataMap;
     typedef ::std::map< SCTAB, std::vector<TokenRangeAddressItem> > ArrayFormulaDataMap;
     // sheet -> list of shared formula descriptions
@@ -81,19 +112,16 @@ class FormulaBuffer : public WorkbookHelper
     // sheet -> stuff needed to create shared formulae
     typedef ::std::map< SCTAB, std::vector<SharedFormulaEntry> >  SheetToFormulaEntryMap;
 
-    typedef ::std::pair< ::com::sun::star::table::CellAddress, double > ValueAddressPair;
     typedef ::std::map< SCTAB, std::vector<ValueAddressPair> > FormulaValueMap;
 
+    osl::Mutex maMtxData;
     FormulaDataMap maCellFormulas;
     ArrayFormulaDataMap maCellArrayFormulas;
     SheetToFormulaEntryMap maSharedFormulas;
     SheetToSharedFormulaid maSharedFormulaIds;
     FormulaValueMap maCellFormulaValues;
 
-    void                applyArrayFormulas(  const std::vector< TokenRangeAddressItem >& rVector );
-    void                applyCellFormulas(  const std::vector< TokenAddressItem >& rVector );
-    void                applyCellFormulaValues( const std::vector< ValueAddressPair >& rVector );
-    void applySharedFormulas( SCTAB nTab );
+    SheetItem getSheetItem( SCTAB nTab );
 
 public:
     explicit            FormulaBuffer( const WorkbookHelper& rHelper );

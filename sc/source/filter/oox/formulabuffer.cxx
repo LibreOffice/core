@@ -33,114 +33,22 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::container;
 
+#include <boost/scoped_ptr.hpp>
+
 namespace oox { namespace xls {
 
-FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
-    const table::CellAddress& rAddr, const table::CellRangeAddress& rRange,
-    const OUString& rTokenStr, sal_Int32 nSharedId ) :
-    maAddress(rAddr), maRange(rRange), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
+namespace {
 
-FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
-    const com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
-    const OUString& rCellValue, sal_Int32 nValueType ) :
-    maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
-
-FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( rHelper )
+void applySharedFormulas(
+    ScDocumentImport& rDoc,
+    SvNumberFormatter& rFormatter,
+    std::vector<FormulaBuffer::SharedFormulaEntry>& rSharedFormulas,
+    std::vector<FormulaBuffer::SharedFormulaDesc>& rCells )
 {
-}
-
-void FormulaBuffer::finalizeImport()
-{
-    ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
-
-    ScDocument& rDoc = getScDocument();
-    rDoc.SetAutoNameCache( new ScAutoNameCache( &rDoc ) );
-    for (SCTAB nTab = 0, nElem = rDoc.GetTableCount(); nTab < nElem; ++nTab)
-    {
-        double fPosition = static_cast< double> (nTab + 1) /static_cast<double>(nElem);
-        xFormulaBar->setPosition( fPosition );
-
-        applySharedFormulas(nTab);
-
-        FormulaDataMap::iterator cellIt = maCellFormulas.find( nTab );
-        if ( cellIt != maCellFormulas.end() )
-        {
-            applyCellFormulas( cellIt->second );
-        }
-
-        ArrayFormulaDataMap::iterator itArray = maCellArrayFormulas.find( nTab );
-        if ( itArray != maCellArrayFormulas.end() )
-        {
-            applyArrayFormulas( itArray->second );
-        }
-
-        FormulaValueMap::iterator itValues = maCellFormulaValues.find( nTab );
-        if ( itValues != maCellFormulaValues.end() )
-        {
-            std::vector< ValueAddressPair > & rVector = itValues->second;
-            applyCellFormulaValues( rVector );
-        }
-    }
-    rDoc.SetAutoNameCache( NULL );
-    xFormulaBar->setPosition( 1.0 );
-}
-
-void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
-{
-    ScDocumentImport& rDoc = getDocImport();
-    ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
-    for ( std::vector< TokenAddressItem >::const_iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
-    {
-        ScAddress aPos;
-        ScUnoConversion::FillScAddress(aPos, it->maCellAddress);
-        ScCompiler aCompiler(&rDoc.getDoc(), aPos);
-        aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
-        ScTokenArray* pCode = aCompiler.CompileString(it->maTokenStr);
-        if (!pCode)
-            continue;
-
-        rDoc.setFormulaCell(aPos, pCode);
-    }
-}
-
-void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair >& rVector )
-{
-    ScDocument& rDoc = getScDocument();
-    for ( std::vector< ValueAddressPair >::const_iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
-    {
-        ScAddress aCellPos;
-        ScUnoConversion::FillScAddress( aCellPos, it->first );
-        ScFormulaCell* pCell = rDoc.GetFormulaCell(aCellPos);
-        if (pCell)
-        {
-            pCell->SetHybridDouble( it->second );
-            pCell->ResetDirty();
-            pCell->SetChanged(false);
-        }
-    }
-}
-
-void FormulaBuffer::applySharedFormulas( SCTAB nTab )
-{
-    SheetToFormulaEntryMap::const_iterator itShared = maSharedFormulas.find(nTab);
-    if (itShared == maSharedFormulas.end())
-        // There is no shared formulas for this sheet.
-        return;
-
-    SheetToSharedFormulaid::const_iterator itCells = maSharedFormulaIds.find(nTab);
-    if (itCells == maSharedFormulaIds.end())
-        // There is no formula cells that use shared formulas for this sheet.
-        return;
-
-    const std::vector<SharedFormulaEntry>& rSharedFormulas = itShared->second;
-    const std::vector<SharedFormulaDesc>& rCells = itCells->second;
-
-    ScDocumentImport& rDoc = getDocImport();
-
     sc::SharedFormulaGroups aGroups;
     {
         // Process shared formulas first.
-        std::vector<SharedFormulaEntry>::const_iterator it = rSharedFormulas.begin(), itEnd = rSharedFormulas.end();
+        std::vector<FormulaBuffer::SharedFormulaEntry>::const_iterator it = rSharedFormulas.begin(), itEnd = rSharedFormulas.end();
         for (; it != itEnd; ++it)
         {
             const table::CellAddress& rAddr = it->maAddress;
@@ -150,6 +58,7 @@ void FormulaBuffer::applySharedFormulas( SCTAB nTab )
             ScAddress aPos;
             ScUnoConversion::FillScAddress(aPos, rAddr);
             ScCompiler aComp(&rDoc.getDoc(), aPos);
+            aComp.SetNumberFormatter(&rFormatter);
             aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
@@ -159,7 +68,7 @@ void FormulaBuffer::applySharedFormulas( SCTAB nTab )
 
     {
         // Process formulas that use shared formulas.
-        std::vector<SharedFormulaDesc>::const_iterator it = rCells.begin(), itEnd = rCells.end();
+        std::vector<FormulaBuffer::SharedFormulaDesc>::const_iterator it = rCells.begin(), itEnd = rCells.end();
         for (; it != itEnd; ++it)
         {
             const table::CellAddress& rAddr = it->maAddress;
@@ -194,10 +103,32 @@ void FormulaBuffer::applySharedFormulas( SCTAB nTab )
     }
 }
 
-void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem >& rVector )
+void applyCellFormulas(
+    ScDocumentImport& rDoc, SvNumberFormatter& rFormatter,
+    const std::vector<FormulaBuffer::TokenAddressItem>& rCells )
 {
-    ScDocumentImport& rDocImport = getDocImport();
-    std::vector<TokenRangeAddressItem>::const_iterator it = rVector.begin(), itEnd = rVector.end();
+    ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
+    std::vector<FormulaBuffer::TokenAddressItem>::const_iterator it = rCells.begin(), itEnd = rCells.end();
+    for (; it != itEnd; ++it)
+    {
+        ScAddress aPos;
+        ScUnoConversion::FillScAddress(aPos, it->maCellAddress);
+        ScCompiler aCompiler(&rDoc.getDoc(), aPos);
+        aCompiler.SetNumberFormatter(&rFormatter);
+        aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+        ScTokenArray* pCode = aCompiler.CompileString(it->maTokenStr);
+        if (!pCode)
+            continue;
+
+        rDoc.setFormulaCell(aPos, pCode);
+    }
+}
+
+void applyArrayFormulas(
+    ScDocumentImport& rDoc, SvNumberFormatter& rFormatter,
+    const std::vector<FormulaBuffer::TokenRangeAddressItem>& rArrays )
+{
+    std::vector<FormulaBuffer::TokenRangeAddressItem>::const_iterator it = rArrays.begin(), itEnd = rArrays.end();
     for (; it != itEnd; ++it)
     {
         ScAddress aPos;
@@ -205,12 +136,185 @@ void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem
         ScRange aRange;
         ScUnoConversion::FillScRange(aRange, it->maCellRangeAddress);
 
-        ScCompiler aComp(&rDocImport.getDoc(), aPos);
+        ScCompiler aComp(&rDoc.getDoc(), aPos);
+        aComp.SetNumberFormatter(&rFormatter);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
         boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(it->maTokenAndAddress.maTokenStr));
         if (pArray)
-            rDocImport.setMatrixCells(aRange, *pArray, formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+            rDoc.setMatrixCells(aRange, *pArray, formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
     }
+}
+
+void applyCellFormulaValues(
+    ScDocumentImport& rDoc, const std::vector<FormulaBuffer::ValueAddressPair>& rVector )
+{
+    std::vector<FormulaBuffer::ValueAddressPair>::const_iterator it = rVector.begin(), itEnd = rVector.end();
+    for (; it != itEnd; ++it)
+    {
+        ScAddress aCellPos;
+        ScUnoConversion::FillScAddress(aCellPos, it->first);
+        ScFormulaCell* pCell = rDoc.getDoc().GetFormulaCell(aCellPos);
+        if (pCell)
+        {
+            pCell->SetHybridDouble(it->second);
+            pCell->ResetDirty();
+            pCell->SetChanged(false);
+        }
+    }
+}
+
+class WorkerThread : public salhelper::Thread
+{
+    ScDocumentImport& mrDoc;
+    FormulaBuffer::SheetItem& mrItem;
+    boost::scoped_ptr<SvNumberFormatter> mpFormatter;
+
+    WorkerThread( const WorkerThread& );
+    WorkerThread& operator= ( const WorkerThread& );
+
+public:
+    WorkerThread( ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter* pFormatter ) :
+        salhelper::Thread("xlsx-import-formula-buffer-worker-thread"),
+        mrDoc(rDoc), mrItem(rItem), mpFormatter(pFormatter) {}
+
+    virtual ~WorkerThread() {}
+
+protected:
+    virtual void execute()
+    {
+        if (mrItem.mpSharedFormulaEntries && mrItem.mpSharedFormulaIDs)
+            applySharedFormulas(mrDoc, *mpFormatter, *mrItem.mpSharedFormulaEntries, *mrItem.mpSharedFormulaIDs);
+
+        if (mrItem.mpCellFormulas)
+            applyCellFormulas(mrDoc, *mpFormatter, *mrItem.mpCellFormulas);
+
+        if (mrItem.mpArrayFormulas)
+            applyArrayFormulas(mrDoc, *mpFormatter, *mrItem.mpArrayFormulas);
+
+        if (mrItem.mpCellFormulaValues)
+            applyCellFormulaValues(mrDoc, *mrItem.mpCellFormulaValues);
+    }
+};
+
+}
+
+FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
+    const table::CellAddress& rAddr, const table::CellRangeAddress& rRange,
+    const OUString& rTokenStr, sal_Int32 nSharedId ) :
+    maAddress(rAddr), maRange(rRange), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
+
+FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
+    const com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
+    const OUString& rCellValue, sal_Int32 nValueType ) :
+    maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
+
+FormulaBuffer::SheetItem::SheetItem() :
+    mpCellFormulas(NULL),
+    mpArrayFormulas(NULL),
+    mpCellFormulaValues(NULL),
+    mpSharedFormulaEntries(NULL),
+    mpSharedFormulaIDs(NULL) {}
+
+FormulaBuffer::FinalizeThread::FinalizeThread( FormulaBuffer& rParent, size_t nThreadCount ) :
+    salhelper::Thread("xlsx-import-formula-buffer-finalize-thread"),
+    mrParent(rParent), mnThreadCount(nThreadCount) {}
+
+FormulaBuffer::FinalizeThread::~FinalizeThread() {}
+
+void FormulaBuffer::FinalizeThread::execute()
+{
+    ScDocumentImport& rDoc = mrParent.getDocImport();
+    rDoc.getDoc().SetAutoNameCache(new ScAutoNameCache(&rDoc.getDoc()));
+    SCTAB nTabCount = rDoc.getDoc().GetTableCount();
+
+    std::vector<SheetItem> aSheetItems;
+    aSheetItems.reserve(nTabCount);
+    for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+        aSheetItems.push_back(mrParent.getSheetItem(nTab));
+
+    typedef rtl::Reference<WorkerThread> WorkerThreadRef;
+    std::vector<WorkerThreadRef> aThreads;
+    aThreads.reserve(mnThreadCount);
+
+    std::vector<SheetItem>::iterator it = aSheetItems.begin(), itEnd = aSheetItems.end();
+
+    while (it != itEnd)
+    {
+        for (size_t i = 0; i < mnThreadCount; ++i)
+        {
+            if (it == itEnd)
+                break;
+
+            WorkerThreadRef xThread(new WorkerThread(rDoc, *it, rDoc.getDoc().CreateFormatTable()));
+            ++it;
+            aThreads.push_back(xThread);
+            xThread->launch();
+        }
+
+        for (size_t i = 0, n = aThreads.size(); i < n; ++i)
+        {
+            if (aThreads[i].is())
+                aThreads[i]->join();
+        }
+
+        aThreads.clear();
+    }
+
+    rDoc.getDoc().SetAutoNameCache(NULL);
+}
+
+FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( rHelper )
+{
+}
+
+void FormulaBuffer::finalizeImport()
+{
+    ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
+
+    rtl::Reference<FinalizeThread> xThreadMgr(new FinalizeThread(*this, 1));
+    xThreadMgr->launch();
+
+    if (xThreadMgr.is())
+        xThreadMgr->join();
+
+    xFormulaBar->setPosition( 1.0 );
+}
+
+FormulaBuffer::SheetItem FormulaBuffer::getSheetItem( SCTAB nTab )
+{
+    osl::MutexGuard aGuard(&maMtxData);
+
+    SheetItem aItem;
+    {
+        FormulaDataMap::iterator it = maCellFormulas.find(nTab);
+        if (it != maCellFormulas.end())
+            aItem.mpCellFormulas = &it->second;
+    }
+
+    {
+        ArrayFormulaDataMap::iterator it = maCellArrayFormulas.find(nTab);
+        if (it != maCellArrayFormulas.end())
+            aItem.mpArrayFormulas = &it->second;
+    }
+
+    {
+        FormulaValueMap::iterator it = maCellFormulaValues.find(nTab);
+        if (it != maCellFormulaValues.end())
+            aItem.mpCellFormulaValues = &it->second;
+    }
+
+    {
+        SheetToFormulaEntryMap::iterator it = maSharedFormulas.find(nTab);
+        if (it != maSharedFormulas.end())
+            aItem.mpSharedFormulaEntries = &it->second;
+    }
+
+    {
+        SheetToSharedFormulaid::iterator it = maSharedFormulaIds.find(nTab);
+        if (it != maSharedFormulaIds.end())
+            aItem.mpSharedFormulaIDs = &it->second;
+    }
+    return aItem;
 }
 
 void FormulaBuffer::createSharedFormulaMapEntry(
