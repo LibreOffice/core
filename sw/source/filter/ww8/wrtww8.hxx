@@ -1558,7 +1558,7 @@ public:
     /// Get styleId of the nId-th style (nId is its position in pFmtA).
     OString GetStyleId(sal_uInt16 nId) const;
 
-    const SwFmt* GetSwFmt() const { return (*pFmtA); }
+    const SwFmt* GetSwFmt(sal_uInt16 nId) const { return pFmtA[nId]; }
 };
 
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt);

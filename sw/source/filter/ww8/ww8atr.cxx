@@ -3665,7 +3665,7 @@ void WW8AttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* /*pSecti
 sal_uInt32 AttributeOutputBase::GridCharacterPitch( const SwTextGridItem& rGrid ) const
 {
     MSWordStyles * pStyles = GetExport().pStyles;
-    const SwFmt * pSwFmt = pStyles->GetSwFmt();
+    const SwFmt * pSwFmt = pStyles->GetSwFmt(0);
 
     sal_uInt32 nPageCharSize = 0;
 
