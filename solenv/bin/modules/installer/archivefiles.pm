@@ -165,7 +165,7 @@ sub resolving_archive_flag
             my $iscommonfile = 0;
             my $sourcepath = $onefile->{'sourcepath'};
 
-            if ( $sourcepath =~ /\Q$installer::globals::separator\E\bcommon$installer::globals::productextension\Q$installer::globals::separator\E/ )   # /common/ or /common.pro/
+            if ( $sourcepath =~ /\Q$installer::globals::separator\E\bcommon\Q$installer::globals::separator\E/ )   # /common/ or /common.pro/
             {
                 $iscommonfile = 1;
             }

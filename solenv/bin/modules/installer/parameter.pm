@@ -336,9 +336,6 @@ sub setglobalvariables
 
     if ( ! $installer::globals::packageformat ) { $installer::globals::packageformat = "native"; }
 
-    # extension, if $installer::globals::pro is set
-    if ($installer::globals::pro) { $installer::globals::productextension = ".pro"; }
-
     # no languages defined as parameter
     if ($installer::globals::languagelist eq "") { $installer::globals::languages_defined_in_productlist = 1; }
 
@@ -390,7 +387,7 @@ sub setglobalvariables
 
         if ( ! -d $installer::globals::temppath ) { installer::exiter::exit_program("ERROR: Failed to create directory $installer::globals::temppath ! Possible reason: Wrong privileges in directory $dirsave .", "setglobalvariables"); }
 
-        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
+        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler;
         installer::systemactions::create_directory($installer::globals::temppath);
         if ( $^O =~ /cygwin/i )
         {

@@ -308,8 +308,6 @@ sub check_logfile
     my $ignore_error = 0;
     my $make_error_to_warning = 0;
 
-    if (( ! $installer::globals::pro ) && ( $installer::globals::ignore_error_in_logfile )) { $ignore_error = 1; }
-
     for ( my $i = 0; $i <= $#{$logfile}; $i++ )
     {
         my $line = ${$logfile}[$i];

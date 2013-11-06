@@ -35,7 +35,6 @@ BEGIN
     $destdir = "";
     $rootpath = "";
 
-    $productextension = "";
     @languageproducts = ();
     $build = "";
     $minor = "";

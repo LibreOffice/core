@@ -185,14 +185,7 @@ sub analyze_settings_block
 
     # Comment line in settings block begin with "#" or ";"
 
-    if ( $installer::globals::pro )
-    {
-        $compilerstring = $installer::globals::compiler . ".pro";
-    }
-    else
-    {
-        $compilerstring = $installer::globals::compiler;
-    }
+    $compilerstring = $installer::globals::compiler;
 
     for ( my $i = 0; $i <= $#{$blockref}; $i++ )
     {
