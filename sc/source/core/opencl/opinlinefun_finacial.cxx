@@ -1132,6 +1132,27 @@ std::string VDBImplement=
 "    return result;\n"
 "}\n";
 
+std::string GetOddlpriceDecl=
+"double GetOddlprice( int nNullDate, int nSettle, int nMat, int nLastCoup,\n"
+"    double fRate, double fYield, double fRedemp, int nFreq, int nBase );\n";
+
+std::string GetOddlprice=
+"double GetOddlprice( int nNullDate, int nSettle, int nMat, int nLastCoup,\n"
+"    double fRate, double fYield, double fRedemp, int nFreq, int nBase )\n"
+"{\n"
+"    double   fFreq =  nFreq ;\n"
+"    double   fDCi = GetYearFrac( nNullDate, nLastCoup,"
+"nMat, nBase ) * fFreq;\n"
+"    double   fDSCi = GetYearFrac( nNullDate, nSettle,"
+"nMat, nBase ) * fFreq;\n"
+"    double   fAi = GetYearFrac( nNullDate, nLastCoup,"
+"nSettle, nBase ) * fFreq;\n"
+"    double   p = fRedemp + fDCi * 100.0 * fRate / fFreq;\n"
+"    p /= fDSCi * fYield / fFreq + 1.0;\n"
+"    p -= fAi * 100.0 * fRate / fFreq;\n"
+"    return p;\n"
+"}\n";
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

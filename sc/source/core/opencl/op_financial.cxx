@@ -2654,6 +2654,138 @@ void OpPrice::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "return tmp;\n";
     ss << "}";
 }
+void OpOddlprice::BinInlineFun(std::set<std::string>& decls,
+     std::set<std::string>& funs)
+{
+    decls.insert(GetOddlpriceDecl);decls.insert(GetDiffDateDecl);
+    decls.insert(GetYearDiffDecl);decls.insert(IsLeapYearDecl);
+    decls.insert(GetNullDateDecl);decls.insert(DateToDaysDecl);
+    decls.insert(DaysToDateDecl);decls.insert(DaysInMonthDecl);
+    decls.insert(GetYearFracDecl);
+    funs.insert(GetOddlprice);funs.insert(GetDiffDate);
+    funs.insert(GetYearDiff);funs.insert(IsLeapYear);
+    funs.insert(GetNullDate);funs.insert(DaysInMonth);
+    funs.insert(DaysToDate);funs.insert(DateToDays);
+    funs.insert(GetYearFrac);
+}
+void OpOddlprice::GenSlidingWindowFunction(std::stringstream &ss,
+          const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ", ";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss <<") {\n";
+    ss <<"    double tmp = 0;\n";
+    ss <<"    int gid0 = get_global_id(0);\n";
+    ss <<"    double tmp0=0;\n";
+    ss <<"    double tmp1=0;\n";
+    ss <<"    double tmp2=0;\n";
+    ss <<"    double tmp3=0;\n";
+    ss <<"    double tmp4=0;\n";
+    ss <<"    double tmp5=0;\n";
+    ss <<"    double tmp6=0;\n";
+    ss <<"    double tmp7=0;\n";
+    size_t nItems = 0;
+    ss <<"    \n";
+    for (size_t i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "    for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            else {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
+#else
+            nItems += 1;
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n";
+#endif
+            nItems += 1;
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+            nItems += 1;
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            tmp"<<i<<"= 0;\n";
+            ss << "        else\n";
+            ss << "            tmp"<<i<<"=";
+            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss <<"    }\n";
+        }
+        else
+        {
+            ss << "        tmp"<<i<<"=";
+            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
+#else
+    ss << "        tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#endif
+    }
+    ss <<"    int nNullDate = GetNullDate();\n";
+    ss <<"    tmp = GetOddlprice(nNullDate,tmp0,tmp1,";
+    ss <<"tmp2,tmp3,tmp4,tmp5,tmp6,tmp7);\n";
+    ss <<"    return tmp;\n";
+    ss <<"}";
+}
 void OpNPER::GenSlidingWindowFunction(std::stringstream &ss,
       const std::string sSymName, SubArguments &vSubArguments)
 {
