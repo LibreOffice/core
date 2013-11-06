@@ -4966,7 +4966,120 @@ void OpXirr::GenSlidingWindowFunction(std::stringstream &ss,
     }
 
 }
-
+void OpDB::GenSlidingWindowFunction(std::stringstream& ss,
+            const std::string sSymName, SubArguments& vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double nWert,nRest,nDauer,nPeriode;\n";
+    ss << "    int nMonate;\n";
+    ss << "    double tmp = 0;\n";
+#ifdef ISNAN
+    FormulaToken* tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    FormulaToken* tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    FormulaToken* tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur2);
+    FormulaToken* tmpCur3 = vSubArguments[3]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur3);
+    FormulaToken* tmpCur4 = vSubArguments[4]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur4);
+    ss<< "    int buffer_wert_len = ";
+    ss<< tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_rest_len = ";
+    ss<< tmpCurDVR1->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_dauer_len = ";
+    ss<< tmpCurDVR2->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_periode_len = ";
+    ss<< tmpCurDVR3->GetArrayLength();
+    ss << ";\n";
+    ss<< "    int buffer_nMonate_len = ";
+    ss<< tmpCurDVR4->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_wert_len || isNan(";
+    ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nWert = 0;\n    else\n";
+#endif
+    ss <<"        nWert = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_rest_len || isNan(";
+    ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nRest = 0;\n    else\n";
+#endif
+    ss <<"        nRest = ";
+    ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_dauer_len || isNan(";
+    ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nDauer = 0;\n    else\n";
+#endif
+    ss <<"        nDauer = "<<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_periode_len || isNan(";
+    ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nPeriode = 0;\n    else\n";
+#endif
+    ss <<"        nPeriode = "<<vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_nMonate_len || isNan(";
+    ss <<vSubArguments[4]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        nMonate = 0;\n    else\n";
+#endif
+    ss <<"        nMonate = (int)"<<vSubArguments[4]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+    ss <<"    double nAbRate = 1.0 - pow(nRest / nWert, 1.0 / nDauer);\n";
+    ss <<"    nAbRate = ((int)(nAbRate * 1000.0 + 0.5)) / 1000.0;\n";
+    ss <<"    double nErsteAbRate = nWert * nAbRate * nMonate / 12.0;\n";
+    ss <<"    double nGda2 = 0.0;\n";
+    ss <<"    if ((int)(nPeriode) == 1)\n";
+    ss <<"        nGda2 = nErsteAbRate;\n";
+    ss <<"    else\n";
+    ss <<"    {\n";
+    ss <<"        double nSummAbRate = nErsteAbRate;\n";
+    ss <<"        double nMin = nDauer;\n";
+    ss <<"        if (nMin > nPeriode) nMin = nPeriode;\n";
+    ss <<"        int iMax = (int)nMin;\n";
+    ss <<"        for (int i = 2; i <= iMax; i++)\n";
+    ss <<"        {\n";
+    ss <<"            nGda2 = (nWert - nSummAbRate) * nAbRate;\n";
+    ss <<"            nSummAbRate += nGda2;\n";
+    ss <<"        }\n";
+    ss <<"        if (nPeriode > nDauer)\n";
+    ss <<"            nGda2 = ((nWert - nSummAbRate)";
+    ss <<"* nAbRate * (12.0 - nMonate)) / 12.0;\n";
+    ss <<"    }\n";
+    ss <<"    tmp = nGda2;\n";
+    ss <<"    return tmp;\n";
+    ss <<"}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
