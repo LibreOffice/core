@@ -1193,12 +1193,14 @@ util::DateTime lcl_DateStringToDateTime( const OUString& rDateTime )
     nIndex = 0;
     aDateTime.Year = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
     aDateTime.Month = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
-    aDateTime.Day = sal_uInt16( sDate.copy( nIndex ).toInt32() );
+    if (nIndex != -1)
+        aDateTime.Day = sal_uInt16( sDate.copy( nIndex ).toInt32() );
 
     nIndex = 0;
     aDateTime.Hours = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
     aDateTime.Minutes = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
-    aDateTime.Seconds = sal_uInt16( sTime.copy( nIndex ).toInt32() );
+    if (nIndex != -1)
+        aDateTime.Seconds = sal_uInt16( sTime.copy( nIndex ).toInt32() );
 
     return aDateTime;
 }
