@@ -467,7 +467,11 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 }
             }
             else
-                bAllowBehind = rCC.isLetterNumeric( rInf.GetTxt(), rInf.GetIdx() );
+            {
+                const OUString& rTxt = rInf.GetTxt();
+                sal_Int32 nIdx = rInf.GetIdx();
+                bAllowBehind = nIdx < rTxt.getLength() ? rCC.isLetterNumeric(rTxt, nIdx) : false;
+            }
 
             const SwLinePortion* pLast = rInf.GetLast();
             if ( bAllowBehind && pLast )
