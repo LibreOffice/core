@@ -76,7 +76,6 @@
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 
-#include <set>
 #include <list>
 #include <boost/unordered_map.hpp>
 #define ASYNC 0

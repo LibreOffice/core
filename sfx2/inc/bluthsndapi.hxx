@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SFX2_INC_BLUTHSNDAPI_HXX
 #define INCLUDED_SFX2_INC_BLUTHSNDAPI_HXX
 
-#include <vector>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ustring.hxx>

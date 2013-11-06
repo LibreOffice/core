@@ -24,7 +24,6 @@
 #include <map>
 #include <utility>
 #include <vector>
-#include <stack>
 
 typedef std::vector<std::wstring> StringList_t;
 
