@@ -68,7 +68,6 @@
 // #i10825#
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
-#include <comphelper/stlunosequence.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <algorithm>
@@ -1389,13 +1388,9 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         else
         {
             const OUString* aRequestedAttrIter =
-                  ::std::find( ::comphelper::stl_begin( aRequestedAttributes ),
-                               ::comphelper::stl_end( aRequestedAttributes ),
-                               sMMToPixelRatio );
-            if ( aRequestedAttrIter != ::comphelper::stl_end( aRequestedAttributes ) )
-            {
+                  ::std::find( aRequestedAttributes.begin(), aRequestedAttributes.end(), sMMToPixelRatio );
+            if ( aRequestedAttrIter != aRequestedAttributes.end() )
                 bProvideMMToPixelRatio = true;
-            }
         }
     }
 

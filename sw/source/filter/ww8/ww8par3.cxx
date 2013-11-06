@@ -46,7 +46,6 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/extract.hxx>
-#include <comphelper/stlunosequence.hxx>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -287,7 +286,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             if ( pFieldmark != NULL )
             {
                 uno::Sequence< OUString > vListEntries(aFormula.maListEntries.size());
-                ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
+                ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), vListEntries.begin());
                 (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
                 sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
                 (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(nIndex);

@@ -163,6 +163,34 @@ public:
     */
     inline E * SAL_CALL getArray();
 
+    /** This function allows to use Sequence in standard algorightms, like std::find
+        and others.
+
+        @since LibreOffice 4.2
+    */
+    inline E * begin();
+
+    /** This function allows to use Sequence in standard algorightms, like std::find
+        and others.
+
+        @since LibreOffice 4.2
+    */
+    inline E const * begin() const;
+
+    /** This function allows to use Sequence in standard algorightms, like std::find
+        and others.
+
+        @since LibreOffice 4.2
+    */
+    inline E * end();
+
+    /** This function allows to use Sequence in standard algorightms, like std::find
+        and others.
+
+        @since LibreOffice 4.2
+    */
+    inline E const * end() const;
+
     /** Non-const index operator: Obtains a reference to element indexed at
         given position.
         The implementation does not check for array bounds!

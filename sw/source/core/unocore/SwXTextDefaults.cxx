@@ -22,7 +22,6 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/stlunosequence.hxx>
 
 #include <SwXTextDefaults.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -251,7 +250,7 @@ sal_Bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName
     throw (RuntimeException)
 {
     uno::Sequence< OUString > aSeq(getSupportedServiceNames());
-    return std::find(comphelper::stl_begin(aSeq), comphelper::stl_end(aSeq), rServiceName) != comphelper::stl_end(aSeq);
+    return std::find(aSeq.begin(), aSeq.end(), rServiceName) != aSeq.end();
 }
 
 
