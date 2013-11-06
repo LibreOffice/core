@@ -205,7 +205,7 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
     } TableId;
     TableId tableId;
     tableId.m_id = name;
-#ifndef WORDS_BIGENDIAN
+#ifndef OSL_BIGENDIAN
     TableId swapped;
     swapped.m_c[3] = tableId.m_c[0];
     swapped.m_c[2] = tableId.m_c[1];
