@@ -14,7 +14,6 @@
 
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/string.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -538,8 +537,7 @@ void DocxTableStyleExport::Impl::tableStyleTblStylePr(uno::Sequence<beans::Prope
 void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle)
 {
     bool bDefault = false, bCustomStyle = false, bQFormat = false, bSemiHidden = false, bUnhideWhenUsed = false;
-    OUString aStyleId, aName, aBasedOn;
-    sal_Int32 nUiPriority = 0, nRsid = 0;
+    OUString aStyleId, aName, aBasedOn, aRsid, aUiPriority;
     uno::Sequence<beans::PropertyValue> aPPr, aRPr, aTblPr, aTcPr;
     std::vector< uno::Sequence<beans::PropertyValue> > aTblStylePrs;
     for (sal_Int32 i = 0; i < rStyle.getLength(); ++i)
@@ -555,7 +553,7 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
         else if (rStyle[i].Name == "basedOn")
             aBasedOn = rStyle[i].Value.get<OUString>();
         else if (rStyle[i].Name == "uiPriority")
-            nUiPriority = rStyle[i].Value.get<sal_Int32>();
+            aUiPriority = rStyle[i].Value.get<OUString>();
         else if (rStyle[i].Name == "qFormat")
             bQFormat = true;
         else if (rStyle[i].Name == "semiHidden")
@@ -563,7 +561,7 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
         else if (rStyle[i].Name == "unhideWhenUsed")
             bUnhideWhenUsed = true;
         else if (rStyle[i].Name == "rsid")
-            nRsid = rStyle[i].Value.get<sal_Int32>();
+            aRsid = rStyle[i].Value.get<OUString>();
         else if (rStyle[i].Name == "pPr")
             aPPr = rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rStyle[i].Name == "rPr")
@@ -594,9 +592,9 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
         m_pSerializer->singleElementNS(XML_w, XML_basedOn,
                 FSNS(XML_w, XML_val), OUStringToOString(aBasedOn, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
-    if (nUiPriority)
+    if (!aUiPriority.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
-                FSNS(XML_w, XML_val), OString::number(nUiPriority),
+                FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
     if (bQFormat)
         m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
@@ -604,17 +602,10 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
-    if (nRsid)
-    {
-        // We want the rsid as a hex string, but always with the length of 8.
-        OStringBuffer aBuf = OString::number(nRsid, 16);
-        OStringBuffer aStr;
-        comphelper::string::padToLength(aStr, 8 - aBuf.getLength(), '0');
-        aStr.append(aBuf.getStr());
+    if (!aRsid.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_rsid,
-                FSNS(XML_w, XML_val), aStr.getStr(),
+                FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
-    }
 
     tableStylePPr(aPPr);
     tableStyleRPr(aRPr);

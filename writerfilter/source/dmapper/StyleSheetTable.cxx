@@ -41,6 +41,7 @@
 #include <map>
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/string.hxx>
 
 #include <dmapperLoggers.hxx>
 
@@ -621,8 +622,14 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 beans::PropertyValue aValue;
                 if (nSprmId == NS_ooxml::LN_CT_Style_rsid)
                 {
+                    // We want the rsid as a hex string, but always with the length of 8.
+                    OUStringBuffer aBuf = OUString::number(nIntValue, 16);
+                    OUStringBuffer aStr;
+                    comphelper::string::padToLength(aStr, 8 - aBuf.getLength(), '0');
+                    aStr.append(aBuf.getStr());
+
                     aValue.Name = "rsid";
-                    aValue.Value = uno::makeAny(nIntValue);
+                    aValue.Value = uno::makeAny(aStr.makeStringAndClear());
                 }
                 else if (nSprmId == NS_ooxml::LN_CT_Style_qFormat)
                     aValue.Name = "qFormat";
@@ -633,7 +640,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 else
                 {
                     aValue.Name = "uiPriority";
-                    aValue.Value = uno::makeAny(nIntValue);
+                    aValue.Value = uno::makeAny(OUString::number(nIntValue));
                 }
                 pEntry->AppendInteropGrabBag(aValue);
             }
