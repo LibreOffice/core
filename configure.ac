@@ -5437,9 +5437,6 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
         AC_MSG_ERROR([Cannot find alignment of 8 byte types.])
     fi
 
-    AC_C_BIGENDIAN
-    WORDS_BIGENDIAN=$ac_cv_c_bigendian
-
     dnl Check for large file support
     AC_SYS_LARGEFILE
     if test -n "$ac_cv_sys_file_offset_bits" -a "$ac_cv_sys_file_offset_bits" != "no"; then
@@ -5462,10 +5459,8 @@ else
     SAL_TYPES_ALIGNMENT2=2
     SAL_TYPES_ALIGNMENT4=4
     SAL_TYPES_ALIGNMENT8=8
-    WORDS_BIGENDIAN=no
     LFS_CFLAGS=''
 fi
-AC_SUBST(WORDS_BIGENDIAN)
 AC_SUBST(LFS_CFLAGS)
 
 AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFSHORT,$SAL_TYPES_SIZEOFSHORT)
