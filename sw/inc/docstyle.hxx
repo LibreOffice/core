@@ -101,6 +101,8 @@ public:
 
     virtual void            SetHidden( sal_Bool bHidden );
     virtual sal_Bool        IsHidden( ) const;
+    void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
+    void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
 
     /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value sal_False,
      which indicates that the indent attributes at a paragraph style should

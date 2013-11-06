@@ -54,6 +54,8 @@
 #include <svx/svxids.hrc>
 #include <SwRewriter.hxx>
 
+using namespace com::sun::star;
+
 // The Format names in the list of all names have the
 // following family as their first character:
 
@@ -425,6 +427,50 @@ void  SwDocStyleSheet::Reset()
     SetPhysical(sal_False);
 }
 
+void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
+{
+    bool bChg = false;
+    if (!bPhysical)
+        FillStyleSheet(FillPhysical);
+
+    SwFmt* pFmt = 0;
+    switch (nFamily)
+    {
+        case SFX_STYLE_FAMILY_PARA:
+            pFmt = rDoc.FindTxtFmtCollByName(aName);
+            if (pFmt)
+            {
+                pFmt->SetGrabBagItem(rVal);
+                bChg = true;
+            }
+            break;
+        default:
+            break;
+    }
+
+    if (bChg)
+    {
+        dynamic_cast<SwDocStyleSheetPool*>(pPool)->InvalidateIterator();
+        pPool->Broadcast(SfxStyleSheetHint(SFX_STYLESHEET_MODIFIED, *this));
+        SwEditShell* pSh = rDoc.GetEditShell();
+        if (pSh)
+            pSh->CallChgLnk();
+    }
+}
+
+void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
+{
+    SwFmt* pFmt = 0;
+    switch (nFamily)
+    {
+        case SFX_STYLE_FAMILY_PARA:
+            pFmt = rDoc.FindTxtFmtCollByName(aName);
+            pFmt->GetGrabBagItem(rVal);
+            break;
+        default:
+            break;
+    }
+}
 // virtual methods
 void SwDocStyleSheet::SetHidden( sal_Bool bValue )
 {
