@@ -338,13 +338,8 @@ sub main()
             $modifier . '^\s*case\s*.*' . $grepdef . '.*\s*:',
             "$SRC_ROOT", "i18nlangtag", "source/isolang/mslangid.cxx", ());
 
-        # With CWS 'langstatusbar' the language listbox resource file gets a new location.
-        my $module = "svx";
-        my $name = "source/dialog/langtab.src";
-        if (!(-e "$SRC_ROOT/$module/$name")) {
-            $module = "svtools";
-            $name = "source/misc/langtab.src";
-        }
+        my $module = "svtools";
+        my $name = "source/misc/langtab.src";
         #         < "Afrikaans" ; LANGUAGE_AFRIKAANS ; > ;
         # lookup define
         @resultlist = grepFile(
