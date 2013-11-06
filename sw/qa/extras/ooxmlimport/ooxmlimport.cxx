@@ -58,7 +58,8 @@ public:
     void testN757890();
     void testFdo49940();
     void testN751077();
-    void testImageCrop();
+    void testImageCrop_JPEG();
+    void testImageCrop_PNG();
     void testN705956_1();
     void testN705956_2();
     void testN747461();
@@ -165,7 +166,8 @@ void Test::run()
         {"n757890.docx", &Test::testN757890},
         {"fdo49940.docx", &Test::testFdo49940},
         {"n751077.docx", &Test::testN751077},
-        {"ImageCrop.docx", &Test::testImageCrop},
+        {"ImageCrop_JPEG.docx", &Test::testImageCrop_JPEG},
+        {"ImageCrop_PNG.docx",&Test::testImageCrop_PNG},
         {"n705956-1.docx", &Test::testN705956_1},
         {"n705956-2.docx", &Test::testN705956_2},
         {"n747461.docx", &Test::testN747461},
@@ -450,7 +452,7 @@ xray image.FillColor
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xc0504d ), fillColor );
 }
 
-void Test::testImageCrop()
+void Test::testImageCrop_JPEG()
 {
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
@@ -458,10 +460,24 @@ void Test::testImageCrop()
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 12943 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 2228 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4226 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 9333 ), aGraphicCropStruct.Bottom );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 2955 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 5477 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 2856 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 2291 ), aGraphicCropStruct.Bottom );
+}
+
+void Test::testImageCrop_PNG()
+{
+    uno::Reference<drawing::XShape> image = getShape(1);
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+
+    imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1141 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1199 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1258 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 684 ), aGraphicCropStruct.Bottom );
 }
 
 void Test::testN747461()
