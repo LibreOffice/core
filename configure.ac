@@ -12598,7 +12598,6 @@ else
         ;;
     esac
 
-    pathmunge "$SRC_ROOT/solenv/$OUTPATH/bin" "before"
     pathmunge "$SRC_ROOT/solenv/bin" "before"
     pathmunge "." "before"
 fi
