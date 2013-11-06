@@ -21,6 +21,7 @@
 #define INCLUDED_SHELL_INC_INTERNAL_CONTENTREADER_HXX
 
 #include "internal/basereader.hxx"
+#include <stack>
 
 class ITag;
 class StreamInterface;

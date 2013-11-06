@@ -22,6 +22,7 @@
 
 #include "internal/basereader.hxx"
 #include "internal/types.hxx"
+#include <stack>
 
 class ITag;
 class CKeywordsTag;
