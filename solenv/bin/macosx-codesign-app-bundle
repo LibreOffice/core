@@ -13,7 +13,7 @@ for V in \
     BUILDDIR \
     MACOSX_BUNDLE_IDENTIFIER \
     MACOSX_CODESIGNING_IDENTITY; do
-    if test -z `eval echo '$'$V`; then
+    if test -z "$(eval echo '$'$V)"; then
        echo No '$'$V "environment variable! This should be run in a build only"
        exit 1
     fi
@@ -35,13 +35,13 @@ APP_BUNDLE=$1
 # mentioned on the command line.
 
 find $APP_BUNDLE \( -name '*.dylib' -or -name '*.so' \) ! -type l | \
-xargs codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign $MACOSX_CODESIGNING_IDENTITY
+xargs codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY"
 
 find $APP_BUNDLE -name '*.dylib.*' ! -type l | \
 while read dylib; do \
     id=`basename "$dylib"`; \
     id=`echo $id | sed -e 's/dylib.*/dylib/'`; \
-    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign $MACOSX_CODESIGNING_IDENTITY "$dylib"; \
+    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$dylib"; \
 done
 
 # The executables have already been signed by
@@ -56,7 +56,7 @@ done
 
 for framework in `find $APP_BUNDLE -name '*.framework' -type d`; do \
     for version in $framework/Versions/*; do \
-        if test ! -L $version -a -d $version; then codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign $MACOSX_CODESIGNING_IDENTITY $version; fi; \
+        if test ! -L $version -a -d $version; then codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version; fi; \
     done; \
 done
 
@@ -68,10 +68,10 @@ done
 #
 # At this stage we also attach the entitlements in the sandboxing case
 
-if test $ENABLE_MACOSX_SANDBOX = TRUE; then
+if test "$ENABLE_MACOSX_SANDBOX" = "TRUE"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
 fi
 
-codesign --force --verbose --sign $MACOSX_CODESIGNING_IDENTITY $entitlements $APP_BUNDLE
+codesign --force --verbose --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
 
 exit 0
