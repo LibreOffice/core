@@ -351,6 +351,15 @@ public:
         std::set<std::string>& );
     virtual std::string BinFuncName(void) const { return "Oddlprice"; }
 };
+class OpOddlyield: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,
+        std::set<std::string>& );
+    virtual std::string BinFuncName(void) const { return "Oddlyield"; }
+};
 class OpPPMT: public Normal
 {
 public:

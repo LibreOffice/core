@@ -1153,6 +1153,24 @@ std::string GetOddlprice=
 "    return p;\n"
 "}\n";
 
+std::string GetOddlyieldDecl=
+"double GetOddlyield( int nNullDate, int nSettle, int nMat, int nLastCoup,\n"
+"    double fRate, double fPrice, double fRedemp, int nFreq, int nBase );\n";
+
+std::string GetOddlyield=
+"double GetOddlyield( int nNullDate, int nSettle, int nMat, int nLastCoup,\n"
+"    double fRate, double fPrice, double fRedemp, int nFreq, int nBase ) \n"
+"{\n"
+"    double fFreq =  nFreq ;\n"
+"    double fDCi= GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;\n"
+"    double fDSCi= GetYearFrac( nNullDate, nSettle, nMat, nBase ) * fFreq;\n"
+"    double fAi= GetYearFrac( nNullDate, nLastCoup, nSettle, nBase )*fFreq;\n"
+"    double y = fRedemp + fDCi * 100.0 * fRate / fFreq;\n"
+"    y /= fPrice + fAi * 100.0 * fRate / fFreq;\n"
+"    y -= 1.0;\n"
+"    y *= fFreq / fDSCi;\n"
+"    return y;\n"
+"}\n";
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1295,6 +1295,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpOddlprice));
                 }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getOddlyield"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                        new OpOddlyield));
+                }
                 break;
             default:
                 throw UnhandledToken(pChild, "unhandled opcode");
