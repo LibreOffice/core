@@ -4046,12 +4046,15 @@ int RTFDocumentImpl::popState()
                     aStr = aStr.copy(8);
                 // extract name
                 int nLength = aStr.toChar();
-                aStr = aStr.copy(1);
+                if (!aStr.isEmpty())
+                    aStr = aStr.copy(1);
                 OString aName = aStr.copy(0, nLength);
-                aStr = aStr.copy(nLength+1); // zero-terminated string
+                if (!aStr.isEmpty())
+                    aStr = aStr.copy(nLength+1); // zero-terminated string
                 // extract default text
                 nLength = aStr.toChar();
-                aStr = aStr.copy(1);
+                if (!aStr.isEmpty())
+                    aStr = aStr.copy(1);
                 RTFValue::Pointer_t pNValue(new RTFValue(OStringToOUString(aName, aState.nCurrentEncoding)));
                 m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
                 if (nLength > 0)
