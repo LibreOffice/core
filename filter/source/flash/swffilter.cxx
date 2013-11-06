@@ -292,6 +292,8 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
 
     lastslash = sPresentation.lastIndexOf('/') + 1;
     int lastdot = sPresentation.lastIndexOf('.');
+    if (lastdot < 0)  // fdo#71309 in case file has no name
+        lastdot=0;
 
     // AS: The name of the presentation, without 3 character extension.
     OUString sPresentationName = sPresentation.copy(lastslash, lastdot - lastslash);
