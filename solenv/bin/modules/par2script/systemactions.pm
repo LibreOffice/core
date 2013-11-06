@@ -75,11 +75,6 @@ sub create_directories
 
     if ($directory eq "unzip" )
     {
-        $path = $path . "common" . $par2script::globals::separator;
-        create_directory($path);
-
-        $path = $path . $directory . $par2script::globals::separator;
-        create_directory($path);
     }
     else
     {

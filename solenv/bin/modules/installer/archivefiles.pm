@@ -162,13 +162,7 @@ sub resolving_archive_flag
 
         if ( $styles =~ /\bARCHIVE\b/ )     # copying, unzipping and changing the file list
         {
-            my $iscommonfile = 0;
             my $sourcepath = $onefile->{'sourcepath'};
-
-            if ( $sourcepath =~ /\Q$installer::globals::separator\E\bcommon\Q$installer::globals::separator\E/ )   # /common/ or /common.pro/
-            {
-                $iscommonfile = 1;
-            }
 
             my $use_internal_rights = 0;
             if ( $styles =~ /\bUSE_INTERNAL_RIGHTS\b/ ) { $use_internal_rights = 1; }   # using the rights used inside the zip file

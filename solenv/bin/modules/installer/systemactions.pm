@@ -202,11 +202,6 @@ sub create_directories
 
     if ($newdirectory eq "unzip" )  # special handling for common directory
     {
-        $path = $path  . ".." . $installer::globals::separator . "common" . $installer::globals::separator;
-        create_directory($path);
-
-        $path = $path . $newdirectory . $installer::globals::separator;
-        create_directory($path);
     }
     else
     {
