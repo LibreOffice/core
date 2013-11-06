@@ -16,14 +16,14 @@ $(eval $(call gb_CustomTarget_register_targets,odk/check,\
 odk_PLATFORM := $(if $(filter WNT,$(OS)),\
 	$(if $(filter GCC,$(COM)),mingw,windows),\
 	$(if $(filter SOLARIS,$(OS)),\
-	$(if $(filter SPARC,$(CPUNAME)),solsparc,\
-	$(if $(filter U,$(CPU)),solsparc64,solintel)),\
-	$(if $(filter LINUX,$(OS)),linux,\
-	$(if $(filter NETBSD,$(OS)),netbsd,\
-	$(if $(filter FREEBSD,$(OS)),freebsd,\
-	$(if $(filter DRAGONFLY,$(OS)),dragonfly,\
-	$(if $(filter MACOSX,$(OS)),macosx,\
-	$(if $(filter AIX,$(OS)),aix))))))))
+		$(if $(filter SPARC,$(CPUNAME)),solsparc,\
+			$(if $(filter SPARC64,$(CPUNAME)),solsparc64,solintel)),\
+		$(if $(filter LINUX,$(OS)),linux,\
+			$(if $(filter NETBSD,$(OS)),netbsd,\
+				$(if $(filter FREEBSD,$(OS)),freebsd,\
+					$(if $(filter DRAGONFLY,$(OS)),dragonfly,\
+						$(if $(filter MACOSX,$(OS)),macosx,\
+							$(if $(filter AIX,$(OS)),aix))))))))
 
 $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		$(SRCDIR)/odk/util/check.pl \

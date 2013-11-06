@@ -4326,6 +4326,13 @@ solaris*)
         PLATFORMID=solaris_sparc
         OUTPATH=unxsogs
         ;;
+    sparc64)
+        CPU=U
+        CPUNAME=SPARC64
+        RTL_ARCH=SPARC64
+        PLATFORMID=solaris_sparc64
+        OUTPATH=unxsogu
+        ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;

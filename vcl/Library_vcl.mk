@@ -661,7 +661,7 @@ $(eval $(call gb_Library_add_libs,vcl,\
 endif
 
 ifeq ($(OS),SOLARIS)
-ifeq ($(CPUNAME)$(CPU),SPARCU)
+ifeq ($(CPUNAME),SPARC64)
 $(eval $(call gb_Library_add_ldflags,vcl,\
     -R/usr/sfw/lib/64 \
 ))

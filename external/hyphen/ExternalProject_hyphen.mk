@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,hyphen,build):
 		./configure --disable-shared \
 			$(if $(filter-out IOS,$(OS)),--with-pic) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
-			$(if $(filter C52U,$(COM)$(CPU)),CFLAGS="-m64") \
+			$(if $(filter C52-SPARC64,$(COM)-$(CPUNAME)),CFLAGS="-m64") \
 		&& $(MAKE) \
 	)
 
