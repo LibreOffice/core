@@ -25,7 +25,7 @@
 #if defined __GNUC__
     #pragma GCC system_header
 #endif
-
+/*
 #include "nsCOMPtr.h"
 #include "nsISupports.h"
 #include "nsString.h"
@@ -38,5 +38,5 @@
 #include "nsVoidArray.h"
 #include "nsIFile.h"
 #include "nsILocalFile.h"
-
+*/
 #include "post_include_mozilla.h"

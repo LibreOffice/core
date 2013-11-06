@@ -52,14 +52,14 @@ MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 INCPRE += -I../mozillasrc
 
 # --- Files -------------------------------------
+SLOFILES += $(SLO)$/MMozillaBootstrap.obj
+#SLOFILES += \
+#	$(SLO)$/MNSINIParser.obj \
+#	$(SLO)$/MNSProfileDiscover.obj \
+#	$(SLO)$/MMozillaBootstrap.obj \
+#	$(SLO)$/MNSFolders.obj
 
-SLOFILES += \
-    $(SLO)$/MNSINIParser.obj \
-    $(SLO)$/MNSProfileDiscover.obj \
-    $(SLO)$/MMozillaBootstrap.obj \
-    $(SLO)$/MNSFolders.obj
-
-.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES" ) || ( "$(WITH_MOZILLA)" == "NO" ) || ( "$(OS)" == "MACOSX" )
+#.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES" ) || ( "$(WITH_MOZILLA)" == "NO" ) || ( "$(OS)" == "MACOSX" )
 CDEFS+=-DMINIMAL_PROFILEDISCOVER
 
 SHL1TARGET=$(TARGET)
@@ -82,14 +82,14 @@ $(MISC)/mozbootstrap.component .ERRREMOVE : \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt mozbootstrap.component
 
-.ELSE
-SLOFILES += \
-    $(SLO)$/MNSInit.obj			            \
-    $(SLO)$/MNSProfileManager.obj	\
-    $(SLO)$/MNSRunnable.obj	\
-    $(SLO)$/MNSProfile.obj					\
-    $(SLO)$/MNSProfileDirServiceProvider.obj
-.ENDIF
+#.ELSE
+#SLOFILES += \
+#	$(SLO)$/MNSInit.obj			            \
+#	$(SLO)$/MNSProfileManager.obj	\
+#	$(SLO)$/MNSRunnable.obj	\
+#	$(SLO)$/MNSProfile.obj					\
+#	$(SLO)$/MNSProfileDirServiceProvider.obj
+#.ENDIF
 
 # --- Targets ----------------------------------
 

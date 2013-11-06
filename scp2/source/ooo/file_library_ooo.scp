@@ -921,12 +921,12 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
+/*#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
                                                                 // #i91209#
 STD_LIB_FILE(gid_File_Lib_Mozab,mozab)
 STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
 
-#else
+#else*/
 
 #ifndef OS2
 File gid_File_Lib_Mozbootstrap
@@ -941,7 +941,7 @@ File gid_File_Lib_Mozbootstrap
 End
 #endif
 
-#endif
+/*#endif*/
 
 #ifdef SYSTEM_LIBWPD
 STD_LIB_FILE(gid_File_Lib_Wpft,wpft)

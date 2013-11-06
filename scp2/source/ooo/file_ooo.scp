@@ -1091,7 +1091,7 @@ File gid_File_Mod_Text
     Name = "text.mod";
 End
 
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) 
+/*#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) 
 
 File gid_File_Mozilla_Runtime
     TXT_FILE_BODY;
@@ -1100,7 +1100,7 @@ File gid_File_Mozilla_Runtime
     Name = "mozruntime.zip";
 End
 
-#endif
+#endif*/
 
 File gid_File_Share_Registry_Main_Xcd
     TXT_FILE_BODY;

@@ -25,7 +25,7 @@
 #if defined __GNUC__
     #pragma GCC system_header
 #endif
-
+/*
 #include "nsIServiceManager.h"
 #include "nsIEventQueueService.h"
 #include "nsIChromeRegistry.h"
@@ -46,5 +46,5 @@
 #include "nsEmbedAPI.h"
 
 #include "nsDirectoryService.h"
-
+*/
 #include "post_include_mozilla.h"

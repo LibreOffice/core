@@ -324,33 +324,6 @@ AC_ARG_ENABLE(static-gtk,
 AC_ARG_ENABLE(layout,
 [  --enable-layout         Enable the compilation and use of layout dialogs
 ],,)
-AC_ARG_ENABLE(mozilla,
-[  --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
-                          binary for your platform, to build without this
-                          version, use this option.
-],,enable_mozilla="yes")
-AC_ARG_ENABLE(build-mozilla,
-[  --disable-build-mozilla Use this option if you do not want to build the
-                          mozilla components from the mozilla source code but
-                          take precompiled zips
-],,)
-AC_ARG_WITH(mozilla-version,
-[  --with-mozilla-version  Choose which version of mozilla to use while building
-                          mozilla. Default: 1.7.5.
-                          Note that not all versions are supported.
-],,)
-AC_ARG_WITH(mozilla-toolkit,
-[  --with-mozilla-toolkit  Choose which GUI toolkit to use while building mozilla
-                          components. Default: gtk2
-],,)
-AC_ARG_WITH(system-mozilla,
-[  --with-system-mozilla   Use mozilla already on system. Note that some
-                          components cannot be built against a contemporary
-                          mozilla. The flavour used can be specified by
-                          --with-system-mozilla=<flavour>. Supported are:
-                          libxul (default), xulrunner, firefox, seamonkey,
-                          mozilla
-], WITH_SYSTEM_MOZILLA=$withval, WITH_SYSTEM_MOZILLA=no)
 AC_ARG_ENABLE(nss_module,
 [  --disable-nss-module    Whether to use provided NSS module     
 ],,enable_nss_module=yes)
@@ -1428,7 +1401,6 @@ ENABLE_CATEGORY_B=
 
 AC_MSG_CHECKING([whether to enable category B components])
 # Category B modules (libraries):
-#   moz (seamonkey)
 #   nss (nss)
 #   hunspell (hunspell)
 #   hyphen (hyphen)
@@ -1447,10 +1419,9 @@ if test "$enable_category_b" = "yes"; then
    enable_coinmp="yes"
    enable_category_b_fonts="yes"
 
-   AC_MSG_RESULT([yes: allow modules moz, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp to be built])
+   AC_MSG_RESULT([yes: allow modules, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp to be built])
 else
    # Disable libaries.
-   enable_mozilla="no"
    enable_nss_module="no"
    enable_hunspell="no"
    enable_hyphen="no"
@@ -1461,7 +1432,7 @@ else
    enable_coinmp="no"
    enable_category_b_fonts="no"
 
-   AC_MSG_RESULT([no: disabled modules moz, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp])
+   AC_MSG_RESULT([no: disabled modules, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp])
 fi
 AC_SUBST(ENABLE_CATEGORY_B)
 
@@ -4765,40 +4736,19 @@ else
 fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
 
-WITH_MOZILLA=NO
-AC_MSG_CHECKING([whether to enable build of Mozilla/Mozilla NSS-using components])
-if test "$enable_mozilla" = "no"; then
-   AC_MSG_RESULT([no])
-   WITH_MOZILLA=NO
-   ENABLE_NSS_MODULE=NO
-else
-   AC_MSG_RESULT([yes])
-   WITH_MOZILLA=YES
-fi
-
-AC_MSG_CHECKING([whether to build Mozilla addressbook connectivity])
-if test "$enable_mozilla" = "no"; then
-   AC_MSG_RESULT([no])
-elif test "$with_system_mozilla" = "yes"; then
-   AC_MSG_RESULT([no, not possible with system-mozilla])
-else
-   AC_MSG_RESULT([yes])
-fi
-
 AC_MSG_CHECKING([whether to build XML Security support])
-if test "$enable_mozilla" = "no"; then
-   AC_MSG_RESULT([no, since Mozilla (NSS) disabled but needed])
+if test "$enable_nss_module" = "no"; then
+   AC_MSG_RESULT([no, since NSS disabled but needed])
 else
    AC_MSG_RESULT([yes])
 fi
 
 AC_MSG_CHECKING([whether to build LDAP configuration backend])
 if test -z "$enable_ldap" || test "$enable_ldap" = "yes"; then
-   if test "$enable_mozilla" = "yes" || test "$with_openldap" = "yes"; then
+   if test "$with_openldap" = "yes"; then
       AC_MSG_RESULT([yes])
       WITH_LDAP=YES
    else
-      AC_MSG_RESULT([no. Either Mozilla or OpenLDAP needed])
       WITH_LDAP=NO
    fi
 else
@@ -4808,7 +4758,7 @@ fi
 
 if test "$WITH_LDAP" = "YES"; then
    dnl ===================================================================
-   dnl Test whether we want to use the Mozilla or the OpenLDAP LDAP SDK
+   dnl Test whether we want to use the OpenLDAP LDAP SDK
    dnl ===================================================================
    AC_MSG_CHECKING([which LDAP SDK to use])
    if test -n "$with_openldap" && test "$with_openldap" != "no"; then
@@ -4822,169 +4772,10 @@ if test "$WITH_LDAP" = "YES"; then
 	   # it has it. Test for it to be sure
          AC_CHECK_LIB(ldap, ldap_set_option, [],
                 [AC_MSG_ERROR(openldap lib not found or functional)], [])
-   else
-	   AC_MSG_RESULT([Netscape/Mozilla])
-	   # TODO. Actually do a sanity check and check for
-	   # LDAP_OPT_SIZELIMIT and LDAP_X_OPT_CONNECT_TIMEOUT 
-	   WITH_OPENLDAP=NO
    fi
 fi
 AC_SUBST(WITH_LDAP)
 AC_SUBST(WITH_OPENLDAP)
-
-dnl ===================================================================
-dnl Check for system mozilla
-dnl ===================================================================
-AC_MSG_CHECKING([which mozilla to use])
-if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_MOZILLA=YES
-    ENABLE_NSS_MODULE=NO
-    enable_nss_module=no
-    AC_MSG_CHECKING([which Mozilla flavour to use])
-    if test -n "$with_system_mozilla" && test "$with_system_mozilla" = "libxul"; then
-      MOZ_FLAVOUR=libxul
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "xulrunner"; then
-      MOZ_FLAVOUR=xulrunner
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "seamonkey"; then
-      MOZ_FLAVOUR=seamonkey
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "firefox"; then
-      MOZ_FLAVOUR=firefox
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "mozilla"; then
-      MOZ_FLAVOUR=mozilla
-    else
-      MOZ_FLAVOUR=libxul
-    fi
-    tmp=`echo $MOZ_FLAVOUR | $PERL -e 'print ucfirst(<STDIN>);'`
-    AC_MSG_RESULT($tmp)
-
-    PKG_CHECK_MODULES( MOZ_NSS, nss, STANDALONENSS="TRUE", STANDALONENSS="" )
-    if test -z "$STANDALONENSS"; then
-        PKG_CHECK_MODULES( MOZ_NSS, $MOZ_FLAVOUR-nss )
-    else
-        NSS_LIB="-L`$PKG_CONFIG --variable=libdir nss`"
-        AC_SUBST(NSS_LIB)
-    fi
-
-    if $PKG_CONFIG --exists nspr ; then
-      PKG_CHECK_MODULES( MOZ_NSPR, nspr )
-      NSPR_LIB="-L`$PKG_CONFIG --variable=libdir nspr`"
-      AC_SUBST(NSPR_LIB)
-    else
-      PKG_CHECK_MODULES( MOZ_NSPR, $MOZ_FLAVOUR-nspr )
-    fi
-
-    if test "$MOZ_FLAVOUR" != "libxul"; then
-      PKG_CHECK_MODULES( MOZILLAXPCOM, $MOZ_FLAVOUR-xpcom, HASXPCOM="TRUE", HASXPCOM="" )
-      MOZ_INC=`$PKG_CONFIG --variable=includedir $MOZ_FLAVOUR-xpcom`
-      MOZ_LIB=`$PKG_CONFIG --variable=libdir $MOZ_FLAVOUR-xpcom`
-    fi
-
-    if test -z "$HASXPCOM"; then
-      PKG_CHECK_MODULES( MOZILLAXPCOM, libxul )
-      MOZ_INC=`$PKG_CONFIG --variable=includedir libxul`
-      MOZ_LIB=`$PKG_CONFIG --variable=libdir libxul`
-      if ! test -e "$MOZ_LIB/libxul.so"; then
-         MOZ_LIB=`$PKG_CONFIG --variable=sdkdir libxul`
-         if test -e "$MOZ_LIB/sdk/lib/libxul.so"; then
-            MOZ_LIB="$MOZ_LIB/sdk/lib"
-         fi
-      fi
-    fi
-
-    save_CPPFLAGS="$CPPFLAGS"
-    save_LDFLAGS="$LDFLAGS"
-    save_LIBS="$LIBS"
-    CPPFLAGS="$CPPFLAGS $MOZ_NSS_CFLAGS"
-    LDFLAGS="$LDFLAGS $MOZ_NSS_LIBS"
-    AC_CHECK_LIB(nss3, PK11_GetCertFromPrivateKey, [], 
-      [AC_MSG_ERROR(PK11_GetCertFromPrivateKey missing but needed.
-See https://bugzilla.mozilla.org/show_bug.cgi?id=262274.
-Fixed since nss 3.9.3 (contained by e.g. mozilla >= 1.7.5))], [])
-    LDFLAGS="$save_LDFLAGS"
-    CPPFLAGS="$save_CPPFLAGS"
-    LIBS="$save_LIBS"
-
-    MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
-    if test "$WITH_LDAP" != "NO" && test "$WITH_OPENLDAP" != "YES"; then
-      AC_MSG_CHECKING([whether $tmp was compiled with --enable-ldap])
-      if test -d "$MOZ_INC/ldap"; then
-         AC_MSG_RESULT([yes])
-         MOZ_LDAP_CFLAGS="-I$MOZ_INC"
-      else
-        AC_MSG_ERROR([no.
-Could not find LDAP header include files in $MOZ_INC/ldap.
-Please recompile $tmp with --enable-ldap or use --with-openldap.])
-      fi
-    fi
-
-    #e.g. http://fedoraproject.org/wiki/Releases/FeatureXULRunnerAPIChanges
-    #the plugin pkg-config etc. reverts to "mozilla-plugin" with libxul
-    if test "$MOZ_FLAVOUR" = "libxul"; then
-        MOZ_FLAVOUR="mozilla"
-    fi
-
-elif test "$enable_mozilla" = "no"; then
-    AC_MSG_RESULT([none])
-    WITH_MOZILLA=NO
-    ENABLE_NSS_MODULE=NO
-    enable_nss_module=no
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_MOZILLA=NO
-    BUILD_TYPE="$BUILD_TYPE MOZ"
-    WITH_MOZILLA=YES
-if test -z "$with_mozilla_version"; then
-   MOZILLA_VERSION=
-else
-   AC_MSG_CHECKING([which mozilla version to build])
-   MOZILLA_VERSION=$with_mozilla_version
-   enable_build_mozilla=1
-   AC_MSG_RESULT([$MOZILLA_VERSION])
-fi
-
-AC_SUBST(MOZILLA_VERSION)
-AC_SUBST(WITH_MOZILLA)
-
-AC_MSG_CHECKING([for toolkit mozilla should use])
-if test -z "$with_mozilla_toolkit"; then
-   if test "$_os" != "WINNT" ; then
-      if test "$_os" = "Darwin" ; then
-         MOZILLA_TOOLKIT=mac  
-         AC_MSG_RESULT([mac])
-      else
-         MOZILLA_TOOLKIT=gtk2
-         AC_MSG_RESULT([gtk2])
-      fi
-   fi
-else
-   MOZILLA_TOOLKIT=$with_mozilla_toolkit
-   enable_build_mozilla=1
-   AC_MSG_RESULT([$MOZILLA_TOOLKIT])
-fi
-#if test "$_os" = "Darwin" && test "$MOZILLA_TOOLKIT" != "gtk2"; then
-#   #only gtk2 toolkit supported - xlib or cocoa nees glib1 and libIDL1 - the latter is not
-#   #available using fink, mac (carbon) doesn't work because xcode installs conflicting headers
-#   AC_MSG_ERROR([Only gtk2 toolkit supported on Mac, sorry.])
-#fi
-
-AC_SUBST(MOZILLA_TOOLKIT)
-
-# default to enabling build mozilla
-if test "$enable_build_mozilla" != "no"; then
-      enable_build_mozilla=yes
-else
-      enable_build_mozilla=
-fi
-
-AC_MSG_CHECKING([whether to build Mozilla/SeaMonkey])
-if test -n "$enable_build_mozilla"; then
-   BUILD_MOZAB="TRUE"
-   AC_MSG_RESULT([yes])
-else
-   BUILD_MOZAB=""	
-   AC_MSG_RESULT([no])
-fi
 
 AC_MSG_CHECKING([whether to build provided NSS module])
 if test "$enable_nss_module" != "no"; then
@@ -5019,77 +4810,9 @@ else
    AC_MSG_RESULT([no])
 fi
 
-if test "$BUILD_MOZAB" = "TRUE"; then
-  if test "$_os" = "WINNT"; then
-    if test "$WITH_MINGWIN" != "yes"; then
-      # compiling with MSVC. Only supported platform here is MSVS2005 at the moment.
-      if test "$MSVSVER" != "2005"; then
-        AC_MSG_ERROR([Building SeaMonkey is supported with Microsoft Visual Studio .NET 2005 only.])
-      fi
-    else
-      AC_MSG_WARN([Building SeaMonkey with mingwin is not tested, and likely to break.])
-      echo "Building SeaMonkey with mingwin is not tested, and likely to break." >> warn
-    fi
-  fi
-
-   if test -z "$MOZILLA_VERSION"; then
-      MOZILLA_VERSION=1.1.14
-   fi
-   if test "$_os" = "WINNT"; then
-      AC_MSG_CHECKING([for moztools binaries])
-      if test ! -e "$TARFILE_LOCATION/vc8-moztools.zip" ; then
-        AC_MSG_ERROR([The following file is missing in $TARFILE_LOCATION: vc8-moztools.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)])
-      else
-         AC_MSG_RESULT([ok])
-      fi
-   elif test "$_os" = "Darwin"; then
-      if test "$MOZILLA_TOOLKIT" = "gtk2"; then
-         AC_MSG_NOTICE([checking whether mozilla can be built...])
-         PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build mozilla]), AC_MSG_ERROR([Prerequisites to build mozilla not met. Either use the precompiled mozilla binaries or install the missing packages]))
-      else
-         PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.6.3,  MOZIDL="TRUE", MOZIDL="")
-         if test -z "$MOZIDL"; then
-            AC_MSG_ERROR([libIDL 0.6.3 or newer is needed to build mozilla with mac toolkit.])
-         fi
-      fi
-   else
-      # Generic Unix/Linux section
-      if test "$MOZILLA_TOOLKIT" = "gtk2"; then
-         PKG_CHECK_MODULES(MOZLIBREQ, gtk+-2.0, MOZGTK="TRUE", MOZGTK="")
-         if test -z "$MOZGTK"; then
-            AC_MSG_ERROR([GTK2 is needed to build mozilla.])
-         fi
-         PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.8.0, MOZIDL="TRUE", MOZIDL="")
-         if test -z "$MOZIDL"; then
-            AC_MSG_ERROR([libIDL >= 0.8.0 is needed when using GTK2 to build mozilla.])
-         fi 
-      else
-         PKG_CHECK_MODULES(MOZLIBREQ, gtk+ >= 1.2.3, MOZGTK="TRUE", MOZGTK="")
-         if test -z "$MOZGTK"; then
-            AC_MSG_ERROR([gtk 1.2 is needed when not using GTK2 to build mozilla.])
-         fi
-         PKG_CHECK_MODULES(MOZLIBREQ, libidl >= 0.6.3 libidl <= 0.6.8, MOZIDL="TRUE", MOZIDL="")
-         if test -z "$MOZIDL"; then
-            AC_MSG_ERROR([libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla.])
-         fi
-      fi
-   fi
-fi
-
-AC_SUBST(BUILD_MOZAB)
-
-fi
 AC_SUBST(ENABLE_NSS_MODULE)
 AC_SUBST(MOZILLABUILD)
-AC_SUBST(SYSTEM_MOZILLA)
-AC_SUBST(MOZ_FLAVOUR)
 AC_SUBST(MOZ_INC)
-AC_SUBST(MOZ_LIB)
-AC_SUBST(MOZ_LIB_XPCOM)
-AC_SUBST(MOZ_NSPR_CFLAGS)
-AC_SUBST(MOZ_NSS_CFLAGS)
-AC_SUBST(MOZ_LDAP_CFLAGS)
 
 dnl ===================================================================
 dnl Check for system sane

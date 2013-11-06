@@ -32,18 +32,18 @@
 #include <osl/conditn.hxx>
 
 #include "pre_include_mozilla.h"
-#include <nsIProxyObjectManager.h>
+//#include <nsIProxyObjectManager.h>
 // More Mozilla includes for LDAP Connection Test
-#include "prprf.h"
-#include "nsILDAPURL.h"
-#include "nsILDAPMessage.h"
-#include "nsILDAPMessageListener.h"
-#include "nsILDAPErrors.h"
-#include "nsILDAPConnection.h"
-#include "nsILDAPOperation.h"
+//#include "prprf.h"
+//#include "nsILDAPURL.h"
+//#include "nsILDAPMessage.h"
+//#include "nsILDAPMessageListener.h"
+//#include "nsILDAPErrors.h"
+//#include "nsILDAPConnection.h"
+//#include "nsILDAPOperation.h"
 #include "post_include_mozilla.h"
-#include "MQuery.hxx"
-#include <MQueryHelper.hxx>
+//#include "MQuery.hxx"
+//#include <MQueryHelper.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <unotools/processfactory.hxx>
 #include "com/sun/star/mozilla/XProxyRunner.hpp"
@@ -60,16 +60,18 @@ using namespace connectivity::mozab;
 /* Implementation file */
 
 static ::osl::Mutex m_aThreadMutex;
-extern nsresult NewAddressBook(const ::rtl::OUString * aName);
+//extern nsresult NewAddressBook(const ::rtl::OUString * aName);
 
 
 MNSMozabProxy::MNSMozabProxy()
 {
+/*
   m_Args = NULL;
 #if OSL_DEBUG_LEVEL > 0
   m_oThreadID = osl_getThreadIdentifier(NULL);
 #endif
   acquire();
+*/
 }
 
 MNSMozabProxy::~MNSMozabProxy()
@@ -78,6 +80,7 @@ MNSMozabProxy::~MNSMozabProxy()
 
 sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::MozillaProductType aProduct,const ::rtl::OUString &aProfile)
 {
+/*
     OSL_TRACE( "IN : MNSMozabProxy::StartProxy() \n" );
     ::osl::MutexGuard aGuard(m_aThreadMutex);
     m_Product = aProduct;
@@ -93,30 +96,34 @@ sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::Mo
     }
     const ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XCodeProxy > aCode(this);
     return xRunner->Run(aCode);
+*/
+    return -1;
 }
 
-extern nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryType,MNameMapper *nmap,
-                        ::std::vector< ::rtl::OUString >*   _rStrings,
-                        ::std::vector< ::rtl::OUString >*   _rTypes,
-                        sal_Int32* pErrorId );
+//extern nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryType,MNameMapper *nmap,
+//                      ::std::vector< ::rtl::OUString >*   _rStrings,
+//                        ::std::vector< ::rtl::OUString >*   _rTypes,
+//                        sal_Int32* pErrorId );
 
 ::com::sun::star::mozilla::MozillaProductType SAL_CALL MNSMozabProxy::getProductType(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return m_Product;
+    return ::com::sun::star::mozilla::MozillaProductType_Default;
 }
 ::rtl::OUString SAL_CALL MNSMozabProxy::getProfileName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return m_Profile;
+    return rtl::OUString();
 }
 
 sal_Int32 SAL_CALL MNSMozabProxy::run(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+    return (sal_Int32)0x80070057L;//NS_ERROR_INVALID_ARG;
+/*
 #if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "IN : MNSMozabProxy::Run() Caller thread :%4d \n" , m_oThreadID );
 #else
     OSL_TRACE( "IN : MNSMozabProxy::Run() \n" );
 #endif
-    nsresult rv = NS_ERROR_INVALID_ARG;
+    //nsresult rv = NS_ERROR_INVALID_ARG;
     if (m_Args == NULL)
         return NS_ERROR_INVALID_ARG;
     switch(m_Args->funcIndex)
@@ -159,8 +166,9 @@ sal_Int32 SAL_CALL MNSMozabProxy::run(  ) throw (::com::sun::star::uno::RuntimeE
            return NS_ERROR_INVALID_ARG;
     }
     return rv;
+*/
 }
-
+/*
 nsresult MNSMozabProxy::QueryHelperStub()
 {
     nsresult rv = NS_ERROR_INVALID_ARG;
@@ -197,6 +205,7 @@ nsresult MNSMozabProxy::QueryHelperStub()
     }
     return rv;
 }
+
 //-------------------------------------------------------------------
 
 #define NS_LDAPCONNECTION_CONTRACTID     "@mozilla.org/network/ldap-connection;1"
@@ -258,11 +267,6 @@ void MLDAPMessageListener::setConnectionStatus( sal_Bool _good )
     m_aCondition.set();
 }
 
-NS_IMETHODIMP MLDAPMessageListener::OnLDAPInit(nsILDAPConnection* /*aConn*/, nsresult aStatus )
-{
-    setConnectionStatus( NS_SUCCEEDED( aStatus ) ? sal_True : sal_False );
-    return aStatus;
-}
 
 NS_IMETHODIMP MLDAPMessageListener::OnLDAPMessage( nsILDAPMessage* aMessage )
 {
@@ -398,3 +402,4 @@ MNSMozabProxy::InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* pPass
         m_Args->arg5 = messageListener;
     return rv;
 }
+*/

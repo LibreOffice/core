@@ -25,7 +25,7 @@
 #if defined __GNUC__
     #pragma GCC system_header
 #endif
-
+/*
 #include "nsIDirectoryService.h"
 #include "nsILocalFile.h"
 #include "nsString.h"
@@ -33,5 +33,5 @@
 #pragma disable_warn
     // somewhere in the files included directly or indirectly in nsString.h, warnings are enabled, again
 #endif
-
+*/
 #include "post_include_mozilla.h"

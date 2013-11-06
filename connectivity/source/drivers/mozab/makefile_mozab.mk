@@ -32,26 +32,26 @@ CDEFS += -DMOZILLA_INTERNAL_API
 
 MOZINC = . \
         -I.. \
-        -I$(MOZ_INC) \
-        -I$(MOZ_INC)$/nspr \
-        -I$(MOZ_INC)$/xpcom \
-        -I$(MOZ_INC)$/string \
-        -I$(MOZ_INC)$/rdf \
-        -I$(MOZ_INC)$/msgbase \
-        -I$(MOZ_INC)$/addrbook \
-        -I$(MOZ_INC)$/mork \
-        -I$(MOZ_INC)$/locale \
-        -I$(MOZ_INC)$/pref \
-        -I$(MOZ_INC)$/mime \
-        -I$(MOZ_INC)$/chrome \
-        -I$(MOZ_INC)$/necko \
-        -I$(MOZ_INC)$/intl \
-        -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base \
-        -I$(MOZ_INC)$/mozldap \
-        -I$(MOZ_INC)$/uconv \
-        -I$(MOZ_INC)$/xpcom_obsolete \
-        -I$(MOZ_INC)$/content
+        -I$(MOZ_INC)
+#       -I$(MOZ_INC)$/nspr \
+#        -I$(MOZ_INC)$/xpcom \
+#	    -I$(MOZ_INC)$/string \
+#	    -I$(MOZ_INC)$/rdf \
+#	    -I$(MOZ_INC)$/msgbase \
+#	    -I$(MOZ_INC)$/addrbook \
+#	    -I$(MOZ_INC)$/mork \
+#	    -I$(MOZ_INC)$/locale \
+#	    -I$(MOZ_INC)$/pref \
+#	    -I$(MOZ_INC)$/mime \
+#	    -I$(MOZ_INC)$/chrome \
+#	    -I$(MOZ_INC)$/necko \
+#	    -I$(MOZ_INC)$/intl \
+#	    -I$(MOZ_INC)$/profile \
+#	    -I$(MOZ_INC)$/embed_base \
+#	    -I$(MOZ_INC)$/mozldap \
+#	    -I$(MOZ_INC)$/uconv \
+#	    -I$(MOZ_INC)$/xpcom_obsolete \
+#	    -I$(MOZ_INC)$/content
         
 .IF "$(GUI)" == "WNT"
   CDEFS +=    \

@@ -47,8 +47,8 @@ namespace connectivity
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access
             virtual ~MozillaBootstrap();
         protected:
-            ProfileAccess * m_ProfileAccess;
-            ProfileManager  * m_ProfileManager;
+            //ProfileAccess * m_ProfileAccess;
+            //ProfileManager    * m_ProfileManager;
         public:
 
             void Init();

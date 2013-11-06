@@ -359,11 +359,11 @@ MY_FILES_main += $(MY_MOD)/DataAccess/kab.xcu
 .END
 .IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO" && \
         "$(OS)" != "MACOSX"
-.IF "$(OS)" == "WNT"
-MY_FILES_main += $(MY_MOD)/DataAccess/mozab.xcu
-.ELSE
-MY_FILES_main += $(MY_MOD)/DataAccess/mozab2.xcu
-.END
+#.IF "$(OS)" == "WNT"
+#MY_FILES_main += $(MY_MOD)/DataAccess/mozab.xcu
+#.ELSE
+#MY_FILES_main += $(MY_MOD)/DataAccess/mozab2.xcu
+#.END
 .END
 .IF "$(SYSTEM_LIBTEXTCAT_DATA)" != ""
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-externallibtextcatdata.xcu

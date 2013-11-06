@@ -96,18 +96,18 @@ namespace connectivity
         public:
             sal_Int32 StartProxy(RunArgs * args,::com::sun::star::mozilla::MozillaProductType aProduct,const ::rtl::OUString &aProfile); //Call this to start proxy
 
-        protected:
-            nsresult testLDAPConnection();
-            nsresult InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* sPasswd,sal_Bool * nUseSSL);
-            nsresult QueryHelperStub();
+        //protected:
+            //nsresult testLDAPConnection();
+            //nsresult InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* sPasswd,sal_Bool * nUseSSL);
+            //nsresult QueryHelperStub();
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XProxyRunner > xRunner;
+            //::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XProxyRunner > xRunner;
 
-            RunArgs * m_Args;
-            ::com::sun::star::mozilla::MozillaProductType m_Product;
-            ::rtl::OUString m_Profile;
+            //RunArgs * m_Args;
+            //::com::sun::star::mozilla::MozillaProductType m_Product;
+            //::rtl::OUString m_Profile;
 #if OSL_DEBUG_LEVEL > 0
-            oslThreadIdentifier m_oThreadID;
+            //oslThreadIdentifier m_oThreadID;
 #endif
         };
     }

@@ -55,15 +55,15 @@ INCPRE += -I../bootstrap
 
 # --- Files -------------------------------------
 
-SLOFILES = \
-    $(SLO)$/MQueryHelper.obj			    \
-    $(SLO)$/MDatabaseMetaDataHelper.obj		\
-    $(SLO)$/MQuery.obj			            \
-    $(SLO)$/MTypeConverter.obj              \
-    $(SLO)$/MNameMapper.obj					\
-    $(SLO)$/MNSMozabProxy.obj	            \
-    $(SLO)$/MNSTerminateListener.obj        \
-    $(SLO)$/MLdapAttributeMap.obj           \
+SLOFILES = $(SLO)$/MNSMozabProxy.obj
+#	$(SLO)$/MQueryHelper.obj			    \
+#	$(SLO)$/MDatabaseMetaDataHelper.obj		\
+#	$(SLO)$/MQuery.obj			            \
+#	$(SLO)$/MTypeConverter.obj              \
+#	$(SLO)$/MNameMapper.obj					\
+#	$(SLO)$/MNSMozabProxy.obj	            
+#	$(SLO)$/MNSTerminateListener.obj        \
+#	$(SLO)$/MLdapAttributeMap.obj           \
 
 .ENDIF
 

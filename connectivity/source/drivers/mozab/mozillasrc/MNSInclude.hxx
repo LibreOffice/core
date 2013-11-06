@@ -34,7 +34,7 @@
 #if defined __GNUC__
     #pragma GCC system_header
 #endif
-
+/*
 #include <nsDebug.h>
 
 #include <nsCOMPtr.h>
@@ -71,7 +71,7 @@
 #include <nsILDAPMessage.h>
 
 #include <prerr.h>
-
+*/
 #include "post_include_mozilla.h"
 
 #endif // _CONNECTIVITY_MAB_NS_INCLUDE_HXX_

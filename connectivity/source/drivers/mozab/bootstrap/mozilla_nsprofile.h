@@ -81,5 +81,5 @@
 #include "nsHashtable.h"
 #include "nsIAtom.h"
 #include "nsCRT.h"
-
+*/
 #include "post_include_mozilla.h"

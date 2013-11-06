@@ -25,7 +25,7 @@
 #if defined __GNUC__
     #pragma GCC system_header
 #endif
-
+/*
 #include "nsCOMPtr.h"
 #include "nsISupports.h"
 #include "nsString.h"
@@ -76,5 +76,5 @@
 
 #include "nsIPlatformCharset.h"
 #include <MNSInit.hxx>
-
+*/
 #include "post_include_mozilla.h"
