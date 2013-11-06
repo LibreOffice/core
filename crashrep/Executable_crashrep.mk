@@ -10,7 +10,7 @@
 $(eval $(call gb_Executable_Executable,crashrep))
 
 $(eval $(call gb_Executable_add_defs,crashrep,\
-	-D_INPATH=\"$(INPATH)\" \
+	-D_INPATH=\"$(OS)_$(CPUNAME)\" \
 ))
 
 $(eval $(call gb_Executable_use_external,crashrep,boost_headers))

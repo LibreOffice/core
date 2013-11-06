@@ -117,7 +117,7 @@ sub parse_options
         exit(1);
     }
     #define intermediate output file
-    $tmp_out_file="$out_file"."$$".$ENV{INPATH};
+    $tmp_out_file="$out_file"."$$".".tmp";
     # Sanity checks.
 
     # Check if out_file can be written.

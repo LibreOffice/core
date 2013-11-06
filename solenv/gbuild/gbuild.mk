@@ -22,7 +22,6 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 # vars needed from the env/calling makefile
 
 # DEBUG
-# INPATH
 # JAVA_HOME
 # LIBXML_CFLAGS
 # OS
