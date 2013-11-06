@@ -214,7 +214,7 @@ sub main()
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
-            "$SRC_ROOT", "i18nlangtag", "lang.h", ());
+            "$SRC_ROOT", "include", "i18nlangtag/lang.h", ());
     }
     else
     {
@@ -223,7 +223,7 @@ sub main()
         my $buf = sprintf( "0x%04X", $lcid);
         @resultlist = grepFile(
             '^\s*#\s*define\s+\w+\s+' . $buf,
-            "$SRC_ROOT", "i18nlangtag", "lang.h", ());
+            "$SRC_ROOT", "include", "i18nlangtag/lang.h", ());
     }
     for $result (@resultlist)
     {
@@ -276,7 +276,7 @@ sub main()
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
-            "$SRC_ROOT", "i18nlangtag", "lang.h", ());
+            "$SRC_ROOT", "include", "i18nlangtag/lang.h", ());
         my @lcidlist;
         for $result (@resultlist)
         {
