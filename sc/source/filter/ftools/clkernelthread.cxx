@@ -8,7 +8,6 @@
  */
 
 #include "clkernelthread.hxx"
-#include "formulagroup.hxx"
 
 using namespace std;
 
@@ -20,7 +19,6 @@ CLBuildKernelThread::~CLBuildKernelThread() {}
 
 void CLBuildKernelThread::execute()
 {
-    sc::FormulaGroupInterpreter::compileOpenCLKernels();
 }
 
 }

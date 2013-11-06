@@ -111,14 +111,6 @@ struct OpenCLEnv
     cl_command_queue mpOclCmdQueue;
 };
 
-struct Kernel
-{
-    const char* mpName;
-    cl_kernel mpKernel;
-
-    Kernel( const char* pName );
-};
-
 struct GPUEnv
 {
     //share vb in all modules in hb library
@@ -128,11 +120,7 @@ struct GPUEnv
     cl_device_id *mpArryDevsID;
     cl_device_id mpDevID;
     cl_command_queue mpCmdQueue;
-    cl_kernel mpArryKernels[MAX_CLFILE_NUM];
     cl_program mpArryPrograms[MAX_CLFILE_NUM]; //one program object maps one kernel source file
-    char mArryKnelSrcFile[MAX_CLFILE_NUM][256]; //the max len of kernel file name is 256
-    std::vector<Kernel> maKernels;
-    int mnFileCount; // only one kernel file
     int mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
     int mnKhrFp64Flag;
     int mnAmdFp64Flag;
@@ -165,7 +153,6 @@ class OpenclDevice
 public:
     static GPUEnv gpuEnv;
     static int isInited;
-    static OString maSourceHash;
     static OString maCacheFolder;
 
     static int registOpenclKernel();
@@ -173,89 +160,16 @@ public:
     static int initOpenclRunEnv( GPUEnv *gpu );
     static int releaseOpenclEnv( GPUEnv *gpuInfo );
     static int initOpenclRunEnv( int argc );
-    static int cachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * clFileName );
     static int generatBinFromKernelSource( cl_program program, const char * clFileName );
     static int writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
     static std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context);
-    static bool buildProgramFromSource(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
     static bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
 
     static int initOpenclAttr( OpenCLEnv * env );
     static int setKernelEnv( KernelEnv *envInfo );
-    static Kernel* fetchKernel( const char *kernelName );
 
     static int getOpenclState();
     static void setOpenclState( int state );
-};
-
-class OclCalc: public OpenclDevice
-{
-
-public:
-    KernelEnv kEnv;
-    cl_mem mpClmemSrcData;
-    cl_mem mpClmemStartPos;
-    cl_mem mpClmemEndPos;
-    cl_mem mpClmemLeftData;
-    cl_mem mpClmemRightData;
-    cl_mem mpClmemMergeLfData;
-    cl_mem mpClmemMergeRtData;
-    cl_mem mpClmemMatixSumSize;
-    cl_mem mpClmemeOp;
-    unsigned int nArithmeticLen;
-    unsigned int nFormulaLen;
-    unsigned int nClmemLen;
-    unsigned int nFormulaColSize;
-    unsigned int nFormulaRowSize;
-
-    OclCalc();
-    ~OclCalc();
-
-// for 64bits double
-    bool oclHostArithmeticOperator64Bits( const char* aKernelName,  double *&rResult, int nRowSize );
-    bool oclMoreColHostArithmeticOperator64Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize );
-    bool oclHostFormulaStatistics64Bits( const char* aKernelName, double *&output, int outputSize);
-    bool oclHostFormulaStash64Bits( const char* aKernelName, const double* dpSrcData, uint *nStartPos, uint *nEndPos, double *output, int nBufferSize, int size);
-    bool oclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize );
-    bool oclHostFormulaSumProduct64Bits( double *fpSumProMergeLfData, double *fpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize);
-    bool oclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclMatrixSrc, double *dpOclMatrixDst, std::vector<double>&dpResult, uint nDim );
-// for 32bits float
-    bool oclHostArithmeticOperator32Bits( const char* aKernelName, double *rResult, int nRowSize );
-    bool oclMoreColHostArithmeticOperator32Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize );
-    bool oclHostFormulaStatistics32Bits( const char* aKernelName, double *output, int outputSize);
-    bool oclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize );
-    bool oclHostArithmeticStash64Bits( const char* aKernelName, const double *dpLeftData, const double *dpRightData, double *rResult,int nRowSize );
-    bool oclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize );
-    bool oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMatrixSrc, float *fpOclMatrixDst, std::vector<double>& dpResult, uint nDim );
-// for groundwater
-    bool oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArray, const double *pSubtractSingle,size_t nSrcDataSize, size_t nElements, double delta ,uint *nStartPos,uint *nEndPos,double *deResult);
-    double *oclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements, double delta );
-
-    ///////////////////////////////////////////////////////////////
-    bool createBuffer64Bits( double *&dpLeftData, double *&dpRightData, int nBufferSize );
-    bool mapAndCopy64Bits(const double *dpTempLeftData,const double *dpTempRightData,int nBufferSize );
-    bool mapAndCopy64Bits(const double *dpTempSrcData,unsigned int *unStartPos,unsigned int *unEndPos,int nBufferSize ,int nRowsize);
-    bool mapAndCopyArithmetic64Bits( const double *dpMoreArithmetic,int nBufferSize );
-    bool mapAndCopyMoreColArithmetic64Bits( const double *dpMoreColArithmetic,int nBufferSize ,uint *npeOp,uint neOpSize );
-    bool createMoreColArithmeticBuf64Bits( int nBufferSize, int neOpSize );
-
-    bool createFormulaBuf64Bits( int nBufferSize, int rowSize );
-    bool createArithmeticOptBuf64Bits( int nBufferSize );
-
-    bool createBuffer32Bits( float *&fpLeftData, float *&fpRightData, int nBufferSize );
-    bool mapAndCopy32Bits(const double *dpTempLeftData,const double *dpTempRightData,int nBufferSize );
-    bool mapAndCopy32Bits(const double *dpTempSrcData,unsigned int *unStartPos,unsigned int *unEndPos,int nBufferSize ,int nRowsize);
-    bool mapAndCopyArithmetic32Bits( const double *dpMoreColArithmetic, int nBufferSize );
-    bool mapAndCopyMoreColArithmetic32Bits( const double *dpMoreColArithmetic,int nBufferSize ,uint *npeOp,uint neOpSize );
-    bool createMoreColArithmeticBuf32Bits( int nBufferSize, int neOpSize );
-    bool createFormulaBuf32Bits( int nBufferSize, int rowSize );
-    bool createArithmeticOptBuf32Bits( int nBufferSize );
-    bool oclHostFormulaStash32Bits( const char* aKernelName, const double* dpSrcData, uint *nStartPos, uint *nEndPos, double *output, int nBufferSize, int size );
-    bool oclHostArithmeticStash32Bits( const char* aKernelName, const double *dpLeftData, const double *dpRightData, double *rResult,int nRowSize );
-
-    void releaseOclBuffer();
-
-    friend class agency;
 };
 
 size_t getOpenCLPlatformCount();
@@ -270,8 +184,6 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo();
  * @return returns true if there is a valid opencl device that has been set up
  */
 bool switchOpenclDevice(const OUString* pDeviceId, bool bAutoSelect);
-
-void compileOpenCLKernels(const OUString* pDeviceId);
 
 }}
 

@@ -72,7 +72,7 @@ size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
     }
     // Obtain cl context
     KernelEnv kEnv;
-    OclCalc::setKernelEnv(&kEnv);
+    OpenclDevice::setKernelEnv(&kEnv);
     cl_int err;
     mpClmem = clCreateBuffer(kEnv.mpkContext,
         (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
@@ -139,7 +139,7 @@ public:
         // marshaling
         // Obtain cl context
         KernelEnv kEnv;
-        OclCalc::setKernelEnv(&kEnv);
+        OpenclDevice::setKernelEnv(&kEnv);
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
         if (CL_SUCCESS != err)
@@ -220,7 +220,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
     assert(mpClmem == NULL);
     // Obtain cl context
     KernelEnv kEnv;
-    OclCalc::setKernelEnv(&kEnv);
+    OpenclDevice::setKernelEnv(&kEnv);
     cl_int err;
     formula::VectorRefArray vRef;
     size_t nStrings = 0;
@@ -1367,7 +1367,7 @@ public:
     {
         // Obtain cl context
         KernelEnv kEnv;
-        OclCalc::setKernelEnv(&kEnv);
+        OpenclDevice::setKernelEnv(&kEnv);
         cl_int err;
         // The results
         mpResClmem = clCreateBuffer(kEnv.mpkContext,
@@ -1424,7 +1424,7 @@ void DynamicKernel::CreateKernel(void)
     // Compile kernel here!!!
     // Obtain cl context
     KernelEnv kEnv;
-    OclCalc::setKernelEnv(&kEnv);
+    OpenclDevice::setKernelEnv(&kEnv);
     const char *src = mFullProgramSrc.c_str();
     if (OpenclDevice::buildProgramFromBinary("",
         &OpenclDevice::gpuEnv,
@@ -1546,7 +1546,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         mpKernel->CodeGen();
         // Obtain cl context
         KernelEnv kEnv;
-        OclCalc::setKernelEnv(&kEnv);
+        OpenclDevice::setKernelEnv(&kEnv);
         // Compile kernel here!!!
         mpKernel->CreateKernel();
         // Run the kernel.
@@ -1634,11 +1634,6 @@ SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(
                        const OUString* pDeviceId, bool bAutoSelect)
 {
     return sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect);
-}
-
-SAL_DLLPUBLIC_EXPORT void compileOpenCLKernels(const OUString* pDeviceId)
-{
-    sc::opencl::compileOpenCLKernels(pDeviceId);
 }
 
 }
