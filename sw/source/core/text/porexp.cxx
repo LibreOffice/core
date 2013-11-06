@@ -150,7 +150,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
         return 0; // Nur noch BlankPortions unterwegs
     // Wenn vor uns ein Blank ist, brauchen wir kein Underflow ausloesen,
     // wenn hinter uns ein Blank ist, brauchen wir kein Underflow weiterreichen
-    if( bUnderFlow && CH_BLANK == rInf.GetTxt()[ nIdx + 1] )
+    if (bUnderFlow && nIdx + 1 < rInf.GetTxt().getLength() && CH_BLANK == rInf.GetTxt()[nIdx + 1])
         return 0;
     if( nIdx && !((SwTxtFormatInfo&)rInf).GetFly() )
     {
