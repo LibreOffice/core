@@ -233,6 +233,7 @@ public:
 
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const OUString& rName);
     void setRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, TokenArrayRef pArray);
+    bool isValidRangeName(sal_uInt16 nFileId, const OUString& rName) const;
 
     void setCellData(sal_uInt16 nFileId, const OUString& rTabName,
                      SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex);
@@ -557,6 +558,8 @@ public:
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(
         sal_uInt16 nFileId, const OUString& rName, const ScAddress* pCurPos = NULL);
 
+    bool isValidRangeName(sal_uInt16 nFileId, const OUString& rName);
+
     OUString getOwnDocumentName() const;
     bool isOwnDocument(const OUString& rFile) const;
 
@@ -765,6 +768,12 @@ private:
 private:
     ScDocument* mpDoc;
 
+    /** Mutex for accessing cached data and/or source document shells. */
+    mutable osl::Mutex maMtxCacheAccess;
+
+    /** Mutex for source document meta-data access. */
+    mutable osl::Mutex maMtxSrcFiles;
+
     /** cache of referenced ranges and names from source documents. */
     ScExternalRefCache maRefCache;
 
@@ -798,7 +807,6 @@ private:
      * external document identifiers.
      */
     std::vector<SrcFileData> maSrcFiles;
-    mutable osl::Mutex maMtxSrcFiles;
 
     /** Status whether in reference marking state. See isInReferenceMarking(). */
     bool mbInReferenceMarking:1;

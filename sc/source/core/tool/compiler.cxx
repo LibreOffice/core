@@ -2914,7 +2914,7 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol )
     pRefMgr->convertToAbsName(aTmp);
     aFile = aTmp;
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aFile);
-    if (!pRefMgr->getRangeNameTokens(nFileId, aName).get())
+    if (!pRefMgr->isValidRangeName(nFileId, aName))
         // range name doesn't exist in the source document.
         return false;
 

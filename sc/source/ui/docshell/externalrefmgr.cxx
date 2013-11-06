@@ -710,6 +710,18 @@ void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& 
     pDoc->maRealRangeNameMap.insert(NamePairMap::value_type(aUpperName, rName));
 }
 
+bool ScExternalRefCache::isValidRangeName(sal_uInt16 nFileId, const OUString& rName) const
+{
+    osl::MutexGuard aGuard(&maMtxDocs);
+
+    DocItem* pDoc = getDocItem(nFileId);
+    if (!pDoc)
+        return false;
+
+    const RangeNameMap& rMap = pDoc->maRangeNames;
+    return rMap.count(rName) > 0;
+}
+
 void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow,
                                      TokenRef pToken, sal_uLong nFmtIndex)
 {
@@ -1747,6 +1759,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rCell,
     const ScAddress* pCurPos, SCTAB* pTab, ScExternalRefCache::CellFormat* pFmt)
 {
+    osl::MutexGuard aGuard(&maMtxCacheAccess);
+
     if (pCurPos)
         insertRefCell(nFileId, *pCurPos);
 
@@ -1839,6 +1853,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange, const ScAddress* pCurPos)
 {
+    osl::MutexGuard aGuard(&maMtxCacheAccess);
+
     if (pCurPos)
         insertRefCell(nFileId, *pCurPos);
 
@@ -1885,6 +1901,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(
     sal_uInt16 nFileId, const OUString& rName, const ScAddress* pCurPos)
 {
+    osl::MutexGuard aGuard(&maMtxCacheAccess);
+
     if (pCurPos)
         insertRefCell(nFileId, *pCurPos);
 
@@ -1922,6 +1940,42 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(
         maRefCache.setRangeNameTokens(nFileId, aName, pArray);
 
     return pArray;
+}
+
+namespace {
+
+bool hasRangeName(ScDocument& rDoc, const OUString& rName)
+{
+    ScRangeName* pExtNames = rDoc.GetRangeName();
+    OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
+    const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
+    return pRangeData != NULL;
+}
+
+}
+
+bool ScExternalRefManager::isValidRangeName(sal_uInt16 nFileId, const OUString& rName)
+{
+    osl::MutexGuard aGuard(&maMtxCacheAccess);
+
+    maybeLinkExternalFile(nFileId);
+    ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
+    if (pSrcDoc)
+    {
+        // Only check the presence of the name.
+        return hasRangeName(*pSrcDoc, rName);
+    }
+
+    if (maRefCache.isValidRangeName(nFileId, rName))
+        // Range name is cached.
+        return true;
+
+    pSrcDoc = getSrcDocument(nFileId);
+    if (!pSrcDoc)
+        // failed to load document from disk.
+        return false;
+
+    return hasRangeName(*pSrcDoc, rName);
 }
 
 void ScExternalRefManager::refreshAllRefCells(sal_uInt16 nFileId)
