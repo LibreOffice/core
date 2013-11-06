@@ -362,9 +362,6 @@ private:
 
     static inline bool MyIsdigit( sal_Unicode c );
 
-    // native number transliteration if necessary
-    void TransformInput( OUString& rString );
-
     /** Whether input matches locale dependent date acceptance pattern.
 
         @param nStartPatternAt

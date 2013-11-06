@@ -147,8 +147,8 @@ inline bool ImpSvNumberInputScan::MyIsdigit( sal_Unicode c )
     return c < 128 && isdigit( (unsigned char) c );
 }
 
-
-void ImpSvNumberInputScan::TransformInput( OUString& rStr )
+// native number transliteration if necessary
+void TransformInput( SvNumberFormatter* pFormatter, OUString& rStr )
 {
     sal_Int32 nPos, nLen;
     for ( nPos = 0, nLen = rStr.getLength(); nPos < nLen; ++nPos )
@@ -3271,7 +3271,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
         // NoMoreUpperNeeded, all comparisons on UpperCase
         aString = pFormatter->GetCharClass()->uppercase( rString );
         // convert native number to ASCII if necessary
-        TransformInput( aString );
+        TransformInput(pFormatter, aString);
         res = IsNumberFormatMain( aString, pFormat );
     }
 
