@@ -76,7 +76,7 @@ if (SOLAR_JAVA==TRUE && SYSTEM_LUCENE!=YES)
     URL1 = http://archive.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if (ENABLE_NSS_MODULE != NO)
+if (ENABLE_NSS_MODULE!=NO && SYSTEM_NSS!=YES)
     MD5 = 1f24ab1d39f4a51faf22244c94a6203f
     name = xmlsec1-1.2.14.tar.gz
     URL1 = ftp://ftp.aleksey.com/pub/xmlsec/releases/xmlsec1-1.2.14.tar.gz
