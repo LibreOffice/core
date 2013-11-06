@@ -26,10 +26,8 @@ $(eval $(call gb_Library_add_defs,shlxthdl_x64,\
 	-DWIN32_LEAN_AND_MEAN \
 	-D_UNICODE \
 	-UNOMINMAX \
-))
-$(eval $(call gb_Library_add_defs,shlxthdl_x64,\
-	-D_WIN32_IE=0x501 \
-	-D_WIN32_WINNT=0x0501 \
+	-D_WIN32_IE=0x700 \
+	-D_WIN32_WINNT=0x0502 \
 ))
 
 $(eval $(call gb_Library_use_externals,shlxthdl_x64,\

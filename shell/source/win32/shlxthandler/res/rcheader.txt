@@ -1,4 +1,3 @@
-#define WINVER 0x0500
 #include <winresrc.h>
 #define LB_ADDSTRING	(WM_USER+1)
 #define CB_ADDSTRING	(WM_USER+3)

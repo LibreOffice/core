@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// http://stackoverflow.com/questions/5839292/error-c1189-after-installing-visual-studio-2010
-#define _WIN32_WINNT 0x0403
-
 #include "ole2uno.hxx"
 #include "rtl/ustrbuf.hxx"
 

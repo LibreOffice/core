@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,emser,\
 
 $(eval $(call gb_Library_add_defs,emser,\
 	-UNOMINMAX \
+	-D_WIN32_WINNT=0x0502 \
 ))
 
 $(eval $(call gb_Library_use_external,emser,boost_headers))
