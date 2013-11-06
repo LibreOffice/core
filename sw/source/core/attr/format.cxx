@@ -25,6 +25,10 @@
 #include <hints.hxx>
 #include <paratr.hxx>
 #include <swcache.hxx>
+#include <svl/grabbagitem.hxx>
+#include <com/sun/star/beans/PropertyValues.hpp>
+
+using namespace com::sun::star;
 
 TYPEINIT1( SwFmt, SwClient );
 
@@ -602,5 +606,24 @@ IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return GetDoc(); }
 IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return GetDoc(); }
 IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return GetDoc(); }
+
+void SwFmt::GetGrabBagItem(uno::Any& rVal) const
+{
+    if (m_pGrabBagItem.get())
+        m_pGrabBagItem->QueryValue(rVal);
+    else
+    {
+        uno::Sequence<beans::PropertyValue> aValue(0);
+        rVal = uno::makeAny(aValue);
+    }
+}
+
+void SwFmt::SetGrabBagItem(const uno::Any& rVal)
+{
+    if (!m_pGrabBagItem.get())
+        m_pGrabBagItem.reset(new SfxGrabBagItem);
+
+    m_pGrabBagItem->PutValue(rVal);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

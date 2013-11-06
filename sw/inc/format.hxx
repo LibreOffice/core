@@ -24,6 +24,7 @@
 #include <swatrset.hxx>
 #include <calbck.hxx>
 #include <hintids.hxx>
+#include <boost/shared_ptr.hpp>
 
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
@@ -32,6 +33,7 @@ class IDocumentTimerAccess;
 class IDocumentFieldsAccess;
 class IDocumentChartDataProviderAccess;
 class SwDoc;
+class SfxGrabBagItem;
 
 /// Base class for various Writer styles.
 class SW_DLLPUBLIC SwFmt : public SwModify
@@ -52,6 +54,7 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     sal_Bool   bAutoUpdateFmt : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
     bool bHidden : 1;
+    boost::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
 
 protected:
     SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
@@ -157,6 +160,9 @@ public:
 
     bool IsHidden() const                 { return bHidden; }
     void SetHidden( bool bValue = false ) { bHidden = bValue; }
+
+    void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
+    void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
 
     /// Query / set bAutoUpdateFmt-flag.
     sal_Bool IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }
