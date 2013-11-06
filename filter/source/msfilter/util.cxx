@@ -490,7 +490,7 @@ OUString WW8ReadFieldParams::GetResult() const
         return OUString();
     else
     {
-        return nSavPtr == -1 ? aData.copy(nFnd) : aData.copy(nFnd, nSavPtr-nFnd);
+        return nSavPtr < nFnd ? aData.copy(nFnd) : aData.copy(nFnd, nSavPtr-nFnd);
     }
 }
 
