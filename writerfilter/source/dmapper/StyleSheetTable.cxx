@@ -173,16 +173,22 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
     return pProps;
 }
 
-beans::PropertyValue StyleSheetEntry::GetInteropGrabBag()
+beans::PropertyValues StyleSheetEntry::GetInteropGrabBagSeq()
 {
-    beans::PropertyValue aRet;
-    aRet.Name = sStyleIdentifierI;
-
     uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
     beans::PropertyValue* pSeq = aSeq.getArray();
     for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
         *pSeq++ = *i;
 
+    return aSeq;
+}
+
+beans::PropertyValue StyleSheetEntry::GetInteropGrabBag()
+{
+    beans::PropertyValue aRet;
+    aRet.Name = sStyleIdentifierI;
+
+    beans::PropertyValues aSeq = GetInteropGrabBagSeq();;
     aRet.Value = uno::makeAny(aSeq);
     return aRet;
 }
@@ -609,9 +615,9 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_semiHidden:
         case NS_ooxml::LN_CT_Style_unhideWhenUsed:
         case NS_ooxml::LN_CT_Style_uiPriority:
-            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE || m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
             {
-                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
+                StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
                 beans::PropertyValue aValue;
                 if (nSprmId == NS_ooxml::LN_CT_Style_rsid)
                 {
@@ -629,7 +635,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     aValue.Name = "uiPriority";
                     aValue.Value = uno::makeAny(nIntValue);
                 }
-                pTableEntry->AppendInteropGrabBag(aValue);
+                pEntry->AppendInteropGrabBag(aValue);
             }
         break;
         case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
@@ -1165,6 +1171,13 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     if(bInsert && !bListStyle)
                     {
                         xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
+                    }
+
+                    beans::PropertyValues aGrabBag = pEntry->GetInteropGrabBagSeq();
+                    if (aGrabBag.hasElements())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("StyleInteropGrabBag", uno::makeAny(aGrabBag));
                     }
                 }
                 else if(pEntry->nStyleTypeCode == STYLE_TYPE_TABLE)

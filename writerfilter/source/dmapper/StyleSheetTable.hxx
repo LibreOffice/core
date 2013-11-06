@@ -24,6 +24,7 @@
 #include <WriterFilterDllApi.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <PropertyMap.hxx>
 #include <FontTable.hxx>
 #include <resourcemodel/LoggedResources.hxx>
@@ -68,7 +69,8 @@ public:
     std::vector<beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
 
     void AppendInteropGrabBag(beans::PropertyValue aValue);
-    beans::PropertyValue GetInteropGrabBag();
+    beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.
+    beans::PropertyValues GetInteropGrabBagSeq(); ///< Used for existing styles, just a list of properties.
 
     StyleSheetEntry();
     virtual ~StyleSheetEntry();
