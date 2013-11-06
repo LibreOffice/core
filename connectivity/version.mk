@@ -81,11 +81,6 @@ MOZAB_MICRO=0
 # target
 MYSQL_TARGET=mysql
 
-
-# ----------------------------Evoab settings-----------------------------------#
-# target
-EVOAB_TARGET=evoab
-
 # ----------------------------Kab settings-------------------------------------#
 # target
 KAB_TARGET=kab
