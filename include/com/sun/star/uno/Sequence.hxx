@@ -153,6 +153,16 @@ inline E * Sequence< E >::getArray()
     return reinterpret_cast< E * >( _pSequence->elements );
 }
 
+template<class E> typename Sequence<E>::iterator Sequence<E>::begin() { return getArray(); }
+
+template<class E> typename Sequence<E>::const_iterator Sequence<E>::begin() const
+{ return reinterpret_cast<E const *>(_pSequence->elements); }
+
+template<class E> typename Sequence<E>::iterator Sequence<E>::end() { return begin() + getLength(); }
+
+template<class E> typename Sequence<E>::const_iterator Sequence<E>::end() const
+{ return begin() + getLength(); }
+
 //______________________________________________________________________________
 template< class E >
 inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )

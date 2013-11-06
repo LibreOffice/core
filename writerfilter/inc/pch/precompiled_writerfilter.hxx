@@ -156,7 +156,6 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/stlunosequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>

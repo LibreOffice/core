@@ -56,7 +56,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <comphelper/stlunosequence.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/makesequence.hxx>
 #include <comphelper/xmltools.hxx>
@@ -1493,8 +1492,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     } else {
         m_RDFaXHTMLContentSet.insert(sXmlId);
     }
-    ::std::for_each(::comphelper::stl_begin(i_rPredicates),
-        ::comphelper::stl_end(i_rPredicates),
+    ::std::for_each(i_rPredicates.begin(), i_rPredicates.end(),
         ::boost::bind( &librdf_Repository::addStatementGraph,
             this, i_xSubject, _1, xContent, xXmlId, true));
 }

@@ -67,7 +67,6 @@
 
 #include <map>
 
-#include <comphelper/stlunosequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -88,7 +87,7 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
 
         const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
         uno::Sequence< OUString > sItems( rEntries.size() );
-        ::std::copy( rEntries.begin(), rEntries.end(), ::comphelper::stl_begin(sItems));
+        ::std::copy( rEntries.begin(), rEntries.end(), sItems.begin());
         if ( sItems.getLength() )
             rxFieldProps->setPropertyValue( "Items", uno::makeAny( sItems ) );
 
