@@ -75,6 +75,7 @@ public:
     void testFdo58577();
     void testFdo60990();
     void testBnc834035();
+    void testCp1000015();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -134,6 +135,7 @@ void Test::run()
         {"fdo58577.odt", &Test::testFdo58577},
         {"fdo60990.odt", &Test::testFdo60990},
         {"bnc834035.odt", &Test::testBnc834035},
+        {"cp1000015.odt", &Test::testCp1000015},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -770,6 +772,13 @@ void Test::testBnc834035()
     xmlDocPtr pXmlDoc = parseExport();
     // This was Figure!1|sequence.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink", "anchor", "_Toc363553908");
+}
+
+void Test::testCp1000015()
+{
+    // Redline and hyperlink end got exported in an incorrect order.
+    getParagraph(1, "Hello.");
+    getParagraph(2, "http://www.google.com/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
