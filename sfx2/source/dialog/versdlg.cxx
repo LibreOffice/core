@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/datetime.hxx>
 #include "svtools/treelistentry.hxx"
+#include <svtools/miscopt.hxx>
 
 #include "versdlg.hxx"
 #include "dialog.hrc"
@@ -348,6 +349,10 @@ void SfxVersionDialog::Init_Impl()
     m_pViewButton->Disable();
     m_pDeleteButton->Disable();
     m_pCompareButton->Disable();
+
+    SvtMiscOptions miscOptions;
+    if ( !miscOptions.IsExperimentalMode() )
+        m_pCmisButton->Hide( );
     m_pCmisButton->Enable();
 
     SelectHdl_Impl(m_pVersionBox);
