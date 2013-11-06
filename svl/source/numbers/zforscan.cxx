@@ -762,7 +762,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                             eType = nTmpType;
                             sal_Int32 nLen = sKeyword[eType].getLength();
                             sSymbol = rStr.copy( nPos-1, nLen );
-                            if ( eType == NF_KEY_E || IsAmbiguousE( eType ) )
+                            if ((eType == NF_KEY_E || IsAmbiguousE(eType)) && nPos < rStr.getLength())
                             {
                                 sal_Unicode cNext = rStr[nPos];
                                 switch ( cNext )
