@@ -406,9 +406,6 @@ endef
 
 # JunitTest class
 
-gb_defaultlangiso := en-US
-gb_smoketest_instset := $(SRCDIR)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(gb_defaultlangiso)/OOo_*_install-arc_$(gb_defaultlangiso).zip
-
 ifneq ($(OOO_TEST_SOFFICE),)
 gb_JunitTest_SOFFICEARG:=$(OOO_TEST_SOFFICE)
 else
