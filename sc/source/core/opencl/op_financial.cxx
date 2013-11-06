@@ -537,6 +537,84 @@ void OpFV::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
+
+void OpIPMT::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(GetZwDecl);
+    funs.insert(GetZw);
+}
+
+void OpIPMT::GenSlidingWindowFunction(std::stringstream& ss,
+    const std::string sSymName, SubArguments& vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() << ";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double arg0 = " << GetBottom() << ";\n";
+    ss << "    double arg1 = " << GetBottom() << ";\n";
+    ss << "    double arg2 = " << GetBottom() << ";\n";
+    ss << "    double arg3 = " << GetBottom() << ";\n";
+    ss << "    double arg4 = " << GetBottom() << ";\n";
+    ss << "    double arg5 = " << GetBottom() << ";\n";
+    unsigned j = vSubArguments.size();
+    while (j--)
+        {
+        FormulaToken* pCur = vSubArguments[j]->GetFormulaToken();
+        assert(pCur);
+        if(pCur->GetType() == formula::svSingleVectorRef)
+            {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if(gid0 >= " << pSVR->GetArrayLength() << " || isNan(";
+            ss << vSubArguments[j]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        arg" << j << " = " <<GetBottom() << ";\n";
+            ss << "    else\n";
+#endif
+            ss << "        arg" << j << " = ";
+            ss << vSubArguments[j]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            }
+        }
+    ss << "    double pmt ;\n";
+    ss << "    if(arg0 == 0.0)\n";
+    ss << "        return 0;\n";
+    ss << "    double temp1 = 0;\n";
+    ss << "    double abl = pow(1.0 + arg0, arg2);\n";
+    ss << "    temp1 -= arg4;\n";
+    ss << "    temp1 -= arg3 * abl;\n";
+    ss << "    pmt = temp1 / (1.0 + arg0 * arg5) /";
+    ss << " ( (abl - 1.0) / arg0);\n";
+    ss << "    double temp = pow( 1 + arg0, arg1 - 2);\n";
+    ss << "    if(arg1 == 1.0)\n";
+    ss << "    {\n";
+    ss << "        if(arg5 > 0.0)\n";
+    ss << "            tmp = 0.0;\n";
+    ss << "        else\n";
+    ss << "            tmp = -arg3;\n";
+    ss << "    }\n";
+    ss << "    else\n";
+    ss << "    {\n";
+    ss << "        if(arg5 > 0.0)\n";
+    ss << "            tmp = GetZw(arg0, arg1 - 2.0, pmt, arg3, 1.0)";
+    ss << " - pmt;\n";
+    ss << "        else\n";
+    ss << "            tmp = GetZw(arg0, arg1 - 1.0, pmt, arg3, 0.0);\n";
+    ss << "    }\n";
+    ss << "    tmp = tmp * arg0;\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
 void OpISPMT::GenSlidingWindowFunction(std::stringstream& ss,
     const std::string sSymName, SubArguments& vSubArguments)
 {
