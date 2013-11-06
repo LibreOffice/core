@@ -57,7 +57,7 @@ static void debug_cal_msg(const char *pat, ...)
 #if erDUMP_ICU_CALENDAR
 // Make icu with
 // DEFS = -DU_DEBUG_CALSVC -DUCAL_DEBUG_DUMP
-// in icu/$(INPATH)/misc/build/icu/source/icudefs.mk
+// in workdir/UnpackedTarball/icu/source/icudefs.mk
 // May need some patches to fix unmaintained things there.
 extern void ucal_dump( const icu::Calendar & );
 static void debug_icu_cal_dump( const ::icu::Calendar & r )

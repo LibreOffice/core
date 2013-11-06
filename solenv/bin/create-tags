@@ -7,16 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-if [ -z "$INPATH" ] ; then
-   INPATH=$(grep "INPATH=" ./config_host.mk | sed -e "s/export INPATH=//")
-fi
-if [ -z "$INPATH" ] ; then
-    echo "could not determine INPATH" >&2
-    exit 1
-fi
-
 omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 ctags -h "+.hdl.hrc" --langmap=c:+.hdl.hrc.src $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
-      -R --exclude=`echo ${INPATH} | sed 's/\./\\\./g'` --exclude=workdir \
+      -R --exclude=instdir --exclude=workdir \
       --exclude=clone --totals=yes *

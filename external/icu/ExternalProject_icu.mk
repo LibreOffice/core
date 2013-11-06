@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 		./configure \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-			--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source) \
+			--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) \
 			--disable-layout --disable-static --enable-shared --disable-samples \
 		&& $(MAKE) \
 		&&  for lib in icudata icuin icuuc; do \
@@ -84,7 +84,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--enable-static --disable-shared,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
-				--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source)\
+				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source)\
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
