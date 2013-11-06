@@ -680,7 +680,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
         while( ! aStream.IsEof() )
         {
             OString aCurLine = aStream.ReadLine();
-            if( aCurLine[0] == '*' )
+            if (!aCurLine.isEmpty() && aCurLine[0] == '*')
             {
                 if (aCurLine.matchIgnoreAsciiCase(OString("*include:")))
                 {
@@ -952,7 +952,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
     {
         OString aCurrentLine( *line );
         ++line;
-        if( aCurrentLine[0] != '*' )
+        if (aCurrentLine.getLength() < 2 || aCurrentLine[0] != '*')
             continue;
         if( aCurrentLine[1] == '%' )
             continue;
