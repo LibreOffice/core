@@ -26,6 +26,7 @@
 #include <vcl/outdev.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/xtable.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
@@ -1102,14 +1103,12 @@ void Outliner::ShowEndOfSearchDialog (void)
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
-    InfoBox aInfoBox (NULL, aString);
+    MessageDialog aInfoBox(NULL, aString, VCL_MESSAGE_INFO);
+
     ShowModalMessageBox (aInfoBox);
 
     mbWholeDocumentProcessed = true;
 }
-
-
-
 
 bool Outliner::ShowWrapArroundDialog (void)
 {
