@@ -672,15 +672,6 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     }
     else
     {
-#ifdef TIMELOG
-        // If we do profiling, we want a trace message for the first element
-        // in order to identify the stream.
-        OString aString(OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
-        SAL_INFO( "xmloff.core", "xmloff" );
-                                   "SvXMLImport::StartElement( \"%s\", ... )",
-                                   aString.getStr() );
-#endif
-
         pContext = CreateContext( nPrefix, aLocalName, xAttrList );
         if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
             IS_TYPE( SvXMLImportContext, pContext ) )

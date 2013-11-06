@@ -159,13 +159,6 @@ sal_Int32 ReadThroughComponent(
     uno::Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
-#ifdef TIMELOG
-    // if we do profiling, we want to know the stream
-    OString aString(OUStringToOString(rStreamName,
-        RTL_TEXTENCODING_ASCII_US));
-    SAL_INFO( "sw.filter", "ReadThroughComponent : parsing \"" << aString.getStr() << "\"" );
-#endif
-
     // finally, parser the stream
     try
     {

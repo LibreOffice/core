@@ -152,12 +152,6 @@ sal_Int32 ReadThroughComponent(
     uno::Reference < XImporter > xImporter( _xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
-
-#ifdef TIMELOG
-    // if we do profiling, we want to know the stream
-    SAL_INFO( "reportdesign", "rptxml ReadThroughComponent : parsing \"" << pStreamName << "\"" );
-#endif
-
     // finally, parser the stream
     try
     {

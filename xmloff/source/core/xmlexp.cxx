@@ -821,20 +821,6 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             }
         }
 
-#ifdef TIMELOG
-        if (GetModel().is())
-        {
-            // print a trace message with the URL
-            OString aUrl(OUStringToOString(GetModel()->getURL(),
-                             RTL_TEXTENCODING_ASCII_US));
-            SAL_INFO( "xmloff.core", aUrl.getStr() );
-            // we also want a trace message with the document class
-            OString aClass(OUStringToOString(GetXMLToken(meClass),
-                               RTL_TEXTENCODING_ASCII_US));
-            SAL_INFO( "xmloff.core", "class=\""  << aClass.getStr() << "\"" );
-        }
-#endif
-
         exportDoc( meClass );
     }
     catch(const uno::Exception& e)

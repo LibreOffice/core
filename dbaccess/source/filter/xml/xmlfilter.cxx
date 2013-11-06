@@ -331,11 +331,6 @@ sal_Int32 ReadThroughComponent(
             return 1; // TODO/LATER: error handling
         }
 
-#ifdef TIMELOG
-        // if we do profiling, we want to know the stream
-       SAL_INFO("dbaccess", "dbaxml ReadThroughComponent : parsing \"" << pStreamName << "\"" );
-#endif
-
         uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
         // read from the stream
         return ReadThroughComponent( xInputStream

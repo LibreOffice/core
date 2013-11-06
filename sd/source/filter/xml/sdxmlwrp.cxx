@@ -432,12 +432,6 @@ sal_Int32 ReadThroughComponent(
 
 sal_Bool SdXMLFilter::Import( ErrCode& nError )
 {
-    SAL_INFO( "sd.filter", "sd cl93746 SdXMLFilter::Import" );
-#ifdef TIMELOG
-    OString aFile(OUStringToOString(mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
-    SAL_INFO( "sd.filter", "importing " << aFile.getStr() );
-#endif
-
     sal_uInt32  nRet = 0;
 
     // Get service factory
@@ -809,12 +803,6 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
 sal_Bool SdXMLFilter::Export()
 {
-#ifdef TIMELOG
-    SAL_INFO( "sd.filter", "sd cl93746 SdXMLFilter::Export" );
-    OString aFile(OUStringToOString(mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
-    SAL_INFO( "sd.filter", "exporting " << aFile.getStr() );
-#endif
-
     SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
     SvXMLGraphicHelper*         pGraphicHelper = NULL;
     sal_Bool                    bDocRet = sal_False;

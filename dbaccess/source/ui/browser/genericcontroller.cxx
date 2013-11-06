@@ -728,14 +728,6 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
     // for locking in the proper order (SolarMutex and m_aMutex), and b) this would be too many places
     // for the time frame of the fix.
     // #i52602#
-
-#ifdef TIMELOG
-    OString sLog( "OGenericUnoController::dispatch( '" );
-    sLog += OString( _aURL.Main.getStr(), _aURL.Main.getLength(), osl_getThreadTextEncoding() );
-    sLog += OString( "' )" );
-    SAL_INFO("dbaccess.ui", "dbaccess frank.schoenheit@sun.com" << sLog.getStr() );
-#endif
-
     executeChecked(_aURL,aArgs);
 }
 

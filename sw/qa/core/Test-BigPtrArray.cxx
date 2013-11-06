@@ -137,10 +137,6 @@ public:
     {
         printMethodName("test_insert_entries_at_front\n");
 
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "START: test_insert_entries_at_front" );
-#endif
-
         BigPtrArray bparr;
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
@@ -153,10 +149,6 @@ public:
                 (bparr.Count() == oldCount + 1)
             );
         }
-
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "END: test_insert_entries_at_front" );
-#endif
 
         for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
@@ -181,10 +173,6 @@ public:
     {
         printMethodName("test_insert_entries_in_the_middle\n");
 
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "START: test_insert_entries_in_the_middle" );
-#endif
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
@@ -193,10 +181,6 @@ public:
         sal_uLong oldCount = bparr.Count();
 
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count() / 2);
-
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "END: test_insert_entries_in_the_middle" );
-#endif
 
         CPPUNIT_ASSERT_MESSAGE
         (
@@ -218,10 +202,6 @@ public:
     {
         printMethodName("test_insert_at_already_used_index\n");
 
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "START: test_insert_at_already_used_index" );
-#endif
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
@@ -231,10 +211,6 @@ public:
 
         for (sal_uLong i = 0, j = -5; i < 5; i++, j++)
             bparr.Insert(new BigPtrEntryMock(j), i);
-
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "END: test_insert_at_already_used_index" );
-#endif
 
         CPPUNIT_ASSERT_MESSAGE
         (
@@ -293,10 +269,6 @@ public:
     {
         printMethodName("test_remove_at_front\n");
 
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "START: test_remove_at_front" );
-#endif
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
@@ -332,10 +304,6 @@ public:
 
             dumpBigPtrArray(bparr);
         }
-
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "END: test_remove_at_front" );
-#endif
     }
 
     void test_remove_at_back()
@@ -382,10 +350,6 @@ public:
     {
         printMethodName("test_remove_in_the_middle\n");
 
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "START: test_remove_in_the_middle" );
-#endif
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
@@ -422,9 +386,6 @@ public:
 
             dumpBigPtrArray(bparr);
         }
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "END: test_remove_in_the_middle" );
-#endif
     }
 
     void test_remove_multiple_elements_at_once()
@@ -783,16 +744,10 @@ public:
     {
         startString_ += methodName;
         endString_ += methodName;
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "END: test_remove_in_the_middle" );
-#endif
     }
 
     ~PerformanceTracer()
     {
-#ifdef TIMELOG
-        SAL_INFO( "sw.core", "END: test_remove_in_the_middle" );
-#endif
     }
 
 private:
