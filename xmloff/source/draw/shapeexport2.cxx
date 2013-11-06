@@ -986,8 +986,6 @@ void XMLShapeExport::ImpExportPolygonShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        sal_Bool bClosed(eShapeType == XmlShapeTypeDrawPolyPolygonShape
-            || eShapeType == XmlShapeTypeDrawClosedBezierShape);
         sal_Bool bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
             || eShapeType == XmlShapeTypeDrawOpenBezierShape);
 
