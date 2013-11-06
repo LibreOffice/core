@@ -491,6 +491,11 @@ SvNumberFormatter* ScDocument::GetFormatTable() const
     return xPoolHelper->GetFormTable();
 }
 
+SvNumberFormatter* ScDocument::CreateFormatTable() const
+{
+    return xPoolHelper->CreateNumberFormatter();
+}
+
 SfxItemPool* ScDocument::GetEditPool() const
 {
     return xPoolHelper->GetEditPool();

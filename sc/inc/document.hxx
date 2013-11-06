@@ -1621,6 +1621,7 @@ public:
         const ScMarkData* pMarkData = NULL );
 
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
+    SC_DLLPUBLIC SvNumberFormatter* CreateFormatTable() const;
 
     void            Sort( SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress );
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );

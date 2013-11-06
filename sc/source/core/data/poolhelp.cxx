@@ -71,14 +71,8 @@ SfxItemPool*        ScPoolHelper::GetEnginePool() const
 }
 SvNumberFormatter*  ScPoolHelper::GetFormTable() const
 {
-    if ( !pFormTable )
-    {
-        pFormTable = new SvNumberFormatter( comphelper::getProcessComponentContext(), ScGlobal::eLnge );
-        pFormTable->SetColorLink( LINK( m_pSourceDoc, ScDocument, GetUserDefinedColor ) );
-        pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
-
-        UseDocOptions();        // null date, year2000, std precision
-    }
+    if (!pFormTable)
+        pFormTable = CreateNumberFormatter();
     return pFormTable;
 }
 
@@ -98,6 +92,24 @@ void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
 {
     aOpt = rOpt;
     UseDocOptions();        // #i105512# if the number formatter exists, update its settings
+}
+
+SvNumberFormatter* ScPoolHelper::CreateNumberFormatter() const
+{
+    SvNumberFormatter* p = NULL;
+    {
+        osl::MutexGuard aGuard(&maMtxCreateNumFormatter);
+        p = new SvNumberFormatter(comphelper::getProcessComponentContext(), ScGlobal::eLnge);
+    }
+    p->SetColorLink( LINK(m_pSourceDoc, ScDocument, GetUserDefinedColor) );
+    p->SetEvalDateFormat(NF_EVALDATEFORMAT_INTL_FORMAT);
+
+    sal_uInt16 d,m,y;
+    aOpt.GetDate(d, m, y);
+    p->ChangeNullDate(d, m, y);
+    p->ChangeStandardPrec(aOpt.GetStdPrecision());
+    p->SetYear2000(aOpt.GetYear2000());
+    return p;
 }
 
 void ScPoolHelper::SourceDocumentGone()
