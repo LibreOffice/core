@@ -935,6 +935,117 @@ void OpConfidence::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "}";
 }
 
+void OpCritBinom::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(MinDecl);
+}
+
+void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
+    const std::string sSymName, SubArguments& vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() <<";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double n = " << GetBottom() <<";\n";
+    ss << "    double p = " << GetBottom() <<";\n";
+    ss << "    double alpha = " << GetBottom() <<";\n";
+#ifdef  ISNAN
+    FormulaToken* tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken* >(tmpCur0);
+    FormulaToken* tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken* >(tmpCur1);
+    FormulaToken* tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken* >(tmpCur2);
+    ss << "    int buffer_n_len = ";
+    ss << tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+    ss << "    int buffer_p_len = ";
+    ss << tmpCurDVR1->GetArrayLength();
+    ss << ";\n";
+    ss << "    int buffer_alpha_len = ";
+    ss << tmpCurDVR2->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef  ISNAN
+    ss << "    if((gid0)>=buffer_n_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "        n = 0;\n    else\n";
+#endif
+    ss << "        n = ";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef  ISNAN
+    ss << "    if((gid0)>=buffer_p_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "        p = 0;\n    else\n";
+#endif
+    ss << "        p = ";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef  ISNAN
+    ss << "    if((gid0)>=buffer_alpha_len || isNan(";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss << "))\n";
+    ss << "        alpha = 0;\n    else\n";
+#endif
+    ss << "        alpha = ";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    double rn = floor(n);\n";
+    ss << "    if (rn < 0.0 || alpha <= 0.0 || alpha >= 1.0 || p < 0.0";
+    ss << " || p > 1.0)\n";
+    ss << "        tmp = -DBL_MAX;\n";
+    ss << "    else\n";
+    ss << "    {\n";
+    ss << "        double rq = (0.5 - p) + 0.5;\n";
+    ss << "        double fFactor = pow(rq, rn);\n";
+    ss << "        if (fFactor <= Min)\n";
+    ss << "        {\n";
+    ss << "            fFactor = pow(p, rn);\n";
+    ss << "            if (fFactor <= Min)\n";
+    ss << "                tmp = -DBL_MAX;\n";
+    ss << "            else\n";
+    ss << "            {\n";
+    ss << "                double fSum = 1.0 - fFactor;\n";
+    ss << "                uint max =(uint)(rn), i;\n";
+    ss << "                for (i = 0; i < max && fSum >= alpha; i++)\n";
+    ss << "                {\n";
+    ss << "                    fFactor *= (rn - i) / (i + 1) * rq / p;\n";
+    ss << "                    fSum -= fFactor;\n";
+    ss << "                }\n";
+    ss << "                tmp = (rn - i);\n";
+    ss << "            }\n";
+    ss << "        }\n";
+    ss << "        else\n";
+    ss << "        {\n";
+    ss << "            double fSum = fFactor;\n";
+    ss << "            uint max = (uint)(rn), i;\n";
+    ss << "            for (i = 0; i < max && fSum < alpha; i++)\n";
+    ss << "            {\n";
+    ss << "                fFactor *= (rn - i) / (i + 1) * p / rq;\n";
+    ss << "                fSum += fFactor;\n";
+    ss << "            }\n";
+    ss << "            tmp = (i);\n";
+    ss << "        }\n";
+    ss << "    }\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
+
 void OpRsq::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
 {

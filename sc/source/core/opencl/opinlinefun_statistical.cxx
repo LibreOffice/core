@@ -12,6 +12,8 @@
 std::string fBigInvDecl ="#define fBigInv  2.22045e-016\n";
 std::string fLogDblMaxDecl ="#define fLogDblMax  log(1.79769e+308)\n";
 std::string fHalfMachEpsDecl ="#define fHalfMachEps  0.5*2.22045e-016\n";
+std::string MinDecl = "#define Min 2.22507e-308\n";
+
 std::string fMaxGammaArgumentDecl =
 "#define fMaxGammaArgument  171.624376956302\n";
 
