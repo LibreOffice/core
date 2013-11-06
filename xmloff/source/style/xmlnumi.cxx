@@ -315,7 +315,8 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
             sTextStyleName = rValue;
             break;
         case XML_TOK_TEXT_LEVEL_ATTR_BULLET_CHAR:
-            cBullet = rValue[0];
+            if (!rValue.isEmpty())
+                cBullet = rValue[0];
             break;
         case XML_TOK_TEXT_LEVEL_ATTR_HREF:
             if( bImage )
