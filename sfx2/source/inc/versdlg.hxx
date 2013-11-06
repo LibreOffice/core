@@ -87,8 +87,6 @@ public:
 
 class SfxCmisVersionsDialog : public SfxModalDialog
 {
-    PushButton*                 m_pSaveButton;
-    CheckBox*                   m_pSaveCheckBox;
     SfxVersionsTabListBox_Impl* m_pVersionBox;
     PushButton*                 m_pOpenButton;
     PushButton*                 m_pViewButton;

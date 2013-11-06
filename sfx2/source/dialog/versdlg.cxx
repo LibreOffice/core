@@ -536,8 +536,6 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, sal_Bool 
     , m_pTable(NULL)
     , m_bIsSaveVersionOnClose(bIsSaveVersionOnClose)
 {
-    get(m_pSaveButton, "save");
-    get(m_pSaveCheckBox, "always");
     get(m_pOpenButton, "open");
     get(m_pViewButton, "show");
     get(m_pDeleteButton, "delete");
