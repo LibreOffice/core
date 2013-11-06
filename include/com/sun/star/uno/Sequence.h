@@ -82,6 +82,9 @@ public:
     */
     typedef E ElementType;
 
+    typedef E * iterator;
+    typedef E const * const_iterator;
+
     /** Default constructor: Creates an empty sequence.
     */
     inline Sequence() SAL_THROW(());
@@ -162,6 +165,11 @@ public:
         @return pointer to elements array
     */
     inline E * SAL_CALL getArray();
+
+    inline iterator begin();
+    inline const_iterator begin() const;
+    inline iterator end();
+    inline const_iterator end() const;
 
     /** Non-const index operator: Obtains a reference to element indexed at
         given position.
