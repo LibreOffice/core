@@ -37,7 +37,6 @@
 
 #include "FormControlHelper.hxx"
 #include <xmloff/odffields.hxx>
-#include <comphelper/stlunosequence.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -237,7 +236,7 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
             xFormField->setFieldType(ODF_FORMDROPDOWN);
             uno::Sequence< OUString > sItems;
             sItems.realloc( m_pFFData->getDropDownEntries().size() );
-            ::std::copy( m_pFFData->getDropDownEntries().begin(), m_pFFData->getDropDownEntries().end(), ::comphelper::stl_begin(sItems));
+            ::std::copy( m_pFFData->getDropDownEntries().begin(), m_pFFData->getDropDownEntries().end(), sItems.begin());
             if ( sItems.getLength() )
             {
                 if ( xNameCont->hasByName(ODF_FORMDROPDOWN_LISTENTRY) )

@@ -24,7 +24,6 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#include <comphelper/stlunosequence.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -174,13 +173,12 @@ RDFaExportHelper::AddRDFa(
 
         OUStringBuffer property;
         ::comphelper::intersperse(
-            ::boost::make_transform_iterator(
-                ::comphelper::stl_begin(rStatements),
+            ::boost::make_transform_iterator(rStatements.begin(),
                 ::boost::bind(&makeCURIE, &m_rExport,
                     ::boost::bind(&rdf::Statement::Predicate, _1))),
             // argh, this must be the same type :(
             ::boost::make_transform_iterator(
-                ::comphelper::stl_end(rStatements),
+                rStatements.end(),
                 ::boost::bind(&makeCURIE, &m_rExport,
                     ::boost::bind(&rdf::Statement::Predicate, _1))),
             ::comphelper::OUStringBufferAppender(property),

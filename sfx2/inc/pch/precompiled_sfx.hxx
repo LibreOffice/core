@@ -69,7 +69,6 @@
 #include "comphelper/mediadescriptor.hxx"
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceasvector.hxx"
-#include "comphelper/stlunosequence.hxx"
 #include "comphelper/storagehelper.hxx"
 #include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/compbase6.hxx"
@@ -547,7 +546,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
-#include <comphelper/stlunosequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/synchronousdispatch.hxx>
