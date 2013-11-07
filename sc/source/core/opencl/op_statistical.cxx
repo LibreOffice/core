@@ -22,6 +22,90 @@
 using namespace formula;
 
 namespace sc { namespace opencl {
+void OpFdist::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(GetFDistDecl);decls.insert(GetBetaDistDecl);
+    decls.insert(GetBetaDecl);decls.insert(fMaxGammaArgumentDecl);
+    decls.insert(lcl_GetBetaHelperContFracDecl);
+    decls.insert(GetBetaDistPDFDecl);
+    decls.insert(GetLogBetaDecl);decls.insert(lcl_getLanczosSumDecl);
+    decls.insert(fMachEpsDecl);
+    funs.insert(GetFDist);funs.insert(GetBetaDist);
+    funs.insert(GetBeta);
+    funs.insert(lcl_GetBetaHelperContFrac);funs.insert(GetBetaDistPDF);
+    funs.insert(GetLogBeta);
+    funs.insert(lcl_getLanczosSum);
+}
+void OpFdist::GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double rF1,rF2,rX;\n";
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur2);
+    ss<< "    int buffer_x_len = ";
+    ss<< tmpCurDVR0->GetArrayLength();
+    ss<< ";\n";
+    ss<< "    int buffer_fF1_len = ";
+    ss<< tmpCurDVR1->GetArrayLength();
+    ss<< ";\n";
+    ss<< "    int buffer_fF2_len = ";
+    ss<< tmpCurDVR2->GetArrayLength();
+    ss<< ";\n";
+#endif
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_x_len || isNan(";
+    ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        rX = 0;\n    else\n";
+#endif
+    ss <<"        rX = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_fF1_len || isNan(";
+    ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        rF1 = 0;\n    else\n";
+#endif
+    ss <<"        rF1 = floor(";
+    ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<");\n";
+#ifdef ISNAN
+    ss <<"    if(gid0 >= buffer_fF2_len || isNan(";
+    ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        rF2 = 0;\n    else\n";
+#endif
+    ss <<"        rF2 = floor("<<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<");\n";
+    ss <<"    if (rX < 0.0 || rF1 < 1.0 || rF2 < 1.0 || rF1 >= 1.0E10 ||";
+    ss <<"rF2 >= 1.0E10)\n";
+    ss <<"    {\n";
+    ss <<"        tmp = -DBL_MAX;\n";
+    ss <<"    }\n";
+    ss <<"    tmp = GetFDist(rX, rF1, rF2);\n";
+    ss <<"    return tmp;\n";
+    ss <<"}";
+}
 
 void OpStandard::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
