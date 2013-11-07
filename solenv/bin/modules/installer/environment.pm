@@ -55,9 +55,6 @@ sub create_pathvariables
     my $platformname  = $environment->{'OUTPATH'};
     $variables{'platformname'} = $platformname;
 
-    my $instdir = $ENV{'INSTROOT'};
-    $variables{'instdir'} = $instdir;
-
     my $installscriptdir = $environment->{'WORKDIR'} . $installer::globals::separator . "InstallScriptTarget";
     $variables{'installscriptdir'} = $installscriptdir;
 
