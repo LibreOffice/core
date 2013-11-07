@@ -80,6 +80,35 @@ void OpCosh::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
+void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
+          formula::SingleVectorRefToken *>(tmpCur);
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss <<"    int gid0=get_global_id(0);\n";
+    ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss<< "    if(isNan(arg0)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg0 = 0;\n";
+#endif
+    ss << "    double tmp=1/tan(arg0);\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
+
 void OpCsc::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
 {
