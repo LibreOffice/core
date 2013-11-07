@@ -3616,7 +3616,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         pFmt->GetGrabBagItem(aAny);
         const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
 
-        bool bQFormat = false, bUnhideWhenUsed = false;
+        bool bQFormat = false, bUnhideWhenUsed = false, bLocked = false;
         OUString aLink, aRsid, aUiPriority;
         for (sal_Int32 i = 0; i < rGrabBag.getLength(); ++i)
         {
@@ -3630,6 +3630,8 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 aRsid = rGrabBag[i].Value.get<OUString>();
             else if (rGrabBag[i].Name == "unhideWhenUsed")
                 bUnhideWhenUsed = true;
+            else if (rGrabBag[i].Name == "locked")
+                bLocked = true;
             else
                 SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
         }
@@ -3646,6 +3648,8 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             m_pSerializer->singleElementNS(XML_w, XML_link,
                     FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
                     FSEND);
+        if (bLocked)
+            m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
         if (!aRsid.isEmpty())
             m_pSerializer->singleElementNS(XML_w, XML_rsid,
                     FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),

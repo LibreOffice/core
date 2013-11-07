@@ -590,7 +590,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_aliases:
         case NS_ooxml::LN_CT_Style_autoRedefine:
         case NS_ooxml::LN_CT_Style_hidden:
-        case NS_ooxml::LN_CT_Style_locked:
         case NS_ooxml::LN_CT_Style_personal:
         case NS_ooxml::LN_CT_Style_personalCompose:
         case NS_ooxml::LN_CT_Style_personalReply:
@@ -616,6 +615,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_unhideWhenUsed:
         case NS_ooxml::LN_CT_Style_uiPriority:
         case NS_ooxml::LN_CT_Style_link:
+        case NS_ooxml::LN_CT_Style_locked:
             if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE || m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
             {
                 StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
@@ -654,6 +654,9 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     aValue.Name = "link";
                     aValue.Value = uno::makeAny(sStringValue);
                 }
+                break;
+                case NS_ooxml::LN_CT_Style_locked:
+                    aValue.Name = "locked";
                 break;
                 default:
                 break;

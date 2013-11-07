@@ -1306,6 +1306,7 @@ DECLARE_OOXML_TEST(testStyleInheritance, "style-inheritance.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:rsid", "val", "00780346");
 
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:link", "val", "Heading1Char");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:locked", 1);
 }
 
 DECLARE_OOXML_TEST(testCalendar1, "calendar1.docx")
