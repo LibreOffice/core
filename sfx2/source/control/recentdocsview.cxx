@@ -175,9 +175,34 @@ void RecentDocsView::loadRecentDocs()
     Invalidate();
 }
 
+void RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if ( rMEvt.IsLeft() )
+    {
+        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
+
+        if (pItem && pItem->isVisible())
+        {
+            Rectangle aRect(pItem->getDrawArea());
+            if (aRect.IsInside(rMEvt.GetPosPixel()))
+            {
+                OnItemDblClicked(pItem);
+                return;
+            }
+        }
+    }
+    ThumbnailView::MouseButtonDown( rMEvt );
+}
+
 void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
 {
-    RecentDocsViewItem* pRecentItem = dynamic_cast<RecentDocsViewItem*>(pItem);
+    OpenItem( pItem );
+}
+
+void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
+{
+    const RecentDocsViewItem* pRecentItem = dynamic_cast<const RecentDocsViewItem*>(pItem);
 
     Reference< XDispatch >            xDispatch;
     Reference< XDispatchProvider >    xDispatchProvider;

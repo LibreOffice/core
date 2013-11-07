@@ -58,7 +58,9 @@ public:
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile* );
 
 protected:
+    virtual void MouseButtonDown( const MouseEvent& rMEvt );
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
+    void OpenItem( const ThumbnailViewItem *pItem );
 
     bool isAcceptedFile(const OUString &rURL) const;
 
