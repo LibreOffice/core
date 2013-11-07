@@ -343,7 +343,7 @@ public:
     virtual std::string BinFuncName(void) const { return "Price"; }
 };
 
-class OpNPER: public Normal
+class OpNper: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,

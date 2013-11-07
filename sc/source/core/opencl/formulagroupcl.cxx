@@ -1078,7 +1078,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                  break;
             case ocZZR:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpNPER));
+                        ft->Children[i], new OpNper));
                  break;
             case ocNormDist:
                 mvSubArguments.push_back(SoPHelper(ts,
