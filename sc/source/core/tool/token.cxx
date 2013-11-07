@@ -1411,6 +1411,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocLogNormDist:
             case ocGammaDist:
             case ocLn:
+            case ocRound:
             // Don't change the state.
             break;
             default:
