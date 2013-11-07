@@ -93,13 +93,13 @@ class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 protected:
 
             const StackVar      eType;          // type of data
-            mutable sal_uInt16  nRefCnt;        // reference count
+            mutable oslInterlockedCount mnRefCnt;        // reference count
 
 public:
                                 FormulaToken( StackVar eTypeP,OpCode e = ocPush ) :
-                                    eOp(e), eType( eTypeP ), nRefCnt(0) {}
+                                    eOp(e), eType( eTypeP ), mnRefCnt(0) {}
                                 FormulaToken( const FormulaToken& r ) : IFormulaToken(),
-                                    eOp(r.eOp), eType( r.eType ), nRefCnt(0) {}
+                                    eOp(r.eOp), eType( r.eType ), mnRefCnt(0) {}
 
     virtual                     ~FormulaToken();
 
@@ -111,16 +111,16 @@ public:
 
     inline void IncRef() const
     {
-        osl_atomic_increment(&nRefCnt);
+        osl_atomic_increment(&mnRefCnt);
     }
 
     inline void DecRef() const
     {
-        if (!osl_atomic_decrement(&nRefCnt))
+        if (!osl_atomic_decrement(&mnRefCnt))
             const_cast<FormulaToken*>(this)->Delete();
     }
 
-    inline  sal_uInt16          GetRef() const          { return nRefCnt; }
+    inline oslInterlockedCount GetRef() const { return mnRefCnt; }
     inline OpCode               GetOpCode() const       { return eOp; }
 
     /**
