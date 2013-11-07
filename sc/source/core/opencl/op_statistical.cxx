@@ -2869,6 +2869,78 @@ formula::SingleVectorRefToken *>(tmpCur3);
         ss << "    return tmp;\n";
         ss << "}\n";
 }
+void OpChiDist::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(fBigInvDecl);
+    funs.insert("");
+    decls.insert(fHalfMachEpsDecl);
+    funs.insert("");
+    decls.insert(GetUpRegIGammaDecl);
+    funs.insert(GetUpRegIGamma);
+    decls.insert(GetGammaSeriesDecl);
+    funs.insert(GetGammaSeries);
+    decls.insert(GetGammaContFractionDecl);
+    funs.insert(GetGammaContFraction);
+    decls.insert(GetChiDistDecl);
+    funs.insert(GetChiDist);
+}
+void OpChiDist::GenSlidingWindowFunction(
+    std::stringstream &ss,const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    double fx,fDF,tmp;\n";
+    ss << "    int gid0=get_global_id(0);\n";
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    ss << "    int buffer_fx_len = ";
+    ss << tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+    ss << "     int buffer_fDF_len = ";
+    ss << tmpCurDVR1->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef ISNAN
+    ss <<"    if((gid0)>=buffer_fx_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        fx = 0;\n";
+    ss <<"    else \n";
+#endif
+    ss <<"         fx ="<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss <<"    if((gid0)>=buffer_fDF_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        fDF = 0;\n";
+    ss <<"    else \n";
+#endif
+    ss <<"        fDF ="<<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+    ss << "    if(fDF < 1.0)\n";
+    ss << "    {\n";
+    ss << "        return DBL_MIN;\n";
+    ss << "    }\n";
+    ss << "    tmp = GetChiDist( fx, fDF);\n";
+    ss << "    return tmp;\n";
+    ss << "}\n";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
