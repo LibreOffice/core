@@ -76,6 +76,7 @@ public:
     void testFdo60990();
     void testBnc834035();
     void testCp1000015();
+    void testFdo70812();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -136,6 +137,7 @@ void Test::run()
         {"fdo60990.odt", &Test::testFdo60990},
         {"bnc834035.odt", &Test::testBnc834035},
         {"cp1000015.odt", &Test::testCp1000015},
+        {"fdo70812.docx", &Test::testFdo70812},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -779,6 +781,12 @@ void Test::testCp1000015()
     // Redline and hyperlink end got exported in an incorrect order.
     getParagraph(1, "Hello.");
     getParagraph(2, "http://www.google.com/");
+}
+
+void Test::testFdo70812()
+{
+    // Import just crashed.
+    getParagraph(1, "Sample pages document.");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
