@@ -2471,7 +2471,88 @@ void OpLogNormDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}\n";
 }
+void OpGammaDist::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(fBigInvDecl);decls.insert(fLogDblMaxDecl);
+    decls.insert(fHalfMachEpsDecl);decls.insert(fMaxGammaArgumentDecl);
+    decls.insert(GetGammaSeriesDecl);decls.insert(GetGammaContFractionDecl);
+    decls.insert(GetLowRegIGammaDecl);decls.insert(GetGammaDistDecl);
+    decls.insert(GetGammaDistPDFDecl);
+    funs.insert(GetGammaSeries);funs.insert(GetGammaContFraction);
+    funs.insert(GetLowRegIGamma);funs.insert(GetGammaDist);
+    funs.insert(GetGammaDistPDF);
+}
 
+void OpGammaDist::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+        FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+formula::SingleVectorRefToken *>(tmpCur0);
+        FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+formula::SingleVectorRefToken *>(tmpCur1);
+        FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+formula::SingleVectorRefToken *>(tmpCur2);
+        FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+formula::SingleVectorRefToken *>(tmpCur3);
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n";
+        ss << "    int gid0=get_global_id(0);\n";
+        ss << "    double arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        ss << "    double arg1 = ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        ss << "    double arg2 = ";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        ss << "    double arg3 = ";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        ss << "    double tmp;\n";
+#ifdef ISNAN
+        ss << "    if(isNan(arg0)||(gid0>=";
+        ss << tmpCurDVR0->GetArrayLength();
+        ss << "))\n";
+        ss << "        arg0 = 0;\n";
+#endif
+#ifdef ISNAN
+        ss << "    if(isNan(arg1)||(gid0>=";
+        ss << tmpCurDVR1->GetArrayLength();
+        ss << "))\n";
+        ss << "        arg1 = 0;\n";
+#endif
+#ifdef ISNAN
+        ss << "    if(isNan(arg2)||(gid0>=";
+        ss << tmpCurDVR2->GetArrayLength();
+        ss << "))\n";
+        ss << "        arg2 = 0;\n";
+#endif
+#ifdef ISNAN
+        ss << "    if(isNan(arg3)||(gid0>=";
+        ss << tmpCurDVR3->GetArrayLength();
+        ss << "))\n";
+        ss << "        arg3 = 0;\n";
+#endif
+        ss << "    if (arg3)\n";
+        ss << "        tmp=GetGammaDist( arg0, arg1, arg2);\n";
+        ss << "    else\n";
+        ss << "        tmp=GetGammaDistPDF( arg0, arg1, arg2);\n";
+        ss << "    return tmp;\n";
+        ss << "}\n";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

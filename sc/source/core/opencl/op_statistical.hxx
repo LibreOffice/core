@@ -225,6 +225,14 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "LogNormdist"; }
 };
+class OpGammaDist: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs);
+    virtual std::string BinFuncName(void) const { return "GammaDist"; }
+};
 }}
 
 #endif
