@@ -428,7 +428,7 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareCall(
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
-    OUString sSqlStatement (transformPreparedStatement( _sSql ));
+    // OUString sSqlStatement (transformPreparedStatement( _sSql ));
 
     // not implemented yet :-) a task to do
     return NULL;
