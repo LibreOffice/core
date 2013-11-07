@@ -385,6 +385,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
 ScFormulaCellGroup::ScFormulaCellGroup() :
     mnRefCount(0),
     mpCode(NULL),
+    mpDynamicKernel(NULL),
     mnStart(0),
     mnLength(0),
     mnFormatType(NUMBERFORMAT_NUMBER),

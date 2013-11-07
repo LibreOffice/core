@@ -16,6 +16,7 @@
 #include "formula/vectortoken.hxx"
 #include "scmatrix.hxx"
 
+#include "dynamickernel.hxx"
 #include "openclwrapper.hxx"
 
 #include "op_financial.hxx"
@@ -44,6 +45,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#undef NO_FALLBACK_TO_SWINTERP /* undef this for non-TDD runs */
 
 using namespace formula;
 
@@ -2377,33 +2379,16 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
         };
     }
 }
-/// Holds the symbol table for a given dynamic kernel
-class SymbolTable {
-public:
-    typedef std::map<const FormulaToken *,
-        boost::shared_ptr<DynamicKernelArgument> > ArgumentMap;
-    // This avoids instability caused by using pointer as the key type
-    typedef std::list< boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
-    SymbolTable(void):mCurId(0) {}
-    template <class T>
-    const DynamicKernelArgument *DeclRefArg(FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen);
-    /// Used to generate sliding window helpers
-    void DumpSlidingWindowFunctions(std::stringstream &ss)
-    {
+
+/// Used to generate sliding window helpers
+void SymbolTable::DumpSlidingWindowFunctions(std::stringstream &ss)
+{
         for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
             ++it) {
             (*it)->GenSlidingWindowFunction(ss);
             ss << "\n";
         }
-    }
-    /// Memory mapping from host to device and pass buffers to the given kernel as
-    /// arguments
-    void Marshal(cl_kernel, int, cl_program);
-private:
-    unsigned int mCurId;
-    ArgumentMap mSymbols;
-    ArgumentList mParams;
-};
+}
 
 void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
 {
@@ -2414,13 +2399,9 @@ void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
     }
 }
 
-/// Code generation
-class DynamicKernel {
-public:
-    DynamicKernel(FormulaTreeNodeRef r):mpRoot(r),
-        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL) {}
     /// Code generation in OpenCL
-    void CodeGen() {
+void DynamicKernel::CodeGen()
+{
         // Travese the tree of expression and declare symbols used
         const DynamicKernelArgument *DK= mSyms.DeclRefArg<
             DynamicKernelSoPArguments>(mpRoot, new OpNop);
@@ -2456,10 +2437,11 @@ public:
 #if 1
         std::cerr<< "Program to be compiled = \n" << mFullProgramSrc << "\n";
 #endif
-    }
-    /// Produce kernel hash
-    std::string GetMD5(void)
-    {
+}
+
+/// Produce kernel hash
+std::string DynamicKernel::GetMD5(void)
+{
 #ifdef MD5_KERNEL
         if (mKernelHash.empty()) {
             std::stringstream md5s;
@@ -2478,15 +2460,12 @@ public:
 #else
         return "";
 #endif
-    }
-    /// Create program, build, and create kerenl
-    /// TODO cache results based on kernel body hash
-    /// TODO: abstract OpenCL part out into OpenCL wrapper.
-    void CreateKernel(void);
-    /// Prepare buffers, marshal them to GPU, and launch the kernel
-    /// TODO: abstract OpenCL part out into OpenCL wrapper.
-    void Launch(size_t nr)
-    {
+}
+
+/// Prepare buffers, marshal them to GPU, and launch the kernel
+/// TODO: abstract OpenCL part out into OpenCL wrapper.
+void DynamicKernel::Launch(size_t nr)
+{
         // Obtain cl context
         KernelEnv kEnv;
         OpenclDevice::setKernelEnv(&kEnv);
@@ -2507,21 +2486,7 @@ public:
             global_work_size, NULL, 0, NULL, NULL);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
-    }
-    ~DynamicKernel();
-    cl_mem GetResultBuffer(void) const { return mpResClmem; }
-private:
-    void TraverseAST(FormulaTreeNodeRef);
-    FormulaTreeNodeRef mpRoot;
-    SymbolTable mSyms;
-    std::string mKernelSignature, mKernelHash;
-    std::string mFullProgramSrc;
-    cl_program mpProgram;
-    cl_kernel mpKernel;
-    cl_mem mpResClmem; // Results
-    std::set<std::string> inlineDecl;
-    std::set<std::string> inlineFun;
-};
+}
 
 DynamicKernel::~DynamicKernel()
 {
@@ -2606,9 +2571,11 @@ public:
     }
 
     virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat );
+    virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
+                                                   const ScAddress& rTopPos,
+                                                   ScTokenArray& rCode);
     virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
                 const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode );
-    DynamicKernel *mpKernel;
 };
 
 ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
@@ -2616,11 +2583,10 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
     return NULL;
 }
 
-bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
-    const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup,
-    ScTokenArray& rCode )
+DynamicKernel* DynamicKernel::create(ScDocument& rDoc,
+                                     const ScAddress& rTopPos,
+                                     ScTokenArray& rCode)
 {
-    // printf("Vector width = %d\n", xGroup->mnLength);
     // Constructing "AST"
     FormulaTokenIterator aCode = rCode;
     std::list<FormulaToken *> list;
@@ -2641,7 +2607,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
                 if(m_TempFormula->GetOpCode()!=ocPush)
                 {
                     if(m_hash_map.find(m_TempFormula)==m_hash_map.end())
-                        return false;
+                        return NULL;
                     m_currNode->Children.push_back(m_hash_map[m_TempFormula]);
                 }
                 else
@@ -2661,20 +2627,55 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 
     FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(NULL));
     Root->Children.push_back(m_hash_map[list.back()]);
+
+    DynamicKernel* pDynamicKernel = new DynamicKernel(Root);
+
+    if (!pDynamicKernel)
+        return NULL;
+
     // Code generation
-    mpKernel = new DynamicKernel(Root);
+    try {
+        pDynamicKernel->CodeGen();
+    }
+    catch (const UnhandledToken &ut) {
+        std::cerr << "\nDynamic formual compiler: unhandled token: ";
+        std::cerr << ut.mMessage << "\n";
+#ifdef NO_FALLBACK_TO_SWINTERP
+        assert(false);
+#else
+        free(pDynamicKernel);
+        return NULL;
+#endif
+    }
+    return pDynamicKernel;
+}
+
+CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument& rDoc,
+                                                                      const ScAddress& rTopPos,
+                                                                      ScTokenArray& rCode)
+{
+    return sc::opencl::DynamicKernel::create(rDoc, rTopPos, rCode);
+}
+
+bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
+    const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup,
+    ScTokenArray& rCode )
+{
+    // printf("Vector width = %d\n", xGroup->mnLength);
+    DynamicKernel *pKernel = DynamicKernel::create(rDoc, rTopPos, rCode);
+    if (!pKernel)
+        return false;
 
     try {
-        mpKernel->CodeGen();
         // Obtain cl context
         KernelEnv kEnv;
         OpenclDevice::setKernelEnv(&kEnv);
         // Compile kernel here!!!
-        mpKernel->CreateKernel();
+        pKernel->CreateKernel();
         // Run the kernel.
-        mpKernel->Launch(xGroup->mnLength);
+        pKernel->Launch(xGroup->mnLength);
         // Map results back
-        cl_mem res = mpKernel->GetResultBuffer();
+        cl_mem res = pKernel->GetResultBuffer();
         cl_int err;
         double *resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
                 res,
@@ -2687,9 +2688,8 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
         if (err != CL_SUCCESS)
             throw OpenCLError(err);
-        delete mpKernel;
+        delete pKernel;
     }
-#undef NO_FALLBACK_TO_SWINTERP /* undef this for non-TDD runs */
     catch (const UnhandledToken &ut) {
         std::cerr << "\nDynamic formual compiler: unhandled token: ";
         std::cerr << ut.mMessage << "\n";
@@ -2758,6 +2758,6 @@ SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(
     return sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect);
 }
 
-}
+} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

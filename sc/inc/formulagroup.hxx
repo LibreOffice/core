@@ -75,6 +75,13 @@ struct FormulaGroupContext : boost::noncopyable
 };
 
 /**
+ * Abstract base class for a "compiled" formula
+ */
+class SC_DLLPUBLIC CompiledFormula
+{
+};
+
+/**
  * Abstract base class for vectorised formula group interpreters,
  * plus a global instance factory.
  */
@@ -92,6 +99,9 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
     static void enableOpenCL(bool bEnable);
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
+    virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
+                                                   const ScAddress& rTopPos,
+                                                   ScTokenArray& rCode) = 0;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;
 };
 
@@ -103,6 +113,9 @@ public:
     virtual ~FormulaGroupInterpreterSoftware() {}
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat);
+    virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
+                                                   const ScAddress& rTopPos,
+                                                   ScTokenArray& rCode) SAL_OVERRIDE;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
 };
 

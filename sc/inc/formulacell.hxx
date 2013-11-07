@@ -38,6 +38,12 @@ struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 
+namespace opencl {
+
+class DynamicKernel;
+
+}
+
 }
 
 class ScProgress;
@@ -49,6 +55,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     mutable size_t mnRefCount;
 
     ScTokenArray* mpCode;
+    sc::opencl::DynamicKernel* mpDynamicKernel;
     SCROW mnStart;  // Start offset of that cell
     SCROW mnLength; // How many of these do we have ?
     short mnFormatType;

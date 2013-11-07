@@ -16,6 +16,7 @@
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include "scmatrix.hxx"
+#include "dynamickernel.hxx"
 
 #include "formula/vectortoken.hxx"
 #include "rtl/bootstrap.hxx"
@@ -284,6 +285,13 @@ ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMa
     return ScMatrixRef();
 }
 
+CompiledFormula* FormulaGroupInterpreterSoftware::createCompiledFormula(ScDocument& /* rDoc */,
+                                                                        const ScAddress& /* rTopPos */,
+                                                                        ScTokenArray& /* rCode */)
+{
+    return NULL;
+}
+
 bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                                                 const ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)
@@ -486,6 +494,7 @@ public:
     FormulaGroupInterpreterOpenCLMissing() : FormulaGroupInterpreter() {}
     virtual ~FormulaGroupInterpreterOpenCLMissing() {}
     virtual ScMatrixRef inverseMatrix(const ScMatrix&) { return ScMatrixRef(); }
+    virtual CompiledFormula* createCompiledFormula(ScDocument&, const ScAddress&, ScTokenArray&) SAL_OVERRIDE { return NULL; }
     virtual bool interpret(ScDocument&, const ScAddress&, const ScFormulaCellGroupRef&, ScTokenArray&) { return false; }
 };
 
@@ -651,6 +660,6 @@ void FormulaGroupInterpreter::enableOpenCL(bool bEnable)
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 
-}
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
