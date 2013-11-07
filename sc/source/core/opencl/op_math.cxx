@@ -460,6 +460,33 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return 0.5 * log((tmp + 1.0) / (tmp - 1.0));\n";
     ss << "}";
 }
+void OpArcSin::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i) ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0   = get_global_id(0);\n";
+    ss << "    double tmp = " << GetBottom() << ";\n";
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0=
+        dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
+    ss << "    int buffer_len = " << tmpCurDVR0->GetArrayLength() << ";\n";
+    ss << "    if((gid0)>=buffer_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        tmp = " << GetBottom() << ";\n";
+    ss << "    else \n    ";
+#endif
+    ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+    ss << "    return asin(tmp);\n";
+    ss << "}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
