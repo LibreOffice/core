@@ -1561,7 +1561,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             {
                 //style sheets cannot have a numbering rule attached
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                pStyleSheetPropertyMap->SetListLevel( (sal_Int16)nIntValue );
+                if (pStyleSheetPropertyMap)
+                    pStyleSheetPropertyMap->SetListLevel( (sal_Int16)nIntValue );
             }
             else
                 rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny( (sal_Int16)nIntValue ));
@@ -1575,7 +1576,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             {
                 //style sheets cannot have a numbering rule attached
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                pStyleSheetPropertyMap->SetListId( nIntValue );
+                if (pStyleSheetPropertyMap)
+                    pStyleSheetPropertyMap->SetListId( nIntValue );
             }
             if( pList.get( ) )
             {
@@ -1593,7 +1595,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 {
                     // set the number id for AbstractNum references
                     StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                    pStyleSheetPropertyMap->SetNumId( nIntValue );
+                    if (pStyleSheetPropertyMap)
+                        pStyleSheetPropertyMap->SetNumId( nIntValue );
                 }
                 else
                 {
