@@ -3593,22 +3593,9 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
 {
-    const char* pType = 0;
-    switch (eType)
-    {
-        case STYLE_TYPE_PARA: pType = "paragraph"; break;
-        case STYLE_TYPE_CHAR: pType = "character"; break;
-        case STYLE_TYPE_LIST: pType = "numbering"; break;
-    }
-    m_pSerializer->startElementNS( XML_w, XML_style,
-            FSNS( XML_w, XML_type ), pType,
-            FSNS( XML_w, XML_styleId ), m_rExport.pStyles->GetStyleId(nId).getStr(),
-            FSEND );
-
-    m_pSerializer->singleElementNS( XML_w, XML_name,
-            FSNS( XML_w, XML_val ), OUStringToOString( OUString( rName ), RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSEND );
-
+    bool bQFormat = false, bUnhideWhenUsed = false, bLocked = false, bDefault = false;
+    OUString aLink, aRsid, aUiPriority;
+    FastAttributeList* pStyleAttributeList = m_pSerializer->createAttrList();
     if (eType == STYLE_TYPE_PARA)
     {
         const SwFmt* pFmt = m_rExport.pStyles->GetSwFmt(nId);
@@ -3616,8 +3603,6 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         pFmt->GetGrabBagItem(aAny);
         const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
 
-        bool bQFormat = false, bUnhideWhenUsed = false, bLocked = false;
-        OUString aLink, aRsid, aUiPriority;
         for (sal_Int32 i = 0; i < rGrabBag.getLength(); ++i)
         {
             if (rGrabBag[i].Name == "uiPriority")
@@ -3632,29 +3617,50 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 bUnhideWhenUsed = true;
             else if (rGrabBag[i].Name == "locked")
                 bLocked = true;
+            else if (rGrabBag[i].Name == "default")
+                bDefault = rGrabBag[i].Value.get<sal_Bool>();
             else
                 SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
         }
-
-        if (!aUiPriority.isEmpty())
-            m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
-                    FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSEND);
-        if (bQFormat)
-            m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
-        if (bUnhideWhenUsed)
-            m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
-        if (!aLink.isEmpty())
-            m_pSerializer->singleElementNS(XML_w, XML_link,
-                    FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSEND);
-        if (bLocked)
-            m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
-        if (!aRsid.isEmpty())
-            m_pSerializer->singleElementNS(XML_w, XML_rsid,
-                    FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSEND);
     }
+
+    const char* pType = 0;
+    switch (eType)
+    {
+        case STYLE_TYPE_PARA: pType = "paragraph"; break;
+        case STYLE_TYPE_CHAR: pType = "character"; break;
+        case STYLE_TYPE_LIST: pType = "numbering"; break;
+    }
+    pStyleAttributeList->add(FSNS( XML_w, XML_type ), pType);
+    pStyleAttributeList->add(FSNS( XML_w, XML_styleId ), m_rExport.pStyles->GetStyleId(nId).getStr());
+    if (bDefault)
+        pStyleAttributeList->add(FSNS(XML_w, XML_default), "1");
+    XFastAttributeListRef xStyleAttributeList(pStyleAttributeList);
+    m_pSerializer->startElementNS( XML_w, XML_style, xStyleAttributeList);
+
+    m_pSerializer->singleElementNS( XML_w, XML_name,
+            FSNS( XML_w, XML_val ), OUStringToOString( OUString( rName ), RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSEND );
+
+    // Output properties from grab-bag.
+    if (!aUiPriority.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
+                FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
+    if (bQFormat)
+        m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
+    if (bUnhideWhenUsed)
+        m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
+    if (!aLink.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_link,
+                FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
+    if (bLocked)
+        m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
+    if (!aRsid.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_rsid,
+                FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
 
     if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
     {
