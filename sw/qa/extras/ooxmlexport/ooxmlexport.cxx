@@ -1568,6 +1568,12 @@ DECLARE_OOXML_TEST(testFdo70812, "fdo70812.docx")
     getParagraph(1, "Sample pages document.");
 }
 
+DECLARE_OOXML_TEST(testPgMargin, "testPgMargin.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
