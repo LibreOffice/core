@@ -211,103 +211,6 @@ struct Fc
     friend ostream & operator << (ostream & o, const Fc & rFc);
 };
 
-/**
-   A character position and a corresponding file character position
-   paired.
- */
-class CpAndFc
-{
-private:
-    /**
-       character position
-    */
-    Cp mCp;
-
-    /**
-       file character position
-    */
-    Fc mFc;
-
-    /**
-       property type
-    */
-    PropertyType mType;
-
-public:
-    CpAndFc() {}
-    CpAndFc(const Cp & rCp, const Fc & rFc, PropertyType eType_);
-
-    /**
-       Return character position.
-    */
-    const Cp & getCp() const { return mCp; }
-
-    /**
-       Return file character position.
-    */
-    const Fc & getFc() const { return mFc; }
-
-    /**
-       Return property type.
-    */
-    PropertyType getType() const { return mType; }
-
-    /**
-       Return if FC is complex.
-
-       @retval true    FC is complex
-       @retval false   else
-     */
-    bool isComplex() const { return mFc.isComplex(); }
-
-    /**
-       Return the distance to other CpAndFc.
-
-       @param  rCpAndFc    the other CpAndFc
-
-       @return the distance from the CP in @a rCpAndFc to the CP in
-       CpAndFc.
-     */
-    sal_uInt32 operator-(const CpAndFc & rCpAndFc) const
-    { return mCp - rCpAndFc.mCp; }
-
-    /**
-       Return string representation of the CpAndFc.
-    */
-    string toString() const;
-
-    friend bool operator < (const CpAndFc & rA, const CpAndFc & rB);
-    friend bool operator == (const CpAndFc & rA, const CpAndFc & rB);
-    friend ostream & operator << (ostream & o, const CpAndFc & rCpAndFc);
-};
-
-struct CpAndFcLess
-{
-    CpAndFcLess()
-    {
-    }
-
-    bool operator()(const CpAndFc & rA, const CpAndFc & rB) const
-    {
-        return rA < rB;
-    }
-
-    bool operator()(const CpAndFc & rA, const Cp & rB) const
-    {
-        return rA.getCp() < rB;
-    }
-
-    bool operator()(const Cp & rA, const CpAndFc & rB) const
-    {
-        return rA < rB.getCp();
-    }
-};
-
-
-typedef set<CpAndFc, CpAndFcLess> CpAndFcs;
-
-ostream & operator << (ostream & o, const CpAndFcs & rCpAndFcs);
-
 struct CpHash
 {
     size_t operator()(const Cp & rCp) const
@@ -329,16 +232,6 @@ struct CpEq
     bool operator() (const Cp & rA, const Cp &rB) const
     {
         return rA == rB;
-    }
-};
-
-struct CpAndFcHash
-{
-    size_t operator()(const CpAndFc & rCpAndFc) const
-    {
-        CpHash aHash;
-
-        return aHash(rCpAndFc.getCp());
     }
 };
 

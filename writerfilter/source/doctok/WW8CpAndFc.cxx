@@ -79,46 +79,6 @@ ostream & operator << (ostream & o, const Fc & rFc)
     return o << rFc.toString();
 }
 
-bool operator < (const CpAndFc & rA, const CpAndFc & rB)
-{
-    bool bResult = false;
-
-    if (rA.mCp < rB.mCp)
-        bResult = true;
-    else if (rA.mCp == rB.mCp && rA.mType < rB.mType)
-        bResult = true;
-
-    return bResult;
-}
-
-bool operator == (const CpAndFc & rA, const CpAndFc & rB)
-{
-    return rA.mCp == rB.mCp;
-}
-
-ostream & operator << (ostream & o, const CpAndFc & /*rCpAndFc*/)
-{
-    return o;
-}
-
-ostream & operator << (ostream & o, const CpAndFcs & rCpAndFcs)
-{
-    copy(rCpAndFcs.begin(), rCpAndFcs.end(),
-         ostream_iterator<CpAndFc>(o, ", "));
-
-    char sBuffer[256];
-
-    snprintf(sBuffer, 255, "%" SAL_PRI_SIZET "u", rCpAndFcs.size());
-    o << sBuffer;
-
-    return o;
-}
-
-CpAndFc::CpAndFc(const Cp & rCp, const Fc & rFc, PropertyType eType_)
-: mCp(rCp), mFc(rFc), mType(eType_)
-{
-}
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
