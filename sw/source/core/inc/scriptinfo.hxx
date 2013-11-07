@@ -105,7 +105,7 @@ public:
     // array operations, nCnt refers to array position
     inline size_t CountScriptChg() const;
     inline xub_StrLen GetScriptChg( const size_t nCnt ) const;
-    inline sal_uInt8 GetScriptType( const sal_uInt16 nCnt ) const;
+    inline sal_uInt8 GetScriptType( const size_t nCnt ) const;
 
     inline size_t CountDirChg() const;
     inline xub_StrLen GetDirChg( const size_t nCnt ) const;
@@ -328,7 +328,7 @@ inline xub_StrLen SwScriptInfo::GetScriptChg( const size_t nCnt ) const
     OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptChange today!");
     return aScriptChanges[nCnt].position;
 }
-inline sal_uInt8 SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
+inline sal_uInt8 SwScriptInfo::GetScriptType( const size_t nCnt ) const
 {
     OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptType today!");
     return aScriptChanges[nCnt].type;
