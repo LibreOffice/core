@@ -33,9 +33,6 @@ sub create_pathvariables
     # The following variables are needed in the path file list
     # solarenvpath, os, pmiscpath
 
-    my $shlxthdlpath = $ENV{'INSTDIR'} . $installer::globals::separator . "program" . $installer::globals::separator . "shlxthdl";
-    $variables{'shlxthdlpath'} = $shlxthdlpath;
-
     $variables{'os'} = $installer::globals::compiler;
 
     my $solarenvpath = "";
