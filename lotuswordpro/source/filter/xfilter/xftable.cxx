@@ -169,15 +169,8 @@ OUString XFTable::GetTableName()
 
 sal_Int32   XFTable::GetRowCount()
 {
-    sal_Int32   rowMax = -1;
-    std::map<sal_Int32,XFRow*>::iterator it;
-    for( it=m_aRows.begin(); it!=m_aRows.end(); ++it )
-    {
-        if( it->first>rowMax )
-            rowMax = it->first;
-    }
-
-    return rowMax;
+    // since we know that map is a sorted container
+    return m_aRows.rbegin()->first;
 }
 
 XFRow*  XFTable::GetRow(sal_Int32 row)
