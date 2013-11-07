@@ -3593,7 +3593,7 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
 {
-    bool bQFormat = false, bUnhideWhenUsed = false, bLocked = false, bDefault = false, bCustomStyle = false;
+    bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
     OUString aLink, aRsid, aUiPriority;
     FastAttributeList* pStyleAttributeList = m_pSerializer->createAttrList();
     if (eType == STYLE_TYPE_PARA)
@@ -3615,6 +3615,8 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 aRsid = rGrabBag[i].Value.get<OUString>();
             else if (rGrabBag[i].Name == "unhideWhenUsed")
                 bUnhideWhenUsed = true;
+            else if (rGrabBag[i].Name == "semiHidden")
+                bSemiHidden = true;
             else if (rGrabBag[i].Name == "locked")
                 bLocked = true;
             else if (rGrabBag[i].Name == "default")
@@ -3653,6 +3655,8 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 FSEND);
     if (bQFormat)
         m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
+    if (bSemiHidden)
+        m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
     if (!aLink.isEmpty())
