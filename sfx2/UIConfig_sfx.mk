@@ -19,6 +19,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/errorfindemaildialog \
 	sfx2/uiconfig/ui/licensedialog \
 	sfx2/uiconfig/ui/managestylepage \
+	sfx2/uiconfig/ui/newstyle \
 	sfx2/uiconfig/ui/optprintpage \
 	sfx2/uiconfig/ui/password \
 	sfx2/uiconfig/ui/printeroptionsdialog \

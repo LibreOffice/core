@@ -31,7 +31,7 @@
 IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
 {
     (void)pControl; //unused
-    const OUString aName( aColBox.GetText() );
+    const OUString aName( m_pColBox->GetText() );
     SfxStyleSheetBase* pStyle = rPool.Find( aName, rPool.GetSearchFamily(), SFXSTYLEBIT_ALL );
     if ( pStyle )
     {
@@ -54,7 +54,7 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
 
 IMPL_LINK_INLINE_START( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 {
-    aOKBtn.Enable( !comphelper::string::remove(pBox->GetText(), ' ').isEmpty() );
+    m_pOKBtn->Enable( !comphelper::string::remove(pBox->GetText(), ' ').isEmpty() );
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
@@ -63,28 +63,26 @@ IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 
 SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool ) :
 
-    ModalDialog( pParent, SfxResId( DLG_NEW_STYLE_BY_EXAMPLE ) ),
+    ModalDialog( pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui" ),
 
-    aColFL              ( this, SfxResId( FL_COL ) ),
-    aColBox             ( this, SfxResId( LB_COL ) ),
-    aOKBtn              ( this, SfxResId( BT_OK ) ),
-    aCancelBtn          ( this, SfxResId( BT_CANCEL ) ),
     aQueryOverwriteBox  ( this, SfxResId( MSG_OVERWRITE ) ),
 
     rPool( rInPool )
 
 {
-    FreeResource();
+    get(m_pColBox, "stylename");
+    m_pColBox->set_width_request(m_pColBox->approximate_char_width() * 25);
+    m_pColBox->set_height_request(m_pColBox->GetTextHeight() * 10);
+    get(m_pOKBtn, "ok");
 
-    aOKBtn.SetClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
-    aColBox.SetModifyHdl(LINK(this, SfxNewStyleDlg, ModifyHdl));
-    aColBox.SetDoubleClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
-//    aColBox.SetAccessibleName(SfxResId(FL_COL).toString());
+    m_pOKBtn->SetClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
+    m_pColBox->SetModifyHdl(LINK(this, SfxNewStyleDlg, ModifyHdl));
+    m_pColBox->SetDoubleClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
 
     SfxStyleSheetBase *pStyle = rPool.First();
     while ( pStyle )
     {
-        aColBox.InsertEntry(pStyle->GetName());
+        m_pColBox->InsertEntry(pStyle->GetName());
         pStyle = rPool.Next();
     }
 }

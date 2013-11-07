@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define BT_OK           100
-#define BT_CANCEL       101
-#define LB_COL          1
-#define FL_COL          2
 #define MSG_OVERWRITE   3
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
