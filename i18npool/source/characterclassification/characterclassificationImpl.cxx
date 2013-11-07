@@ -47,6 +47,7 @@ OUString SAL_CALL
 CharacterClassificationImpl::toUpper( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     return getLocaleSpecificCharacterClassification(rLocale)->toUpper(Text, nPos, nCount, rLocale);
 }
 
@@ -54,6 +55,7 @@ OUString SAL_CALL
 CharacterClassificationImpl::toLower( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     return getLocaleSpecificCharacterClassification(rLocale)->toLower(Text, nPos, nCount, rLocale);
 }
 
@@ -61,6 +63,7 @@ OUString SAL_CALL
 CharacterClassificationImpl::toTitle( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     return getLocaleSpecificCharacterClassification(rLocale)->toTitle(Text, nPos, nCount, rLocale);
 }
 
@@ -68,6 +71,7 @@ sal_Int16 SAL_CALL
 CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos )
         throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     if (xUCI.is())
         return xUCI->getType(Text, nPos);
     throw RuntimeException();
@@ -77,6 +81,7 @@ sal_Int16 SAL_CALL
 CharacterClassificationImpl::getCharacterDirection( const OUString& Text, sal_Int32 nPos )
         throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     if (xUCI.is())
         return xUCI->getCharacterDirection(Text, nPos);
     throw RuntimeException();
@@ -86,6 +91,7 @@ sal_Int16 SAL_CALL
 CharacterClassificationImpl::getScript( const OUString& Text, sal_Int32 nPos )
         throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     if (xUCI.is())
         return xUCI->getScript(Text, nPos);
     throw RuntimeException();
@@ -95,6 +101,7 @@ sal_Int32 SAL_CALL
 CharacterClassificationImpl::getCharacterType( const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale ) throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     return getLocaleSpecificCharacterClassification(rLocale)->getCharacterType(Text, nPos, rLocale);
 }
 
@@ -102,6 +109,7 @@ sal_Int32 SAL_CALL
 CharacterClassificationImpl::getStringType( const OUString& Text, sal_Int32 nPos,
         sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     return getLocaleSpecificCharacterClassification(rLocale)->getStringType(Text, nPos, nCount, rLocale);
 }
 
@@ -111,6 +119,7 @@ ParseResult SAL_CALL CharacterClassificationImpl::parseAnyToken(
         sal_Int32 contCharTokenType, const OUString& userDefinedCharactersCont )
         throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     return getLocaleSpecificCharacterClassification(rLocale)->parseAnyToken(Text, nPos, rLocale,
             startCharTokenType,userDefinedCharactersStart,
             contCharTokenType, userDefinedCharactersCont);
@@ -123,6 +132,7 @@ ParseResult SAL_CALL CharacterClassificationImpl::parsePredefinedToken(
         const OUString& userDefinedCharactersStart, sal_Int32 contCharTokenType,
         const OUString& userDefinedCharactersCont ) throw(RuntimeException)
 {
+    osl::MutexGuard aGuard(&maMtx);
     return getLocaleSpecificCharacterClassification(rLocale)->parsePredefinedToken(
             nTokenType, Text, nPos, rLocale, startCharTokenType, userDefinedCharactersStart,
             contCharTokenType, userDefinedCharactersCont);

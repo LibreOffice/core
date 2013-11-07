@@ -26,6 +26,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include "osl/mutex.hxx"
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 class CharacterClassificationImpl : public cppu::WeakImplHelper2
@@ -93,17 +95,19 @@ private:
             aLocale.Variant == rLocale.Variant;
         };
     };
-    std::vector<lookupTableItem*> lookupTable;
-    lookupTableItem *cachedItem;
-
-    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
-    com::sun::star::uno::Reference < XCharacterClassification > xUCI;
 
     com::sun::star::uno::Reference < XCharacterClassification > SAL_CALL
     getLocaleSpecificCharacterClassification(const com::sun::star::lang::Locale& rLocale) throw(com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL
     createLocaleSpecificCharacterClassification(const OUString& serviceName, const com::sun::star::lang::Locale& rLocale);
 
+private:
+    std::vector<lookupTableItem*> lookupTable;
+    lookupTableItem *cachedItem;
+
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
+    com::sun::star::uno::Reference < XCharacterClassification > xUCI;
+    osl::Mutex maMtx;
 };
 
 } } } }
