@@ -607,6 +607,28 @@ void OpBitAnd::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return (int)num1 & (int)num2;\n";
     ss << "}";
 }
+void OpLn::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    int singleIndex =  gid0;\n";
+
+    GenTmpVariables(ss,vSubArguments);
+    CheckAllSubArgumentIsNan(ss,vSubArguments);
+
+    ss << "    double tmp=log1p(tmp0-1);\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
