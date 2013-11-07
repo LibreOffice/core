@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///tk\u003d",
+        "filename": "include/com/sun/star/uno/Sequence.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-11-07T08:27:52Z",
+      "side": 1,
+      "message": "As it turns out we don\u0027t need to use boost::range in any of the client code, but can make use of the new Sequence member functions directly, there is also no need to define these member typedefs that would be required for boost::range per \u003chttp://www.boost.org/doc/libs/1_54_0/libs/range/doc/html/range/reference/extending/method_1.html\u003e \"Method 1: provide member functions and nested types.\"",
+      "revId": "8d4c4d31754e02c1dfc03aa9342ea47f5384c71c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///tg\u003d",
+        "filename": "include/com/sun/star/uno/Sequence.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-11-07T08:27:52Z",
+      "side": 1,
+      "message": "Please provide some (minimal) documentation for these declarations (stating that they allow to use Sequence in combination with standard sequence algorithms, or some such).",
+      "revId": "8d4c4d31754e02c1dfc03aa9342ea47f5384c71c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///tc\u003d",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-11-07T08:27:52Z",
+      "side": 1,
+      "message": "We can make this more symmetric by using getConstArray here.",
+      "revId": "8d4c4d31754e02c1dfc03aa9342ea47f5384c71c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
