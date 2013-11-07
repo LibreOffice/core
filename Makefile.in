@@ -275,11 +275,11 @@ dev-install:
 	@echo
 	@echo "dev-install is obsolete! Just build with \"make check\" and run"
 ifeq ($(OS),MACOSX)
-	@echo "  open instdir/*/$(PRODUCTNAME).app"
+	@echo "  open instdir/$(PRODUCTNAME).app"
 	@echo
-	@echo "To debug: gdb instdir/*/$(PRODUCTNAME).app/Contents/MacOS/soffice"
+	@echo "To debug: gdb instdir/$(PRODUCTNAME).app/Contents/MacOS/soffice"
 else
-	@echo "  instdir/*/program/soffice"
+	@echo "  instdir/program/soffice"
 endif
 	@echo
 	@echo "(only if you have good reason to test an actual installation: make test-install)"
