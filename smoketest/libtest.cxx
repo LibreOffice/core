@@ -8,6 +8,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <malloc.h>
 #include <assert.h>
 #include <math.h>
@@ -16,17 +17,35 @@
 
 long getTimeMS();
 
+static int help()
+{
+    fprintf( stderr, "Usage: libtest <absolute-path-to-libreoffice-install> [path to load document] [path to save document].\n" );
+    return 1;
+}
+
 int main (int argc, char **argv)
 {
     long start, end;
 
     start = getTimeMS();
 
-    if( argc < 2 )
-        return -1;
+    if( argc < 2 ||
+        ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
+        return help();
+
+    if (argv[1][0] != '/')
+    {
+        fprintf( stderr, "Absolute path required to libreoffice install\n" );
+        return 1;
+    }
+
     LibLibreOffice *pOffice = lo_init( argv[1] );
     if( !pOffice )
+    {
+        fprintf( stderr, "Failed to initialize\n" );
         return -1;
+    }
+
     // This separate init is lame I think.
     if( !pOffice->initialize( argv[1] ) )
     {
@@ -80,7 +99,8 @@ int main (int argc, char **argv)
     return 0;
 }
 
-long getTimeMS() {
+long getTimeMS()
+{
     struct timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);
     long ms = round(t.tv_nsec / 1.0e6) + t.tv_sec * 1000;
