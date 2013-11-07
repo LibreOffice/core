@@ -7,17 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,readlicense_oo_files,$(SRCDIR)/readlicense_oo))
+$(eval $(call gb_Package_Package,readlicense_oo_files,$(SRCDIR)/readlicense_oo/license))
 
-# LICENSE (upper case) is copied without EOL conversion from license.txt
+# LICENSE (upper case) is copied without EOL conversion
 # license.txt is converted, prior to copy, see Package_license.mk
-$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE,txt/license.txt))
+ifneq ($(OS),WNT)
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE,LICENSE))
+endif
 
-$(eval $(call gb_Package_add_file,readlicense_oo_files,NOTICE,txt/NOTICE))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,NOTICE,NOTICE))
 
-$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.odt,odt/LICENSE.odt))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,CREDITS.odt,odt/CREDITS.odt))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.odt,LICENSE.odt))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,CREDITS.odt,CREDITS.odt))
 
-$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.html,html/LICENSE.html))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.html,LICENSE.html))
 
 # vim: set noet sw=4 ts=4:

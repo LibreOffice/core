@@ -14,7 +14,7 @@ readlicense_oo_DIR := $(call gb_CustomTarget_get_workdir,readlicense_oo/license)
 $(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/license.txt
 
 $(readlicense_oo_DIR)/license.txt : \
-		$(SRCDIR)/readlicense_oo/txt/license.txt \
+		$(SRCDIR)/readlicense_oo/license/LICENSE \
 		| $(readlicense_oo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,1)
 	$(call gb_Helper_abbreviate_dirs, \

@@ -52,9 +52,6 @@ sub create_pathvariables
     my $platformname  = $environment->{'OUTPATH'};
     $variables{'platformname'} = $platformname;
 
-    my $instdir = $ENV{'INSTROOT'};
-    $variables{'instdir'} = $instdir;
-
     my $installscriptdir = $environment->{'WORKDIR'} . $installer::globals::separator . "InstallScriptTarget";
     $variables{'installscriptdir'} = $installscriptdir;
 
@@ -66,6 +63,9 @@ sub create_pathvariables
 
     my $filelistpath = $environment->{'WORKDIR'};
     $variables{'filelistpath'} = $filelistpath;
+
+    my $licensepath = $environment->{'SRCDIR'} . $installer::globals::separator . "readlicense_oo/license";
+    $variables{'licensepath'} = $licensepath;
 
     my $packinfopath = $environment->{'SRCDIR'} . $installer::globals::separator . "setup_native/source/packinfo";
     $variables{'packinfopath'} = $packinfopath;
