@@ -152,6 +152,90 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
     return xRet;
 }
 
+/*
+ * This method handles import part of custom xml separatly.
+ * It return's xDocument object for item.xml and itemProps.xml file which is
+ * used in its relationship file.
+ */
+uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importCustomSubStream(OOXMLStream::StreamType_t nType)
+{
+    // This method handles custom xml part separatly.
+    uno::Reference<xml::dom::XDocument> xRet;
+
+    OOXMLStream::Pointer_t pStream;
+    try
+    {
+        pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("writerfilter", "importSubStream: exception while "
+                "importing stream " << nType << " : " << e.Message);
+        return xRet;
+    }
+
+    uno::Reference<io::XInputStream> xInputStream =
+        pStream->getDocumentStream();
+
+    if (xInputStream.is())
+    {
+        try
+        {
+            uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
+            uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
+            xRet = xDomBuilder->parse(xInputStream);
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_WARN("writerfilter", "importSubStream: exception while "
+                     "parsing stream " << nType << " : " << e.Message);
+            return xRet;
+        }
+    }
+
+    // imporing itemprops files for item.xml from customXml.
+    if(OOXMLStream::CUSTOMXML == nType)
+    {
+        uno::Reference<xml::dom::XDocument> xCustomProps;
+        OOXMLStream::Pointer_t cStream;
+        try
+        {
+            cStream = OOXMLDocumentFactory::createStream(pStream, OOXMLStream::CUSTOMXMLPROPS);
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_WARN("writerfilter", "importSubStream: exception while "
+                     "importing stream " << nType << " : " << e.Message);
+            mxCustomXmlProsDom = xCustomProps;
+        }
+
+        uno::Reference<io::XInputStream> xcpInputStream =
+           cStream->getDocumentStream();
+
+        if (xcpInputStream.is())
+        {
+            try
+            {
+                uno::Reference<uno::XComponentContext> xcpContext(pStream->getContext());
+                uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xcpContext));
+                xCustomProps = xDomBuilder->parse(xcpInputStream);
+            }
+            catch (uno::Exception const& e)
+            {
+                SAL_WARN("writerfilter", "importSubStream: exception while "
+                         "parsing stream " << nType << " : " << e.Message);
+                mxCustomXmlProsDom = xCustomProps;
+            }
+        }
+
+        if(xCustomProps.is())
+        {
+            mxCustomXmlProsDom = xCustomProps;
+        }
+    }
+    return xRet;
+}
+
 void OOXMLDocumentImpl::setXNoteId(const sal_Int32 nId)
 {
     mnXNoteId = nId;
@@ -420,6 +504,7 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
                 mxRelationshipAccess->getAllRelationships();
         uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomListTemp(aSeqs.getLength());
+        uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomPropsListTemp(aSeqs.getLength());
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -439,15 +524,23 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
             }
             if(bFound)
             {
-                uno::Reference<xml::dom::XDocument> temp = importSubStream(OOXMLStream::CUSTOMXML);
-                mxCustomXmlDomListTemp[counter] = temp;
-                counter++;
-                resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
+                uno::Reference<xml::dom::XDocument> customXmlTemp = importCustomSubStream(OOXMLStream::CUSTOMXML);
+                // This will add all item[n].xml with it's relationship file i.e itemprops.xml to
+                // grabbag list.
+                if(mxCustomXmlProsDom.is() && customXmlTemp.is())
+                {
+                    mxCustomXmlDomListTemp[counter] = customXmlTemp;
+                    mxCustomXmlDomPropsListTemp[counter] = mxCustomXmlProsDom;
+                    counter++;
+                    resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
+                }
                 bFound = false;
             }
         }
         mxCustomXmlDomListTemp.realloc(counter+1);
+        mxCustomXmlDomPropsListTemp.realloc(counter+1);
         mxCustomXmlDomList = mxCustomXmlDomListTemp;
+        mxCustomXmlDomPropsList = mxCustomXmlDomPropsListTemp;
     }
 }
 
@@ -516,6 +609,11 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getThemeDom( )
 uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomList( )
 {
     return mxCustomXmlDomList;
+}
+
+uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomPropsList( )
+{
+    return mxCustomXmlDomPropsList;
 }
 
 OOXMLDocument *
