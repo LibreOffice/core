@@ -34,6 +34,7 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <config_oauth2.h>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -47,7 +48,6 @@
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
 #include "cmis_resultset.hxx"
-#include "cmis_oauth2_providers.hxx"
 #include "cmis_strings.hxx"
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )

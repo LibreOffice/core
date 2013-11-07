@@ -2017,6 +2017,20 @@ AC_ARG_WITH(all-tarballs,
     AS_HELP_STRING([--with-all-tarballs],
         [Download all external tarballs unconditionally]))
 
+AC_ARG_WITH(gdrive-client-id,
+    AS_HELP_STRING([--with-drive-client-id],
+        [Provides the client id of the application for OAuth2 authentication
+        on Google Drive. If either this or --with-gdrive-client-secret is
+        empty, the feature will be disabled]),
+)
+
+AC_ARG_WITH(gdrive-client-secret,
+    AS_HELP_STRING([--with-drive-client-secret],
+        [Provides the client secret of the application for OAuth2
+        authentication on Google Drive. If either this or
+        --with-gdrive-client-id is empty, the feature will be disabled]),
+)
+
 dnl ===================================================================
 dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
@@ -12231,6 +12245,24 @@ AC_SUBST(INSTALLDIR)
 TESTINSTALLDIR="${BUILDDIR}/test-install/${INPATH}"
 AC_SUBST(TESTINSTALLDIR)
 
+
+# ===================================================================
+# OAuth2 id and secrets
+# ===================================================================
+
+AC_MSG_CHECKING([for Google Drive client id and secret])
+GDRIVE_CLIENT_ID="\"$with_gdrive_client_id\""
+GDRIVE_CLIENT_SECRET="\"$with_gdrive_client_secret\""
+if test "$with_gdrive_client_id" = "no" -o -n "$with_driver_client_id"; then
+    GDRIVE_CLIENT_ID="\"\""
+fi
+
+if test "$with_gdrive_client_secret" = "no" -o -n "$with_driver_client_secret"; then
+    GDRIVE_CLIENT_SECRET="\"\""
+fi
+AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_ID, $GDRIVE_CLIENT_ID)
+AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_SECRET, $GDRIVE_CLIENT_SECRET)
+
 # ===================================================================
 # De- or increase default verbosity of build process
 # ===================================================================
@@ -12606,6 +12638,7 @@ AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
+AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_OUTPUT
 
 if test "$CROSS_COMPILING" = YES; then

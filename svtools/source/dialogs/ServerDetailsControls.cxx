@@ -22,6 +22,7 @@
 
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/ServerDetailsControls.hxx>
+#include <config_oauth2.h>
 
 using namespace std;
 using namespace com::sun::star::lang;
@@ -278,12 +279,19 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
     show( false );
 
     // Load the ServerType entries
+    bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
+                       OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
+
     Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
     Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
     for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
     {
-        m_pLBServerType->InsertEntry( aTypesNamesList[i] );
-        m_aServerTypesURLs.push_back( aTypesUrlsList[i] );
+        OUString sUrl = aTypesUrlsList[i];
+        if ( !( sUrl == OUString( GDRIVE_BASE_URL ) && bSkipGDrive ) )
+        {
+            m_pLBServerType->InsertEntry( aTypesNamesList[i] );
+            m_aServerTypesURLs.push_back( sUrl );
+        }
     }
 }
 

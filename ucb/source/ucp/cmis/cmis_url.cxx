@@ -9,10 +9,10 @@
 
 #include <libcmis/libcmis.hxx>
 
+#include <config_oauth2.h>
 #include <rtl/uri.hxx>
 
 #include "cmis_url.hxx"
-#include "cmis_oauth2_providers.hxx"
 
 using namespace std;
 
