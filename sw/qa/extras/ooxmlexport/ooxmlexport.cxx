@@ -1562,6 +1562,12 @@ DECLARE_OOXML_TEST(testCp1000015, "cp1000015.odt")
     getParagraph(2, "http://www.google.com/");
 }
 
+DECLARE_OOXML_TEST(testFdo70812, "fdo70812.docx")
+{
+    // Import just crashed.
+    getParagraph(1, "Sample pages document.");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
