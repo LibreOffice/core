@@ -1,5 +1,5 @@
---- misc/nss-3.12.6/mozilla/nsprpub/config/autoconf.mk.in	2009-03-04 07:04:23.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/config/autoconf.mk.in	2010-06-17 08:42:08.010625000 +0900
+--- misc/nss-3.13.6/mozilla/nsprpub/config/autoconf.mk.in	2009-03-04 07:04:23.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/nsprpub/config/autoconf.mk.in	2010-06-17 08:42:08.010625000 +0900
 @@ -22,6 +22,7 @@
  RELEASE_OBJDIR_NAME = @RELEASE_OBJDIR_NAME@
  OBJDIR_NAME	= @OBJDIR_NAME@
@@ -8,8 +8,8 @@
  OBJ_SUFFIX	= @OBJ_SUFFIX@
  LIB_SUFFIX	= @LIB_SUFFIX@
  DLL_SUFFIX	= @DLL_SUFFIX@
---- misc/nss-3.12.6/mozilla/nsprpub/config/rules.mk	2009-12-10 06:24:37.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/config/rules.mk	2010-06-17 08:42:08.057500000 +0900
+--- misc/nss-3.13.6/mozilla/nsprpub/config/rules.mk	2009-12-10 06:24:37.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/nsprpub/config/rules.mk	2010-06-17 08:42:08.057500000 +0900
 @@ -113,9 +113,9 @@
  # other platforms do not.
  #
@@ -22,8 +22,8 @@
  SHARED_LIB_PDB	= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION).pdb
  else
  LIBRARY		= $(OBJDIR)/lib$(LIBRARY_NAME)$(LIBRARY_VERSION)_s.$(LIB_SUFFIX)
---- misc/nss-3.12.6/mozilla/nsprpub/configure	2010-02-09 03:41:35.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/configure	2010-06-17 08:42:10.000000000 +0900
+--- misc/nss-3.13.6/mozilla/nsprpub/configure	2010-02-09 03:41:35.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/nsprpub/configure	2010-06-17 08:42:10.000000000 +0900
 @@ -2770,6 +2770,7 @@
  LIB_SUFFIX=a
  DLL_SUFFIX=so
@@ -48,8 +48,8 @@
  s%@MKSHLIB@%$MKSHLIB%g
  s%@DSO_CFLAGS@%$DSO_CFLAGS%g
  s%@DSO_LDOPTS@%$DSO_LDOPTS%g
---- misc/nss-3.12.6/mozilla/nsprpub/pr/src/Makefile.in	2009-12-19 18:06:07.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/pr/src/Makefile.in	2010-06-17 08:42:08.151250000 +0900
+--- misc/nss-3.13.6/mozilla/nsprpub/pr/src/Makefile.in	2009-12-19 18:06:07.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/nsprpub/pr/src/Makefile.in	2010-06-17 08:42:08.151250000 +0900
 @@ -195,7 +195,7 @@
  
  ifeq ($(OS_ARCH),WINNT)
@@ -59,8 +59,8 @@
  else
  OS_LIBS		= advapi32.lib wsock32.lib winmm.lib
  endif
---- misc/nss-3.12.6/mozilla/security/coreconf/WIN32.mk	2009-07-29 09:15:46.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/WIN32.mk	2010-06-17 08:42:08.198125000 +0900
+--- misc/nss-3.13.6/mozilla/security/coreconf/WIN32.mk	2009-07-29 09:15:46.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/security/coreconf/WIN32.mk	2010-06-17 08:42:08.198125000 +0900
 @@ -43,8 +43,8 @@
  DEFAULT_COMPILER = cl
  
@@ -72,8 +72,8 @@
  	LINK         = ld
  	AR           = ar
  	AR          += cr $@
---- misc/nss-3.12.6/mozilla/security/coreconf/WIN95.mk	2009-02-14 14:51:10.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/WIN95.mk	2010-06-17 08:42:08.245000000 +0900
+--- misc/nss-3.13.6/mozilla/security/coreconf/WIN95.mk	2009-02-14 14:51:10.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/security/coreconf/WIN95.mk	2010-06-17 08:42:08.245000000 +0900
 @@ -44,4 +44,8 @@
  DEFINES += -DWIN95
  
@@ -85,8 +85,8 @@
 +  NSPR31_LIB_PREFIX = $(NULL)
 +endif
 \ No newline at end of file
---- misc/nss-3.12.6/mozilla/security/coreconf/rules.mk	2009-12-08 10:33:36.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/rules.mk	2010-06-17 08:42:08.291875000 +0900
+--- misc/nss-3.13.6/mozilla/security/coreconf/rules.mk	2009-12-08 10:33:36.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/security/coreconf/rules.mk	2010-06-17 08:42:08.291875000 +0900
 @@ -281,8 +281,12 @@
  	fi
  endif	# MSVC with manifest tool
@@ -100,8 +100,8 @@
  
  get_objs:
  	@echo $(OBJS)
---- misc/nss-3.12.6/mozilla/security/nss/Makefile	2009-12-09 01:47:03.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/nss/Makefile	2010-06-17 08:42:08.338750000 +0900
+--- misc/nss-3.13.6/mozilla/security/nss/Makefile	2009-12-09 01:47:03.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/security/nss/Makefile	2010-06-17 08:42:08.338750000 +0900
 @@ -108,7 +108,7 @@
  NSPR_CONFIGURE_OPTS += --enable-debug-rtl
  endif
@@ -111,8 +111,8 @@
  endif
  
  #
---- misc/nss-3.12.6/mozilla/security/nss/cmd/crmftest/Makefile	2005-11-14 09:17:21.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/crmftest/Makefile	2010-06-17 08:42:08.370000000 +0900
+--- misc/nss-3.13.6/mozilla/security/nss/cmd/crmftest/Makefile	2005-11-14 09:17:21.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/security/nss/cmd/crmftest/Makefile	2010-06-17 08:42:08.370000000 +0900
 @@ -90,7 +90,7 @@
  LDDIST = $(DIST)/lib
  
@@ -122,8 +122,8 @@
  endif
  
  include ../platrules.mk
---- misc/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/Makefile	2009-08-08 04:06:37.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/Makefile	2010-06-17 08:42:10.000000000 +0900
+--- misc/nss-3.13.6/mozilla/security/nss/cmd/shlibsign/Makefile	2009-08-08 04:06:37.000000000 +0900
++++ misc/build/nss-3.13.6/mozilla/security/nss/cmd/shlibsign/Makefile	2010-06-17 08:42:10.000000000 +0900
 @@ -115,10 +115,16 @@
  	$(call core_abspath,$(OBJDIR)) $(OS_TARGET) \
  	$(call core_abspath,$(NSPR_LIB_DIR)) $(call core_abspath,$<)
@@ -141,27 +141,3 @@
  
  libs install :: $(CHECKLOC)
  
---- misc/nss-3.12.6/mozilla/security/nss/lib/freebl/config.mk	2009-04-12 06:18:42.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/nss/lib/freebl/config.mk	2010-06-17 08:42:08.557500000 +0900
-@@ -84,10 +84,6 @@
- RES     = $(OBJDIR)/$(LIBRARY_NAME).res
- RESNAME = freebl.rc
- 
--ifndef WINCE
--OS_LIBS += shell32.lib
--endif
--
- ifdef NS_USE_GCC
- EXTRA_SHARED_LIBS += \
- 	-L$(DIST)/lib \
-@@ -97,6 +93,10 @@
- 	-lnspr4 \
- 	$(NULL)
- else # ! NS_USE_GCC
-+ifndef WINCE
-+OS_LIBS += shell32.lib
-+endif
-+
- EXTRA_SHARED_LIBS += \
- 	$(DIST)/lib/nssutil3.lib \
- 	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4.lib \

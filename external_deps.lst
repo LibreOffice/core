@@ -305,9 +305,10 @@ if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && ENABLE_JAVASCRIPT==YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && ENABLE_NSS_MODULE==YES)
-    MD5 = b92261a5679276c400555004937af965
-    name = nss-3.12.6-with-nspr-4.8.4.tar.gz
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
+    MD5 = 067a04150b1d8b64f7da3019688a7547
+    name = nss-3.14.4-with-nspr-4.9.5.tar.gz
+    URL1 = ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_14_4_RTM/src/nss-3.14.4-with-nspr-4.9.5.tar.gz
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_SAXON!=YES && DISABLE_SAXON!=YES && SOLAR_JAVA==TRUE)
     MD5 = 24be19595acad0a2cae931af77a0148a
