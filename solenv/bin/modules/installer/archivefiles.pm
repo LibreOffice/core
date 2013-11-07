@@ -141,8 +141,6 @@ sub resolving_archive_flag
 
     my ($systemcall, $returnvalue, $infoline);
 
-    my $unziplistfile = $loggingdir . "unziplist_" . $installer::globals::build . "_" . $installer::globals::compiler . "_" . $$languagestringref . ".txt";
-
     my $platformunzipdirbase = installer::systemactions::create_directories("zip", $languagestringref);
     push(@installer::globals::removedirs, $platformunzipdirbase);
 
