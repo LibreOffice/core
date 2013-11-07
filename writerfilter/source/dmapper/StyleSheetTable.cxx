@@ -588,7 +588,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = sStringValue;
             break;
         case NS_ooxml::LN_CT_Style_aliases:
-        case NS_ooxml::LN_CT_Style_link:
         case NS_ooxml::LN_CT_Style_autoRedefine:
         case NS_ooxml::LN_CT_Style_hidden:
         case NS_ooxml::LN_CT_Style_locked:
@@ -616,11 +615,14 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_semiHidden:
         case NS_ooxml::LN_CT_Style_unhideWhenUsed:
         case NS_ooxml::LN_CT_Style_uiPriority:
+        case NS_ooxml::LN_CT_Style_link:
             if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE || m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
             {
                 StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
                 beans::PropertyValue aValue;
-                if (nSprmId == NS_ooxml::LN_CT_Style_rsid)
+                switch (nSprmId)
+                {
+                case NS_ooxml::LN_CT_Style_rsid:
                 {
                     // We want the rsid as a hex string, but always with the length of 8.
                     OUStringBuffer aBuf = OUString::number(nIntValue, 16);
@@ -631,16 +633,30 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     aValue.Name = "rsid";
                     aValue.Value = uno::makeAny(aStr.makeStringAndClear());
                 }
-                else if (nSprmId == NS_ooxml::LN_CT_Style_qFormat)
+                break;
+                case NS_ooxml::LN_CT_Style_qFormat:
                     aValue.Name = "qFormat";
-                else if (nSprmId == NS_ooxml::LN_CT_Style_semiHidden)
+                break;
+                case NS_ooxml::LN_CT_Style_semiHidden:
                     aValue.Name = "semiHidden";
-                else if (nSprmId == NS_ooxml::LN_CT_Style_unhideWhenUsed)
+                break;
+                case NS_ooxml::LN_CT_Style_unhideWhenUsed:
                     aValue.Name = "unhideWhenUsed";
-                else
+                break;
+                case NS_ooxml::LN_CT_Style_uiPriority:
                 {
                     aValue.Name = "uiPriority";
                     aValue.Value = uno::makeAny(OUString::number(nIntValue));
+                }
+                break;
+                case NS_ooxml::LN_CT_Style_link:
+                {
+                    aValue.Name = "link";
+                    aValue.Value = uno::makeAny(sStringValue);
+                }
+                break;
+                default:
+                break;
                 }
                 pEntry->AppendInteropGrabBag(aValue);
             }

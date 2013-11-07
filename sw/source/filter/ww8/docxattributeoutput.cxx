@@ -3617,17 +3617,19 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
 
         bool bQFormat = false, bUnhideWhenUsed = false;
-        OUString aRsid, aUiPriority;
+        OUString aLink, aRsid, aUiPriority;
         for (sal_Int32 i = 0; i < rGrabBag.getLength(); ++i)
         {
             if (rGrabBag[i].Name == "uiPriority")
                 aUiPriority = rGrabBag[i].Value.get<OUString>();
             else if (rGrabBag[i].Name == "qFormat")
                 bQFormat = true;
+            else if (rGrabBag[i].Name == "link")
+                aLink = rGrabBag[i].Value.get<OUString>();
             else if (rGrabBag[i].Name == "rsid")
                 aRsid = rGrabBag[i].Value.get<OUString>();
-             else if (rGrabBag[i].Name == "unhideWhenUsed")
-                 bUnhideWhenUsed = true;
+            else if (rGrabBag[i].Name == "unhideWhenUsed")
+                bUnhideWhenUsed = true;
             else
                 SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
         }
@@ -3640,6 +3642,10 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
         if (bUnhideWhenUsed)
             m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
+        if (!aLink.isEmpty())
+            m_pSerializer->singleElementNS(XML_w, XML_link,
+                    FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSEND);
         if (!aRsid.isEmpty())
             m_pSerializer->singleElementNS(XML_w, XML_rsid,
                     FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),

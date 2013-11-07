@@ -1304,6 +1304,8 @@ DECLARE_OOXML_TEST(testStyleInheritance, "style-inheritance.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListParagraph']/w:uiPriority", "val", "34");
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:qFormat", 1);
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:rsid", "val", "00780346");
+
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:link", "val", "Heading1Char");
 }
 
 DECLARE_OOXML_TEST(testCalendar1, "calendar1.docx")
