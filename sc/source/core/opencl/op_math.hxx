@@ -160,6 +160,13 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Ln"; }
 };
+class OpRound: public CheckVariables
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "Round"; }
+};
 }}
 
 #endif
