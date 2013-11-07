@@ -62,7 +62,7 @@ namespace connectivity
             @param  _sSQL
                 The SQL statement to transform.
             @return
-                The new statement witgh unnamed parameters.
+                The new statement with unnamed parameters.
         */
         OUString transFormPreparedStatement(const OUString& _sSQL);
         void loadDriverFromProperties(
