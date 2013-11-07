@@ -321,7 +321,7 @@ sub filter_log_error ($$$$)
 
         # Remove all filenames that contain the word "Error".
         my $work_string = $message;
-        $work_string =~ s/Error\.(idt|mlf|ulf|html|hpp|ipp)//g;
+        $work_string =~ s/Error\.(idt|mlf|ulf|idl|html|hpp|ipp)//g;
 
         if ($work_string =~ /\bError\b/i)
         {
