@@ -1642,7 +1642,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         2 New page, 3 Even page, 4 Odd page
         */
     sal_uInt8 nBreakCode = 2;            // default neue Seite beginnen
-    bool bOutPgDscSet = true, bLeftRightPgChain = false;
+    bool bOutPgDscSet = true, bLeftRightPgChain = false, bOutputStyleItemSet = false;
     const SwFrmFmt* pPdFmt = &pPd->GetMaster();
     if ( rSepInfo.pSectionFmt )
     {
@@ -1703,6 +1703,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             // Switch off test on default item values, if page description
             // set (value of <bOutPgDscSet>) isn't written.
             AttrOutput().OutputStyleItemSet( aSet, true, bOutPgDscSet );
+            bOutputStyleItemSet = true;
 
             //Cannot export as normal page framedir, as continous sections
             //cannot contain any grid settings like proper sections
@@ -1789,7 +1790,8 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         }
 
         pISet = &pPdFmt->GetAttrSet();
-        AttrOutput().OutputStyleItemSet( pPdFmt->GetAttrSet(), true, false );
+        if (!bOutputStyleItemSet)
+            AttrOutput().OutputStyleItemSet( pPdFmt->GetAttrSet(), true, false );
         AttrOutput().SectionPageBorders( pPdFmt, pPdFirstPgFmt );
         pISet = pOldI;
 
