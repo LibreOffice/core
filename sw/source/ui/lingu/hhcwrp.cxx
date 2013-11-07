@@ -603,7 +603,7 @@ void SwHHCWrapper::Convert()
             // not work. Thus since chinese conversion is not interactive we start
             // at the begin of the paragraph to solve the problem, i.e. have the
             // TextConversion service get those characters together in the same call.
-            xub_StrLen nStartIdx = STRING_MAXLEN;
+            sal_Int32 nStartIdx = -1;
             if (editeng::HangulHanjaConversion::IsChinese( GetSourceLanguage() ) )
                 nStartIdx = 0;
             else
@@ -618,11 +618,11 @@ void SwHHCWrapper::Convert()
                 if (aBoundary.startPos < aText.getLength() &&
                     aBoundary.startPos != aBoundary.endPos)
                 {
-                    nStartIdx = static_cast< xub_StrLen >(aBoundary.startPos );
+                    nStartIdx = aBoundary.startPos;
                 }
             }
 
-            if (STRING_MAXLEN != nStartIdx)
+            if (nStartIdx != -1)
                 *m_pConvArgs->pStartIdx = nStartIdx;
         }
     }
