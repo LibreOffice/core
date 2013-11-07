@@ -149,7 +149,57 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
         }
     }
 
+    if(OOXMLStream::CUSTOMXML == nType)
+    {
+        importSubStreamRelations(pStream, OOXMLStream::CUSTOMXMLPROPS);
+    }
+
     return xRet;
+}
+
+
+void OOXMLDocumentImpl::importSubStreamRelations(OOXMLStream::Pointer_t pStream, OOXMLStream::StreamType_t nType)
+{
+    // imporing itemprops files for item.xml from customXml.
+    if(OOXMLStream::CUSTOMXMLPROPS == nType)
+    {
+        uno::Reference<xml::dom::XDocument> xCustomProps;
+        OOXMLStream::Pointer_t cStream;
+        try
+        {
+            cStream = OOXMLDocumentFactory::createStream(pStream, OOXMLStream::CUSTOMXMLPROPS);
+        }
+        catch (uno::Exception const& e)
+        {
+           SAL_WARN("writerfilter", "importSubStreamRelations: exception while "
+                    "importing stream " << nType << " : " << e.Message);
+           mxCustomXmlProsDom = xCustomProps;
+        }
+
+        uno::Reference<io::XInputStream> xcpInputStream =
+           cStream->getDocumentStream();
+
+        if (xcpInputStream.is())
+        {
+            try
+            {
+                 uno::Reference<uno::XComponentContext> xcpContext(pStream->getContext());
+                 uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xcpContext));
+                 xCustomProps = xDomBuilder->parse(xcpInputStream);
+            }
+            catch (uno::Exception const& e)
+            {
+                SAL_WARN("writerfilter", "importSubStream: exception while "
+                         "parsing stream " << nType << " : " << e.Message);
+                mxCustomXmlProsDom = xCustomProps;
+            }
+        }
+
+        if(xCustomProps.is())
+        {
+            mxCustomXmlProsDom = xCustomProps;
+        }
+    }
 }
 
 void OOXMLDocumentImpl::setXNoteId(const sal_Int32 nId)
@@ -416,10 +466,11 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
         OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
         OUString sTarget("Target");
         bool bFound = false;
-        sal_Int32 counter = 1;
+        sal_Int32 counter = 0;
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
                 mxRelationshipAccess->getAllRelationships();
         uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomListTemp(aSeqs.getLength());
+        uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomPropsListTemp(aSeqs.getLength());
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -439,15 +490,24 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
             }
             if(bFound)
             {
-                uno::Reference<xml::dom::XDocument> temp = importSubStream(OOXMLStream::CUSTOMXML);
-                mxCustomXmlDomListTemp[counter] = temp;
-                counter++;
-                resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
+                uno::Reference<xml::dom::XDocument> customXmlTemp = importSubStream(OOXMLStream::CUSTOMXML);
+                // This will add all item[n].xml with it's relationship file i.e itemprops.xml to
+                // grabbag list.
+                if(mxCustomXmlProsDom.is() && customXmlTemp.is())
+                {
+                    mxCustomXmlDomListTemp[counter] = customXmlTemp;
+                    mxCustomXmlDomPropsListTemp[counter] = mxCustomXmlProsDom;
+                    counter++;
+                    resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
+                }
                 bFound = false;
             }
         }
-        mxCustomXmlDomListTemp.realloc(counter+1);
+
+        mxCustomXmlDomListTemp.realloc(counter);
+        mxCustomXmlDomPropsListTemp.realloc(counter);
         mxCustomXmlDomList = mxCustomXmlDomListTemp;
+        mxCustomXmlDomPropsList = mxCustomXmlDomPropsListTemp;
     }
 }
 
@@ -516,6 +576,11 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getThemeDom( )
 uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomList( )
 {
     return mxCustomXmlDomList;
+}
+
+uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomPropsList( )
+{
+    return mxCustomXmlDomPropsList;
 }
 
 OOXMLDocument *

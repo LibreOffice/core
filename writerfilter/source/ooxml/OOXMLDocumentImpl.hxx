@@ -43,6 +43,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Reference<xml::sax::XFastShapeContextHandler> mxShapeContext;
     uno::Reference<xml::dom::XDocument> mxThemeDom;
     uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomList;
+    uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomPropsList;
+    uno::Reference<xml::dom::XDocument> mxCustomXmlProsDom;
     bool mbIsSubstream;
 
 protected:
@@ -54,6 +56,8 @@ protected:
                       sal_uInt32 nId);
 
     uno::Reference<xml::dom::XDocument> importSubStream(OOXMLStream::StreamType_t nType);
+
+    void importSubStreamRelations(OOXMLStream::Pointer_t pStream, OOXMLStream::StreamType_t nType);
 
     writerfilter::Reference<Stream>::Pointer_t
     getSubStream(const OUString & rId);
@@ -112,6 +116,7 @@ public:
     virtual void setThemeDom(uno::Reference<xml::dom::XDocument> xThemeDom);
     virtual uno::Reference<xml::dom::XDocument> getThemeDom();
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList();
+    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList();
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX

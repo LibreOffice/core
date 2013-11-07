@@ -1534,7 +1534,8 @@ DECLARE_OOXML_TEST(testCharHighlight, "char_highlight.docx")
 
 DECLARE_OOXML_TEST(testCustomXmlGrabBag, "customxml.docx")
 {
-   // The problem was that CustomXml/item[n].xml files were missing from docx file after saving file.
+   // The problem was that item[n].xml and itemProps[n].xml and .rels files for item[n].xml
+   // files were missing from docx file after saving file.
    // This test case tests whether customxml files grabbagged properly in correct object.
 
    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -1545,15 +1546,15 @@ DECLARE_OOXML_TEST(testCustomXmlGrabBag, "customxml.docx")
    sal_Bool CustomXml = sal_False;
    for(int i = 0; i < aGrabBag.getLength(); ++i)
    {
-       if (aGrabBag[i].Name == OUString("OOXCustomXml"))
+       if (aGrabBag[i].Name == "OOXCustomXml" || aGrabBag[i].Name == "OOXCustomXmlProps")
        {
            CustomXml = sal_True;
            uno::Reference<xml::dom::XDocument> aCustomXmlDom;
            uno::Sequence<uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aCustomXmlDomList); // PropertyValue of proper type
            sal_Int32 length = aCustomXmlDomList.getLength();
-           CPPUNIT_ASSERT_EQUAL(sal_Int32(3), length);
-           aCustomXmlDom = aCustomXmlDomList[1];
+           CPPUNIT_ASSERT_EQUAL(sal_Int32(1), length);
+           aCustomXmlDom = aCustomXmlDomList[0];
            CPPUNIT_ASSERT(aCustomXmlDom.get()); // Reference not empty
        }
    }

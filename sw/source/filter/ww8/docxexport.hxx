@@ -207,7 +207,9 @@ private:
     /// Write word/theme/theme1.xml
     void WriteTheme();
 
+    /// Write customXml/item[n].xml and customXml/itemProps[n].xml
     void WriteCustomXml();
+
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
     sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
 
