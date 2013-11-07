@@ -107,7 +107,6 @@ void applyCellFormulas(
     ScDocumentImport& rDoc, SvNumberFormatter& rFormatter,
     const std::vector<FormulaBuffer::TokenAddressItem>& rCells )
 {
-    ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
     std::vector<FormulaBuffer::TokenAddressItem>::const_iterator it = rCells.begin(), itEnd = rCells.end();
     for (; it != itEnd; ++it)
     {
@@ -225,8 +224,11 @@ void FormulaBuffer::FinalizeThread::execute()
 {
     ScDocumentImport& rDoc = mrParent.getDocImport();
     rDoc.getDoc().SetAutoNameCache(new ScAutoNameCache(&rDoc.getDoc()));
+    ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
+
     SCTAB nTabCount = rDoc.getDoc().GetTableCount();
 
+    // Fetch all the formulas to process first.
     std::vector<SheetItem> aSheetItems;
     aSheetItems.reserve(nTabCount);
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
@@ -238,6 +240,10 @@ void FormulaBuffer::FinalizeThread::execute()
 
     std::vector<SheetItem>::iterator it = aSheetItems.begin(), itEnd = aSheetItems.end();
 
+    // TODO: Right now we are spawning multiple threads all at once and block
+    // on them all at once.  Any more clever thread management would require
+    // use of condition variables which our own osl thread framework seems to
+    // lack.
     while (it != itEnd)
     {
         for (size_t i = 0; i < mnThreadCount; ++i)
