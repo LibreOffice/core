@@ -1033,7 +1033,17 @@ void SmEditWindow::InsertText(const OUString& rText)
         if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
             string = " " + string;
 
+        /*
+          fdo#65588 -  Elements Dock: Scrollbar moves into input window
+          This change "solves" the visual problem. But I don't think so
+          this is the best solution.
+        */
+        pVScrollBar->Hide();
+        pHScrollBar->Hide();
         pEditView->InsertText(string);
+        AdjustScrollBars();
+        pVScrollBar->Show();
+        pHScrollBar->Show();
 
         // Remember start of the selection and move the cursor there afterwards.
         aSelection.nEndPara = aSelection.nStartPara;
