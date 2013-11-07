@@ -939,6 +939,7 @@ void OpCritBinom::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
     decls.insert(MinDecl);
+    funs.insert("");
 }
 
 void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
