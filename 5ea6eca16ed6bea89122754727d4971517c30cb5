@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAaH///q0\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-11-07T15:55:37Z",
+      "side": 1,
+      "message": "GetBetaDistPDF() sets nGlobalError as part of argument checks. I wanted to ignore those errors and just push NoValue.\nBut probably the change of such an error is slim (the argument checks have already taken place in ScCritBinom()) and an error message is not a problem, so have removed this line.",
+      "parentUuid": "AAAAaH///r8\u003d",
+      "revId": "5ea6eca16ed6bea89122754727d4971517c30cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAaH///r4\u003d",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-11-07T13:31:39Z",
       "side": 1,
       "message": "Same here, SetError() without effect.",
+      "revId": "5ea6eca16ed6bea89122754727d4971517c30cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///qw\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-11-07T15:55:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAaH///r4\u003d",
       "revId": "5ea6eca16ed6bea89122754727d4971517c30cb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
