@@ -1072,10 +1072,9 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
     if ( m_sOldPath.isEmpty() )
         m_sOldPath = _rPath;
     m_pPathList->Clear();
-    xub_StrLen i;
     sal_Int32 nIdx = 0;
     sal_Int32 nCount = comphelper::string::getTokenCount(_rPath, CLASSPATH_DELIMITER);
-    for ( i = 0; i < nCount; ++i )
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, INetURLObject::FSYS_DETECT );

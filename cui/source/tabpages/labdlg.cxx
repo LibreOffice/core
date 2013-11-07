@@ -385,7 +385,7 @@ sal_uInt16* SvxCaptionTabPage::GetRanges()
 
 void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 {
-    xub_StrLen  nCnt=0, nIdx=0;
+    sal_Int32 nCnt=0, nIdx=0;
 
     switch( nType )
     {

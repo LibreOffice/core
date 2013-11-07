@@ -127,7 +127,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, co
     fmscInitial.nContext = nInitialContext;
     m_lnkContextSupplier.Call(&fmscInitial);
     DBG_ASSERT(fmscInitial.xCursor.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
-    DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == (xub_StrLen)fmscInitial.arrFields.size(),
+    DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == (sal_Int32)fmscInitial.arrFields.size(),
         "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplied !");
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     for (sal_Int32 i=0; i<(sal_Int32)fmscInitial.arrFields.size(); ++i)
