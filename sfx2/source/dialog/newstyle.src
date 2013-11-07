@@ -22,47 +22,11 @@
 #include "newstyle.hrc"
 #include <sfx2/sfxcommands.h>
 
-ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
-{
-    HelpId = CMD_SID_STYLE_NEW_BY_EXAMPLE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 177 , 112 ) ;
-    Text [ en-US ] = "Create Style" ;
-    Moveable = TRUE ;
-    FixedLine FL_COL
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 109 , 8 ) ;
-        Text [ en-US ] = "Style name" ;
-    };
-    ComboBox LB_COL
-    {
-        HelpID = "sfx2:ComboBox:DLG_NEW_STYLE_BY_EXAMPLE:LB_COL";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 94 , 92 ) ;
-        TabStop = TRUE ;
-    };
-    OKButton BT_OK
-    {
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 121 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BT_CANCEL
-    {
-        Pos = MAP_APPFONT ( 121 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
     QueryBox MSG_OVERWRITE
     {
         Buttons = WB_YES_NO ;
         DefButton = WB_DEF_NO ;
         Message [ en-US ] = "Style already exists. Overwrite?" ;
     };
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

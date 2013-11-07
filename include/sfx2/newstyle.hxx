@@ -33,10 +33,8 @@ class SfxStyleSheetBasePool;
 class SFX2_DLLPUBLIC SfxNewStyleDlg : public ModalDialog
 {
 private:
-    FixedLine               aColFL;
-    ComboBox                aColBox;
-    OKButton                aOKBtn;
-    CancelButton            aCancelBtn;
+    ComboBox* m_pColBox;
+    OKButton* m_pOKBtn;
 
     QueryBox                aQueryOverwriteBox;
     SfxStyleSheetBasePool&  rPool;
@@ -48,7 +46,7 @@ public:
     SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& );
     ~SfxNewStyleDlg();
 
-    OUString                GetName() const { return comphelper::string::stripStart(aColBox.GetText(), ' '); }
+    OUString                GetName() const { return comphelper::string::stripStart(m_pColBox->GetText(), ' '); }
 };
 
 #endif
