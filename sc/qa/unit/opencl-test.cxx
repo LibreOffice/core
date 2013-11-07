@@ -183,6 +183,7 @@ public:
     void testFinacialNPER1Formula();
     void testStatisticalFormulaFDist();
     void testStatisticalFormulaVar();
+    void testStatisticalFormulaChiDist();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -297,6 +298,7 @@ public:
     CPPUNIT_TEST(testFinacialNPER1Formula);
     CPPUNIT_TEST(testStatisticalFormulaFDist);
     CPPUNIT_TEST(testStatisticalFormulaVar);
+    CPPUNIT_TEST(testStatisticalFormulaChiDist);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3247,6 +3249,29 @@ void ScOpenclTest::testStatisticalFormulaGammaDist()
     {
         double fLibre = pDoc->GetValue(ScAddress(4,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(4,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-166]
+void ScOpenclTest::testStatisticalFormulaChiDist()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/ChiDist.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/ChiDist.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 19; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
