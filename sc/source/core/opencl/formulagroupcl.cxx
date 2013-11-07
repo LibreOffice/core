@@ -820,9 +820,7 @@ protected:
     cl_mem mpClmem2;
 };
 
-
-
-/// Abstract class for code generation
+/// Abstract class for OpenCL source code generation
 
 class Reduction: public SlidingFunctionBase
 {
@@ -2399,7 +2397,7 @@ void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
     }
 }
 
-    /// Code generation in OpenCL
+/// OpenCL code generation
 void DynamicKernel::CodeGen()
 {
         // Travese the tree of expression and declare symbols used
@@ -2633,7 +2631,7 @@ DynamicKernel* DynamicKernel::create(ScDocument& rDoc,
     if (!pDynamicKernel)
         return NULL;
 
-    // Code generation
+    // OpenCL source code generation
     try {
         pDynamicKernel->CodeGen();
     }

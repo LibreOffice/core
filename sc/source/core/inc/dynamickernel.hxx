@@ -67,7 +67,7 @@ public:
     static DynamicKernel *create(ScDocument& rDoc,
                                  const ScAddress& rTopPos,
                                  ScTokenArray& rCode);
-    /// Code generation in OpenCL
+    /// OpenCL code generation
     void CodeGen();
     /// Produce kernel hash
     std::string GetMD5(void);
