@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///r8\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-07T13:31:39Z",
+      "side": 1,
+      "message": "SetError() has no effect if nGlobalError is already set, the first error encountered takes precedence, see interpre.hxx\n\nIf you really want to override the the already inherited error (why?) you need to set nGlobalError\u003d0 before setting an error with for example PushNoValue()",
+      "revId": "5ea6eca16ed6bea89122754727d4971517c30cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///r4\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-07T13:31:39Z",
+      "side": 1,
+      "message": "Same here, SetError() without effect.",
+      "revId": "5ea6eca16ed6bea89122754727d4971517c30cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
