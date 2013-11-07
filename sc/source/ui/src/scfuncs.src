@@ -7185,7 +7185,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The degrees of freedom in the denominator of the F distribution." ;
         };
     };
-     // -=*# Resource for function CHIVERT #*=-
+     // -=*# Resource for function CHIDIST #*=-
     Resource SC_OPCODE_CHI_DIST
     {
         String 1 // Description
@@ -7217,6 +7217,39 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The degrees of freedom of the chi square distribution." ;
         };
     };
+     // -=*# Resource for function CHISQ.DIST.RT #*=-
+    Resource SC_OPCODE_CHI_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the right-tail probability of the chi-square distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_CHIVERT_MS );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the chi square distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the chi square distribution." ;
+        };
+    };
+
 
      // -=*# Resource for function CHISQDIST #*=-
     Resource SC_OPCODE_CHISQ_DIST
@@ -7231,6 +7264,47 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_CHISQDIST );
             3;  0;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the probability density function or cumulative distribution function is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Degrees of Freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the chi-square distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Cumulative" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
+        };
+    };
+
+     // -=*# Resource for function CHISQ.DIST #*=-
+    Resource SC_OPCODE_CHISQ_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns left-tail probability of the cumulative distribution function or values of the probability density function of the chi-square distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_CHISQDIST_MS );
+            3;  0;  0;  0;
             0;
         };
         String 2 // Name of Parameter 1
@@ -7293,6 +7367,39 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
 
+     // -=*# Resource for function CHISQ.INV.RT #*=-
+    Resource SC_OPCODE_CHI_INV_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse of CHIDIST(x; DegreesOfFreedom)." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_CHIINV_MS );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse chi square distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the chi square distribution." ;
+        };
+    };
+
      // -=*# Resource for function CHISQINV #*=-
     Resource SC_OPCODE_CHISQ_INV
     {
@@ -7305,6 +7412,39 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_CHISQINV );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Probability" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse of the chi square distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Degrees of Freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the chi square distribution." ;
+        };
+    };
+
+     // -=*# Resource for function CHISQ.INV #*=-
+    Resource SC_OPCODE_CHISQ_INV_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse of CHISQ.DIST(x;DegreesOfFreedom;TRUE())." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_CHISQINV_MS );
             2;  0;  0;
             0;
         };
@@ -7522,6 +7662,38 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_CHITEST );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Data_B" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The observed data array." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_E" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The expected data array." ;
+        };
+    };
+     // -=*# Resource for function CHISQ.TEST.RT #*=-
+    Resource SC_OPCODE_CHI_TEST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the chi square independence test." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_CHITEST_MS );
             2;  0;  0;
             0;
         };

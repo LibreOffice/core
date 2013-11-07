@@ -688,5 +688,10 @@
 #define HID_FUNC_BETAINV_MS                                     "SC_HID_FUNC_BETAINV_MS"
 #define HID_FUNC_BINOM_DIST_MS                                  "SC_HID_FUNC_BINOM_DIST_MS"
 #define HID_FUNC_BINOM_INV_MS                                   "SC_HID_FUNC_BINOM_INV_MS"
+#define HID_FUNC_CHIINV_MS                                      "SC_HID_FUNC_CHIINV_MS"
+#define HID_FUNC_CHIVERT_MS                                     "SC_HID_FUNC_CHIVERT_MS"
+#define HID_FUNC_CHITEST_MS                                     "SC_HID_FUNC_CHITEST_MS"
+#define HID_FUNC_CHISQDIST_MS                                   "SC_HID_FUNC_CHISQDIST_MS"
+#define HID_FUNC_CHISQINV_MS                                    "SC_HID_FUNC_CHISQINV_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
