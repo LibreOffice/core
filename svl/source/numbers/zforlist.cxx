@@ -71,9 +71,16 @@ using namespace ::std;
  * (old currency) is recognized as a date (#53155#). */
 #define UNKNOWN_SUBSTITUTE      LANGUAGE_ENGLISH_US
 
-static bool bIndexTableInitialized = false;
-static sal_uInt32 theIndexTable[NF_INDEX_TABLE_ENTRIES];
+struct IndexTable
+{
+    bool mbInitialized;
+    sal_uInt32 maData[NF_INDEX_TABLE_ENTRIES];
+    osl::Mutex maMtx;
 
+    IndexTable() : mbInitialized(false) {}
+};
+
+static IndexTable theIndexTable;
 
 // ====================================================================
 
@@ -2001,11 +2008,13 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
 
 inline sal_uInt32 SetIndexTable( NfIndexTableOffset nTabOff, sal_uInt32 nIndOff )
 {
-    if ( !bIndexTableInitialized )
+    osl::MutexGuard aGuard(&theIndexTable.maMtx);
+
+    if (!theIndexTable.mbInitialized)
     {
-        DBG_ASSERT( theIndexTable[nTabOff] == NUMBERFORMAT_ENTRY_NOT_FOUND,
+        DBG_ASSERT(theIndexTable.maData[nTabOff] == NUMBERFORMAT_ENTRY_NOT_FOUND,
             "SetIndexTable: theIndexTable[nTabOff] already occupied" );
-        theIndexTable[nTabOff] = nIndOff;
+        theIndexTable.maData[nTabOff] = nIndOff;
     }
     return nIndOff;
 }
@@ -2196,13 +2205,17 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 {
     using namespace ::com::sun::star;
 
-    if ( !bIndexTableInitialized )
     {
-        for ( sal_uInt16 j=0; j<NF_INDEX_TABLE_ENTRIES; j++ )
+        osl::MutexGuard aGuard(&theIndexTable.maMtx);
+        if (!theIndexTable.mbInitialized)
         {
-            theIndexTable[j] = NUMBERFORMAT_ENTRY_NOT_FOUND;
+            for ( sal_uInt16 j=0; j<NF_INDEX_TABLE_ENTRIES; j++ )
+            {
+                theIndexTable.maData[j] = NUMBERFORMAT_ENTRY_NOT_FOUND;
+            }
         }
     }
+
     bool bOldConvertMode = pFormatScanner->GetConvertMode();
     if (bOldConvertMode)
     {
@@ -2631,8 +2644,10 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
                                 CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ),
                                 SV_NUMBERFORMATTER_VERSION_NF_DATE_WW );
 
-
-    bIndexTableInitialized = true;
+    {
+        osl::MutexGuard aGuard(&theIndexTable.maMtx);
+        theIndexTable.mbInitialized = true;
+    }
     SAL_WARN_IF( nNewExtended > ZF_STANDARD_NEWEXTENDEDMAX, "svl.numbers",
         "ImpGenerateFormats: overflow of nNewExtended standard formats" );
 
@@ -3092,17 +3107,24 @@ sal_uInt32 SvNumberFormatter::GetFormatForLanguageIfBuiltIn( sal_uInt32 nFormat,
 sal_uInt32 SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
                                               LanguageType eLnge )
 {
-    if ( nTabOff >= NF_INDEX_TABLE_ENTRIES ||
-         theIndexTable[nTabOff] == NUMBERFORMAT_ENTRY_NOT_FOUND )
-    {
+    if (nTabOff >= NF_INDEX_TABLE_ENTRIES)
         return NUMBERFORMAT_ENTRY_NOT_FOUND;
-    }
-    if ( eLnge == LANGUAGE_DONTKNOW )
-    {
+
+    if (eLnge == LANGUAGE_DONTKNOW)
         eLnge = IniLnge;
+
+    {
+        osl::MutexGuard aGuard(&theIndexTable.maMtx);
+        if (theIndexTable.maData[nTabOff] == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            return NUMBERFORMAT_ENTRY_NOT_FOUND;
     }
+
     sal_uInt32 nCLOffset = ImpGenerateCL(eLnge);    // create new standard formats if necessary
-    return nCLOffset + theIndexTable[nTabOff];
+
+    {
+        osl::MutexGuard aGuard(&theIndexTable.maMtx);
+        return nCLOffset + theIndexTable.maData[nTabOff];
+    }
 }
 
 
@@ -3113,11 +3135,13 @@ NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) 
     {
         return NF_INDEX_TABLE_ENTRIES;      // not a built-in format
     }
-    for ( sal_uInt16 j = 0; j < NF_INDEX_TABLE_ENTRIES; j++ )
+
     {
-        if ( theIndexTable[j] == nOffset )
+        osl::MutexGuard aGuard(&theIndexTable.maMtx);
+        for ( sal_uInt16 j = 0; j < NF_INDEX_TABLE_ENTRIES; j++ )
         {
-            return (NfIndexTableOffset) j;
+            if (theIndexTable.maData[j] == nOffset)
+                return (NfIndexTableOffset) j;
         }
     }
     return NF_INDEX_TABLE_ENTRIES;      // bad luck
