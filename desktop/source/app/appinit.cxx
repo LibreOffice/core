@@ -183,11 +183,11 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
                 rAcceptor->initialize( aSeq );
                 rMap.insert(AcceptorMap::value_type(aAcceptString, rAcceptor));
             }
-            catch (const com::sun::star::uno::Exception&)
+            catch (const com::sun::star::uno::Exception& e)
             {
                 // no error handling needed...
                 // acceptor just won't come up
-                SAL_WARN( "desktop.app", "Acceptor could not be created.");
+                SAL_WARN( "desktop.app", "Acceptor could not be created: " << e.Message);
             }
         }
         else
