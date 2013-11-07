@@ -85,9 +85,9 @@ sub makeLangID($$)
 }
 
 
-sub grepFile($$$$@)
+sub grepFile($$$$$@)
 {
-    my( $regex, $path, $module, $name, @addregex) = @_;
+    my( $regex, $path, $module, $name, $printmsg, @addregex) = @_;
     my @result;
     my $found = 0;
     my $areopen = 0;
@@ -156,7 +156,7 @@ sub grepFile($$$$@)
         }
         close( IN);
     }
-    if (!$found) {
+    if (!$found && $printmsg) {
         print "Not found in $file\n";
         #print "Not found in $file for $regex @addregex\n";
     }
@@ -214,16 +214,17 @@ sub main()
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
-            "$SRC_ROOT", "include", "i18nlangtag/lang.h", ());
+            "$SRC_ROOT", "include", "i18nlangtag/lang.h", 1, ());
     }
     else
     {
         printf( "LangID: 0x%04X (dec %d), primary: 0x%03x, sub 0x%02x\n", $lcid,
                 $lcid, $parts[0], $parts[1]);
         my $buf = sprintf( "0x%04X", $lcid);
+        # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             '^\s*#\s*define\s+\w+\s+' . $buf,
-            "$SRC_ROOT", "include", "i18nlangtag/lang.h", ());
+            "$SRC_ROOT", "include", "i18nlangtag/lang.h", 1, ());
     }
     for $result (@resultlist)
     {
@@ -239,23 +240,70 @@ sub main()
     # If the string given is of the form xx-yy lookup a language,country pair
     # to obtain the define identifier. xx and yy themselfs may be regexps.
     # xx- is a short form for 'xx-.*' and -yy a short form for '.*-yy'
+    # Note that -Latn for '.*-Latn' also works, accidentally.
     if ($grepdef =~ /^(.*)-$/) {
         $grepdef = $1 . "-.*"; }
     if ($grepdef =~ /^-(.*)$/) {
         $grepdef = ".*-" . $1; }
-    if ($grepdef =~ /^(.*)-(.*)$/)
+    if ($grepdef =~ /^([^-]{2,3})-([^-]{2,2})$/)    # catches also .*-.*
     {
         my $lang = $1;
         my $coun = $2;
         $lang = lc($lang);
         $coun = uc($coun);
-        #     { LANGUAGE_AFRIKAANS,                   "af", "ZA", false },
+        #     { LANGUAGE_AFRIKAANS,                   "af", "ZA", 0     },
         @resultlist = grepFile(
-            '^\s*\{\s*\w+\s*,\s*\"' . $lang . '\"\s*,\s*\"'  . $coun . '\"\s*,\s*\w+\s*\}\s*,',
-            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", ());
+            '^\s*\{\s*\w+\s*,\s*"' . $lang . '"\s*,\s*"'  . $coun . '"\s*,\s*\w+\s*\}\s*,',
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", 1, ());
         for $result (@resultlist)
         {
-            if ($result =~ /^\s*\{\s*(\w+)\s*,\s*\"\w+\"\s*,\s*\"(\w+)?\"\s*,\s*\w+\s*\}\s*,/)
+            if ($result =~ /^\s*\{\s*(\w+)\s*,\s*"(\w+)"\s*,\s*"(\w+)?"\s*,\s*\w+\s*\}\s*,/)
+            {
+                push( @greplist, '\b' . $1 . '\b');
+                $modifier = "";     # complete identifier now case sensitive
+                if ($single) {
+                    last; }
+            }
+        }
+        $grepdef = 0;
+    }
+    # Same for lll-Ssss or lll-Ssss-CC language tag.
+    if ($grepdef =~ /^([^-]{2,3})-([^-]{4,4})$/ || $grepdef =~ /^([^-]{2,3})-([^-]{4,4})-([^-]{2,2})$/)
+    {
+        my $lang = $1;
+        my $scri = $2;
+        my $coun = $3;
+        if (!defined($coun)) {
+            $coun = ""; }
+        $lang = lc($lang);
+        $scri = ucfirst(lc($scri));
+        $coun = uc($coun);
+        #     { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sr-Latn", "RS", 0     },
+        @resultlist = grepFile(
+            '^\s*\{\s*\w+\s*,\s*"' . $lang . '-' . $scri . '"\s*,\s*"'  . $coun . '"\s*,\s*\w+\s*\}\s*,',
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", 1, ());
+        for $result (@resultlist)
+        {
+            if ($result =~ /^\s*\{\s*(\w+)\s*,\s*"(\w+-\w+)"\s*,\s*"(\w+)?"\s*,\s*\w+\s*\}\s*,/)
+            {
+                push( @greplist, '\b' . $1 . '\b');
+                $modifier = "";     # complete identifier now case sensitive
+                if ($single) {
+                    last; }
+            }
+        }
+        $grepdef = 0;
+    }
+    # And for any other language tag that MUST match case.
+    if ($grepdef =~ /^[^-]+-/)
+    {
+        #     { LANGUAGE_CATALAN_VALENCIAN,       "ca-ES-valencia", "ES", "ca-valencia" },
+        @resultlist = grepFile(
+            '^\s*\{\s*\w+\s*,\s*"' . $grepdef . '"\s*,\s*"(\w*)"\s*,\s*"([^"]*)"\s*\}\s*,',
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", 1, ());
+        for $result (@resultlist)
+        {
+            if ($result =~ /^\s*\{\s*(\w+)\s*,\s*"([^"]+)"\s*,\s*"(\w*)"\s*,\s*"([^"]*)"\s*\}\s*,/)
             {
                 push( @greplist, '\b' . $1 . '\b');
                 $modifier = "";     # complete identifier now case sensitive
@@ -276,7 +324,7 @@ sub main()
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
-            "$SRC_ROOT", "include", "i18nlangtag/lang.h", ());
+            "$SRC_ROOT", "include", "i18nlangtag/lang.h", 1, ());
         my @lcidlist;
         for $result (@resultlist)
         {
@@ -287,30 +335,66 @@ sub main()
             }
         }
 
-        #     { LANGUAGE_AFRIKAANS,                   "af", "ZA", false },
+        my @allresultslist;
+        #     { LANGUAGE_AFRIKAANS,                   "af", "ZA", 0     },
         @resultlist = grepFile(
-            $modifier . '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*\".*\"\s*,\s*\".*\"\s*,\s*\w+\s*\}\s*,',
-            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", ());
+            $modifier . '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*"(\w+)"\s*,\s*"(\w+)?"\s*,\s*\w+\s*\}\s*,',
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", 0, ());
+        push( @allresultslist, @resultlist);
+        #     { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sr-Latn", "RS", 0     },
+        @resultlist = grepFile(
+            $modifier . '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*"(\w+-\w+)"\s*,\s*"(\w+)?"\s*,\s*\w+\s*}\s*,',
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", 0, ());
+        push( @allresultslist, @resultlist);
+        #     { LANGUAGE_CATALAN_VALENCIAN,       "ca-ES-valencia", "ES", "ca-valencia" },
+        @resultlist = grepFile(
+            $modifier . '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*"([^"]+)"\s*,\s*"(\w*)"\s*,\s*"([^"]*)"\s*\}\s*,',
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", 0, ());
+        push( @allresultslist, @resultlist);
 
-        my @langcoungreplist;
-        for $result (@resultlist)
+        my @langtaggreplist;
+        for $result (@allresultslist)
         {
-            if ($result =~ /^\s*\{\s*\w+\s*,\s*\"(\w+)\"\s*,\s*\"(\w+)?\"\s*,\s*\w+\s*\}\s*,/)
+            my $loca;
+            #     { LANGUAGE_AFRIKAANS,                   "af", "ZA", 0     },
+            #     { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sr-Latn", "RS", 0     },
+            if ($result =~ /^\s*\{\s*(\w+)\s*,\s*"(\w+)"\s*,\s*"(\w+)?"\s*,\s*\w+\s*\}\s*,/ ||
+                $result =~ /^\s*\{\s*(\w+)\s*,\s*"(\w+-\w+)"\s*,\s*"(\w+)?"\s*,\s*\w+\s*\}\s*,/)
             {
-                my $lang = $1;
-                my $coun = $2;
-                my $loca;
+                my $lang = $2;
+                my $coun = $3;
                 if ($coun)
                 {
                     $loca = $lang . "_" . $coun;
-                    push( @langcoungreplist, '\b' . $lang . '\b(-' . $coun . ')?');
+                    push( @langtaggreplist, '\b' . $lang . '\b(-' . $coun . ')?');
                 }
                 else
                 {
                     $loca = $lang;
-                    $coun = "";
-                    push( @langcoungreplist, '\b' . $lang . '\b');
+                    push( @langtaggreplist, '\b' . $lang . '\b');
                 }
+            }
+            #     { LANGUAGE_CATALAN_VALENCIAN,       "ca-ES-valencia", "ES", "ca-valencia" },
+            if ($result =~ /^\s*\{\s*(\w+)\s*,\s*"([^"]+)"\s*,\s*"(\w*)"\s*,\s*"([^"]*)"\s*\}\s*,/)
+            {
+                $loca = $2;
+                my $lang = $4;
+                my $coun = $3;
+                if ($lang)
+                {
+                    if ($coun)
+                    {
+                        push( @langtaggreplist, '\b' . $lang . '\b(-' . $coun . ')?');
+                    }
+                    else
+                    {
+                        push( @langtaggreplist, '\b' . $lang . '\b');
+                    }
+                }
+            }
+            if ($loca)
+            {
+                $loca =~ s/-/_/g;
                 my $file = "$SRC_ROOT/i18npool/source/localedata/data/$loca.xml";
                 my $found = open( LD, $file);
                 if ($found)
@@ -319,11 +403,11 @@ sub main()
                     my $on = 0;
                     while (my $line = <LD>)
                     {
-                        if ($line =~ /<(Language|Country)>/) {
+                        if ($line =~ /<(Language|Country|Variant)>/) {
                             $on = 1; }
                         if ($on) {
                             print $line; }
-                        if ($line =~ /<\/(Language|Country)>/) {
+                        if ($line =~ /<\/(Language|Country|Variant)>/) {
                             $on = 0; }
                     }
                     close( LD);
@@ -333,42 +417,42 @@ sub main()
             }
         }
 
-        #         case LANGUAGE_ARABIC:
+        #         case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY :
         grepFile(
-            $modifier . '^\s*case\s*.*' . $grepdef . '.*\s*:',
-            "$SRC_ROOT", "i18nlangtag", "source/isolang/mslangid.cxx", ());
+            $modifier . '^\s*case\s*.*' . $grepdef . '.*(\s*&\s*\w+)?\s*:',
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/mslangid.cxx", 1, ());
 
         my $module = "svtools";
         my $name = "source/misc/langtab.src";
         #         < "Afrikaans" ; LANGUAGE_AFRIKAANS ; > ;
         # lookup define
         @resultlist = grepFile(
-            $modifier . '^\s*<\s*\".*\"\s*;\s*.*' . $grepdef . '.*\s*;\s*>\s*;',
-            "$SRC_ROOT", $module, $name, ());
+            $modifier . '^\s*<\s*".*"\s*;\s*.*' . $grepdef . '.*\s*;\s*>\s*;',
+            "$SRC_ROOT", $module, $name, 1, ());
         # lookup string
         if (!@resultlist) {
             grepFile(
-                $modifier . '^\s*<\s*\".*' . $grepdef . '.*\"\s*;\s*.*\s*;\s*>\s*;',
-                "$SRC_ROOT", $module, $name, ()); }
+                $modifier . '^\s*<\s*".*' . $grepdef . '.*"\s*;\s*.*\s*;\s*>\s*;',
+                "$SRC_ROOT", $module, $name, 1, ()); }
 
-        for my $langcoun (@langcoungreplist)
+        for my $langtag (@langtaggreplist)
         {
             # Name (xxx) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
             grepFile(
-                '^\s*Name\s*\(' . $langcoun . '\)\s*=',
-                "$SRC_ROOT", "scp2", "source/ooo/file_ooo.scp", ());
+                '^\s*Name\s*\(' . $langtag . '\)\s*=',
+                "$SRC_ROOT", "scp2", "source/ooo/file_ooo.scp", 1, ());
 
             # completelangiso=af ar as-IN ... zu
             grepFile(
-                '^\s*completelangiso\s*=\s*(\s*([a-z]{2,3})(-[A-Z][A-Z])?)*' . $langcoun . '',
-                "$SRC_ROOT", "solenv", "inc/langlist.mk",
+                '^\s*completelangiso\s*=\s*(\s*([a-z]{2,3})(-[A-Z][A-Z])?)*' . $langtag . '',
+                "$SRC_ROOT", "solenv", "inc/langlist.mk", 1,
                 # needs a duplicated pair of backslashes to produce a literal \\
-                ('^\s*completelangiso\s*=', '^\s*$', '^\s*' . $langcoun . '\s*\\\\*$'));
+                ('^\s*completelangiso\s*=', '^\s*$', '^\s*' . $langtag . '\s*\\\\*$'));
 
             # af    1252  1078   # Afrikaans
             grepFile(
-                '^\s*' . $langcoun . '',
-                "$SRC_ROOT", "l10ntools", "source/ulfconv/msi-encodinglist.txt", ());
+                '^\s*' . $langtag . '',
+                "$SRC_ROOT", "l10ntools", "source/ulfconv/msi-encodinglist.txt", 1, ());
         }
     }
     return 0;
