@@ -391,8 +391,8 @@ postprocess_FILES_reportbuilder := \
 	$(postprocess_XCU)/Office/ReportDesign.xcu \
 	$(postprocess_XCU)/Office/UI/DbReportWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/ReportCommands.xcu \
-	$(postprocess_XCU)/TypeDetection/Filter.xcu \
-	$(postprocess_XCU)/TypeDetection/Types.xcu \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_reportbuilder_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_reportbuilder_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Setup-reportbuilder.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-reportbuilder.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess-reportbuilder.xcu \

@@ -290,6 +290,22 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	StarOffice_XML__Base__ui \
 )
 
+# fcfg_reportbuilder
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_reportbuilder_types.xcu,filter/source/config/fragments/types,\
+	StarBaseReport \
+	StarBaseReportChart \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_reportbuilder_filters.xcu,filter/source/config/fragments/filters,\
+	StarBaseReport \
+	StarBaseReportChart \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarBaseReport_ui \
+	StarBaseReportChart_ui \
+)
+
 # fcfg_writer
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
 	generic_HTML \

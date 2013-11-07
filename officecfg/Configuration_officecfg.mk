@@ -52,8 +52,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/UI/Controller.xcu \
 	org/openoffice/Office/UI/Factories.xcu \
 	org/openoffice/Office/UI/ReportCommands.xcu \
-	org/openoffice/TypeDetection/Filter.xcu \
-	org/openoffice/TypeDetection/Types.xcu \
 	org/openoffice/TypeDetection/UISort.xcu \
 	org/openoffice/ucb/Configuration.xcu \
 ))
