@@ -794,6 +794,7 @@ void DocxExport::WriteCustomXml()
         return;
 
     uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomlist;
+    uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomPropslist;
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue( pName ) >>= propList;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
@@ -806,22 +807,50 @@ void DocxExport::WriteCustomXml()
         }
     }
 
-    for (sal_Int32 j = 1; j < customXmlDomlist.getLength(); j++)
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
     {
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXCustomXmlProps" )
+        {
+             propList[nProp].Value >>= customXmlDomPropslist;
+             break;
+        }
+    }
+
+    for (sal_Int32 j = 0; j < customXmlDomlist.getLength(); j++) {
 
         uno::Reference<xml::dom::XDocument> customXmlDom = customXmlDomlist[j];
+        uno::Reference<xml::dom::XDocument> customXmlDomProps = customXmlDomPropslist[j];
         if ( customXmlDom.is() )
         {
             m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml",
-                    "../customXml/item"+OUString::number(j)+".xml" );
+                    "../customXml/item"+OUString::number((j+1))+".xml" );
 
             uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDom, uno::UNO_QUERY );
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
-            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/item"+OUString::number(j)+".xml",
+            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/item"+OUString::number((j+1))+".xml",
                 "application/xml" ) );
             serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
                 uno::Sequence< beans::StringPair >() );
+        }
+
+        if ( customXmlDomProps.is() )
+        {
+
+            uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDomProps, uno::UNO_QUERY );
+            uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
+            writer->setOutputStream( GetFilter().openFragmentStream( "customXml/itemProps"+OUString::number((j+1))+".xml",
+                "application/vnd.openxmlformats-officedocument.customXmlProperties+xml" ) );
+            serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+                uno::Sequence< beans::StringPair >() );
+
+            // Adding itemprops's relationship entry to item.xml.rels file
+            m_pFilter->addRelation( GetFilter().openFragmentStream( "customXml/item"+OUString::number((j+1))+".xml",
+                    "application/xml" ) ,
+                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps",
+                    "itemProps"+OUString::number((j+1))+".xml" );
+
         }
     }
 }
