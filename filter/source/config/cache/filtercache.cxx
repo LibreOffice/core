@@ -1162,8 +1162,10 @@ void FilterCache::impl_validateAndOptimize()
             aPrefFilter[PROPNAME_TYPE] >>= sFilterTypeReg;
             if (sFilterTypeReg != sType)
             {
-                sLog.append("error\t:\t" "The preferred filter \"" + sPrefFilter + "\" of type \"" + sType +
-                            "is registered for another type \"" + sFilterTypeReg + "\".\n");
+                sLog.append("error\t:\t" "The preferred filter \""
+                    + sPrefFilter + "\" of type \"" + sType +
+                    "\" is registered for another type \"" + sFilterTypeReg +
+                    "\".\n");
                 ++nErrors;
             }
 
