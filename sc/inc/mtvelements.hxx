@@ -17,6 +17,7 @@
 #include "editeng/editobj.hxx"
 #include "calcmacros.hxx"
 #include "postit.hxx"
+#include "osl/mutex.hxx"
 
 #if DEBUG_COLUMN_STORAGE
 #ifdef NDEBUG
@@ -138,6 +139,7 @@ class ColumnBlockPositionSet
 
     ScDocument& mrDoc;
     TablesType maTables;
+    osl::Mutex maMtxTables;
 
 public:
     ColumnBlockPositionSet(ScDocument& rDoc);

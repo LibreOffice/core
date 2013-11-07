@@ -30,6 +30,8 @@ ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {
 
 ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
+    osl::MutexGuard aGuard(&maMtxTables);
+
     TablesType::iterator itTab = maTables.find(nTab);
     if (itTab == maTables.end())
     {
