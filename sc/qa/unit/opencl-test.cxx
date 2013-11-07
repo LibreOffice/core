@@ -167,6 +167,7 @@ public:
     void testMathFormulaArcCot();
     void testMathFormulaCosh();
     void testStatisticalFormulaCritBinom();
+    void testMathFormulaArcCotHyp();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -265,6 +266,7 @@ public:
     CPPUNIT_TEST(testMathFormulaArcCot);
     CPPUNIT_TEST(testMathFormulaCosh);
     CPPUNIT_TEST(testStatisticalFormulaCritBinom);
+    CPPUNIT_TEST(testMathFormulaArcCotHyp);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2646,6 +2648,31 @@ void ScOpenclTest::testMathSumIfsFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(8,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(8,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-129]
+void ScOpenclTest::testMathFormulaArcCotHyp()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh =
+        loadDoc("opencl/math/ArcCotHyp.", ODS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes =
+        loadDoc("opencl/math/ArcCotHyp.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Verify ACotH Function
+    for (SCROW i = 1; i <= 1000; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
