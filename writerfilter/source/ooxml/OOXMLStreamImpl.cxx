@@ -111,6 +111,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sCommentsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments");
     static OUString sThemeType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
     static OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
+    static OUString sCustomPropsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps");
     static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
     static OUString sTarget("Target");
     static OUString sTargetMode("TargetMode");
@@ -150,6 +151,9 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
             break;
         case CUSTOMXML:
             sStreamType = sCustomType;
+            break;
+        case CUSTOMXMLPROPS:
+            sStreamType = sCustomPropsType;
             break;
         case SETTINGS:
             sStreamType = sSettingsType;
