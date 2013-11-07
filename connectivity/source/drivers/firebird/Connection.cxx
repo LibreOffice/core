@@ -44,11 +44,11 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <connectivity/sqlparse.hxx>
-#include "resource/common_res.hrc"
-#include "resource/hsqldb_res.hrc"
-#include "resource/sharedresources.hxx"
+#include <resource/common_res.hrc>
+#include <resource/hsqldb_res.hrc>
+#include <resource/sharedresources.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
