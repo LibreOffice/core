@@ -91,6 +91,8 @@
 #define SID_SCFORMULAOPTIONS    (SC_VIEW_START + 20)
 #define SID_SCDEFAULTSOPTIONS   (SC_VIEW_START + 21)
 
+#define SID_DATA_STREAMS        (SC_VIEW_START + 35)
+
 // slot-IDs for attributes
 #define SID_SCATTR_PROTECTION   (SC_VIEW_START + 36)    // protection-page
 

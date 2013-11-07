@@ -1288,6 +1288,11 @@
           <value xml:lang="en-US">Select ~Range...</value>
         </prop>
       </node>
+      <node oor:name=".uno:DataStreams" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Strea~ms...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ManageXMLSource" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~XML Source...</value>

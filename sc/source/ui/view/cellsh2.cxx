@@ -732,7 +732,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
             }
             break;
-
+        case SID_DATA_STREAMS:
+            break;
         case SID_MANAGE_XML_SOURCE:
             ExecuteXMLSourceDialog();
         break;

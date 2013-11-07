@@ -6124,6 +6124,30 @@ SfxVoidItem SelectDB SID_SELECT_DB
     GroupId = GID_DATA;
 ]
 
+SfxVoidItem DataStreams SID_DATA_STREAMS
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DATA;
+]
+
 SfxVoidItem ManageXMLSource SID_MANAGE_XML_SOURCE
 (SfxStringItem DbName SID_MANAGE_XML_SOURCE)
 [

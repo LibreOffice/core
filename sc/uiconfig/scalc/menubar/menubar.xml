@@ -443,6 +443,7 @@
             <menu:menuitem menu:id=".uno:SelectDB"/>
             <menu:menuitem menu:id=".uno:DataAreaRefresh"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DataStreams"/>
             <menu:menuitem menu:id=".uno:ManageXMLSource"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DataSort"/>

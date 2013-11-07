@@ -51,6 +51,7 @@ interface CellSelection
     SID_REFRESH_DBAREA      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SBA_BRW_INSERT      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SELECT_DB           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_DATA_STREAMS        [ ExecMethod = ExecuteDB; ]
     SID_MANAGE_XML_SOURCE   [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SORT                [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_DATA_FORM           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
