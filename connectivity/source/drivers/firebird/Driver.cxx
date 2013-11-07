@@ -48,8 +48,7 @@ namespace connectivity
             const Reference< XMultiServiceFactory >& _rxFactory) throw( Exception )
         {
             SAL_INFO("connectivity.firebird", "FirebirdDriver_CreateInstance()" );
-            (void) _rxFactory;
-            return *(new FirebirdDriver());
+            return *(new FirebirdDriver(comphelper::getComponentContext(_rxFactory)));
         }
     }
 }
@@ -58,8 +57,9 @@ namespace connectivity
 const OUString FirebirdDriver::our_sFirebirdTmpVar("FIREBIRD_TMP");
 const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
 
-FirebirdDriver::FirebirdDriver()
+FirebirdDriver::FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : ODriver_BASE(m_aMutex)
+    , m_aContext(_rxContext)
     , m_firebirdTMPDirectory(NULL, true)
     , m_firebirdLockDirectory(NULL, true)
 {

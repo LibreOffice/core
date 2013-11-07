@@ -45,6 +45,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include "connectivity/dbexception.hxx"
+#include <connectivity/sqlparse.hxx>
 #include "resource/common_res.hrc"
 #include "resource/hsqldb_res.hrc"
 #include "resource/sharedresources.hxx"
@@ -372,6 +373,30 @@ Reference< XStatement > SAL_CALL Connection::createStatement( )
     return xReturn;
 }
 
+OUString Connection::transformPreparedStatement(const OUString& _sSQL)
+{
+    OUString sSqlStatement (_sSQL);
+    try
+    {
+        OSQLParser aParser( m_pDriver->getContext() );
+        OUString sErrorMessage;
+        OUString sNewSql;
+        OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
+        if(pNode)
+        {   // special handling for parameters
+            OSQLParseNode::substituteParameterNames(pNode);
+            pNode->parseNodeToStr( sNewSql, this );
+            delete pNode;
+            sSqlStatement = sNewSql;
+        }
+    }
+    catch(const Exception&)
+    {
+        SAL_WARN("connectivity.firebird", "failed to remove named parameters from '" << _sSQL << "'");
+    }
+    return sSqlStatement;
+}
+
 Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
             const OUString& _sSql)
     throw(SQLException, RuntimeException)
@@ -384,9 +409,11 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
     if(m_aTypeInfo.empty())
         buildTypeInfo();
 
+    OUString sSqlStatement (transformPreparedStatement( _sSql ));
+
     Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,
                                                                      m_aTypeInfo,
-                                                                     _sSql);
+                                                                     sSqlStatement);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 
     return xReturn;
@@ -400,6 +427,8 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareCall(
 
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
+
+    OUString sSqlStatement (transformPreparedStatement( _sSql ));
 
     // not implemented yet :-) a task to do
     return NULL;

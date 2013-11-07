@@ -49,6 +49,7 @@ namespace connectivity
             static const ::rtl::OUString our_sFirebirdTmpVar;
             static const ::rtl::OUString our_sFirebirdLockVar;
 
+            css::uno::Reference<css::uno::XComponentContext> m_aContext;
             ::utl::TempFile m_firebirdTMPDirectory;
             ::utl::TempFile m_firebirdLockDirectory;
 
@@ -60,7 +61,8 @@ namespace connectivity
 
         public:
 
-            FirebirdDriver();
+            FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
 
             // OComponentHelper
             virtual void SAL_CALL disposing(void);

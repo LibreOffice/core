@@ -156,6 +156,14 @@ namespace connectivity
                 throw(::com::sun::star::sdbc::SQLException);
             void disposeStatements();
 
+        /** transform named parameters into unnamed parameters
+            @param  _sSQL
+                The SQL statement to transform.
+            @return
+                The new statement with unnamed parameters
+        */
+        OUString transformPreparedStatement(const OUString& _sSQL);
+
         public:
             Connection(FirebirdDriver* _pDriver);
             virtual ~Connection();
