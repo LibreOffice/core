@@ -52,13 +52,8 @@ void ScExponentialSmoothingDialog::CalculateInputAndWriteToOutput( )
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
 
-    ScAddress aStart = mInputRange.aStart;
-    ScAddress aEnd   = mInputRange.aEnd;
-
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
-
-    SCROW inTab = aStart.Tab();
 
     // Smoothing factor
     double aSmoothingFactor = mpSmoothingFactor->GetValue() / 100.0;
@@ -70,37 +65,39 @@ void ScExponentialSmoothingDialog::CalculateInputAndWriteToOutput( )
     // Exponential Smoothing
     output.push();
 
-    for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
+    boost::scoped_ptr<DataRangeIterator> pIterator;
+    if (mGroupedBy == BY_COLUMN)
+        pIterator.reset(new DataRangeByColumnIterator(mInputRange));
+    else
+        pIterator.reset(new DataRangeByRowIterator(mInputRange));
+
+    for( ; pIterator->hasNext(); pIterator->next() )
     {
         output.resetRow();
 
-        SCROW inRow = aStart.Row();
+        ScRange aCurrentRange = pIterator->get();
 
         if (false)
         {
-            ScRange aColumnRange (
-                    ScAddress(inCol, mInputRange.aStart.Row(), inTab),
-                    ScAddress(inCol, mInputRange.aEnd.Row(), inTab));
-
             aTemplate.setTemplate("=AVERAGE(%RANGE%)");
-            aTemplate.applyRange("%RANGE%", aColumnRange);
+            aTemplate.applyRange("%RANGE%", aCurrentRange);
             output.writeFormula(aTemplate.getTemplate());
         }
         else
         {
-            ScAddress aFirstValueAddress(inCol, mInputRange.aStart.Row(), inTab);
-
             aTemplate.setTemplate("=%VAR%");
-            aTemplate.applyAddress("%VAR%", aFirstValueAddress);
+            aTemplate.applyAddress("%VAR%", aCurrentRange.aStart);
             output.writeFormula(aTemplate.getTemplate());
         }
 
         output.nextRow();
 
-        for (inRow = aStart.Row() + 1; inRow <= aEnd.Row(); inRow++)
+        DataCellIterator aDataCellIterator = pIterator->iterateCells();
+
+        for (; aDataCellIterator.hasNext(); aDataCellIterator.next())
         {
             aTemplate.setTemplate("=%VALUE% * %PREVIOUS_INPUT% + (1 - %VALUE%) * %PREVIOUS_OUTPUT%");
-            aTemplate.applyAddress("%PREVIOUS_INPUT%",  ScAddress(inCol, inRow - 1, inTab));
+            aTemplate.applyAddress("%PREVIOUS_INPUT%",  aDataCellIterator.get());
             aTemplate.applyAddress("%PREVIOUS_OUTPUT%", output.current(0, -1));
             aTemplate.applyAddress("%VALUE%",           aSmoothingFactorAddress);
 

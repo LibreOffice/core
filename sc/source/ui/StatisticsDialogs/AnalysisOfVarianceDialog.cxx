@@ -45,9 +45,10 @@ static const char* lclAnovaLabels[] =
     "Source of Variation", "SS", "df", "MS", "F", "P-value", "F critical", NULL
 };
 
+static const OUString strWildcardRange("%RANGE%");
 static const OUString strWildcardNumber("%NUMBER%");
 static const OUString strColumnLabelTemplate("Column %NUMBER%");
-static const OUString strWildcardRange("%RANGE%");
+static const OUString strRowLabelTemplate("Row %NUMBER%");
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,
@@ -94,13 +95,8 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
 
-    ScAddress aStart = mInputRange.aStart;
-    ScAddress aEnd   = mInputRange.aEnd;
-
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
-
-    SCROW inTab = aStart.Tab();
 
     // Write labels
     for(sal_Int32 i = 0; lclBasicStatisticsLabels[i] != NULL; i++)
@@ -112,19 +108,27 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
 
     ScRangeList aRangeList;
 
+    boost::scoped_ptr<DataRangeIterator> pIterator;
+    if (mGroupedBy == BY_COLUMN)
+        pIterator.reset(new DataRangeByColumnIterator(mInputRange));
+    else
+        pIterator.reset(new DataRangeByRowIterator(mInputRange));
+
     // Write statistic formulas for columns
-    for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
+    for( ; pIterator->hasNext(); pIterator->next() )
     {
         output.resetColumn();
-        aTemplate.setTemplate(strColumnLabelTemplate);
-        aTemplate.applyString(strWildcardNumber, OUString::number(inCol - aStart.Col() + 1));
+
+        if (mGroupedBy == BY_COLUMN)
+            aTemplate.setTemplate(strColumnLabelTemplate);
+        else
+            aTemplate.setTemplate(strRowLabelTemplate);
+
+        aTemplate.applyString(strWildcardNumber, OUString::number(pIterator->index() + 1));
         pDocShell->GetDocFunc().SetStringCell(output.current(), aTemplate.getTemplate(), true);
         output.nextColumn();
 
-        ScRange aColumnRange(
-            ScAddress(inCol, aStart.Row(), inTab),
-            ScAddress(inCol, aEnd.Row(), inTab)
-        );
+        ScRange aColumnRange = pIterator->get();
 
         aRangeList.Append(aColumnRange);
 

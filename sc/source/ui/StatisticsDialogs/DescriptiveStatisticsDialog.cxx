@@ -12,6 +12,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/undo.hxx>
 #include <boost/random.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include "formulacell.hxx"
 #include "rangelst.hxx"
@@ -86,8 +87,6 @@ void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
     AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
-    SCROW inTab = mInputRange.aStart.Tab();
-
     for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
     {
         OUString aLabel(SC_STRLOAD(RID_STATISTICS_DLGS, lclCalcDefinitions[i].aCalculationNameId));
@@ -96,19 +95,20 @@ void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
     }
     aOutput.nextColumn();
 
-    for (SCCOL inCol = mInputRange.aStart.Col(); inCol <= mInputRange.aEnd.Col(); inCol++)
+    boost::scoped_ptr<DataRangeIterator> pIterator;
+    if (mGroupedBy == BY_COLUMN)
+        pIterator.reset(new DataRangeByColumnIterator(mInputRange));
+    else
+        pIterator.reset(new DataRangeByRowIterator(mInputRange));
+
+    for( ; pIterator->hasNext(); pIterator->next() )
     {
         aOutput.resetRow();
-
-        ScRange aColumnRange(
-            ScAddress(inCol, mInputRange.aStart.Row(), inTab),
-            ScAddress(inCol, mInputRange.aEnd.Row(), inTab)
-        );
 
         for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
         {
             aTemplate.setTemplate(lclCalcDefinitions[i].aFormula);
-            aTemplate.applyRange(strWildcardRange, aColumnRange);
+            aTemplate.applyRange(strWildcardRange, pIterator->get());
             aOutput.writeFormula(aTemplate.getTemplate());
             aOutput.nextRow();
         }

@@ -75,6 +75,72 @@ public:
     void writeValue(double aValue);
 };
 
+class DataCellIterator
+{
+private:
+    ScRange mInputRange;
+    bool    mByColumn;
+    SCCOL   mCol;
+    SCROW   mRow;
+
+public:
+    DataCellIterator(ScRange aInputRange, bool aByColumn);
+    virtual ~DataCellIterator();
+
+    virtual bool hasNext();
+    virtual ScAddress get();
+    virtual void next();
+    virtual ScAddress getRelative(int aDelta);
+};
+
+class DataRangeIterator
+{
+protected:
+    ScRange   mInputRange;
+    sal_Int32 mIndex;
+
+public:
+    DataRangeIterator(ScRange aInputRange);
+    virtual ~DataRangeIterator();
+
+    virtual bool hasNext() = 0;
+    virtual ScRange get() = 0;
+    virtual void next() = 0;
+    virtual sal_Int32 index();
+
+    virtual DataCellIterator iterateCells() = 0;
+};
+
+class DataRangeByColumnIterator : public DataRangeIterator
+{
+protected:
+    SCCOL mCol;
+
+public:
+    DataRangeByColumnIterator(ScRange aInputRange);
+
+    virtual bool hasNext();
+    virtual void next();
+    virtual ScRange get();
+    virtual DataCellIterator iterateCells();
+};
+
+class DataRangeByRowIterator : public DataRangeIterator
+{
+protected:
+    SCROW mRow;
+
+public:
+    DataRangeByRowIterator(ScRange aInputRange);
+
+    virtual bool hasNext();
+    virtual void next();
+    virtual ScRange get();
+    virtual DataCellIterator iterateCells();
+};
+
+
+
 #endif
 
 

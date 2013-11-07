@@ -145,4 +145,128 @@ void AddressWalkerWriter::writeValue(double aValue)
     mpDocShell->GetDocFunc().SetValueCell(mCurrentAddress, aValue, true);
 }
 
+// DataCellIterator
+
+DataCellIterator::DataCellIterator(ScRange aInputRange, bool aByColumn) :
+    mInputRange(aInputRange),
+    mByColumn(aByColumn)
+{
+    if(aByColumn)
+        mCol = aInputRange.aStart.Col();
+    else
+        mRow = aInputRange.aStart.Row();
+}
+
+DataCellIterator::~DataCellIterator()
+{}
+
+bool DataCellIterator::hasNext()
+{
+    if(mByColumn)
+        return mCol <= mInputRange.aEnd.Col();
+    else
+        return mRow <= mInputRange.aEnd.Row();
+}
+
+void DataCellIterator::next()
+{
+    if(mByColumn)
+        mCol++;
+    else
+        mRow++;
+}
+
+ScAddress DataCellIterator::get()
+{
+    if(mByColumn)
+        return ScAddress(mCol, mInputRange.aStart.Row(), mInputRange.aStart.Tab());
+    else
+        return ScAddress(mInputRange.aStart.Col(), mRow, mInputRange.aStart.Tab());
+}
+
+ScAddress DataCellIterator::getRelative(int aDelta)
+{
+    if(mByColumn)
+        return ScAddress(mCol + aDelta, mInputRange.aStart.Row(), mInputRange.aStart.Tab());
+    else
+        return ScAddress(mInputRange.aStart.Col(), mRow + aDelta, mInputRange.aStart.Tab());
+}
+
+// DataRangeIterator
+
+DataRangeIterator::DataRangeIterator(ScRange aInputRange) :
+    mInputRange(aInputRange),
+    mIndex(0)
+{}
+
+DataRangeIterator::~DataRangeIterator()
+{}
+
+sal_Int32 DataRangeIterator::index()
+{
+    return mIndex;
+}
+
+// DataRangeByColumnIterator
+
+DataRangeByColumnIterator::DataRangeByColumnIterator(ScRange aInputRange) :
+    DataRangeIterator(aInputRange),
+    mCol(aInputRange.aStart.Col())
+{}
+
+bool DataRangeByColumnIterator::hasNext()
+{
+    return mCol <= mInputRange.aEnd.Col();
+}
+
+void DataRangeByColumnIterator::next()
+{
+    mCol++;
+    mIndex++;
+}
+
+ScRange DataRangeByColumnIterator::get()
+{
+    return ScRange(
+        ScAddress(mCol, mInputRange.aStart.Row(), mInputRange.aStart.Tab()),
+        ScAddress(mCol, mInputRange.aEnd.Row(),   mInputRange.aEnd.Tab())
+    );
+}
+
+DataCellIterator DataRangeByColumnIterator::iterateCells()
+{
+    return DataCellIterator(get(), false);
+}
+
+// DataRangeByRowIterator
+
+DataRangeByRowIterator::DataRangeByRowIterator(ScRange aInputRange) :
+    DataRangeIterator(aInputRange),
+    mRow(aInputRange.aStart.Row())
+{}
+
+bool DataRangeByRowIterator::hasNext()
+{
+    return mRow <= mInputRange.aEnd.Row();
+}
+
+void DataRangeByRowIterator::next()
+{
+    mRow++;
+    mIndex++;
+}
+
+ScRange DataRangeByRowIterator::get()
+{
+    return ScRange(
+        ScAddress(mInputRange.aStart.Col(), mRow, mInputRange.aStart.Tab()),
+        ScAddress(mInputRange.aEnd.Col(),   mRow, mInputRange.aEnd.Tab())
+    );
+}
+
+DataCellIterator DataRangeByRowIterator::iterateCells()
+{
+    return DataCellIterator(get(), true);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
