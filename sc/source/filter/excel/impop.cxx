@@ -320,7 +320,7 @@ void ImportExcel::ReadInteger()
         maStrm >> nValue;
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        GetDoc().SetValue(aScPos, nValue);
+        GetDocImport().setNumericCell(aScPos, nValue);
     }
 }
 
@@ -392,7 +392,7 @@ void ImportExcel::ReadBoolErr()
         const ScTokenArray* pScTokArr = ErrorToFormula( nType, nValue, fValue );
         ScFormulaCell* pCell = pScTokArr ? new ScFormulaCell(pD, aScPos, *pScTokArr) : new ScFormulaCell(pD, aScPos);
         pCell->SetHybridDouble( fValue );
-        GetDoc().SetFormulaCell(aScPos, pCell);
+        GetDocImport().setFormulaCell(aScPos, pCell);
     }
 }
 
