@@ -1555,6 +1555,13 @@ DECLARE_OOXML_TEST(testCp1000015, "cp1000015.odt")
     getParagraph(2, "http://www.google.com/");
 }
 
+DECLARE_OOXML_TEST(testPgMargin, "testPgMargin.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
+}
+
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
