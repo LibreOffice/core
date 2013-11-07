@@ -135,24 +135,33 @@ static OUString getUString( const char *str )
                               RTL_TEXTENCODING_UTF8 );
 }
 
+// Try to convert a relative URL to an absolute one
+static OUString getAbsoluteURL( const char *pURL )
+{
+    OUString aURL( getUString( pURL ) );
+    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
+
+    // FIXME: this would appear to kill non-file URLs.
+    osl_getProcessWorkingDir(&sWorkingDir.pData);
+    osl::FileBase::getFileURLFromSystemPath( aURL, sDocPathUrl );
+    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
+
+    return sAbsoluteDocUrl;
+}
+
 LODocument *
 LibLibreOffice_Impl::documentLoad( const char *docUrl )
 {
-    OUString sUrl = getUString( docUrl );
-    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
+    OUString aURL = getAbsoluteURL( docUrl );
 
     uno::Reference < css::frame::XDesktop2 > xComponentLoader =
             css::frame::Desktop::create(xContext);
-
-    osl_getProcessWorkingDir(&sWorkingDir.pData);
-    osl::FileBase::getFileURLFromSystemPath( sUrl, sDocPathUrl );
-    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
 
     maLastExceptionMsg = "";
     try {
         uno::Reference < css::lang::XComponent > xComponent =
             xComponentLoader->loadComponentFromURL(
-                sAbsoluteDocUrl, OUString("_blank"), 0,
+                aURL, OUString("_blank"), 0,
                 uno::Sequence < css::beans::PropertyValue >());
         if( xComponentLoader.is() )
             return new LibLODocument_Impl( xComponent );
@@ -168,12 +177,7 @@ bool LibLODocument_Impl::saveAs (const char *url, const char *format)
 {
     OUString sFormat = getUString( format );
 
-    OUString sUrl = getUString( url );
-    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
-
-    osl_getProcessWorkingDir(&sWorkingDir.pData);
-    osl::FileBase::getFileURLFromSystemPath( sUrl, sDocPathUrl );
-    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
+    OUString aURL = getAbsoluteURL( url );
 
     try {
         uno::Reference< frame::XModel > xDocument( mxComponent, uno::UNO_QUERY_THROW );
@@ -205,10 +209,10 @@ bool LibLODocument_Impl::saveAs (const char *url, const char *format)
         if( ! format )
         {
             // sniff from the extension
-            sal_Int32 idx = sUrl.lastIndexOf( "." );
+            sal_Int32 idx = aURL.lastIndexOf( "." );
             if( idx > 0 )
             {
-                sFormat = sUrl.copy( idx + 1 );
+                sFormat = aURL.copy( idx + 1 );
             }
             else
             {
@@ -239,7 +243,7 @@ bool LibLODocument_Impl::saveAs (const char *url, const char *format)
         aSeq[1].Value <<= aFilterName;
 
         uno::Reference< frame::XStorable > xStorable( mxComponent, uno::UNO_QUERY_THROW );
-        xStorable->storeToURL( sAbsoluteDocUrl, aSeq );
+        xStorable->storeToURL( aURL, aSeq );
 
         return true;
     } catch (const uno::Exception &ex) {
