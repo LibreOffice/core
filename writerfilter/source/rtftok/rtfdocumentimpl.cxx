@@ -4041,16 +4041,20 @@ int RTFDocumentImpl::popState()
                     }
                 }
                 aStr = aBuf.makeStringAndClear();
+
                 // ignore the first bytes
                 if (aStr.getLength() > 8)
                     aStr = aStr.copy(8);
                 // extract name
-                int nLength = aStr.toChar();
+                sal_Int32 nLength = aStr.toChar();
                 if (!aStr.isEmpty())
                     aStr = aStr.copy(1);
+                nLength = std::min(nLength, aStr.getLength());
                 OString aName = aStr.copy(0, nLength);
-                if (!aStr.isEmpty())
+                if (aStr.getLength() > nLength)
                     aStr = aStr.copy(nLength+1); // zero-terminated string
+                else
+                    aStr = OString();
                 // extract default text
                 nLength = aStr.toChar();
                 if (!aStr.isEmpty())
@@ -4059,7 +4063,7 @@ int RTFDocumentImpl::popState()
                 m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
                 if (nLength > 0)
                 {
-                    OString aDefaultText = aStr.copy(0, nLength);
+                    OString aDefaultText = aStr.copy(0, std::min(nLength, aStr.getLength()));
                     RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, aState.nCurrentEncoding)));
                     m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
                 }
