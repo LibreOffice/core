@@ -74,16 +74,16 @@ class SwVbaReadFieldParams
 {
 private:
     OUString aData;
-    xub_StrLen nLen, nFnd, nNext, nSavPtr;
+    sal_Int32 nLen, nFnd, nNext, nSavPtr;
     OUString aFieldName;
 public:
     SwVbaReadFieldParams( const OUString& rData );
     ~SwVbaReadFieldParams();
 
     long SkipToNextToken();
-    xub_StrLen GetTokenSttPtr() const   { return nFnd;  }
+    sal_Int32 GetTokenSttPtr() const   { return nFnd;  }
 
-    xub_StrLen FindNextStringPiece( xub_StrLen _nStart = STRING_NOTFOUND );
+    sal_Int32 FindNextStringPiece( sal_Int32 _nStart = -1 );
 
     OUString GetResult() const;
     OUString GetFieldName()const { return aFieldName; }
@@ -119,7 +119,7 @@ SwVbaReadFieldParams::~SwVbaReadFieldParams()
 
 OUString SwVbaReadFieldParams::GetResult() const
 {
-    return    (STRING_NOTFOUND == nFnd)
+    return    (-1 == nFnd)
             ? OUString()
             : aData.copy( nFnd, (nSavPtr - nFnd) );
 }
@@ -129,8 +129,8 @@ long SwVbaReadFieldParams::SkipToNextToken()
 {
     long nRet = -1;     // end
     if (
-         (STRING_NOTFOUND != nNext) && (nLen > nNext) &&
-         STRING_NOTFOUND != (nFnd = FindNextStringPiece(nNext))
+         (-1 != nNext) && (nLen > nNext) &&
+         -1 != (nFnd = FindNextStringPiece(nNext))
        )
     {
         nSavPtr = nNext;
@@ -144,7 +144,7 @@ long SwVbaReadFieldParams::SkipToNextToken()
         {
             nRet = -2;
             if (
-                 (STRING_NOTFOUND != nSavPtr ) &&
+                 (-1 != nSavPtr ) &&
                  (
                    ('"' == aData[nSavPtr - 1]) ||
                    (0x201d == aData[nSavPtr - 1])
@@ -166,18 +166,18 @@ long SwVbaReadFieldParams::SkipToNextToken()
 //
 // Return value: 0 if String-End reached, otherwise begin of the paramater or the string
 
-xub_StrLen SwVbaReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
+sal_Int32 SwVbaReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 {
-    xub_StrLen  n = ( STRING_NOTFOUND == nStart ) ? nFnd : nStart;  // Start
-    xub_StrLen n2;          // End
+    sal_Int32  n = ( -1 == nStart ) ? nFnd : nStart;  // Start
+    sal_Int32 n2;          // End
 
-    nNext = STRING_NOTFOUND;        // Default for not found
+    nNext = -1;        // Default for not found
 
     while( (nLen > n) && (aData[ n ] == ' ') )
         ++n;
 
     if( nLen == n )
-        return STRING_NOTFOUND;     // String End reached!
+        return -1;     // String End reached!
 
     if(     (aData[ n ] == '"')     // quotation marks are in front of parenthesis?
         ||  (aData[ n ] == 0x201c)
