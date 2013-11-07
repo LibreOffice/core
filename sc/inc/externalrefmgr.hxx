@@ -381,7 +381,7 @@ public:
      * values from external references.  Interpreting formula strings is one
      * such example.
      */
-    class ApiGuard
+    class SC_DLLPUBLIC ApiGuard
     {
     public:
         ApiGuard(ScDocument* pDoc);
