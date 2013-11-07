@@ -36,7 +36,7 @@ namespace xml { namespace sax { class XAttributeList; } }
 class XMLParaContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextRange > xStart;    // xub_StrLen nStart;
+        ::com::sun::star::text::XTextRange > xStart;
     OUString             sStyleName;
     OUString             m_sXmlId;
     OUString             m_sAbout;
