@@ -8469,7 +8469,7 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         AC_MSG_RESULT([none])
     else
         dnl We need libatomic-ops for any non X86/X64 system
-        if test "$CPU" != I -a "$CPU" != X; then
+        if test "${CPUNAME}" != INTEL -a "${CPUNAME}" != X86_64; then
             dnl ===================================================================
             dnl Check for system libatomic-ops
             dnl ===================================================================
