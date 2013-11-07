@@ -518,8 +518,7 @@ sal_uInt16 ScRangeData::GetErrCode() const
 
 bool ScRangeData::HasReferences() const
 {
-    pCode->Reset();
-    return pCode->GetNextReference() != NULL;
+    return pCode->HasReferences();
 }
 
 sal_uInt32 ScRangeData::GetUnoType() const

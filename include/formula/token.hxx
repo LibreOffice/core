@@ -106,7 +106,10 @@ public:
     inline  void                Delete()                { delete this; }
     inline  StackVar            GetType() const         { return eType; }
             bool                IsFunction() const; // pure functions, no operators
-            bool                IsExternalRef() const;
+
+    bool IsExternalRef() const;
+    bool IsRef() const;
+
             sal_uInt8           GetParamCount() const;
 
     inline void IncRef() const

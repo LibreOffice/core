@@ -130,6 +130,22 @@ bool FormulaToken::IsExternalRef() const
     return bRet;
 }
 
+bool FormulaToken::IsRef() const
+{
+    switch (eType)
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+            return true;
+        default:
+            ;
+    }
+
+    return false;
+}
+
 bool FormulaToken::operator==( const FormulaToken& rToken ) const
 {
     // don't compare reference count!
@@ -536,6 +552,17 @@ FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
     }
     else
         return NULL;
+}
+
+bool FormulaTokenArray::HasReferences() const
+{
+    for (sal_uInt16 i = 0; i < nLen; ++i)
+    {
+        if (pCode[i]->IsRef())
+            return true;
+    }
+
+    return false;
 }
 
 bool FormulaTokenArray::HasExternalRef() const

@@ -116,6 +116,8 @@ public:
     FormulaToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
     FormulaToken* PrevRPN();
 
+    bool HasReferences() const;
+
     bool    HasExternalRef() const;
     bool    HasOpCode( OpCode ) const;
     bool    HasOpCodeRPN( OpCode ) const;
