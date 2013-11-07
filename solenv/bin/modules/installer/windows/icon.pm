@@ -65,9 +65,7 @@ sub create_icon_table
 
     my $icontablename = $basedir . $installer::globals::separator . "Icon.idt";
     installer::files::save_file($icontablename ,\@icontable);
-    my $infoline = "Created idt file: $icontablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
+    $installer::logger::Lang->printf("Created idt file: %s\n", $icontablename);
 }
 
 1;

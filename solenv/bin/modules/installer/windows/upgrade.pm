@@ -124,16 +124,14 @@ sub create_upgrade_table
     {
         @upgradetable = ();
         installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
-        my $infoline = "Beta product -> empty Upgrade table\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Beta product -> empty Upgrade table\n");
     }
 
     # Saving the file
 
     my $upgradetablename = $basedir . $installer::globals::separator . "Upgrade.idt";
     installer::files::save_file($upgradetablename ,\@upgradetable);
-    my $infoline = "Created idt file: $upgradetablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Created idt file: %s\n", $upgradetablename);
 }
 
 ##############################################################

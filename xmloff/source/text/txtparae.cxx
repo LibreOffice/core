@@ -2899,11 +2899,11 @@ void XMLTextParagraphExport::exportContour(
 
     if(bPixel)
     {
-        GetExport().GetMM100UnitConverter().convertMeasurePx(aStringBuffer, aPolyPolygonRange.getWidth());
+        GetExport().GetMM100UnitConverter().convertMeasurePx(aStringBuffer, basegfx::fround(aPolyPolygonRange.getWidth()));
     }
     else
     {
-        GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aPolyPolygonRange.getWidth());
+        GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, basegfx::fround(aPolyPolygonRange.getWidth()));
     }
 
     GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStringBuffer.makeStringAndClear());
@@ -2911,11 +2911,11 @@ void XMLTextParagraphExport::exportContour(
     // svg: height
     if(bPixel)
     {
-        GetExport().GetMM100UnitConverter().convertMeasurePx(aStringBuffer, aPolyPolygonRange.getHeight());
+        GetExport().GetMM100UnitConverter().convertMeasurePx(aStringBuffer, basegfx::fround(aPolyPolygonRange.getHeight()));
     }
     else
     {
-        GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aPolyPolygonRange.getHeight());
+        GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, basegfx::fround(aPolyPolygonRange.getHeight()));
     }
 
     GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStringBuffer.makeStringAndClear());
@@ -2943,7 +2943,8 @@ void XMLTextParagraphExport::exportContour(
             basegfx::tools::exportToSvgD(
                 aPolyPolygon,
                 true,           // bUseRelativeCoordinates
-                false));        // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                true));         // bHandleRelativeNextPointCompatible
 
         // write point array
         GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_D, aPolygonString);

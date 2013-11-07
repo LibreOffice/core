@@ -1,7 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\mozilla\nspr
 mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
 mkdir: %_DEST%\inc%_EXT%\mozilla\nss
-mkdir: %_DEST%\lib%_EXT%\sqlite
 
 ..\%__SRC%\inc\include\* %_DEST%\inc%_EXT%\mozilla\nspr
 ..\%__SRC%\inc\include\obsolete\protypes.h %_DEST%\inc%_EXT%\mozilla\nspr\obsolete\protypes.h
@@ -24,7 +23,8 @@ mkdir: %_DEST%\lib%_EXT%\sqlite
 ..\%__SRC%\lib\libsoftokn3.* %_DEST%\lib%_EXT%\libsoftokn3.*
 ..\%__SRC%\lib\libssl3.* %_DEST%\lib%_EXT%\libssl3.*
 
-..\%__SRC%\lib\libsqlite3.* %_DEST%\lib%_EXT%\sqlite\libsqlite3.*
+..\%__SRC%\lib\libsqlite3.so %_DEST%\lib%_EXT%\libsqlite3.so
+
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
 
 ..\%__SRC%\bin\* %_DEST%\bin%_EXT%

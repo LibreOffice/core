@@ -107,7 +107,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData))
+        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData, true, 0))
         {
             if(aPolyPolygon.count())
             {
@@ -213,7 +213,8 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                 basegfx::tools::exportToSvgD(
                     aPolyPolygon,
                     true,           // bUseRelativeCoordinates
-                    false));        // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                    false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                    true));         // bHandleRelativeNextPointCompatible
 
             // write point array
             rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);

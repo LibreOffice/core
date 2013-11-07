@@ -2316,7 +2316,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                                         _SetGetExpFlds& rSetList )
 {
-    SwRefPageGetField* pGetFld = (SwRefPageGetField*)pTxtFld->GetFld().GetFld();
+    SwRefPageGetField* pGetFld = (SwRefPageGetField*)pTxtFld->GetFmtFld().GetField();
     pGetFld->SetText( aEmptyStr );
 
     // dann suche mal das richtige RefPageSet-Field
@@ -2332,9 +2332,9 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
 
         if( nLast-- )
         {
-            const SwTxtFld* pRefTxtFld = rSetList[ nLast ]->GetFld();
+            const SwTxtFld* pRefTxtFld = rSetList[ nLast ]->GetTxtFld();
             const SwRefPageSetField* pSetFld =
-                        (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
+                        (SwRefPageSetField*)pRefTxtFld->GetFmtFld().GetField();
             if( pSetFld->IsOn() )
             {
                 // dann bestimme mal den entsp. Offset
@@ -2358,7 +2358,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
         }
     }
     // dann die Formatierung anstossen
-    ((SwFmtFld&)pTxtFld->GetFld()).ModifyNotification( 0, 0 );
+    ((SwFmtFld&)pTxtFld->GetFmtFld()).ModifyNotification( 0, 0 );
 }
 
 /*--------------------------------------------------------------------
@@ -2429,9 +2429,9 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     if( !nLast-- )
         return ;        // es gibt kein entsprechendes Set - Feld vor mir
 
-    const SwTxtFld* pRefTxtFld = aTmpLst[ nLast ]->GetFld();
+    const SwTxtFld* pRefTxtFld = aTmpLst[ nLast ]->GetTxtFld();
     const SwRefPageSetField* pSetFld =
-                        (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
+                        (SwRefPageSetField*)pRefTxtFld->GetFmtFld().GetField();
     Point aPt;
     const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False ) : 0;
     if( pSetFld->IsOn() && pRefFrm )
@@ -2441,7 +2441,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         sal_uInt16 nDiff = pPgFrm->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1;
 
-        SwRefPageGetField* pGetFld = (SwRefPageGetField*)pFld->GetFld().GetFld();
+        SwRefPageGetField* pGetFld = (SwRefPageGetField*)pFld->GetFmtFld().GetField();
         sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
                             ? pPgFrm->GetPageDesc()->GetNumType().GetNumberingType()
                             : pGetFld->GetFormat();

@@ -677,15 +677,14 @@ sub create_shortcut_table
             $installer::globals::sofficeiconadded = 1;
         }
 
-        my $localinfoline = "Added icon file $$sourcepathref for language pack into icon file collector.\n";
-        push(@installer::globals::logfileinfo, $localinfoline);
+        $installer::logger::Lang->printf(
+            "Added icon file %s for language pack into icon file collector.\n", $$sourcepathref);
 
         # Saving the file
 
         my $shortcuttablename = $basedir . $installer::globals::separator . "Shortcut.idt" . "." . $onelanguage;
         installer::files::save_file($shortcuttablename ,\@shortcuttable);
-        my $infoline = "Created idt file: $shortcuttablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Created idt file: %s\n", $shortcuttablename);
     }
 }
 

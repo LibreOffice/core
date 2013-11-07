@@ -530,8 +530,9 @@ void TmpRepositoryCommandEnv::handle(
     deployment::VersionException verExc;
     if ( xRequest->getRequest() >>= verExc )
     {
-        // user interaction, if an extension is already been installed.
-        approve = handleVersionException( verExc );
+        // choose newest version, if an extension is already been installed.
+        const bool bChooseNewestVersion = true;
+        approve = handleVersionException( verExc, 0, bChooseNewestVersion );
         abort = !approve;
     }
 

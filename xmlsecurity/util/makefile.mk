@@ -35,9 +35,9 @@ USE_DEFFILE=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :	$(PRJ)$/util$/target.pmk
 
-.IF "$(WITH_MOZILLA)" == "NO"
+.IF "$(ENABLE_NSS_MODULE)" != "YES"
 @all:
-    @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity..."
+    @echo "No nss -> no libxmlsec -> no xmlsecurity..."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -71,8 +71,6 @@ SHL2NAME=xsec_xmlsec
 SHL2TARGET= $(SHL2NAME)
 
 
-.IF "$(ENABLE_NSS_MODULE)"=="YES" || "$(SYSTEM_MOZILLA)" == "YES"
-
 SHL2LIBS= \
     $(SLB)$/xs_comm.lib
 
@@ -83,8 +81,6 @@ SHL2LIBS += \
 
 SHL2LIBS += \
     $(SLB)$/xs_nss.lib
-
-.ENDIF
 
 
 SHL2STDLIBS +=			\
@@ -102,7 +98,7 @@ SHL2STDLIBS +=			\
 SHL2STDLIBS +=-ldl
 .ENDIF
 
-.IF "$(SYSTEM_MOZILLA)" == "YES"
+.IF "$(ENABLE_NSS_MODULE)"=="YES" && "$(SYSTEM_NSS)"!="YES"
 .IF "$(NSPR_LIB)" != ""
 SHL2STDLIBS += $(NSPR_LIB)
 .ENDIF

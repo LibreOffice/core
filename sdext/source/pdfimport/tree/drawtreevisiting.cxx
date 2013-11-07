@@ -358,7 +358,7 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::
     aBuf.append( sal_Unicode(' ') );
     aBuf.append( convPx2mmPrec2(elem.h)*100.0 );
     aProps[ USTR( "svg:viewBox" ) ] = aBuf.makeStringAndClear();
-    aProps[ USTR( "svg:d" ) ]       = basegfx::tools::exportToSvgD( elem.PolyPoly );
+    aProps[ USTR( "svg:d" ) ]       = basegfx::tools::exportToSvgD( elem.PolyPoly, true, true, false );
 
     m_rEmitContext.rEmitter.beginTag( "draw:path", aProps );
     m_rEmitContext.rEmitter.endTag( "draw:path" );

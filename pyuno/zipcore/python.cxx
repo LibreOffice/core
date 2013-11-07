@@ -93,51 +93,46 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             exit(EXIT_FAILURE);
         }
     }
+
     wchar_t bootstrap[MY_LENGTH(L"vnd.sun.star.pathname:") + MAX_PATH] =
         L"vnd.sun.star.pathname:"; //TODO: overflow
     wchar_t * bootstrapEnd = tools::buildPath(
         bootstrap + MY_LENGTH(L"vnd.sun.star.pathname:"), path, pathEnd,
         MY_STRING(L"fundamental.ini"));
-    if (bootstrapEnd == NULL ||
-        (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link"))
-         == NULL))
+    if (bootstrapEnd == NULL)
     {
         exit(EXIT_FAILURE);
     }
-    pathEnd = tools::resolveLink(path);
-    wchar_t path1[MAX_PATH];
-    wchar_t * path1End = tools::buildPath(
-        path1, path, pathEnd, MY_STRING(L"\\program"));
-    if (path1End == NULL) {
-        exit(EXIT_FAILURE);
-    }
+
     wchar_t pythonpath2[MAX_PATH];
     wchar_t * pythonpath2End = tools::buildPath(
         pythonpath2, path, pathEnd,
-        MY_STRING(L"\\program\\python-core-" MY_PYVERSION L"\\lib"));
+        MY_STRING(L"python-core-" MY_PYVERSION L"\\lib"));
     if (pythonpath2End == NULL) {
         exit(EXIT_FAILURE);
     }
+
     wchar_t pythonpath3[MAX_PATH];
     wchar_t * pythonpath3End = tools::buildPath(
         pythonpath3, path, pathEnd,
         MY_STRING(
-            L"\\program\\python-core-" MY_PYVERSION L"\\lib\\site-packages"));
+            L"python-core-" MY_PYVERSION L"\\lib\\site-packages"));
     if (pythonpath3End == NULL) {
         exit(EXIT_FAILURE);
     }
+
 #ifdef __MINGW32__
     wchar_t pythonpath4[MAX_PATH];
     wchar_t * pythonpath4End = tools::buildPath(
         pythonpath4, path, pathEnd,
-        MY_STRING(L"\\program\\python-core-" MY_PYVERSION L"\\lib\\lib-dynload"));
+        MY_STRING(L"python-core-" MY_PYVERSION L"\\lib\\lib-dynload"));
     if (pythonpath4End == NULL) {
         exit(EXIT_FAILURE);
     }
     wchar_t pythonpath5[MAX_PATH];
     wchar_t * pythonpath5End = tools::buildPath(
         pythonpath5, path, pathEnd,
-        MY_STRING(L"\\program\\python-core-" MY_PYVERSION L"\\lib\\lib-dynload"));
+        MY_STRING(L"python-core-" MY_PYVERSION L"\\lib\\lib-dynload"));
     if (pythonpath5End == NULL) {
         exit(EXIT_FAILURE);
     }
@@ -145,7 +140,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wchar_t pythonhome[MAX_PATH];
     wchar_t * pythonhomeEnd = tools::buildPath(
         pythonhome, path, pathEnd,
-        MY_STRING(L"\\program\\python-core-" MY_PYVERSION));
+        MY_STRING(L"python-core-" MY_PYVERSION));
     if (pythonhomeEnd == NULL) {
         exit(EXIT_FAILURE);
     }
@@ -154,26 +149,15 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         pythonexe, path, pathEnd,
 #ifdef __MINGW32__
         MY_STRING(
-            L"\\program\\python-core-" MY_PYVERSION L"\\bin\\python.bin"));
+            L"python-core-" MY_PYVERSION L"\\bin\\python.bin"));
 #else
         MY_STRING(
-            L"\\program\\python-core-" MY_PYVERSION L"\\bin\\python.exe"));
+            L"python-core-" MY_PYVERSION L"\\bin\\python.exe"));
 #endif
     if (pythonexeEnd == NULL) {
         exit(EXIT_FAILURE);
     }
-    if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
-    pathEnd = tools::resolveLink(path);
-    if (pathEnd == NULL) {
-        exit(EXIT_FAILURE);
-    }
-    pathEnd = tools::buildPath(path, path, pathEnd, MY_STRING(L"\\bin"));
-    if (pathEnd == NULL) {
-        exit(EXIT_FAILURE);
-    }
+
     std::size_t clSize = MY_LENGTH(L"\"") + 4 * (pythonexeEnd - pythonexe) +
         MY_LENGTH(L"\"\0"); //TODO: overflow
         // 4 * len: each char preceded by backslash, each trailing backslash
@@ -221,9 +205,11 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         }
     }
     wchar_t * value = new wchar_t[
-        (pathEnd - path) + MY_LENGTH(L";") + (path1End - path1) +
-        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1]; //TODO: overflow
-    wsprintfW(value, L"%s;%s%s%s", path, path1, n == 0 ? L"" : L";", orig);
+       (pathEnd - path) + MY_LENGTH(L";") +
+       (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1]; //TODO: overflow
+
+    wsprintfW(value, L"%s%s%s", path, n == 0 ? L"" : L";", orig);
+
     if (!SetEnvironmentVariableW(L"PATH", value)) {
         exit(EXIT_FAILURE);
     }
@@ -258,11 +244,11 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         n == 0 ? L"" : L";", orig);
 #else
     value = new wchar_t[
-        (path1End - path1) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
+        (pythonpath2End - pythonpath2) +
         MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
         (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1]; //TODO: overflow
     wsprintfW(
-        value, L"%s;%s;%s%s%s", path1, pythonpath2, pythonpath3,
+        value, L"%s;%s%s%s", pythonpath2, pythonpath3,
         n == 0 ? L"" : L";", orig);
 #endif
     if (!SetEnvironmentVariableW(L"PYTHONPATH", value)) {

@@ -177,7 +177,7 @@ sub get_productname_for_property_table
     # Saving this name in hash $allvariables for further usage
     $allvariables->{'PROPERTYTABLEPRODUCTNAME'} = $productname;
     my $infoline = "Defined variable PROPERTYTABLEPRODUCTNAME: $productname\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $productname;
 }
@@ -193,7 +193,7 @@ sub get_quickstarterlinkname_for_property_table
     my $quickstartername = $name . " " . $version;
 
     my $infoline = "Defined Quickstarter Link name: $quickstartername\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $quickstartername;
 }
@@ -512,7 +512,7 @@ sub update_property_table
 
     installer::files::save_file($properyfilename ,$propertyfile);
     my $infoline = "Updated idt file: $properyfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -559,7 +559,7 @@ sub set_languages_in_property_table
 
     installer::files::save_file($properyfilename ,$propertyfile);
     my $infoline = "Added language content into idt file: $properyfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -590,7 +590,7 @@ sub set_codes_in_property_table
 
     installer::files::save_file($properyfilename ,$propertyfile);
     my $infoline = "Added language content into idt file: $properyfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -619,7 +619,7 @@ sub set_regkeyprodpath_in_property_table
 
     installer::files::save_file($properyfilename ,$propertyfile);
     my $infoline = "Added language content into idt file: $properyfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -650,7 +650,7 @@ sub update_checkbox_table
             # Saving the property file
             installer::files::save_file($checkboxfilename ,$checkboxfile);
             my $infoline = "Added ms file type defaults into idt file: $checkboxfilename\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
     }
 }

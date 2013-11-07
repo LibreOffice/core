@@ -584,18 +584,18 @@ sub replace_languages_in_pathes
                     {
                         $installer::globals::refresh_includepathes = 1;
                         $infoline = "Directory $newdir exists and is not empty. Refreshing global file array is required.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print($infoline);
                     }
                     else
                     {
                         $infoline = "Directory $newdir is empty. No refresh of global file array required.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print($infoline);
                     }
                 }
                 else
                 {
                     $infoline = "Directory $newdir does not exist. No refresh of global file array required.\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
             }
         }
@@ -623,10 +623,10 @@ sub list_all_files_from_include_path
         my $path = ${$patharrayref}[$i];
         installer::remover::remove_leading_and_ending_whitespaces(\$path);
         my $infoline = "$path\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
-    push( @installer::globals::logfileinfo, "\n");
+    $installer::logger::Lang->print("\n");
 
     return \@filesarray;
 }

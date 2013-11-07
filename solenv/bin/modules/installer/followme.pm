@@ -93,7 +93,7 @@ sub save_followme_info
 
     # Saving file
     installer::files::save_file($downloadinfodir . $installer::globals::separator . $downloadinfofilename, \@filecontent);
-    installer::logger::print_message( "... creating \"follow me\" info file $downloadinfofilename.\n" );
+    $installer::logger::Info->printf("... creating \"follow me\" info file %s.\n", $downloadinfofilename);
 }
 
 ####################################################
@@ -107,7 +107,8 @@ sub read_followme_info
 
     if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file: $filename", "read_download_info"); }
 
-    installer::logger::print_message( "\n... reading \"follow me\" info file $filename\n" );
+    $installer::logger::Info->print("\n");
+    $installer::logger::Info->printf("... reading \"follow me\" info file %s\n", $filename);
 
     my %contenthash = ();
 

@@ -655,32 +655,29 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
 /* -----------------------------05.04.01 13:10--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
+OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
 {
-    OUString sRet;
-    sal_Int32 nFlags;
-    const PropertyValue* pProperties = rProperties.getConstArray();
-    for(int nProp = 0; nProp < rProperties.getLength(); nProp++)
+    OUString sName;
+    const PropertyValue* pPropVal = rProperties.getConstArray();
+    const PropertyValue* const pEnd = pPropVal + rProperties.getLength();
+    for( ; pPropVal != pEnd; pPropVal++ )
     {
-        if(!pProperties[nProp].Name.compareToAscii("UIName"))
+        const OUString &rName = pPropVal->Name;
+        if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ) )
         {
-            if ( pProperties[nProp].Value >>= sRet )
-                break;
+            OUString sUIName;
+            if ( ( pPropVal->Value >>= sUIName ) && sUIName.getLength() )
+                return sUIName;
         }
-        else if(!pProperties[nProp].Name.compareToAscii("Flags"))
+        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ) )
         {
-            if ( pProperties[nProp].Value >>= nFlags )
-            {
-                nFlags &= 0x100;
-            }
-        }
-        else if(!pProperties[nProp].Name.compareToAscii("Name"))
-        {
-            if ( !sRet.getLength() )
-                pProperties[nProp].Value >>= sRet;
+            pPropVal->Value >>= sName;
         }
     }
-    return sRet;
+
+    OSL_ENSURE( false, "Filter without UIName!" );
+
+    return sName;
 }
 /* -----------------------------05.04.01 13:37--------------------------------
 

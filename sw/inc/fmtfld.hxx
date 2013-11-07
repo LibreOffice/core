@@ -70,8 +70,14 @@ public:
 
     virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
 
-    const SwField *GetFld() const   { return pField; }
-    SwField *GetFld()               { return pField; }
+    const SwField* GetField() const
+    {
+        return pField;
+    }
+    SwField* GetField()
+    {
+        return pField;
+    }
 
     // #111840#
     /**

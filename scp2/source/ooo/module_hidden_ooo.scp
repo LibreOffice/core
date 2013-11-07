@@ -325,9 +325,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Hsqldb_2,
 	gid_File_Lib_Jdbc,
 	gid_File_Lib_Mcnttype,
-	gid_File_Lib_Mozab_2,
-	gid_File_Lib_Mozabdrv,
-	gid_File_Lib_Mozbootstrap,
 	gid_File_Lib_Mysql,
 	gid_File_Lib_Odbc,
 	gid_File_Lib_Officebean,
@@ -407,8 +404,6 @@ Module gid_Module_Root_Files_5
     gid_File_Lib_Mingw_GccS,
     gid_File_Lib_Mingw_Stdcpp,
     gid_File_Lib_Mingwm10,
-	gid_File_Lib_Msvcp70,
-	gid_File_Lib_Msvcr70,
 	gid_File_Lib_Ole,
 	gid_File_Lib_Patchmsi,
 	gid_File_Lib_Reg4allmsdoc,
@@ -419,8 +414,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Gconfebe,
 	gid_File_Lib_Wininetbe,
 	gid_File_Lib_Macbe,
-	gid_File_Lib_Msvcp70_So,
-	gid_File_Lib_Msvcr70_So,
 	gid_File_Lib_Gdiplus,
 	gid_File_Lib_Stlport_Vc6,
 	gid_File_Lib_Stlport_Vc7,
@@ -716,10 +709,7 @@ Module gid_Module_Root_Files_7
 	Sortkey = "1900";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Help_Help_Zip,
-             gid_File_Moz_Msvcp71,
-             gid_File_Moz_Msvcr71,
-             gid_File_Mozilla_Runtime);
+	Files = (gid_File_Help_Help_Zip);
 End
 
 Module gid_Module_Root_Files_Images

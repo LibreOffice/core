@@ -44,6 +44,8 @@
 #include <svl/whiter.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdlegacy.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/sdr/contact/viewcontactofgraphic.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -883,6 +885,38 @@ void SdrUndoInsertObj::Redo()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void SdrUndoDelObj::TryToFlushGraphicContent()
+{
+    SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(&mrSdrObject);
+
+    if(pSdrGrafObj)
+    {
+        sdr::contact::ViewContactOfGraphic* pVC = dynamic_cast< sdr::contact::ViewContactOfGraphic* >(&pSdrGrafObj->GetViewContact());
+
+        if(pVC)
+        {
+            pVC->flushViewObjectContacts();
+            pVC->flushGraphicObjects();
+        }
+
+        pSdrGrafObj->ForceSwapOut();
+    }
+}
+
+SdrUndoDelObj::SdrUndoDelObj(SdrObject& rNewObj)
+:   SdrUndoRemoveObj(rNewObj)
+{
+    SetOwner(true);
+
+    // #122985# if graphic object is deleted (but goes to undo) flush it's graphic content
+    // since it is potentially no longer needed
+    TryToFlushGraphicContent();
+}
+
+SdrUndoDelObj::~SdrUndoDelObj()
+{
+}
+
 void SdrUndoDelObj::Undo()
 {
     SdrUndoRemoveObj::Undo();
@@ -895,6 +929,10 @@ void SdrUndoDelObj::Redo()
     SdrUndoRemoveObj::Redo();
     DBG_ASSERT(!IsOwner(),"RedoDeleteObj: mrSdrObject gehoert bereits der UndoAction");
     SetOwner(true);
+
+    // #122985# if graphic object is deleted (but goes to undo) flush it's graphic content
+    // since it is potentially no longer needed
+    TryToFlushGraphicContent();
 }
 
 XubString SdrUndoDelObj::GetComment() const

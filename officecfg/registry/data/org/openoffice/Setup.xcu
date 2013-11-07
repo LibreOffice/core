@@ -1067,6 +1067,13 @@
                             <it>com.sun.star.PresentationMinimizer-*</it>
                             <!-- presentation screen is integrated since AOO 4.0 -->
                             <it>com.sun.PresenterScreen-*</it>
+                            <!-- Old French dictionaries are incompatible with the new unified French dictionary since AOO 4.0.1 -->
+                            <it>french.modern-dictionary.from.Dicollecte.by.OlivierR</it>
+                            <it>french.classic-dictionary.from.Dicollecte.by.OlivierR</it>
+                            <it>french.reform1990-dictionary.from.Dicollecte.by.OlivierR</it>
+                            <it>french.classic-and-reform1990-dictionary.from.Dicollecte.by.OlivierR</it>
+                            <it>org.openoffice.comp.pyuno.lightproof.oxt.grammalecte</it>
+                            <it>org.openoffice.comp.pyuno.lightproof.oxt.dicollecte_fr_FR</it>
                         </value>
                     </prop>
                 </node>

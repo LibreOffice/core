@@ -453,7 +453,9 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
 
             if(basegfx::tools::importFromSvgD(
                 aPolyPolygon,
-                maPoints))
+                maPoints,
+                true,
+                0))
             {
                 // convert to 3D PolyPolygon
                 const basegfx::B3DPolyPolygon aB3DPolyPolygon(

@@ -1714,14 +1714,6 @@ sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
 // state of the ResizeShapeToFitText flag to correctly set TextMinFrameWidth/Height
 void SdrObjCustomShape::AdaptTextMinSize()
 {
-    if(mbAdaptingTextMinSize)
-    {
-        // already adapting
-        return;
-    }
-
-    mbAdaptingTextMinSize = true;
-
     if(!IsPasteResize())
     {
         const bool bResizeShapeToFitText(0 != static_cast< const SdrOnOffItem& >(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue());
@@ -1755,8 +1747,6 @@ void SdrObjCustomShape::AdaptTextMinSize()
             AdjustTextFrameWidthAndHeight();
         }
     }
-
-    mbAdaptingTextMinSize = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

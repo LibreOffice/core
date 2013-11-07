@@ -410,27 +410,8 @@ namespace drawinglayer
                 }
             }
 
-            // decompose matrix to check for shear, rotate and mirroring
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-
-            aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-            const bool bRotated(!basegfx::fTools::equalZero(fRotate));
-            const bool bSheared(!basegfx::fTools::equalZero(fShearX));
-
-            if(!aBitmapEx.IsTransparent() && (bSheared || bRotated))
-            {
-                // parts will be uncovered, extend aBitmapEx with a mask bitmap
-                const Bitmap aContent(aBitmapEx.GetBitmap());
-#if defined(MACOSX)
-                const AlphaMask aMaskBmp( aContent.GetSizePixel());
-#else
-                Bitmap aMaskBmp( aContent.GetSizePixel(), 1);
-                aMaskBmp.Erase(Color(COL_BLACK)); // #122758# Initialize to non-transparent
-#endif
-                aBitmapEx = BitmapEx(aContent, aMaskBmp);
-            }
+            // #122923# do no longer add Alpha channel here; the right place to do this is when really
+            // the own transformer is used (see OutputDevice::DrawTransformedBitmapEx).
 
             // draw using OutputDevice'sDrawTransformedBitmapEx
             mpOutputDevice->DrawTransformedBitmapEx(aLocalTransform, aBitmapEx);
@@ -490,8 +471,9 @@ namespace drawinglayer
                             aGraphicRange.transform(mpOutputDevice->GetViewTransformation() * aLocalTransform);
 
                             // extract discrete size of graphic
-                            const sal_Int32 nBWidth(basegfx::fround(aGraphicRange.getWidth()));
-                            const sal_Int32 nBHeight(basegfx::fround(aGraphicRange.getHeight()));
+                            // caution: when getting to zero, nothing would be painted; thus, do not allow this
+                            const sal_Int32 nBWidth(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getWidth())));
+                            const sal_Int32 nBHeight(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getHeight())));
 
                             // only do something when bitmap fill has a size in discrete units
                             if(nBWidth > 0 && nBHeight > 0)
@@ -503,9 +485,17 @@ namespace drawinglayer
                                 static bool bEnablePreScaling(true);
                                 const bool bPreScaled(bEnablePreScaling && nBWidth * nBHeight < (250 * 250));
 
+                                // ... but only up to a maximum size, else it gets too expensive
                                 if(bPreScaled)
                                 {
-                                    // ... but only up to a maximum size, else it gets too expensive
+                                    // if color depth is below 24bit, expand before scaling for better quality.
+                                    // This is even needed for low colors, else the scale will produce
+                                    // a bitmap in gray or Black/White (!)
+                                    if(aBitmapEx.GetBitCount() < 24)
+                                    {
+                                        aBitmapEx.Convert(BMP_CONVERSION_24BIT);
+                                    }
+
                                     aBitmapEx.Scale(aNeededBitmapSizePixel, BMP_SCALE_INTERPOLATE);
                                 }
 
@@ -673,7 +663,7 @@ namespace drawinglayer
                 {
                     case GRAPHIC_GDIMETAFILE:
                     {
-                        // metafiles are potentially transparent, cannot optimize´, not done
+                        // metafiles are potentially transparent, cannot optimize, not done
                         break;
                     }
                     case GRAPHIC_BITMAP:
@@ -685,9 +675,10 @@ namespace drawinglayer
 
                             if(nBColorModifierStackCount)
                             {
-                                const basegfx::BColorModifier& rTopmostModifier = maBColorModifierStack.getBColorModifier(nBColorModifierStackCount - 1);
+                                const basegfx::BColorModifierSharedPtr& rTopmostModifier = maBColorModifierStack.getBColorModifier(nBColorModifierStackCount - 1);
+                                const basegfx::BColorModifier_replace* pReplacer = dynamic_cast< const basegfx::BColorModifier_replace* >(rTopmostModifier.get());
 
-                                if(basegfx::BCOLORMODIFYMODE_REPLACE == rTopmostModifier.getMode())
+                                if(pReplacer)
                                 {
                                     // the bitmap fill is in unified color, so we can replace it with
                                     // a single polygon fill. The form of the fill depends on tiling
@@ -698,7 +689,7 @@ namespace drawinglayer
 
                                         aLocalPolyPolygon.transform(maCurrentTransformation);
                                         mpOutputDevice->SetLineColor();
-                                        mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
+                                        mpOutputDevice->SetFillColor(Color(pReplacer->getBColor()));
                                         mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
                                     }
                                     else
@@ -730,7 +721,7 @@ namespace drawinglayer
                                         {
                                             aTarget.transform(maCurrentTransformation);
                                             mpOutputDevice->SetLineColor();
-                                            mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
+                                            mpOutputDevice->SetFillColor(Color(pReplacer->getBColor()));
                                             mpOutputDevice->DrawPolyPolygon(aTarget);
                                         }
                                     }

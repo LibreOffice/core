@@ -57,7 +57,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkgcom,
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
-             gid_Brand_File_Bin_Msvcr71,
  //            gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_IntroAbout,
              gid_Brand_File_Desktophelper_Txt,
@@ -66,12 +65,8 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Lib_Mingw_GccS,
              gid_Brand_File_Lib_Mingw_Stdcpp,
              gid_Brand_File_Lib_Mingwm10,
-             gid_Brand_File_Lib_Msvcr80,
-             gid_Brand_File_Lib_Msvcp80,
-             gid_Brand_File_Lib_Msvcm80,
 			 gid_Brand_File_Lib_Oirm,
 			 gid_Brand_File_Lib_Oirm2,
-             gid_Brand_File_Msvcm80crt_Manifest,
              gid_Brand_File_Lib_Npsoplugin,
 //             gid_Brand_File_ServicesRdb,
 //             gid_Brand_File_Share_Registry_Brand_Xcd,
@@ -425,18 +420,6 @@ File gid_Brand_File_Bin_Unopkg
 End
 #endif
 
-#if defined WNT && \
-    (defined M1310 || \
-     ((defined M1400 || defined M1500) && \
-      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
-File gid_Brand_File_Bin_Msvcr71
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
-    Styles = (PACKED);
-End
-#endif
-
 // Due to Windows DLL search order, OOo executables might pick up a libxml2 DLL
 // from a Windows system directory instead of the one from the URE; to avoid
 // problems, as a HACK, for now a copy of the URE libxml2 DLL is placed next to
@@ -602,23 +585,6 @@ File gid_Brand_File_Lib_Mingwm10
 End
 #endif
 
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcr80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
 #if defined(WNT) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
@@ -643,57 +609,6 @@ End
 
 #endif
 
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcp80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcm80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Msvcm80crt_Manifest
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
 #endif
 
 // Profiles

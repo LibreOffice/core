@@ -397,29 +397,40 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
             Color aPixelColor = aFront;
             Color aBackColor = aBack;
 
-            aBitmapCtl.SetPixelColor( aPixelColor );
-            aBitmapCtl.SetBackgroundColor( aBackColor );
+            // #123564# This causes the wrong color to be selected
+            // as foreground color when the 1st bitmap in the bitmap
+            // list is selected. I see no reason why this is done,
+            // thus I will take it out
+            //
+            //if( 0 == aLbBitmaps.GetSelectEntryPos() )
+            //{
+            //  aLbColor.SelectEntry( Color( COL_BLACK ) );
+            //  ChangePixelColorHdl_Impl( this );
+            //}
+            //else
 
-            // Wenn der Eintrag nicht in der Listbox ist, wird die Farbe
-            // temporaer hinzugenommen
-            if( 0 == aLbBitmaps.GetSelectEntryPos() )
-            {
-                aLbColor.SelectEntry( Color( COL_BLACK ) );
-                ChangePixelColorHdl_Impl( this );
-            }
-            else
-                aLbColor.SelectEntry( aPixelColor );
+            aLbColor.SelectEntry( aPixelColor );
+
             if( aLbColor.GetSelectEntryCount() == 0 )
             {
                 aLbColor.InsertEntry( aPixelColor, String() );
                 aLbColor.SelectEntry( aPixelColor );
             }
+
             aLbBackgroundColor.SelectEntry( aBackColor );
+
             if( aLbBackgroundColor.GetSelectEntryCount() == 0 )
             {
                 aLbBackgroundColor.InsertEntry( aBackColor, String() );
                 aLbBackgroundColor.SelectEntry( aBackColor );
             }
+
+            // update aBitmapCtl, rXFSet and aCtlPreview
+            aBitmapCtl.SetPixelColor( aPixelColor );
+            aBitmapCtl.SetBackgroundColor( aBackColor );
+            rXFSet.Put(XFillBitmapItem(String(), Graphic(aBitmapCtl.GetBitmapEx())));
+            aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
+            aCtlPreview.Invalidate();
         }
         else
         {
@@ -756,9 +767,12 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
                 bLoop = sal_False;
 
                 const BitmapEx aBitmapEx(aBitmapCtl.GetBitmapEx());
-                const XBitmapEntry aEntry(Graphic(aBitmapEx), aName);
 
-                aLbBitmaps.Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), aEntry, nPos );
+                // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+                XBitmapEntry* pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
+                delete maBitmapList->Replace(pEntry, nPos);
+
+                aLbBitmaps.Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry, nPos );
                 aLbBitmaps.SelectEntryPos( nPos );
 
                 // Flag fuer modifiziert setzen

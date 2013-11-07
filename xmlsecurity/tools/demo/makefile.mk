@@ -98,14 +98,6 @@ APP3STDLIBS+=$(SHARE_LIBS)
 APP3OBJS= $(SHARE_OBJS)	$(OBJ)$/multisigdemo.obj
 
 #
-# ---------- mozprofile ----------
-#
-APP4TARGET=mozprofile
-APP4DEPN=makefile.mk
-APP4STDLIBS+=$(SHARE_LIBS)
-APP4OBJS= $(SHARE_OBJS)	$(OBJ)$/mozprofile.obj
-
-#
 # ---------- performance ----------
 #
 APP5TARGET=performance
@@ -137,8 +129,7 @@ REGISTERLIBS=					\
     dynamicloader.uno$(DLLPOST) \
     namingservice.uno$(DLLPOST) \
     bootstrap.uno$(DLLPOST)	\
-    sax.uno$(DLLPOST)			\
-    $(DLLPRE)mozab2$(DLLPOST)
+    sax.uno$(DLLPOST)
 
 $(BIN)$/demo.rdb: \
         makefile.mk \

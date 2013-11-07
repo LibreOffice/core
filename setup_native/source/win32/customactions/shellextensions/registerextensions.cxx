@@ -263,7 +263,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
                     }
                     else
                     {
-                        mystr = "An error occured during removing content of " + sCompleteFileName;
+                        mystr = "An error occurred during removing content of " + sCompleteFileName;
                         // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
                     }
                 }
@@ -277,7 +277,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
                     }
                     else
                     {
-                        mystr = "An error occured during removal of file " + sCompleteFileName;
+                        mystr = "An error occurred during removal of file " + sCompleteFileName;
                         // MessageBox(NULL, mystr.c_str(), "Error removing file", MB_OK);
                     }
                 }
@@ -302,7 +302,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
         }
         else
         {
-            mystr = "An error occured during removal of empty directory " + sPath;
+            mystr = "An error occurred during removal of empty directory " + sPath;
             // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
             bDirectoryRemoved = false;
         }
@@ -339,13 +339,13 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 //          }
 //          else
 //          {
-//              mystr = "An error occured during execution!";
+//              mystr = "An error occurred during execution!";
 //              MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 //          }
 
         if ( ! fSuccess )
         {
-            mystr = "ERROR: An error occured during registration of extensions!";
+            mystr = "ERROR: An error occurred during registration of extensions!";
             MessageBox(NULL, mystr.c_str(), "ERROR", MB_OK);
             registrationError = true;
         }
@@ -418,7 +418,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
 //     }
 //     else
 //     {
-//         mystr = "An error occured during execution!";
+//         mystr = "An error occurred during execution!";
 //         MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
 //     }
 

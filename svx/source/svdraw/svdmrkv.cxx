@@ -849,15 +849,37 @@ void SdrMarkView::CreateMarkHandles(SdrHdlList& rTarget)
     rTarget.SetDistortShear(SDRDRAG_SHEAR == GetDragMode());
     const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
     const bool bStdDrag(SDRDRAG_MOVE == GetDragMode());
-    bool bFrmHdl(ImpIsFrameHandles());
+    const bool bFrmHdl(ImpIsFrameHandles());
     const SdrObject* pSingleSelected = getSelectedIfSingle();
     const SdrTextObj* pSingleTextObj = dynamic_cast< const SdrTextObj* >(pSingleSelected);
     const bool bSingleTextObjMark(pSingleTextObj && pSingleTextObj->IsTextFrame());
 
-    // #122142# for captions in TextEdit, force to FrameHdls to get the special text selection
-    if(!bFrmHdl && bSingleTextObjMark && dynamic_cast< const SdrCaptionObj* >(pSingleSelected))
+    // check if text edit or ole is active and handles need to be suppressed. This may be the case
+    // when a single object is selected
+    // Using a strict return statement is okay here; no handles means *no* handles.
+    if(pSingleSelected)
     {
-        bFrmHdl = true;
+        // formally #i33755#: If TextEdit is active the EditEngine will directly paint
+        // to the window, so suppress Overlay and handles completely; a text frame for
+        // the active text edit will be painted by the repaitnt mechanism in
+        // SdrObjEditView::ImpPaintOutlinerView in this case. This needs to be reworked
+        // in the future
+        // Also formally #122142#: Pretty much the same for SdrCaptionObj's in calc.
+        if(((SdrView*)this)->IsTextEdit())
+        {
+            if(pSingleTextObj && pSingleTextObj->IsInEditMode())
+            {
+                return;
+            }
+        }
+
+        // formally #i118524#: if inplace activated OLE is selected, suppress handles
+        const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pSingleSelected);
+
+        if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
+        {
+            return;
+        }
     }
 
     if(bFrmHdl)

@@ -124,17 +124,17 @@ public:
     static basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const bool bBezierAllowed );
 
 protected:
+    // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
+    // SdrTextMinFrameWidthItem and SdrTextMinFrameHeightItem based on all settings, necessities
+    // and object sizes
+    virtual void AdaptTextMinSize();
+
     String      aName;
 
     virtual ~SdrObjCustomShape();
 
     /// method to copy all data from given source
     virtual void copyDataFromSdrObject(const SdrObject& rSource);
-
-    // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
-    // SDRATTR_TEXT_MINFRAMEWIDTH and SDRATTR_TEXT_MINFRAMEHEIGHT based on all settings, necessities
-    // and object sizes
-    virtual void AdaptTextMinSize();
 
     virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange) const;
 

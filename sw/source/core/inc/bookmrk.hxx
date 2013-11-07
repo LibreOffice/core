@@ -159,8 +159,13 @@ namespace sw { namespace mark
 
             void DeregisterFromDoc(SwDoc* const pDoc);
             virtual ~DdeBookmark();
+            inline bool IsInDestruction() const
+            {
+                return mbInDestruction;
+            }
         private:
             SwServerObjectRef m_aRefObj;
+            bool mbInDestruction;
             static const ::rtl::OUString our_sNamePrefix;
     };
 

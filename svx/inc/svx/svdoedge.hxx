@@ -169,6 +169,27 @@ protected:
     // inside test (HitTest) and object center test (see FindConnector())
     bool                        mbSuppressDefaultConnect : 1;
 
+    // #110649#
+    // Flag value for avoiding death loops when calculating BoundRects
+    // from circularly connected connectors. A coloring algorythm is used
+    // here. When the GetCurrentBoundRect() calculation of a SdrEdgeObj
+    // is running, the flag is set, else it is always sal_False.
+    unsigned                    mbBoundRectCalculationRunning : 1;
+
+    // #123048# need to remember if layouting was suppressed before to get
+    // to a correct state for first real layouting
+    unsigned                    mbSuppressed : 1;
+
+public:
+    // #109007#
+    // Interface to default connect suppression
+    void SetSuppressDefaultConnect(sal_Bool bNew) { mbSuppressDefaultConnect = bNew; }
+    sal_Bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
+
+    // #110649#
+    sal_Bool IsBoundRectCalculationRunning() const { return mbBoundRectCalculationRunning; }
+
+protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     void ImpRecalcEdgeTrack();  // Neuberechnung des Verbindungsverlaufs
@@ -197,11 +218,6 @@ protected:
 public:
     /// create a copy, evtl. with a different target model (if given)
     virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
-
-    // #109007#
-    // Interface to default connect suppression
-    void SetSuppressDefaultConnect(bool bNew) { mbSuppressDefaultConnect = bNew; }
-    bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
 
     virtual bool IsSdrEdgeObj() const;
     virtual bool IsClosedObj() const;

@@ -246,7 +246,7 @@ namespace
 
                 const char* sExportString = "m53570 7650-35430 24100";
                 CPPUNIT_ASSERT_MESSAGE( "Stroke is m535.7 518.5-354.3-241",
-                                        basegfx::tools::exportToSvgD( aPath ).compareToAscii(sExportString) == 0 );
+                                        basegfx::tools::exportToSvgD( aPath, true, true, false ).compareToAscii(sExportString) == 0 );
 
                 m_bGreenStrokeSeen = true;
             }
@@ -270,7 +270,7 @@ namespace
 
                 const char* sExportString = "m49890 5670.00000000001-35430 24090";
                 CPPUNIT_ASSERT_MESSAGE( "Stroke is m49890 5670.00000000001-35430 24090",
-                                        basegfx::tools::exportToSvgD( aPath ).compareToAscii(sExportString) == 0 );
+                                        basegfx::tools::exportToSvgD( aPath, true, true, false ).compareToAscii(sExportString) == 0 );
 
                 m_bDashedLineSeen = true;
             }
@@ -328,7 +328,7 @@ namespace
             const char* sExportString = "m12050 49610c-4310 0-7800-3490-7800-7800 0-4300 "
                 "3490-7790 7800-7790 4300 0 7790 3490 7790 7790 0 4310-3490 7800-7790 7800z";
             CPPUNIT_ASSERT_MESSAGE( "Stroke is a 4-bezier circle",
-                                    basegfx::tools::exportToSvgD( aPath ).compareToAscii(sExportString) == 0 );
+                                    basegfx::tools::exportToSvgD( aPath, true, true, false ).compareToAscii(sExportString) == 0 );
 
             m_bRedCircleSeen = true;
         }

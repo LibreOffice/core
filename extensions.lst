@@ -31,7 +31,7 @@
 # the name has to be specified after the URL enclosed in double quotes.
 
 
-# Some extensions that are installed indepently of the language.
+# Some extensions that are installed independently of the language.
 
 # the presenter console extension
 # [ language=all && ENABLE_XXX ]
@@ -39,7 +39,7 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    b7ce02d25eb302e5b23572cdccaea461 http://sourceforge.net/projects/aoo-extensions/files/17102/0/dict-en.oxt/download "dict-en.oxt"
+    3c3f841f5d40403bcc4d6bb685a38160 http://sourceforge.net/projects/aoo-extensions/files/17102/1/dict-en.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
@@ -55,15 +55,15 @@
 
 # French dictionary.
 [ language=fr || language=nl || language=de || language=de_DE ]
-    47ca39e385b02839c24a5d953495cb98 http://sourceforge.net/projects/aoo-extensions/files/3554/5/ooo-dictionnaire-fr-moderne-v4.2.oxt/download "ooo-dictionnaire-fr-moderne-v4.2.oxt"
+    8f7ca241048c70bd7893995ac4bcca3b http://sourceforge.net/projects/aoo-extensions/files/17340/1/dict411.oxt/download "dict411.oxt"
 
 # Italian dictionary.
 [ language=it || language=de || language=de_DE ]
-    e7ad2666a727b594948cb672a31ba22d http://sourceforge.net/projects/aoo-extensions/files/1204/11/dict-it.oxt/download "dict-it.oxt"
+    67eb02751dda7b2d312a66bcb0505fd2 http://sourceforge.net/projects/aoo-extensions/files/1204/13/dict-it.oxt/download "dict-it.oxt"
 
 # Spanish dictionary.
 [ language=es ]
-    28776430bb77547fd70cf6db504bda63 http://sourceforge.net/projects/aoo-extensions/files/1657/2/es_ES.oxt/download "es_ES.oxt"
+    59dd45e6785ed644adbbd73f4f126182 http://sourceforge.net/projects/aoo-extensions/files/1657/3/es_es.oxt/download "es_es.oxt"
 
 # Danish dictionary.
 [ language=da ]
@@ -100,7 +100,7 @@
 
 # Scottish Gaelic.
 [ language=gd ]
-    867d5509958a867fec1096b445fe4cec http://sourceforge.net/projects/aoo-extensions/files/4587/8/hunspell-gd-2.6.oxt/download "hunspell-gd-2.6.oxt"
+    88d92378c2bcf22f87f49bf594130238 http://sourceforge.net/projects/aoo-extensions/files/4587/9/hunspell-gd-2.7.oxt/download "hunspell-gd-2.7.oxt"
 
 # Basque.
 [ language=eu ]

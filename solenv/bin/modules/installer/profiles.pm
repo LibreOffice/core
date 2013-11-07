@@ -215,12 +215,10 @@ sub create_profiles
         # Some data are set now, others are taken from the file "soffice.exe" ("soffice.bin")
         add_profile_into_filelist($filesarrayref, $oneprofile, $completeprofilename, $allvariables);
 
-        $infoline = "Created Profile: $completeprofilename\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Created Profile: %s\n", $completeprofilename);
     }
 
-    $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
 }
 
 

@@ -921,28 +921,6 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
-                                                                // #i91209#
-STD_LIB_FILE(gid_File_Lib_Mozab,mozab)
-STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
-
-#else
-
-#ifndef OS2
-File gid_File_Lib_Mozbootstrap
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmozbootstrap,UNXSUFFIX));
-  #else
-    Name = "mozbootstrap.dll";
-  #endif
-End
-#endif
-
-#endif
-
 #ifdef SYSTEM_LIBWPD
 STD_LIB_FILE(gid_File_Lib_Wpft,wpft)
 #endif
@@ -966,60 +944,6 @@ File gid_File_Lib_Mingwm10
     Name = "mingwm10.dll";
 End
 
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcr80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Common_Ure;
-//    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcp80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Common_Ure;
-//    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcm80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Common_Ure;
-//    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
 #endif
 #endif
 
@@ -1049,24 +973,6 @@ End
 
 #endif
 
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Msvcm80crt_Manifest
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Common_Ure;
-//    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
 #endif
 
 #if defined(OS2)
@@ -1695,7 +1601,30 @@ SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
 #endif
 #endif
 
-#ifndef WITHOUT_MOZILLA
+
+#ifdef BUNDLE_NSS_LIBS
+
+STD_LIB_FILE( gid_File_Lib_Freebl3, freebl3)
+STD_LIB_FILE( gid_File_Lib_Nspr4, nspr4)
+STD_LIB_FILE( gid_File_Lib_Nss3, nss3)
+STD_LIB_FILE( gid_File_Lib_Nsckbi, nssckbi)
+STD_LIB_FILE( gid_File_Lib_Nssdbm3, nssdbm3)
+STD_LIB_FILE( gid_File_Lib_Nssutil3, nssutil3)
+STD_LIB_FILE( gid_File_Lib_Plc4, plc4)
+STD_LIB_FILE( gid_File_Lib_Plds4, plds4)
+STD_LIB_FILE( gid_File_Lib_Smime3, smime3)
+STD_LIB_FILE( gid_File_Lib_Softokn3, softokn3)
+STD_LIB_FILE( gid_File_Lib_Ssl3, ssl3)
+
+#ifndef MACOSX // #i108575# use system sqlite3 on MacOSX
+STD_LIB_FILE( gid_File_Lib_Sqlite3, sqlite3)
+#endif
+
+#endif // BUNDLE_NSS_LIBS
+
+
+#ifdef ENABLE_XMLSEC
+
 File gid_File_Lib_XSec_Framework
     TXT_FILE_BODY;
 	#ifdef UNX
@@ -1730,6 +1659,7 @@ File gid_File_Lib_XSec_XMLSecurity
 End
 
 #ifdef WNT
+
 File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
     #ifdef _gcc3
@@ -1751,10 +1681,11 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
-#endif
 
-//i20156 - end
-#endif
+#endif // WNT 
+
+#endif // ENABLE_XMLSEC
+
 
 File gid_File_Lib_Migrationoo2
     TXT_FILE_BODY;
@@ -1852,24 +1783,6 @@ End
 STD_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimpc)
 #else
 STD_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
-#endif
-
-#if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA && \
-    !(defined M1400 && defined PROF_EDITION && !defined _STLP_DEBUG)
-        // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
-        // gid_Brand_File_Lib_Msvcr80
-File gid_File_Moz_Msvcp80
-    TXT_FILE_BODY;
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = SCP2_URE_DL_NORMAL("msvcp80");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-End
-File gid_File_Moz_Msvcr80
-    TXT_FILE_BODY;
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = SCP2_URE_DL_NORMAL("msvcr80");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-End
 #endif
 
 #if defined(WNT)

@@ -121,7 +121,7 @@ inline ary::cpp::Class *
 ContextForAry::
 S_OwnerStack::CurClass() const
 {
-    return aStack_Classes.size() > 0
+    return !aStack_Classes.empty()
                 ?   aStack_Classes.top().first
                 :   (ary::cpp::Class *) 0;
 }
@@ -130,7 +130,7 @@ inline void
 ContextForAry::
 S_OwnerStack::SetOwner_2CurNamespace()
 {
-    csv_assert( aStack_Namespaces.size() > 0 );
+    csv_assert( !aStack_Namespaces.empty() );
     pOwner_Cur = pOwner_Namespace.MutablePtr();
     pOwner_Namespace->SetAnotherNamespace( CurNamespace() );
 }
@@ -139,7 +139,7 @@ inline void
 ContextForAry::
 S_OwnerStack::SetOwner_2CurClass()
 {
-    csv_assert( aStack_Classes.size() > 0 );
+    csv_assert( !aStack_Classes.empty() );
     pOwner_Cur = pOwner_Class.MutablePtr();
     pOwner_Class->SetAnotherClass( *CurClass() );
 }
@@ -173,7 +173,7 @@ inline void
 ContextForAry::
 S_OwnerStack::SetGlobalNamespace( ary::cpp::Namespace & io_rGlobalNamespace )
 {
-    csv_assert( aStack_Namespaces.size() == 0 );
+    csv_assert( aStack_Namespaces.empty() );
     aStack_Namespaces.push(&io_rGlobalNamespace);
     SetOwner_2CurNamespace();
 }
@@ -187,7 +187,7 @@ inline void
 ContextForAry::
 S_OwnerStack::OpenNamespace( ary::cpp::Namespace & io_rOpenedNamespace )
 {
-    csv_assert( aStack_Namespaces.size() > 0  OR io_rOpenedNamespace.Parent() == 0 );
+    csv_assert( !aStack_Namespaces.empty()  OR io_rOpenedNamespace.Parent() == 0 );
     aStack_Namespaces.push(&io_rOpenedNamespace);
     SetOwner_2CurNamespace();
 }
@@ -228,7 +228,7 @@ inline E_Protection
 ContextForAry::
 S_OwnerStack::CurProtection() const
 {
-    return aStack_Classes.size() > 0
+    return !aStack_Classes.empty()
                 ?   aStack_Classes.top().second
                 :   ary::cpp::PROTECT_global;
 }
@@ -271,15 +271,15 @@ S_OwnerStack::CloseBlock()
     }
     else
     {
-        // csv_assert( aStack_Classes.size() == 0 );
-        if ( aStack_Classes.size() > 0 )
+        // csv_assert( aStack_Classes.empty() );
+        if ( !aStack_Classes.empty() )
             throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", String::Null_(), 0);
 
         csv_assert( pCurEnum == 0 );
         aStack_Namespaces.pop();
 
-        // csv_assert( aStack_Namespaces.size() > 0 );
-        if( aStack_Namespaces.size() == 0 )
+        // csv_assert( !aStack_Namespaces.empty() );
+        if( aStack_Namespaces.empty() )
             throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", String::Null_(), 0);
 
     }
@@ -290,12 +290,12 @@ void
 ContextForAry::
 S_OwnerStack::CloseClass()
 {
-    // csv_assert( aStack_Classes.size() > 0 );
-    if ( aStack_Classes.size() == 0 )
+    // csv_assert( !aStack_Classes.empty() );
+    if ( aStack_Classes.empty() )
           throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", String::Null_(), 0);
 
     aStack_Classes.pop();
-    if ( aStack_Classes.size() > 0 )
+    if ( !aStack_Classes.empty() )
         SetOwner_2CurClass();
     else
         SetOwner_2CurNamespace();
@@ -307,7 +307,7 @@ S_OwnerStack::CloseEnum()
 {
     csv_assert( pCurEnum != 0 );
     pCurEnum = 0;
-    if ( aStack_Classes.size() > 0 )
+    if ( !aStack_Classes.empty() )
         SetOwner_2CurClass();
     else
         SetOwner_2CurNamespace();

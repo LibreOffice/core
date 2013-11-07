@@ -61,6 +61,6 @@ SHL1HEADER=$(OUT)$/inc$/WindowsAccessBridgeAdapter.h
 $(SLO)$/WindowsAccessBridgeAdapter.obj : $(SHL1HEADER)
 
 $(SHL1HEADER) :
-    javah -classpath $(OUT)$/class -o $(SHL1HEADER) org.openoffice.accessibility.WindowsAccessBridgeAdapter
+    javah -classpath "$(OUT)$/class;$(OUTDIR)$/bin/ridl.jar;$(OUTDIR)$/bin/unoil.jar;$(CLASSPATH)" -o $(SHL1HEADER) org.openoffice.accessibility.WindowsAccessBridgeAdapter
 
 .ENDIF			# "$(GUI)"=="WNT"

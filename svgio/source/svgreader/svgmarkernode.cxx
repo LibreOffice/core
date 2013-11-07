@@ -196,11 +196,11 @@ namespace svgio
             return aPrimitives;
         }
 
-        const basegfx::B2DRange* SvgMarkerNode::getCurrentViewPort() const
+        const basegfx::B2DRange SvgMarkerNode::getCurrentViewPort() const
         {
             if(getViewBox())
             {
-                return getViewBox();
+                return *(getViewBox());
             }
             else
             {

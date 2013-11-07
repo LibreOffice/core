@@ -406,6 +406,10 @@ sal_Bool ImpSvNumFor::HasNewCurrency() const
     return sal_False;
 }
 
+const bool ImpSvNumFor::HasTextFormatCode() const
+{
+    return aI.eScannedType == NUMBERFORMAT_TEXT;
+}
 
 sal_Bool ImpSvNumFor::GetNewCurrencySymbol( String& rSymbol,
             String& rExtension ) const
@@ -1718,6 +1722,15 @@ sal_Bool SvNumberformat::HasNewCurrency() const
     return sal_False;
 }
 
+const bool SvNumberformat::HasTextFormatCode() const
+{
+    for ( sal_uInt16 j=0; j<4; j++ )
+    {
+        if ( NumFor[j].HasTextFormatCode() )
+            return true;
+    }
+    return false;
+}
 
 sal_Bool SvNumberformat::GetNewCurrencySymbol( String& rSymbol,
             String& rExtension ) const

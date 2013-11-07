@@ -30,10 +30,13 @@ namespace dp_gui{ class DialogHelper; }
 
 extern "C" {
 
+    // optional parameter <bChooseNewestVersion> indicates, if
+    // the newest version is chosen without user interaction.
     DESKTOP_DEPLOYMENTGUI_DLLPUBLIC
     bool handleVersionException(
         com::sun::star::deployment::VersionException verExc,
-        dp_gui::DialogHelper* pDialogHelper = 0 );
+        dp_gui::DialogHelper* pDialogHelper = 0,
+        const bool bChooseNewestVersion = false );
 }
 
 #endif

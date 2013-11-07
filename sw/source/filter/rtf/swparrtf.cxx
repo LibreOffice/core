@@ -2289,8 +2289,13 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
             if( pTxtNd )
             {
-                pTxtNd->SetAttr(
-                    *GetDfltAttr(RES_PARATR_NUMRULE));
+                pTxtNd->SetAttr( *GetDfltAttr(RES_PARATR_NUMRULE) );
+                // reset all list attributes
+                pTxtNd->ResetAttr( RES_PARATR_LIST_LEVEL );
+                pTxtNd->ResetAttr( RES_PARATR_LIST_ISRESTART );
+                pTxtNd->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
+                pTxtNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
+                pTxtNd->ResetAttr( RES_PARATR_LIST_ID );
             }
         }
     }

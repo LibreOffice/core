@@ -44,9 +44,18 @@ public:
     void Activate (const cssu::Reference<css::frame::XFrame>& rxFrame);
     void Deactivate (const cssu::Reference<css::frame::XFrame>& rxFrame);
 
+    /** Enable or disable the broadcaster.
+        @param bIsEnabled
+            The new value of the "enabled" state.
+        @return
+            The old value of the "enabled" state is returned.
+    */
+    bool SetBroadcasterEnabled (const bool bIsEnabled);
+
 private:
     rtl::OUString msContextName;
     bool mbIsContextActive;
+    bool mbIsBroadcasterEnabled;
 
     void BroadcastContextChange (
         const cssu::Reference<css::frame::XFrame>& rxFrame,

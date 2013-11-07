@@ -1056,7 +1056,7 @@ void SwRTFParser::ReadField()
 
                         if (pFldAttr)
                         {
-                            const SwField *pFld = pFldAttr->GetFld().GetFld();
+                            const SwField *pFld = pFldAttr->GetFmtFld().GetField();
                             SwFieldType *pTyp = pFld ? pFld->GetTyp() : 0;
                             ASSERT(pTyp->Which() == RES_USERFLD, "expected a user field");
                             if (pTyp->Which() == RES_USERFLD)

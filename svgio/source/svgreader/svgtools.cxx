@@ -156,7 +156,7 @@ namespace svgio
             return aRetval;
         }
 
-        double SvgNumber::solve(const InfoProvider& rInfoProvider, NumberType aNumberType) const
+        double SvgNumber::solveNonPercentage(const InfoProvider& rInfoProvider) const
         {
             if(isSet())
             {
@@ -187,51 +187,89 @@ namespace svgio
 
                         switch(meUnit)
                         {
-                            case Unit_pt: fRetval *= 1.25; break;
-                            case Unit_pc: fRetval *= 15.0; break;
-                            case Unit_cm: fRetval *= 35.43307; break;
-                            case Unit_mm: fRetval *= 3.543307; break;
-                            case Unit_in: fRetval *= 90.0; break;
+                            case Unit_pt: fRetval *= F_SVG_PIXEL_PER_INCH / 72.0; break;
+                            case Unit_pc: fRetval *= F_SVG_PIXEL_PER_INCH / 6.0; break;
+                            case Unit_cm: fRetval *= F_SVG_PIXEL_PER_INCH / 2.54; break;
+                            case Unit_mm: fRetval *= 0.1 * F_SVG_PIXEL_PER_INCH / 2.54; break;
+                            case Unit_in: fRetval *= F_SVG_PIXEL_PER_INCH; break;
                             default: break;
                         }
 
                         return fRetval;
                         break;
                     }
+                    default:
+                    {
+                        OSL_ENSURE(false, "Do not use with percentage! ");
+                        return 0.0;
+                        break;
+                    }
+                }
+            }
+
+            /// not set
+            OSL_ENSURE(false, "SvgNumber not set (!)");
+            return 0.0;
+        }
+
+        double SvgNumber::solve(const InfoProvider& rInfoProvider, NumberType aNumberType) const
+        {
+            if(isSet())
+            {
+                switch(meUnit)
+                {
+                    case Unit_px:
+                    {
+                        return mfNumber;
+                        break;
+                    }
+                    case Unit_pt:
+                    case Unit_pc:
+                    case Unit_cm:
+                    case Unit_mm:
+                    case Unit_in:
+                    case Unit_em:
+                    case Unit_ex:
+                    {
+                        return solveNonPercentage( rInfoProvider);
+                        break;
+                    }
                     case Unit_percent:
                     {
                         double fRetval(mfNumber * 0.01);
-                        const basegfx::B2DRange* pViewPort = rInfoProvider.getCurrentViewPort();
+                        basegfx::B2DRange aViewPort = rInfoProvider.getCurrentViewPort();
 
-                        if(!pViewPort)
+                        if ( aViewPort.isEmpty() )
                         {
+#ifdef DBG_UTIL
+                            myAssert(rtl::OUString::createFromAscii("Design error, this case should have been handled in the caller"));
+#endif
                             // no viewPort, assume a normal page size (A4)
-                            static basegfx::B2DRange aDinA4Range(
+                            aViewPort = basegfx::B2DRange(
                                 0.0,
                                 0.0,
-                                210.0 * 3.543307,
-                                297.0 * 3.543307);
+                                210.0 * F_SVG_PIXEL_PER_INCH / 2.54,
+                                297.0 * F_SVG_PIXEL_PER_INCH / 2.54);
 
-                            pViewPort = &aDinA4Range;
                         }
 
-                        if(pViewPort)
+                        if ( !aViewPort.isEmpty() )
                         {
                             if(xcoordinate == aNumberType)
                             {
                                 // it's a x-coordinate, relative to current width (w)
-                                fRetval *= pViewPort->getWidth();
+                                fRetval *= aViewPort.getWidth();
                             }
                             else if(ycoordinate == aNumberType)
                             {
                                 // it's a y-coordinate, relative to current height (h)
-                                fRetval *= pViewPort->getHeight();
+                                fRetval *= aViewPort.getHeight();
                             }
                             else // length
                             {
                                 // it's a length, relative to sqrt(w*w + h*h)/sqrt(2)
-                                const double fCurrentWidth(pViewPort->getWidth());
-                                const double fCurrentHeight(pViewPort->getHeight());
+                                const double fCurrentWidth(aViewPort.getWidth());
+                                const double fCurrentHeight(aViewPort.getHeight());
                                 const double fCurrentLength(
                                     sqrt(fCurrentWidth * fCurrentWidth + fCurrentHeight * fCurrentHeight)/sqrt(2.0));
 
@@ -924,11 +962,11 @@ namespace svgio
 
                             if(readNumberAndUnit(rCandidate, nPos, aHeight, nLen))
                             {
-                                return basegfx::B2DRange(
-                                    aMinX.solve(rInfoProvider, xcoordinate),
-                                    aMinY.solve(rInfoProvider, ycoordinate),
-                                    aWidth.solve(rInfoProvider, xcoordinate),
-                                    aHeight.solve(rInfoProvider, ycoordinate));
+                                double fX(aMinX.solve(rInfoProvider, xcoordinate));
+                                double fY(aMinY.solve(rInfoProvider, ycoordinate));
+                                double fW(aWidth.solve(rInfoProvider,xcoordinate));
+                                double fH(aHeight.solve(rInfoProvider,ycoordinate));
+                                return basegfx::B2DRange(fX,fY,fX+fW,fY+fH);
                             }
                         }
                     }

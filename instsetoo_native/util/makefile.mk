@@ -28,8 +28,6 @@ TARGET=util
 .INCLUDE:  settings.mk
 .INCLUDE: $(SOLARINCDIR)$/rtlbootstrap.mk
 
-# PERL:=@echo
-
 # watch for the path delimiter
 .IF "$(GUI)"=="WNT"
 PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
@@ -63,6 +61,26 @@ INSTALLDIR=$(OUT)
 
 .INCLUDE: target.mk
 
+# The help target belongs after the inclusion of target.mk to not become the default target.
+help .PHONY :
+    @echo "known targets:"
+    @echo "    openoffice             builds the default installation packages for the platform"
+    @echo "    aoo_srcrelease         packs the source release package"
+    @echo "    updatepack"
+    @echo "    openofficedev          devloper snapshot"
+    @echo "    openofficewithjre"
+    @echo "    ooolanguagepack"
+    @echo "    ooodevlanguagepack"
+    @echo "    sdkoo"
+    @echo "    sdkoodev"
+    @echo 
+    @echo "Most targets (all except aoo_srcrelease and updatepack) accept suffixes"
+    @echo "    add _<language> to build a target for one language only"
+    @echo "        the default set of languages is alllangiso=$(alllangiso)"
+    @echo "    add .<package_format> to build a target for one package format only"
+    @echo "        the default set of package formats is archive and PKGFORMAT=$(PKGFORMAT)"
+
+
 LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
@@ -83,7 +101,6 @@ ALLTAR  : $(LOCALPYFILES)
 ALLTAR : openoffice
 .ELSE
 ALLTAR : openoffice sdkoo_en-US
-#ALLTAR : openoffice sdkoo_en-US ure_en-US
 .ENDIF
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
@@ -139,17 +156,10 @@ sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
 
 sdkoodev: $(foreach,i,$(alllangiso) sdkoodev_$i)
 
-#ure: $(foreach,i,$(alllangiso) ure_$i)
-
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
 
-.IF "$(BUILD_SPECIAL)"!=""
-MSIOFFICETEMPLATEDIR=$(MSIOFFICETEMPLATESOURCE)
-MSILANGPACKTEMPLATEDIR=$(MSILANGPACKTEMPLATESOURCE)
-MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
-.ELSE			# "$(BUILD_SPECIAL)"!=""
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
@@ -159,7 +169,7 @@ MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH)
 
 .IF "$(OS)" == "WNT"
-ADDDEPS+=hack_msitemplates
+ADDDEPS+=msitemplates
 .ENDIF
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
@@ -177,13 +187,9 @@ $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
 
-#$(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
-
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS)"!=""
-
-.ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!=""
@@ -192,45 +198,80 @@ $(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
 $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 .ENDIF			# "$(MAKETARGETS)"!=""
-openoffice_%{$(PKGFORMAT:^".") .archive} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p Apache_OpenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product Apache_OpenOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
+
+
+# This macro makes calling the make_installer.pl script a bit easier.
+# Just add -p and -msitemplate switches.
+MAKE_INSTALLER_COMMAND=					\
+    @$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl 	\
+        -f $(PRJ)$/util$/openoffice.lst 	\
+        -l $(subst,$(@:s/_/ /:1)_, $(@:b)) 	\
+        -u $(OUT) 				\
+        -buildid $(BUILD) 			\
+        -msilanguage $(MISC)$/win_ulffiles	\
+        -format $(@:e:s/.//) 			\
+        $(VERBOSESWITCH)
+
+# This macro makes calling gen_update_info.pl a bit easier
+# Just add --product switches, and xml input file and redirect output.
+GEN_UPDATE_INFO_COMMAND=					\
+    @$(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl		\
+        --buildid $(BUILD)				\
+        --arch "$(RTL_ARCH)"				\
+        --os "$(RTL_OS)"				\
+        --lstfile $(PRJ)$/util$/openoffice.lst		\
+        --languages $(subst,$(@:s/_/ /:1)_, $(@:b))
+
+openoffice_%{$(PKGFORMAT:^".")} :
+    $(MAKE_INSTALLER_COMMAND) 		\
+        -p Apache_OpenOffice		\
+        -msitemplate $(MSIOFFICETEMPLATEDIR)
+    $(GEN_UPDATE_INFO_COMMAND)		\
+        --product Apache_OpenOffice	\
+        $(PRJ)$/util$/update.xml	\
+        > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
+
+openoffice_%{.archive} :
+    $(MAKE_INSTALLER_COMMAND) 		\
+        -p Apache_OpenOffice		\
+        -msitemplate $(MSIOFFICETEMPLATEDIR)
+    $(GEN_UPDATE_INFO_COMMAND)		\
+        --product Apache_OpenOffice	\
+        $(PRJ)$/util$/update.xml	\
+        > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
 openofficewithjre_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p Aapche_OpenOffice_wJRE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_wJRE -msitemplate $(MSIOFFICETEMPLATEDIR)
 
 $(foreach,i,$(alllangiso) openofficedev_$i) : $$@{$(PKGFORMAT:^".")}
 openofficedev_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p Apache_OpenOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product Apache_OpenOffice_Dev --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
+    $(MAKE_INSTALLER_COMMAND)		\
+        -p Apache_OpenOffice_Dev	\
+        -msitemplate $(MSIOFFICETEMPLATEDIR)
+    $(GEN_UPDATE_INFO_COMMAND)			\
+        --product Apache_OpenOffice_Dev 	\
+        $(PRJ)$/util$/update.xml 		\
+        > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 ooolanguagepack_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p Apache_OpenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(MAKE_INSTALLER_COMMAND)			\
+        -p Apache_OpenOffice			\
+        -msitemplate $(MSILANGPACKTEMPLATEDIR)	\
+        -languagepack
 
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 ooodevlanguagepack_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p Apache_OpenOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_Dev -msitemplate $(MSILANGPACKTEMPLATEDIR) -languagepack
 
 $(foreach,i,$(alllangiso) sdkoo_$i) : $$@{$(PKGFORMAT:^".")}
 sdkoo_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p Apache_OpenOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
+    $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_SDK -msitemplate $(MSISDKOOTEMPLATEDIR) -dontstrip
 
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $$@{$(PKGFORMAT:^".")}
 sdkoodev_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p Apache_OpenOffice_Dev_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
-
-#$(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}
-#ure_%{$(PKGFORMAT:^".")} :
-#.IF "$(OS)" == "MACOSX"
-#    @echo 'for now, there is no standalone URE for Mac OS X'
-#.ELSE
-#    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.#lst \
-#        -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p URE -u $(OUT) -buildid $(BUILD) -#format $(@:e:s/.//) $(VERBOSESWITCH) \
-#        -msitemplate $(MSIURETEMPLATEDIR) \
-#        -msilanguage $(MISC)$/win_ulffiles
-#.ENDIF
+    $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_Dev_SDK -msitemplate $(MSISDKOOTEMPLATEDIR) -dontstrip
 
 .IF "$(MAKETARGETS)"!=""
 .IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
@@ -261,18 +302,161 @@ $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
-hack_msitemplates .PHONY:
-    -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
-    -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
-    -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)
-    -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)$/Binary
-    -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)$/Binary
-    -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)$/Binary
-    $(GNUCOPY) $(MSIOFFICETEMPLATESOURCE)$/*.* $(MSIOFFICETEMPLATEDIR)
-    $(GNUCOPY) $(MSILANGPACKTEMPLATESOURCE)$/*.* $(MSILANGPACKTEMPLATEDIR)
-    $(GNUCOPY) $(MSISDKOOTEMPLATESOURCE)$/*.* $(MSISDKOOTEMPLATEDIR)
-    $(GNUCOPY) $(MSIOFFICETEMPLATESOURCE)$/Binary$/*.* $(MSIOFFICETEMPLATEDIR)$/Binary
-    $(GNUCOPY) $(MSILANGPACKTEMPLATESOURCE)$/Binary$/*.* $(MSILANGPACKTEMPLATEDIR)$/Binary
-    $(GNUCOPY) $(MSISDKOOTEMPLATESOURCE)$/Binary$/*.* $(MSISDKOOTEMPLATEDIR)$/Binary
+msitemplates .PHONY: msi_template_files msi_langpack_template_files msi_sdk_template_files
+
+MSI_OFFICE_TEMPLATE_FILES=		\
+    ActionTe.idt			\
+    AdminExe.idt			\
+    AdminUIS.idt			\
+    AdvtExec.idt			\
+    AppSearc.idt			\
+    Binary.idt			\
+    CheckBox.idt			\
+    Control.idt			\
+    ControlC.idt			\
+    ControlE.idt			\
+    CustomAc.idt			\
+    Dialog.idt			\
+    Error.idt			\
+    EventMap.idt			\
+    InstallE.idt			\
+    InstallU.idt			\
+    LaunchCo.idt			\
+    ListBox.idt			\
+    Property.idt			\
+    RadioBut.idt			\
+    RegLocat.idt			\
+    Signatur.idt			\
+    TextStyl.idt			\
+    UIText.idt			\
+    _Validat.idt			\
+    codes.txt			\
+    codes_broo.txt			\
+    codes_broodev.txt		\
+    codes_ooodev.txt		\
+    components.txt			\
+    upgradecode_remove_ooo.txt	\
+    Binary/Banner.bmp		\
+    Binary/Image.bmp		\
+    Binary/caution.ico		\
+    Binary/dontinstall.ico		\
+    Binary/install.ico		\
+    Binary/installfirstuse.ico	\
+    Binary/installpartial.ico	\
+    Binary/installstatemenu.ico	\
+    Binary/networkinstall.ico	\
+    Binary/newfolder.ico		\
+    Binary/openfolder.ico		\
+    Binary/setup.ico		\
+    Binary/setupcomplete.ico	\
+    Binary/setuppartial.ico		\
+    Binary/setuprepair.ico		\
+    Binary/trashcan.ico		\
+    Binary/up.ico
+
+MSI_LANGPACK_TEMPLATE_FILES=		\
+    ActionTe.idt			\
+    AdminExe.idt			\
+    AdminUIS.idt			\
+    AdvtExec.idt			\
+    Binary.idt			\
+    CheckBox.idt			\
+    Control.idt			\
+    ControlC.idt			\
+    ControlE.idt			\
+    CustomAc.idt			\
+    Dialog.idt			\
+    Error.idt			\
+    EventMap.idt			\
+    InstallE.idt			\
+    InstallU.idt			\
+    LaunchCo.idt			\
+    ListBox.idt			\
+    Property.idt			\
+    RadioBut.idt			\
+    TextStyl.idt			\
+    UIText.idt			\
+    _Validat.idt			\
+    bro_patchcodes.txt		\
+    brodev_patchcodes.txt		\
+    codes.txt			\
+    codes_broo.txt			\
+    codes_ooodev.txt		\
+    components.txt			\
+    ooo_patchcodes.txt		\
+    ooodev_patchcodes.txt		\
+    Binary/Banner.bmp
+
+MSI_SDK_TEMPLATE_FILES=			\
+    ActionTe.idt			\
+    AdminExe.idt			\
+    AdminUIS.idt			\
+    AdvtExec.idt			\
+    AppSearc.idt			\
+    Binary.idt			\
+    CheckBox.idt			\
+    Control.idt			\
+    ControlC.idt			\
+    ControlE.idt			\
+    CustomAc.idt			\
+    Dialog.idt			\
+    Error.idt			\
+    EventMap.idt			\
+    InstallE.idt			\
+    InstallU.idt			\
+    LaunchCo.idt			\
+    ListBox.idt			\
+    Property.idt			\
+    RadioBut.idt			\
+    RegLocat.idt			\
+    Signatur.idt			\
+    TextStyl.idt			\
+    UIText.idt			\
+    _Validat.idt			\
+    codes.txt			\
+    components.txt			\
+    Binary/Banner.bmp		\
+    Binary/Image.bmp		\
+    Binary/caution.ico		\
+    Binary/dontinstall.ico		\
+    Binary/install.ico		\
+    Binary/installfirstuse.ico	\
+    Binary/installpartial.ico	\
+    Binary/installstatemenu.ico	\
+    Binary/networkinstall.ico	\
+    Binary/newfolder.ico		\
+    Binary/openfolder.ico		\
+    Binary/setup.ico		\
+    Binary/setupcomplete.ico	\
+    Binary/setuppartial.ico		\
+    Binary/setuprepair.ico		\
+    Binary/trashcan.ico		\
+    Binary/up.ico
+
+msi_template_files .PHONY:					\
+    $(MSIOFFICETEMPLATEDIR)					\
+    $(MSIOFFICETEMPLATEDIR)$/Binary 			\
+    $(MSIOFFICETEMPLATEDIR)$/{$(MSI_OFFICE_TEMPLATE_FILES)}
+$(MSIOFFICETEMPLATEDIR) $(MSIOFFICETEMPLATEDIR)$/Binary :
+    -$(MKDIRHIER) $@
+$(MSIOFFICETEMPLATEDIR)$/% : $(MSIOFFICETEMPLATESOURCE)$/%
+    $(GNUCOPY) $< $@
+
+msi_langpack_template_files .PHONY :				\
+    $(MSILANGPACKTEMPLATEDIR)				\
+    $(MSILANGPACKTEMPLATEDIR)$/Binary			\
+    $(MSILANGPACKTEMPLATEDIR)$/{$(MSI_LANGPACK_TEMPLATE_FILES)}
+$(MSILANGPACKTEMPLATEDIR) $(MSILANGPACKTEMPLATEDIR)$/Binary  :
+    -$(MKDIRHIER) $@
+$(MSILANGPACKTEMPLATEDIR)$/% : $(MSILANGPACKTEMPLATESOURCE)$/%
+    $(GNUCOPY) $< $@
 
 
+msi_sdk_template_files .PHONY :					\
+    $(MSISDKOOTEMPLATEDIR)					\
+    $(MSISDKOOTEMPLATEDIR)$/Binary				\
+    $(MSISDKOOTEMPLATEDIR)$/{$(MSI_SDK_TEMPLATE_FILES)}
+$(MSISDKOOTEMPLATEDIR) $(MSISDKOOTEMPLATEDIR)$/Binary :
+    -$(MKDIRHIER) $@
+$(MSISDKOOTEMPLATEDIR)/% : $(MSISDKOOTEMPLATESOURCE)$/%
+    $(GNUCOPY) $< $@

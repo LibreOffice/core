@@ -109,10 +109,10 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
      $USE_DIRECTX5, $ATL_LIB, $ATL_LIB_X64, $HAVE_ATLTHUNK, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
      $ENABLE_HUNSPELL, $ENABLE_HYPHEN,
-     $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
+     $SYSTEM_PYTHON, $EPM_FLAGS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -150,7 +150,6 @@ $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
 $STLPORT4       = '@STLPORT4@';     # Location of STLport4
 $SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
-$SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $JAVAFLAGS 		= '@JAVAFLAGS@';
 $MINGW          = '@WITH_MINGWIN@'; # use MinGW for Windows build
@@ -161,8 +160,6 @@ if ( $MINGW eq "yes" )
 else
 { $CC             = PathFormat('@CC@');           # C compiler
   $CXX            = PathFormat('@CXX@'); }        # C++ compiler
-$MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
-$MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
 $FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
 $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
@@ -870,40 +867,6 @@ if ($platform =~ m/cygwin/)
 {  $ASM_PATH = PathFormat('@ASM_HOME@');
 }
 
-# Check for prebuild mozab libraries if we don't build them # ourselves
-# and we're also not using the external system mozilla installation.
-#
-# FIXME! This check should be done in configure and not here, but
-# the $OS, $COM, $CPU variables are not yet present there.
-#
-if ( "@WITH_MOZILLA@" eq "YES" and "@BUILD_MOZAB@" ne "TRUE" and "@SYSTEM_MOZILLA@" ne "YES" )
-{  print("\nChecking for prebuilt Mozilla libraries ...");
-   my $mozbinfile = $SRC_ROOT."/moz/zipped/";
-   if ( $^O eq 'MSWin32' ) {
-       chomp( $mozbinfile = qx{cygpath -d "$mozbinfile"} );
-   }
-   $mozbinfile .= $OS.$COM.$CPU;
-   if ( -e $mozbinfile."inc.zip"
-        and -e $mozbinfile."lib.zip"
-        and -e $mozbinfile."runtime.zip" )
-   {   print " found.\n";
-       $PREBUILD_MOZAB = "YES";
-   }
-   else
-   {   print " not found!\n\n";
-       print "If you don\'t use the system mozilla and also not build the needed\n";
-       print "mozilla libraries yourself you have to provide the needed files\n";
-       print "$OS$COM$CPU\{inc,lib,runtime\}.zip in moz/zipped/ .\n";
-       print "These files can be found here:\n";
-       print "  <http://tools.openoffice.org/moz_prebuild/680/>.\n\n";
-       die;
-   }
-}
-else
-{
-   $PREBUILD_MOZAB = "";
-}
-
 #
 # E. Determining the envionment values based on the information
 #    that was gathered earlier on.
@@ -991,6 +954,12 @@ $PERL_PATH            = dirname('@PERL@'); # Perl Path
 $XLIB                 = PathFormat('@XLIB@'); # X11 libraries
 $XINC                 = PathFormat('@XINC@'); # X11 includes
 
+# YD disable autodetection, use PATH
+if ( $platform =~ m/os2/ )
+{
+   $PERL = 'perl';
+   $PERL_PATH = '';
+}
 
 # Mac OS X/Darwin only variables.
 if ( $platform =~ m/darwin/ )
@@ -1397,10 +1366,6 @@ elsif ($platform =~ m/darwin/)
 
 }
 
-if ($SYSTEM_MOZILLA eq "YES")
-{
-       $SOLARLIB .= $L."@MOZ_LIB@"
-}
 
 # Location of the compiler include search directory paths.
 $SOLARINC             = $I.$cur_dir.
@@ -1653,10 +1618,6 @@ ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
 ToFile( "PROEXT",            $PROEXT,            "e" );
 ToFile( "VALGRIND_CFLAGS",   "@VALGRIND_CFLAGS@",  "e" );
 ToFile( "UNIXWRAPPERNAME",   "@UNIXWRAPPERNAME@","e" );
-ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
-ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
-ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
-ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 ToFile( "ENABLE_NSS_MODULE",  "@ENABLE_NSS_MODULE@", "e" );
 ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
@@ -1880,17 +1841,7 @@ ToFile( "THES_SYSTEM_DIR",   "@THES_SYSTEM_DIR@",  "e");
 ToFile( "ENABLE_LOCKDOWN",   "@ENABLE_LOCKDOWN@",  "e" );
 ToFile( "WITH_LDAP",         "@WITH_LDAP@",        "e" );
 ToFile( "WITH_OPENLDAP",     "@WITH_OPENLDAP@",    "e" );
-ToFile( "WITH_MOZILLA",      "@WITH_MOZILLA@",     "e" );
-ToFile( "SYSTEM_MOZILLA",    "@SYSTEM_MOZILLA@",   "e" );
-ToFile( "MOZ_FLAVOUR",       "@MOZ_FLAVOUR@",      "e" );
-ToFile( "NSPR_LIB",          "@NSPR_LIB@",         "e" );
-ToFile( "NSS_LIB",           "@NSS_LIB@",          "e" );
 ToFile( "MOZ_INC",           "@MOZ_INC@",          "e" );
-ToFile( "MOZ_LIB",           "@MOZ_LIB@",          "e" );
-ToFile( "MOZ_LIB_XPCOM",     "@MOZ_LIB_XPCOM@",    "e" );
-ToFile( "MOZ_NSPR_CFLAGS",   "@MOZ_NSPR_CFLAGS@",  "e" );
-ToFile( "MOZ_NSS_CFLAGS",    "@MOZ_NSS_CFLAGS@",   "e" );
-ToFile( "MOZ_LDAP_CFLAGS",   "@MOZ_LDAP_CFLAGS@",  "e" );
 ToFile( "WITH_CATA_FONTS",   "@WITH_CATA_FONTS@",  "e" );
 ToFile( "WITH_CATB_FONTS",   "@WITH_CATB_FONTS@",  "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
@@ -1912,6 +1863,7 @@ ToFile( "BUILD_EPM",         "@BUILD_EPM@",        "e" );
 ToFile( "PKGFORMAT",         "@PKGFORMAT@",        "e" );
 ToFile( "SYSTEM_STDLIBS",    "@SYSTEM_STDLIBS@",   "e" );
 ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
+ToFile( "SYSTEM_NSS",        "@SYSTEM_NSS@",       "e" );
 ToFile( "SYSTEM_OPENSSL",    "@SYSTEM_OPENSSL@",   "e" );
 ToFile( "OPENSSL_CFLAGS",    "@OPENSSL_CFLAGS@",   "e" );
 ToFile( "OPENSSL_LIBS",      "@OPENSSL_LIBS@",     "e" );
@@ -2006,7 +1958,6 @@ ToFile( "SYSTEM_PANGO",      "@SYSTEM_PANGO@",   "e" );
 ToFile( "SYSTEM_LIBPNG",     "@SYSTEM_LIBPNG@",   "e" );
 ToFile( "SYSTEM_LIBJPEG",    "@SYSTEM_LIBJPEG@",   "e" );
 ToFile( "RAT_JAR_HOME",      "@RAT_JAR_HOME@",     "e" );
-ToFile( "DISABLE_XAW",       "@DISABLE_XAW@",      "e" );
 ToFile( "DMAKE_URL",         "@DMAKE_URL@",        "e" );
 ToFile( "DMAKE_PATH",        "@DMAKE_PATH@",       "e" );
 ToFile( "IS_SYSTEM_DMAKE",   "@IS_SYSTEM_DMAKE@",  "e" );
@@ -2080,6 +2031,7 @@ if ( $platform =~ m/os2/ )
    ToFile( "LS",                "ls.exe",           "e" );
    ToFile( "GNUCOPY",           "cp.exe",           "e" );
    ToFile( "TOUCH",             "touch",            "e" );
+   ToFile( "CONFIG_SITE",       "/@unixroot/usr/share/config.site", "e" );
 }
 
 # $perlpre is only used for the following three variables

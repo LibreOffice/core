@@ -198,7 +198,7 @@ sal_Bool StgHeader::Check()
             && nTOCstrm >= 0
             && nThreshold > 0
             && ( nDataFAT == STG_EOF || ( nDataFAT >= 0 && nDataFATSize > 0 ) )
-            && ( nMasterChain == STG_EOF || ( nMasterChain >=0 && nMaster > 0 ) )
+            && ( nMasterChain == STG_FREE || nMasterChain == STG_EOF || ( nMasterChain >=0 && nMaster > 0 ) )
             && nMaster >= 0;
 }
 
@@ -438,7 +438,7 @@ sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
         n = ( n >> 1 ) - 1;
     if ( n > 31 ||
          (nSize < 0 && cType != STG_STORAGE) ||
-         ( nPage1 < 0 && nPage1 != STG_EOF ) )
+         ( nPage1 < 0 && nPage1 != STG_FREE && nPage1 != STG_EOF ) )
     {
         // the size makes no sence for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb

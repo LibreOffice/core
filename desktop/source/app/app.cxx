@@ -801,8 +801,9 @@ void MinimalCommandEnv::handle(
     css::deployment::VersionException verExc;
     if ( xRequest->getRequest() >>= verExc )
     {
-        // user interaction, if an extension is already been installed.
-        bApprove = handleVersionException( verExc );
+        // choose newest version, if an extension is already been installed.
+        const bool bChooseNewestVersion = true;
+        bApprove = handleVersionException( verExc, 0, bChooseNewestVersion );
     }
 
     const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > conts( xRequest->getContinuations());
@@ -954,6 +955,15 @@ static void installBundledExtensionBlobs()
         {}
         catch( css::deployment::DeploymentException&)
         {}
+        catch ( css::ucb::CommandFailedException& )
+        {
+        }
+        catch ( css::ucb::CommandAbortedException& )
+        {
+        }
+        catch ( css::lang::IllegalArgumentException& )
+        {
+        }
     }
 }
 
@@ -2234,6 +2244,21 @@ void Desktop::Main()
         {
             OfficeIPCThread::SetDowning();
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
+        }
+        catch( const ::com::sun::star::uno::Exception& exUNO)
+        {
+            OfficeIPCThread::SetDowning();
+            FatalError( exUNO.Message);
+        }
+        catch( const std::exception& exSTD)
+        {
+            OfficeIPCThread::SetDowning();
+            FatalError( OUString::createFromAscii( exSTD.what()));
+        }
+        catch( ...)
+        {
+            OfficeIPCThread::SetDowning();
+            FatalError( OUString(RTL_CONSTASCII_USTRINGPARAM( "Caught Unknown Exception: Aborting!")));
         }
     }
     // CAUTION: you do not necessarily get here e.g. on the Mac.

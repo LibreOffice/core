@@ -1286,6 +1286,7 @@ void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
 
 
 
+
 void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
 {
     SfxViewFrame* pViewFrame = GetFrame();
@@ -1294,4 +1295,12 @@ void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
             pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
         else
             pImp->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
+}
+
+
+
+
+bool SfxShell::SetContextBroadcasterEnabled (const bool bIsEnabled)
+{
+    return pImp->maContextChangeBroadcaster.SetBroadcasterEnabled(bIsEnabled);
 }

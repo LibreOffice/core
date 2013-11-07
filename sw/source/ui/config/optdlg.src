@@ -235,26 +235,6 @@ TabPage TP_OPTPRINT_PAGE
         TabStop = TRUE ;
         Group = TRUE ;
     };
-/*
-    removed, tables now always get printed
-    CheckBox CB_PTAB
-    {
-        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PTAB";
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "~Tables" ;
-    };
-*/
-/*
-    functionally merged with CB_PGRF (pictures and graphics)
-    CheckBox CB_PDRAW
-    {
-        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PDRAW";
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "Dra~wings" ;
-    };
-*/
     CheckBox CB_CTRLFLD
     {
         HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_CTRLFLD";

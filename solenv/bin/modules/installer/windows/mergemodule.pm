@@ -52,8 +52,9 @@ sub merge_mergemodules_into_msi_database
     if ( $domerge )
     {
         installer::logger::include_header_into_logfile("Merging merge modules into msi database");
-        installer::logger::print_message( "... merging msm files into msi database ... \n" );
-        installer::logger::include_timestamp_into_logfile("\nPerformance Info: MergeModule into msi database, start");
+        $installer::logger::Info->printf("... merging msm files into msi database ... \n");
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->add_timestamp("Performance Info: MergeModule into msi database, start");
 
         my $msidb = "msidb.exe";    # Has to be in the path
         my $cabinetfile = "MergeModule.CABinet"; # the name of each cabinet file in a merge file
@@ -68,9 +69,10 @@ sub merge_mergemodules_into_msi_database
 
         if ( ! $installer::globals::mergemodules_analyzed )
         {
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Analyzing MergeModules, start");
-            $infoline = "Analyzing all Merge Modules\n\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Analyzing MergeModules, start");
+            $installer::logger::Lang->print("Analyzing all Merge Modules\n");
+            $installer::logger::Lang->print("\n");
 
             %installer::globals::mergemodules = ();
 
@@ -91,7 +93,7 @@ sub merge_mergemodules_into_msi_database
                 if ( ! -d $workdir ) { installer::systemactions::create_directory($workdir); }
 
                 $infoline = "Analyzing Merge Module: $filename\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
 
                 # copy msm file into working directory
                 my $completedest = $workdir . $installer::globals::separator . $filename;
@@ -111,18 +113,18 @@ sub merge_mergemodules_into_msi_database
                 $returnvalue = system($systemcall);
 
                 $infoline = "Systemcall: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
 
                 if ($returnvalue)
                 {
                     $infoline = "ERROR: Could not execute $systemcall !\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                     installer::exiter::exit_program("ERROR: Could not extract cabinet file from merge file: $completedest !", "merge_mergemodules_into_msi_database");
                 }
                 else
                 {
                     $infoline = "Success: Executed $systemcall successfully!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
 
                 # exclude tables from mergefile
@@ -147,18 +149,18 @@ sub merge_mergemodules_into_msi_database
                 $returnvalue = system($systemcall);
 
                 $infoline = "Systemcall: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
 
                 if ($returnvalue)
                 {
                     $infoline = "ERROR: Could not execute $systemcall !\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                     installer::exiter::exit_program("ERROR: Could not exclude tables from merge file: $completedest !", "merge_mergemodules_into_msi_database");
                 }
                 else
                 {
                     $infoline = "Success: Executed $systemcall successfully!\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
 
                 # Determining  files
@@ -320,13 +322,14 @@ sub merge_mergemodules_into_msi_database
             }
 
             $infoline = "All Merge Modules successfully analyzed\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             $installer::globals::mergemodules_analyzed = 1;
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Analyzing MergeModules, stop");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Analyzing MergeModules, stop");
 
             $infoline = "\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
 
         # 2. Change msi database (has to be done for every msi database -> for every language)
@@ -344,7 +347,7 @@ sub merge_mergemodules_into_msi_database
             $counter++;
 
             installer::logger::include_header_into_logfile("Merging Module: $mergemodulehash->{'name'}");
-            installer::logger::print_message( "\t... $mergemodulehash->{'name'} ... \n" );
+            $installer::logger::Info->printf("\t... %s ... \n", $mergemodulehash->{'name'});
 
             $msifilename = installer::converter::make_path_conform($msifilename);
             my $workdir = $msifilename;
@@ -360,7 +363,8 @@ sub merge_mergemodules_into_msi_database
 
             # Merging msm file, this is the "real" merge command
 
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before merging database");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Before merging database");
 
             if ( $^O =~ /cygwin/i ) {
                 # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
@@ -377,21 +381,22 @@ sub merge_mergemodules_into_msi_database
             $returnvalue = system($systemcall);
 
             $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             if ($returnvalue)
             {
                 $infoline = "ERROR: Could not execute $systemcall . Returnvalue: $returnvalue!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 installer::exiter::exit_program("ERROR: Could not merge msm file into database: $mergemodulehash->{'mergefilepath'} !", "merge_mergemodules_into_msi_database");
             }
             else
             {
                 $infoline = "Success: Executed $systemcall successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
 
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: After merging database");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: After merging database");
 
             # Saving original idt files
             if ( -f "File.idt" ) { installer::systemactions::rename_one_file("File.idt", "File.idt.$counter"); }
@@ -405,7 +410,8 @@ sub merge_mergemodules_into_msi_database
 
             # Extracting tables
 
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before extracting tables");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Before extracting tables");
 
             my $workingtables = "File Media Directory FeatureComponents"; # required tables
             # Optional tables can be added now
@@ -427,21 +433,22 @@ sub merge_mergemodules_into_msi_database
             $returnvalue = system($systemcall);
 
             $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             if ($returnvalue)
             {
                 $infoline = "ERROR: Could not execute $systemcall !\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 installer::exiter::exit_program("ERROR: Could not exclude tables from msi database: $msifilename !", "merge_mergemodules_into_msi_database");
             }
             else
             {
                 $infoline = "Success: Executed $systemcall successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
 
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: After extracting tables");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: After extracting tables");
 
             # Using 8+3 table names, that are used, when tables are integrated into database. The export of tables
             # creates idt-files, that have long names.
@@ -451,17 +458,22 @@ sub merge_mergemodules_into_msi_database
             if ( -f "MsiAssembly.idt" ) { installer::systemactions::rename_one_file("MsiAssembly.idt", "MsiAssem.idt"); }
 
             # Changing content of tables: File, Media, Directory, FeatureComponent, MsiAssembly
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing Media table");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Changing Media table");
             change_media_table($mergemodulehash, $workdir, $mergemodulegid, $allupdatelastsequences, $allupdatediskids);
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing File table");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Changing File table");
             $filesref = change_file_table($mergemodulehash, $workdir, $allupdatesequences, $includepatharrayref, $filesref, $mergemodulegid);
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing FeatureComponent table");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Changing FeatureComponent table");
             change_featurecomponent_table($mergemodulehash, $workdir);
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing Directory table");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Changing Directory table");
             change_directory_table($mergemodulehash, $workdir);
             if ( $mergemodulehash->{'hasmsiassemblies'} )
             {
-                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing MsiAssembly table");
+                $installer::logger::Lang->print("\n");
+                $installer::logger::Lang->add_timestamp("Performance Info: Changing MsiAssembly table");
                 change_msiassembly_table($mergemodulehash, $workdir);
             }
 
@@ -523,29 +535,35 @@ sub merge_mergemodules_into_msi_database
             # into tables InstallExecuteSequence, AdminExecuteSequence and AdvtExecuteSequence
             if ( -f "ModuleInstallExecuteSequence.idt" )
             {
-                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing InstallExecuteSequence table");
+                $installer::logger::Lang->print("\n");
+                $installer::logger::Lang->add_timestamp("Performance Info: Changing InstallExecuteSequence table");
                 change_executesequence_table($mergemodulehash, $workdir, "InstallE.idt", "ModuleInstallExecuteSequence.idt");
-                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing InstallUISequence table");
+                $installer::logger::Lang->print("\n");
+                $installer::logger::Lang->add_timestamp("Performance Info: Changing InstallUISequence table");
                 change_executesequence_table($mergemodulehash, $workdir, "InstallU.idt", "ModuleInstallExecuteSequence.idt");
             }
 
             if ( -f "ModuleAdminExecuteSequence.idt" )
             {
-                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing AdminExecuteSequence table");
+                $installer::logger::Lang->print("\n");
+                $installer::logger::Lang->add_timestamp("Performance Info: Changing AdminExecuteSequence table");
                 change_executesequence_table($mergemodulehash, $workdir, "AdminExe.idt", "ModuleAdminExecuteSequence.idt");
             }
 
             if ( -f "ModuleAdvtExecuteSequence.idt" )
             {
-                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing AdvtExecuteSequence table");
+                $installer::logger::Lang->print("\n");
+                $installer::logger::Lang->add_timestamp("Performance Info: Changing AdvtExecuteSequence table");
                 change_executesequence_table($mergemodulehash, $workdir, "AdvtExec.idt", "ModuleAdvtExecuteSequence.idt");
             }
 
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: All tables edited");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: All tables edited");
 
             # Including tables into msi database
 
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before including tables");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: Before including tables");
 
             if ( $^O =~ /cygwin/i ) {
                 # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
@@ -562,28 +580,30 @@ sub merge_mergemodules_into_msi_database
             $returnvalue = system($systemcall);
 
             $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             if ($returnvalue)
             {
                 $infoline = "ERROR: Could not execute $systemcall !\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 installer::exiter::exit_program("ERROR: Could not include tables into msi database: $msifilename !", "merge_mergemodules_into_msi_database");
             }
             else
             {
                 $infoline = "Success: Executed $systemcall successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
 
-            installer::logger::include_timestamp_into_logfile("\nPerformance Info: After including tables");
+            $installer::logger::Lang->print("\n");
+            $installer::logger::Lang->add_timestamp("Performance Info: After including tables");
 
             chdir($from);
         }
 
         if ( ! $installer::globals::mergefiles_added_into_collector ) { $installer::globals::mergefiles_added_into_collector = 1; } # Now all mergemodules are merged for one language.
 
-        installer::logger::include_timestamp_into_logfile("\nPerformance Info: MergeModule into msi database, stop");
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->add_timestamp("Performance Info: MergeModule into msi database, stop");
     }
 
     return $filesref;
@@ -819,7 +839,7 @@ sub set_last_cabfile_name
         if ( $mediafile->{$line}->{'DiskId'} == $lastdiskid ) { $installer::globals::lastcabfilename = $mediafile->{$line}->{'Cabinet'}; }
     }
     my $infoline = "Setting last cabinet file: $installer::globals::lastcabfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 #########################################################################
@@ -832,7 +852,7 @@ sub change_media_table
     my ( $mergemodulehash, $workdir, $mergemodulegid, $allupdatelastsequences, $allupdatediskids ) = @_;
 
     my $infoline = "Changing content of table \"Media\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $filename = "Media.idt";
     if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file \"$filename\" in \"$workdir\" !", "change_media_table"); }
@@ -857,11 +877,11 @@ sub change_media_table
                 my $start = $1;
                 my $final = $2;
                 $infoline = "Merge: Old line in media table: ${$filecontent}[$i]\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 my $newline = $start . $newmaxsequencenumber . $final . "\n";
                 ${$filecontent}[$i] = $newline;
                 $infoline = "Merge: Changed line in media table: ${$filecontent}[$i]\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
         }
     }
@@ -874,7 +894,7 @@ sub change_media_table
         }
 
         $infoline = "Adding line: $installer::globals::merge_media_line{$mergemodulegid}\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         # adding new line
         push(@{$filecontent}, $installer::globals::merge_media_line{$mergemodulegid});
@@ -1072,7 +1092,7 @@ sub change_file_table
     my ($mergemodulehash, $workdir, $allupdatesequenceshashref, $includepatharrayref, $filesref, $mergemodulegid) = @_;
 
     my $infoline = "Changing content of table \"File\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $idtfilename = "File.idt";
     if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_file_table"); }
@@ -1133,7 +1153,7 @@ sub change_file_table
         # should be available on every Windows system.
 
         $infoline = "Unpacking cabinet file: $mergemodulehash->{'cabinetfile'}\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         # Avoid the Cygwin expand command
         my $expandfile = "expand.exe";  # Has to be in the path
@@ -1161,18 +1181,18 @@ sub change_file_table
         my $returnvalue = system($systemcall);
 
         $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         if ($returnvalue)
         {
             $infoline = "ERROR: Could not execute $systemcall !\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             installer::exiter::exit_program("ERROR: Could not extract cabinet file: $mergemodulehash->{'cabinetfile'} !", "change_file_table");
         }
         else
         {
             $infoline = "Success: Executed $systemcall successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
 
         chdir($from);
@@ -1216,11 +1236,11 @@ sub change_file_table
         ${$filecontent}[$linenumber] = $newline;
 
         $infoline = "Merge, replacing line:\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         $infoline = "Old: $oldline\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         $infoline = "New: $newline\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         # Adding files to the files collector (but only once)
         if (( $installer::globals::fix_number_of_cab_files ) && ( ! $installer::globals::mergefiles_added_into_collector ))
@@ -1343,7 +1363,7 @@ sub change_featurecomponent_table
     my ($mergemodulehash, $workdir) = @_;
 
     my $infoline = "Changing content of table \"FeatureComponents\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $idtfilename = "FeatureC.idt";
     if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_featurecomponent_table"); }
@@ -1370,7 +1390,7 @@ sub change_featurecomponent_table
         my $line = "$feature\t$component\n";
         push(@{$filecontent}, $line);
         $infoline = "Adding line: $line\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # saving file
@@ -1392,7 +1412,7 @@ sub change_directory_table
     if ( $scpdirectory ne "TARGETDIR" )  # TARGETDIR works fine, when using msidb.exe
     {
         my $infoline = "Changing content of table \"Directory\"\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         my $idtfilename = "Director.idt";
         if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_directory_table"); }
@@ -1432,11 +1452,11 @@ sub change_directory_table
                 ${$filecontent}[$linenumber] = $newline;
 
                 $infoline = "Merge, replacing line:\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 $infoline = "Old: $oldline\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 $infoline = "New: $newline\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
         }
 
@@ -1454,7 +1474,7 @@ sub change_msiassembly_table
     my ($mergemodulehash, $workdir) = @_;
 
     my $infoline = "Changing content of table \"MsiAssembly\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $idtfilename = "MsiAssem.idt";
     if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_msiassembly_table"); }
@@ -1492,11 +1512,11 @@ sub change_msiassembly_table
         ${$filecontent}[$linenumber] = $newline;
 
         $infoline = "Merge, replacing line:\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         $infoline = "Old: $oldline\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         $infoline = "New: $newline\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # saving file
@@ -1581,7 +1601,7 @@ sub change_executesequence_table
     my ($mergemodulehash, $workdir, $idtfilename, $moduleidtfilename) = @_;
 
     my $infoline = "Changing content of table \"$idtfilename\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_executesequence_table"); }
     if ( ! -f $moduleidtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$moduleidtfilename\" in \"$workdir\" !", "change_executesequence_table"); }

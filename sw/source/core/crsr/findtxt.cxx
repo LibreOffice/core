@@ -57,9 +57,13 @@ using namespace util;
 
 String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
-String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
-                      xub_StrLen& rEnde, SvULongs& rArr, String& rRet,
-                      bool bRemoveSoftHyphen )
+String& lcl_CleanStr(
+    const SwTxtNode& rNd,
+    xub_StrLen nStart,
+    xub_StrLen& rEnde,
+    SvULongs& rArr,
+    String& rRet,
+    const bool bRemoveSoftHyphen )
 {
     rRet = rNd.GetTxt();
     if( rArr.Count() )
@@ -122,13 +126,13 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
             if ( pHt->HasDummyChar() && (nStt >= nStart) )
             {
                 //JP 17.05.00: Task 75806 ask for ">=" and not for ">"
-                   switch( pHt->Which() )
+                switch( pHt->Which() )
                 {
                 case RES_TXTATR_FLYCNT:
                 case RES_TXTATR_FTN:
-                   case RES_TXTATR_FIELD:
+                case RES_TXTATR_FIELD:
                 case RES_TXTATR_REFMARK:
-                   case RES_TXTATR_TOXMARK:
+                case RES_TXTATR_TOXMARK:
                 case RES_TXTATR_META:
                 case RES_TXTATR_METAFIELD:
                     {
@@ -140,24 +144,24 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                         //              wir sie einfach.
                         //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
                         //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
-                           sal_Bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
+                        sal_Bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
                             !(static_cast<SwTxtFld const*>(pHt)
-                                ->GetFld().GetFld()->ExpandField(true).Len());
+                                ->GetFmtFld().GetField()->ExpandField(true).Len());
                         if ( bEmpty && nStart == nAkt )
-                           {
+                        {
                             rArr.Insert( nAkt, rArr.Count() );
                             --rEnde;
                             rRet.Erase( nAkt, 1 );
-                           }
+                        }
                         else
-                           {
+                        {
                             if ( bEmpty )
                                 aReplaced.Insert( nAkt, aReplaced.Count() );
                             rRet.SetChar( nAkt, '\x7f' );
-                           }
-                       }
-                       break;
-                   default:
+                        }
+                    }
+                    break;
+                default:
                     ASSERT( false, "unknown case in lcl_CleanStr" )
                     break;
                 }
@@ -200,7 +204,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
             aIndex++;
             const SwTxtAttr* pTxtAttr = (*pHts)[i];
             if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                    (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+                    (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
             {
                 aCount--;
                 if (!aCount)
@@ -213,7 +217,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
         if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+                (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
             break;
         else
             aIndex++;
@@ -308,7 +312,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
                     xub_StrLen aPos = *(*pHts)[i]->GetStart();
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
                     if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                                (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+                                (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
                     {
                         if ( (aPos >= nStart) && (aPos <= nEnde) )
                             aNumberPostits++;
@@ -391,7 +395,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
                         if ( (bSrchForward && (GetPostIt(aLoop + aIgnore,pHts) < pHts->Count()) ) || ( !bSrchForward && (aLoop!=0) ))
                         {
                             const SwTxtAttr* pTxtAttr = bSrchForward ?  (*pHts)[GetPostIt(aLoop+aIgnore,pHts)] : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)];
-                            if ( pPostItMgr && pPostItMgr->SearchReplace(((SwTxtFld*)pTxtAttr)->GetFld(),rSearchOpt,bSrchForward) )
+                            if ( pPostItMgr && pPostItMgr->SearchReplace(((SwTxtFld*)pTxtAttr)->GetFmtFld(),rSearchOpt,bSrchForward) )
                             {
                                 bFound = true ;
                                 break;

@@ -101,7 +101,7 @@ sub check_ddf_file
     }
 
     my $infoline = "Check of ddf file \"$ddffilename\": Maximum length \"$maxlength\" in line \"$maxline\" (allowed line length: 256 characters)\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 ##########################################################################
@@ -162,7 +162,7 @@ sub generate_cab_file_list
 
     installer::logger::include_header_into_logfile("Generating ddf files");
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: ddf file generation start");
+    $installer::logger::Lang->add_timestamp("Performance Info: ddf file generation start");
 
     if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filesref); }
 
@@ -244,7 +244,7 @@ sub generate_cab_file_list
 
             installer::files::save_file($ddffilename ,\@ddffile);
             my $infoline = "Created ddf file: $ddffilename\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             # lines in ddf files must not be longer than 256 characters
             check_ddf_file(\@ddffile, $ddffilename);
@@ -337,7 +337,7 @@ sub generate_cab_file_list
 
             installer::files::save_file($ddffilename ,\@ddffile);
             my $infoline = "Created ddf file: $ddffilename\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             # lines in ddf files must not be longer than 256 characters
             check_ddf_file(\@ddffile, $ddffilename);
@@ -413,7 +413,7 @@ sub generate_cab_file_list
 
             installer::files::save_file($ddffilename ,\@ddffile);
             my $infoline = "Created ddf file: $ddffilename\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             # lines in ddf files must not be longer than 256 characters
             check_ddf_file(\@ddffile, $ddffilename);
@@ -476,7 +476,7 @@ sub generate_cab_file_list
 
         installer::files::save_file($ddffilename ,\@ddffile);
         my $infoline = "Created ddf file: $ddffilename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         # lines in ddf files must not be longer than 256 characters
         check_ddf_file(\@ddffile, $ddffilename);
@@ -528,7 +528,7 @@ sub generate_cab_file_list
 
         installer::files::save_file($ddffilename ,\@ddffile);
         my $infoline = "Created ddf file: $ddffilename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         # lines in ddf files must not be longer than 256 characters
         check_ddf_file(\@ddffile, $ddffilename);
@@ -547,7 +547,7 @@ sub generate_cab_file_list
         installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "create_media_table");
     }
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: ddf file generation end");
+    $installer::logger::Lang->add_timestamp("Performance Info: ddf file generation end");
 
     return \@cabfilelist;   # contains all system calls for packaging process
 }
@@ -593,7 +593,7 @@ sub save_packorder
 {
     installer::logger::include_header_into_logfile("Saving pack order");
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: saving pack order start");
+    $installer::logger::Lang->add_timestamp("Performance Info: saving pack order start");
 
     my $packorderfilename = "packorder.txt";
     $packorderfilename = $installer::globals::infodirectory . $installer::globals::separator . $packorderfilename;
@@ -638,7 +638,7 @@ sub save_packorder
 
     installer::files::save_file($packorderfilename ,\@packorder);
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: saving pack order end");
+    $installer::logger::Lang->add_timestamp("Performance Info: saving pack order end");
 }
 
 #################################################################
@@ -708,17 +708,17 @@ sub create_msi_database
     my $returnvalue = system($systemcall);
 
     my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $msidb!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
     else
     {
         $infoline = "Success: Executed $msidb successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -812,7 +812,7 @@ sub get_packagecode_for_sis
     my $guid = "\{" . ${$guidref}[0] . "\}";
 
     my $infoline = "PackageCode: $guid\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $guid;
 }
@@ -949,17 +949,17 @@ sub write_summary_into_msi_database
     my $returnvalue = system($systemcall);
 
     my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $msiinfo!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
     else
     {
         $infoline = "Success: Executed $msiinfo successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -1004,7 +1004,7 @@ sub create_transforms
         my $returnvalue = system($systemcall);
 
         my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occured.
         # Therefore it has to be checked, if this is version 4.0. If yes, if the mst file
@@ -1015,7 +1015,7 @@ sub create_transforms
         if ($returnvalue)
         {
             $infoline = "WARNING: Returnvalue of $msitran is not 0. Checking version of $msitran!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             open(FILE, "<$installer::globals::msitranpath") or die "ERROR: Can't open $installer::globals::msitranpath for creating file hash";
             binmode(FILE);
@@ -1028,9 +1028,9 @@ sub create_transforms
             foreach my $problemchecksum ( @problemchecksums )
             {
                 $infoline = "Checksum of problematic MsiTran.exe: $problemchecksum\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 $infoline = "Checksum of used MsiTran.exe: $digest\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 if ( $digest eq $problemchecksum ) { $isproblemchecksum = 1; }
             }
 
@@ -1040,45 +1040,45 @@ sub create_transforms
                 if ( -f $transformfile )
                 {
                     $infoline = "File $transformfile exists.\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                     my $filesize = ( -s $transformfile );
                     $infoline = "Size of $transformfile: $filesize\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
 
                     if ( $filesize > 0 )
                     {
                         $infoline = "Info: Returnvalue $returnvalue of $msitran is no problem :-) .\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print($infoline);
                         $returnvalue = 0; # reset the error
                     }
                     else
                     {
                         $infoline = "Filesize indicates that an error occured.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->print($infoline);
                     }
                 }
                 else
                 {
                     $infoline = "File $transformfile does not exist -> An error occured.\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
             }
             else
             {
                 $infoline = "This is not a problematic version of msitran.exe. Therefore the error is not caused by problematic msitran.exe.\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
         }
 
         if ($returnvalue)
         {
             $infoline = "ERROR: Could not execute $msitran!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
         else
         {
             $infoline = "Success: Executed $msitran successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
 
         # The reference database can be deleted
@@ -1089,7 +1089,7 @@ sub create_transforms
         if ( $result == 0 )
         {
             $infoline = "ERROR: Could not remove file $$referencedbname !\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             installer::exiter::exit_program($infoline, "create_transforms");
         }
     }
@@ -1337,7 +1337,7 @@ sub create_setup_ini
     installer::files::save_file($setupinifilename, $setupinifile);
 
     $infoline = "Generated file $setupinifilename !\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 #################################################################
@@ -1479,19 +1479,19 @@ sub get_guid_list
     close (UUIDGEN);
 
     my $infoline = "Systemcall: $systemcall\n";
-    if ( $log ) { push( @installer::globals::logfileinfo, $infoline); }
+    if ( $log ) { $installer::logger::Lang->print($infoline); }
 
     my $comparenumber = $#uuidlist + 1;
 
     if ( $comparenumber == $number )
     {
         $infoline = "Success: Executed $uuidgen successfully!\n";
-        if ( $log ) { push( @installer::globals::logfileinfo, $infoline); }
+        if ( $log ) { $installer::logger::Lang->print($infoline); }
     }
     else
     {
         $infoline = "ERROR: Could not execute $uuidgen successfully!\n";
-        if ( $log ) { push( @installer::globals::logfileinfo, $infoline); }
+        if ( $log ) { $installer::logger::Lang->print($infoline); }
     }
 
     # uppercase, no longer "-c", because this is only supported in uuidgen.exe v.1.01
@@ -1678,12 +1678,12 @@ sub set_uuid_into_component_table
 #       # installer::files::save_file($installer::globals::componentfilename, $componentfile);  # version using new file in solver
 #
 #       $infoline = "COMPONENTCODES: Created $counter new GUIDs for components ! \n";
-#       push( @installer::globals::logfileinfo, $infoline);
+#       $installer::logger::Lang->print($infoline);
 #   }
 #   else
 #   {
 #       $infoline = "SUCCESS COMPONENTCODES: All component codes exist! \n";
-#       push( @installer::globals::logfileinfo, $infoline);
+#       $installer::logger::Lang->print($infoline);
 #   }
 
 }
@@ -1745,7 +1745,7 @@ sub prepare_64bit_database
                 # Saving the files
                 installer::files::save_file($reglocatfilename ,$reglocatfile);
                 $infoline = "Making idt file 64 bit conform: $reglocatfilename\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
         }
 
@@ -1778,7 +1778,7 @@ sub prepare_64bit_database
                     # Saving the files
                     installer::files::save_file($fullfilename ,$filecontent);
                     $infoline = "Making idt file 64 bit conform: $fullfilename\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
             }
         }
@@ -1803,7 +1803,7 @@ sub include_cabs_into_msi
     chdir($to);
 
     my $infoline = "Changing into directory: $to";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $msidb = "msidb.exe";    # Has to be in the path
     my $extraslash = "";        # Has to be set for non-ActiveState perl
@@ -1825,17 +1825,17 @@ sub include_cabs_into_msi
         my $returnvalue = system($systemcall);
 
         $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         if ($returnvalue)
         {
             $infoline = "ERROR: Could not execute $systemcall !\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
         else
         {
             $infoline = "Success: Executed $systemcall successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
 
         # deleting the cab file
@@ -1843,11 +1843,11 @@ sub include_cabs_into_msi
         unlink(${$allcabfiles}[$i]);
 
         $infoline = "Deleted cab file: ${$allcabfiles}[$i]\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     $infoline = "Changing back into directory: $from";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     chdir($from);
 }
@@ -1863,7 +1863,7 @@ sub execute_packaging
 
     installer::logger::include_header_into_logfile("Packaging process");
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: Execute packaging start");
+    $installer::logger::Lang->add_timestamp("Performance Info: Execute packaging start");
 
     my $infoline = "";
     my $from = cwd();
@@ -1871,7 +1871,7 @@ sub execute_packaging
 
     chdir($to);
     $infoline = "chdir: $to \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # if the ddf file contains relative pathes, it is necessary to change into the temp directory
     if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} )
@@ -1879,7 +1879,7 @@ sub execute_packaging
         $to = $installer::globals::temppath;
         chdir($to);
         $infoline = "chdir: $to \n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # changing the tmp directory, because makecab.exe generates temporary cab files
@@ -1896,7 +1896,7 @@ sub execute_packaging
 
         my $callscounter = $i + 1;
 
-        installer::logger::print_message( "... makecab.exe ($callscounter/$allmakecabcalls) ... \n" );
+        $installer::logger::Info->printf("... makecab.exe (%s/%s) ... \n", $callscounter, $allmakecabcalls);
 
         # my $returnvalue = system($systemcall);
 
@@ -1905,7 +1905,7 @@ sub execute_packaging
             my @ddfoutput = ();
 
             $infoline = "Systemcall: $systemcall";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
 
             open (DDF, "$systemcall");
             while (<DDF>) {push(@ddfoutput, $_); }
@@ -1917,26 +1917,26 @@ sub execute_packaging
             {
                 if ( $n < $maxmakecabcalls )
                 {
-                    installer::logger::print_message( "makecab_error (Try $n): Trying again \n" );
-                    $infoline = "makecab_error (Try $n): $systemcall !";
+                    $installer::logger::Info->printf("makecab_error (Try %s): Trying again\n", $n);
+                    $installer::logger::Lang->printf("makecab_error (Try %s): Trying again\n", $n);
                 }
                 else
                 {
-                    installer::logger::print_message( "ERROR (Try $n): Abort packing \n" );
-                    $infoline = "ERROR (Try $n): $systemcall !";
+                    $installer::logger::Info->printf("ERROR (Try %s): Abort packing \n", $n);
+                    $installer::logger::Lang->printf("ERROR (Try %s): Abort packing \n", $n);
                 }
-
-                push( @installer::globals::logfileinfo, $infoline);
-                # for ( my $j = 0; $j <= $#ddfoutput; $j++ ) { push( @installer::globals::logfileinfo, "$ddfoutput[$j]"); }
 
                 for ( my $m = 0; $m <= $#ddfoutput; $m++ )
                 {
                     if ( $ddfoutput[$m] =~ /(ERROR\:.*?)\s*$/ )
                     {
                         $infoline = $1 . "\n";
-                        if ( $n < $maxmakecabcalls ) { $infoline =~ s/ERROR\:/makecab_error\:/i; }
-                        installer::logger::print_message( $infoline );
-                        push( @installer::globals::logfileinfo, $infoline);
+                        if ( $n < $maxmakecabcalls )
+                        {
+                            $infoline =~ s/ERROR\:/makecab_error\:/i;
+                        }
+                        $installer::logger::Info->print($infoline);
+                        $installer::logger::Lang->print($infoline);
                     }
                 }
 
@@ -1944,22 +1944,21 @@ sub execute_packaging
             }
             else
             {
-                # installer::logger::print_message( "Success (Try $n): \"$systemcall\"\n" );
                 $infoline = "Success (Try $n): $systemcall";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
                 last;
             }
         }
     }
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: Execute packaging end");
+    $installer::logger::Lang->add_timestamp("Performance Info: Execute packaging end");
 
     # setting back to the original tmp directory
     $ENV{'TMP'} = $origtemppath;
 
     chdir($from);
     $infoline = "chdir: $from \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 ###############################################################
@@ -1982,7 +1981,7 @@ sub set_global_code_variables
     }
 
     my $infoline = "Using Codes file: $installer::globals::codefilename \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $codefile = installer::files::read_file($installer::globals::codefilename);
 
@@ -2051,9 +2050,9 @@ sub set_global_code_variables
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
 
     $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Setting UpgradeCode to: $installer::globals::upgradecode \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # Adding both variables into the variables array
 
@@ -2061,10 +2060,10 @@ sub set_global_code_variables
     $allvariableshashref->{'UPGRADECODE'} = $installer::globals::upgradecode;
 
     $infoline = "Defined variable PRODUCTCODE: $installer::globals::productcode \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     $infoline = "Defined variable UPGRADECODE: $installer::globals::upgradecode \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -2185,7 +2184,7 @@ sub update_reglocat_table
             # Saving the file
             installer::files::save_file($reglocatfilename ,$reglocatfile);
             my $infoline = "Updated idt file: $reglocatfilename\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
     }
 }
@@ -2220,7 +2219,7 @@ sub update_removere_table
         # Saving the file
         installer::files::save_file($removeregistryfilename ,$removeregistryfile);
         my $infoline = "Updated idt file: $removeregistryfilename \n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -2234,7 +2233,7 @@ sub read_saved_mappings
 {
     installer::logger::include_header_into_logfile("Reading saved mappings from older installation sets:");
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: Reading saved mappings start");
+    $installer::logger::Lang->add_timestamp("Performance Info: Reading saved mappings start");
 
     if ( $installer::globals::previous_idt_dir )
     {
@@ -2250,8 +2249,12 @@ sub read_saved_mappings
         # Reading File.idt
 
         my $idtfile = $idtdir . $installer::globals::separator . "File.idt";
-        push( @installer::globals::globallogfileinfo, "\nAnalyzing file: $idtfile\n" );
-        if ( ! -f $idtfile ) { push( @installer::globals::globallogfileinfo, "Warning: File $idtfile does not exist!\n" ); }
+        $installer::logger::Global->print("\n");
+        $installer::logger::Global->printf("Analyzing file: %s\n", $idtfile);
+        if ( ! -f $idtfile )
+        {
+            $installer::logger::Global->printf("Warning: File %s does not exist!\n", $idtfile);
+        }
 
         my $n = 0;
         open (F, "<$idtfile") || installer::exiter::exit_program("ERROR: Cannot open file $idtfile for reading", "read_saved_mappings");
@@ -2319,13 +2322,18 @@ sub read_saved_mappings
 
         close (F);
 
-        push( @installer::globals::globallogfileinfo, "Read $n old file table key or 8.3 name mappings from $idtfile\n" );
+        $installer::logger::Global->printf("Read %s old file table key or 8.3 name mappings from %s\n",
+            $n, $idtfile);
 
         # Reading Director.idt
 
         $idtfile = $idtdir . $installer::globals::separator . "Director.idt";
-        push( @installer::globals::globallogfileinfo, "\nAnalyzing file $idtfile\n" );
-        if ( ! -f $idtfile ) { push( @installer::globals::globallogfileinfo, "Warning: File $idtfile does not exist!\n" ); }
+        $installer::logger::Global->print("\n");
+        $installer::logger::Global->printf("Analyzing file %s\n", $idtfile);
+        if ( ! -f $idtfile )
+        {
+            $installer::logger::Global->printf("Warning: File %s does not exist!\n", $idtfile);
+        }
 
         $n = 0;
         open (F, "<$idtfile") || installer::exiter::exit_program("ERROR: Cannot open file $idtfile for reading", "read_saved_mappings");
@@ -2356,25 +2364,25 @@ sub read_saved_mappings
         }
         close (F);
 
-        push( @installer::globals::globallogfileinfo, "Read $n old directory 8.3 name mappings from $idtfile\n" );
+        $installer::logger::Global->printf("Read %s old directory 8.3 name mappings from %s\n",
+            $n, $idtfile);
 
         # Analyzing errors
 
         if ( $error_occured )
         {
-            for ( my $i = 0; $i <= $#errorlines; $i++ )
+            for my $line (@errorlines)
             {
-                print "$errorlines[$i]";
-                push( @installer::globals::globallogfileinfo, "$errorlines[$i]");
+                $installer::logger::Info->print($line);
+                $installer::logger::Global->print($line);
             }
             installer::exiter::exit_program("ERROR: Duplicate entries in saved mappings!", "read_saved_mappings");
         }
     } else {
-        # push( @installer::globals::globallogfileinfo, "WARNING: Windows patch shall be prepared, but PREVIOUS_IDT_DIR is not set!\n" );
         installer::exiter::exit_program("ERROR: Windows patch shall be prepared, but environment variable PREVIOUS_IDT_DIR is not set!", "read_saved_mappings");
     }
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: Reading saved mappings end");
+    $installer::logger::Lang->add_timestamp("Performance Info: Reading saved mappings end");
 }
 
 1;

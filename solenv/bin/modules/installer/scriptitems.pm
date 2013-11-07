@@ -103,8 +103,8 @@ sub resolve_all_directory_names
                         if ($parentvalue eq "")
                         {
                             $directoryhashref->{$key} = "FAILURE";
-                            my $infoline = "WARNING: No hostname for $parentid with \"$key\". Needed by child directory $gid !\n";
-                            push( @installer::globals::globallogfileinfo, $infoline);
+                            $installer::logger::Global->printf("WARNING: No hostname for %s with \"%s\". Needed by child directory %s !\n",
+                                $parentid, $key, $gid);
                         }
                         else
                         {
@@ -206,8 +206,8 @@ sub remove_notinsuite_files_from_productlists
         }
         else
         {
-            my $infoline = "INFO: Flag NOT_IN_SUITE \-\> Removing $oneitem->{'gid'} from file list.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->printf("INFO: Flag NOT_IN_SUITE \-\> Removing %s from file list.\n",
+                $oneitem->{'gid'});
         }
     }
 
@@ -240,8 +240,9 @@ sub remove_office_start_language_files
         }
         else
         {
-            my $infoline = "INFO: Flag SET_OFFICE_LANGUAGE \-\> Removing $oneitem->{'gid'} from file list.\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf(
+                "INFO: Flag SET_OFFICE_LANGUAGE \-\> Removing %s from file list.\n",
+                $oneitem->{'gid'});
         }
     }
 
@@ -436,8 +437,7 @@ sub remove_not_required_spellcheckerlanguage_modules
             }
             else
             {
-                $infoline = "Spellchecker selection: Removing module $module->{'gid'}\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Spellchecker selection: Removing module %s\n", $module->{'gid'});
 
                 # Collecting all files at modules that are removed
 
@@ -481,8 +481,8 @@ sub remove_not_required_spellcheckerlanguage_files
         my $onefile = ${$filesarrayref}[$i];
         if ( exists($installer::globals::spellcheckerfilehash{$onefile->{'gid'}}) )
         {
-            $infoline = "Spellchecker selection: Removing file $onefile->{'gid'}\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Spellchecker selection: Removing file %s\n",
+                $onefile->{'gid'});
             next;
         }
         push(@filesarray, $onefile);
@@ -541,13 +541,12 @@ sub add_bundled_extension_blobs
         # file:// extensions are added as pre-registered in add_bundled_prereg_extension().
     }
 
-    installer::logger::print_message(
-        sprintf("preparing %d extension blob%s for language%s %s:\n",
-           $#bundle_files + 1,
-           $#bundle_files!=0 ? "s" : "",
-           $#installer::globals::languageproducts!=0 ? "s" : "",
-           join(" ", @installer::globals::languageproducts),
-           join("\n    ", @bundle_files)));
+    $installer::logger::Info->printf(
+        "preparing %d extension blob%s for language%s %s:\n",
+        $#bundle_files + 1,
+        $#bundle_files!=0 ? "s" : "",
+        $#installer::globals::languageproducts!=0 ? "s" : "",
+        join(" ", @installer::globals::languageproducts));
 
     foreach my $filename ( @bundle_files)
     {
@@ -562,9 +561,9 @@ sub add_bundled_extension_blobs
             'gid' => "gid_File_Extension_".$basename
         };
         push( @filelist, $onefile);
-        push( @installer::globals::logfileinfo, "\tbundling \"$filename\" extension\n");
+        $installer::logger::Lang->printf("\tbundling \"%s\" extension\n", $filename);
 
-        installer::logger::print_message("    " . $basename . "\n");
+        $installer::logger::Info->printf("    %s\n", $basename);
     }
 
     return \@filelist;
@@ -609,13 +608,16 @@ sub add_bundled_prereg_extensions
         }
     }
 
-    installer::logger::print_message(
-        sprintf("preparing %d bundled extension%s for language%s %s:\n    %s\n",
-           $#bundle_files + 1,
-           $#bundle_files!=0 ? "s" : "",
-           $#installer::globals::languageproducts!=0 ? "s" : "",
-           join(" ", @installer::globals::languageproducts),
-           join("\n    ", @bundle_files)));
+    $installer::logger::Info->printf(
+        "preparing %d bundled extension%s for language%s %s:\n",
+        $#bundle_files + 1,
+        $#bundle_files!=0 ? "s" : "",
+        $#installer::globals::languageproducts!=0 ? "s" : "",
+        join(" ", @installer::globals::languageproducts));
+    foreach my $filename (@bundle_files)
+    {
+        $installer::logger::Info->printf("    %s\n", $filename);
+    }
 
     # Find the prereg directory entry so that we can create a new sub-directory.
     my $parentdir_gid = "gid_Brand_Dir_Share_Prereg_Bundled";
@@ -659,7 +661,7 @@ sub add_bundled_prereg_extensions
             'gid' => "gid_File_Extension_".$basename
         };
         push( @filelist, $onefile);
-        push( @installer::globals::logfileinfo, "\tbundling \"$filename\" extension\n");
+        $installer::logger::Lang->printf("\tbundling \"%s\" extension\n", $filename);
     }
 
     return (\@filelist, $dirsref);
@@ -1088,8 +1090,9 @@ sub remove_non_existent_languages_in_productlists
 
         if ($itemtoberemoved)
         {
-            $infoline = "WARNING: Language $$languagestringref: No $itemtype packed for $oneitem->{'gid'}!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("WARNING: Language %s: No $itemtype packed for %s!\n",
+                $$languagestringref,
+                $oneitem->{'gid'});
         }
         else
         {
@@ -1097,8 +1100,7 @@ sub remove_non_existent_languages_in_productlists
         }
     }
 
-    $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
 
     return \@allexistentitems;
 }
@@ -1261,15 +1263,16 @@ sub get_sourcepath_from_filename_and_includepath_classic
                 $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
             }
 
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf($infoline);
         }
     }
     else
     {
         if ( $write_logfile)
         {
-            $infoline = "SUCCESS: Source for $$searchfilenameref: $onefile\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("SUCCESS: Source for %s: %s\n",
+                $$searchfilenameref,
+                $onefile);
         }
     }
 
@@ -1339,7 +1342,7 @@ sub get_sourcepath_from_filename_and_includepath
                 $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
             }
 
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf($infoline);
         }
     }
     else
@@ -1354,7 +1357,7 @@ sub get_sourcepath_from_filename_and_includepath
             {
                 $infoline = "SUCCESS/WARNING: Special handling for $$searchfilenameref: $onefile\n";
             }
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf($infoline);
         }
     }
 
@@ -1445,9 +1448,8 @@ sub get_Source_Directory_For_Files_From_Includepathlist
 
                 if ($onefile->{'sourcepath'})   # defaulting to english was successful
                 {
-                    $infoline = "WARNING: Using $onefilename instead of $oldname\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                    print "    $infoline";
+                    $installer::logger::Lang->printf("WARNING: Using %s instead of %s\n", $onefilename, $oldname);
+                    $installer::logger::Info->printf("WARNING: Using %s instead of %s\n", $onefilename, $oldname);
                     # if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/\Q$oldname\E/$onefile->{'Name'}/; }
 
                     # If the directory, in which the new file is installed, is not language dependent,
@@ -1463,23 +1465,25 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                         if ( ! $islanguagedependent )
                         {
                             $onefile->{'Styles'} =~ s/\bARCHIVE\b/ARCHIVE, RENAME_TO_LANGUAGE/; # Setting new flag RENAME_TO_LANGUAGE
-                            $infoline = "Setting flag RENAME_TO_LANGUAGE: File $onefile->{'Name'} in directory: $directorygid\n";
-                            push( @installer::globals::logfileinfo, $infoline);
+                            $installer::logger::Lang->printf(
+                                "Setting flag RENAME_TO_LANGUAGE: File %s in directory: %s\n",
+                                $onefile->{'Name'},
+                                $directorygid);
                         }
                     }
                 }
                 else
                 {
-                    $infoline = "WARNING: Using $onefile->{'Name'} instead of $oldname was not successful\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("WARNING: Using %s instead of %s was not successful\n",
+                        $onefile->{'Name'}, $oldname);
                     $onefile->{'Name'} = $oldname;  # Switching back to old file name
                 }
             }
         }
     }
 
-    $infoline = "\n";   # empty line after listing of all files
-    push( @installer::globals::logfileinfo, $infoline);
+    # empty line after listing of all files
+    $installer::logger::Lang->printf("\n");
 }
 
 #################################################################################
@@ -1507,8 +1511,8 @@ sub remove_Files_For_Languagepacks
         if (( $gid eq "gid_File_Extra_Fontunxpsprint" ) ||
             ( $gid eq "gid_File_Extra_Migration_Lang" ))
         {
-            $infoline = "ATTENTION: Removing item $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("ATTENTION: Removing item %s from the installation set.\n",
+                $oneitem->{'gid'},);
 
             next;
         }
@@ -1549,8 +1553,8 @@ sub remove_Files_Without_Sourcedirectory
 
             if ( ! $installer::globals::languagepack )
             {
-                $infoline = "ERROR: No sourcepath -> Removing file $filename from file list.\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("ERROR: No sourcepath -> Removing file %s from file list.\n",
+                    $filename);
 
                 push(@missingfiles, "ERROR: File not found: $filename\n");
                 $error_occured = 1;
@@ -1561,8 +1565,7 @@ sub remove_Files_Without_Sourcedirectory
             {
                 if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))
                 {
-                    $infoline = "ERROR: Removing file $filename from file list.\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("ERROR: Removing file %s from file list.\n", $filename);
 
                     push(@missingfiles, "ERROR: File not found: $filename\n");
                     $error_occured = 1;
@@ -1571,10 +1574,11 @@ sub remove_Files_Without_Sourcedirectory
                 }
                 else
                 {
-                    $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                    $infoline = "INFO: It is not language dependent and can be ignored in language packs.\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf(
+                        "INFO: Removing file %s from file list. It is not language dependent.\n",
+                        $filename);
+                    $installer::logger::Lang->printf(
+                        "INFO: It is not language dependent and can be ignored in language packs.\n");
 
                     next;   # removing this file from list, if sourcepath is empty
                 }
@@ -1584,8 +1588,7 @@ sub remove_Files_Without_Sourcedirectory
         push(@newfilesarray, $onefile);
     }
 
-    $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
 
     if ( $error_occured )
     {
@@ -1717,20 +1720,24 @@ sub add_License_Files_into_Installdir
 
             push(@newfilesarray, $newfile);
 
-            $infoline = "New files: Adding file $newfilename for the installation root to the file list. Language: $defaultlanguage\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf(
+                "New files: Adding file %s for the installation root to the file list. Language: %s\n",
+                $newfilename,
+                $defaultlanguage);
 
             if ( defined $newfile->{'InstallName'} )
             {
-                $infoline = "New files: Using installation name: $newfile->{'InstallName'}\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf(
+                    "New files: Using installation name: %s\n", $newfile->{'InstallName'});
             }
 
             # Collecting license and readme file for the installation set
 
             push(@installer::globals::installsetfiles, $newfile);
-            $infoline = "New files: Adding file $newfilename to the file collector for the installation set. Language: $defaultlanguage\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf(
+                "New files: Adding file %s to the file collector for the installation set. Language: %s\n",
+                $newfilename,
+                $defaultlanguage);
         }
 
         push(@newfilesarray, $onefile);
@@ -1760,13 +1767,12 @@ sub remove_onlyasialanguage_files_from_productlists
     my $containsasianlanguage = installer::languages::detect_asian_language($installer::globals::alllanguagesinproductarrayref);
 
     my $alllangstring = installer::converter::convert_array_to_comma_separated_string($installer::globals::alllanguagesinproductarrayref);
-    $infoline = "\nLanguages in complete product: $alllangstring\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
+    $installer::logger::Lang->printf("Languages in complete product: %s\n", $alllangstring);
 
     if ( ! $containsasianlanguage )
     {
-        $infoline = "Product does not contain asian language -> removing files\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Product does not contain asian language -> removing files\n");
 
         for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
         {
@@ -1775,8 +1781,9 @@ sub remove_onlyasialanguage_files_from_productlists
             if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
             if ( $styles =~ /\bONLY_ASIA_LANGUAGE\b/ )
             {
-                $infoline = "Flag ONLY_ASIA_LANGUAGE: Removing file $onefile->{'Name'} from files collector!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf(
+                    "Flag ONLY_ASIA_LANGUAGE: Removing file %s from files collector!\n",
+                    $onefile->{'Name'});
                 next;
             }
 
@@ -1789,9 +1796,7 @@ sub remove_onlyasialanguage_files_from_productlists
     {
         $returnfilesarrayref = $filesarrayref;
 
-        $infoline = "Product contains asian language -> Nothing to do\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
+        $installer::logger::Lang->printf("Product contains asian language -> Nothing to do\n");
     }
 
     return $returnfilesarrayref;
@@ -1818,13 +1823,12 @@ sub remove_onlywesternlanguage_files_from_productlists
     my $containswesternlanguage = installer::languages::detect_western_language($installer::globals::alllanguagesinproductarrayref);
 
     my $alllangstring = installer::converter::convert_array_to_comma_separated_string($installer::globals::alllanguagesinproductarrayref);
-    $infoline = "\nLanguages in complete product: $alllangstring\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
+    $installer::logger::Lang->printf("Languages in complete product: %s\n", $alllangstring);
 
     if ( ! $containswesternlanguage )
     {
-        $infoline = "Product does not contain western language -> removing files\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Product does not contain western language -> removing files\n");
 
         for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
         {
@@ -1833,8 +1837,9 @@ sub remove_onlywesternlanguage_files_from_productlists
             if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
             if ( $styles =~ /\bONLY_WESTERN_LANGUAGE\b/ )
             {
-                $infoline = "Flag ONLY_WESTERN_LANGUAGE: Removing file $onefile->{'Name'} from files collector!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf(
+                    "Flag ONLY_WESTERN_LANGUAGE: Removing file %s from files collector!\n",
+                    $onefile->{'Name'});
                 next;
             }
 
@@ -1847,9 +1852,7 @@ sub remove_onlywesternlanguage_files_from_productlists
     {
         $returnfilesarrayref = $filesarrayref;
 
-        $infoline = "Product contains western language -> Nothing to do\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
+        $installer::logger::Lang->printf("Product contains western language -> Nothing to do\n");
     }
 
     return $returnfilesarrayref;
@@ -1895,12 +1898,10 @@ sub make_filename_language_specific
                     $onefile->{'destination'} =~ s/\Q$fileextension\E\s*$/_$language$fileextension/;
                 }
 
-                $infoline = "Flag MAKE_LANG_SPECIFIC:\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                $infoline = "Changing name from $oldname to $onefile->{'Name'} !\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                $infoline = "Changing destination from $olddestination to $onefile->{'destination'} !\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Flag MAKE_LANG_SPECIFIC:\n");
+                $installer::logger::Lang->printf("Changing name from %s to %s !\n", $oldname, $onefile->{'Name'});
+                $installer::logger::Lang->printf("Changing destination from %s to %s !\n",
+                    $olddestination, $onefile->{'destination'});
             }
         }
     }
@@ -1930,8 +1931,9 @@ sub remove_scpactions_without_name
 
         if  ( $name eq "" )
         {
-            $infoline = "ATTENTION: Removing scpaction $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf(
+                "ATTENTION: Removing scpaction %s from the installation set.\n",
+                $oneitem->{'gid'});
             next;
         }
 
@@ -2009,8 +2011,9 @@ sub remove_Xpdonly_Items
 
         if ( $styles =~ /\bXPD_ONLY\b/ )
         {
-            $infoline = "Removing \"xpd only\" item $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->printf(
+                "Removing \"xpd only\" item %s from the installation set.\n",
+                $oneitem->{'gid'});
 
             next;
         }
@@ -2018,8 +2021,7 @@ sub remove_Xpdonly_Items
         push(@newitemsarray, $oneitem);
     }
 
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->print("\n");
 
     return \@newitemsarray;
 }
@@ -2047,8 +2049,9 @@ sub remove_Languagepacklibraries_from_Installset
 
         if ( $styles =~ /\bLANGUAGEPACK\b/ )
         {
-            $infoline = "Removing language pack file $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->printf(
+                "Removing language pack file %s from the installation set.\n",
+                $oneitem->{'gid'});
 
             next;
         }
@@ -2056,8 +2059,7 @@ sub remove_Languagepacklibraries_from_Installset
         push(@newitemsarray, $oneitem);
     }
 
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->print("\n");
 
     return \@newitemsarray;
 }
@@ -2085,8 +2087,9 @@ sub remove_patchonlyfiles_from_Installset
 
         if ( $styles =~ /\bPATCH_ONLY\b/ )
         {
-            $infoline = "Removing file with flag PATCH_ONLY $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->printf(
+                "Removing file with flag PATCH_ONLY %s from the installation set.\n",
+                $oneitem->{'gid'});
 
             next;
         }
@@ -2094,8 +2097,7 @@ sub remove_patchonlyfiles_from_Installset
         push(@newitemsarray, $oneitem);
     }
 
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->print("\n");
 
     return \@newitemsarray;
 }
@@ -2123,8 +2125,9 @@ sub remove_tabonlyfiles_from_Installset
 
         if ( $styles =~ /\bTAB_ONLY\b/ )
         {
-            $infoline = "Removing tab only file $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->printf(
+                "Removing tab only file %s from the installation set.\n",
+                $oneitem->{'gid'});
 
             next;
         }
@@ -2132,8 +2135,7 @@ sub remove_tabonlyfiles_from_Installset
         push(@newitemsarray, $oneitem);
     }
 
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->print("\n");
 
     return \@newitemsarray;
 }
@@ -2161,16 +2163,16 @@ sub remove_installedproductonlyfiles_from_Installset
 
         if ( $styles =~ /\bONLY_INSTALLED_PRODUCT\b/ )
         {
-            $infoline = "Removing file $oneitem->{'gid'} from the installation set. This file is only required for PKGFORMAT archive or installed).\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->printf(
+                "Removing file  from the installation set. This file is only required for PKGFORMAT archive or installed).\n",
+                $oneitem->{'gid'});
             next;
         }
 
         push(@newitemsarray, $oneitem);
     }
 
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
+    $installer::logger::Global->print("\n");
 
     return \@newitemsarray;
 }
@@ -2202,16 +2204,15 @@ sub quoting_illegal_filenames
 
             # sourcepath and destination have to be quoted for epm list file
 
-            # $filename =~ s/\$/\$\$/g;
             $destpath =~ s/\$/\$\$/g;
             $sourcepath =~ s/\$/\$\$/g;
 
-            # my $infoline = "ATTENTION: Files: Renaming $onefile->{'Name'} to $filename\n";
-            # push( @installer::globals::logfileinfo, $infoline);
-            my $infoline = "ATTENTION: Files: Quoting sourcepath $onefile->{'sourcepath'} to $sourcepath\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            $infoline = "ATTENTION: Files: Quoting destination path $onefile->{'destination'} to $destpath\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("ATTENTION: Files: Quoting sourcepath %s to %s\n",
+                $onefile->{'sourcepath'},
+                $sourcepath);
+            $installer::logger::Lang->printf("ATTENTION: Files: Quoting destination path %s to %s\n",
+                $onefile->{'destination'},
+                $destpath);
 
             # $onefile->{'Name'} = $filename;
             $onefile->{'sourcepath'} = $sourcepath;
@@ -2514,14 +2515,14 @@ sub get_destination_file_path_for_links
 
             if (!($foundfile))
             {
-                $infoline = "Warning: FileID $fileid for Link $onelink->{'gid'} not found!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Warning: FileID %s for Link %s not found!\n",
+                    $fileid,
+                    $onelink->{'gid'});
             }
         }
     }
 
-    $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
 }
 
 #################################################
@@ -2561,14 +2562,14 @@ sub get_destination_link_path_for_links
 
             if (!($foundlink))
             {
-                $infoline = "Warning: ShortcutID $shortcutid for Link $onelink->{'gid'} not found!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("Warning: ShortcutID %s for Link %s not found!\n",
+                    $shortcutid,
+                    $onelink->{'gid'});
             }
         }
     }
 
-    $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("\n");
 }
 
 ###################################################################################
@@ -2786,14 +2787,14 @@ sub assigning_modules_to_items
         if (( $oneitem->{'ismultilingual'} ) && ( ! $oneitem->{'haslanguagemodule'} ))
         {
             $infoline = "Error: \"$oneitem->{'gid'}\" is multi lingual, but not in language pack (Assigned module: $modulegids)!\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->print($infoline);
             push( @languageassignmenterrors, $infoline );
             $languageassignmenterror = 1;
         }
         if (( $oneitem->{'haslanguagemodule'} ) && ( ! $oneitem->{'ismultilingual'} ))
         {
             $infoline = "Error: \"$oneitem->{'gid'}\" is in language pack, but not multi lingual (Assigned module: $modulegids)!\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->print($infoline);
             push( @languageassignmenterrors, $infoline );
             $languageassignmenterror = 1;
         }
@@ -2918,8 +2919,7 @@ sub collect_all_parent_feature
             if ( $found_root_module ) { installer::exiter::exit_program("ERROR: Only one module without ParentID or with empty ParentID allowed ($installer::globals::rootmodulegid, $onefeature->{'gid'}).", "collect_all_parent_feature"); }
             $installer::globals::rootmodulegid = $onefeature->{'gid'};
             $found_root_module = 1;
-            $infoline = "Setting Root Module: $installer::globals::rootmodulegid\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            $installer::logger::Global->printf("Setting Root Module: %s\n", $installer::globals::rootmodulegid);
         }
 
         if ( ! $found_root_module ) { installer::exiter::exit_program("ERROR: Could not define root module. No module without ParentID or with empty ParentID exists.", "collect_all_parent_feature"); }

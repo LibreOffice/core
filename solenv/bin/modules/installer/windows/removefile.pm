@@ -140,9 +140,7 @@ sub create_removefile_table
 
     my $removefiletablename = $basedir . $installer::globals::separator . "RemoveFi.idt";
     installer::files::save_file($removefiletablename ,\@removefiletable);
-    my $infoline = "Created idt file: $removefiletablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
+    $installer::logger::Lang->printf("Created idt file: %s\n", $removefiletablename);
 }
 
 1;

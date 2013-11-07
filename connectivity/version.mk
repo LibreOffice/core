@@ -69,22 +69,9 @@ DBPOOL_MICRO=0
 # target
 DBASE_TARGET=dbase
 
-# ----------------------------MOZAB settings-----------------------------------#
-# the major 
-MOZAB_MAJOR=2
-# the minor 
-MOZAB_MINOR=0
-# the micro 
-MOZAB_MICRO=0
-
 # ----------------------------MySQL settings-----------------------------------#
 # target
 MYSQL_TARGET=mysql
-
-
-# ----------------------------Evoab settings-----------------------------------#
-# target
-EVOAB_TARGET=evoab
 
 # ----------------------------Kab settings-------------------------------------#
 # target

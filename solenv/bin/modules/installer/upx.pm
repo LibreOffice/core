@@ -68,17 +68,17 @@ sub do_upx
     my $returnvalue = system($systemcall);
 
     my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "WARNING: Could not successfully upx $filename! Using original file.\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
     else
     {
         $infoline = "SUCCESS: upx $filename!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return $returnvalue;
@@ -97,13 +97,15 @@ sub upx_on_libraries
 
     if ( ! $installer::globals::upx_in_path )
     {
-        $infoline = "\n\nWarning: This is an UPX product, but upx was not found in PATH!\n\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->print("Warning: This is an UPX product, but upx was not found in PATH!\n");
+        $installer::logger::Lang->print("\n");
     }
     else
     {
         $infoline = "Using upx: $installer::globals::upxfile\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         my $upxdirbase = installer::systemactions::create_directories("upx", $languagestringref);
 
@@ -121,8 +123,8 @@ sub upx_on_libraries
                 my $shortfilename = $sourcefilename;
                 installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$shortfilename);
 
-                $infoline = "\nUpx: $shortfilename";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print("\n");
+                $installer::logger::Lang->printf("Upx: %s", $shortfilename);
 
                 # copy file into directory for stripped libraries
                 my $onelanguage = ${$filelist}[$i]->{'specificlanguage'};

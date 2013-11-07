@@ -112,8 +112,6 @@ public class BasicTestCase extends TestCase {
                 tParam.get("adabas.password") + "\"");
             oBasicHandler.perform("setValue", "adoUrl = \"sdbc:ado:" +
                 tParam.get("ado.url") + "\"");
-            oBasicHandler.perform("setValue", "mozabUrl = \"sdbc:address:" +
-                tParam.get("mozab.url") + "\"");
         } catch (BasicException e) {
             log.println(e.info);
             throw new RuntimeException(e.info);

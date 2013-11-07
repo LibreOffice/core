@@ -135,17 +135,13 @@ sub update_patch_tables
     # Saving the files
 
     installer::files::save_file($reglocatfilename ,$reglocatfile);
-    my $infoline = "Updated idt file: $reglocatfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Updated idt file: %s\n", $reglocatfilename);
 
     installer::files::save_file($appsearchfilename ,$appsearchfile);
-    $infoline = "Updated idt file: $appsearchfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Updated idt file: %s\n", $appsearchfilename);
 
     installer::files::save_file($signaturefilename ,$signaturefile);
-    $infoline = "Updated idt file: $signaturefilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
-
+    $installer::logger::Lang->printf("Updated idt file: %s\n", $signaturefilename);
 }
 
 1;

@@ -2167,7 +2167,7 @@ lcl_ApplyCellProperties(
             {
                 xCellPS->setPropertyValue(rName, rValue);
             }
-            catch (uno::Exception const& e)
+            catch (uno::Exception const& )
             {
                 // Apply the paragraph and char properties to the cell's content
                 const uno::Reference< text::XText > xCellText(xCell,

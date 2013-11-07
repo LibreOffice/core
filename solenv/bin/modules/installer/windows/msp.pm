@@ -186,7 +186,7 @@ sub prepare_path_in_nopatchfilehash
     if ( ! $found ) { installer::exiter::exit_program("ERROR: Could not determine flexible destination path for msp patch creation!", "prepare_path_in_nopatchfilehash"); }
 
     $infoline = "Setting flexible path for msp creation: $flexiblepath\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     foreach my $onedestination ( keys %{$nopatchfiledestinations} )
     {
@@ -206,25 +206,25 @@ sub synchronize_installation_sets
 {
     my ($olddatabase, $newdatabase, $filesarray) = @_;
 
-    my $infoline = "\nSynchronizing installed products because of PATCH flag\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->print("Synchronizing installed products because of PATCH flag\n");
     $infoline = "Old product: $olddatabase\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "New product: $newdatabase\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my ( $patchfiledestinations, $nopatchfiledestinations, $patchfilecounter, $nopatchfilecounter ) = collect_patch_file_destinations($filesarray);
 
     $infoline = "Number of files with PATCH flag: $patchfilecounter\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     $infoline = "Number of files without PATCH flag: $nopatchfilecounter\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     foreach my $localfile ( sort keys %{$patchfiledestinations} )
     {
         $infoline = "\tPATCH file: $localfile\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     my $oldpath = $olddatabase;
@@ -255,18 +255,18 @@ sub synchronize_installation_sets
                 my $copyreturn = copy($source, $dest);
                 # installer::systemactions::copy_one_file($source, $dest);
                 # $infoline = "Synchronizing file: $source to $dest\n";
-                # push( @installer::globals::logfileinfo, $infoline);
+                # $installer::logger::Lang->print($infoline);
             }
             else
             {
                 $infoline = "Not synchronizing. Destination file \"$dest\" does not exist.\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
         }
         else
         {
             $infoline = "Not synchronizing. Source file \"$source\" does not exist.\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
     }
 }
@@ -301,18 +301,18 @@ sub extract_all_tables_from_pcpfile
     $returnvalue = system($systemcall);
 
     $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program("ERROR: Could not exclude tables from pcp file: $fullpcpfilepath !", "extract_all_tables_from_msidatabase");
     }
     else
     {
         $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -363,18 +363,18 @@ sub include_tables_into_pcpfile
     $returnvalue = system($systemcall);
 
     $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program("ERROR: Could not include tables into pcp file: $fullpcpfilepath !", "include_tables_into_pcpfile");
     }
     else
     {
         $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -424,23 +424,23 @@ sub execute_msimsp
     }
 
     $systemcall = $msimsp . " -s " . $localfullpcpfilename . " -p " . $localmspfilename . " -l " . $locallogfilename . " -f " . $localmsimsptemppath;
-    installer::logger::print_message( "... $systemcall ...\n" );
+    $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
     $returnvalue = system($systemcall);
 
     $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     if ($returnvalue)
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         installer::exiter::exit_program("ERROR: Could not execute $systemcall !", "execute_msimsp");
     }
     else
     {
         $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     return $logfilename;
@@ -544,7 +544,7 @@ sub change_properties_table
     my ($localmspdir, $mspfilename) = @_;
 
     my $infoline = "Changing content of table \"Properties\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $filename = $localmspdir . $installer::globals::separator . "Properties.idt";
     if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file \"$filename\" !", "change_properties_table"); }
@@ -602,7 +602,7 @@ sub change_targetimages_table
     my ($localmspdir, $olddatabase) = @_;
 
     my $infoline = "Changing content of table \"TargetImages\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $filename = $localmspdir . $installer::globals::separator . "TargetImages.idt";
     if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file \"$filename\" !", "change_targetimages_table"); }
@@ -630,7 +630,7 @@ sub change_upgradedimages_table
     my ($localmspdir, $newdatabase) = @_;
 
     my $infoline = "Changing content of table \"UpgradedImages\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $filename = $localmspdir . $installer::globals::separator . "UpgradedImages.idt";
     if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file \"$filename\" !", "change_upgradedimages_table"); }
@@ -679,7 +679,7 @@ sub change_imagefamilies_table
     my ($localmspdir) = @_;
 
     my $infoline = "Changing content of table \"ImageFamilies\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $filename = $localmspdir . $installer::globals::separator . "ImageFamilies.idt";
     if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file \"$filename\" !", "change_imagefamilies_table"); }
@@ -846,7 +846,7 @@ sub change_patchmetadata_table
     my ($localmspdir, $allvariables, $languagestringref) = @_;
 
     my $infoline = "Changing content of table \"PatchMetadata\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $filename = $localmspdir . $installer::globals::separator . "PatchMetadata.idt";
     if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file \"$filename\" !", "change_patchmetadata_table"); }
@@ -1054,7 +1054,7 @@ sub change_patchsequence_table
     my ($localmspdir, $allvariables) = @_;
 
     my $infoline = "Changing content of table \"PatchSequence\"\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     my $filename = $localmspdir . $installer::globals::separator . "PatchSequence.idt";
     if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file \"$filename\" !", "change_patchsequence_table"); }
@@ -1342,10 +1342,11 @@ sub create_msp_patch
 {
     my ($installationdir, $includepatharrayref, $allvariables, $languagestringref, $languagesarrayref, $filesarray) = @_;
 
-    my $force = 1; # print this message even in 'quiet' mode
-    installer::logger::print_message( "\n******************************************\n" );
-    installer::logger::print_message( "... creating msp installation set ...\n", $force );
-    installer::logger::print_message( "******************************************\n" );
+    # print this message even in 'quiet' mode
+    $installer::logger::Info->print("\n");
+    $installer::logger::Info->print("******************************************\n");
+    $installer::logger::Info->print("... creating msp installation set ...\n", 1);
+    $installer::logger::Info->print("******************************************\n");
 
     $installer::globals::creating_windows_installer_patch = 1;
 
@@ -1381,22 +1382,25 @@ sub create_msp_patch
 
     $installer::globals::saveinstalldir = $mspdir;
 
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting product installation");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: Starting product installation");
 
     # Installing both installation sets
-    installer::logger::print_message( "... installing products ...\n" );
+    $installer::logger::Info->printf("... installing products ...\n");
     my ($olddatabase, $newdatabase) = install_installation_sets($installationdir);
 
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting synchronization of installation sets");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: Starting synchronization of installation sets");
 
     # Synchronizing installed products, allowing only different files with PATCH flag
-    installer::logger::print_message( "... synchronizing installation sets ...\n" );
+    $installer::logger::Info->printf("... synchronizing installation sets ...\n");
     synchronize_installation_sets($olddatabase, $newdatabase, $filesarray);
 
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting pcp file creation");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: Starting pcp file creation");
 
     # Create pcp file
-    installer::logger::print_message( "... creating pcp file ...\n" );
+    $installer::logger::Info->printf("... creating pcp file ...\n");
 
     my $localmspdir = installer::systemactions::create_directories("msp", $languagestringref);
 
@@ -1437,12 +1441,14 @@ sub create_msp_patch
     include_tables_into_pcpfile($fullpcpfilename, $localmspdir, $tablelist);
 
     # Start msimsp.exe
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting msimsp.exe");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: Starting msimsp.exe");
     my $msimsplogfile = execute_msimsp($fullpcpfilename, $mspfilename, $localmspdir);
 
     # Copy final installation set next to msp file
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Copying installation set");
-    installer::logger::print_message( "... copying installation set ...\n" );
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: Copying installation set");
+    $installer::logger::Info->printf("... copying installation set ...\n");
 
     my $oldinstallationsetpath = $installer::globals::updatedatabasepath;
 
@@ -1470,7 +1476,7 @@ sub create_msp_patch
         # Copying patch file
         installer::systemactions::copy_one_file($requiredpatchfile, $mspdir);
         # my $infoline = "Copy $requiredpatchfile to $mspdir\n";
-        # push( @installer::globals::logfileinfo, $infoline);
+        # $installer::logger::Lang->print($infoline);
     }
 
     # Find all files included into the patch
@@ -1478,7 +1484,8 @@ sub create_msp_patch
     analyze_msimsp_logfile($msimsplogfile, $filesarray);
 
     # Done
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: msp creation done");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: msp creation done");
 
     return $mspdir;
 }

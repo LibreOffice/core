@@ -197,12 +197,10 @@ sub resolving_archive_flag
             {
                 $select_files = 1;
                 $selectlistfiles = get_patch_file_list( $onefile->{'Selectfiles'} );
-                $infoline = "Selected file list defined at file: $onefile->{'Name'} :\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                for ( my $k = 0; $k <= $#{$selectlistfiles}; $k++ )
+                $installer::logging::Lang->printf("Selected file list defined at file: %s :\n", $onefile->{'Name'});
+                foreach my $line (@$selectlistfiles)
                 {
-                    $infoline = "\"${$selectlistfiles}[$k]\"\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logging::Lang->printf("\"%s\"\n", $line);
                 }
             }
 
@@ -216,12 +214,10 @@ sub resolving_archive_flag
             {
                 $select_patch_files = 1; # special handling if a Patchlist is defined
                 $patchlistfiles = get_patch_file_list( $onefile->{'Patchfiles'} );
-                $infoline = "Patch file list defined at file: $onefile->{'Name'} :\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                for ( my $k = 0; $k <= $#{$patchlistfiles}; $k++ )
+                $installer::logger::Lang->printf("Patch file list defined at file: %s :\n", $onefile->{'Name'});
+                foreach my $line (@$patchlistfiles)
                 {
-                    $infoline = "\"${$patchlistfiles}[$k]\"\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("\"%s\"\n", $line);
                 }
             }
 
@@ -254,8 +250,7 @@ sub resolving_archive_flag
             my $zip = Archive::Zip->new();
             if ( $zip->read($sourcepath) != AZ_OK )
             {
-                $infoline = "ERROR: Could not unzip $sourcepath\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->printf("ERROR: Could not unzip %s\n", $sourcepath);
             }
 
             my $counter = 0;
@@ -268,28 +263,27 @@ sub resolving_archive_flag
 
             if (! ( $counter > 0 )) # the zipfile is empty
             {
-                $infoline = "ERROR: Could not unzip $sourcepath\n";
-                push( @installer::globals::logfileinfo, $infoline);
-
+                $installer::logger::Lang->printf("ERROR: Could not unzip %s\n", $sourcepath);
             }
             else
             {
                 if ( $installer::globals::dounzip )         # really unpacking the files
                 {
-                    if ( $zip->extractTree("", $unzipdir) != AZ_OK ) { installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag"); }
+                    if ( $zip->extractTree("", $unzipdir) != AZ_OK )
+                    {
+                        installer::exiter::exit_program("ERROR: can not unzip ".$sourcepath, "resolving_archive_flag");
+                    }
 
                     if (( $^O =~ /cygwin/i ) && ( $contains_dll ))
                     {
                         # Make dll's executable
                         $systemcall = "cd $unzipdir; find . -name \\*.dll -exec chmod 775 \{\} \\\;";
                         $returnvalue = system($systemcall);
-                        $infoline = "Systemcall: $systemcall\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
                         if ($returnvalue)
                         {
-                            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-                            push( @installer::globals::logfileinfo, $infoline);
+                            $installer::logger::Lang->printf("ERROR: Could not execute \"\"!\n", $systemcall);
                         }
                     }
 
@@ -299,13 +293,10 @@ sub resolving_archive_flag
 
                         $systemcall = "cd $unzipdir; find . -type d -exec chmod 775 \{\} \\\;";
                         $returnvalue = system($systemcall);
-                        $infoline = "Systemcall: $systemcall\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-
+                        $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
                         if ($returnvalue)
                         {
-                            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-                            push( @installer::globals::logfileinfo, $infoline);
+                            $installer::logger::Lang->printf("ERROR: Could not execute \"\"!\n", $systemcall);
                         }
                     }
 
@@ -363,8 +354,10 @@ sub resolving_archive_flag
                         {
                             my $value = sprintf("%o", (stat($newfile{'sourcepath'}))[2]);
                             $newfile{'UnixRights'} = substr($value, 3);
-                            $infoline = "Setting unix rights for \"$newfile{'sourcepath'}\" to \"$newfile{'UnixRights'}\"\n";
-                            push( @installer::globals::logfileinfo, $infoline);
+                            $installer::logger::Lang->printf(
+                                "Setting unix rights for \"%s\" to \"%s\"\n",
+                                $newfile{'sourcepath'},
+                                $newfile{'UnixRights'});
                         }
 
                         if ( $set_executable_privileges )
@@ -375,8 +368,10 @@ sub resolving_archive_flag
                             if ( exists($executable_files_in_extensions{$compare_path}) )
                             {
                                 $newfile{'UnixRights'} = "775";
-                                $infoline = "Executable in Extension: Setting unix rights for \"$newfile{'sourcepath'}\" to \"$newfile{'UnixRights'}\"\n";
-                                push( @installer::globals::logfileinfo, $infoline);
+                                $installer::logger::Lang->printf(
+                                    "Executable in Extension: Setting unix rights for \"%s\" to \"%s\"\n",
+                                    $newfile{'sourcepath'},
+                                    $newfile{'UnixRights'});
                             }
                         }
 
@@ -384,14 +379,16 @@ sub resolving_archive_flag
                         {
                             if ( ! installer::existence::exists_in_array($zipname,$selectlistfiles) )
                             {
-                                $infoline = "Removing from ARCHIVE file $onefilename: $zipname\n";
-                                push( @installer::globals::logfileinfo, $infoline);
+                                $installer::logger::Lang->printf("Removing from ARCHIVE file %s: %s\n",
+                                    $onefilename,
+                                    $zipname);
                                 next; # ignoring files, that are not included in $selectlistfiles
                             }
                             else
                             {
-                                $infoline = "Keeping from ARCHIVE file $onefilename: $zipname\n";
-                                push( @installer::globals::logfileinfo, $infoline);
+                                $installer::logger::Lang->printf("Keeping from ARCHIVE file %s: \n",
+                                    $onefilename,
+                                    $zipname);
                                 push( @keptfiles, $zipname); # collecting all kept files
                             }
                         }
@@ -407,13 +404,9 @@ sub resolving_archive_flag
                                 $newfile{'Styles'} =~ s/\,\s*\,/\,/;
                                 $newfile{'Styles'} =~ s/\(\s*\,/\(/;
                                 $newfile{'Styles'} =~ s/\,\s*\)/\)/;
-                                # $infoline = "Removing PATCH flag from: $zipname\n";
-                                # push( @installer::globals::logfileinfo, $infoline);
                             }
                             else
                             {
-                                # $infoline = "Keeping PATCH flag at: $zipname\n";
-                                # push( @installer::globals::logfileinfo, $infoline);
                                 push( @keptpatchflags, $zipname); # collecting all PATCH flags
                             }
                         }
@@ -430,15 +423,15 @@ sub resolving_archive_flag
                             $newfile{'destination'} = $destination . $newzipname;
                             $newfile{'sourcepath'} = $unzipdir . $newzipname;
 
-                            $infoline = "RENAME_TO_LANGUAGE: Using $newzipname instead of $zipname!\n";
-                            push( @installer::globals::logfileinfo, $infoline);
+                            $installer::logger::Lang->printf("RENAME_TO_LANGUAGE: Using %s instead of %s!\n",
+                                $newzipname,
+                                $zipname);
                         }
 
                         my $sourcefiletest = $unzipdir . $zipname;
                         if ( ! -f $sourcefiletest )
                         {
-                            $infoline = "ATTENTION: Unzip failed for $sourcefiletest!\n";
-                            push( @installer::globals::logfileinfo, $infoline);
+                            $installer::logger::Lang->printf("ATTENTION: Unzip failed for %s!\n", $sourcefiletest);
                             $unziperror = 1;
                         }
 
@@ -455,35 +448,25 @@ sub resolving_archive_flag
 
                 if ( $select_files )
                 {
-                    my $number = $#{$selectlistfiles} + 1;
-                    $infoline = "SELECTLIST: Number of files in file selection list: $number\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                    $number = $#keptfiles + 1;
-                    $infoline = "SELECTLIST: Number of kept files: $number\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("SELECTLIST: Number of files in file selection list: %d\n",
+                        scalar @$selectlistfiles);
+                    $installer::logger::Lang->printf("SELECTLIST: Number of kept files: %d\n",
+                        scalar @keptfiles);
 
-                    for ( my $k = 0; $k <= $#keptfiles; $k++ )
+                    foreach my $name (@keptfiles)
                     {
-                        $infoline = "KEPT FILES: $keptfiles[$k]\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->printf("KEPT FILES: %s\n", $name);
                     }
 
-                    my @warningfiles = ();
-
-                    for ( my $k = 0; $k <= $#{$selectlistfiles}; $k++ )
+                    foreach my $name (@$selectlistfiles)
                     {
-                        if ( ! installer::existence::exists_in_array(${$selectlistfiles}[$k],\@keptfiles) )
+                        if ( ! installer::existence::exists_in_array($name,\@keptfiles) )
                         {
-                            push(@warningfiles, ${$selectlistfiles}[$k]);
+                            $installer::logger::Lang->printf(
+                                "WARNING: %s not included in install set (does not exist in zip file)!\n",
+                                $name);;
                         }
                     }
-
-                    for ( my $k = 0; $k <= $#warningfiles; $k++ )
-                    {
-                        $infoline = "WARNING: $warningfiles[$k] not included in install set (does not exist in zip file)!\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                    }
-
                 }
 
                 # Comparing the content of @keptpatchflags and $patchlistfiles
@@ -493,41 +476,32 @@ sub resolving_archive_flag
 
                 if ( $select_patch_files )
                 {
-                    my $number = $#{$patchlistfiles} + 1;
-                    $infoline = "PATCHLIST: Number of files in patch list: $number\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                    $number = $#keptpatchflags + 1;
-                    $infoline = "PATCHLIST: Number of kept PATCH flags: $number\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("PATCHLIST: Number of files in patch list: %d\n",
+                        scalar @$patchlistfiles);
+                    $installer::logger::Lang->printf("PATCHLIST: Number of kept PATCH flags: %d\n",
+                        scalar @keptpatchflags);
 
-                    for ( my $k = 0; $k <= $#keptpatchflags; $k++ )
+                    foreach my $flag (@keptpatchflags)
                     {
-                        $infoline = "KEPT PATCH FLAGS: $keptpatchflags[$k]\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                        $installer::logger::Lang->printf("KEPT PATCH FLAGS: %s\n",
+                            $flag);
                     }
 
-                    my @warningfiles = ();
-
-                    for ( my $k = 0; $k <= $#{$patchlistfiles}; $k++ )
+                    foreach my $name (@$patchlistfiles)
                     {
-                        if ( ! installer::existence::exists_in_array(${$patchlistfiles}[$k],\@keptpatchflags) )
+                        if ( ! installer::existence::exists_in_array($name,\@keptpatchflags) )
                         {
-                            push(@warningfiles, ${$patchlistfiles}[$k]);
+                            $installer::logger::Lang->printf(
+                                "WARNING: %s did not keep PATCH flag (does not exist in zip file)!\n",
+                                $name);
                         }
-                    }
-
-                    for ( my $k = 0; $k <= $#warningfiles; $k++ )
-                    {
-                        $infoline = "WARNING: $warningfiles[$k] did not keep PATCH flag (does not exist in zip file)!\n";
-                        push( @installer::globals::logfileinfo, $infoline);
                     }
                 }
 
                 if ( $unziperror )
                 {
                     installer::logger::print_warning( "Repeating to unpack $sourcepath! \n" );
-                    $infoline = "ATTENTION: Repeating to unpack $sourcepath !\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("ATTENTION: Repeating to unpack %s!\n", $sourcepath);
                     $repeat_unzip = 1;
                     $maxcounter++;
 
@@ -538,8 +512,7 @@ sub resolving_archive_flag
                 }
                 else
                 {
-                    $infoline = "Info: $sourcepath unpacked without problems !\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("Info: %s unpacked without problems !\n", $sourcepath);
                     $repeat_unzip = 0;
                     $maxcounter = 0;
                 }
@@ -551,8 +524,7 @@ sub resolving_archive_flag
         }
     }
 
-    $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
 
     return \@newallfilesarray;
 }

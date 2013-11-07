@@ -390,7 +390,11 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(const SdrObject& rShape2d, cons
             // #116336#
             // If shapes are mirrored once (mirroring two times correct geometry again)
             // double-sided at the object and two-sided-lighting at the scene need to be set.
-            if((bIsMirroredX && !bIsMirroredY) || (!bIsMirroredX && bIsMirroredY))
+            //
+            // #122777# Also use double sided for two fill styles since there several 3d objects get
+            // created with a depth of 0; one of them is the backside which needs double-sided to
+            // get visible
+            if(bUseTwoFillStyles || (bIsMirroredX && !bIsMirroredY) || (!bIsMirroredX && bIsMirroredY))
             {
                 aSet.Put(SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, true));
 
@@ -538,22 +542,26 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(const SdrObject& rShape2d, cons
 
                         aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
 
-                        Size aLogicalSize(aFillBmp.GetPrefSize());
-
-                        if(MapMode(MAP_PIXEL) == aFillBmp.GetPrefMapMode())
-                        {
-                            aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, MAP_100TH_MM);
-                        }
-                        else
-                        {
-                            aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, aFillBmp.GetPrefMapMode(), MAP_100TH_MM);
-                        }
-
-                        aLogicalSize.Width() *= 5; // :-( nice scaling, look at engine3d/obj3d.cxx
-                        aLogicalSize.Height() *= 5;
-                        aFillBmp.SetPrefSize(aLogicalSize);
-                        aFillBmp.SetPrefMapMode(MAP_100TH_MM);
-                        p3DObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aFillBmp)));
+                        // #122777# old adaption of FillStyle bitmap size to 5-times the original size; this is not needed
+                        // anymore and was used in old times to male the fill look better when converting to 3D. Removed
+                        // from regular 3D objects for some time, also needs to be removed from CustomShapes
+                        //
+                        //Size aLogicalSize(aFillBmp.GetPrefSize());
+                        //
+                        //if(MapMode(MAP_PIXEL) == aFillBmp.GetPrefMapMode())
+                        //{
+                        //  aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, MAP_100TH_MM);
+                        //}
+                        //else
+                        //{
+                        //  aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, aFillBmp.GetPrefMapMode(), MAP_100TH_MM);
+                        //}
+                        //
+                        //aLogicalSize.Width() *= 5; // :-( nice scaling, look at engine3d/obj3d.cxx
+                        //aLogicalSize.Height() *= 5;
+                        //aFillBmp.SetPrefSize(aLogicalSize);
+                        //aFillBmp.SetPrefMapMode(MAP_100TH_MM);
+                        //p3DObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aFillBmp)));
                     }
                     else
                     {
@@ -599,11 +607,12 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(const SdrObject& rShape2d, cons
                     p3DObj->SetMergedItem(Svx3DCloseBackItem(false));
                     pScene->Insert3DObj(*p3DObj);
 
+                    // #122777# depth 0 is okay for planes when using double-sided
                     p3DObj = new E3dExtrudeObj(
                         rCustomShape.getSdrModelFromSdrObject(),
                         a3DDefaultAttr,
                         aPolyPoly,
-                        10);
+                        0);
                     p3DObj->SetLayer(rShape2d.GetLayer());
                     p3DObj->SetMergedItemSet(aLocalSet);
 

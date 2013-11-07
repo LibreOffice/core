@@ -944,8 +944,9 @@ namespace {
         for ( sal_Int32 i = 0; i <= nMaxIndex; ++i )
         {
             if ( pPLCFPosArray[i] < 0
-                 && !( i == nMaxIndex-1 && pPLCFPosArray[i] == -63488 )   // pPLCFPosArray[nMaxIndex-1]==-63488 seems to be allowed
-                 && !( i == nMaxIndex-1 && pPLCFPosArray[i] == -65536 ) ) // pPLCFPosArray[nMaxIndex-1]==-65536 seems to be allowed
+                 && !( i == nMaxIndex-1 && pPLCFPosArray[i] == -63488 )   // pPLCFPosArray[nMaxIndex-1]==-63488 (0xffff0800) seems to be allowed
+                 && !( i == nMaxIndex-1 && pPLCFPosArray[i] == -65536 )   // pPLCFPosArray[nMaxIndex-1]==-65536 (0xffff0000) seems to be allowed
+                 && !( i == nMaxIndex-1 && pPLCFPosArray[i] == -61440 ) ) // pPLCFPosArray[nMaxIndex-1]==-61440 (0xffff112c) seems to be allowed
             {
                 bIsValid = false;
                 break;

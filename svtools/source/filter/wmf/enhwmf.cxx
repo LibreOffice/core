@@ -1023,14 +1023,18 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     }
                     aLogFont.alfFaceName = UniString( lfFaceName );
 
-                    // #121382# Need to apply WorldTransform to FontHeight/Width; this should be completely
-                    // chnaged to basegfx::B2DHomMatrix instead of 'struct XForm', but not now due to time
-                    // constraints and dangers
-                    const XForm& rXF = pOut->GetWorldTransform();
-                    const basegfx::B2DHomMatrix aWT(rXF.eM11, rXF.eM21, rXF.eDx, rXF.eM12, rXF.eM22, rXF.eDy);
-                    const basegfx::B2DVector aTransVec(aWT * basegfx::B2DVector(aLogFont.lfWidth, aLogFont.lfHeight));
-                    aLogFont.lfWidth = aTransVec.getX();
-                    aLogFont.lfHeight = aTransVec.getY();
+                    // #123216# Not used in the test case of #121382# (always identity in XForm), also
+                    // no hints in ms docu if FontSize should be scaled with WT. Using with the example
+                    // from #123216# creates errors, so removing.
+                    //
+                    // // #121382# Need to apply WorldTransform to FontHeight/Width; this should be completely
+                    // // chnaged to basegfx::B2DHomMatrix instead of 'struct XForm', but not now due to time
+                    // // constraints and dangers
+                    // const XForm& rXF = pOut->GetWorldTransform();
+                    // const basegfx::B2DHomMatrix aWT(rXF.eM11, rXF.eM21, rXF.eDx, rXF.eM12, rXF.eM22, rXF.eDy);
+                    // const basegfx::B2DVector aTransVec(aWT * basegfx::B2DVector(aLogFont.lfWidth, aLogFont.lfHeight));
+                    // aLogFont.lfWidth = aTransVec.getX();
+                    // aLogFont.lfHeight = aTransVec.getY();
 
                     pOut->CreateObject( nIndex, GDI_FONT, new WinMtfFontStyle( aLogFont ) );
                 }

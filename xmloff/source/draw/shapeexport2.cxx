@@ -1037,7 +1037,8 @@ void XMLShapeExport::ImpExportPolygonShape(
                 basegfx::tools::exportToSvgD(
                     aPolyPolygon,
                     true,       // bUseRelativeCoordinates
-                    false));     // bDetectQuadraticBeziers TTTT: not used in old, but maybe activated now
+                    false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                    true));     // bHandleRelativeNextPointCompatible
 
             // write point array
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
@@ -1411,7 +1412,8 @@ void XMLShapeExport::ImpExportConnectorShape(
                 basegfx::tools::exportToSvgD(
                     aPolyPolygon,
                     true,           // bUseRelativeCoordinates
-                    false));        // bDetectQuadraticBeziers TTTT: not used in old, but maybe activated now
+                    false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                    true));         // bHandleRelativeNextPointCompatible
 
             // write svg:d
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);

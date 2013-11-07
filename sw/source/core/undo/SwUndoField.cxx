@@ -82,7 +82,7 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
-    const SwField * pField = pTxtFld->GetFld().GetFld();
+    const SwField * pField = pTxtFld->GetFmtFld().GetField();
 
     if (pField)
     {
@@ -93,14 +93,14 @@ void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 void SwUndoFieldFromDoc::DoImpl()
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
-    const SwField * pField = pTxtFld->GetFld().GetFld();
+    const SwField * pField = pTxtFld->GetFmtFld().GetField();
 
     if (pField)
     {
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
-        SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
+        SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
 
-        if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyStr,false) == pDstFmtFld->GetFld()->GetTyp() )
+        if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyStr,false) == pDstFmtFld->GetField()->GetTyp() )
             pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SWFMTFLD_INSERTED ) );
     }
 }

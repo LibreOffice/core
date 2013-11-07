@@ -101,15 +101,15 @@ sub update_java_tables
 
     installer::files::save_file($reglocatfilename ,$reglocatfile);
     my $infoline = "Updated idt file for Java: $reglocatfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     installer::files::save_file($appsearchfilename ,$appsearchfile);
     $infoline = "Updated idt file for Java: $appsearchfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     installer::files::save_file($signaturefilename ,$signaturefile);
     $infoline = "Updated idt file: $signaturefilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 

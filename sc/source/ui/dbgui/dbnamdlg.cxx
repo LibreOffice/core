@@ -160,7 +160,6 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
         aStrAdd         ( ScResId( STR_ADD ) ),
         aStrModify      ( ScResId( STR_MODIFY ) ),
-        aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         aStrInvalid     ( ScResId( STR_DB_INVALID ) ),
         //
         pViewData       ( ptrViewData ),
@@ -237,10 +236,10 @@ void ScDbNameDlg::Init()
         ScDBData*       pDBData = NULL;
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                  nEndCol,   nEndRow,  nEndTab );
+            nEndCol,     nEndRow,  nEndTab );
 
         theCurArea = ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
-                              ScAddress( nEndCol,   nEndRow,   nEndTab ) );
+            ScAddress( nEndCol,   nEndRow,   nEndTab ) );
 
         theCurArea.Format( theAreaStr, ABS_DREF3D, pDoc, aAddrDetails );
 
@@ -266,11 +265,15 @@ void ScDbNameDlg::Init()
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
                     pDBData->GetName( theDbName );
-                    //if ( theDbName != aStrNoName )
-                    if ( !pDBData->IsBuildin() )
+                    if ( !pDBData->IsInternalUnnamed()
+                         && !pDBData->IsInternalForAutoFilter() )
+                    {
                         aEdName.SetText( theDbName );
+                    }
                     else
+                    {
                         aEdName.SetText( EMPTY_STRING );
+                    }
                     aBtnHeader.Check( pDBData->HasHeader() );
                     aBtnDoSize.Check( pDBData->IsDoSize() );
                     aBtnKeepFmt.Check( pDBData->IsKeepFmt() );
@@ -379,8 +382,8 @@ void ScDbNameDlg::UpdateNames()
             if ( pDbData )
             {
                 pDbData->GetName( aString );
-                //if ( aString != aStrNoName )
-                if ( !pDbData->IsBuildin() )
+                if ( !pDbData->IsInternalUnnamed()
+                     && !pDbData->IsInternalForAutoFilter() )
                     aEdName.InsertEntry( aString );
             }
         }

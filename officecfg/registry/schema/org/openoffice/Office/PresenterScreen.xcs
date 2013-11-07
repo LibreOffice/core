@@ -34,8 +34,8 @@
       <prop oor:name="Name" oor:type="xs:string">
         <info><desc>Name of the bitmap.  Used to look-up the bitmap in a container.</desc></info>
       </prop>
-      <prop oor:name="Text" oor:type="xs:string">
-        <info><desc>Text that is displayed together with the icon.</desc></info>
+      <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
+        <info><desc>Localized text that is displayed together with the icon.</desc></info>
       </prop>
       <prop oor:name="NormalFileName" oor:type="xs:string">
         <info><desc>Relative file name to the bitmap for the normal icon.</desc></info>
@@ -166,8 +166,8 @@
       <node-ref oor:name="Icon" oor:node-type="BitmapDescriptor">
         <info><desc>The icon to display.</desc></info>
       </node-ref>
-      <prop oor:name="Text" oor:type="xs:string">
-        <info><desc>The text to display.</desc></info>
+      <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
+        <info><desc>The localized text to display.</desc></info>
       </prop>
       <prop oor:name="Action" oor:type="xs:string">
         <info><desc>Action to execute when a button is triggered.</desc></info>
@@ -211,8 +211,8 @@
       <node-ref oor:name="Icon" oor:node-type="BitmapDescriptor">
         <info><desc>The icon to display.</desc></info>
       </node-ref>
-      <prop oor:name="Text" oor:type="xs:string">
-        <info><desc>The text to display.</desc></info>
+      <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
+        <info><desc>The localized text to display.</desc></info>
       </prop>
       <prop oor:name="Action" oor:type="xs:string">
         <info><desc>Action to execute when a button is triggered.</desc></info>
@@ -220,11 +220,11 @@
     </group>
     <group oor:name="HelpEntry">
       <info><desc>Describes a Help entry.</desc></info>
-      <prop oor:name="Left" oor:type="xs:string">
-        <info><desc>Typically a list of keyboard key names.</desc></info>
+      <prop oor:name="Left" oor:type="xs:string" oor:localized="true">
+        <info><desc>Typically a list of localized keyboard key names.</desc></info>
       </prop>
-      <prop oor:name="Right" oor:type="xs:string">
-        <info><desc>Typically a description of the action triggered by pressing the keys on the left.</desc></info>
+      <prop oor:name="Right" oor:type="xs:string" oor:localized="true">
+        <info><desc>Typically a localized description of the action triggered by pressing the keys on the left.</desc></info>
       </prop>
     </group>
     <group oor:name="PaneStyle">
@@ -289,7 +289,7 @@
     </group>
     <group oor:name="PresenterString">
       <info><desc>A Presenter string</desc></info>
-      <prop oor:name="String" oor:type="xs:string">
+      <prop oor:name="String" oor:type="xs:string" oor:localized="true">
         <info><desc>The localized string.</desc></info>
       </prop>
     </group>
@@ -302,12 +302,12 @@
       <prop oor:name="StyleName" oor:type="xs:string">
         <info><desc>Name of a view style.</desc></info>
       </prop>
-      <prop oor:name="Title" oor:type="xs:string">
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
         <info><desc>Title displayed for the component.  An empty or missing
             title means that no title is displayed.</desc></info>
         <value></value>
       </prop>
-      <prop oor:name="AccessibleTitle" oor:type="xs:string">
+      <prop oor:name="AccessibleTitle" oor:type="xs:string" oor:localized="true">
         <info><desc>Title displayed for the component when accessibility support is active.
             An empty or missing title means that no title is displayed.</desc></info>
         <value></value>

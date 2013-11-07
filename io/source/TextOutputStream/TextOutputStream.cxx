@@ -74,6 +74,7 @@ class OTextOutputStream : public TextOutputStreamHelper
     rtl_UnicodeToTextContext    mContextUnicode2Text;
 
     Sequence<sal_Int8> implConvert( const OUString& rSource );
+    void checkOutputStream() throw(IOException);
 
 public:
     OTextOutputStream();
@@ -174,6 +175,7 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
 void OTextOutputStream::writeString( const OUString& aString )
     throw(IOException, RuntimeException)
 {
+    checkOutputStream();
     if( !mbEncodingInitialized )
     {
         OUString aUtf8Str( RTL_CONSTASCII_USTRINGPARAM("utf8") );
@@ -205,19 +207,32 @@ void OTextOutputStream::setEncoding( const OUString& Encoding )
 void OTextOutputStream::writeBytes( const Sequence< sal_Int8 >& aData )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    checkOutputStream();
     mxStream->writeBytes( aData );
 }
 
 void OTextOutputStream::flush(  )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    checkOutputStream();
     mxStream->flush();
 }
 
 void OTextOutputStream::closeOutput(  )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    checkOutputStream();
     mxStream->closeOutput();
+}
+
+
+void OTextOutputStream::checkOutputStream()
+    throw(IOException)
+{
+    if (! mxStream.is() )
+        throw IOException(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("output stream is not initialized, you have to use setOutputStream first")),
+            Reference<XInterface>());
 }
 
 

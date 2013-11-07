@@ -159,6 +159,9 @@ public:
     void SetNatNumDate( sal_Bool bDate ) { aNatNum.SetDate( bDate ); }
     const SvNumberNatNum& GetNatNum() const { return aNatNum; }
 
+    // check, if the format code contains a subformat for text
+    const bool HasTextFormatCode() const;
+
 private:
     ImpSvNumberformatInfo aI;           // Hilfsstruct fuer die restlichen Infos
     String sColorName;                  // color name
@@ -331,6 +334,9 @@ public:
 
     // Whether a new SYMBOLTYPE_CURRENCY is contained in the format
     sal_Bool HasNewCurrency() const;
+
+    // check, if the format code contains a subformat for text
+    const bool HasTextFormatCode() const;
 
     // Build string from NewCurrency for saving it SO50 compatible
     void Build50Formatstring( String& rStr ) const;

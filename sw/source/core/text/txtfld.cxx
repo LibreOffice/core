@@ -84,7 +84,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
 {
     SwExpandPortion *pRet = 0;
     SwFrm *pFrame = (SwFrm*)pFrm;
-    SwField *pFld = (SwField*)pHint->GetFld().GetFld();
+    SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
     const sal_Bool bName = rInf.GetOpt().IsFldName();
 
     SwCharFmt* pChFmt = 0;
@@ -98,7 +98,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         pFld->SetLanguage( GetFnt()->GetLanguage() );
         // let the visual note know about its new language
         if (pFld->GetTyp()->Which()==RES_POSTITFLD)
-            const_cast<SwFmtFld*> (&pHint->GetFld())->Broadcast( SwFmtFldHint( &pHint->GetFld(), SWFMTFLD_LANGUAGE ) );
+            const_cast<SwFmtFld*> (&pHint->GetFmtFld())->Broadcast( SwFmtFldHint( &pHint->GetFmtFld(), SWFMTFLD_LANGUAGE ) );
     }
 
     ViewShell *pSh = rInf.GetVsh();

@@ -183,13 +183,12 @@ sub resolving_patchsoname_flag
 
                 if ($found == 0)
                 {
-                    my $infoline = "Did not patch the file $destinationpath\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("Did not patch the file %s\n", $destinationpath);
                 }
                 else
                 {
-                    my $infoline = "Successfully patched $destinationpath, Count: $found\n";
-                    push( @installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->printf("Successfully patched %s, Count: %s\n",
+                        $destinationpath, $found);
                 }
             }
 
@@ -207,8 +206,7 @@ sub resolving_patchsoname_flag
         }
     }
 
-    my $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
 }
 
 1;

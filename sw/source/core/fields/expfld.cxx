@@ -534,8 +534,8 @@ void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
 void SwSetExpFieldType::SetSeqFormat(sal_uLong nFmt)
 {
     SwIterator<SwFmtFld,SwFieldType> aIter(*this);
-    for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
-        pFld->GetFld()->ChangeFormat( nFmt );
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+        pFmtFld->GetField()->ChangeFormat( nFmt );
 }
 
 sal_uLong SwSetExpFieldType::GetSeqFormat()
@@ -543,7 +543,7 @@ sal_uLong SwSetExpFieldType::GetSeqFormat()
     if( !GetDepends() )
         return SVX_NUM_ARABIC;
 
-    SwField *pFld = ((SwFmtFld*)GetDepends())->GetFld();
+    SwField *pFld = ((SwFmtFld*)GetDepends())->GetField();
     return pFld->GetFormat();
 }
 
@@ -562,10 +562,10 @@ extern void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 
     SwIterator<SwFmtFld,SwFieldType> aIter( *this );
     const SwTxtNode* pNd;
     for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
-        if( pF->GetFld() != &rFld && pF->GetTxtFld() &&
+        if( pF->GetField() != &rFld && pF->GetTxtFld() &&
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )
-            InsertSort( aArr, ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
+            InsertSort( aArr, ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
 
 
     // teste erstmal ob die Nummer schon vorhanden ist:
@@ -605,7 +605,7 @@ sal_uInt16 SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
         {
             _SeqFldLstElem* pNew = new _SeqFldLstElem(
                     pNd->GetExpandTxt( 0, (*pF->GetTxtFld()->GetStart()) + 1 ),
-                    ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
+                    ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }
 

@@ -243,14 +243,12 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 {
                     RemoveIdxRel( rIdx.GetIndex()+1, SwPosition( rIdx,
-                            SwIndex( pTxtNode, pTxtNode->GetTxt().Len() )));
+                        SwIndex( pTxtNode, pTxtNode->GetTxt().Len() )));
                 }
                 pTxtNode->JoinNext();
             }
             // reset all text attributes in the paragraph!
-    //i121897, change the hints clearing method from 'RstAttr' to 'ClarSwpHints' as the certain tox mark index hint reason
-            if( pTxtNode && pTxtNode->GetpSwpHints() )
-                pTxtNode->ClearSwpHintsArr( true );
+            pTxtNode->RstAttr( SwIndex(pTxtNode, 0), pTxtNode->Len(), 0, 0, true );
 
             // setze alle Attribute im Node zurueck
             pTxtNode->ResetAllAttr();

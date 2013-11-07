@@ -56,19 +56,16 @@ sub extract_all_tables_from_msidatabase
     $systemcall = $msidb . " -d " . $fulldatabasepath . " -f " . $workdir . " -e " . $extraslash . "*";
     $returnvalue = system($systemcall);
 
-    $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute $systemcall !\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not execute %s !\n", $systemcall);
         installer::exiter::exit_program("ERROR: Could not exclude tables from msi database: $fulldatabasepath !", "extract_all_tables_from_msidatabase");
     }
     else
     {
-        $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Success: Executed %s successfully!\n", $systemcall);
     }
 }
 
@@ -323,17 +320,19 @@ sub readdatabase
     if (( $databasename ) && ( $databasename ne "" )) # This is an update packaging process!
     {
         $installer::globals::updatedatabase = 1;
-        installer::logger::print_message( "... update process, using database $databasename ...\n" );
-        $infoline = "\nDatabase found in $completelistname: \"$databasename\"\n\n";
+        $installer::logger::Info->printf("... update process, using database %s ...\n", $databasename);
+        $installer::logger::Lang->printf("\n");
+        $installer::logger::Lang->printf("Database found in %s: \"%s\"\n", $completelistname, $databasename);
+        $installer::logger::Lang->printf("\n");
         # Saving in global variable
         $installer::globals::updatedatabasepath = $databasename;
     }
     else
     {
-        # installer::logger::print_message( "... no update process, no database found ...\n" );
-        $infoline = "\nNo database found in $completelistname. This is no update process!\n\n";
+        $installer::logger::Lang->printf("\n");
+        $installer::logger::Lang->printf("No database found in %s. This is no update process!\n", $completelistname);
+        $installer::logger::Lang->printf("\n");
     }
-    push( @installer::globals::logfileinfo, $infoline);
 
     if ( $installer::globals::updatedatabase )
     {
@@ -342,7 +341,7 @@ sub readdatabase
         my $msifilename = $databasename;
         installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$msifilename);
 
-        installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase start");
+        $installer::logger::Lang->add_timestamp("Performance Info: readdatabase start");
 
         # create directory for unpacking
         my $databasedir = installer::systemactions::create_directories("database", $languagestringref);
@@ -351,12 +350,12 @@ sub readdatabase
         my $fulldatabasepath = $databasedir . $installer::globals::separator . $msifilename;
         installer::systemactions::copy_one_file($databasename, $fulldatabasepath);
 
-        installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase: before extracting tables");
+        $installer::logger::Lang->add_timestamp("Performance Info: readdatabase: before extracting tables");
 
         # extract all tables from database
         extract_all_tables_from_msidatabase($fulldatabasepath, $databasedir);
 
-        installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase: before reading tables");
+        $installer::logger::Lang->add_timestamp("Performance Info: readdatabase: before reading tables");
 
         # read all tables
         $database = read_all_tables_from_msidatabase($databasedir);
@@ -402,7 +401,7 @@ sub readdatabase
         #   }
         # }
 
-        installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase end");
+        $installer::logger::Lang->add_timestamp("Performance Info: readdatabase end");
     }
 
     return $database;
@@ -416,7 +415,7 @@ sub readmergedatabase
 {
     my ( $mergemodules, $languagestringref, $includepatharrayref ) = @_;
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: readmergedatabase start");
+    $installer::logger::Lang->add_timestamp("Performance Info: readmergedatabase start");
 
     my $mergemoduledir = installer::systemactions::create_directories("mergedatabase", $languagestringref);
 
@@ -461,7 +460,7 @@ sub readmergedatabase
         }
     }
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: readmergedatabase end");
+    $installer::logger::Lang->add_timestamp("Performance Info: readmergedatabase end");
 }
 
 #################################################################################

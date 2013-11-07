@@ -463,7 +463,7 @@ sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
                          // defined as weak-script ?
             if ( RES_TXTATR_FIELD == pAttr->Which() )
             {
-                const SwField* const pFld = pAttr->GetFld().GetFld();
+                const SwField* const pFld = pAttr->GetFmtFld().GetField();
                 if (pFld)
                 {
                     sExp += pFld->ExpandField(true);

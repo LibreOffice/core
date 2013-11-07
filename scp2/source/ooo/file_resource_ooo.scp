@@ -111,7 +111,7 @@ STD_RES_FILE( gid_File_Res_Xsltdlg, xsltdlg )
 
 STD_RES_FILE( gid_File_Res_AVMedia, avmedia )
 
-#ifndef WITHOUT_MOZILLA
+#ifdef ENABLE_XMLSEC
 STD_RES_FILE( gid_File_Res_XMLSecurity, xmlsec )
 #endif
 

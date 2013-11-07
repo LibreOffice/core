@@ -1163,7 +1163,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    // #111955#
     hash_set< String, StringHashRef, StringEqRef > aSet;
     aSet.insert(String("ForbiddenCharacters", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("IsKernAsianPunctuation", RTL_TEXTENCODING_ASCII_US));
@@ -1189,16 +1188,14 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aSet.insert(String("PrintSingleJobs", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("UpdateFromTemplate", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("PrinterIndependentLayout", RTL_TEXTENCODING_ASCII_US));
-    // --> FME 2005-12-13 #b6354161#
     aSet.insert(String("PrintEmptyPages", RTL_TEXTENCODING_ASCII_US));
-    // <--
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
 
     SvtSaveOptions aSaveOpt;
-    sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
-         bSet = bIsUserSetting;
+    sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings();
+    sal_Bool bSet = bIsUserSetting;
 
     // for some properties we don't want to use the application
     // default if they're missing. So we watch for them in the loop
@@ -1221,7 +1218,16 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUnixForceZeroExtLeading = false;
     bool bUseOldPrinterMetrics = false;
 
-    OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
+    static const OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
+
+    // Set current database properties in certain order
+    // Thus, keep these properties during loop and set them afterwards in valid order
+    static const OUString sCurrentDatabaseDataSource( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseDataSource" ) );
+    uno::Any aCurrentDatabaseDataSource;
+    static const OUString sCurrentDatabaseCommand( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseCommand" ) );
+    uno::Any aCurrentDatabaseCommand;
+    static const OUString sCurrentDatabaseCommandType( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseCommandType" ) );
+    uno::Any aCurrentDatabaseCommandType;
 
     while( nCount-- )
     {
@@ -1245,10 +1251,24 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                         pValues->Value >>= aKey;
                         GetTextImport()->SetChangesProtectionKey( aKey );
                     }
+                    else if ( !aCurrentDatabaseDataSource.hasValue()
+                              && pValues->Name.equals( sCurrentDatabaseDataSource ) )
+                    {
+                        aCurrentDatabaseDataSource = pValues->Value;
+                    }
+                    else if ( !aCurrentDatabaseCommand.hasValue()
+                              && pValues->Name.equals( sCurrentDatabaseCommand ) )
+                    {
+                        aCurrentDatabaseCommand = pValues->Value;
+                    }
+                    else if ( !aCurrentDatabaseCommandType.hasValue()
+                              && pValues->Name.equals( sCurrentDatabaseCommandType ) )
+                    {
+                        aCurrentDatabaseCommandType = pValues->Value;
+                    }
                     else
                     {
-                        xProps->setPropertyValue( pValues->Name,
-                                                  pValues->Value );
+                        xProps->setPropertyValue( pValues->Name, pValues->Value );
                     }
                 }
 
@@ -1296,11 +1316,26 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         pValues++;
     }
 
+    // apply current database properties
+    {
+        if ( aCurrentDatabaseDataSource.hasValue() )
+        {
+            xProps->setPropertyValue( sCurrentDatabaseDataSource, aCurrentDatabaseDataSource );
+        }
+        if ( aCurrentDatabaseCommand.hasValue() )
+        {
+            xProps->setPropertyValue( sCurrentDatabaseCommand, aCurrentDatabaseCommand );
+        }
+        if ( aCurrentDatabaseCommandType.hasValue() )
+        {
+            xProps->setPropertyValue( sCurrentDatabaseCommandType, aCurrentDatabaseCommandType );
+        }
+    }
+
     // finally, treat the non-default cases
-    // --> OD 2006-04-18 #b6402800#
+
     // introduce boolean, that indicates a document, written by version prior SO8.
     const bool bDocumentPriorSO8 = !bConsiderWrapOnObjPos;
-    // <--
 
     if( ! bPrinterIndependentLayout )
     {
@@ -1330,14 +1365,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerObjectPositioning")), makeAny( true ) );
     }
 
-    if( !bUseOldNumbering ) // #111955#
+    if( !bUseOldNumbering )
     {
         Any aAny;
         sal_Bool bOldNum = true;
         aAny.setValue(&bOldNum, ::getBooleanCppuType());
-        xProps->setPropertyValue
-            (OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldNumbering")),
-                       aAny );
+        xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldNumbering")), aAny );
     }
 
     if( !bOutlineLevelYieldsOutlineRule )
@@ -1403,8 +1436,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if ( !bLoadReadonly )
     {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("LoadReadonly") ), makeAny( false ) );
+        xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("LoadReadonly") ), makeAny( false ) );
     }
 
     // This flag has to be set for all documents < SO8
@@ -1441,7 +1473,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( xTextTunnel.is() )
     {
         SwXText *pText = reinterpret_cast< SwXText *>(
-                sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
+            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
         ASSERT( pText, "SwXText missing" );
         if( pText )
         {

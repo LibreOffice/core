@@ -313,27 +313,29 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
             sal_uInt8* pSrcRGB(pRGB->mpBits);
             const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
             const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
+            const Gdiplus::Rect aAllRect(0, 0, nW, nH);
+            Gdiplus::BitmapData aGdiPlusBitmapData;
+            pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat24bppRGB, &aGdiPlusBitmapData);
 
+            // copy data to Gdiplus::Bitmap; format is BGR here in both cases, so memcpy is possible
             for(sal_uInt32 y(0); y < nH; y++)
             {
                 const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
+                sal_uInt8* targetPixels = (sal_uInt8*)aGdiPlusBitmapData.Scan0 + (nYInsert * aGdiPlusBitmapData.Stride);
 
-                for(sal_uInt32 x(0); x < nW; x++)
-                {
-                    const sal_uInt8 nB(*pSrcRGB++);
-                    const sal_uInt8 nG(*pSrcRGB++);
-                    const sal_uInt8 nR(*pSrcRGB++);
-
-                    pRetval->SetPixel(x, nYInsert, Gdiplus::Color(nR, nG, nB));
-                }
-
-                pSrcRGB += nExtraRGB;
+                memcpy(targetPixels, pSrcRGB, nW * 3);
+                pSrcRGB += nW * 3 + nExtraRGB;
             }
+
+            pRetval->UnlockBits(&aGdiPlusBitmapData);
         }
     }
 
     if(pExtraRGB)
     {
+        // #123478# shockingly, BitmapBuffer does not free the memory it is controlling
+        // in it's destructor, this *has to be done handish*. Doing it here now
+        delete[] pExtraRGB->mpBits;
         delete pExtraRGB;
     }
     else
@@ -443,29 +445,38 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
             const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
             const sal_uInt32 nExtraA(pA->mnScanlineSize - nW);
             const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
+            const Gdiplus::Rect aAllRect(0, 0, nW, nH);
+            Gdiplus::BitmapData aGdiPlusBitmapData;
+            pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat32bppARGB, &aGdiPlusBitmapData);
 
+            // copy data to Gdiplus::Bitmap; format is BGRA; need to mix BGR from Bitmap and
+            // A from alpha, so inner loop is needed (who invented BitmapEx..?)
             for(sal_uInt32 y(0); y < nH; y++)
             {
                 const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
+                sal_uInt8* targetPixels = (sal_uInt8*)aGdiPlusBitmapData.Scan0 + (nYInsert * aGdiPlusBitmapData.Stride);
 
                 for(sal_uInt32 x(0); x < nW; x++)
                 {
-                    const sal_uInt8 nB(*pSrcRGB++);
-                    const sal_uInt8 nG(*pSrcRGB++);
-                    const sal_uInt8 nR(*pSrcRGB++);
-                    const sal_uInt8 nA(0xff - *pSrcA++);
-
-                    pRetval->SetPixel(x, nYInsert, Gdiplus::Color(nA, nR, nG, nB));
+                    *targetPixels++ = *pSrcRGB++;
+                    *targetPixels++ = *pSrcRGB++;
+                    *targetPixels++ = *pSrcRGB++;
+                    *targetPixels++ = 0xff - *pSrcA++;
                 }
 
                 pSrcRGB += nExtraRGB;
                 pSrcA += nExtraA;
             }
+
+            pRetval->UnlockBits(&aGdiPlusBitmapData);
         }
     }
 
     if(pExtraA)
     {
+        // #123478# shockingly, BitmapBuffer does not free the memory it is controlling
+        // in it's destructor, this *has to be done handish*. Doing it here now
+        delete[] pExtraA->mpBits;
         delete pExtraA;
     }
     else
@@ -480,6 +491,9 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
 
     if(pExtraRGB)
     {
+        // #123478# shockingly, BitmapBuffer does not free the memory it is controlling
+        // in it's destructor, this *has to be done handish*. Doing it here now
+        delete[] pExtraRGB->mpBits;
         delete pExtraRGB;
     }
     else

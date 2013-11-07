@@ -83,14 +83,12 @@ sub check_tilde_in_directory
         my $home = $ENV{'HOME'};
         $home =~ s/\Q$installer::globals::separator\E\s*$//;
         $installer::globals::localinstalldir =~ s/~/$home/;
-        my $infoline = "Info: Changing LOCALINSTALLDIR to $installer::globals::localinstalldir\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("Info: Changing LOCALINSTALLDIR to %s\n", $installer::globals::localinstalldir);
     }
     else
     {
         # exit, because "~" is not allowed, if HOME is not set
-        my $infoline = "ERROR: If \"~\" is used in \"LOCALINSTALLDIR\", environment variable \"HOME\" needs to be defined!\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: If \"~\" is used in \"LOCALINSTALLDIR\", environment variable \"HOME\" needs to be defined!\n");
         installer::exiter::exit_program("ERROR: If \"~\" is used in \"LOCALINSTALLDIR\", environment variable \"HOME\" needs to be defined!", "check_tilde_in_directory");
     }
 }

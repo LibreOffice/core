@@ -856,7 +856,8 @@ bool SdrDragView::BegInsGluePoint(const basegfx::B2DPoint& rPnt)
 
         if(rProvider.allowsUserGluePoints())
         {
-            sdr::glue::GluePoint& rNew = rProvider.addUserGluePoint(sdr::glue::GluePoint());
+            sdr::glue::GluePoint aNewGluePoint;
+            sdr::glue::GluePoint& rNew = rProvider.addUserGluePoint(aNewGluePoint);
             const sal_uInt32 nGlueId(rNew.getID());
             SdrHdl* pHdl = 0;
 

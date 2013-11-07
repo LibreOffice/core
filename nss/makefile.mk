@@ -32,10 +32,10 @@ TARGET=nss
 
 # --- Files --------------------------------------------------------
 
-.IF "$(ENABLE_NSS_MODULE)"!="YES"
+.IF "$(ENABLE_NSS_MODULE)"!="YES" || "$(SYSTEM_NSS)"=="YES"
 
 all:
-    @echo "NSS will not be built. ENABLE_NSS_MODULE is '$(ENABLE_NSS_MODULE)'"
+    @echo "NSS will not be built because ENABLE_NSS_MODULE='$(ENABLE_NSS_MODULE)' and SYSTEM_NSS='$(SYSTEM_NSS)'"
 
 .ELSE
 

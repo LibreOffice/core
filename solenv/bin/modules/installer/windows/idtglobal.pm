@@ -790,8 +790,12 @@ sub prepare_language_idt_directory
             if ( $allvariables->{'WINDOWSBITMAPDIRECTORY'} ) { $bitmapdir = $allvariables->{'WINDOWSBITMAPDIRECTORY'}; }
 
             my $newsourcedir = $installer::globals::unpackpath . $installer::globals::separator . $bitmapdir; # path setting in list file dependent from unpackpath !?
-            $infoline = "\nOverwriting files in directory \"" . $destinationdir . $installer::globals::separator . "Binary" . "\" with files from directory \"" . $newsourcedir . "\".\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("\n");
+            $installer::logger::Lang->printf(
+                "Overwriting files in directory \"%s%sBinary\" with files from directory \"%s\".\n",
+                $destinationdir,
+                $installer::globals::separator,
+                $newsourcedir);
             if ( ! -d $newsourcedir )
             {
                 my $currentdir = cwd();
@@ -856,8 +860,7 @@ sub get_rtflicensefilesource
 
     if ($$sourcefileref eq "") { installer::exiter::exit_program("ERROR: Could not find $licensefilename!", "get_rtflicensefilesource"); }
 
-    my $infoline = "Using licensefile: $$sourcefileref\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Using licensefile: %s\n", $$sourcefileref);
 
     return $$sourcefileref;
 }
@@ -1041,7 +1044,7 @@ sub add_officedir_to_database
 
     installer::files::save_file($customactionfilename ,$customacfile);
     my $infoline = "Updated idt file: $customactionfilename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -1282,7 +1285,7 @@ sub set_custom_action
         push(@{$customactionidttable}, $line);
 
         $infoline = "Added $actionname CustomAction into table $customactionidttablename (NO_FILE has been set)\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
 
         $included_customaction = 1;
         return $included_customaction;
@@ -1335,7 +1338,7 @@ sub set_custom_action
 
     if ( $included_customaction ) { $infoline = "Added $actionname CustomAction into table $customactionidttablename\n"; }
     else { $infoline = "Did not add $actionname CustomAction into table $customactionidttablename\n"; }
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     return $included_customaction;
 }
@@ -1368,7 +1371,7 @@ sub add_custom_action_to_install_table
         push(@{$installtable}, $line);
 
         $infoline = "Added $actionname CustomAction into table $installtablename (NO_FILE has been set)\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         return;
     }
 
@@ -1423,7 +1426,7 @@ sub add_custom_action_to_install_table
 
     if ( $included_customaction ) { $infoline = "Added $actionname CustomAction into table $installtablename\n"; }
     else { $infoline = "Did not add $actionname CustomAction into table $installtablename\n"; }
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
 }
 
@@ -1443,7 +1446,7 @@ sub connect_custom_action_to_control
     $line =~ s/\s*$//g;
 
     $infoline = "Added line \"$line\" into table $tablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 ##################################################################
@@ -1462,7 +1465,7 @@ sub connect_condition_to_control
     $line =~ s/\s*$//g;
 
     $infoline = "Added line \"$line\" into table $tablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 ##################################################################
@@ -1618,7 +1621,7 @@ sub include_subdirname_into_directory_table
                 push(@{$directorytable}, $line);
                 installer::remover::remove_leading_and_ending_whitespaces(\$line);
                 $infoline = "Added $line into directory table $directorytablename\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
 
                 $includedline = 1;
                 last;
@@ -1659,7 +1662,7 @@ sub include_subdir_into_componenttable
                 installer::remover::remove_leading_and_ending_whitespaces(\$oldvalue);
                 installer::remover::remove_leading_and_ending_whitespaces(\$newvalue);
                 $infoline = "Change in Component table: From \"$oldvalue\" to \"$newvalue\"\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
 
                 $changeddirectory = 1;
                 last;
@@ -1727,7 +1730,7 @@ sub add_childprojects
         $infoline = "SystemFolder already exists in table $directorytablename\n";
     }
 
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # Additional content for the directory table
     # subjava   INSTALLLOCATION program:java
@@ -1763,7 +1766,7 @@ sub add_childprojects
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $allvariables->{'UREPRODUCT'} )
@@ -1772,7 +1775,7 @@ sub add_childprojects
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $allvariables->{'JAVAPRODUCT'} )
@@ -1781,7 +1784,7 @@ sub add_childprojects
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $allvariables->{'UREPRODUCT'} )
@@ -1790,7 +1793,7 @@ sub add_childprojects
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # Content for InstallUISequence table
@@ -1808,7 +1811,7 @@ sub add_childprojects
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $allvariables->{'JAVAPRODUCT'} )
@@ -1820,7 +1823,7 @@ sub add_childprojects
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $allvariables->{'ADAPRODUCT'} )
@@ -1831,7 +1834,7 @@ sub add_childprojects
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $allvariables->{'JAVAPRODUCT'} )
@@ -1843,7 +1846,7 @@ sub add_childprojects
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $allvariables->{'UREPRODUCT'} )
@@ -1855,7 +1858,7 @@ sub add_childprojects
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     if ( $allvariables->{'UREPRODUCT'} )
@@ -1867,7 +1870,7 @@ sub add_childprojects
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     # Content for Feature table, better from scp (translation)
@@ -2101,8 +2104,8 @@ sub set_positions_in_table
 {
     my ( $sequencetable, $tablename ) = @_;
 
-    my $infoline = "\nSetting positions in table \"$tablename\".\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->printf("Setting positions in table \"%s\".\n", $tablename);
 
     # Step 1: Resolving all occurences of "POSITIONTEMPLATE_end"
 
@@ -2116,7 +2119,7 @@ sub set_positions_in_table
             $lastposition = $lastposition + 25;
             ${$sequencetable}[$i] =~ s/POSITIONTEMPLATE_end/$lastposition/;
             $infoline = "Setting position \"$lastposition\" for custom action \"$customaction\".\n";
-            push(@installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
     }
 
@@ -2166,12 +2169,12 @@ sub set_positions_in_table
                     ${$sequencetable}[$i] =~ s/$templatename/$newposition/;
                     $template_replaced = 1;
                     $infoline = "Setting position \"$newposition\" for custom action \"$onename\" (scp: \"$positionname\" at position $position).\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
                 else
                 {
                     $infoline = "Could not assign position for custom action \"$onename\" yet (scp: \"$positionname\").\n";
-                    push(@installer::globals::logfileinfo, $infoline);
+                    $installer::logger::Lang->print($infoline);
                 }
             }
         }
@@ -2207,13 +2210,13 @@ sub set_positions_in_table
                 $lastposition = $lastposition + 25;
                 ${$sequencetable}[$i] =~ s/$fulltemplate/$lastposition/;
                 $infoline = "WARNING: Setting position \"$lastposition\" for custom action \"$customactionname\". Could not find CustomAction \"$template\".\n";
-                push(@installer::globals::logfileinfo, $infoline);
+                $installer::logger::Lang->print($infoline);
             }
         }
         # $templatestring =~ s/,\s*$//;
 
         # $infoline = "Error: Saving table \"$tablename\"\n";
-        # push(@installer::globals::logfileinfo, $infoline);
+        # $installer::logger::Lang->print($infoline);
         # print $infoline;
         # installer::files::save_file($tablename, $sequencetable);
         # installer::exiter::exit_program("ERROR: Unresolved positions in CustomActions in scp2: $templatestring", "set_positions_in_table");
@@ -2229,7 +2232,8 @@ sub addcustomactions
 {
     my ($languageidtdir, $customactions, $filesarray) = @_;
 
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: addcustomactions start\n");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: addcustomactions start\n");
 
     my $customactionidttablename = $languageidtdir . $installer::globals::separator . "CustomAc.idt";
     my $customactionidttable = installer::files::read_file($customactionidttablename);
@@ -2344,19 +2348,20 @@ sub addcustomactions
     installer::files::save_file($controlconditiontablename, $controlconditiontable);
 
     my $infoline = "Updated idt file: $customactionidttablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Updated idt file: $installexecutetablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Updated idt file: $adminexecutetablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Updated idt file: $installuitablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Updated idt file: $controleventtablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     $infoline = "Updated idt file: $controlconditiontablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
-    installer::logger::include_timestamp_into_logfile("\nPerformance Info: addcustomactions end\n");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Performance Info: addcustomactions end\n");
 }
 
 ##########################################################################
@@ -2427,11 +2432,11 @@ sub setbidiattributes
 
     installer::files::save_file($dialogfilename, $dialogfile);
     $infoline = "Set bidi support in idt file \"$dialogfilename\" for language $onelanguage\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     installer::files::save_file($controlfilename, $controlfile);
     $infoline = "Set bidi support in idt file \"$controlfilename\" for language $onelanguage\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 1;

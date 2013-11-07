@@ -53,7 +53,8 @@ extern "C" {
 
 bool handleVersionException(
     com::sun::star::deployment::VersionException verExc,
-    DialogHelper* pDialogHelper )
+    DialogHelper* pDialogHelper,
+    const bool bChooseNewestVersion )
 {
     bool bApprove = false;
 
@@ -72,37 +73,45 @@ bool handleVersionException(
         break;
     }
     OSL_ASSERT( verExc.Deployed.is() );
-    const bool bEqualNames = verExc.NewDisplayName.equals(
-        verExc.Deployed->getDisplayName());
+
+    if ( bChooseNewestVersion )
     {
-        vos::OGuard guard(Application::GetSolarMutex());
-        WarningBox box( pDialogHelper ? pDialogHelper->getWindow() : NULL, ResId(id, *DeploymentGuiResMgr::get()));
-        String s;
-        if (bEqualNames)
+        bApprove = id == RID_WARNINGBOX_VERSION_GREATER;
+    }
+    else
+    {
+        const bool bEqualNames = verExc.NewDisplayName.equals(
+            verExc.Deployed->getDisplayName());
         {
-            s = box.GetMessText();
+            vos::OGuard guard(Application::GetSolarMutex());
+            WarningBox box( pDialogHelper ? pDialogHelper->getWindow() : NULL, ResId(id, *DeploymentGuiResMgr::get()));
+            String s;
+            if (bEqualNames)
+            {
+                s = box.GetMessText();
+            }
+            else if (id == RID_WARNINGBOX_VERSION_EQUAL)
+            {
+                //hypothetical: requires two instances of an extension with the same
+                //version to have different display names. Probably the developer forgot
+                //to change the version.
+                s = String(ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
+            }
+            else if (id == RID_WARNINGBOX_VERSION_LESS)
+            {
+                s = String(ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
+            }
+            else if (id == RID_WARNINGBOX_VERSION_GREATER)
+            {
+                s = String(ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
+            }
+            s.SearchAndReplaceAllAscii( "$NAME", verExc.NewDisplayName);
+            s.SearchAndReplaceAllAscii( "$OLDNAME", verExc.Deployed->getDisplayName());
+            s.SearchAndReplaceAllAscii( "$NEW", getVersion(verExc.NewVersion) );
+            s.SearchAndReplaceAllAscii( "$DEPLOYED", getVersion(verExc.Deployed) );
+            box.SetMessText(s);
+            bApprove = box.Execute() == RET_OK;
         }
-        else if (id == RID_WARNINGBOX_VERSION_EQUAL)
-        {
-            //hypothetical: requires two instances of an extension with the same
-            //version to have different display names. Probably the developer forgot
-            //to change the version.
-            s = String(ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
-        }
-        else if (id == RID_WARNINGBOX_VERSION_LESS)
-        {
-            s = String(ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
-        }
-        else if (id == RID_WARNINGBOX_VERSION_GREATER)
-        {
-            s = String(ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
-        }
-        s.SearchAndReplaceAllAscii( "$NAME", verExc.NewDisplayName);
-        s.SearchAndReplaceAllAscii( "$OLDNAME", verExc.Deployed->getDisplayName());
-        s.SearchAndReplaceAllAscii( "$NEW", getVersion(verExc.NewVersion) );
-        s.SearchAndReplaceAllAscii( "$DEPLOYED", getVersion(verExc.Deployed) );
-        box.SetMessText(s);
-        bApprove = box.Execute() == RET_OK;
     }
 
     return bApprove;

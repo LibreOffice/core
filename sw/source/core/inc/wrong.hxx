@@ -103,10 +103,10 @@ private:
                 }
             }
         }
-        catch(::com::sun::star::container::NoSuchElementException& ex)
+        catch(::com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch(::com::sun::star::uno::RuntimeException& ex)
+        catch(::com::sun::star::uno::RuntimeException& )
         {
         }
 
@@ -137,10 +137,10 @@ private:
                 }
             }
         }
-        catch(::com::sun::star::container::NoSuchElementException& ex)
+        catch(::com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch(::com::sun::star::uno::RuntimeException& ex)
+        catch(::com::sun::star::uno::RuntimeException& )
         {
         }
 

@@ -508,10 +508,7 @@ public:
                                         sal_Bool bStartOnly = sal_False) const;
     ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData*       GetFilterDBAtTable(SCTAB nTab) const;
-//UNUSED2008-05  ScRangeData*   GetRangeAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
-//UNUSED2008-05                                      sal_Bool bStartOnly = sal_False) const;
     SC_DLLPUBLIC ScRangeData*   GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
-    ScDBData*       GetDBAtTable(SCTAB nTab, ScGetDBMode eMode) const;
 
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
@@ -1517,7 +1514,10 @@ public:
                                 TypedScStrCollection& rStrings, sal_Bool bLimit = sal_False );
     sal_Bool            GetFormulaEntries( TypedScStrCollection& rStrings );
 
-    sal_Bool            HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    sal_Bool            HasAutoFilter(
+        const SCCOL nCol,
+        const SCROW nRow,
+        const SCTAB nTab );
 
     SC_DLLPUBLIC sal_Bool           HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab );

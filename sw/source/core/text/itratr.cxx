@@ -773,7 +773,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                     }
                     case RES_TXTATR_FIELD :
                     {
-                        SwField *pFld = (SwField*)pHint->GetFld().GetFld();
+                        SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
                         const String aTxt = pFld->ExpandField(true);
                         if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
                             aTxt.Len() ) )
@@ -976,7 +976,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
                 }
                 case RES_TXTATR_FIELD :
                 {
-                    SwField *pFld = (SwField*)pHint->GetFld().GetFld();
+                    SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
                     String const aTxt = pFld->ExpandField(true);
                     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.Len() );
 

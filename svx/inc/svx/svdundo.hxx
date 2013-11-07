@@ -244,13 +244,12 @@ public:
 
 class SVX_DLLPUBLIC SdrUndoDelObj : public SdrUndoRemoveObj
 {
+private:
+    void TryToFlushGraphicContent();
+
 public:
-    SdrUndoDelObj(SdrObject& rNewObj)
-    :   SdrUndoRemoveObj(rNewObj)
-    {
-        SetOwner(true);
-    }
-    virtual ~SdrUndoDelObj() {}
+    SdrUndoDelObj(SdrObject& rNewObj);
+    virtual ~SdrUndoDelObj();
 
     virtual void Undo();
     virtual void Redo();

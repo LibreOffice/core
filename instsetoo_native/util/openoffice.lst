@@ -5,9 +5,9 @@ Globals
         variables
         {
             APACHEPROJECTNAME Apache OpenOffice
-            OOOBASEVERSION 4.0
-            OOOPACKAGEVERSION 4.0.0
-            UREPACKAGEVERSION 4.0.0
+            OOOBASEVERSION 4.1
+            OOOPACKAGEVERSION 4.1.0
+            UREPACKAGEVERSION 4.1.0
             URELAYERVERSION 1
             BASISROOTNAME OpenOffice
             UNIXBASISROOTNAME openoffice
@@ -41,9 +41,9 @@ Globals
             OOOXMLFILEFORMATNAME OpenOffice.org XML
             OOOXMLFILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            SERVICETAG_PRODUCTNAME Apache OpenOffice 4.0
-            SERVICETAG_PRODUCTVERSION 4.0
-            SERVICETAG_PARENTNAME Apache OpenOffice 4.0
+            SERVICETAG_PRODUCTNAME Apache OpenOffice 4.1
+            SERVICETAG_PRODUCTVERSION 4.1
+            SERVICETAG_PARENTNAME Apache OpenOffice 4.1
             SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
             SERVICETAG_URN urn:uuid:500061aa-5666-11e0-8e00-080020a9ed93
             REGISTRATION_HOST https://registration.openoffice.org
@@ -61,7 +61,7 @@ Apache_OpenOffice
         {
             FULLPRODUCTNAME Apache OpenOffice
             PRODUCTNAME OpenOffice
-            PRODUCTVERSION 4.0.0
+            PRODUCTVERSION 4.1.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
             SHORT_PRODUCTEXTENSION 
@@ -69,15 +69,15 @@ Apache_OpenOffice
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.0.0
-            BASEPRODUCTVERSION 4.0
+            ABOUTBOXPRODUCTVERSION 4.1.0
+            BASEPRODUCTVERSION 4.1
             PCPFILENAME openoffice.pcp
-            UPDATEURL https://ooo-updates.apache.org/aoo40/check.Update
+            UPDATEURL https://ooo-updates.apache.org/aoo410/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             EVAL
-            PACKAGEVERSION 4.0.0
+            PACKAGEVERSION 4.1.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -121,7 +121,7 @@ Apache_OpenOffice_wJRE
         {
             FULLPRODUCTNAME Apache OpenOffice
             PRODUCTNAME OpenOffice
-            PRODUCTVERSION 4.0.0
+            PRODUCTVERSION 4.1.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
             SHORT_PRODUCTEXTENSION 
@@ -129,14 +129,14 @@ Apache_OpenOffice_wJRE
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.0.0
-            BASEPRODUCTVERSION 4.0
-            UPDATEURL https://ooo-site.apache.org/projects/update/aoo40/check.Update
+            ABOUTBOXPRODUCTVERSION 4.1.0
+            BASEPRODUCTVERSION 4.1
+            UPDATEURL https://ooo-updates.apache.org/aoo410/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             EVAL
-            PACKAGEVERSION 4.0.0
+            PACKAGEVERSION 4.1.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             WITHJREPRODUCT 1
@@ -181,7 +181,7 @@ Apache_OpenOffice_Dev
         {
             FULLPRODUCTNAME AOO-Developer-Build
             PRODUCTNAME AOO-Developer-Build
-            PRODUCTVERSION 4.0.0
+            PRODUCTVERSION 4.1.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
             SHORT_PRODUCTEXTENSION 
@@ -191,17 +191,17 @@ Apache_OpenOffice_Dev
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.0.0
-            BASEPRODUCTVERSION 4.0
+            ABOUTBOXPRODUCTVERSION 4.1.0
+            BASEPRODUCTVERSION 4.1
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX aoodev
             UREPACKAGEPREFIX aoodev
             SOLSUREPACKAGEPREFIX aoodev
             REGISTRYLAYERNAME LayerDev
-            UPDATEURL https://ooo-site.apache.org/projects/update/aoo40/check.Update
+            UPDATEURL https://ooo-updates.apache.org/aoo410/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
             EVAL
-            PACKAGEVERSION 4.0.0
+            PACKAGEVERSION 4.1.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -250,8 +250,8 @@ URE
         {
             FULLPRODUCTNAME URE
             PRODUCTNAME URE
-            PRODUCTVERSION 4.0.0
-            PACKAGEVERSION 4.0
+            PRODUCTVERSION 4.1.0
+            PACKAGEVERSION 4.1
             PACKAGEREVISION 1
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -293,14 +293,14 @@ Apache_OpenOffice_SDK
         {
             FULLPRODUCTNAME Apache OpenOffice
             PRODUCTNAME OpenOffice
-            PRODUCTVERSION 4.0.0
+            PRODUCTVERSION 4.1.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4
-            PACKAGEVERSION 4.0.0
+            PACKAGEVERSION 4.1.0
             PACKAGEREVISION {milestone}
             PACK_INSTALLED 1
             POOLPRODUCT 0
@@ -341,7 +341,7 @@ Apache_OpenOffice_Dev_SDK
         {
             FULLPRODUCTNAME AOO-Developer-Build
             PRODUCTNAME AOO-Developer-Build
-            PRODUCTVERSION 4.0.0
+            PRODUCTVERSION 4.1.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
@@ -350,7 +350,7 @@ Apache_OpenOffice_Dev_SDK
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4
-            PACKAGEVERSION 4.0.0
+            PACKAGEVERSION 4.1.0
             PACKAGEREVISION {milestone}
             BASISPACKAGEPREFIX aoodev
             UREPACKAGEPREFIX aoodev

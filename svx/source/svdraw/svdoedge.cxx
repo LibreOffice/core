@@ -732,33 +732,40 @@ void SdrEdgeObj::ImpUndirtyEdgeTrack()
 
 void SdrEdgeObj::ImpRecalcEdgeTrack()
 {
-    // #120437# if bEdgeTrackUserDefined, do not recalculate. Also not when model locked
-    if(mbEdgeTrackUserDefined || getSdrModelFromSdrObject().isLocked())
+    // #120437# if bEdgeTrackUserDefined, do not recalculate
+    if(mbEdgeTrackUserDefined)
     {
         return;
     }
 
-    static bool mbBoundRectCalculationRunning = false;
+    // #120437# also not when model locked during import, but remember
+    if(getSdrModelFromSdrObject().isLocked())
+    {
+        mbSuppressed = true;
+        return;
+    }
 
-    if(mbBoundRectCalculationRunning)
+    // #110649#
+    if(IsBoundRectCalculationRunning())
     {
         // this object is involved into another ImpRecalcEdgeTrack() call
         // from another SdrEdgeObj. Do not calculate again to avoid loop.
         // Also, do not change mbEdgeTrackDirty so that it gets recalculated
         // later at the first non-looping call.
     }
-    else if(getSdrModelFromSdrObject().isLocked())
-    {
-        // avoid re-layout during imports/API call sequences
-        // #i45294# but calc EdgeTrack and secure properties there
-        mbBoundRectCalculationRunning = true;
-        maEdgeTrack = ImpCalcEdgeTrack(maCon1, maCon2, &maEdgeInfo);
-        ImpSetAttrToEdgeInfo();
-        mbEdgeTrackDirty = false;
-        mbBoundRectCalculationRunning = false;
-    }
     else
     {
+        if(mbSuppressed)
+        {
+            // #123048# If layouting was ever suppressed, it needs to be done once
+            // and the attr need to be set at EdgeInfo, else these attr *will be lost*
+            // in the following call to ImpSetEdgeInfoToAttr() sice they were never
+            // set before (!)
+            maEdgeTrack = ImpCalcEdgeTrack(maCon1, maCon2, &maEdgeInfo);
+            ImpSetAttrToEdgeInfo();
+            mbSuppressed = false;
+        }
+
         // To not run in a depth loop, use a coloring algorythm on
         // SdrEdgeObj BoundRect calculations
         mbBoundRectCalculationRunning = true;

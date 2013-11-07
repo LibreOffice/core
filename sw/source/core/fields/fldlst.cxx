@@ -60,14 +60,14 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType || RES_DROPDOWN == nType )
         {
             SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-            for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
             {
-                const SwTxtFld* pTxtFld = pFld->GetTxtFld();
+                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
 
                 //  nur InputFields und interaktive SetExpFlds bearbeiten
                 //  and DropDown fields
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
-                    !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
+                    !((SwSetExpField*)pFmtFld->GetField())->GetInputFlag()))
                     continue;
 
                 const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
@@ -107,9 +107,9 @@ sal_uInt16 SwInputFieldList::Count() const
 
 SwField* SwInputFieldList::GetField(sal_uInt16 nId)
 {
-    const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetFld();
+    const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetTxtFld();
     ASSERT( pTxtFld, "kein TextFld" );
-    return (SwField*)pTxtFld->GetFld().GetFld();
+    return (SwField*)pTxtFld->GetFmtFld().GetField();
 }
 
 /*--------------------------------------------------------------------
@@ -156,13 +156,13 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType )
         {
             SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-            for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
             {
-                const SwTxtFld* pTxtFld = pFld->GetTxtFld();
+                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
 
                 //  nur InputFields und interaktive SetExpFlds bearbeiten
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
-                    !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
+                    !((SwSetExpField*)pFmtFld->GetField())->GetInputFlag()))
                     continue;
 
                 const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();

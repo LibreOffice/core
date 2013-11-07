@@ -66,18 +66,15 @@ sub do_strip
 
     my $returnvalue = system($systemcall);
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Systemcall: %s\n", $systemcall);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not strip $filename!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("ERROR: Could not strip %s!\n", $filename);
     }
     else
     {
-        $infoline = "SUCCESS: Stripped library $filename!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->printf("SUCCESS: Stripped library %s!\n", $filename);
     }
 }
 
@@ -124,8 +121,7 @@ sub strip_binaries
             my $shortfilename = $sourcefilename;
             installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$shortfilename);
 
-            $infoline = "Strip: $shortfilename\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->printf("Strip: %s\n", $shortfilename);
 
             # copy file into directory for stripped libraries
 

@@ -371,14 +371,12 @@ String STR_QUERY_SAVEMODIFIED
 
 String STR_ERROR_PARSING_STATEMENT
 {
-    Text [ en-US ] = "$object$ is based on an SQL command which could not be parsed."
-        "(except \"SQL command\", which doesn't make sense here) will be inserted.";
+    Text [ en-US ] = "$object$ is based on an SQL command which could not be parsed.";
 };
 
 String STR_INFO_OPENING_IN_SQL_VIEW
 {
-    Text [ en-US ] = "$object$ will be opened in SQL view."
-        "(except \"SQL command\", which doesn't make sense here) will be inserted.";
+    Text [ en-US ] = "$object$ will be opened in SQL view.";
 };
 
 Resource RSC_QUERY_OBJECT_TYPE

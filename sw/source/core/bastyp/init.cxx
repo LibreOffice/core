@@ -334,10 +334,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_PARA_HYPHENZONE, SFX_ITEM_POOLABLE },    // RES_PARATR_HYPHENZONE
     { FN_FORMAT_DROPCAPS, 0 },                          // RES_PARATR_DROP
     { SID_ATTR_PARA_REGISTER, SFX_ITEM_POOLABLE },      // RES_PARATR_REGISTER
-    // --> OD 2008-03-04 #refactorlists#
-    // RES_PARATR_NUMRULE is now poolable
     { SID_ATTR_PARA_NUMRULE, SFX_ITEM_POOLABLE },       // RES_PARATR_NUMRULE
-    // <--
     { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // RES_PARATR_SCRIPTSPACE
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
 
@@ -348,13 +345,11 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
 
     { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level,zhaojianwei
 
-    // --> OD 2008-02-19 #refactorlists#
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISRESTART
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_RESTARTVALUE
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISCOUNTED
-    // <--
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_FILL_ORDER
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRM_SIZE
@@ -524,15 +519,15 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY2 );
 // CharakterAttr - Dummies
 
-    aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] = new SwFmtAutoFmt;
-    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] = new SwFmtINetFmt( aEmptyStr, aEmptyStr );
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] = new SwFmtRefMark( aEmptyStr );
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] = new SwTOXMark;
+    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_META);
+    aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
+    aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] = new SwFmtAutoFmt;
+    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] = new SwFmtINetFmt( aEmptyStr, aEmptyStr );
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] = new SwFmtCharFmt( 0 );
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] = new SwFmtRuby( aEmptyStr );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
-    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_META);
-    aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
 
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] = new SwFmtFld;
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] = new SwFmtFlyCnt( 0 );
@@ -545,6 +540,7 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY2 );
     aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY5 );
 // TextAttr - Dummies
+
     aAttrTab[ RES_CHRATR_BIDIRTL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_BIDIRTL, sal_Int16(-1) );
     aAttrTab[ RES_CHRATR_IDCTHINT - POOLATTR_BEGIN ] = new SfxInt16Item( RES_CHRATR_IDCTHINT, sal_Int16(-1) );
 

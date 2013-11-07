@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
@@ -39,7 +37,7 @@ namespace drawinglayer
     {
         ModifiedColorPrimitive3D::ModifiedColorPrimitive3D(
             const Primitive3DSequence& rChildren,
-            const basegfx::BColorModifier& rColorModifier)
+            const basegfx::BColorModifierSharedPtr& rColorModifier)
         :   GroupPrimitive3D(rChildren),
             maColorModifier(rColorModifier)
         {

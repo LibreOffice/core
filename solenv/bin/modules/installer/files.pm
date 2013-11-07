@@ -84,9 +84,9 @@ sub save_file
 
         if ( $savefile =~ /\.log/ )
         {
-            print "\n*************************************************\n";
+            print "*************************************************\n";
             print "ERROR: Cannot write log file: $savefile";
-            print "\n*************************************************\n";
+            print "*************************************************\n";
             exit(-1);   # exiting the program to avoid endless loops
         }
 

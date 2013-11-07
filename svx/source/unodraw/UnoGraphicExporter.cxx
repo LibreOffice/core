@@ -222,21 +222,52 @@ namespace svx
     {
         BitmapEx aBmpEx;
 
-        if(bTransparent)
+        if(bTransparent) // TTTT: Is this needed? Simply use 1st case for all?
         {
             // use new primitive conversion tooling
             basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
+            sal_uInt32 nMaximumQuadraticPixels(500000);
 
             // use 100th mm for primitive bitmap converter tool, input is pixel
             // use a real OutDev to get the correct DPI, the static LogicToLogic assumes 72dpi which is wrong (!)
             const Size aSize100th(Application::GetDefaultDevice()->PixelToLogic(rSize, MapMode(MAP_100TH_MM)));
 
             aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
-            aBmpEx = convertMetafileToBitmapEx(rMtf, aRange);
+
+            // when explicitely pixels are requested from the GraphicExporter, use a *very* high limit
+            // of 16gb (4096x4096 pixels), else use the default for the converters
+            nMaximumQuadraticPixels = std::min(sal_uInt32(4096 * 4096), sal_uInt32(rSize.Width() * rSize.Height()));
+
+            aBmpEx = convertMetafileToBitmapEx(rMtf, aRange, nMaximumQuadraticPixels);
         }
         else
         {
             const SvtOptionsDrawinglayer aDrawinglayerOpt;
+
+            // #122820# If a concrete target size in pixels is given, use it
+            Size aTargetSize(rSize);
+
+            // get hairline and full bound rect to evtl. reduce given target pixel size when
+            // it is known that it will be expanded to get the right and bottom hairlines right
+            Rectangle aHairlineRect;
+            const Rectangle aRect(rMtf.GetBoundRect(*Application::GetDefaultDevice(), &aHairlineRect));
+
+            if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
+            {
+                if(aRect.Right() == aHairlineRect.Right() || aRect.Bottom() == aHairlineRect.Bottom())
+                {
+                    if(aTargetSize.Width())
+                    {
+                        aTargetSize.Width() -= 1;
+                    }
+
+                    if(aTargetSize.Height())
+                    {
+                        aTargetSize.Height() -= 1;
+                    }
+                }
+            }
+
             const GraphicConversionParameters aParameters(
                 rSize,
                 true, // allow unlimited size
@@ -417,26 +448,39 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
     }
 
     pVDev->SetMapMode( aMM );
-#ifdef DBG_UTIL
-    sal_Bool bAbort = !
-#endif
-        pVDev->SetOutputSize(aPageSize);
-    DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
+    bool bSuccess(false);
 
-    SdrView* pView = new SdrView(*mpDoc, pVDev);
-    pView->SetPageVisible(false);
-    pView->SetBordVisible(false);
-    pView->SetGridVisible(false);
-    pView->SetHlplVisible(false);
-    pView->SetGlueVisible(false);
-    pView->ShowSdrPage(*pPage);
-    Region aRegion (Rectangle( aPoint, aPageSize ) );
+    // #122820# If available, use pixel size directly
+    if(nWidthPixel && nHeightPixel)
+    {
+        bSuccess = pVDev->SetOutputSizePixel(Size(nWidthPixel, nHeightPixel));
+    }
+    else
+    {
+        bSuccess = pVDev->SetOutputSize(aPageSize);
+    }
 
-    ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
+    if(bSuccess)
+    {
+        SdrView* pView = new SdrView(*mpDoc, pVDev);
+        pView->SetPageVisible(false);
+        pView->SetBordVisible(false);
+        pView->SetGridVisible(false);
+        pView->SetHlplVisible(false);
+        pView->SetGlueVisible(false);
+        pView->ShowSdrPage(*pPage);
+        Region aRegion (Rectangle( aPoint, aPageSize ) );
 
-    pView->CompleteRedraw(pVDev, aRegion, &aRedirector);
+        ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-    delete pView;
+        pView->CompleteRedraw(pVDev, aRegion, &aRedirector);
+        delete pView;
+    }
+    else
+    {
+        OSL_ENSURE(false, "Could not get a VirtualDevice of requested size (!)");
+    }
+
     return pVDev;
 }
 

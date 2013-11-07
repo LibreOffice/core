@@ -198,3 +198,126 @@ diff -ru misc/boost_1_48_0/boost/unordered/detail/emplace_args.hpp misc/build/bo
 +    BOOST_PP_CAT(a, n)(BOOST_PP_CAT(b, n))
  
  #endif
+--- misc/boost_1_48_0/boost/unordered/detail/buckets.hpp	2011-10-09 20:30:10.000000000 +0200
++++ misc/build/boost_1_48_0/boost/unordered/detail/buckets.hpp	2012-06-21 10:22:36.000000000 +0000
+@@ -477,22 +477,22 @@
+ 
+         // This is called after erasing a node or group of nodes to fix up
+         // the bucket pointers.
+-        void fix_buckets(bucket_pointer bucket,
++        void fix_buckets(bucket_pointer bucket_arg,
+                 previous_pointer prev, node_pointer next)
+         {
+             if (!next)
+             {
+-                if (bucket->next_ == prev) bucket->next_ = node_pointer();
++                if (bucket_arg->next_ == prev) bucket_arg->next_ = node_pointer();
+             }
+             else
+             {
+                 bucket_pointer next_bucket = this->get_bucket(
+                     next->hash_ % this->bucket_count_);
+ 
+-                if (next_bucket != bucket)
++                if (next_bucket != bucket_arg)
+                 {
+                     next_bucket->next_ = prev;
+-                    if (bucket->next_ == prev) bucket->next_ = node_pointer();
++                    if (bucket_arg->next_ == prev) bucket_arg->next_ = node_pointer();
+                 }
+             }
+         }
+--- misc/boost_1_48_0/boost/unordered/detail/equivalent.hpp	2011-11-04 03:31:36.000000000 +0100
++++ misc/build/boost_1_48_0/boost/unordered/detail/equivalent.hpp	2012-06-21 10:23:12.000000000 +0000
+@@ -246,14 +246,14 @@
+             node_pointer n = this->find_node(k);
+             if (!n) return 0;
+ 
+-            std::size_t count = 0;
++            std::size_t lcl_count = 0;
+             node_pointer it = n;
+             do {
+                 it = static_cast<node_pointer>(it->group_prev_);
+-                ++count;
++                ++lcl_count;
+             } while(it != n);
+ 
+-            return count;
++            return lcl_count;
+         }
+ 
+         std::pair<iterator, iterator>
+@@ -523,9 +523,9 @@
+ 
+             std::size_t hash = this->hash_function()(k);
+             std::size_t bucket_index = hash % this->bucket_count_;
+-            bucket_pointer bucket = this->get_bucket(bucket_index);
++            bucket_pointer lcl_bucket = this->get_bucket(bucket_index);
+ 
+-            previous_pointer prev = bucket->next_;
++            previous_pointer prev = lcl_bucket->next_;
+             if (!prev) return 0;
+ 
+             for (;;)
+@@ -548,7 +548,7 @@
+                 static_cast<node_pointer>(pos->group_prev_)->next_;
+             node_pointer end = static_cast<node_pointer>(end1);
+             prev->next_ = end1;
+-            this->fix_buckets(bucket, prev, end);
++            this->fix_buckets(lcl_bucket, prev, end);
+             return this->delete_nodes(pos, end);
+         }
+ 
+@@ -557,11 +557,11 @@
+             BOOST_ASSERT(r);
+             node_pointer next = static_cast<node_pointer>(r->next_);
+ 
+-            bucket_pointer bucket = this->get_bucket(
++            bucket_pointer lcl_bucket = this->get_bucket(
+                 r->hash_ % this->bucket_count_);
+-            previous_pointer prev = unlink_node(*bucket, r);
++            previous_pointer prev = unlink_node(*lcl_bucket, r);
+ 
+-            this->fix_buckets(bucket, prev, next);
++            this->fix_buckets(lcl_bucket, prev, next);
+ 
+             this->delete_node(r);
+ 
+--- misc/boost_1_48_0/boost/unordered/detail/unique.hpp	2011-11-04 03:31:36.000000000 +0100
++++ misc/build/boost_1_48_0/boost/unordered/detail/unique.hpp	2012-06-21 10:23:00.000000000 +0000
+@@ -523,9 +523,9 @@
+ 
+             std::size_t hash = this->hash_function()(k);
+             std::size_t bucket_index = hash % this->bucket_count_;
+-            bucket_pointer bucket = this->get_bucket(bucket_index);
++            bucket_pointer lcl_bucket = this->get_bucket(bucket_index);
+ 
+-            previous_pointer prev = bucket->next_;
++            previous_pointer prev = lcl_bucket->next_;
+             if (!prev) return 0;
+ 
+             for (;;)
+@@ -545,7 +545,7 @@
+             node_pointer pos = static_cast<node_pointer>(prev->next_);
+             node_pointer end = static_cast<node_pointer>(pos->next_);
+             prev->next_ = pos->next_;
+-            this->fix_buckets(bucket, prev, end);
++            this->fix_buckets(lcl_bucket, prev, end);
+             return this->delete_nodes(pos, end);
+         }
+ 
+@@ -554,11 +554,11 @@
+             BOOST_ASSERT(r);
+             node_pointer next = static_cast<node_pointer>(r->next_);
+ 
+-            bucket_pointer bucket = this->get_bucket(
++            bucket_pointer lcl_bucket = this->get_bucket(
+                 r->hash_ % this->bucket_count_);
+-            previous_pointer prev = unlink_node(*bucket, r);
++            previous_pointer prev = unlink_node(*lcl_bucket, r);
+ 
+-            this->fix_buckets(bucket, prev, next);
++            this->fix_buckets(lcl_bucket, prev, next);
+ 
+             this->delete_node(r);
+ 

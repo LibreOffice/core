@@ -206,8 +206,6 @@ int main( int argc, char *argv[] )
             strcat( envstr, value );
         }
         putenv( envstr );
-        fprintf( stderr, "DYLD_LIBRARY_PATH=%s\n", envstr );
-
     }
     else
     {
@@ -242,8 +240,7 @@ char const* getPath()
 
     if ( path == NULL )
     {
-        fprintf( stderr, "Warning: getting path from PATH environment "
-                 "variable failed!\n" );
+        fprintf( stderr, "Warning: getting path from PATH environment variable failed!\n" );
         fflush( stderr );
     }
 

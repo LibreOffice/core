@@ -64,10 +64,7 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
-// --> OD 2007-03-30 #i73788#
 #include <pausethreadstarting.hxx>
-// <--
-
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -534,7 +531,48 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
     {
         Reference< XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
         if( xProps.is() )
-            SvXMLUnitConverter::convertPropertySet( rProps, xProps );
+        {
+            // property CurrentDatabaseDataSource needs to be exported before CurrentDatabaseCommand and CurrentDatabaseCommandType
+            // in order to assure that AOO/OOo versions (before AOO 4.0.1) are able to apply the current database settings correct
+            // Thus, put CurrentDatabaseDataSource as the first one into the Sequence
+//            SvXMLUnitConverter::convertPropertySet( rProps, xProps );
+            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xProps->getPropertySetInfo();
+            if (xPropertySetInfo.is())
+            {
+                uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
+                const sal_Int32 nCount(aProps.getLength());
+                if (nCount)
+                {
+                    rProps.realloc(nCount);
+                    beans::PropertyValue* pProps = rProps.getArray();
+
+                    static ::rtl::OUString csCurrentDatabaseSource = ::rtl::OUString::createFromAscii("CurrentDatabaseDataSource");
+                    const sal_Bool bHasCurrentDatabaseSource = xPropertySetInfo->hasPropertyByName( csCurrentDatabaseSource );
+                    if ( bHasCurrentDatabaseSource )
+                    {
+                        beans::Property aProp = xPropertySetInfo->getPropertyByName( csCurrentDatabaseSource );
+                        pProps->Name = aProp.Name;
+                        pProps->Value = xProps->getPropertyValue(aProp.Name);
+                        ++pProps;
+                    }
+
+                    for (sal_Int32 i = 0; i < nCount; i++ )
+                    {
+                        if ( bHasCurrentDatabaseSource
+                             && aProps[i].Name.compareTo( csCurrentDatabaseSource ) == 0 )
+                        {
+                            // nothing to do - already added as first item - see above
+                        }
+                        else
+                        {
+                            pProps->Name = aProps[i].Name;
+                            pProps->Value = xProps->getPropertyValue(aProps[i].Name);
+                            ++pProps;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

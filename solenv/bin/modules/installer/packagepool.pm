@@ -57,8 +57,8 @@ sub set_sessionid
     my $timer = time(); # time
     $installer::globals::sessionid = $pid . $timer;
     $installer::globals::sessionidset = 1;
-    my $infoline = "\nPool: Setting session id: $installer::globals::sessionid.\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->print("Pool: Setting session id: $installer::globals::sessionid.\n");
 }
 
 ####################################################
@@ -104,7 +104,8 @@ sub compare_epm_content
     if ( $oldmember != $newmember )
     {
         $identical = 0;
-        installer::logger::print_message("\n...... changed length of EPM file\n");
+        $installer::logger::Info->print("\n");
+        $installer::logger::Info->print("...... changed length of EPM file\n");
         $diffinfo = "Pool: EPM, different line count: old epm file: $oldmember, new epm file: $newmember\n";
         push(@installer::globals::epmdifflist, $diffinfo);
     }
@@ -119,7 +120,8 @@ sub compare_epm_content
             {
                 $identical = 0;
                 my $line = $i + 1;
-                installer::logger::print_message("\n...... different content in EPM file\n");
+                $installer::logger::Info->print("\n");
+                $installer::logger::Info->print("...... different content in EPM file\n");
                 $diffinfo = "Pool: EPM, line $line changed from \"${$oldcontent}[$i]\" to \"$newlocalcontent[$i]\".\n";
                 push(@installer::globals::epmdifflist, $diffinfo);
                 last;
@@ -150,7 +152,8 @@ sub compare_package_content
     {
         # Logging the difference
         $identical = 0;
-        installer::logger::print_message("\n...... different number of files in packages. New number: $newmember, old number: $oldmember\n");
+        $installer::logger::Info->print("\n");
+        $installer::logger::Info->printf("...... different number of files in packages. New number: %s, old number: %s\n", $newmember, $oldmember);
         $infoline = "Different number of files in packages. New number: $newmember, old number: $oldmember\n";
         push(@installer::globals::pcfdiffcomment, $infoline);
     }
@@ -166,7 +169,7 @@ sub compare_package_content
             if ( ! exists($oldcontent->{$dest}) )
             {
                 $identical = 0;
-                installer::logger::print_message("$start...... file only in one package (A): $dest\n");
+                $installer::logger::Info->printf("%s...... file only in one package (A): %s\n", $start, $dest);
                 $infoline = "File only in existing pool package: $dest\n";
                 push(@installer::globals::pcfdiffcomment, $infoline);
                 if ( $first ) { $start = ""; }
@@ -182,7 +185,7 @@ sub compare_package_content
                 if ( ! exists($newcontent->{$dest}) )
                 {
                     $identical = 0;
-                    installer::logger::print_message("$start...... file only in one package (B): $dest\n");
+                    $installer::logger::Info->printf("%s...... file only in one package (B): %s\n", $start, $dest);
                     $infoline = "File only in new package: $dest\n";
                     push(@installer::globals::pcfdiffcomment, $infoline);
                     if ( $first ) { $start = ""; }
@@ -205,11 +208,11 @@ sub compare_package_content
                 $identical = 0;
                 if ( $first == 1 )
                 {
-                    installer::logger::print_message("\n");
+                    $installer::logger::Info->print("\n");
                     $first = 0;
                 }
                 $installer::globals::pcfdifflist{$dest} = 1;
-                installer::logger::print_message("...... different file: $dest\n");
+                $installer::logger::Info->printf("...... different file: %s\n", $dest);
                 # last;
             }
 
@@ -219,7 +222,8 @@ sub compare_package_content
                 {
                     $identical = 0;
                     $installer::globals::pcfdifflist{$dest} = 1;
-                    installer::logger::print_message("\n...... different file: $dest");
+                    $installer::logger::Info->print("\n");
+                    $installer::logger::Info->printf("...... different file: %s", $dest);
                     # last;
                 }
             }
@@ -237,7 +241,8 @@ sub calculate_current_content
 {
     my ($filesarray, $packagename) = @_;
 
-    installer::logger::include_timestamp_into_logfile("\nCalculating content for package content file ($packagename), start");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Calculating content for package content file ($packagename), start");
 
     my %globalcontent = ();
 
@@ -265,7 +270,8 @@ sub calculate_current_content
         $globalcontent{$destination} = \%onefilehash;
     }
 
-    installer::logger::include_timestamp_into_logfile("\nCalculating content for package content file ($packagename), start");
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->add_timestamp("Calculating content for package content file ($packagename), start");
 
     return \%globalcontent;
 }
@@ -424,8 +430,10 @@ sub check_pool_exit
     {
         my $timestring = installer::logger::convert_timestring($timeage);
         my $infoline = "\nPool: Attention: \"$lockfilename\" is too old ($timestring). Removing file!\n";
-        installer::logger::print_message( "... $infoline" );
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Info->print("\n");
+        $installer::logger::Info->printf("... %s", $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->print($infoline);
         unlink $lockfilename;
         # installer::exiter::exit_program("ERROR: Waiting too long for removal of lock file \"$lockfilename\"", "check_pool_exit (packagepool)");
     }
@@ -434,9 +442,11 @@ sub check_pool_exit
         my $filecontent = installer::files::read_file($lockfilename);
         my $waittime = $timecounter * 10;
         $waittime = installer::logger::convert_timestring($waittime);
-        my $infoline = "\nPool: Warning: \"$lockfilename\" blocks this process for $waittime. Lock content: \"${$filecontent}[0]\"\n";
-        installer::logger::print_message( "... $infoline" );
-        push( @installer::globals::logfileinfo, $infoline);
+        my $infoline = "Pool: Warning: \"$lockfilename\" blocks this process for $waittime. Lock content: \"${$filecontent}[0]\"\n";
+        $installer::logger::Info->print("\n");
+        $installer::logger::Info->printf("... %s", $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->print($infoline);
     }
 }
 
@@ -457,16 +467,24 @@ sub log_pool_info
 
     if ( $file_exists )
     {
-        $infoline = "\nPool Problem: Lock file \"$installer::globals::savelockfilename\" belongs to another process. This process has session id: $installer::globals::sessionid .\n";
-        push( @installer::globals::logfileinfo, $infoline);
-        $infoline = "Content of Lock file:\n";
-        push( @installer::globals::logfileinfo, $infoline);
-        foreach my $line ( @{$installer::globals::savelockfilecontent} ) { push( @installer::globals::logfileinfo, $line); }
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->printf(
+            "Pool Problem: Lock file \"%s\" belongs to another process. This process has session id: %s.\n",
+            $installer::globals::savelockfilename,
+            $installer::globals::sessionid);
+        $installer::logger::Lang->print("Content of Lock file:\n");
+        foreach my $line ( @{$installer::globals::savelockfilecontent} )
+        {
+            $installer::logger::Lang->print($line);
+        }
     }
     else
     {
-        $infoline = "\nPool Problem: Lock file \"$installer::globals::savelockfilename\" does not exist anymore (this process has session id: $installer::globals::sessionid) .\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print("\n");
+        $installer::logger::Lang->printf(
+            "Pool Problem: Lock file \"%s\" does not exist anymore (this process has session id: %s).\n",
+            $installer::globals::savelockfilename,
+            $installer::globals::sessionid);
     }
 }
 
@@ -499,8 +517,8 @@ sub remove_package_from_installset
 {
     my ($newpackagepath) = @_;
 
-    my $infoline = "Pool problem: Removing package \"$newpackagepath\" from installation set!\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Pool problem: Removing package \"%s\" from installation set!\n",
+        $newpackagepath);
 
     if ( -f $newpackagepath ) { unlink $newpackagepath; }
     if ( -d $newpackagepath ) { installer::systemactions::remove_complete_directory($newpackagepath, 1); }
@@ -518,7 +536,7 @@ sub package_is_up_to_date
 {
     my ($allvariables, $onepackage, $packagename, $newepmcontent, $filesinpackage, $installdir, $subdir, $languagestringref) = @_;
 
-    installer::logger::print_message_without_newline( "... checking pool package $packagename ..." );
+    $installer::logger::Info->printf("... checking pool package ...\n", $packagename);
 
     installer::logger::include_header_into_logfile("Checking package in pool: $packagename");
 
@@ -563,10 +581,12 @@ sub package_is_up_to_date
         }
 
         $infoline = "Pool: $checkfilename exists. WAITING 10 seconds ($timecounter).\n";
-        if ( $timecounter == 1 ) { installer::logger::print_message( "\n" ); }
-        installer::logger::print_message( "... $infoline" );
-        push( @installer::globals::logfileinfo, $infoline);
-        # if ( $timecounter % 50 == 0 ) { check_pool_exit($checkfilename, $timecounter); }
+        if ( $timecounter == 1 )
+        {
+            $installer::logger::Info->print("\n");
+        }
+        $installer::logger::Info->printf("... %s", $infoline);
+        $installer::logger::Lang->print($infoline);
         if ( $timecounter % 100 == 0 ) { check_pool_exit($checkfilename, $timecounter); }
         sleep 10; # process sleeps 10 seconds
         $waited_for_check = 1;
@@ -580,7 +600,7 @@ sub package_is_up_to_date
     if ( ! -f $checkfilename )
     {
         $infoline = "Pool problem: Pool lock file \"$checkfilename\" could not be created successfully or was removed by another process (A)!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         log_pool_info(0);
         $package_is_up_to_date = 4; # repeat this package
         return $package_is_up_to_date;
@@ -589,15 +609,18 @@ sub package_is_up_to_date
     if ( ! process_is_owner($checkfilename) )
     {
         $infoline = "Pool problem: Pool lock file \"$checkfilename\" belongs to another process (A)!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         log_pool_info(1);
         $package_is_up_to_date = 4; # repeat this package
         return $package_is_up_to_date;
     }
 
     $infoline = "Pool: Created file: $checkfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
-    if ( $waited_for_check ) { installer::logger::print_message( "... $infoline" ); }
+    $installer::logger::Lang->print($infoline);
+    if ( $waited_for_check )
+    {
+        $installer::logger::Info->printf("... %s", $infoline);
+    }
 
     # Waiting, step 2
     # Checking, if another process creates this package at the moment
@@ -606,17 +629,22 @@ sub package_is_up_to_date
     {
         $timecounter++;
         $infoline = "Pool: $lockfilename exists. WAITING 10 seconds ($timecounter).\n";
-        if ( $timecounter == 1 ) { installer::logger::print_message( "\n" ); }
-        installer::logger::print_message( "... $infoline" );
-        push( @installer::globals::logfileinfo, $infoline);
-        # if ( $timecounter % 50 == 0 ) { check_pool_exit($lockfilename, $timecounter); }
+        if ( $timecounter == 1 )
+        {
+            $installer::logger::Info->print("\n");
+        }
+        $installer::logger::Info->printf("... %s", $infoline);
+        $installer::logger::Lang->print($infoline);
         if ( $timecounter % 100 == 0 ) { check_pool_exit($lockfilename, $timecounter); }
         sleep 10; # process sleeps 10 seconds
         $waited_for_lock = 1;
     }
 
     # No lock file exists, therefore no process creates this package at the moment. Check can be done now.
-    if ( $waited_for_lock ) { installer::logger::print_message( "... Pool: Proceeding, $lockfilename was removed.\n" ); }
+    if ( $waited_for_lock )
+    {
+        $installer::logger::Info->printf("... Pool: Proceeding, %s was removed.\n", $lockfilename);
+    }
 
     my $package_already_exists = 0;
 
@@ -651,26 +679,35 @@ sub package_is_up_to_date
     if ( $package_is_up_to_date )
     {
         $infoline = "Pool: $packagename: No new content, using existing package\n";
-        push( @installer::globals::logfileinfo, $infoline);
-        installer::logger::print_message( "... using package from pool\n" );
+        $installer::logger::Lang->print($infoline);
+        $installer::logger::Info->printf("... using package from pool\n");
     }
     else
     {
         if ( $package_already_exists )
         {
             $infoline = "Pool: $packagename: Contains new content, creating new package. Differences:\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            foreach my $dest ( sort keys %installer::globals::pcfdifflist ) { push( @installer::globals::logfileinfo, "$dest\n"); }
-            foreach my $dest ( @installer::globals::pcfdiffcomment ) { push( @installer::globals::logfileinfo, "$dest"); }
-            foreach my $dest ( @installer::globals::epmdifflist ) { push( @installer::globals::logfileinfo, "$dest"); }
+            $installer::logger::Lang->print($infoline);
+            foreach my $dest ( sort keys %installer::globals::pcfdifflist )
+            {
+                $installer::logger::Lang->printf("%s\n", $dest);
+            }
+            foreach my $dest ( @installer::globals::pcfdiffcomment )
+            {
+                $installer::logger::Lang->printf("%s\n", $dest);
+            }
+            foreach my $dest ( @installer::globals::epmdifflist )
+            {
+                $installer::logger::Lang->printf("%s\n", $dest);
+            }
         }
         else
         {
             $infoline = "Pool: $packagename: Does not exist in pool.\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
         }
 
-        installer::logger::print_message( "... packaging required\n" );
+        $installer::logger::Info->printf("... packaging required\n");
         %installer::globals::xpdpackageinfo = (); # reset the filled hash, because the package cannot be used.
 
         # Creating lock mechanism, so that other processes do not create this package, too.
@@ -682,7 +719,7 @@ sub package_is_up_to_date
         if ( ! -f $lockfilename )
         {
             $infoline = "Pool problem: Pool lock file \"$lockfilename\" could not be created successfully or was removed by another process (D)!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             log_pool_info(0);
             $package_is_up_to_date = 4; # repeat this package
             return $package_is_up_to_date;
@@ -691,14 +728,14 @@ sub package_is_up_to_date
         if ( ! process_is_owner($lockfilename) )
         {
             $infoline = "Pool problem: Pool lock file \"$lockfilename\" belongs to another process (D)!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             log_pool_info(1);
             $package_is_up_to_date = 4; # repeat this package
             return $package_is_up_to_date;
         }
 
         $infoline = "Pool: Created file: $lockfilename\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
     my $newpackagepath = "";
@@ -711,7 +748,7 @@ sub package_is_up_to_date
         if ( ! -f $checkfilename )
         {
             $infoline = "Pool problem: Pool lock file \"$checkfilename\" was removed by another process (B)!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             log_pool_info(0);
             $package_is_up_to_date = 4; # repeat this package
             return $package_is_up_to_date;
@@ -720,7 +757,7 @@ sub package_is_up_to_date
         if ( ! process_is_owner($checkfilename) )
         {
             $infoline = "Pool problem: Pool lock file \"$checkfilename\" belongs to another process (B)!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             log_pool_info(1);
             $package_is_up_to_date = 4; # repeat this package
             return $package_is_up_to_date;
@@ -735,7 +772,7 @@ sub package_is_up_to_date
     if ( ! -f $checkfilename )
     {
         $infoline = "Pool problem: Pool lock file \"$checkfilename\" was removed by another process (C)!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         log_pool_info(0);
 
         # removing new package from installation set
@@ -748,7 +785,7 @@ sub package_is_up_to_date
     if ( ! process_is_owner($checkfilename) )
     {
         $infoline = "Pool problem: Pool lock file \"$checkfilename\" belongs to another process (C)!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         log_pool_info(1);
 
         # removing new package from installation set
@@ -763,7 +800,7 @@ sub package_is_up_to_date
     unlink $checkfilename;
     $installer::globals::processhaspoolcheckfile = 0;
     $infoline = "Pool: Removing file: $checkfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # Last chance before packaging starts, to check, if this process is really still owner
     # of the packaging lock file. If not, this packaging process can be repeated.
@@ -772,7 +809,7 @@ sub package_is_up_to_date
         if ( ! -f $lockfilename )
         {
             $infoline = "Pool problem: Pool lock file \"$lockfilename\" was removed by another process (E)!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             log_pool_info(0);
             $package_is_up_to_date = 4; # repeat this package
             return $package_is_up_to_date;
@@ -781,7 +818,7 @@ sub package_is_up_to_date
         if ( ! process_is_owner($lockfilename) )
         {
             $infoline = "Pool problem: Pool lock file \"$lockfilename\" belongs to another process (E)!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($infoline);
             log_pool_info(1);
             $package_is_up_to_date = 4; # repeat this package
             return $package_is_up_to_date;
@@ -884,7 +921,7 @@ sub put_content_into_pool
 
     # Put package into pool
     $infoline = "Pool: Adding package \"$packagename\" into pool.\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # Copying with unique name, containing PID. Only renaming if everything was fine.
     my $realdestination = "";
@@ -929,7 +966,7 @@ sub put_content_into_pool
     rename($uniquedestination, $realdestination);
 
     $infoline = "Pool: Renamed file: \"$uniquedestination\" to \"$realdestination\".\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     # Before the lock file in the pool can be removed, it has to be checked, if this process is still the owner of this lock file.
     # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occured.
@@ -949,7 +986,7 @@ sub put_content_into_pool
     unlink $installer::globals::poollockfilename;
     $installer::globals::processhaspoollockfile = 0;
     $infoline = "Pool: Removing file: $installer::globals::poollockfilename\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 }
 
 ###################################################################
@@ -961,7 +998,7 @@ sub copy_package_from_pool
     my ($installdir, $subdir, $packagename) = @_;
 
     my $infoline = "Pool: Using package \"$packagename\" from pool.\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
     my $sourcefile = $installer::globals::poolpath . $installer::globals::separator . $packagename;
     if ( $installer::globals::issolarisbuild ) { $sourcefile = $sourcefile . ".tar"; }
     if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Missing package in package pool: \"$sourcefile\"", "copy_package_from_pool"); }
@@ -1016,27 +1053,26 @@ sub log_pool_statistics
     my $created_packages = get_count(\%installer::globals::createpackages);
 
     $infoline = "Number of packages from pool: $pool_packages\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print($infoline);
 
     foreach my $packagename ( sort keys(%installer::globals::poolpackages) )
     {
         $infoline = "\t$packagename\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
     }
 
-    $infoline = "\nNumber of packages that were created: $created_packages\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->print("\n");
+    $installer::logger::Lang->print("Number of packages that were created: %s\n", $created_packages);
 
     foreach my $packagename ( sort keys(%installer::globals::createpackages) )
     {
         $infoline = "\t$packagename\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $installer::logger::Lang->print($infoline);
         my $reason = $installer::globals::createpackages{$packagename};
 
-        for ( my $i = 0; $i <= $#{$reason}; $i++ )
+        foreach my $line (@reason)
         {
-            $infoline = "${$reason}[$i]";
-            push( @installer::globals::logfileinfo, $infoline);
+            $installer::logger::Lang->print($line);
         }
     }
 }

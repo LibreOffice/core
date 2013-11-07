@@ -76,7 +76,7 @@ if (SOLAR_JAVA==TRUE && SYSTEM_LUCENE!=YES)
     URL1 = http://archive.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if (WITH_MOZILLA != NO)
+if (ENABLE_NSS_MODULE!=NO && SYSTEM_NSS!=YES)
     MD5 = 1f24ab1d39f4a51faf22244c94a6203f
     name = xmlsec1-1.2.14.tar.gz
     URL1 = ftp://ftp.aleksey.com/pub/xmlsec/releases/xmlsec1-1.2.14.tar.gz
@@ -302,13 +302,6 @@ if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && ENABLE_JAVASCRIPT==YES)
     MD5 = 99d94103662a8d0b571e247a77432ac5
     name = rhino1_7R3.zip
     URL1 = ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R3.zip
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-
-if (ENABLE_CATEGORY_B==YES && WITH_MOZILLA!=NO && BUILD_MOZAB==TRUE)
-    MD5 = a169ab152209200a7bad29a275cb0333
-    name = seamonkey-1.1.14.source.tar.gz
-    # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/1.1.4/seamonkey-1.1.4.source.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && ENABLE_NSS_MODULE==YES)

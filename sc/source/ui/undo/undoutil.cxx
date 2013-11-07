@@ -82,33 +82,44 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
 
 
 ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
-                                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+                                   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     ScDBData* pRet = pDoc->GetDBAtArea( nTab, nCol1, nRow1, nCol2, nRow2 );
 
     if (!pRet)
     {
-        sal_Bool bWasTemp = sal_False;
+        bool bWasInternalUnnamed = false;
+        bool bWasInternalForAutoFilter = false;
         if ( pUndoData )
         {
             String aName;
             pUndoData->GetName( aName );
-//          if ( aName == ScGlobal::GetRscString( STR_DB_NONAME ) )
-            if (pUndoData->IsBuildin())
-                bWasTemp = sal_True;
+            if ( pUndoData->IsInternalUnnamed() )
+            {
+                bWasInternalUnnamed = true;
+            }
+            else if (pUndoData->IsInternalForAutoFilter())
+            {
+                bWasInternalForAutoFilter = true;
+            }
         }
-        DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
+        DBG_ASSERT( bWasInternalUnnamed || bWasInternalForAutoFilter, "Undo: didn't find database range");
 
         sal_uInt16 nIndex;
         ScDBCollection* pColl = pDoc->GetDBCollection();
-        if (pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nIndex ))
+        if ( bWasInternalUnnamed
+             && pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nIndex ))
+        {
             pRet = (*pColl)[nIndex];
+        }
         else
         {
-            String  aNoNamed = pColl->GetNewDefaultDBName();
-            pRet = new ScDBData( aNoNamed/*ScGlobal::GetRscString( STR_DB_NONAME )*/, nTab,
-                                nCol1,nRow1, nCol2,nRow2, sal_True,
-                                pDoc->HasColHeader( nCol1,nRow1,nCol2,nRow2,nTab ) );
+            String aNewNamed = bWasInternalForAutoFilter
+                               ? pColl->GetNewDefaultDBName()
+                               : ScGlobal::GetRscString( STR_DB_NONAME );
+            pRet = new ScDBData(
+                aNewNamed, nTab, nCol1,nRow1, nCol2,nRow2, sal_True,
+                pDoc->HasColHeader( nCol1,nRow1,nCol2,nRow2,nTab ) );
             pColl->Insert( pRet );
         }
     }

@@ -563,7 +563,7 @@ sub create_directory_table
     # Before ":" : [sourcedir]:[destdir] (not programmed yet)
     # After ":" : 8+3 and not 8+3 the destination directory name
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: Directory Table start");
+    $installer::logger::Lang->add_timestamp("Performance Info: Directory Table start");
 
     my @directorytable = ();
     my $infoline;
@@ -584,11 +584,9 @@ sub create_directory_table
 
     my $directorytablename = $basedir . $installer::globals::separator . "Director.idt";
     installer::files::save_file($directorytablename ,\@directorytable);
-    $infoline = "Created idt file: $directorytablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    $installer::logger::Lang->printf("Created idt file: %s\n", $directorytablename);
 
-    installer::logger::include_timestamp_into_logfile("Performance Info: Directory Table end");
-
+    $installer::logger::Lang->add_timestamp("Performance Info: Directory Table end");
 }
 
 1;

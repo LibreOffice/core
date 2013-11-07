@@ -137,7 +137,7 @@ namespace svgio
             const SvgNodeVector& getChildren() const { return maChildren; }
 
             /// InfoProvider support for %, em and ex values
-            virtual const basegfx::B2DRange* getCurrentViewPort() const;
+            virtual const basegfx::B2DRange getCurrentViewPort() const;
             virtual double getCurrentFontSize() const;
             virtual double getCurrentXHeight() const;
 

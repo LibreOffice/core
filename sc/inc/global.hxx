@@ -404,13 +404,10 @@ enum ScAnchorType                   // Verankerung eines Zeichenobjekts
 
 enum ScGetDBMode
 {
-    SC_DB_MAKE,     // wenn noetig, "unbenannt" anlegen
-    SC_DB_IMPORT,   // wenn noetig, "Importx" anlegen
-    SC_DB_OLD,      // nicht neu anlegen
-    SC_DB_MAKE_FILTER,   // to create a new filter/sort/subtotal
-    SC_DB_MAKE_SORT,
-    SC_DB_MAKE_SUBTOTAL,
-    SC_DB_OLD_FILTER   //to find a existed filter
+    SC_DB_MAKE,             // if needed create database range with name $STR_DB_NONAME
+    SC_DB_IMPORT,           // if needed create database range with name $STR_DBNAME_IMPORT[X]
+    SC_DB_OLD,              // do not create new database range, provide only existing one
+    SC_DB_MAKE_AUTOFILTER   // if needed create database range with name $SC_DBNAME_UNNAMED[X]
 };
 
 /// For ScDBFunc::GetDBData()

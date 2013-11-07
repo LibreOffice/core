@@ -87,6 +87,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
+#include <bookmrk.hxx>
 #include <docary.hxx>
 #include <section.hxx>
 #include <ndtxt.hxx>
@@ -3771,12 +3772,6 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     rStrm.Write( pMem, nLen );
     delete[] pMem;
 
-    //if( bDelBookmrk )
-    //{
-    //  // er wird das erstemal abgeholt, also ins Undo mitaufnehmen
-    //  // aber wie??
-    //}
-
     IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
     if(ppMark != pMarkAccess->getMarksEnd()
@@ -3822,7 +3817,7 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
     //      kein DataChanged mehr entgegen nehmen, wenn man
     //      sich schon im Disconnet befindet!
     //      (DTOR vom Bookmark verschickt einen DataChanged!)
-    sal_Bool bOldDisconnect = bInDisconnect;
+    const sal_Bool bOldDisconnect = bInDisconnect;
     bInDisconnect = sal_True;
 
     // den nicht verwendeten Bookmark wieder zerstoeren (ohne Undo!)?
@@ -3838,13 +3833,20 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
         sal_Bool bIsModified = pDoc->IsModified();
 
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        pMarkAccess->deleteMark(pMarkAccess->findMark(sName));
+        // check, if DdeBookmark is already in its desctruction
+        IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
+        if ( ppMark != pMarkAccess->getMarksEnd() )
+        {
+            ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(ppMark->get());
+            if ( pDdeBookmark && !pDdeBookmark->IsInDestruction() )
+            {
+                pMarkAccess->deleteMark(ppMark);
+            }
+        }
 
         if( !bIsModified )
             pDoc->ResetModified();
-        // --> OD, CD, OS 2005-11-25 #i58448#
         pDoc->SetOle2Link( aSavedOle2Link );
-        // <--
 
         bDelBookmrk = sal_False;
     }

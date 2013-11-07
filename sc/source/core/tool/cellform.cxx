@@ -28,6 +28,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include "cellform.hxx"
 #include "cell.hxx"
@@ -129,7 +130,9 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
                             rString.Erase();
                         else if ( pFCell->IsValue() )
                         {
-                            if(pFCell->GetFormatType() == NUMBERFORMAT_LOGICAL)
+                            const SvNumberformat* pNumFmt = rFormatter.GetEntry( nFormat );
+                            const bool bHasTextFormatCode = pNumFmt != NULL && pNumFmt->HasTextFormatCode();
+                            if( pFCell->GetFormatType() == NUMBERFORMAT_LOGICAL && bHasTextFormatCode )
                             {
                                 String aCellString;
                                 double fValue = pFCell->GetValue();

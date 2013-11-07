@@ -2220,12 +2220,17 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
             }
             case SMART_TAGS : // SMARTTAGS
             {
-                const SwRect aRepaint( ((SwTxtFrm*)pCnt)->SmartTagScan( pCntntNode, nTxtPos ) );
-                bPageValid = bPageValid && !pTxtNode->IsSmartTagDirty();
-                if( !bPageValid )
-                    bAllValid = sal_False;
-                if ( aRepaint.HasArea() )
-                    pImp->GetShell()->InvalidateWindows( aRepaint );
+                try {
+                    const SwRect aRepaint( ((SwTxtFrm*)pCnt)->SmartTagScan( pCntntNode, nTxtPos ) );
+                    bPageValid = bPageValid && !pTxtNode->IsSmartTagDirty();
+                    if( !bPageValid )
+                        bAllValid = sal_False;
+                    if ( aRepaint.HasArea() )
+                        pImp->GetShell()->InvalidateWindows( aRepaint );
+                } catch( const ::com::sun::star::uno::RuntimeException& e) {
+                    // #i122885# handle smarttag problems gracefully and provide diagnostics
+                    DBG_WARNING( rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
                 if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD|INPUT_OTHER|INPUT_PAINT ) )
                     return sal_True;
                 break;

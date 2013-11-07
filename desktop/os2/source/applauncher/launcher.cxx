@@ -42,12 +42,7 @@ int main( int argc, char* argv[])
     erridErrorCode = WinGetLastError(hab);
 
     // Calculate application name
-    CHAR    szLibpath[_MAX_PATH*2];
     CHAR    szApplicationName[_MAX_PATH];
-    CHAR    szDrive[_MAX_PATH];
-    CHAR    szDir[_MAX_PATH];
-    CHAR    szFileName[_MAX_PATH];
-    CHAR    szExt[_MAX_PATH];
 
     // get executable fullpath
     DosGetInfoBlocks(NULL, &pib);
@@ -55,15 +50,13 @@ int main( int argc, char* argv[])
 
     // adjust libpath
 #if OSL_DEBUG_LEVEL > 0
+    CHAR    szLibpath[_MAX_PATH*2];
     rc = DosQueryExtLIBPATH( (PSZ)szLibpath, BEGIN_LIBPATH);
     fprintf( stderr, "1 BeginLibPath: %s\n", szLibpath);
 #endif
-    _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
-    char* basedir = strstr( szDir, "\\PROGRAM\\");
+    char* basedir = strrchr( szApplicationName, '\\');
     if (basedir) *basedir = 0;
-     sprintf( szLibpath, "\"%s%s\\URE\\BIN\";\"%s%s\\BASIS\\PROGRAM\";%%BeginLIBPATH%%;",
-          szDrive, szDir, szDrive, szDir);
-    DosSetExtLIBPATH( (PCSZ)szLibpath, BEGIN_LIBPATH);
+    DosSetExtLIBPATH( (PCSZ)szApplicationName, BEGIN_LIBPATH);
 
     // make sure we load DLL from our path only, so multiple instances/versions
     // can be loaded.
@@ -75,8 +68,7 @@ int main( int argc, char* argv[])
 #endif
 
     // adjust exe name
-    _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
-    _makepath( szApplicationName, szDrive, szDir, OFFICE_IMAGE_NAME, (".bin") );
+    strcat( szApplicationName, "\\" OFFICE_IMAGE_NAME ".bin");
 
     // copy command line parameters
     int i, len;

@@ -132,7 +132,7 @@ namespace sdr
 
                 if(nWhich)
                 {
-                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich, 0, 0);
+                    const SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich, 0, 0);
                     ItemSetChanged(aSet);
                 }
             }

@@ -97,14 +97,14 @@ static char* platformSpecific()
     if ( path == NULL )
     {
         /* read the key's default value from HKEY_LOCAL_USER 64 */
-        path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME64 );
+        path = getPathFromRegistryKey( HKEY_CURRENT_USER, SUBKEYNAME64 );
     }
-    else if ( path == NULL )
+    if ( path == NULL )
     {
         /* read the key's default value from HKEY_LOCAL_MACHINE */
         path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME );
     }
-    else if ( path == NULL )
+    if ( path == NULL )
     {
         /* read the key's default value from HKEY_LOCAL_MACHINE 64*/
         path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME64 );
@@ -117,7 +117,7 @@ static char* platformSpecific()
 
 #include <unistd.h>
 #include <limits.h>
-
+#include <stdio.h>
 /*
  * Gets the installation path from the PATH environment variable.
  *
@@ -129,12 +129,27 @@ static char* platformSpecific()
  */
 static char* platformSpecific()
 {
+    char* path = NULL;
+
+#ifdef MACOSX
+    /* On MacOS we have no soffice link under /usr/bin but the default office location is known
+       and we check this only
+     */
+    const char* MACDEFAULTOFFICEPATH = "/Applications/OpenOffice.app/Contents/MacOS";
+    const char* MACDEFAULTSOFFICE = "/Applications/OpenOffice.app/Contents/MacOS/soffice";
+
+    if ( !access( MACDEFAULTSOFFICE, F_OK ) )
+    {
+        path = (char*) malloc( strlen(MACDEFAULTOFFICEPATH) + 1 );
+        strcpy( path, MACDEFAULTOFFICEPATH);
+    }
+    return path;
+#else
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
     const char* APPENDIX = "/soffice";
 
-    char* path = NULL;
     char* env = NULL;
     char* str = NULL;
     char* dir = NULL;
@@ -145,7 +160,7 @@ static char* platformSpecific()
     char buffer[PATH_MAX];
     int pos;
 
-    /* get the value of the PATH environment variable */
+/* get the value of the PATH environment variable */
     env = getenv( PATHVARNAME );
     str = (char*) malloc( strlen( env ) + 1 );
     strcpy( str, env );
@@ -190,6 +205,7 @@ static char* platformSpecific()
     free( str );
 
     return path;
+#endif
 }
 
 #endif

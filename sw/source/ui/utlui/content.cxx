@@ -417,7 +417,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            String sEntry = aFmtFld->GetFld()->GetPar2();
+                            String sEntry = aFmtFld->GetField()->GetPar2();
                             RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
@@ -428,25 +428,6 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                             nMemberCount++;
                         }
                     }
-                    /*
-                    //  this code can be used once we want redline comments in the margin
-                    else    // redcomment
-                    {
-                        SwRedline* pRedline = static_cast<SwRedline*>((*i)->GetBroadCaster());
-                        if ( pRedline->GetComment() != String(::rtl::OUString::createFromAscii("")) )
-                        {
-                            String sEntry = pRedline->GetComment();
-                            RemoveNewline(sEntry);
-                            SwPostItContent* pCnt = new SwPostItContent(
-                                                this,
-                                                sEntry, // hier steht der Text
-                                                pRedline,
-                                                nMemberCount);
-                            pMember->Insert(pCnt);
-                            nMemberCount++;
-                        }
-                    }
-                    */
                 }
             }
             //
@@ -784,7 +765,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            String sEntry = aFmtFld->GetFld()->GetPar2();
+                            String sEntry = aFmtFld->GetField()->GetPar2();
                             RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,

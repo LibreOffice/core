@@ -87,6 +87,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -1342,7 +1343,7 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 const SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
                 basegfx::B2DVector aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
 
-                // TTTT: Is this correct? It overrides ViewBox stuff; OTOH it makes no
+                // Is this correct? It overrides ViewBox stuff; OTOH it makes no
                 // sense to have the geometry content size different from object size
                 if(!basegfx::fTools::equalZero(maObjectSize.getX()) && !basegfx::fTools::equalZero(maObjectSize.getY()))
                 {
@@ -1441,7 +1442,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         const SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
         basegfx::B2DVector aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
 
-        // TTTT: Is this correct? It overrides ViewBox stuff; OTOH it makes no
+        // Is this correct? It overrides ViewBox stuff; OTOH it makes no
         // sense to have the geometry content size different from object size
         if(!basegfx::fTools::equalZero(maObjectSize.getX()) && !basegfx::fTools::equalZero(maObjectSize.getY()))
         {
@@ -1450,7 +1451,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::tools::importFromSvgD(aPolyPolygon, maD))
+        if(basegfx::tools::importFromSvgD(aPolyPolygon, maD, true, 0))
         {
             if(aPolyPolygon.count())
             {
@@ -1902,7 +1903,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
         {
             basegfx::B2DPolyPolygon aPolyPolygon;
 
-            if(basegfx::tools::importFromSvgD(aPolyPolygon, rValue))
+            if(basegfx::tools::importFromSvgD(aPolyPolygon, rValue, true, 0))
             {
                 if(aPolyPolygon.count())
                 {

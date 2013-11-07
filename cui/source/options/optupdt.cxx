@@ -371,13 +371,14 @@ IMPL_LINK( SvxOnlineUpdateTabPage, CheckNowHdl_Impl, PushButton *, EMPTYARG )
         uno::Reference< frame::XDispatchProvider > xDispatchProvider(
             xDesktop->getCurrentFrame(), uno::UNO_QUERY );
 
-        uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, rtl::OUString(), 0);
+        uno::Reference< frame::XDispatch > xDispatch;
+        if( xDispatchProvider.is() )
+            xDispatch = xDispatchProvider->queryDispatch(aURL, rtl::OUString(), 0);
 
         if( xDispatch.is() )
-        {
             xDispatch->dispatch(aURL, uno::Sequence< beans::PropertyValue > ());
-            UpdateLastCheckedText();
-        }
+
+        UpdateLastCheckedText();
     }
     catch( const uno::Exception& e )
     {

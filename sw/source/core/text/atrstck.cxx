@@ -121,18 +121,18 @@ const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
     35, // RES_CHRATR_OVERLINE,                  // 38
      0, // RES_CHRATR_DUMMY1,                    // 39
      0, // RES_CHRATR_DUMMY2,                    // 40
-     0, // RES_CHRATR_BIDIRTL
-     0, // RES_CHRATR_IDCTHINT
-    36, // RES_TXTATR_REFMARK,                   // 41
-    37, // RES_TXTATR_TOXMARK,                   // 42
-    38, // RES_TXTATR_META,                      // 43
-    38, // RES_TXTATR_METAFIELD,                 // 44
-     0, // RES_TXTATR_AUTOFMT,                   // 45
-     0, // RES_TXTATR_INETFMT                    // 46
-     0, // RES_TXTATR_CHARFMT,                   // 47
-    39, // RES_TXTATR_CJK_RUBY,                  // 48
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 49
-     0, // RES_TXTATR_DUMMY5                     // 50
+     0, // RES_CHRATR_BIDIRTL                    // 41
+     0, // RES_CHRATR_IDCTHINT                   // 42
+    36, // RES_TXTATR_REFMARK,                   // 43
+    37, // RES_TXTATR_TOXMARK,                   // 44
+    38, // RES_TXTATR_META,                      // 45
+    38, // RES_TXTATR_METAFIELD,                 // 46
+     0, // RES_TXTATR_AUTOFMT,                   // 47
+     0, // RES_TXTATR_INETFMT                    // 48
+     0, // RES_TXTATR_CHARFMT,                   // 49
+    39, // RES_TXTATR_CJK_RUBY,                  // 50
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 51
+     0, // RES_TXTATR_DUMMY5                     // 52
 };
 
 /*************************************************************************

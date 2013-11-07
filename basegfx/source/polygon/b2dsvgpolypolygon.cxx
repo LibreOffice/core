@@ -38,12 +38,25 @@ namespace basegfx
 {
     namespace tools
     {
-        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const ::rtl::OUString&  rSvgDStatement)
+        bool PointIndex::operator<(const PointIndex& rComp) const
+        {
+            if(rComp.getPolygonIndex() == getPolygonIndex())
+            {
+                return rComp.getPointIndex() < getPointIndex();
+            }
+
+            return rComp.getPolygonIndex() < getPolygonIndex();
+        }
+
+        bool importFromSvgD(
+            B2DPolyPolygon& o_rPolyPolygon,
+            const ::rtl::OUString& rSvgDStatement,
+            bool bHandleRelativeNextPointCompatible,
+            PointIndexSet* pHelpPointIndexSet)
         {
             o_rPolyPolygon.clear();
             const sal_Int32 nLen(rSvgDStatement.getLength());
             sal_Int32 nPos(0);
-            bool bIsClosed(false);
             double nLastX( 0.0 );
             double nLastY( 0.0 );
             B2DPolygon aCurrPoly;
@@ -54,27 +67,56 @@ namespace basegfx
             while(nPos < nLen)
             {
                 bool bRelative(false);
-                bool bMoveTo(false);
                 const sal_Unicode aCurrChar(rSvgDStatement[nPos]);
+
+                if(o_rPolyPolygon.count() && !aCurrPoly.count() && !('m' == aCurrChar || 'M' == aCurrChar))
+                {
+                    // we have a new sub-polygon starting, but without a 'moveto' command.
+                    // this requires to add the current point as start point to the polygon
+                    // (see SVG1.1 8.3.3 The "closepath" command)
+                    aCurrPoly.append(B2DPoint(nLastX, nLastY));
+                }
 
                 switch(aCurrChar)
                 {
                     case 'z' :
                     case 'Z' :
                     {
+                        // consume CurrChar and whitespace
                         nPos++;
                         ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        // remember closed state of current polygon
-                        bIsClosed = true;
+                        // create closed polygon and reset import values
+                        if(aCurrPoly.count())
+                        {
+                            if(!bHandleRelativeNextPointCompatible)
+                            {
+                                // SVG defines that "the next subpath starts at the
+                                // same initial point as the current subpath", so set the
+                                // current point if we do not need to be compatible
+                                nLastX = aCurrPoly.getB2DPoint(0).getX();
+                                nLastY = aCurrPoly.getB2DPoint(0).getY();
+                            }
+
+                            aCurrPoly.setClosed(true);
+                            o_rPolyPolygon.append(aCurrPoly);
+                            aCurrPoly.clear();
+                        }
+
                         break;
                     }
 
                     case 'm' :
                     case 'M' :
                     {
-                        bMoveTo = true;
-                        // FALLTHROUGH intended
+                        // create non-closed polygon and reset import values
+                        if(aCurrPoly.count())
+                        {
+                            o_rPolyPolygon.append(aCurrPoly);
+                            aCurrPoly.clear();
+                        }
+
+                        // FALLTHROUGH intended to add coordinate data as 1st point of new polygon
                     }
                     case 'l' :
                     case 'L' :
@@ -84,28 +126,7 @@ namespace basegfx
                             bRelative = true;
                         }
 
-                        if(bMoveTo)
-                        {
-                            // new polygon start, finish old one
-                            if(aCurrPoly.count())
-                            {
-                                // add current polygon
-                                if(bIsClosed)
-                                {
-                                    // #123465# no need to do the old closeWithGeometryChange
-                                    // corerection on SVG polygons; this even may lead to wrong
-                                    // results e.g. for marker processing
-                                    aCurrPoly.setClosed(true);
-                                }
-
-                                o_rPolyPolygon.append(aCurrPoly);
-
-                                // reset import values
-                                bIsClosed = false;
-                                aCurrPoly.clear();
-                            }
-                        }
-
+                        // consume CurrChar and whitespace
                         nPos++;
                         ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
@@ -590,7 +611,22 @@ namespace basegfx
                                 // if we swapped angles above
                                 if( bFlipSegment )
                                     aSegment.flip();
+
+                                // remember PointIndex of evtl. added pure helper points
+                                sal_uInt32 nPointIndex(aCurrPoly.count() + 1);
                                 aCurrPoly.append(aSegment);
+
+                                // if asked for, mark pure helper points by adding them to the index list of
+                                // helper points
+                                if(pHelpPointIndexSet && aCurrPoly.count() > 1)
+                                {
+                                    const sal_uInt32 nPolyIndex(o_rPolyPolygon.count());
+
+                                    for(;nPointIndex + 1 < aCurrPoly.count(); nPointIndex++)
+                                    {
+                                        pHelpPointIndexSet->insert(PointIndex(nPolyIndex, nPointIndex));
+                                    }
+                                }
                             }
 
                             // set last position
@@ -610,17 +646,9 @@ namespace basegfx
                 }
             }
 
+            // if there is polygon data, create non-closed polygon
             if(aCurrPoly.count())
             {
-                // end-process last poly
-                if(bIsClosed)
-                {
-                    // #123465# no need to do the old closeWithGeometryChange
-                    // corerection on SVG polygons; this even may lead to wrong
-                    // results e.g. for marker processing
-                    aCurrPoly.setClosed(true);
-                }
-
                 o_rPolyPolygon.append(aCurrPoly);
             }
 
@@ -679,7 +707,8 @@ namespace basegfx
         ::rtl::OUString exportToSvgD(
             const B2DPolyPolygon& rPolyPolygon,
             bool bUseRelativeCoordinates,
-            bool bDetectQuadraticBeziers)
+            bool bDetectQuadraticBeziers,
+            bool bHandleRelativeNextPointCompatible)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
             ::rtl::OUStringBuffer aResult;
@@ -699,10 +728,21 @@ namespace basegfx
 
                     // handle polygon start point
                     B2DPoint aEdgeStart(aPolygon.getB2DPoint(0));
-                    aResult.append(::basegfx::internal::lcl_getCommand('M', 'm', bUseRelativeCoordinates));
-                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                    aLastSVGCommand =  ::basegfx::internal::lcl_getCommand('L', 'l', bUseRelativeCoordinates);
+                    bool bUseRelativeCoordinatesForFirstPoint(bUseRelativeCoordinates);
+
+                    if(bHandleRelativeNextPointCompatible)
+                    {
+                        // To get around the error that the start point for the next polygon is the
+                        // start point of the current one (and not the last as it was handled up to now)
+                        // do force to write an absolute 'M' command as start for the next polygon
+                        bUseRelativeCoordinatesForFirstPoint = false;
+                    }
+
+                    // Write 'moveto' and the 1st coordinates, set aLastSVGCommand to 'lineto'
+                    aResult.append(::basegfx::internal::lcl_getCommand('M', 'm', bUseRelativeCoordinatesForFirstPoint));
+                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint);
+                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint);
+                    aLastSVGCommand =  ::basegfx::internal::lcl_getCommand('L', 'l', bUseRelativeCoordinatesForFirstPoint);
                     aCurrentSVGPosition = aEdgeStart;
 
                     for(sal_uInt32 nIndex(0); nIndex < nEdgeCount; nIndex++)
@@ -899,6 +939,13 @@ namespace basegfx
                     if(aPolygon.isClosed())
                     {
                         aResult.append(::basegfx::internal::lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
+                    }
+
+                    if(!bHandleRelativeNextPointCompatible)
+                    {
+                        // SVG defines that "the next subpath starts at the same initial point as the current subpath",
+                        // so set aCurrentSVGPosition to the 1st point of the current, now ended and written path
+                        aCurrentSVGPosition = aPolygon.getB2DPoint(0);
                     }
                 }
             }

@@ -529,6 +529,19 @@ namespace basegfx
         */
         B2DPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolygon& rCandidate);
 
+        /** returns true if the Polygon only contains horizontal or vertical edges
+            so that it could be represented by RegionBands
+        */
+        bool containsOnlyHorizontalAndVerticalEdges(const B2DPolygon& rCandidate);
+
+        /// get the tangent with which the given point is entered seen from the previous
+        /// polygon path data. Take into account all stuff like closed state, zero-length edges and others.
+        B2DVector getTangentEnteringPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
+        /// get the tangent with which the given point is left seen from the following
+        /// polygon path data. Take into account all stuff like closed state, zero-length edges and others.
+        B2DVector getTangentLeavingPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
         /// converters for com::sun::star::drawing::PointSequence
         B2DPolygon UnoPointSequenceToB2DPolygon(
             const com::sun::star::drawing::PointSequence& rPointSequenceSource,
