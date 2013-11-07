@@ -4111,8 +4111,10 @@ StackVar ScInterpreter::Interpret()
                 case ocLogNormDist      : ScLogNormDist();              break;
                 case ocTDist            : ScTDist();                    break;
                 case ocFDist            : ScFDist();                    break;
-                case ocChiDist          : ScChiDist();                  break;
-                case ocChiSqDist        : ScChiSqDist();                break;
+                case ocChiDist          :
+                case ocChiDist_MS       : ScChiDist();                  break;
+                case ocChiSqDist        :
+                case ocChiSqDist_MS     : ScChiSqDist();                break;
                 case ocStandard         : ScStandard();                 break;
                 case ocAveDev           : ScAveDev();                   break;
                 case ocDevSq            : ScDevSq();                    break;
@@ -4162,9 +4164,12 @@ StackVar ScInterpreter::Interpret()
                 case ocGamma            : ScGamma();                    break;
                 case ocGammaDist        : ScGammaDist();                break;
                 case ocGammaInv         : ScGammaInv();                 break;
-                case ocChiTest          : ScChiTest();                  break;
-                case ocChiInv           : ScChiInv();                   break;
-                case ocChiSqInv         : ScChiSqInv();                 break;
+                case ocChiTest          :
+                case ocChiTest_MS       : ScChiTest();                  break;
+                case ocChiInv           :
+                case ocChiInv_MS        : ScChiInv();                   break;
+                case ocChiSqInv         :
+                case ocChiSqInv_MS      : ScChiSqInv();                 break;
                 case ocTInv             : ScTInv();                     break;
                 case ocFInv             : ScFInv();                     break;
                 case ocLogInv           : ScLogNormInv();               break;

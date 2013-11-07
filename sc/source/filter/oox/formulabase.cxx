@@ -756,7 +756,12 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.BETA.DIST",              "BETA.DIST"  ,         NOID,    NOID,   4,  6,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.BETA.INV",               "BETA.INV",            NOID,    NOID,   3,  5,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.BINOM.DIST",             "BINOM.DIST",          NOID,    NOID,   4,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.BINOM.INV",              "BINOM.INV",           NOID,    NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.BINOM.INV",              "BINOM.INV",           NOID,    NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CHISQ.DIST",             "CHISQ.DIST",          NOID,    NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CHISQ.INV",              "CHISQ.INV",           NOID,    NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CHISQ.DIST.RT",          "CHISQ.DIST.RT",       NOID,    NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CHISQ.INV.RT",           "CHISQ.INV.RT",        NOID,    NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CHISQ.TEST",             "CHISQ.TEST",          NOID,    NOID,   2,  2,  V, { VA }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions new in Excel 2013.

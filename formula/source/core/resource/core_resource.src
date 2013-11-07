@@ -285,6 +285,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_T_DIST { Text = "LEGACY.TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "LEGACY.FDIST" ; };
     String SC_OPCODE_CHI_DIST { Text = "LEGACY.CHIDIST" ; };
+    String SC_OPCODE_CHI_DIST_MS { Text = "COM.MICROSOFT.CHISQ.DIST.RT" ; };
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
@@ -328,11 +329,13 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_RKP { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
     String SC_OPCODE_CHI_INV { Text = "LEGACY.CHIINV" ; };
+    String SC_OPCODE_CHI_INV_MS { Text = "COM.MICROSOFT.CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
     String SC_OPCODE_F_INV { Text = "LEGACY.FINV" ; };
     String SC_OPCODE_CHI_TEST { Text = "LEGACY.CHITEST" ; };
+    String SC_OPCODE_CHI_TEST_MS { Text = "COM.MICROSOFT.CHISQ.TEST" ; };
     String SC_OPCODE_LOG_INV { Text = "LOGINV" ; };
     String SC_OPCODE_TABLE_OP { Text = "MULTIPLE.OPERATIONS" ; };
     String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
@@ -358,7 +361,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_NUMBERVALUE { Text = "NUMBERVALUE" ; };
     String SC_OPCODE_GAMMA { Text = "GAMMA" ; };
     String SC_OPCODE_CHISQ_DIST { Text = "CHISQDIST" ; };
+    String SC_OPCODE_CHISQ_DIST_MS { Text = "COM.MICROSOFT.CHISQ.DIST" ; };
     String SC_OPCODE_CHISQ_INV { Text = "CHISQINV" ;};
+    String SC_OPCODE_CHISQ_INV_MS { Text = "COM.MICROSOFT.CHISQ.INV" ;};
     String SC_OPCODE_BITAND        { Text = "BITAND" ;};
     String SC_OPCODE_BITOR         { Text = "BITOR" ;};
     String SC_OPCODE_BITXOR        { Text = "BITXOR" ;};
@@ -643,6 +648,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_T_DIST { Text = "TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "FDIST" ; };
     String SC_OPCODE_CHI_DIST { Text = "CHIDIST" ; };
+    String SC_OPCODE_CHI_DIST_MS { Text = "CHISQ.DIST.RT" ; };
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
@@ -686,11 +692,13 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_RKP { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
     String SC_OPCODE_CHI_INV { Text = "CHIINV" ; };
+    String SC_OPCODE_CHI_INV_MS { Text = "CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
     String SC_OPCODE_F_INV { Text = "FINV" ; };
     String SC_OPCODE_CHI_TEST { Text = "CHITEST" ; };
+    String SC_OPCODE_CHI_TEST_MS { Text = "CHISQ.TEST" ; };
     String SC_OPCODE_LOG_INV { Text = "LOGINV" ; };
     String SC_OPCODE_TABLE_OP { Text = "TABLE" ; };
     String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
@@ -716,6 +724,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_NUMBERVALUE { Text = "NUMBERVALUE" ; };
     String SC_OPCODE_GAMMA { Text = "GAMMA" ; };
     String SC_OPCODE_CHISQ_DIST { Text = "CHISQDIST" ; };
+    String SC_OPCODE_CHISQ_DIST_MS { Text = "CHISQ.DIST" ; };
+    String SC_OPCODE_CHISQ_INV_MS { Text = "CHISQ.INV" ;};
     String SC_OPCODE_CHISQ_INV { Text = "CHISQINV" ;};
     String SC_OPCODE_BITAND    { Text = "BITAND" ;};
     String SC_OPCODE_BITOR    { Text = "BITOR" ;};
@@ -1712,6 +1722,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "CHIDIST" ;
     };
+    String SC_OPCODE_CHI_DIST_MS
+    {
+        Text [ en-US ] = "CHISQ.DIST.RT" ;
+    };
     String SC_OPCODE_WEIBULL
     {
         Text [ en-US ] = "WEIBULL" ;
@@ -1884,6 +1898,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "CHIINV" ;
     };
+    String SC_OPCODE_CHI_INV_MS
+    {
+        Text [ en-US ] = "CHISQ.INV.RT" ;
+    };
     String SC_OPCODE_GAMMA_DIST
     {
         Text [ en-US ] = "GAMMADIST" ;
@@ -1903,6 +1921,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_CHI_TEST
     {
         Text [ en-US ] = "CHITEST" ;
+    };
+    String SC_OPCODE_CHI_TEST_MS
+    {
+        Text [ en-US ] = "CHISQ.TEST" ;
     };
     String SC_OPCODE_LOG_INV
     {
@@ -2000,9 +2022,17 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "CHISQDIST" ;
     };
+    String SC_OPCODE_CHISQ_DIST_MS
+    {
+        Text [ en-US ] = "CHISQ.DIST" ;
+    };
     String SC_OPCODE_CHISQ_INV
     {
         Text [ en-US ] = "CHISQINV" ;
+    };
+    String SC_OPCODE_CHISQ_INV_MS
+    {
+        Text [ en-US ] = "CHISQ.INV" ;
     };
     String SC_OPCODE_BITAND
     {
