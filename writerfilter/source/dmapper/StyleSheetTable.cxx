@@ -64,6 +64,7 @@ StyleSheetEntry::StyleSheetEntry() :
         ,sBaseStyleIdentifier()
         ,sNextStyleIdentifier()
         ,pProperties(new StyleSheetPropertyMap)
+        ,bAutoRedefine(false)
 {
 }
 
@@ -586,11 +587,13 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = sStringValue;
             break;
         case NS_ooxml::LN_CT_Style_aliases:
-        case NS_ooxml::LN_CT_Style_autoRedefine:
         case NS_ooxml::LN_CT_Style_hidden:
         case NS_ooxml::LN_CT_Style_personal:
         case NS_ooxml::LN_CT_Style_personalCompose:
         case NS_ooxml::LN_CT_Style_personalReply:
+        break;
+        case NS_ooxml::LN_CT_Style_autoRedefine:
+        m_pImpl->m_pCurrentEntry->bAutoRedefine = nIntValue;
         break;
         case NS_ooxml::LN_CT_Style_tcPr:
         {
@@ -1198,11 +1201,14 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     }
 
                     beans::PropertyValues aGrabBag = pEntry->GetInteropGrabBagSeq();
+                    uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
                     if (aGrabBag.hasElements())
                     {
-                        uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
                         xPropertySet->setPropertyValue("StyleInteropGrabBag", uno::makeAny(aGrabBag));
                     }
+
+                    if (pEntry->bAutoRedefine)
+                        xPropertySet->setPropertyValue("IsAutoUpdate", uno::makeAny(sal_True));
                 }
                 else if(pEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
                 {

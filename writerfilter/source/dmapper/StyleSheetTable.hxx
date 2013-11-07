@@ -67,6 +67,7 @@ public:
     OUString sConvertedStyleName;
     std::vector<beans::PropertyValue> aLatentStyles; ///< Attributes of latentStyles
     std::vector<beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
+    bool           bAutoRedefine; ///< Writer calls this auto-update.
 
     void AppendInteropGrabBag(beans::PropertyValue aValue);
     beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.
