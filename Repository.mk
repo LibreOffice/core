@@ -562,7 +562,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	libreoffice \
 	pyuno \
 	pyuno_wrapper \
 	recentfile \

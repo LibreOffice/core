@@ -15,8 +15,11 @@ $(eval $(call gb_Executable_set_include,libtest,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,libtest,\
-	libreoffice \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Executable_use_static_libraries,libtest,\
+	libreoffice \
 ))
 
 $(eval $(call gb_Executable_add_libs,libtest,\
