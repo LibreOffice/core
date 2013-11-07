@@ -1395,7 +1395,7 @@ private:
     void simpleAddTextToParagraph(const OUString& rAddString);
     bool HandlePageBreakChar();
     bool ReadChar(long nPosCp, long nCpOfs);
-    bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);
+    bool ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCpOfs);
     bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd, long nCpOfs);
     bool LangUsesHindiNumbers(sal_uInt16 nLang);
     sal_Unicode TranslateToHindiNumbers(sal_Unicode);

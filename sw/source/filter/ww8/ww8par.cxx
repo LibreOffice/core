@@ -2935,15 +2935,15 @@ sal_Unicode SwWW8ImplReader::TranslateToHindiNumbers(sal_Unicode nChar)
 /**
  * Return value: true for non special chars
  */
-bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
+bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCpOfs)
 {
-    sal_Size nRequestedStrLen = nEnd - rPos;
+    sal_Int32 nRequestedStrLen = nEnd - rPos;
 
     OSL_ENSURE(nRequestedStrLen, "String is 0");
-    if (!nRequestedStrLen)
+    if (nRequestedStrLen <= 0)
         return true;
 
-    sal_Size nRequestedPos = pSBase->WW8Cp2Fc(nCpOfs+rPos, &bIsUnicode);
+    sal_Int32 nRequestedPos = pSBase->WW8Cp2Fc(nCpOfs+rPos, &bIsUnicode);
     bool bValidPos = checkSeek(*pStrm, nRequestedPos);
     OSL_ENSURE(bValidPos, "Document claimed to have more text than available");
     if (!bValidPos)
@@ -2962,7 +2962,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         return true;
     }
 
-    sal_Size nValidStrLen = std::min(nRequestedStrLen, nAvailableStrLen);
+    sal_Int32 nValidStrLen = std::min<sal_Size>(nRequestedStrLen, nAvailableStrLen);
 
     // Reset Unicode flag and correct FilePos if needed.
     // Note: Seek is not expensive, as we're checking inline whether or not
