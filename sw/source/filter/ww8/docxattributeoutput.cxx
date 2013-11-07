@@ -3593,7 +3593,7 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
 {
-    bool bQFormat = false, bUnhideWhenUsed = false, bLocked = false, bDefault = false;
+    bool bQFormat = false, bUnhideWhenUsed = false, bLocked = false, bDefault = false, bCustomStyle = false;
     OUString aLink, aRsid, aUiPriority;
     FastAttributeList* pStyleAttributeList = m_pSerializer->createAttrList();
     if (eType == STYLE_TYPE_PARA)
@@ -3619,6 +3619,8 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 bLocked = true;
             else if (rGrabBag[i].Name == "default")
                 bDefault = rGrabBag[i].Value.get<sal_Bool>();
+            else if (rGrabBag[i].Name == "customStyle")
+                bCustomStyle = rGrabBag[i].Value.get<sal_Bool>();
             else
                 SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
         }
@@ -3635,6 +3637,8 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     pStyleAttributeList->add(FSNS( XML_w, XML_styleId ), m_rExport.pStyles->GetStyleId(nId).getStr());
     if (bDefault)
         pStyleAttributeList->add(FSNS(XML_w, XML_default), "1");
+    if (bCustomStyle)
+        pStyleAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
     XFastAttributeListRef xStyleAttributeList(pStyleAttributeList);
     m_pSerializer->startElementNS( XML_w, XML_style, xStyleAttributeList);
 

@@ -493,13 +493,12 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_Style_customStyle:
-            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE || m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
             {
-                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
                 beans::PropertyValue aValue;
                 aValue.Name = "customStyle";
                 aValue.Value = uno::makeAny(sal_Bool(nIntValue != 0));
-                pTableEntry->AppendInteropGrabBag(aValue);
+                m_pImpl->m_pCurrentEntry->AppendInteropGrabBag(aValue);
             }
         break;
         case NS_ooxml::LN_CT_Style_styleId:
