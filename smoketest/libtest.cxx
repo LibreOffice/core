@@ -12,10 +12,15 @@
 #include <malloc.h>
 #include <assert.h>
 #include <math.h>
-#include <time.h>
+#include <sys/time.h>
 #include <liblibreoffice.hxx>
 
-long getTimeMS();
+long getTimeMS()
+{
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return t.tv_sec*1000 + t.tv_usec/1000;
+}
 
 static int help()
 {
@@ -97,14 +102,6 @@ int main (int argc, char **argv)
     delete pOffice;
 
     return 0;
-}
-
-long getTimeMS()
-{
-    struct timespec t;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    long ms = round(t.tv_nsec / 1.0e6) + t.tv_sec * 1000;
-    return ms;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
