@@ -39,6 +39,7 @@
 #include "calcmacros.hxx"
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include "osl/mutex.hxx"
 
 #include <memory>
 #include <map>
@@ -298,7 +299,9 @@ private:
     ::std::auto_ptr<ScDocProtection> pDocProtection;
     ::std::auto_ptr<ScClipParam>     mpClipParam;
 
-    ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
+    boost::scoped_ptr<ScExternalRefManager> mpExternalRefMgr;
+    mutable osl::Mutex maMtxExternalRefMgr;
+
     ::std::auto_ptr<ScMacroManager> mpMacroMgr;
 
 
@@ -661,7 +664,7 @@ public:
                                     const OUString& aFileName,
                                     const OUString& aTabName );
 
-    bool            HasExternalRefManager() const { return pExternalRefMgr.get(); }
+    SC_DLLPUBLIC bool HasExternalRefManager() const;
     SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
     bool            IsInExternalReferenceMarking() const;
     void            MarkUsedExternalReferences();

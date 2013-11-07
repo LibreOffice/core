@@ -150,7 +150,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         pCacheFieldEditEngine( NULL ),
         pDocProtection( NULL ),
         mpClipParam( NULL),
-        pExternalRefMgr( NULL ),
+        mpExternalRefMgr( NULL ),
         mpMacroMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
@@ -384,7 +384,7 @@ ScDocument::~ScDocument()
     mxFormulaParserPool.reset();
     // Destroy the external ref mgr instance here because it has a timer
     // which needs to be stopped before the app closes.
-    pExternalRefMgr.reset();
+    mpExternalRefMgr.reset();
 
     ScAddInAsync::RemoveDocument( this );
     ScAddInListener::RemoveDocument( this );
