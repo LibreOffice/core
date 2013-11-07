@@ -262,8 +262,8 @@ static void lcl_ConvertSequenceName(OUString& rSequenceName)
 }
 
 // FindParaStart() finds 1st Parameter that follows '\' and cToken
-// and returns start of this parameter or STRING_NOT_FOUND.
-xub_StrLen FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
+// and returns start of this parameter or -1
+sal_Int32 FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
     bool bStr = false; // ignore inside a string
 
@@ -283,10 +283,10 @@ xub_StrLen FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode 
                    && rStr[ nBuf ] == ' ' )
                 nBuf++;
             // return start of parameters
-            return nBuf < rStr.getLength() ? nBuf : STRING_NOTFOUND;
+            return nBuf < rStr.getLength() ? nBuf : -1;
         }
     }
-    return STRING_NOTFOUND;
+    return -1;
 }
 
 // FindPara() findet den ersten Parameter mit '\' und cToken. Es wird
@@ -294,10 +294,10 @@ xub_StrLen FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode 
 // und alles, was zum Parameter gehoert, wird in ihm zurueckgeliefert.
 OUString FindPara( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
-    xub_StrLen n2;                                          // end
-    xub_StrLen n = FindParaStart( rStr, cToken, cToken2 );  // start
-    if( STRING_NOTFOUND == n )
-        return aEmptyOUStr;
+    sal_Int32 n2;                                          // end
+    sal_Int32 n = FindParaStart( rStr, cToken, cToken2 );  // start
+    if( n == -1)
+        return OUString();
 
     if(    rStr[ n ] == '"'
         || rStr[ n ] == 132 )
