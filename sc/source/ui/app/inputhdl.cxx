@@ -395,7 +395,7 @@ static void lcl_RemoveLineEnd(OUString& rStr)
     removeChars(rStr, sal_Unicode('\n'));
 }
 
-xub_StrLen lcl_MatchParenthesis( const OUString& rStr, xub_StrLen nPos )
+static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, xub_StrLen nPos )
 {
     int nDir;
     sal_Unicode c1, c2 = 0;
@@ -438,7 +438,7 @@ xub_StrLen lcl_MatchParenthesis( const OUString& rStr, xub_StrLen nPos )
         nDir = 0;
     }
     if ( !nDir )
-        return STRING_NOTFOUND;
+        return -1;
     sal_Int32 nLen = rStr.getLength();
     const sal_Unicode* p0 = rStr.getStr();
     const sal_Unicode* p;
@@ -483,8 +483,8 @@ xub_StrLen lcl_MatchParenthesis( const OUString& rStr, xub_StrLen nPos )
         }
     }
     if ( nLevel )
-        return STRING_NOTFOUND;
-    return (xub_StrLen) (p - p0);
+        return -1;
+    return (sal_Int32) (p - p0);
 }
 
 //==================================================================
@@ -834,8 +834,8 @@ void ScInputHandler::ShowTipCursor()
             while( !bFound )
             {
                 aSelText += ")";
-                xub_StrLen nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.getLength()-1 );
-                if( nLeftParentPos != STRING_NOTFOUND )
+                sal_Int32 nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.getLength()-1 );
+                if( nLeftParentPos != -1 )
                 {
                     sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText[ nLeftParentPos-1 ] : 0;
                     if( !(comphelper::string::isalphaAscii(c)) )
@@ -1058,7 +1058,7 @@ void ScInputHandler::UseFormulaData()
         {
             xub_StrLen nPos = aSel.nEndPos;
             OUString  aFormula = aTotal.copy( 0, nPos );;
-            xub_StrLen  nLeftParentPos = 0;
+            sal_Int32   nLeftParentPos = 0;
             xub_StrLen  nNextFStart = 0;
             xub_StrLen  nNextFEnd = 0;
             xub_StrLen  nArgPos = 0;
@@ -1085,7 +1085,7 @@ void ScInputHandler::UseFormulaData()
             {
                 aFormula += ")";
                 nLeftParentPos = lcl_MatchParenthesis( aFormula, aFormula.getLength()-1 );
-                if( nLeftParentPos == STRING_NOTFOUND )
+                if( nLeftParentPos == -1 )
                     break;
 
                 // nLeftParentPos can be 0 if a parenthesis is inserted before the formula
@@ -1692,8 +1692,8 @@ void ScInputHandler::UpdateParenthesis()
                 sal_Unicode c = aFormula[nPos];
                 if ( c == '(' || c == ')' )
                 {
-                    xub_StrLen nOther = lcl_MatchParenthesis( aFormula, nPos );
-                    if ( nOther != STRING_NOTFOUND )
+                    sal_Int32 nOther = lcl_MatchParenthesis( aFormula, nPos );
+                    if ( nOther != -1 )
                     {
                         SfxItemSet aSet( pEngine->GetEmptyItemSet() );
                         aSet.Put( SvxWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT ) );

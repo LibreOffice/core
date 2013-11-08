@@ -840,16 +840,17 @@ void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescap
     }
 }
 
-xub_StrLen ScGlobal::FindUnquoted( const OUString& rString, sal_Unicode cChar, xub_StrLen nStart, sal_Unicode cQuote )
+sal_Int32 ScGlobal::FindUnquoted( const OUString& rString, sal_Unicode cChar)
 {
+    const sal_Unicode cQuote = '\'';
     const sal_Unicode* const pStart = rString.getStr();
     const sal_Unicode* const pStop = pStart + rString.getLength();
-    const sal_Unicode* p = pStart + nStart;
+    const sal_Unicode* p = pStart;
     bool bQuoted = false;
     while (p < pStop)
     {
         if (*p == cChar && !bQuoted)
-            return sal::static_int_cast< xub_StrLen >( p - pStart );
+            return sal::static_int_cast< sal_Int32 >( p - pStart );
         else if (*p == cQuote)
         {
             if (!bQuoted)
@@ -861,7 +862,7 @@ xub_StrLen ScGlobal::FindUnquoted( const OUString& rString, sal_Unicode cChar, x
         }
         ++p;
     }
-    return STRING_NOTFOUND;
+    return -1;
 }
 
 const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote )

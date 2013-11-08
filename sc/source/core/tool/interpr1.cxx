@@ -7182,7 +7182,7 @@ void ScInterpreter::ScAddressFunc()
         {
             // Isolate Tab from 'Doc'#Tab
             sal_Int32 nPos = ScCompiler::GetDocTabPos( sTabStr);
-            if (nPos != STRING_NOTFOUND)
+            if (nPos != -1)
             {
                 if (sTabStr[nPos+1] == '$')
                     ++nPos;     // also split 'Doc'#$Tab

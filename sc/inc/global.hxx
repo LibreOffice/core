@@ -650,9 +650,9 @@ SC_DLLPUBLIC    static void             EraseQuotes( OUString& rString, sal_Unic
         quotes have to be escaped by being doubled. Caller must ensure that
         nStart points into an unquoted range or the opening quote. Specialty:
         if cChar==cQuote the first cQuote character from nStart on is found.
-        @returns offset if found, else STRING_NOTFOUND
+        @returns offset if found, else -1
      */
-SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const OUString& rString, sal_Unicode cChar, xub_StrLen nStart = 0, sal_Unicode cQuote = '\'' );
+SC_DLLPUBLIC    static sal_Int32       FindUnquoted( const OUString& rString, sal_Unicode cChar);
 
     /** Finds an unquoted instance of cChar in null-terminated pString. Same
         semantics as FindUnquoted( const String&, ...)

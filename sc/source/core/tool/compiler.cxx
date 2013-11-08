@@ -736,8 +736,8 @@ struct ConventionOOO_A1 : public Convention_A1
         {
             aString = aTmp;
             // "'Doc'#Tab"
-            xub_StrLen nPos = ScCompiler::GetDocTabPos( aString );
-            if ( nPos != STRING_NOTFOUND )
+            sal_Int32 nPos = ScCompiler::GetDocTabPos( aString );
+            if ( nPos != -1 )
             {
                 aDoc = aString.copy( 0, nPos + 1 );
                 aString = aString.copy( nPos + 1 );
@@ -1056,8 +1056,8 @@ struct ConventionXL
         rTabName = aTmp;
 
         // Cheesy hack to unparse the OOO style "'Doc'#Tab"
-        xub_StrLen nPos = ScCompiler::GetDocTabPos( rTabName);
-        if (nPos != STRING_NOTFOUND)
+        sal_Int32 nPos = ScCompiler::GetDocTabPos( rTabName);
+        if (nPos != -1)
         {
             rDocName = rTabName.copy( 0, nPos );
             // TODO : More research into how XL escapes the doc path
@@ -1716,14 +1716,14 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
     }
 }
 
-xub_StrLen ScCompiler::GetDocTabPos( const OUString& rString )
+sal_Int32 ScCompiler::GetDocTabPos( const OUString& rString )
 {
     if (rString[0] != '\'')
-        return STRING_NOTFOUND;
-    xub_StrLen nPos = ScGlobal::FindUnquoted( rString, SC_COMPILER_FILE_TAB_SEP);
+        return -1;
+    sal_Int32 nPos = ScGlobal::FindUnquoted( rString, SC_COMPILER_FILE_TAB_SEP);
     // it must be 'Doc'#
-    if (nPos != STRING_NOTFOUND && rString[nPos-1] != '\'')
-        nPos = STRING_NOTFOUND;
+    if (nPos != -1 && rString[nPos-1] != '\'')
+        nPos = -1;
     return nPos;
 }
 
@@ -2744,10 +2744,10 @@ bool ScCompiler::IsReference( const OUString& rName )
         // something like 3:3, meaning entire row 3.
         do
         {
-            const xub_StrLen nPos = ScGlobal::FindUnquoted( rName, '.');
-            if ( nPos == STRING_NOTFOUND )
+            const sal_Int32 nPos = ScGlobal::FindUnquoted( rName, '.');
+            if ( nPos == -1 )
             {
-                if (ScGlobal::FindUnquoted( rName, ':') != STRING_NOTFOUND)
+                if (ScGlobal::FindUnquoted( rName, ':') != -1)
                     break;      // may be 3:3, continue as usual
                 return false;
             }

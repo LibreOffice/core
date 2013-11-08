@@ -1309,7 +1309,7 @@ bool ConvertSingleRef( ScDocument* pDoc, const OUString& rRefString,
                        ScAddress::ExternalInfo* pExtInfo /* = NULL */ )
 {
     bool bRet = false;
-    if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == STRING_NOTFOUND))
+    if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == -1))
     {
         ScAddress aAddr( 0, 0, nDefTab );
         sal_uInt16 nRes = aAddr.Parse( rRefString, pDoc, rDetails, pExtInfo);
@@ -1331,7 +1331,7 @@ bool ConvertDoubleRef( ScDocument* pDoc, const OUString& rRefString, SCTAB nDefT
                        ScAddress::ExternalInfo* pExtInfo /* = NULL */ )
 {
     bool bRet = false;
-    if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == STRING_NOTFOUND))
+    if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == -1))
     {
         ScRange aRange( ScAddress( 0, 0, nDefTab));
         sal_uInt16 nRes = aRange.Parse( rRefString, pDoc, rDetails, pExtInfo);
@@ -1426,8 +1426,8 @@ static sal_uInt16
 lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScAddress::ExternalInfo* pExtInfo = NULL )
 {
     sal_uInt16 nRes1 = 0, nRes2 = 0;
-    xub_StrLen nPos = ScGlobal::FindUnquoted( r, ':');
-    if (nPos != STRING_NOTFOUND)
+    sal_Int32 nPos = ScGlobal::FindUnquoted( r, ':');
+    if (nPos != -1)
     {
         OUStringBuffer aTmp(r);
         aTmp[nPos] = 0;
@@ -1742,8 +1742,8 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             // External Reference, same as in ScCompiler::MakeTabStr()
             if( aTabName[0] == '\'' )
             {   // "'Doc'#Tab"
-                xub_StrLen nPos = ScCompiler::GetDocTabPos( aTabName);
-                if (nPos != STRING_NOTFOUND)
+                sal_Int32 nPos = ScCompiler::GetDocTabPos( aTabName);
+                if (nPos != -1)
                 {
                     aDocName = aTabName.copy( 0, nPos + 1 );
                     aTabName = aTabName.copy( nPos + 1 );
@@ -1817,8 +1817,8 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
     // External reference, same as in ScCompiler::MakeTabStr()
     if ( rTabName[0] == '\'' )
     {   // "'Doc'#Tab"
-        xub_StrLen nPos = ScCompiler::GetDocTabPos( rTabName);
-        if (nPos != STRING_NOTFOUND)
+        sal_Int32 nPos = ScCompiler::GetDocTabPos( rTabName);
+        if (nPos != -1)
         {
             rDocName = rTabName.copy( 0, nPos + 1 );
             rTabName = rTabName.copy( nPos + 1 );

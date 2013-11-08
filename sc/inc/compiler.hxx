@@ -379,8 +379,8 @@ public:
     /** Analyzes a string for a 'Doc'#Tab construct, or 'Do''c'#Tab etc..
 
         @returns the position of the unquoted # hash mark in 'Doc'#Tab, or
-                 STRING_NOTFOUND if none. */
-    static xub_StrLen GetDocTabPos( const OUString& rString );
+                 -1 if none. */
+    static sal_Int32 GetDocTabPos( const OUString& rString );
 
     static bool EnQuote( OUString& rStr );
     sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
