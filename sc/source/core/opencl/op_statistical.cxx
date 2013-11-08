@@ -2941,6 +2941,66 @@ void OpChiDist::GenSlidingWindowFunction(
     ss << "    return tmp;\n";
     ss << "}\n";
 }
+void OpChiSqDist::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(fMaxGammaArgumentDecl);decls.insert(GetChiSqDistCDFDecl);
+    decls.insert(GetChiSqDistPDFDecl);decls.insert(GetLowRegIGammaDecl);
+    decls.insert(GetGammaContFractionDecl);decls.insert(GetGammaSeriesDecl);
+    decls.insert(fHalfMachEpsDecl);decls.insert(F_PIDecl);
+    decls.insert(fBigInvDecl);
+
+    funs.insert(GetGammaContFraction);funs.insert(GetChiSqDistCDF);
+    funs.insert(GetChiSqDistPDF);funs.insert(GetLowRegIGamma);
+    funs.insert(GetGammaSeries);
+}
+
+void OpChiSqDist::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName, SubArguments &
+vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    int singleIndex = gid0;\n";
+    ss << "    double result = 0;\n";
+    if(vSubArguments.size()<2)
+    {
+        ss << "    result = -DBL_MAX;\n";
+        ss << "    return result;\n";
+    }else
+    {
+        GenTmpVariables(ss,vSubArguments);
+        CheckAllSubArgumentIsNan(ss,vSubArguments);
+        if(vSubArguments.size() == 2)
+        {
+            ss << "    int tmp2  = 1;\n";
+        }
+        ss << "tmp1 = floor(tmp1);\n";
+
+        ss << "    if(tmp1 < 1.0)\n";
+        ss << "        result = -DBL_MAX;\n";
+        ss << "    else\n";
+        ss << "    {\n";
+        ss << "        if(tmp2)\n";
+        ss << "            result =GetChiSqDistCDF(tmp0,tmp1);\n";
+        ss << "        else\n";
+        ss << "            result =GetChiSqDistPDF(tmp0,tmp1);\n";
+        ss << "    }\n";
+        ss << "    return result;\n";
+        ss << "}";
+    }
+
+}
+
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
