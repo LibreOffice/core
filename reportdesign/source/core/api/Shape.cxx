@@ -151,7 +151,7 @@ uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  ) throw(un
 sal_Bool SAL_CALL OShape::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
 
-    return cppu::supportsService(this, ServiceName);
+    return m_sServiceName == ServiceName || cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 // XReportComponent
