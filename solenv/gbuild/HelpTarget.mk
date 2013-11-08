@@ -81,11 +81,10 @@ $(call gb_HelpTranslatePartTarget_get_clean_target,%) :
 # gb_HelpTranslatePartTarget_HelpTranslatePartTarget target lang dir
 define gb_HelpTranslatePartTarget_HelpTranslatePartTarget
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : HELP_LANG := $(2)
-$(call gb_HelpTranslatePartTarget_get_target,$(1)) : POFILES := $(gb_POLOCATION)/$(2)/$(3).po
+$(call gb_HelpTranslatePartTarget_get_target,$(1)) : POFILES := $(3)
 
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
-$(call gb_HelpTranslatePartTarget_get_target,$(1)) : $(gb_POLOCATION)/$(2)/$(3).po
-$(gb_POLOCATION)/$(2)/$(3).po :
+$(call gb_HelpTranslatePartTarget_get_target,$(1)) : $(3)
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) :| $(dir $(call gb_HelpTranslatePartTarget_get_target,$(1))).dir
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) :| $(call gb_HelpTranslatePartTarget_get_workdir,$(1))/.dir
 
@@ -137,9 +136,10 @@ $(call gb_HelpTranslateTarget_get_target,$(1)) :| $(dir $(call gb_HelpTranslateT
 
 endef
 
+# use wildcard to avoid spurious rebuilds if translation is missing
 # gb_HelpTranslateTarget__make_part module part lang dir
 define gb_HelpTranslateTarget__make_part
-$(call gb_HelpTranslatePartTarget_HelpTranslatePartTarget,$(2),$(3),$(patsubst %/,%,$(4)))
+$(call gb_HelpTranslatePartTarget_HelpTranslatePartTarget,$(2),$(3),$(wildcard $(gb_POLOCATION)/$(3)/$(patsubst %/,%,$(4)).po))
 
 $(call gb_HelpTranslateTarget_get_target,$(1)) : $(call gb_HelpTranslatePartTarget_get_target,$(2))
 $(call gb_HelpTranslateTarget_get_clean_target,$(1)) : $(call gb_HelpTranslatePartTarget_get_clean_target,$(2))
@@ -244,13 +244,13 @@ endef
 define gb_HelpTreeTarget__set_pofiles
 $(call gb_HelpTreeTarget_get_target,$(1)) : POFILES := $(2)
 $(call gb_HelpTreeTarget_get_target,$(1)) : $(2)
-$(2) :
 
 endef
 
+# use wildcard to avoid spurious rebuilds if translation is missing
 # gb_HelpTreeTarget_set_treefile target treefile
 define gb_HelpTreeTarget_set_treefile
-$(call gb_HelpTreeTarget__set_pofiles,$(1),$(gb_POLOCATION)/$(lastword $(subst /, ,$(1)))/$(patsubst %/,%,$(dir $(2))).po)
+$(call gb_HelpTreeTarget__set_pofiles,$(1),$(wildcard $(gb_POLOCATION)/$(lastword $(subst /, ,$(1)))/$(patsubst %/,%,$(dir $(2))).po))
 
 $(call gb_HelpTreeTarget_get_target,$(1)) : HELP_TREE := $(SRCDIR)/$(2).tree
 $(call gb_HelpTreeTarget_get_target,$(1)) : $(SRCDIR)/$(2).tree
