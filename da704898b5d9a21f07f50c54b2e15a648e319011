@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///mM\u003d",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-08T17:34:03Z",
+      "side": 1,
+      "message": "Just a nitpick ;-)  Why not stick with the previously used naming convention and have, for example, HID_FUNC_CHI_INV_MS instead?",
+      "revId": "da704898b5d9a21f07f50c54b2e15a648e319011",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
