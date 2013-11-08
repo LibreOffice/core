@@ -910,7 +910,9 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
         sal_uInt16 nLines = aLine.getLength()/nCharspLine+1;
         for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
         {
-            OUString aTmpLine = aLine.copy(nLine*nCharspLine, nCharspLine );
+            sal_Int32 nBeginIndex = nLine*nCharspLine;
+            sal_Int32 nCopyCount = std::min<sal_Int32>(nCharspLine, aLine.getLength()-nBeginIndex);
+            OUString aTmpLine = aLine.copy(nBeginIndex, nCopyCount);
             aPos.Y() += nLineHeight;
             if ( aPos.Y() > ( aPaperSz.Height() + Print::nTopMargin ) )
             {
