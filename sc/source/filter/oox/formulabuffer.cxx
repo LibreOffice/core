@@ -189,7 +189,24 @@ void applyCellFormulas(
         if (p)
         {
             // Use the cached version to avoid re-compilation.
-            ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());
+
+            ScFormulaCell* pCell = NULL;
+            if (p->mnRow + 1 == aPos.Row())
+            {
+                // Put them in the same formula group.
+                ScFormulaCell& rPrev = *p->mpCell;
+                ScFormulaCellGroupRef xGroup = rPrev.GetCellGroup();
+                if (!xGroup)
+                    // Last cell is not grouped yet. Start a new group.
+                    xGroup = rPrev.CreateCellGroup(p->mnRow, 1, false);
+
+                ++xGroup->mnLength;
+
+                pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, xGroup);
+            }
+            else
+                pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());
+
             rDoc.setFormulaCell(aPos, pCell);
 
             // Update the cache.
