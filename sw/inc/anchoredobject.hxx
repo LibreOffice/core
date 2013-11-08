@@ -269,15 +269,12 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to data of position calculation:
         // frame vertical position is orient at
-        inline const SwLayoutFrm* GetVertPosOrientFrm() const
+        const SwLayoutFrm* GetVertPosOrientFrm() const
         {
             return mpVertPosOrientFrm;
         }
         // method to clear member <mpVertPosOrientFrm>
-        inline void ClearVertPosOrientFrm()
-        {
-            mpVertPosOrientFrm = 0L;
-        }
+        void ClearVertPosOrientFrm();
 
         /** check anchor character rectangle and top of line
 
