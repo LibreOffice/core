@@ -135,7 +135,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
         if( bOutput )
         {
-            OUString aPageStr = " [" + IDE_RESSTR(RID_STR_PAGE) + " " + OUString::valueOf( nCurPage ) + "]";
+            OUString aPageStr = " [" + IDE_RESSTR(RID_STR_PAGE) + " " + OUString::number( nCurPage ) + "]";
             pPrinter->DrawText( aPos, aPageStr );
         }
     }
