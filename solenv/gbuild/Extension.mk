@@ -131,9 +131,9 @@ $(if $(filter nodeliver,$(3)),,$(call gb_Extension__Extension_deliver,$(1),Exten
 
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : \
-	POFILES := $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+	POFILES := $(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po))
 $(call gb_Extension_get_workdir,$(1))/description.xml : \
-	$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+	$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po))
 $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po) :
 endif
 
