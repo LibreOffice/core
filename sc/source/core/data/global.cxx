@@ -1201,4 +1201,19 @@ ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
     return *pFieldEditEngine;
 }
 
+OUString ScGlobal::ReplaceOrAppend( const OUString& rString,
+        const OUString& rPlaceholder, const OUString& rReplacement )
+{
+    if (rString.isEmpty())
+        return rReplacement;
+    sal_Int32 nFound = rString.indexOf( rPlaceholder);
+    if (nFound < 0)
+    {
+        if (rString[rString.getLength()-1] == ' ')
+            return rString + rReplacement;
+        return rString + " " + rReplacement;
+    }
+    return rString.replaceFirst( rPlaceholder, rReplacement, &nFound);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

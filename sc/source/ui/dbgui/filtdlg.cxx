@@ -460,8 +460,7 @@ void ScFilterDlg::FillFieldLists()
             aFieldName = pDoc->GetString(col, nFirstRow, nTab);
             if (!pBtnHeader->IsChecked() || aFieldName.isEmpty())
             {
-                OUString aTemp( aStrColumn);
-                aFieldName = aTemp.replaceFirst("%1", ScColToAlpha( col ));
+                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
             }
             pLbField1->InsertEntry( aFieldName, i );
             pLbField2->InsertEntry( aFieldName, i );

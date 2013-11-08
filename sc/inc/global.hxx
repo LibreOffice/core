@@ -684,6 +684,19 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
     /** A static instance of ScFieldEditEngine not capable of resolving
         document specific fields, to be used only by ScEditUtil::GetString(). */
     static ScFieldEditEngine&   GetStaticFieldEditEngine();
+
+    /** Replaces the first occurrence of rPlaceholder in rString with
+        rReplacement, or if rPlaceholder is not found appends one space if
+        rString does not end in a space and appends rReplacement.
+
+        Meant to be used with resource strings ala "Column %1" where a
+        translation may have omitted the %1 placeholder and a simple
+        replacement would end up with nothing replaced so no column indicator
+        in the result string.
+     */
+    SC_DLLPUBLIC static OUString    ReplaceOrAppend( const OUString& rString,
+                                                     const OUString& rPlaceholder,
+                                                     const OUString& rReplacement );
 };
 #endif
 

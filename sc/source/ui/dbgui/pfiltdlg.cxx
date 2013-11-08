@@ -291,8 +291,7 @@ void ScPivotFilterDlg::FillFieldLists()
             aFieldName = pDoc->GetString(col, nFirstRow, nTab);
             if ( aFieldName.isEmpty() )
             {
-                OUString aTemp( aStrColumn);
-                aFieldName = aTemp.replaceFirst("%1", ScColToAlpha( col ));
+                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
             }
             aLbField1.InsertEntry( aFieldName, i );
             aLbField2.InsertEntry( aFieldName, i );
