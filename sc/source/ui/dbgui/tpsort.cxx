@@ -384,9 +384,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
                     aFieldName = pDoc->GetString(col, nFirstSortRow, nTab);
                     if ( !bHasHeader || aFieldName.isEmpty() )
                     {
-                        OUStringBuffer aBuf;
-                        aBuf.append(aStrColumn);
-                        aFieldName = aBuf.makeStringAndClear().replaceAll("%1", ScColToAlpha( col ));
+                        aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
                     }
                     nFieldArr.push_back( col );
 
@@ -407,12 +405,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
                     aFieldName = pDoc->GetString(nFirstSortCol, row, nTab);
                     if ( !bHasHeader || aFieldName.isEmpty() )
                     {
-                        OUStringBuffer aBuf;
-                        OUStringBuffer tempBuf;
-
-                        aBuf.append(aStrRow);
-                        tempBuf.append(row+1 );
-                        aFieldName = aBuf.makeStringAndClear().replaceAll("%1", tempBuf.makeStringAndClear());
+                        aFieldName = ScGlobal::ReplaceOrAppend( aStrRow, "%1", OUString::number( row+1));
                     }
                     nFieldArr.push_back( row );
 
