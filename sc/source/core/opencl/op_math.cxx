@@ -16,6 +16,7 @@
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include "formula/vectortoken.hxx"
+#include "opinlinefun_math.hxx"
 #include <sstream>
 
 using namespace formula;
@@ -747,7 +748,46 @@ void OpRound::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
-
+void OpOdd::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur);
+    ss << Math_Intg_Str;
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss <<"    int gid0=get_global_id(0);\n";
+    ss << "    double tmp=0;\n";
+    ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss<< "    if(isNan(arg0)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg0 = 0;\n";
+#endif
+    ss << "    if (arg0 > 0.0 ){\n";
+    ss << "        tmp=Intg(arg0);\n";
+    ss << "        if(tmp-trunc(tmp/2)*2 == 0)\n";
+    ss << "            tmp=tmp+1;\n";
+    ss << "    }else if (arg0 < 0.0 ){\n";
+    ss << "        tmp=Intg(arg0);\n";
+    ss << "        if(tmp-trunc(tmp/2)*2 == 0)\n";
+    ss << "            tmp=tmp-1.0;\n";
+    ss << "    }else if (arg0 == 0.0 )\n";
+    ss << "            tmp=1.0;\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
 
 }}
 

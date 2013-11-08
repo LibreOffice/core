@@ -190,6 +190,13 @@ public:
         const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Power"; }
 };
+class OpOdd: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "Odd"; }
+};
 }}
 
 #endif
