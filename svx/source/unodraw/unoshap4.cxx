@@ -174,7 +174,14 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
         OUString aPersistName;
         if( rValue >>= aPersistName )
         {
-            static_cast<SdrOle2Obj*>(mpObj.get())->SetPersistName( aPersistName );
+            SdrOle2Obj *pOle;
+#if OSL_DEBUG_LEVEL > 0
+            pOle = dynamic_cast<SdrOle2Obj*>(mpObj.get());
+            assert(pOle);
+#else
+            pOle = static_cast<SdrOle2Obj*>(mpObj.get());
+#endif
+            pOle->SetPersistName( aPersistName );
             return true;
         }
         break;
