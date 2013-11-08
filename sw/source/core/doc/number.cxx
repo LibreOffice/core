@@ -24,6 +24,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -1039,6 +1040,25 @@ void SwNumRule::RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
     {
         maParagraphStyleList.erase( aIter );
     }
+}
+
+void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
+{
+    if (mpGrabBagItem.get())
+        mpGrabBagItem->QueryValue(rVal);
+    else
+    {
+        uno::Sequence<beans::PropertyValue> aValue(0);
+        rVal = uno::makeAny(aValue);
+    }
+}
+
+void SwNumRule::SetGrabBagItem(const uno::Any& rVal)
+{
+    if (!mpGrabBagItem.get())
+        mpGrabBagItem.reset(new SfxGrabBagItem);
+
+    mpGrabBagItem->PutValue(rVal);
 }
 
 namespace numfunc

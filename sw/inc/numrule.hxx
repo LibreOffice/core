@@ -37,6 +37,7 @@ class IDocumentListsAccess;
 class SwNodeNum;
 class Font;
 class SvxBrushItem;
+class SfxGrabBagItem;
 class SvxNumRule;
 class SwCharFmt;
 class SwDoc;
@@ -141,6 +142,7 @@ private:
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
     OUString msDefaultListId;
+    boost::shared_ptr<SfxGrabBagItem> mpGrabBagItem; ///< Style InteropGrabBag.
 
 public:
     /// add parameter <eDefaultNumberFormatPositionAndSpaceMode>
@@ -271,6 +273,8 @@ public:
 
     void Validate();
     void dumpAsXml(xmlTextWriterPtr w);
+    void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
+    void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
 };
 
 /// namespace for static functions and methods for numbering and bullets
