@@ -498,13 +498,6 @@ void DocxAttributeOutput::StartParagraphProperties()
 
     m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
 
-    // and output the section break now (if it appeared)
-    if ( m_pSectionInfo )
-    {
-        m_rExport.SectionProperties( *m_pSectionInfo );
-        m_pSectionInfo.reset();
-    }
-
     InitCollectedParagraphProperties();
 }
 
