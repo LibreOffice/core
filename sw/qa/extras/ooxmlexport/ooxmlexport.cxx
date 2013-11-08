@@ -1718,6 +1718,16 @@ DECLARE_OOXML_TEST(testLineSpacingexport, "test_line_spacing.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "line", "31680");
 }
 
+DECLARE_OOXML_TEST(testHyperlineIsEnd, "hyperlink.docx")
+{
+    // Check  that the document.xml contents all the tag properly closed.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // If  document.xml miss any ending tag then parseExport() returns NULL which fail the test case.
+    CPPUNIT_ASSERT(pXmlDoc) ;
+    // Check hyperlink is properly open.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink",1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
