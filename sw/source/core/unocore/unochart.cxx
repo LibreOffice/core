@@ -209,7 +209,7 @@ bool FillRangeDescriptor(
         SwRangeDescriptor &rDesc,
         const OUString &rCellRangeName )
 {
-    xub_StrLen nToken = -1 == rCellRangeName.indexOf('.') ? 0 : 1;
+    sal_Int32 nToken = -1 == rCellRangeName.indexOf('.') ? 0 : 1;
     OUString aCellRangeNoTableName( rCellRangeName.getToken( nToken, '.' ) );
     OUString aTLName( aCellRangeNoTableName.getToken(0, ':') );  // name of top left cell
     OUString aBRName( aCellRangeNoTableName.getToken(1, ':') );  // name of bottom right cell
