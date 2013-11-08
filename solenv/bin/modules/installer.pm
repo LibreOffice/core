@@ -126,7 +126,8 @@ sub run {
     # Creating the log directory
     ######################################
 
-    my $loggingdir = installer::systemactions::create_directories("logging", "");
+    my $empty = "";
+    my $loggingdir = installer::systemactions::create_directories("logging", \$empty);
     $loggingdir = $loggingdir . $installer::globals::separator;
     $installer::globals::exitlog = $loggingdir;
 
@@ -176,7 +177,7 @@ sub run {
     # FIXME: It would be better to use installer::systemactions::remove_complete_directory
     #        Though, we would need to remove only the lang-specific subdirectory for langpacks and helppacks
     rmdir $oldloggingdir;
-    $loggingdir = installer::systemactions::create_directories("logging", "");
+    $loggingdir = installer::systemactions::create_directories("logging", \$empty);
     $loggingdir = $loggingdir . $installer::globals::separator;
     $installer::globals::exitlog = $loggingdir;
 

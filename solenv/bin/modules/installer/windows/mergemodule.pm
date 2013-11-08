@@ -1101,7 +1101,8 @@ sub change_file_table
     # Unpacking the MergeModule.CABinet (only once)
     # Unpacking into temp directory. Warning: expand.exe has problems with very long unpack directories.
 
-    my $unpackdir = installer::systemactions::create_directories("cab", "");
+    my $empty = "";
+    my $unpackdir = installer::systemactions::create_directories("cab", \$empty);
     push(@installer::globals::removedirs, $unpackdir);
     $unpackdir = $unpackdir . $installer::globals::separator . $mergemodulegid;
 
