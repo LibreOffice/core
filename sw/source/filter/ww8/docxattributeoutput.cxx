@@ -3596,7 +3596,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
     OUString aLink, aRsid, aUiPriority;
     FastAttributeList* pStyleAttributeList = m_pSerializer->createAttrList();
-    if (eType == STYLE_TYPE_PARA)
+    if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
     {
         const SwFmt* pFmt = m_rExport.pStyles->GetSwFmt(nId);
         uno::Any aAny;

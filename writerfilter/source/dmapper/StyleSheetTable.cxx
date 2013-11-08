@@ -400,6 +400,12 @@ PropertyMapPtr StyleSheetTable::GetDefaultCharProps()
     return m_pImpl->m_pDefaultCharProps;
 }
 
+// Does the given style type support InteropGrabBag?
+bool lcl_wantGrabBag(StyleType eType)
+{
+    return eType == STYLE_TYPE_TABLE || eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR;
+}
+
 void StyleSheetTable::lcl_attribute(Id Name, Value & val)
 {
     OSL_ENSURE( m_pImpl->m_pCurrentEntry, "current entry has to be set here");
@@ -485,7 +491,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_ooxml::LN_CT_Style_default:
             m_pImpl->m_pCurrentEntry->bIsDefaultStyle = (nIntValue != 0);
-            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE || m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
+            if(lcl_wantGrabBag(m_pImpl->m_pCurrentEntry->nStyleTypeCode))
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "default";
@@ -494,7 +500,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_Style_customStyle:
-            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE || m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
+            if(lcl_wantGrabBag(m_pImpl->m_pCurrentEntry->nStyleTypeCode))
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "customStyle";
@@ -617,7 +623,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_uiPriority:
         case NS_ooxml::LN_CT_Style_link:
         case NS_ooxml::LN_CT_Style_locked:
-            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE || m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA)
+            if(lcl_wantGrabBag(m_pImpl->m_pCurrentEntry->nStyleTypeCode))
             {
                 StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
                 beans::PropertyValue aValue;
