@@ -18,119 +18,119 @@ File gid_File_Extra_Gallery_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgallery.filelist";
+    Name = "accessories_accessoriesgallery.filelist";
 End
 
 File gid_File_Extra_Gallery_Draws_People_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgallerydrawspeople.filelist";
+    Name = "accessories_accessoriesgallerydrawspeople.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Plants_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotosplants.filelist";
+    Name = "accessories_accessoriesgalleryphotosplants.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Celebration_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotoscelebration.filelist";
+    Name = "accessories_accessoriesgalleryphotoscelebration.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Fauna_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotosfauna.filelist";
+    Name = "accessories_accessoriesgalleryphotosfauna.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Flowers_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotosflowers.filelist";
+    Name = "accessories_accessoriesgalleryphotosflowers.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_FoodsandDrinks_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotosfoodsanddrinks.filelist";
+    Name = "accessories_accessoriesgalleryphotosfoodsanddrinks.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Humans_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotoshumans.filelist";
+    Name = "accessories_accessoriesgalleryphotoshumans.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Landscapes_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotoslandscapes.filelist";
+    Name = "accessories_accessoriesgalleryphotoslandscapes.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Buildings_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotosbuildings.filelist";
+    Name = "accessories_accessoriesgalleryphotosbuildings.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Objects_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotosobjects.filelist";
+    Name = "accessories_accessoriesgalleryphotosobjects.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Cities_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotoscities.filelist";
+    Name = "accessories_accessoriesgalleryphotoscities.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Space_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotosspace.filelist";
+    Name = "accessories_accessoriesgalleryphotosspace.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Statues_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotosstatues.filelist";
+    Name = "accessories_accessoriesgalleryphotosstatues.filelist";
 End
 
 File gid_File_Extra_Gallery_Photos_Travel_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryphotostravel.filelist";
+    Name = "accessories_accessoriesgalleryphotostravel.filelist";
 End
 
 File gid_File_Extra_Gallery_Elements_Bullets2_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgalleryelementsbullets2.filelist";
+    Name = "accessories_accessoriesgalleryelementsbullets2.filelist";
 End
 
 File gid_File_Extra_Gallery_NONFREE_Accessories
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "extras_accessoriesgallerynonfree.filelist";
+    Name = "accessories_accessoriesgallerynonfree.filelist";
 End
 
 #endif

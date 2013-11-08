@@ -97,77 +97,77 @@ File gid_File_Extra_Templates_Common
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommon.filelist";
+    Name = "accessories_accessoriestemplatescommon.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Layout
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonlayout.filelist";
+    Name = "accessories_accessoriestemplatescommonlayout.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Present
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonpresent.filelist";
+    Name = "accessories_accessoriestemplatescommonpresent.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Educate
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommoneducate.filelist";
+    Name = "accessories_accessoriestemplatescommoneducate.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Finance
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonfinance.filelist";
+    Name = "accessories_accessoriestemplatescommonfinance.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Forms
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonforms.filelist";
+    Name = "accessories_accessoriestemplatescommonforms.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Labels
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonlabels.filelist";
+    Name = "accessories_accessoriestemplatescommonlabels.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Misc
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonmisc.filelist";
+    Name = "accessories_accessoriestemplatescommonmisc.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Officorr
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonofficorr.filelist";
+    Name = "accessories_accessoriestemplatescommonofficorr.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Offimisc
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonoffimisc.filelist";
+    Name = "accessories_accessoriestemplatescommonoffimisc.filelist";
 End
 
 File gid_File_Extra_Templates_Common_Personal
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, DONT_OVERWRITE);
-    Name = "extras_accessoriestemplatescommonpersonal.filelist";
+    Name = "accessories_accessoriestemplatescommonpersonal.filelist";
 End
 
 /* ** Templates - NON FREE ** */
