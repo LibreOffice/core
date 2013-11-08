@@ -68,6 +68,11 @@ done
 #make sure shared extensions will be readable by users
 [ $SHARED = true ] && umask 0022
 
+# LHM-Patch: Sicherstellen, dass unopkg-Aufrufe als root die Profilverzeichnisse von Benutzern
+# unbeeinflusst lassen, auch wenn diese mit "sudo -s" (statt mit "sudo -s -H") arbeiten.
+SET_ROOT_PROFILE=""
+test "x$USER" = "xroot" && SET_ROOT_PROFILE=' -env:UserInstallation=file:///root/libreoffice/4/'
+
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/../ure-link/bin/javaldx" ] ; then
     my_path=`"$sd_prog/../ure-link/bin/javaldx" $BOOTSTRAPVARS \
