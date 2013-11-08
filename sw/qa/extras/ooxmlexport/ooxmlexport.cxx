@@ -1588,6 +1588,16 @@ DECLARE_OOXML_TEST(testVMLData, "TestVMLData.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:shape", "stroked").match("f"));
 }
 
+DECLARE_OOXML_TEST(testHyperlineIsEnd, "file-corrupted.docx")
+{
+    // Check  that the document.xml contents all the tag properly closed.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // If  document.xml miss any ending tag then parseExport() returns NULL which fail the test case.
+    CPPUNIT_ASSERT(pXmlDoc) ;
+    // Check hyperlink is properly open.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink",1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
