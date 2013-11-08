@@ -40,7 +40,7 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 
 # rule necessary to rebuild cxx files that include the header
 $(call gb_SdiTarget_get_target,%.hxx) : $(call gb_SdiTarget_get_target,%)
-	@true
+	touch $@
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_SdiTarget_get_dep_target,%)).dir :
