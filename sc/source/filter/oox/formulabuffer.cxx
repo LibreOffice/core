@@ -46,6 +46,8 @@ namespace {
  */
 class CachedTokenArray : boost::noncopyable
 {
+public:
+
     struct Item : boost::noncopyable
     {
         SCROW mnRow;
@@ -55,11 +57,6 @@ class CachedTokenArray : boost::noncopyable
         Item( SCROW nRow, ScTokenArray* p ) : mnRow(nRow), mpCode(p) {}
     };
 
-    typedef boost::unordered_map<SCCOL, Item*> ColCacheType;
-    ColCacheType maCache;
-    ScDocument& mrDoc;
-
-public:
     CachedTokenArray( ScDocument& rDoc ) : mrDoc(rDoc) {}
 
     ~CachedTokenArray()
@@ -69,21 +66,21 @@ public:
             delete it->second;
     }
 
-    const ScTokenArray* get( const ScAddress& rPos, const OUString& rFormula ) const
+    Item* get( const ScAddress& rPos, const OUString& rFormula )
     {
         // Check if a token array is cached for this column.
-        ColCacheType::const_iterator it = maCache.find(rPos.Col());
+        ColCacheType::iterator it = maCache.find(rPos.Col());
         if (it == maCache.end())
             return NULL;
 
-        const Item& rCached = *it->second;
+        Item& rCached = *it->second;
         ScCompiler aComp(&mrDoc, rPos, *rCached.mpCode);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
         OUStringBuffer aBuf;
         aComp.CreateStringFromTokenArray(aBuf);
         OUString aPredicted = aBuf.makeStringAndClear();
         if (rFormula == aPredicted)
-            return rCached.mpCode.get();
+            return &rCached;
 
         return NULL;
     }
@@ -106,6 +103,11 @@ public:
         it->second->mnRow = rPos.Row();
         it->second->mpCode.reset(rArray.Clone());
     }
+
+private:
+    typedef boost::unordered_map<SCCOL, Item*> ColCacheType;
+    ColCacheType maCache;
+    ScDocument& mrDoc;
 };
 
 void applySharedFormulas(
@@ -181,11 +183,12 @@ void applyCellFormulas(
     {
         ScAddress aPos;
         ScUnoConversion::FillScAddress(aPos, it->maCellAddress);
-        const ScTokenArray* p = rCache.get(aPos, it->maTokenStr);
+        CachedTokenArray::Item* p = rCache.get(aPos, it->maTokenStr);
         if (p)
         {
             // Use the cached version to avoid re-compilation.
-            rDoc.setFormulaCell(aPos, p->Clone());
+            ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, p->mpCode->Clone());
+            rDoc.setFormulaCell(aPos, pCell);
             continue;
         }
 
@@ -196,7 +199,8 @@ void applyCellFormulas(
         if (!pCode)
             continue;
 
-        rDoc.setFormulaCell(aPos, pCode);
+        ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pCode);
+        rDoc.setFormulaCell(aPos, pCell);
         rCache.store(aPos, *pCode);
     }
 }
