@@ -268,13 +268,13 @@ xub_StrLen SwWW8AttrIter::SearchNext( xub_StrLen nStartPos )
     if ( nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().size() )
     {
         // nCurRedlinePos point to the next redline
-        nPos = nCurRedlinePos;
+        sal_uInt16 nRedLinePos = nCurRedlinePos;
         if( pCurRedline )
-            ++nPos;
+            ++nRedLinePos;
 
-        for ( ; nPos < m_rExport.pDoc->GetRedlineTbl().size(); ++nPos )
+        for ( ; nRedLinePos < m_rExport.pDoc->GetRedlineTbl().size(); ++nRedLinePos )
         {
-            const SwRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nPos ];
+            const SwRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nRedLinePos ];
 
             const SwPosition* pStt = pRedl->Start();
             const SwPosition* pEnd = pStt == pRedl->GetPoint()
