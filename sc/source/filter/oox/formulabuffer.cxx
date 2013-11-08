@@ -51,10 +51,11 @@ public:
     struct Item : boost::noncopyable
     {
         SCROW mnRow;
-        boost::scoped_ptr<ScTokenArray> mpCode;
+        ScFormulaCell* mpCell;
 
-        Item() : mnRow(-1), mpCode(NULL) {}
-        Item( SCROW nRow, ScTokenArray* p ) : mnRow(nRow), mpCode(p) {}
+        Item() : mnRow(-1), mpCell(NULL) {}
+        Item( SCROW nRow, ScFormulaCell* pCell ) :
+            mnRow(nRow), mpCell(pCell) {}
     };
 
     CachedTokenArray( ScDocument& rDoc ) : mrDoc(rDoc) {}
@@ -74,7 +75,7 @@ public:
             return NULL;
 
         Item& rCached = *it->second;
-        ScCompiler aComp(&mrDoc, rPos, *rCached.mpCode);
+        ScCompiler aComp(&mrDoc, rPos, *rCached.mpCell->GetCode());
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
         OUStringBuffer aBuf;
         aComp.CreateStringFromTokenArray(aBuf);
@@ -85,7 +86,7 @@ public:
         return NULL;
     }
 
-    void store( const ScAddress& rPos, const ScTokenArray& rArray )
+    void store( const ScAddress& rPos, ScFormulaCell* pCell )
     {
         ColCacheType::iterator it = maCache.find(rPos.Col());
         if (it == maCache.end())
@@ -100,8 +101,9 @@ public:
             it = r.first;
         }
 
-        it->second->mnRow = rPos.Row();
-        it->second->mpCode.reset(rArray.Clone());
+        Item& rItem = *it->second;
+        rItem.mnRow = rPos.Row();
+        rItem.mpCell = pCell;
     }
 
 private:
@@ -187,8 +189,12 @@ void applyCellFormulas(
         if (p)
         {
             // Use the cached version to avoid re-compilation.
-            ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, p->mpCode->Clone());
+            ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());
             rDoc.setFormulaCell(aPos, pCell);
+
+            // Update the cache.
+            p->mnRow = aPos.Row();
+            p->mpCell = pCell;
             continue;
         }
 
@@ -201,7 +207,7 @@ void applyCellFormulas(
 
         ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pCode);
         rDoc.setFormulaCell(aPos, pCell);
-        rCache.store(aPos, *pCode);
+        rCache.store(aPos, pCell);
     }
 }
 
