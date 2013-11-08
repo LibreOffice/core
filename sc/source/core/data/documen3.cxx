@@ -582,41 +582,30 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
     return true;
 }
 
-bool ScDocument::HasExternalRefManager() const
-{
-    osl::MutexGuard aGuard(&maMtxExternalRefMgr);
-    return mpExternalRefMgr.get();
-}
-
 ScExternalRefManager* ScDocument::GetExternalRefManager() const
 {
-    osl::MutexGuard aGuard(&maMtxExternalRefMgr);
-
     ScDocument* pThis = const_cast<ScDocument*>(this);
-    if (!mpExternalRefMgr.get())
-        pThis->mpExternalRefMgr.reset( new ScExternalRefManager( pThis));
+    if (!pExternalRefMgr.get())
+        pThis->pExternalRefMgr.reset( new ScExternalRefManager( pThis));
 
-    return mpExternalRefMgr.get();
+    return pExternalRefMgr.get();
 }
 
 bool ScDocument::IsInExternalReferenceMarking() const
 {
-    osl::MutexGuard aGuard(&maMtxExternalRefMgr);
-    return mpExternalRefMgr.get() && mpExternalRefMgr->isInReferenceMarking();
+    return pExternalRefMgr.get() && pExternalRefMgr->isInReferenceMarking();
 }
 
 void ScDocument::MarkUsedExternalReferences()
 {
-    osl::MutexGuard aGuard(&maMtxExternalRefMgr);
-
-    if (!mpExternalRefMgr.get())
+    if (!pExternalRefMgr.get())
         return;
-    if (!mpExternalRefMgr->hasExternalData())
+    if (!pExternalRefMgr->hasExternalData())
         return;
     // Charts.
-    mpExternalRefMgr->markUsedByLinkListeners();
+    pExternalRefMgr->markUsedByLinkListeners();
     // Formula cells.
-    mpExternalRefMgr->markUsedExternalRefCells();
+    pExternalRefMgr->markUsedExternalRefCells();
 
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
