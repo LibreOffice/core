@@ -916,6 +916,8 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
 
     // - RowCount/IsRowCountFinal
     fireRowcount();
+
+    ::dbaccess::notifyDataSourceModified(m_xActiveConnection,sal_True);
 }
 
 sal_Int32 SAL_CALL ORowSet::getRow(  ) throw(SQLException, RuntimeException)
@@ -978,6 +980,8 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
 
             // - RowCount/IsRowCountFinal
             fireRowcount();
+
+            ::dbaccess::notifyDataSourceModified(m_xActiveConnection,sal_True);
         }
         else if ( !m_bAfterLast ) // the update went rong
         {
@@ -1035,6 +1039,8 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
 
     // - RowCount/IsRowCountFinal
     fireRowcount();
+
+    ::dbaccess::notifyDataSourceModified(m_xActiveConnection,sal_True);
 }
 
 void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQLException, RuntimeException ) )
