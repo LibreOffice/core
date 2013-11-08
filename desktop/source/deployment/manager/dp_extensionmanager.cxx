@@ -351,7 +351,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
     {
         throw;
     }
-    catch (const lang::IllegalArgumentException &)
+    catch (css::uno::RuntimeException &)
     {
         throw;
     }
