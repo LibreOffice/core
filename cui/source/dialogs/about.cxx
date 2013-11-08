@@ -38,6 +38,7 @@
 #include "cppuhelper/bootstrap.hxx"
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <svtools/optionsdrawinglayer.hxx>
 
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxcommands.h>
@@ -171,6 +172,11 @@ void AboutDialog::SetLogo()
 {
     long nWidth = get_content_area()->get_preferred_size().Width();
 
+    // fdo#67401 set AntiAliasing for SVG logo
+    SvtOptionsDrawinglayer aDrawOpt;
+    sal_Bool bOldAntiAliasSetting = aDrawOpt.IsAntiAliasing();
+    aDrawOpt.SetAntiAliasing(sal_True);
+
     // load svg logo, specify desired width, scale height isotrophically
     if( SfxApplication::loadBrandSvg("flat_logo", aLogoBitmap, nWidth) &&
         !aLogoBitmap.IsEmpty() )
@@ -184,6 +190,7 @@ void AboutDialog::SetLogo()
         m_pLogoImage->Hide();
         m_pLogoReplacement->Show();
     }
+    aDrawOpt.SetAntiAliasing(bOldAntiAliasSetting);
 }
 
 void AboutDialog::Resize()
