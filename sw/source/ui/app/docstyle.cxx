@@ -452,6 +452,16 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
                 bChg = true;
             }
             break;
+        case SFX_STYLE_FAMILY_PSEUDO:
+            {
+                SwNumRule* pRule = rDoc.FindNumRulePtr(aName);
+                if (pRule)
+                {
+                    pRule->SetGrabBagItem(rVal);
+                    bChg = true;
+                }
+            }
+            break;
         default:
             break;
     }
@@ -478,6 +488,13 @@ void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
         case SFX_STYLE_FAMILY_PARA:
             pFmt = rDoc.FindTxtFmtCollByName(aName);
             pFmt->GetGrabBagItem(rVal);
+            break;
+        case SFX_STYLE_FAMILY_PSEUDO:
+            {
+                SwNumRule* pRule = rDoc.FindNumRulePtr(aName);
+                if (pRule)
+                    pRule->GetGrabBagItem(rVal);
+            }
             break;
         default:
             break;

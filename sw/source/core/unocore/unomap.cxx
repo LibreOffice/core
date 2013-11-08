@@ -931,6 +931,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_IS_PHYSICAL), FN_UNO_IS_PHYSICAL,     CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_DISPLAY_NAME), FN_UNO_DISPLAY_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_HIDDEN), FN_UNO_HIDDEN,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_STYLE_INTEROP_GRAB_BAG), FN_UNO_STYLE_INTEROP_GRAB_BAG, CPPU_E2T(CPPUTYPE_PROPERTYVALUE), PROPERTY_NONE, 0},
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aNumStyleMap;
