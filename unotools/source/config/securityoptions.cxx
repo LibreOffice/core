@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/sequenceasvector.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/wldcrd.hxx>
 
 #include <unotools/pathoptions.hxx>
 
@@ -176,8 +175,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         Sequence< OUString >    GetSecureURLs   (                                                       ) const ;
         void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList          )       ;
-        sal_Bool                IsSecureURL     (   const   OUString&               sURL,
-                                                    const   OUString&               sReferer            ) const ;
         inline sal_Int32        GetMacroSecurityLevel   (                                               ) const ;
         void                    SetMacroSecurityLevel   ( sal_Int32 _nLevel                             )       ;
 
@@ -189,7 +186,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
         sal_Bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const ;
         sal_Bool                SetOption       ( SvtSecurityOptions::EOption eOption, sal_Bool bValue  )       ;
         sal_Bool                IsOptionEnabled ( SvtSecurityOptions::EOption eOption                   ) const ;
-private:
 
         /*-****************************************************************************************************//**
             @short      return list of key names of ouer configuration management which represent our module tree
@@ -867,55 +863,6 @@ void SvtSecurityOptions_Impl::SetSecureURLs( const Sequence< OUString >& seqURLL
     }
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
-                                                const   OUString&   sReferer) const
-{
-    sal_Bool bState = sal_False;
-
-    // Check for uncritical protocols first
-    // All protocols different from "macro..." and "slot..." are secure per definition and must not be checked.
-    // "macro://#..." means AppBasic macros that are considered safe
-    INetURLObject   aURL        ( sURL );
-    INetProtocol    aProtocol   = aURL.GetProtocol();
-
-    // All other URLs must checked in combination with referer and internal information about security
-    if ( (aProtocol != INET_PROT_MACRO && aProtocol !=  INET_PROT_SLOT) ||
-         aURL.GetMainURL( INetURLObject::NO_DECODE ).matchIgnoreAsciiCaseAsciiL( "macro:///", 9 ) )
-    {
-        // security check only for "macro" ( without app basic ) or "slot" protocols
-        bState = sal_True;
-    }
-    else
-    {
-        //  check list of allowed URL patterns
-        // Trusted referer given?
-        // NO  => bState will be false per default
-        // YES => search for it in our internal url list
-        if( !sReferer.isEmpty() )
-        {
-            // Search in internal list
-            OUString sRef = sReferer.toAsciiLowerCase();
-            sal_uInt32 nCount = m_seqSecureURLs.getLength();
-            for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
-            {
-                OUString sCheckURL = m_seqSecureURLs[nItem].toAsciiLowerCase();
-                sCheckURL += "*";
-                if( WildCard( sCheckURL ).Matches( sRef ) == sal_True )
-                {
-                    bState = sal_True;
-                    break;
-                }
-            }
-
-            if ( !bState )
-                bState = sRef.compareToAscii("private:user") == COMPARE_EQUAL;
-        }
-    }
-
-    // Return result of operation.
-    return bState;
-}
-
 inline sal_Int32 SvtSecurityOptions_Impl::GetMacroSecurityLevel() const
 {
     return m_nSecLevel;
@@ -1086,11 +1033,40 @@ void SvtSecurityOptions::SetSecureURLs( const Sequence< OUString >& seqURLList )
     m_pDataContainer->SetSecureURLs( seqURLList );
 }
 
-sal_Bool SvtSecurityOptions::IsSecureURL(   const   OUString&   sURL        ,
-                                            const   OUString&   sReferer    ) const
+bool SvtSecurityOptions::isSecureMacroUri(
+    OUString const & uri, OUString const & referer) const
 {
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->IsSecureURL( sURL, sReferer );
+    switch (INetURLObject(uri).GetProtocol()) {
+    case INET_PROT_MACRO:
+        if (uri.startsWithIgnoreAsciiCase("macro:///")) {
+            // Denotes an App-BASIC macro (see SfxMacroLoader::loadMacro), which
+            // is considered safe:
+            return true;
+        }
+        // fall through
+    case INET_PROT_SLOT:
+        if (referer.equalsIgnoreAsciiCase("private:user")) {
+            return true;
+        }
+        {
+            MutexGuard g(GetInitMutex());
+            for (sal_Int32 i = 0;
+                 i != m_pDataContainer->m_seqSecureURLs.getLength(); ++i)
+            {
+                OUString pref(m_pDataContainer->m_seqSecureURLs[i]);
+                if (pref.endsWith("/"))
+                    pref = pref.copy(0, pref.getLength() - 1);
+                if (referer.equalsIgnoreAsciiCase(pref)
+                    || referer.startsWithIgnoreAsciiCase(pref + "/"))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    default:
+        return true;
+    }
 }
 
 sal_Int32 SvtSecurityOptions::GetMacroSecurityLevel() const

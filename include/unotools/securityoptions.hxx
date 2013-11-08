@@ -181,21 +181,11 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
 
         sal_Bool            IsMacroDisabled             (                   ) const ;
 
-        /*-****************************************************************************************************//**
-            @short      special method to check an URL and his referer corresponding to ouer internal security cessation
-            @descr      Give us an URL and his referer and we will say you if these url can be scripted or not!
-
-            @seealso    -
-
-            @param      "sURL" reference to URL for checking
-            @param      "sReferer" reference to referer which whish to run script by given URL
-            @return     sal_True if URL is secure or security is obsolete(!) or sal_False otherwise.
-
-            @onerror    No error should occurre!
-        *//*-*****************************************************************************************************/
-
-        sal_Bool IsSecureURL(   const   OUString&    sURL        ,
-                                const   OUString&    sReferer    ) const ;
+        /**
+           Check whether the given uri is either no dangerous macro-execution
+           URI at all or else the given referer is a trusted source.
+        */
+        bool isSecureMacroUri(OUString const & uri, OUString const & referer) const;
 
         ::com::sun::star::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const ;
         void                                            SetTrustedAuthors       ( const ::com::sun::star::uno::Sequence< Certificate >& rAuthors    )       ;
