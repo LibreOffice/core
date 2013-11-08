@@ -494,12 +494,6 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
     return bRet;
 }
 
-//--------------------------------------------------------------------
-sal_Bool SfxApplication::IsSecureURL( const INetURLObject& rURL, const OUString* pReferer ) const
-{
-    return SvtSecurityOptions().IsSecureURL( rURL.GetMainURL( INetURLObject::NO_DECODE ), *pReferer );
-}
-//--------------------------------------------------------------------
 // TODO/CLEANUP: Why two SetOptions Methods?
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
