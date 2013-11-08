@@ -45,6 +45,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 namespace connectivity
 {
@@ -96,12 +97,22 @@ namespace connectivity
             /* EMBEDDED MODE DATA */
             /** Denotes that we have a .fdb stored within a .odb file. */
             sal_Bool            m_bIsEmbedded;
+
             /**
              * Handle for the folder within the .odb where we store our .fdb
              * (Only used if m_bIsEmbedded is true).
              */
             ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
                 m_xEmbeddedStorage;
+
+            /**
+             * Handle for the parent DatabaseDocument. We need to notify this
+             * whenever any data is written to our temporary database so that
+             * the user is able to save this back to the .odb file.
+             */
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >
+                m_xParentDocument;
+
             /**
              * The temporary folder where we extract the .fdb from a .odb.
              * It is only valid if m_bIsEmbedded is true.
@@ -131,10 +142,16 @@ namespace connectivity
             OWeakRefArray       m_aStatements;
 
             /**
+             * Find the parent database document using this connection.
+             */
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                findDatabaseDocument(const OUString& rStorageURL);
+
+            /**
              * If we are embedded in a .odb we need to listen to Document events
              * in order to save the .fdb back into the .odb.
              */
-            void attachAsDocumentListener(const ::rtl::OUString& rStorageURL);
+            void attachAsDocumentListener();
 
             /**
              * Firebird stores binary collations for indexes on Character based
@@ -181,6 +198,16 @@ namespace connectivity
             isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
             isc_tr_handle&  getTransaction()
                 throw(::com::sun::star::sdbc::SQLException);
+
+            /**
+             * Must be called anytime the underlying database is likely to have
+             * changed.
+             *
+             * This is used to notify the database document of any changes, so
+             * that the user is informed of any pending changes needing to be
+             * saved.
+             */
+            void notifyDatabaseModified();
 
             /**
              * Create a new Blob tied to this connection. Blobs are tied to a
