@@ -87,7 +87,6 @@
 #include "objshimp.hxx"
 #include "openflag.hxx"
 #include <sfx2/passwd.hxx>
-#include "referers.hxx"
 #include <sfx2/request.hxx>
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/viewsh.hxx>
@@ -681,7 +680,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( !aFilter.isEmpty() )
             rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
         rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
-        rReq.AppendItem( SfxStringItem( SID_REFERER, OUString(SFX_REFERER_USER) ) );
+        rReq.AppendItem( SfxStringItem( SID_REFERER, "private:user" ) );
         delete pSet;
 
         if(!pURLList.empty())

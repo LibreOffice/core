@@ -37,8 +37,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 
-static const char SFX_REFERER_USER[] = "private:user";
-
 RecentDocsView::RecentDocsView( Window* pParent )
     : ThumbnailView(pParent)
     , mnFileTypes(TYPE_NONE)
@@ -225,7 +223,7 @@ void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
     sal_Int32 nSize = 2;
     aArgsList.realloc( nSize );
     aArgsList[0].Name = "Referer";
-    aArgsList[0].Value = makeAny( OUString( SFX_REFERER_USER ) );
+    aArgsList[0].Value = makeAny( OUString( "private:user" ) );
 
     // documents will never be opened as templates
     aArgsList[1].Name = "AsTemplate";

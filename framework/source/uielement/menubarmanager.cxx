@@ -142,8 +142,6 @@ namespace framework
 #define SID_ADDONLIST           (SID_SFX_START + 1677)
 #define SID_HELPMENU            (SID_SFX_START + 410)
 
-#define SFX_REFERER_USER        "private:user"
-
 #define aCmdHelpIndex ".uno:HelpIndex"
 #define aCmdToolsMenu ".uno:ToolsMenu"
 #define aCmdHelpMenu ".uno:HelpMenu"
@@ -1075,7 +1073,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
                         // bookmark menu item selected
                         aArgs.realloc( 1 );
                         aArgs[0].Name = OUString( "Referer" );
-                        aArgs[0].Value <<= OUString( SFX_REFERER_USER );
+                        aArgs[0].Value <<= OUString( "private:user" );
                     }
 
                     xDispatch = pMenuItemHandler->xMenuItemDispatch;

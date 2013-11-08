@@ -42,7 +42,6 @@
 #include <sfx2/event.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
-#include "referers.hxx"
 #include <sfx2/docfile.hxx>
 #include "objshimp.hxx"
 #include <sfx2/docfilt.hxx>
@@ -310,7 +309,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
     {
         SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, SFX_APP()->GetPool() );
         aReq.AppendItem( SfxStringItem( SID_FILE_NAME, pPick->aName ));
-        aReq.AppendItem( SfxStringItem( SID_REFERER, SFX_REFERER_USER ) );
+        aReq.AppendItem( SfxStringItem( SID_REFERER, "private:user" ) );
         aReq.AppendItem( SfxStringItem( SID_TARGETNAME, "_default" ) );
         OUString aFilter( pPick->aFilter );
         aGuard.clear();

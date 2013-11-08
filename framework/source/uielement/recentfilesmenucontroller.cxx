@@ -42,7 +42,6 @@ using namespace com::sun::star::util;
 
 #define MAX_MENU_ITEMS  99
 
-static const char SFX_REFERER_USER[] = "private:user";
 static const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
 static const char CMD_PREFIX[]       = "vnd.sun.star.popup:RecentFileList?entry=";
 static const char MENU_SHORTCUT[]     = "~N. ";
@@ -215,7 +214,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         sal_Int32 nSize = 2;
         aArgsList.realloc( nSize );
         aArgsList[0].Name = "Referer";
-        aArgsList[0].Value = makeAny( OUString( SFX_REFERER_USER ) );
+        aArgsList[0].Value = makeAny( OUString( "private:user" ) );
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = "AsTemplate";

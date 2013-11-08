@@ -86,8 +86,6 @@ namespace framework
 #define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
 #define SID_ADDONLIST           (SID_SFX_START + 1677)
 
-#define SFX_REFERER_USER        "private:user"
-
 #define aSlotNewDocDirect "slot:5537"
 #define aSlotAutoPilot "slot:6381"
 
@@ -695,7 +693,7 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
     aArgsList[0].Value = a;
 
     aArgsList[1].Name = OUString( "Referer" );
-    a <<= OUString( SFX_REFERER_USER );
+    a <<= OUString( "private:user" );
     aArgsList[1].Value = a;
 
     OUString aFilter( pMenuItemHandler->aFilter );
@@ -896,7 +894,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                         // bookmark menu item selected
                         aArgs.realloc( 1 );
                         aArgs[0].Name = OUString( "Referer" );
-                        aArgs[0].Value <<= OUString( SFX_REFERER_USER );
+                        aArgs[0].Value <<= OUString( "private:user" );
                     }
 
                     xDispatch = pMenuItemHandler->xMenuItemDispatch;

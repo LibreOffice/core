@@ -84,7 +84,6 @@
 #include <sfx2/module.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfac.hxx>
-#include "referers.hxx"
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>

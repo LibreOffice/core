@@ -83,7 +83,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "frmload.hxx"
-#include "referers.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

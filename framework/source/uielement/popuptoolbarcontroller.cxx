@@ -33,7 +33,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
-#define SFX_REFERER_USER                "private:user"
 
 namespace framework
 {
@@ -310,7 +309,7 @@ NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer"  ));
-    aArgs[0].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ) );
+    aArgs[0].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ) );
 
     dispatchCommand( m_aLastURL, aArgs, aTarget );
 }

@@ -46,7 +46,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
-#include "referers.hxx"
 #include "sfxtypes.hxx"
 #include "helper.hxx"
 
@@ -113,7 +112,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*
         {
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Name = "Referer";
-            aArgs[0].Value = makeAny( OUString(SFX_REFERER_USER ));
+            aArgs[0].Value = makeAny( OUString( "private:user" ));
             aArgs[1].Name = "FileName";
             aArgs[1].Value = makeAny( OUString( aName ));
 

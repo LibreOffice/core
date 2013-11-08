@@ -57,8 +57,6 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using namespace com::sun::star::ui;
 
-static const char SFX_REFERER_USER[] = "private:user";
-
 namespace framework
 {
 
@@ -420,7 +418,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
             xURLTransformer->parseStrict( aTargetURL );
 
             aArgsList[0].Name = OUString( "Referer" );
-            aArgsList[0].Value = makeAny( OUString(SFX_REFERER_USER ));
+            aArgsList[0].Value = makeAny( OUString( "private:user" ));
 
             OUString aTargetFrame( m_aTargetFrame );
             AddInfoForId::const_iterator pItem = m_aAddInfoForItem.find( rEvent.MenuId );
