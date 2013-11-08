@@ -170,8 +170,8 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
 
             if (pIter)
             {
-                sal_uInt32 nRec = pIter->First();
-                while (nRec != SQL_COLUMN_NOTFOUND)
+                sal_uIntPtr nRec = pIter->First();
+                while (nRec != NODE_NOTFOUND)
                 {
                     if (m_aOrderbyAscending[0])
                         m_pFileSet->get().push_back(nRec);
