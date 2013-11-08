@@ -1559,6 +1559,8 @@ public:
     OString GetStyleId(sal_uInt16 nId) const;
 
     const SwFmt* GetSwFmt(sal_uInt16 nId) const { return pFmtA[nId]; }
+    /// Get numbering rule of the nId-th style
+    const SwNumRule* GetSwNumRule(sal_uInt16 nId) const;
 };
 
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt);

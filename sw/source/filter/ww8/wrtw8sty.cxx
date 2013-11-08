@@ -718,6 +718,13 @@ void MSWordStyles::OutputStylesTable()
     m_rExport.bStyDef = false;
 }
 
+const SwNumRule* MSWordStyles::GetSwNumRule(sal_uInt16 nId) const
+{
+    std::map<sal_uInt16, const SwNumRule*>::const_iterator it = m_aNumRules.find(nId);
+    assert(it != m_aNumRules.end());
+    return it->second;
+}
+
 //---------------------------------------------------------------------------
 //          Fonts
 //---------------------------------------------------------------------------
