@@ -826,7 +826,7 @@ void TextPropertyPanel::NotifyItemUpdate (
             {
                 mpHeightItem = NULL;
                 mpFontSizeBox->SetText( "" );
-                //increase decrease diabled when multi-seletion have different font size
+                //increase decrease disabled when multi-seletion have different font size
 
                 // font size +/- enhancement in sd
                 switch(maContext.GetCombinedContext_DI())
