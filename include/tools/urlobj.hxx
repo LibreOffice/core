@@ -222,9 +222,10 @@ public:
 
     // Strict Parsing:
 
-    inline INetURLObject(OUString const & rTheAbsURIRef,
-                         EncodeMechanism eMechanism = WAS_ENCODED,
-                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
+    inline explicit INetURLObject(
+        OUString const & rTheAbsURIRef,
+        EncodeMechanism eMechanism = WAS_ENCODED,
+        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     inline bool SetURL(OUString const & rTheAbsURIRef,
                        EncodeMechanism eMechanism = WAS_ENCODED,

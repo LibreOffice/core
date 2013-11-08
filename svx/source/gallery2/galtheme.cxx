@@ -915,7 +915,7 @@ sal_Bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInse
 
         if( bRet )
         {
-            const SgaObjectBmp aObjBmp( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            const SgaObjectBmp aObjBmp( aURL );
             InsertObject( aObjBmp, nInsertPos );
         }
     }

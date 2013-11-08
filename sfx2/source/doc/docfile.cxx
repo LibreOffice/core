@@ -2994,8 +2994,7 @@ const INetURLObject& SfxMedium::GetURLObject() const
     if (!pImp->m_pURLObj)
     {
         pImp->m_pURLObj = new INetURLObject( pImp->m_aLogicName );
-        if (pImp->m_pURLObj->HasMark())
-            *pImp->m_pURLObj = INetURLObject( pImp->m_aLogicName ).GetURLNoMark();
+        pImp->m_pURLObj->SetMark("");
     }
 
     return *pImp->m_pURLObj;

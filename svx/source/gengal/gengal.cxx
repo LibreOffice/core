@@ -18,7 +18,7 @@
 #include <unistd.h>
 #endif
 
-#include <list>
+#include <vector>
 
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -42,8 +42,6 @@
 #include <svx/gallery1.hxx>
 
 using namespace ::com::sun::star;
-
-typedef ::std::list<OUString> FileNameList;
 
 class GalApp : public Application
 {
@@ -72,7 +70,7 @@ void disposeGallery( Gallery* pGallery )
 }
 
 static void createTheme( OUString aThemeName, OUString aGalleryURL,
-                         OUString aDestDir, FileNameList &rFiles,
+                         OUString aDestDir, std::vector<INetURLObject> &rFiles,
                          bool bRelativeURLs )
 {
     Gallery* pGallery;
@@ -111,7 +109,7 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
              OUStringToOString( aDestDir, RTL_TEXTENCODING_UTF8 ).getStr() );
     pGalTheme->SetDestDir( aDestDir, bRelativeURLs );
 
-    FileNameList::const_iterator aIter;
+    std::vector<INetURLObject>::const_iterator aIter;
 
     for( aIter = rFiles.begin(); aIter != rFiles.end(); ++aIter )
     {
@@ -123,10 +121,10 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
 
         if ( ! pGalTheme->InsertURL( *aIter ) )
             fprintf( stderr, "Failed to import '%s'\n",
-                     OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ).getStr() );
+                     OUStringToOString( aIter->GetMainURL(INetURLObject::NO_DECODE), RTL_TEXTENCODING_UTF8 ).getStr() );
         else
             fprintf( stderr, "Imported file '%s' (%" SAL_PRI_SIZET "u)\n",
-                     OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ).getStr(),
+                     OUStringToOString( aIter->GetMainURL(INetURLObject::NO_DECODE), RTL_TEXTENCODING_UTF8 ).getStr(),
                      pGalTheme->GetObjectCount() );
     }
 
@@ -162,11 +160,11 @@ static int PrintHelp()
     return EXIT_SUCCESS;
 }
 
-static OUString Smartify( const OUString &rPath )
+static INetURLObject Smartify( const OUString &rPath )
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rPath );
-    return aURL.GetMainURL( INetURLObject::NO_DECODE );
+    return aURL;
 }
 
 void GalApp::Init()
@@ -214,7 +212,7 @@ int GalApp::Main()
 {
     OUString aPath, aDestDir;
     OUString aName( "Default name" );
-    FileNameList aFiles;
+    std::vector<INetURLObject> aFiles;
 
     for( sal_uInt32 i = 0; i < GetCommandLineParamCount(); i++ )
     {
@@ -232,7 +230,8 @@ int GalApp::Main()
         else if ( aParam == "--name" )
             aName = GetCommandLineParam( ++i );
         else if ( aParam == "--path" )
-            aPath = Smartify( GetCommandLineParam( ++i ) );
+            aPath = Smartify( GetCommandLineParam( ++i ) ).
+                GetMainURL(INetURLObject::NO_DECODE);
         else if ( aParam == "--destdir" )
             aDestDir = GetCommandLineParam( ++i );
         else if ( aParam == "--relative-urls" )
@@ -244,7 +243,7 @@ int GalApp::Main()
             aFiles.push_back( Smartify( aParam ) );
     }
 
-    if( aFiles.size() < 1 )
+    if( aFiles.empty() )
         return PrintHelp();
 
     createTheme( aName, aPath, aDestDir, aFiles, mbRelativeURLs );

@@ -316,7 +316,7 @@ void TakeThread::execute()
         {
             SolarMutexGuard aGuard;
 
-            mpProgress->SetFile( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+            mpProgress->SetFile( aURL );
             pStatusProgress->Update( i, nEntries - 1 );
             mpProgress->Sync();
             pThm->InsertURL( aURL );
@@ -1008,7 +1008,7 @@ void TPGalleryThemeProperties::SearchFiles()
     aLbxFound.Clear();
 
     pProgress->SetFileType( aCbbFileType.GetText() );
-    pProgress->SetDirectory( OUString() );
+    pProgress->SetDirectory( INetURLObject() );
     pProgress->Update();
 
     pProgress->StartExecuteModal( LINK( this, TPGalleryThemeProperties, EndSearchProgressHdl ) );

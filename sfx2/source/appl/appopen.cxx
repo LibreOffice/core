@@ -933,7 +933,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         sal_Bool bLoadInternal = sal_False;
 
                         // security reservation: => we have to check the referer before executing
-                        if (SFX_APP()->IsSecureURL(OUString(), &aReferer))
+                        if (SFX_APP()->IsSecureURL(INetURLObject(), &aReferer))
                         {
                             try
                             {

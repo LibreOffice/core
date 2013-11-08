@@ -127,7 +127,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference
 
         if( !aFileURL.matchIgnoreAsciiCase( OUString("file://") ) )
         {
-            aFileURL = URIHelper::SmartRel2Abs( sProgPath, aFileURL, Link(), false );
+            aFileURL = URIHelper::SmartRel2Abs( INetURLObject(sProgPath), aFileURL, Link(), false );
         }
 
         INetURLObject aURL( aFileURL );
