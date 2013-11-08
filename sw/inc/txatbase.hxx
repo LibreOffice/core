@@ -126,7 +126,7 @@ protected:
     xub_StrLen m_nEnd;
 
 public:
-    SwTxtAttrEnd( SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
+    SwTxtAttrEnd( SfxPoolItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
 
     using SwTxtAttr::GetEnd;
     virtual xub_StrLen* GetEnd();

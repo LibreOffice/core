@@ -469,8 +469,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 (rSTxt.*fnMove->fnSearch)( sCleanStr, &nProxyStart, &nProxyEnd, 0 ) &&
                 !(bZeroMatch = (nProxyStart == nProxyEnd)))
         {
-            nStart = (sal_uInt16)nProxyStart;
-            nEnd = (sal_uInt16)nProxyEnd;
+            nStart = (xub_StrLen)nProxyStart;
+            nEnd = (xub_StrLen)nProxyEnd;
             // set section correctly
             *GetPoint() = *pPam->GetPoint();
             SetMark();
@@ -478,24 +478,25 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             // adjust start and end
             if( !aFltArr.empty() )
             {
-                xub_StrLen n, nNew;
                 // if backward search, switch positions temporarily
-                if( !bSrchForward ) { n = nStart; nStart = nEnd; nEnd = n; }
+                if( !bSrchForward ) { std::swap(nStart, nEnd); }
 
-                for( n = 0, nNew = nStart;
+                xub_StrLen nNew(nStart);
+                for (size_t n = 0;
                     n < aFltArr.size() && aFltArr[ n ] <= nStart;
                     ++n, ++nNew )
                     ;
 
                 nStart = nNew;
-                for( n = 0, nNew = nEnd;
+                nNew = nEnd;
+                for(size_t n = 0;
                     n < aFltArr.size() && aFltArr[ n ] < nEnd;
                     ++n, ++nNew )
                     ;
 
                 nEnd = nNew;
                 // if backward search, switch positions temporarily
-                if( !bSrchForward ) { n = nStart; nStart = nEnd; nEnd = n; }
+                if( !bSrchForward ) { std::swap(nStart, nEnd); }
             }
             GetMark()->nContent = nStart;
             GetPoint()->nContent = nEnd;

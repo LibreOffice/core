@@ -51,7 +51,7 @@ class SwTxtFrm: public SwCntntFrm
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
     friend class SwTxtFrmLocker;        // duerfen Lock()/Unlock()
-    friend bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_uInt16 nNew );
+    friend bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew );
 
     static SwCache *pTxtCache;  //Pointer auf den Line-Cache
     static long nMinPrtLine;    //Diese Linie darf beim Drucken nicht
@@ -219,11 +219,11 @@ public:
     void Init();
 
     // Wird von FormatSpelling( ) gerufen
-    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, sal_uInt16 );
+    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, xub_StrLen );
     // is called from the FormatSpelling( ) method
-    SwRect SmartTagScan( SwCntntNode* , sal_uInt16 );
+    SwRect SmartTagScan( SwCntntNode* , xub_StrLen );
     // Wird vom CollectAutoCmplWords gerufen
-    void CollectAutoCmplWrds( SwCntntNode* , sal_uInt16 );
+    void CollectAutoCmplWrds( SwCntntNode* , xub_StrLen );
 
     // Returns the screen position of rPos. The values are relative to the upper
     // left position of the page frame.
@@ -302,10 +302,10 @@ public:
     // Methoden zur Verwaltung von FolgeFrames
            SwCntntFrm *SplitFrm( const xub_StrLen nTxtPos );
            SwCntntFrm *JoinFrm();
-    inline sal_uInt16      GetOfst() const { return nOfst; }
-           void        _SetOfst( const sal_uInt16 nNewOfst );
-    inline void        SetOfst ( const sal_uInt16 nNewOfst );
-    inline void        ManipOfst ( const sal_uInt16 nNewOfst ){ nOfst = nNewOfst; }
+    inline xub_StrLen  GetOfst() const { return nOfst; }
+           void        _SetOfst( const xub_StrLen nNewOfst );
+    inline void        SetOfst ( const xub_StrLen nNewOfst );
+    inline void        ManipOfst ( const xub_StrLen nNewOfst ){ nOfst = nNewOfst; }
            SwTxtFrm   *GetFrmAtPos ( const SwPosition &rPos);
     inline const SwTxtFrm *GetFrmAtPos ( const SwPosition &rPos) const;
            // OD 07.10.2003 #110978# - return <reference> instead of <pointer>
@@ -503,10 +503,10 @@ public:
     sal_uInt16 FirstLineHeight() const;
 
     // Haengt FlyInCntFrm um, wenn nEnd > Index >= nStart ist.
-    void MoveFlyInCnt( SwTxtFrm *pNew, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd );
 
     // Berechnet die Position von FlyInCntFrms
-    sal_uInt16 CalcFlyPos( SwFrmFmt* pSearch );
+    xub_StrLen CalcFlyPos( SwFrmFmt* pSearch );
 
     // Ermittelt die Startposition und Schrittweite des Registers
     sal_Bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );

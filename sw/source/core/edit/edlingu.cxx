@@ -100,8 +100,8 @@ public:
 // the content positions of each portion need to be saved
 struct SpellContentPosition
 {
-    sal_uInt16 nLeft;
-    sal_uInt16 nRight;
+    xub_StrLen nLeft;
+    xub_StrLen nRight;
 };
 
 typedef std::vector<SpellContentPosition>  SpellContentPositions;

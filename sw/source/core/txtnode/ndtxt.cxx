@@ -2320,7 +2320,7 @@ void SwTxtNode::GCAttr()
         return;
 
     bool   bChanged = false;
-    sal_uInt16 nMin = m_Text.getLength(),
+    xub_StrLen nMin = m_Text.getLength(),
            nMax = 0;
     bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
                            // INet-Formate entfernt.

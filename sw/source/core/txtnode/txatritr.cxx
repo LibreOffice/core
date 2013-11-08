@@ -205,8 +205,8 @@ void SwTxtAttrIterator::SearchNextChg()
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
             const SwTxtAttr* pHt = (*pHts)[ nAttrPos ];
-            const sal_uInt16* pEnd = pHt->GetEnd();
-            const sal_uInt16 nHtStt = *pHt->GetStart();
+            const xub_StrLen* pEnd = pHt->GetEnd();
+            const xub_StrLen nHtStt = *pHt->GetStart();
             if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
                 continue;
 

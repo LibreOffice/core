@@ -337,8 +337,8 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     }
     if (m_pTxtNode!=NULL) {
         //TODO maybe use hints like FieldHints for this instead of looking at the text...
-        int l=(nNext<m_pTxtNode->Len()?nNext:m_pTxtNode->Len());
-        sal_uInt16 p=nPos;
+        xub_StrLen l=(nNext<m_pTxtNode->Len()?nNext:m_pTxtNode->Len());
+        xub_StrLen p=nPos;
         while (p<l && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDSTART
                    && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDEND
                    && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FORMELEMENT)
