@@ -31,20 +31,6 @@ namespace oox { namespace xls {
 
 class FormulaBuffer : public WorkbookHelper
 {
-    class FinalizeThread : public salhelper::Thread
-    {
-        FormulaBuffer& mrParent;
-        size_t mnThreadCount;
-    public:
-        FinalizeThread( FormulaBuffer& rParent, size_t nThreadCount );
-        virtual ~FinalizeThread();
-
-    protected:
-        virtual void execute();
-    };
-
-    friend class FinalizeThread;
-
 public:
     /**
      * Represents a shared formula definition.

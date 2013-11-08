@@ -214,15 +214,16 @@ FormulaBuffer::SheetItem::SheetItem() :
     mpSharedFormulaEntries(NULL),
     mpSharedFormulaIDs(NULL) {}
 
-FormulaBuffer::FinalizeThread::FinalizeThread( FormulaBuffer& rParent, size_t nThreadCount ) :
-    salhelper::Thread("xlsx-import-formula-buffer-finalize-thread"),
-    mrParent(rParent), mnThreadCount(nThreadCount) {}
-
-FormulaBuffer::FinalizeThread::~FinalizeThread() {}
-
-void FormulaBuffer::FinalizeThread::execute()
+FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( rHelper )
 {
-    ScDocumentImport& rDoc = mrParent.getDocImport();
+}
+
+void FormulaBuffer::finalizeImport()
+{
+    ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
+
+    const size_t nThreadCount = 1;
+    ScDocumentImport& rDoc = getDocImport();
     rDoc.getDoc().SetAutoNameCache(new ScAutoNameCache(&rDoc.getDoc()));
     ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
 
@@ -232,11 +233,11 @@ void FormulaBuffer::FinalizeThread::execute()
     std::vector<SheetItem> aSheetItems;
     aSheetItems.reserve(nTabCount);
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
-        aSheetItems.push_back(mrParent.getSheetItem(nTab));
+        aSheetItems.push_back(getSheetItem(nTab));
 
     typedef rtl::Reference<WorkerThread> WorkerThreadRef;
     std::vector<WorkerThreadRef> aThreads;
-    aThreads.reserve(mnThreadCount);
+    aThreads.reserve(nThreadCount);
 
     std::vector<SheetItem>::iterator it = aSheetItems.begin(), itEnd = aSheetItems.end();
 
@@ -246,7 +247,7 @@ void FormulaBuffer::FinalizeThread::execute()
     // lack.
     while (it != itEnd)
     {
-        for (size_t i = 0; i < mnThreadCount; ++i)
+        for (size_t i = 0; i < nThreadCount; ++i)
         {
             if (it == itEnd)
                 break;
@@ -267,21 +268,6 @@ void FormulaBuffer::FinalizeThread::execute()
     }
 
     rDoc.getDoc().SetAutoNameCache(NULL);
-}
-
-FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( rHelper )
-{
-}
-
-void FormulaBuffer::finalizeImport()
-{
-    ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
-
-    rtl::Reference<FinalizeThread> xThreadMgr(new FinalizeThread(*this, 1));
-    xThreadMgr->launch();
-
-    if (xThreadMgr.is())
-        xThreadMgr->join();
 
     xFormulaBar->setPosition( 1.0 );
 }
