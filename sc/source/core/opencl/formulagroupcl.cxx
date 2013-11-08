@@ -696,9 +696,9 @@ public:
     virtual std::string GetBottom(void) { return "MAXFLOAT"; }
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
-        return "fmin("+lhs + "," + rhs +")";
+        return "min("+lhs + "," + rhs +")";
     }
-    virtual std::string BinFuncName(void) const { return "fmin"; }
+    virtual std::string BinFuncName(void) const { return "min"; }
 };
 
 class OpMax: public Reduction {
@@ -706,9 +706,9 @@ public:
     virtual std::string GetBottom(void) { return "-MAXFLOAT"; }
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
-        return "fmax("+lhs + "," + rhs +")";
+        return "max("+lhs + "," + rhs +")";
     }
-    virtual std::string BinFuncName(void) const { return "fmax"; }
+    virtual std::string BinFuncName(void) const { return "max"; }
 };
 class OpSumProduct: public SumOfProduct {
 public:
@@ -1231,6 +1231,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocChiSqDist:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpChiSqDist));
+                break;
+            case ocChiSqInv:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i],new OpChiSqInv));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
