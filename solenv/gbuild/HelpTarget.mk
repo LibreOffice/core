@@ -348,6 +348,8 @@ $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_WORKDIR := $(4)
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(dir $(call gb_HelpLinkTarget_get_target,$(1))).dir
 
+$(4)/$(2).tree : $(call gb_HelpLinkTarget_get_target,$(1))
+
 endef
 
 # gb_HelpLinkTarget_set_configfile target configfile
@@ -373,6 +375,7 @@ endef
 # gb_HelpLinkTarget_set_indexed target indexfiles
 define gb_HelpLinkTarget_set_indexed
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_INDEXED := $(2)
+$(addprefix $(call gb_HelpTarget_get_workdir,$(1))/,$(2)) : $(call gb_HelpIndexTarget_get_target,$(1))
 
 endef
 
@@ -495,6 +498,8 @@ $(call gb_HelpJarTarget_get_target,$(1)) : HELP_MODULE := $(2)
 $(call gb_HelpJarTarget_get_target,$(1)) : HELP_WORKDIR := $(3)
 
 $(call gb_HelpJarTarget_get_target,$(1)) :| $(dir $(call gb_HelpJarTarget_get_target,$(1))).dir
+
+$(3)/$(2).jar : $(call gb_HelpJarTarget_get_target,$(1))
 
 endef
 
@@ -621,6 +626,24 @@ $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpTranslateTarget_get_
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpTreeTarget_get_clean_target,$(1))
 
 endef
+
+# need a rule for these because these are targets for the Package
+$(WORKDIR)/HelpTarget/%.tree :
+	touch $@
+$(WORKDIR)/HelpTarget/%.jar :
+	touch $@
+$(WORKDIR)/HelpTarget/%.db :
+	touch $@
+$(WORKDIR)/HelpTarget/%.ht :
+	touch $@
+$(WORKDIR)/HelpTarget/%.key :
+	touch $@
+$(WORKDIR)/HelpTarget/%.idxl/_0.cfs :
+	touch $@
+$(WORKDIR)/HelpTarget/%.idxl/segments_3 :
+	touch $@
+$(WORKDIR)/HelpTarget/%.idxl/segments.gen :
+	touch $@
 
 # Get list of the various index files.
 #
