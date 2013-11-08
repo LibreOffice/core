@@ -3055,6 +3055,216 @@ vSubArguments)
     }
 
 }
+void OpGammaInv::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(fBigInvDecl);decls.insert(fHalfMachEpsDecl);
+    decls.insert(GetGammaSeriesDecl);decls.insert(GetGammaContFractionDecl);
+    decls.insert(GetGammaInvValueDecl);
+    funs.insert(GetGammaSeries);funs.insert(GetGammaContFraction);
+    funs.insert(GetGammaInvValue);
+}
+
+void OpGammaInv::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double tmp;\n";
+    ss << "    double arg0,arg1,arg2;\n";
+    size_t i = vSubArguments.size();
+    size_t nItems = 0;
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n ";
+#endif
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            else {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+            ss << "    {\n";
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            arg"<<i<<"= 0;\n";
+            ss << "        else\n";
+            ss << "            arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss << "    }\n";
+            ss << "    else\n";
+            ss << "        arg"<<i<<"= 0;\n";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        arg"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#endif
+        }
+    }
+    ss << "    if (arg0 == 0.0)\n"
+    "    {\n"
+    "        tmp=0.0;\n"
+    "        return tmp;\n"
+    "    }\n"
+    "    else\n"
+    "    {\n"
+    "        bool bConvError;\n"
+    "        double fStart = arg1 * arg2;\n"
+    "        double fAx=fStart*0.5;\n"
+    "        double fBx=fStart;\n"
+    "        bConvError = false;\n"
+    "        double fYEps = 1.0E-307;\n"
+    "        double fXEps = 2.22045e-016;\n"
+    "        double fAy = arg0-GetGammaInvValue(arg1,arg2,fAx);\n"
+    "        double fBy = arg0-GetGammaInvValue(arg1,arg2,fBx);\n"
+    "        double fTemp;\n"
+    "        unsigned short nCount;\n"
+    "        for (nCount = 0; nCount < 1000 && !((fAy < 0.0 && fBy > 0.0)"
+    " || (fAy > 0.0 && fBy < 0.0)); nCount++)\n"
+    "        {\n"
+    "            if (fabs(fAy) <= fabs(fBy))\n"
+    "            {\n"
+    "                fTemp = fAx;\n"
+    "                fAx += 2.0 * (fAx - fBx);\n"
+    "                if (fAx < 0.0)\n"
+    "                    fAx = 0.0;\n"
+    "                fBx = fTemp;\n"
+    "                fBy = fAy;\n"
+    "                fAy = arg0-GetGammaInvValue(arg1,arg2,fAx);\n"
+    "            }\n"
+    "            else\n"
+    "            {\n"
+    "                fTemp = fBx;\n"
+    "                fBx += 2.0 * (fBx - fAx);\n"
+    "                fAx = fTemp;\n"
+    "                fAy = fBy;\n"
+    "                fBy = arg0-GetGammaInvValue(arg1,arg2,fBx);\n"
+    "            }\n"
+    "        }\n"
+    "        if (fAy == 0.0)\n"
+    "        {\n"
+    "            tmp = fAx;\n"
+    "            return tmp;\n"
+    "        }\n"
+    "        if (fBy == 0.0)\n"
+    "        {\n"
+    "            tmp = fBx;\n"
+    "            return tmp;\n"
+    "        }\n"
+    "        if (!((fAy < 0.0 && fBy > 0.0) || (fAy > 0.0 && fBy < 0.0)))\n"
+    "        {\n"
+    "            bConvError = true;\n"
+    "            tmp = 0.0;\n"
+    "            return tmp;\n"
+    "        }\n"
+    "        double fPx = fAx;\n"
+    "        double fPy = fAy;\n"
+    "        double fQx = fBx;\n"
+    "        double fQy = fBy;\n"
+    "        double fRx = fAx;\n"
+    "        double fRy = fAy;\n"
+    "        double fSx = 0.5 * (fAx + fBx);\n"
+    "        bool bHasToInterpolate = true;\n"
+    "        nCount = 0;\n"
+    "        while ( nCount < 500 && fabs(fRy) > fYEps &&"
+    "(fBx-fAx) > fmax( fabs(fAx), fabs(fBx)) * fXEps )\n"
+    "        {\n"
+    "            if (bHasToInterpolate)\n"
+    "            {\n"
+    "                if (fPy!=fQy && fQy!=fRy && fRy!=fPy)\n"
+    "                {\n"
+    "                    fSx = fPx * fRy * fQy / (fRy-fPy) / (fQy-fPy)"
+    "+ fRx * fQy * fPy / (fQy-fRy) / (fPy-fRy)"
+    "+ fQx * fPy * fRy / (fPy-fQy) / (fRy-fQy);\n"
+    "                    bHasToInterpolate = (fAx < fSx) && (fSx < fBx);\n"
+    "                }\n"
+    "                else\n"
+    "                    bHasToInterpolate = false;\n"
+    "            }\n"
+    "            if(!bHasToInterpolate)\n"
+    "            {\n"
+    "                fSx = 0.5 * (fAx + fBx);\n"
+    "                fPx = fAx; fPy = fAy;\n"
+    "                fQx = fBx; fQy = fBy;\n"
+    "                bHasToInterpolate = true;\n"
+    "            }\n"
+    "            fPx = fQx; fQx = fRx; fRx = fSx;\n"
+    "            fPy = fQy; fQy = fRy;\n"
+    "            fRy =  arg0-GetGammaInvValue(arg1,arg2,fSx);\n"
+    "            if ((fAy < 0.0 && fRy > 0.0) || (fAy > 0.0 && fRy < 0.0))\n"
+    "            {\n"
+    "                fBx = fRx;\n"
+    "                fBy = fRy;\n"
+    "            }\n"
+    "            else\n"
+    "            {\n"
+    "                fAx = fRx;\n"
+    "                fAy = fRy;\n"
+    "            }\n"
+    "            bHasToInterpolate = bHasToInterpolate && (fabs(fRy)"
+    " * 2.0 <= fabs(fQy));\n"
+    "            ++nCount;\n"
+    "        }\n"
+    "        tmp = fRx;\n"
+    "        return tmp;\n"
+    "    }\n"
+    "}\n";
+}
+
 
 }}
 
