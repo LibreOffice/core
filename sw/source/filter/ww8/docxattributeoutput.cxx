@@ -1224,7 +1224,6 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     if( m_closeHyperlinkInThisRun )
     {
         m_closeHyperlinkInPreviousRun = true;
-        m_closeHyperlinkInThisRun = false;
     }
 
     // one text can be split into more <w:t>blah</w:t>'s by line breaks etc.
