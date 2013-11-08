@@ -21,6 +21,7 @@
 
 #include "frame.hxx"
 
+class SwAnchoredObject;
 class SwCntntFrm;
 class SwFlowFrm;
 class SwFmtCol;
@@ -53,6 +54,7 @@ protected:
     virtual void MakeAll();
 
     SwFrm           *pLower;
+    std::vector<SwAnchoredObject*> aVertPosOrientFrmsFor;
 
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
@@ -164,6 +166,18 @@ public:
     inline SwFrm* GetLastLower();
 
     virtual void PaintBreak() const;
+
+    void SetVertPosOrientFrmFor(SwAnchoredObject *pObj)
+    {
+        aVertPosOrientFrmsFor.push_back(pObj);
+    }
+
+    void ClearVertPosOrientFrmFor(SwAnchoredObject *pObj)
+    {
+        aVertPosOrientFrmsFor.erase(
+            std::remove(aVertPosOrientFrmsFor.begin(),
+                aVertPosOrientFrmsFor.end(), pObj), aVertPosOrientFrmsFor.end());
+    }
 };
 
 //Um doppelte Implementierung zu sparen wird hier ein bischen gecasted
