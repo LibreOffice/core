@@ -278,9 +278,7 @@ void ScTpSubTotalGroup::FillListBoxes()
             aFieldName = pDoc->GetString(col, nFirstRow, nTab);
             if ( aFieldName.isEmpty() )
             {
-                OUStringBuffer aBuf;
-                aBuf.append(aStrColumn);
-                aFieldName = aBuf.makeStringAndClear().replaceAll("%1", ScColToAlpha( col ));
+                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
             }
             nFieldArr[i] = col;
             aLbGroup.InsertEntry( aFieldName, i+1 );
