@@ -765,6 +765,8 @@ private:
 
     boost::shared_ptr<DocxTableStyleExport> m_pTableStyleExport;
 
+    bool m_setFootnote;
+
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
 

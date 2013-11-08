@@ -1577,6 +1577,17 @@ DECLARE_OOXML_TEST(testPgMargin, "testPgMargin.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
 }
 
+DECLARE_OOXML_TEST(testFootnoteParagraphTag, "testFootnote.docx")
+{
+    /* In footnotes.xml, the paragraph tag inside <w:footnote w:id="2"> was getting written into document.xml.
+     * Check for, paragraph tag is correctly written into footnotes.xml.
+     */
+    xmlDocPtr pXmlFootnotes = parseExport("word/footnotes.xml");
+    assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]","id","2");
+    assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:rPr/w:rStyle","val","Footnotereference");
+}
+
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
