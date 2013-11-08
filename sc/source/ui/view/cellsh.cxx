@@ -55,6 +55,7 @@
 #include "postit.hxx"
 #include "cliputil.hxx"
 #include "clipparam.hxx"
+#include "datastreams.hxx"
 #include "markdata.hxx"
 
 //------------------------------------------------------------------
@@ -98,6 +99,7 @@ ScCellShell::~ScCellShell()
     }
 
     delete pImpl->m_pLinkedDlg;
+    delete pImpl->m_pDataStreams;
     delete pImpl->m_pRequest;
     delete pImpl;
 }

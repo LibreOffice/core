@@ -56,6 +56,7 @@
 #include "scabstdlg.hxx"
 #include "impex.hxx"
 #include "asciiopt.hxx"
+#include "datastreams.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
 
@@ -733,6 +734,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             }
             break;
         case SID_DATA_STREAMS:
+            if (!pImpl->m_pDataStreams)
+                pImpl->m_pDataStreams = new DataStreams(GetViewData()->GetDocShell());
+            pImpl->m_pDataStreams->ShowDialog( pTabViewShell->GetDialogParent() );
             break;
         case SID_MANAGE_XML_SOURCE:
             ExecuteXMLSourceDialog();

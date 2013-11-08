@@ -228,7 +228,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/optutil \
     sc/source/core/tool/orcusxml \
     sc/source/core/tool/parclass \
-        sc/source/core/tool/platforminfo \
+    sc/source/core/tool/platforminfo \
     sc/source/core/tool/printopt \
     sc/source/core/tool/prnsave \
     sc/source/core/tool/progress \
@@ -440,6 +440,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/miscdlgs/autofmt \
     sc/source/ui/miscdlgs/conflictsdlg \
     sc/source/ui/miscdlgs/crnrdlg \
+    sc/source/ui/miscdlgs/datastreams \
+    sc/source/ui/miscdlgs/datastreamsdlg \
     sc/source/ui/miscdlgs/highred \
     sc/source/ui/miscdlgs/optsolver \
     sc/source/ui/miscdlgs/protectiondlg \
