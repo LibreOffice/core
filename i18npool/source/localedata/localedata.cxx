@@ -284,7 +284,8 @@ static const struct {
     { "yom_CG", lcl_DATA_OTHERS },
     { "sid_ET", lcl_DATA_OTHERS },
     { "bo_CN",  lcl_DATA_OTHERS },
-    { "bo_IN",  lcl_DATA_OTHERS }
+    { "bo_IN",  lcl_DATA_OTHERS },
+    { "bm_ML",  lcl_DATA_OTHERS }
 };
 
 #else
