@@ -27,8 +27,15 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
+#include "svl/itemset.hxx"
+#include "editeng/flditem.hxx"
+
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/optional.hpp>
+
 class ScXMLImport;
 class ScXMLTableRowCellContext;
+class ScEditEngineDefaulter;
 
 struct ScXMLAnnotationStyleEntry
 {
@@ -59,12 +66,32 @@ struct ScXMLAnnotationData
     bool                mbShown;
     std::vector<ScXMLAnnotationStyleEntry> maContentStyles;
 
+    ScEditEngineDefaulter* maEditEngine;
+
     explicit            ScXMLAnnotationData();
                         ~ScXMLAnnotationData();
 };
 
 class ScXMLAnnotationContext : public SvXMLImportContext
 {
+
+    struct ParaFormat
+    {
+        SfxItemSet maItemSet;
+        ESelection maSelection;
+
+        ParaFormat(ScEditEngineDefaulter& rEditEngine);
+    };
+
+    struct Field : boost::noncopyable
+    {
+        SvxFieldData* mpData;
+        ESelection maSelection;
+
+        Field(SvxFieldData* pData);
+        ~Field();
+    };
+
 public:
 
     ScXMLAnnotationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -94,7 +121,18 @@ public:
 
     void AddContentStyle( sal_uInt16 nFamily, const OUString& rName, const ESelection& rSelection );
 
+    // handle caption - callback from annotationtextparacontext
+    void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
+    void PushParagraphFieldDate(const OUString& rStyleName);
+    void PushParagraphFieldSheetName(const OUString& rStyleName);
+    void PushParagraphFieldDocTitle(const OUString& rStyleName);
+    void PushParagraphFieldURL(const OUString& rURL, const OUString& rRep, const OUString& rStyleName);
+    void PushParagraphEnd();
+    void PushParagraphField(SvxFieldData* pData, const OUString& rStyleName);
+    void PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, const OUString& rStyleName);
+
 private:
+
     ScXMLAnnotationData& mrAnnotationData;
     OUStringBuffer maTextBuffer;
     OUStringBuffer maAuthorBuffer;
@@ -105,6 +143,22 @@ private:
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+    ScEditEngineDefaulter* mpEditEngine;
+    OUStringBuffer maParagraph;
+    sal_Int32 mnCurParagraph;
+
+    typedef boost::ptr_vector<ParaFormat> ParaFormatsType;
+    typedef boost::ptr_vector<Field> FieldsType;
+
+    ParaFormatsType maFormats;
+    FieldsType maFields;
+
+    boost::optional<OUString> maFirstParagraph; /// unformatted first paragraph, for better performance.
+
+    bool mbEditEngineHasText;
+    bool mbHasFormatRuns;
+
 };
 
 

@@ -874,28 +874,15 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         SdrObject* pObject = ::GetSdrObjectFromXShape( mxAnnotationData->mxShape );
         OSL_ENSURE( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
 
-        /*  Try to reuse the drawing object already created (but only if the
-            note is visible, and the object is a caption object). */
-        if( mxAnnotationData->mbShown && mxAnnotationData->mbUseShapePos )
-        {
-            if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
-            {
-                OSL_ENSURE( !pCaption->GetLogicRect().IsEmpty(), "ScXMLTableRowCellContext::SetAnnotation - invalid caption rectangle" );
-                // create the cell note with the caption object
-                pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, rPos, *pCaption, true );
-                // forget pointer to object (do not create note again below)
-                pObject = 0;
-            }
-        }
-
-        // drawing object has not been used to create a note -> use shape data
+        // use shape data
         if( pObject )
         {
             // rescue settings from drawing object before the shape is removed
             ::std::auto_ptr< SfxItemSet > xItemSet( new SfxItemSet( pObject->GetMergedItemSet() ) );
             ::std::auto_ptr< OutlinerParaObject > xOutlinerObj;
-            if( OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject() )
-                xOutlinerObj.reset( new OutlinerParaObject( *pOutlinerObj ) );
+            OutlinerParaObject* pOutlinerObj = new OutlinerParaObject( (*mxAnnotationData->maEditEngine->CreateTextObject()) );
+            xOutlinerObj.reset( new OutlinerParaObject( *pOutlinerObj ) );
+
             Rectangle aCaptionRect;
             if( mxAnnotationData->mbUseShapePos )
                 aCaptionRect = pObject->GetLogicRect();
@@ -956,6 +943,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         pSheetData->AddNoteContentStyle( aIter->mnFamily, aIter->maName, rPos, aIter->maSelection );
         ++aIter;
     }
+
 }
 
 // core implementation
