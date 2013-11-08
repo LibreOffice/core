@@ -34,10 +34,79 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::container;
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace oox { namespace xls {
 
 namespace {
+
+/**
+ * Cache the token array for the last cell position in each column. We use
+ * one cache per sheet.
+ */
+class CachedTokenArray : boost::noncopyable
+{
+    struct Item : boost::noncopyable
+    {
+        SCROW mnRow;
+        boost::scoped_ptr<ScTokenArray> mpCode;
+
+        Item() : mnRow(-1), mpCode(NULL) {}
+        Item( SCROW nRow, ScTokenArray* p ) : mnRow(nRow), mpCode(p) {}
+    };
+
+    typedef boost::unordered_map<SCCOL, Item*> ColCacheType;
+    ColCacheType maCache;
+    ScDocument& mrDoc;
+
+public:
+    CachedTokenArray( ScDocument& rDoc ) : mrDoc(rDoc) {}
+
+    ~CachedTokenArray()
+    {
+        ColCacheType::const_iterator it = maCache.begin(), itEnd = maCache.end();
+        for (; it != itEnd; ++it)
+            delete it->second;
+    }
+
+    const ScTokenArray* get( const ScAddress& rPos, const OUString& rFormula ) const
+    {
+        // Check if a token array is cached for this column.
+        ColCacheType::const_iterator it = maCache.find(rPos.Col());
+        if (it == maCache.end())
+            return NULL;
+
+        const Item& rCached = *it->second;
+        ScCompiler aComp(&mrDoc, rPos, *rCached.mpCode);
+        aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+        OUStringBuffer aBuf;
+        aComp.CreateStringFromTokenArray(aBuf);
+        OUString aPredicted = aBuf.makeStringAndClear();
+        if (rFormula == aPredicted)
+            return rCached.mpCode.get();
+
+        return NULL;
+    }
+
+    void store( const ScAddress& rPos, const ScTokenArray& rArray )
+    {
+        ColCacheType::iterator it = maCache.find(rPos.Col());
+        if (it == maCache.end())
+        {
+            // Create an entry for this column.
+            std::pair<ColCacheType::iterator,bool> r =
+                maCache.insert(ColCacheType::value_type(rPos.Col(), new Item));
+            if (!r.second)
+                // Insertion failed.
+                return;
+
+            it = r.first;
+        }
+
+        it->second->mnRow = rPos.Row();
+        it->second->mpCode.reset(rArray.Clone());
+    }
+};
 
 void applySharedFormulas(
     ScDocumentImport& rDoc,
@@ -104,7 +173,7 @@ void applySharedFormulas(
 }
 
 void applyCellFormulas(
-    ScDocumentImport& rDoc, SvNumberFormatter& rFormatter,
+    ScDocumentImport& rDoc, CachedTokenArray& rCache, SvNumberFormatter& rFormatter,
     const std::vector<FormulaBuffer::TokenAddressItem>& rCells )
 {
     std::vector<FormulaBuffer::TokenAddressItem>::const_iterator it = rCells.begin(), itEnd = rCells.end();
@@ -112,6 +181,14 @@ void applyCellFormulas(
     {
         ScAddress aPos;
         ScUnoConversion::FillScAddress(aPos, it->maCellAddress);
+        const ScTokenArray* p = rCache.get(aPos, it->maTokenStr);
+        if (p)
+        {
+            // Use the cached version to avoid re-compilation.
+            rDoc.setFormulaCell(aPos, p->Clone());
+            continue;
+        }
+
         ScCompiler aCompiler(&rDoc.getDoc(), aPos);
         aCompiler.SetNumberFormatter(&rFormatter);
         aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
@@ -120,6 +197,7 @@ void applyCellFormulas(
             continue;
 
         rDoc.setFormulaCell(aPos, pCode);
+        rCache.store(aPos, *pCode);
     }
 }
 
@@ -185,7 +263,10 @@ protected:
             applySharedFormulas(mrDoc, *mpFormatter, *mrItem.mpSharedFormulaEntries, *mrItem.mpSharedFormulaIDs);
 
         if (mrItem.mpCellFormulas)
-            applyCellFormulas(mrDoc, *mpFormatter, *mrItem.mpCellFormulas);
+        {
+            CachedTokenArray aCache(mrDoc.getDoc());
+            applyCellFormulas(mrDoc, aCache, *mpFormatter, *mrItem.mpCellFormulas);
+        }
 
         if (mrItem.mpArrayFormulas)
             applyArrayFormulas(mrDoc, *mpFormatter, *mrItem.mpArrayFormulas);
