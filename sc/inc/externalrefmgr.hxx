@@ -768,12 +768,6 @@ private:
 private:
     ScDocument* mpDoc;
 
-    /** Mutex for accessing cached data and/or source document shells. */
-    mutable osl::Mutex maMtxCacheAccess;
-
-    /** Mutex for source document meta-data access. */
-    mutable osl::Mutex maMtxSrcFiles;
-
     /** cache of referenced ranges and names from source documents. */
     ScExternalRefCache maRefCache;
 
