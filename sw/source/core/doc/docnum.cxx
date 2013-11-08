@@ -1005,13 +1005,16 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
 {
     sal_uInt16 nPos = FindNumRule( rName );
 
+    if (nPos == USHRT_MAX)
+        return false;
+
     if ( (*mpNumRuleTbl)[ nPos ] == GetOutlineNumRule() )
     {
         OSL_FAIL( "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
         return false;
     }
 
-    if( USHRT_MAX != nPos && !IsUsed( *(*mpNumRuleTbl)[ nPos ] ))
+    if( !IsUsed( *(*mpNumRuleTbl)[ nPos ] ))
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
