@@ -385,8 +385,6 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTx
         aDelimiters.push_back(nEndPos);
 
     // Iterate through the word and all words that compose it.
-    n = aDelimiters.size();
-
     // Two capital letters at the beginning of word?
     for(n = 0; n < aDelimiters.size() - 1; n++)
     {
