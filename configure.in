@@ -1388,7 +1388,7 @@ dnl ===================================================================
 dnl Build options
 dnl ===================================================================
 
-# Disable or enable libraries seamonkey, nss, hunspell, hyphen, saxon,
+# Disable or enable category-B librariets: nss, hunspell, hyphen, saxon,
 # rhino, silgraphite, beanshell.
 
 # Note that further below they may be enabled or disabled again by
@@ -1416,7 +1416,7 @@ if test "$enable_category_b" = "yes"; then
    enable_coinmp="yes"
    enable_category_b_fonts="yes"
 
-   AC_MSG_RESULT([yes: allow modules, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp to be built])
+   AC_MSG_RESULT([yes: allow modules nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp to be built])
 else
    # Disable libaries.
    enable_nss_module="no"
@@ -1429,7 +1429,7 @@ else
    enable_coinmp="no"
    enable_category_b_fonts="no"
 
-   AC_MSG_RESULT([no: disabled modules, nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp])
+   AC_MSG_RESULT([no: disabled modules nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp])
 fi
 AC_SUBST(ENABLE_CATEGORY_B)
 
@@ -4774,7 +4774,7 @@ fi
 AC_SUBST(WITH_LDAP)
 AC_SUBST(WITH_OPENLDAP)
 
-AC_MSG_CHECKING([whether to build provided NSS module])
+AC_MSG_CHECKING([whether to build the internal NSS module])
 if test "$enable_nss_module" != "no"; then
    ENABLE_NSS_MODULE="YES"
    BUILD_TYPE="$BUILD_TYPE NSS"
@@ -4782,9 +4782,12 @@ if test "$enable_nss_module" != "no"; then
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for Mozilla build tooling])
       if test -z "$MOZILLABUILD" ; then
-AC_MSG_ERROR([Mozilla build tooling not found. It is needed for NSS.
-Use the --with-mozilla-build option after installling the tools obtained
-from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
+AC_MSG_ERROR([
+Mozilla build tooling not found!
+  It is required for NSS that is needed for AOO's security facilities.
+  Either disable NSS using the option --disable-nss-module
+  or use the --with-mozilla-build option after installing the tool obtained
+  from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
       else
          if test \( "$WITH_MINGWIN" = "yes" \) ; then
             if test ! -d "$MOZILLABUILD" ; then
