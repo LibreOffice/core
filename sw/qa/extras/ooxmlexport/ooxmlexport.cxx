@@ -1314,6 +1314,9 @@ DECLARE_OOXML_TEST(testStyleInheritance, "style-inheritance.docx")
 
     // Additional char style properties should be also roundtripped.
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DefaultParagraphFont']", "default", "1");
+
+    // Finally check the same for numbering styles.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']", "default", "1");
 }
 
 DECLARE_OOXML_TEST(testCalendar1, "calendar1.docx")

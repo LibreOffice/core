@@ -3596,36 +3596,41 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
     OUString aLink, aRsid, aUiPriority;
     FastAttributeList* pStyleAttributeList = m_pSerializer->createAttrList();
+    uno::Any aAny;
     if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
     {
         const SwFmt* pFmt = m_rExport.pStyles->GetSwFmt(nId);
-        uno::Any aAny;
         pFmt->GetGrabBagItem(aAny);
-        const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
+    }
+    else
+    {
+        const SwNumRule* pRule = m_rExport.pStyles->GetSwNumRule(nId);
+        pRule->GetGrabBagItem(aAny);
+    }
+    const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
 
-        for (sal_Int32 i = 0; i < rGrabBag.getLength(); ++i)
-        {
-            if (rGrabBag[i].Name == "uiPriority")
-                aUiPriority = rGrabBag[i].Value.get<OUString>();
-            else if (rGrabBag[i].Name == "qFormat")
-                bQFormat = true;
-            else if (rGrabBag[i].Name == "link")
-                aLink = rGrabBag[i].Value.get<OUString>();
-            else if (rGrabBag[i].Name == "rsid")
-                aRsid = rGrabBag[i].Value.get<OUString>();
-            else if (rGrabBag[i].Name == "unhideWhenUsed")
-                bUnhideWhenUsed = true;
-            else if (rGrabBag[i].Name == "semiHidden")
-                bSemiHidden = true;
-            else if (rGrabBag[i].Name == "locked")
-                bLocked = true;
-            else if (rGrabBag[i].Name == "default")
-                bDefault = rGrabBag[i].Value.get<sal_Bool>();
-            else if (rGrabBag[i].Name == "customStyle")
-                bCustomStyle = rGrabBag[i].Value.get<sal_Bool>();
-            else
-                SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
-        }
+    for (sal_Int32 i = 0; i < rGrabBag.getLength(); ++i)
+    {
+        if (rGrabBag[i].Name == "uiPriority")
+            aUiPriority = rGrabBag[i].Value.get<OUString>();
+        else if (rGrabBag[i].Name == "qFormat")
+            bQFormat = true;
+        else if (rGrabBag[i].Name == "link")
+            aLink = rGrabBag[i].Value.get<OUString>();
+        else if (rGrabBag[i].Name == "rsid")
+            aRsid = rGrabBag[i].Value.get<OUString>();
+        else if (rGrabBag[i].Name == "unhideWhenUsed")
+            bUnhideWhenUsed = true;
+        else if (rGrabBag[i].Name == "semiHidden")
+            bSemiHidden = true;
+        else if (rGrabBag[i].Name == "locked")
+            bLocked = true;
+        else if (rGrabBag[i].Name == "default")
+            bDefault = rGrabBag[i].Value.get<sal_Bool>();
+        else if (rGrabBag[i].Name == "customStyle")
+            bCustomStyle = rGrabBag[i].Value.get<sal_Bool>();
+        else
+            SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
     }
 
     const char* pType = 0;
