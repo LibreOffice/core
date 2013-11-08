@@ -1055,7 +1055,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 SwNodes &rDestNodes = GetDoc()->GetNodes();
                 xub_StrLen nDestStart = PCURCRSR->GetPoint()->nNode.GetIndex() - nNodesCnt;
 
-                for ( sal_uInt64 nIdx = 0; nIdx <= nNodesCnt; nIdx++ )
+                for (xub_StrLen nIdx = 0; nIdx <= nNodesCnt; ++nIdx)
                 {
                     SwTxtNode *pTxtNode = rDestNodes[ nDestStart + nIdx ]->GetTxtNode();
                     if ( pTxtNode )
