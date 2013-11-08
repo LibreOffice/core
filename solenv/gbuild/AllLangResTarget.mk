@@ -62,8 +62,10 @@ $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) 
 		$(call gb_SrsPartMergeTarget__command,$@,$*,$<),\
 		mkdir -p $(dir $@) && cp $< $@)
 
+# translations are optional - use "wildcard" to avoid spurious re-builds
+# when they don't exist
 define gb_SrsPartMergeTarget_SrsPartMergeTarget
-$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(if $(2),$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)))
+$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(if $(2),$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))))
 endef
 
 define gb_SrsPartMergeTarget__SrsPartMergeTarget_impl
