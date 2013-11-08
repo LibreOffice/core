@@ -436,6 +436,14 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
     SwFmt* pFmt = 0;
     switch (nFamily)
     {
+        case SFX_STYLE_FAMILY_CHAR:
+            pFmt = rDoc.FindCharFmtByName(aName);
+            if (pFmt)
+            {
+                pFmt->SetGrabBagItem(rVal);
+                bChg = true;
+            }
+            break;
         case SFX_STYLE_FAMILY_PARA:
             pFmt = rDoc.FindTxtFmtCollByName(aName);
             if (pFmt)
@@ -463,6 +471,10 @@ void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
     SwFmt* pFmt = 0;
     switch (nFamily)
     {
+        case SFX_STYLE_FAMILY_CHAR:
+            pFmt = rDoc.FindCharFmtByName(aName);
+            pFmt->GetGrabBagItem(rVal);
+            break;
         case SFX_STYLE_FAMILY_PARA:
             pFmt = rDoc.FindTxtFmtCollByName(aName);
             pFmt->GetGrabBagItem(rVal);
