@@ -222,9 +222,10 @@ public:
 
     // Strict Parsing:
 
-    inline INetURLObject(OUString const & rTheAbsURIRef,
-                         EncodeMechanism eMechanism = WAS_ENCODED,
-                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
+    inline explicit INetURLObject(
+        OUString const & rTheAbsURIRef,
+        EncodeMechanism eMechanism = WAS_ENCODED,
+        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     inline bool SetURL(OUString const & rTheAbsURIRef,
                        EncodeMechanism eMechanism = WAS_ENCODED,
@@ -818,6 +819,8 @@ public:
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
+    bool clearFragment();
+
     // File URLs:
 
     /** Create an INetURLObject from a file system path.
@@ -1235,8 +1238,6 @@ private:
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // Fragment:
-
-    bool clearFragment();
 
     bool setFragment(
         OUString const & rTheMark, bool bOctets,

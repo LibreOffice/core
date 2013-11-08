@@ -1379,15 +1379,15 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
     if ( !aBaseURL.setFinalSlash() )
         throw uno::RuntimeException();
 
-    INetURLObject aFileURL = INetURLObject::GetAbsURL(
+    OUString aFileURL = INetURLObject::GetAbsURL(
                 aBaseURL.GetMainURL( INetURLObject::NO_DECODE ),
                 sStreamPath );
 
-    if ( ::utl::UCBContentHelper::IsFolder( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( ::utl::UCBContentHelper::IsFolder( aFileURL ) )
         throw io::IOException();
 
     if ( ( nOpenMode & embed::ElementModes::NOCREATE )
-      && !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+      && !::utl::UCBContentHelper::IsDocument( aFileURL ) )
         throw io::IOException(); // TODO:
 
     uno::Reference< ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
@@ -1396,19 +1396,19 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
     {
         if ( nOpenMode & embed::ElementModes::WRITE )
         {
-            if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            if ( isLocalFile_Impl( aFileURL ) )
             {
                 uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
                 uno::Reference< io::XStream > xStream =
-                    xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                    xSimpleFileAccess->openFileReadWrite( aFileURL );
 
                 xResult = static_cast< io::XStream* >( new OFSStreamContainer( xStream ) );
             }
             else
             {
                 // TODO: test whether it really works for http and fwp
-                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ),
+                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aFileURL,
                                                                           STREAM_STD_WRITE );
                 if ( pStream )
                 {
@@ -1435,10 +1435,10 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
         else
         {
             if ( ( nOpenMode & embed::ElementModes::TRUNCATE )
-              || !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+              || !::utl::UCBContentHelper::IsDocument( aFileURL ) )
                 throw io::IOException(); // TODO: access denied
 
-            ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aResultContent( aFileURL, xDummyEnv, comphelper::getProcessComponentContext() );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
             xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
         }
@@ -1511,19 +1511,19 @@ void SAL_CALL FSStorage::removeStreamElementByHierarchicalName( const OUString& 
     if ( !aBaseURL.setFinalSlash() )
         throw uno::RuntimeException();
 
-    INetURLObject aFileURL = INetURLObject::GetAbsURL(
+    OUString aFileURL = INetURLObject::GetAbsURL(
                 aBaseURL.GetMainURL( INetURLObject::NO_DECODE ),
                 sStreamPath );
 
-    if ( !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !::utl::UCBContentHelper::IsDocument( aFileURL ) )
     {
-        if ( ::utl::UCBContentHelper::IsFolder( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        if ( ::utl::UCBContentHelper::IsFolder( aFileURL ) )
             throw lang::IllegalArgumentException();
         else
             throw container::NoSuchElementException(); // TODO:
     }
 
-    if ( !::utl::UCBContentHelper::Kill( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !::utl::UCBContentHelper::Kill( aFileURL ) )
         throw io::IOException(); // TODO: error handling
 }
 
