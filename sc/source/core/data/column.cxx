@@ -1284,7 +1284,7 @@ class CopyToClipHandler
         for (++it; it != itEnd; ++it, pPrev = pCur)
         {
             pCur = *it;
-            ScFormulaCell::CompareState eState = pPrev->CompareByTokenArray(*pPrev);
+            ScFormulaCell::CompareState eState = pPrev->CompareByTokenArray(*pCur);
             if (eState == ScFormulaCell::NotEqual)
                 continue;
 
