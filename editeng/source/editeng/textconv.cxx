@@ -451,16 +451,16 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
         pESelection->Adjust();
 
         // remember cursor start position for later setting of the cursor
-        const xub_StrLen nStartIndex = pESelection->nStartPos;
+        const sal_Int32 nStartIndex = pESelection->nStartPos;
 
         const sal_Int32  nIndices = pOffsets->getLength();
         const sal_Int32 *pIndices = pOffsets->getConstArray();
-        sal_Int32  nConvTextLen = rNewText.getLength();
-        xub_StrLen nPos = 0;
-        xub_StrLen nChgPos = STRING_NOTFOUND;
-        xub_StrLen nChgLen = 0;
-        xub_StrLen nConvChgPos = STRING_NOTFOUND;
-        xub_StrLen nConvChgLen = 0;
+        sal_Int32 nConvTextLen = rNewText.getLength();
+        sal_Int32 nPos = 0;
+        sal_Int32 nChgPos = -1;
+        sal_Int32 nChgLen = 0;
+        sal_Int32 nConvChgPos = -1;
+        sal_Int32 nConvChgLen = 0;
 
         // offset to calculate the position in the text taking into
         // account that text may have been replaced with new text of
@@ -474,20 +474,20 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
         while (true)
         {
             // get index in original text that matches nPos in new text
-            xub_StrLen nIndex;
+            sal_Int32 nIndex;
             if (nPos < nConvTextLen)
-                nIndex = (sal_Int32) nPos < nIndices ? (xub_StrLen) pIndices[nPos] : nPos;
+                nIndex = nPos < nIndices ? pIndices[nPos] : nPos;
             else
             {
                 nPos   = nConvTextLen;
-                nIndex = static_cast< xub_StrLen >( rOrigText.getLength() );
+                nIndex = rOrigText.getLength();
             }
 
             if (rOrigText[nIndex] == rNewText[nPos] ||
                 nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
             {
                 // substring that needs to be replaced found?
-                if (nChgPos != STRING_NOTFOUND && nConvChgPos != STRING_NOTFOUND)
+                if (nChgPos != -1 && nConvChgPos != -1)
                 {
                     nChgLen = nIndex - nChgPos;
                     nConvChgLen = nPos - nConvChgPos;
@@ -498,7 +498,7 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
 
                     // set selection to sub string to be replaced in original text
                     ESelection aSel( *pESelection );
-                    xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
+                    sal_Int32 nChgInNodeStartIndex = nStartIndex + nCorrectionOffset + nChgPos;
                     aSel.nStartPos = nChgInNodeStartIndex;
                     aSel.nEndPos   = nChgInNodeStartIndex + nChgLen;
                     m_pEditView->SetSelection( aSel );
@@ -513,14 +513,14 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
 
                     nCorrectionOffset += nConvChgLen - nChgLen;
 
-                    nChgPos = STRING_NOTFOUND;
-                    nConvChgPos = STRING_NOTFOUND;
+                    nChgPos = -1;
+                    nConvChgPos = -1;
                 }
             }
             else
             {
                 // begin of non-matching char sequence found ?
-                if (nChgPos == STRING_NOTFOUND && nConvChgPos == STRING_NOTFOUND)
+                if (nChgPos == -1 && nConvChgPos == -1)
                 {
                     nChgPos = nIndex;
                     nConvChgPos = nPos;
