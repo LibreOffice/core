@@ -439,6 +439,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
+	getuid \
 	smoketest \
 	subsequenttest \
 	test \
@@ -496,7 +497,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	$(if $(filter MSC,$(COM)),cli_uno) \
-	getuid \
 	jpipe \
 	$(if $(filter WNT,$(OS)),jpipx) \
 ))

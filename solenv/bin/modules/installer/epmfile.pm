@@ -794,16 +794,8 @@ sub set_patch_state
 
 sub get_ld_preload_string
 {
-    my ($includepatharrayref) = @_;
-
-    my $getuidlibraryname = "libgetuid.so";
-
-    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
-    if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "get_ld_preload_string"); }
-
-    my $ldpreloadstring = "LD_PRELOAD=" . $$getuidlibraryref;
-
-    return $ldpreloadstring;
+    return 'LD_PRELOAD=' . $ENV{'WORKDIR'}
+        . '/CustomTarget/setup_native/libgetuid.so';
 }
 
 #################################################
