@@ -20,6 +20,7 @@
 #define INCLUDED_TOOLS_STREAM_HXX
 
 #include <limits>
+#include <osl/process.h>
 #include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 #include <tools/lineend.hxx>
@@ -362,7 +363,7 @@ public:
               @endcode
               causing endless loops ...
     */
-    bool            ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
+    virtual bool    ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
     bool            WriteLine( const OString& rStr );
 
     /** Read a line of bytes.
@@ -470,10 +471,10 @@ public:
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // for Manips
 
     /// end of input seen during previous i/o operation
-    bool            eof() const { return bIsEof; }
+    virtual bool eof() const { return bIsEof; }
 
     /// stream is broken
-    bool            bad() const { return GetError() != 0; }
+    virtual bool bad() const { return GetError() != 0; }
 
     /** Get state
 
@@ -488,7 +489,7 @@ public:
         If we try to read into a variable v and the operation fails, the value
         of v should be unchanged,
     */
-    bool good() const { return !(eof() || bad()); }
+    virtual bool good() const { return !(eof() || bad()); }
 };
 
 inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
@@ -757,6 +758,19 @@ public:
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
     sal_Size        GetResizeOffset() const { return nResize; }
     virtual sal_Size remainingSize() { return GetBufSize() - Tell(); }
+};
+
+class TOOLS_DLLPUBLIC SvScriptStream: public SvStream
+{
+    oslProcess mpProcess;
+    oslFileHandle mpHandle;
+
+public:
+    SvScriptStream(const OUString& rUrl);
+    ~SvScriptStream();
+
+    virtual bool ReadLine(OString &rStr, sal_Int32) SAL_OVERRIDE;
+    virtual bool good() const SAL_OVERRIDE;
 };
 
 /** Data Copy Stream

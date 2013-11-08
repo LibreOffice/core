@@ -1961,6 +1961,63 @@ void SvMemoryStream::SetSize( sal_Size nNewSize )
     ReAllocateMemory( nDiff );
 }
 
+SvScriptStream::SvScriptStream(const OUString& rUrl):
+    mpProcess(NULL), mpHandle(NULL)
+{
+    oslProcessError rc;
+    rc = osl_executeProcess_WithRedirectedIO(
+        rUrl.pData,
+        NULL, 0,
+        osl_Process_HIDDEN,
+        NULL,
+        NULL,
+        NULL, 0,
+        &mpProcess,
+        NULL, &mpHandle, NULL);
+    if (osl_Process_E_None != rc)
+    {
+        mpProcess = NULL;
+        mpHandle = NULL;
+    }
+}
+
+SvScriptStream::~SvScriptStream()
+{
+    if (mpProcess)
+    {
+        osl_terminateProcess(mpProcess);
+        osl_freeProcessHandle(mpProcess);
+    }
+    if (mpHandle)
+        osl_closeFile(mpHandle);
+}
+
+bool SvScriptStream::ReadLine(OString &rStr, sal_Int32)
+{
+    rStr = OString();
+    if (!good())
+        return false;
+
+    OStringBuffer sBuf;
+    sal_Char aChar('\n');
+    sal_uInt64 nBytesRead;
+    while (osl_File_E_None == osl_readFile(mpHandle, &aChar, 1, &nBytesRead)
+            && nBytesRead == 1 && aChar != '\n')
+    {
+        sBuf.append( aChar );
+    }
+    rStr = sBuf.makeStringAndClear();
+    if (!rStr.isEmpty())
+        return true;
+
+    return false;
+}
+
+bool SvScriptStream::good() const
+{
+    return mpHandle != NULL;
+}
+
 TYPEINIT0 ( SvDataCopyStream )
 
 void SvDataCopyStream::Assign( const SvDataCopyStream& )
