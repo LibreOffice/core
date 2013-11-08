@@ -889,6 +889,7 @@ void ImportExcel::Shrfmla( void )
         xGroup->compileCode(rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_DEFAULT);
 
         ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, xGroup);
+        xGroup->mpTopCell = pCell;
         rDoc.getDoc().EnsureTable(aPos.Tab());
         rDoc.setFormulaCell(aPos, pCell);
         pCell->SetNeedNumberFormat(false);

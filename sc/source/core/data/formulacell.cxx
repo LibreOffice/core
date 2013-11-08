@@ -407,7 +407,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mnRefCount(0),
     mpCode(NULL),
     mpDynamicKernel(NULL),
-    mnStart(0),
+    mpTopCell(NULL),
     mnLength(0),
     mnFormatType(NUMBERFORMAT_NUMBER),
     mbInvariant(false),
@@ -2321,12 +2321,6 @@ bool ScFormulaCell::UpdatePosOnShift( const sc::RefUpdateContext& rCxt )
 
     // This formula cell itself is being shifted during cell range
     // insertion or deletion. Update its position.
-
-    if (mxGroup && (mxGroup->mnStart+mxGroup->mnLength-1) == aPos.Row())
-        // For a shared formula cell, update its group start position only
-        // when it's the last cell of the group.
-        mxGroup->mnStart += rCxt.mnRowDelta;
-
     aPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
 
     return true;
@@ -2751,7 +2745,7 @@ bool ScFormulaCell::UpdateReference(
     if (pDocument->IsClipOrUndo())
         return false;
 
-    if (mxGroup && mxGroup->mnStart != aPos.Row())
+    if (mxGroup && mxGroup->mpTopCell != this)
     {
         // This is not a top cell of a formula group. Don't update references.
 
@@ -3314,14 +3308,14 @@ ScFormulaCell*  ScFormulaCell::GetNextTrack() const                    { return 
 void            ScFormulaCell::SetPreviousTrack( ScFormulaCell* pF )   { pPreviousTrack = pF; }
 void            ScFormulaCell::SetNextTrack( ScFormulaCell* pF )       { pNextTrack = pF; }
 
-ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nStart, SCROW nLen, bool bInvariant )
+ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvariant )
 {
     if (mxGroup)
         // You can't create a new group if the cell is already a part of a group.
         return ScFormulaCellGroupRef();
 
     mxGroup.reset(new ScFormulaCellGroup);
-    mxGroup->mnStart = nStart;
+    mxGroup->mpTopCell = this;
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
     mxGroup->mpCode = pCode; // Move this to the shared location.
@@ -3697,8 +3691,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return InterpretInvariantFormulaGroup();
 
     ScTokenArray aCode;
-    ScAddress aTopPos = aPos;
-    aTopPos.SetRow(mxGroup->mnStart);
+    ScAddress aTopPos = mxGroup->mpTopCell->aPos;
     GroupTokenConverter aConverter(aCode, *pDocument, *this, aTopPos);
     if (!aConverter.convert(*pCode))
     {
@@ -3776,7 +3769,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
     for ( sal_Int32 i = 0; i < mxGroup->mnLength; i++ )
     {
         ScAddress aTmpPos = aPos;
-        aTmpPos.SetRow(mxGroup->mnStart + i);
+        aTmpPos.SetRow(mxGroup->mpTopCell->aPos.Row() + i);
         ScFormulaCell* pCell = pDocument->GetFormulaCell(aTmpPos);
         assert( pCell != NULL );
 
@@ -4014,12 +4007,12 @@ bool ScFormulaCell::IsSharedTop() const
     if (!mxGroup)
         return false;
 
-    return mxGroup->mnStart == aPos.Row();
+    return mxGroup->mpTopCell == this;
 }
 
 SCROW ScFormulaCell::GetSharedTopRow() const
 {
-    return mxGroup ? mxGroup->mnStart : -1;
+    return mxGroup ? mxGroup->mpTopCell->aPos.Row() : -1;
 }
 
 SCROW ScFormulaCell::GetSharedLength() const

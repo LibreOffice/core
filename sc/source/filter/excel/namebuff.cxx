@@ -86,7 +86,10 @@ void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rArr
         aPos.SetCol(i);
 
         ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
-        xNewGroup->mnStart = rRange.aStart.Row();
+        // We have no ScFormulaCell yet to point mpTopCell to!?
+        // Let's hope that the only called of this in ImportExcel::Shrfmla()
+        // fixes that up properly.
+        xNewGroup->mpTopCell = NULL;
         xNewGroup->mnLength = 1;
         xNewGroup->setCode(rArray);
         maFormulaGroups.insert(FormulaGroupsType::value_type(aPos, xNewGroup));

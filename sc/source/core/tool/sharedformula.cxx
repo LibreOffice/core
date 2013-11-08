@@ -38,18 +38,18 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
 
     ScFormulaCellGroupRef xGroup = rTop.GetCellGroup();
 
-    SCROW nLength2 = xGroup->mnStart + xGroup->mnLength - nRow;
+    SCROW nLength2 = xGroup->mpTopCell->aPos.Row() + xGroup->mnLength - nRow;
     ScFormulaCellGroupRef xGroup2;
     if (nLength2 > 1)
     {
         xGroup2.reset(new ScFormulaCellGroup);
         xGroup2->mbInvariant = xGroup->mbInvariant;
-        xGroup2->mnStart = nRow;
+        xGroup2->mpTopCell = &rTop;
         xGroup2->mnLength = nLength2;
         xGroup2->mpCode = xGroup->mpCode->Clone();
     }
 
-    xGroup->mnLength = nRow - xGroup->mnStart;
+    xGroup->mnLength = nRow - xGroup->mpTopCell->aPos.Row();
     if (xGroup->mnLength == 1)
     {
         // The top group consists of only one cell. Ungroup this.
@@ -60,7 +60,7 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
 
     // Apply the lower group object to the lower cells.
 #if DEBUG_COLUMN_STORAGE
-    if (xGroup2->mnStart + xGroup2->mnLength > aPos.first->position + aPos.first->size)
+    if (xGroup2->mpTopCell->aPos.Row() + xGroup2->mnLength > aPos.first->position + aPos.first->size)
     {
         cerr << "ScColumn::SplitFormulaCellGroup: Shared formula region goes beyond the formula block. Not good." << endl;
         cerr.flush();
@@ -111,8 +111,6 @@ void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPo
     if (eState == ScFormulaCell::NotEqual)
         return;
 
-    SCROW nRow = rPos.first->position + rPos.second;
-
     // Formula tokens equal those of the previous formula cell.
     ScFormulaCellGroupRef xGroup1 = rCell1.GetCellGroup();
     ScFormulaCellGroupRef xGroup2 = rCell2.GetCellGroup();
@@ -147,13 +145,13 @@ void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPo
         {
             // cell 1 is not shared, but cell 2 is already shared.
             rCell1.SetCellGroup(xGroup2);
-            xGroup2->mnStart = nRow;
+            xGroup2->mpTopCell = &rCell1;
             ++xGroup2->mnLength;
         }
         else
         {
             // neither cells are shared.
-            xGroup1 = rCell1.CreateCellGroup(nRow, 2, eState == ScFormulaCell::EqualInvariant);
+            xGroup1 = rCell1.CreateCellGroup(2, eState == ScFormulaCell::EqualInvariant);
             rCell2.SetCellGroup(xGroup1);
         }
     }
@@ -207,8 +205,9 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
         else
         {
             // Move the top cell to the next formula cell down.
+            ScFormulaCell& rNext = *sc::formula_block::at(*it->data, aPos.second+1);
             --xGroup->mnLength;
-            ++xGroup->mnStart;
+            xGroup->mpTopCell = &rNext;
         }
     }
     else if (rCell.aPos.Row() == rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1)
@@ -239,8 +238,8 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
     {
         // In the middle of the shared range. Split it into two groups.
         ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
-        SCROW nEndRow = xGroup->mnStart + xGroup->mnLength - 1;
-        xGroup->mnLength = rCell.aPos.Row() - xGroup->mnStart; // Shorten the top group.
+        SCROW nEndRow = xGroup->mpTopCell->aPos.Row() + xGroup->mnLength - 1;
+        xGroup->mnLength = rCell.aPos.Row() - xGroup->mpTopCell->aPos.Row(); // Shorten the top group.
         if (xGroup->mnLength == 1)
         {
             // Make the top cell non-shared.
@@ -261,12 +260,13 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
         {
             ScFormulaCellGroupRef xGroup2;
             xGroup2.reset(new ScFormulaCellGroup);
-            xGroup2->mnStart = rCell.aPos.Row() + 1;
+            ScFormulaCell& rNext = *sc::formula_block::at(*it->data, aPos.second+1);
+            xGroup2->mpTopCell = &rNext;
             xGroup2->mnLength = nLength2;
             xGroup2->mbInvariant = xGroup->mbInvariant;
             xGroup2->mpCode = xGroup->mpCode->Clone();
 #if DEBUG_COLUMN_STORAGE
-            if (xGroup2->mnStart + xGroup2->mnLength > it->position + it->size)
+            if (xGroup2->mpTopCell->aPos.Row() + xGroup2->mnLength > it->position + it->size)
             {
                 cerr << "ScColumn::UnshareFormulaCell: Shared formula region goes beyond the formula block. Not good." << endl;
                 cerr.flush();

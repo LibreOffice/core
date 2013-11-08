@@ -2786,14 +2786,14 @@ public:
                 nRow += xCurGrp->mnLength;
                 std::advance(it, xCurGrp->mnLength);
                 pPrev->SetCellGroup(xCurGrp);
-                --xCurGrp->mnStart;
+                --xCurGrp->mpTopCell = pPrev;
                 ++xCurGrp->mnLength;
                 xPrevGrp = xCurGrp;
             }
             else
             {
                 // Both previous and current cells are regular cells.
-                xPrevGrp = pPrev->CreateCellGroup(nRow - 1, 2, eCompState == ScFormulaCell::EqualInvariant);
+                xPrevGrp = pPrev->CreateCellGroup(2, eCompState == ScFormulaCell::EqualInvariant);
                 pCur->SetCellGroup(xPrevGrp);
                 ++nRow;
                 ++it;

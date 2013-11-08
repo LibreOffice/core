@@ -48,6 +48,7 @@ class DynamicKernel;
 
 }
 
+class ScFormulaCell;
 class ScProgress;
 class ScTokenArray;
 struct ScSimilarFormulaDelta;
@@ -58,7 +59,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
 
     ScTokenArray* mpCode;
     sc::opencl::DynamicKernel* mpDynamicKernel;
-    SCROW mnStart;  // Start offset of that cell
+    ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
     short mnFormatType;
     bool mbInvariant:1;
@@ -347,7 +348,7 @@ public:
     /**
      * Turn a non-grouped cell into the top of a grouped cell.
      */
-    ScFormulaCellGroupRef CreateCellGroup( SCROW nStart, SCROW nLen, bool bInvariant );
+    ScFormulaCellGroupRef CreateCellGroup( SCROW nLen, bool bInvariant );
     ScFormulaCellGroupRef GetCellGroup();
     void SetCellGroup( const ScFormulaCellGroupRef &xRef );
 

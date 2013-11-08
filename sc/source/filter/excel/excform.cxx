@@ -135,7 +135,7 @@ void ImportExcel::Formula(
                     ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, xGroup);
                     rDoc.getDoc().EnsureTable(aScPos.Tab());
                     rDoc.setFormulaCell(aScPos, pCell);
-                    xGroup->mnLength = aScPos.Row() - xGroup->mnStart + 1;
+                    xGroup->mnLength = aScPos.Row() - xGroup->mpTopCell->aPos.Row() + 1;
                     pCell->SetNeedNumberFormat(false);
                     if (!rtl::math::isNan(fCurVal))
                         pCell->SetResultDouble(fCurVal);

@@ -48,7 +48,7 @@ public:
             }
 
             // Create a new group.
-            xGroup = pPrev->CreateCellGroup(pPrev->aPos.Row(), 2, eState == ScFormulaCell::EqualInvariant);
+            xGroup = pPrev->CreateCellGroup(2, eState == ScFormulaCell::EqualInvariant);
             pCur->SetCellGroup(xGroup);
         }
     }

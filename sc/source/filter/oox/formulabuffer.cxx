@@ -198,7 +198,7 @@ void applyCellFormulas(
                 ScFormulaCellGroupRef xGroup = rPrev.GetCellGroup();
                 if (!xGroup)
                     // Last cell is not grouped yet. Start a new group.
-                    xGroup = rPrev.CreateCellGroup(p->mnRow, 1, false);
+                    xGroup = rPrev.CreateCellGroup(p->mnRow, false);
 
                 ++xGroup->mnLength;
 
