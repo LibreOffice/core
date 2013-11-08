@@ -82,6 +82,7 @@
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/unotools.hxx>
 #include "shapeimpl.hxx"
 #include <sal/log.hxx>
@@ -2330,10 +2331,24 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                 }
             case OWN_ATTR_EDGE_POLYPOLYGONBEZIER:
                 {
-                    drawing::PolyPolygonBezierCoords aPolyPoly;
-                    if ( rValue >>= aPolyPoly )
+                    basegfx::B2DPolyPolygon aNewPolyPolygon;
+
+                    // #123616# be a little bit more flexible regardin gthe data type used
+                    if( rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0))
                     {
-                        basegfx::B2DPolyPolygon aNewPolyPolygon( basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( aPolyPoly ) );
+                        // get polygpon data from PointSequenceSequence
+                        aNewPolyPolygon = basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
+                            *(const drawing::PointSequenceSequence*)rValue.getValue());
+                    }
+                    else if( rValue.getValueType() == ::getCppuType(( const drawing::PolyPolygonBezierCoords*)0))
+                    {
+                        // get polygpon data from PolyPolygonBezierCoords
+                        aNewPolyPolygon = basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+                            *(const drawing::PolyPolygonBezierCoords*)rValue.getValue());
+                    }
+
+                    if(aNewPolyPolygon.count())
+                    {
                         // Reintroduction of fix for issue i59051 (#i108851#)
                         ForceMetricToItemPoolMetric( aNewPolyPolygon );
                         if( mpModel->IsWriter() )
