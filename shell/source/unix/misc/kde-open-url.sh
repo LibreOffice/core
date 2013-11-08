@@ -19,9 +19,9 @@
 
 # special handling for mailto: uris
 if echo $1 | grep '^mailto:' > /dev/null; then
-  kmailservice "$1" &
+  /usr/bin/thunderbird -compose $1 &
 else
-  kfmclient openURL "$1" &
+  /usr/bin/sensible-browser $1 &
 fi
 
 exit 0
