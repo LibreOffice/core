@@ -501,7 +501,7 @@ void DocxAttributeOutput::StartParagraphProperties()
     m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
 
     // and output the section break now (if it appeared)
-    if ( m_pSectionInfo )
+    if ( m_pSectionInfo && (!m_setFootnote))
     {
         m_rExport.SectionProperties( *m_pSectionInfo );
         m_pSectionInfo.reset();
@@ -5120,6 +5120,7 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
 
 void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 {
+    m_setFootnote = true;
     const FootnotesVector& rVector = bFootnotes? m_pFootnotesList->getVector(): m_pEndnotesList->getVector();
 
     sal_Int32 nBody = bFootnotes? XML_footnotes: XML_endnotes;
@@ -6272,7 +6273,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_iParaBeforeSpacing(0),
-      m_iParaAfterSpacing(0)
+      m_iParaAfterSpacing(0),
+      m_setFootnote(false)
 {
 }
 

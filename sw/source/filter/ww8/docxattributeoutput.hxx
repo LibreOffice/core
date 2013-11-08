@@ -784,6 +784,8 @@ private:
     // store hardcoded value which was set during import.
     sal_Int32 m_iParaBeforeSpacing,m_iParaAfterSpacing;
 
+    bool m_setFootnote;
+
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
 
