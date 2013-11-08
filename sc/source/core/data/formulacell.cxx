@@ -436,6 +436,7 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
                 assert(mxCLKernelThread.is());
                 mxCLKernelThread->finish();
                 mxCLKernelThread->join();
+                SAL_INFO("sc.opencl", "OpenCL kernel compilation thread has finished");
                 mxCLKernelThread.clear();
             }
     }

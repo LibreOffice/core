@@ -26,9 +26,7 @@ CLBuildKernelThread::~CLBuildKernelThread()
 
 void CLBuildKernelThread::execute()
 {
-    SAL_INFO("sc", "opencl-buildkernel-thread running");
-
-    SAL_INFO("sc", "opencl-buildkernel-thread finishing");
+    SAL_INFO("sc.opencl", "opencl-buildkernel-thread running");
 }
 
 void CLBuildKernelThread::produce()
@@ -41,7 +39,7 @@ void CLBuildKernelThread::consume()
 
 void CLBuildKernelThread::finish()
 {
-    SAL_INFO("sc", "opencl-buildkernel-thread request to finish");
+    SAL_INFO("sc.opencl", "opencl-buildkernel-thread request to finish");
 }
 
 }
