@@ -47,7 +47,7 @@ OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
 static OUString
 lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
-             std::vector<sal_uLong> &rArr, bool const bRemoveSoftHyphen)
+             std::vector<xub_StrLen> &rArr, bool const bRemoveSoftHyphen)
 {
     OUStringBuffer buf(rNd.GetTxt());
     rArr.clear();
@@ -392,7 +392,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     const SwNode* pSttNd = &rNdIdx.GetNode();
     OUString sCleanStr;
-    std::vector<sal_uLong> aFltArr;
+    std::vector<xub_StrLen> aFltArr;
     LanguageType eLastLang = 0;
     // if the search string contains a soft hypen,
     // we don't strip them from the text:
