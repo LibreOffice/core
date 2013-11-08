@@ -1,0 +1,232 @@
+#!/bin/bash
+
+start_time=$(date "+%s")
+
+# Gibt eine Fehlermeldung aus und beendet das Skipt mit Fehlercode 1
+error()
+{
+  echo "$@" 1>&2
+  exit 1
+}
+
+USAGE="USAGE: build [OPTIONEN] [<srcpath>]
+  -c Configure nicht aufrufen
+  -d make dev-install aufrufen
+  -b Build nicht starten
+  -k Baue mit KDE3 (Standard ist KDE4)
+  -w Windows-Build
+  <srcpath> Pfad, in dem die Sourcen von LibreOffice liegen. Default ist das aktuelle Verzeichnis.
+"
+
+if [ "$1" == "--help" ]; then
+	error "$USAGE"
+fi
+
+# Variablen zum Steuern des Builds
+configure=1
+build=1
+devinst=""
+kde="kde4"
+clean=0
+
+while getopts bcdklw opt
+  do case "$opt" in
+  b) build=0;;
+  c) configure=0;;
+  d) devinst="dev-install";;
+  k) kde="kde";;
+  l) clean=1;;
+  w) windows=1;;
+  [?]) error "$USAGE";;
+  esac
+done
+
+shift $((OPTIND-1))
+
+src=${1:-"."}
+cd $src || error "Zielverzeichnis existiert nicht."
+
+if [ ! -f ./autogen.sh ]; then
+	error "$USAGE"
+fi
+
+do_configure()
+{
+	if [ "_$windows" = "_1" ]; then
+		if [ -f /cygdrive/c/Programme/Java/jdk1.5.0_22/bin/javac.exe ] ; then 
+			JDK_HOME="/cygdrive/c/Programme/Java/jdk1.5.0_22"
+		else 
+			echo "Kein JDK unter /cygdrive/c/Programme/Java/jdk1.5.0_22/bin/ gefunden!"
+		fi
+
+		./autogen.sh \
+			--with-build-version=${BUILD_NUMBER} \
+			--with-vendor="IT@m Landeshauptstadt München" \
+			--with-lang="en-US de fr es it pt " \
+			--with-jdk-home=${JDK_HOME} \
+			--with-java \
+			--with-java-target-version=1.5 \
+			--enable-release-build \
+			--disable-build-mozilla \
+                        --disable-online-update \
+			--with-mozilla-build="/cygdrive/e/Programme/mozilla-build" \
+                        --enable-extension-integration \
+                        --enable-ext-scripting-beanshell \
+                        --enable-ext-wiki-publisher \
+                        --enable-ext-report-builder \
+                        --enable-ext-presenter-minimizer \
+                        --enable-ext-nlpsolver \
+			--with-ant-home=/cygdrive/c/ant \
+                        --without-junit \
+			--with-help \
+			--with-cl-home="/cygdrive/c/Programme/Microsoft Visual Studio 9.0/VC/"  \
+			--with-midl-path="/cygdrive/c/Programme/Microsoft SDKs/Windows/v7.0/Bin/Midl.exe" \
+			--with-windows-sdk-home="/cygdrive/c/Programme/Microsoft SDKs/Windows/v7.0" \
+			|| echo autogen.sh ist fehlgeschlagen 
+	else
+		if [ -f /usr/lib/j2sdk1.5-sun/bin/javac  ]; then
+			JDK_HOME="/usr/lib/j2sdk1.5-sun"
+		else
+			JDK_HOME="/usr/lib/jvm/java-6-sun"
+		fi
+
+		./autogen.sh \
+                        --with-system-zlib \
+                        --with-system-jpeg \
+                        --with-system-expat \
+                        --with-system-libxml \
+                        --with-system-sane \
+                        --with-system-curl \
+			--without-fonts \
+			--without-afms \
+			--without-ppds \
+			--enable-extension-integration \
+			--enable-odk \
+			--enable-lockdown \
+			--enable-kde4 \
+			--enable-evolution2 \
+			--disable-gnome-vfs \
+			--enable-ext-wiki-publisher \
+			--enable-ext-presenter-minimizer \
+			--enable-ext-nlpsolver \
+			--enable-epm \
+			--enable-python=internal \
+			--disable-online-update \
+			--disable-randr-link \
+			--disable-kde \
+			--disable-dbus \
+			--without-junit \
+			--with-package-format=deb \
+			--with-lang="en-US de fr es it pt" \
+			--without-doxygen \
+                        --disable-gconf \
+			--enable-release-build \
+			--with-build-version="${BUILD_NUMBER}" \
+			--with-vendor="IT@M Landeshauptstadt München" \
+			--with-java \
+			--with-jdk-home=$JDK_HOME \
+			|| error "autogen.sh fehlgeschlagen."
+	fi
+			
+}
+#		--disable-vba \
+#		--with-jvm-path \	Use a specific JVM search path at runtime.
+#		--enable-gstreamer \	gstreamer 1.0
+#		--enable-kde \		KDE 3
+#                --with-system-libs \
+#                --without-system-clucene \
+#                --without-system-libcdr \
+#                --without-system-libmspub \
+#                --without-system-libvisio \
+#                --without-system-libcmis \
+#                --without-system-libwpd \
+#                --without-system-lcms2 \
+#                --without-system-cppunit \
+#                --without-system-libwps \
+#                --without-system-libwpg \
+#                --without-system-postgresql \
+#                --without-system-boost \
+#                --without-system-mdds \
+#                --without-system-graphite \
+#                --without-system-lpsolve \
+#                --without-system-libexttextcat \
+#                --without-system-poppler \
+#                --without-system-jfreereport \
+#                --without-system-icu \
+#
+#                       --with-lang="en-US de" \
+#                        --enable-epm \
+#                        --enable-ext-wiki-publisher \
+#                        --enable-graphite \
+#                        --disable-gnome-vfs \
+#                        --disable-kdeab \
+#                        --enable-$kde \
+ #                       --without-fonts \
+#                        --without-ppds \
+#                        --without-afms \
+#                        --with-jdk-home=$JDK_HOME \
+#                        --with-java \
+#                        --with-java-target-version=1.5 \
+#                        --enable-ext-scripting-beanshell \
+#                        --disable-ccache \
+#                        --with-system-openldap \
+#                                        --with-system-zlib \
+#                                        --with-system-openssl \
+#                                        --with-system-jpeg \
+#                                        --with-system-expat \
+ #                                       --with-system-libxml \
+#                                        --with-system-sane \
+#                                        --with-system-curl \
+#                        --with-system-db \
+#                        --with-system-neon \
+ #                       --enable-librsvg="internal" \
+#                        --enable-python="system" \
+#                        --without-doxygen \
+#                        --disable-lockdown \
+#                        --disable-gconf \
+#                        --enable-release-build \
+
+
+do_build() {
+	make $devinst || error "make fehlgeschlagen."
+}
+
+echo "Startzeit: $(date)" | tee build.log
+
+if [ "_$configure" = "_1" ]; then
+  echo Configuring...
+  do_configure 2>&1 | tee -a build.log
+  ret=${PIPESTATUS[0]}
+  if [ $ret -ne 0 ]; then
+    exit $ret
+  fi
+fi
+
+if [ "_$clean" = "_1" ]; then
+  echo Cleaning...
+  make clean 2>&1 | tee -a build.log
+  ret=${PIPESTATUS[0]}
+  if [ $ret -ne 0 ]; then
+    exit $ret
+  fi
+fi
+
+if [ "_$build" = "_1" ]; then
+  echo Building...
+  ./download 2>&1 | tee -a build.log
+  do_build 2>&1 | tee -a build.log
+  ret=${PIPESTATUS[0]}
+  if [ $ret -ne 0 ]; then
+    exit $ret
+  fi
+fi
+
+end_time=$(date "+%s")
+
+time_diff=$(($end_time - $start_time))
+minutes=$(($time_diff / 60))
+hours=$(($minutes / 60))
+minutes=$(($minutes - $hours * 60))
+
+echo "Gesamtzeit für den Build: $hours Std. $minutes Min." | tee -a build.log
+
