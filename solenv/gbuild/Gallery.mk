@@ -82,6 +82,14 @@ $(call gb_Gallery_get_workdir,%).ulf : \
 $(call gb_Gallery_get_workdir,%).str : $(gb_Gallery_TRANSLATE)
 	$(call gb_Gallery__command_str,$@,$*)
 
+# there must be a rule for these since they are targets due to Package
+$(call gb_Gallery_get_workdir,%).sdg :
+	touch $@
+$(call gb_Gallery_get_workdir,%).sdv :
+	touch $@
+$(call gb_Gallery_get_workdir,%).thm :
+	touch $@
+
 .PHONY : $(call gb_Gallery_get_clean_target,%)
 $(call gb_Gallery_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),GAL,1)
