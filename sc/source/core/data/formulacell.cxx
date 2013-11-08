@@ -38,6 +38,7 @@
 #include "editutil.hxx"
 #include "chgtrack.hxx"
 #include "tokenarray.hxx"
+#include "clkernelthread.hxx"
 
 #include "formula/errorcodes.hxx"
 #include "formula/vectortoken.hxx"
@@ -382,6 +383,26 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
 
 }
 
+//  The mutex to synchronize access to the OpenCL compilation thread.
+static osl::Mutex& getOpenCLCompilationThreadMutex()
+{
+    static osl::Mutex* pMutex = NULL;
+    if( !pMutex )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if( !pMutex )
+        {
+            static osl::Mutex aMutex;
+            pMutex = &aMutex;
+        }
+    }
+
+    return *pMutex;
+}
+
+int ScFormulaCellGroup::mnCount = 0;
+rtl::Reference<sc::CLBuildKernelThread> ScFormulaCellGroup::mxCLKernelThread;
+
 ScFormulaCellGroup::ScFormulaCellGroup() :
     mnRefCount(0),
     mpCode(NULL),
@@ -393,10 +414,31 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mbSubTotal(false),
     meCalcState(sc::GroupCalcEnabled)
 {
+    if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+    {
+        osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
+        if (mnCount++ == 0)
+            {
+                assert(!mxCLKernelThread.is());
+                mxCLKernelThread.set(new sc::CLBuildKernelThread);
+                mxCLKernelThread->launch();
+            }
+    }
 }
 
 ScFormulaCellGroup::~ScFormulaCellGroup()
 {
+    if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+    {
+        osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
+        if (--mnCount == 0)
+            {
+                assert(mxCLKernelThread.is());
+                mxCLKernelThread->finish();
+                mxCLKernelThread->join();
+                mxCLKernelThread.clear();
+            }
+    }
     delete mpCode;
 }
 

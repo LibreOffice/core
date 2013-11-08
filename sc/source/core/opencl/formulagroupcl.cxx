@@ -2652,7 +2652,7 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument
                                                                       const ScAddress& rTopPos,
                                                                       ScTokenArray& rCode)
 {
-    return sc::opencl::DynamicKernel::create(rDoc, rTopPos, rCode);
+    return DynamicKernel::create(rDoc, rTopPos, rCode);
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,

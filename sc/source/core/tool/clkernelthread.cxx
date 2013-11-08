@@ -7,18 +7,41 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/log.hxx>
+
 #include "clkernelthread.hxx"
 
 using namespace std;
 
 namespace sc {
 
-CLBuildKernelThread::CLBuildKernelThread() : salhelper::Thread("opencl-build-kernel-thread") {}
+CLBuildKernelThread::CLBuildKernelThread() :
+    salhelper::Thread("opencl-build-kernel-thread")
+{
+}
 
-CLBuildKernelThread::~CLBuildKernelThread() {}
+CLBuildKernelThread::~CLBuildKernelThread()
+{
+}
 
 void CLBuildKernelThread::execute()
 {
+    SAL_INFO("sc", "opencl-buildkernel-thread running");
+
+    SAL_INFO("sc", "opencl-buildkernel-thread finishing");
+}
+
+void CLBuildKernelThread::produce()
+{
+}
+
+void CLBuildKernelThread::consume()
+{
+}
+
+void CLBuildKernelThread::finish()
+{
+    SAL_INFO("sc", "opencl-buildkernel-thread request to finish");
 }
 
 }

@@ -7,7 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "salhelper/thread.hxx"
+#include <osl/conditn.hxx>
+#include <salhelper/thread.hxx>
 
 namespace sc {
 
@@ -17,8 +18,15 @@ public:
     CLBuildKernelThread();
     virtual ~CLBuildKernelThread();
 
+    void finish();
+
 protected:
     virtual void execute();
+
+private:
+    osl::Condition maConsumeCondition;
+    void produce();
+    void consume();
 };
 
 }

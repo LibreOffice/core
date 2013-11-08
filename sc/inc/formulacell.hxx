@@ -23,6 +23,7 @@
 #include "formularesult.hxx"
 
 #include "formula/tokenarray.hxx"
+#include <rtl/ref.hxx>
 #include "svl/listener.hxx"
 #include "types.hxx"
 
@@ -31,6 +32,7 @@
 
 namespace sc {
 
+class CLBuildKernelThread;
 class StartListeningContext;
 class EndListeningContext;
 struct RefUpdateContext;
@@ -69,6 +71,9 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     void setCode( const ScTokenArray& rCode );
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
+
+    static int mnCount;
+    static rtl::Reference<sc::CLBuildKernelThread> mxCLKernelThread;
 };
 
 inline void intrusive_ptr_add_ref(const ScFormulaCellGroup *p)
