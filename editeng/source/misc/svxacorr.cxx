@@ -359,7 +359,6 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTx
     // Is the word a compounded word separated by delimiters?
     // If so, keep track of all delimiters so each constituent
     // word can be checked for two initial capital letters.
-    xub_StrLen n = 0;
     std::deque<xub_StrLen> aDelimiters;
 
     // Always check for two capitals at the beginning
@@ -367,13 +366,12 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTx
     aDelimiters.push_back(nSttPos);
 
     // Find all compound word delimiters
-    for (n = nSttPos; n < nEndPos; n++)
+    for (xub_StrLen n = nSttPos; n < nEndPos; ++n)
     {
         if (IsAutoCorrectChar(rTxt[ n ]))
         {
             aDelimiters.push_back( n + 1 ); // Get position of char after delimiter
         }
-
     }
 
     // Decide where to put the terminating delimiter.
@@ -386,10 +384,10 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTx
 
     // Iterate through the word and all words that compose it.
     // Two capital letters at the beginning of word?
-    for(n = 0; n < aDelimiters.size() - 1; n++)
+    for (size_t nI = 0; nI < aDelimiters.size() - 1; ++nI)
     {
-        nSttPos = aDelimiters[n];
-        nEndPos = aDelimiters[n + 1];
+        nSttPos = aDelimiters[nI];
+        nEndPos = aDelimiters[nI + 1];
 
         if( nSttPos+2 < nEndPos &&
             IsUpperLetter( rCC.getCharacterType( rTxt, nSttPos )) &&
