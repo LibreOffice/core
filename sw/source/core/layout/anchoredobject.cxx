@@ -98,8 +98,18 @@ SwAnchoredObject::SwAnchoredObject() :
 {
 }
 
+void SwAnchoredObject::ClearVertPosOrientFrm()
+{
+    if (mpVertPosOrientFrm)
+    {
+        const_cast<SwLayoutFrm*>(mpVertPosOrientFrm)->ClearVertPosOrientFrmFor(this);
+        mpVertPosOrientFrm = NULL;
+    }
+}
+
 SwAnchoredObject::~SwAnchoredObject()
 {
+    ClearVertPosOrientFrm();
 }
 
 // =============================================================================
@@ -228,6 +238,8 @@ void SwAnchoredObject::ResetLastCharRectHeight()
 void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFrm )
 {
     mpVertPosOrientFrm = &_rVertPosOrientFrm;
+
+    const_cast<SwLayoutFrm*>(mpVertPosOrientFrm)->SetVertPosOrientFrmFor(this);
 
     // #i28701# - take over functionality of deleted method
     // <SwFlyAtCntFrm::AssertPage()>: assure for at-paragraph and at-character

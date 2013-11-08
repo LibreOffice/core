@@ -557,6 +557,14 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
 
 void SwLayoutFrm::Destroy()
 {
+    while (!aVertPosOrientFrmsFor.empty())
+    {
+        SwAnchoredObject *pObj = *aVertPosOrientFrmsFor.begin();
+        pObj->ClearVertPosOrientFrm();
+    }
+
+    assert(aVertPosOrientFrmsFor.empty());
+
     SwFrm *pFrm = pLower;
 
     if( GetFmt() && !GetFmt()->GetDoc()->IsInDtor() )
