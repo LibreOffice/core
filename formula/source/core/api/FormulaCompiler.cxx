@@ -703,7 +703,7 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
     mxSymbolsEnglishXL = aMap.mxSymbolMap;
 
     // TODO: For now, just replace the separators to the Excel English
