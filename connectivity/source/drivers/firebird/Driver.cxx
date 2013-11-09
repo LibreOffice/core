@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/process.h>
+#include <svtools/miscopt.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -153,7 +154,10 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
 sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const OUString& url )
     throw(SQLException, RuntimeException)
 {
-    return url.equals("sdbc:embedded:firebird") || url.startsWith("sdbc:firebird:");
+    SvtMiscOptions aMiscOptions;
+
+    return aMiscOptions.IsExperimentalMode() &&
+        (url.equals("sdbc:embedded:firebird") || url.startsWith("sdbc:firebird:"));
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(

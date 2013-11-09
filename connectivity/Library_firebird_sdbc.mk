@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_libraries,firebird_sdbc, \
     sal \
     salhelper \
     utl \
+    svt \
     vcl \
 	$(gb_UWINAPI) \
 ))

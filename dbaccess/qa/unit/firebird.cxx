@@ -15,6 +15,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
+#include <svtools/miscopt.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
@@ -28,11 +29,20 @@ public:
     void testEmptyDBConnection();
     void testIntegerDatabase();
 
+    virtual void setUp();
+
     CPPUNIT_TEST_SUITE(FirebirdTest);
     CPPUNIT_TEST(testEmptyDBConnection);
     CPPUNIT_TEST(testIntegerDatabase);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void FirebirdTest::setUp()
+{
+    DBTestBase::setUp();
+    SvtMiscOptions aMiscOptions;
+    aMiscOptions.SetExperimentalMode(sal_True);
+}
 
 /**
  * Test the loading of an "empty" file, i.e. the embedded database has not yet

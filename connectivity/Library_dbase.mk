@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,dbase,\
 	file \
 	utl \
 	comphelper \
+	svt \
 	$(gb_UWINAPI) \
 ))
 

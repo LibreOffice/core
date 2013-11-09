@@ -18,6 +18,7 @@
  */
 #include "connectivity/DriversConfig.hxx"
 #include <tools/wldcrd.hxx>
+#include <svtools/miscopt.hxx>
 
 using namespace connectivity;
 using namespace utl;
@@ -102,6 +103,8 @@ void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rx
 
         if ( m_aInstalled.isValid() )
         {
+            SvtMiscOptions aMiscOptions;
+
             const uno::Sequence< OUString > aURLPatterns = m_aInstalled.getNodeNames();
             const OUString* pPatternIter = aURLPatterns.getConstArray();
             const OUString* pPatternEnd  = pPatternIter + aURLPatterns.getLength();
@@ -109,7 +112,9 @@ void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rx
             {
                 TInstalledDriver aInstalledDriver;
                 lcl_readURLPatternNode(m_aInstalled,*pPatternIter,aInstalledDriver);
-                if ( !aInstalledDriver.sDriverFactory.isEmpty() )
+                if ( !aInstalledDriver.sDriverFactory.isEmpty() &&
+                     ( aMiscOptions.IsExperimentalMode() ||
+                       !aInstalledDriver.sDriverFactory.equals("com.sun.star.comp.sdbc.firebird.Driver") ))
                     m_aDrivers.insert(TInstalledDrivers::value_type(*pPatternIter,aInstalledDriver));
             }
         } // if ( m_aInstalled.isValid() )

@@ -53,6 +53,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_commontools, \
     unotest \
     utl \
     tl \
+    svt \
     $(gb_UWINAPI) \
 ))
 
