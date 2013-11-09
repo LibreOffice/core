@@ -3573,7 +3573,163 @@ void OpFTest::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "    return tmp;\n";
         ss << "}";
 }
+void OpB::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    //decls.insert(fBigInvDecl);decls.insert(fLogDblMaxDecl);
+    decls.insert(GetBinomDistPMFDecl);decls.insert(MinDecl);
+    decls.insert(fMachEpsDecl);decls.insert(fMaxGammaArgumentDecl);
+    decls.insert(GetBetaDistDecl);decls.insert(GetBetaDistPDFDecl);
+    decls.insert(lcl_GetBetaHelperContFracDecl);decls.insert(GetLogBetaDecl);
+    decls.insert(lcl_getLanczosSumDecl); decls.insert(GetBetaDecl);
+    funs.insert(GetBinomDistPMF);funs.insert(lcl_GetBinomDistRange);
+    funs.insert(GetBetaDist);funs.insert(GetBetaDistPDF);
+    funs.insert(lcl_GetBetaHelperContFrac);funs.insert(GetLogBeta);
+    funs.insert(lcl_getLanczosSum);funs.insert(GetBeta);
+}
 
+void OpB::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double min = 2.22507e-308;\n";
+    ss << "    double tmp;\n";
+    ss << "    double arg0,arg1,arg2,arg3;\n";
+    size_t i = vSubArguments.size();
+    size_t nItems = 0;
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n ";
+#endif
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            else {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+            ss << "    {\n";
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            arg"<<i<<"= 0;\n";
+            ss << "        else\n";
+            ss << "            arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss << "    }\n";
+            ss << "    else\n";
+            ss << "        arg"<<i<<"= 0;\n";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        arg"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#endif
+        }
+    }
+    ss << "    double rxs = floor(arg2);\n"
+    "    double rxe = floor(arg3);\n"
+    "    double rn = floor(arg0);\n"
+    "    double rq = (0.5 - arg1) + 0.5;\n"
+    "    bool bIsValidX = (0.0 <= rxs && rxs <= rxe && rxe <= rn);\n"
+    "    if (bIsValidX && 0.0 < arg1 && arg1 < 1.0)\n"
+    "    {\n"
+    "        if (rxs == rxe)\n"
+    "            tmp = GetBinomDistPMF(rxs, rn, arg1);\n"
+    "        else\n"
+    "        {\n"
+    "            double fFactor = pow(rq, rn);\n"
+    "            if (fFactor > min)\n"
+    "                tmp ="
+    " lcl_GetBinomDistRange(rn, rxs, rxe, fFactor, arg1, rq);\n"
+    "            else\n"
+    "            {\n"
+    "                fFactor = pow(arg1, rn);\n"
+    "                if (fFactor > min)\n"
+    "                {\n"
+    "                    tmp ="
+    "lcl_GetBinomDistRange(rn, rn - rxe, rn - rxs, fFactor, rq, arg1);\n"
+    "            }\n"
+    "                else\n"
+    "                    tmp ="
+    "GetBetaDist(rq, rn - rxe, rxe + 1.0)"
+    "- GetBetaDist(rq, rn - rxs + 1, rxs);\n"
+    "            }\n"
+    "        }\n"
+    "    }\n"
+    "    else\n"
+    "    {\n"
+    "        if (bIsValidX)\n"
+    "        {\n"
+    "            if (arg1 == 0.0)\n"
+    "                tmp = (rxs == 0.0 ? 1.0 : 0.0);\n"
+    "            else if (arg1 == 1.0)\n"
+    "                tmp = (rxe == rn ? 1.0 : 0.0);\n"
+    "            else\n"
+    "            {\n"
+    "                tmp = DBL_MIN;\n"
+    "            }\n"
+    "        }\n"
+    "        else\n"
+    "        {\n"
+    "            tmp = DBL_MIN;\n"
+    "        }\n"
+    "    }\n"
+    "    return tmp;"
+    "}\n";
+}
 
 }}
 
