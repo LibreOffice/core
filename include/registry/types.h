@@ -20,7 +20,7 @@
 #ifndef INCLUDED_registry_types_h
 #define INCLUDED_registry_types_h
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

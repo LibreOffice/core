@@ -20,12 +20,12 @@
 #ifndef INCLUDED_registry_reader_h
 #define INCLUDED_registry_reader_h
 
-#include "registry/regdllapi.h"
-#include "registry/types.h"
-#include "registry/version.h"
+#include <registry/regdllapi.h>
+#include <registry/types.h>
+#include <registry/version.h>
 
-#include "rtl/ustring.h"
-#include "sal/types.h"
+#include <rtl/ustring.h>
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

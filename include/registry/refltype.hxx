@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REGISTRY_REFLTYPE_HXX
 #define INCLUDED_REGISTRY_REFLTYPE_HXX
 
-#include "registry/types.h"
+#include <registry/types.h>
 #include <sal/types.h>
 
 /** specifies the type source of a binary type blob.

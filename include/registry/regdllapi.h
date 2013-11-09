@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REGISTRY_REGDLLAPI_H
 #define INCLUDED_REGISTRY_REGDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(REG_DLLIMPLEMENTATION)
 #define REG_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

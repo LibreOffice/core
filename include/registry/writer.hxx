@@ -20,13 +20,13 @@
 #ifndef INCLUDED_registry_writer_hxx
 #define INCLUDED_registry_writer_hxx
 
-#include "registry/writer.h"
-#include "registry/refltype.hxx"
-#include "registry/types.h"
-#include "registry/version.h"
+#include <registry/writer.h>
+#include <registry/refltype.hxx>
+#include <registry/types.h>
+#include <registry/version.h>
 
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <new>
 
