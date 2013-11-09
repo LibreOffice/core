@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CODEMAKER_COMMONJAVA_HXX
 #define INCLUDED_CODEMAKER_COMMONJAVA_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "codemaker/unotype.hxx"
+#include <codemaker/unotype.hxx>
 
 namespace rtl { class OString; }
 

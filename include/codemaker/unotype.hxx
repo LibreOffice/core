@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_UNOTYPE_HXX
 #define INCLUDED_CODEMAKER_UNOTYPE_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include <vector>
 

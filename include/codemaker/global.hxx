@@ -26,9 +26,9 @@
 
 #include <stdio.h>
 
-#include "osl/file.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/strbuf.hxx"
+#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 
 struct EqualString
 {

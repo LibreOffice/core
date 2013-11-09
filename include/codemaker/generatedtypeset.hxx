@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_GENERATEDTYPESET_HXX
 #define INCLUDED_CODEMAKER_GENERATEDTYPESET_HXX
 
-#include "rtl/string.hxx"
+#include <rtl/string.hxx>
 
 #include <boost/unordered_set.hpp>
 

@@ -20,16 +20,16 @@
 #ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 #define INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
-#include "codemaker/unotype.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/string.hxx"
-#include "rtl/textenc.h"
-#include "rtl/ustring.hxx"
-#include "salhelper/simplereferenceobject.hxx"
+#include <codemaker/unotype.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace unoidl {
     class Entity;

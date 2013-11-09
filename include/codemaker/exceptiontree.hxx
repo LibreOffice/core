@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CODEMAKER_EXCEPTIONTREE_HXX
 #define INCLUDED_CODEMAKER_EXCEPTIONTREE_HXX
 
-#include "codemaker/global.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/string.hxx"
+#include <codemaker/global.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/string.hxx>
 
 #include <vector>
 

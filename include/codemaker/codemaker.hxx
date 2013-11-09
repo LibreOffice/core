@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_CODEMAKER_HXX
 #define INCLUDED_CODEMAKER_CODEMAKER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 namespace rtl {
     class OString;
