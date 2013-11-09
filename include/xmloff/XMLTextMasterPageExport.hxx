@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
 #define INCLUDED_XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/XMLPageExport.hxx>

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLICTXT_HXX
 #define INCLUDED_XMLOFF_XMLICTXT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <tools/solar.h>
 #include <tools/ref.hxx>

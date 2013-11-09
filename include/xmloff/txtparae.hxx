@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_TXTPARAE_HXX
 #define INCLUDED_XMLOFF_TXTPARAE_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>

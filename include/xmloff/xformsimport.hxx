@@ -19,8 +19,8 @@
 #ifndef INCLUDED_XMLOFF_XFORMSIMPORT_HXX
 #define INCLUDED_XMLOFF_XFORMSIMPORT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 
 #include <tools/solar.h>
 #include <com/sun/star/uno/Reference.hxx>

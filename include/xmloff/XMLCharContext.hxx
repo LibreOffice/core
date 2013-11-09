@@ -19,9 +19,9 @@
 #ifndef INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
 
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 #include <com/sun/star/uno/Reference.h>
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 
 class XMLOFF_DLLPUBLIC XMLCharContext : public SvXMLImportContext
 {

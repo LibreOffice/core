@@ -20,13 +20,13 @@
 #ifndef INCLUDED_XMLOFF_NMSPMAP_HXX
 #define INCLUDED_XMLOFF_NMSPMAP_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 #include <utility>
 
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <boost/unordered_map.hpp>
 #include <rtl/ref.hxx>

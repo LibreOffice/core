@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLPAGEEXPORT_HXX
 #define INCLUDED_XMLOFF_XMLPAGEEXPORT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <xmloff/attrlist.hxx>

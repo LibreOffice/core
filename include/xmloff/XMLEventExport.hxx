@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLEVENTEXPORT_HXX
 #define INCLUDED_XMLOFF_XMLEVENTEXPORT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>

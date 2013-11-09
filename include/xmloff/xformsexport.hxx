@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_XFORMSEXPORT_HXX
 #define INCLUDED_XMLOFF_XFORMSEXPORT_HXX
 
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 
 class SvXMLExport;

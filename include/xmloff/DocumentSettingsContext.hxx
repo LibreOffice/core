@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
 #define INCLUDED_XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>

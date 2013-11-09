@@ -19,9 +19,9 @@
 #ifndef INCLUDED_XMLOFF_PRSTYLEI_HXX
 #define INCLUDED_XMLOFF_PRSTYLEI_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/style/XStyle.hpp>
 #include <vector>
 #include <xmloff/xmlstyle.hxx>

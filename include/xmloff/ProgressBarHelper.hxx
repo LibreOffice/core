@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_PROGRESSBARHELPER_HXX
 #define INCLUDED_XMLOFF_PROGRESSBARHELPER_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 

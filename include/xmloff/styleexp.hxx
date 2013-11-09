@@ -19,8 +19,8 @@
 #ifndef INCLUDED_XMLOFF_STYLEEXP_HXX
 #define INCLUDED_XMLOFF_STYLEEXP_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 

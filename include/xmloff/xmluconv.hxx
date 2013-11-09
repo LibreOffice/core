@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLUCONV_HXX
 #define INCLUDED_XMLOFF_XMLUCONV_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 
 #include <memory>
 #include <limits.h>

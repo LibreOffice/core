@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
 #define INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
 
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>

@@ -19,9 +19,9 @@
 #ifndef INCLUDED_XMLOFF_XMLTEXTMASTERPAGECONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLTEXTMASTERPAGECONTEXT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 
 #include <xmloff/xmlstyle.hxx>
 

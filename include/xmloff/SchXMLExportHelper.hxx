@@ -19,9 +19,9 @@
 #ifndef INCLUDED_XMLOFF_SCHXMLEXPORTHELPER_HXX
 #define INCLUDED_XMLOFF_SCHXMLEXPORTHELPER_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <xmloff/uniref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/util/XStringMapping.hpp>

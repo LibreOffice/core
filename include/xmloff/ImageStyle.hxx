@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_IMAGESTYLE_HXX
 #define INCLUDED_XMLOFF_IMAGESTYLE_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 class SvXMLNamespaceMap;

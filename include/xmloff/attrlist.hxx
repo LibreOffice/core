@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_ATTRLIST_HXX
 #define INCLUDED_XMLOFF_ATTRLIST_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>

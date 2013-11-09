@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
 #define INCLUDED_XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/prstylei.hxx>
 
 namespace com { namespace sun { namespace star { namespace container

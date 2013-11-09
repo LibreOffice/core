@@ -19,8 +19,8 @@
 #ifndef INCLUDED_XMLOFF_XMLTEXTSHAPESTYLECONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLTEXTSHAPESTYLECONTEXT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/XMLShapeStyleContext.hxx>
 
 class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext : public XMLShapeStyleContext

@@ -22,11 +22,11 @@
 
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
-#include "xmloff/dllapi.h"
-#include "xmloff/xmlictxt.hxx"
-#include "xmloff/uniref.hxx"
-#include "xmloff/xmlimppr.hxx"
-#include "xmloff/prhdlfac.hxx"
+#include <xmloff/dllapi.h>
+#include <xmloff/xmlictxt.hxx>
+#include <xmloff/uniref.hxx>
+#include <xmloff/xmlimppr.hxx>
+#include <xmloff/prhdlfac.hxx>
 
 #include <rtl/ref.hxx>
 

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_UNIREF_HXX
 #define INCLUDED_XMLOFF_UNIREF_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <osl/interlck.h>
 

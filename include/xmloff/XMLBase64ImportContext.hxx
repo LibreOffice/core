@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmlictxt.hxx>
 

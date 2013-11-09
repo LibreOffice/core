@@ -19,9 +19,9 @@
 #ifndef INCLUDED_XMLOFF_XMLIMPPR_HXX
 #define INCLUDED_XMLOFF_XMLIMPPR_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <tools/solar.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

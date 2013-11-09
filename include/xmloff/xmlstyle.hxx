@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLSTYLE_HXX
 #define INCLUDED_XMLOFF_XMLSTYLE_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <rsc/rscsfx.hxx>
 #include <tools/rtti.hxx>
 #include <xmloff/uniref.hxx>

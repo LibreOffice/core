@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_NUMEHELP_HXX
 #define INCLUDED_XMLOFF_NUMEHELP_HXX
 
-#include "sal/config.h"
-#include "xmloff/xmlnmspe.hxx"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>

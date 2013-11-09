@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "xmloff/xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 
 //........................................................................
 namespace xmloff

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_DLLAPI_H
 #define INCLUDED_XMLOFF_DLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined XMLOFF_DLLIMPLEMENTATION
 #define XMLOFF_DLLPUBLIC SAL_DLLPUBLIC_EXPORT

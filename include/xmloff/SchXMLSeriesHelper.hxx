@@ -26,7 +26,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 
 #include <vector>
 #include <map>

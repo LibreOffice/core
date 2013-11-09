@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 #define INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
 #include <xmloff/uniref.hxx>

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_PRHDLFAC_HXX
 #define INCLUDED_XMLOFF_PRHDLFAC_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 
 #include <map>
 #include <xmloff/uniref.hxx>

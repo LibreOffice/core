@@ -19,8 +19,8 @@
 #ifndef INCLUDED_XMLOFF_TXTSTYLI_HXX
 #define INCLUDED_XMLOFF_TXTSTYLI_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/prstylei.hxx>
 
 class SvXMLTokenMap;

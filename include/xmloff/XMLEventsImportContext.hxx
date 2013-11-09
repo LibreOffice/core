@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <xmloff/xmlictxt.hxx>

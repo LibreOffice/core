@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
 #define INCLUDED_XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmltoken.hxx>
 

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_SHAPEIMPORT_HXX
 #define INCLUDED_XMLOFF_SHAPEIMPORT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -32,7 +32,7 @@
 #include <xmloff/uniref.hxx>
 #include <xmloff/xmlictxt.hxx>
 
-#include "xmloff/table/XMLTableImport.hxx"
+#include <xmloff/table/XMLTableImport.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <vector>
 

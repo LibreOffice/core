@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLTEXTTABLECONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLTEXTTABLECONTEXT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
 

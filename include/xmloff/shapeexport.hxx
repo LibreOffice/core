@@ -19,9 +19,9 @@
 #ifndef INCLUDED_XMLOFF_SHAPEEXPORT_HXX
 #define INCLUDED_XMLOFF_SHAPEEXPORT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -39,7 +39,7 @@
 #include <xmloff/animexp.hxx>
 #include <xmloff/families.hxx>
 
-#include "xmloff/table/XMLTableExport.hxx"
+#include <xmloff/table/XMLTableExport.hxx>
 
 // shape export features are bits used for the nFeature
 // parameter of XMLShapeExport::exportShape

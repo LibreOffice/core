@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX
 #define INCLUDED_XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/shapeimport.hxx>
 
 class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper

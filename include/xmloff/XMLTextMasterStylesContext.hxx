@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLTEXTMASTERSTYLESCONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLTEXTMASTERSTYLESCONTEXT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/xmlstyle.hxx>
 
 class XMLOFF_DLLPUBLIC XMLTextMasterStylesContext : public SvXMLStylesContext

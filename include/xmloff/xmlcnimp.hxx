@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_XMLCNIMP_HXX
 #define INCLUDED_XMLOFF_XMLCNIMP_HXX
 
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <boost/scoped_ptr.hpp>
 

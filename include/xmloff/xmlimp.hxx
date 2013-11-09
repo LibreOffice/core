@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLIMP_HXX
 #define INCLUDED_XMLOFF_XMLIMP_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>

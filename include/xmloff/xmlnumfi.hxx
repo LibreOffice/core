@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLNUMFI_HXX
 #define INCLUDED_XMLOFF_XMLNUMFI_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmlstyle.hxx>

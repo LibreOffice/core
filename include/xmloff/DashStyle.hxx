@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_DASHSTYLE_HXX
 #define INCLUDED_XMLOFF_DASHSTYLE_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <sal/types.h>
 
 class SvXMLImport;

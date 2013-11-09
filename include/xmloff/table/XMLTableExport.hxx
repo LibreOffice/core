@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_TABLE_XMLTABLEEXPORT_HXX
 #define INCLUDED_XMLOFF_TABLE_XMLTABLEEXPORT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -37,10 +37,10 @@
 
 #include <rtl/ref.hxx>
 
-#include "xmloff/dllapi.h"
-#include "xmloff/uniref.hxx"
-#include "xmloff/xmlprmap.hxx"
-#include "xmloff/xmlexppr.hxx"
+#include <xmloff/dllapi.h>
+#include <xmloff/uniref.hxx>
+#include <xmloff/xmlprmap.hxx>
+#include <xmloff/xmlexppr.hxx>
 
 
 //////////////////////////////////////////////////////////////////////////////

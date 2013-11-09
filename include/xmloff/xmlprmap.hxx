@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLPRMAP_HXX
 #define INCLUDED_XMLOFF_XMLPRMAP_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

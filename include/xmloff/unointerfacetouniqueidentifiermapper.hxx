@@ -20,9 +20,9 @@
 #ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #define __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
+#include <sal/types.h>
 
 #include <map>
 #include <rtl/ustring.hxx>

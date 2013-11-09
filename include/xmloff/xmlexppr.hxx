@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLEXPPR_HXX
 #define INCLUDED_XMLOFF_XMLEXPPR_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/uniref.hxx>
 

@@ -21,7 +21,7 @@
 #define INCLUDED_XMLOFF_I18NMAP_HXX
 
 #include <sal/config.h>
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <map>

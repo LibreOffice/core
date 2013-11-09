@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_FORMLAYEREXPORT_HXX
 #define INCLUDED_XMLOFF_FORMLAYEREXPORT_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

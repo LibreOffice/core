@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_CONTROLPROPERTYHDL_HXX
 #define INCLUDED_XMLOFF_CONTROLPROPERTYHDL_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
+#include <sal/config.h>
+#include <xmloff/dllapi.h>
 #include <xmloff/prhdlfac.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>

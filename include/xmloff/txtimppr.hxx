@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_TXTIMPPR_HXX
 #define INCLUDED_XMLOFF_TXTIMPPR_HXX
 
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 #include <xmloff/xmlimppr.hxx>
 
 class XMLFontStylesContext;
