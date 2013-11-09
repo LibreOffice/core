@@ -29,11 +29,11 @@
  *
  *****************************************************************************/
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #import <Cocoa/Cocoa.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #define AppleRemoteControlEvent 15
 

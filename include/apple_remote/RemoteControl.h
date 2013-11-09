@@ -29,11 +29,11 @@
  *
  *****************************************************************************/
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #import <Cocoa/Cocoa.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 // notifaction names that are being used to signal that an application wants to
 // have access to the remote control device or if the application has finished
