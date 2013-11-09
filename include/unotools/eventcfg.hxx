@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_EVENTCFG_HXX
 #define INCLUDED_UNOTOOLS_EVENTCFG_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>

@@ -20,14 +20,14 @@
 #ifndef INCLUDED_UNOTOOLS_CONFIGMGR_HXX
 #define INCLUDED_UNOTOOLS_CONFIGMGR_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <list>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "sal/types.h"
-#include "unotools/unotoolsdllapi.h"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
+#include <unotools/unotoolsdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace container{ class XHierarchicalNameAccess; }

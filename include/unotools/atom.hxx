@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_ATOM_HXX
 #define INCLUDED_UNOTOOLS_ATOM_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>

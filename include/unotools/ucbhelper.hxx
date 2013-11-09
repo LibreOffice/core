@@ -20,11 +20,11 @@
 #ifndef INCLUDED_UNOTOOLS_UCBHELPER_HXX
 #define INCLUDED_UNOTOOLS_UCBHELPER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Sequence.hxx"
-#include "sal/types.h"
-#include "unotools/unotoolsdllapi.h"
+#include <com/sun/star/uno/Sequence.hxx>
+#include <sal/types.h>
+#include <unotools/unotoolsdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

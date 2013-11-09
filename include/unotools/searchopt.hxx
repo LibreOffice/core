@@ -20,8 +20,8 @@
 #ifndef INCLUDED_UNOTOOLS_SEARCHOPT_HXX
 #define INCLUDED_UNOTOOLS_SEARCHOPT_HXX
 
-#include "unotools/unotoolsdllapi.h"
-#include "tools/solar.h"
+#include <unotools/unotoolsdllapi.h>
+#include <tools/solar.h>
 
 class SvtSearchOptions_Impl;
 

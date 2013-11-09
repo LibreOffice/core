@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 #define INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
 

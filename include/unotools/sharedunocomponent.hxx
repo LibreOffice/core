@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 #define INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 
-#include "unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>

@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 //TODO Use XCharacterClassification::getStringType to determine the current
 //(possibly mixed) case type and rotate to the next one

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_SYSLOCALE_HXX
 #define INCLUDED_UNOTOOLS_SYSLOCALE_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <i18nlangtag/languagetag.hxx>

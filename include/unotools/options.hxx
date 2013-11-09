@@ -20,8 +20,8 @@
 #ifndef INCLUDED_UNOTOOLS_OPTIONS_HXX
 #define INCLUDED_UNOTOOLS_OPTIONS_HXX
 
-#include "sal/config.h"
-#include "unotools/unotoolsdllapi.h"
+#include <sal/config.h>
+#include <unotools/unotoolsdllapi.h>
 #include <vector>
 
 /*

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 #define INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

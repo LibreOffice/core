@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

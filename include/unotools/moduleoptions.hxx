@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_MODULEOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_MODULEOPTIONS_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <salhelper/singletonref.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_ACCESSIBLERELATIONSETHELPER_HXX
 #define INCLUDED_UNOTOOLS_ACCESSIBLERELATIONSETHELPER_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/uno/Reference.hxx>

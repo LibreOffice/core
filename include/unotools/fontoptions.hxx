@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_FONTOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_FONTOPTIONS_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>

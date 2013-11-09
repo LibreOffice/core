@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_SYSLOCALEOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_SYSLOCALEOPTIONS_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>

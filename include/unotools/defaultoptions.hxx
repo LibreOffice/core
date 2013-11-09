@@ -19,9 +19,9 @@
 #ifndef INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
-#include "tools/solar.h"
+#include <tools/solar.h>
 #include <unotools/options.hxx>
 
 class SvtDefaultOptions_Impl;

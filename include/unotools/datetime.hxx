@@ -18,7 +18,7 @@
  */
 
 //= conversions UNO3.TimeClass <-> Tools.TimeClass (Date/Time/DateTime)
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 #ifndef INCLUDED_UNOTOOLS_DATETIME_HXX
 #define INCLUDED_UNOTOOLS_DATETIME_HXX

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 #ifndef INCLUDED_UNOTOOLS_CHARCLASS_HXX
 #define INCLUDED_UNOTOOLS_CHARCLASS_HXX

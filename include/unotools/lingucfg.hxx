@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_LINGUCFG_HXX
 #define INCLUDED_UNOTOOLS_LINGUCFG_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>

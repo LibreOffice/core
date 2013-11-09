@@ -21,7 +21,7 @@
 
 // -----------------------------------------------------------------------
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <unotools/configitem.hxx>
 
 struct SvtFilterOptions_Impl;

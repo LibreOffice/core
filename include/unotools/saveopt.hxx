@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_SAVEOPT_HXX
 #define INCLUDED_UNOTOOLS_SAVEOPT_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
 
 struct SvtLoadSaveOptions_Impl;

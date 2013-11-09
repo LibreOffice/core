@@ -19,9 +19,9 @@
 #ifndef INCLUDED_UNOTOOLS_MISCCFG_HXX
 #define INCLUDED_UNOTOOLS_MISCCFG_HXX
 
-#include "unotools/unotoolsdllapi.h"
-#include "tools/solar.h"
-#include "unotools/options.hxx"
+#include <unotools/unotoolsdllapi.h>
+#include <tools/solar.h>
+#include <unotools/options.hxx>
 
 namespace utl
 {

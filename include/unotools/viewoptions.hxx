@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_VIEWOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_VIEWOPTIONS_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unotools/configmgr.hxx>

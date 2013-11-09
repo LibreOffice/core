@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_OPTIONSDLG_HXX
 #define INCLUDED_UNOTOOLS_OPTIONSDLG_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 

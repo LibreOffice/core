@@ -20,7 +20,7 @@
 #define INCLUDED_UNOTOOLS_LOCALFILEHELPER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 #include <rtl/ustring.hxx>
 

@@ -21,7 +21,7 @@
 #define INCLUDED_UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

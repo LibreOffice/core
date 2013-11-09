@@ -20,7 +20,7 @@
 #define INCLUDED_UNOTOOLS_LOCALISATIONOPTIONS_HXX
 
 #include <sal/types.h>
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 

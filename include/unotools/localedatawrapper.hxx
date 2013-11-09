@@ -28,7 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/readwritemutexguard.hxx>
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

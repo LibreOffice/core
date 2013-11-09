@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_USEROPTIONS_HXX
 #define INCLUDED_UNOTOOLS_USEROPTIONS_HXX
 
-#include "unotools/unotoolsdllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <unotools/configitem.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
