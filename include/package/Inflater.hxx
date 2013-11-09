@@ -21,7 +21,7 @@
 #define INCLUDED_PACKAGE_INFLATER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include "packagedllapi.hxx"
+#include <package/packagedllapi.hxx>
 
 struct z_stream_s;
 
