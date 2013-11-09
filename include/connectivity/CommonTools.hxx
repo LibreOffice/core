@@ -32,7 +32,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <osl/interlck.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct Date;

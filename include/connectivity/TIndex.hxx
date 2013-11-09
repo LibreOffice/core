@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_TINDEX_HXX
 #define INCLUDED_CONNECTIVITY_TINDEX_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
-#include "connectivity/sdbcx/VIndex.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/sdbcx/VIndex.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 namespace connectivity

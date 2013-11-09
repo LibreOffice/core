@@ -24,10 +24,10 @@
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/sdbcx/VDescriptor.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/sdbcx/VDescriptor.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity

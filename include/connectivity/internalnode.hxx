@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_INTERNALNODE_HXX
 #define INCLUDED_CONNECTIVITY_INTERNALNODE_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sqlnode.hxx>
 
 namespace connectivity

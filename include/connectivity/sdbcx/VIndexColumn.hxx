@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VINDEXCOLUMN_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VINDEXCOLUMN_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/sdbcx/VColumn.hxx>
 
 namespace connectivity
 {

@@ -26,7 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <vector>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 //........................................................................
 namespace dbtools

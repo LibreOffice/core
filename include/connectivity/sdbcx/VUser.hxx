@@ -25,13 +25,13 @@
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase4.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/container/XNamed.hpp>
-#include "connectivity/sdbcx/IRefreshable.hxx"
-#include "connectivity/sdbcx/VDescriptor.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/sdbcx/IRefreshable.hxx>
+#include <connectivity/sdbcx/VDescriptor.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
 #define INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
-#include "connectivity/sdbcx/VTable.hxx"
-#include "connectivity/sdbcx/VKey.hxx"
-#include "connectivity/StdTypeDefs.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/sdbcx/VTable.hxx>
+#include <connectivity/sdbcx/VKey.hxx>
+#include <connectivity/StdTypeDefs.hxx>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/sdb/tools/XTableRename.hpp>
 #include <com/sun/star/sdb/tools/XTableAlteration.hpp>

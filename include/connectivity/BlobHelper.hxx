@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_BLOBHELPER_HXX
 #define INCLUDED_CONNECTIVITY_BLOBHELPER_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/sdbc/XBlob.hpp>
 #include <cppuhelper/implbase1.hxx>
 

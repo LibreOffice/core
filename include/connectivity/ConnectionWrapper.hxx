@@ -27,8 +27,8 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

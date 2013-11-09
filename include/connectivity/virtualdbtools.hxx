@@ -29,7 +29,7 @@
 
 #include <vector>
 #include <memory>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 //========================================================================
 //= forward declarations

@@ -23,7 +23,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 //.........................................................................
 namespace dbtools

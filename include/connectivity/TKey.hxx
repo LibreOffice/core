@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_TKEY_HXX
 #define INCLUDED_CONNECTIVITY_TKEY_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VKey.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 

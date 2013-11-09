@@ -32,8 +32,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
-#include "connectivity/dbtoolsdllapi.hxx"
-#include "connectivity/paramwrapper.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/paramwrapper.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

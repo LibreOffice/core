@@ -22,7 +22,7 @@
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace com
 {

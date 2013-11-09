@@ -29,11 +29,11 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include "connectivity/sdbcx/IRefreshable.hxx"
-#include "connectivity/sdbcx/VDescriptor.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/sdbcx/IRefreshable.hxx>
+#include <connectivity/sdbcx/VDescriptor.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity

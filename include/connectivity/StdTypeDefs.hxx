@@ -19,11 +19,11 @@
 #ifndef INCLUDED_CONNECTIVITY_STDTYPEDEFS_HXX
 #define INCLUDED_CONNECTIVITY_STDTYPEDEFS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 #include <vector>
-#include "sal/types.h"
+#include <sal/types.h>
 
 
 namespace connectivity

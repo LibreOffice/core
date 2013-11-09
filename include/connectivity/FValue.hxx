@@ -27,8 +27,8 @@
 #include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
 #include <rtl/ref.hxx>
-#include "connectivity/dbtoolsdllapi.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/CommonTools.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>

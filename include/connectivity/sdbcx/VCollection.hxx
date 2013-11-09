@@ -35,10 +35,10 @@
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <com/sun/star/container/XContainer.hpp>
-#include "connectivity/StdTypeDefs.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/StdTypeDefs.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <memory>
 
 

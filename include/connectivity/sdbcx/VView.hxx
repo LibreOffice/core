@@ -25,11 +25,11 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase1.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/container/XNamed.hpp>
-#include "connectivity/sdbcx/VDescriptor.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/sdbcx/VDescriptor.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 

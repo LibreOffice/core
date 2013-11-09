@@ -31,10 +31,10 @@
 #include <cppuhelper/implbase4.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/container/XNamed.hpp>
-#include "connectivity/sdbcx/IRefreshable.hxx"
-#include "connectivity/sdbcx/VDescriptor.hxx"
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/sdbcx/IRefreshable.hxx>
+#include <connectivity/sdbcx/VDescriptor.hxx>
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 namespace connectivity

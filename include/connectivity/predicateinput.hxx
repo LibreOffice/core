@@ -26,7 +26,7 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <connectivity/sqlparse.hxx>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 //.........................................................................
 namespace dbtools

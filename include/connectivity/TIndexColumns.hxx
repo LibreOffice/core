@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
 #define INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
 
-#include "connectivity/sdbcx/VCollection.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

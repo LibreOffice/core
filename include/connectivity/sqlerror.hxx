@@ -25,7 +25,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 //........................................................................
 namespace connectivity

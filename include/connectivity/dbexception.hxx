@@ -21,8 +21,8 @@
 #define INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include "connectivity/standardsqlstate.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/standardsqlstate.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace com
 {

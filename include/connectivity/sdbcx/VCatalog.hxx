@@ -29,11 +29,11 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <cppuhelper/compbase5.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/OSubComponent.hxx"
-#include "connectivity/sdbcx/IRefreshable.hxx"
-#include "connectivity/StdTypeDefs.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/OSubComponent.hxx>
+#include <connectivity/sdbcx/IRefreshable.hxx>
+#include <connectivity/StdTypeDefs.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

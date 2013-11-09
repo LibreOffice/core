@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 #define INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>
 
 #include <com/sun/star/sdbc/XParameters.hpp>

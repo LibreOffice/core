@@ -26,7 +26,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/stl_types.hxx>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

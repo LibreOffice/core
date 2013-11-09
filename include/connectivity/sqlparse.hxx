@@ -32,9 +32,9 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
-#include "connectivity/IParseContext.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
-#include "connectivity/sqlerror.hxx"
+#include <connectivity/IParseContext.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/sqlerror.hxx>
 #include <salhelper/singletonref.hxx>
 
 #include <map>

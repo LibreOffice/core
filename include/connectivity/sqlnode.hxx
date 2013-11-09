@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SQLNODE_HXX
 #define INCLUDED_CONNECTIVITY_SQLNODE_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
-#include "connectivity/dbmetadata.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/dbmetadata.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

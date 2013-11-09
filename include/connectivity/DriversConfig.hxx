@@ -22,7 +22,7 @@
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <salhelper/singletonref.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <unotools/confignode.hxx>

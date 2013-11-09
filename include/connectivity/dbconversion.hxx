@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 // forward declarations
 namespace com

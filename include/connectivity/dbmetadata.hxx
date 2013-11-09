@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 //........................................................................
 namespace dbtools

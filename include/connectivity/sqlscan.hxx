@@ -20,8 +20,8 @@
 #define INCLUDED_CONNECTIVITY_SQLSCAN_HXX
 
 #include <stdarg.h>
-#include "connectivity/IParseContext.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/IParseContext.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

@@ -19,9 +19,9 @@
 #ifndef INCLUDED_CONNECTIVITY_PCOLUMN_HXX
 #define INCLUDED_CONNECTIVITY_PCOLUMN_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/sdbcx/VColumn.hxx>
+#include <connectivity/CommonTools.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_DBCHARSET_HXX
 #define INCLUDED_CONNECTIVITY_DBCHARSET_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
@@ -28,7 +28,7 @@
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <rtl/ustring.hxx>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 //.........................................................................
 namespace dbtools

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_DBTOOLSDLLAPI_HXX
 #define INCLUDED_CONNECTIVITY_DBTOOLSDLLAPI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_DBTOOLS
 #define OOO_DLLPUBLIC_DBTOOLS SAL_DLLPUBLIC_EXPORT

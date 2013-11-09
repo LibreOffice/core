@@ -26,7 +26,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <memory>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 //........................................................................
 namespace dbtools
