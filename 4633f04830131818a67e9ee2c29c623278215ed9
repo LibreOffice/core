@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH///l8\u003d",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-11-09T01:10:48Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it rather be possible to pass the document that is using this connection as an argument to the constructor? That would seem far cleaner to me.",
+      "revId": "4633f04830131818a67e9ee2c29c623278215ed9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///l4\u003d",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-11-09T01:10:48Z",
+      "side": 1,
+      "message": "Minor nitpick:\n    if (getStatementChangeCount() \u003e 0)\nor\n    if (getStatementChangeCount() !\u003d 0)\nis IMHO slightly more readable.",
+      "revId": "4633f04830131818a67e9ee2c29c623278215ed9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaH///l0\u003d",
+        "filename": "connectivity/source/drivers/firebird/Statement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-11-09T01:10:48Z",
+      "side": 1,
+      "message": "A DDL statement changes the database, so why not notifyDatabaseModified() in this case? From glancing at the code, it seems that m_pConnection-\u003ecommit(); does *not* save the fdb in the odb.\n\nThis could solve the issue that \"Insertion of new tables still does not result\nin the modified state being set.\"",
+      "revId": "4633f04830131818a67e9ee2c29c623278215ed9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
