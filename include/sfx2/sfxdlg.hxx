@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SFX2_SFXDLG_HXX
 #define INCLUDED_SFX2_SFXDLG_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <vcl/abstdlg.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

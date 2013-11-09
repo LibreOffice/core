@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SFX2_PRINTER_HXX
 #define INCLUDED_SFX2_PRINTER_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <vcl/print.hxx>
 
 class SfxTabPage;

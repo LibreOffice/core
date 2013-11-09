@@ -19,10 +19,10 @@
 #ifndef INCLUDED_SFX2_BINDINGS_HXX
 #define INCLUDED_SFX2_BINDINGS_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
-#include "rtl/strbuf.hxx"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
+#include <rtl/strbuf.hxx>
 #include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

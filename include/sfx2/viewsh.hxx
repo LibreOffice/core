@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SFX2_VIEWSH_HXX
 #define INCLUDED_SFX2_VIEWSH_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
@@ -31,7 +31,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
-#include "shell.hxx"
+#include <sfx2/shell.hxx>
 #include <tools/gen.hxx>
 #include <tools/errcode.hxx>
 #include <vcl/jobset.hxx>

@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SFX2_BASEDLGS_HXX
 #define INCLUDED_SFX2_BASEDLGS_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <vcl/builder.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/floatwin.hxx>

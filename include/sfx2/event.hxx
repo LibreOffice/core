@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SFX2_EVENT_HXX
 #define INCLUDED_SFX2_EVENT_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sfx2/sfx.hrc"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sfx2/sfx.hrc>
 #include <svl/hint.hxx>
 #include <unotools/eventcfg.hxx>
 #include <rtl/ustring.hxx>

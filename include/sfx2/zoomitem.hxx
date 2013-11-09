@@ -21,7 +21,7 @@
 
 #include <svl/intitem.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 //-------------------------------------------------------------------------
 

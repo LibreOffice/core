@@ -19,8 +19,8 @@
 #ifndef _SFX_STYLEDLG_HXX
 #define _SFX_STYLEDLG_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <sfx2/tabdlg.hxx>
 

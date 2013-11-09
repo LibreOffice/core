@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_SFXBASECONTROLLER_HXX
 #define INCLUDED_SFX2_SFXBASECONTROLLER_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>

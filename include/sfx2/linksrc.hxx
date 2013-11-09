@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SFX2_LINKSRC_HXX
 #define INCLUDED_SFX2_LINKSRC_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <tools/link.hxx>
 #include <tools/ref.hxx>

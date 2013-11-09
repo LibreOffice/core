@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SFX2_THUMBNAILVIEW_HXX
 #define INCLUDED_SFX2_THUMBNAILVIEW_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 #include <vector>
 #include <boost/function.hpp>

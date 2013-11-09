@@ -21,11 +21,11 @@
 
 #include <config_features.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "tools/solar.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <tools/solar.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>

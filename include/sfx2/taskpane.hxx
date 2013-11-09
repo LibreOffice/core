@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_TASKPANE_HXX
 #define INCLUDED_SFX2_TASKPANE_HXX
 
-#include "sfx2/dllapi.h"
-#include "sfx2/childwin.hxx"
-#include "sfx2/titledockwin.hxx"
+#include <sfx2/dllapi.h>
+#include <sfx2/childwin.hxx>
+#include <sfx2/titledockwin.hxx>
 
 #include <svtools/toolpanel/tabalignment.hxx>
 #include <svtools/toolpanel/tabitemcontent.hxx>

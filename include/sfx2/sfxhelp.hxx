@@ -20,9 +20,9 @@
 #define INCLUDED_SFX2_SFXHELP_HXX
 
 #include <rtl/ustring.hxx>
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <vcl/help.hxx>
 
 class SfxHelp_Impl;

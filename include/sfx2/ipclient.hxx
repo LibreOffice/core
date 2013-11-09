@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SFX2_IPCLIENT_HXX
 #define INCLUDED_SFX2_IPCLIENT_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

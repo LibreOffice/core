@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_QUERYSTATUS_HXX
 #define INCLUDED_SFX2_QUERYSTATUS_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <svl/poolitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/conditn.hxx>

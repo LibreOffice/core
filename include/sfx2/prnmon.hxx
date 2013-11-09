@@ -19,8 +19,8 @@
 #ifndef _SFX_PRNMON_HXX
 #define _SFX_PRNMON_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

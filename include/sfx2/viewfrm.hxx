@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SFX2_VIEWFRM_HXX
 #define INCLUDED_SFX2_VIEWFRM_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <svl/lstner.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/frame.hxx>

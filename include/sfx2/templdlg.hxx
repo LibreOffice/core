@@ -19,8 +19,8 @@
 #ifndef _SFX_TEMPLDLG_HXX
 #define _SFX_TEMPLDLG_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <rsc/rscsfx.hxx>
 

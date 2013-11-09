@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_TITLEDOCKWIN_HXX
 #define INCLUDED_SFX2_TITLEDOCKWIN_HXX
 
-#include "sfx2/dllapi.h"
-#include "sfx2/dockwin.hxx"
+#include <sfx2/dllapi.h>
+#include <sfx2/dockwin.hxx>
 
 #include <vcl/toolbox.hxx>
 #include <tools/svborder.hxx>

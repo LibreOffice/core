@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_SIDEBARCHILDWINDOW_HXX
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARCHILDWINDOW_HXX
 
-#include "sfx2/childwin.hxx"
+#include <sfx2/childwin.hxx>
 
 
 namespace sfx2 { namespace sidebar {

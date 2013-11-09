@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SFX2_DOCFAC_HXX
 #define INCLUDED_SFX2_DOCFAC_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <tools/rtti.hxx>

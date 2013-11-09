@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/vclmedit.hxx>
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 

@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SFX2_SECURITYPAGE_HXX
 #define INCLUDED_SFX2_SECURITYPAGE_HXX
 
-#include "sfx2/tabdlg.hxx"
-#include "sfx2/htmlmode.hxx"
+#include <sfx2/tabdlg.hxx>
+#include <sfx2/htmlmode.hxx>
 
 #include <memory>
 

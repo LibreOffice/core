@@ -19,8 +19,8 @@
 #ifndef _SFXNEW_HXX
 #define _SFXNEW_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>

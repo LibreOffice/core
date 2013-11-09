@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_ENUMCONTEXT_HXX
 #define INCLUDED_SFX2_SIDEBAR_ENUMCONTEXT_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 #include <rtl/ustring.hxx>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
 #define INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
 namespace cssu = ::com::sun::star::uno;

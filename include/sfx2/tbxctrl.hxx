@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SFX2_TBXCTRL_HXX
 #define INCLUDED_SFX2_TBXCTRL_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <vcl/timer.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/fixed.hxx>

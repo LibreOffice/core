@@ -21,8 +21,8 @@
 #define INCLUDED_SFX2_CONTROLWRAPPER_HXX
 
 #include <tools/debug.hxx>
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <memory>
 

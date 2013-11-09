@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SFX2_DIALOGHELPER_HXX
 #define INCLUDED_SFX2_DIALOGHELPER_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 

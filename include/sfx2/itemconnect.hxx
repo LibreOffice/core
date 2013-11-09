@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_ITEMCONNECT_HXX
 #define INCLUDED_SFX2_ITEMCONNECT_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <memory>
 

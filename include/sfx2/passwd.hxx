@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_PASSWD_HXX
 #define INCLUDED_SFX2_PASSWD_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

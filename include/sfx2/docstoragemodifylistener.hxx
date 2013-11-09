@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_DOCSTORAGEMODIFYLISTENER_HXX
 #define INCLUDED_SFX2_DOCSTORAGEMODIFYLISTENER_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 #include <com/sun/star/util/XModifyListener.hpp>
 

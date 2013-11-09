@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_ILAYOUTABLEWINDOW_HXX
 #define INCLUDED_SFX2_SIDEBAR_ILAYOUTABLEWINDOW_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 #include <tools/gen.hxx>
 #include <sal/types.h>
 #include <com/sun/star/ui/LayoutSize.hpp>

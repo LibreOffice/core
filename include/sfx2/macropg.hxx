@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SFX2_MACROPG_HXX
 #define INCLUDED_SFX2_MACROPG_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>

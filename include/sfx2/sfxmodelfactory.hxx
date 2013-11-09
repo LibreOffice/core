@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_SFXMODELFACTORY_HXX
 #define INCLUDED_SFX2_SFXMODELFACTORY_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

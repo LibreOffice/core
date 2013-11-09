@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_DLLAPI_H
 #define INCLUDED_SFX2_DLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined SFX2_DLLIMPLEMENTATION
 #define SFX2_DLLPUBLIC SAL_DLLPUBLIC_EXPORT

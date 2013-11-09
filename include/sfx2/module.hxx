@@ -20,8 +20,8 @@
 #define INCLUDED_SFX2_MODULE_HXX  // internal
 #define _SFXMOD_HXX     // external
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
 #include <svtools/imgdef.hxx>
 #include <sal/types.h>

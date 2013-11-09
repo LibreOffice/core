@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SFX2_APP_HXX
 #define INCLUDED_SFX2_APP_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <tools/solar.h>
 #include <tools/errcode.hxx>
 #include <svl/smplhint.hxx>

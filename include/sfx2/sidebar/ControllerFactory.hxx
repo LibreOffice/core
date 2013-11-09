@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_CONTROLLERFACTORY_HXX
 #define INCLUDED_SFX2_SIDEBAR_CONTROLLERFACTORY_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>

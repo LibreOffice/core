@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_ITEMWRAPPER_HXX
 #define INCLUDED_SFX2_ITEMWRAPPER_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

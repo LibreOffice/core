@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_FRMHTML_HXX
 #define INCLUDED_SFX2_FRMHTML_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/sfxhtml.hxx>

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_SFXHTML_HXX
 #define INCLUDED_SFX2_SFXHTML_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <i18nlangtag/lang.h>
 #include <svtools/parhtml.hxx>
 #include <svl/macitem.hxx>

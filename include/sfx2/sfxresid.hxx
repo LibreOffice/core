@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SFXRESID_HXX
 #define INCLUDED_SFX2_SFXRESID_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 #include <tools/resid.hxx>
 
 class SFX2_DLLPUBLIC SfxResId: public ResId

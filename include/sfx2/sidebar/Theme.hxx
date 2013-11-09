@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_THEME_HXX
 #define INCLUDED_SFX2_SIDEBAR_THEME_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 #include <tools/color.hxx>
 #include <vcl/image.hxx>

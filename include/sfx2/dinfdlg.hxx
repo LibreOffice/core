@@ -23,8 +23,8 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
@@ -47,7 +47,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/ctrl.hxx>
 
-#include "tabdlg.hxx"
+#include <sfx2/tabdlg.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace document {

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_SFXBASEMODEL_HXX
 #define INCLUDED_SFX2_SFXBASEMODEL_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/frame/XTitle.hpp>

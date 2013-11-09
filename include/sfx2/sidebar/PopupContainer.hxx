@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_POPUPCONTAINER_HXX
 #define INCLUDED_SFX2_SIDEBAR_POPUPCONTAINER_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 #include <vcl/floatwin.hxx>
 
 namespace sfx2 { namespace sidebar {

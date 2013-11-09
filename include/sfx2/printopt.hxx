@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_PRINTOPT_HXX
 #define INCLUDED_SFX2_PRINTOPT_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>

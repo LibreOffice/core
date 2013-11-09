@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 
-#include "sfx2/dllapi.h"
-#include "vcl/toolbox.hxx"
+#include <sfx2/dllapi.h>
+#include <vcl/toolbox.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>

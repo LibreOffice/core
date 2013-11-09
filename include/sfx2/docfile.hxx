@@ -21,9 +21,9 @@
 #define INCLUDED_SFX2_DOCFILE_HXX
 
 #include <com/sun/star/io/XSeekable.hpp>
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

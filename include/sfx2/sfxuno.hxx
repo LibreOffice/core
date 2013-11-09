@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_SFXUNO_HXX
 #define INCLUDED_SFX2_SFXUNO_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URL.hpp>

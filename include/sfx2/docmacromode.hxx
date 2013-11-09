@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_DOCMACROMODE_HXX
 #define INCLUDED_SFX2_DOCMACROMODE_HXX
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/embed/XStorage.hpp>

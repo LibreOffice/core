@@ -23,7 +23,7 @@
 #include <vcl/gradient.hxx>
 #include <tools/svborder.hxx>
 
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
