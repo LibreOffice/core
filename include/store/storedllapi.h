@@ -19,7 +19,7 @@
 #ifndef INCLUDED_STORE_STOREDLLAPI_H
 #define INCLUDED_STORE_STOREDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(STORE_DLLIMPLEMENTATION)
 #define STORE_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

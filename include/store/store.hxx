@@ -20,9 +20,9 @@
 #ifndef INCLUDED_STORE_STORE_HXX
 #define INCLUDED_STORE_STORE_HXX
 
-#include "sal/types.h"
-#include "rtl/ustring.hxx"
-#include "store/store.h"
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+#include <store/store.h>
 
 namespace store
 {
