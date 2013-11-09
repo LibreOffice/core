@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NUTIL_SCRIPTTYPEDETECTOR_HXX
 #define INCLUDED_I18NUTIL_SCRIPTTYPEDETECTOR_HXX
 
-#include "i18nutildllapi.h"
+#include <i18nutil/i18nutildllapi.h>
 #include <rtl/ustring.hxx>
 
 class I18NUTIL_DLLPUBLIC ScriptTypeDetector

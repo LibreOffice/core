@@ -20,7 +20,7 @@
 #ifndef INCLUDED_I18NUTIL_PAPER_HXX
 #define INCLUDED_I18NUTIL_PAPER_HXX
 
-#include "i18nutildllapi.h"
+#include <i18nutil/i18nutildllapi.h>
 #include <rtl/string.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 

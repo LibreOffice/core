@@ -21,7 +21,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <rtl/ustring.hxx>
-#include "i18nutildllapi.h"
+#include <i18nutil/i18nutildllapi.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

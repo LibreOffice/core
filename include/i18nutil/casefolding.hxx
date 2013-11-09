@@ -23,7 +23,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include "i18nutildllapi.h"
+#include <i18nutil/i18nutildllapi.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

@@ -22,7 +22,7 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <sal/types.h>
 #include <unicode/uscript.h>
-#include "i18nutildllapi.h"
+#include <i18nutil/i18nutildllapi.h>
 
 typedef struct _ScriptTypeList {
     sal_Int16 from;
