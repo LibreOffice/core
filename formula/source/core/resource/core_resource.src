@@ -311,6 +311,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_QUARTILE { Text = "QUARTILE" ; };
     String SC_OPCODE_NORM_INV { Text = "NORMINV" ; };
     String SC_OPCODE_CONFIDENCE { Text = "CONFIDENCE" ; };
+    String SC_OPCODE_CONFIDENCE_N { Text = "COM.MICROSOFT.CONFIDENCE.NORM" ; };
+    String SC_OPCODE_CONFIDENCE_T { Text = "COM.MICROSOFT.CONFIDENCE.T" ; };
     String SC_OPCODE_F_TEST { Text = "FTEST" ; };
     String SC_OPCODE_TRIM_MEAN { Text = "TRIMMEAN" ; };
     String SC_OPCODE_PROB { Text = "PROB" ; };
@@ -672,6 +674,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_QUARTILE { Text = "QUARTILE" ; };
     String SC_OPCODE_NORM_INV { Text = "NORMINV" ; };
     String SC_OPCODE_CONFIDENCE { Text = "CONFIDENCE" ; };
+    String SC_OPCODE_CONFIDENCE_N { Text = "_xlfn.CONFIDENCE.NORM" ; };
+    String SC_OPCODE_CONFIDENCE_T { Text = "_xlfn.CONFIDENCE.T" ; };
     String SC_OPCODE_F_TEST { Text = "FTEST" ; };
     String SC_OPCODE_TRIM_MEAN { Text = "TRIMMEAN" ; };
     String SC_OPCODE_PROB { Text = "PROB" ; };
@@ -1035,6 +1039,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_QUARTILE { Text = "QUARTILE" ; };
     String SC_OPCODE_NORM_INV { Text = "NORMINV" ; };
     String SC_OPCODE_CONFIDENCE { Text = "CONFIDENCE" ; };
+    String SC_OPCODE_CONFIDENCE_N { Text = "CONFIDENCE.NORM" ; };
+    String SC_OPCODE_CONFIDENCE_T { Text = "CONFIDENCE.T" ; };
     String SC_OPCODE_F_TEST { Text = "FTEST" ; };
     String SC_OPCODE_TRIM_MEAN { Text = "TRIMMEAN" ; };
     String SC_OPCODE_PROB { Text = "PROB" ; };
@@ -2186,6 +2192,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_CONFIDENCE
     {
         Text [ en-US ] = "CONFIDENCE" ;
+    };
+    String SC_OPCODE_CONFIDENCE_N
+    {
+        Text [ en-US ] = "CONFIDENCE.NORM" ;
+    };
+    String SC_OPCODE_CONFIDENCE_T
+    {
+        Text [ en-US ] = "CONFIDENCE.T" ;
     };
     String SC_OPCODE_F_TEST
     {

@@ -693,5 +693,7 @@
 #define HID_FUNC_CHITEST_MS                                     "SC_HID_FUNC_CHITEST_MS"
 #define HID_FUNC_CHISQDIST_MS                                   "SC_HID_FUNC_CHISQDIST_MS"
 #define HID_FUNC_CHISQINV_MS                                    "SC_HID_FUNC_CHISQINV_MS"
+#define HID_FUNC_CONFIDENCE_N                                   "SC_HID_FUNC_CONFIDENCE_N"
+#define HID_FUNC_CONFIDENCE_T                                   "SC_HID_FUNC_CONFIDENCE_T"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
