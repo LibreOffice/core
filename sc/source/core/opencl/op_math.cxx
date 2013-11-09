@@ -243,6 +243,60 @@ void OpEven::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
+void OpMod::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+          formula::SingleVectorRefToken *>(tmpCur0);
+    FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+          formula::SingleVectorRefToken *>(tmpCur1);
+#endif
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss <<"    int gid0=get_global_id(0);\n";
+    ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss <<"    double arg1 =" << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss<< "    if(isNan(arg0)||(gid0>=";
+    ss<<tmpCurDVR0->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg0 = 0;\n";
+#endif
+#ifdef ISNAN
+    ss<< "    if(isNan(arg1)||(gid0>=";
+    ss<<tmpCurDVR1->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg1 = 0;\n";
+#endif
+    ss << "    double tem;\n";
+    ss << "    if(arg1 != 0) {\n";
+    ss << "        if(arg0 < 0 && arg1 > 0)\n";
+    ss << "            while(arg0 < 0)\n";
+    ss << "                arg0 += arg1;\n";
+    ss << "        else if (arg0 > 0 && arg1 < 0)\n";
+    ss << "            while(arg0 > 0)\n";
+    ss << "                arg0 += arg1;\n";
+    ss << "        tem = fmod(arg0,arg1);\n";
+    ss << "    }\n";
+    ss << "    else\n";
+    ss << "        tem = 0;\n";
+    ss << "    if(arg1 < 0 && tem > 0)\n";
+    ss << "        tem = -tem;\n";
+    ss << "    return tem;\n";
+    ss << "}";
+}
 void OpLog::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
