@@ -22,8 +22,8 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <memory>
-#include "formula/formuladllapi.h"
-#include "formula/omoduleclient.hxx"
+#include <formula/formuladllapi.h>
+#include <formula/omoduleclient.hxx>
 #include <formula/IFunctionDescription.hxx>
 
 namespace formula

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FORMULA_GRAMMAR_HXX
 #define INCLUDED_FORMULA_GRAMMAR_HXX
 
-#include "com/sun/star/sheet/FormulaLanguage.hpp"
-#include "formula/formuladllapi.h"
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
+#include <formula/formuladllapi.h>
 #include <tools/debug.hxx>
 
 namespace formula

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_FORMULA_VECTORTOKEN_HXX
 #define INCLUDED_FORMULA_VECTORTOKEN_HXX
 
-#include "formula/token.hxx"
+#include <formula/token.hxx>
 
 namespace formula {
 

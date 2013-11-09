@@ -23,7 +23,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
-#include "formula/formuladllapi.h"
+#include <formula/formuladllapi.h>
 
 namespace formula {
 

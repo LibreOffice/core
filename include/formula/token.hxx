@@ -23,13 +23,13 @@
 #include <memory>
 #include <string.h>
 #include <vector>
-#include "formula/opcode.hxx"
+#include <formula/opcode.hxx>
 #include <tools/mempool.hxx>
-#include "formula/IFunctionDescription.hxx"
-#include "formula/formuladllapi.h"
-#include "formula/types.hxx"
-#include "svl/sharedstring.hxx"
-#include "osl/interlck.h"
+#include <formula/IFunctionDescription.hxx>
+#include <formula/formuladllapi.h>
+#include <formula/types.hxx>
+#include <svl/sharedstring.hxx>
+#include <osl/interlck.h>
 
 namespace formula
 {

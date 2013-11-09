@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <memory>
-#include "formula/formuladllapi.h"
+#include <formula/formuladllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/sheet/XFormulaParser.hpp>

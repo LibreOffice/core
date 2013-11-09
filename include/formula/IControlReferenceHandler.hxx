@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FORMULA_ICONTROLREFERENCEHANDLER_HXX
 #define INCLUDED_FORMULA_ICONTROLREFERENCEHANDLER_HXX
 
-#include "formula/formuladllapi.h"
+#include <formula/formuladllapi.h>
 
 namespace formula
 {

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_FORMULA_OMODULECLIENT_HXX
 #define INCLUDED_FORMULA_OMODULECLIENT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "formula/formuladllapi.h"
+#include <boost/noncopyable.hpp>
+#include <formula/formuladllapi.h>
 
 namespace formula {
 

@@ -21,8 +21,8 @@
 #define INCLUDED_FORMULA_TOKENARRAY_HXX
 
 #include <limits.h>
-#include "formula/token.hxx"
-#include "formula/ExternalReferenceHelper.hxx"
+#include <formula/token.hxx>
+#include <formula/ExternalReferenceHelper.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 

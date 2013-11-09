@@ -21,7 +21,7 @@
 #define INCLUDED_FORMULA_EXTERNALREFERENCEHELPER_HXX
 
 #include <rtl/ustring.hxx>
-#include "formula/formuladllapi.h"
+#include <formula/formuladllapi.h>
 
 namespace formula
 {

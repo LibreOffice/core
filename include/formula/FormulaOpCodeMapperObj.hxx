@@ -20,13 +20,13 @@
 #ifndef INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 #define INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 
-#include "formula/formuladllapi.h"
+#include <formula/formuladllapi.h>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <memory>
-#include "formula/FormulaCompiler.hxx"
+#include <formula/FormulaCompiler.hxx>
 
 
 namespace formula
