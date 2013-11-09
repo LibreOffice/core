@@ -1428,6 +1428,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocB:
             case ocBetaDist:
             case ocExp:
+            case ocLog10:
             // Don't change the state.
             break;
             default:
