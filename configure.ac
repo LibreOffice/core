@@ -7655,6 +7655,11 @@ fi
 AC_SUBST(SYSTEM_EXPAT)
 
 dnl ===================================================================
+dnl Check for system libebook
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.0],["-I${WORKDIR}/UnpackedTarball/libebook/inc"],["-L${WORKDIR}/UnpackedTarball/libebook/src/lib/.libs -le-book-0.0"])
+
+dnl ===================================================================
 dnl Check for system libetonyek
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.0],["-I${WORKDIR}/UnpackedTarball/libetonyek/inc"],["-L${WORKDIR}/UnpackedTarball/libetonyek/src/lib/.libs -letonyek-0.0"])
