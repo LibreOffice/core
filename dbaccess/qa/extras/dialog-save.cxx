@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-class DialogSaveTest : public UnoApiTest
+class DialogSaveTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
     DialogSaveTest();
@@ -48,17 +48,13 @@ public:
     void test();
 
     CPPUNIT_TEST_SUITE(DialogSaveTest);
-// Should we disable this test on MOX and WNT?
-// #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(test);
-// #endif
     CPPUNIT_TEST_SUITE_END();
 
 };
 
 
 DialogSaveTest::DialogSaveTest()
-      : UnoApiTest("/dbaccess/qa/extras/testdocuments")
 {
 }
 
