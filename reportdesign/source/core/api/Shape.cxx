@@ -117,6 +117,12 @@ void SAL_CALL OShape::dispose() throw(uno::RuntimeException)
     ShapePropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
 }
+//------------------------------------------------------------------------------
+uno::Reference< uno::XInterface > OShape::create(uno::Reference< uno::XComponentContext > const & xContext)
+{
+    return *(new OShape(xContext));
+}
+
 // -----------------------------------------------------------------------------
 OUString OShape::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
@@ -136,22 +142,27 @@ uno::Sequence< OUString > OShape::getSupportedServiceNames_Static(  ) throw(uno:
 
     return aServices;
 }
-//------------------------------------------------------------------------------
-uno::Reference< uno::XInterface > OShape::create(uno::Reference< uno::XComponentContext > const & xContext)
-{
-    return *(new OShape(xContext));
-}
-
 //--------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    if(m_sServiceName.isEmpty())
+    {
+        return getSupportedServiceNames_Static();
+    }
+    else
+    {
+        uno::Sequence< OUString > aServices(2);
+        aServices.getArray()[0] = SERVICE_SHAPE;
+        aServices.getArray()[1] = m_sServiceName;
+
+        return aServices;
+    }
 }
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OShape::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
 
-    return m_sServiceName == ServiceName || cppu::supportsService(this, ServiceName);
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 // XReportComponent
