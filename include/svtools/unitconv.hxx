@@ -20,7 +20,7 @@
 #define INCLUDED_SVTOOLS_UNITCONV_HXX
 
 #include <vcl/field.hxx>
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svl/poolitem.hxx>
 
 // macro -----------------------------------------------------------------

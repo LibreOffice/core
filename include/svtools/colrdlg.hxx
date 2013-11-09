@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_COLRDLG_HXX
 #define INCLUDED_SVTOOLS_COLRDLG_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <tools/color.hxx>
 

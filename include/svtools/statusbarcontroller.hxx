@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_STATUSBARCONTROLLER_HXX
 #define INCLUDED_SVTOOLS_STATUSBARCONTROLLER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #define INCLUDED_SVTOOLS_COLORCFG_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.h>

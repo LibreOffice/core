@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_WIZDLG_HXX
 #define INCLUDED_SVTOOLS_WIZDLG_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <vcl/dialog.hxx>
 

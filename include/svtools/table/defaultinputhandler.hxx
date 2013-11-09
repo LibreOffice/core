@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVTOOLS_TABLE_DEFAULTINPUTHANDLER_HXX
 #define INCLUDED_SVTOOLS_TABLE_DEFAULTINPUTHANDLER_HXX
 
-#include "svtools/table/tableinputhandler.hxx"
-#include "svtools/table/tabletypes.hxx"
+#include <svtools/table/tableinputhandler.hxx>
+#include <svtools/table/tabletypes.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

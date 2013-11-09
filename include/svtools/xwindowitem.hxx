@@ -20,7 +20,7 @@
 #define INCLUDED_SVTOOLS_XWINDOWITEM_HXX
 
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <svl/poolitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

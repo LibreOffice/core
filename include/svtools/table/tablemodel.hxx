@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SVTOOLS_TABLE_TABLEMODEL_HXX
 #define INCLUDED_SVTOOLS_TABLE_TABLEMODEL_HXX
 
-#include "svtools/svtdllapi.h"
-#include "svtools/table/tabletypes.hxx"
-#include "svtools/table/tablerenderer.hxx"
-#include "svtools/table/tableinputhandler.hxx"
-#include "svtools/table/tablesort.hxx"
+#include <svtools/svtdllapi.h>
+#include <svtools/table/tabletypes.hxx>
+#include <svtools/table/tablerenderer.hxx>
+#include <svtools/table/tableinputhandler.hxx>
+#include <svtools/table/tablesort.hxx>
 
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>

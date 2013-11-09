@@ -28,7 +28,7 @@
 
 #include <vcl/graph.hxx>
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {

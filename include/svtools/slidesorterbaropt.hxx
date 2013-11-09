@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SLIDESORTERBAROPT_HXX
 #define INCLUDED_SVTOOLS_SLIDESORTERBAROPT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>

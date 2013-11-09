@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_IMAPOBJ_HXX
 #define INCLUDED_SVTOOLS_IMAPOBJ_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svl/macitem.hxx>
 #include <rtl/strbuf.hxx>
 

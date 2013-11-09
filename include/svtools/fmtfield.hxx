@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_FMTFIELD_HXX
 #define INCLUDED_SVTOOLS_FMTFIELD_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <vcl/spinfld.hxx>
 #include <svl/zforlist.hxx>
 

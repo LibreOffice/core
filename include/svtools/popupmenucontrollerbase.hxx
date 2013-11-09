@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_POPUPMENUCONTROLLERBASE_HXX
 #define INCLUDED_SVTOOLS_POPUPMENUCONTROLLERBASE_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

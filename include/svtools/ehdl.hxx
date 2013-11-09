@@ -22,7 +22,7 @@
 
 #ifndef __RSC
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <tools/errinf.hxx>
 

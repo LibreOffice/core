@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #define INCLUDED_SVTOOLS_MISCOPT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>

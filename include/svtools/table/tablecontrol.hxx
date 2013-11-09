@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SVTOOLS_TABLE_TABLECONTROL_HXX
 #define INCLUDED_SVTOOLS_TABLE_TABLECONTROL_HXX
 
-#include "svtools/svtdllapi.h"
-#include "svtools/table/tablemodel.hxx"
-#include "svtools/accessibletable.hxx"
-#include "svtools/accessiblefactory.hxx"
+#include <svtools/svtdllapi.h>
+#include <svtools/table/tablemodel.hxx>
+#include <svtools/accessibletable.hxx>
+#include <svtools/accessiblefactory.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>

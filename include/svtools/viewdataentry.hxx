@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVTOOLS_VIEWDATAENTRY_HXX
 #define INCLUDED_SVTOOLS_VIEWDATAENTRY_HXX
 
-#include "svtdllapi.h"
-#include "tools/solar.h"
-#include "tools/gen.hxx"
+#include <svtools/svtdllapi.h>
+#include <tools/solar.h>
+#include <tools/gen.hxx>
 
 #include <vector>
 

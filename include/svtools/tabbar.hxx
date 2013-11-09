@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TABBAR_HXX
 #define INCLUDED_SVTOOLS_TABBAR_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
 #include <vector>

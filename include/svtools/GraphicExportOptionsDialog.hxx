@@ -32,7 +32,7 @@
 
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 class SVT_DLLPUBLIC GraphicExportOptionsDialog : public ModalDialog
 {

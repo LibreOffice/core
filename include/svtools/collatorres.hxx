@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_COLLATORRES_HXX
 #define INCLUDED_SVTOOLS_COLLATORRES_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 
 class CollatorResourceData;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_RTFKEYWD_HXX
 #define INCLUDED_SVTOOLS_RTFKEYWD_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #define OOO_STRING_SVTOOLS_RTF_HEXCHAR "\\'"
 #define OOO_STRING_SVTOOLS_RTF_IGNORE "\\*"

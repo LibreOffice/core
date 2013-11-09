@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SVTDLLAPI_H
 #define INCLUDED_SVTOOLS_SVTDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(SVT_DLLIMPLEMENTATION)
 #define SVT_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

@@ -20,7 +20,7 @@
 #ifndef _SCRWIN_HXX
 #define _SCRWIN_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <vcl/scrbar.hxx>
 

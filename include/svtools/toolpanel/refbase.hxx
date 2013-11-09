@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TOOLPANEL_REFBASE_HXX
 #define INCLUDED_SVTOOLS_TOOLPANEL_REFBASE_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <rtl/ref.hxx>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
 #define INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>

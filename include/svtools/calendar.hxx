@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_CALENDAR_HXX
 #define INCLUDED_SVTOOLS_CALENDAR_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/Weekdays.hpp>
 

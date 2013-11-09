@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_IMAPRECT_HXX
 #define INCLUDED_SVTOOLS_IMAPRECT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/imapobj.hxx>
 #include <tools/gen.hxx>
 

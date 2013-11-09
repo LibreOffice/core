@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_FILEURLBOX_HXX
 #define INCLUDED_SVTOOLS_FILEURLBOX_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/inettbc.hxx>
 
 //.........................................................................

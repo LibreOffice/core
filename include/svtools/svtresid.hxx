@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SVTRESID_HXX
 #define INCLUDED_SVTOOLS_SVTRESID_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 

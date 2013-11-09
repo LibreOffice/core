@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_TEMPLDLG_HXX
 #define INCLUDED_SVTOOLS_TEMPLDLG_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

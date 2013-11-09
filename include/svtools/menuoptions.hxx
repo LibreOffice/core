@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #define INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>

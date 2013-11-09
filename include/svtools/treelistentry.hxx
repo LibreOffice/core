@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SVTOOLS_TREELISTENTRY_HXX
 #define INCLUDED_SVTOOLS_TREELISTENTRY_HXX
 
-#include "svtdllapi.h"
-#include "tools/solar.h"
-#include "treelistbox.hxx"
-#include "treelistentries.hxx"
+#include <svtools/svtdllapi.h>
+#include <tools/solar.h>
+#include <svtools/treelistbox.hxx>
+#include <svtools/treelistentries.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_JAVACONTEXT_HXX
 #define INCLUDED_SVTOOLS_JAVACONTEXT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>

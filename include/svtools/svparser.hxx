@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SVPARSER_HXX
 #define INCLUDED_SVTOOLS_SVPARSER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <rtl/textenc.h>

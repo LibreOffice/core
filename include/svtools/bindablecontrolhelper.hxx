@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_BINDABLECONTROLHELPER_HXX
 #define INCLUDED_SVTOOLS_BINDABLECONTROLHELPER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <com/sun/star/frame/XModel.hpp>
 //........................................................................

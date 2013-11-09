@@ -29,7 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/menu.hxx>
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 namespace svt
 {

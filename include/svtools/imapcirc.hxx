@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_IMAPCIRC_HXX
 #define INCLUDED_SVTOOLS_IMAPCIRC_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/gen.hxx>
 #include <svtools/imapobj.hxx>
 

@@ -9,7 +9,7 @@
 #ifndef INCLUDED_SVTOOLS_SAMPLETEXT_HXX
 #define INCLUDED_SVTOOLS_SAMPLETEXT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <unicode/uscript.h>
 #include <i18nlangtag/lang.h>

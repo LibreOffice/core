@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVTOOLS_TOOLPANEL_PANELTABBAR_HXX
 #define INCLUDED_SVTOOLS_TOOLPANEL_PANELTABBAR_HXX
 
-#include "svtools/svtdllapi.h"
-#include "svtools/toolpanel/tabalignment.hxx"
-#include "svtools/toolpanel/tabitemcontent.hxx"
+#include <svtools/svtdllapi.h>
+#include <svtools/toolpanel/tabalignment.hxx>
+#include <svtools/toolpanel/tabitemcontent.hxx>
 
 #include <vcl/ctrl.hxx>
 

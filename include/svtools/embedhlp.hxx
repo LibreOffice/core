@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_EMBEDHLP_HXX
 #define INCLUDED_SVTOOLS_EMBEDHLP_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>

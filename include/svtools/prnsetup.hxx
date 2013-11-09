@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_PRNSETUP_HXX
 #define INCLUDED_SVTOOLS_PRNSETUP_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

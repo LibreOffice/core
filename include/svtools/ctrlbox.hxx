@@ -20,7 +20,7 @@
 #ifndef _CTRLBOX_HXX
 #define _CTRLBOX_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>

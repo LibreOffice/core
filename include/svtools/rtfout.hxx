@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_RTFOUT_HXX
 #define INCLUDED_SVTOOLS_RTFOUT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/solar.h>
 
 #include <rtl/textenc.h>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_BRWBOX_HXX
 #define INCLUDED_SVTOOLS_BRWBOX_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <vcl/scrbar.hxx>
 #include <vcl/ctrl.hxx>
 #include <tools/multisel.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 #define INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

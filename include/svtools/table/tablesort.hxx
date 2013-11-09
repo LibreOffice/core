@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TABLE_TABLESORT_HXX
 #define INCLUDED_SVTOOLS_TABLE_TABLESORT_HXX
 
-#include "svtools/table/tabletypes.hxx"
+#include <svtools/table/tabletypes.hxx>
 
 //......................................................................................................................
 namespace svt { namespace table

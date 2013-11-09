@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_ITEMDEL_HXX
 #define INCLUDED_SVTOOLS_ITEMDEL_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 class SfxPoolItem;
 

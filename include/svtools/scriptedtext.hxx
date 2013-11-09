@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SCRIPTEDTEXT_HXX
 #define INCLUDED_SVTOOLS_SCRIPTEDTEXT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 

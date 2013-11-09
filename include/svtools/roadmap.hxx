@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SVTOOLS_ROADMAP_HXX
 #define INCLUDED_SVTOOLS_ROADMAP_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/imgctrl.hxx>
 
-#include "svtools/hyperlabel.hxx"
+#include <svtools/hyperlabel.hxx>
 
 
 

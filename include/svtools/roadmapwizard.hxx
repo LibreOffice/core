@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
 #define INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/wizardmachine.hxx>
 
 //........................................................................

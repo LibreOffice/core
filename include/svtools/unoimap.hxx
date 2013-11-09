@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_UNOIMAP_HXX
 #define INCLUDED_SVTOOLS_UNOIMAP_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/XInterface.hpp>
 
 class ImageMap;

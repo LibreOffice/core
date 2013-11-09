@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVTOOLS_IMAGEMGR_HXX
 #define INCLUDED_SVTOOLS_IMAGEMGR_HXX
 
-#include "svtools/svtdllapi.h"
-#include "sal/types.h"
+#include <svtools/svtdllapi.h>
+#include <sal/types.h>
 
 class Image;
 namespace rtl {

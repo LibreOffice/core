@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_FONTSUBSTCONFIG_HXX
 #define INCLUDED_SVTOOLS_FONTSUBSTCONFIG_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <unotools/configitem.hxx>
 
 struct SvtFontSubstConfig_Impl;

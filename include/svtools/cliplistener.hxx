@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_CLIPLISTENER_HXX
 #define INCLUDED_SVTOOLS_CLIPLISTENER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>

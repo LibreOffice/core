@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_SVMEDIT2_HXX
 #define INCLUDED_SVTOOLS_SVMEDIT2_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/svmedit.hxx>
 
 class TextAttrib;

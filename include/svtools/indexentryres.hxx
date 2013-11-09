@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_INDEXENTRYRES_HXX
 #define INCLUDED_SVTOOLS_INDEXENTRYRES_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 
 class IndexEntryResourceData;

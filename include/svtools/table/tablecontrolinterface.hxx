@@ -24,8 +24,8 @@
 #include <vcl/event.hxx>
 #include <vcl/seleng.hxx>
 
-#include "svtools/table/tabletypes.hxx"
-#include "svtools/table/tablemodel.hxx"
+#include <svtools/table/tabletypes.hxx>
+#include <svtools/table/tablemodel.hxx>
 
 class Pointer;
 

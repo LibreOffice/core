@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_PARRTF_HXX
 #define INCLUDED_SVTOOLS_PARRTF_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/svparser.hxx>
 #include <stack>
 

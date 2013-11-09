@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SVTOOLS_TOOLPANEL_DRAWERLAYOUTER_HXX
 #define INCLUDED_SVTOOLS_TOOLPANEL_DRAWERLAYOUTER_HXX
 
-#include "svtools/svtdllapi.h"
-#include "svtools/toolpanel/refbase.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "svtools/toolpanel/decklayouter.hxx"
+#include <svtools/svtdllapi.h>
+#include <svtools/toolpanel/refbase.hxx>
+#include <svtools/toolpanel/toolpaneldeck.hxx>
+#include <svtools/toolpanel/decklayouter.hxx>
 
 #include <boost/shared_ptr.hpp>
 

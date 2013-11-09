@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX
 #define INCLUDED_SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/toolbox.hxx>
 

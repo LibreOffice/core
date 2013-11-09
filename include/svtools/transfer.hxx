@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TRANSFER_HXX
 #define INCLUDED_SVTOOLS_TRANSFER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
 #include <sot/formats.hxx>

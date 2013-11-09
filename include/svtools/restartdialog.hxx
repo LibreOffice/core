@@ -10,10 +10,10 @@
 #ifndef INCLUDED_SVTOOLS_RESTARTDIALOG_HXX
 #define INCLUDED_SVTOOLS_RESTARTDIALOG_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "svtools/svtdllapi.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <svtools/svtdllapi.h>
 
 class Window;
 namespace com { namespace sun { namespace star { namespace uno {

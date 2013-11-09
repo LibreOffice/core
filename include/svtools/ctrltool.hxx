@@ -22,7 +22,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vcl/metric.hxx>

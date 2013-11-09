@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_JAVAINTERACTIONHANDLER_HXX
 #define INCLUDED_SVTOOLS_JAVAINTERACTIONHANDLER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <osl/mutex.hxx>
 #include <sal/types.h>
 

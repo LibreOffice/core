@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_FILECTRL_HXX
 #define INCLUDED_SVTOOLS_FILECTRL_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>

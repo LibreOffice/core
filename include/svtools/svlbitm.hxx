@@ -21,7 +21,7 @@
 #ifndef INCLUDED_SVTOOLS_SVLBITM_HXX
 #define INCLUDED_SVTOOLS_SVLBITM_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <tools/link.hxx>
 

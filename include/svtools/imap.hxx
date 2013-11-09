@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_IMAP_HXX
 #define INCLUDED_SVTOOLS_IMAP_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/stream.hxx>
 #include <vector>
 

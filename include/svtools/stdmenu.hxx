@@ -20,7 +20,7 @@
 #ifndef _STDMENU_HXX
 #define _STDMENU_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/menu.hxx>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_BORDERHELPER_HXX
 #define INCLUDED_SVTOOLS_BORDERHELPER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

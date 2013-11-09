@@ -20,7 +20,7 @@
 #ifndef _RULER_HXX
 #define _RULER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>

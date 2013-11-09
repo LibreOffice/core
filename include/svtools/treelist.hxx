@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVTOOLS_TREELIST_HXX
 #define INCLUDED_SVTOOLS_TREELIST_HXX
 
-#include "svtools/svtdllapi.h"
-#include "svtools/treelistentries.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/svtdllapi.h>
+#include <svtools/treelistentries.hxx>
+#include <svtools/viewdataentry.hxx>
 
 #include <tools/solar.h>
 #include <tools/link.hxx>

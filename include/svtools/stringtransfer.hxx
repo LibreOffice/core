@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_STRINGTRANSFER_HXX
 #define INCLUDED_SVTOOLS_STRINGTRANSFER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/transfer.hxx>
 
 //........................................................................

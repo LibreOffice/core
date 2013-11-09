@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TREELISTBOX_HXX
 #define INCLUDED_SVTOOLS_TREELISTBOX_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <deque>
 #include <vector>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_HTMLTOKN_H
 #define INCLUDED_SVTOOLS_HTMLTOKN_H
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <sal/types.h>
 #include <tools/solar.h>
 

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #define INCLUDED_SVTOOLS_HELPOPT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <list>
 #include <rtl/ustring.hxx>

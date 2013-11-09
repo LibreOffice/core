@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_EMBEDTRANSFER_HXX
 #define INCLUDED_SVTOOLS_EMBEDTRANSFER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svtools/transfer.hxx>
 

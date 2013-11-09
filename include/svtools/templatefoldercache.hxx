@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
 #define INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <sal/types.h>
 
 //.........................................................................

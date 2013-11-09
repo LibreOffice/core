@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
 #define INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <boost/function.hpp>
 #include <osl/file.hxx>
 #include <vcl/timer.hxx>

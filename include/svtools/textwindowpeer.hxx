@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TEXTWINDOWPEER_HXX
 #define INCLUDED_SVTOOLS_TEXTWINDOWPEER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <memory>

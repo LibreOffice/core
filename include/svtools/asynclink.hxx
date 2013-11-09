@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_ASYNCLINK_HXX
 #define INCLUDED_SVTOOLS_ASYNCLINK_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <osl/mutex.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
 #define INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

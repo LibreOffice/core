@@ -20,7 +20,7 @@
 #ifndef _VALUESET_HXX
 #define _VALUESET_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/virdev.hxx>

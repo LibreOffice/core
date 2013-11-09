@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVTOOLS_ACCESSIBLEFACTORY_HXX
 #define INCLUDED_SVTOOLS_ACCESSIBLEFACTORY_HXX
 
-#include "AccessibleBrowseBoxObjType.hxx"
-#include "accessibletableprovider.hxx"
+#include <svtools/AccessibleBrowseBoxObjType.hxx>
+#include <svtools/accessibletableprovider.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 

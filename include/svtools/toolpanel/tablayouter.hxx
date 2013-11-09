@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SVTOOLS_TOOLPANEL_TABLAYOUTER_HXX
 #define INCLUDED_SVTOOLS_TOOLPANEL_TABLAYOUTER_HXX
 
-#include "svtools/svtdllapi.h"
-#include "svtools/toolpanel/decklayouter.hxx"
-#include "svtools/toolpanel/tabalignment.hxx"
-#include "svtools/toolpanel/tabitemcontent.hxx"
-#include "svtools/toolpanel/refbase.hxx"
+#include <svtools/svtdllapi.h>
+#include <svtools/toolpanel/decklayouter.hxx>
+#include <svtools/toolpanel/tabalignment.hxx>
+#include <svtools/toolpanel/tabitemcontent.hxx>
+#include <svtools/toolpanel/refbase.hxx>
 
 #include <memory>
 

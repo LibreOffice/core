@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVTOOLS_INETTBC_HXX
 #define INCLUDED_SVTOOLS_INETTBC_HXX
 
-#include "rtl/ref.hxx"
-#include "svtools/svtdllapi.h"
+#include <rtl/ref.hxx>
+#include <svtools/svtdllapi.h>
 #include <tools/urlobj.hxx>
 
 #include <vcl/combobox.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_URLCONTROL_HXX
 #define INCLUDED_SVTOOLS_URLCONTROL_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/inettbc.hxx>
 
 //.........................................................................

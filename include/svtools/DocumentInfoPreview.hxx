@@ -20,15 +20,15 @@
 #ifndef INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 #define INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/scoped_ptr.hpp"
-#include "i18nlangtag/languagetag.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "svtools/svmedit2.hxx"
-#include "svtools/svtdllapi.h"
-#include "tools/wintypes.hxx"
-#include "vcl/window.hxx"
+#include <boost/scoped_ptr.hpp>
+#include <i18nlangtag/languagetag.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <svtools/svmedit2.hxx>
+#include <svtools/svtdllapi.h>
+#include <tools/wintypes.hxx>
+#include <vcl/window.hxx>
 
 class SvtDocInfoTable_Impl;
 

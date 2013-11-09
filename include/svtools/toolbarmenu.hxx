@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TOOLBARMENU_HXX
 #define INCLUDED_SVTOOLS_TOOLBARMENU_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

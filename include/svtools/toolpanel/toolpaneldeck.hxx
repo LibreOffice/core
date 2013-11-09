@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANELDECK_HXX
 #define INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANELDECK_HXX
 
-#include "svtools/svtdllapi.h"
-#include "svtools/toolpanel/toolpanel.hxx"
-#include "svtools/toolpanel/decklayouter.hxx"
+#include <svtools/svtdllapi.h>
+#include <svtools/toolpanel/toolpanel.hxx>
+#include <svtools/toolpanel/decklayouter.hxx>
 
 #include <vcl/ctrl.hxx>
 

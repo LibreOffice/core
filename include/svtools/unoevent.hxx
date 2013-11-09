@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_UNOEVENT_HXX
 #define INCLUDED_SVTOOLS_UNOEVENT_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

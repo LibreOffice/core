@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_HTMLKYWD_HXX
 #define INCLUDED_SVTOOLS_HTMLKYWD_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #define OOO_STRING_SVTOOLS_HTML_doctype40 \
     "HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\""

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
 #define INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
 
-#include "ServerDetailsControls.hxx"
+#include <svtools/ServerDetailsControls.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

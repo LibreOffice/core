@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_IMAPPOLY_HXX
 #define INCLUDED_SVTOOLS_IMAPPOLY_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/imapobj.hxx>
 #include <tools/poly.hxx>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_PRINTOPTIONS_HXX
 #define INCLUDED_SVTOOLS_PRINTOPTIONS_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
