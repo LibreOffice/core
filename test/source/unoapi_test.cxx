@@ -31,7 +31,6 @@ void UnoApiTest::setUp()
 
 void UnoApiTest::tearDown()
 {
-    uno::Reference< lang::XComponent >( mxDesktop )->dispose();
     test::BootstrapFixture::tearDown();
 }
 
