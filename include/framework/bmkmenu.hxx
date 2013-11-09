@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FRAMEWORK_BMKMENU_HXX
 #define INCLUDED_FRAMEWORK_BMKMENU_HXX
 
-#include "framework/addonmenu.hxx"
+#include <framework/addonmenu.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <framework/fwedllapi.h>

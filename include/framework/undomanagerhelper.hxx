@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
 #define INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
 
-#include "framework/fwedllapi.h"
-#include "framework/iguard.hxx"
-#include "framework/imutex.hxx"
+#include <framework/fwedllapi.h>
+#include <framework/iguard.hxx>
+#include <framework/imutex.hxx>
 
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

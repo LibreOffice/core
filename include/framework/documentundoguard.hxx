@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_DOCUMENTUNDOGUARD_HXX
 #define INCLUDED_FRAMEWORK_DOCUMENTUNDOGUARD_HXX
 
-#include "framework/fwedllapi.h"
+#include <framework/fwedllapi.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
 
