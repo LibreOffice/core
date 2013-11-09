@@ -25,7 +25,7 @@
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <vector>
 
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }

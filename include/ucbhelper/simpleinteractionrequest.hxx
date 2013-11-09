@@ -21,7 +21,7 @@
 #define INCLUDED_UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX
 
 #include <ucbhelper/interactionrequest.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper {
 

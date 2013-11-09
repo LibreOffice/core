@@ -22,7 +22,7 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper {
 

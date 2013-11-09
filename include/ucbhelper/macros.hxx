@@ -26,8 +26,8 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include "osl/mutex.hxx"
-#include "ucbhelper/getcomponentcontext.hxx"
+#include <osl/mutex.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
 
 //=========================================================================
 

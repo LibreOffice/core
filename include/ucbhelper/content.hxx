@@ -19,13 +19,13 @@
 #ifndef INCLUDED_UCBHELPER_CONTENT_HXX
 #define INCLUDED_UCBHELPER_CONTENT_HXX
 
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySetInfo;

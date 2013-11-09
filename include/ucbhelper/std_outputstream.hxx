@@ -17,7 +17,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper
 {

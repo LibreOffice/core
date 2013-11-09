@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/weak.hxx>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 #include <ucbhelper/macros.hxx>
 
 namespace ucbhelper {

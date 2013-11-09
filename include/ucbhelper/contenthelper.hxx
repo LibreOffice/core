@@ -34,10 +34,10 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <cppuhelper/weak.hxx>
 
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <ucbhelper/macros.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace ucb {
     struct CommandInfo;

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_UCBHELPER_GETCOMPONENTCONTEXT_HXX
 #define INCLUDED_UCBHELPER_GETCOMPONENTCONTEXT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }

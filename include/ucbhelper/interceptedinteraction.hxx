@@ -26,7 +26,7 @@
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 
 namespace ucbhelper{

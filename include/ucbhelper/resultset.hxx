@@ -32,11 +32,11 @@
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include "rtl/ref.hxx"
-#include "salhelper/simplereferenceobject.hxx"
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper {
 

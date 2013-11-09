@@ -20,7 +20,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper
 {

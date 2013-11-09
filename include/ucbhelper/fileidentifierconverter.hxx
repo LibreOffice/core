@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <sal/types.h>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XUniversalContentBroker;

@@ -23,7 +23,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 
 namespace ucbhelper

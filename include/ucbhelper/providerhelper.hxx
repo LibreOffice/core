@@ -27,10 +27,10 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>
 
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <ucbhelper/macros.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 //=========================================================================
 

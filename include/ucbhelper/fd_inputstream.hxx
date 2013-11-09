@@ -28,7 +28,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper
 {

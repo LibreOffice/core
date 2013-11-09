@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace lang  { class XMultiServiceFactory; }

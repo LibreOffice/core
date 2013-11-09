@@ -29,7 +29,7 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/contenthelper.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace cppu {
     class OInterfaceContainerHelper;

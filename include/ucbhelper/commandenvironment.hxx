@@ -24,7 +24,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper
 {

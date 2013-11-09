@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace uno { class Any; }

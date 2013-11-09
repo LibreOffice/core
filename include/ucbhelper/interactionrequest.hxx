@@ -31,7 +31,7 @@
 #include <com/sun/star/ucb/XInteractionSupplyName.hpp>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
-#include "ucbhelper/ucbhelperdllapi.h"
+#include <ucbhelper/ucbhelperdllapi.h>
 
 namespace ucbhelper {
 
