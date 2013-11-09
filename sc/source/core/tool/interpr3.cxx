@@ -2120,13 +2120,17 @@ void ScInterpreter::ScTInv()
         PushIllegalArgument();
         return;
     }
+    PushDouble( GetTInv( fP, fDF ) );
+};
 
+double ScInterpreter::GetTInv( double fAlpha, double fSize )
+{
     bool bConvError;
-    ScTDistFunction aFunc( *this, fP, fDF );
-    double fVal = lcl_IterateInverse( aFunc, fDF*0.5, fDF, bConvError );
+    ScTDistFunction aFunc( *this, fAlpha, fSize );
+    double fVal = lcl_IterateInverse( aFunc, fSize * 0.5, fSize, bConvError );
     if (bConvError)
         SetError(errNoConvergence);
-    PushDouble(fVal);
+    return( fVal );
 }
 
 class ScFDistFunction : public ScDistFunc
@@ -2244,6 +2248,20 @@ void ScInterpreter::ScConfidence()
             PushIllegalArgument();
         else
             PushDouble( gaussinv(1.0-alpha/2.0) * sigma/sqrt(n) );
+    }
+}
+
+void ScInterpreter::ScConfidenceT()
+{
+    if ( MustHaveParamCount( GetByte(), 3 ) )
+    {
+        double n     = ::rtl::math::approxFloor(GetDouble());
+        double sigma = GetDouble();
+        double alpha = GetDouble();
+        if (sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1.0)
+            PushIllegalArgument();
+        else
+            PushDouble( sigma * GetTInv( 1 - alpha / 2, n - 1 ) / sqrt( n ) );
     }
 }
 

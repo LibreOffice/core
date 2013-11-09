@@ -423,8 +423,10 @@
 #define SC_OPCODE_CHI_TEST_MS       425
 #define SC_OPCODE_CHISQ_DIST_MS     426
 #define SC_OPCODE_CHISQ_INV_MS      427
+#define SC_OPCODE_CONFIDENCE_N      428
+#define SC_OPCODE_CONFIDENCE_T      429
 
-#define SC_OPCODE_STOP_2_PAR        428     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_STOP_2_PAR        430     /* last function with two or more parameters' OpCode + 1 */
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */
 

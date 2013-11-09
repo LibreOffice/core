@@ -2375,6 +2375,8 @@ void Test::testFunctionLists()
         "CHISQINV",
         "CHITEST",
         "CONFIDENCE",
+        "CONFIDENCE.NORM",
+        "CONFIDENCE.T",
         "CORREL",
         "COUNT",
         "COUNTA",
