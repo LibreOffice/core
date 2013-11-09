@@ -19,8 +19,8 @@
 #ifndef INCLUDED_TEST_TESTDLLAPI_HXX
 #define INCLUDED_TEST_TESTDLLAPI_HXX
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_TEST
 #define OOO_DLLPUBLIC_TEST SAL_DLLPUBLIC_EXPORT

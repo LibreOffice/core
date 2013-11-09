@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_TEXT_XTEXT_HXX
 #define INCLUDED_TEST_TEXT_XTEXT_HXX
 
-#include "test/testdllapi.hxx"
+#include <test/testdllapi.hxx>
 
 #include <com/sun/star/text/XText.hpp>
 

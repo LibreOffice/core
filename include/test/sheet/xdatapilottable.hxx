@@ -11,7 +11,7 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <test/testdllapi.hxx>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 namespace apitest {
 

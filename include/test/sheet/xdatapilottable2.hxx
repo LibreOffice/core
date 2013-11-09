@@ -14,7 +14,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/uno/Sequence.h>
 
-#include "test/testdllapi.hxx"
+#include <test/testdllapi.hxx>
 
 #include <vector>
 

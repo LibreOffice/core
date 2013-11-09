@@ -11,7 +11,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 
-#include "test/testdllapi.hxx"
+#include <test/testdllapi.hxx>
 
 namespace apitest {
 

@@ -14,7 +14,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
-#include "test/testdllapi.hxx"
+#include <test/testdllapi.hxx>
 
 #include <vector>
 
