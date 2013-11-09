@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_RESMGR_HXX
 #define INCLUDED_TOOLS_RESMGR_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/resid.hxx>
 

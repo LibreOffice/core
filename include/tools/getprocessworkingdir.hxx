@@ -20,8 +20,8 @@
 #ifndef INCLUDED_TOOLS_GETPROCESSWORKINGDIR_HXX
 #define INCLUDED_TOOLS_GETPROCESSWORKINGDIR_HXX
 
-#include "sal/config.h"
-#include "tools/toolsdllapi.h"
+#include <sal/config.h>
+#include <tools/toolsdllapi.h>
 
 
 namespace tools {

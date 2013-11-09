@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <tools/resid.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 class InternalResMgr;
 

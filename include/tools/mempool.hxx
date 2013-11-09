@@ -19,11 +19,11 @@
 #ifndef INCLUDED_TOOLS_MEMPOOL_HXX
 #define INCLUDED_TOOLS_MEMPOOL_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/macros.h"
-#include "tools/toolsdllapi.h"
-#include "tools/solar.h"
+#include <sal/macros.h>
+#include <tools/toolsdllapi.h>
+#include <tools/solar.h>
 
 struct FixedMemPool_Impl;
 

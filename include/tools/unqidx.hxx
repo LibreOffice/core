@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_UNQIDX_HXX
 #define INCLUDED_TOOLS_UNQIDX_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 #include <tools/contnr.hxx>
 #include <map>

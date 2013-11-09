@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_DEBUG_HXX
 #define INCLUDED_TOOLS_DEBUG_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 #include <sal/detail/log.h>
 #include <sal/types.h>

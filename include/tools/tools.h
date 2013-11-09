@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_TOOLS_H
 #define INCLUDED_TOOLS_TOOLS_H
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 
 // Methoden, die von VCL gerufen werden muessen

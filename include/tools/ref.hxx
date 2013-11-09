@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_REF_HXX
 #define INCLUDED_TOOLS_REF_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <vector>
 
 #define PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef, AddNextRef, ReleaseRef, pRefbase ) \

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_CONTNR_HXX
 #define INCLUDED_TOOLS_CONTNR_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 
 #include <limits.h>

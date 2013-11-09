@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_PATHUTILS_HXX
 #define INCLUDED_TOOLS_PATHUTILS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #if defined WNT
 #include <cstddef>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_VCOMPAT_HXX
 #define INCLUDED_TOOLS_VCOMPAT_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 
 #define COMPAT_FORMAT( char1, char2, char3, char4 ) \

@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
 struct ImpSvGlobalName

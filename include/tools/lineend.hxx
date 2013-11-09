@@ -12,7 +12,7 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 enum LineEnd { LINEEND_CR, LINEEND_LF, LINEEND_CRLF };
 

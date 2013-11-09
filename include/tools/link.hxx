@@ -19,9 +19,9 @@
 #ifndef INCLUDED_TOOLS_LINK_HXX
 #define INCLUDED_TOOLS_LINK_HXX
 
-#include "tools/toolsdllapi.h"
-#include "sal/config.h"
-#include "sal/types.h"
+#include <tools/toolsdllapi.h>
+#include <sal/config.h>
+#include <sal/types.h>
 #include <tools/solar.h>
 
 typedef long (*PSTUB)( void*, void* );

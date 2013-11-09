@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_INETMSG_HXX
 #define INCLUDED_TOOLS_INETMSG_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>

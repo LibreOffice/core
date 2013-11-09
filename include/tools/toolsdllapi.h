@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLS_TOOLSDLLAPI_H
 #define INCLUDED_TOOLS_TOOLSDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(TOOLS_DLLIMPLEMENTATION)
 #define TOOLS_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

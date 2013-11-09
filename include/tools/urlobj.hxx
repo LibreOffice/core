@@ -19,12 +19,12 @@
 #ifndef INCLUDED_TOOLS_URLOBJ_HXX
 #define INCLUDED_TOOLS_URLOBJ_HXX
 
-#include "tools/toolsdllapi.h"
-#include "com/sun/star/uno/Reference.hxx"
-#include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/textenc.h"
-#include "sal/types.h"
+#include <tools/toolsdllapi.h>
+#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/string.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/textenc.h>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace util {
     class XStringWidth;

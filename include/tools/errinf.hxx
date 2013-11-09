@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/rtti.hxx>
 #include <tools/errcode.hxx>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 class EDcr_Impl;
 class ErrHdl_Impl;

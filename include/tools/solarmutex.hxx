@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_SOLARMUTEX_HXX
 #define INCLUDED_TOOLS_SOLARMUTEX_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <comphelper/solarmutex.hxx>
 
 namespace tools

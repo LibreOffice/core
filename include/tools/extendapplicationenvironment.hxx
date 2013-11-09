@@ -19,8 +19,8 @@
 #ifndef INCLUDED_TOOLS_EXTENDAPPLICATIONENVIRONMENT_HXX
 #define INCLUDED_TOOLS_EXTENDAPPLICATIONENVIRONMENT_HXX
 
-#include "sal/config.h"
-#include "tools/toolsdllapi.h"
+#include <sal/config.h>
+#include <tools/toolsdllapi.h>
 
 namespace tools {
 

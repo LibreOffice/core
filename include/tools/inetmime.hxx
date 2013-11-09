@@ -21,7 +21,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/string.hxx>

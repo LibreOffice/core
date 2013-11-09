@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLS_ZCODEC_HXX
 #define INCLUDED_TOOLS_ZCODEC_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 
 // Defines

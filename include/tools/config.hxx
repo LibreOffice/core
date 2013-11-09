@@ -19,7 +19,7 @@
 #ifndef _CONFIG_HXX
 #define _CONFIG_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
 
 struct ImplConfigData;

@@ -21,7 +21,7 @@
 #define INCLUDED_TOOLS_SHL_HXX
 
 #include <tools/solar.h>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 // GetAppData()
 

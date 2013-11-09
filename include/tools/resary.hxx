@@ -19,9 +19,9 @@
 #ifndef INCLUDED_TOOLS_RESARY_HXX
 #define INCLUDED_TOOLS_RESARY_HXX
 
-#include "boost/noncopyable.hpp"
+#include <boost/noncopyable.hpp>
 #include <vector>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/resid.hxx>
 
 #define RESARRAY_INDEX_NOTFOUND (0xffffffff)

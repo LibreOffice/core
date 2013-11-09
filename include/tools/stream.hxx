@@ -20,7 +20,7 @@
 #define INCLUDED_TOOLS_STREAM_HXX
 
 #include <limits>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 #include <tools/lineend.hxx>
 #include <tools/errinf.hxx>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_COLOR_HXX
 #define INCLUDED_TOOLS_COLOR_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 class SvStream;
 class ResId;

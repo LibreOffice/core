@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_POLY_HXX
 #define INCLUDED_TOOLS_POLY_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 

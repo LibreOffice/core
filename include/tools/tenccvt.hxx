@@ -20,7 +20,7 @@
 #define INCLUDED_TOOLS_TENCCVT_HXX
 
 #include <rtl/textenc.h>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 // Functions for handling Import/Export
 

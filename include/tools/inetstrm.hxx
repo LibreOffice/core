@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_INETSTRM_HXX
 #define INCLUDED_TOOLS_INETSTRM_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_DATE_HXX
 #define INCLUDED_TOOLS_DATE_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 #include <com/sun/star/util/Date.hpp>
 #include <sal/log.hxx>

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_TOOLS_APPENDUNIXSHELLWORD_HXX
 #define INCLUDED_TOOLS_APPENDUNIXSHELLWORD_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #if defined UNX
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 
 namespace tools {

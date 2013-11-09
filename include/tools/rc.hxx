@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_RC_HXX
 #define INCLUDED_TOOLS_RC_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <tools/resmgr.hxx>
 

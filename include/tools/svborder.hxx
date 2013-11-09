@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLS_SVBORDER_HXX
 #define INCLUDED_TOOLS_SVBORDER_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
 
 class TOOLS_DLLPUBLIC SvBorder

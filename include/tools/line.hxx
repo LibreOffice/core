@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_LINE_HXX
 #define INCLUDED_TOOLS_LINE_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
 
 class Link;

@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 
 struct RSHEADER_TYPE;
 typedef sal_uInt32 RESOURCE_TYPE;

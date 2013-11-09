@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TOOLS_WLDCRD_HXX
 #define INCLUDED_TOOLS_WLDCRD_HXX
 
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
 

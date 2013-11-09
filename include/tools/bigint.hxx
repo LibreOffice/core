@@ -21,7 +21,7 @@
 
 #include <climits>
 #include <rtl/ustring.hxx>
-#include "tools/toolsdllapi.h"
+#include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 
 class SvStream;
