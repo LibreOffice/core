@@ -21,7 +21,9 @@ namespace unotest {
 
 uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(const OUString& rURL, const char* pDocService)
 {
+    CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
     uno::Reference< com::sun::star::frame::XComponentLoader> xLoader = uno::Reference< com::sun::star::frame::XComponentLoader >( mxDesktop, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > args(1);
     args[0].Name = "MacroExecutionMode";
     args[0].Handle = -1;
