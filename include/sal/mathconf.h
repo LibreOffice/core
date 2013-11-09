@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_MATHCONF_H
 #define INCLUDED_SAL_MATHCONF_H
 
-#include "osl/endian.h"
+#include <osl/endian.h>
 
 #include <float.h>
 

@@ -10,15 +10,15 @@
 #ifndef INCLUDED_SAL_LOG_HXX
 #define INCLUDED_SAL_LOG_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 #include <sstream>
 #include <string>
 
-#include "sal/detail/log.h"
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <sal/detail/log.h>
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 // Avoid the use of other sal code in this header as much as possible, so that
 // this code can be called from other sal code without causing endless

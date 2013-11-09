@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SAL_MAIN_H
 #define INCLUDED_SAL_MAIN_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 #if defined AIX
 #include <unistd.h>
