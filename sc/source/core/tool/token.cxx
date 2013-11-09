@@ -1432,6 +1432,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocExpDist:
             case ocAverageIfs:
             case ocCountIfs:
+            case ocKombin2:
             // Don't change the state.
             break;
             default:
