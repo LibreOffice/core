@@ -28,7 +28,7 @@
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/task/XInteractionPassword.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //.........................................................................
 namespace comphelper

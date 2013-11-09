@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_TYPEGENERATION_HXX
 
 #include <sal/types.h>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 #define CPPU_E2T(type)      ((com::sun::star::uno::Type*)type)
 

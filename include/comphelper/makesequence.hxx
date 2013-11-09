@@ -20,10 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_MAKESEQUENCE_HXX
 #define INCLUDED_COMPHELPER_MAKESEQUENCE_HXX
 
-#include "com/sun/star/uno/Sequence.hxx"
-#include "boost/preprocessor/cat.hpp"
-#include "boost/preprocessor/repetition.hpp"
-#include "boost/preprocessor/arithmetic/add.hpp"
+#include <com/sun/star/uno/Sequence.hxx>
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/repetition.hpp>
+#include <boost/preprocessor/arithmetic/add.hpp>
 
 namespace comphelper {
 

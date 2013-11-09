@@ -23,7 +23,7 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //=========================================================================
 //= selection helper classes

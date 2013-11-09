@@ -24,7 +24,7 @@
 #include <comphelper/PropertyInfoHash.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/TypeGeneration.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 /*
  * A ChainablePropertySetInfo is usually initialised with a pointer to the first element

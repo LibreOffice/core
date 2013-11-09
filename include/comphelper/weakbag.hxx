@@ -20,12 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_WEAKBAG_HXX
 #define INCLUDED_COMPHELPER_WEAKBAG_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <list>
-#include "com/sun/star/uno/Reference.hxx"
-#include "cppuhelper/weakref.hxx"
-#include "osl/diagnose.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <osl/diagnose.h>
 
 namespace comphelper {
 

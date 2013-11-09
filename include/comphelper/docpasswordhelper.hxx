@@ -21,9 +21,9 @@
 #define INCLUDED_COMPHELPER_DOCPASSWORDHELPER_HXX
 
 #include <com/sun/star/beans/NamedValue.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 #include <vector>
-#include "comphelper/docpasswordrequest.hxx"
+#include <comphelper/docpasswordrequest.hxx>
 
 namespace com { namespace sun { namespace star { namespace task { class XInteractionHandler; } } } }
 namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }

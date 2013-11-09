@@ -22,7 +22,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustring.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;

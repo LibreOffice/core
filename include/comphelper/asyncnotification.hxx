@@ -20,13 +20,13 @@
 #ifndef INCLUDED_COMPHELPER_ASYNCNOTIFICATION_HXX
 #define INCLUDED_COMPHELPER_ASYNCNOTIFICATION_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/scoped_ptr.hpp"
-#include "comphelper/comphelperdllapi.h"
-#include "rtl/ref.hxx"
-#include "sal/types.h"
-#include "salhelper/thread.hxx"
+#include <boost/scoped_ptr.hpp>
+#include <comphelper/comphelperdllapi.h>
+#include <rtl/ref.hxx>
+#include <sal/types.h>
+#include <salhelper/thread.hxx>
 
 //........................................................................
 namespace comphelper

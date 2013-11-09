@@ -27,8 +27,8 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include "comphelper/comphelperdllapi.h"
-#include "cppu/unotype.hxx"
+#include <comphelper/comphelperdllapi.h>
+#include <cppu/unotype.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt {
     struct FontDescriptor;

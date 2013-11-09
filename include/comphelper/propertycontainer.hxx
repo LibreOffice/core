@@ -23,7 +23,7 @@
 #include <comphelper/propertycontainerhelper.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //.........................................................................
 namespace comphelper

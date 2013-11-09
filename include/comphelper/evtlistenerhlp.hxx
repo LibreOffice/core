@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <osl/diagnose.h>
 #include <cppuhelper/weakref.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //........................................................................
 namespace comphelper

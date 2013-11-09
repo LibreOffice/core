@@ -23,8 +23,8 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/PropertyInfoHash.hxx>
-#include "comphelper/comphelperdllapi.h"
-#include "comphelper/solarmutex.hxx"
+#include <comphelper/comphelperdllapi.h>
+#include <comphelper/solarmutex.hxx>
 #include <map>
 
 namespace comphelper

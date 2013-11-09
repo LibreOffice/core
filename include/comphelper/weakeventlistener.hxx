@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //.........................................................................
 namespace comphelper

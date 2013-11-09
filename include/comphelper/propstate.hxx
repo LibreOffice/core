@@ -30,7 +30,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //=========================================================================
 //= property helper classes

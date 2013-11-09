@@ -19,7 +19,7 @@
 #ifndef INCLUDED_COMPHELPER_STL_TYPES_HXX
 #define INCLUDED_COMPHELPER_STL_TYPES_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 #include <map>

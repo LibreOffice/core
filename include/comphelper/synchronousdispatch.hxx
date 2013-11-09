@@ -20,12 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_SYNCHRONOUSDISPATCH_HXX
 #define INCLUDED_COMPHELPER_SYNCHRONOUSDISPATCH_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
-#include "com/sun/star/beans/PropertyValue.hpp"
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

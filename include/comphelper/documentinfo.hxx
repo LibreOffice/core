@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_DOCUMENTINFO_HXX
 #define INCLUDED_COMPHELPER_DOCUMENTINFO_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 #include <com/sun/star/frame/XModel.hpp>
 

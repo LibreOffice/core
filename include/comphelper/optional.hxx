@@ -19,8 +19,8 @@
 #ifndef INCLUDED_COMPHELPER_OPTIONAL_HXX
 #define INCLUDED_COMPHELPER_OPTIONAL_HXX
 
-#include "com/sun/star/beans/Optional.hpp"
-#include "boost/optional.hpp"
+#include <com/sun/star/beans/Optional.hpp>
+#include <boost/optional.hpp>
 
 namespace comphelper {
 

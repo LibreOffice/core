@@ -20,10 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_STRING_HXX
 #define INCLUDED_COMPHELPER_STRING_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>

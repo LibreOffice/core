@@ -22,7 +22,7 @@
 
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //.........................................................................
 namespace comphelper

@@ -10,8 +10,8 @@
 #ifndef INCLUDED_COMPHELPER_EXPANDMACRO_HXX
 #define INCLUDED_COMPHELPER_EXPANDMACRO_HXX
 
-#include "rtl/ustring.hxx"
-#include "comphelper/comphelperdllapi.h"
+#include <rtl/ustring.hxx>
+#include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

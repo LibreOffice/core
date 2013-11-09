@@ -25,8 +25,8 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <functional>
-#include "comphelper/comphelperdllapi.h"
-#include "cppu/unotype.hxx"
+#include <comphelper/comphelperdllapi.h>
+#include <cppu/unotype.hxx>
 
 //=========================================================================
 //= property helper classes

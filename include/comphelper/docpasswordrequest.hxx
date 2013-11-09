@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_DOCPASSWORDREQUEST_HXX
 #define INCLUDED_COMPHELPER_DOCPASSWORDREQUEST_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase1.hxx>

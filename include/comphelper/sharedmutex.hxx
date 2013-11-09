@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_SHAREDMUTEX_HXX
 #define INCLUDED_COMPHELPER_SHAREDMUTEX_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 #include <osl/mutex.hxx>
 

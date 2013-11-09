@@ -20,9 +20,9 @@
 #ifndef INCLUDED_COMPHELPER_ANYTOSTRING_HXX
 #define INCLUDED_COMPHELPER_ANYTOSTRING_HXX
 
-#include "rtl/ustring.hxx"
-#include "com/sun/star/uno/Any.hxx"
-#include "comphelper/comphelperdllapi.h"
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
 {

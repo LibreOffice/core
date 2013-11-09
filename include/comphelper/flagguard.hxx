@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_FLAGGUARD_HXX
 #define INCLUDED_COMPHELPER_FLAGGUARD_HXX
 
-#include "comphelper/scopeguard.hxx"
+#include <comphelper/scopeguard.hxx>
 
 //......................................................................................................................
 namespace comphelper

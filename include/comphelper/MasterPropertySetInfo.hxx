@@ -23,7 +23,7 @@
 #include <comphelper/PropertyInfoHash.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/TypeGeneration.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
 {

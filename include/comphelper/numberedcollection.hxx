@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_NUMBEREDCOLLECTION_HXX
 #define INCLUDED_COMPHELPER_NUMBEREDCOLLECTION_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

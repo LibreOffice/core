@@ -20,10 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_SCOPEGUARD_HXX
 #define INCLUDED_COMPHELPER_SCOPEGUARD_HXX
 
-#include "comphelper/comphelperdllapi.h"
-#include "boost/function.hpp"
-#include "boost/noncopyable.hpp"
-#include "boost/bind.hpp"
+#include <comphelper/comphelperdllapi.h>
+#include <boost/function.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/bind.hpp>
 
 namespace comphelper {
 

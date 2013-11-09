@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <comphelper/propstate.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 #include <map>
 

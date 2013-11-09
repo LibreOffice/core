@@ -10,16 +10,16 @@
 #ifndef INCLUDED_COMPHELPER_CONFIGURATION_HXX
 #define INCLUDED_COMPHELPER_CONFIGURATION_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "boost/optional.hpp"
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "comphelper/comphelperdllapi.h"
-#include "comphelper/processfactory.hxx"
-#include "sal/types.h"
+#include <boost/noncopyable.hpp>
+#include <boost/optional.hpp>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <comphelper/comphelperdllapi.h>
+#include <comphelper/processfactory.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace configuration { class XReadWriteAccess; }

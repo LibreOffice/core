@@ -22,7 +22,7 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
 {

@@ -41,7 +41,7 @@
     #ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_<N>
     #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_<N>
     #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER <N>
-    #include "comphelper/implbase_var.hxx"
+    #include <comphelper/implbase_var.hxx>
     #endif
 
     Additionally you can
@@ -65,13 +65,13 @@
 #define COMPHELPER_IMPLBASE_MAX_CTOR_ARGS 6 // default
 #endif
 
-#include "cppuhelper/implbase_ex.hxx"
-#include "rtl/instance.hxx"
-#include "cppuhelper/compbase_ex.hxx"
+#include <cppuhelper/implbase_ex.hxx>
+#include <rtl/instance.hxx>
+#include <cppuhelper/compbase_ex.hxx>
 
-#include "boost/preprocessor/cat.hpp"
-#include "boost/preprocessor/repetition.hpp"
-#include "boost/preprocessor/arithmetic/add.hpp"
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/repetition.hpp>
+#include <boost/preprocessor/arithmetic/add.hpp>
 
 namespace comphelper {
 

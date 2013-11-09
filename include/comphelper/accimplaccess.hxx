@@ -22,7 +22,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 // forward declaration
 namespace com { namespace sun { namespace star { namespace accessibility {

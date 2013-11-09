@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 
 namespace comphelper{

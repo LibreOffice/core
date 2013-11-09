@@ -25,7 +25,7 @@
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //.........................................................................
 namespace comphelper

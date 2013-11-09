@@ -36,7 +36,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/stl_types.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //.............................................................................
 namespace comphelper

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_PROPERTYBAG_HXX
 #define INCLUDED_COMPHELPER_PROPERTYBAG_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 #include <comphelper/propertycontainerhelper.hxx>
 
 #include <memory>

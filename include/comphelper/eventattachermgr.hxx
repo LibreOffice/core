@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_EVENTATTACHERMGR_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 namespace com { namespace sun { namespace star {
 namespace uno {

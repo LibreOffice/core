@@ -23,7 +23,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <com/sun/star/lang/XEventListener.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 #include <memory>
 

@@ -26,7 +26,7 @@
 
 #include <vector>
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //..............................................................................
 namespace comphelper

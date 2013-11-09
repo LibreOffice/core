@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/stl_types.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //=========================================================================
 //= property helper classes

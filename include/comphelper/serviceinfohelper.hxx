@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_SERVICEINFOHELPER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper {
 

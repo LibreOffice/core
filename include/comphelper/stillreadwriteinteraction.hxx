@@ -24,7 +24,7 @@
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 
 namespace comphelper{

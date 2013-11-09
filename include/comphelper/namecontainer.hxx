@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
 {

@@ -22,7 +22,7 @@
 
 #include <comphelper/propstate.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //=========================================================================
 //= property helper classes

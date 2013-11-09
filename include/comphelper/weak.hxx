@@ -19,7 +19,7 @@
 #ifndef INCLUDED_COMPHELPER_WEAK_HXX
 #define INCLUDED_COMPHELPER_WEAK_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>

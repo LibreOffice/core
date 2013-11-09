@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper {
 

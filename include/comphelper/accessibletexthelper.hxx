@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 
 //..............................................................................

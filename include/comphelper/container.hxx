@@ -21,8 +21,8 @@
 #define INCLUDED_COMPHELPER_CONTAINER_HXX
 
 #include <vector>
-#include "com/sun/star/uno/Reference.hxx"
-#include "comphelper/comphelperdllapi.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <comphelper/comphelperdllapi.h>
 
 //.........................................................................
 namespace comphelper

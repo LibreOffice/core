@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_COMPONENTBASE_HXX
 #define INCLUDED_COMPHELPER_COMPONENTBASE_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 #include <cppuhelper/interfacecontainer.hxx>
 
 //........................................................................

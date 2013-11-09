@@ -29,7 +29,7 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //_______________________________________________
 // namespaces

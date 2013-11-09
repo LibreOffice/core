@@ -20,10 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_SOLARMUTEX_HXX
 #define INCLUDED_COMPHELPER_SOLARMUTEX_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "comphelper/comphelperdllapi.h"
+#include <boost/noncopyable.hpp>
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper {
 

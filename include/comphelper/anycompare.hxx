@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_ANYCOMPARE_HXX
 #define INCLUDED_COMPHELPER_ANYCOMPARE_HXX
 
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>

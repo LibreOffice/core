@@ -28,7 +28,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/compbase_ex.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 /* class hierarchy herein:
 

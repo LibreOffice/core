@@ -23,7 +23,7 @@
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/io/XDataInputStream.hpp>
 #include <com/sun/star/io/XDataOutputStream.hpp>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
 {

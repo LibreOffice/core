@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
-#include "comphelper/comphelperdllapi.h"
+#include <comphelper/comphelperdllapi.h>
 
 //.........................................................................
 namespace comphelper
