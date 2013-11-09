@@ -13,7 +13,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_macros_test, \
     dbaccess/qa/extras/macros-test \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,dbaccess_dialog_save,\
+$(eval $(call gb_CppunitTest_use_externals,dbaccess_macros_test,\
     boost_headers \
 ))
 
