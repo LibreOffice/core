@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_POPUPMENUWINDOW_HXX
 #define INCLUDED_VCL_POPUPMENUWINDOW_HXX
 
-#include "vcl/floatwin.hxx"
+#include <vcl/floatwin.hxx>
 
 class VCL_DLLPUBLIC PopupMenuFloatingWindow : public FloatingWindow
 {

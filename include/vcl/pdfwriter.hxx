@@ -30,10 +30,10 @@
 #include <vcl/font.hxx>
 #include <vcl/graphictools.hxx>
 
-#include "com/sun/star/io/XOutputStream.hpp"
-#include "com/sun/star/beans/XMaterialHolder.hpp"
-#include "com/sun/star/security/XCertificate.hpp"
-#include "com/sun/star/lang/Locale.hpp"
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 
 #include <boost/scoped_ptr.hpp>
 

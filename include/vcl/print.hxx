@@ -22,18 +22,18 @@
 
 #include <rtl/ustring.hxx>
 
-#include "tools/errcode.hxx"
-#include "tools/solar.h"
-#include "vcl/dllapi.h"
-#include "vcl/outdev.hxx"
-#include "vcl/prntypes.hxx"
-#include "vcl/jobset.hxx"
-#include "vcl/gdimtf.hxx"
-#include "tools/stream.hxx"
-#include "tools/multisel.hxx"
+#include <tools/errcode.hxx>
+#include <tools/solar.h>
+#include <vcl/dllapi.h>
+#include <vcl/outdev.hxx>
+#include <vcl/prntypes.hxx>
+#include <vcl/jobset.hxx>
+#include <vcl/gdimtf.hxx>
+#include <tools/stream.hxx>
+#include <tools/multisel.hxx>
 
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/view/PrintableState.hpp"
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/view/PrintableState.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_MNEMONICENGINE_HXX
 #define INCLUDED_VCL_MNEMONICENGINE_HXX
 
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 
 #include <sal/config.h>
 #include <sal/types.h>

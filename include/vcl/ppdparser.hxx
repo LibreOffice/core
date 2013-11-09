@@ -28,7 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
-#include "com/sun/star/lang/Locale.hpp"
+#include <com/sun/star/lang/Locale.hpp>
 
 #define PRINTER_PPDDIR "driver"
 

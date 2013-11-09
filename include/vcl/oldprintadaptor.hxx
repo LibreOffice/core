@@ -20,7 +20,7 @@
 #ifndef _VCL_OLDPRINTADAPTOR
 #define _VCL_OLDPRINTADAPTOR
 
-#include "vcl/print.hxx"
+#include <vcl/print.hxx>
 
 namespace vcl
 {

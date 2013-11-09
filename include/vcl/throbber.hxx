@@ -20,9 +20,9 @@
 #ifndef INCLUDED_VCL_THROBBER_HXX
 #define INCLUDED_VCL_THROBBER_HXX
 
-#include "vcl/dllapi.h"
-#include "vcl/imgctrl.hxx"
-#include "vcl/timer.hxx"
+#include <vcl/dllapi.h>
+#include <vcl/imgctrl.hxx>
+#include <vcl/timer.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 

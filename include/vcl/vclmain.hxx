@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_VCLMAIN_HXX
 #define INCLUDED_VCL_VCLMAIN_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 namespace vclmain {
 

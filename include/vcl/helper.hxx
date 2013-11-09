@@ -22,9 +22,9 @@
 
 #include <list>
 
-#include "vcl/dllapi.h"
+#include <vcl/dllapi.h>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 
 // forwards

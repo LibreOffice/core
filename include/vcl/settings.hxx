@@ -20,13 +20,13 @@
 #ifndef INCLUDED_VCL_SETTINGS_HXX
 #define INCLUDED_VCL_SETTINGS_HXX
 
-#include "tools/solar.h"
-#include "vcl/dllapi.h"
-#include "tools/color.hxx"
-#include "vcl/bitmapex.hxx"
-#include "vcl/font.hxx"
-#include "vcl/accel.hxx"
-#include "vcl/wall.hxx"
+#include <tools/solar.h>
+#include <vcl/dllapi.h>
+#include <tools/color.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/font.hxx>
+#include <vcl/accel.hxx>
+#include <vcl/wall.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 

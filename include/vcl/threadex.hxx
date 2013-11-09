@@ -22,8 +22,8 @@
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
-#include "cppuhelper/exc_hlp.hxx"
-#include "boost/optional.hpp"
+#include <cppuhelper/exc_hlp.hxx>
+#include <boost/optional.hpp>
 #include <memory>
 
 namespace vcl

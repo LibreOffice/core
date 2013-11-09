@@ -20,10 +20,10 @@
 #ifndef INCLUDED_VCL_VCLEVENT_HXX
 #define INCLUDED_VCL_VCLEVENT_HXX
 
-#include "tools/link.hxx"
-#include "tools/rtti.hxx"
-#include "vcl/dllapi.h"
-#include "vcl/impdel.hxx"
+#include <tools/link.hxx>
+#include <tools/rtti.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/impdel.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 

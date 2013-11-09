@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_DLLAPI_H
 #define INCLUDED_VCL_DLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined VCL_DLLIMPLEMENTATION
 #define VCL_DLLPUBLIC SAL_DLLPUBLIC_EXPORT

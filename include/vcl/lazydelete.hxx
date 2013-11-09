@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_LAZYDELETE_HXX
 #define INCLUDED_VCL_LAZYDELETE_HXX
 
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 
 #include <vector>
 #include <boost/unordered_map.hpp>

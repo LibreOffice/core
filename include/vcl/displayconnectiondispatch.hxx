@@ -20,10 +20,10 @@
 #ifndef INCLUDED_VCL_DISPLAYCONNECTIONDISPATCH_HXX
 #define INCLUDED_VCL_DISPLAYCONNECTIONDISPATCH_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/awt/XDisplayConnection.hpp"
-#include "cppuhelper/implbase1.hxx"
+#include <com/sun/star/awt/XDisplayConnection.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 namespace vcl {
 

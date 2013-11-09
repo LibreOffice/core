@@ -25,11 +25,11 @@
 #include <list>
 #include <set>
 
-#include "vcl/dllapi.h"
-#include "vcl/helper.hxx"
-#include "vcl/timer.hxx"
-#include "vcl/vclenum.hxx"
-#include "com/sun/star/lang/Locale.hpp"
+#include <vcl/dllapi.h>
+#include <vcl/helper.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/vclenum.hxx>
+#include <com/sun/star/lang/Locale.hpp>
 
 #include <vector>
 

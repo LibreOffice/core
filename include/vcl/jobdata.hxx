@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_JOBDATA_HXX
 #define INCLUDED_VCL_JOBDATA_HXX
 
-#include "vcl/ppdparser.hxx"
+#include <vcl/ppdparser.hxx>
 
 namespace psp {
 

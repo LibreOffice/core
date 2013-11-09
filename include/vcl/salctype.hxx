@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SALCTYPE_HXX
 #define INCLUDED_VCL_SALCTYPE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vcl/graph.hxx>
 
