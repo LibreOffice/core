@@ -31,9 +31,9 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(WITH_MOZILLA)" == "NO"
+.IF "$(ENABLE_NSS_MODULE)" == "NO"
 @all:
-    @echo "Mozilla disabled -> no nss -> no libxmlsec...."
+    @echo "No nss -> no libxmlsec...."
 .ENDIF
 
 # --- Files --------------------------------------------------------
