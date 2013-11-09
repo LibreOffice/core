@@ -22,8 +22,8 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "IReference.hxx"
-#include "dbaccessdllapi.h"
+#include <dbaccess/IReference.hxx>
+#include <dbaccess/dbaccessdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace util {

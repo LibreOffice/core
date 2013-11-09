@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
-#include "dbaccessdllapi.h"
+#include <dbaccess/dbaccessdllapi.h>
 
 class SvtMiscOptions;
 class ToolBox;

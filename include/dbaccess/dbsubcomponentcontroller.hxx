@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_DBSUBCOMPONENTCONTROLLER_HXX
 #define INCLUDED_DBACCESS_DBSUBCOMPONENTCONTROLLER_HXX
 
-#include "genericcontroller.hxx"
+#include <dbaccess/genericcontroller.hxx>
 
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>

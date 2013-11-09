@@ -20,10 +20,10 @@
 #ifndef INCLUDED_DBACCESS_GENERICCONTROLLER_HXX
 #define INCLUDED_DBACCESS_GENERICCONTROLLER_HXX
 
-#include "AsyncronousLink.hxx"
-#include "controllerframe.hxx"
-#include "dbaccessdllapi.h"
-#include "IController.hxx"
+#include <dbaccess/AsyncronousLink.hxx>
+#include <dbaccess/controllerframe.hxx>
+#include <dbaccess/dbaccessdllapi.h>
+#include <dbaccess/IController.hxx>
 
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XController2.hpp>

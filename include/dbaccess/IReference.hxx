@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_IREFERENCE_HXX
 #define INCLUDED_DBACCESS_IREFERENCE_HXX
 
-#include "dbaccessdllapi.h"
+#include <dbaccess/dbaccessdllapi.h>
 
 namespace dbaui
 {

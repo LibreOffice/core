@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_DBAUNDOMANAGER_HXX
 #define INCLUDED_DBACCESS_DBAUNDOMANAGER_HXX
 
-#include "dbaccessdllapi.h"
+#include <dbaccess/dbaccessdllapi.h>
 
 #include <com/sun/star/document/XUndoManager.hpp>
 

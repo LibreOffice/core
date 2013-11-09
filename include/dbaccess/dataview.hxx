@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_DATAVIEW_HXX
 #define INCLUDED_DBACCESS_DATAVIEW_HXX
 
-#include "dbaccessdllapi.h"
+#include <dbaccess/dbaccessdllapi.h>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <svtools/acceleratorexecute.hxx>
