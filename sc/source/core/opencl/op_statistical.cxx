@@ -3466,6 +3466,113 @@ void OpFInv::GenSlidingWindowFunction(std::stringstream &ss,
     "    return tmp;"
     "}";
 }
+void OpFTest::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(fMachEpsDecl);decls.insert(fMaxGammaArgumentDecl);
+    decls.insert(lcl_getLanczosSumDecl);decls.insert(GetBetaDecl);
+    decls.insert(GetLogBetaDecl);decls.insert(GetBetaDistPDFDecl);
+    decls.insert(lcl_GetBetaHelperContFracDecl);decls.insert(GetBetaDistDecl);
+    decls.insert(GetFDistDecl);
+    funs.insert(lcl_getLanczosSum);funs.insert(GetBeta);
+    funs.insert(GetLogBeta);funs.insert(GetBetaDistPDF);
+    funs.insert(lcl_GetBetaHelperContFrac);funs.insert(GetBetaDist);
+    funs.insert(GetFDist);
+}
+void OpFTest::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
+    assert(pCur);
+    const formula::DoubleVectorRefToken* pCurDVR =
+        dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+    size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+    FormulaToken *pCur1 = vSubArguments[1]->GetFormulaToken();
+    assert(pCur1);
+    const formula::DoubleVectorRefToken* pCurDVR1 =
+        dynamic_cast<const formula::DoubleVectorRefToken *>(pCur1);
+    size_t nCurWindowSize1 = pCurDVR1->GetRefRowSize();
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"( ";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double fSum1 = 0.0;\n";
+    ss << "    double fSumSqr1 = 0.0;\n";
+    ss << "    double fSum2 = 0.0;\n";
+    ss << "    double fSumSqr2 = 0.0;\n";
+    ss << "    int length0="<<nCurWindowSize;
+    ss << ";\n";
+    ss << "    int length1= "<<nCurWindowSize1;
+    ss << ";\n";
+    ss << "    double tmp = 0;\n";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "    for (int i = ";
+#ifdef  ISNAN
+            ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+            ss << "        double arg"<<i<<" = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "        if(isNan(arg"<<i<<")||((gid0+i)>=";
+            ss << pDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "        {\n";
+            ss << "            length"<<i<<"--;\n";
+            ss << "            continue;\n";
+            ss << "        }\n";
+#endif
+            ss << "        fSum"<<i+1<<" += arg"<<i<<";\n";
+            ss << "        fSumSqr"<<i+1<<" += arg"<<i;
+            ss << " * arg"<<i<<";\n";
+            ss << "    }\n";
+#endif
+            }
+            else if (pCur->GetType() == formula::svSingleVectorRef)
+            {
+#ifdef  ISNAN
+                ss << "return HUGE_VAL";
+#endif
+            }
+            else if (pCur->GetType() == formula::svDouble)
+            {
+#ifdef  ISNAN
+                ss << "return HUGE_VAL";
+#endif
+            }
+        }
+        ss << "    double fS1 = (fSumSqr1-fSum1*fSum1/length0)/(length0-1.0);\n"
+        "    double fS2 = (fSumSqr2-fSum2*fSum2/length1)/(length1-1.0);\n"
+        "    double fF, fF1, fF2;\n"
+        "    if (fS1 > fS2)\n"
+        "    {\n"
+        "        fF = fS1/fS2;\n"
+        "        fF1 = length0-1.0;\n"
+        "        fF2 = length1-1.0;\n"
+        "    }\n"
+        "    else\n"
+        "    {\n"
+        "        fF = fS2/fS1;\n"
+        "        fF1 = length1-1.0;\n"
+        "        fF2 = length0-1.0;\n"
+        "    }\n"
+        "    tmp = 2.0*GetFDist(fF, fF1, fF2);\n";
+        ss << "    return tmp;\n";
+        ss << "}";
+}
 
 
 }}
