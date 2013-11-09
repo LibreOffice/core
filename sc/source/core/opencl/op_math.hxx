@@ -256,6 +256,14 @@ public:
     virtual std::string BinFuncName(void) const { return "Combina"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
+class OpLog: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+
+    virtual std::string BinFuncName(void) const { return "Log"; }
+};
 }}
 
 #endif

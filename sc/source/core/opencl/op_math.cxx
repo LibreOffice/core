@@ -243,6 +243,56 @@ void OpEven::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
+void OpLog::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double tem;\n";
+    ss << "    double arg0,arg1;\n";
+    for (unsigned int i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        ss << "    arg"<<i<<" = "<<vSubArguments[i]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        if(pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if(isNan(arg" << i <<")||(gid0 >= ";
+            ss << pSVR->GetArrayLength();
+            ss << "))\n";
+            if( i == 0)
+                ss << "        arg0 = 0;\n";
+            else if ( i == 1)
+                ss << "        arg1 = 10;\n";
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+            ss << "    if(isNan(arg" << i <<"))\n";
+            if( i == 0)
+                ss << "        arg0 = 0;\n";
+            else if ( i == 1)
+                ss << "        arg1 = 10;\n";
+        }
+#endif
+    }
+    if (vSubArguments.size() < 2)
+        ss << "    arg1 = 10;\n";
+    ss << "    tem = log10(arg0)/log10(arg1);;\n";
+    ss << "    return tem;\n";
+    ss << "}";
+}
 void OpCsc::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
 {
