@@ -632,11 +632,11 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     // ---- Turquoise --------------------------------------------------
 
-    Any aTurquise1( implMakeSolidCellStyle( pSSPool, "turquise1" , aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
-    Any aTurquise2( implMakeSolidCellStyle( pSSPool, "turquise2" , aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
-    Any aTurquise3( implMakeSolidCellStyle( pSSPool, "turquise3" , aDefaultCellStyleName, RGB_COLORDATA(25,138,138)));
+    Any aTurquoise1( implMakeSolidCellStyle( pSSPool, "turquoise1" , aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
+    Any aTurquoise2( implMakeSolidCellStyle( pSSPool, "turquoise2" , aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
+    Any aTurquoise3( implMakeSolidCellStyle( pSSPool, "turquoise3" , aDefaultCellStyleName, RGB_COLORDATA(25,138,138)));
 
-    implCreateTableTemplate( xTableFamily, "turquise" , aTurquise1, aTurquise3, aTurquise2 );
+    implCreateTableTemplate( xTableFamily, "turquoise" , aTurquoise1, aTurquoise3, aTurquoise2 );
 
     // ---- Gray ------------------------------------------------
 
