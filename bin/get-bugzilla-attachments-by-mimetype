@@ -179,7 +179,7 @@ def get_launchpad_bugs(prefix):
     #since searching bugs having attachments with specific mimetypes is not available in launchpad API
     #we're iterating over all bugs of the libreoffice source package
     libo = ubuntu.getSourcePackage(name="libreoffice")
-    libobugs = libo.getBugTasks()
+    libobugs = libo.searchTasks()
 
     for bugtask in libobugs:
         bug = bugtask.bug
