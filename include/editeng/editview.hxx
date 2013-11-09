@@ -53,7 +53,7 @@ class OutputDevice;
 
 #include <editeng/editdata.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 namespace com {
 namespace sun {

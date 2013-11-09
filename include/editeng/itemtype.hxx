@@ -28,7 +28,7 @@
 #include <tools/bigint.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/shl.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class Color;
 class IntlWrapper;

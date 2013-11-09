@@ -10,7 +10,7 @@
 #define INCLUDED_EDITENG_RSIDITEM_HXX
 
 #include <svl/intitem.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 //----------------------
 // SvxRsidItem

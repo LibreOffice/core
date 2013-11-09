@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EDITENG_EDITUND2_HXX
 #define INCLUDED_EDITENG_EDITUND2_HXX
 
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 #include <svl/undo.hxx>
 
 class EditEngine;

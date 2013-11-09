@@ -21,7 +21,7 @@
 
 #include <com/sun/star/text/WritingMode.hpp>
 #include <svl/intitem.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 // class SvxWritingModeItem ----------------------------------------------
 

@@ -30,7 +30,7 @@
 #include <vcl/graph.hxx>
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <svtools/grfmgr.hxx>

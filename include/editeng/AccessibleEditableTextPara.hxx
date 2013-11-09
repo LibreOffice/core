@@ -39,10 +39,10 @@
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "editeng/AccessibleParaManager.hxx"
-#include "editeng/AccessibleImageBullet.hxx"
-#include "editeng/unoedprx.hxx"
-#include "editeng/editengdllapi.h"
+#include <editeng/AccessibleParaManager.hxx>
+#include <editeng/AccessibleImageBullet.hxx>
+#include <editeng/unoedprx.hxx>
+#include <editeng/editengdllapi.h>
 
 namespace accessibility
 {

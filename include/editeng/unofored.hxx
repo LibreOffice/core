@@ -22,7 +22,7 @@
 
 #include <editeng/editeng.hxx>
 #include <editeng/unoedsrc.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 //  SvxEditEngineForwarder - SvxTextForwarder for EditEngine
 

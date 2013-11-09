@@ -23,7 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class SfxItemSet;
 class SfxPoolItem;

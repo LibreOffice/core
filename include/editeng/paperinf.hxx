@@ -24,7 +24,7 @@
 #include <vcl/print.hxx>
 #include <vcl/mapmod.hxx>
 #include <editeng/svxenum.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 // forward ---------------------------------------------------------------
 

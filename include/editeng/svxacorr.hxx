@@ -28,7 +28,7 @@
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <editeng/swafopt.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 #include <map>
 #include <set>

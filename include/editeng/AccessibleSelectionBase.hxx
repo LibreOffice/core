@@ -21,7 +21,7 @@
 #define INCLUDED_EDITENG_ACCESSIBLESELECTIONBASE_HXX
 
 #include <comphelper/accessibleselectionhelper.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 namespace accessibility
 {

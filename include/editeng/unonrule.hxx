@@ -22,7 +22,7 @@
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 #include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

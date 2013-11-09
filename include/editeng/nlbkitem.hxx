@@ -20,7 +20,7 @@
 #define INCLUDED_EDITENG_NLBKITEM_HXX
 
 #include <svl/eitem.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 // class SvxNoLinebreakItem ----------------------------------------------
 class EDITENG_DLLPUBLIC SvxNoLinebreakItem : public SfxBoolItem

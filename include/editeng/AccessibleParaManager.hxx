@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class SvxEditSourceAdapter;
 

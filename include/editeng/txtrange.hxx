@@ -20,9 +20,9 @@
 #ifndef INCLUDED_EDITENG_TXTRANGE_HXX
 #define INCLUDED_EDITENG_TXTRANGE_HXX
 
-#include "editeng/editengdllapi.h"
-#include "tools/solar.h"
-#include "tools/gen.hxx"
+#include <editeng/editengdllapi.h>
+#include <tools/solar.h>
+#include <tools/gen.hxx>
 
 #include <deque>
 

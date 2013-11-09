@@ -24,11 +24,11 @@
 #include <tools/debug.hxx>
 #include <rsc/rscsfx.hxx>
 #include <svl/itemset.hxx>
-#include "svl/itempool.hxx"
+#include <svl/itempool.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
-#include "editeng/editengdllapi.h"
-#include "editeng/macros.hxx"
+#include <editeng/editengdllapi.h>
+#include <editeng/macros.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 

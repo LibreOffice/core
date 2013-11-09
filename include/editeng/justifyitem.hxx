@@ -20,8 +20,8 @@
 #ifndef INCLUDED_EDITENG_JUSTIFYITEM_HXX
 #define INCLUDED_EDITENG_JUSTIFYITEM_HXX
 
-#include "editeng/editengdllapi.h"
-#include "editeng/svxenum.hxx"
+#include <editeng/editengdllapi.h>
+#include <editeng/svxenum.hxx>
 #include <svl/eitem.hxx>
 #include <sal/types.h>
 

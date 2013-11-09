@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <svl/itemset.hxx>
 #include <vcl/font.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class EDITENG_DLLPUBLIC SvxUnoFontDescriptor
 {

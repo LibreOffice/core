@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_BULLETITEM_HXX
 #define INCLUDED_EDITENG_BULLETITEM_HXX
 
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 
 // define ----------------------------------------------------------------

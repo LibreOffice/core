@@ -25,7 +25,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 namespace accessibility {
 

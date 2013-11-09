@@ -29,7 +29,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 
 class SvxEditSource;

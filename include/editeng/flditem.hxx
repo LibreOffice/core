@@ -24,7 +24,7 @@
 #include <tools/date.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/pstm.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 

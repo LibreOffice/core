@@ -20,7 +20,7 @@
 #define INCLUDED_EDITENG_PGRDITEM_HXX
 
 #include <svl/eitem.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 // class SvxParaGridItem -------------------------------------------------
 

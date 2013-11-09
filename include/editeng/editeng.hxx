@@ -29,7 +29,7 @@
 #include <rsc/rscsfx.hxx>
 #include <editeng/editdata.hxx>
 #include <i18nlangtag/lang.h>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 #include <tools/lineend.hxx>
 #include <tools/rtti.hxx>

@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 #include <svl/itemprop.hxx>
 #include <vector>
 

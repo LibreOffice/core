@@ -21,7 +21,7 @@
 #define INCLUDED_EDITENG_XMLCNITM_HXX
 
 #include <svl/poolitem.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class SvXMLNamespaceMap;
 

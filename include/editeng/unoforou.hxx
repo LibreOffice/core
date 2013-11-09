@@ -21,7 +21,7 @@
 #define INCLUDED_EDITENG_UNOFOROU_HXX
 
 #include <editeng/unoedsrc.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 #include <editeng/editdata.hxx>
 

@@ -27,7 +27,7 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/component.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 #include <comphelper/servicehelper.hxx>
 

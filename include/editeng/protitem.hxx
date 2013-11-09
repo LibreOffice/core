@@ -20,7 +20,7 @@
 #define INCLUDED_EDITENG_PROTITEM_HXX
 
 #include <svl/poolitem.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class SvXMLUnitConverter;
 

@@ -25,7 +25,7 @@
 #include <rtl/ref.hxx>
 
 #include <cppuhelper/implbase2.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class SvxForbiddenCharactersTable;
 

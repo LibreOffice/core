@@ -25,7 +25,7 @@
 #include <editeng/unoedsrc.hxx>
 
 #include <editeng/editdata.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class SvxAccessibleTextAdapter : public SvxTextForwarder
 {

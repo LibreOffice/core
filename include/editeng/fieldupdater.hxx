@@ -10,7 +10,7 @@
 #ifndef INCLUDED_EDITENG_FIELDUPDATER_HXX
 #define INCLUDED_EDITENG_FIELDUPDATER_HXX
 
-#include "editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 class EditTextObject;
 

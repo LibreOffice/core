@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_ACORRCFG_HXX
 #define INCLUDED_EDITENG_ACORRCFG_HXX
 
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 #include <unotools/configitem.hxx>
 
 class SvxAutoCorrect;

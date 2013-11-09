@@ -29,7 +29,7 @@
 #endif
 #include <editeng/flditem.hxx>
 #endif
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
