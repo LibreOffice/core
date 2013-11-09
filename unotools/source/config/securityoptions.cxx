@@ -21,6 +21,7 @@
 #include <unotools/securityoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -1045,28 +1046,25 @@ bool SvtSecurityOptions::isSecureMacroUri(
         }
         // fall through
     case INET_PROT_SLOT:
-        if (referer.equalsIgnoreAsciiCase("private:user")) {
-            return true;
-        }
-        {
-            MutexGuard g(GetInitMutex());
-            for (sal_Int32 i = 0;
-                 i != m_pDataContainer->m_seqSecureURLs.getLength(); ++i)
-            {
-                OUString pref(m_pDataContainer->m_seqSecureURLs[i]);
-                if (pref.endsWith("/"))
-                    pref = pref.copy(0, pref.getLength() - 1);
-                if (referer.equalsIgnoreAsciiCase(pref)
-                    || referer.startsWithIgnoreAsciiCase(pref + "/"))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        return referer.equalsIgnoreAsciiCase("private:user")
+            || isTrustedLocationUri(referer);
     default:
         return true;
     }
+}
+
+bool SvtSecurityOptions::isTrustedLocationUri(OUString const & uri) const {
+    MutexGuard g(GetInitMutex());
+    for (sal_Int32 i = 0; i != m_pDataContainer->m_seqSecureURLs.getLength();
+         ++i)
+    {
+        if (UCBContentHelper::IsSubPath(
+                m_pDataContainer->m_seqSecureURLs[i], uri))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 sal_Int32 SvtSecurityOptions::GetMacroSecurityLevel() const

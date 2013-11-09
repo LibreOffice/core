@@ -187,6 +187,11 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         */
         bool isSecureMacroUri(OUString const & uri, OUString const & referer) const;
 
+        /**
+           Check whether the given uri is a trusted location.
+        */
+        bool isTrustedLocationUri(OUString const & uri) const;
+
         ::com::sun::star::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const ;
         void                                            SetTrustedAuthors       ( const ::com::sun::star::uno::Sequence< Certificate >& rAuthors    )       ;
 
