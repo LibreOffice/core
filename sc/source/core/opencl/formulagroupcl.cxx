@@ -407,12 +407,9 @@ public:
                     ss << "0; i < "<< nCurWindowSize << "; i++)\n\t\t";
 #endif
                 }
-                else {
-#ifdef  ISNAN
-                    ss << "0; i < "<< nCurWindowSize << "; i++){\n\t\t";
-#else
-                    ss << "0; i < "<< nCurWindowSize << "; i++)\n\t\t";
-#endif
+                else
+                {
+                    ss << "0; i < "<< pDVR->GetArrayLength() << "; i++){\n\t\t";
                 }
                 nItems += nCurWindowSize;
             }
@@ -1239,6 +1236,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocGammaInv:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpGammaInv));
+                break;
+            case ocFloor:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i], new OpFloor));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(

@@ -789,6 +789,56 @@ void OpOdd::GenSlidingWindowFunction(
     ss << "}";
 }
 
+void OpFloor::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur);
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss <<"    int gid0=get_global_id(0);\n";
+    ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    double arg1 = " << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    double arg2 = " << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss<< "    if(isNan(arg0)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg0 = 0;\n";
+    ss<< "    if(isNan(arg1)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg1 = 0;\n";
+    ss<< "    if(isNan(arg2)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg2 = 0;\n";
+#endif
+    ss <<"    if(arg1==0.0)\n";
+    ss <<"        return 0.0;\n";
+    ss <<"    else if(arg0*arg1<0.0)\n";
+    ss <<"        return 0.0000000001;\n";
+    ss <<"    else if(arg2==0.0&&arg0<0.0)\n";
+    ss <<"        return (trunc(arg0/arg1)+1)*arg1;\n";
+    ss <<"    else\n";
+    ss <<"        return trunc(arg0/arg1)*arg1;\n";
+    ss << "}\n";
+}
+
+
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
