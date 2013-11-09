@@ -20,12 +20,12 @@
 #ifndef INCLUDED_UNOTEST_OFFICECONNECTION_HXX
 #define INCLUDED_UNOTEST_OFFICECONNECTION_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "osl/process.h"
-#include "unotest/detail/unotestdllapi.hxx"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <osl/process.h>
+#include <unotest/detail/unotestdllapi.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

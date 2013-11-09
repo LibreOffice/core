@@ -11,7 +11,7 @@
 #define INCLUDED_UNOTEST_MACROS_TEST_HXX
 
 #include <rtl/ustring.hxx>
-#include "unotest/detail/unotestdllapi.hxx"
+#include <unotest/detail/unotestdllapi.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_UNOTEST_UNIQUEPIPENAME_HXX
 #define INCLUDED_UNOTEST_UNIQUEPIPENAME_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "unotest/detail/unotestdllapi.hxx"
+#include <unotest/detail/unotestdllapi.hxx>
 
 
 namespace test {

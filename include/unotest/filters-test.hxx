@@ -9,7 +9,7 @@
 
 #include <comphelper/documentconstants.hxx>
 #include <rtl/ustring.hxx>
-#include "unotest/detail/unotestdllapi.hxx"
+#include <unotest/detail/unotestdllapi.hxx>
 
 namespace test {
 

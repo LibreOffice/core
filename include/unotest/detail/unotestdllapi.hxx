@@ -20,8 +20,8 @@
 #ifndef INCLUDED_UNOTEST_DETAIL_UNOTESTDLLAPI_HXX
 #define INCLUDED_UNOTEST_DETAIL_UNOTESTDLLAPI_HXX
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_UNOTEST
 #define OOO_DLLPUBLIC_UNOTEST SAL_DLLPUBLIC_EXPORT
