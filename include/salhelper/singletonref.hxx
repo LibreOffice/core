@@ -21,9 +21,9 @@
 #define INCLUDED_SALHELPER_SINGLETONREF_HXX
 
 #include <osl/mutex.hxx>
-#include "rtl/instance.hxx"
-#include "osl/diagnose.h"
-#include "osl/getglobalmutex.hxx"
+#include <rtl/instance.hxx>
+#include <osl/diagnose.h>
+#include <osl/getglobalmutex.hxx>
 
 
 namespace salhelper{

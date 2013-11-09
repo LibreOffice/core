@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
-#include "salhelperdllapi.h"
+#include <salhelper/salhelperdllapi.h>
 
 namespace salhelper
 {

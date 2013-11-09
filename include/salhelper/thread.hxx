@@ -10,14 +10,14 @@
 #ifndef INCLUDED_SALHELPER_THREAD_HXX
 #define INCLUDED_SALHELPER_THREAD_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
-#include "osl/thread.hxx"
-#include "sal/types.h"
-#include "salhelper/salhelperdllapi.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include <osl/thread.hxx>
+#include <sal/types.h>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace salhelper {
 

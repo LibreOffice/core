@@ -24,7 +24,7 @@
 
 #include <osl/conditn.h>
 #include <osl/mutex.hxx>
-#include "salhelperdllapi.h"
+#include <salhelper/salhelperdllapi.h>
 
 namespace salhelper
 {

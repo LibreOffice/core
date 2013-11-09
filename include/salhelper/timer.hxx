@@ -23,7 +23,7 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <osl/time.h>
-#include "salhelperdllapi.h"
+#include <salhelper/salhelperdllapi.h>
 
 namespace salhelper
 {
