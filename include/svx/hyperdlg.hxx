@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_HYPERDLG_HXX
 
 #include <sfx2/childwin.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

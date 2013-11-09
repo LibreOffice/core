@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_RELFLD_HXX
 
 #include <vcl/field.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 // class SvxRelativeField ------------------------------------------------

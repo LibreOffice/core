@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SVXCOLORVALUESET_HXX
 
 #include <svtools/valueset.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 

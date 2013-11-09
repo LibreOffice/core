@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/svdorect.hxx>
 
 //************************************************************

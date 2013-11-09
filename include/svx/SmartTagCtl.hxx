@@ -22,7 +22,7 @@
 
 #include <tools/link.hxx>
 #include <sfx2/mnuitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>

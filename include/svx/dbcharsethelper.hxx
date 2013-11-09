@@ -19,8 +19,8 @@
 
 #ifndef INCLUDED_SVX_DBCHARSETHELPER_HXX
 #define INCLUDED_SVX_DBCHARSETHELPER_HXX
-#include "svx/svxdllapi.h"
-#include "svx/dbtoolsclient.hxx"
+#include <svx/svxdllapi.h>
+#include <svx/dbtoolsclient.hxx>
 
 //........................................................................
 namespace svxform

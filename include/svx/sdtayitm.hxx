@@ -21,7 +21,7 @@
 
 #include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SdrTextAniDelayItem: public SfxUInt16Item {
 public:

@@ -23,7 +23,7 @@
 #include <svx/svdmrkv.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SfxUndoAction;
 class SdrUndoAction;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_UCSUBSET_HXX
 #define INCLUDED_SVX_UCSUBSET_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <svx/ucsubset.hrc>
 #include <vcl/metric.hxx>

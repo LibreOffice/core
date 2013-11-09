@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_IPOLYPOLYGONEDITORCONTROLLER_HXX
 #define INCLUDED_SVX_IPOLYPOLYGONEDITORCONTROLLER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/svdedtv.hxx>
 
 //************************************************************

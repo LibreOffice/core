@@ -22,7 +22,7 @@
 
 #include <svl/eitem.hxx>
 #include <svx/xenum.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/LineJoint.hpp>
 
 //---------------------

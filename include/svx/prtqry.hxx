@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_PRTQRY_HXX
 
 #include <vcl/msgbox.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SvxPrtQryBox : public MessBox
 {

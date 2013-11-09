@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XFLASIT_HXX
 
 #include <svl/poolitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

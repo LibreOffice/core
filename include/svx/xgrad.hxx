@@ -22,7 +22,7 @@
 
 #include <svx/xenum.hxx>
 #include <tools/color.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class Gradient;
 

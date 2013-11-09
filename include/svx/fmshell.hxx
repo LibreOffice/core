@@ -29,7 +29,7 @@
 
 #include <svx/svxids.hrc>
 #include <svx/fmview.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <svx/ifaceids.hxx>
 

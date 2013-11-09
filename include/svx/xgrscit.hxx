@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XGRSCIT_HXX
 
 #include <svl/intitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

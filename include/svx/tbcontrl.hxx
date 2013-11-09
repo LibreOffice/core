@@ -146,7 +146,7 @@
 #include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/strarray.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 

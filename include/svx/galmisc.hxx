@@ -28,7 +28,7 @@
 #include <svx/svdobj.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XProgressMonitor.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 

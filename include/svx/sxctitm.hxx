@@ -21,7 +21,7 @@
 
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 enum SdrCaptionType   {SDRCAPT_TYPE1,SDRCAPT_TYPE2,SDRCAPT_TYPE3,SDRCAPT_TYPE4};
 

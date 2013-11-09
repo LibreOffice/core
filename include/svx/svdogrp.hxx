@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SVDOGRP_HXX
 
 #include <svx/svdobj.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //************************************************************
 //   Vorausdeklarationen

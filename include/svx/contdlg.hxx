@@ -23,7 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/childwin.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

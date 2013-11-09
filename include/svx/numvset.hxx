@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace com{namespace sun{ namespace star{
     namespace container{

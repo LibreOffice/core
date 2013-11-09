@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SVDCRTV_HXX
 
 #include <svx/svddrgv.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class XLineAttrSetItem;
 class XFillAttrSetItem;

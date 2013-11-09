@@ -26,7 +26,7 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/button.hxx>
 #include <svtools/stdctrl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <svx/f3dchild.hxx>
 #include <svx/dlgctl3d.hxx>

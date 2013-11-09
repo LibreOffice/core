@@ -29,7 +29,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 class SvxTextForwarder;

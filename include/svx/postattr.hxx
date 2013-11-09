@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_POSTATTR_HXX
 
 #include <svl/stritem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // class SvxPostItAuthorItem ---------------------------------------------
 

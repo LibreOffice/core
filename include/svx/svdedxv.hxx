@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SVDEDXV_HXX
 
 #include <rtl/ref.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/svdglev.hxx>
 
 #include <svx/selectioncontroller.hxx>

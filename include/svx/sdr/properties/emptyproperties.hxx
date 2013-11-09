@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_PROPERTIES_EMPTYPROPERTIES_HXX
 
 #include <svx/sdr/properties/properties.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 

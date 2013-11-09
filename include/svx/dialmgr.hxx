@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_DIALMGR_HXX
 
 #include <tools/resid.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // forward ---------------------------------------------------------------
 

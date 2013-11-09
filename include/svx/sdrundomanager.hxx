@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SDRUNDOMANAGER_HXX
 #define INCLUDED_SVX_SDRUNDOMANAGER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <sal/types.h>
 #include <editeng/editund2.hxx>
 #include <tools/link.hxx>

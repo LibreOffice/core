@@ -22,7 +22,7 @@
 
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //--------------------
 // SdrGrafInvertItem -

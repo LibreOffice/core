@@ -23,7 +23,7 @@
 #include <svx/svdedxv.hxx>
 
 #include <vcl/gdimtf.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SdrExchangeView: public SdrObjEditView
 {

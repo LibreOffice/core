@@ -23,7 +23,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // Status information for specialized object dragging. In order for the model
 // to stay status free, the status data is kept on the View

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 #define INCLUDED_SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // header for class OUString
 #include <rtl/ustring.hxx>

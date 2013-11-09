@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_ROTMODIT_HXX
 
 #include <svl/eitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //----------------------------------------------------------------------------
 //  Alignment with rotated text

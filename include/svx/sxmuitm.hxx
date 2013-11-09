@@ -22,7 +22,7 @@
 #include <vcl/field.hxx>
 #include <svx/svddef.hxx>
 #include <svl/eitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // Vorgabe einer Masseinheit. Der Zahlenwert wird in diese Einheit umgerechnet
 // (ausgehend von der MapUnit des Models). Diese Einheit wird dann ggf. auch angezeigt.

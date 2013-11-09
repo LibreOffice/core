@@ -22,7 +22,7 @@
 
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //--------------------------
 // SdrGrafTransparenceItem -

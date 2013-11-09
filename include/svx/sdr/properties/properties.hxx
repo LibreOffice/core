@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_PROPERTIES_PROPERTIES_HXX
 
 #include <sal/types.h>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations

@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SVX_NBDTMG_HXX
 #define INCLUDED_SVX_NBDTMG_HXX
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <editeng/numitem.hxx>

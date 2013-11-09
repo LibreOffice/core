@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_STDDLG_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // class SvxStandardDialog -----------------------------------------------
 

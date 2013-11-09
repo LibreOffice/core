@@ -28,7 +28,7 @@
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // -----------------------------
 // - SvXMLEmbeddedObjectHelper -

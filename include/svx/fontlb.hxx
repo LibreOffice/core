@@ -23,7 +23,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/svlbitm.hxx>
 #include <vcl/virdev.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // ============================================================================
 

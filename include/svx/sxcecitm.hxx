@@ -23,7 +23,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>
 #include <svx/sdmetitm.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 enum SdrCaptionEscDir {SDRCAPT_ESCHORIZONTAL,SDRCAPT_ESCVERTICAL,SDRCAPT_ESCBESTFIT};
 

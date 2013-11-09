@@ -26,7 +26,7 @@
 #include <sal/types.h>
 #include <svtools/grfmgr.hxx>
 #include <svl/poolitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SvxShape;
 class SdrObject;

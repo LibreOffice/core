@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_PSZCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // forward ---------------------------------------------------------------
 

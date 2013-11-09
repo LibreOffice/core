@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XLNSTIT_HXX
 
 #include <svx/xit.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 class SdrModel;

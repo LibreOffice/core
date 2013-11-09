@@ -26,7 +26,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/mapmod.hxx>
 #include <tools/color.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>

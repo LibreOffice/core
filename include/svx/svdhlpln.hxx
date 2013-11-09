@@ -25,7 +25,7 @@
 #include <tools/gen.hxx>
 
 #include <vcl/pointr.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class OutputDevice;
 ////////////////////////////////////////////////////////////////////////////////////////////////////

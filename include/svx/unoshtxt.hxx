@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <editeng/unoedsrc.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

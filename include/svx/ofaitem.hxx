@@ -21,7 +21,7 @@
 
 #include <svl/poolitem.hxx>
 #include <rtl/ref.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // class OfaPtrItem ------------------------------------------------------
 

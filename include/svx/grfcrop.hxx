@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_GRFCROP_HXX
 
 #include <svl/poolitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #define GRFCROP_VERSION_SWDEFAULT       0
 #define GRFCROP_VERSION_MOVETOSVX       1

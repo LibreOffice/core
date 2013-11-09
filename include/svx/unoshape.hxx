@@ -45,7 +45,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/mutex.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Any.hxx>
 

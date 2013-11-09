@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 #define INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <tools/solar.h>
 
 class Window;

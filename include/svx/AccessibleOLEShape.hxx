@@ -23,7 +23,7 @@
 #include <svx/AccessibleShape.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace accessibility {
 

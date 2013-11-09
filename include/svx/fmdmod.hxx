@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_FMDMOD_HXX
 
 #include <svx/unomod.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SvxFmMSFactory : public SvxUnoDrawMSFactory
 {

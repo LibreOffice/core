@@ -22,7 +22,7 @@
 
 #include <svx/svdsob.hxx>
 #include <vcl/region.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace sdr
 {

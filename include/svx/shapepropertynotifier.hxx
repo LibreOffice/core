@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVX_SHAPEPROPERTYNOTIFIER_HXX
 #define INCLUDED_SVX_SHAPEPROPERTYNOTIFIER_HXX
 
-#include "svx/svxdllapi.h"
-#include "svx/shapeproperty.hxx"
+#include <svx/svxdllapi.h>
+#include <svx/shapeproperty.hxx>
 
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>

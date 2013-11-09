@@ -22,7 +22,7 @@
 #include <svl/intitem.hxx>
 #include <svx/svxids.hrc>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //-------------------------------------------------------------------------
 

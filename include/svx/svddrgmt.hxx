@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SVDDRGMT_HXX
 
 #include <svx/svddrgv.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/sdr/contact/objectcontact.hxx>
 
 class SdrDragView;

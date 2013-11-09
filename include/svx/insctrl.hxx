@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_INSCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // class SvxInsertToolBoxControl -----------------------------------------
 

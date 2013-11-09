@@ -22,7 +22,7 @@
 
 #include <svx/svdorect.hxx>
 #include <avmedia/mediaitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class Graphic;
 

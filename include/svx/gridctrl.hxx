@@ -35,7 +35,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vector>
 
 class DbGridControl;

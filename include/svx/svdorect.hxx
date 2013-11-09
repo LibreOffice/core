@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SVDORECT_HXX
 
 #include <svx/svdotext.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //************************************************************
 //   Vorausdeklarationen

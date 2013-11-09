@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XFLBTOXY_HXX
 
 #include <svl/intitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC XFillBmpTileOffsetXItem : public SfxUInt16Item
 {

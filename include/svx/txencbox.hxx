@@ -21,7 +21,7 @@
 
 #include <vcl/lstbox.hxx>
 #include <rtl/textenc.h>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SvxTextEncodingTable;
 

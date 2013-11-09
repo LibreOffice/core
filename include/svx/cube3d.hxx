@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_CUBE3D_HXX
 
 #include <svx/obj3d.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

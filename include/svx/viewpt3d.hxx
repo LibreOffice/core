@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_VIEWPT3D_HXX
 #define INCLUDED_SVX_VIEWPT3D_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>

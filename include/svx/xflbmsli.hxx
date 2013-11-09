@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XFLBMSLI_HXX
 
 #include <svl/eitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC XFillBmpSizeLogItem : public SfxBoolItem
 {

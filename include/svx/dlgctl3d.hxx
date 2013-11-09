@@ -24,7 +24,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/button.hxx>
 #include <svl/itemset.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <basegfx/vector/b3dvector.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

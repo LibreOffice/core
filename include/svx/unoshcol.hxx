@@ -26,7 +26,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <cppuhelper/implbase3.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SvxShapeCollectionMutex
 {

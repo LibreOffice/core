@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SIDEBAR_COLORPOPUP_HXX
 #define INCLUDED_SVX_SIDEBAR_COLORPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
+#include <svx/sidebar/Popup.hxx>
 
 #include <tools/color.hxx>
 

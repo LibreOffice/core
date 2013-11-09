@@ -23,7 +23,7 @@
 #include <svtools/svlbitm.hxx>
 
 #include <vcl/lstbox.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // class SvxCheckListBox -------------------------------------------------
 

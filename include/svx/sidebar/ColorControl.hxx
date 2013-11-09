@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SIDEBAR_COLORCONTROL_HXX
 #define INCLUDED_SVX_SIDEBAR_COLORCONTROL_HXX
 
-#include "svx/sidebar/PopupControl.hxx"
+#include <svx/sidebar/PopupControl.hxx>
 
 #include <svtools/valueset.hxx>
 #include <boost/function.hpp>

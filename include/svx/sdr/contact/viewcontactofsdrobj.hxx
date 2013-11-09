@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdtakitm.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations

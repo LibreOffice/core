@@ -40,7 +40,7 @@
 
 class OutputDevice;
 #include <svx/svdtypes.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <rtl/ref.hxx>
 #include <deque>

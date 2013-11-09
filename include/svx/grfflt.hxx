@@ -31,7 +31,7 @@
 #include <svx/graphctl.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // ---------------
 // - Error codes -

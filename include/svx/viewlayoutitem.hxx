@@ -21,7 +21,7 @@
 
 #include <svl/intitem.hxx>
 #include <svx/svxids.hrc>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //-------------------------------------------------------------------------
 

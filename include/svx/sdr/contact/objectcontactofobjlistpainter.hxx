@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
 
 #include <svx/sdr/contact/objectcontact.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/svdpage.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

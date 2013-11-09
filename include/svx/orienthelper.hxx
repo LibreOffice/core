@@ -23,7 +23,7 @@
 #include <memory>
 #include <vcl/window.hxx>
 #include <sfx2/itemconnect.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class NumericField;
 class CheckBox;

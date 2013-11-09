@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_POLYGN3D_HXX
 
 #include <svx/obj3d.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC E3dPolygonObj : public E3dCompoundObject
 {

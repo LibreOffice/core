@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //........................................................................
 namespace svx

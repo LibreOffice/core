@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_FMSRCIMP_HXX
 
 #include <svx/fmtools.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XListBox.hpp>

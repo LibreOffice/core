@@ -24,7 +24,7 @@
 
 #include <svx/gridctrl.hxx>
 #include <svtools/transfer.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //==================================================================
 // FmGridHeader

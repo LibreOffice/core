@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SIDEBAR_POPUP_HXX
 #define INCLUDED_SVX_SIDEBAR_POPUP_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 

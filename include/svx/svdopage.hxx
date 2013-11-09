@@ -22,7 +22,7 @@
 
 #include <svx/svdobj.hxx>
 #include <svx/sdrpageuser.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SdrPageObj : public SdrObject, public sdr::PageUser
 {

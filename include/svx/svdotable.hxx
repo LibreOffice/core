@@ -24,8 +24,8 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <rtl/ref.hxx>
-#include "svdotext.hxx"
-#include "svx/svxdllapi.h"
+#include <svx/svdotext.hxx>
+#include <svx/svxdllapi.h>
 
 //------------------------------------------------------------------------
 

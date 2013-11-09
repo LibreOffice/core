@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_TBXCUSTOMSHAPES_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

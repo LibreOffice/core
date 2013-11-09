@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/ustrbuf.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 namespace accessibility {

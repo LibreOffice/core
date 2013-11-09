@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_PFILEDLG_HXX
 
 #include <sfx2/filedlghelper.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

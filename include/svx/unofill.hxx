@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_UNOFILL_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrModel;
 

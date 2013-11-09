@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SIDEBAR_POPUPCONTAINER_HXX
 #define INCLUDED_SVX_SIDEBAR_POPUPCONTAINER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vcl/floatwin.hxx>
 
 namespace svx { namespace sidebar {

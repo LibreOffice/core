@@ -23,7 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SvxLinkWarningDialog : public SfxModalDialog
 {

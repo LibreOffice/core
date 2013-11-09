@@ -22,7 +22,7 @@
 
 #include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //----------------------
 // SdrGrafGamma100Item -

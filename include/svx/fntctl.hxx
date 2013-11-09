@@ -21,7 +21,7 @@
 
 #include <sfx2/mnuitem.hxx>
 #include <svl/lstner.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 

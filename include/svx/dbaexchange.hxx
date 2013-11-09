@@ -26,7 +26,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //........................................................................
 namespace svx

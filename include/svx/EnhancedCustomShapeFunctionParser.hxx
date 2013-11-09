@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
-#include "EnhancedCustomShapeFunctionParser.hxx"
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <vector>

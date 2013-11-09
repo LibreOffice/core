@@ -23,7 +23,7 @@
 #include <svtools/grfmgr.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //------------------
 // SdrGrafModeItem -

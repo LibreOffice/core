@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_GALTHEME_HXX
 #define INCLUDED_SVX_GALTHEME_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>

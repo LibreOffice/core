@@ -21,7 +21,7 @@
 
 
 #include <svl/poolitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <vcl/graph.hxx>
 

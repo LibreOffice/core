@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
 
 #include <svx/sdr/properties/textproperties.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 

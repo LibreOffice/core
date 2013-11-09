@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XFLCLIT_HXX
 
 #include <svx/xcolit.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                           Fuellattribute

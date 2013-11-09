@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_FMOBJFAC_HXX
 
 #include <tools/link.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrObjFactory;
 

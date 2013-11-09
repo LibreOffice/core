@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XLNSTCIT_HXX
 
 #include <svl/eitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //------------------------------
 // class XLineStartCenterItem

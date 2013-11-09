@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_TBXALIGN_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 class SVX_DLLPUBLIC SvxTbxCtlAlign: public SfxToolBoxControl

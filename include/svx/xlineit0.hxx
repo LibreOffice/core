@@ -25,7 +25,7 @@
 //---------------------
 // class LineStyleItem
 //---------------------
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC XLineStyleItem : public SfxEnumItem
 {

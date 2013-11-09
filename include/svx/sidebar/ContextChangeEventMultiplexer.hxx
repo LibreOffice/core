@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SIDEBAR_CONTEXTCHANGEEVENTMULTIPLEXER_HXX
 #define INCLUDED_SVX_SIDEBAR_CONTEXTCHANGEEVENTMULTIPLEXER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

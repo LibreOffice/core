@@ -24,7 +24,7 @@
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
 #include <svtools/grfmgr.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace sdr
 {

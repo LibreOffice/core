@@ -32,8 +32,8 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <svx/AccessibleTextHelper.hxx>
-#include "svx/svxdllapi.h"
-#include "ChildrenManager.hxx"
+#include <svx/svxdllapi.h>
+#include <svx/ChildrenManager.hxx>
 
 class SdrObject;
 

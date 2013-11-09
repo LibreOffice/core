@@ -21,7 +21,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/graph.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>

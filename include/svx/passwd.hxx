@@ -26,7 +26,7 @@
 #include <vcl/edit.hxx>
 
 #include <vcl/button.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // class SvxPasswordDialog -----------------------------------------------
 

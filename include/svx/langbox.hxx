@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/lstbox.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vcl/image.hxx>
 #include <tools/solar.h>
 

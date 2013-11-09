@@ -23,7 +23,7 @@
 #include <sal/types.h>
 
 #include <vector>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

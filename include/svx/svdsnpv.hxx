@@ -22,7 +22,7 @@
 
 #include <svx/svdpntv.hxx>
 #include <svx/svdhlpln.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 #define SDRSNAP_NOTSNAPPED  0x0000

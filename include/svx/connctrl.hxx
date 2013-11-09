@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_CONNCTRL_HXX
 
 #include <vcl/ctrl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SfxItemSet;
 class SdrEdgeObj;

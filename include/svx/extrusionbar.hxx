@@ -23,7 +23,7 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/module.hxx>
 #include <svx/ifaceids.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SfxViewShell;
 class SdrView;

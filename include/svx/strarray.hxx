@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_STRARRAY_HXX
 
 #include <tools/resary.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //  class SvxStringArray -------------------------------------------------
 

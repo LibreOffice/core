@@ -26,10 +26,10 @@
 #include <svx/svdtrans.hxx>
 #include <tools/datetime.hxx>
 #include <svx/xtextit0.hxx>
-#include "svdtext.hxx"
+#include <svx/svdtext.hxx>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/svdpagv.hxx>
 

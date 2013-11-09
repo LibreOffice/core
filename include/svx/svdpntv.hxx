@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <svl/itemset.hxx>
 #include <vcl/timer.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/options.hxx>
 

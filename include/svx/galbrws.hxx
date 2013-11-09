@@ -24,7 +24,7 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/graph.hxx>
 #include <tools/urlobj.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC GalleryChildWindow : public SfxChildWindow
 {

@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SIDEBAR_SELECTIONANALYZER_HXX
 
 #include <sfx2/sidebar/EnumContext.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrMarkList;
 class SdrObject;

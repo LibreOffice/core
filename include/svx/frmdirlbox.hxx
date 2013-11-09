@@ -23,7 +23,7 @@
 #include <vcl/lstbox.hxx>
 #include <sfx2/itemconnect.hxx>
 #include <editeng/frmdir.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SvxFrameDirectionItem;
 

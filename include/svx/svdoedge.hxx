@@ -22,7 +22,7 @@
 
 #include <svx/svdotext.hxx>
 #include <svx/svdglue.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //************************************************************
 //   Vorausdeklarationen

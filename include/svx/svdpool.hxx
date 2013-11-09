@@ -22,7 +22,7 @@
 
 #include <svx/xpool.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class XLineAttrSetItem;
 class XFillAttrSetItem;

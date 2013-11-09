@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XLNEDWIT_HXX
 
 #include <svl/metitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #define LINE_END_WIDTH_DEFAULT      (200)
 

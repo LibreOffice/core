@@ -21,8 +21,8 @@
 #define INCLUDED_SVX_XFTSHIT_HXX
 
 #include <svl/eitem.hxx>
-#include "svx/svxdllapi.h"
-#include "svx/xenum.hxx"
+#include <svx/svxdllapi.h>
+#include <svx/xenum.hxx>
 
 /*************************************************************************
 |*

@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //************************************************************
 //   Initial Declarations

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SIDEBAR_POPUPCONTROL_HXX
 #define INCLUDED_SVX_SIDEBAR_POPUPCONTROL_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vcl/ctrl.hxx>
 
 namespace svx { namespace sidebar {

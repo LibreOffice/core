@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_FMMODEL_HXX
 
 #include <svx/svdmodel.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SfxObjectShell;
 class SfxItemPool;

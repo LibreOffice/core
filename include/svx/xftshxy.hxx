@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XFTSHXY_HXX
 
 #include <svl/metitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

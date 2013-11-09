@@ -34,8 +34,8 @@
 #include <svtools/valueset.hxx>
 #include <svtools/brwbox.hxx>
 #include <svtools/grfmgr.hxx>
-#include "svx/galmisc.hxx"
-#include "svx/svxdllapi.h"
+#include <svx/galmisc.hxx>
+#include <svx/svxdllapi.h>
 
 class GalleryTheme;
 class GalleryBrowser2;

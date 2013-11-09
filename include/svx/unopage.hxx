@@ -33,7 +33,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <svl/lstner.hxx>
 #include <editeng/mutxhelp.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/servicehelper.hxx>

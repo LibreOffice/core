@@ -21,7 +21,7 @@
 
 #include <i18nlangtag/lang.h>
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <svl/zforlist.hxx>
 

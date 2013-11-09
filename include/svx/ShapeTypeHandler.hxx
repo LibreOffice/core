@@ -28,7 +28,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <rtl/ustring.hxx>
 #include <vector>

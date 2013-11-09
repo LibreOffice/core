@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SDROBJECTFILTER_HXX
 #define INCLUDED_SVX_SDROBJECTFILTER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrObject;
 

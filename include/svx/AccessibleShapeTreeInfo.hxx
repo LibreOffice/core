@@ -25,7 +25,7 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <svx/IAccessibleViewForwarder.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrView;
 class Window;

@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 struct SvxClipboardFmtItem_Impl;
 

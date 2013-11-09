@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <sal/types.h>
 #include <tools/color.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vcl/outdev.hxx>
 #include <editeng/borderline.hxx>
 

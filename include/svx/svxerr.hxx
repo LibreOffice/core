@@ -79,7 +79,7 @@
 #ifndef __RSC
 
 #include <svtools/ehdl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SvxErrorHandler : private SfxErrorHandler
 {

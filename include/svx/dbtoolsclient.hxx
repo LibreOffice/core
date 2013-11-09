@@ -25,7 +25,7 @@
 #include <osl/module.h>
 #include <tools/solar.h>
 #include <unotools/sharedunocomponent.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //........................................................................
 namespace svxform

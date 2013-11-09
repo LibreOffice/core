@@ -25,7 +25,7 @@
 #include <svx/svdhdl.hxx>
 #include <tools/weakbase.hxx>
 #include <svtools/accessibilityoptions.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/svdcrtv.hxx>
 #include <unotools/options.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

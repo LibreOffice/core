@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVX_POLYPOLYGONEDITOR_HXX
 #define INCLUDED_SVX_POLYPOLYGONEDITOR_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
-#include "svx/ipolypolygoneditorcontroller.hxx"
+#include <svx/ipolypolygoneditorcontroller.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <set>

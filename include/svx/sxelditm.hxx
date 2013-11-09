@@ -21,7 +21,7 @@
 
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrEdgeLineDeltaAnzItem: public SfxUInt16Item {
 public:

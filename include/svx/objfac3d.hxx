@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_OBJFAC3D_HXX
 #define INCLUDED_SVX_OBJFAC3D_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 /*************************************************************************

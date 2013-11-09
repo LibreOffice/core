@@ -22,7 +22,7 @@
 
 
 #include <tools/stream.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                Clipboard format for XOutDev filling attributes

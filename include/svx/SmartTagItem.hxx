@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace container {
     class XStringKeyMap;

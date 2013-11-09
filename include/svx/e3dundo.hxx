@@ -22,7 +22,7 @@
 
 #include <svx/svdundo.hxx>
 #include <svx/scene3d.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /************************************************************************\
 |*

@@ -23,7 +23,7 @@
 #include <svl/stritem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /************************************************************************/
 

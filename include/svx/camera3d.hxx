@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_CAMERA3D_HXX
 
 #include <svx/viewpt3d.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

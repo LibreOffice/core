@@ -23,7 +23,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/svxenum.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SvStream;
 

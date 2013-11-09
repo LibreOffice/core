@@ -22,7 +22,7 @@
 
 #include <svx/view3d.hxx>
 #include <comphelper/uno3.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace beans {

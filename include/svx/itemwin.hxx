@@ -22,7 +22,7 @@
 #include <vcl/bitmap.hxx>
 
 #include <svx/dlgctrl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // forward ---------------------------------------------------------------
 

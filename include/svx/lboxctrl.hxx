@@ -23,7 +23,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class ToolBox;
 class SvxPopupWindowListBox;

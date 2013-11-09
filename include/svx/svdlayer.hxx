@@ -23,7 +23,7 @@
 #include <tools/stream.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <algorithm>
 
 class SdrModel;

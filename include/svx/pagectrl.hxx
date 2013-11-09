@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_PAGECTRL_HXX
 
 #include <vcl/window.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // forward ---------------------------------------------------------------
 

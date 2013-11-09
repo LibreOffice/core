@@ -21,7 +21,7 @@
 
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //------------------------------
 // class SdrTextVertAdjustItem

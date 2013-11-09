@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <vector>
 #include <map>

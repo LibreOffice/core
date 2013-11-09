@@ -23,7 +23,7 @@
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrHint;
 class SdrModel;

@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SVDOUTL_HXX
 
 #include <editeng/outliner.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/svdobj.hxx>
 
 class SdrTextObj;

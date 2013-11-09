@@ -21,7 +21,7 @@
 
 #include <svl/itempool.hxx>
 #include <svx/numfmtsh.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // class SvxNumberInfoItem -----------------------------------------------
 

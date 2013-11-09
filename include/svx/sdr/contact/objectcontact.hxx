@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_CONTACT_OBJECTCONTACT_HXX
 
 #include <svx/sdr/animation/objectanimator.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

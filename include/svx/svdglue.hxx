@@ -26,7 +26,7 @@ class SvStream;
 class SdrObject;
 
 #include <tools/gen.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -26,7 +26,7 @@
 #include <vcl/bitmap.hxx>
 #include <editeng/borderline.hxx>
 #include <svx/framebordertype.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace editeng {
     class SvxBorderLine;

@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACT_HXX
 
 #include <sal/types.h>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

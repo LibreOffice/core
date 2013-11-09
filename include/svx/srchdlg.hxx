@@ -32,7 +32,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/srchdefs.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vector>
 
 class SvxSearchItem;

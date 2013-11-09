@@ -21,7 +21,7 @@
 
 #include <tools/solar.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class Point;
 class Rectangle;

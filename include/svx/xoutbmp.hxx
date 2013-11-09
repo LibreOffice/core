@@ -23,7 +23,7 @@
 #include <vcl/graph.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #define XOUTBMP_MIRROR_HORZ             0x00000001L
 #define XOUTBMP_MIRROR_VERT             0x00000010L

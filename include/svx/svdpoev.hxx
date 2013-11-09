@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SVX_SVDPOEV_HXX
 #define INCLUDED_SVX_SVDPOEV_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/svdedtv.hxx>
 
-#include "svx/ipolypolygoneditorcontroller.hxx"
+#include <svx/ipolypolygoneditorcontroller.hxx>
 
 class SVX_DLLPUBLIC SdrPolyEditView: public SdrEditView, public IPolyPolygonEditorController
 {

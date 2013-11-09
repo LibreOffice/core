@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SVXCOLORCHILDWINDOW_HXX
 
 #include <sfx2/childwin.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /**
  * Child of SfxChildWindow as a "container" for Controller

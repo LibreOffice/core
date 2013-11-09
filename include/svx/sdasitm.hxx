@@ -29,7 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <boost/unordered_map.hpp>
 #include <map>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrCustomShapeEngineItem : public SfxStringItem
 {

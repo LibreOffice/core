@@ -22,7 +22,7 @@
 
 #include <svx/itextprovider.hxx>
 #include <svx/sdr/properties/attributeproperties.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
 
 #include <svx/sdr/properties/attributeproperties.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 

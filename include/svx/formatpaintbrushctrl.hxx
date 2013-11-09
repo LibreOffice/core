@@ -24,7 +24,7 @@
 #include <sfx2/tbxctrl.hxx>
 // header for class Timer
 #include <vcl/timer.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //.............................................................................
 namespace svx

@@ -22,7 +22,7 @@
 
 #include <svl/poolitem.hxx>
 #include <basegfx/vector/b3dvector.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #ifndef _SVXVECT3DITEM_HXX
 #define _SVXVECT3DITEM_HXX

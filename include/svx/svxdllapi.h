@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SVXDLLAPI_H
 #define INCLUDED_SVX_SVXDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(SVX_DLLIMPLEMENTATION)
 #define SVX_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

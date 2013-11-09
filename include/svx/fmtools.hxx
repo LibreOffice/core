@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_FMTOOLS_HXX
 #define INCLUDED_SVX_FMTOOLS_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>

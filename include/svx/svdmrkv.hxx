@@ -24,7 +24,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdsnpv.hxx>
 #include <svx/svdtypes.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 // The following is not yet implemented, or just particially:

@@ -27,7 +27,7 @@
 #include <svx/e3ditem.hxx>
 #include <svx/viewpt3d.hxx>
 #include <svx/svddef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // Svx3D _3DOBJ_ Items
 class SVX_DLLPUBLIC Svx3DPercentDiagonalItem : public SfxUInt16Item {

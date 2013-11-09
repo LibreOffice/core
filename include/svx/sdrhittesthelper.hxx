@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SDRHITTESTHELPER_HXX
 #define INCLUDED_SVX_SDRHITTESTHELPER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <tools/gen.hxx>
 
 /////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XFLBMSXY_HXX
 
 #include <svl/metitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC XFillBmpSizeXItem : public SfxMetricItem
 {

@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <tools/gen.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

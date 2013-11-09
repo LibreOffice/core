@@ -27,7 +27,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrModel;
 

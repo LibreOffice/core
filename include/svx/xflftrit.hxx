@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XFLFTRIT_HXX
 
 #include <svx/xflgrit.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //-----------------------------------
 // class XFillFloatTransparenceItem -

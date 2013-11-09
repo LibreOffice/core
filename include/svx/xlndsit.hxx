@@ -23,7 +23,7 @@
 #include <svx/xit.hxx>
 
 #include <svx/xdash.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrModel;
 

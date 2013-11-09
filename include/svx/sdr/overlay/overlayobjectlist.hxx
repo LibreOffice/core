@@ -22,7 +22,7 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <sal/types.h>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 

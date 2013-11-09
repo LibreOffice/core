@@ -26,7 +26,7 @@
 #include <memory>
 
 #include <vector>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace svx {
 namespace frame {

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SVDFIELD_HXX
 #define INCLUDED_SVX_SVDFIELD_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 void SVX_DLLPUBLIC SdrRegisterFieldClasses();
 

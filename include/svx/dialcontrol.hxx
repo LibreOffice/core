@@ -23,7 +23,7 @@
 #include <memory>
 #include <vcl/ctrl.hxx>
 #include <sfx2/itemconnect.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <boost/scoped_ptr.hpp>
 

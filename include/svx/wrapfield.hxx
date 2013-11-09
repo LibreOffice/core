@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_WRAPFIELD_HXX
 
 #include <vcl/field.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace svx {
 

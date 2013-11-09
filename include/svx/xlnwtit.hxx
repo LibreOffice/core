@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XLNWTIT_HXX
 
 #include <svl/metitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //---------------------
 // class XLineWidthItem

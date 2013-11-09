@@ -27,7 +27,7 @@
 #include <vcl/layout.hxx>
 
 #include <svx/pagectrl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace svx
 {

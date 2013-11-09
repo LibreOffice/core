@@ -22,7 +22,7 @@
 
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 
 /*************************************************************************

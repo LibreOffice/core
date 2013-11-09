@@ -21,7 +21,7 @@
 #ifndef INCLUDED_SVX_FONTWORKGALLERY_HXX
 #define INCLUDED_SVX_FONTWORKGALLERY_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>

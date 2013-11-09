@@ -29,7 +29,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vector>
 
 class ImageMap;

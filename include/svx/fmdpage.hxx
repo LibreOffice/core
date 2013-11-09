@@ -22,7 +22,7 @@
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <svx/unopage.hxx>
 #include <comphelper/uno3.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //==================================================================
 // SvxFmDrawPage

@@ -33,7 +33,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <unotools/textsearch.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #define FLT_DATE_BEFORE     0
 #define FLT_DATE_SINCE      1

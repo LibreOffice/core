@@ -21,7 +21,7 @@
 
 #include <vcl/window.hxx>
 #include <editeng/svxenum.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // enum ------------------------------------------------------------------
 

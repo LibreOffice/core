@@ -24,7 +24,7 @@
 
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //---------------------
 // class XFillStyleItem

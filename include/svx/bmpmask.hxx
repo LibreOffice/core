@@ -25,7 +25,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/graph.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <svx/dlgctrl.hxx>
 

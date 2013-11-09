@@ -21,8 +21,8 @@
 #define INCLUDED_SVX_EXTRUSIONCOLORCONTROL_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include "svx/svxdllapi.h"
-#include "svx/tbxcolorupdate.hxx"
+#include <svx/svxdllapi.h>
+#include <svx/tbxcolorupdate.hxx>
 
 namespace svx {
 

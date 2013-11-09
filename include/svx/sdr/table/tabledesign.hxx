@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_TABLE_TABLEDESIGN_HXX
 #define INCLUDED_SVX_SDR_TABLE_TABLEDESIGN_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 

@@ -29,7 +29,7 @@ class SdrView;
 #include <svx/rectenum.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vector>
 
 namespace com{namespace sun{namespace star{

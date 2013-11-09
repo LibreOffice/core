@@ -23,7 +23,7 @@
 #include <vcl/window.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // class SwFrmPagePreview -------------------------------------------------------
 

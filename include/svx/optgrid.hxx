@@ -24,7 +24,7 @@
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SvxGridTabPage;
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SELECTIONCONTROLLER_HXX
 #define INCLUDED_SVX_SELECTIONCONTROLLER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <boost/shared_ptr.hpp>
 

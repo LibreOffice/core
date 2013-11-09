@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_FNTSZCTL_HXX
 
 #include <sfx2/mnuitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 

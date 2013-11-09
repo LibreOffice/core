@@ -22,7 +22,7 @@
 
 #include <svl/itempool.hxx>
 #include <svx/xdef.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 /*************************************************************************
 |*

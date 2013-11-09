@@ -25,7 +25,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <memory>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace accessibility {
 

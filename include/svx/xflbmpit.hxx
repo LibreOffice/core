@@ -21,8 +21,8 @@
 #define INCLUDED_SVX_XFLBMPIT_HXX
 
 #include <svl/eitem.hxx>
-#include "svx/rectenum.hxx"
-#include "svx/svxdllapi.h"
+#include <svx/rectenum.hxx>
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC XFillBmpPosItem : public SfxEnumItem
 {

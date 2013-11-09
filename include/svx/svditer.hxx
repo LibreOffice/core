@@ -23,7 +23,7 @@
 #include <vector>
 
 #include <sal/types.h>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrObjList;
 class SdrObject;

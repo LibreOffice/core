@@ -25,7 +25,7 @@
 //-------------
 
 #include <svx/xenum.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <vector>
 

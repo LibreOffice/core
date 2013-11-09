@@ -26,7 +26,7 @@
 #include <tools/gen.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdsob.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SfxItemSet;
 class SfxStyleSheet;

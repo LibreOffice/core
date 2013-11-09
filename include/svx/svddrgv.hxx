@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SVDDRGV_HXX
 #define INCLUDED_SVX_SVDDRGV_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <svx/svdxcgv.hxx>
 
 class SdrUndoGeoObj;

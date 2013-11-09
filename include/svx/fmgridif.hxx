@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_FMGRIDIF_HXX
 #define INCLUDED_SVX_FMGRIDIF_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

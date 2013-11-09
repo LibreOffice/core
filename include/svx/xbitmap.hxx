@@ -24,7 +24,7 @@
 #include <vcl/bitmap.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/xenum.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC XOBitmap
 {

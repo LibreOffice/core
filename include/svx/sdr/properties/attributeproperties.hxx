@@ -23,7 +23,7 @@
 #include <svl/lstner.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 

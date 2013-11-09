@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_TBXCOLOR_HXX
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //........................................................................
 namespace svx

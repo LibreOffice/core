@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_CHRTITEM_HXX
 
 #include <svl/eitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //------------------------------------------------------------------------
 

@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XMLSECCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 
 class  SvxSizeItem;

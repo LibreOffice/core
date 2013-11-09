@@ -29,7 +29,7 @@
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 // ----------------------
 // - SvXMLGraphicHelper -

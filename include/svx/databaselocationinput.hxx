@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVX_DATABASELOCATIONINPUT_HXX
 #define INCLUDED_SVX_DATABASELOCATIONINPUT_HXX
 
-#include "svx/svxdllapi.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <svx/svxdllapi.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class PushButton;
 namespace svt { class OFileURLControl; }

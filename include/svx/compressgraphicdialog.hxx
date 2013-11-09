@@ -26,7 +26,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <sfx2/bindings.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SdrGrafObj;
 

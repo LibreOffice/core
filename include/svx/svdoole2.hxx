@@ -24,12 +24,12 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include "com/sun/star/awt/XWindow.hpp"
+#include <com/sun/star/awt/XWindow.hpp>
 #include <svx/svdorect.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <sot/storage.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 //************************************************************
 //   SdrOle2Obj
