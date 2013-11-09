@@ -202,6 +202,47 @@ void OpCombina::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tem;\n";
     ss << "}";
 }
+void OpEven::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
+          formula::SingleVectorRefToken *>(tmpCur);
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss <<"    int gid0=get_global_id(0);\n";
+    ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss<< "    if(isNan(arg0)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg0 = 0;\n";
+#endif
+    ss << "    double tmp;\n";
+    ss << "    arg0 = arg0 / 2;\n";
+    ss << "    if (arg0 < 0)\n";
+    ss << "        if (trunc(arg0) == arg0)\n";
+    ss << "            tmp = arg0 * 2;\n";
+    ss << "        else\n";
+    ss << "            tmp = (trunc(arg0) - 1) * 2;\n";
+    ss << "    else if (arg0 > 0)\n";
+    ss << "         if (trunc(arg0) == arg0)\n";
+    ss << "             tmp = arg0 * 2;\n";
+    ss << "         else\n";
+    ss << "             tmp = (trunc(arg0) + 1) * 2;\n";
+    ss << "    else\n";
+    ss << "        tmp = 0;\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
 void OpCsc::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
 {
