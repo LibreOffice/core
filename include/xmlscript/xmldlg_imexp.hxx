@@ -26,8 +26,8 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "xmlscript/xmlns.h"
-#include "xmlscript/xmlscriptdllapi.h"
+#include <xmlscript/xmlns.h>
+#include <xmlscript/xmlscriptdllapi.h>
 
 namespace xmlscript
 {

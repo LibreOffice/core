@@ -26,7 +26,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
-#include "xmlscript/xmlscriptdllapi.h"
+#include <xmlscript/xmlscriptdllapi.h>
 
 namespace xmlscript
 {

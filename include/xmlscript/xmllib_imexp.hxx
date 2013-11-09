@@ -22,8 +22,8 @@
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include "xmlscript/xmlns.h"
-#include "xmlscript/xmlscriptdllapi.h"
+#include <xmlscript/xmlns.h>
+#include <xmlscript/xmlscriptdllapi.h>
 
 namespace xmlscript
 {
