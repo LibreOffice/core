@@ -22,8 +22,8 @@
 
 #include <sal/config.h>
 
-#include "i18nlangtag/i18nlangtagdllapi.h"
-#include "i18nlangtag/lang.h"
+#include <i18nlangtag/i18nlangtagdllapi.h>
+#include <i18nlangtag/lang.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <vector>
 
