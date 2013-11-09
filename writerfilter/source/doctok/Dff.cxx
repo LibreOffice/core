@@ -174,12 +174,6 @@ sal_uInt32 DffRecord::getShapeType()
 
     Records_t aRecords = findRecords(0xf00a);
 
-    if (!aRecords.empty())
-    {
-        DffFSP * pDffFSP = dynamic_cast<DffFSP*>((*aRecords.begin()).get());
-        nResult = pDffFSP->get_shptype();
-    }
-
     return nResult;
 }
 
@@ -188,12 +182,6 @@ sal_uInt32 DffRecord::getShapeId()
     sal_uInt32 nResult = 0;
 
     Records_t aRecords = findRecords(0xf00a);
-
-    if (!aRecords.empty())
-    {
-        DffFSP * pDffFSP = dynamic_cast<DffFSP*>((*aRecords.begin()).get());
-        nResult = pDffFSP->get_shpid();
-    }
 
     return nResult;
 }

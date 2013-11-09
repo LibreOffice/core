@@ -56,7 +56,6 @@
   <xsl:apply-templates select="UML:Class[UML:ModelElement.stereotype/UML:Stereotype/@xmi.idref='ww8sprm']"/>
   <xsl:comment>SPRMS</xsl:comment>
   <xsl:comment>DFFS</xsl:comment>
-  <xsl:apply-templates select="UML:Class[UML:ModelElement.stereotype/UML:Stereotype/@xmi.idref='dffrecord']"/>
   <xsl:comment>DFFS</xsl:comment>
   <xsl:comment>DFFOPT</xsl:comment>
   <xsl:apply-templates select="UML:Class[UML:ModelElement.stereotype/UML:Stereotype/@xmi.idref='dffopt']"/>
@@ -88,14 +87,6 @@
   <xsl:copy-of select="."/>
   <xsl:copy-of select="key('generalization', $theid)"/>
   <xsl:comment>SPRM <xsl:value-of select="@xmi.id"/></xsl:comment>
-</xsl:template>
-
-<xsl:template match="UML:Class[UML:ModelElement.stereotype/UML:Stereotype/@xmi.idref='dffrecord']">
-  <xsl:variable name="theid"><xsl:value-of select="@xmi.id"/></xsl:variable>
-  <xsl:comment>DFF <xsl:value-of select="@xmi.id"/></xsl:comment>
-  <xsl:copy-of select="."/>
-  <xsl:copy-of select="key('generalization', $theid)"/>
-  <xsl:comment>DFF <xsl:value-of select="@xmi.id"/></xsl:comment>
 </xsl:template>
 
 <xsl:template match="UML:Class[UML:ModelElement.stereotype/UML:Stereotype/@xmi.idref='dffopt']">

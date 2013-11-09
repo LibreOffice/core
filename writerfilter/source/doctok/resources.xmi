@@ -41400,12 +41400,6 @@
         <!--DFFS-->
         <!--DFF UDefProp-->
         <UML:Class xmi.id="UDefProp" name="UDefProp">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="resolvenoauto"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf122</UML:TaggedValue.dataValue>
@@ -41426,9 +41420,6 @@
         <!--DFF UDefProp-->
         <!--DFF FSPGR-->
         <UML:Class xmi.id="FSPGR" name="FSPGR">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf009</UML:TaggedValue.dataValue>
@@ -41572,9 +41563,6 @@
         <!--DFF OPT-->
         <!--DFF FSP-->
         <UML:Class xmi.id="FSP" name="FSP">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf00a</UML:TaggedValue.dataValue>
@@ -42487,9 +42475,6 @@
         <!--DFF FSP-->
         <!--DFF DGG-->
         <UML:Class xmi.id="DGG" name="DGG">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf006</UML:TaggedValue.dataValue>
@@ -42590,9 +42575,6 @@
         <!--DFF DGG-->
         <!--DFF BSE-->
         <UML:Class xmi.id="BSE" name="BSE">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf007</UML:TaggedValue.dataValue>
@@ -42719,9 +42701,6 @@
         <!--DFF BSE-->
         <!--DFF BlipPng-->
         <UML:Class xmi.id="BlipPng" name="BlipPng">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf01e</UML:TaggedValue.dataValue>
@@ -42779,9 +42758,6 @@
         <!--DFF BlipPng-->
         <!--DFF BlipDib-->
         <UML:Class xmi.id="BlipDib" name="BlipDib">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf01f</UML:TaggedValue.dataValue>
@@ -42839,9 +42815,6 @@
         <!--DFF BlipDib-->
         <!--DFF SpContainer-->
         <UML:Class xmi.id="SpContainer" name="SpContainer">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf004</UML:TaggedValue.dataValue>
@@ -42906,9 +42879,6 @@
         <!--DFF SpContainer-->
         <!--DFF Dg-->
         <UML:Class xmi.id="Dg" name="Dg">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="dffrecord"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xf008</UML:TaggedValue.dataValue>

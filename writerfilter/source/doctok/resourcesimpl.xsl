@@ -58,11 +58,6 @@ using namespace ::std;
           <xsl:with-param name="needsinit">true</xsl:with-param>          
         </xsl:apply-templates>
       </xsl:when>
-      <xsl:when test='.//UML:Stereotype[@xmi.idref = "dffrecord"]'>
-        <xsl:apply-templates select="." mode="ww8resource">
-          <xsl:with-param name="classprefix">Dff</xsl:with-param>
-        </xsl:apply-templates>
-      </xsl:when>
     </xsl:choose>
   </xsl:template>
 
@@ -161,10 +156,6 @@ using namespace ::std;
     <xsl:choose>
       <xsl:when test=".//UML:Stereotype[@xmi.idref='ww8resource']">
         <xsl:text>::resolve(Properties &amp; </xsl:text>
-        <xsl:text>)</xsl:text>
-      </xsl:when>
-      <xsl:when test=".//UML:Stereotype[@xmi.idref='dffrecord']">
-        <xsl:text>::resolveLocal(Properties &amp; </xsl:text>
         <xsl:text>)</xsl:text>
       </xsl:when>
     </xsl:choose>

@@ -730,66 +730,6 @@ class </xsl:text>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="UML:Class" mode="dffrecord">
-  <xsl:variable name="classname">
-  <xsl:text>Dff</xsl:text><xsl:value-of select="@name"/>
-  </xsl:variable>
-  <xsl:text>
-/** 
-    Automaticallay generated class:
-  </xsl:text>
-  <xsl:value-of select="$classname"/>
-  <xsl:text>&#xa;
-*/&#xa;
-class </xsl:text>
-<xsl:value-of select="$classname"/>
-<xsl:text> : public DffRecord
-{
-public:
-    typedef boost::shared_ptr &lt; </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text> &gt; Pointer_t;&#xa;
-    </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>(WW8StructBase * pParent, sal_uInt32 nOffset, sal_uInt32 nCount)&#xa;
-    : DffRecord(pParent, nOffset, nCount) {}&#xa;
-    </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>(WW8Stream &amp; rStream, sal_uInt32 nOffset, sal_uInt32 nCount)&#xa;
-    : DffRecord(rStream, nOffset, nCount) {}&#xa;
-    </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>(DffRecord &amp; rRecord)&#xa;
-    : DffRecord(rRecord) {}
-    virtual ~</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>();
-
-    virtual void resolveLocal(Properties &amp; props);</xsl:text>
-    <xsl:if test='.//UML:Stereotype[@xmi.idref = "resolvenoauto"]'>
-      void resolveNoAuto(Properties &amp; rHandler);
-    </xsl:if>
-    <xsl:text>
-
-    virtual DffRecord * clone() const { return new </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>(*this); }&#xa;
-    virtual string getType() const 
-    {
-        return "</xsl:text>
-        <xsl:value-of select="$classname"/>
-        <xsl:text>";
-    }
-
-    virtual string getName() const { return ""; }
-    </xsl:text>
-    <xsl:apply-templates select="." mode="declsProperties"/>
-    <xsl:text>
-};
-</xsl:text>
-</xsl:template>
-
-
 <xsl:template name="parenttype">
   <xsl:param name='type'/>
   <xsl:for-each select='/XMI/XMI.content/UML:Model/UML:Namespace.ownedElement/UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$type]'>
