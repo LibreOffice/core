@@ -14,7 +14,7 @@
 #define INCLUDED_SHELL_TDE_HEADERS_H
 
 /* ********* Suppress warnings if needed */
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
@@ -77,7 +77,7 @@
 #include <tdeabc/field.h>
 #include <tdeabc/stdaddressbook.h>
 
-#include "tde_defines.h"
+#include <tde_defines.h>
 
 #endif
 

@@ -24,12 +24,12 @@
 
 #if ENABLE_TDE
 
-#include "shell/tde_headers.h"
+#include <shell/tde_headers.h>
 
 #else // ENABLE_TDE
 
 /* ********* Suppress warnings if needed */
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
