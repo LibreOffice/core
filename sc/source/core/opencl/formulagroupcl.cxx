@@ -1262,10 +1262,16 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                           ft->Children[i], new OpCscH));
                 break;
             case ocExp:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpExp));
+                mvSubArguments.push_back(SoPHelper(ts,
+                           ft->Children[i], new OpExp));
                 break;
             case ocLog10:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLog10));
+                mvSubArguments.push_back(SoPHelper(ts,
+                           ft->Children[i], new OpLog10));
+                break;
+            case ocExpDist:
+                mvSubArguments.push_back(SoPHelper(ts,
+                    ft->Children[i], new OpExponDist));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(

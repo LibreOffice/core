@@ -254,6 +254,92 @@ void OpVar::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        return vSum / (fCount - 1.0);\n";
     ss << "}\n";
 }
+void OpExponDist::GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double rx,rlambda,rkum;\n";
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+#endif
+    ss <<"    rx = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+    ss <<"    rlambda = "<<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+    ss <<"    rkum = "<<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    if(tmpCur0->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur0);
+        ss<< "    int buffer_x_len = "<<tmpCurDVR0->GetArrayLength();
+        ss<< ";\n";
+        ss <<"    if(gid0 >= buffer_x_len || isNan(";
+        ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        rx = 0;\n";
+    }
+#endif
+#ifdef ISNAN
+    if(tmpCur1->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur1);
+        ss<< "    int buffer_lambda_len = "<< tmpCurDVR1->GetArrayLength();
+        ss<< ";\n";
+        ss <<"    if(gid0 >= buffer_lambda_len || isNan(";
+        ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        rlambda = 0;\n";
+    }
+#endif
+#ifdef ISNAN
+    if(tmpCur2->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur2);
+        ss<< "    int buffer_kum_len = "<< tmpCurDVR2->GetArrayLength();
+        ss<< ";\n";
+        ss <<"    if(gid0 >= buffer_kum_len || isNan(";
+        ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        rkum = 0;\n";
+    }
+#endif
+    ss <<"    if(rlambda <= 0.0)\n";
+    ss <<"    {\n";
+    ss <<"        tmp = -DBL_MAX;\n";
+    ss <<"    }\n";
+    ss <<"    else if(rkum == 0)\n";
+    ss <<"    {\n";
+    ss <<"        if(rx >= 0)\n";
+    ss <<"            tmp = rlambda*exp(-rlambda*rx);\n";
+    ss <<"        else\n";
+    ss <<"            tmp = 0.0;\n";
+    ss <<"    }\n";
+    ss <<"    else\n";
+    ss <<"    {\n";
+    ss <<"        if(rx > 0)\n";
+    ss <<"            tmp = 1.0 - exp(-rlambda*rx);\n";
+    ss <<"        else\n";
+    ss <<"            tmp = 0.0;\n";
+    ss <<"    }\n";
+    ss <<"    return tmp;\n";
+    ss <<"}";
+}
 void OpFdist::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
