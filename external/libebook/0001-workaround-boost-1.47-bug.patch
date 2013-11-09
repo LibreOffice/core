@@ -1,0 +1,44 @@
+From b3c1a009a79e754c8cb05d06b505b272be4b7788 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sun, 10 Nov 2013 19:32:07 +0100
+Subject: [PATCH] workaround boost 1.47 bug
+
+---
+ src/lib/FB2ContentCollector.cpp | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/src/lib/FB2ContentCollector.cpp b/src/lib/FB2ContentCollector.cpp
+index c5476df..249d47d 100644
+--- a/src/lib/FB2ContentCollector.cpp
++++ b/src/lib/FB2ContentCollector.cpp
+@@ -183,9 +183,9 @@ void FB2ContentCollector::insertBitmapData(const char *contentType, const char *
+   WPXPropertyList props;
+   props.insert("libwpd:mimetype", WPXString(contentType));
+ 
+-  const size_t dataLength(std::strlen(base64Data));
+-
+-  boost::iterator_range<const char *> base64String(base64Data, base64Data + dataLength);
++  std::string base64String(base64Data, std::strlen(base64Data));
++  const unsigned numPadding = std::count(base64String.begin(), base64String.end(), '=');
++  std::replace(base64String.begin(), base64String.end(), '=', 'A'); // replace '=' by base64 encoding of '\0'
+ 
+   namespace bit = boost::archive::iterators;
+   typedef
+@@ -197,8 +197,12 @@ void FB2ContentCollector::insertBitmapData(const char *contentType, const char *
+ 
+   if (!buffer.empty())
+   {
+-    WPXBinaryData data(&buffer[0], buffer.size());
+-    m_document->insertBinaryObject(props, data);
++    buffer.erase(buffer.end() - numPadding, buffer.end());  // erase padding '\0' characters
++    if (!buffer.empty())
++    {
++      WPXBinaryData data(&buffer[0], buffer.size());
++      m_document->insertBinaryObject(props, data);
++    }
+   }
+ }
+ 
+-- 
+1.8.3.1
+
