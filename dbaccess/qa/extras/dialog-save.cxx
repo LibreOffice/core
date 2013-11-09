@@ -62,7 +62,7 @@ DialogSaveTest::DialogSaveTest()
 void DialogSaveTest::test()
 {
     OUString aFileName;
-    aFileName = getURLFromWorkdir("/CppunitTest/testDialogSave.odb");
+    aFileName = getURLFromWorkdir("CppunitTest/testDialogSave.odb");
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
         CPPUNIT_ASSERT(xComponent.is());
@@ -95,7 +95,7 @@ void DialogSaveTest::test()
         xDocMod->setModified(sal_True);
 
         // now save; the code path to exercise in this test is the "store to same location"
-        //           do *not* change to store(As|To|URL!
+        //           do *not* change to store(As|To|URL)!
         xDocStorable->store();
 
         // close
