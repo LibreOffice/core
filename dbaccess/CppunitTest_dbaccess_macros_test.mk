@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_macros_test, \
     cppuhelper \
     dba \
     dbu \
-    dbu \
     sdbt \
     drawinglayer \
     editeng \
@@ -40,7 +39,8 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_macros_test, \
     svt \
     svx \
     svxcore \
-	test \
+    test \
+    subsequenttest \
     tl \
     tk \
     ucbhelper \
@@ -94,9 +94,12 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_macros_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_macros_test))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,dbaccess_macros_test))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,dbaccess_macros_test))
 
