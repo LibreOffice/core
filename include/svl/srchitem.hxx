@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SVL_SRCHITEM_HXX
 #define INCLUDED_SVL_SRCHITEM_HXX
 
-#include "sal/config.h"
-#include "svl/svldllapi.h"
+#include <sal/config.h>
+#include <svl/svldllapi.h>
 #include <com/sun/star/util/XSearchDescriptor.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>

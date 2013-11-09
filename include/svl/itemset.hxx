@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_ITEMSET_HXX
 #define INCLUDED_SVL_ITEMSET_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 
 #include <cstdarg>
 #include <svl/poolitem.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_PICKERHISTORYACCESS_HXX
 #define INCLUDED_SVL_PICKERHISTORYACCESS_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 
 #include <com/sun/star/uno/Reference.hxx>
 

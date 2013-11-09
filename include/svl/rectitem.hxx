@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_RECTITEM_HXX
 #define INCLUDED_SVL_RECTITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svl/poolitem.hxx>

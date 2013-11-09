@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SVL_SHAREDSTRING_HXX
 #define INCLUDED_SVL_SHAREDSTRING_HXX
 
-#include "svl/svldllapi.h"
-#include "rtl/ustring.hxx"
+#include <svl/svldllapi.h>
+#include <rtl/ustring.hxx>
 
 namespace svl {
 

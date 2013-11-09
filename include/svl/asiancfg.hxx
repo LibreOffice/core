@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SVL_ASIANCFG_HXX
 #define INCLUDED_SVL_ASIANCFG_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "boost/scoped_ptr.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "sal/types.h"
-#include "svl/svldllapi.h"
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <sal/types.h>
+#include <svl/svldllapi.h>
 
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_ITEMPROP_HXX
 #define INCLUDED_SVL_ITEMPROP_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/solar.h>
 #include <svl/itemset.hxx>
 #include <cppuhelper/implbase1.hxx>

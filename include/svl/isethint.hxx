@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_ISETHINT_HXX
 #define INCLUDED_SVL_ISETHINT_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 
 #include <svl/hint.hxx>
 

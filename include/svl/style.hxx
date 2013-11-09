@@ -27,7 +27,7 @@
 #include <vector>
 #include <comphelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <rsc/rscsfx.hxx>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>

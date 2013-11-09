@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_GLOBALNAMEITEM_HXX
 #define INCLUDED_SVL_GLOBALNAMEITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/solar.h>
 #include <tools/rtti.hxx>
 #include <tools/globname.hxx>

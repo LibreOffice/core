@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_CENUMITM_HXX
 #define INCLUDED_SVL_CENUMITM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 

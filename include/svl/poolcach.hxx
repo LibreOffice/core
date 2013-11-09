@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_POOLCACH_HXX
 #define INCLUDED_SVL_POOLCACH_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/solar.h>
 #include <vector>
 

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_ITEMITER_HXX
 #define INCLUDED_SVL_ITEMITER_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/solar.h>
 #include <svl/itemset.hxx>
 

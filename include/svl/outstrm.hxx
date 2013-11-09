@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_OUTSTRM_HXX
 #define INCLUDED_SVL_OUTSTRM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <com/sun/star/uno/Reference.h>
 #include <tools/stream.hxx>
 

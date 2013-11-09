@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_EITEM_HXX
 #define INCLUDED_SVL_EITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <svl/cenumitm.hxx>
 
 //============================================================================

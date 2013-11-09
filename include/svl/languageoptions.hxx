@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_LANGUAGEOPTIONS_HXX
 #define INCLUDED_SVL_LANGUAGEOPTIONS_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <sal/types.h>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>

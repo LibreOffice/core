@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_RNGITEM_HXX
 #define INCLUDED_SVL_RNGITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 
 class SvStream;

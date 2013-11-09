@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_METITEM_HXX
 #define INCLUDED_SVL_METITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <svl/intitem.hxx>
 
 DBG_NAMEEX_VISIBILITY(SfxMetricItem, SVL_DLLPUBLIC)

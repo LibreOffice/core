@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_NUMUNO_HXX
 #define INCLUDED_SVL_NUMUNO_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase2.hxx>

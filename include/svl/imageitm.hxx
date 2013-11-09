@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_IMAGEITM_HXX
 #define INCLUDED_SVL_IMAGEITM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <svl/intitem.hxx>
 
 struct SfxImageItem_Impl;

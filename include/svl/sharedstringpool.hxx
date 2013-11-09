@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SVL_SHAREDSTRINGPOOL_HXX
 #define INCLUDED_SVL_SHAREDSTRINGPOOL_HXX
 
-#include "svl/sharedstring.hxx"
-#include "osl/mutex.hxx"
+#include <svl/sharedstring.hxx>
+#include <osl/mutex.hxx>
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>

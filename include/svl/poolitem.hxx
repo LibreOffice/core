@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_POOLITEM_HXX
 #define INCLUDED_SVL_POOLITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <sal/config.h>

@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.h>

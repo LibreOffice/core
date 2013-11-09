@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_ZFORMAT_HXX
 #define INCLUDED_SVL_ZFORMAT_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfversi.hxx>

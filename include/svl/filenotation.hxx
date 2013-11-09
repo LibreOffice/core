@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_FILENOTATION_HXX
 #define INCLUDED_SVL_FILENOTATION_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
 
 //.........................................................................

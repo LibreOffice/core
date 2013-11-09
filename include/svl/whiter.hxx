@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_WHITER_HXX
 #define INCLUDED_SVL_WHITER_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 
 #include <limits.h>
 #include <tools/solar.h>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_LISTENERITER_HXX
 #define INCLUDED_SVL_LISTENERITER_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/rtti.hxx>
 
 class SvtListener;

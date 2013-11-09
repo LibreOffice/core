@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_PTITEM_HXX
 #define INCLUDED_SVL_PTITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <tools/gen.hxx>
 

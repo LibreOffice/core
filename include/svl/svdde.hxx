@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_SVDDE_HXX
 #define INCLUDED_SVL_SVDDE_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <sot/exchange.hxx>
 #include <tools/solar.h>
 #include <tools/link.hxx>

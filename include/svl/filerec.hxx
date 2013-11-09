@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_FILEREC_HXX
 #define INCLUDED_SVL_FILEREC_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vector>

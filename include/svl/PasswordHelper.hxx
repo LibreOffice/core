@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVL_PASSWORDHELPER_HXX
 #define INCLUDED_SVL_PASSWORDHELPER_HXX
 
-#include "svl/svldllapi.h"
-#include "sal/types.h"
-#include "com/sun/star/uno/Sequence.hxx"
+#include <svl/svldllapi.h>
+#include <sal/types.h>
+#include <com/sun/star/uno/Sequence.hxx>
 
 class SvPasswordHelper
 {

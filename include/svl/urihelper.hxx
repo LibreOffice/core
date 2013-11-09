@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVL_URIHELPER_HXX
 #define INCLUDED_SVL_URIHELPER_HXX
 
-#include "svl/svldllapi.h"
-#include "com/sun/star/uno/Reference.hxx"
+#include <svl/svldllapi.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/textenc.h>
 #include <tools/link.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_OWNLIST_HXX
 #define INCLUDED_SVL_OWNLIST_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vector>
 

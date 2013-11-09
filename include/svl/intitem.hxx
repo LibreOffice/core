@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_INTITEM_HXX
 #define INCLUDED_SVL_INTITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <svl/cintitem.hxx>
 
 //============================================================================

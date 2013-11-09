@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_INETTYPE_HXX
 #define INCLUDED_SVL_INETTYPE_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/inetmime.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

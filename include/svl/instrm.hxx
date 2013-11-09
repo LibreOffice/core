@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_INSTRM_HXX
 #define INCLUDED_SVL_INSTRM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <com/sun/star/uno/Reference.h>
 #include <tools/stream.hxx>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_ILSTITEM_HXX
 #define INCLUDED_SVL_ILSTITEM_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vector>

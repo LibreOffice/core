@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_STRMADPT_HXX
 #define INCLUDED_SVL_STRMADPT_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_ZFORLIST_HXX
 #define INCLUDED_SVL_ZFORLIST_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>

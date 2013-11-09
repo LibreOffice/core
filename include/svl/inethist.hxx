@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_INETHIST_HXX
 #define INCLUDED_SVL_INETHIST_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <tools/solar.h>
 #include <tools/urlobj.hxx>
 #include <svl/brdcst.hxx>
