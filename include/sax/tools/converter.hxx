@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAX_TOOLS_CONVERTER_HXX
 #define INCLUDED_SAX_TOOLS_CONVERTER_HXX
 
-#include "sax/saxdllapi.h"
+#include <sax/saxdllapi.h>
 
 #include <boost/optional/optional.hpp>
 

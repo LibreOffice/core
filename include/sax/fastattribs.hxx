@@ -26,7 +26,7 @@
 #include <com/sun/star/xml/FastAttribute.hpp>
 
 #include <cppuhelper/implbase1.hxx>
-#include "sax/saxdllapi.h"
+#include <sax/saxdllapi.h>
 
 #include <map>
 #include <vector>
