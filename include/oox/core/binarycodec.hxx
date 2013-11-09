@@ -25,7 +25,7 @@
 
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
 namespace oox { class AttributeList; }
 

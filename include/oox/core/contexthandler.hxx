@@ -24,9 +24,9 @@
 #include <boost/shared_ptr.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
-#include "oox/token/namespaces.hxx"
-#include "oox/token/tokens.hxx"
-#include "oox/dllapi.h"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XLocator; } }

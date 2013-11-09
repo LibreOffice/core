@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_THEMEFRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_DRAWINGML_THEMEFRAGMENTHANDLER_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/dllapi.h"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/dllapi.h>
 
 namespace oox {
 namespace drawingml {

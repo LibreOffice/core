@@ -20,10 +20,10 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_PLOTAREAMODEL_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_PLOTAREAMODEL_HXX
 
-#include "oox/drawingml/shape.hxx"
-#include "oox/drawingml/chart/axismodel.hxx"
-#include "oox/drawingml/chart/seriesmodel.hxx"
-#include "oox/drawingml/chart/typegroupmodel.hxx"
+#include <oox/drawingml/shape.hxx>
+#include <oox/drawingml/chart/axismodel.hxx>
+#include <oox/drawingml/chart/seriesmodel.hxx>
+#include <oox/drawingml/chart/typegroupmodel.hxx>
 
 namespace oox {
 namespace drawingml {

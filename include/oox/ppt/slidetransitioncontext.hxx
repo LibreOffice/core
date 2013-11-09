@@ -20,8 +20,8 @@
 #ifndef OOX_PPT_SLIDETRANSITIONCONTEXT
 #define OOX_PPT_SLIDETRANSITIONCONTEXT
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/ppt/slidetransition.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/ppt/slidetransition.hxx>
 
 namespace oox { class PropertyMap; }
 

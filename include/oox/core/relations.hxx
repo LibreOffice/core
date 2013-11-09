@@ -22,8 +22,8 @@
 
 #include <map>
 #include <boost/shared_ptr.hpp>
-#include "oox/helper/helper.hxx"
-#include "oox/dllapi.h"
+#include <oox/helper/helper.hxx>
+#include <oox/dllapi.h>
 
 namespace oox {
 namespace core {

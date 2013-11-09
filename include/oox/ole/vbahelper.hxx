@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_VBAHELPER_HXX
 #define INCLUDED_OOX_OLE_VBAHELPER_HXX
 
-#include "oox/helper/binarystreambase.hxx"
+#include <oox/helper/binarystreambase.hxx>
 
 namespace oox { class BinaryInputStream; }
 

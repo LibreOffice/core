@@ -20,10 +20,10 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 
-#include "oox/core/contexthandler2.hxx"
-#include "oox/drawingml/clrscheme.hxx"
-#include "oox/drawingml/color.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
+#include <oox/core/contexthandler2.hxx>
+#include <oox/drawingml/clrscheme.hxx>
+#include <oox/drawingml/color.hxx>
+#include <oox/drawingml/colorchoicecontext.hxx>
 
 namespace oox { namespace drawingml {
 

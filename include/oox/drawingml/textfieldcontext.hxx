@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTFIELDCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTFIELDCONTEXT_HXX
 
-#include "oox/core/contexthandler2.hxx"
+#include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
 

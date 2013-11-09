@@ -20,8 +20,8 @@
 #ifndef OOX_PPT_TIMENODELISTCONTEXT
 #define OOX_PPT_TIMENODELISTCONTEXT
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/ppt/timenode.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/ppt/timenode.hxx>
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
 

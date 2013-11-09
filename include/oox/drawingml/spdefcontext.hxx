@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_SPDEFCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_SPDEFCONTEXT_HXX
 
-#include "oox/drawingml/shape.hxx"
-#include "oox/core/contexthandler2.hxx"
+#include <oox/drawingml/shape.hxx>
+#include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
 

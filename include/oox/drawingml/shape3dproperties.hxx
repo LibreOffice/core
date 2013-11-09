@@ -23,9 +23,9 @@
 #include <map>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/color.hxx"
-#include "oox/helper/helper.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/color.hxx>
+#include <oox/helper/helper.hxx>
 
 namespace oox { class PropertyMap; }
 namespace oox { class PropertySet; }

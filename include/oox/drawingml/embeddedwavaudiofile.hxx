@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
-#include "oox/core/fragmenthandler.hxx"
+#include <oox/core/fragmenthandler.hxx>
 
 namespace oox { namespace drawingml {
 

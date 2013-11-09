@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_TITLEMODEL_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_TITLEMODEL_HXX
 
-#include "oox/drawingml/shape.hxx"
-#include "oox/drawingml/chart/datasourcemodel.hxx"
+#include <oox/drawingml/shape.hxx>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
 
 namespace oox {
 namespace drawingml {

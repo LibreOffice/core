@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
 
-#include "oox/drawingml/chart/chartcontextbase.hxx"
+#include <oox/drawingml/chart/chartcontextbase.hxx>
 
 namespace oox {
 namespace drawingml {

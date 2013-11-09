@@ -22,8 +22,8 @@
 
 #include <vector>
 #include <com/sun/star/uno/Reference.hxx>
-#include "oox/helper/refmap.hxx"
-#include "oox/dllapi.h"
+#include <oox/helper/refmap.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace embed { class XStorage; }

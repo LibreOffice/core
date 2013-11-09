@@ -27,7 +27,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-#include "oox/helper/helper.hxx"
+#include <oox/helper/helper.hxx>
 
 namespace oox {
 namespace drawingml {

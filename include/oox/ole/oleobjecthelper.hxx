@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_OLEOBJECTHELPER_HXX
 #define INCLUDED_OOX_OLE_OLEOBJECTHELPER_HXX
 
-#include "oox/helper/binarystreambase.hxx"
+#include <oox/helper/binarystreambase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Size; }

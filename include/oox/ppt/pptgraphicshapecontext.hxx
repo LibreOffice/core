@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_PPT_PPTGRAPHICSHAPECONTEXT_HXX
 #define INCLUDED_OOX_PPT_PPTGRAPHICSHAPECONTEXT_HXX
 
-#include "oox/drawingml/graphicshapecontext.hxx"
+#include <oox/drawingml/graphicshapecontext.hxx>
 
 namespace oox { namespace ppt {
 

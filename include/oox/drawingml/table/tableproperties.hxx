@@ -20,10 +20,10 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLEPROPERTIES_HXX
 #define INCLUDED_OOX_DRAWINGML_TABLE_TABLEPROPERTIES_HXX
 
-#include "oox/drawingml/table/tablerow.hxx"
-#include "oox/drawingml/table/tablestyle.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/color.hxx"
+#include <oox/drawingml/table/tablerow.hxx>
+#include <oox/drawingml/table/tablestyle.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/drawingml/color.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>

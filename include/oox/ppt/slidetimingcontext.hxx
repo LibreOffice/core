@@ -21,8 +21,8 @@
 #define OOX_PPT_SLIDETIMINGCONTEXT
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
-#include "oox/ppt/timenode.hxx"
-#include "oox/core/fragmenthandler2.hxx"
+#include <oox/ppt/timenode.hxx>
+#include <oox/core/fragmenthandler2.hxx>
 
 #include <stack>
 #include <vector>

@@ -22,10 +22,10 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/core/contexthandler.hxx"
-#include "oox/dllapi.h"
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/core/contexthandler.hxx>
+#include <oox/dllapi.h>
 
 namespace oox {
 namespace core {

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_CORE_RELATIONSHANDLER_HXX
 #define INCLUDED_OOX_CORE_RELATIONSHANDLER_HXX
 
-#include "oox/core/fragmenthandler.hxx"
+#include <oox/core/fragmenthandler.hxx>
 
 namespace oox {
 namespace core {

@@ -21,8 +21,8 @@
 #define INCLUDED_OOX_VML_VMLSHAPECONTAINER_HXX
 
 #include <com/sun/star/awt/Rectangle.hpp>
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/refvector.hxx>
 #include <stack>
 
 namespace com { namespace sun { namespace star {

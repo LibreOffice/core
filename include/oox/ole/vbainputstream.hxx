@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_OLE_VBAINPUTSTREAM_HXX
 
 #include <vector>
-#include "oox/helper/binaryinputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
 
 namespace oox {
 namespace ole {

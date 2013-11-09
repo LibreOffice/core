@@ -20,9 +20,9 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTBODY_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTBODY_HXX
 
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/textbodyproperties.hxx"
-#include "oox/drawingml/textliststyle.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/textbodyproperties.hxx>
+#include <oox/drawingml/textliststyle.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace text { class XText; }

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_CHARTDRAWINGFRAGMENT_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_CHARTDRAWINGFRAGMENT_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/drawingml/shape.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/drawingml/shape.hxx>
 
 namespace oox {
 namespace drawingml {

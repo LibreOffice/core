@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_PPT_PPTSHAPEPROPERTIESCONTEXT_HXX
 #define INCLUDED_OOX_PPT_PPTSHAPEPROPERTIESCONTEXT_HXX
 
-#include "oox/drawingml/shapepropertiescontext.hxx"
+#include <oox/drawingml/shapepropertiescontext.hxx>
 
 namespace oox { namespace ppt {
 

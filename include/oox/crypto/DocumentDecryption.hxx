@@ -11,19 +11,19 @@
 #ifndef INCLUDED_OOX_CRYPTO_DOCUMENTDECRYPTION_HXX
 #define INCLUDED_OOX_CRYPTO_DOCUMENTDECRYPTION_HXX
 
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
-#include "oox/ole/olestorage.hxx"
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
+#include <oox/ole/olestorage.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include "CryptTools.hxx"
-#include "AgileEngine.hxx"
-#include "Standard2007Engine.hxx"
+#include <oox/crypto/CryptTools.hxx>
+#include <oox/crypto/AgileEngine.hxx>
+#include <oox/crypto/Standard2007Engine.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>

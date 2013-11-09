@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <com/sun/star/io/XInputStream.hpp>
-#include "oox/helper/binarystreambase.hxx"
+#include <oox/helper/binarystreambase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }

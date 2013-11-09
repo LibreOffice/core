@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLELISTFRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLELISTFRAGMENTHANDLER_HXX
 
-#include "oox/drawingml/table/tablestylelist.hxx"
-#include "oox/core/fragmenthandler2.hxx"
+#include <oox/drawingml/table/tablestylelist.hxx>
+#include <oox/core/fragmenthandler2.hxx>
 
 namespace oox {
 namespace drawingml {

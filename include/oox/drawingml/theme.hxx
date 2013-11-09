@@ -20,11 +20,11 @@
 #ifndef INCLUDED_OOX_DRAWINGML_THEME_HXX
 #define INCLUDED_OOX_DRAWINGML_THEME_HXX
 
-#include "oox/drawingml/clrscheme.hxx"
-#include "oox/drawingml/shape.hxx"
-#include "oox/drawingml/textfont.hxx"
+#include <oox/drawingml/clrscheme.hxx>
+#include <oox/drawingml/shape.hxx>
+#include <oox/drawingml/textfont.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
 namespace oox {
 namespace drawingml {

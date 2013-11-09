@@ -21,8 +21,8 @@
 #define INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAM_HXX
 
 #include <rtl/ustring.hxx>
-#include "oox/drawingml/shape.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/drawingml/shape.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 
 #include <com/sun/star/xml/dom/XDocument.hpp>
 

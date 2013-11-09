@@ -24,7 +24,7 @@
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
 
 namespace com { namespace sun { namespace star {

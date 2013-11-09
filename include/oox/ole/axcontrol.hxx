@@ -21,11 +21,11 @@
 #define INCLUDED_OOX_OLE_AXCONTROL_HXX
 
 #include <boost/shared_ptr.hpp>
-#include "oox/helper/binarystreambase.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/ole/axbinaryreader.hxx"
-#include "oox/ole/olehelper.hxx"
-#include "oox/dllapi.h"
+#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/ole/axbinaryreader.hxx>
+#include <oox/ole/olehelper.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }

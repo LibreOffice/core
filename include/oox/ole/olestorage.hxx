@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_OLESTORAGE_HXX
 #define INCLUDED_OOX_OLE_OLESTORAGE_HXX
 
-#include "oox/helper/storagebase.hxx"
+#include <oox/helper/storagebase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }

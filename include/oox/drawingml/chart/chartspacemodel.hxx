@@ -20,9 +20,9 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_CHARTSPACEMODEL_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_CHARTSPACEMODEL_HXX
 
-#include "oox/drawingml/shape.hxx"
-#include "oox/drawingml/chart/plotareamodel.hxx"
-#include "oox/drawingml/chart/titlemodel.hxx"
+#include <oox/drawingml/shape.hxx>
+#include <oox/drawingml/chart/plotareamodel.hxx>
+#include <oox/drawingml/chart/titlemodel.hxx>
 
 namespace oox {
 namespace drawingml {

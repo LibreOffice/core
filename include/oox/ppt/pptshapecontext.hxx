@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_PPT_PPTSHAPECONTEXT_HXX
 #define INCLUDED_OOX_PPT_PPTSHAPECONTEXT_HXX
 
-#include "oox/drawingml/shapecontext.hxx"
-#include "oox/ppt/slidepersist.hxx"
+#include <oox/drawingml/shapecontext.hxx>
+#include <oox/ppt/slidepersist.hxx>
 
 namespace oox { namespace ppt {
 

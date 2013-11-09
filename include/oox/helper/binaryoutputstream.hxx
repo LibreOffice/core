@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 #define INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 
-#include "oox/helper/binarystreambase.hxx"
+#include <oox/helper/binarystreambase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XOutputStream; }

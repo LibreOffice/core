@@ -20,7 +20,7 @@
 #ifndef OOX_PPT_LAYOUTFRAGMENTHANDLER
 #define OOX_PPT_LAYOUTFRAGMENTHANDLER
 
-#include "oox/ppt/slidefragmenthandler.hxx"
+#include <oox/ppt/slidefragmenthandler.hxx>
 
 #include <vector>
 

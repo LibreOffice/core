@@ -11,16 +11,16 @@
 #ifndef INCLUDED_OOX_CRYPTO_DOCUMENTENCRYPTION_HXX
 #define INCLUDED_OOX_CRYPTO_DOCUMENTENCRYPTION_HXX
 
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
-#include "oox/ole/olestorage.hxx"
+#include <oox/ole/olestorage.hxx>
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include "CryptTools.hxx"
-#include "Standard2007Engine.hxx"
+#include <oox/crypto/CryptTools.hxx>
+#include <oox/crypto/Standard2007Engine.hxx>
 
 #include <vector>
 

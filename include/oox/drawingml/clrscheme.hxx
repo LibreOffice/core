@@ -23,8 +23,8 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <vector>
-#include "oox/drawingml/color.hxx"
-#include "oox/dllapi.h"
+#include <oox/drawingml/color.hxx>
+#include <oox/dllapi.h>
 
 namespace oox { namespace drawingml {
 

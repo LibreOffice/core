@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_FILLPROPERTIESGROUPCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_FILLPROPERTIESGROUPCONTEXT_HXX
 
-#include "oox/drawingml/colorchoicecontext.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include <oox/drawingml/colorchoicecontext.hxx>
+#include <oox/drawingml/fillproperties.hxx>
 
 namespace oox {
 namespace drawingml {

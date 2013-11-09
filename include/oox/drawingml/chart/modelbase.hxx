@@ -20,9 +20,9 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_MODELBASE_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_MODELBASE_HXX
 
-#include "oox/helper/helper.hxx"
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/refvector.hxx>
 
 namespace oox { class AttributeList; }
 

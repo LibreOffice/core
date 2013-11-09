@@ -20,10 +20,10 @@
 #ifndef INCLUDED_OOX_PPT_SLIDEMASTERTEXTSTYLESCONTEXT_HXX
 #define INCLUDED_OOX_PPT_SLIDEMASTERTEXTSTYLESCONTEXT_HXX
 
-#include "oox/drawingml/theme.hxx"
-#include "oox/core/contexthandler.hxx"
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/ppt/slidepersist.hxx"
+#include <oox/drawingml/theme.hxx>
+#include <oox/core/contexthandler.hxx>
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/ppt/slidepersist.hxx>
 
 namespace oox { namespace ppt {
 

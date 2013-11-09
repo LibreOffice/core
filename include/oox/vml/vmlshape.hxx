@@ -23,9 +23,9 @@
 #include <memory>
 #include <vector>
 #include <com/sun/star/awt/Point.hpp>
-#include "oox/vml/vmlformatting.hxx"
-#include "oox/vml/vmltextbox.hxx"
-#include "oox/dllapi.h"
+#include <oox/vml/vmlformatting.hxx>
+#include <oox/vml/vmltextbox.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }

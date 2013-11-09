@@ -26,10 +26,10 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include "oox/core/filterbase.hxx"
-#include "oox/core/relations.hxx"
-#include "oox/drawingml/table/tablestylelist.hxx"
-#include "oox/dllapi.h"
+#include <oox/core/filterbase.hxx>
+#include <oox/core/relations.hxx>
+#include <oox/drawingml/table/tablestylelist.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }

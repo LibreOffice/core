@@ -20,11 +20,11 @@
 #ifndef INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 #define INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 
-#include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/customshapeproperties.hxx"
-#include "oox/drawingml/textliststyle.hxx"
-#include "oox/drawingml/shape3dproperties.hxx"
+#include <oox/helper/propertymap.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/customshapeproperties.hxx>
+#include <oox/drawingml/textliststyle.hxx>
+#include <oox/drawingml/shape3dproperties.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -33,7 +33,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vector>
 #include <map>
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
 namespace oox { namespace vml {
     struct OleObjectInfo;

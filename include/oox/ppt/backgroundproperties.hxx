@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_PPT_BACKGROUNDPROPERTIES_HXX
 #define INCLUDED_OOX_PPT_BACKGROUNDPROPERTIES_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/drawingml/fillproperties.hxx>
 
 namespace oox { namespace ppt {
 

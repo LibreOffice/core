@@ -21,8 +21,8 @@
 #ifndef OOX_DRAWINGML_TABLECELLCONTEXT
 #define OOX_DRAWINGML_TABLECELLCONTEXT
 
-#include "oox/drawingml/shapecontext.hxx"
-#include "oox/drawingml/table/tablecell.hxx"
+#include <oox/drawingml/shapecontext.hxx>
+#include <oox/drawingml/table/tablecell.hxx>
 
 namespace oox { namespace drawingml { namespace table {
 

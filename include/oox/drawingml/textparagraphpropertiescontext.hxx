@@ -23,10 +23,10 @@
 #include <list>
 
 #include <com/sun/star/style/TabStop.hpp>
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/textparagraphproperties.hxx"
-#include "oox/drawingml/textspacing.hxx"
-#include "oox/core/contexthandler2.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/textparagraphproperties.hxx>
+#include <oox/drawingml/textspacing.hxx>
+#include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
 

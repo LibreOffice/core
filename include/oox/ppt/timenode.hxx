@@ -28,11 +28,11 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
-#include "oox/helper/propertymap.hxx"
-#include "oox/ppt/slidetransition.hxx"
-#include "oox/ppt/slidepersist.hxx"
-#include "oox/ppt/animationspersist.hxx"
-#include "oox/ppt/timenode.hxx"
+#include <oox/helper/propertymap.hxx>
+#include <oox/ppt/slidetransition.hxx>
+#include <oox/ppt/slidepersist.hxx>
+#include <oox/ppt/animationspersist.hxx>
+#include <oox/ppt/timenode.hxx>
 
 namespace oox { namespace ppt {
 

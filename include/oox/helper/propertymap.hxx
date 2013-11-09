@@ -25,8 +25,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
-#include "oox/token/properties.hxx"
-#include "oox/dllapi.h"
+#include <oox/token/properties.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct PropertyValue;

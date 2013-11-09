@@ -10,8 +10,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
 
-#include "oox/core/contexthandler2.hxx"
-#include "oox/dllapi.h"
+#include <oox/core/contexthandler2.hxx>
+#include <oox/dllapi.h>
 
 namespace oox { namespace drawingml {
 

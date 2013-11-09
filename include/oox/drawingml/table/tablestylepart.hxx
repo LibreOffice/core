@@ -22,11 +22,11 @@
 
 #include <rtl/ustring.hxx>
 #include <boost/optional.hpp>
-#include "oox/drawingml/color.hxx"
-#include "oox/drawingml/textfont.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/shape.hxx"
+#include <oox/drawingml/color.hxx>
+#include <oox/drawingml/textfont.hxx>
+#include <oox/drawingml/fillproperties.hxx>
+#include <oox/drawingml/lineproperties.hxx>
+#include <oox/drawingml/shape.hxx>
 #include <map>
 
 namespace oox { namespace drawingml { namespace table {

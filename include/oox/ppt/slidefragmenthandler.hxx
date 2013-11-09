@@ -21,9 +21,9 @@
 #define OOX_PPT_SLIDEFRAGMENTHANDLER
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include "oox/helper/propertymap.hxx"
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/ppt/slidepersist.hxx"
+#include <oox/helper/propertymap.hxx>
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/ppt/slidepersist.hxx>
 
 #include <stack>
 #include <vector>

@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCEMODEL_HXX
 
 #include <com/sun/star/uno/Any.hxx>
-#include "oox/drawingml/chart/modelbase.hxx"
+#include <oox/drawingml/chart/modelbase.hxx>
 
 namespace oox {
 namespace drawingml {

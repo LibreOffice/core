@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
 #define INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
 
-#include "oox/drawingml/table/tablecell.hxx"
+#include <oox/drawingml/table/tablecell.hxx>
 #include <vector>
 
 namespace oox { namespace drawingml { namespace table {

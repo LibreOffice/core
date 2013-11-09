@@ -26,7 +26,7 @@
 #include <oox/ole/axcontrol.hxx>
 #include <oox/ole/oleobjecthelper.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }

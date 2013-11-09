@@ -21,7 +21,7 @@
 #ifndef OOX_DRAWINGML_TABLECONTEXT
 #define OOX_DRAWINGML_TABLECONTEXT
 
-#include "oox/drawingml/shapecontext.hxx"
+#include <oox/drawingml/shapecontext.hxx>
 
 namespace oox { namespace drawingml { namespace table {
 

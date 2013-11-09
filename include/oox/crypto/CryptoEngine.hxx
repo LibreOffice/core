@@ -13,8 +13,8 @@
 
 #include <vector>
 
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
 
 namespace oox {
 namespace core {

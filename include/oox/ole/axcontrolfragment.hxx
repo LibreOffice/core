@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_AXCONTROLFRAGMENT_HXX
 #define INCLUDED_OOX_OLE_AXCONTROLFRAGMENT_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
+#include <oox/core/fragmenthandler2.hxx>
 
 namespace oox {
 namespace ole {

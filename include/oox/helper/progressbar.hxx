@@ -22,7 +22,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
 
 namespace com { namespace sun { namespace star {

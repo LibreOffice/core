@@ -25,8 +25,8 @@
 #include <sal/types.h>
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
-#include "oox/helper/helper.hxx"
-#include "oox/dllapi.h"
+#include <oox/helper/helper.hxx>
+#include <oox/dllapi.h>
 
 namespace oox { class GraphicHelper; }
 

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_OBJECTFORMATTER_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_OBJECTFORMATTER_HXX
 
-#include "oox/helper/propertyset.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/chart/modelbase.hxx"
+#include <oox/helper/propertyset.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/chart/modelbase.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 { class XChartDocument; }

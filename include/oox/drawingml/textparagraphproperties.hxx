@@ -21,11 +21,11 @@
 #define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIES_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/textcharacterproperties.hxx"
+#include <oox/drawingml/fillpropertiesgroupcontext.hxx>
+#include <oox/drawingml/textcharacterproperties.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
-#include "oox/drawingml/textfont.hxx"
-#include "textspacing.hxx"
+#include <oox/drawingml/textfont.hxx>
+#include <oox/drawingml/textspacing.hxx>
 #include <boost/optional.hpp>
 
 namespace com { namespace sun { namespace star {

@@ -26,7 +26,7 @@
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }

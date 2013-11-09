@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_SHAPEPROPERTIESCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_SHAPEPROPERTIESCONTEXT_HXX
 
-#include "oox/core/contexthandler2.hxx"
-#include "oox/drawingml/shape.hxx"
+#include <oox/core/contexthandler2.hxx>
+#include <oox/drawingml/shape.hxx>
 
 namespace oox { namespace drawingml {
 

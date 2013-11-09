@@ -20,10 +20,10 @@
 #ifndef INCLUDED_OOX_CORE_FRAGMENTHANDLER2_HXX
 #define INCLUDED_OOX_CORE_FRAGMENTHANDLER2_HXX
 
-#include "oox/core/contexthandler2.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include <oox/core/contexthandler2.hxx>
+#include <oox/core/fragmenthandler.hxx>
 #include <vector>
-#include "oox/dllapi.h"
+#include <oox/dllapi.h>
 
 namespace oox {
 namespace core {

@@ -21,17 +21,17 @@
 #define INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
 
 #include <boost/shared_ptr.hpp>
-#include "oox/drawingml/shape.hxx"
-#include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/clrscheme.hxx"
-#include "oox/drawingml/textliststyle.hxx"
-#include "oox/drawingml/textparagraphproperties.hxx"
+#include <oox/drawingml/shape.hxx>
+#include <oox/drawingml/theme.hxx>
+#include <oox/drawingml/clrscheme.hxx>
+#include <oox/drawingml/textliststyle.hxx>
+#include <oox/drawingml/textparagraphproperties.hxx>
 #include <oox/ppt/headerfooter.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/ppt/comments.hxx"
+#include <oox/core/fragmenthandler.hxx>
+#include <oox/ppt/comments.hxx>
 
 #include <list>
 

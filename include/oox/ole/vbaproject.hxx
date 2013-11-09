@@ -22,10 +22,10 @@
 
 #include <map>
 #include <com/sun/star/uno/XInterface.hpp>
-#include "oox/helper/refvector.hxx"
-#include "oox/helper/storagebase.hxx"
-#include "oox/dllapi.h"
-#include "oox/ole/vbamodule.hxx"
+#include <oox/helper/refvector.hxx>
+#include <oox/helper/storagebase.hxx>
+#include <oox/dllapi.h>
+#include <oox/ole/vbamodule.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }

@@ -21,23 +21,23 @@
 #define INCLUDED_OOX_OLE_OLEHELPER_HXX
 
 #include <rtl/ustring.hxx>
-#include "oox/helper/binarystreambase.hxx"
-#include "oox/helper/storagebase.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "com/sun/star/form/XFormComponent.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/frame/XModel.hpp"
-#include "com/sun/star/frame/XFrame.hpp"
-#include "com/sun/star/drawing/XShapes.hpp"
-#include "com/sun/star/awt/XControlModel.hpp"
-#include "com/sun/star/io/XInputStream.hpp"
-#include "com/sun/star/io/XOutputStream.hpp"
+#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/storagebase.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include "com/sun/star/container/XIndexContainer.hpp"
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <filter/msfilter/msocximex.hxx>
-#include "oox/dllapi.h"
-#include "sot/storage.hxx"
+#include <oox/dllapi.h>
+#include <sot/storage.hxx>
 
 class SvGlobalName;
 

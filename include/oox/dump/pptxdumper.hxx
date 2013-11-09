@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DUMP_PPTXDUMPER_HXX
 #define INCLUDED_OOX_DUMP_PPTXDUMPER_HXX
 
-#include "oox/dump/dumperbase.hxx"
+#include <oox/dump/dumperbase.hxx>
 
 #if OOX_INCLUDE_DUMPER
 

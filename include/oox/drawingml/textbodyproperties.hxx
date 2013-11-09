@@ -21,8 +21,8 @@
 #define INCLUDED_OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
 
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertymap.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertymap.hxx>
 #include <boost/optional.hpp>
 
 namespace oox {

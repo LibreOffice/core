@@ -21,8 +21,8 @@
 #ifndef OOX_DRAWINGML_TABLESTYLETEXTSTYLECONTEXT
 #define OOX_DRAWINGML_TABLESTYLETEXTSTYLECONTEXT
 
-#include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/table/tablestylepart.hxx"
+#include <oox/core/contexthandler.hxx>
+#include <oox/drawingml/table/tablestylepart.hxx>
 
 namespace oox { namespace drawingml { namespace table {
 

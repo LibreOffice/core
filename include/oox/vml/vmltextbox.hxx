@@ -22,8 +22,8 @@
 
 #include <vector>
 #include <rtl/ustring.hxx>
-#include "oox/helper/helper.hxx"
-#include "oox/dllapi.h"
+#include <oox/helper/helper.hxx>
+#include <oox/dllapi.h>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com { namespace sun { namespace star {

@@ -20,12 +20,12 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLECELL_HXX
 #define INCLUDED_OOX_DRAWINGML_TABLE_TABLECELL_HXX
 
-#include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/color.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/textliststyle.hxx"
+#include <oox/helper/propertymap.hxx>
+#include <oox/drawingml/color.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/lineproperties.hxx>
+#include <oox/drawingml/fillproperties.hxx>
+#include <oox/drawingml/textliststyle.hxx>
 #include <com/sun/star/table/XCell.hpp>
 
 #include <boost/shared_ptr.hpp>

@@ -22,8 +22,8 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "oox/drawingml/textrun.hxx"
-#include "oox/drawingml/textparagraphproperties.hxx"
+#include <oox/drawingml/textrun.hxx>
+#include <oox/drawingml/textparagraphproperties.hxx>
 
 namespace oox { namespace drawingml {
 

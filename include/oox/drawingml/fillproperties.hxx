@@ -23,9 +23,9 @@
 #include <map>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
-#include "oox/drawingml/color.hxx"
-#include "oox/helper/helper.hxx"
-#include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include <oox/drawingml/color.hxx>
+#include <oox/helper/helper.hxx>
+#include <oox/drawingml/embeddedwavaudiofile.hxx>
 
 namespace oox {
     class GraphicHelper;

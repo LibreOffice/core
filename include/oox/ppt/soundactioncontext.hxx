@@ -21,7 +21,7 @@
 #ifndef OOX_PPT_SOUNDACTIONCONTEXT
 #define OOX_PPT_SOUNDACTIONCONTEXT
 
-#include "oox/core/fragmenthandler2.hxx"
+#include <oox/core/fragmenthandler2.hxx>
 
 namespace oox { class PropertyMap; }
 

@@ -11,8 +11,8 @@
 #define INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
 
 #include <utility>
-#include "oox/helper/binaryoutputstream.hxx"
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/binaryoutputstream.hxx>
+#include <oox/helper/refvector.hxx>
 
 namespace oox {
 namespace ole {

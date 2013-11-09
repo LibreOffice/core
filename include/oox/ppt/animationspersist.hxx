@@ -30,8 +30,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/ppt/slidepersist.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/ppt/slidepersist.hxx>
 
 namespace oox { namespace ppt {
 

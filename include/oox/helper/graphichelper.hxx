@@ -25,8 +25,8 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include "oox/helper/binarystreambase.hxx"
-#include "oox/helper/storagebase.hxx"
+#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/storagebase.hxx>
 
 struct WMF_EXTERNALHEADER;
 

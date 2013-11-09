@@ -20,10 +20,10 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
 
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/color.hxx"
-#include "oox/drawingml/textfont.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/drawingml/color.hxx>
+#include <oox/drawingml/textfont.hxx>
 
 namespace oox { class PropertySet; }
 

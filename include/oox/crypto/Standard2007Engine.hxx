@@ -11,8 +11,8 @@
 #ifndef INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
 #define INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
 
-#include "CryptTools.hxx"
-#include "CryptoEngine.hxx"
+#include <oox/crypto/CryptTools.hxx>
+#include <oox/crypto/CryptoEngine.hxx>
 
 namespace oox {
 namespace core {

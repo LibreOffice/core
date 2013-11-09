@@ -20,12 +20,12 @@
 #ifndef INCLUDED_OOX_PPT_PPTIMPORT_HXX
 #define INCLUDED_OOX_PPT_PPTIMPORT_HXX
 
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/core/xmlfilterbase.hxx>
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <oox/drawingml/theme.hxx>
-#include "oox/ppt/presentationfragmenthandler.hxx"
-#include "oox/ppt/slidepersist.hxx"
+#include <oox/ppt/presentationfragmenthandler.hxx>
+#include <oox/ppt/slidepersist.hxx>
 #include <vector>
 #include <map>
 

@@ -33,9 +33,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include "oox/helper/binarystreambase.hxx"
-#include "oox/helper/storagebase.hxx"
-#include "oox/dllapi.h"
+#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/storagebase.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct DeviceInfo; }

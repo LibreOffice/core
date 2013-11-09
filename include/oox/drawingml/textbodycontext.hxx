@@ -22,9 +22,9 @@
 
 #include <com/sun/star/text/XText.hpp>
 
-#include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/textrun.hxx"
-#include "oox/core/contexthandler2.hxx"
+#include <oox/drawingml/textbody.hxx>
+#include <oox/drawingml/textrun.hxx>
+#include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
 

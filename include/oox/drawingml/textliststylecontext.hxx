@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
 
-#include "oox/drawingml/textliststyle.hxx"
-#include "oox/core/contexthandler2.hxx"
+#include <oox/drawingml/textliststyle.hxx>
+#include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
 
