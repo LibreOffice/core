@@ -1402,6 +1402,41 @@ endef
 endif # SYSTEM_CDR
 
 
+ifeq ($(SYSTEM_EBOOK),YES)
+
+define gb_LinkTarget__use_ebook
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(EBOOK_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(EBOOK_LIBS))
+
+endef
+
+gb_ExternalProject__use_ebook :=
+
+else # !SYSTEM_EBOOK
+
+define gb_LinkTarget__use_ebook
+$(call gb_LinkTarget_set_include,$(1),\
+	$(EBOOK_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libebook)/src/lib/.libs/libe-book-0.0$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libebook)
+
+endef
+
+define gb_ExternalProject__use_ebook
+$(call gb_ExternalProject_use_external_project,$(1),libebook)
+
+endef
+
+endif # SYSTEM_EBOOK
+
+
 ifeq ($(SYSTEM_ETONYEK),YES)
 
 define gb_LinkTarget__use_etonyek
