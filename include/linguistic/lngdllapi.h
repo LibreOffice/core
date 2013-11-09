@@ -20,8 +20,8 @@
 #ifndef INCLUDED_LINGUISTIC_LNGDLLAPI_H
 #define INCLUDED_LINGUISTIC_LNGDLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined(LNG_DLLIMPLEMENTATION)
 #define LNG_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
