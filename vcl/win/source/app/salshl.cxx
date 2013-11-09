@@ -34,11 +34,7 @@ extern "C"
 #ifdef __MINGW32__
 sal_Bool WINAPI DllMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 #else
-#ifdef ICC
-int _CRT_init(void);
-#else
 BOOL WINAPI _CRT_INIT( HINSTANCE hInst, DWORD nReason, LPVOID pReserved );
-#endif
 
 BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 #endif
@@ -48,11 +44,7 @@ BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
         aSalShlData.mhInst = hInst;
 
 #ifndef __MINGW32__
-#ifdef ICC
-    if ( _CRT_init() == -1 )
-#else
     if ( !_CRT_INIT( hInst, nReason, pReserved ) )
-#endif
         return 0;
 #else
     (void)pReserved;

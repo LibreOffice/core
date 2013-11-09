@@ -20,10 +20,6 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_H
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_H
 
-#if defined( ICC )
-#include <stdio.h>
-#endif
-
 #if defined (UNX) || defined(__MINGW32__)
 #include <sys/types.h>
 #endif

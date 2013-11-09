@@ -46,15 +46,9 @@ class DdeItemImp : public std::vector<DdeItemImpData> {};
 
 // --- DdeInternat::SvrCallback() ----------------------------------
 
-#if defined( WNT ) || defined( ICC )
 HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
-#else
-HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
-            WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
-            HDDEDATA hData, DWORD, DWORD )
-#endif
 {
     DdeServices&    rAll = DdeService::GetServices();
     DdeService*     pService;

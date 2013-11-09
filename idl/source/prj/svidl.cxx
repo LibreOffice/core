@@ -321,10 +321,6 @@ int main ( int argc, char ** argv)
         {
             if( !aCommand.aTargetFile.isEmpty() )
             {
-#ifdef ICC
-                DirEntry aT(aCommand.aTargetFile);
-                aT.Kill();
-#endif
                 // stamp file, because idl passed through correctly
                 SvFileStream aOutStm( aCommand.aTargetFile,
                                 STREAM_READWRITE | STREAM_TRUNC );

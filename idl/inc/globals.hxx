@@ -22,9 +22,6 @@
 
 #include <hash.hxx>
 
-#ifdef ICC
-#undef _Export
-#endif
 
 class SvClassManager;
 struct SvGlobalHashNames

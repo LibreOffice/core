@@ -5115,13 +5115,8 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
                 if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(itr->first))
                     ppSortArray[j++] = &r;
             }
-#ifndef ICC
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
                 &ScRangeData_QsortNameCompare );
-#else
-            qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
-                ICCQsortNameCompare );
-#endif
             OUString aName;
             OUStringBuffer aContent;
             OUString aFormula;

@@ -52,56 +52,6 @@
 
 //--------------------------------------------------------------------------
 
-#ifdef OS2__00
-
-#ifdef ODBCIMP
-
-// Stub version: dynamic binding to the DLL at runtime.
-// odbcstub defines the NSQL... methods used in the sources
-// as indirect function calls.
-// odbcimp uses preos2, odbc and postos2 itself.
-//  #include "odbc3imp.hxx"
-
-#else
-
-// Currently, we directly use the ODBC DLL from Watcom SQL (via the supplied lib)
-
-#ifndef ODBC_OS2
-#define ODBC_OS2
-#endif
-
-#include <svpm.h>
-#include <odbc.h>
-#define SQL_API __syscall
-#ifndef SQL_MAX_MESSAGE_LENGTH
-#define SQL_MAX_MESSAGE_LENGTH MAX_MESSAGE_LENGTH
-#endif
-#ifndef SQL_MAX_DSN_LENGTH
-#define SQL_MAX_DSN_LENGTH MAX_DSN_LENGTH
-#endif
-#ifndef SQL_AUTOCOMMIT_ON
-#define SQL_AUTOCOMMIT_ON 1UL
-#endif
-#ifndef SQL_AUTOCOMMIT_OFF
-#define SQL_AUTOCOMMIT_OFF 0UL
-#endif
-
-#define SQL_FETCH_PRIOR SQL_FETCH_PREV
-#define SQL_NO_TOTAL (-4)
-
-#endif
-
-// The ODBC.h from Watcom expects char*, not UCHAR* usually used with ODBC
-#if defined( ICC )
-#define SDB_ODBC_CHAR unsigned char
-#else
-#define SDB_ODBC_CHAR char
-#endif
-
-#endif
-
-//--------------------------------------------------------------------------
-
 #ifdef UNX
 
 // Currently, we directly use the ODBC shared library from Q+E (via the supplied lib)

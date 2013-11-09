@@ -26,18 +26,8 @@
 
 // --- DdeInternal::InfCallback() ----------------------------------
 
-#ifdef WNT
 HDDEDATA CALLBACK DdeInternal::InfCallback(
                 WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD )
-#else
-#if defined( ICC )
-HDDEDATA CALLBACK DdeInternal::InfCallback(
-                WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD )
-#else
-HDDEDATA CALLBACK _export DdeInternal::InfCallback(
-                WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD )
-#endif
-#endif
 {
     return (HDDEDATA)DDE_FNOTPROCESSED;
 }

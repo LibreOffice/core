@@ -364,7 +364,6 @@ static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, const Point& rPos,
     {
         if ( pItems[i].mnWidth && pItems[i].mnHeight )
         {
-            // Wegen ICC auftrennen
             Point       aPoint( pItems[i].mnLeft, pItems[i].mnTop );
             Size        aSize( pItems[i].mnWidth, pItems[i].mnHeight );
             Rectangle   aRect( aPoint, aSize );
@@ -999,7 +998,6 @@ void SplitWindow::ImplDrawBack( SplitWindow* pWindow, ImplSplitSet* pSet )
         {
             if ( pSet->mpBitmap || pSet->mpWallpaper )
             {
-                // Wegen ICC auftrennen
                 Point       aPoint( pItems[i].mnLeft, pItems[i].mnTop );
                 Size        aSize( pItems[i].mnWidth, pItems[i].mnHeight );
                 Rectangle   aRect( aPoint, aSize );
