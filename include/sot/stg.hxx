@@ -34,8 +34,8 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
-#include "sot/storinfo.hxx"
-#include "sot/sotdllapi.h"
+#include <sot/storinfo.hxx>
+#include <sot/sotdllapi.h>
 
 class Storage;
 class StorageStream;

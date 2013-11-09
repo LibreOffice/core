@@ -23,7 +23,7 @@
 #include <sot/sotdata.hxx>
 #include <tools/globname.hxx>
 #include <tools/ref.hxx>
-#include "sot/sotdllapi.h"
+#include <sot/sotdllapi.h>
 
 /*************************************************************************
 *************************************************************************/

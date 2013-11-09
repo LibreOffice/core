@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SOT_FILELIST_HXX
 #define INCLUDED_SOT_FILELIST_HXX
 
-#include "sot/sotdllapi.h"
+#include <sot/sotdllapi.h>
 #include <tools/stream.hxx>
 
 #include <vector>

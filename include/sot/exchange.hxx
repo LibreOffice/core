@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#include "sot/sotdllapi.h"
+#include <sot/sotdllapi.h>
 #include <tools/solar.h>
 
 class SotDataObject;

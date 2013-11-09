@@ -23,7 +23,7 @@
 #include <tools/globname.hxx>
 #include <tools/solar.h>
 #include <vector>
-#include "sot/sotdllapi.h"
+#include <sot/sotdllapi.h>
 
 class StgDirEntry;
 class SvStorageInfo

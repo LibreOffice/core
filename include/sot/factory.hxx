@@ -22,7 +22,7 @@
 
 #include <tools/globname.hxx>
 #include <tools/rtti.hxx>
-#include "sot/sotdllapi.h"
+#include <sot/sotdllapi.h>
 #include <vector>
 
 /*************************************************************************

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SOT_SOTDLLAPI_H
 #define INCLUDED_SOT_SOTDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(SOT_DLLIMPLEMENTATION)
 #define SOT_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

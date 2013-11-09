@@ -24,7 +24,7 @@
 *************************************************************************/
 
 #include <tools/solar.h>
-#include "sot/sotdllapi.h"
+#include <sot/sotdllapi.h>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <vector>
 #include <list>
