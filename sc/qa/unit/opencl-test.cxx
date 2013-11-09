@@ -198,6 +198,7 @@ public:
     void testMathFormulaExp();
     void testMathFormulaLog10();
     void testStatisticalFormulaExpondist();
+    void testMathAverageIfsFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -327,6 +328,7 @@ public:
     CPPUNIT_TEST(testMathFormulaExp);
     CPPUNIT_TEST(testMathFormulaLog10);
     CPPUNIT_TEST(testStatisticalFormulaExpondist);
+    CPPUNIT_TEST(testMathAverageIfsFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3620,6 +3622,29 @@ void ScOpenclTest::testMathFormulaFloor()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[ AMLOEXT-179]
+void ScOpenclTest::testMathAverageIfsFormula()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/math/averageifs.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    sc::FormulaGroupInterpreter::enableOpenCL(true);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/averageifs.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 1; i <= 11; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(4,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(4,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
 //[AMLOEXT-180]
 void ScOpenclTest::testMathFormulaLog10()
 {
