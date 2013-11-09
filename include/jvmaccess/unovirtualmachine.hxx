@@ -20,10 +20,10 @@
 #ifndef INCLUDED_JVMACCESS_UNOVIRTUALMACHINE_HXX
 #define INCLUDED_JVMACCESS_UNOVIRTUALMACHINE_HXX
 
-#include "jvmaccessdllapi.h"
-#include "sal/config.h"
-#include "salhelper/simplereferenceobject.hxx"
-#include "rtl/ref.hxx"
+#include <jvmaccess/jvmaccessdllapi.h>
+#include <sal/config.h>
+#include <salhelper/simplereferenceobject.hxx>
+#include <rtl/ref.hxx>
 
 namespace jvmaccess {
 

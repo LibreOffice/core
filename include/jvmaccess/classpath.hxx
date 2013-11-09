@@ -20,9 +20,9 @@
 #ifndef INCLUDED_JVMACCESS_CLASSPATH_HXX
 #define INCLUDED_JVMACCESS_CLASSPATH_HXX
 
-#include "jvmaccessdllapi.h"
-#include "sal/config.h"
-#include "com/sun/star/uno/Reference.hxx"
+#include <jvmaccess/jvmaccessdllapi.h>
+#include <sal/config.h>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include "jni.h"
 

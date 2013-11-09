@@ -20,9 +20,9 @@
 #ifndef INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
 #define INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
 
-#include "jvmaccessdllapi.h"
-#include "rtl/ref.hxx"
-#include "salhelper/simplereferenceobject.hxx"
+#include <jvmaccess/jvmaccessdllapi.h>
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include "jni.h"
 
