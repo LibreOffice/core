@@ -21,7 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSORFROMOUTPUTDEVICE_HXX
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include "drawinglayer/drawinglayerdllapi.h"
+#include <drawinglayer/drawinglayerdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
