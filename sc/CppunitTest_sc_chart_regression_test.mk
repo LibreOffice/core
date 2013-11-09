@@ -37,7 +37,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_chart_regression_test, \
     svt \
     svx \
     svxcore \
-	test \
+    test \
+    subsequenttest \
     tl \
     tk \
     ucbhelper \
@@ -76,6 +77,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_chart_regression_test,\
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \
