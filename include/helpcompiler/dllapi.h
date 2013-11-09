@@ -20,8 +20,8 @@
 #ifndef INCLUDED_HELPCOMPILER_DLLAPI_H
 #define INCLUDED_HELPCOMPILER_DLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined L10N_DLLIMPLEMENTATION
 #define L10N_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
