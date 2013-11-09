@@ -322,7 +322,7 @@ AC_ARG_ENABLE(static-gtk,
 AC_ARG_ENABLE(layout,
 [  --enable-layout         Enable the compilation and use of layout dialogs
 ],,)
-AC_ARG_ENABLE(nss_module,
+AC_ARG_ENABLE(nss-module,
 [  --disable-nss-module    Whether to use the NSS module that is used for xml-security    
 ],,enable_nss_module=yes)
 AC_ARG_ENABLE(kde,
