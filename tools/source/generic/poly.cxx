@@ -1156,6 +1156,7 @@ public:
                             mnLow( nLow ),
                             mnHigh( nHigh ),
                             mnEdge( nEdge ),
+                            mnLastOutside( 0 ),
                             mbFirst( true )
                         {
                         }
