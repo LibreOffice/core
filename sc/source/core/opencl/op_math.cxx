@@ -139,6 +139,69 @@ void OpCoth::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
+void OpCombina::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(bikDecl);
+    funs.insert(bik);
+}
+
+void OpCombina::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double tem;\n";
+    ss << "    double arg0,arg1;\n";
+    for (unsigned int i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        ss << "    arg"<<i<<" = "<<vSubArguments[i]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        if(pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if(isNan(arg" << i <<")||(gid0 >= ";
+            ss << pSVR->GetArrayLength();
+            ss << "))\n";
+            ss << "        arg" << i << " = 0;\n";
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+            ss << "    if(isNan(arg" << i <<"))\n";
+            ss << "        arg" << i << " = 0;\n";
+        }
+#endif
+    }
+    ss << "    arg0 = trunc(arg0);\n";
+    ss << "    arg1 = trunc(arg1);\n";
+    ss << "    if(arg0 < arg1 || arg0 < 0 || arg1 < 0)\n";
+    ss << "        tem = -1;\n";
+    ss << "    else if(arg0 == 0 && arg1 == 0)\n";
+    ss << "        tem = 0;\n";
+    ss << "    else if(arg0 > 0 && arg1 == 0)\n";
+    ss << "        tem = 1;\n";
+    ss << "    else\n";
+    ss << "        tem = bik(arg0+arg1-1,arg1);\n";
+    ss << "    double k = tem - trunc(tem);\n";
+    ss << "    if(k < 0.5)\n";
+    ss << "        tem = trunc(tem);\n";
+    ss << "    else\n";
+    ss << "        tem = trunc(tem) + 1;";
+    ss << "    return tem;\n";
+    ss << "}";
+}
 void OpCsc::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
 {

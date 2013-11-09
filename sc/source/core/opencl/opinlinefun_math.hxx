@@ -21,6 +21,22 @@ std::string Math_Intg_Str=
         return trunc(n)+1;\n\
 }\n";
 
+std::string bikDecl = "double bik(double n,double k);\n";
+std::string bik =
+"double bik(double n,double k)\n"
+"{\n"
+"    double nVal = n/k;\n"
+"    n = n - 1;\n"
+"    k = k - 1;\n"
+"    while (k > 0)\n"
+"    {\n"
+"        nVal = nVal * ( n/k );\n"
+"        k = k - 1;\n"
+"        n = n - 1;\n"
+"    }\n"
+"    return nVal;\n"
+"}\n";
+
 #endif //SC_OPENCL_OPINLINFUN_MATH
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
