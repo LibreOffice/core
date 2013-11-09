@@ -26,8 +26,8 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 
-#include "com/sun/star/lang/DisposedException.hpp"
-#include "cppuhelperdllapi.h"
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <cppuhelper/cppuhelperdllapi.h>
 
 /** */ //for docpp
 namespace cppu

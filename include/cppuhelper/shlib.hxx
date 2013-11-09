@@ -23,7 +23,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 
 namespace cppu

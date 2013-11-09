@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CPPUHELPER_QUERYINTERFACE_HXX
 #define INCLUDED_CPPUHELPER_QUERYINTERFACE_HXX
 
-#include "sal/config.h"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Type.hxx"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <sal/types.h>
 
 namespace cppu
 {

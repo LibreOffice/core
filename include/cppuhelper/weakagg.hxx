@@ -21,7 +21,7 @@
 
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 
 namespace cppu

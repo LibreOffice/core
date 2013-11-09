@@ -26,7 +26,7 @@
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 /* This header should not be used anymore.
    @deprecated

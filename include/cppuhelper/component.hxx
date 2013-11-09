@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 namespace cppu
 {

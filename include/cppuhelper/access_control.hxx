@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/security/XAccessController.hpp>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 
 namespace cppu

@@ -24,7 +24,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/uno/XWeak.hpp>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 
 namespace cppu

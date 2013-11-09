@@ -21,7 +21,7 @@
 #define INCLUDED_CPPUHELPER_EXC_HLP_HXX
 
 #include <com/sun/star/uno/Any.hxx>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 namespace cppu
 {

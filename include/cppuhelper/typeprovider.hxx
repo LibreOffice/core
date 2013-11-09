@@ -22,7 +22,7 @@
 #include <rtl/alloc.h>
 #include <rtl/uuid.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 
 namespace cppu

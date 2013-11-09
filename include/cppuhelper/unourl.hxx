@@ -21,7 +21,7 @@
 #define INCLUDED_CPPUHELPER_UNOURL_HXX
 
 #include <memory>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 namespace rtl { class OUString; }
 

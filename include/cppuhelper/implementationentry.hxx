@@ -20,7 +20,7 @@
 #define INCLUDED_CPPUHELPER_IMPLEMENTATIONENTRY_HXX
 
 #include <cppuhelper/factory.hxx>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 // MinGW wants it the one way around while MSVC wants it the other (cf.
 // <sourceforge.net/support/tracker.php?aid=3514133> "Syntactic __cdecl

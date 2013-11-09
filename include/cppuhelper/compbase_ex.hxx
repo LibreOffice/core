@@ -23,7 +23,7 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 /// @cond INTERNAL
 

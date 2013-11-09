@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
 #include <memory>
-#include "cppuhelperdllapi.h"
+#include <cppuhelper/cppuhelperdllapi.h>
 
 
 namespace cppu
