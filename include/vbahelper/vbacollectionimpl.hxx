@@ -32,8 +32,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include "vbahelper/vbahelper.hxx"
-#include "vbahelper/vbahelperinterface.hxx"
+#include <vbahelper/vbahelper.hxx>
+#include <vbahelper/vbahelperinterface.hxx>
 
 #include <vector>
 

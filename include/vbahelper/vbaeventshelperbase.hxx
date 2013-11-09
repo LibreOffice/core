@@ -27,7 +27,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/implbase3.hxx>
-#include "vbahelper/vbahelper.hxx"
+#include <vbahelper/vbahelper.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace script { namespace vba { class XVBAModuleInfo; } }

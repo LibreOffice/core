@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBAGLOBALBASE_HXX
 #define INCLUDED_VBAHELPER_VBAGLOBALBASE_HXX
 
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 #include <ooo/vba/XGlobalsBase.hpp>
 
 typedef InheritedHelperInterfaceImpl1< ov::XGlobalsBase > Globals_BASE;

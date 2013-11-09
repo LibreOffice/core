@@ -38,7 +38,7 @@
 #include <sfx2/docfile.hxx>
 #include <vcl/pointr.hxx>
 #include <memory>
-#include "vbaaccesshelper.hxx"
+#include <vbahelper/vbaaccesshelper.hxx>
 
 namespace ooo
 {
