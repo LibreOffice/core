@@ -31,7 +31,7 @@ void CalcUnoApiTest::setUp()
 void CalcUnoApiTest::tearDown()
 {
     uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
+    UneApiTest::tearDown();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
