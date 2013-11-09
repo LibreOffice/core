@@ -288,6 +288,77 @@ void OpExp::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "return tmp;\n";
     ss << "}";
 }
+void OpAverageIfs::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
+         formula::DoubleVectorRefToken *>(tmpCur);
+    size_t nCurWindowSize = pCurDVR->GetArrayLength() <
+    pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
+    pCurDVR->GetRefRowSize() ;
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n    {\n";
+    ss <<"     int gid0=get_global_id(0);\n";
+    ss << "    double tmp =0;\n";
+    ss << "    int count=0;\n";
+    ss << "    int i ;\n";
+    GenTmpVariables(ss,vSubArguments);
+    ss << "    for (i = ";
+     if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+        ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
+     } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+        ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
+     } else {
+        ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
+     }
+     ss << "    {\n";
+     if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+     {
+        ss<< "    int doubleIndex =i+gid0;\n";
+     }else
+     {
+        ss<< "    int doubleIndex =i;\n";
+     }
+     ss<< "    int singleIndex =gid0;\n";
+     int m=0;
+     for(unsigned j=1;j<vSubArguments.size();j+=2,m++)
+     {
+        CheckSubArgumentIsNan(ss,vSubArguments,j);
+        CheckSubArgumentIsNan(ss,vSubArguments,j+1);
+        ss <<"    if(isequal(";
+        ss <<"tmp";
+        ss <<j;
+        ss <<" , ";
+        ss << "tmp";
+        ss << j+1;
+        ss << ")){\n";
+     }
+     CheckSubArgumentIsNan(ss,vSubArguments,0);
+    ss << "    tmp += tmp0;\n";
+    ss << "    count++;\n";
+    for(unsigned j=1;j<=vSubArguments.size();j+=2,m--)
+     {
+         for(int n = 0;n<m+1;n++)
+        {
+            ss << "    ";
+        }
+        ss<< "}\n";
+     }
+     ss << "    if(count!=0)\n";
+     ss << "        tmp=tmp/count;\n";
+     ss << "    else\n";
+     ss << "        tmp= 0 ;\n";
+    ss << "return tmp;\n";
+    ss << "}";
+}
 
 void OpLog10::GenSlidingWindowFunction(std::stringstream &ss,
                const std::string sSymName, SubArguments &vSubArguments)

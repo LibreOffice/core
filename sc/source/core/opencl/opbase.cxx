@@ -138,7 +138,8 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
          ss<< pTmpDVR2->GetArrayLength();
          ss<<" ||";
      }
-     if(vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble)
+     if(vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble ||
+     vSubArguments[i]->GetFormulaToken()->GetOpCode() != ocPush)
      {
          ss<< "    if(";
      }
