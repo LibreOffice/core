@@ -288,6 +288,36 @@ void OpExp::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "return tmp;\n";
     ss << "}";
 }
+
+void OpLog10::GenSlidingWindowFunction(std::stringstream &ss,
+               const std::string sSymName, SubArguments &vSubArguments)
+{
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
+          formula::SingleVectorRefToken *>(tmpCur);
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n\t";
+    ss <<"int gid0=get_global_id(0);\n\t";
+    ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n\t";
+#ifdef ISNAN
+    ss<< "if(isNan(arg0)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n\t\t";
+    ss<<"arg0 = 0;\n\t";
+#endif
+    ss << "double tmp=log10(arg0);\n\t";
+    ss << "return tmp;\n";
+    ss << "}";
+}
+
 void OpSinh::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
