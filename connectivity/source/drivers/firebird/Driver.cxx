@@ -20,10 +20,10 @@
 #include "Connection.hxx"
 #include "Driver.hxx"
 
-#include "connectivity/dbexception.hxx"
-#include "resource/common_res.hrc"
-#include "resource/hsqldb_res.hrc"
-#include "resource/sharedresources.hxx"
+#include <connectivity/dbexception.hxx>
+#include <resource/common_res.hrc>
+#include <resource/hsqldb_res.hrc>
+#include <resource/sharedresources.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
