@@ -11,9 +11,9 @@
 #ifndef INCLUDED_UNOIDL_DETAIL_DLLAPI_HXX
 #define INCLUDED_UNOIDL_DETAIL_DLLAPI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined LO_DLLIMPLEMENTATION_UNOIDL
 #define LO_DLLPUBLIC_UNOIDL SAL_DLLPUBLIC_EXPORT
