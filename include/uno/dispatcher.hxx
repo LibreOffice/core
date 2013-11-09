@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNO_DISPATCHER_HXX
 #define INCLUDED_UNO_DISPATCHER_HXX
 
-#include "uno/dispatcher.h"
+#include <uno/dispatcher.h>
 
 /// @cond INTERNAL
 

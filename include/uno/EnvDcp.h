@@ -21,7 +21,7 @@
 #define INCLUDED_uno_EnvDcp_h
 
 #include <cppu/cppudllapi.h>
-#include "rtl/ustring.h"
+#include <rtl/ustring.h>
 
 #ifdef __cplusplus
 extern "C"

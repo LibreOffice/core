@@ -25,8 +25,8 @@
 #include <uno/mapping.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include "cppu/unotype.hxx"
-#include "uno/environment.hxx"
+#include <cppu/unotype.hxx>
+#include <uno/environment.hxx>
 
 typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
