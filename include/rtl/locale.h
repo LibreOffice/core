@@ -20,10 +20,10 @@
 #ifndef INCLUDED_RTL_LOCALE_H
 #define INCLUDED_RTL_LOCALE_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ustring.h"
-#include "sal/saldllapi.h"
+#include <rtl/ustring.h>
+#include <sal/saldllapi.h>
 
 #ifdef __cplusplus
 extern "C" {

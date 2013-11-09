@@ -20,7 +20,7 @@
 #ifndef INCLUDED_RTL_STRING_HXX
 #define INCLUDED_RTL_STRING_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <new>
@@ -36,7 +36,7 @@
 #include <rtl/stringconcat.hxx>
 #endif
 
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 // The unittest uses slightly different code to help check that the proper
 // calls are made. The class is put into a different namespace to make

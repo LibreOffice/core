@@ -19,10 +19,10 @@
 #ifndef INCLUDED_RTL_LOGFILE_H
 #define INCLUDED_RTL_LOGFILE_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

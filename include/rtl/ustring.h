@@ -20,13 +20,13 @@
 #ifndef INCLUDED_RTL_USTRING_H
 #define INCLUDED_RTL_USTRING_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/interlck.h"
-#include "rtl/string.h"
-#include "rtl/textenc.h"
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <osl/interlck.h>
+#include <rtl/string.h>
+#include <rtl/textenc.h>
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

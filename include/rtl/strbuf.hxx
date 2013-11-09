@@ -20,7 +20,7 @@
 #ifndef INCLUDED_RTL_STRBUF_HXX
 #define INCLUDED_RTL_STRBUF_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <string.h>

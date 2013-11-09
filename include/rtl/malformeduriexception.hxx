@@ -20,7 +20,7 @@
 #ifndef INCLUDED_RTL_MALFORMEDURIEXCEPTION_HXX
 #define INCLUDED_RTL_MALFORMEDURIEXCEPTION_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 namespace rtl {
 

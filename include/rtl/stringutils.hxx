@@ -10,7 +10,7 @@
 #ifndef INCLUDED_RTL_STRINGUTILS_HXX
 #define INCLUDED_RTL_STRINGUTILS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 // Manually defining RTL_DISABLE_FAST_STRING allows to force turning fast string concatenation off
 // (e.g. for debugging).

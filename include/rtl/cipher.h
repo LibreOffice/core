@@ -20,10 +20,10 @@
 #ifndef INCLUDED_RTL_CIPHER_H
 #define INCLUDED_RTL_CIPHER_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

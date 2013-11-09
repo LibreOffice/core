@@ -20,19 +20,19 @@
 #ifndef INCLUDED_RTL_USTRING_HXX
 #define INCLUDED_RTL_USTRING_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <new>
 #include <ostream>
 #include <string.h>
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #ifdef RTL_FAST_STRING
 #include <rtl/stringconcat.hxx>

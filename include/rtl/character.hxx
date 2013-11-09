@@ -20,11 +20,11 @@
 #ifndef INCLUDED_RTL_CHARACTER_HXX
 #define INCLUDED_RTL_CHARACTER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 namespace rtl
 {

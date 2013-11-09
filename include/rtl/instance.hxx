@@ -20,10 +20,10 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #define INCLUDED_RTL_INSTANCE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/doublecheckedlocking.h"
-#include "osl/getglobalmutex.hxx"
+#include <osl/doublecheckedlocking.h>
+#include <osl/getglobalmutex.hxx>
 
 namespace {
 
@@ -62,8 +62,8 @@ namespace {
 
     Code:
 
-      #include "rtl/instance.hxx"
-      #include "osl/getglobalmutex.hxx"
+      #include <rtl/instance.hxx>
+      #include <osl/getglobalmutex.hxx>
 
       namespace {
           struct Init
@@ -101,8 +101,8 @@ namespace {
 
     Code:
 
-      #include "rtl/instance.hxx"
-      #include "osl/getglobalmutex.hxx"
+      #include <rtl/instance.hxx>
+      #include <osl/getglobalmutex.hxx>
 
       namespace {
           struct Init
@@ -142,7 +142,7 @@ namespace {
 
     Code:
 
-      #include "rtl/instance.hxx"
+      #include <rtl/instance.hxx>
 
       namespace {
           struct InitInstance
@@ -192,8 +192,8 @@ namespace {
 
     Code:
 
-      #include "rtl/instance.hxx"
-      #include "osl/getglobalmutex.hxx"
+      #include <rtl/instance.hxx>
+      #include <osl/getglobalmutex.hxx>
 
       namespace {
           struct InitInstance
