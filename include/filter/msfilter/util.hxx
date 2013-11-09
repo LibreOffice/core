@@ -14,7 +14,7 @@
 #include <tools/datetime.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 #include <com/sun/star/awt/Size.hpp>
 
 namespace msfilter {

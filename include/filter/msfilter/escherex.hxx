@@ -38,7 +38,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <svx/msdffdef.hxx>
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 
         /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/
 // In the Microsoft documentation the naming scheme is msofbt... instead of ESCHER_...

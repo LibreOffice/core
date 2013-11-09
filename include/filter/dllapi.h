@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FILTER_DLLAPI_H
 #define INCLUDED_FILTER_DLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined FILTER_DLLIMPLEMENTATION
 #define FILTER_DLLPUBLIC SAL_DLLPUBLIC_EXPORT

@@ -24,7 +24,7 @@
 
 #include <sal/types.h>
 #include <i18nlangtag/lang.h>
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 
 // ----------------------------------------------------------------------------
 

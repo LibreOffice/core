@@ -26,7 +26,7 @@
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 namespace ooo {
 namespace vba {
 

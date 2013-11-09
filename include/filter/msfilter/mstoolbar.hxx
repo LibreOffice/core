@@ -8,7 +8,7 @@
  */
 #ifndef INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
 #define INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 #include <sot/storage.hxx>
 #include <ostream>
 #include <memory>

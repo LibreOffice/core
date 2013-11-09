@@ -20,7 +20,7 @@
 #define INCLUDED_FILTER_MSFILTER_MSOLEEXP_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 
 // for the CreateSdrOLEFromStorage we need the information, how we handle
 // convert able OLE-Objects - this ist stored in

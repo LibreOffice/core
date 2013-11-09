@@ -21,7 +21,7 @@
 #define INCLUDED_FILTER_MSFILTER_SVXMSBAS_HXX
 
 #include <tools/solar.h>
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 
 #include <sot/storage.hxx>
 #include <map>

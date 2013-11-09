@@ -33,7 +33,7 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <editeng/flditem.hxx>
 #undef ITEMID_FIELD
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 #include <vcl/font.hxx>
 #include <vector>
 #include <boost/optional.hpp>

@@ -21,7 +21,7 @@
 
 #include <sot/storage.hxx>
 
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 
 namespace com{namespace sun{namespace star{
         namespace drawing{
