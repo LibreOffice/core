@@ -6,6 +6,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <swmodeltestbase.hxx>
+
+#if !defined(MACOSX) && !defined(WNT)
+
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
@@ -14,7 +18,6 @@
 
 #include <vcl/svapp.hxx>
 
-#include <swmodeltestbase.hxx>
 #include <bordertest.hxx>
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -22,62 +25,14 @@
 class Test : public SwModelTestBase
 {
 public:
-    void testN757910();
-    void testN760294();
-    void testN750255();
-    void testN652364();
-    void testN757118();
-    void testN757905();
-    void testAllGapsWord();
-    void testFdo59530();
-    void testI120158();
-    void testN816603();
-    void testN816593();
-    void testPageBorder();
-    void testN823651();
-    void testFdo36868();
-    void testListNolevel();
-
-    CPPUNIT_TEST_SUITE(Test);
-#if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(run);
-#endif
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-    void run();
+    Test() : SwModelTestBase("/sw/qa/extras/ww8import/data/", "MS Word 97")
+    {
+    }
 };
 
-void Test::run()
-{
-    MethodEntry<Test> aMethods[] = {
-        {"n757910.doc", &Test::testN757910},
-        {"n760294.doc", &Test::testN760294},
-        {"n750255.doc", &Test::testN750255},
-        {"n652364.doc", &Test::testN652364},
-        {"n757118.doc", &Test::testN757118},
-        {"n757905.doc", &Test::testN757905},
-        {"all_gaps_word.doc", &Test::testAllGapsWord},
-        {"fdo59530.doc", &Test::testFdo59530},
-        {"i120158.doc", &Test::testI120158},
-        {"n816603.doc", &Test::testN816603},
-        {"n816593.doc", &Test::testN816593},
-        {"page-border.doc", &Test::testPageBorder},
-        {"n823651.doc", &Test::testN823651},
-        {"fdo36868.doc", &Test::testFdo36868},
-        {"list-nolevel.doc", &Test::testListNolevel},
-    };
-    header();
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
-    {
-        MethodEntry<Test>& rEntry = aMethods[i];
-        load("/sw/qa/extras/ww8import/data/", rEntry.pName);
-        (this->*rEntry.pMethod)();
-        finish();
-    }
-}
+#define DECLARE_WW8IMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
 
-void Test::testN757910()
+DECLARE_WW8IMPORT_TEST(testN757910, "n757910.doc")
 {
     // The internal margin was larger than 0.28cm
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -93,7 +48,7 @@ void Test::testN757910()
     CPPUNIT_ASSERT(aBorder.LineWidth > 0);
 }
 
-void Test::testN760294()
+DECLARE_WW8IMPORT_TEST(testN760294, "n760294.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -104,7 +59,7 @@ void Test::testN760294()
     CPPUNIT_ASSERT_EQUAL(aTableBorder.TopLine.InnerLineWidth, aTableBorder.TopLine.LineDistance);
 }
 
-void Test::testN750255()
+DECLARE_WW8IMPORT_TEST(testN750255, "n750255.doc")
 {
 /*
 Column break without columns on the page is a page break, so check those paragraphs
@@ -141,7 +96,7 @@ xray para2.PageStyleName
 
 }
 
-void Test::testN652364()
+DECLARE_WW8IMPORT_TEST(testN652364, "n652364.doc")
 {
 /*
 Related to 750255 above, column break with columns on the page however should be a column break.
@@ -178,7 +133,7 @@ xray para2.PageStyleName
     CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle2 );
 }
 
-void Test::testN757118()
+DECLARE_WW8IMPORT_TEST(testN757118, "n757118.doc")
 {
 /*
 Two pairs of horizontal rules (one absolute width, one relative width)
@@ -201,7 +156,7 @@ xray ThisComponent.DrawPage.getByIndex(0).BoundRect
     CPPUNIT_ASSERT( abs( boundRect2.Width - boundRect4.Width ) < 5 );
 }
 
-void Test::testN757905()
+DECLARE_WW8IMPORT_TEST(testN757905, "n757905.doc")
 {
     // The problem was that the paragraph had only a single fly
     // (as-character-anchored), and the height of that was smallar than the
@@ -212,13 +167,13 @@ void Test::testN757905()
     CPPUNIT_ASSERT(sal_Int32(31) < aHeight.toInt32());
 }
 
-void Test::testAllGapsWord()
+DECLARE_WW8IMPORT_TEST(testAllGapsWord, "all_gaps_word.doc")
 {
     BorderTest borderTest;
     borderTest.testTheBorders(mxComponent);
 }
 
-void Test::testFdo59530()
+DECLARE_WW8IMPORT_TEST(testFdo59530, "fdo59530.doc")
 {
     // See ooxmlexport's testFdo38244().
     // Test comment range feature.
@@ -243,7 +198,7 @@ void Test::testFdo59530()
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
-void Test::testI120158()
+DECLARE_WW8IMPORT_TEST(testI120158, "i120158.doc")
 {
     // See https://issues.apache.org/ooo/show_bug.cgi?id=120158
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
@@ -257,7 +212,7 @@ void Test::testI120158()
     CPPUNIT_ASSERT(sFieldResult.endsWith("AM") || sFieldResult.endsWith("PM"));
 }
 
-void Test::testN816603()
+DECLARE_WW8IMPORT_TEST(testN816603, "n816603.doc")
 {
     // Bugdoc was 5 pages in Word, 1 in Writer due to pointlessly wrapping the
     // table in a frame. Exact layout may depend on fonts available, etc. --
@@ -265,7 +220,7 @@ void Test::testN816603()
     CPPUNIT_ASSERT(getPages() > 1);
 }
 
-void Test::testN816593()
+DECLARE_WW8IMPORT_TEST(testN816593, "n816593.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -274,14 +229,14 @@ void Test::testN816593()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
-void Test::testPageBorder()
+DECLARE_WW8IMPORT_TEST(testPageBorder, "page-border.doc")
 {
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
     table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "TopBorder");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(TWIP_TO_MM100(6 * 20)), aBorder.LineWidth);
 }
 
-void Test::testN823651()
+DECLARE_WW8IMPORT_TEST(testN823651, "n823651.doc")
 {
     // Character height was 10pt instead of 7.5pt in the header.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
@@ -289,14 +244,14 @@ void Test::testN823651()
     CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), "CharHeight"));
 }
 
-void Test::testFdo36868()
+DECLARE_WW8IMPORT_TEST(testFdo36868, "fdo36868.doc")
 {
     OUString aText = parseDump("/root/page/body/txt[3]/Special[@nType='POR_NUMBER']", "rText");
     // This was 1.1.
     CPPUNIT_ASSERT_EQUAL(OUString("2.1"), aText);
 }
 
-void Test::testListNolevel()
+DECLARE_WW8IMPORT_TEST(testListNolevel, "list-nolevel.doc")
 {
     // Similar to fdo#36868, numbering portions had wrong values.
     OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='POR_NUMBER']", "rText");
@@ -304,7 +259,7 @@ void Test::testListNolevel()
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
