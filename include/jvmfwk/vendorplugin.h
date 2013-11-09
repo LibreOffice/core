@@ -21,9 +21,9 @@
 #ifndef INCLUDED_JVMFWK_VENDORPLUGIN_H
 #define INCLUDED_JVMFWK_VENDORPLUGIN_H
 
-#include "jvmfwkplugindllapi.h"
-#include "jvmfwk/framework.h"
-#include "rtl/ustring.h"
+#include <jvmfwk/jvmfwkplugindllapi.h>
+#include <jvmfwk/framework.h>
+#include <rtl/ustring.h>
 #include "jni.h"
 
 #ifdef __cplusplus

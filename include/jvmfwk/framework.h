@@ -22,9 +22,9 @@
 #ifndef INCLUDED_JVMFWK_FRAMEWORK_H
 #define INCLUDED_JVMFWK_FRAMEWORK_H
 
-#include "jvmfwkdllapi.h"
-#include "rtl/ustring.h"
-#include "osl/mutex.h"
+#include <jvmfwk/jvmfwkdllapi.h>
+#include <rtl/ustring.h>
+#include <osl/mutex.h>
 #include "jni.h"
 
 #ifdef __cplusplus
