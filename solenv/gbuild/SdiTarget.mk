@@ -36,7 +36,10 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 			-fx$(EXPORTS) \
 			-fm$@ \
 			$(if $(gb_FULLDEPS),-fM$(call gb_SdiTarget_get_dep_target,$*)) \
-			$<)
+			$< \
+		&& touch $@.hxx)
+# touch the hxx file so it's newer than the target - the .hxx only occurs in
+# generated .d files, so it's not a target yet when building from scratch!
 
 # rule necessary to rebuild cxx files that include the header
 $(call gb_SdiTarget_get_target,%.hxx) : $(call gb_SdiTarget_get_target,%)
