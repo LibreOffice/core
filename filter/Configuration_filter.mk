@@ -357,6 +357,13 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_OOXML \
 	writer_OOXML_Template \
 	writer_layout_dump_xml \
+	writer_BroadBand_eBook \
+	writer_eReader_eBook \
+	writer_FictionBook_2 \
+	writer_PalmDoc \
+	writer_Plucker_eBook \
+	writer_TealDoc \
+	writer_zTXT \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
@@ -407,6 +414,13 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	OOXML_Text \
 	OOXML_Text_Template \
 	writer_layout_dump \
+	BroadBand_eBook \
+	eReader_eBook \
+	FictionBook_2 \
+	PalmDoc \
+	Plucker_eBook \
+	TealDoc \
+	zTXT \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
