@@ -30,7 +30,6 @@ protected:
 
 
 private:
-    css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
     OUString m_aBaseString;
 };
 

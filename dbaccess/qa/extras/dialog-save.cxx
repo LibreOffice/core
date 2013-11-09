@@ -37,24 +37,25 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-class DialogSaveTest : public test::BootstrapFixture, public unotest::MacrosTest
+class DialogSaveTest : public UnoApiTest
 {
 public:
     DialogSaveTest();
 
-    virtual void setUp();
-    virtual void tearDown();
-
     void test();
 
     CPPUNIT_TEST_SUITE(DialogSaveTest);
+// Should we disable this test on MOX and WNT?
+// #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(test);
+// #endif
     CPPUNIT_TEST_SUITE_END();
 
 };
 
 
 DialogSaveTest::DialogSaveTest()
+      : UnoApiTest("/dbaccess/qa/extras/testdocuments")
 {
 }
 
@@ -115,21 +116,6 @@ void DialogSaveTest::test()
         CPPUNIT_ASSERT(xPS->getPropertyValue("Size") >>= nSize);
         CPPUNIT_ASSERT(nSize != 0);
     }
-}
-
-void DialogSaveTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
-    CPPUNIT_ASSERT(mxDesktop.is());
-}
-
-void DialogSaveTest::tearDown()
-{
-    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DialogSaveTest);

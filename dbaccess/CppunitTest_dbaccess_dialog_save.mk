@@ -57,8 +57,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_dialog_save, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,dbaccess_dialog_save,\
-    -I$(SRCDIR)/sc/source/ui/inc \
-    -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 

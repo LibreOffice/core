@@ -8,8 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
@@ -58,15 +57,10 @@ bool checkDumpAgainstFile( const OUString& rDump, const OUString aFilePath, cons
 
 }
 
-class ScChartRegressionTest : public test::BootstrapFixture, public unotest::MacrosTest
+class ScChartRegressionTest : public UnoApiTest
 {
 public:
     ScChartRegressionTest();
-
-    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
-
-    virtual void setUp();
-    virtual void tearDown();
 
     void test();
 
@@ -74,25 +68,13 @@ public:
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 
-private:
-    uno::Reference<uno::XInterface> m_xCalcComponent;
-    OUString m_aBaseString;
 };
 
-
-void ScChartRegressionTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
-{
-    OUString aSep("/");
-    OUStringBuffer aBuffer( getSrcRootURL() );
-    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
-}
 
 void ScChartRegressionTest::test()
 {
     OUString aFileName;
-    createFileURL( "testChart.", "ods", aFileName);
+    createFileURL( "testChart.ods", aFileName);
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT(xComponent.is());
@@ -132,26 +114,8 @@ void ScChartRegressionTest::test()
 }
 
 ScChartRegressionTest::ScChartRegressionTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/chart2/qa/unit/data"))
+      : UnoApiTest("/chart2/qa/unit/data/ods")
 {
-}
-
-void ScChartRegressionTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xCalcComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-    mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
-}
-
-void ScChartRegressionTest::tearDown()
-{
-    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScChartRegressionTest);
