@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLREADER_DETAIL_XMLREADERDLLAPI_HXX
 #define INCLUDED_XMLREADER_DETAIL_XMLREADERDLLAPI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_XMLREADER
 #define OOO_DLLPUBLIC_XMLREADER SAL_DLLPUBLIC_EXPORT

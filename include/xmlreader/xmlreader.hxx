@@ -20,20 +20,20 @@
 #ifndef INCLUDED_XMLREADER_XMLREADER_HXX
 #define INCLUDED_XMLREADER_XMLREADER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <stack>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/file.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "xmlreader/detail/xmlreaderdllapi.hxx"
-#include "xmlreader/pad.hxx"
-#include "xmlreader/span.hxx"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <osl/file.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <xmlreader/detail/xmlreaderdllapi.hxx>
+#include <xmlreader/pad.hxx>
+#include <xmlreader/span.hxx>
 
 namespace xmlreader {
 

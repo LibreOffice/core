@@ -20,12 +20,12 @@
 #ifndef INCLUDED_XMLREADER_SPAN_HXX
 #define INCLUDED_XMLREADER_SPAN_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
-#include "sal/types.h"
-#include "xmlreader/detail/xmlreaderdllapi.hxx"
+#include <sal/types.h>
+#include <xmlreader/detail/xmlreaderdllapi.hxx>
 
 namespace rtl { class OUString; }
 
