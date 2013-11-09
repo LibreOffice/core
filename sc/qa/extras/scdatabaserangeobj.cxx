@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xdatabaserange.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -22,7 +22,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 6
 
-class ScDatabaseRangeObj : public UnoApiTest, apitest::XDatabaseRange
+class ScDatabaseRangeObj : public CalcUnoApiTest, apitest::XDatabaseRange
 {
 public:
     virtual void setUp();
@@ -49,7 +49,7 @@ sal_Int32 ScDatabaseRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScDatabaseRangeObj::mxComponent;
 
 ScDatabaseRangeObj::ScDatabaseRangeObj()
-      : UnoApiTest("/sc/qa/extras/testdocuments")
+      : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -72,7 +72,7 @@ uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBN
 void ScDatabaseRangeObj::setUp()
 {
     nTest++;
-    UnoApiTest::setUp();
+    CalcUnoApiTest::setUp();
 }
 
 void ScDatabaseRangeObj::tearDown()
@@ -80,7 +80,7 @@ void ScDatabaseRangeObj::tearDown()
     if (nTest == NUMBER_OF_TESTS)
         closeDocument(mxComponent);
 
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDatabaseRangeObj);

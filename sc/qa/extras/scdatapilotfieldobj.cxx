@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xdatapilotfieldgrouping.hxx>
 #include <test/sheet/datapilotfield.hxx>
 
@@ -24,7 +24,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 6
 
-class ScDataPilotFieldObj : public UnoApiTest, apitest::XDataPilotFieldGrouping,
+class ScDataPilotFieldObj : public CalcUnoApiTest, apitest::XDataPilotFieldGrouping,
                                 apitest::DataPilotField
 {
 public:
@@ -53,7 +53,7 @@ sal_Int32 ScDataPilotFieldObj::nTest = 0;
 uno::Reference< lang::XComponent > ScDataPilotFieldObj::mxComponent;
 
 ScDataPilotFieldObj::ScDataPilotFieldObj()
-     : UnoApiTest("/sc/qa/extras/testdocuments")
+     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -88,7 +88,7 @@ uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
 void ScDataPilotFieldObj::setUp()
 {
     nTest++;
-    UnoApiTest::setUp();
+    CalcUnoApiTest::setUp();
 }
 
 void ScDataPilotFieldObj::tearDown()
@@ -96,7 +96,7 @@ void ScDataPilotFieldObj::tearDown()
     if (nTest == NUMBER_OF_TESTS)
         closeDocument(mxComponent);
 
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotFieldObj);

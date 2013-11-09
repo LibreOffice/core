@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xspreadsheets2.hxx>
 #include <test/container/xnamecontainer.hxx>
 
@@ -21,7 +21,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 13
 
-class ScTableSheetsObj : public UnoApiTest, public ::apitest::XSpreadsheets2, apitest::XNameContainer
+class ScTableSheetsObj : public CalcUnoApiTest, public ::apitest::XSpreadsheets2, apitest::XNameContainer
 {
 public:
     ScTableSheetsObj();
@@ -58,7 +58,7 @@ uno::Reference< lang::XComponent > ScTableSheetsObj::mxComponent;
 sal_Int32 ScTableSheetsObj::nTest = 0;
 
 ScTableSheetsObj::ScTableSheetsObj():
-            UnoApiTest("/sc/qa/extras/testdocuments"),
+            CalcUnoApiTest("/sc/qa/extras/testdocuments"),
             apitest::XNameContainer(OUString("Sheet2"))
 {
 
@@ -71,12 +71,12 @@ uno::Reference< lang::XComponent > ScTableSheetsObj::getComponent()
 
 void ScTableSheetsObj::createFileURL(const OUString& rFileBase, OUString& rFileURL)
 {
-    UnoApiTest::createFileURL(rFileBase, rFileURL);
+    CalcUnoApiTest::createFileURL(rFileBase, rFileURL);
 }
 
 uno::Reference< lang::XComponent > ScTableSheetsObj::loadFromDesktop(const OUString& rString)
 {
-    return UnoApiTest::loadFromDesktop(rString);
+    return CalcUnoApiTest::loadFromDesktop(rString);
 }
 
 uno::Reference< uno::XInterface > ScTableSheetsObj::init()
@@ -96,7 +96,7 @@ void ScTableSheetsObj::setUp()
 {
     nTest++;
     CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
-    UnoApiTest::setUp();
+    CalcUnoApiTest::setUp();
 }
 
 void ScTableSheetsObj::tearDown()
@@ -104,7 +104,7 @@ void ScTableSheetsObj::tearDown()
     if (nTest == NUMBER_OF_TESTS)
         closeDocument(mxComponent);
 
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableSheetsObj);

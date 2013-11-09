@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/cellproperties.hxx>
 #include <test/util/xreplaceable.hxx>
@@ -25,7 +25,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 14
 
-class ScCellRangeObj : public UnoApiTest, apitest::XCellRangesQuery, apitest::CellProperties,
+class ScCellRangeObj : public CalcUnoApiTest, apitest::XCellRangesQuery, apitest::CellProperties,
                         apitest::XSearchable, apitest::XReplaceable, apitest::XCellRangeData
 {
 public:
@@ -63,7 +63,7 @@ sal_Int32 ScCellRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
 
 ScCellRangeObj::ScCellRangeObj():
-        UnoApiTest("/sc/qa/extras/testdocuments"),
+        CalcUnoApiTest("/sc/qa/extras/testdocuments"),
         apitest::XSearchable(OUString("15"), 1),
         apitest::XReplaceable(OUString("15"), OUString("35"))
 {
@@ -113,7 +113,7 @@ void ScCellRangeObj::setUp()
 {
     nTest++;
     CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
-    UnoApiTest::setUp();
+    CalcUnoApiTest::setUp();
 }
 
 void ScCellRangeObj::tearDown()
@@ -121,7 +121,7 @@ void ScCellRangeObj::tearDown()
     if (nTest == NUMBER_OF_TESTS)
         closeDocument(mxComponent);
 
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellRangeObj);

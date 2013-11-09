@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xnamedrange.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
@@ -24,7 +24,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 9
 
-class ScNamedRangeObj : public UnoApiTest, apitest::XNamedRange, apitest::XNamed, apitest::XCellRangeReferrer
+class ScNamedRangeObj : public CalcUnoApiTest, apitest::XNamedRange, apitest::XNamed, apitest::XCellRangeReferrer
 {
 public:
     ScNamedRangeObj();
@@ -57,7 +57,7 @@ sal_Int32 ScNamedRangeObj::nTest = 0;
 uno::Reference< lang::XComponent > ScNamedRangeObj::mxComponent;
 
 ScNamedRangeObj::ScNamedRangeObj():
-        UnoApiTest("/sc/qa/extras/testdocuments"),
+        CalcUnoApiTest("/sc/qa/extras/testdocuments"),
         apitest::XNamed(OUString("NamedRange")),
         apitest::XCellRangeReferrer(table::CellRangeAddress(0,1,7,1,7))
 {
@@ -96,7 +96,7 @@ uno::Reference< uno::XInterface > ScNamedRangeObj::init()
 void ScNamedRangeObj::setUp()
 {
     nTest++;
-    UnoApiTest::setUp();
+    CalcUnoApiTest::setUp();
 }
 
 void ScNamedRangeObj::tearDown()
@@ -104,7 +104,7 @@ void ScNamedRangeObj::tearDown()
     if (nTest == NUMBER_OF_TESTS)
         closeDocument(mxComponent);
 
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScNamedRangeObj);

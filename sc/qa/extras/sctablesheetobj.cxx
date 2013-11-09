@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 #include <test/sheet/xprintareas.hxx>
@@ -21,7 +21,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-class ScTableSheetObj : public UnoApiTest, apitest::XSearchable, apitest::XReplaceable, apitest::XPrintAreas
+class ScTableSheetObj : public CalcUnoApiTest, apitest::XSearchable, apitest::XReplaceable, apitest::XPrintAreas
 {
 public:
     ScTableSheetObj();
@@ -48,7 +48,7 @@ sal_Int32 ScTableSheetObj::nTest = 0;
 uno::Reference< lang::XComponent > ScTableSheetObj::mxComponent;
 
 ScTableSheetObj::ScTableSheetObj():
-    UnoApiTest("/sc/qa/extras/testdocuments"),
+    CalcUnoApiTest("/sc/qa/extras/testdocuments"),
     apitest::XSearchable(OUString("test"), 4),
     apitest::XReplaceable(OUString("searchReplaceString"), OUString("replaceReplaceString"))
 {

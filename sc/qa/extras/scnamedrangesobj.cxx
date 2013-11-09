@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xnamedranges.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -21,7 +21,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 3
 
-class ScNamedRangesObj : public UnoApiTest, apitest::XNamedRanges
+class ScNamedRangesObj : public CalcUnoApiTest, apitest::XNamedRanges
 {
 public:
     virtual void setUp();
@@ -47,7 +47,7 @@ sal_Int32 ScNamedRangesObj::nTest = 0;
 uno::Reference< lang::XComponent > ScNamedRangesObj::mxComponent;
 
 ScNamedRangesObj::ScNamedRangesObj()
-     : UnoApiTest("/sc/qa/extras/testdocuments")
+     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
@@ -74,7 +74,7 @@ uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
 void ScNamedRangesObj::setUp()
 {
     nTest++;
-    UnoApiTest::setUp();
+    CalcUnoApiTest::setUp();
 }
 
 void ScNamedRangesObj::tearDown()
@@ -82,7 +82,7 @@ void ScNamedRangesObj::tearDown()
     if (nTest == NUMBER_OF_TESTS)
         closeDocument(mxComponent);
 
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScNamedRangesObj);

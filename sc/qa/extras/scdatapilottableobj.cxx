@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xdatapilottable.hxx>
 #include <test/sheet/xdatapilottable2.hxx>
 #include <test/sheet/xdatapilotdescriptor.hxx>
@@ -26,7 +26,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 16
 
-class ScDataPilotTableObj : public UnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable,
+class ScDataPilotTableObj : public CalcUnoApiTest, apitest::XDataPilotDescriptor, apitest::XDataPilotTable,
                                 apitest::XNamed, apitest::XDataPilotTable2
 {
 public:
@@ -67,7 +67,7 @@ sal_Int32 ScDataPilotTableObj::nTest = 0;
 uno::Reference< lang::XComponent > ScDataPilotTableObj::mxComponent;
 
 ScDataPilotTableObj::ScDataPilotTableObj()
-    : UnoApiTest("/sc/qa/extras/testdocuments"),
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments"),
       apitest::XNamed(OUString("DataPilotTable"))
 {
 }
@@ -142,7 +142,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
 void ScDataPilotTableObj::setUp()
 {
     nTest++;
-    UnoApiTest::setUp();
+    CalcUnoApiTest::setUp();
 }
 
 void ScDataPilotTableObj::tearDown()
@@ -150,7 +150,7 @@ void ScDataPilotTableObj::tearDown()
     if (nTest == NUMBER_OF_TESTS)
         closeDocument(mxComponent);
 
-    UnoApiTest::tearDown();
+    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotTableObj);
