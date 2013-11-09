@@ -21,8 +21,8 @@
 #define INCLUDED_cppu_helper_purpenv_Environment_hxx
 
 #include <cppu/cppudllapi.h>
-#include "uno/environment.h"
-#include "cppu/Enterable.hxx"
+#include <uno/environment.h>
+#include <cppu/Enterable.hxx>
 
 
 namespace cppu { namespace helper { namespace purpenv {

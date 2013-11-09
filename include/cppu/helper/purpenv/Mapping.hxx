@@ -20,11 +20,11 @@
 #ifndef INCLUDED_cppu_helper_purpenv_Mapping_hxx
 #define INCLUDED_cppu_helper_purpenv_Mapping_hxx
 
-#include "com/sun/star/uno/Any.h"
+#include <com/sun/star/uno/Any.h>
 
 #include <cppu/cppudllapi.h>
-#include "uno/environment.h"
-#include "uno/mapping.h"
+#include <uno/environment.h>
+#include <uno/mapping.h>
 
 
 namespace cppu { namespace helper { namespace purpenv {

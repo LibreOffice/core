@@ -20,8 +20,8 @@
 #ifndef INCLUDED_cppu_EnvGuards_hxx
 #define INCLUDED_cppu_EnvGuards_hxx
 
-#include "uno/environment.hxx"
-#include "uno/mapping.hxx"
+#include <uno/environment.hxx>
+#include <uno/mapping.hxx>
 
 
 namespace cssuno = com::sun::star::uno;
