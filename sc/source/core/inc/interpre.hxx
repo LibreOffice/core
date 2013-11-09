@@ -790,6 +790,7 @@ void ScQuartile();
 void ScNormInv();
 void ScSNormInv();
 void ScConfidence();
+void ScConfidenceT();
 void ScTrimMean();
 void ScProbability();
 void ScCorrel();
@@ -819,6 +820,7 @@ double GetUpRegIGamma(double fA,double fX);     // upper regularized incomplete 
 double GetGammaDistPDF(double fX, double fAlpha, double fLambda);
 // cumulative distribution function; fLambda is "scale" parameter
 double GetGammaDist(double fX, double fAlpha, double fLambda);
+double GetTInv( double fAlpha, double fSize );
 
 public:
     ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,

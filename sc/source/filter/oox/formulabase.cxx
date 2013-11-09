@@ -761,7 +761,9 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.CHISQ.INV",              "CHISQ.INV",           NOID,    NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.CHISQ.DIST.RT",          "CHISQ.DIST.RT",       NOID,    NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.CHISQ.INV.RT",           "CHISQ.INV.RT",        NOID,    NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.CHISQ.TEST",             "CHISQ.TEST",          NOID,    NOID,   2,  2,  V, { VA }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.CHISQ.TEST",             "CHISQ.TEST",          NOID,    NOID,   2,  2,  V, { VA }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CONFIDENCE.NORM",        "CONFIDENCE.NORM",     NOID,    NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CONFIDENCE.T",           "CONFIDENCE.T",        NOID,    NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions new in Excel 2013.

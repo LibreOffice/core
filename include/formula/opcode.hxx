@@ -356,6 +356,8 @@ enum OpCodeEnum
         ocQuartile          = SC_OPCODE_QUARTILE,
         ocNormInv           = SC_OPCODE_NORM_INV,
         ocConfidence        = SC_OPCODE_CONFIDENCE,
+        ocConfidence_N      = SC_OPCODE_CONFIDENCE_N,
+        ocConfidence_T      = SC_OPCODE_CONFIDENCE_T,
         ocFTest             = SC_OPCODE_F_TEST,
         ocTrimMean          = SC_OPCODE_TRIM_MEAN,
         ocProb              = SC_OPCODE_PROB,

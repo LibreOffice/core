@@ -4143,7 +4143,9 @@ StackVar ScInterpreter::Interpret()
                 case ocQuartile         : ScQuartile();                 break;
                 case ocNormInv          : ScNormInv();                  break;
                 case ocSNormInv         : ScSNormInv();                 break;
-                case ocConfidence       : ScConfidence();               break;
+                case ocConfidence       :
+                case ocConfidence_N     : ScConfidence();               break;
+                case ocConfidence_T     : ScConfidenceT();              break;
                 case ocTrimMean         : ScTrimMean();                 break;
                 case ocProb             : ScProbability();              break;
                 case ocCorrel           : ScCorrel();                   break;
