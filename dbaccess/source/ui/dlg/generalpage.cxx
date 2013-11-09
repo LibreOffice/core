@@ -143,7 +143,7 @@ namespace dbaui
         if ( m_bInitEmbeddedDBList )
         {
             m_bInitEmbeddedDBList = false;
-             m_pEmbeddedDBType->Clear();
+            m_pEmbeddedDBType->Clear();
 
             if ( m_pCollection )
             {
