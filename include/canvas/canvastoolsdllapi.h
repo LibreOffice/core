@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CANVAS_CANVASTOOLSDLLAPI_H
 #define INCLUDED_CANVAS_CANVASTOOLSDLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined(CANVASTOOLS_DLLIMPLEMENTATION)
 #define CANVASTOOLS_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

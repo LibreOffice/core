@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-#include "boost/shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 #include <canvas/canvastoolsdllapi.h>
 
 namespace canvas

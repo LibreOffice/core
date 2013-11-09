@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CANVAS_VERBOSETRACE_HXX
 #define INCLUDED_CANVAS_VERBOSETRACE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/detail/log.h"
+#include <sal/detail/log.h>
 
 #define VERBOSE_TRACE(...) \
     SAL_DETAIL_INFO_IF_FORMAT(true, "canvas.level2", __VA_ARGS__)
