@@ -81,8 +81,8 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include "toolkit/awt/vclxwindow.hxx"
-#include "toolkit/awt/vclxtopwindow.hxx"
+#include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/awt/vclxtopwindow.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <vcl/pointr.hxx>

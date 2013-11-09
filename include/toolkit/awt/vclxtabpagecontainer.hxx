@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include "toolkit/awt/vclxwindow.hxx"
+#include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <cppuhelper/implbase2.hxx>

@@ -251,7 +251,7 @@ namespace com { namespace sun { namespace star {
             throw (::com::sun::star::uno::Exception);
     };
 
-#include "toolkit/controls/geometrycontrolmodel_impl.hxx"
+#include <toolkit/controls/geometrycontrolmodel_impl.hxx>
 
 //........................................................................
 // }    // namespace toolkit

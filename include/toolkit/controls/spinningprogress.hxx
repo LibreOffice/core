@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_CONTROLS_SPINNINGPROGRESS_HXX
 #define INCLUDED_TOOLKIT_CONTROLS_SPINNINGPROGRESS_HXX
 
-#include "toolkit/controls/animatedimages.hxx"
+#include <toolkit/controls/animatedimages.hxx>
 
 //......................................................................................................................
 namespace toolkit

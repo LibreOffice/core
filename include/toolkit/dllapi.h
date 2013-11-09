@@ -20,8 +20,8 @@
 #ifndef INCLUDED_TOOLKIT_DLLAPI_H
 #define INCLUDED_TOOLKIT_DLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined TOOLKIT_DLLIMPLEMENTATION
 #define TOOLKIT_DLLPUBLIC SAL_DLLPUBLIC_EXPORT

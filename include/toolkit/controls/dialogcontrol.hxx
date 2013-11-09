@@ -27,8 +27,8 @@
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
-#include "toolkit/helper/servicenames.hxx"
-#include "toolkit/helper/macros.hxx"
+#include <toolkit/helper/servicenames.hxx>
+#include <toolkit/helper/macros.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase2.hxx>

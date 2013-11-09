@@ -20,8 +20,8 @@
 #ifndef INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX
 #define INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX
 
-#include "toolkit/controls/unocontrolbase.hxx"
-#include "toolkit/controls/unocontrolmodel.hxx"
+#include <toolkit/controls/unocontrolbase.hxx>
+#include <toolkit/controls/unocontrolmodel.hxx>
 
 #include <com/sun/star/awt/XAnimation.hpp>
 #include <com/sun/star/awt/XAnimatedImages.hpp>

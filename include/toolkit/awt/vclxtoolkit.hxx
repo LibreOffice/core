@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 #include <cppuhelper/compbase2.hxx>
-#include "cppuhelper/interfacecontainer.hxx"
+#include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
 #include <osl/module.h>
 #include <tools/link.hxx>

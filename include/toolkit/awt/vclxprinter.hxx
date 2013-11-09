@@ -34,7 +34,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
 
-#include "vcl/oldprintadaptor.hxx"
+#include <vcl/oldprintadaptor.hxx>
 
 // relevant properties for the printer:
 /*

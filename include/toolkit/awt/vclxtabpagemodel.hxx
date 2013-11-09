@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include "toolkit/awt/vclxwindow.hxx"
+#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
