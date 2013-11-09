@@ -19,10 +19,10 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_H
 #define INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_H
 
-#include "typelib/typedescription.h"
-#include "uno/sequence2.h"
-#include "com/sun/star/uno/Type.h"
-#include "rtl/alloc.h"
+#include <typelib/typedescription.h>
+#include <uno/sequence2.h>
+#include <com/sun/star/uno/Type.h>
+#include <rtl/alloc.h>
 
 #include <new>
 

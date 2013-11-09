@@ -22,7 +22,7 @@
 #include <uno/any2.h>
 #include <typelib/typedescription.h>
 #include <com/sun/star/uno/Type.h>
-#include "cppu/unotype.hxx"
+#include <cppu/unotype.hxx>
 #include <rtl/alloc.h>
 
 

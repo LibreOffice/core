@@ -19,16 +19,16 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "osl/interlck.h"
-#include "com/sun/star/uno/Sequence.h"
-#include "typelib/typedescription.h"
-#include "uno/data.h"
-#include "com/sun/star/uno/genfunc.hxx"
-#include "cppu/unotype.hxx"
+#include <osl/interlck.h>
+#include <com/sun/star/uno/Sequence.h>
+#include <typelib/typedescription.h>
+#include <uno/data.h>
+#include <com/sun/star/uno/genfunc.hxx>
+#include <cppu/unotype.hxx>
 
 namespace com
 {

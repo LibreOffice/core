@@ -21,7 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Type.h>
-#include "cppu/unotype.hxx"
+#include <cppu/unotype.hxx>
 
 namespace com
 {

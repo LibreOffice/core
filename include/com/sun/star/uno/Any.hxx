@@ -19,7 +19,7 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_ANY_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_ANY_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <iomanip>
@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
-#include "cppu/unotype.hxx"
+#include <cppu/unotype.hxx>
 
 namespace com
 {
