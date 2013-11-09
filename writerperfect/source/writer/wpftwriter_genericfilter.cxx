@@ -31,6 +31,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "sal/types.h"
 
+#include "EBookImportFilter.hxx"
 #include "WordPerfectImportFilter.hxx"
 #include "MSWorksImportFilter.hxx"
 #include "MWAWImportFilter.hxx"
@@ -46,6 +47,9 @@ static cppu::ImplementationEntry const services[] = {
       &cppu::createSingleComponentFactory, 0, 0 },
     { &MWAWImportFilter_createInstance, &MWAWImportFilter_getImplementationName,
       &MWAWImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &EBookImportFilter_createInstance, &EBookImportFilter_getImplementationName,
+      &EBookImportFilter_getSupportedServiceNames,
       &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 } };
 
