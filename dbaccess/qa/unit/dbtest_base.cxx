@@ -8,8 +8,7 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -24,30 +23,27 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
 class DBTestBase
-    : public ::test::BootstrapFixture
-    , public ::unotest::MacrosTest
+    : public UnoApiTest
 {
 protected:
     static const OUString our_sFilePath;
 public:
-    virtual void setUp();
-    virtual void tearDown();
+    DBTestBase() : UnoApiTest("dbaccess/qa/unit/data") {};
 
     uno::Reference< XOfficeDatabaseDocument >
-        getDocumentForFileName(OUString sFileName);
+        getDocumentForFileName(const OUString &sFileName);
 
     uno::Reference< XConnection >
         getConnectionForDocument(
             uno::Reference< XOfficeDatabaseDocument >& xDocument);
 };
 
-const OUString DBTestBase::our_sFilePath("/dbaccess/qa/unit/data/");
-
 uno::Reference< XOfficeDatabaseDocument >
-    DBTestBase::getDocumentForFileName(OUString sFileName)
+    DBTestBase::getDocumentForFileName(const OUString &sFileName)
 {
-    uno::Reference< lang::XComponent > xComponent =
-        loadFromDesktop(getSrcRootURL() + our_sFilePath + sFileName);
+    OUString sFilePath;
+    createFileURL(sFileName, sFilePath);
+    uno::Reference< lang::XComponent > xComponent (loadFromDesktop(sFilePath));
     CPPUNIT_ASSERT(xComponent.is());
 
     uno::Reference< XOfficeDatabaseDocument > xDocument(xComponent, UNO_QUERY);
@@ -66,21 +62,6 @@ uno::Reference< XConnection > DBTestBase::getConnectionForDocument(
     CPPUNIT_ASSERT(xConnection.is());
 
     return xConnection;
-}
-
-
-void DBTestBase::setUp()
-{
-    ::test::BootstrapFixture::setUp();
-
-    mxDesktop = ::com::sun::star::frame::Desktop::create(
-                    ::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(mxDesktop.is());
-}
-
-void DBTestBase::tearDown()
-{
-    test::BootstrapFixture::tearDown();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

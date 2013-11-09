@@ -100,6 +100,8 @@ private:
 
     void setupTestTable(uno::Reference< XConnection >& xConnection);
 
+    SvFileStream *getWordListStream();
+
     // Individual Tests
     void performPreparedStatementInsertTest(
         uno::Reference< XConnection >& xConnection,
@@ -122,6 +124,22 @@ public:
     CPPUNIT_TEST(testPerformance);
     CPPUNIT_TEST_SUITE_END();
 };
+
+SvFileStream* EmbeddedDBPerformanceTest::getWordListStream()
+{
+    OUString wlPath;
+    createFileURL("wordlist", wlPath);
+
+    SvFileStream *pFile(new SvFileStream(wlPath, STREAM_READ));
+
+    if (!pFile)
+    {
+        fprintf(stderr, "Please ensure the wordlist is present\n");
+        CPPUNIT_ASSERT(false);
+    }
+
+    return pFile;
+}
 
 void EmbeddedDBPerformanceTest::printTimes(
     const TimeValue* pTime1,
@@ -252,15 +270,7 @@ void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
 
     uno::Reference< XParameters > xParameters(xPreparedStatement, UNO_QUERY_THROW);
 
-    ::boost::scoped_ptr< SvFileStream > pFile(new SvFileStream(
-            getSrcRootURL() + our_sFilePath + "wordlist",
-            STREAM_READ));
-
-    if (!pFile)
-    {
-        fprintf(stderr, "Please ensure the wordlist is present\n");
-        CPPUNIT_ASSERT(false);
-    }
+    ::boost::scoped_ptr< SvFileStream > pFile(getWordListStream());
 
     OUString aWord;
     sal_Int32 aID = 0;
@@ -296,15 +306,7 @@ void EmbeddedDBPerformanceTest::performStatementInsertTest(
     uno::Reference< XStatement > xStatement =
         xConnection->createStatement();
 
-    ::boost::scoped_ptr< SvFileStream > pFile(new SvFileStream(
-            getSrcRootURL() + our_sFilePath + "wordlist",
-            STREAM_READ));
-
-    if (!pFile)
-    {
-        fprintf(stderr, "Please ensure the wordlist is present\n");
-        CPPUNIT_ASSERT(false);
-    }
+    ::boost::scoped_ptr< SvFileStream > pFile(getWordListStream());
 
     OUString aWord;
     sal_Int32 aID = 0;
