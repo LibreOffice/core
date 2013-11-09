@@ -21,7 +21,7 @@
 #define INCLUDED_BASIC_SBXPROP_HXX
 
 #include <basic/sbxvar.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class BASIC_DLLPUBLIC SbxProperty : public SbxVariable
 {

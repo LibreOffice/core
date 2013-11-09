@@ -22,7 +22,7 @@
 
 #include <i18nlangtag/lang.h>
 #include <basic/sbxdef.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class SbxFactory;

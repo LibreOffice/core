@@ -22,7 +22,7 @@
 
 #include <basic/sbxprop.hxx>
 #include <basic/sbdef.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class SbModule;
 

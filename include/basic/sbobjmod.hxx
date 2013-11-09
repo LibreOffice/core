@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 // Basic-Module for excel object.
 

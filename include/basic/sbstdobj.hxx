@@ -23,7 +23,7 @@
 #include <basic/sbxobj.hxx>
 #include <vcl/graph.hxx>
 #include <basic/sbxfac.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 //--------------------
 // class SbStdFactory

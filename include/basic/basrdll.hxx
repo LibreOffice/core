@@ -23,7 +23,7 @@
 class ResMgr;
 
 #include <vcl/accel.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class BASIC_DLLPUBLIC BasicDLL
 {

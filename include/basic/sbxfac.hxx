@@ -22,7 +22,7 @@
 
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class SbxBase;
 class SbxObject;

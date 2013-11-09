@@ -30,7 +30,7 @@
 #include <basic/sberrors.hxx>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class SbModule;                     // completed module
 class SbiInstance;                  // runtime instance

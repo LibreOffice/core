@@ -20,16 +20,16 @@
 #ifndef INCLUDED_BASIC_SBX_HXX
 #define INCLUDED_BASIC_SBX_HXX
 
-#include "tools/ref.hxx"
-#include "svl/smplhint.hxx"
-#include "svl/lstner.hxx"
+#include <tools/ref.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/lstner.hxx>
 
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxprop.hxx>
 #include <basic/sbxmeth.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

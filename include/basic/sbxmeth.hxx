@@ -21,7 +21,7 @@
 #define INCLUDED_BASIC_SBXMETH_HXX
 
 #include <basic/sbxvar.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class BASIC_DLLPUBLIC SbxMethod : public SbxVariable
 {

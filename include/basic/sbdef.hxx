@@ -22,7 +22,7 @@
 
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx

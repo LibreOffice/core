@@ -28,7 +28,7 @@
 #include <vector>
 #include <deque>
 #include <boost/utility.hpp>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 #include <basic/codecompletecache.hxx>
 
 class SbMethod;

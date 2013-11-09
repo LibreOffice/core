@@ -22,7 +22,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class BasicManager;
 

@@ -23,7 +23,7 @@
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 #include <vector>
 
 // Basic XML Import/Export

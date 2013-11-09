@@ -25,7 +25,7 @@
 #include <tools/debug.hxx>
 
 #include <basic/sbxdef.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class SvStream;
 

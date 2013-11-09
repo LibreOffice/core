@@ -9,7 +9,7 @@
 #ifndef INCLUDED_BASIC_BASICDLLAPI_H
 #define INCLUDED_BASIC_BASICDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(BASIC_DLLIMPLEMENTATION)
 #define BASIC_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

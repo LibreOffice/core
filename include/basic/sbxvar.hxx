@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <basic/sbxcore.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 
 class SbxDecimal;

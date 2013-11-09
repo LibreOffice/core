@@ -22,7 +22,7 @@
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {

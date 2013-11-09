@@ -24,7 +24,7 @@
 
 #ifndef __RSC
 #include <tools/solar.h>
-#include "tools/errcode.hxx"
+#include <tools/errcode.hxx>
 
 enum SbxClassType {         // SBX-class-IDs (order is important!)
     SbxCLASS_DONTCARE = 1,  // don't care (search, not 0 due to StarBASIC)

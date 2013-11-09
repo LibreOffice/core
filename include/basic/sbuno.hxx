@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <basic/sbxobj.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 

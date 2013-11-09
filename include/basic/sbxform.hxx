@@ -77,7 +77,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 class BASIC_DLLPUBLIC SbxBasicFormater {
   public:

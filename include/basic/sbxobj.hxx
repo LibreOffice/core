@@ -22,7 +22,7 @@
 
 #include <svl/lstner.hxx>
 #include <basic/sbxvar.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 
 class SbxProperty;

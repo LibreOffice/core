@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ustring.hxx>
-#include "basicdllapi.h"
+#include <basic/basicdllapi.h>
 
 namespace basic {
 namespace vba {
