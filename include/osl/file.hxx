@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OSL_FILE_HXX
 #define INCLUDED_OSL_FILE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <string.h>
 

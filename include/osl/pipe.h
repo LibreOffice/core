@@ -21,11 +21,11 @@
 #ifndef INCLUDED_OSL_PIPE_H
 #define INCLUDED_OSL_PIPE_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/security.h"
-#include "rtl/ustring.h"
-#include "sal/saldllapi.h"
+#include <osl/security.h>
+#include <rtl/ustring.h>
+#include <sal/saldllapi.h>
 
 #ifdef __cplusplus
 extern "C" {

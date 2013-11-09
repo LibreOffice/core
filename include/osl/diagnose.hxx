@@ -19,7 +19,7 @@
 #ifndef INCLUDED_OSL_DIAGNOSE_HXX
 #define INCLUDED_OSL_DIAGNOSE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <functional>
 #include <typeinfo>
@@ -29,15 +29,15 @@
 #if !HAVE_CXX11
 #define BOOST_NO_0X_HDR_TYPEINDEX
 #endif
-#include "boost/unordered_set.hpp"
-#include "osl/diagnose.h"
-#include "osl/interlck.h"
-#include "osl/mutex.hxx"
-#include "rtl/allocator.hxx"
-#include "rtl/instance.hxx"
-#include "sal/log.hxx"
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <boost/unordered_set.hpp>
+#include <osl/diagnose.h>
+#include <osl/interlck.h>
+#include <osl/mutex.hxx>
+#include <rtl/allocator.hxx>
+#include <rtl/instance.hxx>
+#include <sal/log.hxx>
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 /// @cond INTERNAL
 

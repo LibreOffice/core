@@ -20,11 +20,11 @@
 #ifndef INCLUDED_OSL_MODULE_H
 #define INCLUDED_OSL_MODULE_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/tencinfo.h"
-#include "rtl/ustring.h"
-#include "sal/saldllapi.h"
+#include <rtl/tencinfo.h>
+#include <rtl/ustring.h>
+#include <sal/saldllapi.h>
 
 #ifdef __cplusplus
 extern "C" {

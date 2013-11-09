@@ -20,11 +20,11 @@
 #ifndef INCLUDED_OSL_THREAD_H
 #define INCLUDED_OSL_THREAD_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/time.h"
-#include "rtl/textenc.h"
-#include "sal/saldllapi.h"
+#include <osl/time.h>
+#include <rtl/textenc.h>
+#include <sal/saldllapi.h>
 
 #ifdef __cplusplus
 extern "C" {

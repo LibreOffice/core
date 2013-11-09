@@ -21,10 +21,10 @@
 #ifndef INCLUDED_OSL_CONDITN_H
 #define INCLUDED_OSL_CONDITN_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/time.h"
-#include "sal/saldllapi.h"
+#include <osl/time.h>
+#include <sal/saldllapi.h>
 
 #ifdef __cplusplus
 extern "C" {

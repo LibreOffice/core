@@ -20,11 +20,11 @@
 #ifndef INCLUDED_OSL_PROFILE_H
 #define INCLUDED_OSL_PROFILE_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ustring.h"
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <rtl/ustring.h>
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

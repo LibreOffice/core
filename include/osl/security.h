@@ -20,10 +20,10 @@
 #ifndef INCLUDED_OSL_SECURITY_H
 #define INCLUDED_OSL_SECURITY_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ustring.h"
-#include "sal/saldllapi.h"
+#include <rtl/ustring.h>
+#include <sal/saldllapi.h>
 
 #ifdef __cplusplus
 extern "C" {

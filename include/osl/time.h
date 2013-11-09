@@ -20,10 +20,10 @@
 #ifndef _OSL_TIME_H_
 #define _OSL_TIME_H_
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

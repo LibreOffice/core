@@ -10,12 +10,12 @@
 #ifndef INCLUDED_OSL_DETAIL_FILE_H
 #define INCLUDED_OSL_DETAIL_FILE_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <sys/stat.h>
 
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 /** @cond INTERNAL */
 
