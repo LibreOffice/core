@@ -45,6 +45,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 namespace connectivity
 {
@@ -96,6 +97,17 @@ namespace connectivity
             /* EMBEDDED MODE DATA */
             /** Denotes that we have a .fdb stored within a .odb file. */
             sal_Bool            m_bIsEmbedded;
+
+            /**
+             * Handle for the parent DatabaseDocument. We need to notify this
+             * whenever any data is written to our temporary database so that
+             * the user is able to save this back to the .odb file.
+             *
+             * Note that this is ONLY set in embedded mode.
+             */
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >
+                m_xParentDocument;
+
             /**
              * Handle for the folder within the .odb where we store our .fdb
              * (Only used if m_bIsEmbedded is true).
@@ -129,12 +141,6 @@ namespace connectivity
                 m_xMetaData;
             /** Statements owned by this connection. */
             OWeakRefArray       m_aStatements;
-
-            /**
-             * If we are embedded in a .odb we need to listen to Document events
-             * in order to save the .fdb back into the .odb.
-             */
-            void attachAsDocumentListener(const ::rtl::OUString& rStorageURL);
 
             /**
              * Firebird stores binary collations for indexes on Character based
