@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_INC_FMTFLD_HXX
 #define INCLUDED_SW_INC_FMTFLD_HXX
 
-#include <list>
-
 #include <com/sun/star/text/XTextField.hpp>
 
 #include <cppuhelper/weakref.hxx>

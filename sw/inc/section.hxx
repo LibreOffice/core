@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_INC_SECTION_HXX
 #define INCLUDED_SW_INC_SECTION_HXX
 
-#include <boost/utility.hpp>
-
 #include <com/sun/star/uno/Sequence.h>
 
 #include <tools/rtti.hxx>

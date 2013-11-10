@@ -74,7 +74,6 @@ class SwList;
 #include <svtools/embedhlp.hxx>
 #include <vector>
 #include <set>
-#include <map>
 #include <memory>
 
 #include <boost/scoped_ptr.hpp>
