@@ -146,6 +146,7 @@ private:
     /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an
         external data provider this reference must be set to 0
     */
+    bool mbInternalDataProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   m_xInternalDataProvider;
 
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
@@ -193,8 +194,6 @@ private:
     void SAL_CALL
         impl_notifyStorageChangeListeners()
                             throw(::com::sun::star::uno::RuntimeException);
-
-    void impl_killInternalData() throw( com::sun::star::util::CloseVetoException );
 
     void impl_store(
         const ::com::sun::star::uno::Sequence<
