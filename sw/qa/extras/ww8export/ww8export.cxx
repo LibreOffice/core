@@ -6,6 +6,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <swmodeltestbase.hxx>
+
+#if !defined(MACOSX) && !defined(WNT)
+
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -13,59 +17,21 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 
-#include <swmodeltestbase.hxx>
-
 class Test : public SwModelTestBase
 {
 public:
-    void testN325936();
-    void testFdo45724();
-    void testFdo46020();
-    void testFirstHeaderFooter();
-    void testZoom();
-    void test56513();
-    void testNewPageStylesTable();
-    void testFdo42144();
-    void testCharacterBorder();
+    Test() : SwModelTestBase("/sw/qa/extras/ww8export/data/", "MS Word 97") {}
 
-    CPPUNIT_TEST_SUITE(Test);
-#if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(run);
-#endif
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-    void run();
+    bool mustTestImportOf(const char* filename) const
+    {
+        // If the testcase is stored in some other format, it's pointless to test.
+        return OString(filename).endsWith(".doc");
+    }
 };
 
-void Test::run()
-{
-    MethodEntry<Test> aMethods[] = {
-        {"n325936.doc", &Test::testN325936},
-        {"fdo45724.odt", &Test::testFdo45724},
-        {"fdo46020.odt", &Test::testFdo46020},
-        {"first-header-footer.doc", &Test::testFirstHeaderFooter},
-        {"zoom.doc", &Test::testZoom},
-        {"fdo56513.doc", &Test::test56513},
-        {"new-page-styles.doc", &Test::testNewPageStylesTable},
-        {"fdo42144.odt", &Test::testFdo42144},
-        {"charborder.odt", &Test::testCharacterBorder},
-    };
-    header();
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
-    {
-        MethodEntry<Test>& rEntry = aMethods[i];
-        load("/sw/qa/extras/ww8export/data/", rEntry.pName);
-        // If the testcase is stored in some other format, it's pointless to test.
-        if (OString(rEntry.pName).endsWith(".doc"))
-            (this->*rEntry.pMethod)();
-        reload("MS Word 97");
-        (this->*rEntry.pMethod)();
-        finish();
-    }
-}
+#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
-void Test::testN325936()
+DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
 {
     /*
      * The problem was that the transparent background of the drawing in the
@@ -79,7 +45,7 @@ void Test::testN325936()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
 }
 
-void Test::testFdo45724()
+DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
 {
     // The text and background color of the control shape was not correct.
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
@@ -88,7 +54,7 @@ void Test::testFdo45724()
     CPPUNIT_ASSERT_EQUAL(OUString("xxx"), xComponent->getCurrentValue().get<OUString>());
 }
 
-void Test::testFdo46020()
+DECLARE_WW8EXPORT_TEST(testFdo46020, "fdo46020.odt")
 {
     // The footnote in that document wasn't exported, check that it is actually exported
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
@@ -96,7 +62,7 @@ void Test::testFdo46020()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
 }
 
-void Test::testFirstHeaderFooter()
+DECLARE_WW8EXPORT_TEST(testFirstHeaderFooter, "first-header-footer.doc")
 {
     // Test import and export of a section's headerf/footerf properties.
 
@@ -116,7 +82,7 @@ void Test::testFirstHeaderFooter()
     CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
 }
 
-void Test::testZoom()
+DECLARE_WW8EXPORT_TEST(testZoom, "zoom.doc")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -126,28 +92,28 @@ void Test::testZoom()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 }
 
-void Test::test56513()
+DECLARE_WW8EXPORT_TEST(test56513, "fdo56513.doc")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("This is the header of the first section"),  parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header of the second section"),   parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header of the second section"),  parseDump("/root/page[3]/header/txt/text()"));
 }
 
-void Test::testNewPageStylesTable()
+DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals and Results (Page 1)*"),  parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Assessment (Page 2)****"),   parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals: Next Year (Page 3)*******"),  parseDump("/root/page[3]/header/txt/text()"));
 }
 
-void Test::testFdo42144()
+DECLARE_WW8EXPORT_TEST(testFdo42144, "fdo42144.odt")
 {
     // Footer wasn't disabled -- instead empty footer was exported.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xStyle, "FooterIsOn")));
 }
 
-void Test::testCharacterBorder()
+DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // WW8 has just one border attribute (sprmCBrc) for text border so all side has
@@ -184,7 +150,7 @@ void Test::testCharacterBorder()
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
