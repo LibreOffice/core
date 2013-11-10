@@ -880,7 +880,7 @@ private:
         aEvent.mnX            = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
         aEvent.mnY            = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
-        aEvent.mbDeltaIsPixel = TRUE;
+        aEvent.mbDeltaIsPixel = FALSE;
 
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
