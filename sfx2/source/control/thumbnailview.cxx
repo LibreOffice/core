@@ -737,7 +737,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
 
-        if (pItem && pItem->isVisible())
+        if (pItem)
         {
             if ( rMEvt.GetClicks() == 1 )
             {
@@ -829,10 +829,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
             }
             else if ( rMEvt.GetClicks() == 2 )
             {
-                Rectangle aRect(pItem->getDrawArea());
-
-                if (aRect.IsInside(rMEvt.GetPosPixel()))
-                    OnItemDblClicked(pItem);
+                OnItemDblClicked(pItem);
             }
 
             return;
