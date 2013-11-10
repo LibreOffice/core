@@ -97,9 +97,17 @@ ALLTAR  : $(LOCALPYFILES)
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 .IF "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
+.IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall $(OOOHELPPACK)
 .ELSE
+ALLTAR : openoffice_$(defaultlangiso) $(eq,$(OS),MACOSX $(NULL) ooolanguagepack) $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
+.ENDIF
+.ELSE
+.IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall $(OOOHELPPACK) sdkooall
+.ELSE
+ALLTAR : openoffice_$(defaultlangiso) $(eq,$(OS),MACOSX $(NULL) ooolanguagepack) $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US) sdkoo_en-US
+.ENDIF
 .ENDIF
 .ELSE # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
