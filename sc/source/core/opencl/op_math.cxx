@@ -1037,6 +1037,45 @@ void OpArcSinHyp::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return asinh(tmp);\n";
     ss << "}";
 }
+void OpArcTan2::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i) ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double x_num = " << GetBottom() << ";\n";
+    ss << "    double y_num = " << GetBottom() << ";\n";
+#ifdef ISNAN
+    FormulaToken *iXNum = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVRX=
+        dynamic_cast<const formula::SingleVectorRefToken *>(iXNum);
+    FormulaToken *iYNum = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVRY=
+        dynamic_cast<const formula::SingleVectorRefToken *>(iYNum);
+    ss << "    int buffer_x_len = " << tmpCurDVRX->GetArrayLength() << ";\n";
+    ss << "    int buffer_y_len = " << tmpCurDVRY->GetArrayLength() << ";\n";
+    ss << "    if((gid0)>=buffer_x_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        x_num = " << GetBottom() << ";\n";
+    ss << "    else \n    ";
+#endif
+    ss << "    x_num = "<< vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef ISNAN
+    ss << "    if((gid0)>=buffer_y_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        y_num = " << GetBottom() << ";\n";
+    ss << "    else \n    ";
+#endif
+    ss << "    y_num = "<< vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+    ss << "    return atan2(y_num, x_num);\n";
+    ss << "}";
+}
 void OpArcTan::GenSlidingWindowFunction(std::stringstream &ss,
     const std::string sSymName, SubArguments &vSubArguments)
 {
