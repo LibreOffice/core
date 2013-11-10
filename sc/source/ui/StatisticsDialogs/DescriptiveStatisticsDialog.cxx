@@ -56,7 +56,9 @@ static const StatisticCalculation lclCalcDefinitions[] =
 };
 
 static const OUString strWildcardRange("%RANGE%");
-
+static const OUString strWildcardNumber("%NUMBER%");
+static const OUString strColumnLabelTemplate("Column %NUMBER%");
+static const OUString strRowLabelTemplate("Row %NUMBER%");
 }
 
 ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
@@ -75,18 +77,42 @@ sal_Bool ScDescriptiveStatisticsDialog::Close()
     return DoClose( ScDescriptiveStatisticsDialogWrapper::GetChildWindowId() );
 }
 
-void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
+sal_Int16 ScDescriptiveStatisticsDialog::GetUndoNameId()
 {
-    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, STR_DESCRIPTIVE_STATISTICS_UNDO_NAME));
-    ScDocShell* pDocShell = mViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo );
+    return STR_DESCRIPTIVE_STATISTICS_UNDO_NAME;
+}
 
+ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
+{
     OUString aReferenceString;
 
     AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
+    boost::scoped_ptr<DataRangeIterator> pIterator;
+    if (mGroupedBy == BY_COLUMN)
+        pIterator.reset(new DataRangeByColumnIterator(mInputRange));
+    else
+        pIterator.reset(new DataRangeByRowIterator(mInputRange));
+
+    aOutput.nextColumn();
+
+    // Write column/row labels
+    for( ; pIterator->hasNext(); pIterator->next() )
+    {
+        if (mGroupedBy == BY_COLUMN)
+            aTemplate.setTemplate(strColumnLabelTemplate);
+        else
+            aTemplate.setTemplate(strRowLabelTemplate);
+        aTemplate.applyNumber(strWildcardNumber, pIterator->index() + 1);
+        aOutput.writeBoldString(aTemplate.getTemplate());
+        aOutput.nextColumn();
+    }
+    aOutput.nextRow();
+    aOutput.resetColumn();
+    aOutput.push();
+
+    // Write calculation labels
     for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
     {
         OUString aLabel(SC_STRLOAD(RID_STATISTICS_DLGS, lclCalcDefinitions[i].aCalculationNameId));
@@ -95,11 +121,7 @@ void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
     }
     aOutput.nextColumn();
 
-    boost::scoped_ptr<DataRangeIterator> pIterator;
-    if (mGroupedBy == BY_COLUMN)
-        pIterator.reset(new DataRangeByColumnIterator(mInputRange));
-    else
-        pIterator.reset(new DataRangeByRowIterator(mInputRange));
+    pIterator->reset();
 
     for( ; pIterator->hasNext(); pIterator->next() )
     {
@@ -115,9 +137,7 @@ void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
         aOutput.nextColumn();
     }
 
-    pUndoManager->LeaveListAction();
-    ScRange aOutputRange(aOutput.mMinimumAddress, aOutput.mMaximumAddress);
-    pDocShell->PostPaint( aOutputRange, PAINT_GRID );
+    return ScRange(aOutput.mMinimumAddress, aOutput.mMaximumAddress);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

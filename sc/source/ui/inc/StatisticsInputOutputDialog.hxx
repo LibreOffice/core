@@ -38,7 +38,10 @@ public:
     virtual void        SetActive();
 
 protected:
-    virtual void CalculateInputAndWriteToOutput() = 0;
+    virtual void CalculateInputAndWriteToOutput();
+
+    virtual ScRange ApplyOutput(ScDocShell* pDocShell) = 0;
+    virtual sal_Int16 GetUndoNameId() = 0;
 
     // Widgets
     FixedText*          mpInputRangeLabel;

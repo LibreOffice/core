@@ -45,19 +45,24 @@ sal_Bool ScExponentialSmoothingDialog::Close()
     return DoClose( ScExponentialSmoothingDialogWrapper::GetChildWindowId() );
 }
 
-void ScExponentialSmoothingDialog::CalculateInputAndWriteToOutput( )
+sal_Int16 ScExponentialSmoothingDialog::GetUndoNameId()
 {
-    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, STR_EXPONENTIAL_SMOOTHING_UNDO_NAME));
-    ScDocShell* pDocShell = mViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo );
+    return STR_EXPONENTIAL_SMOOTHING_UNDO_NAME;
+}
 
+ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
+{
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
     // Smoothing factor
     double aSmoothingFactor = mpSmoothingFactor->GetValue() / 100.0;
 
+    // Alpha
+    output.writeBoldString("Alpha");
+    output.nextRow();
+
+    // Alpha Value
     ScAddress aSmoothingFactorAddress = output.current();
     output.writeValue(aSmoothingFactor);
     output.nextRow();
@@ -77,6 +82,16 @@ void ScExponentialSmoothingDialog::CalculateInputAndWriteToOutput( )
 
         ScRange aCurrentRange = pIterator->get();
 
+        // Write column label
+        if (mGroupedBy == BY_COLUMN)
+            aTemplate.setTemplate("Column %NUMBER%");
+        else
+            aTemplate.setTemplate("Row %NUMBER%");
+        aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
+        output.writeBoldString(aTemplate.getTemplate());
+        output.nextRow();
+
+        // Initial value
         if (false)
         {
             aTemplate.setTemplate("=AVERAGE(%RANGE%)");
@@ -107,9 +122,7 @@ void ScExponentialSmoothingDialog::CalculateInputAndWriteToOutput( )
         output.nextColumn();
     }
 
-    pUndoManager->LeaveListAction();
-    ScRange aOutputRange(output.mMinimumAddress, output.mMaximumAddress);
-    pDocShell->PostPaint( aOutputRange, PAINT_GRID );
+    return ScRange (output.mMinimumAddress, output.mMaximumAddress);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

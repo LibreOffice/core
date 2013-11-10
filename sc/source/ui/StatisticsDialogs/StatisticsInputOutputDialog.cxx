@@ -22,6 +22,7 @@
 #include "scresid.hxx"
 #include "random.hxx"
 #include "docfunc.hxx"
+#include "strload.hxx"
 
 #include "StatisticsInputOutputDialog.hxx"
 
@@ -220,6 +221,19 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, GroupByChanged )
         mGroupedBy = BY_ROW;
 
     return 0;
+}
+
+void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()
+{
+    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, GetUndoNameId()));
+    ScDocShell* pDocShell = mViewData->GetDocShell();
+    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
+    pUndoManager->EnterListAction( aUndo, aUndo );
+
+    ScRange aOutputRange = ApplyOutput(pDocShell);
+
+    pUndoManager->LeaveListAction();
+    pDocShell->PostPaint( aOutputRange, PAINT_GRID );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

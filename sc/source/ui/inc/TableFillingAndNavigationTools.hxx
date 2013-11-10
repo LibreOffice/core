@@ -108,6 +108,7 @@ public:
     virtual bool hasNext() = 0;
     virtual ScRange get() = 0;
     virtual void next() = 0;
+    virtual void reset() = 0;
     virtual sal_Int32 index();
 
     virtual DataCellIterator iterateCells() = 0;
@@ -124,6 +125,7 @@ public:
     virtual bool hasNext();
     virtual void next();
     virtual ScRange get();
+    virtual void reset();
     virtual DataCellIterator iterateCells();
 };
 
@@ -138,10 +140,9 @@ public:
     virtual bool hasNext();
     virtual void next();
     virtual ScRange get();
+    virtual void reset();
     virtual DataCellIterator iterateCells();
 };
-
-
 
 #endif
 

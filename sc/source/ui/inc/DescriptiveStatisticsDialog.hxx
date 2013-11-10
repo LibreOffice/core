@@ -33,7 +33,8 @@ public:
     virtual sal_Bool Close();
 
 protected:
-    virtual void CalculateInputAndWriteToOutput();
+    virtual sal_Int16 GetUndoNameId();
+    virtual ScRange ApplyOutput(ScDocShell* pDocShell);
 };
 
 #endif

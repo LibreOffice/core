@@ -87,16 +87,19 @@ sal_Bool ScAnalysisOfVarianceDialog::Close()
     return DoClose( ScAnalysisOfVarianceDialogWrapper::GetChildWindowId() );
 }
 
-void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
+sal_Int16 ScAnalysisOfVarianceDialog::GetUndoNameId()
 {
-    OUString aUndo( SC_STRLOAD( RID_STATISTICS_DLGS, STR_ANALYSIS_OF_VARIANCE_UNDO_NAME));
+    return STR_ANALYSIS_OF_VARIANCE_UNDO_NAME;
+}
 
-    ScDocShell* pDocShell = mViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo );
-
+ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
+{
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
+
+    output.writeBoldString("ANOVA - Single Factor");
+    output.nextRow();
+    output.nextRow();
 
     // Write labels
     for(sal_Int32 i = 0; lclBasicStatisticsLabels[i] != NULL; i++)
@@ -114,7 +117,7 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
     else
         pIterator.reset(new DataRangeByRowIterator(mInputRange));
 
-    // Write statistic formulas for columns
+    // Write statistic formulas for rows/columns
     for( ; pIterator->hasNext(); pIterator->next() )
     {
         output.resetColumn();
@@ -124,7 +127,7 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
         else
             aTemplate.setTemplate(strRowLabelTemplate);
 
-        aTemplate.applyString(strWildcardNumber, OUString::number(pIterator->index() + 1));
+        aTemplate.applyNumber(strWildcardNumber, pIterator->index() + 1);
         pDocShell->GetDocFunc().SetStringCell(output.current(), aTemplate.getTemplate(), true);
         output.nextColumn();
 
@@ -260,9 +263,7 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
     }
     output.nextRow();
 
-    ScRange aOutputRange(output.mMinimumAddress, output.mMaximumAddress);
-    pUndoManager->LeaveListAction();
-    pDocShell->PostPaint( aOutputRange, PAINT_GRID );
+    return ScRange(output.mMinimumAddress, output.mMaximumAddress);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

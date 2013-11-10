@@ -273,6 +273,11 @@ ScRange DataRangeByColumnIterator::get()
     );
 }
 
+void DataRangeByColumnIterator::reset()
+{
+    mCol = mInputRange.aStart.Col();
+}
+
 DataCellIterator DataRangeByColumnIterator::iterateCells()
 {
     return DataCellIterator(get(), false);
@@ -302,6 +307,11 @@ ScRange DataRangeByRowIterator::get()
         ScAddress(mInputRange.aStart.Col(), mRow, mInputRange.aStart.Tab()),
         ScAddress(mInputRange.aEnd.Col(),   mRow, mInputRange.aEnd.Tab())
     );
+}
+
+void DataRangeByRowIterator::reset()
+{
+    mRow = mInputRange.aStart.Row();
 }
 
 DataCellIterator DataRangeByRowIterator::iterateCells()

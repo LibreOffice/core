@@ -45,13 +45,13 @@ sal_Bool ScMovingAverageDialog::Close()
     return DoClose( ScMovingAverageDialogWrapper::GetChildWindowId() );
 }
 
-void ScMovingAverageDialog::CalculateInputAndWriteToOutput( )
+sal_Int16 ScMovingAverageDialog::GetUndoNameId()
 {
-    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, STR_MOVING_AVERAGE_UNDO_NAME));
-    ScDocShell* pDocShell = mViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo );
+    return STR_MOVING_AVERAGE_UNDO_NAME;
+}
 
+ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
+{
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
@@ -68,10 +68,13 @@ void ScMovingAverageDialog::CalculateInputAndWriteToOutput( )
     {
         output.resetRow();
 
-        // Write column label
-        aTemplate.setTemplate("Column %NUMBER%");
+        // Write label
+        if (mGroupedBy == BY_COLUMN)
+            aTemplate.setTemplate("Column %NUMBER%");
+        else
+            aTemplate.setTemplate("Row %NUMBER%");
         aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
-        output.writeString(aTemplate.getTemplate());
+        output.writeBoldString(aTemplate.getTemplate());
         output.nextRow();
 
         DataCellIterator aDataCellIterator = pIterator->iterateCells();
@@ -102,16 +105,13 @@ void ScMovingAverageDialog::CalculateInputAndWriteToOutput( )
             }
             else
             {
-                output.writeString("N/A");
+                output.writeFormula("=#N/A");
             }
             output.nextRow();
         }
         output.nextColumn();
     }
-
-    pUndoManager->LeaveListAction();
-    ScRange aOutputRange(output.mMinimumAddress, output.mMaximumAddress);
-    pDocShell->PostPaint( aOutputRange, PAINT_GRID );
+    return ScRange(output.mMinimumAddress, output.mMaximumAddress);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,13 +71,13 @@ ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
 ScMatrixComparisonGenerator::~ScMatrixComparisonGenerator()
 {}
 
-void ScMatrixComparisonGenerator::CalculateInputAndWriteToOutput( )
+sal_Int16 ScMatrixComparisonGenerator::GetUndoNameId()
 {
-    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, STR_CORRELATION_UNDO_NAME));
-    ScDocShell* pDocShell = mViewData->GetDocShell();
-    svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo );
+    return STR_CORRELATION_UNDO_NAME;
+}
 
+ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
+{
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
@@ -128,9 +128,7 @@ void ScMatrixComparisonGenerator::CalculateInputAndWriteToOutput( )
 
     lclWriteCorrelationFormulas(output, aTemplate, aRangeList, getTemplate());
 
-    ScRange aOutputRange(output.mMinimumAddress, output.mMaximumAddress);
-    pUndoManager->LeaveListAction();
-    pDocShell->PostPaint(aOutputRange, PAINT_GRID);
+    return ScRange(output.mMinimumAddress, output.mMaximumAddress);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
