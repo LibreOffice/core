@@ -302,6 +302,12 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
     osl_atomic_decrement( &m_refCount );
 }
 
+void Connection::notifyDatabaseModified()
+{
+    if (m_xParentDocument.is()) // Only true in embedded mode
+        m_xParentDocument->setModified(sal_True);
+}
+
 //----- XServiceInfo ---------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(Connection, "com.sun.star.sdbc.drivers.firebird.Connection",
                                                     "com.sun.star.sdbc.Connection")
