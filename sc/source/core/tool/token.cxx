@@ -1442,6 +1442,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocBitOr:
             case ocBitLshift:
             case ocBitRshift:
+            case ocBitXor:
             // Don't change the state.
             break;
             default:
