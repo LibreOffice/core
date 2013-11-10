@@ -206,6 +206,7 @@ public:
     void testMathFormulaMod();
     void testMathFormulaTrunc();
     void testStatisticalFormulaSkew();
+    void testMathFormulaArcTan2();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -343,6 +344,7 @@ public:
     CPPUNIT_TEST(testMathFormulaMod);
     CPPUNIT_TEST(testMathFormulaTrunc);
     CPPUNIT_TEST(testStatisticalFormulaSkew);
+    CPPUNIT_TEST(testMathFormulaArcTan2);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3317,6 +3319,33 @@ void ScOpenclTest:: testFinacialNPER1Formula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-147]
+void ScOpenclTest::testMathFormulaArcTan2()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh =
+        loadDoc("opencl/math/ArcTan2.", ODS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes =
+        loadDoc("opencl/math/ArcTan2.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Verify ATan2 Function
+    for (SCROW i = 1; i <= 17; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.000001);
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
+
 //[AMLOEXT-148]
 void ScOpenclTest::testStatisticalFormulaChiSqInv()
 {
