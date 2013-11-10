@@ -189,6 +189,16 @@ namespace connectivity
                 throw(::com::sun::star::sdbc::SQLException);
 
             /**
+              * Must be called anytime the underlying database is likely to have
+              * changed.
+              *
+              * This is used to notify the database document of any changes, so
+              * that the user is informed of any pending changes needing to be
+              * saved.
+              */
+            void notifyDatabaseModified();
+
+            /**
              * Create a new Blob tied to this connection. Blobs are tied to a
              * transaction and not to a statement, hence the connection should
              * deal with their management.
