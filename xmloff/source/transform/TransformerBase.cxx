@@ -1192,10 +1192,10 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
         nVal += (rValue[nPos] - sal_Unicode('0'));
         nPos++;
     }
-    double nDiv = 1.;
     if( nPos < nLen && sal_Unicode('.') == rValue[nPos] )
     {
         nPos++;
+        double nDiv = 1.;
 
         while( nPos < nLen &&
                sal_Unicode('0') <= rValue[nPos] &&
