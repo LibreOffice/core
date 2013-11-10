@@ -33,7 +33,7 @@
 #include "document.hxx"
 #include "docpool.hxx"
 
-#define SC_RTFTWIPTOL 10        // 10 Twips Toleranz bei Spaltenbestimmung
+#define SC_RTFTWIPTOL 10        // 10 Twips tolerance when determining columns
 
 
 
@@ -51,7 +51,7 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
     // RTF default FontSize 12Pt
     long nMM = OutputDevice::LogicToLogic( 12, MAP_POINT, MAP_100TH_MM );
     pPool->SetPoolDefaultItem( SvxFontHeightItem( nMM, 100, EE_CHAR_FONTHEIGHT ) );
-    // freifliegender pInsDefault
+    // Free-flying pInsDefault
     pInsDefault = new ScRTFCellDefault( pPool );
 }
 
@@ -74,18 +74,18 @@ sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
         if ( !maList.empty() )
         {
             ScEEParseEntry* pE = maList.back();
-            if (    // komplett leer
+            if (    // Completely empty
                 (  (  pE->aSel.nStartPara == pE->aSel.nEndPara
                    && pE->aSel.nStartPos  == pE->aSel.nEndPos
                    )
-                ||  // leerer Paragraph
+                ||  // Empty paragraph
                    (  pE->aSel.nStartPara + 1 == pE->aSel.nEndPara
                    && pE->aSel.nStartPos      == pEdit->GetTextLen( pE->aSel.nStartPara )
                    && pE->aSel.nEndPos        == 0
                    )
                 )
                )
-            {   // den letzten leeren Absatz nicht uebernehmen
+            {   // Don't take over the last paragraph
                 maList.pop_back();
             }
         }
@@ -98,9 +98,9 @@ sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
 
 void ScRTFParser::EntryEnd( ScEEParseEntry* pE, const ESelection& aSel )
 {
-    // Paragraph -2 stript den angehaengten leeren Paragraph
+    // Paragraph -2 strips the attached empty paragraph
     pE->aSel.nEndPara = aSel.nEndPara - 2;
-    // obwohl das nEndPos heisst, ist das letzte Position + 1
+    // Although it's called nEndPos, the last one is position + 1
     pE->aSel.nEndPos = pEdit->GetTextLen( aSel.nEndPara - 1 );
 }
 
@@ -124,10 +124,10 @@ sal_Bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
     if ( !nCount )
         return false;
     SCCOL nCol = *pCol;
-    // nCol ist Einfuegeposition, da liegt der Naechsthoehere (oder auch nicht)
+    // nCol is insertion position; the next one higher up is there (or not)
     if ( nCol < static_cast<SCCOL>(nCount) && (((*pColTwips)[nCol] - SC_RTFTWIPTOL) <= nTwips) )
         return sal_True;
-    // nicht kleiner als alles andere? dann mit Naechstniedrigerem vergleichen
+    // Not smaller than everything else? Then compare with the next lower one
     else if ( nCol != 0 && (((*pColTwips)[nCol-1] + SC_RTFTWIPTOL) >= nTwips) )
     {
         (*pCol)--;
@@ -150,13 +150,13 @@ void ScRTFParser::ColAdjust()
                 nCol = 0;
             pE->nCol = nCol;
             if ( pE->nColOverlap > 1 )
-                nCol = nCol + pE->nColOverlap;       // merged cells mit \clmrg
+                nCol = nCol + pE->nColOverlap; // Merged cells with \clmrg
             else
             {
                 SeekTwips( pE->nTwips, &nCol );
                 if ( ++nCol <= pE->nCol )
-                    nCol = pE->nCol + 1;        // verschobene Zell-X
-                pE->nColOverlap = nCol - pE->nCol;      // merged cells ohne \clmrg
+                    nCol = pE->nCol + 1; // Moved cell X
+                pE->nColOverlap = nCol - pE->nCol; // Merged cells without \clmrg
             }
             if ( nCol > nColMax )
                 nColMax = nCol;
@@ -189,11 +189,11 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
             break;
         case RTFIMP_END:
             if ( pInfo->aSelection.nEndPos )
-            {   // falls noch Text: letzten Absatz erzeugen
+            {   // If still text: create last paragraph
                 pActDefault = NULL;
                 pInfo->nToken = RTF_PAR;
-                // EditEngine hat keinen leeren Paragraph mehr angehaengt
-                // den EntryEnd strippen koennte
+                // EditEngine did not attach an empty paragraph anymore
+                // which EntryEnd could strip
                 pInfo->aSelection.nEndPara++;
                 ProcToken( pInfo );
             }
@@ -210,15 +210,15 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
     return 0;
 }
 
-
-// bei RTF_INTBL bzw. am Anfang von erstem RTF_CELL nach RTF_CELLX wenn es
-// kein RTF_INTBL gab, bad behavior
+// Bad behavior:
+// For RTF_INTBL or respectively at the start of the first RTF_CELL
+// after RTF_CELLX if there was no RTF_INTBL
 void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
 {
     if ( bNewDef )
     {
         bNewDef = false;
-        // rechts nicht buendig? => neue Tabelle
+        // Not flush on the right? => new table
         if ( nLastWidth && !maDefaultList.empty() )
         {
             const ScRTFCellDefault& rD = maDefaultList.back();
@@ -235,7 +235,7 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
                 }
             }
         }
-        // TwipCols aufbauen, erst nach nLastWidth Vergleich!
+        // Build up TwipCols only after nLastWidth comparison!
         for ( size_t i = 0, n = maDefaultList.size(); i < n; ++i )
         {
             const ScRTFCellDefault& rD = maDefaultList[i];
@@ -309,9 +309,9 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 mnCurPos = maDefaultList.size() - 1;
             }
             OSL_ENSURE( pDefMerge, "RTF_CLMRG: pDefMerge==0" );
-            if ( pDefMerge )        // sonst rottes RTF
-                pDefMerge->nColOverlap++;   // mehrere nacheinander moeglich
-            pInsDefault->nColOverlap = 0;   // Flag: ignoriere diese
+            if ( pDefMerge ) // Else broken RTF
+                pDefMerge->nColOverlap++;   // multiple successive ones possible
+            pInsDefault->nColOverlap = 0;   // Flag: ignore these
             nLastToken = pInfo->nToken;
         }
         break;
@@ -319,9 +319,9 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         {
             bNewDef = sal_True;
             pInsDefault->nCol = nColCnt;
-            pInsDefault->nTwips = pInfo->nTokenValue;   // rechter Zellenrand
+            pInsDefault->nTwips = pInfo->nTokenValue; // Right cell border
             maDefaultList.push_back( pInsDefault );
-            // neuer freifliegender pInsDefault
+            // New free-flying pInsDefault
             pInsDefault = new ScRTFCellDefault( pPool );
             if ( ++nColCnt > nColMax )
                 nColMax = nColCnt;
@@ -330,8 +330,8 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         break;
         case RTF_INTBL:         // before the first RTF_CELL
         {
-            // einmal ueber NextToken und einmal ueber UnknownAttrToken
-            // oder z.B. \intbl ... \cell \pard \intbl ... \cell
+            // Once over NextToken and once over UnknownAttrToken
+            // or e.g. \intbl ... \cell \pard \intbl ... \cell
             if ( nLastToken != RTF_INTBL && nLastToken != RTF_CELL && nLastToken != RTF_PAR )
             {
                 NewCellRow( pInfo );
@@ -344,11 +344,11 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             OSL_ENSURE( pActDefault, "RTF_CELL: pActDefault==0" );
             if ( bNewDef || !pActDefault )
                 NewCellRow( pInfo );    // davor war kein \intbl, bad behavior
-            // rottes RTF? retten was zu retten ist
+            // Broken RTF? Let's save what we can
             if ( !pActDefault )
                 pActDefault = pInsDefault;
             if ( pActDefault->nColOverlap > 0 )
-            {   // nicht merged mit vorheriger
+            {   // Not merged with preceding
                 pActEntry->nCol = pActDefault->nCol;
                 pActEntry->nColOverlap = pActDefault->nColOverlap;
                 pActEntry->nTwips = pActDefault->nTwips;
@@ -359,17 +359,17 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 if ( nStartAdjust == (sal_uLong)~0 )
                     nStartAdjust = maList.size();
                 maList.push_back( pActEntry );
-                NewActEntry( pActEntry );   // neuer freifliegender pActEntry
+                NewActEntry( pActEntry ); // New free-flying pActEntry
             }
             else
-            {   // aktuelle Twips der MergeCell zuweisen
+            {   // Assign current Twips to MergeCell
                 if ( !maList.empty() )
                 {
                     pE = maList.back();
                     pE->nTwips = pActDefault->nTwips;
                 }
-                // Selection des freifliegenden pActEntry anpassen
-                // Paragraph -1 wg. Textaufbruch in EditEngine waehrend Parse
+                // Adjust selection of free-flying pActEntry
+                // Paragraph -1 due to separated text in EditEngine during parsing
                 pActEntry->aSel.nStartPara = pInfo->aSelection.nEndPara - 1;
             }
 
@@ -380,7 +380,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_ROW:           // means the end of a row
+        case RTF_ROW:           // denotes the end of a row
         {
             NextRow();
             nLastToken = pInfo->nToken;
@@ -417,8 +417,5 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         }
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
