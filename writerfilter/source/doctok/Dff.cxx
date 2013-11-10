@@ -172,7 +172,7 @@ sal_uInt32 DffRecord::getShapeType()
 {
     sal_uInt32 nResult = 0;
 
-    Records_t aRecords = findRecords(0xf00a);
+    findRecords(0xf00a);
 
     return nResult;
 }
@@ -181,7 +181,7 @@ sal_uInt32 DffRecord::getShapeId()
 {
     sal_uInt32 nResult = 0;
 
-    Records_t aRecords = findRecords(0xf00a);
+    findRecords(0xf00a);
 
     return nResult;
 }
