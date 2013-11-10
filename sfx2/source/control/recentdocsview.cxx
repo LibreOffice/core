@@ -180,14 +180,10 @@ void RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
 
-        if (pItem && pItem->isVisible())
+        if (pItem)
         {
-            Rectangle aRect(pItem->getDrawArea());
-            if (aRect.IsInside(rMEvt.GetPosPixel()))
-            {
-                OnItemDblClicked(pItem);
-                return;
-            }
+            OpenItem(pItem);
+            return;
         }
     }
     ThumbnailView::MouseButtonDown( rMEvt );
