@@ -147,7 +147,7 @@ void lcl_createDefintionObject(const OUString& _rName
                            ,const Reference< XNameContainer >& _xTableDefinitions
                            ,Reference<XPropertySet>& _xTableDefinition
                            ,Reference<XNameAccess>& _xColumnDefinitions
-                           ,sal_Bool _bModified)
+                           ,sal_Bool)
 {
     if ( _xTableDefinitions.is() )
     {
@@ -158,7 +158,7 @@ void lcl_createDefintionObject(const OUString& _rName
             // set as folder
             _xTableDefinition.set( TableDefinition::createWithName( ::comphelper::getProcessComponentContext(), _rName ), UNO_QUERY);
             _xTableDefinitions->insertByName(_rName,makeAny(_xTableDefinition));
-            ::dbaccess::notifyDataSourceModified(_xTableDefinitions,_bModified);
+//             ::dbaccess::notifyDataSourceModified(_xTableDefinitions,_bModified);
         }
         Reference<XColumnsSupplier> xColumnsSupplier(_xTableDefinition,UNO_QUERY);
         if ( xColumnsSupplier.is() )
@@ -311,7 +311,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 
     Reference<XPropertySet> xTableDefinition;
     Reference<XNameAccess> xColumnDefinitions;
-    lcl_createDefintionObject(getNameForObject(descriptor),m_xTableDefinitions,xTableDefinition,xColumnDefinitions,sal_False);
+    lcl_createDefintionObject(getNameForObject(descriptor),m_xTableDefinitions,xTableDefinition,xColumnDefinitions,sal_True);
     Reference<XColumnsSupplier> xSup(descriptor,UNO_QUERY);
     Reference<XDataDescriptorFactory> xFac(xColumnDefinitions,UNO_QUERY);
     Reference<XAppend> xAppend(xColumnDefinitions,UNO_QUERY);
