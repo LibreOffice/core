@@ -23,12 +23,6 @@ namespace writerfilter {
 namespace doctok
 {
 
-writerfilter::Reference<Properties>::Pointer_t
-WW8FSPA::get_shape()
-{
-    return writerfilter::Reference<Properties>::Pointer_t();
-}
-
 void WW8FFDATA::resolveNoAuto(Properties & /*rHandler*/)
 {
 }

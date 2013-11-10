@@ -25362,9 +25362,6 @@
         <!--Class PICF-->
         <!--Class FSPA-->
         <UML:Class xmi.id="FSPA" name="FSPA">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>26</UML:TaggedValue.dataValue>
