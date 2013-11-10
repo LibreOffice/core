@@ -37,7 +37,6 @@
 #include "CachedDataSequence.hxx"
 
 #include <map>
-#include <memory>
 
 namespace chart
 {
