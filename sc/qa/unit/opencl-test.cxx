@@ -207,6 +207,7 @@ public:
     void testMathFormulaTrunc();
     void testStatisticalFormulaSkew();
     void testMathFormulaArcTan2();
+    void testMathFormulaBitOr();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -345,6 +346,7 @@ public:
     CPPUNIT_TEST(testMathFormulaTrunc);
     CPPUNIT_TEST(testStatisticalFormulaSkew);
     CPPUNIT_TEST(testMathFormulaArcTan2);
+    CPPUNIT_TEST(testMathFormulaBitOr);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3417,6 +3419,32 @@ void ScOpenclTest::testStatisticalFormulaExpondist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-152]
+void ScOpenclTest::testMathFormulaBitOr()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh =
+        loadDoc("opencl/math/BitOr.", ODS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes =
+        loadDoc("opencl/math/BitOr.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Verify BitOr Function
+    for (SCROW i = 1; i <= 20; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
 //[AMLOEXT-153]
 void ScOpenclTest::testMathFormulaOdd()
 {
