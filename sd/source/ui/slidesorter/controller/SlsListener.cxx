@@ -491,32 +491,32 @@ void SAL_CALL Listener::propertyChange (
 
     if (rEvent.PropertyName.equals(sCurrentPagePropertyName))
     {
-        Any aCurrentPage = rEvent.NewValue;
-        Reference<beans::XPropertySet> xPageSet (aCurrentPage, UNO_QUERY);
-        if (xPageSet.is())
-        {
-            try
-            {
-                Any aPageNumber = xPageSet->getPropertyValue ("Number");
-                sal_Int32 nCurrentPage = 0;
-                aPageNumber >>= nCurrentPage;
-                // The selection is already set but we call SelectPage()
-                // nevertheless in order to make the new current page the
-                // last recently selected page of the PageSelector.  This is
-                // used when making the selection visible.
-                mrController.GetCurrentSlideManager()->NotifyCurrentSlideChange(nCurrentPage-1);
-                mrController.GetPageSelector().SelectPage(nCurrentPage-1);
-            }
-            catch (beans::UnknownPropertyException&)
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-            catch (lang::DisposedException&)
-            {
-                // Something is already disposed.  There is not much we can
-                // do, except not to crash.
-            }
-        }
+//         Any aCurrentPage = rEvent.NewValue;
+//         Reference<beans::XPropertySet> xPageSet (aCurrentPage, UNO_QUERY);
+//         if (xPageSet.is())
+//         {
+//             try
+//             {
+//                 Any aPageNumber = xPageSet->getPropertyValue ("Number");
+//                 sal_Int32 nCurrentPage = 0;
+//                 aPageNumber >>= nCurrentPage;
+//                 // The selection is already set but we call SelectPage()
+//                 // nevertheless in order to make the new current page the
+//                 // last recently selected page of the PageSelector.  This is
+//                 // used when making the selection visible.
+//                 mrController.GetCurrentSlideManager()->NotifyCurrentSlideChange(nCurrentPage-1);
+//                 mrController.GetPageSelector().SelectPage(nCurrentPage-1);
+//             }
+//             catch (beans::UnknownPropertyException&)
+//             {
+//                 DBG_UNHANDLED_EXCEPTION();
+//             }
+//             catch (lang::DisposedException&)
+//             {
+//                 // Something is already disposed.  There is not much we can
+//                 // do, except not to crash.
+//             }
+//         }
     }
     else if (rEvent.PropertyName.equals (sEditModePropertyName))
     {

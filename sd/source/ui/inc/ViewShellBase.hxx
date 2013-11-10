@@ -30,6 +30,7 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 #include <set>
 
@@ -49,6 +50,14 @@ class ToolBarManager;
 class ViewShell;
 class ViewShellManager;
 class ViewTabBar;
+
+namespace slidesorter
+{
+namespace model
+{
+class SlideSorterModel;
+}
+}
 
 /** SfxViewShell descendant that the stacked Draw/Impress shells are
     based on.
@@ -228,6 +237,12 @@ public:
         and not cached, so do not use it excessive (f.e. in status updates) */
     OUString RetrieveLabelFromCommand( const OUString& aCmdURL ) const;
 
+    void setSlideSorterModel(::boost::shared_ptr< slidesorter::model::SlideSorterModel > pSlideSorterModel)
+    { mpSlideSorterModel = pSlideSorterModel; }
+
+    ::boost::weak_ptr< slidesorter::model::SlideSorterModel > getSlideSorterModel()
+    { return mpSlideSorterModel; }
+
 protected:
     osl::Mutex maMutex;
 
@@ -248,6 +263,8 @@ private:
         not the case because something went wrong.
     */
     OUString GetInitialViewShellType (void);
+
+    ::boost::weak_ptr< slidesorter::model::SlideSorterModel > mpSlideSorterModel;
 };
 
 } // end of namespace sd

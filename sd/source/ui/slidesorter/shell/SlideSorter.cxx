@@ -221,12 +221,10 @@ SlideSorter::~SlideSorter (void)
     // they are being destructed and one or two of them are already gone.
     mpSlideSorterController->Dispose();
     mpSlideSorterView->Dispose();
-    mpSlideSorterModel->Dispose();
 
     // Reset the auto pointers explicitly to control the order of destruction.
     mpSlideSorterController.reset();
     mpSlideSorterView.reset();
-    mpSlideSorterModel.reset();
 
     mpHorizontalScrollBar.reset();
     mpVerticalScrollBar.reset();
@@ -420,9 +418,13 @@ void SlideSorter::ReleaseListeners (void)
 
 void SlideSorter::CreateModelViewController (void)
 {
-    mpSlideSorterModel.reset(CreateModel());
-    DBG_ASSERT (mpSlideSorterModel.get()!=NULL,
-        "Can not create model for slide browser");
+    if (!(mpSlideSorterModel = GetViewShellBase()->getSlideSorterModel().lock()))
+    {
+        mpSlideSorterModel.reset(CreateModel());
+        GetViewShellBase()->setSlideSorterModel(mpSlideSorterModel);
+        DBG_ASSERT (mpSlideSorterModel.get()!=NULL,
+            "Can not create model for slide browser");
+    }
 
     mpSlideSorterView.reset(CreateView());
     DBG_ASSERT (mpSlideSorterView.get()!=NULL,

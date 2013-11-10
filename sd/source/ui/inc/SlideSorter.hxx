@@ -222,7 +222,7 @@ private:
     bool mbIsValid;
 
     ::boost::scoped_ptr<controller::SlideSorterController> mpSlideSorterController;
-    ::boost::scoped_ptr<model::SlideSorterModel> mpSlideSorterModel;
+    ::boost::shared_ptr<model::SlideSorterModel> mpSlideSorterModel;
     ::boost::scoped_ptr<view::SlideSorterView> mpSlideSorterView;
     ::com::sun::star::uno::WeakReference<com::sun::star::frame::XController> mxControllerWeak;
     ViewShell* mpViewShell;
