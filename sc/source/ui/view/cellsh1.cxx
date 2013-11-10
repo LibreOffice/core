@@ -965,6 +965,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
             }
             break;
+        case SID_MOVING_AVERAGE_DIALOG:
+            {
+                sal_uInt16 nId  = ScMovingAverageDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+            }
+            break;
 
         //
         //  disposal (Outlines)

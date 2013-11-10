@@ -250,8 +250,7 @@ void ScDLL::Init()
 
     // Hack: Eingabezeile mit 42 registrieren, damit sie im PlugIn immer sichtbar ist
     ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
-    ScNavigatorDialogWrapper    ::RegisterChildWindowContext(
-            sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
+    ScNavigatorDialogWrapper    ::RegisterChildWindowContext(static_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(false, pMod);
     ScOptSolverDlgWrapper       ::RegisterChildWindow(false, pMod);
     ScXMLSourceDlgWrapper       ::RegisterChildWindow(false, pMod);
@@ -274,6 +273,7 @@ void ScDLL::Init()
     ScCorrelationDialogWrapper          ::RegisterChildWindow(false, pMod);
     ScCovarianceDialogWrapper           ::RegisterChildWindow(false, pMod);
     ScExponentialSmoothingDialogWrapper ::RegisterChildWindow(false, pMod);
+    ScMovingAverageDialogWrapper        ::RegisterChildWindow(false, pMod);
 
     // First docking Window for Calc
     ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);

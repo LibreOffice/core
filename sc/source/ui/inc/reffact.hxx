@@ -102,6 +102,14 @@ private:
     ScExponentialSmoothingDialogWrapper() SAL_DELETED_FUNCTION;
 };
 
+class ScMovingAverageDialogWrapper :
+    public ChildWindowWrapper<SID_MOVING_AVERAGE_DIALOG>
+{
+private:
+    ScMovingAverageDialogWrapper() SAL_DELETED_FUNCTION;
+};
+
+
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
     public:

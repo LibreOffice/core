@@ -68,6 +68,7 @@
 #include "CorrelationDialog.hxx"
 #include "CovarianceDialog.hxx"
 #include "ExponentialSmoothingDialog.hxx"
+#include "MovingAverageDialog.hxx"
 
 #include <config_orcus.h>
 
@@ -360,6 +361,12 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_EXPONENTIAL_SMOOTHING_DIALOG:
         {
             pResult = new ScExponentialSmoothingDialog( pB, pCW, pParent, GetViewData() );
+        }
+        break;
+
+        case SID_MOVING_AVERAGE_DIALOG:
+        {
+            pResult = new ScMovingAverageDialog( pB, pCW, pParent, GetViewData() );
         }
         break;
 

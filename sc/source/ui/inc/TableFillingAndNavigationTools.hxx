@@ -37,6 +37,7 @@ public:
     void        applyRangeList(OUString aVariable, ScRangeList aRangeList);
     void        applyAddress(OUString aVariable, ScAddress aAddress);
     void        applyString(OUString aVariable, OUString aValue);
+    void        applyNumber(OUString aVariable, sal_Int32 aValue);
 };
 
 class AddressWalker
@@ -72,6 +73,7 @@ public:
     void writeFormula(OUString aFormula);
     void writeString(OUString aString);
     void writeString(const char* aCharArray);
+    void writeBoldString(OUString aString);
     void writeValue(double aValue);
 };
 

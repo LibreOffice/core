@@ -8,6 +8,14 @@
  *
  */
 
+#include <boost/scoped_ptr.hpp>
+
+#include <editeng/editobj.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/eeitem.hxx>
+
+#include "editutil.hxx"
+
 #include "TableFillingAndNavigationTools.hxx"
 
 FormulaTemplate::FormulaTemplate(ScDocument* aDocument, ScAddress::Details aAddressDetails) :
@@ -52,6 +60,11 @@ void FormulaTemplate::applyAddress(OUString aVariable, ScAddress aAddress)
 void FormulaTemplate::applyString(OUString aVariable, OUString aValue)
 {
     mTemplate = mTemplate.replaceAll(aVariable, aValue);
+}
+
+void FormulaTemplate::applyNumber(OUString aVariable, sal_Int32 aValue)
+{
+    mTemplate = mTemplate.replaceAll(aVariable, OUString::number(aValue));
 }
 
 AddressWalker::AddressWalker(ScAddress aInitialAddress, bool aTrackRange) :
@@ -137,7 +150,19 @@ void AddressWalkerWriter::writeString(OUString aString)
 
 void AddressWalkerWriter::writeString(const char* aCharArray)
 {
-    mpDocShell->GetDocFunc().SetStringCell(mCurrentAddress, OUString::createFromAscii(aCharArray), true);
+    writeString(OUString::createFromAscii(aCharArray));
+}
+
+void AddressWalkerWriter::writeBoldString(OUString aString)
+{
+    ScFieldEditEngine& rEngine = mpDocument->GetEditEngine();
+    rEngine.SetText(aString);
+    SfxItemSet aItemSet = rEngine.GetEmptyItemSet();
+    SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);
+    aItemSet.Put(aWeight);
+    rEngine.QuickSetAttribs(aItemSet, ESelection(0, 0, 0, aString.getLength()) );
+    boost::scoped_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
+    mpDocShell->GetDocFunc().SetEditCell(mCurrentAddress, *pEditText, true);
 }
 
 void AddressWalkerWriter::writeValue(double aValue)
@@ -178,18 +203,33 @@ void DataCellIterator::next()
 
 ScAddress DataCellIterator::get()
 {
-    if(mByColumn)
-        return ScAddress(mCol, mInputRange.aStart.Row(), mInputRange.aStart.Tab());
-    else
-        return ScAddress(mInputRange.aStart.Col(), mRow, mInputRange.aStart.Tab());
+    return getRelative(0);
 }
 
 ScAddress DataCellIterator::getRelative(int aDelta)
 {
     if(mByColumn)
-        return ScAddress(mCol + aDelta, mInputRange.aStart.Row(), mInputRange.aStart.Tab());
+    {
+        SCCOL aNewColumn = mCol + aDelta;
+        if(aNewColumn < mInputRange.aStart.Col() || aNewColumn > mInputRange.aEnd.Col())
+        {
+            ScAddress aResult;
+            aResult.SetInvalid();
+            return aResult;
+        }
+        return ScAddress(aNewColumn, mInputRange.aStart.Row(), mInputRange.aStart.Tab());
+    }
     else
-        return ScAddress(mInputRange.aStart.Col(), mRow + aDelta, mInputRange.aStart.Tab());
+    {
+        SCROW aNewRow = mRow + aDelta;
+        if(aNewRow < mInputRange.aStart.Row() || aNewRow > mInputRange.aEnd.Row())
+        {
+            ScAddress aResult;
+            aResult.SetInvalid();
+            return aResult;
+        }
+        return ScAddress(mInputRange.aStart.Col(), aNewRow, mInputRange.aStart.Tab());
+    }
 }
 
 // DataRangeIterator

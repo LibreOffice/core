@@ -13,7 +13,14 @@
 Resource RID_STATISTICS_DLGS
 {
 
-    /* AnalysisOfVarianceDialog */
+    /* MovingAverageDialog */
+
+    String STR_MOVING_AVERAGE_UNDO_NAME
+    {
+        Text [ en-US ] = "Moving Average";
+    };
+
+    /* ExponentialSmoothingDialog */
 
     String STR_EXPONENTIAL_SMOOTHING_UNDO_NAME
     {
