@@ -703,12 +703,17 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             if ( m_pImpl->isEmbeddedDatabase() )
             {
                 sal_Int32 nCount = aDriverInfo.getLength();
-                aDriverInfo.realloc(nCount + 2 );
+                aDriverInfo.realloc(nCount + 3 );
+
                 aDriverInfo[nCount].Name = "URL";
                 aDriverInfo[nCount++].Value <<= m_pImpl->getURL();
+
                 aDriverInfo[nCount].Name = "Storage";
                 Reference< css::document::XDocumentSubStorageSupplier> xDocSup( m_pImpl->getDocumentSubStorageSupplier() );
                 aDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE);
+
+                aDriverInfo[nCount].Name = "Document";
+                aDriverInfo[nCount++].Value <<= getDatabaseDocument();
             }
             if (nAdditionalArgs)
                 xReturn = xManager->getConnectionWithInfo(m_pImpl->m_sConnectURL, ::comphelper::concatSequences(aUserPwd,aDriverInfo));

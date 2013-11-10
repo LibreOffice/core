@@ -124,6 +124,7 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
     if (url.equals("sdbc:embedded:firebird"))
     {
         m_bIsEmbedded = true;
+
         const PropertyValue* pIter = info.getConstArray();
         const PropertyValue* pEnd = pIter + info.getLength();
 
@@ -136,6 +137,10 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
             else if ( pIter->Name == "URL" )
             {
                 pIter->Value >>= aStorageURL;
+            }
+            else if ( pIter->Name == "Document" )
+            {
+                pIter->Value >>= m_xParentDocument;
             }
         }
 
@@ -284,50 +289,17 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
         // it in the .odb.
         rebuildIndexes();
 
-        attachAsDocumentListener(aStorageURL);
+        // We need to attach as a document listener in order to be able to store
+        // the temporary db back into the .odb when saving
+        uno::Reference<XDocumentEventBroadcaster> xBroadcaster(m_xParentDocument, UNO_QUERY);
+
+        if (xBroadcaster.is())
+            xBroadcaster->addDocumentEventListener(this);
+        else
+            assert(false);
     }
 
     osl_atomic_decrement( &m_refCount );
-}
-
-void Connection::attachAsDocumentListener(const OUString& rStorageURL)
-{
-    // We can't directly access the Document that is using this connection
-    // (since a Connection can in fact be used independently of a DB document)
-    // hence we need to iterate through all Frames to find our Document.
-    uno::Reference< frame::XDesktop2 > xFramesSupplier =
-        frame::Desktop::create(::comphelper::getProcessComponentContext());
-    uno::Reference< frame::XFrames > xFrames(xFramesSupplier->getFrames(),
-                                             uno::UNO_QUERY);
-    if (!xFrames.is())
-        return;
-
-    uno::Sequence< uno::Reference<frame::XFrame> > xFrameList =
-        xFrames->queryFrames( frame::FrameSearchFlag::ALL );
-
-    for (sal_Int32 i = 0; i < xFrameList.getLength(); i++)
-    {
-        uno::Reference< frame::XFrame > xf = xFrameList[i];
-        uno::Reference< XController > xc;
-        if (xf.is())
-            xc = xf->getController();
-
-        uno::Reference< XModel > xm;
-        if (xc.is())
-            xm = xc->getModel();
-
-        if (xm.is() && xm->getURL() == rStorageURL)
-        {
-            uno::Reference<XDocumentEventBroadcaster> xBroadcaster( xm, UNO_QUERY);
-            if (xBroadcaster.is())
-            {
-                xBroadcaster->addDocumentEventListener(this);
-                return;
-            }
-            //TODO: remove in the disposing?
-        }
-    }
-    assert(false); // If we have an embedded DB we must have a document
 }
 
 //----- XServiceInfo ---------------------------------------------------------
