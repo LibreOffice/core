@@ -4305,7 +4305,154 @@ void OpBetaDist::BinInlineFun(std::set<std::string>& decls,
     funs.insert(lcl_GetBetaHelperContFrac);funs.insert(GetLogBeta);
     funs.insert(GetBeta);funs.insert(lcl_getLanczosSum);
 }
-
+void OpPoisson::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(fHalfMachEpsDecl);
+    funs.insert("");
+    decls.insert(fMaxGammaArgumentDecl);
+    funs.insert("");
+    decls.insert(fBigInvDecl);
+    funs.insert("");
+    decls.insert(GetLogGammaDecl);
+    funs.insert(GetLogGamma);
+    decls.insert(lcl_GetLogGammaHelperDecl);
+    funs.insert(lcl_GetLogGammaHelper);
+    decls.insert(lcl_GetGammaHelperDecl);
+    funs.insert(lcl_GetGammaHelper);
+    decls.insert(lcl_getLanczosSumDecl);
+    funs.insert(lcl_getLanczosSum);
+    decls.insert(GetUpRegIGammaDecl);
+    funs.insert(GetUpRegIGamma);
+    decls.insert(GetGammaContFractionDecl);
+    funs.insert(GetGammaContFraction);
+    decls.insert(GetGammaSeriesDecl);
+    funs.insert(GetGammaSeries);
+}
+void OpPoisson::GenSlidingWindowFunction(
+    std::stringstream &ss,const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    double x,lambda,tmp;\n";
+    ss << "    int bCumulative;\n";
+    ss << "    int gid0=get_global_id(0);\n";
+#ifdef ISNAN
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur2);
+    ss << "    int buffer_x_len = ";
+    ss << tmpCurDVR0->GetArrayLength();
+    ss << ";\n";
+    ss << "     int buffer_lambda_len = ";
+    ss << tmpCurDVR1->GetArrayLength();
+    ss << ";\n";
+    ss << "    int buffer_bCumulative_len = ";
+    ss << tmpCurDVR2->GetArrayLength();
+    ss << ";\n";
+#endif
+#ifdef ISNAN
+    ss <<"    if((gid0)>=buffer_x_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        x = 0;\n";
+    ss <<"    else \n";
+#endif
+    ss <<"         x ="<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss <<"    if((gid0)>=buffer_lambda_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"        lambda = 0;\n";
+    ss <<"    else \n";
+#endif
+    ss <<"        lambda ="<<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss <<"    if((gid0)>=buffer_bCumulative_len || isNan(";
+    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<"))\n";
+    ss <<"    bCumulative = 0;\n";
+    ss <<"else \n";
+#endif
+    ss <<"     bCumulative ="<<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    if (!bCumulative)\n";
+    ss << "    {\n";
+    ss << "        if(lambda == 0.0)\n";
+    ss << "        {\n";
+    ss << "            return 0;\n";
+    ss << "        }\n";
+    ss << "        else\n";
+    ss << "        {\n";
+    ss << "            if (lambda >712)\n";
+    ss << "            {\n";
+    ss << "            tmp = (exp(x*log(lambda)-lambda-GetLogGamma(x+1.0)));\n";
+    ss << "            return tmp;\n";
+    ss << "            }\n";
+    ss << "            else\n";
+    ss << "            {\n";
+    ss << "                double fPoissonVar = 1.0;\n";
+    ss << "                for ( int f = 0; f < x; ++f )\n";
+    ss << "                    fPoissonVar *= lambda / ( (double)f + 1.0 );\n";
+    ss << "                tmp = ( fPoissonVar * exp( -lambda ) );\n";
+    ss << "                return tmp;\n";
+    ss << "            }\n";
+    ss << "        }\n";
+    ss << "     } \n";
+    ss << "     else\n";
+    ss << "     {\n";
+    ss << "         if (lambda == 0.0)\n";
+    ss << "         {\n";
+    ss << "             return 1;\n";
+    ss << "         }\n";
+    ss << "         else\n";
+    ss << "         {\n";
+    ss << "             if (lambda > 712 )\n";
+    ss << "             {\n";
+    ss << "                 tmp = (GetUpRegIGamma(x+1.0,lambda));\n";
+    ss << "                 return tmp;\n";
+    ss << "             }\n";
+    ss << "             else\n";
+    ss << "             {\n";
+    ss << "                 if (x >= 936.0)\n";
+    ss << "                 {\n";
+    ss << "                     return 1;\n";
+    ss << "                 }\n";
+    ss << "                 else\n";
+    ss << "                 {\n";
+    ss << "                     double fSummand = exp(-lambda);\n";
+    ss << "                     double fSum = fSummand;\n";
+    ss << "                     int nEnd = (int) (x + 0.5);\n";
+    ss << "                     for (int i = 1; i <= nEnd; i++)\n";
+    ss << "                     {\n";
+    ss << "                         fSummand = (fSummand*lambda)/(double)i;\n";
+    ss << "                         fSum += fSummand;\n";
+    ss << "                     }\n";
+    ss << "                     tmp = fSum;\n";
+    ss << "                     return tmp;\n";
+    ss << "                 }\n";
+    ss << "             }\n";
+    ss << "         }\n";
+    ss << "     }\n";
+    ss << "}\n";
+}
 void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
