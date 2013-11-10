@@ -1422,7 +1422,50 @@ void OpBitOr::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return (long)num1 | (long)num2;\n";
     ss << "}";
 }
-
+void OpBitLshift::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i) ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double num = " << GetBottom() << ";\n";
+    ss << "    double shift_amount = " << GetBottom() << ";\n";
+#ifdef ISNAN
+    FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVRNum=
+        dynamic_cast<const formula::SingleVectorRefToken*>(iNum);
+    FormulaToken *iShiftAmount = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVRShiftAmount=
+        dynamic_cast<const formula::SingleVectorRefToken*>(iShiftAmount);
+    ss << "    int buffer_num_len = "<< tmpCurDVRNum->GetArrayLength()<<";\n";
+    ss << "    int buffer_shift_amount_len = ";
+    ss << tmpCurDVRShiftAmount->GetArrayLength() << ";\n";
+    ss << "    if((gid0)>=buffer_num_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        num = " << GetBottom() << ";\n";
+    ss << "    else\n    ";
+#endif
+    ss << "    num = floor(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
+#ifdef ISNAN
+    ss << "    if((gid0)>=buffer_shift_amount_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        shift_amount = " << GetBottom() << ";\n";
+    ss << "    else\n    ";
+#endif
+    ss << "    shift_amount = floor(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+    ss << "    return floor(" << "shift_amount >= 0 ? ";
+    ss << "num * pow(2.0, shift_amount) : ";
+    ss << "num / pow(2.0, fabs(shift_amount)));\n";
+    ss << "}";
+}
 
 }}
 
