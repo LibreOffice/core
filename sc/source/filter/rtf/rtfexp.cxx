@@ -42,8 +42,6 @@
 #include "stlpool.hxx"
 #include "ftools.hxx"
 
-//------------------------------------------------------------------
-
 FltError ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/ )
 {
@@ -71,7 +69,7 @@ sal_uLong ScRTFExport::Write()
     rStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
     rStrm << OOO_STRING_SVTOOLS_RTF_ANSI << SAL_NEWLINE_STRING;
 
-    // Daten
+    // Data
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
     {
         if ( nTab > aRange.aStart.Tab() )
@@ -143,7 +141,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 
         rStrm << OOO_STRING_SVTOOLS_RTF_CELLX << OString::number(pCellX[nCol+1]).getStr();
         if ( (nCol & 0x0F) == 0x0F )
-            rStrm << SAL_NEWLINE_STRING;      // Zeilen nicht zu lang werden lassen
+            rStrm << SAL_NEWLINE_STRING; // Do not let lines get too long
     }
     rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << SAL_NEWLINE_STRING;
 
@@ -152,7 +150,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
     {
         WriteCell( nTab, nRow, nCol );
         if ( rStrm.Tell() - nStrmPos > 255 )
-        {   // Zeilen nicht zu lang werden lassen
+        {   // Do not let lines get too long
             rStrm << SAL_NEWLINE_STRING;
             nStrmPos = rStrm.Tell();
         }
@@ -188,7 +186,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
             {
                 EditEngine& rEngine = GetEditEngine();
                 rEngine.SetText(*pObj);
-                aContent = rEngine.GetText(LINEEND_LF);   // LineFeed zwischen Absaetzen!
+                aContent = rEngine.GetText(LINEEND_LF); // LineFeed in between paragraphs!
             }
         }
         break;
@@ -250,6 +248,5 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     if ( bResetAttr )
         rStrm << OOO_STRING_SVTOOLS_RTF_PLAIN;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
