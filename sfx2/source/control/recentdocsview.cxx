@@ -30,6 +30,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <templateview.hrc>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -239,6 +240,32 @@ void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
 
         Application::PostUserEvent( STATIC_LINK(0, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile );
     }
+}
+
+void RecentDocsView::Paint( const Rectangle &aRect )
+{
+    if ( mItemList.size() == 0 )
+    {
+        // No recent files to be shown yet. Show a welcome screen.
+        Image aImg(SfxResId(IMG_WELCOME));
+        OUString aStr(SfxResId(STR_WELCOME));
+        Font aOldFont(GetFont());
+        Font aNewFont(aOldFont);
+        aNewFont.SetHeight(20);
+        SetFont(aNewFont);
+        long nTextWidth = GetTextWidth(aStr);
+        long nTextHeight = GetTextHeight();
+        const Size & rImgSize = aImg.GetSizePixel();
+        const Size & rScreenSize = GetSizePixel();
+        const int nX = (rScreenSize.Width() - rImgSize.Width())/2;
+        const int nY = (rScreenSize.Height() - nTextHeight*1.5 - rImgSize.Height())/2;
+        Point aImgPoint(nX, nY);
+        DrawImage(aImgPoint, rImgSize, aImg, IMAGE_DRAW_SEMITRANSPARENT);
+        Point aStrPoint((rScreenSize.Width() - nTextWidth)/2, nY + rImgSize.Height() + nTextHeight/2);
+        DrawText(aStrPoint, aStr);
+        SetFont(aOldFont);
+    }
+    ThumbnailView::Paint(aRect);
 }
 
 void RecentDocsView::SetThumbnailSize(long thumbnailSize)

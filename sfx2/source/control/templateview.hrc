@@ -10,5 +10,7 @@
 #define BTN_ALL_TEMPLATES       256
 #define CONTROL_BUTTONS         257
 #define FT_NAME                 258
+#define STR_WELCOME             259
+#define IMG_WELCOME             260
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

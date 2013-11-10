@@ -23,4 +23,14 @@ FixedText FT_NAME
     Size = MAP_APPFONT( 238, 12 );
 };
 
+String STR_WELCOME
+{
+    Text [ en-US ] = "Welcome! You can open or create a new document!";
+};
+
+Image IMG_WELCOME
+{
+    ImageBitmap = Bitmap { File = "logo.png" ; };
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

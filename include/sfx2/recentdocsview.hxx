@@ -61,6 +61,7 @@ protected:
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
     void OpenItem( const ThumbnailViewItem *pItem );
+    virtual void Paint( const Rectangle& rRect );
 
     bool isAcceptedFile(const OUString &rURL) const;
 
