@@ -284,6 +284,13 @@ public:
     virtual std::string BinFuncName(void) const { return "ChiSqInv"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
+class OpChiInv:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
+    virtual std::string BinFuncName(void) const { return "OpChiInv"; }
+};
 class OpGammaInv: public Normal
 {
 public:
