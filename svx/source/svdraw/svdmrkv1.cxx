@@ -323,6 +323,13 @@ void SdrMarkView::UndirtyMrkPnt() const
     for (sal_uIntPtr nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) {
         SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
         const SdrObject* pObj=pM->GetMarkedSdrObj();
+
+        // fix crash of #74651, when an object
+        // is selected and removed by macro
+        if (pObj == NULL) {
+            continue;
+        }
+
         // PolyPoints
         SdrUShortCont* pPts=pM->GetMarkedPoints();
         if (pPts!=NULL) {

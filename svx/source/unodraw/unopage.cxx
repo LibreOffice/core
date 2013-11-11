@@ -40,6 +40,9 @@
 #include <svx/svdopath.hxx>
 #include "svx/unoapi.hxx"
 #include <svx/svdomeas.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdglob.hxx>
+#include <svx/svdstr.hrc>
 #include <svx/extrud3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <vcl/svapp.hxx>
@@ -260,6 +263,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
+    mpModel->BegUndo( ImpGetResStr( STR_EditDelete ) );
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
     if(pShape)
@@ -273,7 +277,10 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
             {
                 if(mpPage->GetObj(nNum) == pObj)
                 {
+                    SdrUndoAction * action = mpModel->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj );
+                    mpModel->AddUndo(action);
                     OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );
+                    pShape->InvalidateSdrObject();
                     SdrObject::Free( pObj );
                     break;
                 }
@@ -281,8 +288,10 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
         }
     }
 
-    if( mpModel )
+    if( mpModel ){
         mpModel->SetChanged();
+        mpModel->EndUndo();
+    }
 }
 
 //----------------------------------------------------------------------
