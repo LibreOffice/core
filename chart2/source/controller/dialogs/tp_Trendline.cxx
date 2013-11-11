@@ -25,10 +25,9 @@ namespace chart
 {
 
 TrendlineTabPage::TrendlineTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
-        SfxTabPage( pParent, SchResId( TP_TRENDLINE ), rInAttrs ),
+        SfxTabPage( pParent, "TP_TRENDLINE", "modules/schart/ui/tp_Trendline.ui", rInAttrs ),
         m_aTrendlineResources( this, rInAttrs )
 {
-    FreeResource();
 }
 
 TrendlineTabPage::~TrendlineTabPage()
