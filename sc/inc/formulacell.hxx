@@ -33,18 +33,13 @@
 namespace sc {
 
 class CLBuildKernelThread;
+class CompiledFormula;
 class StartListeningContext;
 class EndListeningContext;
 struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
-
-namespace opencl {
-
-class DynamicKernel;
-
-}
 
 }
 
@@ -58,7 +53,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     mutable size_t mnRefCount;
 
     ScTokenArray* mpCode;
-    sc::opencl::DynamicKernel* mpDynamicKernel;
+    sc::CompiledFormula* mpCompiledFormula;
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
     short mnFormatType;

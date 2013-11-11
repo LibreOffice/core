@@ -406,7 +406,7 @@ rtl::Reference<sc::CLBuildKernelThread> ScFormulaCellGroup::mxCLKernelThread;
 ScFormulaCellGroup::ScFormulaCellGroup() :
     mnRefCount(0),
     mpCode(NULL),
-    mpDynamicKernel(NULL),
+    mpCompiledFormula(NULL),
     mpTopCell(NULL),
     mnLength(0),
     mnFormatType(NUMBERFORMAT_NUMBER),
