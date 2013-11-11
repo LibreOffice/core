@@ -35,6 +35,13 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Var"; }
 };
+class OpVarP: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "VarP"; }
+};
 class OpSkewp: public Normal
 {
 public:
