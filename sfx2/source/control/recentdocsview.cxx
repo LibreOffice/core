@@ -265,7 +265,8 @@ void RecentDocsView::Paint( const Rectangle &aRect )
         DrawText(aStrPoint, aStr);
         SetFont(aOldFont);
     }
-    ThumbnailView::Paint(aRect);
+    else
+        ThumbnailView::Paint(aRect);
 }
 
 void RecentDocsView::SetThumbnailSize(long thumbnailSize)
