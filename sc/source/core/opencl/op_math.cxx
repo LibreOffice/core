@@ -1554,6 +1554,120 @@ void OpBitRshift::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "num * pow(2.0, fabs(shift_amount)));\n";
     ss << "}";
 }
+void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); ++i)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double sum = 0.0f, arg;\n";
+    for( unsigned i=0; i < vSubArguments.size(); ++i)
+    {
+        FormulaToken *tmpCur = vSubArguments[i]->GetFormulaToken();
+        assert(tmpCur);
+        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            if (tmpCur->GetType() == formula::svDoubleVectorRef)
+            {
+                const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(tmpCur);
+                size_t nCurWindowSize = pDVR->GetRefRowSize();
+                ss << "    for (int i = ";
+                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "gid0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < " << nCurWindowSize  << "; ++i)\n";
+                    ss << "    {\n";
+#else
+                    ss << "gid0; i < "<< nCurWindowSize << "; ++i)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < gid0+"<< nCurWindowSize << "; ++i)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < gid0+"<< nCurWindowSize << "; ++i)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                    ss << " &&  i < "<< nCurWindowSize << "; ++i)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else
+                {
+#ifdef  ISNAN
+                    ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
+                    ss << "    {\n";
+#endif
+                }
+                ss << "        arg = ";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << ";\n";
+#ifdef  ISNAN
+                ss << "        if (isNan(arg))\n";
+                ss << "            continue;\n";
+#endif
+                ss << "        sum += arg*arg;\n";
+                ss << "    }\n";
+            }
+            else if(tmpCur->GetType() == formula::svSingleVectorRef)
+            {
+                const formula::SingleVectorRefToken* tmpCurDVR=
+                      dynamic_cast<
+                      const formula::SingleVectorRefToken *>(tmpCur);
+                ss << "    arg = ";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << ";\n";
+#ifdef ISNAN
+                ss << "    if(isNan(arg)||(gid0>=";
+                ss << tmpCurDVR->GetArrayLength();
+                ss << "))\n";
+                ss << "        arg = 0.0f;\n";
+                ss << "    sum += arg * arg;\n";
+#endif
+            }
+            else if(tmpCur->GetType() == formula::svDouble)
+            {
+                ss << "        arg = ";
+                ss << tmpCur->GetDouble() << ";\n";
+                ss << "        sum += arg*arg;\n";
+            }
+        }
+        else
+        {
+            ss << "        arg = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss << "        sum += arg*arg;\n";
+        }
+    }
+    ss << "    return sum;\n";
+    ss << "}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
