@@ -15,6 +15,8 @@
 #include <asciiopt.hxx>
 #include <docsh.hxx>
 #include <impex.hxx>
+#include <viewdata.hxx>
+#include <dbfunc.hxx>
 
 namespace datastreams {
 
@@ -54,7 +56,7 @@ private:
 DataStreams::DataStreams(ScDocShell *pScDocShell):
     mpScDocShell(pScDocShell)
     , mpScDocument(mpScDocShell->GetDocument())
-    , mbMove(false)
+    , meMove(NO_MOVE)
 {
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
@@ -81,23 +83,21 @@ void DataStreams::Stop()
 {
     mbRunning = false;
     mpScDocument->EnableUndo(mbIsUndoEnabled);
-    mbMove = false;
 }
 
-void DataStreams::Set(const OUString& rUrl, bool bIsScript, const OUString& rRange)
+void DataStreams::Set(const OUString& rUrl, bool bIsScript,
+        const OUString& rRange, sal_Int32 nLimit, MoveEnum eMove)
 {
     mpRange.reset ( new ScRange() );
     mpRange->Parse(rRange, mpScDocument);
+    mpStartRange.reset( new ScRange(*mpRange.get()) );
     if (bIsScript)
         mpStream.reset( new SvScriptStream(rUrl) );
     else
         mpStream.reset( new SvFileStream(rUrl, STREAM_READ) );
-}
 
-void DataStreams::SetMove(sal_Int32 nLimit)
-{
     mpEndRange.reset( NULL );
-    mbMove = true;
+    meMove = eMove;
     sal_Int32 nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
     nLimit = nHeight * (nLimit / nHeight);
     if (nLimit && mpRange->aStart.Row() + nLimit - 1 < MAXROW)
@@ -107,15 +107,26 @@ void DataStreams::SetMove(sal_Int32 nLimit)
     }
 }
 
-void DataStreams::Move()
+void DataStreams::MoveData()
 {
-    if (!mbMove)
-        return;
-    if (mpEndRange.get())
+    switch (meMove)
     {
-        mpScDocument->DeleteRow(*mpEndRange);
+        case RANGE_DOWN:
+            if (mpRange->aStart == mpEndRange->aStart)
+                meMove = MOVE_UP;
+            break;
+        case MOVE_UP:
+            mpScDocument->DeleteRow(*mpStartRange);
+            mpScDocument->InsertRow(*mpEndRange);
+            break;
+        case MOVE_DOWN:
+            if (mpEndRange.get())
+                mpScDocument->DeleteRow(*mpEndRange);
+            mpScDocument->InsertRow(*mpRange);
+            break;
+        case NO_MOVE:
+            break;
     }
-    mpScDocument->InsertRow(*mpRange);
 }
 
 bool DataStreams::ImportData()
@@ -127,8 +138,6 @@ bool DataStreams::ImportData()
         return mbRunning;
     }
 
-    SolarMutexGuard aGuard;
-    Move();
     SCROW nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
     OStringBuffer aBuf;
     OString sTmp;
@@ -138,17 +147,25 @@ bool DataStreams::ImportData()
         aBuf.append(sTmp);
         aBuf.append('\n');
     }
+    SolarMutexGuard aGuard;
+    MoveData();
     SvMemoryStream aMemoryStream((void *)aBuf.getStr(), aBuf.getLength(), STREAM_READ);
     ScImportExport aImport(mpScDocument, *mpRange);
     aImport.SetSeparator(',');
     aImport.ImportStream(aMemoryStream, OUString(), FORMAT_STRING);
     // ImportStream calls PostPaint for relevant area,
     // we need to call it explicitly only when moving rows.
-    if (!mbMove)
+    if (meMove == NO_MOVE)
         return mbRunning;
 
+    if (meMove == RANGE_DOWN)
+    {
+        mpRange->Move(0, mpRange->aEnd.Row() - mpRange->aStart.Row() + 1, 0);
+        mpScDocShell->GetViewData()->GetView()->AlignToCursor(
+                mpRange->aStart.Col(), mpRange->aStart.Row(), SC_FOLLOW_JUMP);
+    }
     SCROW aEndRow = mpEndRange.get() ? mpEndRange->aEnd.Row() : MAXROW;
-    mpScDocShell->PostPaint( ScRange( mpRange->aStart, ScAddress( mpRange->aEnd.Col(),
+    mpScDocShell->PostPaint( ScRange( mpStartRange->aStart, ScAddress( mpRange->aEnd.Col(),
                     aEndRow, mpRange->aStart.Tab()) ), PAINT_GRID );
 
     return mbRunning;
