@@ -382,6 +382,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_WEBSERVICE    { Text = "COM.MICROSOFT.WEBSERVICE"; };
 };
 
+/** These function names are used only in the XLSX import. */
 Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
 {
     String SC_OPCODE_IF { Text = "IF" ; };
@@ -544,14 +545,14 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_VAR_A { Text = "VARA" ; };
     String SC_OPCODE_VAR_P { Text = "VARP" ; };
     String SC_OPCODE_VAR_P_A { Text = "VARPA" ; };
-    String SC_OPCODE_VAR_P_MS { Text = "VAR.P" ; };
-    String SC_OPCODE_VAR_S { Text = "VAR.S" ; };
+    String SC_OPCODE_VAR_P_MS { Text = "_xlfn.VAR.P" ; };
+    String SC_OPCODE_VAR_S { Text = "_xlfn.VAR.S" ; };
     String SC_OPCODE_ST_DEV { Text = "STDEV" ; };
     String SC_OPCODE_ST_DEV_A { Text = "STDEVA" ; };
     String SC_OPCODE_ST_DEV_P { Text = "STDEVP" ; };
     String SC_OPCODE_ST_DEV_P_A { Text = "STDEVPA" ; };
-    String SC_OPCODE_ST_DEV_P_MS { Text = "STDEV.P" ; };
-    String SC_OPCODE_ST_DEV_S { Text = "STDEV.S" ; };
+    String SC_OPCODE_ST_DEV_P_MS { Text = "_xlfn.STDEV.P" ; };
+    String SC_OPCODE_ST_DEV_S { Text = "_xlfn.STDEV.S" ; };
     String SC_OPCODE_B { Text = "B" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
@@ -645,6 +646,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_T_DIST { Text = "TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "FDIST" ; };
     String SC_OPCODE_CHI_DIST { Text = "CHIDIST" ; };
+    String SC_OPCODE_CHI_DIST_MS { Text = "_xlfn.CHISQ.DIST.RT" ; };
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
@@ -675,8 +677,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_PROB { Text = "PROB" ; };
     String SC_OPCODE_CORREL { Text = "CORREL" ; };
     String SC_OPCODE_COVAR { Text = "COVAR" ; };
-    String SC_OPCODE_COVARIANCE_P { Text = "COVARIANCE.P" ; };
-    String SC_OPCODE_COVARIANCE_S { Text = "COVARIANCE.S" ; };
+    String SC_OPCODE_COVARIANCE_P { Text = "_xlfn.COVARIANCE.P" ; };
+    String SC_OPCODE_COVARIANCE_S { Text = "_xlfn.COVARIANCE.S" ; };
     String SC_OPCODE_PEARSON { Text = "PEARSON" ; };
     String SC_OPCODE_RSQ { Text = "RSQ" ; };
     String SC_OPCODE_STEYX { Text = "STEYX" ; };
@@ -688,6 +690,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_RKP { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
     String SC_OPCODE_CHI_INV { Text = "CHIINV" ; };
+    String SC_OPCODE_CHI_INV_MS { Text = "_xlfn.CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
@@ -713,13 +716,15 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
     String SC_OPCODE_HYPERLINK { Text = "HYPERLINK" ; };
     String SC_OPCODE_INFO { Text = "INFO" ; };
-    String SC_OPCODE_BAHTTEXT { Text = "BAHTTEXT" ; };
+    String SC_OPCODE_BAHTTEXT { Text = "_xlfn.BAHTTEXT" ; };
     String SC_OPCODE_GET_PIVOT_DATA { Text = "GETPIVOTDATA" ; };
     String SC_OPCODE_EUROCONVERT { Text = "EUROCONVERT" ; };
     String SC_OPCODE_NUMBERVALUE { Text = "NUMBERVALUE" ; };
     String SC_OPCODE_GAMMA { Text = "GAMMA" ; };
     String SC_OPCODE_CHISQ_DIST { Text = "CHISQDIST" ; };
+    String SC_OPCODE_CHISQ_DIST_MS { Text = "_xlfn.CHISQ.DIST" ; };
     String SC_OPCODE_CHISQ_INV { Text = "CHISQINV" ;};
+    String SC_OPCODE_CHISQ_INV_MS { Text = "_xlfn.CHISQ.INV" ;};
     String SC_OPCODE_BITAND    { Text = "BITAND" ;};
     String SC_OPCODE_BITOR    { Text = "BITOR" ;};
     String SC_OPCODE_BITXOR    { Text = "BITXOR" ;};
@@ -734,8 +739,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_ERROR_NUM     { Text = "#NUM!"   ; };
     String SC_OPCODE_ERROR_NA      { Text = "#N/A"    ; };
     /* END defined ERROR.TYPE() values. */
-    String SC_OPCODE_FILTERXML     { Text = "FILTERXML";};
-    String SC_OPCODE_WEBSERVICE    { Text = "WEBSERVICE"; };
+    String SC_OPCODE_FILTERXML     { Text = "_xlfn.FILTERXML";};
+    String SC_OPCODE_WEBSERVICE    { Text = "_xlfn.WEBSERVICE"; };
 };
 
 // DO NOT CHANGE NAMES! Only add functions.
