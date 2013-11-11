@@ -98,6 +98,11 @@ def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
 
             attachmentid += 1
 
+            download = suffix + '/' + prefix + id + '-' + str(attachmentid) + '.' + suffix
+            if os.path.isfile(download):
+                print("assuming " + download + " is up to date")
+                continue
+
             realAttachmentId = match.group(1)
             handle = urlopen_retry(novellattach + realAttachmentId)
             if not handle:
@@ -115,7 +120,6 @@ def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
                 print("skipping")
                 continue
 
-            download = suffix + '/' + prefix + id + '-' + str(attachmentid) + '.' + suffix
             print('downloading as ' + download)
             f = open(download, 'wb')
             f.write(handle.read())
