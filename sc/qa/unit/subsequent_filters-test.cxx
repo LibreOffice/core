@@ -385,9 +385,10 @@ void ScFiltersTest::testFunctionsExcel2010()
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,2,0)));
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,3,0)));
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,4,0)));
-#if 0 // CHISQ.TEST and F.DIST.RT are not yet supported in the core.
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,5,0)));
     // Skip B7.
+
+#if 0 //F.DIST.RT not yet supported in the core.
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,7,0)));
 #endif
 
