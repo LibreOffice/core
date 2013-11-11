@@ -12,11 +12,9 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,xslt))
 $(eval $(call gb_UnpackedTarball_set_tarball,xslt,$(LIBXSLT_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xslt,\
-	external/libxslt/libxslt-configure.patch \
-	external/libxslt/libxslt-win_manifest.patch \
-	external/libxslt/libxslt-mingw.patch \
+	external/libxslt/libxslt-config.patch.1 \
+	external/libxslt/libxslt-freebsd.patch.1 \
 	external/libxslt/libxslt-internal-symbols.patch \
-	external/libxslt/libxslt-aix.patch \
 	external/libxslt/libxslt-vc10.patch \
 	external/libxslt/libxslt-1.1.26-memdump.patch \
 	$(if $(filter ANDROID,$(OS)),external/libxslt/libxslt-android.patch) \
