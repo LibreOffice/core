@@ -67,6 +67,9 @@ SecurityOptionsDialog::SecurityOptionsDialog(Window* pParent, SvtSecurityOptions
     get(m_pCtrlHyperlinkCB, "ctrlclick");
     enableAndSet(*pOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, *m_pCtrlHyperlinkCB,
         *get<FixedImage>("lockctrlclick"));
+    get(m_pBlockUntrustedRefererLinksCB, "blockuntrusted");
+    enableAndSet(*pOptions, SvtSecurityOptions::E_BLOCKUNTRUSTEDREFERERLINKS, *m_pBlockUntrustedRefererLinksCB,
+        *get<FixedImage>("lockblockuntrusted"));
 }
 
 SecurityOptionsDialog::~SecurityOptionsDialog()

@@ -899,6 +899,7 @@ sal_Bool SvxSecurityTabPage::FillItemSet( SfxItemSet& )
         CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, mpSecOptDlg->IsRemovePersInfoChecked(), bModified );
         CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, mpSecOptDlg->IsRecommPasswdChecked(), bModified );
         CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, mpSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_BLOCKUNTRUSTEDREFERERLINKS, mpSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
     }
 
     return bModified;

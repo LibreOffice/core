@@ -58,6 +58,7 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO "RemovePersonalInfoOnSaving"
 #define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  "RecommendPasswordProtection"
 #define PROPERTYNAME_CTRLCLICK_HYPERLINK        "HyperlinksWithCtrlClick"
+#define PROPERTYNAME_BLOCKUNTRUSTEDREFERERLINKS "BlockUntrustedRefererLinks"
 #define PROPERTYNAME_MACRO_SECLEVEL             "MacroSecurityLevel"
 #define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       "TrustedAuthors"
 #define PROPERTYNAME_MACRO_DISABLE              "DisableMacrosExecution"
@@ -89,11 +90,12 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO   9
 #define PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD    10
 #define PROPERTYHANDLE_CTRLCLICK_HYPERLINK          11
-#define PROPERTYHANDLE_MACRO_SECLEVEL               12
-#define PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS         13
-#define PROPERTYHANDLE_MACRO_DISABLE                14
+#define PROPERTYHANDLE_BLOCKUNTRUSTEDREFERERLINKS   12
+#define PROPERTYHANDLE_MACRO_SECLEVEL               13
+#define PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS         14
+#define PROPERTYHANDLE_MACRO_DISABLE                15
 
-#define PROPERTYCOUNT                               15
+#define PROPERTYCOUNT                               16
 #define PROPERTYHANDLE_INVALID                      -1
 
 #define CFG_READONLY_DEFAULT                        sal_False
@@ -200,6 +202,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         sal_Bool                                    m_bRemoveInfo;
         sal_Bool                                    m_bRecommendPwd;
         sal_Bool                                    m_bCtrlClickHyperlink;
+        sal_Bool                                    m_bBlockUntrustedRefererLinks;
         sal_Int32                                   m_nSecLevel;
         Sequence< SvtSecurityOptions::Certificate > m_seqTrustedAuthors;
         sal_Bool                                    m_bDisableMacros;
@@ -212,6 +215,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         sal_Bool                                    m_bRORemoveInfo;
         sal_Bool                                    m_bRORecommendPwd;
         sal_Bool                                    m_bROCtrlClickHyperlink;
+        sal_Bool                                    m_bROBlockUntrustedRefererLinks;
         sal_Bool                                    m_bROSecLevel;
         sal_Bool                                    m_bROTrustedAuthors;
         sal_Bool                                    m_bRODisableMacros;
@@ -370,6 +374,13 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         }
         break;
 
+        case PROPERTYHANDLE_BLOCKUNTRUSTEDREFERERLINKS:
+        {
+            rValue >>= m_bBlockUntrustedRefererLinks;
+            m_bROBlockUntrustedRefererLinks = bRO;
+        }
+        break;
+
         case PROPERTYHANDLE_MACRO_SECLEVEL:
         {
             rValue >>= m_nSecLevel;
@@ -499,6 +510,8 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
         nHandle = PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD;
     else if( rName == PROPERTYNAME_CTRLCLICK_HYPERLINK )
         nHandle = PROPERTYHANDLE_CTRLCLICK_HYPERLINK;
+    else if( rName == PROPERTYNAME_BLOCKUNTRUSTEDREFERERLINKS )
+        nHandle = PROPERTYHANDLE_BLOCKUNTRUSTEDREFERERLINKS;
     else if( rName == PROPERTYNAME_MACRO_SECLEVEL )
         nHandle = PROPERTYHANDLE_MACRO_SECLEVEL;
     else if( rName == PROPERTYNAME_MACRO_TRUSTEDAUTHORS )
@@ -554,6 +567,10 @@ bool SvtSecurityOptions_Impl::GetOption( SvtSecurityOptions::EOption eOption, sa
         case SvtSecurityOptions::E_CTRLCLICK_HYPERLINK:
             rpValue = &m_bCtrlClickHyperlink;
             rpRO = &m_bROCtrlClickHyperlink;
+            break;
+        case SvtSecurityOptions::E_BLOCKUNTRUSTEDREFERERLINKS:
+            rpValue = &m_bBlockUntrustedRefererLinks;
+            rpRO = &m_bROBlockUntrustedRefererLinks;
             break;
         default:
             rpValue = NULL;
@@ -666,6 +683,14 @@ void SvtSecurityOptions_Impl::Commit()
                 bDone = !m_bROCtrlClickHyperlink;
                 if( bDone )
                     lValues[ nRealCount ] <<= m_bCtrlClickHyperlink;
+            }
+            break;
+
+            case PROPERTYHANDLE_BLOCKUNTRUSTEDREFERERLINKS:
+            {
+                bDone = !m_bROBlockUntrustedRefererLinks;
+                if( bDone )
+                    lValues[ nRealCount ] <<= m_bBlockUntrustedRefererLinks;
             }
             break;
 
@@ -805,7 +830,9 @@ sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOptio
         case SvtSecurityOptions::E_CTRLCLICK_HYPERLINK:
             bReadonly = m_bROCtrlClickHyperlink;
             break;
-
+        case SvtSecurityOptions::E_BLOCKUNTRUSTEDREFERERLINKS:
+            bReadonly = m_bROBlockUntrustedRefererLinks;
+            break;
 
         // xmlsec05 deprecated
         case SvtSecurityOptions::E_BASICMODE:
@@ -948,6 +975,7 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
         OUString(PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO),
         OUString(PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD),
         OUString(PROPERTYNAME_CTRLCLICK_HYPERLINK),
+        OUString(PROPERTYNAME_BLOCKUNTRUSTEDREFERERLINKS),
         OUString(PROPERTYNAME_MACRO_SECLEVEL),
         OUString(PROPERTYNAME_MACRO_TRUSTEDAUTHORS),
         OUString(PROPERTYNAME_MACRO_DISABLE)
@@ -1031,6 +1059,13 @@ bool SvtSecurityOptions::isSecureMacroUri(
     default:
         return true;
     }
+}
+
+bool SvtSecurityOptions::isUntrustedReferer(OUString const & referer) const {
+    MutexGuard g(GetInitMutex());
+    return m_pDataContainer->IsOptionSet(E_BLOCKUNTRUSTEDREFERERLINKS)
+        && !(referer.isEmpty() || referer.startsWithIgnoreAsciiCase("private:")
+             || isTrustedLocationUri(referer));
 }
 
 bool SvtSecurityOptions::isTrustedLocationUri(OUString const & uri) const {

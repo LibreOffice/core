@@ -79,7 +79,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             E_MACRO_SECLEVEL,
             E_MACRO_TRUSTEDAUTHORS,
             E_MACRO_DISABLE,
-            E_CTRLCLICK_HYPERLINK
+            E_CTRLCLICK_HYPERLINK,
+            E_BLOCKUNTRUSTEDREFERERLINKS
         };
 
         enum MacroAction
@@ -187,6 +188,12 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         */
         bool isSecureMacroUri(OUString const & uri, OUString const & referer)
             const;
+
+        /**
+           Check whether the given referer URI is untrusted, and links
+           originating from it should not be accessed.
+         */
+        bool isUntrustedReferer(OUString const & referer) const;
 
         /**
            Check whether the given uri is a trusted location.

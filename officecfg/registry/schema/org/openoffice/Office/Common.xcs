@@ -2537,6 +2537,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="BlockUntrustedRefererLinks" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether to block any links originating from
+            documents that are not among the trusted locations.</desc>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="MacroSecurityLevel" oor:type="xs:int" oor:nillable="false">
           <info>
             <desc>Level of Macro security.</desc>

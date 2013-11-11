@@ -45,7 +45,7 @@ namespace svx
         CheckBox* m_pRemovePersInfoCB;
         CheckBox* m_pRecommPasswdCB;
         CheckBox* m_pCtrlHyperlinkCB;
-
+        CheckBox* m_pBlockUntrustedRefererLinksCB;
 
     public:
         SecurityOptionsDialog( Window* pParent, SvtSecurityOptions* pOptions );
@@ -58,6 +58,7 @@ namespace svx
         bool IsRemovePersInfoChecked() const { return m_pRemovePersInfoCB->IsChecked() != sal_False; }
         bool IsRecommPasswdChecked() const { return m_pRecommPasswdCB->IsChecked() != sal_False; }
         bool IsCtrlHyperlinkChecked() const { return m_pCtrlHyperlinkCB->IsChecked() != sal_False; }
+        bool IsBlockUntrustedRefererLinksChecked() const { return m_pBlockUntrustedRefererLinksCB->IsChecked() != sal_False; }
     };
 
 //........................................................................
