@@ -274,6 +274,13 @@ class OpChiDist:public Normal{
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
     virtual std::string BinFuncName(void) const { return "OpChiDist"; }
 };
+class OpBinomdist:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
+    virtual std::string BinFuncName(void) const { return "OpBinomdist"; }
+};
 class OpChiSqDist: public CheckVariables
 {
 public:
