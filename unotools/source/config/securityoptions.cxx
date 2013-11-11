@@ -50,41 +50,26 @@ using namespace ::com::sun::star::uno   ;
 // xmlsec05 deprecated
 #define DEFAULT_STAROFFICEBASIC         eALWAYS_EXECUTE
 
-#define CSTR_SECUREURL                  "SecureURL"
-#define CSTR_DOCWARN_SAVEORSEND         "WarnSaveOrSendDoc"
-#define CSTR_DOCWARN_SIGNING            "WarnSignDoc"
-#define CSTR_DOCWARN_PRINT              "WarnPrintDoc"
-#define CSTR_DOCWARN_CREATEPDF          "WarnCreatePDF"
-#define CSTR_DOCWARN_REMOVEPERSONALINFO "RemovePersonalInfoOnSaving"
-#define CSTR_DOCWARN_RECOMMENDPASSWORD  "RecommendPasswordProtection"
-#define CSTR_CTRLCLICK_HYPERLINK        "HyperlinksWithCtrlClick"
-#define CSTR_MACRO_SECLEVEL             "MacroSecurityLevel"
-#define CSTR_MACRO_TRUSTEDAUTHORS       "TrustedAuthors"
-#define CSTR_MACRO_DISABLE              "DisableMacrosExecution"
-#define CSTR_TRUSTEDAUTHOR_SUBJECTNAME  "SubjectName"
-#define CSTR_TRUSTEDAUTHOR_SERIALNUMBER "SerialNumber"
-#define CSTR_TRUSTEDAUTHOR_RAWDATA      "RawData"
-
-#define PROPERTYNAME_SECUREURL                  OUString(CSTR_SECUREURL)
-#define PROPERTYNAME_DOCWARN_SAVEORSEND         OUString(CSTR_DOCWARN_SAVEORSEND)
-#define PROPERTYNAME_DOCWARN_SIGNING            OUString(CSTR_DOCWARN_SIGNING)
-#define PROPERTYNAME_DOCWARN_PRINT              OUString(CSTR_DOCWARN_PRINT)
-#define PROPERTYNAME_DOCWARN_CREATEPDF          OUString(CSTR_DOCWARN_CREATEPDF)
-#define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO OUString(CSTR_DOCWARN_REMOVEPERSONALINFO)
-#define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  OUString(CSTR_DOCWARN_RECOMMENDPASSWORD)
-#define PROPERTYNAME_CTRLCLICK_HYPERLINK        OUString(CSTR_CTRLCLICK_HYPERLINK)
-#define PROPERTYNAME_MACRO_SECLEVEL             OUString(CSTR_MACRO_SECLEVEL)
-#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       OUString(CSTR_MACRO_TRUSTEDAUTHORS)
-#define PROPERTYNAME_MACRO_DISABLE              OUString(CSTR_MACRO_DISABLE)
-#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  OUString(CSTR_TRUSTEDAUTHOR_SUBJECTNAME)
-#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER OUString(CSTR_TRUSTEDAUTHOR_SERIALNUMBER)
-#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      OUString(CSTR_TRUSTEDAUTHOR_RAWDATA)
+#define PROPERTYNAME_SECUREURL                  "SecureURL"
+#define PROPERTYNAME_DOCWARN_SAVEORSEND         "WarnSaveOrSendDoc"
+#define PROPERTYNAME_DOCWARN_SIGNING            "WarnSignDoc"
+#define PROPERTYNAME_DOCWARN_PRINT              "WarnPrintDoc"
+#define PROPERTYNAME_DOCWARN_CREATEPDF          "WarnCreatePDF"
+#define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO "RemovePersonalInfoOnSaving"
+#define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  "RecommendPasswordProtection"
+#define PROPERTYNAME_CTRLCLICK_HYPERLINK        "HyperlinksWithCtrlClick"
+#define PROPERTYNAME_MACRO_SECLEVEL             "MacroSecurityLevel"
+#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       "TrustedAuthors"
+#define PROPERTYNAME_MACRO_DISABLE              "DisableMacrosExecution"
+#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  "SubjectName"
+#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER "SerialNumber"
+#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      "RawData"
 
 // xmlsec05 deprecated
-#define PROPERTYNAME_STAROFFICEBASIC    OUString("OfficeBasic")
-#define PROPERTYNAME_EXECUTEPLUGINS     OUString("ExecutePlugins")
-#define PROPERTYNAME_WARNINGENABLED     OUString("Warning")
-#define PROPERTYNAME_CONFIRMATIONENABLED OUString("Confirmation")
+#define PROPERTYNAME_STAROFFICEBASIC    "OfficeBasic"
+#define PROPERTYNAME_EXECUTEPLUGINS     "ExecutePlugins"
+#define PROPERTYNAME_WARNINGENABLED     "Warning"
+#define PROPERTYNAME_CONFIRMATIONENABLED "Confirmation"
 // xmlsec05 deprecated
 
 
@@ -498,27 +483,27 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
 {
     sal_Int32   nHandle;
 
-    if( rName.equalsAscii( CSTR_SECUREURL ) )
+    if( rName == PROPERTYNAME_SECUREURL )
         nHandle = PROPERTYHANDLE_SECUREURL;
-    else if( rName.equalsAscii( CSTR_DOCWARN_SAVEORSEND ) )
+    else if( rName == PROPERTYNAME_DOCWARN_SAVEORSEND )
         nHandle = PROPERTYHANDLE_DOCWARN_SAVEORSEND;
-    else if( rName.equalsAscii( CSTR_DOCWARN_SIGNING ) )
+    else if( rName == PROPERTYNAME_DOCWARN_SIGNING )
         nHandle = PROPERTYHANDLE_DOCWARN_SIGNING;
-    else if( rName.equalsAscii( CSTR_DOCWARN_PRINT ) )
+    else if( rName == PROPERTYNAME_DOCWARN_PRINT )
         nHandle = PROPERTYHANDLE_DOCWARN_PRINT;
-    else if( rName.equalsAscii( CSTR_DOCWARN_CREATEPDF ) )
+    else if( rName == PROPERTYNAME_DOCWARN_CREATEPDF )
         nHandle = PROPERTYHANDLE_DOCWARN_CREATEPDF;
-    else if( rName.equalsAscii( CSTR_DOCWARN_REMOVEPERSONALINFO ) )
+    else if( rName == PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO )
         nHandle = PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO;
-    else if( rName.equalsAscii( CSTR_DOCWARN_RECOMMENDPASSWORD ) )
+    else if( rName == PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD )
         nHandle = PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD;
-    else if( rName.equalsAscii( CSTR_CTRLCLICK_HYPERLINK ) )
+    else if( rName == PROPERTYNAME_CTRLCLICK_HYPERLINK )
         nHandle = PROPERTYHANDLE_CTRLCLICK_HYPERLINK;
-    else if( rName.equalsAscii( CSTR_MACRO_SECLEVEL ) )
+    else if( rName == PROPERTYNAME_MACRO_SECLEVEL )
         nHandle = PROPERTYHANDLE_MACRO_SECLEVEL;
-    else if( rName.equalsAscii( CSTR_MACRO_TRUSTEDAUTHORS ) )
+    else if( rName == PROPERTYNAME_MACRO_TRUSTEDAUTHORS )
         nHandle = PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS;
-    else if( rName.equalsAscii( CSTR_MACRO_DISABLE ) )
+    else if( rName == PROPERTYNAME_MACRO_DISABLE )
         nHandle = PROPERTYHANDLE_MACRO_DISABLE;
 
     // xmlsec05 deprecated
@@ -700,12 +685,11 @@ void SvtSecurityOptions_Impl::Commit()
                     sal_Int32   nCnt = m_seqTrustedAuthors.getLength();
                     if( nCnt )
                     {
-                        OUString  s(CSTR_MACRO_TRUSTEDAUTHORS);
-                        s += "/a";
-
                         for( sal_Int32 i = 0 ; i < nCnt ; ++i )
                         {
-                            OUString aPrefix = OUStringBuffer(s).append(i).append('/').makeStringAndClear();
+                            OUString aPrefix(
+                                PROPERTYNAME_MACRO_TRUSTEDAUTHORS "/a"
+                                + OUString::number(i) + "/");
                             Sequence< com::sun::star::beans::PropertyValue >    lPropertyValues( 3 );
                             lPropertyValues[ 0 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
                             lPropertyValues[ 0 ].Value <<= m_seqTrustedAuthors[ i ][0];
@@ -952,21 +936,21 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
     // Build static list of configuration key names.
     const OUString pProperties[] =
     {
-        PROPERTYNAME_SECUREURL,
-        PROPERTYNAME_STAROFFICEBASIC,
-        PROPERTYNAME_EXECUTEPLUGINS,
-        PROPERTYNAME_WARNINGENABLED,
-        PROPERTYNAME_CONFIRMATIONENABLED,
-        PROPERTYNAME_DOCWARN_SAVEORSEND,
-        PROPERTYNAME_DOCWARN_SIGNING,
-        PROPERTYNAME_DOCWARN_PRINT,
-        PROPERTYNAME_DOCWARN_CREATEPDF,
-        PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO,
-        PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD,
-        PROPERTYNAME_CTRLCLICK_HYPERLINK,
-        PROPERTYNAME_MACRO_SECLEVEL,
-        PROPERTYNAME_MACRO_TRUSTEDAUTHORS,
-        PROPERTYNAME_MACRO_DISABLE
+        OUString(PROPERTYNAME_SECUREURL),
+        OUString(PROPERTYNAME_STAROFFICEBASIC),
+        OUString(PROPERTYNAME_EXECUTEPLUGINS),
+        OUString(PROPERTYNAME_WARNINGENABLED),
+        OUString(PROPERTYNAME_CONFIRMATIONENABLED),
+        OUString(PROPERTYNAME_DOCWARN_SAVEORSEND),
+        OUString(PROPERTYNAME_DOCWARN_SIGNING),
+        OUString(PROPERTYNAME_DOCWARN_PRINT),
+        OUString(PROPERTYNAME_DOCWARN_CREATEPDF),
+        OUString(PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO),
+        OUString(PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD),
+        OUString(PROPERTYNAME_CTRLCLICK_HYPERLINK),
+        OUString(PROPERTYNAME_MACRO_SECLEVEL),
+        OUString(PROPERTYNAME_MACRO_TRUSTEDAUTHORS),
+        OUString(PROPERTYNAME_MACRO_DISABLE)
     };
     // Initialize return sequence with these list ...
     const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
