@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///7A\u003d",
+        "filename": "sc/source/filter/rtf/eeimpars.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-11T16:15:59Z",
+      "side": 1,
+      "message": "It\u0027s not upper/lower case but superscript/subscript instead.",
+      "revId": "016cfdf0106612b7122ca46d127536ecd15562ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
