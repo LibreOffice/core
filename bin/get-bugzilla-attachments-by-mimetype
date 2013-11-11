@@ -182,40 +182,41 @@ def get_launchpad_bugs(prefix):
     ubuntu = launchpad.distributions["ubuntu"]
 
     #since searching bugs having attachments with specific mimetypes is not available in launchpad API
-    #we're iterating over all bugs of the libreoffice source package
-    libo = ubuntu.getSourcePackage(name="libreoffice")
-    libobugs = libo.searchTasks()
+    #we're iterating over all bugs of the most interesting source packages
+    for pkg in ["libreoffice", "openoffice.org", "abiword", "gnumeric", "koffice", "calligra"]:
+        srcpkg = ubuntu.getSourcePackage(name=pkg)
+        pkgbugs = srcpkg.searchTasks(status=["New", "Fix Committed", "Invalid", "Won't Fix", "Confirmed", "Triaged", "In Progress", "Incomplete", "Incomplete (with response)", "Incomplete (without response)", "Fix Released", "Opinion", "Expired"])
 
-    for bugtask in libobugs:
-        bug = bugtask.bug
-        id = str(bug.id)
-        print("parsing " + id + " status: " + bugtask.status + " title: " + bug.title[:50])
-        attachmentid = 0
-        for attachment in bug.attachments:
-            attachmentid += 1
-            handle = attachment.data.open()
-            if not handle.content_type in mimetypes:
-                #print "skipping"
-                continue
+        for bugtask in pkgbugs:
+            bug = bugtask.bug
+            id = str(bug.id)
+            print("parsing " + id + " status: " + bugtask.status + " title: " + bug.title[:50])
+            attachmentid = 0
+            for attachment in bug.attachments:
+                attachmentid += 1
+                handle = attachment.data.open()
+                if not handle.content_type in mimetypes:
+                    #print "skipping"
+                    continue
 
-            suffix = mimetypes[handle.content_type]
-            if not os.path.isdir(suffix):
-                try:
-                    os.mkdir(suffix)
-                except:
-                    pass
+                suffix = mimetypes[handle.content_type]
+                if not os.path.isdir(suffix):
+                    try:
+                        os.mkdir(suffix)
+                    except:
+                        pass
 
-            download = suffix + '/' + prefix + id + '-' + str(attachmentid) + '.' + suffix
+                download = suffix + '/' + prefix + id + '-' + str(attachmentid) + '.' + suffix
 
-            if os.path.isfile(download):
-                print("assuming " + id + " is up to date")
-                break
+                if os.path.isfile(download):
+                    print("assuming " + id + " is up to date")
+                    break
 
-            print('mimetype is ' + handle.content_type + ' downloading as ' + download)
+                print('mimetype is ' + handle.content_type + ' downloading as ' + download)
 
-            f = open(download, "w")
-            f.write(handle.read())
-            f.close()
+                f = open(download, "w")
+                f.write(handle.read())
+                f.close()
 
 freedesktop = 'http://bugs.freedesktop.org/buglist.cgi'
 abisource = 'http://bugzilla.abisource.com/buglist.cgi' #added for abiword
