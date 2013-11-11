@@ -2141,9 +2141,8 @@ void cppuhelper::TypeManager::readRdbDirectory(
 void cppuhelper::TypeManager::readRdbFile(
     rtl::OUString const & uri, bool optional)
 {
-    rtl::Reference< unoidl::Provider > prov;
     try {
-        prov = unoidl::loadProvider(manager_, uri);
+        manager_->addProvider(unoidl::loadProvider(manager_, uri));
     } catch (unoidl::NoSuchFileException &) {
         if (!optional) {
             throw css::uno::DeploymentException(
@@ -2157,7 +2156,6 @@ void cppuhelper::TypeManager::readRdbFile(
                  + e.getDetail()),
                 static_cast< cppu::OWeakObject * >(this));
     }
-    manager_->addProvider(prov);
 }
 
 css::uno::Any cppuhelper::TypeManager::getSequenceType(
