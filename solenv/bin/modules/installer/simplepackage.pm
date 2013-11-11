@@ -445,8 +445,10 @@ sub create_package
 
 		if ($returnvalue)
 		{
-		    $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                    $infoline = "WARNING: \"$systemcall\" returned with non-zero!\n";
+                    $infoline .= "Return value: " . ($returnvalue >> 8) . "\n";
 		    push( @installer::globals::logfileinfo, $infoline);
+                    print $infoline;
 		}
 		else
 		{
