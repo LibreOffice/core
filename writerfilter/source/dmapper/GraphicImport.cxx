@@ -405,7 +405,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_LCB: break;//byte count
         case NS_rtf::LN_CBHEADER: break;//ignored
         case NS_rtf::LN_MFP: //MetafilePict
-        case NS_rtf::LN_DffRecord: //dff record - expands to an sprm which expands to ...
         case NS_rtf::LN_shpopt: //shape options
         case NS_rtf::LN_shpfbse: //BLIP store entry
         case NS_rtf::LN_BRCTOP: //top border

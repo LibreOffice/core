@@ -142,17 +142,6 @@
           </UML:Generalization.parent>
         </UML:Generalization>
         <!--Class SEPX-->
-        <!--Class DffRecord-->
-        <UML:Class xmi.id="DffRecord" name="DffRecord"/>
-        <UML:Generalization isSpecification="false" xmi.id="DffRecord-Properties">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="DffRecord"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Properties"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
-        <!--Class DffRecord-->
         <!--Class Papx-->
         <UML:Class xmi.id="Papx" name="Papx">
           <UML:Classifier.feature>
@@ -437,21 +426,6 @@
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
                   <UML:TaggedValue.dataValue>rtf:Inline</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="attrid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="attribute"/>
-              </UML:ModelElement.stereotype>
-            </UML:Attribute>
-          </UML:Classifier.feature>
-          <UML:Classifier.feature>
-            <UML:Attribute name="dffrecord">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:DffRecord</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="attrid"/>
                   </UML:TaggedValue.type>
@@ -26223,13 +26197,6 @@
                   </UML:TaggedValue.type>
                 </UML:TaggedValue>
               </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="DffRecord"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
               <UML:ModelElement.stereotype>
                 <UML:Stereotype xmi.idref="attribute"/>
               </UML:ModelElement.stereotype>
@@ -42660,8 +42627,6 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
-          <UML:Classifier.feature><UML:Operation name="blip"><UML:ModelElement.taggedValue><UML:TaggedValue><UML:TaggedValue.dataValue>rtf:blip</UML:TaggedValue.dataValue><UML:TaggedValue.type><UML:TagDefinition xmi.idref="opid"/></UML:TaggedValue.type></UML:TaggedValue></UML:ModelElement.taggedValue><UML:BehavioralFeature.parameter><UML:Parameter kind="return" name="return"><UML:Parameter.type><UML:Class xmi.idref="DffRecord"/></UML:Parameter.type></UML:Parameter></UML:BehavioralFeature.parameter><UML:ModelElement.stereotype><UML:Stereotype xmi.idref="attribute"/></UML:ModelElement.stereotype></UML:Operation>
-          g          </UML:Classifier.feature>
           <!--
               <UML:Classifier.feature>
               <UML:Operation name="binary">
