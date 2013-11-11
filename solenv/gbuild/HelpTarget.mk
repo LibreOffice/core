@@ -405,6 +405,8 @@ endef
 define gb_HelpLinkTarget_add_renamed_file
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES += $(strip $(2)),$(strip $(3))
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(3)
+$(call gb_HelpTarget_get_workdir,$(1))/$(2) : $(call gb_HelpLinkTarget_get_target,$(1))
+	touch $$@
 
 endef
 
