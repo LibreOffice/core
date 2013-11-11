@@ -1,0 +1,69 @@
+Hack the xml2-config to return paths into WORKDIR.
+
+--- a/xml2-config.in	2009-12-17 11:45:20.000000000 +0000
++++ b/xml2-config.in	2009-12-17 11:45:36.000000000 +0000
+@@ -1,9 +1,14 @@
+ #! /bin/sh
+ 
+-prefix=@prefix@
+-exec_prefix=@exec_prefix@
+-includedir=@includedir@
+-libdir=@libdir@
++#prefix=@prefix@
++#exec_prefix=@exec_prefix@
++#includedir=@includedir@
++#libdir=@libdir@
++
++prefix=${WORKDIR}/UnpackedTarball/xml2
++exec_prefix=${WORKDIR}/UnpackedTarball/xml2
++includedir=${WORKDIR}/UnpackedTarball/xml2/include
++libdir=${WORKDIR}/UnpackedTarball/xml2/.libs
+ 
+ usage()
+ {
+@@ -67,7 +72,8 @@
+ 	;;
+ 
+     --cflags)
+-       	echo @XML_INCLUDEDIR@ @XML_CFLAGS@
++        echo -I${includedir}
++#       	echo @XML_INCLUDEDIR@ @XML_CFLAGS@
+        	;;
+ 
+     --libtool-libs)
+@@ -82,19 +88,24 @@
+        	;;
+ 
+     --libs)
+-        if [ "`uname`" = "Linux" ]
+-	then
+-	    if [ "@XML_LIBDIR@" = "-L/usr/lib" -o "@XML_LIBDIR@" = "-L/usr/lib64" ]
+-	    then
+-		echo @XML_LIBS@ @MODULE_PLATFORM_LIBS@
+-	    else
+-		echo @XML_LIBDIR@ @XML_LIBS@ @MODULE_PLATFORM_LIBS@
+-	    fi
+-	else
+-	    echo @XML_LIBDIR@ @XML_LIBS@ @MODULE_PLATFORM_LIBS@ @WIN32_EXTRA_LIBADD@
+-	fi
++        echo -L${libdir} -lxml2 -lm
++#        if [ "`uname`" = "Linux" ]
++#	then
++#	    if [ "@XML_LIBDIR@" = "-L/usr/lib" -o "@XML_LIBDIR@" = "-L/usr/lib64" ]
++#	    then
++#		echo @XML_LIBS@ @MODULE_PLATFORM_LIBS@
++#	    else
++#		echo @XML_LIBDIR@ @XML_LIBS@ @MODULE_PLATFORM_LIBS@
++#	    fi
++#	else
++#	    echo @XML_LIBDIR@ @XML_LIBS@ @MODULE_PLATFORM_LIBS@ @WIN32_EXTRA_LIBADD@
++#	fi
+        	;;
+ 
++    print) # ugly configure hack
++        exit 0
++        ;;
++ 
+     *)
+ 	usage
+ 	exit 1
