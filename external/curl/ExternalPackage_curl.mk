@@ -16,11 +16,11 @@ ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.dll,lib/.libs/libcurl.dll))
 else ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.dll,lib/libcurl.dll))
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll,lib/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll))
 else ifeq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so,lib/.libs/libcurl.so.4))
 else
-$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so.4,lib/.libs/libcurl.so.4.3.0))
 endif
 
 endif # $(DISABLE_DYNLOADING)
