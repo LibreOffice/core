@@ -124,16 +124,16 @@ $(eval $(call gb_CustomTarget_CustomTarget,sysui/share))
 $(eval $(call gb_CustomTarget_register_targets,sysui/share,\
 	$(ULFS) \
 	$(foreach product,$(PRODUCTLIST),\
-	$(product)/build.flag \
-	$(product)/openoffice.org.xml \
-	$(product)/openoffice.mime \
-	$(product)/openoffice.applications \
-	$(product)/openoffice.keys \
-	$(product)/openoffice.sh \
-	$(product)/printeradmin.sh \
-	$(product)/create_tree.sh \
-	$(product)/mimelnklist \
-	$(product)/launcherlist) \
+		$(product)/build.flag \
+		$(product)/openoffice.org.xml \
+		$(product)/openoffice.mime \
+		$(product)/openoffice.applications \
+		$(product)/openoffice.keys \
+		$(product)/openoffice.sh \
+		$(product)/printeradmin.sh \
+		$(product)/create_tree.sh \
+		$(product)/mimelnklist \
+		$(product)/launcherlist) \
 ))
 
 $(share_WORKDIR)/%/openoffice.org.xml: $(share_WORKDIR)/documents.ulf $(MIMEDESKTOPS) $(share_SRCDIR)/share/create_mime_xml.pl
@@ -203,8 +203,18 @@ $(share_WORKDIR)/%/openoffice.applications: $(share_SRCDIR)/mimetypes/openoffice
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
 	cat $< | tr -d "\015" | sed -e "s/OFFICENAME/$(UNIXFILENAME.$*)/" -e "s/%PRODUCTNAME/$(PRODUCTNAME.$*) $(PRODUCTVERSION.$*)/" > $@
 
+# these .desktop files are written by brand.pl below
+# need to have a rule for these because they are targets in Package_share
+define sysui_Desktop_rule
+$(share_WORKDIR)/%/$(1).desktop : $(share_WORKDIR)/%/build.flag
+	touch $$@
+
+endef
+
+$(foreach launcher,$(LAUNCHERLIST),$(eval $(call sysui_Desktop_rule,$(launcher))))
+
 $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
-	$(share_TRANSLATE)  $(addprefix $(share_WORKDIR)/,$(ULFS))
+		$(share_TRANSLATE) $(addprefix $(share_WORKDIR)/,$(ULFS))
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(PERL) $(share_SRCDIR)/share/brand.pl -p '$${PRODUCTNAME} $${PRODUCTVERSION}' -u $(UNIXFILENAME.$*) \
