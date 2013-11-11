@@ -118,6 +118,7 @@ define gb_LinkTarget__command_dynamiclink
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
 		$(wildcard $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib*.a) \
+		$(EBOOK_LIBS) \
 		$(FREEHAND_LIBS) \
 		$(HUNSPELL_LIBS) \
 		$(HYPHEN_LIB) \
