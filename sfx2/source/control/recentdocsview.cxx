@@ -45,6 +45,8 @@ RecentDocsView::RecentDocsView( Window* pParent )
     , mnTextHeight(30)
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)
+    , maWelcomeImage(SfxResId(IMG_WELCOME))
+    , maWelcomeText(SfxResId(STR_WELCOME))
 {
     SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( mnItemMaxTextLength );
@@ -247,22 +249,23 @@ void RecentDocsView::Paint( const Rectangle &aRect )
     if ( mItemList.size() == 0 )
     {
         // No recent files to be shown yet. Show a welcome screen.
-        Image aImg(SfxResId(IMG_WELCOME));
-        OUString aStr(SfxResId(STR_WELCOME));
         Font aOldFont(GetFont());
         Font aNewFont(aOldFont);
         aNewFont.SetHeight(20);
         SetFont(aNewFont);
-        long nTextWidth = GetTextWidth(aStr);
+
+        long nTextWidth = GetTextWidth(maWelcomeText);
         long nTextHeight = GetTextHeight();
-        const Size & rImgSize = aImg.GetSizePixel();
+        const Size & rImgSize = maWelcomeImage.GetSizePixel();
         const Size & rScreenSize = GetSizePixel();
         const int nX = (rScreenSize.Width() - rImgSize.Width())/2;
         const int nY = (rScreenSize.Height() - nTextHeight*1.5 - rImgSize.Height())/2;
         Point aImgPoint(nX, nY);
-        DrawImage(aImgPoint, rImgSize, aImg, IMAGE_DRAW_SEMITRANSPARENT);
         Point aStrPoint((rScreenSize.Width() - nTextWidth)/2, nY + rImgSize.Height() + nTextHeight/2);
-        DrawText(aStrPoint, aStr);
+
+        DrawImage(aImgPoint, rImgSize, maWelcomeImage, IMAGE_DRAW_SEMITRANSPARENT);
+        DrawText(aStrPoint, maWelcomeText);
+
         SetFont(aOldFont);
     }
     else

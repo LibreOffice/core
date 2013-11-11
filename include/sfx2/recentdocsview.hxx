@@ -12,6 +12,7 @@
 
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/recentdocsviewitem.hxx>
+#include <vcl/image.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -69,6 +70,9 @@ protected:
     long    mnTextHeight;
     long    mnItemPadding;
     long    mnItemMaxTextLength;
+
+    Image   maWelcomeImage;
+    OUString maWelcomeText;
 };
 
 #endif // INCLUDED_SFX2_RECENTDOCSVIEW_HXX
