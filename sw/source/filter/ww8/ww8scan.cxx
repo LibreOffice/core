@@ -5509,7 +5509,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
 }
 
 
-WW8Fib::WW8Fib(sal_uInt8 nVer)
+WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
 {
     memset(this, 0, sizeof(*this));
     nVersion = nVer;
@@ -5520,6 +5520,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
         nFib = 0x0101;
         nFibBack = 0xbf;
         nProduct = 0x204D;
+        fDot = bDot;
 
         csw = 0x0e;     // muss das sein ???
         cfclcb = 0x88;  //      -""-

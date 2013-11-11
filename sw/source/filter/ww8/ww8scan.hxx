@@ -1410,7 +1410,7 @@ public:
     WW8Fib( SvStream& rStrm, sal_uInt8 nWantedVersion,sal_uInt32 nOffset=0 );
 
     /* leider falsch, man braucht auch noch einen fuer den Export */
-    WW8Fib( sal_uInt8 nVersion = 6 );
+    WW8Fib( sal_uInt8 nVersion = 6, bool bDot = false );
     bool WriteHeader(SvStream& rStrm);
     bool Write(SvStream& rStrm);
     static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs);

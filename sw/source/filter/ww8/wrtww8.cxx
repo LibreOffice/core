@@ -3071,7 +3071,7 @@ void WW8Export::ExportDocument_Impl()
 {
     PrepareStorage();
 
-    pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
+    pFib = new WW8Fib( bWrtWW8 ? 8 : 6, m_bDot );
 
     SvStorageStreamRef xWwStrm( GetWriter().GetStorage().OpenSotStream( aMainStg ) );
     SvStorageStreamRef xTableStrm( xWwStrm ), xDataStrm( xWwStrm );
@@ -3377,7 +3377,8 @@ sal_uLong SwWW8Writer::WriteStorage()
 
     // Do the actual export
     {
-        WW8Export aExport( this, pDoc, pCurPam, pOrigPam, m_bWrtWW8 );
+        bool bDot = mpMedium->GetFilter()->GetName().endsWith("Vorlage");
+        WW8Export aExport( this, pDoc, pCurPam, pOrigPam, m_bWrtWW8, bDot );
         m_pExport = &aExport;
         aExport.ExportDocument( bWriteAll );
         m_pExport = NULL;
@@ -3425,11 +3426,12 @@ MSWordExportBase::~MSWordExportBase()
 
 WW8Export::WW8Export( SwWW8Writer *pWriter,
         SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
-        bool bIsWW8 )
+        bool bIsWW8, bool bDot )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       pO( NULL ),
       pSepx( NULL ),
       bWrtWW8( bIsWW8 ),
+      m_bDot(bDot),
       m_pWriter( pWriter ),
       m_pAttrOutput( new WW8AttributeOutput( *this ) )
 {
