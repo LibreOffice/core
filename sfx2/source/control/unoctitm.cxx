@@ -677,89 +677,97 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             if (pViewFrame)
                 xFrameRef = pViewFrame->GetFrame().GetFrameInterface();
         }
-        SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
-        if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
-            aInternalSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrameRef ) );
 
         sal_Bool bSuccess = sal_False;
         const SfxPoolItem* pItem = NULL;
-        SfxShell* pShell( 0 );
-        // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution
         SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
-        if ( pDispatcher->GetBindings() )
+
+        // Extra scope so that aInternalSet is destroyed before
+        // rListener->dispatchFinished potentially calls
+        // framework::Desktop::terminate -> SfxApplication::Deinitialize ->
+        // ~CntItemPool:
         {
-            if ( !pDispatcher->IsLocked( GetId() ) )
+            SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
+            if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
+                aInternalSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrameRef ) );
+
+            SfxShell* pShell( 0 );
+            // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution
+            if ( pDispatcher->GetBindings() )
             {
-                const SfxSlot *pSlot = 0;
-                if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
-                        SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), sal_False ) )
+                if ( !pDispatcher->IsLocked( GetId() ) )
                 {
-                    if ( bMasterSlave )
+                    const SfxSlot *pSlot = 0;
+                    if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
+                                                            SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), sal_False ) )
                     {
-                        // Extract slave command and add argument to the args list. Master slot MUST
-                        // have a argument that has the same name as the master slot and type is SfxStringItem.
-                        sal_Int32 nIndex = lNewArgs.getLength();
-                        lNewArgs.realloc( nIndex+1 );
-                        lNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );
-                        lNewArgs[nIndex].Value  = makeAny( SfxDispatchController_Impl::getSlaveCommand( aDispatchURL ));
-                    }
+                        if ( bMasterSlave )
+                        {
+                            // Extract slave command and add argument to the args list. Master slot MUST
+                            // have a argument that has the same name as the master slot and type is SfxStringItem.
+                            sal_Int32 nIndex = lNewArgs.getLength();
+                            lNewArgs.realloc( nIndex+1 );
+                            lNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );
+                            lNewArgs[nIndex].Value  = makeAny( SfxDispatchController_Impl::getSlaveCommand( aDispatchURL ));
+                        }
 
-                    eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
-                    boost::scoped_ptr<SfxAllItemSet> xSet(new SfxAllItemSet(pShell->GetPool()));
-                    TransformParameters(GetId(), lNewArgs, *xSet, pSlot);
-                    if (xSet->Count())
-                    {
-                        // execute with arguments - call directly
-                        pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
-                        bSuccess = (pItem != NULL);
-                    }
-                    else
-                    {
-                        // Be sure to delete this before we send a dispatch
-                        // request, which will destroy the current shell.
-                        xSet.reset();
+                        eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
+                        boost::scoped_ptr<SfxAllItemSet> xSet(new SfxAllItemSet(pShell->GetPool()));
+                        TransformParameters(GetId(), lNewArgs, *xSet, pSlot);
+                        if (xSet->Count())
+                        {
+                            // execute with arguments - call directly
+                            pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
+                            bSuccess = (pItem != NULL);
+                        }
+                        else
+                        {
+                            // Be sure to delete this before we send a dispatch
+                            // request, which will destroy the current shell.
+                            xSet.reset();
 
-                        // execute using bindings, enables support for toggle/enum etc.
-                        SfxRequest aReq( GetId(), nCall, pShell->GetPool() );
-                        aReq.SetModifier( nModifier );
-                        aReq.SetInternalArgs_Impl(aInternalSet);
-                        pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
-                        pItem = aReq.GetReturnValue();
-                        bSuccess = aReq.IsDone() || pItem != NULL;
+                            // execute using bindings, enables support for toggle/enum etc.
+                            SfxRequest aReq( GetId(), nCall, pShell->GetPool() );
+                            aReq.SetModifier( nModifier );
+                            aReq.SetInternalArgs_Impl(aInternalSet);
+                            pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
+                            pItem = aReq.GetReturnValue();
+                            bSuccess = aReq.IsDone() || pItem != NULL;
+                        }
                     }
-                }
 #ifdef DBG_UTIL
-                else
-                    DBG_WARNING("MacroPlayer: Unknown slot dispatched!");
+                    else
+                        DBG_WARNING("MacroPlayer: Unknown slot dispatched!");
 #endif
-            }
-        }
-        else
-        {
-            eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), GetId() );
-            // AppDispatcher
-            SfxAllItemSet aSet( SFX_APP()->GetPool() );
-            TransformParameters( GetId(), lNewArgs, aSet );
-
-            if ( aSet.Count() )
-                pItem = pDispatcher->Execute( GetId(), nCall, &aSet, &aInternalSet, nModifier );
-            else
-                // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
-                pItem = pDispatcher->Execute( GetId(), nCall, 0, &aInternalSet, nModifier );
-
-            // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
-            if ( SfxApplication::Get() )
-            {
-                SfxDispatcher* pAppDispat = SFX_APP()->GetAppDispatcher_Impl();
-                if ( pAppDispat )
-                {
-                    const SfxPoolItem* pState=0;
-                     SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
-                    StateChanged( GetId(), eState, pState );
                 }
             }
+            else
+            {
+                eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), GetId() );
+                // AppDispatcher
+                SfxAllItemSet aSet( SFX_APP()->GetPool() );
+                TransformParameters( GetId(), lNewArgs, aSet );
 
-            bSuccess = (pItem != NULL);
+                if ( aSet.Count() )
+                    pItem = pDispatcher->Execute( GetId(), nCall, &aSet, &aInternalSet, nModifier );
+                else
+                    // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
+                    pItem = pDispatcher->Execute( GetId(), nCall, 0, &aInternalSet, nModifier );
+
+                // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
+                if ( SfxApplication::Get() )
+                {
+                    SfxDispatcher* pAppDispat = SFX_APP()->GetAppDispatcher_Impl();
+                    if ( pAppDispat )
+                    {
+                        const SfxPoolItem* pState=0;
+                        SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
+                        StateChanged( GetId(), eState, pState );
+                    }
+                }
+
+                bSuccess = (pItem != NULL);
+            }
         }
 
         if ( rListener.is() )
