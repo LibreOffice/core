@@ -1,23 +1,10 @@
 --- build/libxml2-2.7.6/win32/Makefile.msvc.old	2010-09-20 20:22:41.500000000 +0200
 +++ build/libxml2-2.7.6/win32/Makefile.msvc	2010-09-20 20:23:00.250000000 +0200
 @@ -59,6 +59,7 @@
- CFLAGS = $(CFLAGS) /D "HAVE_ZLIB_H"
+ CFLAGS = $(CFLAGS) /D "HAVE_LZMA_H"
  !endif
  CFLAGS = $(CFLAGS) /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
 +CFLAGS = $(CFLAGS) $(SOLARINC)
  
  # The linker and its options.
  LD = link.exe
-@@ -91,8 +91,12 @@
- LDFLAGS = $(LDFLAGS) /DEBUG
- !else
- CFLAGS = $(CFLAGS) /D "NDEBUG" /O2 
-+!if "$(_NMAKE_VER)" >= "10.00.30319.01"
-+LDFLAGS = $(LDFLAGS)
-+!else
- LDFLAGS = $(LDFLAGS) /OPT:NOWIN98
- !endif
-+!endif
- 
- # Libxml object files.
- XML_OBJS = $(XML_INTDIR)\c14n.obj\

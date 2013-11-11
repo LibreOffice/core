@@ -12,16 +12,11 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,xml2))
 $(eval $(call gb_UnpackedTarball_set_tarball,xml2,$(LIBXML_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xml2,\
-	libxml2/libxml2-configure.patch \
-	libxml2/libxml2-gnome599717.patch \
-	libxml2/libxml2-xpath.patch \
+	libxml2/libxml2-config.patch.1 \
+	libxml2/libxml2-freebsd.patch.1 \
 	libxml2/libxml2-global-symbols.patch \
-	libxml2/libxml2-aix.patch \
 	libxml2/libxml2-vc10.patch \
-	libxml2/libxml2-latin.patch \
 	$(if $(filter ANDROID,$(OS)),libxml2/libxml2-android.patch) \
-	$(if $(filter WNT,$(OS)),libxml2/libxml2-long-path.patch \
-	$(if $(filter GCC,$(COM)),libxml2/libxml2-mingw.patch)) \
 ))
 
 # vim: set noet sw=4 ts=4:
