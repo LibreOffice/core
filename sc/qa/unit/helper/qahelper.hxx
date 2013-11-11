@@ -121,6 +121,12 @@ SCQAHELPER_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2O
 SCQAHELPER_DLLPUBLIC bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
 
 /**
+ * Check if the cell at specified position is a formula cell that doesn't
+ * have an error value.
+ */
+SCQAHELPER_DLLPUBLIC bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos);
+
+/**
  * Convert formula token array to a formula string.
  */
 SCQAHELPER_DLLPUBLIC OUString toString(

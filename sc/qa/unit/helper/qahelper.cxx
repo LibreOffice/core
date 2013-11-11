@@ -430,6 +430,15 @@ bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected
     return true;
 }
 
+bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos)
+{
+    ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
+    if (!pFC)
+        return false;
+
+    return pFC->GetErrCode() == 0;
+}
+
 OUString toString(
     ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram)
 {
