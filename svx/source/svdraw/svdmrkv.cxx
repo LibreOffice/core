@@ -1138,8 +1138,16 @@ void SdrMarkView::CheckMarked()
         nm--;
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
+        // fix crash of #74651, when an object
+        // is selected and removed by macro
+        if (pObj == NULL) {
+                GetMarkedObjectListWriteAccess().DeleteMark(nm);
+                continue;
+        }
+
         SdrPageView* pPV=pM->GetPageView();
         SdrLayerID nLay=pObj->GetLayer();
+
         bool bRaus=!pObj->IsInserted(); // Obj deleted?
         if (!pObj->Is3DObj()) {
             bRaus=bRaus || pObj->GetPage()!=pPV->GetPage();   // Obj suddenly in different Page or Group
@@ -1925,15 +1933,18 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
         for (sal_uIntPtr nm=0; nm<GetMarkedObjectCount(); nm++) {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pO=pM->GetMarkedSdrObj();
-            Rectangle aR1(pO->GetSnapRect());
-            // apply calc offset to marked object rect
-            // ( necessary for handles to be displayed in
-            // correct position )
-            if (aRect2.IsEmpty()) aRect2=aR1;
-            else aRect2.Union( aR1 );
-            aR1 += pO->GetGridOffset();
-            if (aRect.IsEmpty()) aRect=aR1;
-            else aRect.Union(aR1);
+            // fix crash of #74651
+            if (pO != NULL) {
+                Rectangle aR1(pO->GetSnapRect());
+                // apply calc offset to marked object rect
+                // ( necessary for handles to be displayed in
+                // correct position )
+                if (aRect2.IsEmpty()) aRect2=aR1;
+                else aRect2.Union( aR1 );
+                aR1 += pO->GetGridOffset();
+                if (aRect.IsEmpty()) aRect=aR1;
+                else aRect.Union(aR1);
+            }
         }
         ((SdrMarkView*)this)->aMarkedObjRect=aRect;
         ((SdrMarkView*)this)->aMarkedObjRectNoOffset=aRect2;
@@ -2021,7 +2032,7 @@ void SdrMarkView::MarkListHasChanged()
     sal_Bool bOneEdgeMarked=sal_False;
     if (GetMarkedObjectCount()==1) {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (pObj->GetObjInventor()==SdrInventor) {
+        if ((pObj != NULL) && (pObj->GetObjInventor()==SdrInventor)) {
             sal_uInt16 nIdent=pObj->GetObjIdentifier();
             bOneEdgeMarked=nIdent==OBJ_EDGE;
         }
