@@ -100,13 +100,13 @@ ALLTAR  : $(LOCALPYFILES)
 .IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall $(OOOHELPPACK)
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) $(eq,$(OS),MACOSX $(NULL) ooolanguagepack) $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
+ALLTAR : $(eq,$(OS),MACOSX openofficeall openoffice_$(defaultlangiso)) $(eq,$(OS),MACOSX $(NULL) ooolanguagepack) $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
 .ENDIF
 .ELSE
 .IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall $(OOOHELPPACK) sdkooall
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) $(eq,$(OS),MACOSX $(NULL) ooolanguagepack) $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US) sdkoo_en-US
+ALLTAR : $(eq,$(OS),MACOSX openofficeall openoffice_$(defaultlangiso)) $(eq,$(OS),MACOSX $(NULL) ooolanguagepack) $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US) sdkoo_en-US
 .ENDIF
 .ENDIF
 .ELSE # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
