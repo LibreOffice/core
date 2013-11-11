@@ -213,6 +213,7 @@ public:
     void testMathFormulaBitXor();
     void testStatisticalFormulaChiInv();
     void testStatisticalFormulaPoisson();
+    void testMathFormulaSumSQ();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -357,6 +358,7 @@ public:
     CPPUNIT_TEST(testMathFormulaBitXor);
     CPPUNIT_TEST(testStatisticalFormulaChiInv);
     CPPUNIT_TEST(testStatisticalFormulaPoisson);
+    CPPUNIT_TEST(testMathFormulaSumSQ);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1366,6 +1368,28 @@ void ScOpenclTest::testMathFormulaSin()
     {
         double fLibre = pDoc->GetValue(ScAddress(1,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-59]
+void ScOpenclTest::testMathFormulaSumSQ()
+{
+    if (!detectOpenCLDevice())
+            return;
+    ScDocShellRef xDocSh = loadDoc("opencl/math/sumsq.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/sumsq.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i < 20; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(5,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(5,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
