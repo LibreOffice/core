@@ -316,6 +316,9 @@ mimetypes = {
     'application/x-iwork-keynote-sffkey': 'key',
     'application/x-hwp': 'hwp',
     'application/x-aportisdoc': 'pdb',
+    'application/prs.plucker' : 'pdb_plucker',
+    'application/vnd.palm' : 'pdb_palm',
+    'application/x-sony-bbeb' : 'lrf',
     'application/x-pocket-word': 'psw',
     'application/x-t602': '602',
 # binfilter
