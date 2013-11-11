@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///8c\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-11T10:18:28Z",
+      "side": 1,
+      "message": "Nitpick: please next time use \"m_pPoint\" or something like that, \"v\" is a prefix we rarely use, and if we do so, it\u0027s used for std::vector instances only.",
+      "revId": "6b438372969ebc5005e9e99c1e39a243bfc4bc8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
