@@ -44,10 +44,7 @@ interface XVBAEventProcessor
 
         @return
             `TRUE`, if the VBA event handler exists.
-
-        @throws ::com::sun::star::lang::IllegalArgumentException
-            if the passed event identifier is not supported, or if the passed
-            specifier is required but invalid.
+            `FALSE`, for all other cases.
     **/
     boolean hasVbaEventHandler( [in] long nEventId, [in] sequence< any > aArgs )
         raises (::com::sun::star::lang::IllegalArgumentException);

@@ -51,15 +51,6 @@ VbaEventsHelperBase::~VbaEventsHelperBase()
     SAL_WARN_IF( !mbDisposed, "vbahelper", "VbaEventsHelperBase::~VbaEventsHelperBase - missing disposing notification" );
 }
 
-sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
-{
-    // getEventHandlerInfo() throws, if unknown event dentifier has been passed
-    const EventHandlerInfo& rInfo = getEventHandlerInfo( nEventId );
-    // getEventHandlerPath() searches for the macro in the document
-    return !getEventHandlerPath( rInfo, rArgs ).isEmpty();
-}
-
 sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
         throw (lang::IllegalArgumentException, util::VetoException, uno::RuntimeException)
 {
@@ -239,6 +230,16 @@ void VbaEventsHelperBase::stopListening()
     mpShell = 0;
     maEventInfos.clear();
     mbDisposed = true;
+}
+
+sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
+        throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    EventHandlerInfoMap::const_iterator aIt = maEventInfos.find( nEventId );
+    if( aIt == maEventInfos.end() )
+        return sal_False; // throwing a lot of exceptions is slow.
+    else // getEventHandlerPath() searches for the macro in the document
+        return !getEventHandlerPath( aIt->second, rArgs ).isEmpty();
 }
 
 const VbaEventsHelperBase::EventHandlerInfo& VbaEventsHelperBase::getEventHandlerInfo(
