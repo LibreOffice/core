@@ -20,15 +20,15 @@ Usage: $0 [ --xz ] [ --bz2 ] [ --md5 ] [ --output-dir=<output location> ]
 
     --xz         generate a package compressed with xz (default)
     --bz2        generate a package compressed with bz2. Note if you specify
-                 both --cz and --bz2, both are created. if you specify neither
-                 --xz is impliied.
-    --md5        generate a md5 signature for the generated pacakge(s)
+                 both --cz and --bz2, both are created. If you specify neither
+                 --xz is implied.
+    --md5        generate a md5 signature for the generated package(s)
     --output-dir where to put the generated packages
     --core-dir   location of the core repo to extract sources from.
-                 by default this is one directory up from the position
+                 By default this is one directory up from the position
                  of this script.
-    --version    version string used to generate the name of the pacakge
-                 the source pacakge name is libreoffice-<version>.tar.[bz2|xz]
+    --version    version string used to generate the name of the package
+                 the source package name is libreoffice-<version>.tar.[bz2|xz]
 
 EOF
 }
@@ -99,7 +99,7 @@ done
 
 # we need a label
 if [ -z "${LABEL}" ] ; then
-    echo "Missing argument. we need a git label as source" 1>&2
+    echo "Missing argument. We need a git label as source" 1>&2
     exit 1
 fi
 
