@@ -16,10 +16,10 @@ $(eval $(call gb_ExternalPackage_add_file,xslt,bin/xslt-config,xslt-config))
 endif
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libxslt.1.dylib,libxslt/.libs/libxslt.1.1.26.dylib))
-$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.dylib,libxslt/.libs/libxslt.1.1.26.dylib))
-$(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libexslt.0.dylib,libexslt/.libs/libexslt.0.8.15.dylib))
-$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libexslt.dylib,libexslt/.libs/libexslt.0.8.15.dylib))
+$(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libxslt.1.dylib,libxslt/.libs/libxslt.1.1.28.dylib))
+$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.dylib,libxslt/.libs/libxslt.1.1.28.dylib))
+$(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libexslt.0.dylib,libexslt/.libs/libexslt.0.8.17.dylib))
+$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libexslt.dylib,libexslt/.libs/libexslt.0.8.17.dylib))
 $(eval $(call gb_ExternalPackage_add_file,xslt,bin/xsltproc,xsltproc/.libs/xsltproc))
 else ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.a,libxslt/.libs/libxslt.a))
@@ -42,10 +42,10 @@ $(eval $(call gb_ExternalPackage_add_library_for_install,xslt,bin/libexslt.dll,w
 $(eval $(call gb_ExternalPackage_add_file,xslt,bin/xsltproc.exe,win32/bin.msvc/xsltproc.exe))
 endif
 else # OS!=WNT
-$(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libxslt.so.1,libxslt/.libs/libxslt.so.1.1.26))
-$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.so,libxslt/.libs/libxslt.so.1.1.26))
-$(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libexslt.so.0,libexslt/.libs/libexslt.so.0.8.15))
-$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libexslt.so,libexslt/.libs/libexslt.so.0.8.15))
+$(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libxslt.so.1,libxslt/.libs/libxslt.so.1.1.28))
+$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.so,libxslt/.libs/libxslt.so.1.1.28))
+$(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libexslt.so.0,libexslt/.libs/libexslt.so.0.8.17))
+$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libexslt.so,libexslt/.libs/libexslt.so.0.8.17))
 $(eval $(call gb_ExternalPackage_add_file,xslt,bin/xsltproc,xsltproc/.libs/xsltproc))
 endif
 

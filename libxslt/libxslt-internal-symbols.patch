@@ -44,10 +44,8 @@
 +#XSLT_REFACTORED  xsltStyleStylesheetLevelGetExtData;
  
  # xsltInternals
--  xsltTransStorageAdd;
--  xsltTransStorageRemove;
-+#NOT_IMPLEMENTED  xsltTransStorageAdd;
-+#NOT_IMPLEMENTED  xsltTransStorageRemove;
+ # xsltTransStorageAdd; removed in 1.1.28
+ # xsltTransStorageRemove; removed in 1.1.28
    xsltUninit;
 -  xsltXSLTAttrMarker; # variable
 +#XSLT_REFACTORED  xsltXSLTAttrMarker; # variable
@@ -56,11 +54,11 @@
  LIBXML2_1.1.20 {
 @@ -475,5 +475,9 @@
  
- # transform
-   xsltProcessOneNode;
+ # xsltutils
+   xsltXPathCompileFlags;
 +
 +# Solaris ld needs explicit auto-reduction (or, alternatively, "-B local")
 +    local:
 +  *;
- } LIBXML2_1.1.25;
+ } LIBXML2_1.1.26;
  
