@@ -19,6 +19,10 @@
 
 #ifdef __i386
 
+// For the iOS emulator (i386). Basically a copy of
+// ../gcc3_macosx_intel/uno2cpp.cxx with some cleanups and necessary
+// changes.
+
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "bridges/cpp_uno/shared/bridge.hxx"

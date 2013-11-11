@@ -19,7 +19,7 @@
 
 #if defined(__arm) || defined(__arm64)
 
-// For iOS devices (ARM). Basically a copy of n
+// For iOS devices (ARM). Basically a copy of
 // ../gcc3_linux_arm/cpp2uno.cxx with some cleanups and necessary
 // changes: No dynamic code generation as that is prohibited for apps
 // in the App Store. Instead we use a set of pre-generated snippets.
@@ -28,6 +28,11 @@
 // common code in this and cpp2uno-i386.cxx have been done. Which is
 // sad. But then the whole bridges/source/cpp_uno is full of
 // copy/paste. So I continue in that tradition...
+
+// Note that for iOS, neither __ARM_EABI__ or __ARM_PCS_VFP are
+// defined.  The ifdefs for those have been left in place to keep this
+// file as close to ../gcc3_linux_arm/cpp2uno.cxx as possible, to make
+// future unification easier.
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <uno/data.h>
