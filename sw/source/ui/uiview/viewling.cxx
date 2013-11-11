@@ -175,7 +175,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             const SwPosition *pPoint = m_pWrtShell->GetCrsr()->GetPoint();
                             sal_Bool bRestoreCursor = pPoint->nNode.GetNode().IsTxtNode();
                             const SwNodeIndex aPointNodeIndex( pPoint->nNode );
-                            xub_StrLen nPointIndex = pPoint->nContent.GetIndex();
+                            sal_Int32 nPointIndex = pPoint->nContent.GetIndex();
 
                             // since this conversion is not interactive the whole converted
                             // document should be undone in a single undo step.
@@ -517,11 +517,11 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
         // preserve those. Therefore count those "in words" in order to modify
         // the selection accordingly.
         const sal_Unicode* pChar = rLookUpText.getStr();
-        xub_StrLen nLeft = 0;
+        sal_Int32 nLeft = 0;
         while (pChar && *pChar++ == CH_TXTATR_INWORD)
             ++nLeft;
         pChar = rLookUpText.getLength() ? rLookUpText.getStr() + rLookUpText.getLength() - 1 : 0;
-        xub_StrLen nRight = 0;
+        sal_Int32 nRight = 0;
         while (pChar && *pChar-- == CH_TXTATR_INWORD)
             ++nRight;
 

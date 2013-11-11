@@ -87,7 +87,7 @@ class SwAccessiblePortionData : public SwPortionHandler
 
     // helper method for GetEditableRange(...):
     void AdjustAndCheck( sal_Int32 nPos, size_t& nPortionNo,
-                         sal_uInt16& nCorePos, sal_Bool& bEdit ) const;
+                         sal_Int32& nCorePos, sal_Bool& bEdit ) const;
 
 public:
     SwAccessiblePortionData( const SwTxtNode* pTxtNd,
@@ -121,10 +121,10 @@ public:
 
     /// get the position in the model string for a given
     /// (accessibility) position
-    sal_uInt16 GetModelPosition( sal_Int32 nPos ) const;
+    sal_Int32 GetModelPosition( sal_Int32 nPos ) const;
 
     /// get the position in the accessibility string for a given model position
-    sal_Int32 GetAccessiblePosition( sal_uInt16 nPos ) const;
+    sal_Int32 GetAccessiblePosition( sal_Int32 nPos ) const;
 
     /// fill a SwSpecialPos structure, suitable for calling
     /// SwTxtFrm->GetCharRect
@@ -148,16 +148,16 @@ public:
     ///          or not at all. This can be used to test whether editing
     ///          that range would be legal
     sal_Bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
-                               sal_uInt16& nCoreStart, sal_uInt16& nCoreEnd ) const;
+                               sal_Int32& nCoreStart, sal_Int32& nCoreEnd ) const;
 
     /// Determine whether this core position is valid for these portions.
     /// (A paragraph may be split into several frames, e.g. at page
     ///  boundaries. In this case, only part of a paragraph is represented
     ///  through this object. This method determines whether one particular
     ///  position is valid for this object or not.)
-    sal_Bool IsValidCorePosition( sal_uInt16 nPos ) const;
-    sal_uInt16 GetFirstValidCorePosition() const;
-    sal_uInt16 GetLastValidCorePosition() const;
+    sal_Bool IsValidCorePosition( sal_Int32 nPos ) const;
+    sal_Int32 GetFirstValidCorePosition() const;
+    sal_Int32 GetLastValidCorePosition() const;
 };
 
 #endif

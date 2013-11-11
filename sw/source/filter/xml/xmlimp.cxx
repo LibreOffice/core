@@ -773,7 +773,7 @@ void SwXMLImport::endDocument( void )
                 if( pSttNdIdx->GetIndex()+1 ==
                                         pPaM->GetBound( sal_True ).nNode.GetIndex() )
                 {
-                    sal_uInt16 nCntPos =
+                    const sal_Int32 nCntPos =
                             pPaM->GetBound( sal_True ).nContent.GetIndex();
                     pPaM->GetBound( sal_True ).nContent.Assign( pTxtNode,
                             pTxtNode->GetTxt().getLength() + nCntPos );
@@ -781,7 +781,7 @@ void SwXMLImport::endDocument( void )
                 if( pSttNdIdx->GetIndex()+1 ==
                                 pPaM->GetBound( sal_False ).nNode.GetIndex() )
                 {
-                    sal_uInt16 nCntPos =
+                    const sal_Int32 nCntPos =
                             pPaM->GetBound( sal_False ).nContent.GetIndex();
                     pPaM->GetBound( sal_False ).nContent.Assign( pTxtNode,
                             pTxtNode->GetTxt().getLength() + nCntPos );

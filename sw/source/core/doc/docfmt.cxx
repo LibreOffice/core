@@ -141,7 +141,7 @@ static bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
     if( pTxtNode && pTxtNode->GetpSwpHints() )
     {
         SwIndex aSt( pTxtNode, 0 );
-        sal_uInt16 nEnd = pTxtNode->Len();
+        sal_Int32 nEnd = pTxtNode->Len();
 
         if( &pPara->pSttNd->nNode.GetNode() == pTxtNode &&
             pPara->pSttNd->nContent.GetIndex() )
@@ -337,7 +337,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         pPam = new SwPaM( *rRg.GetPoint() );
 
         SwIndex& rSt = pPam->GetPoint()->nContent;
-        sal_uInt16 nMkPos, nPtPos = rSt.GetIndex();
+        sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
 
         // Special case: if the Crsr is located within a URL attribute, we take over it's area
         SwTxtAttr const*const pURLAttr(
@@ -359,8 +359,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
             if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
             {
-                nMkPos = (xub_StrLen)aBndry.startPos;
-                nPtPos = (xub_StrLen)aBndry.endPos;
+                nMkPos = aBndry.startPos;
+                nPtPos = aBndry.endPos;
             }
             else
             {
@@ -654,8 +654,8 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             aTxtSet.Put( rChgSet );
             if( aTxtSet.Count() )
             {
-                sal_uInt16 nInsCnt = rSt.GetIndex();
-                sal_uInt16 nEnd = pStt->nNode == pEnd->nNode
+                const sal_Int32 nInsCnt = rSt.GetIndex();
+                const sal_Int32 nEnd = pStt->nNode == pEnd->nNode
                                 ? pEnd->nContent.GetIndex()
                                 : pNode->Len();
                 SwRegHistory history( pNode, *pNode, pHistory );
@@ -787,7 +787,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         {
             SwTxtNode* pTxtNd = static_cast<SwTxtNode*>(pNode);
             const SwIndex& rSt = pStt->nContent;
-            sal_uInt16 nMkPos, nPtPos = rSt.GetIndex();
+            sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
             const OUString& rStr = pTxtNd->GetTxt();
 
             // Special case: if the Crsr is located within a URL attribute, we take over it's area
@@ -810,8 +810,8 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
                 if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
                 {
-                    nMkPos = (xub_StrLen)aBndry.startPos;
-                    nPtPos = (xub_StrLen)aBndry.endPos;
+                    nMkPos = aBndry.startPos;
+                    nPtPos = aBndry.endPos;
                 }
                 else
                     nPtPos = nMkPos = rSt.GetIndex();
@@ -878,7 +878,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
     if( pNode )
     {
-        sal_uInt16 nLen = pNode->Len();
+        const sal_Int32 nLen = pNode->Len();
         if( pStt->nNode != pEnd->nNode )
             aCntEnd.Assign( pNode, nLen );
 
@@ -943,8 +943,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         pNode = pEnd->nNode.GetNode().GetCntntNode();
         if(pNode)
         {
-            sal_uInt16 nLen = pNode->Len();
-            if( aCntEnd.GetIndex() != nLen )
+            if( aCntEnd.GetIndex() != pNode->Len() )
             {
                 // the SwRegHistory inserts the attribute into the TxtNode!
                 if( pNode->IsTxtNode() && pCharSet && pCharSet->Count() )
@@ -1110,7 +1109,7 @@ bool SwDoc::UpdateRsid( const SwPaM &rRg, const xub_StrLen nLen )
     {
         return false;
     }
-    xub_StrLen const nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
+    const sal_Int32 nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
     SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
 
     SfxItemSet aSet(GetAttrPool(), RES_CHRATR_RSID, RES_CHRATR_RSID);
@@ -2464,7 +2463,7 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
         SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
     }
 
-    xub_StrLen const nEnd(rPam.End()->nContent.GetIndex());
+    const sal_Int32 nEnd(rPam.End()->nContent.GetIndex());
     std::vector<sal_uInt16> whichIds;
     SfxItemIter iter(rSet);
     for (SfxPoolItem const* pItem = iter.FirstItem();

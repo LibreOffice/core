@@ -492,7 +492,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 &( pSrch = rFtnArr[ nPos ] )->GetTxtNode())->GetIndex()
                         <= pEnd->nNode.GetIndex() )
             {
-                xub_StrLen nFtnSttIdx = *pSrch->GetStart();
+                const sal_Int32 nFtnSttIdx = *pSrch->GetStart();
                 if( (nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                     ? (&pEnd->nNode.GetNode() == pFtnNd )
                     : (( &pStt->nNode.GetNode() == pFtnNd &&
@@ -522,7 +522,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
             while( nPos-- && ( pFtnNd = &( pSrch = rFtnArr[ nPos ] )->
                     GetTxtNode())->GetIndex() >= pStt->nNode.GetIndex() )
             {
-                xub_StrLen nFtnSttIdx = *pSrch->GetStart();
+                const sal_Int32 nFtnSttIdx = *pSrch->GetStart();
                 if( !(nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType) && (
                     ( &pStt->nNode.GetNode() == pFtnNd &&
                     pStt->nContent.GetIndex() > nFtnSttIdx ) ||

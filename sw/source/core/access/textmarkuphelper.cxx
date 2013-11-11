@@ -162,7 +162,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     // assumption:
     // value of <nCharIndex> is in range [0..length of accessible text)
 
-    const sal_uInt16 nCoreCharIndex = mrPortionData.GetModelPosition( nCharIndex );
+    const sal_Int32 nCoreCharIndex = mrPortionData.GetModelPosition( nCharIndex );
     // Handling of portions with core length == 0 at the beginning of the
     // paragraph - e.g. numbering portion.
     if ( mrPortionData.GetAccessiblePosition( nCoreCharIndex ) > nCharIndex )

@@ -1950,8 +1950,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                 // We need to remove the last empty Node again
                 aIdx = aInsPos.nNode;
                 SwCntntNode* pCNd = GetNodes().GoPrevious( &aInsPos.nNode );
-                xub_StrLen nCLen = 0; if( pCNd ) nCLen = pCNd->Len();
-                aInsPos.nContent.Assign( pCNd, nCLen );
+                aInsPos.nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
 
                 // All, that are in the to-be-deleted Node, need to be
                 // moved to the next Node
@@ -2055,8 +2054,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         {
             pREnd->nNode = nRedlEndNd;
             SwCntntNode* pCNd = pREnd->nNode.GetNode().GetCntntNode();
-            xub_StrLen nL = 0; if( pCNd ) nL = pCNd->Len();
-            pREnd->nContent.Assign( pCNd, nL );
+            pREnd->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
         }
     }
 

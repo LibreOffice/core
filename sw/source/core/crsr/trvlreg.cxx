@@ -159,8 +159,7 @@ sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     if( pCNd )
     {
         pPos->nNode = *pCNd;
-        xub_StrLen nTmpPos = bMoveBackward ? pCNd->Len() : 0;
-        pPos->nContent.Assign( pCNd, nTmpPos );
+        pPos->nContent.Assign( pCNd, bMoveBackward ? pCNd->Len() : 0 );
     }
     return 0 != pCNd;
 }
@@ -174,7 +173,7 @@ sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
         return sal_False;
 
     SwPosition* pPos = rCurCrsr.GetPoint();
-    xub_StrLen nCurrCnt = pPos->nContent.GetIndex();
+    const sal_Int32 nCurrCnt = pPos->nContent.GetIndex();
     bool bMoveBackward = fnPosRegion == fnMoveBackward;
 
     do {
@@ -196,8 +195,7 @@ sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             pPos->nNode = aIdx;
         }
 
-        xub_StrLen nTmpPos = bMoveBackward ? pCNd->Len() : 0;
-        pPos->nContent.Assign( pCNd, nTmpPos );
+        pPos->nContent.Assign( pCNd, bMoveBackward ? pCNd->Len() : 0 );
 
         if( &pPos->nNode.GetNode() != pCurrNd ||
             pPos->nContent.GetIndex() != nCurrCnt )

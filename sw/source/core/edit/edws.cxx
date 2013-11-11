@@ -274,7 +274,7 @@ sal_Bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWo
 
     sal_Bool bRet;
     SwPaM* pCrsr = getShellCrsr( true );
-    xub_StrLen nPos = pCrsr->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nPos = pCrsr->GetPoint()->nContent.GetIndex();
     SwTxtNode* pTNd = pCrsr->GetNode()->GetTxtNode();
     if( pTNd && nPos )
     {

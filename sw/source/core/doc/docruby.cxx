@@ -185,7 +185,8 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     SwPosition* pPos = rPam.GetPoint();
        const SwTxtNode* pTNd = pPos->nNode.GetNode().GetTxtNode();
     OUString const& rTxt = pTNd->GetTxt();
-    xub_StrLen nStart = pPos->nContent.GetIndex(), nEnd = rTxt.getLength();
+    sal_Int32 nStart = pPos->nContent.GetIndex();
+    sal_Int32 nEnd = rTxt.getLength();
 
     sal_Bool bHasMark = rPam.HasMark();
     if( bHasMark )
@@ -194,7 +195,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
         if( rPam.GetMark()->nNode == pPos->nNode )
         {
             // then use that end
-            xub_StrLen nTEnd = rPam.GetMark()->nContent.GetIndex();
+            const sal_Int32 nTEnd = rPam.GetMark()->nContent.GetIndex();
             if( nTEnd < nEnd )
                 nEnd = nTEnd;
         }
@@ -229,20 +230,20 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     if( !bHasMark && nStart && ( !pAttr || nStart != *pAttr->GetStart()) )
     {
         // skip to the word begin!
-        long nWordStt = g_pBreakIt->GetBreakIter()->getWordBoundary(
+        const sal_Int32 nWordStt = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             rTxt, nStart,
                             g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             sal_True ).startPos;
         if( nWordStt < nStart && -1 != nWordStt )
         {
-            nStart = (xub_StrLen)nWordStt;
+            nStart = nWordStt;
             pPos->nContent = nStart;
         }
     }
 
     bool bAlphaNum = false;
-    long nWordEnd = nEnd;
+    sal_Int32 nWordEnd = nEnd;
     CharClass& rCC = GetAppCharClass();
     while(  nStart < nEnd )
     {

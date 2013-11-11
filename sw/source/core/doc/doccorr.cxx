@@ -90,7 +90,7 @@ namespace
     static inline void lcl_PaMCorrRel1(SwPaM * pPam,
         SwNode const * const pOldNode,
         const SwPosition& rNewPos,
-        const xub_StrLen nCntIdx)
+        const sal_Int32 nCntIdx)
     {
         for(int nb = 0; nb < 2; ++nb)
             if(&((pPam)->GetBound(sal_Bool(nb)).nNode.GetNode()) == pOldNode)
@@ -251,7 +251,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     SwPosition aNewPos( rNewPos );
     const SwDoc* pDoc = pOldNode->GetDoc();
 
-    xub_StrLen nCntIdx = rNewPos.nContent.GetIndex() + nOffset;
+    const sal_Int32 nCntIdx = rNewPos.nContent.GetIndex() + nOffset;
 
     SwCrsrShell* pShell = pDoc->GetEditShell();
     if( pShell )

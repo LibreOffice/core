@@ -304,7 +304,7 @@ SwTwips SwTxtFrmInfo::GetFirstIndent() const
  *                   SwTxtFrmInfo::GetBigIndent()
  *************************************************************************/
 
-KSHORT SwTxtFrmInfo::GetBigIndent( xub_StrLen& rFndPos,
+sal_Int32 SwTxtFrmInfo::GetBigIndent( sal_Int32& rFndPos,
                                     const SwTxtFrm *pNextFrm ) const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
@@ -355,7 +355,7 @@ KSHORT SwTxtFrmInfo::GetBigIndent( xub_StrLen& rFndPos,
 
     SwRect aRect;
     return aLine.GetCharRect( &aRect, rFndPos )
-            ? KSHORT( aRect.Left() - pFrm->Frm().Left() - pFrm->Prt().Left())
+            ? static_cast<sal_Int32>(aRect.Left() - pFrm->Frm().Left() - pFrm->Prt().Left())
             : 0;
 }
 

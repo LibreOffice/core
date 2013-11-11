@@ -164,13 +164,13 @@ sal_Bool SwCrsrShell::GotoFtnAnchor()
 
 inline sal_Bool CmpLE( const SwTxtFtn& rFtn, sal_uLong nNd, xub_StrLen nCnt )
 {
-    sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
+    const sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() <= nCnt );
 }
 
-inline sal_Bool CmpL( const SwTxtFtn& rFtn, sal_uLong nNd, xub_StrLen nCnt )
+inline sal_Bool CmpL( const SwTxtFtn& rFtn, sal_uLong nNd, sal_Int32 nCnt )
 {
-    sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
+    const sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() < nCnt );
 }
 
@@ -186,7 +186,7 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
         if( nPos < rFtnArr.size() )
         {
             sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
-            xub_StrLen nCntPos = GetPoint()->nContent.GetIndex();
+            const sal_Int32 nCntPos = GetPoint()->nContent.GetIndex();
 
             pTxtFtn = rFtnArr[ nPos ];
             // search forwards
@@ -243,7 +243,7 @@ sal_Bool SwCursor::GotoPrevFtnAnchor()
     {
         // there is a footnote with this index, so search also for the next one
         sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
-        xub_StrLen nCntPos = GetPoint()->nContent.GetIndex();
+        const sal_Int32 nCntPos = GetPoint()->nContent.GetIndex();
 
         pTxtFtn = rFtnArr[ nPos ];
         // search forwards

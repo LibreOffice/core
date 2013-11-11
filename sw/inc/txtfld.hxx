@@ -32,7 +32,7 @@ class SwTxtFld : public SwTxtAttr
     SwTxtNode * m_pTxtNode;
 
 public:
-    SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStart,
+    SwTxtFld(SwFmtFld & rAttr, sal_Int32 const nStart,
             bool const bInClipboard);
     virtual ~SwTxtFld();
 

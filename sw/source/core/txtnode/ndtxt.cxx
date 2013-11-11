@@ -266,7 +266,7 @@ SwCntntFrm *SwTxtNode::MakeFrm( SwFrm* pSib )
     return pFrm;
 }
 
-xub_StrLen SwTxtNode::Len() const
+sal_Int32 SwTxtNode::Len() const
 {
     return m_Text.getLength();
 }
@@ -357,7 +357,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
     bool parentIsOutline = IsOutline();
 
     // create a node "in front" of me
-    const xub_StrLen nSplitPos = rPos.nContent.GetIndex();
+    const sal_Int32 nSplitPos = rPos.nContent.GetIndex();
     const sal_Int32 nTxtLen = m_Text.getLength();
     SwTxtNode* const pNode =
         _MakeNewTxtNode( rPos.nNode, sal_False, nSplitPos==nTxtLen );
@@ -451,7 +451,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
                     }
                     else if ( pHt->DontExpand() )
                     {
-                        const xub_StrLen* const pEnd = pHt->GetEnd();
+                        const sal_Int32* const pEnd = pHt->GetEnd();
                         if (pEnd && *pHt->GetStart() == *pEnd )
                         {
                             // delete it!
@@ -534,7 +534,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             for ( sal_uInt16 j = m_pSwpHints->Count(); j; )
             {
                 SwTxtAttr* const pHt = m_pSwpHints->GetTextHint( --j );
-                const xub_StrLen* const pEnd = pHt->GetEnd();
+                const sal_Int32* const pEnd = pHt->GetEnd();
                 if ( pHt->DontExpand() && pEnd && (*pHt->GetStart() == *pEnd) )
                 {
                     // delete it!
@@ -596,7 +596,7 @@ void SwTxtNode::MoveTxtAttr_To_AttrSet()
         if( *pHt->GetStart() )
             break;
 
-        const xub_StrLen* pHtEndIdx = pHt->GetEnd();
+        const sal_Int32* pHtEndIdx = pHt->GetEnd();
 
         if( !pHtEndIdx )
             continue;
@@ -720,7 +720,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         std::vector<sal_uLong> aBkmkArr;
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
-        xub_StrLen nLen = pTxtNode->Len();
+        const sal_Int32 nLen = pTxtNode->Len();
 
         SwWrongList *pList = pTxtNode->GetWrong();
         if( pList )
@@ -829,23 +829,23 @@ void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
 
 
 // override SwIndexReg::Update => text hints do not need SwIndex for start/end!
-void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
+void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
                         const bool bNegative, const bool bDelete )
 {
     SetAutoCompleteWordDirty( sal_True );
 
     ::std::auto_ptr<SwpHts> pCollector;
-    const xub_StrLen nChangePos = rPos.GetIndex();
+    const sal_Int32 nChangePos = rPos.GetIndex();
 
     if ( HasHints() )
     {
         if ( bNegative )
         {
-            const xub_StrLen nChangeEnd = nChangePos + nChangeLen;
+            const sal_Int32 nChangeEnd = nChangePos + nChangeLen;
             for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(n);
-                xub_StrLen * const pStart = pHint->GetStart();
+                sal_Int32 * const pStart = pHint->GetStart();
                 if ( *pStart > nChangePos )
                 {
                     if ( *pStart > nChangeEnd )
@@ -858,7 +858,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                     }
                 }
 
-                xub_StrLen * const pEnd = pHint->GetEnd();
+                sal_Int32 * const pEnd = pHint->GetEnd();
                 if (pEnd)
                 {
                     if ( *pEnd > nChangePos )
@@ -891,8 +891,8 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
             for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(n);
-                xub_StrLen * const pStart = pHint->GetStart();
-                xub_StrLen * const pEnd = pHint->GetEnd();
+                sal_Int32 * const pStart = pHint->GetStart();
+                sal_Int32 * const pEnd = pHint->GetEnd();
                 if ( *pStart >= nChangePos )
                 {
                     *pStart = *pStart + nChangeLen;
@@ -1109,7 +1109,7 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
 bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
                                 bool bFmtToTxtAttributes )
 {
-    const xub_StrLen nIdx = rIdx.GetIndex();
+    const sal_Int32 nIdx = rIdx.GetIndex();
     if (bFmtToTxtAttributes && nIdx == m_Text.getLength())
     {
         FmtToTxtAttr( this );
@@ -1123,7 +1123,7 @@ bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
         while( nPos )
         {
             SwTxtAttr *pTmp = m_pSwpHints->GetEnd( --nPos );
-            xub_StrLen *pEnd = pTmp->GetEnd();
+            sal_Int32 *pEnd = pTmp->GetEnd();
             if( !pEnd || *pEnd > nIdx )
                 continue;
             if( nIdx != *pEnd )
@@ -1161,7 +1161,7 @@ lcl_GetTxtAttrs(
     enum SwTxtNode::GetTxtAttrMode const eMode)
 {
     sal_uInt16 const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
-    xub_StrLen nPreviousIndex(0); // index of last hint with nWhich
+    sal_Int32 nPreviousIndex(0); // index of last hint with nWhich
     bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=0;
     switch (eMode)
     {
@@ -1174,7 +1174,7 @@ lcl_GetTxtAttrs(
     for( sal_uInt16 i = 0; i < nSize; ++i )
     {
         SwTxtAttr *const pHint = pSwpHints->GetTextHint(i);
-        xub_StrLen const nHintStart( *(pHint->GetStart()) );
+        sal_Int32 const nHintStart( *(pHint->GetStart()) );
         if (nIndex < nHintStart)
         {
             return; // hints are sorted by start, so we are done...
@@ -1185,7 +1185,7 @@ lcl_GetTxtAttrs(
             continue;
         }
 
-        xub_StrLen const*const pEndIdx = pHint->GetEnd();
+        sal_Int32 const*const pEndIdx = pHint->GetEnd();
         // cannot have hint with no end and no dummy char
         assert(pEndIdx || pHint->HasDummyChar());
             // Wenn bExpand gesetzt ist, wird das Verhalten bei Eingabe
@@ -1397,11 +1397,11 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
         for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); i++ )
         {
             SwTxtAttr *const pHt = m_pSwpHints->GetTextHint(i);
-            xub_StrLen const nAttrStartIdx = *pHt->GetStart();
+            sal_Int32 const nAttrStartIdx = *pHt->GetStart();
             if ( nTxtStartIdx < nAttrStartIdx )
                 break;      // ueber das Textende, da nLen == 0
 
-            const xub_StrLen *const pEndIdx = pHt->GetEnd();
+            const sal_Int32 *const pEndIdx = pHt->GetEnd();
             if ( pEndIdx && !pHt->HasDummyChar() )
             {
                 if( ( *pEndIdx > nTxtStartIdx ||
@@ -1466,8 +1466,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       xub_StrLen nLen,
                       const bool bForceCopyOfAllAttrs )
 {
-    xub_StrLen nTxtStartIdx = rStart.GetIndex();
-    xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
+    sal_Int32 nTxtStartIdx = rStart.GetIndex();
+    sal_Int32 nDestStart = rDestStart.GetIndex();      // alte Pos merken
 
     if (pDest->GetDoc()->IsClipBoard() && this->GetNum())
     {
@@ -1563,7 +1563,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // Ende erst jetzt holen, weil beim Kopieren in sich selbst der
     // Start-Index und alle Attribute vorher aktualisiert werden.
     nTxtStartIdx = rStart.GetIndex();
-    const xub_StrLen nEnd = nTxtStartIdx + nLen;
+    const sal_Int32 nEnd = nTxtStartIdx + nLen;
 
     // 2. Attribute kopieren
     // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
@@ -1582,12 +1582,12 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         //Achtung: kann ungueltig sein!!
     for (sal_uInt16 n = 0; ( n < nSize ); ++n)
     {
-        const xub_StrLen nAttrStartIdx = *(*m_pSwpHints)[n]->GetStart();
+        const sal_Int32 nAttrStartIdx = *(*m_pSwpHints)[n]->GetStart();
         if (!( nAttrStartIdx < nEnd))
             break;
 
         SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(n);
-        const xub_StrLen * const pEndIdx = pHt->GetEnd();
+        const sal_Int32 * const pEndIdx = pHt->GetEnd();
         const sal_uInt16 nWhich = pHt->Which();
 
         // JP 26.04.94: REFMARK's werden nie kopiert. Hat das Refmark aber
@@ -1606,8 +1606,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
             continue;
         }
 
-        xub_StrLen nAttrStt;
-        xub_StrLen nAttrEnd;
+        sal_Int32 nAttrStt = 0;
+        sal_Int32 nAttrEnd = 0;
 
         if( nAttrStartIdx < nTxtStartIdx )
         {
@@ -1712,8 +1712,8 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 {
     assert(rIdx <= m_Text.getLength()); // invalid index
 
-    xub_StrLen aPos = rIdx.GetIndex();
-    xub_StrLen nLen = m_Text.getLength() - aPos;
+    const sal_Int32 aPos = rIdx.GetIndex();
+    sal_Int32 nLen = m_Text.getLength() - aPos;
     sal_Int32 const nOverflow(
             m_Text.getLength() + rStr.getLength() - TXTNODE_MAX);
     SAL_WARN_IF(nOverflow > 0, "sw.core",
@@ -1753,7 +1753,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                 rIdx >= *(*m_pSwpHints)[i]->GetStart(); ++i )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint( i );
-            xub_StrLen * const pEndIdx = pHt->GetEnd();
+            sal_Int32 * const pEndIdx = pHt->GetEnd();
             if( !pEndIdx )
                 continue;
 
@@ -1883,8 +1883,8 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         return;
     }
 
-    xub_StrLen nTxtStartIdx = rStart.GetIndex();
-    xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
+    sal_Int32 nTxtStartIdx = rStart.GetIndex();
+    sal_Int32 nDestStart = rDestStart.GetIndex();      // alte Pos merken
     const sal_Int32 nInitSize = pDest->m_Text.getLength();
 
     // wird in sich selbst verschoben, muss es gesondert behandelt werden !!
@@ -1898,7 +1898,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             nTxtStartIdx + ((nDestStart < nTxtStartIdx) ? nLen : 0), nLen);
         m_Text = buf.makeStringAndClear();
 
-        const xub_StrLen nEnd = rStart.GetIndex() + nLen;
+        const sal_Int32 nEnd = rStart.GetIndex() + nLen;
 
         // dann suche mal alle Attribute zusammen, die im verschobenen
         // Bereich liegen. Diese werden in das extra Array verschoben,
@@ -1912,10 +1912,10 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         while ( m_pSwpHints && nAttrCnt < m_pSwpHints->Count() )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
-            const xub_StrLen nAttrStartIdx = *pHt->GetStart();
+            const sal_Int32 nAttrStartIdx = *pHt->GetStart();
             if (!( nAttrStartIdx < nEnd ))
                 break;
-            const xub_StrLen * const pEndIdx = pHt->GetEnd();
+            const sal_Int32 * const pEndIdx = pHt->GetEnd();
             const sal_uInt16 nWhich = pHt->Which();
             SwTxtAttr *pNewHt = 0;
 
@@ -1993,7 +1993,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         {
             SwTxtAttr *const pNewHt = aArr[n];
             *pNewHt->GetStart() = nDestStart + *pNewHt->GetStart();
-            xub_StrLen * const pEndIdx = pNewHt->GetEnd();
+            sal_Int32 * const pEndIdx = pNewHt->GetEnd();
             if ( pEndIdx )
             {
                 *pEndIdx = nDestStart + *pEndIdx;
@@ -2023,7 +2023,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 
         CHECK_SWPHINTS(pDest);
 
-        const xub_StrLen nEnd = rStart.GetIndex() + nLen;
+        const sal_Int32 nEnd = rStart.GetIndex() + nLen;
         SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc())
             ? pDest->GetDoc() : 0;
         bool const bUndoNodes = !pOtherDoc
@@ -2064,10 +2064,10 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         while ( m_pSwpHints && (nAttrCnt < m_pSwpHints->Count()) )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
-            const xub_StrLen nAttrStartIdx = *pHt->GetStart();
+            const sal_Int32 nAttrStartIdx = *pHt->GetStart();
             if (!( nAttrStartIdx < nEnd ))
                 break;
-            const xub_StrLen * const pEndIdx = pHt->GetEnd();
+            const sal_Int32 * const pEndIdx = pHt->GetEnd();
             const sal_uInt16 nWhich = pHt->Which();
             SwTxtAttr *pNewHt = 0;
 
@@ -2161,7 +2161,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                 SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
                 if ( nEnd != *pHt->GetStart() )
                     break;
-                const xub_StrLen * const pEndIdx = pHt->GetEnd();
+                const sal_Int32 * const pEndIdx = pHt->GetEnd();
                 if ( pEndIdx && *pEndIdx == nEnd )
                 {
                     aArr.push_back( pHt );
@@ -2209,10 +2209,10 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
 {
     assert(rIdx <= m_Text.getLength()); // invalid index
 
-    const xub_StrLen nStartIdx = rIdx.GetIndex();
-    const xub_StrLen nCnt = (STRING_LEN == nCount)
+    const sal_Int32 nStartIdx = rIdx.GetIndex();
+    const sal_Int32 nCnt = (STRING_LEN == nCount)
                       ? m_Text.getLength() - nStartIdx : nCount;
-    const xub_StrLen nEndIdx = nStartIdx + nCnt;
+    const sal_Int32 nEndIdx = nStartIdx + nCnt;
     m_Text = m_Text.replaceAt(nStartIdx, nCnt, "");
 
     /* GCAttr(); alle leeren weggwerfen ist zu brutal.
@@ -2224,7 +2224,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
     {
         SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
 
-        const xub_StrLen nHintStart = *pHt->GetStart();
+        const sal_Int32 nHintStart = *pHt->GetStart();
 
         if ( nHintStart < nStartIdx )
             continue;
@@ -2232,7 +2232,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         if ( nHintStart > nEndIdx )
             break; // hints are sorted by end, so break here
 
-        const xub_StrLen* pHtEndIdx = pHt->GetEnd();
+        const sal_Int32* pHtEndIdx = pHt->GetEnd();
         const sal_uInt16 nWhich = pHt->Which();
 
         if( !pHtEndIdx )
@@ -2320,8 +2320,8 @@ void SwTxtNode::GCAttr()
         return;
 
     bool   bChanged = false;
-    xub_StrLen nMin = m_Text.getLength(),
-           nMax = 0;
+    sal_Int32 nMin = m_Text.getLength();
+    sal_Int32 nMax = 0;
     bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
                            // INet-Formate entfernt.
 
@@ -2330,7 +2330,7 @@ void SwTxtNode::GCAttr()
         SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(i);
 
         // wenn Ende und Start gleich sind --> loeschen
-        const xub_StrLen * const pEndIdx = pHt->GetEnd();
+        const sal_Int32 * const pEndIdx = pHt->GetEnd();
         if (pEndIdx && !pHt->HasDummyChar() && (*pEndIdx == *pHt->GetStart())
             && ( bAll || pHt->Which() == RES_TXTATR_INETFMT ) )
         {
@@ -3054,7 +3054,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     SwIndex aDestIdx(&rDestNd, rDestNd.GetTxt().getLength());
     if( pDestIdx )
         aDestIdx = *pDestIdx;
-    xub_StrLen nDestStt = aDestIdx.GetIndex();
+    const sal_Int32 nDestStt = aDestIdx.GetIndex();
 
     // Text einfuegen
     OUStringBuffer buf(GetTxt());
@@ -3076,7 +3076,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     // alle FontAttribute mit CHARSET Symbol in dem Bereich setzen
     if ( HasHints() )
     {
-        xub_StrLen nInsPos = nDestStt - nIdx;
+        sal_Int32 nInsPos = nDestStt - nIdx;
         for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*m_pSwpHints)[i];
@@ -3085,7 +3085,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
             if (nIdx + nLen <= nAttrStartIdx)
                 break;      // ueber das Textende
 
-            const xub_StrLen *pEndIdx = pHt->GetEnd();
+            const sal_Int32 *pEndIdx = pHt->GetEnd();
             if( pEndIdx && *pEndIdx > nIdx &&
                 ( RES_CHRATR_FONT == nWhich ||
                   RES_TXTATR_CHARFMT == nWhich ||
@@ -3205,7 +3205,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         }
         assert(-1 != nStartDelete); // without delete range, would have contined
         rDestNd.EraseText(
-            SwIndex(&rDestNd, static_cast<xub_StrLen>(nStartDelete)),
+            SwIndex(&rDestNd, nStartDelete),
             aDestIdx.GetIndex() - nStartDelete);
         assert(aDestIdx.GetIndex() == nStartDelete);
         nStartDelete = -1; // reset
@@ -3290,7 +3290,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
             const SwTxtAttr* pAttr = (*pSwpHints2)[i];
             if (pAttr->HasDummyChar())
             {
-                xub_StrLen nDummyCharPos = *pAttr->GetStart();
+                const sal_Int32 nDummyCharPos = *pAttr->GetStart();
                 if (aHiddenMulti.IsSelected(nDummyCharPos))
                     continue;
                 std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(), containsPos(nDummyCharPos));
@@ -3319,7 +3319,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
             for (std::vector<const SwTxtAttr*>::iterator j = i->m_aAttrs.begin(); j != i->m_aAttrs.end(); ++j)
             {
                 const SwTxtAttr* pAttr = *j;
-                xub_StrLen nFieldPos = *pAttr->GetStart();
+                const sal_Int32 nFieldPos = *pAttr->GetStart();
                 OUString aExpand;
                 switch (pAttr->Which())
                 {
@@ -3352,7 +3352,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
 OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                                 sal_Bool bExpandFlds, sal_Bool bWithNum ) const
 {
-    std::vector<sal_uInt16> aRedlArr;
+    std::vector<sal_Int32> aRedlArr;
     const SwDoc* pDoc = GetDoc();
     sal_uInt16 nRedlPos = pDoc->GetRedlinePos( *this, nsRedlineType_t::REDLINE_DELETE );
     if( USHRT_MAX != nRedlPos )
@@ -3373,7 +3373,7 @@ OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                     else if( pREnd->nNode == nNdIdx )
                     {
                         // von 0 bis nContent ist alles geloescht
-                        aRedlArr.push_back( xub_StrLen(0) );
+                        aRedlArr.push_back( 0 );
                         aRedlArr.push_back( pREnd->nContent.GetIndex() );
                     }
                 }
@@ -3400,15 +3400,16 @@ OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                 : GetTxt().copy(nIdx, nLen));
 
     sal_Int32 nTxtStt = nIdx, nIdxEnd = nIdx + aTxt.getLength();
-    for( sal_uInt16 n = 0; n < aRedlArr.size(); n += 2 )
+    for( size_t n = 0; n < aRedlArr.size(); n += 2 )
     {
-        xub_StrLen nStt = aRedlArr[ n ], nEnd = aRedlArr[ n+1 ];
+        sal_Int32 nStt = aRedlArr[ n ];
+        sal_Int32 nEnd = aRedlArr[ n+1 ];
         if( ( nIdx <= nStt && nStt <= nIdxEnd ) ||
             ( nIdx <= nEnd && nEnd <= nIdxEnd ))
         {
             if( nStt < nIdx ) nStt = nIdx;
             if( nIdxEnd < nEnd ) nEnd = nIdxEnd;
-            xub_StrLen nDelCnt = nEnd - nStt;
+            const sal_Int32 nDelCnt = nEnd - nStt;
             aTxt.remove(nStt - nTxtStt, nDelCnt);
             Replace0xFF(*this, aTxt, nTxtStt, nStt - nTxtStt, bExpandFlds);
             nTxtStt = nTxtStt + nDelCnt;
@@ -3444,9 +3445,9 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
         return; // nothing to do
     }
 
-    const xub_StrLen nStartPos = rStart.GetIndex();
-    xub_StrLen nEndPos = nStartPos + nDelLen;
-    xub_StrLen nLen = nDelLen;
+    const sal_Int32 nStartPos = rStart.GetIndex();
+    sal_Int32 nEndPos = nStartPos + nDelLen;
+    sal_Int32 nLen = nDelLen;
     for( sal_Int32 nPos = nStartPos; nPos < nEndPos; ++nPos )
     {
         if ((CH_TXTATR_BREAKWORD == m_Text[nPos]) ||

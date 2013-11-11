@@ -1045,7 +1045,7 @@ SwRect SwCntntNode::FindPageFrmRect( const sal_Bool bPrtArea, const Point* pPoin
     return aRet;
 }
 
-xub_StrLen SwCntntNode::Len() const { return 0; }
+sal_Int32 SwCntntNode::Len() const { return 0; }
 
 SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
@@ -1093,14 +1093,14 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
         else
         {
             const SwTxtNode& rTNd = *GetTxtNode();
-            xub_StrLen nPos = pIdx->GetIndex();
+            sal_Int32 nPos = pIdx->GetIndex();
             if( g_pBreakIt->GetBreakIter().is() )
             {
                 sal_Int32 nDone = 0;
                 sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
                                         CharacterIteratorMode::SKIPCELL :
                                         CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextCharacters( rTNd.GetTxt(), nPos,
+                nPos = g_pBreakIt->GetBreakIter()->nextCharacters( rTNd.GetTxt(), nPos,
                                    g_pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
                                    nItrMode, 1, nDone );
 
@@ -1140,14 +1140,14 @@ sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
         else
         {
             const SwTxtNode& rTNd = *GetTxtNode();
-            xub_StrLen nPos = pIdx->GetIndex();
+            sal_Int32 nPos = pIdx->GetIndex();
             if( g_pBreakIt->GetBreakIter().is() )
             {
                 sal_Int32 nDone = 0;
                 sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
                                         CharacterIteratorMode::SKIPCELL :
                                         CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->previousCharacters( rTNd.GetTxt(), nPos,
+                nPos = g_pBreakIt->GetBreakIter()->previousCharacters( rTNd.GetTxt(), nPos,
                                    g_pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
                                    nItrMode, 1, nDone );
 

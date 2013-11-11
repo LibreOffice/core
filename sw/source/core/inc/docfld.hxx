@@ -42,7 +42,7 @@ struct SwPosition;
 class _SetGetExpFld
 {
     sal_uLong nNode;
-    xub_StrLen nCntnt;
+    sal_Int32 nCntnt;
     union {
         const SwTxtFld* pTxtFld;
         const SwSection* pSection;
@@ -105,7 +105,7 @@ public:
     void GetPosOfContent( SwPosition& rPos ) const;
 
     const SwNode* GetNodeFromCntnt() const;
-    xub_StrLen GetCntPosFromCntnt() const;
+    sal_Int32 GetCntPosFromCntnt() const;
 
     void SetBodyPos( const SwCntntFrm& rFrm );
 };

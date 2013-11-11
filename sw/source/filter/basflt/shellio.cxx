@@ -164,12 +164,12 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                 pDoc->GetSpzFrmFmts()->end(), std::back_inserter(aFlyFrmArr));
         }
 
-        xub_StrLen nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
 
         // damit fuer alle Reader die Ende-Position immer stimmt, hier
         // pflegen.
         SwCntntNode* pCNd = pPam->GetCntntNode();
-        xub_StrLen nEndCntnt = pCNd ? pCNd->Len() - nSttCntnt : 0;
+        sal_Int32 nEndCntnt = pCNd ? pCNd->Len() - nSttCntnt : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
 
         pDoc->SetRedlineMode_intern( eOld );
@@ -189,7 +189,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                 pCNd = pDoc->GetNodes().GoNext( &aEndPos );
 
             pPam->GetPoint()->nNode = aEndPos;
-            xub_StrLen nLen = pCNd->Len();
+            const sal_Int32 nLen = pCNd->Len();
             if( nLen < nEndCntnt )
                 nEndCntnt = 0;
             else

@@ -147,8 +147,9 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {
     const SwTxtNode& rNd = (SwTxtNode&)rNode;
 
-    xub_StrLen nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
-    xub_StrLen nNodeEnde = rNd.Len(), nEnde = nNodeEnde;
+    sal_Int32 nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nNodeEnde = rNd.Len();
+    sal_Int32 nEnde = nNodeEnde;
     bool bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
     if( bLastNd )
         nEnde = rWrt.pCurPam->GetMark()->nContent.GetIndex();
@@ -173,7 +174,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                                     RTL_TEXTENCODING_UTF8 == rWrt.GetAsciiOptions().GetCharSet();
 
     do {
-        xub_StrLen nNextAttr = aAttrIter.WhereNext();
+        sal_Int32 nNextAttr = aAttrIter.WhereNext();
 
         if( nNextAttr > nEnde )
             nNextAttr = nEnde;

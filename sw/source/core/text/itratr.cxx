@@ -337,7 +337,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     }
     if (m_pTxtNode!=NULL) {
         //TODO maybe use hints like FieldHints for this instead of looking at the text...
-        xub_StrLen l=(nNext<m_pTxtNode->Len()?nNext:m_pTxtNode->Len());
+        const sal_Int32 l = nNext<m_pTxtNode->Len() ? nNext : m_pTxtNode->Len();
         xub_StrLen p=nPos;
         while (p<l && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDSTART
                    && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDEND
@@ -1030,7 +1030,7 @@ sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
 {
     sal_uInt16 nRet = 0;
 
-    xub_StrLen nIdx = 0;
+    sal_Int32 nIdx = 0;
     sal_Unicode cCh;
 
     while ( nIdx < GetTxt().getLength() &&

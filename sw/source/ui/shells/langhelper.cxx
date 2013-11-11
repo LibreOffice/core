@@ -557,10 +557,9 @@ namespace SwLangHelper
             aText = pNode->GetTxt();
             if (!aText.isEmpty())
             {
-                xub_StrLen nStt = 0;
-                xub_StrLen nEnd = pCrsr->GetPoint()->nContent.GetIndex();
+                sal_Int32 nEnd = pCrsr->GetPoint()->nContent.GetIndex();
                 // at most 100 chars to the left...
-                nStt = nEnd > 100 ? nEnd - 100 : 0;
+                const sal_Int32 nStt = nEnd > 100 ? nEnd - 100 : 0;
                 // ... and 100 to the right of the cursor position
                 nEnd = aText.getLength() - nEnd > 100 ? nEnd + 100 : aText.getLength();
                 aText = aText.copy( nStt, nEnd - nStt );

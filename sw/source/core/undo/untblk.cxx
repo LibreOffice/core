@@ -206,10 +206,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             SwNodeIndex aDelIdx( rIdx );
             ++rIdx;
             SwCntntNode* pCNd = rIdx.GetNode().GetCntntNode();
-            xub_StrLen nCnt = 0;
-            if( pCNd )
-                nCnt = pCNd->Len();
-            pPam->GetPoint()->nContent.Assign( pCNd, nCnt );
+            pPam->GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
             pPam->SetMark();
             pPam->DeleteMark();
 

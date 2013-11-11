@@ -625,7 +625,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 
     if ( FLY_AS_CHAR == eAnchorId )
     {
-        xub_StrLen nStt = rAnchPos.nContent.GetIndex();
+        const sal_Int32 nStt = rAnchPos.nContent.GetIndex();
         SwTxtNode * pTxtNode = rAnchPos.nNode.GetNode().GetTxtNode();
 
         OSL_ENSURE(pTxtNode!= 0, "There should be a SwTxtNode!");
@@ -668,7 +668,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         sal_uLong nNodeIdx = rAnchPos.nNode.GetIndex();
-        xub_StrLen nCntIdx = rAnchPos.nContent.GetIndex();
+        const sal_Int32 nCntIdx = rAnchPos.nContent.GetIndex();
         GetIDocumentUndoRedo().AppendUndo(
             new SwUndoInsLayFmt( pFmt, nNodeIdx, nCntIdx ));
     }
@@ -923,7 +923,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     // For Draws anchored as character we set the attribute in the paragraph
     if ( FLY_AS_CHAR == eAnchorId )
     {
-        xub_StrLen nStt = rRg.GetPoint()->nContent.GetIndex();
+        const sal_Int32 nStt = rRg.GetPoint()->nContent.GetIndex();
         SwFmtFlyCnt aFmt( pFmt );
         bool const bSuccess( // may fail if there's no space left
             rRg.GetPoint()->nNode.GetNode().GetTxtNode()->InsertItem(
@@ -981,8 +981,8 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                (nPamEndIndex > nFlyIndex));
         else
         {
-            xub_StrLen nFlyContentIndex = pFlyPos->nContent.GetIndex();
-            xub_StrLen nPamEndContentIndex = pPaMEnd->nContent.GetIndex();
+            const sal_Int32 nFlyContentIndex = pFlyPos->nContent.GetIndex();
+            const sal_Int32 nPamEndContentIndex = pPaMEnd->nContent.GetIndex();
             bOk = (nPamStartIndex < nFlyIndex &&
                 (( nPamEndIndex > nFlyIndex )||
                  ((nPamEndIndex == nFlyIndex) &&
@@ -1293,7 +1293,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     const SwPosition *pPos = rAnchor.GetCntntAnchor();
                     SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                     OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-                    const xub_StrLen nIdx = pPos->nContent.GetIndex();
+                    const sal_Int32 nIdx = pPos->nContent.GetIndex();
                     SwTxtAttr * const pHnt =
                         pTxtNode->GetTxtAttrForCharAt(nIdx, RES_TXTATR_FLYCNT);
 
@@ -1598,7 +1598,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         const SwPosition *pPos = rAnchor.GetCntntAnchor();
         SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
         OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const xub_StrLen nIdx = pPos->nContent.GetIndex();
+        const sal_Int32 nIdx = pPos->nContent.GetIndex();
         SwTxtAttr * const pHnt =
             pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
 

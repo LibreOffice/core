@@ -2942,15 +2942,15 @@ xub_StrLen SwHTMLParser::StripTrailingLF()
 {
     xub_StrLen nStripped = 0;
 
-    xub_StrLen nLen = pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nLen = pPam->GetPoint()->nContent.GetIndex();
     if( nLen )
     {
         SwTxtNode* pTxtNd = pPam->GetPoint()->nNode.GetNode().GetTxtNode();
         // vorsicht, wenn Kommentare nicht uebrlesen werden!!!
         if( pTxtNd )
         {
-            xub_StrLen nPos = nLen;
-            xub_StrLen nLFCount = 0;
+            sal_Int32 nPos = nLen;
+            sal_Int32 nLFCount = 0;
             while (nPos && ('\x0a' == pTxtNd->GetTxt()[--nPos]))
                 nLFCount++;
 

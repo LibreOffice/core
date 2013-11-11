@@ -165,7 +165,7 @@ class SwAutoFormat
     sal_Bool IsEnumericChar( const SwTxtNode&) const;
     sal_Bool IsBlanksInString( const SwTxtNode&) const;
     sal_uInt16 CalcLevel( const SwTxtNode&, sal_uInt16 *pDigitLvl = 0 ) const;
-    xub_StrLen GetBigIndent( xub_StrLen& rAktSpacePos ) const;
+    sal_Int32 GetBigIndent( sal_Int32& rAktSpacePos ) const;
 
     OUString DelLeadingBlanks(const OUString& rStr) const;
     OUString& DelTrailingBlanks( OUString& rStr ) const;
@@ -173,7 +173,7 @@ class SwAutoFormat
     xub_StrLen GetTrailingBlanks( const OUString& rStr ) const;
 
     bool IsFirstCharCapital( const SwTxtNode& rNd ) const;
-    sal_uInt16 GetDigitLevel( const SwTxtNode& rTxtNd, xub_StrLen& rPos,
+    sal_uInt16 GetDigitLevel( const SwTxtNode& rTxtNd, sal_Int32& rPos,
                             OUString* pPreFix = 0, OUString* pPostFix = 0,
                             OUString* pNumTypes = 0 ) const;
     /// get the FORMATED TextFrame
@@ -394,8 +394,8 @@ sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 {
     const OUString& rTxt = rNd.GetTxt();
     OUString sTmp( rTxt );
-    xub_StrLen nBlnks = GetLeadingBlanks( sTmp );
-    xub_StrLen nLen = rTxt.getLength() - nBlnks;
+    sal_Int32 nBlnks = GetLeadingBlanks( sTmp );
+    const sal_Int32 nLen = rTxt.getLength() - nBlnks;
     if( !nLen )
         return sal_False;
 
@@ -459,7 +459,7 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl 
         ++nLvl;
     }
 
-    for( xub_StrLen n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n )
+    for (sal_Int32 n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n)
     {
         switch (rTxt[n])
         {
@@ -478,7 +478,7 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl 
     return nLvl;
 }
 
-xub_StrLen SwAutoFormat::GetBigIndent( xub_StrLen& rAktSpacePos ) const
+sal_Int32 SwAutoFormat::GetBigIndent( sal_Int32& rAktSpacePos ) const
 {
     SwTxtFrmInfo aFInfo( GetFrm( *pAktTxtNd ) );
     const SwTxtFrm* pNxtFrm = 0;
@@ -735,12 +735,12 @@ bool SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
     return false;
 }
 
-sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
+sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, sal_Int32& rPos,
         OUString* pPreFix, OUString* pPostFix, OUString* pNumTypes ) const
 {
     // check for 1.) / 1. / 1.1.1 / (1). / (1) / ....
     const OUString& rTxt = rNd.GetTxt();
-    xub_StrLen nPos = rPos;
+    sal_Int32 nPos = rPos;
     int eScan = NONE;
 
     sal_uInt16 nStart = 0;
@@ -1012,7 +1012,7 @@ bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
     // Is there a Blank at the beginning or end?
     // Do not delete it, it will be inserted again.
     SwPosition * pPos = rPam.End();
-    xub_StrLen nBlnkPos = pPos->nContent.GetIndex();
+    sal_Int32 nBlnkPos = pPos->nContent.GetIndex();
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
     if (nBlnkPos && nBlnkPos-- < pTxtNd->GetTxt().getLength() &&
         (' ' == pTxtNd->GetTxt()[nBlnkPos]))
@@ -1072,7 +1072,7 @@ void SwAutoFormat::DeleteCurrentParagraph( bool bStart, bool bEnd )
         // delete blanks at the end of the current and at the beginning of the next one
         aDelPam.DeleteMark();
         aDelPam.GetPoint()->nNode = aNdIdx;
-        xub_StrLen nPos(0);
+        sal_Int32 nPos(0);
         if( bStart && 0 != ( nPos = GetLeadingBlanks( pAktTxtNd->GetTxt() )))
         {
             aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );
@@ -1406,7 +1406,8 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
     // replace bullet character with defined one
     const OUString& rStr = pAktTxtNd->GetTxt();
-    xub_StrLen nTxtStt = 0, nOrigTxtStt = 0;
+    sal_Int32 nTxtStt = 0;
+    const sal_Int32 nOrigTxtStt = 0;
     const sal_Unicode* pFndBulletChr;
     if( aFlags.bChgEnumNum &&
         2 < rStr.getLength() &&
@@ -1680,7 +1681,8 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
 
     // read all succeeding paragraphs that belong to this enumeration
     bool bBreak = true;
-    xub_StrLen nSpacePos, nTxtPos = GetBigIndent( nSpacePos );
+    sal_Int32 nSpacePos = 0;
+    const sal_Int32 nTxtPos = GetBigIndent( nSpacePos );
     if( bMoreLines )
         DelMoreLinesBlanks( true );
     else

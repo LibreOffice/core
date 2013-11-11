@@ -289,7 +289,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
     //Get the footnote character and remove it from the txtnode. We'll
     //replace it with the footnote
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
-    xub_StrLen nPos = pPaM->GetPoint()->nContent.GetIndex();
+    sal_Int32 nPos = pPaM->GetPoint()->nContent.GetIndex();
 
     OUString sChar;
     SwTxtAttr* pFN = 0;
@@ -2904,7 +2904,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
                 SwPosition* pGridPos = pIo->pPaM->GetPoint();
 
-                xub_StrLen nEnd = pGridPos->nContent.GetIndex();
+                const sal_Int32 nEnd = pGridPos->nContent.GetIndex();
                 pGridPos->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
                 pIo->pCtrlStck->NewAttr(*pGridPos, aGridItem);
                 pGridPos->nContent.Assign(pIo->pPaM->GetCntntNode(), nEnd);

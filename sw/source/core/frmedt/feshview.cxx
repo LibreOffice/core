@@ -342,27 +342,25 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                 {
                     SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
                     SwTxtNode* pTxtNd = ((SwTxtFrm*)pOld)->GetTxtNode();
-                    xub_StrLen nAct = pPos->nContent.GetIndex();
+                    const sal_Int32 nAct = pPos->nContent.GetIndex();
                     if( SW_MOVE_LEFT == nDir )
                     {
                         bRet = sal_True;
                         if( nAct )
                         {
-                            --nAct;
-                            pPos->nContent.Assign( pTxtNd, nAct );
+                            pPos->nContent.Assign( pTxtNd, nAct-1 );
                         }
                         else
                             nDir = SW_MOVE_UP;
                     }
                     else
                     {
-                        xub_StrLen nMax =
+                        const sal_Int32 nMax =
                             static_cast<SwTxtFrm*>(pOld)->GetTxtNode()->GetTxt().getLength();
                         if( nAct < nMax )
                         {
-                            ++nAct;
                             bRet = sal_True;
-                            pPos->nContent.Assign( pTxtNd, nAct );
+                            pPos->nContent.Assign( pTxtNd, nAct+1 );
                         }
                         else
                             nDir = SW_MOVE_DOWN;
@@ -381,7 +379,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                     SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
                     SwTxtNode* pTxtNd = ((SwTxtFrm*)pNew)->GetTxtNode();
                     pPos->nNode = *pTxtNd;
-                    xub_StrLen nTmp = 0;
+                    sal_Int32 nTmp = 0;
                     if( bRet )
                     {
                         nTmp = static_cast<SwTxtFrm*>(pNew)->GetTxtNode()->GetTxt().getLength();

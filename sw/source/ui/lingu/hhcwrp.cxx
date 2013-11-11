@@ -609,7 +609,7 @@ void SwHHCWrapper::Convert()
             else
             {
                 OUString aText( m_pConvArgs->pStartNode->GetTxt() );
-                long     nPos = m_pConvArgs->pStartIdx->GetIndex();
+                const sal_Int32 nPos = m_pConvArgs->pStartIdx->GetIndex();
                 Boundary aBoundary( g_pBreakIt->GetBreakIter()->
                         getWordBoundary( aText, nPos, g_pBreakIt->GetLocale( m_pConvArgs->nConvSrcLang ),
                                 WordType::DICTIONARY_WORD, sal_True ) );

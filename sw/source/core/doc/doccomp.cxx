@@ -1872,7 +1872,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
-        xub_StrLen nSaveCnt = pDestRedl->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nSaveCnt = pDestRedl->GetPoint()->nContent.GetIndex();
 
         RedlineMode_t eOld = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
@@ -2107,15 +2107,15 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
         return false;
     }
 
-    int nPar1Len = pTxtNd1->Len();
-    int nPar2Len = pTxtNd2->Len();
+    const sal_Int32 nPar1Len = pTxtNd1->Len();
+    const sal_Int32 nPar2Len = pTxtNd2->Len();
 
     if( std::min( nPar1Len, nPar2Len ) * 3 < std::max( nPar1Len, nPar2Len ) )
     {
         return false;
     }
 
-    int nBorderLen = ( nPar1Len + nPar2Len )/16;
+    sal_Int32 nBorderLen = ( nPar1Len + nPar2Len )/16;
 
     if( nBorderLen < 3 )
     {
@@ -2126,7 +2126,7 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     unsigned nHash = 0;
     unsigned nMul = 251;
     unsigned nPow = 1;
-    int i;
+    sal_Int32 i;
 
     for( i = 0; i < nBorderLen - 1; i++ )
     {

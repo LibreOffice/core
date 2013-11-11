@@ -136,8 +136,8 @@ void RtfExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub
                 it != end; ++it )
         {
             IMark* pMark = (*it);
-            xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
-            xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
             if ( nStart == nAktPos )
                 aStarts.push_back( pMark->GetName() );

@@ -708,8 +708,7 @@ sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, cons
          !rCTLOptions.IsCTLSequenceChecking() )
          return sal_False;
 
-    const xub_StrLen nFirstPos = rCrsr.Start()->nContent.GetIndex();
-    if ( 0 == nFirstPos ) /* first char needs not to be checked */
+    if ( 0 == rCrsr.Start()->nContent.GetIndex() ) /* first char needs not to be checked */
         return sal_False;
 
     SwBreakIt *pBreakIter = SwBreakIt::Get();
@@ -917,7 +916,7 @@ void SwEditWin::FlushInBuffer()
             // if text prior to the original selection needs to be changed
             // as well, we now expand the selection accordingly.
             SwPaM &rCrsr = *rSh.GetCrsr();
-            xub_StrLen nCrsrStartPos = rCrsr.Start()->nContent.GetIndex();
+            const sal_Int32 nCrsrStartPos = rCrsr.Start()->nContent.GetIndex();
             OSL_ENSURE( nCrsrStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
             if (nExpandSelection && nCrsrStartPos >= nExpandSelection)
             {
@@ -5304,9 +5303,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if( pCrsr )
             {
                 sal_uLong nPosNodeIdx = pCrsr->GetPoint()->nNode.GetIndex();
-                xub_StrLen nPosIdx = pCrsr->GetPoint()->nContent.GetIndex();
+                const sal_Int32 nPosIdx = pCrsr->GetPoint()->nContent.GetIndex();
                 sal_uLong nMarkNodeIdx = pCrsr->GetMark()->nNode.GetIndex();
-                xub_StrLen nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
+                const sal_Int32 nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
 
                 if( !rSh.GetCrsr()->HasMark() )
                     rSh.GetCrsr()->SetMark();
@@ -6020,7 +6019,7 @@ OUString SwEditWin::GetSurroundingText() const
     else if( !rSh.HasSelection() )
     {
         SwPosition *pPos = rSh.GetCrsr()->GetPoint();
-        xub_StrLen nPos = pPos->nContent.GetIndex();
+        const sal_Int32 nPos = pPos->nContent.GetIndex();
 
         // get the sentence around the cursor
         rSh.HideCrsr();
@@ -6051,11 +6050,11 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         // Return the position of the visible cursor in the sentence
         // around the visible cursor.
         SwPosition *pPos = rSh.GetCrsr()->GetPoint();
-        xub_StrLen nPos = pPos->nContent.GetIndex();
+        const sal_Int32 nPos = pPos->nContent.GetIndex();
 
         rSh.HideCrsr();
         rSh.GoStartSentence();
-        xub_StrLen nStartPos = rSh.GetCrsr()->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nStartPos = rSh.GetCrsr()->GetPoint()->nContent.GetIndex();
 
         pPos->nContent = nPos;
         rSh.ClearMark();

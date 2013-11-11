@@ -417,7 +417,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
         for( sal_Int32 i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            const xub_StrLen* pEnd = pHt->GetEnd();
+            const sal_Int32* pEnd = pHt->GetEnd();
 
             if (pEnd ? ( nSwPos >= *pHt->GetStart() && nSwPos < *pEnd)
                         : nSwPos == *pHt->GetStart() )
@@ -522,7 +522,7 @@ void SwWW8AttrIter::OutFlys(xub_StrLen nSwPos)
     while ( maFlyIter != maFlyFrms.end() )
     {
         const SwPosition &rAnchor = maFlyIter->GetPosition();
-        xub_StrLen nPos = rAnchor.nContent.GetIndex();
+        const sal_Int32 nPos = rAnchor.nContent.GetIndex();
 
         if ( nPos != nSwPos )
             break;
@@ -597,7 +597,7 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const SfxPoolItem* pItem = &pHt->GetAttr();
-            const xub_StrLen* pAtrEnd = 0;
+            const sal_Int32* pAtrEnd = 0;
             if( 0 != ( pAtrEnd = pHt->GetEnd() ) &&     // only Attr with an end
                 nTmpSwPos >= *pHt->GetStart() && nTmpSwPos < *pAtrEnd )
             {
@@ -1068,7 +1068,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
     ww::eField eType = ww::eNONE;
 
     const SwTxtTOXMark& rTxtTOXMark = *rAttr.GetTxtTOXMark();
-    const xub_StrLen* pTxtEnd = rTxtTOXMark.GetEnd();
+    const sal_Int32* pTxtEnd = rTxtTOXMark.GetEnd();
     if ( pTxtEnd ) // has range?
     {
         sTxt = rNode.GetExpandTxt( *rTxtTOXMark.GetStart(),
@@ -1122,7 +1122,7 @@ int SwWW8AttrIter::OutAttrWithRange(xub_StrLen nPos)
     if ( const SwpHints* pTxtAttrs = rNd.GetpSwpHints() )
     {
         m_rExport.m_aCurrentCharPropStarts.push( nPos );
-        const xub_StrLen* pEnd;
+        const sal_Int32* pEnd;
         for ( sal_uInt16 i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
@@ -1652,8 +1652,8 @@ class CompareMarksEnd : public std::binary_function < const IMark *, const IMark
 public:
     inline bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const
     {
-        xub_StrLen nOEnd = pOneB->GetMarkEnd().nContent.GetIndex();
-        xub_StrLen nTEnd = pTwoB->GetMarkEnd().nContent.GetIndex();
+        const sal_Int32 nOEnd = pOneB->GetMarkEnd().nContent.GetIndex();
+        const sal_Int32 nTEnd = pTwoB->GetMarkEnd().nContent.GetIndex();
 
         return nOEnd < nTEnd;
     }
@@ -1704,8 +1704,8 @@ void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nA
             IMark* pMark = (*it);
 
             // Remove the positions egals to the current pos
-            xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
-            xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
             if ( nStart > nAktPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
                 aSortedStart.push_back( pMark );

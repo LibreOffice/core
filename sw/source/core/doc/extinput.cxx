@@ -55,8 +55,8 @@ SwExtTextInput::~SwExtTextInput()
     if( pTNd )
     {
         SwIndex& rIdx = GetPoint()->nContent;
-        xub_StrLen nSttCnt = rIdx.GetIndex(),
-                   nEndCnt = GetMark()->nContent.GetIndex();
+        sal_Int32 nSttCnt = rIdx.GetIndex();
+        sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
         if( nEndCnt != nSttCnt )
         {
             if( nEndCnt < nSttCnt )
@@ -133,8 +133,8 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
     if( pTNd )
     {
-        xub_StrLen nSttCnt = GetPoint()->nContent.GetIndex(),
-                    nEndCnt = GetMark()->nContent.GetIndex();
+        sal_Int32 nSttCnt = GetPoint()->nContent.GetIndex();
+        sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
         if( nEndCnt < nSttCnt )
         {
             std::swap(nSttCnt, nEndCnt);
@@ -211,8 +211,8 @@ void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
     const SwTxtNode *const pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
     if (pTNd)
     {
-        xub_StrLen nSttCnt = GetPoint()->nContent.GetIndex(),
-                    nEndCnt = GetMark()->nContent.GetIndex();
+        const sal_Int32 nSttCnt = GetPoint()->nContent.GetIndex();
+        const sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
         sOverwriteText = pTNd->GetTxt().copy( std::min(nSttCnt, nEndCnt) );
         if( !sOverwriteText.isEmpty() )
         {
@@ -257,7 +257,7 @@ void SwDoc::DeleteExtTextInput( SwExtTextInput* pDel )
 }
 
 SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
-                                        xub_StrLen nCntntPos ) const
+                                        sal_Int32 nCntntPos ) const
 {
     SwExtTextInput* pRet = 0;
     if( mpExtInputRing )
@@ -267,17 +267,17 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
         do {
             sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
                   nMk = pTmp->GetMark()->nNode.GetIndex();
-            xub_StrLen nPtCnt = pTmp->GetPoint()->nContent.GetIndex(),
-                         nMkCnt = pTmp->GetMark()->nContent.GetIndex();
+            sal_Int32 nPtCnt = pTmp->GetPoint()->nContent.GetIndex();
+            sal_Int32 nMkCnt = pTmp->GetMark()->nContent.GetIndex();
 
             if( nPt < nMk || ( nPt == nMk && nPtCnt < nMkCnt ))
             {
                 sal_uLong nTmp = nMk; nMk = nPt; nPt = nTmp;
-                nTmp = nMkCnt; nMkCnt = nPtCnt; nPtCnt = (xub_StrLen)nTmp;
+                sal_Int32 nTmp2 = nMkCnt; nMkCnt = nPtCnt; nPtCnt = nTmp2;
             }
 
             if( nMk <= nNdIdx && nNdIdx <= nPt &&
-                ( STRING_NOTFOUND == nCntntPos ||
+                ( nCntntPos<0 ||
                     ( nMkCnt <= nCntntPos && nCntntPos <= nPtCnt )))
             {
                 pRet = pTmp;

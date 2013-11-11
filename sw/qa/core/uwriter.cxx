@@ -230,7 +230,7 @@ void SwDocTest::testModelToViewHelper()
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
         m_pDoc->InsertString(aPaM, OUString("AAAAA BBBBB "));
         SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
-        xub_StrLen nPos = aPaM.GetPoint()->nContent.GetIndex();
+        sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
         pTxtNode->InsertItem(aFtn, nPos, nPos);
         m_pDoc->InsertString(aPaM, OUString(" CCCCC "));
         nPos = aPaM.GetPoint()->nContent.GetIndex();
@@ -446,7 +446,7 @@ void SwDocTest::testSwScanner()
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
         m_pDoc->InsertString(aPaM, OUString("Apple"));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
-        xub_StrLen nPos = aPaM.GetPoint()->nContent.GetIndex();
+        sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
         SwFmtFtn aFtn;
         aFtn.SetNumStr(OUString("banana"));
         SwTxtAttr* pTA = pTxtNode->InsertItem(aFtn, nPos, nPos);
@@ -456,7 +456,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT(aDocStat.nWord == 1);
         CPPUNIT_ASSERT_MESSAGE("footnote should be expanded", aDocStat.nChar == 11);
 
-        xub_StrLen nNextPos = aPaM.GetPoint()->nContent.GetIndex();
+        const sal_Int32 nNextPos = aPaM.GetPoint()->nContent.GetIndex();
         CPPUNIT_ASSERT(nNextPos == nPos+1);
         SwFmtRefMark aRef(OUString("refmark"));
         pTA = pTxtNode->InsertItem(aRef, nNextPos, nNextPos);

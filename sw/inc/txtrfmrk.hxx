@@ -29,14 +29,14 @@ class SwTxtNode;
 class SwTxtRefMark : public SwTxtAttrEnd
 {
     SwTxtNode * m_pTxtNode;
-    xub_StrLen * m_pEnd; // end is optional (point reference)
+    sal_Int32 * m_pEnd; // end is optional (point reference)
 
 public:
     SwTxtRefMark( SwFmtRefMark& rAttr,
-            xub_StrLen const nStart, xub_StrLen const*const pEnd = 0);
+            sal_Int32 const nStart, sal_Int32 const*const pEnd = 0);
 
-    virtual xub_StrLen * GetEnd();       // SwTxtAttr
-    inline const xub_StrLen * GetEnd() const { return m_pEnd; }
+    virtual sal_Int32 * GetEnd();       // SwTxtAttr
+    inline const sal_Int32 * GetEnd() const { return m_pEnd; }
 
     // get and set TxtNode pointer
     inline const SwTxtNode& GetTxtNode() const;

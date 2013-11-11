@@ -1045,8 +1045,7 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const OUString& rBaseURL, sal_B
                         // evtl. Zeilen eingefuegt / aufgebrochen werden
         const SwPosition* pPos = pPaM->GetPoint();
         const SwTxtNode* pSttNd = pPos->nNode.GetNode().GetTxtNode();
-        sal_uInt16 nCntPos = pPos->nContent.GetIndex();
-        if (nCntPos && !pSttNd->GetTxt().isEmpty())
+        if (pPos->nContent.GetIndex() && !pSttNd->GetTxt().isEmpty())
                                             // EinfuegePos nicht in leerer Zeile
             pDoc->SplitNode( *pPos, false );        // neue Zeile erzeugen
         if (!pSttNd->GetTxt().isEmpty())

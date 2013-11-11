@@ -2031,7 +2031,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         // der Absatz noch leer ist und sonst auto-gebunden.
         // Auto-gebundene Rahmen werden zunaechst an der Position davor
         // eingefuegt und erst spaeter verschoben.
-        xub_StrLen nCntnt = pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nCntnt = pPam->GetPoint()->nContent.GetIndex();
         if( nCntnt )
         {
             aAnchor.SetType( FLY_AT_CHAR );
@@ -2288,7 +2288,7 @@ void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, sal_Bool bRemove
             // Fuer DropCaps noch die Anzahl der Zeichen anpassen. Wenn
             // es am Ende 0 sind, wird das Attribut invalidiert und dann
             // von _SetAttr gar nicht erst gesetzt.
-            xub_StrLen nChars = pPam->GetPoint()->nContent.GetIndex();
+            sal_Int32 nChars = pPam->GetPoint()->nContent.GetIndex();
             if( nChars < 1 )
                 pAttr->Invalidate();
             else if( nChars > MAX_DROPCAP_CHARS )

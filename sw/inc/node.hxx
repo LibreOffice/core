@@ -427,7 +427,7 @@ public:
 
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */
-    virtual xub_StrLen Len() const;
+    virtual sal_Int32 Len() const;
 
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
 

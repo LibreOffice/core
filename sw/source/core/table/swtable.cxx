@@ -2088,7 +2088,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
         {
             // Exchange text. Bugfix to keep Tabs (front and back!)
             const OUString& rOrig = pTNd->GetTxt();
-            xub_StrLen n;
+            sal_Int32 n;
 
             for( n = 0; n < rOrig.getLength() && '\x9' == rOrig[n]; ++n )
                 ;

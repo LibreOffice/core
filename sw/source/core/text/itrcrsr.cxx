@@ -1821,7 +1821,7 @@ bool SwTxtFrm::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) c
         }
         else if( aRect.HasArea() )
         {
-            xub_StrLen nOld = STRING_LEN;
+            sal_Int32 nOld = -1;
             SwPosition aPosR( aPosL );
             Point aPoint;
             SwTxtInfo aInf( const_cast<SwTxtFrm*>(this) );

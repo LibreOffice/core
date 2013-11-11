@@ -74,8 +74,8 @@ public:
     void SetObjType( sal_uInt16 nType ) { SvBaseLink::SetObjType( nType ); }
 
     sal_Bool IsRecursion( const SwBaseLink* pChkLnk ) const;
-    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
-                            xub_StrLen nEnd = STRING_NOTFOUND ) const;
+    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
+                            sal_Int32 nEnd = -1 ) const;
 
     void SetNoDataFlag()    { bNoDataFlag = sal_True; }
     sal_Bool ChkNoDataFlag()    { sal_Bool bRet = bNoDataFlag; bNoDataFlag = sal_False; return bRet; }

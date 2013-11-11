@@ -1391,7 +1391,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     if (!rText.isEmpty())
     {
-        const xub_StrLen nContentPos = pCursor->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nContentPos = pCursor->GetPoint()->nContent.GetIndex();
         SwUnoCursorHelper::DocInsertStringSplitCR(
             *m_pImpl->m_pDoc, *pCursor, rText, false);
         SwUnoCursorHelper::SelectPam(*pCursor, true);
@@ -1842,7 +1842,7 @@ void SwXText::Impl::ConvertCell(
         SwPaM aNewStartPaM(pCorrectedRange->aStart, 0);
         aStartCellPam = aNewStartPaM;
 
-        xub_StrLen nEndLen = 0;
+        sal_Int32 nEndLen = 0;
         SwTxtNode * pTxtNode = pCorrectedRange->aEnd.GetNode().GetTxtNode();
         if (pTxtNode != NULL)
             nEndLen = pTxtNode->Len();

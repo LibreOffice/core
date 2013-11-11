@@ -648,7 +648,7 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
     bool bCheckPos;
     sal_Bool bRet;
     sal_uLong nPtNd = 0;
-    xub_StrLen nPtCnt = 0;
+    sal_Int32 nPtCnt = 0;
 
     if ( !m_pTblCrsr && m_pCurCrsr->HasMark() )
     {

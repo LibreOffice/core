@@ -982,7 +982,7 @@ namespace
         int nReturn = BEFORE_NODE;
         if( nIndex == nNode )
         {
-            xub_StrLen nCntIdx = rPos.nContent.GetIndex();
+            const sal_Int32 nCntIdx = rPos.nContent.GetIndex();
             if( nCntIdx < nCntnt )
                 nReturn = BEFORE_SAME_NODE;
             else if( nCntIdx == nCntnt )
@@ -1091,7 +1091,10 @@ SaveBookmark::SaveBookmark(
         }
     }
     else
-        m_nNode2 = ULONG_MAX, m_nCntnt2 = STRING_NOTFOUND;
+    {
+        m_nNode2 = ULONG_MAX;
+        m_nCntnt2 = -1;
+    }
 }
 
 void SaveBookmark::SetInDoc(
@@ -1211,8 +1214,7 @@ void _DelBookmarks(
                         pCNd = pRStt->nNode.GetNode().GetCntntNode();
                     }
                 }
-                xub_StrLen nTmp = bStt ? 0 : pCNd->Len();
-                pRStt->nContent.Assign( pCNd, nTmp );
+                pRStt->nContent.Assign( pCNd, bStt ? 0 : pCNd->Len() );
             }
         }
         if( lcl_Greater( *pREnd, rStt, pSttIdx ) && lcl_Lower( *pREnd, rEnd, pEndIdx ))
@@ -1234,8 +1236,7 @@ void _DelBookmarks(
                         pCNd = pREnd->nNode.GetNode().GetCntntNode();
                     }
                 }
-                xub_StrLen nTmp = bStt ? 0 : pCNd->Len();
-                pREnd->nContent.Assign( pCNd, nTmp );
+                pREnd->nContent.Assign( pCNd, bStt ? 0 : pCNd->Len() );
             }
         }
     }

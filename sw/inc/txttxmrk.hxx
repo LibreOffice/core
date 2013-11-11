@@ -30,15 +30,15 @@ class SwDoc;
 class SwTxtTOXMark : public SwTxtAttrEnd
 {
     SwTxtNode * m_pTxtNode;
-    xub_StrLen * m_pEnd;   // 0 if SwTOXMark without AlternativeText
+    sal_Int32 * m_pEnd;   // 0 if SwTOXMark without AlternativeText
 
 public:
     SwTxtTOXMark( SwTOXMark& rAttr,
-            xub_StrLen const nStart, xub_StrLen const*const pEnd = 0);
+            sal_Int32 const nStart, sal_Int32 const*const pEnd = 0);
     virtual ~SwTxtTOXMark();
 
-    virtual xub_StrLen *GetEnd();     // SwTxtAttr
-    inline const xub_StrLen* GetEnd() const { return m_pEnd; }
+    virtual sal_Int32 *GetEnd();     // SwTxtAttr
+    inline const sal_Int32* GetEnd() const { return m_pEnd; }
 
     void CopyTOXMark( SwDoc* pDestDoc );
 

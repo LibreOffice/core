@@ -111,10 +111,10 @@ const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     return 0; // invalid text attribute
 }
 
-static void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnd,
+static void lcl_SetAttrPam( SwPaM& rPam, sal_Int32 nStart, const sal_Int32* pEnd,
                      const sal_Bool bSaveMark )
 {
-    xub_StrLen nCntntPos;
+    sal_Int32 nCntntPos;
     if( bSaveMark )
         nCntntPos = rPam.GetMark()->nContent.GetIndex();
     else
@@ -175,10 +175,11 @@ static sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
 struct _SwSrchChrAttr
 {
     sal_uInt16 nWhich;
-    xub_StrLen nStt, nEnd;
+    sal_Int32 nStt;
+    sal_Int32 nEnd;
 
     _SwSrchChrAttr( const SfxPoolItem& rItem,
-                    xub_StrLen nStart, xub_StrLen nAnyEnd )
+                    sal_Int32 nStart, sal_Int32 nAnyEnd )
         : nWhich( rItem.Which() ), nStt( nStart ), nEnd( nAnyEnd )
     {}
 };
@@ -186,7 +187,8 @@ struct _SwSrchChrAttr
 class SwAttrCheckArr
 {
     _SwSrchChrAttr *pFndArr, *pStackArr;
-    xub_StrLen nNdStt, nNdEnd;
+    sal_Int32 nNdStt;
+    sal_Int32 nNdEnd;
     sal_uInt16 nArrStart, nArrLen;
     sal_uInt16 nFound, nStackCnt;
     SfxItemSet aCmpSet;
@@ -204,11 +206,11 @@ public:
     int Found() const       { return nFound == aCmpSet.Count(); }
     int CheckStack();
 
-    xub_StrLen Start() const;
-    xub_StrLen End() const;
+    sal_Int32 Start() const;
+    sal_Int32 End() const;
 
-    xub_StrLen GetNdStt() const { return nNdStt; }
-    xub_StrLen GetNdEnd() const { return nNdEnd; }
+    sal_Int32 GetNdStt() const { return nNdStt; }
+    sal_Int32 GetNdEnd() const { return nNdEnd; }
 
     int SetAttrFwd( const SwTxtAttr& rAttr );
     int SetAttrBwd( const SwTxtAttr& rAttr );
@@ -308,7 +310,7 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
 }
 
 static bool
-lcl_IsAttributeIgnorable(xub_StrLen const nNdStart, xub_StrLen const nNdEnd,
+lcl_IsAttributeIgnorable(sal_Int32 const nNdStart, sal_Int32 const nNdEnd,
         _SwSrchChrAttr const& rTmp)
 {
     // #i115528#: if there is a paragraph attribute, it has been added by the
@@ -626,9 +628,9 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
     return Found();
 }
 
-xub_StrLen SwAttrCheckArr::Start() const
+sal_Int32 SwAttrCheckArr::Start() const
 {
-    xub_StrLen nStart = nNdStt;
+    sal_Int32 nStart = nNdStt;
     _SwSrchChrAttr* pArrPtr = pFndArr;
     for( sal_uInt16 n = 0; n < nArrLen; ++n, ++pArrPtr )
         if( pArrPtr->nWhich && pArrPtr->nStt > nStart )
@@ -637,10 +639,10 @@ xub_StrLen SwAttrCheckArr::Start() const
     return nStart;
 }
 
-xub_StrLen SwAttrCheckArr::End() const
+sal_Int32 SwAttrCheckArr::End() const
 {
     _SwSrchChrAttr* pArrPtr = pFndArr;
-    xub_StrLen nEnd = nNdEnd;
+    sal_Int32 nEnd = nNdEnd;
     for( sal_uInt16 n = 0; n < nArrLen; ++n, ++pArrPtr )
         if( pArrPtr->nWhich && pArrPtr->nEnd < nEnd )
             nEnd = pArrPtr->nEnd;
@@ -654,7 +656,8 @@ int SwAttrCheckArr::CheckStack()
         return sal_False;
 
     sal_uInt16 n;
-    xub_StrLen nSttPos = Start(), nEndPos = End();
+    const sal_Int32 nSttPos = Start();
+    const sal_Int32 nEndPos = End();
     _SwSrchChrAttr* pArrPtr;
     for( pArrPtr = pStackArr, n = 0; n < nArrLen; ++n, ++pArrPtr )
     {
@@ -684,7 +687,7 @@ int SwAttrCheckArr::CheckStack()
 static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
 {
-    xub_StrLen nEndPos, nSttPos;
+    sal_Int32 nEndPos;
     rCmpArr.SetNewSet( rTxtNd, rPam );
     if( !rTxtNd.HasHints() )
     {
@@ -725,6 +728,7 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
         }
     }
 
+    sal_Int32 nSttPos;
     for( ; nPos < rHtArr.Count(); ++nPos )
         if( rCmpArr.SetAttrFwd( *( pAttr = rHtArr.GetStart( nPos )) ) )
         {
@@ -757,7 +761,7 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
 {
-    xub_StrLen nEndPos, nSttPos;
+    sal_Int32 nEndPos;
     rCmpArr.SetNewSet( rTxtNd, rPam );
     if( !rTxtNd.HasHints() )
     {
@@ -771,6 +775,7 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     const SwpHints& rHtArr = rTxtNd.GetSwpHints();
     const SwTxtAttr* pAttr;
     sal_uInt16 nPos = rHtArr.Count();
+    sal_Int32 nSttPos;
 
     // if everything is already there then check with which it will be ended
     if( rCmpArr.Found() )
@@ -894,8 +899,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
             return false;
         }
         SwCntntNode *pNd = pPam->GetCntntNode();
-        xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
-        pPam->GetPoint()->nContent.Assign( pNd, nTmpPos );
+        pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ) )
@@ -985,8 +989,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
             return false;
         }
         SwCntntNode *pNd = pPam->GetCntntNode();
-        xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
-        pPam->GetPoint()->nContent.Assign( pNd, nTmpPos );
+        pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
 
@@ -1136,7 +1139,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         const bool bRegExp(
                 SearchAlgorithms_REGEXP == pSearchOpt->algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
-        xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
+        const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
 
         // add to shell-cursor-ring so that the regions will be moved enventually
         Ring *pPrevRing = 0;

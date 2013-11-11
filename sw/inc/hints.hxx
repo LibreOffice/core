@@ -76,10 +76,10 @@ public:
 class SwInsTxt: public SwMsgPoolItem
 {
 public:
-    xub_StrLen nPos;
-    xub_StrLen nLen;
+    sal_Int32 nPos;
+    sal_Int32 nLen;
 
-    SwInsTxt( xub_StrLen nP, xub_StrLen nL );
+    SwInsTxt( sal_Int32 nP, sal_Int32 nL );
 };
 
 class SwDelChr: public SwMsgPoolItem

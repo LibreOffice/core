@@ -619,7 +619,7 @@ private:
                                 SwFrmFmt* = 0 );
 
     void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
-                            const xub_StrLen nEndContentIndex,
+                            const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rStartIdx,
                             const bool bCopyFlyAtFly = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, bool bNewFrms );
@@ -1072,7 +1072,7 @@ public:
                                 SwFrmFmt *pParent = 0 );
 
     void CopyWithFlyInFly( const SwNodeRange& rRg,
-                            const xub_StrLen nEndContentIndex,
+                            const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rInsPos,
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
@@ -1932,7 +1932,7 @@ public:
     SwExtTextInput* CreateExtTextInput( const SwPaM& rPam );
     void DeleteExtTextInput( SwExtTextInput* pDel );
     SwExtTextInput* GetExtTextInput( const SwNode& rNd,
-                                xub_StrLen nCntntPos = STRING_NOTFOUND) const;
+                                sal_Int32 nCntntPos = -1) const;
     SwExtTextInput* GetExtTextInput() const;
 
     /// Interface for access to AutoComplete-List.

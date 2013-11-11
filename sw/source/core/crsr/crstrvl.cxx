@@ -1053,9 +1053,9 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     && !aTmpState.bFtnNoInfo )
                 {
                     const SwWrongList* pSmartTagList = pTxtNd->GetSmartTags();
-                    xub_StrLen nCurrent = aPos.nContent.GetIndex();
-                    xub_StrLen nBegin = nCurrent;
-                    xub_StrLen nLen = 1;
+                    sal_Int32 nCurrent = aPos.nContent.GetIndex();
+                    const sal_Int32 nBegin = nCurrent;
+                    sal_Int32 nLen = 1;
 
                     if ( pSmartTagList && pSmartTagList->InWrongWord( nCurrent, nLen ) && !pTxtNd->IsSymbol(nBegin) )
                     {
@@ -1257,7 +1257,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                         if( bRet )
                         {
-                            const xub_StrLen* pEnd = pTxtAttr->GetEnd();
+                            const sal_Int32* pEnd = pTxtAttr->GetEnd();
                             if( pEnd )
                                 rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
                                             *pTxtAttr->GetStart(),
@@ -1416,7 +1416,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 #ifdef DBG_UTIL
             if( !bRet && SwContentAtPos::SW_CURR_ATTRS & rCntntAtPos.eCntntAtPos )
             {
-                xub_StrLen n = aPos.nContent.GetIndex();
+                const sal_Int32 n = aPos.nContent.GetIndex();
                 SfxItemSet aSet( GetDoc()->GetAttrPool(), POOLATTR_BEGIN,
                                                           POOLATTR_END - 1 );
                 if( pTxtNd->GetpSwpHints() )
@@ -1424,7 +1424,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     for( sal_uInt16 i = 0; i < pTxtNd->GetSwpHints().Count(); ++i )
                     {
                         const SwTxtAttr* pHt = pTxtNd->GetSwpHints()[i];
-                        xub_StrLen nAttrStart = *pHt->GetStart();
+                        const sal_Int32 nAttrStart = *pHt->GetStart();
                         if( nAttrStart > n ) // over the section
                             break;
 
@@ -1624,7 +1624,7 @@ sal_Bool SwCrsrShell::SelectTxtAttr( sal_uInt16 nWhich, sal_Bool bExpand,
             m_pCurCrsr->DeleteMark();
             rPos.nContent = *pTxtAttr->GetStart();
             m_pCurCrsr->SetMark();
-            const xub_StrLen* pEnd = pTxtAttr->GetEnd();
+            const sal_Int32* pEnd = pTxtAttr->GetEnd();
             rPos.nContent = pEnd ? *pEnd : *pTxtAttr->GetStart() + 1;
 
             if( !m_pCurCrsr->IsSelOvr() )

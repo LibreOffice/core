@@ -1218,13 +1218,12 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
 
     // copy all attributes of the TextNode in the area from nStart to nEnd
     SwTxtAttr* pHt;
-    xub_StrLen nAttrStt;
-    const xub_StrLen * pEndIdx;
+    const sal_Int32 * pEndIdx;
     for( sal_uInt16 n = 0; n < pHts->Count(); n++ )
     {
         // nAttrStt must even be set when !pEndIdx
         pHt = pHts->GetTextHint(n);
-        nAttrStt = *pHt->GetStart();
+        const sal_Int32 nAttrStt = *pHt->GetStart();
         if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
             break;
 

@@ -779,7 +779,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     // Update the rsid of the old and the new node unless
     // the old node is split at the beginning or at the end
     SwTxtNode *pTxtNode =  rPos.nNode.GetNode().GetTxtNode();
-    xub_StrLen nPos = rPos.nContent.GetIndex();
+    const sal_Int32 nPos = rPos.nContent.GetIndex();
     if( pTxtNode && nPos && nPos != pTxtNode->Len() )
     {
         UpdateParRsid( pTxtNode );
@@ -973,7 +973,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const OUString &rStr,
         }
 
         CharClass const& rCC = GetAppCharClass();
-        xub_StrLen nInsPos = rPos.nContent.GetIndex();
+        sal_Int32 nInsPos = rPos.nContent.GetIndex();
 
         if (!pUndo)
         {
@@ -2598,8 +2598,8 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
 
         if (0 != pTxtNode)
         {
-            xub_StrLen nStart = rPam.Start()->nContent.GetIndex();
-            xub_StrLen nEnd = rPam.End()->nContent.GetIndex();
+            const sal_Int32 nStart = rPam.Start()->nContent.GetIndex();
+            const sal_Int32 nEnd = rPam.End()->nContent.GetIndex();
 
             aResult += SW_RES(STR_START_QUOTE);
             aResult += ShortenString(pTxtNode->GetTxt().

@@ -38,7 +38,7 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
     SwConversionArgs *m_pConvArgs;    /**< object for arguments (and results) needed
                                        to find of next convertible text portion */
 
-    xub_StrLen      m_nLastPos;       /**< starting position of the last found text part
+    sal_Int32       m_nLastPos;       /**< starting position of the last found text part
                                        (needs to be sth that gets not moved like
                                        SwPaM or SwPosition by replace operations!) */
     sal_Int32       m_nUnitOffset;

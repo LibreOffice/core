@@ -158,7 +158,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
             if (rAnch.GetAnchorId() == FLY_AS_CHAR)
             {
                 const SwPosition* pPos = rAnch.GetCntntAnchor();
-                xub_StrLen nIdx = pPos->nContent.GetIndex();
+                const sal_Int32 nIdx = pPos->nContent.GetIndex();
                 if ( nIdx >= nStart && nEnd > nIdx )
                 {
                     if ( pAnchoredObj->ISA(SwFlyFrm) )

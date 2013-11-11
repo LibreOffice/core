@@ -218,11 +218,11 @@ OUString SwTOXMark::GetText() const
 
     if( pTxtAttr && pTxtAttr->GetpTxtNd() )
     {
-        xub_StrLen* pEndIdx = pTxtAttr->GetEnd();
+        sal_Int32* pEndIdx = pTxtAttr->GetEnd();
         OSL_ENSURE( pEndIdx, "TOXMark without mark!");
         if( pEndIdx )
         {
-            const xub_StrLen nStt = *pTxtAttr->GetStart();
+            const sal_Int32 nStt = *pTxtAttr->GetStart();
             return pTxtAttr->GetpTxtNd()->GetExpandTxt( nStt, *pEndIdx-nStt );
         }
     }

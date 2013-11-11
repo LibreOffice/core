@@ -379,14 +379,14 @@ void SwTxtNode::RstAttr(
     if ( !GetpSwpHints() )
         return;
 
-    const xub_StrLen nStt = rIdx.GetIndex();
-    const xub_StrLen nEnd = nStt + nLen;
+    const sal_Int32 nStt = rIdx.GetIndex();
+    const sal_Int32 nEnd = nStt + nLen;
 
     bool bChanged = false;
 
     // nMin and nMax initialized to maximum / minimum (inverse)
     sal_Int32 nMin = m_Text.getLength();
-    xub_StrLen nMax = nStt;
+    sal_Int32 nMax = nStt;
     const bool bNoLen = nMin == 0;
 
     // We have to remember the "new" attributes, that have
@@ -397,7 +397,7 @@ void SwTxtNode::RstAttr(
     // iterate over attribute array until start of attribute is behind
     // deletion range
     sal_uInt16 i = 0;
-    xub_StrLen nAttrStart;
+    sal_Int32 nAttrStart;
     SwTxtAttr *pHt = NULL;
     while ((i < m_pSwpHints->Count()) &&
         ((( nAttrStart = *(*m_pSwpHints)[i]->GetStart()) < nEnd ) || nLen==0) )
@@ -406,7 +406,7 @@ void SwTxtNode::RstAttr(
 
         // attributes without end stay in!
         // but consider <bInclRefToxMark> used by Undo
-        xub_StrLen* const pAttrEnd = pHt->GetEnd();
+        sal_Int32* const pAttrEnd = pHt->GetEnd();
         const bool bKeepAttrWithoutEnd =
             pAttrEnd == NULL
             && ( !bInclRefToxMark
@@ -465,7 +465,7 @@ void SwTxtNode::RstAttr(
 
         if( nStt <= nAttrStart )          // Faelle: 1,3,5
         {
-            const xub_StrLen nAttrEnd = pAttrEnd != NULL
+            const sal_Int32 nAttrEnd = pAttrEnd != NULL
                                         ? *pAttrEnd
                                         : nAttrStart;
             if( nEnd > nAttrStart
@@ -534,7 +534,7 @@ void SwTxtNode::RstAttr(
                         nMax = *pAttrEnd;
                     bChanged = true;
 
-                    const xub_StrLen nAttrEnd = *pAttrEnd;
+                    const sal_Int32 nAttrEnd = *pAttrEnd;
 
                     m_pSwpHints->NoteInHistory( pHt );
                     *pAttrEnd = nStt;
@@ -556,7 +556,7 @@ void SwTxtNode::RstAttr(
                     if ( nMax < *pAttrEnd )
                         nMax = *pAttrEnd;
                     bChanged = true;
-                    xub_StrLen nTmpEnd = *pAttrEnd;
+                    const sal_Int32 nTmpEnd = *pAttrEnd;
                     m_pSwpHints->NoteInHistory( pHt );
                     *pAttrEnd = nStt;
                     m_pSwpHints->NoteInHistory( pHt, sal_True );
@@ -897,8 +897,6 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
-    xub_StrLen nBegin, nEnd;
-
     // modify string according to redline information and hidden text
     const OUString aOldTxt( m_Text );
     OUStringBuffer buf(m_Text);
@@ -909,12 +907,11 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
         m_Text = buf.makeStringAndClear();
     }
 
-    if ( pArgs->pStartNode != this )
-        nBegin = 0;
-    else
-        nBegin = pArgs->pStartIdx->GetIndex();
+    sal_Int32 nBegin = ( pArgs->pStartNode != this )
+        ? 0
+        : pArgs->pStartIdx->GetIndex();
 
-    nEnd = ( pArgs->pEndNode != this )
+    sal_Int32 nEnd = ( pArgs->pEndNode != this )
             ? m_Text.getLength()
             : pArgs->pEndIdx->GetIndex();
 
@@ -995,11 +992,11 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
                         // count those "in words" in order to modify the
                         // selection accordingly.
                         const sal_Unicode* pChar = rWord.getStr();
-                        xub_StrLen nLeft = 0;
+                        sal_Int32 nLeft = 0;
                         while (pChar && *pChar++ == CH_TXTATR_INWORD)
                             ++nLeft;
                         pChar = rWord.getLength() ? rWord.getStr() + rWord.getLength() - 1 : 0;
-                        xub_StrLen nRight = 0;
+                        sal_Int32 nRight = 0;
                         while (pChar && *pChar-- == CH_TXTATR_INWORD)
                             ++nRight;
 
@@ -1062,22 +1059,13 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     // get range of text within node to be converted
     // (either all the text or the text within the selection
     // when the conversion was started)
-    sal_Int32 nTextBegin, nTextEnd;
-    //
-    if ( rArgs.pStartNode != this )
-    {
-        nTextBegin = 0;
-    }
-    else
-        nTextBegin = rArgs.pStartIdx->GetIndex();
-    if (nTextBegin > m_Text.getLength())
-    {
-        nTextBegin = m_Text.getLength();
-    }
+    const sal_Int32 nTextBegin = ( rArgs.pStartNode == this )
+        ? ::std::min(rArgs.pStartIdx->GetIndex(), m_Text.getLength())
+        : 0;
 
-    nTextEnd = ( rArgs.pEndNode != this )
-        ?  m_Text.getLength()
-        :  ::std::min<xub_StrLen>(rArgs.pEndIdx->GetIndex(), m_Text.getLength());
+    const sal_Int32 nTextEnd = ( rArgs.pEndNode == this )
+        ?  ::std::min(rArgs.pEndIdx->GetIndex(), m_Text.getLength())
+        :  m_Text.getLength();
 
     rArgs.aConvText = OUString();
 
@@ -1313,8 +1301,8 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
                 if( !xSpell->isValid( rWord, eActLang, Sequence< PropertyValue >() ) )
                 {
-                    xub_StrLen nSmartTagStt = nBegin;
-                    xub_StrLen nDummy = 1;
+                    sal_Int32 nSmartTagStt = nBegin;
+                    sal_Int32 nDummy = 1;
                     if ( !pNode->GetSmartTags() || !pNode->GetSmartTags()->InWrongWord( nSmartTagStt, nDummy ) )
                     {
                         if( !pNode->GetWrong() )

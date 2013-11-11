@@ -62,7 +62,7 @@ public:
         { pFrm = pNew; return *this; }
 
     // Is it a comparison? Returns position in frame.
-    sal_uInt16 GetBigIndent( xub_StrLen& rFndPos,
+    sal_Int32 GetBigIndent( sal_Int32& rFndPos,
                         const SwTxtFrm *pNextFrm = 0 ) const;
 };
 

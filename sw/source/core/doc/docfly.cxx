@@ -243,7 +243,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, bool bNewFrms
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
         SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
         OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const xub_StrLen nIdx = pPos->nContent.GetIndex();
+        const sal_Int32 nIdx = pPos->nContent.GetIndex();
         SwTxtAttr * const  pHnt =
             pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
@@ -816,7 +816,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // The TxtAttribut needs to be destroyed which, unfortunately, also
                     // destroys the format. To avoid that, we disconnect the format from
                     // the attribute.
-                    const xub_StrLen nIndx( xOldAsCharAnchorPos->nContent.GetIndex() );
+                    const sal_Int32 nIndx( xOldAsCharAnchorPos->nContent.GetIndex() );
                     SwTxtNode* pTxtNode( xOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
                     OSL_ENSURE( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
                     OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );

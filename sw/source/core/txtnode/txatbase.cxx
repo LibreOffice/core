@@ -22,7 +22,7 @@
 #include <fmtfld.hxx>
 #include <docufld.hxx>
 
-SwTxtAttr::SwTxtAttr( SfxPoolItem& rAttr, xub_StrLen nStart )
+SwTxtAttr::SwTxtAttr( SfxPoolItem& rAttr, sal_Int32 nStart )
     : m_pAttr( &rAttr )
     , m_nStart( nStart )
     , m_bDontExpand( false )
@@ -43,7 +43,7 @@ SwTxtAttr::~SwTxtAttr( )
 {
 }
 
-xub_StrLen* SwTxtAttr::GetEnd()
+sal_Int32* SwTxtAttr::GetEnd()
 {
     return 0;
 }
@@ -62,12 +62,12 @@ int SwTxtAttr::operator==( const SwTxtAttr& rAttr ) const
 }
 
 SwTxtAttrEnd::SwTxtAttrEnd( SfxPoolItem& rAttr,
-        xub_StrLen nStart, xub_StrLen nEnd ) :
+        sal_Int32 nStart, sal_Int32 nEnd ) :
     SwTxtAttr( rAttr, nStart ), m_nEnd( nEnd )
 {
 }
 
-xub_StrLen* SwTxtAttrEnd::GetEnd()
+sal_Int32* SwTxtAttrEnd::GetEnd()
 {
     return & m_nEnd;
 }

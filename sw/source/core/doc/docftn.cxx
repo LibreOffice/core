@@ -398,9 +398,9 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
 
     const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
     const sal_uLong nSttNd = pStt->nNode.GetIndex();
-    const xub_StrLen nSttCnt = pStt->nContent.GetIndex();
+    const sal_Int32 nSttCnt = pStt->nContent.GetIndex();
     const sal_uLong nEndNd = pEnd->nNode.GetIndex();
-    const xub_StrLen nEndCnt = pEnd->nContent.GetIndex();
+    const sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
 
     sal_uInt16 nPos;
     rFtnArr.SeekEntry( pStt->nNode, &nPos );

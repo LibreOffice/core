@@ -29,7 +29,7 @@ SwFmtChg::SwFmtChg( SwFmt* pFmt )
 {
 }
 
-SwInsTxt::SwInsTxt( xub_StrLen nP, xub_StrLen nL )
+SwInsTxt::SwInsTxt( sal_Int32 nP, sal_Int32 nL )
     : SwMsgPoolItem( RES_INS_TXT ), nPos( nP ), nLen( nL )
 {
 }

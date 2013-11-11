@@ -464,7 +464,7 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
     {
         pDontExpItems = new SfxItemSet( ((SwDoc*)pTxtNd->GetDoc())->GetAttrPool(),
                                             aCharFmtSetRange );
-        xub_StrLen n = rPos.nContent.GetIndex();
+        const sal_Int32 n = rPos.nContent.GetIndex();
         if( !pTxtNd->GetAttr( *pDontExpItems, n, n,
                                 n != pTxtNd->GetTxt().getLength() ))
             delete pDontExpItems, pDontExpItems = 0;
@@ -476,7 +476,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
     {
-        xub_StrLen nStart = rPos.nContent.GetIndex();
+        const sal_Int32 nStart = rPos.nContent.GetIndex();
         if( nStart == pTxtNd->GetTxt().getLength() )
             pTxtNd->FmtToTxtAttr( pTxtNd );
 
@@ -484,8 +484,8 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
         {
             const sal_uInt16 nSize = pTxtNd->GetpSwpHints()->Count();
             sal_uInt16 n;
-            xub_StrLen nAttrStart;
-            const xub_StrLen* pAttrEnd;
+            sal_Int32 nAttrStart;
+            const sal_Int32* pAttrEnd;
 
             for( n = 0; n < nSize; ++n )
             {

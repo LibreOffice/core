@@ -54,7 +54,7 @@ struct SW_DLLPUBLIC SwPosition
     SwPosition( const SwNodeIndex &rNode, const SwIndex &rCntnt );
     explicit SwPosition( const SwNodeIndex &rNode );
     explicit SwPosition( const SwNode& rNode );
-    explicit SwPosition( SwCntntNode& rNode, const xub_StrLen nOffset = 0 );
+    explicit SwPosition( SwCntntNode& rNode, const sal_Int32 nOffset = 0 );
 
     SwPosition( const SwPosition & );
     SwPosition &operator=(const SwPosition &);
@@ -203,7 +203,7 @@ public:
 
     bool DoSearch( const com::sun::star::util::SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                    SwMoveFn fnMove, bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
-                   xub_StrLen &nStart, xub_StrLen &nEnde,xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam);
+                   sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTxtLen, SwNode* pNode, SwPaM* pPam);
 
     inline bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
     inline void _SetInFrontOfLabel( bool bNew ) { m_bIsInFrontOfLabel = bNew; }

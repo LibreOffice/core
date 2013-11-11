@@ -247,7 +247,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         }
 
         // Vertikale Ausrichtung und Verankerung bestimmen.
-        xub_StrLen nCntnt = pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nCntnt = pPam->GetPoint()->nContent.GetIndex();
         if( nCntnt )
         {
             aAnchor.SetType( FLY_AT_CHAR );
@@ -1392,7 +1392,7 @@ void SwHTMLParser::StripTrailingPara()
         bSetSmallFont = sal_True;
         SwTxtNode* pTxtNd = pCNd->GetTxtNode();
 
-        xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
+        sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
         while( bSetSmallFont && nPos>0 )
         {
             --nPos;

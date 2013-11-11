@@ -144,7 +144,7 @@ sal_uLong SwASCIIParser::CallParser()
     ::StartProgress( STR_STATSTR_W4WREAD, 0, nFileSize, pDoc->GetDocShell() );
 
     SwPaM* pInsPam = 0;
-    xub_StrLen nSttCntnt = 0;
+    sal_Int32 nSttCntnt = 0;
     if (!bNewDoc)
     {
         const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;

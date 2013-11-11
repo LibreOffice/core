@@ -505,11 +505,11 @@ class SwAccessibleEventMap_Impl: public _SwAccessibleEventMap_Impl
 
 struct SwAccessibleParaSelection
 {
-    xub_StrLen nStartOfSelection;
-    xub_StrLen nEndOfSelection;
+    sal_Int32 nStartOfSelection;
+    sal_Int32 nEndOfSelection;
 
-    SwAccessibleParaSelection( const xub_StrLen _nStartOfSelection,
-                               const xub_StrLen _nEndOfSelection )
+    SwAccessibleParaSelection( const sal_Int32 _nStartOfSelection,
+                               const sal_Int32 _nEndOfSelection )
         : nStartOfSelection( _nStartOfSelection ),
           nEndOfSelection( _nEndOfSelection )
     {}
@@ -2610,7 +2610,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                                                 : 0,
                                     pTxtNode == &(pEndPos->nNode.GetNode())
                                                 ? pEndPos->nContent.GetIndex()
-                                                : STRING_LEN );
+                                                : -1 );
                                 SwAccessibleSelectedParas_Impl::value_type
                                                 aEntry( xWeakAcc, aDataEntry );
                                 if ( !pRetSelectedParas )

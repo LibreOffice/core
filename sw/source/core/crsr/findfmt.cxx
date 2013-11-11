@@ -38,8 +38,7 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
             return false;
         }
         SwCntntNode *pNd = pPam->GetPoint()->nNode.GetNode().GetCntntNode();
-        xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
-        pPam->GetPoint()->nContent.Assign( pNd, nTmpPos );
+        pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
     sal_Bool bFirst = sal_True;

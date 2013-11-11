@@ -30,7 +30,7 @@ TYPEINIT0(SwIndexReg);
 // SwIndex
 // -------
 
-SwIndex::SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx)
+SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
     , m_pIndexReg( pReg )
     , m_pNext( 0 )
@@ -56,7 +56,7 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     ChgValue( rIdx, rIdx.m_nIndex );
 }
 
-void SwIndex::Init(xub_StrLen const nIdx)
+void SwIndex::Init(sal_Int32 const nIdx)
 {
     if (!m_pIndexReg)
     {
@@ -79,7 +79,7 @@ void SwIndex::Init(xub_StrLen const nIdx)
     }
 }
 
-SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
+SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
 {
     assert(m_pIndexReg == rIdx.m_pIndexReg);
     if (!m_pIndexReg)
@@ -197,7 +197,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
     return *this;
 }
 
-SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
+SwIndex& SwIndex::Assign( SwIndexReg* pArr, sal_Int32 nIdx )
 {
     if (pArr != m_pIndexReg) // unregister!
     {
@@ -227,14 +227,14 @@ SwIndexReg::~SwIndexReg()
     assert(!m_pFirst && !m_pLast); // There are still indices registered
 }
 
-void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
+void SwIndexReg::Update( SwIndex const & rIdx, const sal_Int32 nDiff,
     const bool bNeg, const bool /* argument is only used in derived class*/ )
 {
     SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
-    xub_StrLen nNewVal = rIdx.m_nIndex;
+    const sal_Int32 nNewVal = rIdx.m_nIndex;
     if( bNeg )
     {
-        xub_StrLen nLast = rIdx.GetIndex() + nDiff;
+        const sal_Int32 nLast = rIdx.GetIndex() + nDiff;
         while (pStt && pStt->m_nIndex == nNewVal)
         {
             pStt->m_nIndex = nNewVal;
@@ -291,57 +291,57 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
 // SwIndex
 // -------
 
-xub_StrLen SwIndex::operator++(int)
+sal_Int32 SwIndex::operator++(int)
 {
-    OSL_ASSERT( m_nIndex < INVALID_INDEX );
+    OSL_ASSERT( m_nIndex < SAL_MAX_INT32 );
 
-    xub_StrLen nOldIndex = m_nIndex;
+    const sal_Int32 nOldIndex = m_nIndex;
     ChgValue( *this, m_nIndex+1 );
     return nOldIndex;
 }
 
-xub_StrLen SwIndex::operator++()
+sal_Int32 SwIndex::operator++()
 {
-    OSL_ASSERT( m_nIndex < INVALID_INDEX );
+    OSL_ASSERT( m_nIndex < SAL_MAX_INT32 );
 
     ChgValue( *this, m_nIndex+1 );
     return m_nIndex;
 }
 
-xub_StrLen SwIndex::operator--(int)
+sal_Int32 SwIndex::operator--(int)
 {
-    OSL_ASSERT( m_nIndex );
+    OSL_ASSERT( m_nIndex>0 );
 
-    xub_StrLen nOldIndex = m_nIndex;
+    const sal_Int32 nOldIndex = m_nIndex;
     ChgValue( *this, m_nIndex-1 );
     return nOldIndex;
 }
 
-xub_StrLen SwIndex::operator--()
+sal_Int32 SwIndex::operator--()
 {
-    OSL_ASSERT( m_nIndex );
+    OSL_ASSERT( m_nIndex>0 );
     return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
 
-xub_StrLen SwIndex::operator+=( xub_StrLen const nVal )
+sal_Int32 SwIndex::operator+=( sal_Int32 const nVal )
 {
-    OSL_ASSERT( m_nIndex < INVALID_INDEX - nVal );
+    OSL_ASSERT( m_nIndex <= SAL_MAX_INT32 - nVal );
     return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
 
-xub_StrLen SwIndex::operator-=( xub_StrLen const nVal )
+sal_Int32 SwIndex::operator-=( sal_Int32 const nVal )
 {
     OSL_ASSERT( m_nIndex >= nVal );
     return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
 }
 
-xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
+sal_Int32 SwIndex::operator+=( const SwIndex & rIndex )
 {
-    OSL_ASSERT( m_nIndex < INVALID_INDEX - rIndex.m_nIndex );
+    OSL_ASSERT( m_nIndex <= SAL_MAX_INT32 - rIndex.m_nIndex );
     return ChgValue( *this, m_nIndex + rIndex.m_nIndex ).m_nIndex;
 }
 
-xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
+sal_Int32 SwIndex::operator-=( const SwIndex & rIndex )
 {
     OSL_ASSERT( m_nIndex >= rIndex.m_nIndex );
     return ChgValue( *this, m_nIndex - rIndex.m_nIndex ).m_nIndex;
@@ -375,7 +375,7 @@ bool SwIndex::operator>=( const SwIndex & rIndex ) const
     return m_nIndex >= rIndex.m_nIndex;
 }
 
-SwIndex& SwIndex::operator= ( xub_StrLen const nVal )
+SwIndex& SwIndex::operator= ( sal_Int32 const nVal )
 {
     if (m_nIndex != nVal)
         ChgValue( *this, nVal );

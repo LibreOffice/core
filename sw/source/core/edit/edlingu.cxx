@@ -100,8 +100,8 @@ public:
 // the content positions of each portion need to be saved
 struct SpellContentPosition
 {
-    xub_StrLen nLeft;
-    xub_StrLen nRight;
+    sal_Int32 nLeft;
+    sal_Int32 nRight;
 };
 
 typedef std::vector<SpellContentPosition>  SpellContentPositions;
@@ -168,7 +168,7 @@ public:
     uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     sal_Bool IsAuto();
-    void InsertSoftHyph( const xub_StrLen nHyphPos );
+    void InsertSoftHyph( const sal_Int32 nHyphPos );
     void ShowSelection();
 };
 
@@ -524,13 +524,13 @@ void SwHyphIter::Ignore()
 void SwHyphIter::DelSoftHyph( SwPaM &rPam )
 {
     const SwPosition* pStt = rPam.Start();
-    const xub_StrLen nStart = pStt->nContent.GetIndex();
-    const xub_StrLen nEnd   = rPam.End()->nContent.GetIndex();
+    const sal_Int32 nStart = pStt->nContent.GetIndex();
+    const sal_Int32 nEnd   = rPam.End()->nContent.GetIndex();
     SwTxtNode *pNode = pStt->nNode.GetNode().GetTxtNode();
     pNode->DelSoftHyph( nStart, nEnd );
 }
 
-void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
+void SwHyphIter::InsertSoftHyph( const sal_Int32 nHyphPos )
 {
     SwEditShell *pMySh = GetSh();
     OSL_ENSURE( pMySh,  "SwHyphIter::InsertSoftHyph: missing HyphStart()");
@@ -541,7 +541,7 @@ void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
     SwPosition* pSttPos = pCrsr->Start();
     SwPosition* pEndPos = pCrsr->End();
 
-    xub_StrLen nLastHyphLen = GetEnd()->nContent.GetIndex() -
+    const sal_Int32 nLastHyphLen = GetEnd()->nContent.GetIndex() -
                           pSttPos->nContent.GetIndex();
 
     if( pSttPos->nNode != pEndPos->nNode || !nLastHyphLen )
@@ -835,8 +835,8 @@ uno::Reference< XSpellAlternatives >
         0 != (pWrong = pNode->GetWrong()) &&
         !pNode->IsInProtectSect() )
     {
-        xub_StrLen nBegin = aPos.nContent.GetIndex();
-        xub_StrLen nLen = 1;
+        sal_Int32 nBegin = aPos.nContent.GetIndex();
+        sal_Int32 nLen = 1;
         if( pWrong->InWrongWord(nBegin,nLen) && !pNode->IsSymbol(nBegin) )
         {
             const OUString aText(pNode->GetTxt().copy(nBegin, nLen));
@@ -874,9 +874,9 @@ uno::Reference< XSpellAlternatives >
                 // save the start and end positons of the line and the starting point
                 Push();
                 LeftMargin();
-                xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
+                const sal_Int32 nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
                 RightMargin();
-                xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
+                const sal_Int32 nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
                 Pop(sal_False);
 
                 // make sure the selection build later from the data below does
@@ -884,11 +884,11 @@ uno::Reference< XSpellAlternatives >
                 // preserve those. Therefore count those "in words" in order to
                 // modify the selection accordingly.
                 const sal_Unicode* pChar = aText.getStr();
-                xub_StrLen nLeft = 0;
+                sal_Int32 nLeft = 0;
                 while (pChar && *pChar++ == CH_TXTATR_INWORD)
                     ++nLeft;
                 pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : 0;
-                xub_StrLen nRight = 0;
+                sal_Int32 nRight = 0;
                 while (pChar && *pChar-- == CH_TXTATR_INWORD)
                     ++nRight;
 
@@ -898,9 +898,9 @@ uno::Reference< XSpellAlternatives >
                 pCrsr->SetMark();
                 ExtendSelection( sal_True, nLen - nLeft - nRight );
                 // don't determine the rectangle in the current line
-                xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
+                const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
                 // take one less than the line end - otherwise the next line would be calculated
-                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
+                const sal_Int32 nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
                                         ? nLineEnd : (nBegin + nLen - nLeft - nRight);
                 Push();
                 pCrsr->DeleteMark();
@@ -947,8 +947,8 @@ bool SwEditShell::GetGrammarCorrection(
         0 != (pWrong = pNode->GetGrammarCheck()) &&
         !pNode->IsInProtectSect() )
     {
-        xub_StrLen nBegin = aPos.nContent.GetIndex();
-        xub_StrLen nLen = 1;
+        sal_Int32 nBegin = aPos.nContent.GetIndex();
+        sal_Int32 nLen = 1;
         if (pWrong->InWrongWord(nBegin, nLen))
         {
             const OUString aText(pNode->GetTxt().copy(nBegin, nLen));
@@ -1000,9 +1000,9 @@ bool SwEditShell::GetGrammarCorrection(
                 // save the start and end positons of the line and the starting point
                 Push();
                 LeftMargin();
-                xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
+                const sal_Int32 nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
                 RightMargin();
-                xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
+                const sal_Int32 nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
                 Pop(sal_False);
 
                 // make sure the selection build later from the data below does
@@ -1010,11 +1010,11 @@ bool SwEditShell::GetGrammarCorrection(
                 // order to preserve those. Therefore count those "in words" in
                 // order to modify the selection accordingly.
                 const sal_Unicode* pChar = aText.getStr();
-                xub_StrLen nLeft = 0;
+                sal_Int32 nLeft = 0;
                 while (pChar && *pChar++ == CH_TXTATR_INWORD)
                     ++nLeft;
                 pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : 0;
-                xub_StrLen nRight = 0;
+                sal_Int32 nRight = 0;
                 while (pChar && *pChar-- == CH_TXTATR_INWORD)
                     ++nRight;
 
@@ -1024,9 +1024,9 @@ bool SwEditShell::GetGrammarCorrection(
                 pCrsr->SetMark();
                 ExtendSelection( sal_True, nLen - nLeft - nRight );
                 // don't determine the rectangle in the current line
-                xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
+                const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
                 // take one less than the line end - otherwise the next line would be calculated
-                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
+                const sal_Int32 nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
                                         ? nLineEnd : (nBegin + nLen - nLeft - nRight);
                 Push();
                 pCrsr->DeleteMark();
@@ -1263,7 +1263,7 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
         const SwTxtNode* pTxtNode = pCrsr->GetNode()->GetTxtNode();
 
         sal_uInt16 nAct = pDoc->GetRedlinePos( *pTxtNode, USHRT_MAX );
-        const xub_StrLen nStartIndex = pStartPos->nContent.GetIndex();
+        const sal_Int32 nStartIndex = pStartPos->nContent.GetIndex();
         for ( ; nAct < pDoc->GetRedlineTbl().size(); nAct++ )
         {
             const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
@@ -1273,8 +1273,10 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
 
             if( nsRedlineType_t::REDLINE_DELETE == pRed->GetType() )
             {
-                xub_StrLen nStart, nEnd;
-                pRed->CalcStartEnd( pTxtNode->GetIndex(), nStart, nEnd );
+                xub_StrLen nStart_, nEnd_;
+                pRed->CalcStartEnd( pTxtNode->GetIndex(), nStart_, nEnd_ );
+                sal_Int32 nStart = nStart_;
+                sal_Int32 nEnd = nEnd_;
                 if(nStart >= nStartIndex || nEnd >= nStartIndex)
                 {
                     SpellContentPosition aAdd;
@@ -1295,7 +1297,7 @@ static void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShel
     {
         SwPaM *pCrsr = pSh->GetCrsr();
         const SwPosition* pEndPos = pCrsr->End();
-        xub_StrLen nEnd = pEndPos->nContent.GetIndex();
+        const sal_Int32 nEnd = pEndPos->nContent.GetIndex();
         while(!aDeletedRedlines.empty() &&
                 aDeletedRedlines.back().nLeft > nEnd)
         {
@@ -1306,10 +1308,10 @@ static void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShel
 
 static SpellContentPosition  lcl_FindNextDeletedRedline(
         const SpellContentPositions& rDeletedRedlines,
-        xub_StrLen nSearchFrom )
+        sal_Int32 nSearchFrom )
 {
     SpellContentPosition aRet;
-    aRet.nLeft = aRet.nRight = STRING_MAXLEN;
+    aRet.nLeft = aRet.nRight = SAL_MAX_INT32;
     if(!rDeletedRedlines.empty())
     {
         SpellContentPositions::const_iterator aIter = rDeletedRedlines.begin();
@@ -1425,7 +1427,8 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         {
             const ModelToViewHelper aConversionMap(*(SwTxtNode*)pCrsr->GetNode());
             OUString aExpandText = aConversionMap.getViewText();
-            xub_StrLen nSentenceEnd = (xub_StrLen)aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition );
+            sal_Int32 nSentenceEnd = static_cast<sal_Int32>(
+                aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition ));
             // remove trailing space
             if( aExpandText[nSentenceEnd - 1] == ' ' )
                 --nSentenceEnd;
@@ -1623,7 +1626,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
             if( aNextRedline.nLeft == aStart.nContent.GetIndex() )
             {
                 // select until the end of the current redline
-                xub_StrLen nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
+                const sal_Int32 nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
                             aEnd.nContent.GetIndex() : aNextRedline.nRight;
                 pCrsr->GetPoint()->nContent.Assign( pTxtNode, nEnd );
                 CreatePortion(xAlt, pGrammarResult, false, true);
@@ -1694,7 +1697,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                 {
                     *pCrsr->GetMark() = *pCrsr->GetPoint();
                     // select until the end of the current redline
-                    xub_StrLen nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
+                    const sal_Int32 nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
                                 aEnd.nContent.GetIndex() : aNextRedline.nRight;
                     pCrsr->GetPoint()->nContent.Assign( pTxtNode, nEnd );
                     CreatePortion(xAlt, pGrammarResult, false, true);

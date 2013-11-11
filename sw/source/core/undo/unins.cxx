@@ -234,7 +234,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
     else
     {
         sal_uLong nNd = nNode;
-        xub_StrLen nCnt = nCntnt;
+        sal_Int32 nCnt = nCntnt;
         if( nLen )
         {
             SwNodeIndex aNd( pTmpDoc->GetNodes(), nNode);
@@ -672,7 +672,7 @@ SwUndoReplace::Impl::Impl(
     if( !pHistory->Count() )
         delete pHistory, pHistory = 0;
 
-    xub_StrLen nECnt = m_bSplitNext ? pNd->GetTxt().getLength()
+    const sal_Int32 nECnt = m_bSplitNext ? pNd->GetTxt().getLength()
         : pEnd->nContent.GetIndex();
     m_sOld = pNd->GetTxt().copy( m_nSttCnt, nECnt - m_nSttCnt );
 }

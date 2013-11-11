@@ -168,11 +168,7 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
             if( bValidPos )
             {
                 SwCntntNode* pCNd = GetCntntNode();
-                sal_uInt16 nCnt = 0;
-                if( pCNd && !bMoveDown )
-                    nCnt = pCNd->Len();
-
-                GetPoint()->nContent.Assign( pCNd, nCnt );
+                GetPoint()->nContent.Assign( pCNd, (pCNd && !bMoveDown) ? pCNd->Len() : 0);
             }
             else
             {

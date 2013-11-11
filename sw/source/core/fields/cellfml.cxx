@@ -152,7 +152,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
         const sal_Unicode Char = bOK ? sTxt[nSttPos] : 0;
         if ( bOK && (Char==CH_TXTATR_BREAKWORD || Char==CH_TXTATR_INWORD) )
         {
-            SwIndex aIdx( pTxtNd, static_cast<xub_StrLen>(nSttPos) );
+            SwIndex aIdx( pTxtNd, nSttPos );
             SwTxtFld * const pTxtFld = static_cast<SwTxtFld*>(
                 pTxtNd->GetTxtAttrForCharAt(aIdx.GetIndex(), RES_TXTATR_FIELD));
             if( !pTxtFld )

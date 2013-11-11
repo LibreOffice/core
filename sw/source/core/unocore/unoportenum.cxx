@@ -329,7 +329,7 @@ lcl_ExportFieldMark(
     uno::Reference<text::XTextRange> xRef;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     //flr: maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation....
-    const xub_StrLen start = pUnoCrsr->Start()->nContent.GetIndex();
+    const sal_Int32 start = pUnoCrsr->Start()->nContent.GetIndex();
     OSL_ENSURE(pUnoCrsr->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");
 
@@ -1103,7 +1103,7 @@ lcl_CreatePortions(
         }
 
         SwpHints * const pHints = pTxtNode->GetpSwpHints();
-        const xub_StrLen nCurrentIndex =
+        const sal_Int32 nCurrentIndex =
             pUnoCrsr->GetPoint()->nContent.GetIndex();
         // this contains the portion which consumes the character in the
         // text at nCurrentIndex; i.e. it must be set _once_ per iteration

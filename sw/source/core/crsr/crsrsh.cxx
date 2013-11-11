@@ -2163,7 +2163,7 @@ OUString SwCrsrShell::GetSelTxt() const
         SwTxtNode* pTxtNd = m_pCurCrsr->GetNode()->GetTxtNode();
         if( pTxtNd )
         {
-            xub_StrLen nStt = m_pCurCrsr->Start()->nContent.GetIndex();
+            const sal_Int32 nStt = m_pCurCrsr->Start()->nContent.GetIndex();
             aTxt = pTxtNd->GetExpandTxt( nStt,
                     m_pCurCrsr->End()->nContent.GetIndex() - nStt );
         }
@@ -2202,7 +2202,7 @@ sal_Unicode SwCrsrShell::GetChar( sal_Bool bEnd, long nOffset )
     if( !pTxtNd )
         return 0;
 
-    xub_StrLen nPos = pPos->nContent.GetIndex();
+    const sal_Int32 nPos = pPos->nContent.GetIndex();
     const OUString& rStr = pTxtNd->GetTxt();
     sal_Unicode cCh = 0;
 
@@ -2226,7 +2226,7 @@ sal_Bool SwCrsrShell::ExtendSelection( sal_Bool bEnd, xub_StrLen nCount )
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "no text node; how should this then be extended?" );
 
-    xub_StrLen nPos = pPos->nContent.GetIndex();
+    sal_Int32 nPos = pPos->nContent.GetIndex();
     if( bEnd )
     {
         if ((nPos + nCount) <= pTxtNd->GetTxt().getLength())
@@ -2831,7 +2831,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
     if( bOk )
     {
         pCNd = rNdIdx.GetNode().GetCntntNode();
-        xub_StrLen nCntnt = rNdIdx.GetIndex() < nNdIdx ? pCNd->Len() : 0;
+        const sal_Int32 nCntnt = rNdIdx.GetIndex() < nNdIdx ? pCNd->Len() : 0;
         m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, nCntnt );
     }
     else
@@ -2926,11 +2926,11 @@ sal_Bool SwCrsrShell::IsSelFullPara() const
     if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
         m_pCurCrsr->GetMark()->nNode.GetIndex() && m_pCurCrsr == m_pCurCrsr->GetNext() )
     {
-        xub_StrLen nStt = m_pCurCrsr->GetPoint()->nContent.GetIndex(),
-                   nEnd = m_pCurCrsr->GetMark()->nContent.GetIndex();
+        sal_Int32 nStt = m_pCurCrsr->GetPoint()->nContent.GetIndex();
+        sal_Int32 nEnd = m_pCurCrsr->GetMark()->nContent.GetIndex();
         if( nStt > nEnd )
         {
-            xub_StrLen nTmp = nStt;
+            sal_Int32 nTmp = nStt;
             nStt = nEnd;
             nEnd = nTmp;
         }
@@ -3233,7 +3233,7 @@ static void lcl_FillRecognizerData( uno::Sequence< OUString >& rSmartTagTypes,
 }
 
 static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
-                   SwTxtNode& rNode, xub_StrLen nBegin, xub_StrLen nLen )
+                   SwTxtNode& rNode, sal_Int32 nBegin, sal_Int32 nLen )
 {
     // create SwPosition for nStartIndex
     SwIndex aIndex( &rNode, nBegin );
@@ -3264,9 +3264,9 @@ void SwCrsrShell::GetSmartTagTerm( uno::Sequence< OUString >& rSmartTagTypes,
         const SwWrongList *pSmartTagList = pNode->GetSmartTags();
         if ( pSmartTagList )
         {
-            xub_StrLen nCurrent = aPos.nContent.GetIndex();
-            xub_StrLen nBegin = nCurrent;
-            xub_StrLen nLen = 1;
+            sal_Int32 nCurrent = aPos.nContent.GetIndex();
+            sal_Int32 nBegin = nCurrent;
+            sal_Int32 nLen = 1;
 
             if( pSmartTagList->InWrongWord( nBegin, nLen ) && !pNode->IsSymbol(nBegin) )
             {
@@ -3308,9 +3308,9 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
         0 != (pSmartTagList = pNode->GetSmartTags()) &&
         !pNode->IsInProtectSect() )
     {
-        xub_StrLen nCurrent = aPos.nContent.GetIndex();
-        xub_StrLen nBegin = nCurrent;
-        xub_StrLen nLen = 1;
+        sal_Int32 nCurrent = aPos.nContent.GetIndex();
+        sal_Int32 nBegin = nCurrent;
+        sal_Int32 nLen = 1;
 
         if( pSmartTagList->InWrongWord( nBegin, nLen ) && !pNode->IsSymbol(nBegin) )
         {
@@ -3331,9 +3331,9 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             //save the start and end positons of the line and the starting point
             Push();
             LeftMargin();
-            xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
+            const sal_Int32 nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
             RightMargin();
-            xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
+            const sal_Int32 nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
             Pop(sal_False);
 
             // make sure the selection build later from the data below does not
@@ -3341,11 +3341,11 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             // preserve those. Therefore count those "in words" in order to
             // modify the selection accordingly.
             const sal_Unicode* pChar = aText.getStr();
-            xub_StrLen nLeft = 0;
+            sal_Int32 nLeft = 0;
             while (pChar && *pChar++ == CH_TXTATR_INWORD)
                 ++nLeft;
             pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : 0;
-            xub_StrLen nRight = 0;
+            sal_Int32 nRight = 0;
             while (pChar && *pChar-- == CH_TXTATR_INWORD)
                 ++nRight;
 
@@ -3355,10 +3355,10 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             pCrsr->SetMark();
             ExtendSelection( sal_True, nLen - nLeft - nRight );
             // do not determine the rectangle in the current line
-            xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
+            const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
             // take one less than the line end - otherwise the next line would
             // be calculated
-            xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd : (nBegin + nLen - nLeft - nRight);
+            const sal_Int32 nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd : (nBegin + nLen - nLeft - nRight);
             Push();
             pCrsr->DeleteMark();
             SwIndex& rContent = GetCrsr()->GetPoint()->nContent;

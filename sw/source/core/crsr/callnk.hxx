@@ -31,18 +31,18 @@ class SwCallLink
 public:
     SwCrsrShell & rShell;
     sal_uLong nNode;
-    xub_StrLen nCntnt;
+    sal_Int32 nCntnt;
     sal_uInt8 nNdTyp;
     long nLeftFrmPos;
     bool bHasSelection;
 
     SwCallLink( SwCrsrShell & rSh );
-    SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
+    SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktCntnt,
                                     sal_uInt8 nAktNdTyp, long nLRPos,
                                     bool bAktSelection );
     ~SwCallLink();
 
-    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
+    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, sal_Int32 nCntPos, sal_Bool bCalcFrm );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX

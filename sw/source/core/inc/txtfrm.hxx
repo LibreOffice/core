@@ -296,7 +296,7 @@ public:
 
     // Prepares the cursor position for a visual cursor move (BiDi).
     // The behaviour is different for insert and overwrite cursors
-    void PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
+    void PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
                             sal_Bool& bRight, sal_Bool bInsertCrsr );
 
     // Methoden zur Verwaltung von FolgeFrames

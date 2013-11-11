@@ -354,7 +354,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
             pRedlPam->GetPoint()->nNode.Assign( aEndIdx.GetNode() );
             pCNd = pRedlPam->GetCntntNode( sal_True );
-            xub_StrLen nCLen = 0;
+            sal_Int32 nCLen = 0;
             if( !pCNd &&
                 0 != (pCNd = GetNodes()[ aEndIdx.GetIndex()-1 ]->GetCntntNode()))
             {

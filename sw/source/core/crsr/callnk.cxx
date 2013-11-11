@@ -36,7 +36,7 @@
 #include <breakit.hxx>
 #include<vcl/window.hxx>
 
-SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
+SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktCntnt,
                         sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
     : rShell( rSh ), nNode( nAktNode ), nCntnt( nAktCntnt ),
       nNdTyp( nAktNdTyp ), nLeftFrmPos( nLRPos ),
@@ -127,7 +127,7 @@ SwCallLink::~SwCallLink()
     }
     lcl_notifyRow(pNode, rShell);
 
-    xub_StrLen nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
+    sal_Int32 nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
     sal_uInt16 nNdWhich = pCNd->GetNodeType();
     sal_uLong nAktNode = pCurCrsr->GetPoint()->nNode.GetIndex();
 
@@ -165,8 +165,8 @@ SwCallLink::~SwCallLink()
             {
                 const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
                 sal_uInt16 n;
-                xub_StrLen nStart;
-                const xub_StrLen *pEnd;
+                sal_Int32 nStart;
+                const sal_Int32 *pEnd;
 
                 for( n = 0; n < rHts.Count(); n++ )
                 {
@@ -235,7 +235,7 @@ SwCallLink::~SwCallLink()
     }
 }
 
-long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm )
+long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, sal_Int32 nCntPos, sal_Bool bCalcFrm )
 {
     SwTxtFrm* pFrm = (SwTxtFrm*)rNd.getLayoutFrm(pRoot,0,0,bCalcFrm), *pNext = pFrm;
     if ( pFrm && !pFrm->IsHiddenNow() )

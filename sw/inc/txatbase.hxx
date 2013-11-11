@@ -44,7 +44,7 @@ class SwTxtAttr : private boost::noncopyable
 {
 private:
     SfxPoolItem * const m_pAttr;
-    xub_StrLen m_nStart;
+    sal_Int32 m_nStart;
     bool m_bDontExpand          : 1;
     bool m_bLockExpandFlag      : 1;
 
@@ -59,7 +59,7 @@ private:
     bool m_bFormatIgnoreEnd     : 1;    ///< text formatting should ignore end
 
 protected:
-    SwTxtAttr( SfxPoolItem& rAttr, xub_StrLen nStart );
+    SwTxtAttr( SfxPoolItem& rAttr, sal_Int32 nStart );
     virtual ~SwTxtAttr();
 
     void SetLockExpandFlag( bool bFlag )    { m_bLockExpandFlag = bFlag; }
@@ -76,14 +76,14 @@ public:
     static void Destroy( SwTxtAttr * pToDestroy, SfxItemPool& rPool );
 
     /// start position
-                  xub_StrLen* GetStart()        { return & m_nStart; }
-            const xub_StrLen* GetStart() const  { return & m_nStart; }
+                  sal_Int32* GetStart()        { return & m_nStart; }
+            const sal_Int32* GetStart() const  { return & m_nStart; }
 
     /// end position
-    virtual      xub_StrLen* GetEnd();
-    inline const xub_StrLen* GetEnd() const;
+    virtual      sal_Int32* GetEnd();
+    inline const sal_Int32* GetEnd() const;
     /// end (if available), else start
-    inline const xub_StrLen* GetAnyEnd() const;
+    inline const sal_Int32* GetAnyEnd() const;
 
     inline void SetDontExpand( bool bDontExpand );
     bool DontExpand() const                 { return m_bDontExpand; }
@@ -123,26 +123,26 @@ public:
 class SwTxtAttrEnd : public SwTxtAttr
 {
 protected:
-    xub_StrLen m_nEnd;
+    sal_Int32 m_nEnd;
 
 public:
-    SwTxtAttrEnd( SfxPoolItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
 
     using SwTxtAttr::GetEnd;
-    virtual xub_StrLen* GetEnd();
+    virtual sal_Int32* GetEnd();
 };
 
 
 // --------------- Inline Implementations ------------------------
 
-inline const xub_StrLen* SwTxtAttr::GetEnd() const
+inline const sal_Int32* SwTxtAttr::GetEnd() const
 {
     return const_cast<SwTxtAttr * >(this)->GetEnd();
 }
 
-inline const xub_StrLen* SwTxtAttr::GetAnyEnd() const
+inline const sal_Int32* SwTxtAttr::GetAnyEnd() const
 {
-    const xub_StrLen* pEnd = GetEnd();
+    const sal_Int32* pEnd = GetEnd();
     return pEnd ? pEnd : GetStart();
 }
 

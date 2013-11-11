@@ -46,7 +46,7 @@ SwDoc* SwUiWriterTest::createDoc(const char* pName)
 
 //Replacement tests
 
-static void lcl_selectCharacters(SwPaM& rPaM, int first, int end)
+static void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
 {
     rPaM.GetPoint()->nContent.Assign(rPaM.GetCntntNode(), first);
     rPaM.SetMark();

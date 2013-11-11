@@ -49,8 +49,8 @@ public:
         const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
-    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
-                            xub_StrLen nEnd = STRING_NOTFOUND ) const;
+    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
+                            sal_Int32 nEnd = -1 ) const;
 };
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const OUString& rMimeType,
@@ -190,7 +190,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 }
 
 sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
-                                xub_StrLen nStt, xub_StrLen nEnd ) const
+                                sal_Int32 nStt, sal_Int32 nEnd ) const
 {
     // here, any anchor of the normal NodesArray should be sufficient
     SwNodes* pNds = &rFldType.GetDoc()->GetNodes();

@@ -223,7 +223,7 @@ public:
     sal_uInt16 GetWrongPos( xub_StrLen nValue ) const;
 
     sal_Bool Check( xub_StrLen &rChk, xub_StrLen &rLn ) const;
-    sal_Bool InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const;
+    sal_Bool InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const;
     xub_StrLen NextWrong( xub_StrLen nChk ) const;
 
     void Move( xub_StrLen nPos, long nDiff );

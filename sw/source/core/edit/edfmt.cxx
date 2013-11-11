@@ -63,7 +63,8 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
     if( pCNd->IsTxtNode() )
     {
         SwTxtNode const*const pTxtNode(static_cast<SwTxtNode const*>(pCNd));
-        xub_StrLen nStt, nEnd;
+        sal_Int32 nStt;
+        sal_Int32 nEnd;
         if( pPam->HasMark() )
         {
             const SwPosition* pPtPos = pPam->GetPoint();

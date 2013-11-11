@@ -1352,8 +1352,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             aPam.GetPoint()->nNode.Assign( *rPt.pSelBox->GetSttNd()->
                                             EndOfSectionNode(), -1 );
             SwCntntNode* pCNd = aPam.GetCntntNode();
-            sal_uInt16 nL = pCNd ? pCNd->Len() : 0;
-            aPam.GetPoint()->nContent.Assign( pCNd, nL );
+            aPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
 
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
             // one node should be kept in the box (otherwise the

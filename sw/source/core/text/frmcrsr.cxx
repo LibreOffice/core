@@ -67,7 +67,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
                           const sal_Bool bRightMargin, const sal_Bool bNoScroll = sal_True )
 {
     // RightMargin in the last master line
-    const xub_StrLen nOffset = rPos.nContent.GetIndex();
+    const sal_Int32 nOffset = rPos.nContent.GetIndex();
     SwTxtFrm *pFrmAtPos = pFrm;
     if( !bNoScroll || pFrm->GetFollow() )
     {
@@ -75,7 +75,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
         if( nOffset < pFrmAtPos->GetOfst() &&
             !pFrmAtPos->IsFollow() )
         {
-            xub_StrLen nNew = nOffset;
+            sal_Int32 nNew = nOffset;
             if( nNew < MIN_OFFSET_STEP )
                 nNew = 0;
             else
@@ -270,8 +270,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             nMaxY = pFrm->SwitchVerticalToHorizontal( nMaxY );
 
         bool bGoOn = true;
-        xub_StrLen nOffset = rPos.nContent.GetIndex();
-        xub_StrLen nNextOfst;
+        const sal_Int32 nOffset = rPos.nContent.GetIndex();
+        sal_Int32 nNextOfst;
 
         do
         {
@@ -372,7 +372,7 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     if( IsHiddenNow() )
         return sal_False;
 
-    xub_StrLen nOffset = rPos.nContent.GetIndex();
+    const sal_Int32 nOffset = rPos.nContent.GetIndex();
     SwTxtFrm* pFrm = &(const_cast<SwTxtFrm*>(this)->GetFrmAtOfst( nOffset ));
 
     pFrm->GetFormatted();
@@ -460,7 +460,7 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
     bool bRet = true;
 
     // get position offset
-    xub_StrLen nOffset = _rPos.nContent.GetIndex();
+    const sal_Int32 nOffset = _rPos.nContent.GetIndex();
 
     if ( GetTxt().getLength() < nOffset )
     {
@@ -805,7 +805,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
     }
 
     ((SwTxtFrm*)this)->GetFormatted();
-    const xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
     SwRect aCharBox;
 
     if( !IsEmpty() && !IsHiddenNow() )
@@ -932,7 +932,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 // bLeft: whether the break iterator has to add or subtract from the
 //        current position
 static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nIdx,
-                              xub_StrLen& nPos, sal_Bool& bRight,
+                              sal_Int32& nPos, sal_Bool& bRight,
                               sal_uInt8& nCrsrLevel, sal_uInt8 nDefaultDir )
 {
     const SwLinePortion* pPor = rCurrLine.GetFirstPortion();
@@ -986,7 +986,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         if ( bRecurse )
         {
             const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
-            xub_StrLen nTmpPos = nPos - nIdx;
+            sal_Int32 nTmpPos = nPos - nIdx;
             sal_Bool bTmpForward = ! bRight;
             sal_uInt8 nTmpCrsrLevel = nCrsrLevel;
             lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
@@ -1045,7 +1045,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         if ( bRecurse )
         {
             const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
-            xub_StrLen nTmpPos = nPos - nIdx;
+            sal_Int32 nTmpPos = nPos - nIdx;
             sal_Bool bTmpForward = ! bRight;
             sal_uInt8 nTmpCrsrLevel = nCrsrLevel;
             lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
@@ -1076,7 +1076,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
     }
 }
 
-void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
+void SwTxtFrm::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCrsrLevel,
                                   sal_Bool& bForward, sal_Bool bInsertCrsr )
 {
     if( IsEmpty() || IsHiddenNow() )
@@ -1093,8 +1093,8 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
         aLine.Top();
 
     const SwLineLayout* pLine = aLine.GetCurr();
-    const xub_StrLen nStt = aLine.GetStart();
-    const xub_StrLen nLen = pLine->GetLen();
+    const sal_Int32 nStt = aLine.GetStart();
+    const sal_Int32 nLen = pLine->GetLen();
 
     // We have to distinguish between an insert and overwrite cursor:
     // The insert cursor position depends on the cursor level:
@@ -1125,12 +1125,12 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
     UBiDi* pBidi = ubidi_openSized( nLen, 0, &nError );
     ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, NULL, &nError ); // UChar != sal_Unicode in MinGW
 
-    xub_StrLen nTmpPos;
+    sal_Int32 nTmpPos = 0;
     bool bOutOfBounds = false;
 
     if ( nPos < nStt + nLen )
     {
-        nTmpPos = (xub_StrLen)ubidi_getVisualIndex( pBidi, nPos, &nError );
+        nTmpPos = ubidi_getVisualIndex( pBidi, nPos, &nError );
 
         // visual indices are always LTR aligned
         if ( bVisualRight )
@@ -1161,7 +1161,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
 
     if ( ! bOutOfBounds )
     {
-        nPos = (xub_StrLen)ubidi_getLogicalIndex( pBidi, nTmpPos, &nError );
+        nPos = ubidi_getLogicalIndex( pBidi, nTmpPos, &nError );
 
         if ( bForward )
         {
@@ -1197,7 +1197,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
         return SwCntntFrm::UnitDown( pPam, nOffset, bSetInReadOnly );
     }
     ((SwTxtFrm*)this)->GetFormatted();
-    const xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
     SwRect aCharBox;
     const SwCntntFrm *pTmpFollow = 0;
 

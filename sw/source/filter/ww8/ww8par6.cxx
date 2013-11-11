@@ -3088,9 +3088,9 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
     */
     SwFrmFmt *pRet=0;
     SwNodeIndex aBegin(rRegion.Start()->nNode);
-    xub_StrLen nBegin(rRegion.Start()->nContent.GetIndex());
+    const sal_Int32 nBegin(rRegion.Start()->nContent.GetIndex());
     SwNodeIndex aEnd(rRegion.End()->nNode);
-    xub_StrLen nEnd(rRegion.End()->nContent.GetIndex());
+    const sal_Int32 nEnd(rRegion.End()->nContent.GetIndex());
     const SwTxtNode* pTNd;
     const SwTxtAttr* pTFlyAttr;
     if (

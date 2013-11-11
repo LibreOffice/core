@@ -1080,7 +1080,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
                 pDoc->DeleteAndJoin(*pUnoCrsr);
 
             SwNodeIndex aSave(  pUnoCrsr->GetPoint()->nNode, -1 );
-            xub_StrLen nCntnt = pUnoCrsr->GetPoint()->nContent.GetIndex();
+            sal_Int32 nCntnt = pUnoCrsr->GetPoint()->nContent.GetIndex();
 
             sal_uInt32 nErrno = pRdr->Read( *pRead );   // and paste the document
 

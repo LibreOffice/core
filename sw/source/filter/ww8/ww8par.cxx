@@ -1508,7 +1508,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
             */
             if (pNd->IsTxtNode())
             {
-                xub_StrLen nPos = rPos.nContent.GetIndex();
+                const sal_Int32 nPos = rPos.nContent.GetIndex();
                 SfxItemSet aSet(pDoc->GetAttrPool(), nWhich, nWhich);
                 if (static_cast<const SwTxtNode*>(pNd)->GetAttr(aSet, nPos, nPos))
                     pItem = aSet.GetItem(nWhich);
@@ -2505,7 +2505,7 @@ bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
             else
                 aUL.SetLower( static_cast< sal_uInt16 >(nSpace) );
 
-            xub_StrLen nEnd = pSpacingPos->nContent.GetIndex();
+            const sal_Int32 nEnd = pSpacingPos->nContent.GetIndex();
             rMyPam.GetPoint()->nContent.Assign(rMyPam.GetCntntNode(), 0);
             pCtrlStck->NewAttr(*pSpacingPos, aUL);
             rMyPam.GetPoint()->nContent.Assign(rMyPam.GetCntntNode(), nEnd);
@@ -5171,7 +5171,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                     for( sal_uInt16 nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
                     {
                         const SwTxtAttr *pHt = (*pHints)[nHintPos];
-                        const xub_StrLen st = *(pHt->GetStart());
+                        const sal_Int32 st = *(pHt->GetStart());
                         if( pHt
                             && pHt->Which() == RES_TXTATR_FLYCNT
                             && (st >= ppBkmk->get()->GetMarkStart().nContent.GetIndex()) )

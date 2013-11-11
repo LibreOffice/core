@@ -240,7 +240,7 @@ public:
 struct _SwCursor_SavePos
 {
     sal_uLong nNode;
-    xub_StrLen nCntnt;
+    sal_Int32 nCntnt;
     _SwCursor_SavePos* pNext;
 
     _SwCursor_SavePos( const SwCursor& rCrsr )
@@ -260,7 +260,8 @@ class SwTableCursor : public virtual SwCursor
 
 protected:
     sal_uLong nTblPtNd, nTblMkNd;
-    xub_StrLen nTblPtCnt, nTblMkCnt;
+    sal_Int32 nTblPtCnt;
+    sal_Int32 nTblMkCnt;
     SwSelBoxes m_SelectedBoxes;
     sal_Bool bChg : 1;
     sal_Bool bParked : 1;       // Table-cursor was parked.

@@ -570,7 +570,7 @@ void SwTxtFrm::HideAndShowObjects()
                 // #120729# - hotfix
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
-                const xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
+                const sal_Int32 nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
                 if ((eAnchorType != FLY_AT_CHAR) ||
                     sw_HideObj( *this, eAnchorType, nObjAnchorPos,
                                  (*GetDrawObjs())[i] ))
@@ -607,7 +607,7 @@ void SwTxtFrm::HideAndShowObjects()
                 {
                     xub_StrLen nHiddenStart;
                     xub_StrLen nHiddenEnd;
-                    xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
+                    const sal_Int32 nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
                     SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd, 0 );
                     // #120729# - hotfix
                     // under certain conditions
@@ -951,7 +951,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     // Dies spart Stack, man muss nur aufpassen,
     // dass sie Variablen gesetzt werden.
-    xub_StrLen nPos, nLen;
+    sal_Int32 nPos;
+    sal_Int32 nLen;
     bool bSetFldsDirty = false;
     bool bRecalcFtnFlag = false;
 

@@ -137,7 +137,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
         if( pExtInp || MSHRT_MAX != nRedlPos )
         {
             const std::vector<sal_uInt16> *pArr = 0;
-            xub_StrLen nInputStt = 0;
+            sal_Int32 nInputStt = 0;
             if( pExtInp )
             {
                 pArr = &pExtInp->GetAttrs();

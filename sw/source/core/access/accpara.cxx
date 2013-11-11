@@ -132,7 +132,7 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
         {
             // same node? Then check whether it's also within 'our' part
             // of the paragraph
-            sal_uInt16 nIndex = pPoint->nContent.GetIndex();
+            const sal_Int32 nIndex = pPoint->nContent.GetIndex();
             if( GetPortionData().IsValidCorePosition( nIndex ) )
             {
                 // Yes, it's us!
@@ -207,7 +207,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                         // selection starts in this node:
                         // then check whether it's before or inside our part of
                         // the paragraph, and if so, get the proper position
-                        sal_uInt16 nCoreStart = pStart->nContent.GetIndex();
+                        const sal_Int32 nCoreStart = pStart->nContent.GetIndex();
                         if( nCoreStart <
                             GetPortionData().GetFirstValidCorePosition() )
                         {
@@ -243,7 +243,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
 
                         // selection ends in this node: then select everything
                         // before our part of the node
-                        sal_uInt16 nCoreEnd = pEnd->nContent.GetIndex();
+                        const sal_Int32 nCoreEnd = pEnd->nContent.GetIndex();
                         if( nCoreEnd >
                                 GetPortionData().GetLastValidCorePosition() )
                         {
@@ -559,8 +559,8 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
                 IsValidRange(nStartIndex, nEndIndex, GetString().getLength()),
                 "please check parameters before calling this method" );
 
-    sal_uInt16 nStart = GetPortionData().GetModelPosition( nStartIndex );
-    sal_uInt16 nEnd = (nEndIndex == -1) ? (nStart + 1) :
+    const sal_Int32 nStart = GetPortionData().GetModelPosition( nStartIndex );
+    const sal_Int32 nEnd = (nEndIndex == -1) ? (nStart + 1) :
                         GetPortionData().GetModelPosition( nEndIndex );
 
     // create UNO cursor
@@ -1433,9 +1433,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     {
         const SwTxtNode* pTxtNode( GetTxtNode() );
         SwPosition* pStartPos = new SwPosition( *pTxtNode );
-        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<sal_uInt16>(nIndex) );
+        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), nIndex );
         SwPosition* pEndPos = new SwPosition( *pTxtNode );
-        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<sal_uInt16>(nIndex+1) );
+        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), nIndex+1 );
 
         pPaM = new SwPaM( *pStartPos, *pEndPos );
 
@@ -1692,7 +1692,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
 
     SwIndex aCntntIdx = aPos.nContent;
-    const xub_StrLen nIndex = aCntntIdx.GetIndex();
+    const sal_Int32 nIndex = aCntntIdx.GetIndex();
     if ( nIndex > 0 )
     {
         SwRect aResultRect;
@@ -2018,7 +2018,8 @@ sal_Bool SwAccessibleParagraph::replaceText(
         SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
         // translate positions
-        sal_uInt16 nStart, nEnd;
+        sal_Int32 nStart;
+        sal_Int32 nEnd;
         sal_Bool bSuccess = GetPortionData().GetEditableRange(
                                         nStartIndex, nEndIndex, nStart, nEnd );
 
@@ -2196,8 +2197,8 @@ void SwAccessibleParagraph::deselectAccessibleChild(
 class SwHyperlinkIter_Impl
 {
     const SwpHints *pHints;
-    xub_StrLen nStt;
-    xub_StrLen nEnd;
+    sal_Int32 nStt;
+    sal_Int32 nEnd;
     sal_uInt16 nPos;
 
 public:
@@ -2205,8 +2206,8 @@ public:
     const SwTxtAttr *next();
     sal_uInt16 getCurrHintPos() const { return nPos-1; }
 
-    xub_StrLen startIdx() const { return nStt; }
-    xub_StrLen endIdx() const { return nEnd; }
+    sal_Int32 startIdx() const { return nStt; }
+    sal_Int32 endIdx() const { return nEnd; }
 };
 
 SwHyperlinkIter_Impl::SwHyperlinkIter_Impl( const SwTxtFrm *pTxtFrm ) :
@@ -2228,8 +2229,8 @@ const SwTxtAttr *SwHyperlinkIter_Impl::next()
             const SwTxtAttr *pHt = (*pHints)[nPos];
             if( RES_TXTATR_INETFMT == pHt->Which() )
             {
-                xub_StrLen nHtStt = *pHt->GetStart();
-                xub_StrLen nHtEnd = *pHt->GetAnyEnd();
+                const sal_Int32 nHtStt = *pHt->GetStart();
+                const sal_Int32 nHtEnd = *pHt->GetAnyEnd();
                 if( nHtEnd > nHtStt &&
                     ( (nHtStt >= nStt && nHtStt < nEnd) ||
                       (nHtEnd > nStt && nHtEnd <= nEnd) ) )
@@ -2291,9 +2292,9 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
             }
             if( !xRet.is() )
             {
-                sal_Int32 nHStt= GetPortionData().GetAccessiblePosition(
+                const sal_Int32 nHStt= GetPortionData().GetAccessiblePosition(
                                 max( aHIter.startIdx(), *pHt->GetStart() ) );
-                sal_Int32 nHEnd= GetPortionData().GetAccessiblePosition(
+                const sal_Int32 nHEnd= GetPortionData().GetAccessiblePosition(
                                 min( aHIter.endIdx(), *pHt->GetAnyEnd() ) );
                 xRet = new SwAccessibleHyperlink( aHIter.getCurrHintPos(),
                                                   this, nHStt, nHEnd );
@@ -2335,7 +2336,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aHIter( pTxtFrm );
 
-        xub_StrLen nIdx = GetPortionData().GetModelPosition( nCharIndex );
+        const sal_Int32 nIdx = GetPortionData().GetModelPosition( nCharIndex );
         sal_Int32 nPos = 0;
         const SwTxtAttr *pHt = aHIter.next();
         while( pHt && !(nIdx >= *pHt->GetStart() && nIdx < *pHt->GetAnyEnd()) )

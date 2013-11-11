@@ -202,7 +202,7 @@ throw( uno::RuntimeException )
     SwTxtNode* pTxtNd = pUnoCrsr->GetNode()->GetTxtNode();
     if ( pTxtNd )
     {
-        xub_StrLen nStt = pUnoCrsr->Start()->nContent.GetIndex();
+        const sal_Int32 nStt = pUnoCrsr->Start()->nContent.GetIndex();
         aTxt = pTxtNd->GetExpandTxt( nStt,
                 pUnoCrsr->End()->nContent.GetIndex() - nStt );
     }

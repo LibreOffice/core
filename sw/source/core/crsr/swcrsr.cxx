@@ -242,7 +242,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
 
             // set cursor to new position:
             SwNodeIndex aIdx( rPtIdx );
-            xub_StrLen nCntntPos = pSavePos->nCntnt;
+            sal_Int32 nCntntPos = pSavePos->nCntnt;
             int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
             SwCntntNode* pCNd = bGoNxt
                     ? rNds.GoNextSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections)
@@ -275,7 +275,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
             }
 
             // register ContentIndex:
-            xub_StrLen nTmpPos = bIsValidPos ? (bGoNxt ? 0 : pCNd->Len()) : nCntntPos;
+            const sal_Int32 nTmpPos = bIsValidPos ? (bGoNxt ? 0 : pCNd->Len()) : nCntntPos;
             GetPoint()->nContent.Assign( pCNd, nTmpPos );
             if( !bIsValidPos || !bValidNodesRange ||
                 IsInProtectTable( sal_True ) )
@@ -355,8 +355,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 pNd = pCNd;
 
                 // register ContentIndex:
-                xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
-                GetPoint()->nContent.Assign( pCNd, nTmpPos );
+                GetPoint()->nContent.Assign( pCNd, bGoNxt ? 0 : pCNd->Len() );
 
                 if( IsInProtectTable( sal_True ) )
                     pFrm = 0;
@@ -461,8 +460,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     else
                     {
                         SwCntntNode* pCNd = (SwCntntNode*)pMyNd;
-                        xub_StrLen nTmpPos = bSelTop ? pCNd->Len() : 0;
-                        GetPoint()->nContent.Assign( pCNd, nTmpPos );
+                        GetPoint()->nContent.Assign( pCNd, bSelTop ? pCNd->Len() : 0 );
                         return sal_False;
                     }
                 }
@@ -1050,10 +1048,7 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
 
     if( pCNd )
     {
-        xub_StrLen nCPos = 0;
-        if( !bIsStart )
-            nCPos = pCNd->Len();
-        rPos.nContent.Assign( pCNd, nCPos );
+        rPos.nContent.Assign( pCNd, bIsStart ? 0 : pCNd->Len() );
     }
 }
 
@@ -1108,7 +1103,7 @@ sal_Bool SwCursor::IsStartWordWT( sal_Int16 nWordType ) const
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         bRet = g_pBreakIt->GetBreakIter()->isBeginWord(
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos )),
@@ -1123,7 +1118,7 @@ sal_Bool SwCursor::IsEndWordWT( sal_Int16 nWordType ) const
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         bRet = g_pBreakIt->GetBreakIter()->isEndWord(
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
@@ -1139,7 +1134,7 @@ sal_Bool SwCursor::IsInWordWT( sal_Int16 nWordType ) const
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         Boundary aBoundary = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
@@ -1181,8 +1176,8 @@ sal_Bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->getWordBoundary(
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+        nPtPos = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType,
@@ -1205,8 +1200,8 @@ sal_Bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->getWordBoundary(
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+        nPtPos = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType,
@@ -1230,9 +1225,9 @@ sal_Bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
 
-        nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextWord(
+        nPtPos = g_pBreakIt->GetBreakIter()->nextWord(
                                 pTxtNd->GetTxt(), nPtPos,
             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
@@ -1254,12 +1249,12 @@ sal_Bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        const xub_StrLen nPtStart = nPtPos;
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+        const sal_Int32 nPtStart = nPtPos;
 
         if( nPtPos )
             --nPtPos;
-        nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->previousWord(
+        nPtPos = g_pBreakIt->GetBreakIter()->previousWord(
                                 pTxtNd->GetTxt(), nPtStart,
             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
@@ -1315,7 +1310,7 @@ sal_Bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, c
         }
         else
         {
-            xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+            const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
             Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary(
                                 pTxtNd->GetTxt(), nPtPos,
                                 g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
@@ -1324,11 +1319,11 @@ sal_Bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, c
 
             if( aBndry.startPos != aBndry.endPos )
             {
-                GetPoint()->nContent = (xub_StrLen)aBndry.endPos;
+                GetPoint()->nContent = aBndry.endPos;
                 if( !IsSelOvr() )
                 {
                     SetMark();
-                    GetMark()->nContent = (xub_StrLen)aBndry.startPos;
+                    GetMark()->nContent = aBndry.startPos;
                     if( !IsSelOvr() )
                         bRet = sal_True;
                 }
@@ -1386,41 +1381,41 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
         OUString sNodeText( lcl_MaskDeletedRedlines( pTxtNd ) );
 
         SwCrsrSaveState aSave( *this );
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         switch ( eMoveType )
         {
         case START_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
-            nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfSentence(
+            nPtPos = g_pBreakIt->GetBreakIter()->beginOfSentence(
                                     sNodeText,
                                     nPtPos, g_pBreakIt->GetLocale(
                                             pTxtNd->GetLang( nPtPos ) ));
             break;
         case END_SENT: /* when modifying: see also ExpandToSentenceBorders below! */
-            nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfSentence(
+            nPtPos = g_pBreakIt->GetBreakIter()->endOfSentence(
                                     sNodeText,
                                     nPtPos, g_pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             break;
         case NEXT_SENT:
             {
-                nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfSentence(
+                nPtPos = g_pBreakIt->GetBreakIter()->endOfSentence(
                                         sNodeText,
                                         nPtPos, g_pBreakIt->GetLocale(
                                                     pTxtNd->GetLang( nPtPos ) ));
-                while (nPtPos != (sal_uInt16) -1 && ++nPtPos < sNodeText.getLength()
+                while (nPtPos>=0 && ++nPtPos < sNodeText.getLength()
                        && sNodeText[nPtPos] == ' ' /*isWhiteSpace( aTxt.GetChar(nPtPos)*/ )
                     ;
                 break;
             }
         case PREV_SENT:
-            nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfSentence(
+            nPtPos = g_pBreakIt->GetBreakIter()->beginOfSentence(
                                     sNodeText,
                                     nPtPos, g_pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             if (nPtPos == 0)
                 return sal_False;   // the previous sentence is not in this paragraph
             if (nPtPos > 0)
-                nPtPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfSentence(
+                nPtPos = g_pBreakIt->GetBreakIter()->beginOfSentence(
                                     sNodeText,
                                     nPtPos - 1, g_pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
@@ -1453,13 +1448,13 @@ sal_Bool SwCursor::ExpandToSentenceBorders()
         OUString sEndText( pStartNd == pEndNd? sStartText : lcl_MaskDeletedRedlines( pEndNd ) );
 
         SwCrsrSaveState aSave( *this );
-        xub_StrLen nStartPos = Start()->nContent.GetIndex();
-        xub_StrLen nEndPos   = End()->nContent.GetIndex();
+        sal_Int32 nStartPos = Start()->nContent.GetIndex();
+        sal_Int32 nEndPos   = End()->nContent.GetIndex();
 
-        nStartPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfSentence(
+        nStartPos = g_pBreakIt->GetBreakIter()->beginOfSentence(
                                 sStartText, nStartPos,
                                 g_pBreakIt->GetLocale( pStartNd->GetLang( nStartPos ) ) );
-        nEndPos   = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfSentence(
+        nEndPos   = g_pBreakIt->GetBreakIter()->endOfSentence(
                                 sEndText, nEndPos,
                                 g_pBreakIt->GetLocale( pEndNd->GetLang( nEndPos ) ) );
 
@@ -1502,7 +1497,7 @@ SwCursor::DoSetBidiLevelLeftRight(
     {
         const SwTxtNode& rTNd = *rNode.GetTxtNode();
         SwIndex& rIdx = GetPoint()->nContent;
-        xub_StrLen nPos = rIdx.GetIndex();
+        sal_Int32 nPos = rIdx.GetIndex();
 
         const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
         if ( bVisualAllowed && rCTLOptions.IsCTLFontEnabled() &&
@@ -1529,7 +1524,7 @@ SwCursor::DoSetBidiLevelLeftRight(
             const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rTNd );
             if ( pSI )
             {
-                const xub_StrLen nMoveOverPos = io_rbLeft ?
+                const sal_Int32 nMoveOverPos = io_rbLeft ?
                                                ( nPos ? nPos - 1 : 0 ) :
                                                 nPos;
                 SetCrsrBidiLevel( pSI->DirType( nMoveOverPos ) );
@@ -1595,8 +1590,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                     SwCntntNode* pCntntNode = GetCntntNode();
                     if ( pCntntNode )
                     {
-                        const xub_StrLen nTmpPos = bLeft ? pCntntNode->Len() : 0;
-                        GetPoint()->nContent.Assign( pCntntNode, nTmpPos );
+                        GetPoint()->nContent.Assign( pCntntNode, bLeft ? pCntntNode->Len() : 0 );
 
                         // Redo the move:
                         if ( !Move( fnMove, fnGo ) )
@@ -1629,8 +1623,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 SwCntntNode* pCntntNode = GetCntntNode();
                 if ( pCntntNode )
                 {
-                    const xub_StrLen nTmpPos = bLeft ? pCntntNode->Len() : 0;
-                       GetPoint()->nContent.Assign( pCntntNode, nTmpPos );
+                    GetPoint()->nContent.Assign( pCntntNode, bLeft ? pCntntNode->Len() : 0 );
                 }
             }
         }
@@ -1674,7 +1667,7 @@ void SwCursor::DoSetBidiLevelUpDown()
         if ( pSI )
         {
             SwIndex& rIdx = GetPoint()->nContent;
-            xub_StrLen nPos = rIdx.GetIndex();
+            const sal_Int32 nPos = rIdx.GetIndex();
 
             if (nPos && nPos <
                     static_cast<SwTxtNode&>(rNode).GetTxt().getLength())
@@ -1964,7 +1957,7 @@ sal_Bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
         const SwCntntNode* pCntntNd = pNd->GetCntntNode();
         if ( pCntntNd )
         {
-            const xub_StrLen nSttEnd = fnPosPara == fnMoveForward ? 0 : pCntntNd->Len();
+            const sal_Int32 nSttEnd = fnPosPara == fnMoveForward ? 0 : pCntntNd->Len();
             if ( GetPoint()->nContent.GetIndex() != nSttEnd )
                 bShortCut = true;
         }
@@ -2011,7 +2004,7 @@ void SwCursor::RestoreSavePos()
     {
         GetPoint()->nNode = pSavePos->nNode;
 
-        xub_StrLen nIdx = 0;
+        sal_Int32 nIdx = 0;
         if ( GetCntntNode() )
         {
             if ( pSavePos->nCntnt <= GetCntntNode()->Len() )

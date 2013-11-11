@@ -191,7 +191,7 @@ private:
                                    in the same column */
     long m_nLeftFrmPos;
     sal_uLong m_nAktNode;             // save CursorPos at Start-Action
-    xub_StrLen m_nAktCntnt;
+    sal_Int32 m_nAktCntnt;
     sal_uInt16 m_nAktNdTyp;
     bool m_bAktSelection;
 

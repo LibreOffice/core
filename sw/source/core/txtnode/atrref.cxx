@@ -65,7 +65,7 @@ SfxPoolItem* SwFmtRefMark::Clone( SfxItemPool* ) const
 // Attribut fuer Inhalts-/Positions-Referenzen im Text
 
 SwTxtRefMark::SwTxtRefMark( SwFmtRefMark& rAttr,
-            xub_StrLen const nStartPos, xub_StrLen const*const pEnd)
+            sal_Int32 const nStartPos, sal_Int32 const*const pEnd)
     : SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
     , m_pTxtNode( 0 )
     , m_pEnd( 0 )
@@ -84,7 +84,7 @@ SwTxtRefMark::SwTxtRefMark( SwFmtRefMark& rAttr,
     SetOverlapAllowedAttr( true );
 }
 
-xub_StrLen* SwTxtRefMark::GetEnd()
+sal_Int32* SwTxtRefMark::GetEnd()
 {
     return m_pEnd;
 }

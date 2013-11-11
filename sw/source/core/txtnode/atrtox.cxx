@@ -24,7 +24,7 @@
 #include <ndtxt.hxx>
 
 SwTxtTOXMark::SwTxtTOXMark( SwTOXMark& rAttr,
-            xub_StrLen const nStartPos, xub_StrLen const*const pEnd)
+            sal_Int32 const nStartPos, sal_Int32 const*const pEnd)
     : SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
     , m_pTxtNode( 0 )
     , m_pEnd( 0 )
@@ -47,7 +47,7 @@ SwTxtTOXMark::~SwTxtTOXMark()
 {
 }
 
-xub_StrLen* SwTxtTOXMark::GetEnd()
+sal_Int32* SwTxtTOXMark::GetEnd()
 {
     return m_pEnd;
 }

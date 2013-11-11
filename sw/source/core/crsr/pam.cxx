@@ -44,7 +44,7 @@
 #include <xmloff/odffields.hxx>
 
 // for the dump "MSC-" compiler
-inline xub_StrLen GetSttOrEnd( bool bCondition, const SwCntntNode& rNd )
+inline sal_Int32 GetSttOrEnd( bool bCondition, const SwCntntNode& rNd )
 {
     return bCondition ? 0 : rNd.Len();
 }
@@ -64,7 +64,7 @@ SwPosition::SwPosition( const SwNode& rNode )
 {
 }
 
-SwPosition::SwPosition( SwCntntNode & rNode, const xub_StrLen nOffset )
+SwPosition::SwPosition( SwCntntNode & rNode, const sal_Int32 nOffset )
     : nNode( rNode ), nContent( &rNode, nOffset )
 {
 }
@@ -924,8 +924,8 @@ sal_Bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
     SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
     if( pNd )
     {
-        xub_StrLen nOld = rPos.nContent.GetIndex(),
-                   nNew = aPosPara == fnMoveForward ? 0 : pNd->Len();
+        const sal_Int32 nOld = rPos.nContent.GetIndex();
+        const sal_Int32 nNew = aPosPara == fnMoveForward ? 0 : pNd->Len();
         // if already at beginning/end then to the next/previous
         if( nOld != nNew )
         {
@@ -1042,10 +1042,10 @@ OUString SwPaM::GetTxt() const
             {
                 // Handle corner cases of start/end node(s)
                 const sal_Int32 nStart = bIsStartNode
-                    ? static_cast<sal_Int32>(Start()->nContent.GetIndex())
+                    ? Start()->nContent.GetIndex()
                     : 0;
                 const sal_Int32 nEnd = bIsEndNode
-                    ? static_cast<sal_Int32>(End()->nContent.GetIndex())
+                    ? End()->nContent.GetIndex()
                     : aTmpStr.getLength();
 
                 aResult += aTmpStr.copy(nStart, nEnd-nStart);

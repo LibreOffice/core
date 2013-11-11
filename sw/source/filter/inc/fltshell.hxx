@@ -59,7 +59,7 @@ struct SW_DLLPUBLIC SwFltPosition
 {
 public:
     SwNodeIndex m_nNode;
-    xub_StrLen m_nCntnt;
+    sal_Int32 m_nCntnt;
 public:
     SwFltPosition(const SwFltPosition &rOther)
         : m_nNode(rOther.m_nNode)

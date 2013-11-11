@@ -1523,7 +1523,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
                                                 aCntIdx.GetIndex() );
 
                 std::vector<sal_uLong> aBkmkArr;
-                xub_StrLen nOldTxtLen = aCntIdx.GetIndex();
+                const sal_Int32 nOldTxtLen = aCntIdx.GetIndex();
                 _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().getLength(),
                                 aBkmkArr );
 

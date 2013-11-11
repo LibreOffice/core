@@ -188,7 +188,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     sal_Bool bRet = sal_False;
     bool bFirstMove = true;
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
-    xub_StrLen nSttCntIdx = 0;
+    sal_Int32 nSttCntIdx = 0;
     // For block selection this list is filled with the insert positions
     std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 

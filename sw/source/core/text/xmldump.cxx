@@ -300,10 +300,10 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
             {
                 xmlTextWriterStartElement(writer, BAD_CAST("swpam"));
                 xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("pointNodeIndex"), "%ld", pPaM->GetPoint()->nNode.GetIndex());
-                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("pointContentIndex"), "%d", pPaM->GetPoint()->nContent.GetIndex());
+                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("pointContentIndex"), "%" SAL_PRIdINT32, pPaM->GetPoint()->nContent.GetIndex());
 
                 xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("markNodeIndex"), "%ld", pPaM->GetMark()->nNode.GetIndex());
-                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("markContentIndex"), "%d", pPaM->GetMark()->nContent.GetIndex());
+                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("markContentIndex"), "%" SAL_PRIdINT32, pPaM->GetMark()->nContent.GetIndex());
                 xmlTextWriterEndElement(writer);
                 pPaM = static_cast<SwPaM*>(pPaM->GetNext());
             }

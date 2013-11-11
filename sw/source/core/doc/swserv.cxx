@@ -188,8 +188,8 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
 sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 {
     sal_uLong nSttNd = 0, nEndNd = 0;
-    xub_StrLen nStt = 0;
-    xub_StrLen nEnd = 0;
+    sal_Int32 nStt = 0;
+    sal_Int32 nEnd = 0;
     const SwNode* pNd = 0;
     const SwNodes* pNds = 0;
 
@@ -220,7 +220,8 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     {
         nSttNd = pNd->GetIndex();
         nEndNd = pNd->EndOfSectionIndex();
-        nStt = 0, nEnd = USHRT_MAX;
+        nStt = 0;
+        nEnd = -1;
         pNds = &pNd->GetNodes();
     }
 

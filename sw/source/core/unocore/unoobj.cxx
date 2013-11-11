@@ -1277,7 +1277,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand) throw (uno::RuntimeException)
     // in specific cases...
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      *const pOldNode   = &pPoint->nNode.GetNode();
-    xub_StrLen   const nOldIndex  = pPoint->nContent.GetIndex();
+    sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // end of paragraph
@@ -1321,7 +1321,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw (uno::RuntimeException)
     sal_Bool bRet = sal_False;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      *const pOldNode   = &pPoint->nNode.GetNode();
-    xub_StrLen   const nOldIndex  = pPoint->nContent.GetIndex();
+    sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // start of paragraph?
@@ -1360,7 +1360,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand) throw (uno::RuntimeException)
     sal_Bool bRet = sal_False;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      &      rOldNode   = pPoint->nNode.GetNode();
-    xub_StrLen   const nOldIndex  = pPoint->nContent.GetIndex();
+    sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
     const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
@@ -1396,7 +1396,7 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand) throw (uno::RuntimeException)
     sal_Bool bRet = sal_False;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      &      rOldNode   = pPoint->nNode.GetNode();
-    xub_StrLen   const nOldIndex  = pPoint->nContent.GetIndex();
+    sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
     const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
@@ -2964,7 +2964,7 @@ throw (uno::RuntimeException)
 
         SwNodeIndex aPrevIdx( rStart.nNode, -1 );
         const sal_uLong nOffset = rEnd.nNode.GetIndex() - rStart.nNode.GetIndex();
-        const xub_StrLen nCntStt  = rStart.nContent.GetIndex();
+        const sal_Int32 nCntStt  = rStart.nContent.GetIndex();
 
         rUnoCursor.GetDoc()->SortText(rUnoCursor, aSortOpt);
 
@@ -2972,7 +2972,7 @@ throw (uno::RuntimeException)
         rUnoCursor.DeleteMark();
         rUnoCursor.GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
         SwCntntNode *const pCNd = rUnoCursor.GetCntntNode();
-        xub_StrLen nLen = pCNd->Len();
+        sal_Int32 nLen = pCNd->Len();
         if (nLen > nCntStt)
         {
             nLen = nCntStt;

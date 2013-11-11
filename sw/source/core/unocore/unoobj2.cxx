@@ -189,7 +189,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 {
                     // create SwDepend and insert into array
                     SwDepend* pNewDepend = new SwDepend( &rClnt, &rFmt );
-                    xub_StrLen idx =
+                    const sal_Int32 idx =
                         rFmt.GetAnchor().GetCntntAnchor()->nContent.GetIndex();
                     sal_uInt32 nOrder = rFmt.GetAnchor().GetOrder();
 
@@ -218,7 +218,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
 
                 // OD 2004-05-07 #i28701# - determine insert position for
                 // sorted <rFrameArr>
-                xub_StrLen nIndex = pAnchorPos->nContent.GetIndex();
+                const sal_Int32 nIndex = pAnchorPos->nContent.GetIndex();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
                 FrameDependSortListEntry entry(nIndex, nOrder, pNewDepend);
@@ -370,9 +370,9 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
             {
                 case ND_TEXTNODE:
                 {
-                    const xub_StrLen nStart = (n == nSttNd)
+                    const sal_Int32 nStart = (n == nSttNd)
                         ? rStart.nContent.GetIndex() : 0;
-                    const xub_StrLen nEnd   = (n == nEndNd)
+                    const sal_Int32 nEnd   = (n == nEndNd)
                         ? rEnd.nContent.GetIndex()
                         : static_cast<SwTxtNode*>(pNd)->GetTxt().getLength();
                     static_cast<SwTxtNode*>(pNd)->GetAttr(

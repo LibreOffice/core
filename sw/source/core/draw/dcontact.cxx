@@ -1684,7 +1684,7 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 }
 
 static SwTxtFrm* lcl_GetFlyInCntntAnchor( SwTxtFrm* _pProposedAnchorFrm,
-                                   const xub_StrLen _nTxtOfs )
+                                   const sal_Int32 _nTxtOfs )
 {
     SwTxtFrm* pAct = _pProposedAnchorFrm;
     SwTxtFrm* pTmp;

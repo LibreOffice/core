@@ -613,7 +613,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
     // MIB 24.06.97: Wenn ein PostIt nach einen Space eingefuegt
     // werden soll, fuegen wir es vor dem Space ein. Dann gibt es
     // weniger Probleme beim Formatieren (bug #40483#)
-    xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
     SwTxtNode *pTxtNd = pPam->GetNode()->GetTxtNode();
     sal_Bool bMoveFwd = sal_False;
     if (nPos>0 && pTxtNd && (' ' == pTxtNd->GetTxt()[nPos-1]))
@@ -621,7 +621,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
         bMoveFwd = sal_True;
 
         sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
-        xub_StrLen nIdx = pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nIdx = pPam->GetPoint()->nContent.GetIndex();
         for( sal_uInt16 i = aSetAttrTab.size(); i > 0; )
         {
             _HTMLAttr *pAttr = aSetAttrTab[--i];

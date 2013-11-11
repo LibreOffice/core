@@ -126,10 +126,10 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
 
     const SwpHints & rHts = *pTxtNd->GetpSwpHints();
     const SwTxtAttr* pHt;
-    xub_StrLen nSttIdx;
-    const xub_StrLen *pEndIdx;
+    sal_Int32 nSttIdx;
+    const sal_Int32 *pEndIdx;
 
-    xub_StrLen nAktPos = rPos.nContent.GetIndex();
+    const sal_Int32 nAktPos = rPos.nContent.GetIndex();
 
     for( sal_uInt16 n = 0; n < rHts.Count(); ++n )
     {
@@ -725,7 +725,7 @@ bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, bool bAtStart ) const
     if( pSectNd )
     {
         SwCntntNode* pCNd;
-        xub_StrLen nC = 0;
+        sal_Int32 nC = 0;
         if( bAtStart )
         {
             rPos.nNode = *pSectNd;

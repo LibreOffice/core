@@ -2059,7 +2059,7 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
             {
                 const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
                 SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-                const xub_StrLen nIdx = rPos.nContent.GetIndex();
+                const sal_Int32 nIdx = rPos.nContent.GetIndex();
                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
             }
             else

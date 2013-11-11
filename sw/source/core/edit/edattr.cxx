@@ -109,8 +109,8 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
         sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
               nEndNd = pPaM->GetPoint()->nNode.GetIndex();
-        xub_StrLen nSttCnt = pPaM->GetMark()->nContent.GetIndex(),
-                   nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
+        sal_Int32 nSttCnt = pPaM->GetMark()->nContent.GetIndex();
+        sal_Int32 nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
@@ -134,8 +134,8 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             {
             case ND_TEXTNODE:
                 {
-                    xub_StrLen const nStt = (n == nSttNd) ? nSttCnt : 0;
-                    xub_StrLen const nEnd = (n == nEndNd)
+                    const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
+                    const sal_Int32 nEnd = (n == nEndNd)
                         ? nEndCnt
                         : static_cast<SwTxtNode*>(pNd)->GetTxt().getLength();
 
@@ -511,15 +511,14 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
         }
     }
 
-    sal_Int32 nEnd = sExp.getLength();
+    const sal_Int32 nEnd = sExp.getLength();
     if ( nEnd )
     {
-        xub_StrLen n;
         if( bInSelection )
         {
             sal_uInt16 nScript;
-            for( n = 0; n < nEnd; n = (xub_StrLen)
-                    g_pBreakIt->GetBreakIter()->endOfScript( sExp, n, nScript ))
+            for( sal_Int32 n = 0; n < nEnd;
+                 n = g_pBreakIt->GetBreakIter()->endOfScript( sExp, n, nScript ))
             {
                 nScript = g_pBreakIt->GetBreakIter()->getScriptType( sExp, n );
                 rScrpt |= lcl_SetScriptFlags( nScript );
@@ -553,7 +552,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                     // try to get SwScriptInfo
                     const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTNd );
 
-                    xub_StrLen nPos = pStt->nContent.GetIndex();
+                    sal_Int32 nPos = pStt->nContent.GetIndex();
                     //Task 90448: we need the scripttype of the previous
                     //              position, if no selection exist!
                     if( nPos )
@@ -591,10 +590,10 @@ sal_uInt16 SwEditShell::GetScriptType() const
                         // try to get SwScriptInfo
                         const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTNd );
 
-                        xub_StrLen nChg = aIdx == pStt->nNode
+                        sal_Int32 nChg = aIdx == pStt->nNode
                                                 ? pStt->nContent.GetIndex()
-                                                : 0,
-                                    nEndPos = aIdx == nEndIdx
+                                                : 0;
+                        sal_Int32 nEndPos = aIdx == nEndIdx
                                                 ? pEnd->nContent.GetIndex()
                                                 : rTxt.getLength();
 
@@ -623,7 +622,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
 
                             nChg = pScriptInfo ?
                                    pScriptInfo->NextScriptChg( nChg ) :
-                                   (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript(
+                                   g_pBreakIt->GetBreakIter()->endOfScript(
                                                     rTxt, nChg, nScript );
 
                             nFldPos = rTxt.indexOf(
@@ -657,7 +656,7 @@ sal_uInt16 SwEditShell::GetCurLang() const
     {
         //JP 24.9.2001: if exist no selection, then get the language before
         //              the current character!
-        xub_StrLen nPos = rPos.nContent.GetIndex();
+        sal_Int32 nPos = rPos.nContent.GetIndex();
         if( nPos && !pCrsr->HasMark() )
             --nPos;
         nLang = pTNd->GetLang( nPos );
@@ -677,14 +676,13 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
     sal_uInt16 nScaleWidth;
     if( pTNd )
     {
-        xub_StrLen nStt = pStt->nContent.GetIndex(), nEnd;
         const SwPosition* pEnd = pStt == pCrsr->GetPoint()
                                         ? pCrsr->GetMark()
                                         : pCrsr->GetPoint();
-        if( pStt->nNode == pEnd->nNode )
-            nEnd = pEnd->nContent.GetIndex();
-        else
-            nEnd = pTNd->GetTxt().getLength();
+        const sal_Int32 nStt = pStt->nContent.GetIndex();
+        const sal_Int32 nEnd = pStt->nNode == pEnd->nNode
+            ? pEnd->nContent.GetIndex()
+            : pTNd->GetTxt().getLength();
         nScaleWidth = pTNd->GetScalingOfSelectedText( nStt, nEnd );
     }
     else

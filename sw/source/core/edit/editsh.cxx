@@ -123,8 +123,8 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
         if ( rNode.IsTxtNode() )
         {
             SwIndex& rIdx = pTmpCrsr->GetPoint()->nContent;
-            xub_StrLen nPos = rIdx.GetIndex();
-            xub_StrLen nPrevPos = nPos;
+            sal_Int32 nPos = rIdx.GetIndex();
+            sal_Int32 nPrevPos = nPos;
             if ( nPrevPos )
                 --nPrevPos;
 
@@ -532,7 +532,7 @@ OUString SwEditShell::Calculate()
         if(pTxtNd)
         {
             const SwPosition *pStart = pPaM->Start(), *pEnd = pPaM->End();
-            xub_StrLen nStt = pStart->nContent.GetIndex();
+            const sal_Int32 nStt = pStart->nContent.GetIndex();
             OUString aStr = pTxtNd->GetExpandTxt( nStt, pEnd->nContent.
                                                 GetIndex() - nStt );
 
@@ -1019,11 +1019,11 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
             pInput->SetInputData( rData );
         // position cursor
         const SwPosition& rStt = *pInput->Start();
-        xub_StrLen nNewCrsrPos = rStt.nContent.GetIndex() + rData.GetCursorPos();
+        const sal_Int32 nNewCrsrPos = rStt.nContent.GetIndex() + rData.GetCursorPos();
 
         // ugly but works
         ShowCrsr();
-        long nDiff = nNewCrsrPos - rPos.nContent.GetIndex();
+        const sal_Int32 nDiff = nNewCrsrPos - rPos.nContent.GetIndex();
         if( 0 > nDiff )
             Left( (xub_StrLen)-nDiff, CRSR_SKIP_CHARS );
         else if( 0 < nDiff )

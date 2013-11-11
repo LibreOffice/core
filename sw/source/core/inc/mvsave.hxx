@@ -66,8 +66,8 @@ namespace sw { namespace mark
             IDocumentMarkAccess::MarkType m_eOrigBkmType;
             sal_uLong m_nNode1;
             sal_uLong m_nNode2;
-            xub_StrLen m_nCntnt1;
-            xub_StrLen m_nCntnt2;
+            sal_Int32 m_nCntnt1;
+            sal_Int32 m_nCntnt2;
             ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
     };
 }}
@@ -120,7 +120,7 @@ class SwDataChanged
     const SwPosition* pPos;
     SwDoc* pDoc;
     sal_uLong nNode;
-    xub_StrLen nCntnt;
+    sal_Int32 nCntnt;
 
 public:
     SwDataChanged( const SwPaM& rPam );
@@ -128,7 +128,7 @@ public:
     ~SwDataChanged();
 
     sal_uLong GetNode() const           { return nNode; }
-    xub_StrLen GetCntnt() const     { return nCntnt; }
+    sal_Int32 GetCntnt() const { return nCntnt; }
 };
 
 

@@ -332,7 +332,7 @@ void SwAccessiblePortionData::GetLastLineBoundary(
     FillBoundary( rBound, aLineBreaks, nBreaks <= 3 ? 0 : nBreaks-4 );
 }
 
-sal_uInt16 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
+sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
 {
     OSL_ENSURE( nPos >= 0, "illegal position" );
     OSL_ENSURE( nPos <= sAccessibleString.getLength(), "illegal position" );
@@ -360,7 +360,7 @@ sal_uInt16 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
 
     OSL_ENSURE( (nStartPos >= 0) && (nStartPos < USHRT_MAX),
                 "How can the SwTxtNode have so many characters?" );
-    return static_cast<sal_uInt16>(nStartPos);
+    return nStartPos;
 }
 
 void SwAccessiblePortionData::FillBoundary(
@@ -512,14 +512,13 @@ void SwAccessiblePortionData::GetAttributeBoundary(
                   FindBreak( aAccessiblePositions, nPos ) );
 }
 
-sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_uInt16 nPos ) const
+sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_Int32 nPos ) const
 {
     OSL_ENSURE( nPos <= pTxtNode->GetTxt().getLength(), "illegal position" );
 
     // find the portion number
     // #i70538# - consider "empty" model portions - e.g. number portion
-    size_t nPortionNo = FindLastBreak( aModelPositions,
-                                       static_cast<sal_Int32>(nPos) );
+    size_t nPortionNo = FindLastBreak( aModelPositions, nPos );
 
     sal_Int32 nRet = aAccessiblePositions[nPortionNo];
 
@@ -643,25 +642,24 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
 void SwAccessiblePortionData::AdjustAndCheck(
     sal_Int32 nPos,
     size_t& nPortionNo,
-    sal_uInt16& nCorePos,
+    sal_Int32& nCorePos,
     sal_Bool& bEdit) const
 {
     // find portion and get mode position
     nPortionNo = FindBreak( aAccessiblePositions, nPos );
-    nCorePos = static_cast<sal_uInt16>( aModelPositions[ nPortionNo ] );
+    nCorePos = aModelPositions[ nPortionNo ];
 
     // for special portions, make sure we're on a portion boundary
     // for text portions, add the in-portion offset
     if( IsSpecialPortion( nPortionNo ) )
         bEdit &= nPos == aAccessiblePositions[nPortionNo];
     else
-        nCorePos = static_cast<sal_uInt16>( nCorePos +
-            nPos - aAccessiblePositions[nPortionNo] );
+        nCorePos += nPos - aAccessiblePositions[nPortionNo];
 }
 
 sal_Bool SwAccessiblePortionData::GetEditableRange(
     sal_Int32 nStart, sal_Int32 nEnd,
-    sal_uInt16& nCoreStart, sal_uInt16& nCoreEnd ) const
+    sal_Int32& nCoreStart, sal_Int32& nCoreEnd ) const
 {
     sal_Bool bIsEditable = sal_True;
 
@@ -696,21 +694,21 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
     return bIsEditable;
 }
 
-sal_Bool SwAccessiblePortionData::IsValidCorePosition( sal_uInt16 nPos ) const
+sal_Bool SwAccessiblePortionData::IsValidCorePosition( sal_Int32 nPos ) const
 {
     // a position is valid its within the model positions that we know
     return ( aModelPositions[0] <= nPos ) &&
            ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
 }
 
-sal_uInt16 SwAccessiblePortionData::GetFirstValidCorePosition() const
+sal_Int32 SwAccessiblePortionData::GetFirstValidCorePosition() const
 {
-    return static_cast<sal_uInt16>( aModelPositions[0] );
+    return aModelPositions[0];
 }
 
-sal_uInt16 SwAccessiblePortionData::GetLastValidCorePosition() const
+sal_Int32 SwAccessiblePortionData::GetLastValidCorePosition() const
 {
-    return static_cast<sal_uInt16>( aModelPositions[ aModelPositions.size()-1 ] );
+    return aModelPositions[ aModelPositions.size()-1 ];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

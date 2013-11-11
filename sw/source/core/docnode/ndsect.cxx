@@ -259,7 +259,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                 const SwCntntNode* pCNd = pEndPos->nNode.GetNode().GetCntntNode();
                 if( pCNd && pCNd->Len() != pEndPos->nContent.GetIndex() )
                 {
-                    xub_StrLen nCntnt = pSttPos->nContent.GetIndex();
+                    sal_Int32 nCntnt = pSttPos->nContent.GetIndex();
                     SplitNode( *pEndPos, false );
 
                     SwTxtNode* pTNd;

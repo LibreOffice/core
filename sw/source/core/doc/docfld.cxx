@@ -954,9 +954,9 @@ const SwNode* _SetGetExpFld::GetNodeFromCntnt() const
     return pRet;
 }
 
-xub_StrLen _SetGetExpFld::GetCntPosFromCntnt() const
+sal_Int32 _SetGetExpFld::GetCntPosFromCntnt() const
 {
-    sal_uInt16 nRet = 0;
+    sal_Int32 nRet = 0;
     if( CNTNT.pTxtFld )
         switch( eSetGetExpFldType )
         {

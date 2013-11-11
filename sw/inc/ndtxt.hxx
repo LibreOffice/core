@@ -222,7 +222,7 @@ public:
 
     virtual ~SwTxtNode();
 
-    virtual xub_StrLen Len() const;
+    virtual sal_Int32 Len() const;
 
     /// Is in itratr.
     void GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax, sal_uLong &rAbs,
@@ -735,7 +735,7 @@ public:
     TYPEINFO(); // fuer rtti
 
     /// override SwIndexReg
-    virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
+    virtual void Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
                  const bool bNegative = false, const bool bDelete = false );
 
     /// change text to Upper/Lower/Hiragana/Katagana/...

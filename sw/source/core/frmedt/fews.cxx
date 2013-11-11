@@ -580,7 +580,7 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
 
             SwNodeIndex aPrevIdx( pStart->nNode, -1 );
             sal_uLong nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
-            xub_StrLen nCntStt  = pStart->nContent.GetIndex();
+            const sal_Int32 nCntStt  = pStart->nContent.GetIndex();
 
             // Sorting
             bRet = mpDoc->SortText(*pPam, rOpt) ? sal_True : sal_False;
@@ -589,7 +589,7 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
             pPam->DeleteMark();
             pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
             SwCntntNode* pCNd = pPam->GetCntntNode();
-            xub_StrLen nLen = pCNd->Len();
+            sal_Int32 nLen = pCNd->Len();
             if( nLen > nCntStt )
                 nLen = nCntStt;
             pPam->GetPoint()->nContent.Assign(pCNd, nLen );

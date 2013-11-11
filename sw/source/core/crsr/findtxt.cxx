@@ -46,8 +46,8 @@ using namespace util;
 OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
 static OUString
-lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
-             std::vector<xub_StrLen> &rArr, bool const bRemoveSoftHyphen)
+lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
+             std::vector<sal_Int32> &rArr, bool const bRemoveSoftHyphen)
 {
     OUStringBuffer buf(rNd.GetTxt());
     rArr.clear();
@@ -56,18 +56,18 @@ lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
 
     sal_uInt16 n = 0;
     sal_Int32 nSoftHyphen = nStart;
-    xub_StrLen nHintStart = STRING_LEN;
+    sal_Int32 nHintStart = -1;
     bool bNewHint       = true;
     bool bNewSoftHyphen = true;
-    const xub_StrLen nEnd = rEnd;
-    std::vector<sal_uInt16> aReplaced;
+    const sal_Int32 nEnd = rEnd;
+    std::vector<sal_Int32> aReplaced;
 
     do
     {
         if ( bNewHint )
             nHintStart = pHts && n < pHts->Count() ?
                          *(*pHts)[n]->GetStart() :
-                         STRING_LEN;
+                         -1;
 
         if ( bNewSoftHyphen )
         {
@@ -78,10 +78,10 @@ lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
 
         bNewHint       = false;
         bNewSoftHyphen = false;
-        xub_StrLen nStt = 0;
+        sal_Int32 nStt = 0;
 
         // Check if next stop is a hint.
-        if ( STRING_LEN != nHintStart
+        if ( nHintStart>=0
             && (-1 == nSoftHyphen || nHintStart < nSoftHyphen)
             && nHintStart < nEnd )
         {
@@ -104,7 +104,7 @@ lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
         else
             break;
 
-        const xub_StrLen nAkt = nStt - rArr.size();
+        const sal_Int32 nAkt = nStt - rArr.size();
 
         if ( bNewHint )
         {
@@ -165,7 +165,7 @@ lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
 
     for( sal_uInt16 i = aReplaced.size(); i; )
     {
-        const xub_StrLen nTmp = aReplaced[ --i ];
+        const sal_Int32 nTmp = aReplaced[ --i ];
         if (nTmp == buf.getLength() - 1)
         {
             buf.truncate(nTmp);
@@ -227,8 +227,6 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
     sal_Bool bFirst = sal_True;
     SwCntntNode * pNode;
 
-    xub_StrLen nStart, nEnd, nTxtLen;
-
     const bool bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
     const bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
                         ( rSearchOpt.searchString.equalsAscii( "^$" ) ||
@@ -240,12 +238,13 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
     {
         if( pNode->IsTxtNode() )
         {
-            nTxtLen = static_cast<SwTxtNode*>(pNode)->GetTxt().getLength();
+            sal_Int32 nTxtLen = static_cast<SwTxtNode*>(pNode)->GetTxt().getLength();
+            sal_Int32 nEnd;
             if( rNdIdx == pPam->GetMark()->nNode )
                 nEnd = pPam->GetMark()->nContent.GetIndex();
             else
                 nEnd = bSrchForward ? nTxtLen : 0;
-            nStart = rCntntIdx.GetIndex();
+            sal_Int32 nStart = rCntntIdx.GetIndex();
 
             /* #i80135# */
             // if there are SwPostItFields inside our current node text, we
@@ -260,18 +259,16 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             {
                 if (!bSrchForward)
                 {
-                    xub_StrLen swap = nEnd;
-                    nEnd = nStart;
-                    nStart = swap;
+                    std::swap(nStart, nEnd);
                 }
 
                 for( sal_Int32 i = 0; i < pHts->Count(); i++ )
                 {
-                    xub_StrLen aPos = *(*pHts)[i]->GetStart();
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
                     if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
                                 (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
                     {
+                        const sal_Int32 aPos = *pTxtAttr->GetStart();
                         if ( (aPos >= nStart) && (aPos <= nEnd) )
                             aNumberPostits++;
                         else
@@ -284,9 +281,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
 
                 if (!bSrchForward)
                 {
-                    xub_StrLen swap = nEnd;
-                    nEnd = nStart;
-                    nStart = swap;
+                    std::swap(nStart, nEnd);
                 }
 
             }
@@ -324,8 +319,8 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             if (aNumberPostits)
             {
                 // now we have to split
-                xub_StrLen nStartInside = 0;
-                xub_StrLen nEndInside = 0;
+                sal_Int32 nStartInside = 0;
+                sal_Int32 nEndInside = 0;
                 sal_Int16 aLoop= bSrchForward ? aStart : aNumberPostits;
 
                 while ( (aLoop>=0) && (aLoop<=aNumberPostits))
@@ -384,14 +379,14 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
 bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                       SwMoveFn fnMove, bool bSrchForward, bool bRegSearch,
                       bool bChkEmptyPara, bool bChkParaEnd,
-                      xub_StrLen &nStart, xub_StrLen &nEnd, xub_StrLen nTxtLen,
+                      sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTxtLen,
                       SwNode* pNode, SwPaM* pPam)
 {
     bool bFound = false;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     const SwNode* pSttNd = &rNdIdx.GetNode();
     OUString sCleanStr;
-    std::vector<xub_StrLen> aFltArr;
+    std::vector<sal_Int32> aFltArr;
     LanguageType eLastLang = 0;
     // if the search string contains a soft hypen,
     // we don't strip them from the text:
@@ -433,7 +428,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         nSearchScript = g_pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
     }
 
-    xub_StrLen nStringEnd = nEnd;
+    const sal_Int32 nStringEnd = nEnd;
     bool bZeroMatch = false;    // zero-length match, i.e. only $ anchor as regex
     while ( ((bSrchForward && nStart < nStringEnd) ||
             (! bSrchForward && nStart > nStringEnd)) && !bZeroMatch )
@@ -480,18 +475,18 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 // if backward search, switch positions temporarily
                 if( !bSrchForward ) { std::swap(nStart, nEnd); }
 
-                xub_StrLen nNew(nStart);
-                for (size_t n = 0;
-                    n < aFltArr.size() && aFltArr[ n ] <= nStart;
-                    ++n, ++nNew )
-                    ;
+                sal_Int32 nNew = nStart;
+                for (size_t n = 0; n < aFltArr.size() && aFltArr[ n ] <= nStart; ++n )
+                {
+                    ++nNew;
+                }
 
                 nStart = nNew;
                 nNew = nEnd;
-                for(size_t n = 0;
-                    n < aFltArr.size() && aFltArr[ n ] < nEnd;
-                    ++n, ++nNew )
-                    ;
+                for( size_t n = 0; n < aFltArr.size() && aFltArr[ n ] < nEnd; ++n )
+                {
+                    ++nNew;
+                }
 
                 nEnd = nNew;
                 // if backward search, switch positions temporarily
@@ -575,7 +570,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         // use replace method in SwDoc
         const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
-        xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
+        const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
         // add to shell-cursor-ring so that the regions will be moved enventually
         Ring *pPrev(0);
         if( bRegExp )

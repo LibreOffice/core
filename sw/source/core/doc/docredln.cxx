@@ -3232,13 +3232,13 @@ void SwRedline::InvalidateRange()       // trigger the Layout
 {
     sal_uLong nSttNd = GetMark()->nNode.GetIndex(),
             nEndNd = GetPoint()->nNode.GetIndex();
-    sal_uInt16 nSttCnt = GetMark()->nContent.GetIndex(),
-            nEndCnt = GetPoint()->nContent.GetIndex();
+    sal_Int32 nSttCnt = GetMark()->nContent.GetIndex();
+    sal_Int32 nEndCnt = GetPoint()->nContent.GetIndex();
 
     if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
     {
         sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-        nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (sal_uInt16)nTmp;
+        sal_Int32 nTmp2 = nSttCnt; nSttCnt = nEndCnt; nEndCnt = nTmp2;
     }
 
     SwUpdateAttr aHt( 0, 0, RES_FMT_CHG );
@@ -3591,7 +3591,7 @@ void SwRedline::MoveFromSection()
                                 ? pCNd->GetFmtColl() : 0;
 
             SwNodeIndex aNdIdx( GetPoint()->nNode, -1 );
-            sal_uInt16 nPos = GetPoint()->nContent.GetIndex();
+            const sal_Int32 nPos = GetPoint()->nContent.GetIndex();
 
             SwPosition aPos( *GetPoint() );
             if( bDelLastPara && *aPam.GetPoint() == *aPam.GetMark() )

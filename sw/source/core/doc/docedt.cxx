@@ -56,7 +56,8 @@ struct _SaveRedline
 {
     SwRedline* pRedl;
     sal_uInt32 nStt, nEnd;
-    xub_StrLen nSttCnt, nEndCnt;
+    sal_Int32 nSttCnt;
+    sal_Int32 nEndCnt;
 
     _SaveRedline( SwRedline* pR, const SwNodeIndex& rSttIdx )
         : pRedl( pR )
@@ -144,7 +145,7 @@ static bool lcl_MayOverwrite( const SwTxtNode *pNode, const sal_Int32 nPos )
     }
 }
 
-static void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
+static void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, sal_Int32 &rStart )
 {
     if( !lcl_MayOverwrite( pNode, rStart ) )
     {
@@ -351,7 +352,7 @@ static bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
             &( pSrch = rFtnArr[ nPos ] )->GetTxtNode())->GetIndex()
                     <= rEndNd.GetIndex() )
         {
-            xub_StrLen nFtnSttIdx = *pSrch->GetStart();
+            const sal_Int32 nFtnSttIdx = *pSrch->GetStart();
             if( ( pEndCnt && pSttCnt )
                 ? (( &rSttNd.GetNode() == pFtnNd &&
                      pSttCnt->GetIndex() > nFtnSttIdx) ||
@@ -384,7 +385,7 @@ static bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
         while( nPos-- && ( pFtnNd = &( pSrch = rFtnArr[ nPos ] )->
                 GetTxtNode())->GetIndex() >= rSttNd.GetIndex() )
         {
-            xub_StrLen nFtnSttIdx = *pSrch->GetStart();
+            const sal_Int32 nFtnSttIdx = *pSrch->GetStart();
             if( !pEndCnt || !pSttCnt ||
                 !( (( &rSttNd.GetNode() == pFtnNd &&
                     pSttCnt->GetIndex() > nFtnSttIdx ) ||
@@ -727,7 +728,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const OUString &rStr )
                                 ? pNode->GetpSwpHints()->Count() : 0;
     SwDataChanged aTmp( rRg );
     SwIndex& rIdx = rPt.nContent;
-    xub_StrLen nStart = 0;
+    sal_Int32 nStart = 0;
 
     bool bOldExpFlg = pNode->IsIgnoreDontExpand();
     pNode->SetIgnoreDontExpand( true );
@@ -899,7 +900,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         ( rPos.nContent.GetIndex() || ( pTNd->Len() && bCorrSavePam  )) )
     {
         bSplit = sal_True;
-        xub_StrLen nMkCntnt = rPaM.GetMark()->nContent.GetIndex();
+        const sal_Int32 nMkCntnt = rPaM.GetMark()->nContent.GetIndex();
 
         std::vector<sal_uLong> aBkmkArr;
         _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
@@ -1398,15 +1399,15 @@ void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
 }
 
 static void
-lcl_CalcBreaks( ::std::vector<xub_StrLen> & rBreaks, SwPaM const & rPam )
+lcl_CalcBreaks( ::std::vector<sal_Int32> & rBreaks, SwPaM const & rPam )
 {
     SwTxtNode const * const pTxtNode(
             rPam.End()->nNode.GetNode().GetTxtNode() );
     if (!pTxtNode)
         return; // left-overlap only possible at end of selection...
 
-    const xub_StrLen nStart(rPam.Start()->nContent.GetIndex());
-    const xub_StrLen nEnd  (rPam.End  ()->nContent.GetIndex());
+    const sal_Int32 nStart(rPam.Start()->nContent.GetIndex());
+    const sal_Int32 nEnd  (rPam.End  ()->nContent.GetIndex());
     if (nEnd == pTxtNode->Len())
         return; // paragraph selected until the end
 
@@ -1428,7 +1429,7 @@ lcl_CalcBreaks( ::std::vector<xub_StrLen> & rBreaks, SwPaM const & rPam )
 static bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
         bool (SwDoc::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
 {
-    ::std::vector<xub_StrLen> Breaks;
+    ::std::vector<sal_Int32> Breaks;
 
     lcl_CalcBreaks(Breaks, rPam);
 
@@ -1446,7 +1447,7 @@ static bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
 
     bool bRet( true );
     // iterate from end to start, to avoid invalidating the offsets!
-    ::std::vector<xub_StrLen>::reverse_iterator iter( Breaks.rbegin() );
+    ::std::vector<sal_Int32>::reverse_iterator iter( Breaks.rbegin() );
     SwPaM aPam( rSelectionEnd, rSelectionEnd ); // end node!
     SwPosition & rEnd( *aPam.End() );
     SwPosition & rStart( *aPam.Start() );
@@ -1592,8 +1593,8 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         SwpHints* pHts;
         if( pTxtNd &&  0 != ( pHts = pTxtNd->GetpSwpHints()) && pHts->Count() )
         {
-            const xub_StrLen *pEndIdx;
-            xub_StrLen nMkCntPos = rPam.GetMark()->nContent.GetIndex();
+            const sal_Int32 *pEndIdx;
+            const sal_Int32 nMkCntPos = rPam.GetMark()->nContent.GetIndex();
             for( sal_uInt16 n = pHts->Count(); n; )
             {
                 const SwTxtAttr* pAttr = (*pHts)[ --n ];
@@ -1612,7 +1613,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     if (GetIDocumentUndoRedo().DoesUndo() && pStt->nNode == pEnd->nNode && (pEnd->nContent.GetIndex() - pStt->nContent.GetIndex()) == 1)
     {
         SwTxtNode* pTxtNd = rPam.Start()->nNode.GetNode().GetTxtNode();
-        xub_StrLen nIndex = rPam.Start()->nContent.GetIndex();
+        const sal_Int32 nIndex = rPam.Start()->nContent.GetIndex();
         // We may have a postit here.
         if (pTxtNd->GetTxt()[nIndex] == CH_TXTATR_INWORD)
         {
@@ -1682,7 +1683,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
             {
                 // now move the Content to the new Node
                 sal_Bool bOneNd = pStt->nNode == pEnd->nNode;
-                xub_StrLen nLen = ( bOneNd ? pEnd->nContent.GetIndex()
+                const sal_Int32 nLen = ( bOneNd ? pEnd->nContent.GetIndex()
                                            : pCNd->Len() )
                                         - pStt->nContent.GetIndex();
 
@@ -1872,8 +1873,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             ::SetProgressState( nStat, (SwDocShell*)GetDocShell() );
                         }
                         //Spell() changes the pSpellArgs in case an error is found
-                        xub_StrLen nBeginGrammarCheck = 0;
-                        xub_StrLen nEndGrammarCheck = 0;
+                        sal_Int32 nBeginGrammarCheck = 0;
+                        sal_Int32 nEndGrammarCheck = 0;
                         if( pSpellArgs && pSpellArgs->bIsGrammarCheck)
                         {
                             nBeginGrammarCheck = pSpellArgs->pStartNode == pNd ?  pSpellArgs->pStartIdx->GetIndex() : 0;
@@ -1896,7 +1897,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     ->GetTxt().getLength();
                         }
 
-                        xub_StrLen nSpellErrorPosition =
+                        sal_Int32 nSpellErrorPosition =
                             static_cast<SwTxtNode const*>(pNd)->GetTxt().getLength();
                         if( (!pConvArgs &&
                                 ((SwTxtNode*)pNd)->Spell( pSpellArgs )) ||
@@ -1943,7 +1944,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     if( aResult.nStartOfNextSentencePosition <= nBeginGrammarCheck )
                                         break;
                                     // prepare next iteration
-                                    nBeginGrammarCheck = (xub_StrLen)aResult.nStartOfNextSentencePosition;
+                                    nBeginGrammarCheck = aResult.nStartOfNextSentencePosition;
                                 }
                                 while( nSpellErrorPosition > aResult.nBehindEndOfSentencePosition && !nGrammarErrors && aResult.nBehindEndOfSentencePosition < nEndGrammarCheck );
 
@@ -1957,8 +1958,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     pEndPos->nNode = nCurrNd;
                                     pSpellArgs->pStartNode = ((SwTxtNode*)pNd);
                                     pSpellArgs->pEndNode = ((SwTxtNode*)pNd);
-                                    pSpellArgs->pStartIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
-                                    pSpellArgs->pEndIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
+                                    pSpellArgs->pStartIdx->Assign(((SwTxtNode*)pNd), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
+                                    pSpellArgs->pEndIdx->Assign(((SwTxtNode*)pNd), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
                                     nCurrNd = nEndNd;
                                 }
                             }
@@ -2003,8 +2004,8 @@ class SwHyphArgs : public SwInterHyphInfo
     sal_uInt16 *pPageSt;
 
     sal_uInt32 nNode;
-    xub_StrLen nPamStart;
-    xub_StrLen nPamLen;
+    sal_Int32 nPamStart;
+    sal_Int32 nPamLen;
 
 public:
     SwHyphArgs( const SwPaM *pPam, const Point &rPoint,
@@ -2163,7 +2164,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const OUString& rStr,
     // unfortunately replace works slightly differently from delete,
     // so we cannot use lcl_DoWithBreaks here...
 
-    ::std::vector<xub_StrLen> Breaks;
+    ::std::vector<sal_Int32> Breaks;
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     aPam.Normalize(false);
@@ -2199,7 +2200,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const OUString& rStr,
 
     bool bRet( true );
     // iterate from end to start, to avoid invalidating the offsets!
-    ::std::vector<xub_StrLen>::reverse_iterator iter( Breaks.rbegin() );
+    ::std::vector<sal_Int32>::reverse_iterator iter( Breaks.rbegin() );
     OSL_ENSURE(aPam.GetPoint() == aPam.End(), "wrong!");
     SwPosition & rEnd( *aPam.End() );
     SwPosition & rStart( *aPam.Start() );
@@ -2262,8 +2263,8 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
         // Own Undo?
         OUString sRepl( rStr );
         SwTxtNode* pTxtNd = pStt->nNode.GetNode().GetTxtNode();
-        xub_StrLen nStt = pStt->nContent.GetIndex(),
-                nEnd = bOneNode ? pEnd->nContent.GetIndex()
+        sal_Int32 nStt = pStt->nContent.GetIndex();
+        sal_Int32 nEnd = bOneNode ? pEnd->nContent.GetIndex()
                                 : pTxtNd->GetTxt().getLength();
 
         SwDataChanged aTmp( aDelPam );
@@ -2313,7 +2314,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
 
                 // Remember the End
                 SwNodeIndex aPtNd( aDelPam.GetPoint()->nNode, -1 );
-                xub_StrLen nPtCnt = aDelPam.GetPoint()->nContent.GetIndex();
+                const sal_Int32 nPtCnt = aDelPam.GetPoint()->nContent.GetIndex();
 
                 bool bFirst = true;
                 OUString sIns;
@@ -2323,7 +2324,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
                     if( bFirst )
                     {
                         SwNodeIndex aMkNd( aDelPam.GetMark()->nNode, -1 );
-                        xub_StrLen nMkCnt = aDelPam.GetMark()->nContent.GetIndex();
+                        const sal_Int32 nMkCnt = aDelPam.GetMark()->nContent.GetIndex();
 
                         SplitNode( *aDelPam.GetPoint(), false );
 
@@ -2405,7 +2406,7 @@ SetRedlineMode( eOld );
                 aDelPam.Exchange();
 
             SwNodeIndex aPtNd( pStt->nNode, -1 );
-            xub_StrLen nPtCnt = pStt->nContent.GetIndex();
+            const sal_Int32 nPtCnt = pStt->nContent.GetIndex();
 
             // Set the values again, if Frames or footnotes on the Text have been removed.
             nStt = nPtCnt;
@@ -2629,8 +2630,8 @@ void SwDoc::TransliterateText(
                        * pEnd = rPaM.End();
     sal_uLong nSttNd = pStt->nNode.GetIndex(),
           nEndNd = pEnd->nNode.GetIndex();
-    xub_StrLen nSttCnt = pStt->nContent.GetIndex(),
-               nEndCnt = pEnd->nContent.GetIndex();
+    sal_Int32 nSttCnt = pStt->nContent.GetIndex();
+    sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
 
     SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
     if( pStt == pEnd && pTNd )  // no selection?
@@ -2647,8 +2648,8 @@ void SwDoc::TransliterateText(
 
         if( aBndry.startPos < nSttCnt && nSttCnt < aBndry.endPos )
         {
-            nSttCnt = (xub_StrLen)aBndry.startPos;
-            nEndCnt = (xub_StrLen)aBndry.endPos;
+            nSttCnt = aBndry.startPos;
+            nEndCnt = aBndry.endPos;
         }
     }
 
@@ -2726,8 +2727,8 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
     const sal_uLong nSttNd = pStt->nNode.GetIndex();
     const sal_uLong nEndNd = pEnd->nNode.GetIndex();
 
-    const xub_StrLen nSttCnt = pStt->nContent.GetIndex();
-    const xub_StrLen nEndCnt = pEnd->nContent.GetIndex();
+    const sal_Int32 nSttCnt = pStt->nContent.GetIndex();
+    const sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
 
     const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
     if( pStt == pEnd && pTNd )                  // no region ?

@@ -106,7 +106,7 @@ namespace
         sal_uLong nNdOff = rOrigPos.nNode.GetIndex();
         nNdOff -= rOrigStt.nNode.GetIndex();
         nNdOff -= nDelCount;
-        xub_StrLen nCntntPos = rOrigPos.nContent.GetIndex();
+        sal_Int32 nCntntPos = rOrigPos.nContent.GetIndex();
 
         // Always adjust <nNode> at to be changed <SwPosition> instance <rChgPos>
         rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
@@ -963,7 +963,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 }
                 else if( !bOneNode || bColumnSel )
                 {
-                    xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
+                    const sal_Int32 nCntntEnd = pEnd->nContent.GetIndex();
                     {
                         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                         pDoc->SplitNode( rPos, false );
@@ -1029,7 +1029,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                 if( !bCopyOk )
                 {
-                    const xub_StrLen nCpyLen = ( (bOneNode)
+                    const sal_Int32 nCpyLen = ( (bOneNode)
                                            ? pEnd->nContent.GetIndex()
                                            : pSttTxtNd->GetTxt().getLength())
                                          - pStt->nContent.GetIndex();
@@ -1090,7 +1090,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 // (and joined from undo)
                 bStartIsTxtNode = sal_True;
 
-                xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
+                const sal_Int32 nCntntEnd = pEnd->nContent.GetIndex();
                 {
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->SplitNode( rPos, false );
@@ -1312,7 +1312,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 }
 
 // Copy method from SwDoc - "copy Flys in Flys"
-void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex,
+void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rInsPos, sal_Bool bMakeNewFrms,
                             sal_Bool bDelRedlines, sal_Bool bCopyFlyAtFly ) const
 {
@@ -1387,7 +1387,7 @@ static void lcl_ChainFmts( SwFlyFrmFmt *pSrc, SwFlyFrmFmt *pDest )
 }
 
 void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
-        const xub_StrLen nEndContentIndex, const SwNodeIndex& rStartIdx,
+        const sal_Int32 nEndContentIndex, const SwNodeIndex& rStartIdx,
         const bool bCopyFlyAtFly ) const
 {
     // First collect all Flys, sort them according to their ordering number,

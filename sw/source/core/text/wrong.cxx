@@ -112,10 +112,10 @@ void SwWrongList::ClearList()
  * sal_Bool SwWrongList::InWrongWord() gibt den Anfang und die Laenge des
  * Wortes zurueck, wenn es als falsch markiert ist.
  *************************************************************************/
-sal_Bool SwWrongList::InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const
+sal_Bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
     MSHORT nPos = GetWrongPos( rChk );
-    xub_StrLen nWrPos;
+    sal_Int32 nWrPos;
     if( nPos < Count() && ( nWrPos = Pos( nPos ) ) <= rChk )
     {
         rLn = Len( nPos );

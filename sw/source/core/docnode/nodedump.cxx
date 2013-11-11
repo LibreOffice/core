@@ -103,6 +103,7 @@ void WriterHelper::writeFormatAttribute( const char* attribute, const char* form
 // Hack: somehow conversion from "..." to va_list does
 // bomb on two string litterals in the format.
 static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
+static const char* TMP_FORMAT_I32 = "%" SAL_PRIdINT32;
 
 }
 
@@ -132,9 +133,9 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w )
         pMark_t pMark = *it;
         writer.startElement("fieldmark");
         writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
-        writer.writeFormatAttribute("startOffset", "%d", pMark->GetMarkStart().nContent.GetIndex());
+        writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
         writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
-        writer.writeFormatAttribute("endOffset", "%d", pMark->GetMarkEnd().nContent.GetIndex());
+        writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
         OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
         writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
         writer.endElement();

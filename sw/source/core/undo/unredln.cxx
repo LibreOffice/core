@@ -283,14 +283,14 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 
     SwNodeIndex aPrevIdx( pStart->nNode, -1 );
     sal_uLong nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
-    xub_StrLen nCntStt  = pStart->nContent.GetIndex();
+    const sal_Int32 nCntStt  = pStart->nContent.GetIndex();
 
     rDoc.SortText(rPam, *pOpt);
 
     pPam->DeleteMark();
     pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
     SwCntntNode* pCNd = pPam->GetCntntNode();
-    xub_StrLen nLen = pCNd->Len();
+    sal_Int32 nLen = pCNd->Len();
     if( nLen > nCntStt )
         nLen = nCntStt;
     pPam->GetPoint()->nContent.Assign(pCNd, nLen );

@@ -689,7 +689,7 @@ void SwHTMLParser::Continue( int nToken )
             SwNodeIndex aNxtIdx( *pSttNdIdx );
             if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ))
             {
-                sal_Int32 nStt = pTxtNode->GetTxt().getLength();
+                const sal_Int32 nStt = pTxtNode->GetTxt().getLength();
                 // wenn der Cursor noch in dem Node steht, dann setze in an das Ende
                 if( pPam->GetPoint()->nNode == aNxtIdx )
                 {
@@ -706,13 +706,13 @@ OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_False ).nNode.GetInde
 
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_True ).nNode.GetIndex() )
 {
-    xub_StrLen nCntPos = pPam->GetBound( sal_True ).nContent.GetIndex();
+    const sal_Int32 nCntPos = pPam->GetBound( sal_True ).nContent.GetIndex();
     pPam->GetBound( sal_True ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().getLength() + nCntPos );
 }
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
 {
-    xub_StrLen nCntPos = pPam->GetBound( sal_False ).nContent.GetIndex();
+    const sal_Int32 nCntPos = pPam->GetBound( sal_False ).nContent.GetIndex();
     pPam->GetBound( sal_False ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().getLength() + nCntPos );
 }
@@ -1447,7 +1447,7 @@ void SwHTMLParser::NextToken( int nToken )
         // insert string without spanning attributes at the end.
         if( !aToken.isEmpty() && ' '==aToken[0] && !IsReadPRE() )
         {
-            xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
+            sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
             if( nPos )
             {
                 const OUString& rText =
@@ -2137,7 +2137,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
     // Zeichen-Attribute aufspalten und ggf keine setzen, die ueber den
     // ganzen Absatz gesetzt sind
     const SwNodeIndex& rEndIdx = aOldPos.nNode;
-    xub_StrLen nEndCnt = aOldPos.nContent.GetIndex();
+    const sal_Int32 nEndCnt = aOldPos.nContent.GetIndex();
     const SwPosition& rPos = *pPam->GetPoint();
 
     _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
@@ -2179,7 +2179,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                             sal_uInt16 nScriptTxt =
                                 g_pBreakIt->GetBreakIter()->getScriptType(
                                             rText, pAttr->GetSttCnt() );
-                            xub_StrLen nScriptEnd = (xub_StrLen)g_pBreakIt->GetBreakIter()
+                            sal_Int32 nScriptEnd = g_pBreakIt->GetBreakIter()
                                     ->endOfScript( rText, nStt, nScriptTxt );
                             while( nScriptEnd < nEndCnt )
                             {
@@ -2648,7 +2648,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
 {
     SwPaM* pAttrPam = new SwPaM( *pPam->GetPoint() );
     const SwNodeIndex& rEndIdx = pPam->GetPoint()->nNode;
-    xub_StrLen nEndCnt = pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nEndCnt = pPam->GetPoint()->nContent.GetIndex();
     _HTMLAttr* pAttr;
     SwCntntNode* pCNd;
     sal_uInt16 n;
@@ -3006,7 +3006,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
 
     // die aktuelle Position als Ende-Position merken
     const SwNodeIndex* pEndIdx = &pPam->GetPoint()->nNode;
-    xub_StrLen nEndCnt = pPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nEndCnt = pPam->GetPoint()->nContent.GetIndex();
 
     // WIrd das zueltzt gestartete oder ein frueher gestartetes Attribut
     // beendet?
@@ -3068,7 +3068,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         const OUString& rText = pTxtNd->GetTxt();
         sal_uInt16 nScriptTxt = g_pBreakIt->GetBreakIter()->getScriptType(
                         rText, pAttr->GetSttCnt() );
-        xub_StrLen nScriptEnd = (xub_StrLen)g_pBreakIt->GetBreakIter()
+        sal_Int32 nScriptEnd = g_pBreakIt->GetBreakIter()
                     ->endOfScript( rText, pAttr->GetSttCnt(), nScriptTxt );
         while( nScriptEnd < nEndCnt )
         {
@@ -3266,8 +3266,8 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
     _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
     _HTMLAttr** pSaveTbl = (_HTMLAttr**)&rNewAttrTab;
     sal_Bool bSetAttr = sal_True;
-    xub_StrLen nSttCnt = pPam->GetPoint()->nContent.GetIndex();
-    xub_StrLen nEndCnt = nSttCnt;
+    const sal_Int32 nSttCnt = pPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nEndCnt = nSttCnt;
 
     if( bMoveEndBack )
     {
@@ -3375,7 +3375,7 @@ void SwHTMLParser::RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
 
         const SwPosition *pPos = pPam->GetPoint();
         const SwNodeIndex& rSttPara = pPos->nNode;
-        xub_StrLen nSttCnt = pPos->nContent.GetIndex();
+        const sal_Int32 nSttCnt = pPos->nContent.GetIndex();
 
         *pTbl = *pSaveTbl;
 

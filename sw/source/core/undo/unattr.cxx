@@ -510,7 +510,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
         SwTxtNode *pTxtNode = (SwTxtNode*)&pPos->nNode.GetNode();
         OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const xub_StrLen nIdx = pPos->nContent.GetIndex();
+        const sal_Int32 nIdx = pPos->nContent.GetIndex();
         SwTxtAttr * const pHnt =
             pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,

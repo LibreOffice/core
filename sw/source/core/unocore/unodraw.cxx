@@ -1193,7 +1193,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                                 const SwPosition *pPos = aAnchor.GetCntntAnchor();
                                 SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                                 SAL_WARN_IF( !pTxtNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                                const xub_StrLen nIdx = pPos->nContent.GetIndex();
+                                const sal_Int32 nIdx = pPos->nContent.GetIndex();
                                 SwTxtAttr * const pHnt =
                                     pTxtNode->GetTxtAttrForCharAt(
                                         nIdx, RES_TXTATR_FLYCNT );
@@ -1295,7 +1295,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             const SwPosition *pPos = rOldAnchor.GetCntntAnchor();
                             SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                             SAL_WARN_IF( !pTxtNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                            const xub_StrLen nIdx = pPos->nContent.GetIndex();
+                            const sal_Int32 nIdx = pPos->nContent.GetIndex();
                             SwTxtAttr * const pHnt =
                                 pTxtNode->GetTxtAttrForCharAt(
                                     nIdx, RES_TXTATR_FLYCNT );
@@ -2088,7 +2088,7 @@ void SwXShape::dispose(void) throw( uno::RuntimeException )
             {
                 const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
                 SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-                const xub_StrLen nIdx = rPos.nContent.GetIndex();
+                const sal_Int32 nIdx = rPos.nContent.GetIndex();
                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
             }
             else
