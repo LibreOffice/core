@@ -43,7 +43,8 @@ endef
 # call gb_ExtensionPackage_ExtensionPackage,package,oxt
 define gb_ExtensionPackage_ExtensionPackage
 $(call gb_ExtensionPackage_ExtensionPackage_internal,$(1),$(2))
-$(2) :|	$(call gb_ExtensionPackage_get_preparation_target,$(1))
+$(2) : $(call gb_ExtensionPackage_get_preparation_target,$(1))
+	touch $$@
 
 $$(eval $$(call gb_Module_register_target,$(call gb_ExtensionPackage_get_target,$(1)),$(call gb_ExtensionPackage_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),ExtensionPackage)
