@@ -1388,9 +1388,6 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
 {
     sal_uLong nErr = 0;
 
-    // Create a URL from filename
-    INetURLObject aURLObj( rURL );
-
     // Set filter:
     OUString sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
     SfxFilterMatcher aMatcher( sFactory );

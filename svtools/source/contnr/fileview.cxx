@@ -2446,8 +2446,6 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
     pData->mbIsFolder = sal_True;
     pData->maTargetURL   = rURL;
 
-    INetURLObject aURLObj( rURL );
-
     ::svtools::VolumeInfo aVolInfo;
     pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
     pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, sal_False );

@@ -93,8 +93,6 @@ SvxHyperlinkDocTp::~SvxHyperlinkDocTp ()
 
 void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 {
-    INetURLObject aURL(rStrURL);
-
     sal_Int32 nPos = rStrURL.indexOf(sHash);
     // path
     maCbbPath.SetText ( rStrURL.copy( 0, ( nPos == -1 ? rStrURL.getLength() : nPos ) ) );

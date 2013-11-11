@@ -1143,7 +1143,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         if( aLibName == aStandardStr )
                         {
                             SfxLibrary* pImplLib = getImplLib( aStandardStr );
-                            INetURLObject aStandardFolderInetObj( pImplLib->maStorageURL );
                             OUString aStandardFolder = pImplLib->maStorageURL;
                             mxSFI->kill( aStandardFolder );
                         }

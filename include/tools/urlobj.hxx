@@ -105,7 +105,7 @@ enum INetProtocol
     INET_PROT_END = 35
 };
 
-class TOOLS_DLLPUBLIC INetURLObject
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED INetURLObject
 {
 public:
     // Get- and Set-Methods:

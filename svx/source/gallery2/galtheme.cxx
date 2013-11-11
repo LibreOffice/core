@@ -1291,7 +1291,6 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
 {
     const INetURLObject aRelURL1( GetParent()->GetRelativeURL() );
     const INetURLObject aRelURL2( GetParent()->GetUserURL() );
-    INetURLObject       aNewURL, aTempURL;
     sal_uInt32          nCount = GetObjectCount();
     sal_Bool                bRel;
 

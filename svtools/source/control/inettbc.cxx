@@ -478,7 +478,6 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
     if( !SvtURLBox_Impl::TildeParsing( aText, aBaseURL ) )
         return OUString();
 
-    INetURLObject aURLObject;
     if( !aBaseURL.isEmpty() )
     {
         INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );

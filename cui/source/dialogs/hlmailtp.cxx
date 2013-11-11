@@ -94,7 +94,6 @@ SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
 
 void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
 {
-    INetURLObject aURL(rStrURL);
     OUString aStrScheme = GetSchemeFromURL(rStrURL);
 
     // set URL-field and additional controls

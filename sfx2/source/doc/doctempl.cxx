@@ -607,9 +607,6 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
                                   aTitle,
                                   pSource->GetTargetURL() ) )
     {
-
-        INetURLObject aSourceObj( pSource->GetTargetURL() );
-
         OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
         if ( aNewTargetURL.isEmpty() )
             return sal_False;
