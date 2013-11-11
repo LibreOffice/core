@@ -1,14 +1,14 @@
 --- curl-7.26.0/lib/Makefile.vc9
 +++ misc/build/curl-7.26.0/lib/Makefile.vc9
 @@ -116,7 +116,7 @@ LFLAGS     = /nologo /machine:$(MACHINE)
- SSLLIBS    = libeay32.lib ssleay32.lib
- ZLIBLIBSDLL= zdll.lib
- ZLIBLIBS   = zlib.lib
--WINLIBS    = ws2_32.lib wldap32.lib
-+WINLIBS    = ws2_32.lib wldap32.lib winhttp.lib
- CFLAGS     = $(CFLAGS) $(EXCFLAGS)
+ SSLLIBS      = libeay32.lib ssleay32.lib
+ ZLIBLIBSDLL  = zdll.lib
+ ZLIBLIBS     = zlib.lib
+-WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib
++WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib winhttp.lib
+ CFLAGS       = $(CFLAGS) $(EXCFLAGS)
  
- CFGSET     = FALSE
+ CFGSET       = FALSE
 --- curl-7.26.0/lib/url.c
 +++ misc/build/curl-7.26.0/lib/url.c
 @@ -80,6 +80,10 @@ void idn_free (void *ptr);
