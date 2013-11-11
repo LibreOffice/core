@@ -41,40 +41,28 @@ public:
     void FillValueSets();
 
 private:
-    FixedLine m_aFLType;
+    RadioButton* m_pRB_Linear;
+    RadioButton* m_pRB_Logarithmic;
+    RadioButton* m_pRB_Exponential;
+    RadioButton* m_pRB_Power;
+    RadioButton* m_pRB_Polynomial;
+    RadioButton* m_pRB_MovingAverage;
 
-    RadioButton m_aRBLinear;
-    RadioButton m_aRBLogarithmic;
-    RadioButton m_aRBExponential;
-    RadioButton m_aRBPower;
-    RadioButton m_aRBPolynomial;
-    RadioButton m_aRBMovingAverage;
+    FixedImage*  m_pFI_Linear;
+    FixedImage*  m_pFI_Logarithmic;
+    FixedImage*  m_pFI_Exponential;
+    FixedImage*  m_pFI_Power;
+    FixedImage*  m_pFI_Polynomial;
+    FixedImage*  m_pFI_MovingAverage;
 
-    FixedImage  m_aFILinear;
-    FixedImage  m_aFILogarithmic;
-    FixedImage  m_aFIExponential;
-    FixedImage  m_aFIPower;
-    FixedImage  m_aFIPolynomial;
-    FixedImage  m_aFIMovingAverage;
-
-    FixedText         m_aFT_Degree;
-    NumericField      m_aNF_Degree;
-    FixedText         m_aFT_Period;
-    NumericField      m_aNF_Period;
-
-    FixedText         m_aFT_ExtrapolateForward;
-    NumericField      m_aNF_ExtrapolateForward;
-
-    FixedText         m_aFT_ExtrapolateBackward;
-    NumericField      m_aNF_ExtrapolateBackward;
-
-    CheckBox          m_aCB_SetIntercept;
-    NumericField      m_aNF_InterceptValue;
-
-    FixedLine m_aFLEquation;
-
-    CheckBox m_aCBShowEquation;
-    CheckBox m_aCBShowCorrelationCoeff;
+    NumericField* m_pNF_Degree;
+    NumericField* m_pNF_Period;
+    NumericField* m_pNF_ExtrapolateForward;
+    NumericField* m_pNF_ExtrapolateBackward;
+    CheckBox*     m_pCB_SetIntercept;
+    NumericField* m_pNF_InterceptValue;
+    CheckBox*     m_pCB_ShowEquation;
+    CheckBox*     m_pCB_ShowCorrelationCoeff;
 
     SvxChartRegress     m_eTrendLineType;
 
