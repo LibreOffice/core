@@ -1912,6 +1912,84 @@ void OpConvert::GenSlidingWindowFunction(
 
 }
 
+void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"( ";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    int i = 0;\n";
+    ss << "    double product=0.0;\n\n";
+    char sArgNoI[5];
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        sprintf(sArgNoI,"%d",i);
+        ss << std::string("    double arg")+sArgNoI+";\n";
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << std::string("    arg")+sArgNoI+" = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+#ifdef ISNAN
+            ss << std::string("    if(isNan(arg")+sArgNoI+")||((gid0+i)>=";
+            ss << pDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "    {\n";
+            ss << std::string("        arg")+sArgNoI+" = 0;\n";
+            ss << "    }\n";
+#endif
+            ss << std::string("    product = arg")+sArgNoI+";\n";
+            ss << "    for (i = ";
+            ss << "1; i < "<< nCurWindowSize << "; i++)\n";
+            ss << "    {\n";
+            ss << std::string("        arg")+sArgNoI+" = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss <<std::string("        if(isNan(arg")+sArgNoI+")||((gid0+i)>=";
+            ss << pDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "        {\n";
+            ss << std::string("            arg")+sArgNoI+" = 0;\n";
+            ss << "        }\n";
+#endif
+            ss << std::string("        product*=arg")+sArgNoI+";\n";
+            ss << "    }\n";
+            }
+            else if (pCur->GetType() == formula::svSingleVectorRef)
+            {
+#ifdef  ISNAN
+                ss << std::string("    arg")+sArgNoI+" = ";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << ";\n";
+                ss << std::string("    product*=arg")+sArgNoI+";\n";
+#endif
+            }
+            else if (pCur->GetType() == formula::svDouble)
+            {
+#ifdef  ISNAN
+                ss << std::string("    arg")+sArgNoI+" = ";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << ";\n";
+                ss << std::string("    product*=arg")+sArgNoI+";\n";
+#endif
+            }
+        }
+        ss << "    return product;\n";
+        ss << "}";
+}
 
 }}
 
