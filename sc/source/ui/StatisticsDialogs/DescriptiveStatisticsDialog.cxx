@@ -84,8 +84,6 @@ sal_Int16 ScDescriptiveStatisticsDialog::GetUndoNameId()
 
 ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    OUString aReferenceString;
-
     AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
