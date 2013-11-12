@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
-#include "com/sun/star/ucb/XSimpleFileAccess3.hpp"
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 
 namespace treeview {
 

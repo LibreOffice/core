@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>

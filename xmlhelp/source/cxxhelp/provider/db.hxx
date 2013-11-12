@@ -19,7 +19,7 @@
 #ifndef HELPDATAFILEPROXY_DB_HXX_
 #define HELPDATAFILEPROXY_DB_HXX_
 
-#include "com/sun/star/ucb/XSimpleFileAccess3.hpp"
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 
 #include <config_global.h>
 #if !HAVE_CXX11

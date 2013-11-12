@@ -23,7 +23,7 @@
 #include <rtl/alloc.h>
 #include <cstring>
 
-#include "com/sun/star/io/XSeekable.hpp"
+#include <com/sun/star/io/XSeekable.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;

@@ -40,7 +40,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
-#include "com/sun/star/ucb/XSimpleFileAccess3.hpp"
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 
 // Forward declaration
 
