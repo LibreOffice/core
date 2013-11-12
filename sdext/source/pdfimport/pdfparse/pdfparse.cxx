@@ -640,6 +640,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
     }
     catch( const parser_error< const char*, file_iterator<> >& rError )
     {
+        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - file_start);
 #if OSL_DEBUG_LEVEL > 1
         OUString aTmp;
         unsigned int nElem = aGrammar.m_aObjectStack.size();
@@ -650,7 +651,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
                              strlen(typeid( *(aGrammar.m_aObjectStack[i]) ).name()),
                              RTL_TEXTENCODING_ASCII_US);
         }
-        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - file_start << ", object stack: " << aTmp);
+        SAL_WARN("sdext.pdfimport.pdfparse", "parse error object stack: " << aTmp);
 #endif
     }
 
