@@ -5899,6 +5899,17 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         OString sStartColor = msfilter::util::ConvertColor(rGradient.GetStartColor());
         OString sEndColor = msfilter::util::ConvertColor(rGradient.GetEndColor());
 
+        // Calculate the angle that was originally in the imported DOCX file
+        // (reverse calculate the angle that was converted in the file
+        //     /oox/source/vml/vmlformatting.cxx :: FillModel::pushToPropMap
+        // and also in
+        //     /oox/source/drawingml/fillproperties.cxx :: FillProperties::pushToPropMap
+        sal_Int32 nReverseAngle = 4500 - rGradient.GetAngle();
+        nReverseAngle = nReverseAngle / 10;
+        nReverseAngle = (270 - nReverseAngle) % 360;
+        if (nReverseAngle != 0)
+            m_pFlyFillAttrList->add(XML_angle, OString::number(nReverseAngle));
+
         OString sColor1 = sStartColor;
         OString sColor2 = sEndColor;
 
