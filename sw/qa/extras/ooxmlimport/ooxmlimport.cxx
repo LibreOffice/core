@@ -123,6 +123,7 @@ public:
     void testN820509();
     void testN820788();
     void testN820504();
+    void testN830205();
     void testFdo43641();
     void testFdo46361();
     void testFdo65632();
@@ -226,6 +227,7 @@ void Test::run()
         {"n820509.docx", &Test::testN820509},
         {"n820788.docx", &Test::testN820788},
         {"n820504.docx", &Test::testN820504},
+        {"n830205.docx", &Test::testN830205},
         {"fdo43641.docx", &Test::testFdo43641},
         {"fdo46361.docx", &Test::testFdo46361},
         {"fdo65632.docx", &Test::testFdo65632},
@@ -1512,6 +1514,12 @@ void Test::testN820504()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(xDraws->getByIndex(0), "AnchorType"));
+}
+
+void Test::testN830205()
+{
+    // Previously import just crashed (due to infinite recursion).
+    getParagraph(1, "XXX");
 }
 
 void Test::testFdo43641()
