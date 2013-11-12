@@ -226,14 +226,8 @@ BEGIN
     @linkrpms = ();
     $archiveformat = "";
     $minorupgradekey = "";
-    $updatelastsequence = 0;
-    $updatesequencecounter = 0;
-    $updatedatabase = 0;
-    $updatedatabasepath = "";
     $pfffileexists = 0;
     $pffcabfilename = "ooobasis3.0_pff.cab";
-    %newupdatefiles = ();
-    %allusedupdatesequences = ();
     $mergefiles_added_into_collector = 0;
     $creating_windows_installer_patch = 0;
 

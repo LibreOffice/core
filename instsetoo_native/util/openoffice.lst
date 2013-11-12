@@ -27,9 +27,7 @@ Globals
             NATIVEPROGRESS false
             REGISTRYLAYERNAME Layers
             SERVICEPACK 1
-            UPDATE_DATABASE 1
             CREATE_MSP_INSTALLSET 0
-            UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
             WINDOWSPATCHLEVEL 8
             OOOVENDOR Apache Software Foundation

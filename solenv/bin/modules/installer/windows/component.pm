@@ -46,11 +46,6 @@ sub get_component_guid
     # At this time only a template
     my $returnvalue = "\{COMPONENTGUID\}";
 
-    if (( $installer::globals::updatedatabase ) && ( exists($componentidhashref->{$componentname}) ))
-    {
-        $returnvalue = $componentidhashref->{$componentname};
-    }
-
     # Returning a ComponentID, that is assigned in scp project
     if ( exists($installer::globals::componentid{$componentname}) )
     {

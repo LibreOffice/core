@@ -210,16 +210,7 @@ sub get_last_sequence
 {
     my ( $cabfilename, $alludpatelastsequences ) = @_;
 
-    my $sequence = 0;
-
-    if (( $installer::globals::updatedatabase ) && ( exists($alludpatelastsequences->{$cabfilename}) ))
-    {
-        $sequence = $alludpatelastsequences->{$cabfilename};
-    }
-    else
-    {
-        $sequence = $installer::globals::lastsequence{$cabfilename};
-    }
+    my $sequence = $installer::globals::lastsequence{$cabfilename};
 
     return $sequence;
 }
@@ -233,7 +224,7 @@ sub get_last_sequence
 
 sub create_media_table
 {
-    my ($filesref, $basedir, $allvariables, $alludpatelastsequences, $allupdatediskids) = @_;
+    my ($filesref, $basedir, $allvariables) = @_;
 
     my @mediatable = ();
 

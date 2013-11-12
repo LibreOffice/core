@@ -166,93 +166,7 @@ sub generate_cab_file_list
 
     if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filesref); }
 
-    if (( $installer::globals::fix_number_of_cab_files ) && ( $installer::globals::updatedatabase ))
-    {
-        my $sequenceorder = get_sequenceorder($filesref);
-
-        my $counter = 1;
-        my $currentcabfile = "";
-
-        while ( exists($sequenceorder->{$counter}) )
-        {
-            my $onefile = ${$filesref}[$sequenceorder->{$counter}];
-            $counter++;
-
-            my $cabinetfile = $onefile->{'cabinet'};
-            my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
-            my $uniquename =  $onefile->{'uniquename'};
-
-            my $styles = "";
-            my $doinclude = 1;
-            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
-            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
-
-            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
-
-            my @ddffile = ();
-
-            write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
-
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            if ( $doinclude ) { push(@ddffile, $ddfline); }
-
-            my $nextfile = "";
-            if ( ${$filesref}[$sequenceorder->{$counter}] ) { $nextfile = ${$filesref}[$sequenceorder->{$counter}]; }
-
-            my $nextcabinetfile = "";
-
-            if ( $nextfile->{'cabinet'} ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
-
-            while ( $nextcabinetfile eq $cabinetfile )
-            {
-                $sourcepath =  $nextfile->{'sourcepath'};
-                if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
-                # to avoid lines with more than 256 characters, it can be useful to use relative pathes
-                if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
-                $uniquename =  $nextfile->{'uniquename'};
-                my $localdoinclude = 1;
-                my $nextfilestyles = "";
-                if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
-                if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-                if ( $localdoinclude ) { push(@ddffile, $ddfline); }
-                $counter++;                                         # increasing the counter!
-                $nextfile = "";
-                $nextcabinetfile = "_lastfile_";
-                if (( exists($sequenceorder->{$counter}) ) && ( ${$filesref}[$sequenceorder->{$counter}] ))
-                {
-                    $nextfile = ${$filesref}[$sequenceorder->{$counter}];
-                    $nextcabinetfile = $nextfile->{'cabinet'};
-                }
-            }
-
-            # creating the DDF file
-
-            my $ddffilename = $cabinetfile;
-            $ddffilename =~ s/.cab/.ddf/;
-            $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
-            $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
-
-            installer::files::save_file($ddffilename ,\@ddffile);
-            my $infoline = "Created ddf file: $ddffilename\n";
-            $installer::logger::Lang->print($infoline);
-
-            # lines in ddf files must not be longer than 256 characters
-            check_ddf_file(\@ddffile, $ddffilename);
-
-            # Writing the makecab system call
-
-            my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-
-            push(@cabfilelist, $oneline);
-
-            # collecting all ddf files
-            push(@installer::globals::allddffiles, $ddffilename);
-        }
-    }
-    elsif ( $installer::globals::fix_number_of_cab_files )
+    if ( $installer::globals::fix_number_of_cab_files )
     {
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
@@ -1831,11 +1745,7 @@ sub set_global_code_variables
     }
 
     # ProductCode must not change, if Windows patches shall be applied
-    if ( $installer::globals::updatedatabase )
-    {
-        $installer::globals::productcode = $alloldproperties->{'ProductCode'};
-    }
-    elsif ( $installer::globals::prepare_winpatch )
+    if ( $installer::globals::prepare_winpatch )
     {
         # ProductCode has to be specified in each language
         my $searchstring = "PRODUCTCODE";
