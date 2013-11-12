@@ -779,27 +779,6 @@ struct ParserContext
 
 typedef ::boost::shared_ptr< ParserContext > ParserContextSharedPtr;
 
-/** Generate apriori constant value
-    */
-
-class ConstantFunctor
-{
-    const double                    mnValue;
-    ParserContextSharedPtr          mpContext;
-
-public:
-
-    ConstantFunctor( double rValue, const ParserContextSharedPtr& rContext ) :
-        mnValue( rValue ),
-        mpContext( rContext )
-    {
-    }
-    void operator()( StringIteratorT /*rFirst*/, StringIteratorT /*rSecond*/ ) const
-    {
-        mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( mnValue ) ) );
-    }
-};
-
 /** Generate parse-dependent-but-then-constant value
     */
 class DoubleConstantFunctor
