@@ -38,7 +38,7 @@ class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
 
     short nInterLineSpace;
     sal_uInt16 nLineHeight;
-    sal_uInt8 nPropLineSpace;
+    sal_uInt16 nPropLineSpace;
     SvxLineSpace eLineSpace;
     SvxInterLineSpace eInterLineSpace;
 
@@ -83,7 +83,7 @@ public:
     }
 
     // To increase or decrease the row height.
-    sal_uInt8 GetPropLineSpace() const { return nPropLineSpace; }
+    sal_uInt16 GetPropLineSpace() const { return nPropLineSpace; }
     inline void SetPropLineSpace( const sal_uInt8 nProp )
     {
         nPropLineSpace = nProp;

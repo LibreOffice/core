@@ -1704,6 +1704,20 @@ DECLARE_OOXML_TEST(testFdo70838, "fdo70838.docx")
     }
 }
 
+DECLARE_OOXML_TEST(testLineSpacingexport, "test_line_spacing.docx")
+{
+     // The Problem was that the w:line attribute value in w:spacing tag was incorrect
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+
+    style::LineSpacing alineSpacing = getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(13200), static_cast<sal_Int16>(alineSpacing.Height));
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "line", "31680");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -203,7 +203,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             case style::LineSpacingMode::PROP:
             {
                 eLineSpace = SVX_LINE_SPACE_AUTO;
-                nPropLineSpace = (sal_Int8)std::min(aLSp.Height, (short)0xFF);
+                nPropLineSpace = (sal_Int16)aLSp.Height;
                 if(100 == aLSp.Height)
                     eInterLineSpace = SVX_INTER_LINE_SPACE_OFF;
                 else
