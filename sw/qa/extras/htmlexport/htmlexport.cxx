@@ -10,6 +10,8 @@
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <swmodule.hxx>
+#include <usrpref.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -37,10 +39,22 @@ void Test::run()
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
+        FieldUnit eUnit = FUNIT_NONE;
+        if (OString(rEntry.pName) == "charborder.odt")
+        {
+            // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
+            SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
+            eUnit = pPref->GetMetric();
+            pPref->SetMetric(FUNIT_CM);
+        }
         load("/sw/qa/extras/htmlexport/data/", rEntry.pName,
              false /* not doing layout is required for this test */);
-        utl::TempFile aFile;
-        save("HTML", aFile);
+        reload("HTML (StarWriter)");
+        if (OString(rEntry.pName) == "charborder.odt")
+        {
+            SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
+            pPref->SetMetric(eUnit);
+        }
         (this->*rEntry.pMethod)();
         finish();
     }
