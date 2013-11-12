@@ -704,7 +704,7 @@ void CffSubsetterContext::readDictOp( void)
         nS32 += mpReadPtr[1] << 16;
         nS32 += mpReadPtr[2] << 8;
         nS32 += mpReadPtr[3] << 0;
-        if( (sizeof(nS32) != 4) && (nS32 & (1<<31)))
+        if( (sizeof(nS32) != 4) && (nS32 & (1U<<31)))
             nS32 |= (~0U) << 31;    // assuming 2s complement
         mpReadPtr += 4;
         nVal = static_cast<ValType>(nS32);
@@ -743,7 +743,7 @@ void CffSubsetterContext::read2push()
         p += 2;
     } else /*if( c == 255)*/ {  // Fixed16.16
         int nS32 = (p[1] << 24) + (p[2] << 16) + (p[3] << 8) + p[4];
-        if( (sizeof(nS32) != 2) && (nS32 & (1<<31)))
+        if( (sizeof(nS32) != 2) && (nS32 & (1U<<31)))
             nS32 |= (~0U) << 31;    // assuming 2s complement
         aVal = static_cast<ValType>(nS32 * (1.0 / 0x10000));
         p += 5;
