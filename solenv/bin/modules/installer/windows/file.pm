@@ -707,7 +707,6 @@ sub check_file_sequences
     my $infoline = "";
 
     my @missing_sequences = ();
-    my @really_missing_sequences = ();
 
     for ( my $i = 1; $i <= $installer::globals::updatelastsequence; $i++ )
     {
@@ -716,29 +715,12 @@ sub check_file_sequences
 
     if ( $#missing_sequences > -1 )
     {
-        # Missing sequences can also be caused by files included in merge modules. This files are added later into the file table.
-        # Therefore now it is time to check the content of the merge modules.
-
+        my $errorstring = "";
         for ( my $j = 0; $j <= $#missing_sequences; $j++ )
         {
             my $filename = $allupdatefileorderhashref->{$missing_sequences[$j]};
-
-            # Is this a file from a merge module? Then this is no error.
-            if ( ! exists($installer::globals::mergemodulefiles{$filename}) )
-            {
-                push(@really_missing_sequences, $missing_sequences[$j]);
-            }
-        }
-    }
-
-    if ( $#really_missing_sequences > -1 )
-    {
-        my $errorstring = "";
-        for ( my $j = 0; $j <= $#really_missing_sequences; $j++ )
-        {
-            my $filename = $allupdatefileorderhashref->{$really_missing_sequences[$j]};
-            my $comp = $allupdatecomponentorderhashref->{$really_missing_sequences[$j]};
-            $errorstring = "$errorstring$filename (Sequence: $really_missing_sequences[$j], Component: \"$comp\")\n";
+            my $comp = $allupdatecomponentorderhashref->{$missing_sequences[$j]};
+            $errorstring = "$errorstring$filename (Sequence: $missing_sequences[$j], Component: \"$comp\")\n";
         }
 
         $infoline = "ERROR: Files are removed compared with update database.\nThe following files are missing:\n$errorstring";

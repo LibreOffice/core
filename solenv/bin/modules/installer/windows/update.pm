@@ -407,61 +407,6 @@ sub readdatabase
     return $database;
 }
 
-#################################################################################
-# Files can be included in merge modules. This is also important for update.
-#################################################################################
-
-sub readmergedatabase
-{
-    my ( $mergemodules, $languagestringref, $includepatharrayref ) = @_;
-
-    $installer::logger::Lang->add_timestamp("Performance Info: readmergedatabase start");
-
-    my $mergemoduledir = installer::systemactions::create_directories("mergedatabase", $languagestringref);
-
-    my %allmergefiles = ();
-
-    $installer::globals::mergemodulenumber = $#{$mergemodules} + 1;
-
-    foreach my $mergemodule ( @{$mergemodules} )
-    {
-        my $filename = $mergemodule->{'Name'};
-        my $mergefile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
-
-        if ( $$mergefile eq "" ) { installer::exiter::exit_program("ERROR: msm file not found: $filename !", "readmergedatabase"); }
-        my $completesource = $$mergefile;
-
-        my $mergegid = $mergemodule->{'gid'};
-        my $workdir = $mergemoduledir . $installer::globals::separator . $mergegid;
-        if ( ! -d $workdir ) { installer::systemactions::create_directory($workdir); }
-
-        my $completedest = $workdir . $installer::globals::separator . $filename;
-        installer::systemactions::copy_one_file($completesource, $completedest);
-        if ( ! -f $completedest ) { installer::exiter::exit_program("ERROR: msm file not found: $completedest !", "readmergedatabase"); }
-
-        # extract all tables from database
-        extract_all_tables_from_msidatabase($completedest, $workdir);
-
-        # read all tables
-        my $onemergefile = read_all_tables_from_msidatabase($workdir);
-
-        $allmergefiles{$mergegid} = $onemergefile;
-    }
-
-    foreach my $mergefilegid ( keys %allmergefiles )
-    {
-        my $onemergefile = $allmergefiles{$mergefilegid};
-        my $filetable = $onemergefile->{'File'};
-
-        foreach my $linenumber ( keys %{$filetable} )
-        {
-            # Collecting all files from merge modules in global hash
-            $installer::globals::mergemodulefiles{$filetable->{$linenumber}->{'File'}} = 1;
-        }
-    }
-
-    $installer::logger::Lang->add_timestamp("Performance Info: readmergedatabase end");
-}
 
 #################################################################################
 # Creating several useful hashes from old database

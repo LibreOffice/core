@@ -232,18 +232,14 @@ BEGIN
     $updatedatabasepath = "";
     $pfffileexists = 0;
     $pffcabfilename = "ooobasis3.0_pff.cab";
-    $mergemodulenumber = 0;
-    %allmergemodulefilesequences = ();
     %newupdatefiles = ();
     %allusedupdatesequences = ();
-    %mergemodulefiles = ();
     $mergefiles_added_into_collector = 0;
     $creating_windows_installer_patch = 0;
 
     $strip = 1;
 
     $globallogging = 0;
-    $globalloggingform21 = 1;
     $logfilename = "logfile.log";   # the default logfile name for global errors
 #   @logfileinfo = ();
 #   @errorlogfileinfo = ();
@@ -292,7 +288,6 @@ BEGIN
     $pwfile = "";
     $pfxfile = "";
 
-    %mergemodules = ();
     %merge_media_line = ();
     %merge_allfeature_hash = ();
     %merge_alldirectory_hash = ();
@@ -448,7 +443,6 @@ BEGIN
 
     $postprocess_specialepm = 0;
     $postprocess_standardepm = 0;
-    $mergemodules_analyzed = 0;
 
     $starttime = "";
 

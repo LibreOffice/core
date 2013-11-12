@@ -173,15 +173,8 @@ sub generate_cab_file_list
         my $counter = 1;
         my $currentcabfile = "";
 
-        while ( ( exists($sequenceorder->{$counter}) ) || ( exists($installer::globals::allmergemodulefilesequences{$counter}) ) ) # Taking care of files from merge modules
+        while ( exists($sequenceorder->{$counter}) )
         {
-#           if ( exists($installer::globals::allmergemodulefilesequences{$counter}) )
-#           {
-#               # Skipping this sequence, it is not included in $filesref, because it is assigned to a file from a merge module.\n";
-#               $counter++;
-#               next;
-#           }
-
             my $onefile = ${$filesref}[$sequenceorder->{$counter}];
             $counter++;
 
@@ -1245,28 +1238,6 @@ sub copy_windows_installer_files_into_installset
         $destfile = $installdir . $installer::globals::separator . $destfile;
 
         installer::systemactions::copy_one_file($$sourcefileref, $destfile);
-    }
-}
-
-#################################################################
-# Copying MergeModules for the Windows installer into the
-# installation set. The list of MergeModules is located
-# in %installer::globals::copy_msm_files
-#################################################################
-
-sub copy_merge_modules_into_installset
-{
-    my ($installdir) = @_;
-
-    installer::logger::include_header_into_logfile("Copying Merge files into installation set");
-
-    my $cabfile;
-    foreach $cabfile ( keys  %installer::globals::copy_msm_files )
-    {
-        my $sourcefile  = $installer::globals::copy_msm_files{$cabfile};
-        my $destfile = $installdir . $installer::globals::separator . $cabfile;
-
-        installer::systemactions::copy_one_file($sourcefile, $destfile);
     }
 }
 

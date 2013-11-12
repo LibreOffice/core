@@ -74,7 +74,6 @@ use installer::windows::idtglobal;
 use installer::windows::inifile;
 use installer::windows::java;
 use installer::windows::media;
-use installer::windows::mergemodule;
 use installer::windows::msiglobal;
 use installer::windows::msp;
 use installer::windows::patch;
@@ -524,7 +523,6 @@ my $folderinproductarrayref;
 my $folderitemsinproductarrayref;
 my $registryitemsinproductarrayref;
 my $windowscustomactionsarrayref;
-my $mergemodulesarrayref;
 
 if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, FolderItem, RegistryItem, WindowsCustomAction
 {
@@ -556,11 +554,6 @@ if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, Fo
 
     $windowscustomactionsarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "WindowsCustomAction");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "windowscustomactions1.log", $windowscustomactionsarrayref); }
-
-    $installer::logger::Info->print( "... analyzing Windows merge modules ... \n" );
-
-    $mergemodulesarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "MergeModule");
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "mergemodules1.log", $mergemodulesarrayref); }
 }
 
 my $modulesinproductarrayref;
@@ -737,7 +730,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::updatedatabase )
             {
                 ($uniquefilename, $revuniquefilename, $revshortfilename, $allupdatesequences, $allupdatecomponents, $allupdatefileorder, $allupdatecomponentorder, $shortdirname, $componentid, $componentidkeypath, $alloldproperties, $allupdatelastsequences, $allupdatediskids) = installer::windows::update::create_database_hashes($refdatabase);
-                if ( $mergemodulesarrayref > -1 ) { installer::windows::update::readmergedatabase($mergemodulesarrayref, $languagestringref, $includepatharrayref); }
             }
         }
     }
@@ -2181,11 +2173,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile, $allvariableshashref);
 
-                # if there are Merge Modules, they have to be integrated now
-                $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $msifilename, $languagestringref, $onelanguage, $languagefile, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
-                if (( $installer::globals::globallogging ) && ($installer::globals::globalloggingform21)) { installer::files::save_array_of_hashes($loggingdir . "productfiles21_" . $onelanguage . ".log", $filesinproductlanguageresolvedarrayref); }
-                $installer::globals::globalloggingform21 = 0;
-
                 # copy msi database into installation directory
 
                 my $msidestfilename = $installdir . $installer::globals::separator . $msidatabasename;
@@ -2225,10 +2212,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # ... copying the setup.exe
 
         installer::windows::msiglobal::copy_windows_installer_files_into_installset($installdir, $includepatharrayref, $allvariableshashref);
-
-        # ... copying MergeModules into installation set
-
-        if ( ! $installer::globals::fix_number_of_cab_files ) { installer::windows::msiglobal::copy_merge_modules_into_installset($installdir); }
 
         # ... copying the child projects
 
