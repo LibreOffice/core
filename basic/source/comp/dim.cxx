@@ -21,13 +21,13 @@
 #include "sbcomp.hxx"
 #include "sbunoobj.hxx"
 #include <svtools/miscopt.hxx>
-#include "com/sun/star/reflection/XIdlReflection.hpp"
+#include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
-#include "com/sun/star/reflection/XIdlMethod.hpp"
-#include "com/sun/star/uno/Exception.hpp"
+#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
+#include <com/sun/star/reflection/XIdlMethod.hpp>
+#include <com/sun/star/uno/Exception.hpp>
 #include <basic/codecompletecache.hxx>
 
 using namespace ::com::sun::star;

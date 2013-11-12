@@ -79,7 +79,7 @@ static int  GnIndentForPCode = 2;
 
 #include <algorithm>
 #include <stack>
-#include "canvas/elapsedtime.hxx"
+#include <canvas/elapsedtime.hxx>
 
 //*** Profiling ***
 // GbTimerOn:

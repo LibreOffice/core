@@ -21,7 +21,7 @@
 #include "rtlproto.hxx"
 #include "sbdiagnose.hxx"
 
-#include "basic/sbstar.hxx"
+#include <basic/sbstar.hxx>
 
 #include <tools/debug.hxx>
 #include <comphelper/flagguard.hxx>

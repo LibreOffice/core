@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basic/modsizeexceeded.hxx"
+#include <basic/modsizeexceeded.hxx>
 
 #include <comphelper/interaction.hxx>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>

@@ -67,7 +67,7 @@
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <com/sun/star/script/XAutomationInvocation.hpp>
-#include "basic/codecompletecache.hxx"
+#include <basic/codecompletecache.hxx>
 
 using com::sun::star::uno::Reference;
 using namespace com::sun::star::uno;

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "basic/global.hxx"
+#include <basic/global.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/instance.hxx>

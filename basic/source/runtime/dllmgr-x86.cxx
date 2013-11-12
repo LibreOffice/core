@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #if defined(WNT)
 #include <windows.h>
@@ -30,14 +30,14 @@
 #include <map>
 #include <vector>
 
-#include "basic/sbx.hxx"
-#include "basic/sbxvar.hxx"
+#include <basic/sbx.hxx>
+#include <basic/sbxvar.hxx>
 #include "runtime.hxx"
-#include "osl/thread.h"
-#include "rtl/ref.hxx"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
-#include "salhelper/simplereferenceobject.hxx"
+#include <osl/thread.h>
+#include <rtl/ref.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #undef max
 

@@ -10,16 +10,16 @@
 #define INCLUDED_BASIC_QA_CPPUNIT_BASICTEST_HXX
 
 #include <sal/types.h>
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
-#include "basic/sbstar.hxx"
-#include "basic/basrdll.hxx"
-#include "basic/sbmod.hxx"
-#include "basic/sbmeth.hxx"
-#include "basic/basrdll.hxx"
-#include "basic/sbuno.hxx"
+#include <basic/sbstar.hxx>
+#include <basic/basrdll.hxx>
+#include <basic/sbmod.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/basrdll.hxx>
+#include <basic/sbuno.hxx>
 #include <osl/file.hxx>
 
 class MacroSnippet

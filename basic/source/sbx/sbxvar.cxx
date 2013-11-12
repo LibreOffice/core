@@ -18,7 +18,7 @@
  */
 
 #include <tools/stream.hxx>
-#include "svl/brdcst.hxx"
+#include <svl/brdcst.hxx>
 
 #include <basic/sbx.hxx>
 #include "sbxres.hxx"
@@ -26,7 +26,7 @@
 #include <math.h>
 #include <ctype.h>
 
-#include "com/sun/star/uno/XInterface.hpp"
+#include <com/sun/star/uno/XInterface.hpp>
 using namespace com::sun::star::uno;
 
 ///////////////////////////// SbxVariable //////////////////////////////

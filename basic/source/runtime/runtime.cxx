@@ -64,7 +64,7 @@
 #include "sb.hrc"
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
-#include "basic/codecompletecache.hxx"
+#include <basic/codecompletecache.hxx>
 
 using com::sun::star::uno::Reference;
 

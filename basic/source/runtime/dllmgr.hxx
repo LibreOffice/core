@@ -20,12 +20,12 @@
 #ifndef INCLUDED_BASIC_SOURCE_RUNTIME_DLLMGR_HXX
 #define INCLUDED_BASIC_SOURCE_RUNTIME_DLLMGR_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include "basic/sberrors.hxx"
+#include <basic/sberrors.hxx>
 
 class SbxArray;
 class SbxVariable;

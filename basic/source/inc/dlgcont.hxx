@@ -23,7 +23,7 @@
 #include "namecont.hxx"
 
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
-#include "com/sun/star/resource/XStringResourcePersistence.hpp"
+#include <com/sun/star/resource/XStringResourcePersistence.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>

@@ -21,7 +21,7 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
-#include "unotools/syslocale.hxx"
+#include <unotools/syslocale.hxx>
 
 #include <stdlib.h>
 

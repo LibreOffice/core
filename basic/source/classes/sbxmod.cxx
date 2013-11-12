@@ -37,7 +37,7 @@
 #include "token.hxx"
 #include "sbunoobj.hxx"
 
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #include <basic/basrdll.hxx>
 #include <osl/mutex.hxx>
