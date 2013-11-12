@@ -302,6 +302,12 @@ public:
     void BinInlineFun(std::set<std::string>& decls,std::set<std::string>& funs);
     virtual std::string BinFuncName(void) const { return "GammaDist"; }
 };
+class OpHypGeomDist:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "OpHypGeomDist"; }
+};
 class OpChiDist:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,

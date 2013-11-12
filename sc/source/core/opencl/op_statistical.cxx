@@ -6412,6 +6412,129 @@ void OpDevSq::GenSlidingWindowFunction(std::stringstream& ss,
         ss << "    return vSum;\n";
         ss << "}";
 }
+void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double arg0,arg1,arg2,arg3;\n";
+    size_t i = vSubArguments.size();
+    size_t nItems = 0;
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n";
+#endif
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
+#endif
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
+#endif
+            }
+            else {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+            ss << "    {\n";
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            arg"<<i<<"= 0;\n";
+            ss << "        else\n";
+            ss << "            arg"<<i<<"=";
+            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss << "    }\n";
+            ss << "    else\n";
+            ss << "        arg"<<i<<"= 0;\n";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        arg"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        arg"<<i<<"=";
+            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#endif
+        }
+    }
+    ss << "    double N1=floor(arg3);\n"
+    "    double M1=floor(arg2);\n"
+    "    double n1=floor(arg1);\n"
+    "    double x1=floor(arg0);\n"
+    "    double num[9],out[9];\n"
+    "    double PI = 3.1415926535897932384626433832795;\n"
+    "    double tmp,sum;\n"
+    "    if( (x1 < 0.0) || (n1 < x1) || (M1 < x1) || (N1 < n1) ||"
+    "(N1 < M1) || (x1 < n1 - N1 + M1) )\n"
+    "    {\n"
+    "        tmp = DBL_MIN;\n"
+    "        return tmp;\n"
+    "    }\n"
+    "    num[0]=M1;\n"
+    "    num[1]=x1;\n"
+    "    num[2]=M1-x1;\n"
+    "    num[3]=N1-M1;\n"
+    "    num[4]=n1-x1;\n"
+    "    num[5]=N1-M1-n1+x1;\n"
+    "    num[6]=N1;\n"
+    "    num[7]=n1;\n"
+    "    num[8]=N1-n1;\n"
+    "    for(int i=0;i<9;i++)\n"
+    "    {\n"
+    "        if(num[i]<171)\n"
+    "        {\n"
+    "            if(num[i]==0)\n"
+    "                out[i]=0;\n"
+    "            else\n"
+    "                out[i]=log(tgamma(num[i])*num[i]);\n"
+    "        }\n"
+    "        else\n"
+    "            out[i]=0.5*log(2.0*PI)+(num[i]+0.5)*log(num[i])-num[i]+"
+    "(1.0/12.0/num[i]-1.0/360/(num[i]*num[i]*num[i]));\n"
+    "    }\n";
+    ss << "    sum=out[0]+out[3]+out[7]+out[8]-out[1]-out[2]-out[4]-out[5]-out[6];\n";
+    ss << "    tmp=exp(sum);\n";
+    ss << "    return tmp;\n";
+    ss << "}\n";
+}
 
 }}
 
