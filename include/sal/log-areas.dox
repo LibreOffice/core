@@ -251,7 +251,6 @@ certain functionality.
 @li @c svtools.contnr
 @li @c svtools.control
 @li @c svtools.dialogs
-@li @c svtools.filter
 @li @c svtools.misc
 @li @c svtools.table
 @li @c svtools.uno

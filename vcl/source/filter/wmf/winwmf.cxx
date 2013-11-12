@@ -372,7 +372,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     nPoints += pnPoints[a];
                 }
 
-                SAL_WARN_IF(!bRecordOk, "svtools.filter", "polypolygon record has more polygons than we can handle");
+                SAL_WARN_IF(!bRecordOk, "vcl.filter", "polypolygon record has more polygons than we can handle");
 
                 bRecordOk &= pWMF->good();
 
@@ -1375,7 +1375,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                         nPoints += nP;
                     }
 
-                    SAL_WARN_IF(!bRecordOk, "svtools.filter", "polypolygon record has more polygons than we can handle");
+                    SAL_WARN_IF(!bRecordOk, "vcl.filter", "polypolygon record has more polygons than we can handle");
 
                     bRecordOk &= pStm->good();
 

@@ -347,7 +347,7 @@ template <class T>
 Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
 {
     bool bRecordOk = nPoints <= SAL_MAX_UINT16;
-    SAL_WARN_IF(!bRecordOk, "svtools.filter", "polygon record has more polygons than we can handle");
+    SAL_WARN_IF(!bRecordOk, "vcl.filter", "polygon record has more polygons than we can handle");
     if (!bRecordOk)
         return Polygon();
 

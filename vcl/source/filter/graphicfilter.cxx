@@ -122,15 +122,15 @@ static bool DirEntryExists( const INetURLObject& rObj )
     }
     catch(const css::ucb::CommandAbortedException&)
     {
-        SAL_WARN( "svtools.filter", "CommandAbortedException" );
+        SAL_WARN( "vcl.filter", "CommandAbortedException" );
     }
     catch(const css::ucb::ContentCreationException&)
     {
-        SAL_WARN( "svtools.filter", "ContentCreationException" );
+        SAL_WARN( "vcl.filter", "ContentCreationException" );
     }
     catch( ... )
     {
-        SAL_WARN( "svtools.filter", "Any other exception" );
+        SAL_WARN( "vcl.filter", "Any other exception" );
     }
     return bExists;
 }
@@ -148,11 +148,11 @@ static void KillDirEntry( const OUString& rMainUrl )
     }
     catch(const css::ucb::CommandAbortedException&)
     {
-        SAL_WARN( "svtools.filter", "CommandAbortedException" );
+        SAL_WARN( "vcl.filter", "CommandAbortedException" );
     }
     catch( ... )
     {
-        SAL_WARN( "svtools.filter", "Any other exception" );
+        SAL_WARN( "vcl.filter", "Any other exception" );
     }
 }
 
