@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///14\u003d",
+        "filename": "filter/source/flash/swffilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-11-12T14:59:45Z",
+      "side": 1,
+      "message": "this should rather be \"std::max\u003csal_Int32\u003e(0, sPresentation.getLength() - 1)\"\n\nbecause it\u0027s possible that it contains a \"/\" but not \".\" and the subtraction below would fail...",
+      "revId": "c38857dec1d1deea5b026ccb9f633ac1b34d9774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///10\u003d",
+        "filename": "filter/source/flash/swffilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-11-12T14:59:45Z",
+      "side": 0,
+      "message": "wtf is the reason for that (preexisting) nonsense?",
+      "revId": "be2f8b889ed04e8cf3a6e8a0d73f300754588557",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
