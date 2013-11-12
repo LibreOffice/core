@@ -229,6 +229,7 @@ public:
     void testMathFormulaRandom();
     void testMathFormulaConvert();
     void testMathFormulaProduct();
+    void testStatisticalFormulaHypGeomDist();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -389,6 +390,7 @@ public:
     CPPUNIT_TEST(testMathFormulaRandom);
     CPPUNIT_TEST(testMathFormulaConvert);
     CPPUNIT_TEST(testMathFormulaProduct);
+    CPPUNIT_TEST(testStatisticalFormulaHypGeomDist);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4432,6 +4434,29 @@ void ScOpenclTest::testMathFormulaKombin()
     {
         double fLibre = pDoc->GetValue(ScAddress(2,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-199]
+void ScOpenclTest::testStatisticalFormulaHypGeomDist()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/HypGeomDist.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/HypGeomDist.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 19; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(4,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
