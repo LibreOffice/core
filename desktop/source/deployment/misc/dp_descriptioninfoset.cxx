@@ -131,15 +131,8 @@ public:
         return m_xRoot;
     }
 
-    OUString getExtensionRootUrl() const
-    {
-        return m_sExtensionRootUrl;
-    }
-
-
 private:
     css::uno::Reference<css::xml::dom::XNode> m_xRoot;
-    OUString m_sExtensionRootUrl;
 };
 
 class NoDescriptionException
@@ -178,7 +171,6 @@ ExtensionDescription::ExtensionDescription(
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv)
 {
     try {
-        m_sExtensionRootUrl = installDir;
         //may throw ::com::sun::star::ucb::ContentCreationException
         //If there is no description.xml then ucb will start an interaction which
         //brings up a dialog.We want to prevent this. Therefore we wrap the xCmdEnv
