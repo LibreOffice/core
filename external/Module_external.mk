@@ -51,6 +51,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	$(call gb_Helper_optional,LCMS2,lcms2) \
 	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
+	$(call gb_Helper_optional,LIBEOT,libeot) \
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \

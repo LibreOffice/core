@@ -2639,6 +2639,49 @@ gb_LinkTarget__use_orcus-parser :=
 
 endif
 
+ifeq ($(ENABLE_EOT),TRUE)
+
+ifeq ($(SYSTEM_LIBEOT),TRUE)
+
+define gb_LinkTarget__use_libeot
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(LIBEOT_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBEOT_LIBS))
+
+endef
+
+gb_ExternalProject__use_libeot :=
+
+else # !SYSTEM_LIBEOT
+
+define gb_LinkTarget__use_libeot
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libeot)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libeot)/.libs/libeot$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libeot)
+
+endef
+
+define gb_ExternalProject__use_libeot
+$(call gb_ExternalProject_use_external_project,$(1),libeot)
+
+endef
+
+endif # SYSTEM_LIBEOT
+
+else # !ENABLE_EOT
+
+gb_LinkTarget__use_libeot :=
+gb_ExternalProject__use_libeot :=
+
+endif # ENABLE_EOT
+
 ### X11 stuff ###
 
 ifeq ($(GUIBASE),unx)
