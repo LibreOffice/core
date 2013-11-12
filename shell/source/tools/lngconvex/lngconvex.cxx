@@ -172,9 +172,6 @@ public:
     OUString make_OUString() const
     { return OStringToOUString( maBcp47, RTL_TEXTENCODING_ASCII_US); }
 
-    OString make_OString() const
-    { return maBcp47; }
-
     std::string make_std_string() const
     { return maBcp47.getStr(); }
 
