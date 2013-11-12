@@ -88,15 +88,12 @@ class fillStructState
     // How many positional arguments are consumed
     // This is always the so-many first ones
     sal_Int32 nPosConsumed;
-    // The total number of members set, either by a keyword argument or a positional argument
-    unsigned int nMembersSet;
 
 public:
     fillStructState()
         : used (PyDict_New())
         , initialised ()
         , nPosConsumed (0)
-        , nMembersSet (0)
     {
         if ( ! used )
             throw RuntimeException("pyuno._createUnoStructHelper failed to create new dictionary", Reference< XInterface > ());
@@ -108,10 +105,6 @@ public:
     void setUsed(PyObject *key)
     {
         PyDict_SetItem(used, key, Py_True);
-    }
-    bool isUsed(PyObject *key) const
-    {
-        return Py_True == PyDict_GetItem(used, key);
     }
     void setInitialised(OUString key, sal_Int32 pos = -1)
     {
@@ -130,7 +123,6 @@ public:
             throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > ());
         }
         initialised[key] = true;
-        ++nMembersSet;
         if ( pos >= 0 )
             ++nPosConsumed;
     }
@@ -145,10 +137,6 @@ public:
     sal_Int32 getCntConsumed() const
     {
         return nPosConsumed;
-    }
-    int getCntMembersSet() const
-    {
-        return nMembersSet;
     }
 };
 
