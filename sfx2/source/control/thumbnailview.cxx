@@ -732,113 +732,116 @@ void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
 
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() )
+    if ( !rMEvt.IsLeft() )
     {
-        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
-        ThumbnailViewItem* pItem = ImplGetItem(nPos);
-
-        if (pItem)
-        {
-            if ( rMEvt.GetClicks() == 1 )
-            {
-                if (rMEvt.IsMod1())
-                {
-                    //Keep selected item group state and just invert current desired one state
-                    pItem->setSelection(!pItem->isSelected());
-
-                    //This one becomes the selection range start position if it changes its state to selected otherwise resets it
-                    mpStartSelRange = pItem->isSelected() ? mFilteredItemList.begin() + nPos : mFilteredItemList.end();
-                }
-                else if (rMEvt.IsShift() && mpStartSelRange != mFilteredItemList.end())
-                {
-                    std::pair<size_t,size_t> aNewRange;
-                    aNewRange.first = mpStartSelRange - mFilteredItemList.begin();
-                    aNewRange.second = nPos;
-
-                    if (aNewRange.first > aNewRange.second)
-                        std::swap(aNewRange.first,aNewRange.second);
-
-                    //Deselect the ones outside of it
-                    for (size_t i = 0, n = mFilteredItemList.size(); i < n; ++i)
-                    {
-                        ThumbnailViewItem *pCurItem  = mFilteredItemList[i];
-
-                        if (pCurItem->isSelected() && (i < aNewRange.first || i > aNewRange.second))
-                        {
-                            pCurItem->setSelection(false);
-
-                            if (pCurItem->isVisible())
-                                DrawItem(pCurItem);
-
-                            maItemStateHdl.Call(pCurItem);
-                        }
-                    }
-
-                    size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
-
-                    //Select the items between start range and the selected item
-                    if (nSelPos != nPos)
-                    {
-                        int dir = nSelPos < nPos ? 1 : -1;
-                        size_t nCurPos = nSelPos + dir;
-
-                        while (nCurPos != nPos)
-                        {
-                            ThumbnailViewItem *pCurItem  = mFilteredItemList[nCurPos];
-
-                            if (!pCurItem->isSelected())
-                            {
-                                pCurItem->setSelection(true);
-
-                                if (pCurItem->isVisible())
-                                    DrawItem(pCurItem);
-
-                                maItemStateHdl.Call(pCurItem);
-                            }
-
-                            nCurPos += dir;
-                        }
-                    }
-
-                    pItem->setSelection(true);
-                }
-                else
-                {
-                    //If we got a group of selected items deselect the rest and only keep the desired one
-                    //mark items as not selected to not fire unnecessary change state events.
-                    pItem->setSelection(false);
-                    deselectItems();
-                    pItem->setSelection(true);
-
-                    //Mark as initial selection range position and reset end one
-                    mpStartSelRange = mFilteredItemList.begin() + nPos;
-                }
-
-                if (pItem->isSelected())
-                {
-                    bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
-                    pItem->setEditTitle(bClickOnTitle);
-                }
-
-                if (!pItem->isHighlighted())
-                    DrawItem(pItem);
-
-                maItemStateHdl.Call(pItem);
-
-                //fire accessible event??
-            }
-            else if ( rMEvt.GetClicks() == 2 )
-            {
-                OnItemDblClicked(pItem);
-            }
-
-            return;
-        }
-        else if (!pItem)
-            deselectItems( );
+        Control::MouseButtonDown( rMEvt );
+        return;
     }
 
-    Control::MouseButtonDown( rMEvt );
+    size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
+    ThumbnailViewItem* pItem = ImplGetItem(nPos);
+
+    if ( !pItem )
+    {
+        deselectItems();
+        Control::MouseButtonDown( rMEvt );
+        return;
+    }
+
+    if ( rMEvt.GetClicks() == 2 )
+    {
+        OnItemDblClicked(pItem);
+        return;
+    }
+
+    if ( rMEvt.GetClicks() == 1 )
+    {
+        if (rMEvt.IsMod1())
+        {
+            //Keep selected item group state and just invert current desired one state
+            pItem->setSelection(!pItem->isSelected());
+
+            //This one becomes the selection range start position if it changes its state to selected otherwise resets it
+            mpStartSelRange = pItem->isSelected() ? mFilteredItemList.begin() + nPos : mFilteredItemList.end();
+        }
+        else if (rMEvt.IsShift() && mpStartSelRange != mFilteredItemList.end())
+        {
+            std::pair<size_t,size_t> aNewRange;
+            aNewRange.first = mpStartSelRange - mFilteredItemList.begin();
+            aNewRange.second = nPos;
+
+            if (aNewRange.first > aNewRange.second)
+                std::swap(aNewRange.first,aNewRange.second);
+
+            //Deselect the ones outside of it
+            for (size_t i = 0, n = mFilteredItemList.size(); i < n; ++i)
+            {
+                ThumbnailViewItem *pCurItem  = mFilteredItemList[i];
+
+                if (pCurItem->isSelected() && (i < aNewRange.first || i > aNewRange.second))
+                {
+                    pCurItem->setSelection(false);
+
+                    if (pCurItem->isVisible())
+                        DrawItem(pCurItem);
+
+                    maItemStateHdl.Call(pCurItem);
+                }
+            }
+
+            size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
+
+            //Select the items between start range and the selected item
+            if (nSelPos != nPos)
+            {
+                int dir = nSelPos < nPos ? 1 : -1;
+                size_t nCurPos = nSelPos + dir;
+
+                while (nCurPos != nPos)
+                {
+                    ThumbnailViewItem *pCurItem  = mFilteredItemList[nCurPos];
+
+                    if (!pCurItem->isSelected())
+                    {
+                        pCurItem->setSelection(true);
+
+                        if (pCurItem->isVisible())
+                            DrawItem(pCurItem);
+
+                        maItemStateHdl.Call(pCurItem);
+                    }
+
+                    nCurPos += dir;
+                }
+            }
+
+            pItem->setSelection(true);
+        }
+        else
+        {
+            //If we got a group of selected items deselect the rest and only keep the desired one
+            //mark items as not selected to not fire unnecessary change state events.
+            pItem->setSelection(false);
+            deselectItems();
+            pItem->setSelection(true);
+
+            //Mark as initial selection range position and reset end one
+            mpStartSelRange = mFilteredItemList.begin() + nPos;
+        }
+
+        if (pItem->isSelected())
+        {
+            bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
+            pItem->setEditTitle(bClickOnTitle);
+        }
+
+        if (!pItem->isHighlighted())
+            DrawItem(pItem);
+
+        maItemStateHdl.Call(pItem);
+
+        //fire accessible event??
+    }
 }
 
 void ThumbnailView::MouseButtonUp( const MouseEvent& rMEvt )
