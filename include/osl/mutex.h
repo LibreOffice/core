@@ -32,7 +32,7 @@ extern "C" {
 struct _oslMutexImpl;
 typedef struct _oslMutexImpl * oslMutex;
 
-/** Create a thread-local mutex.
+/** Create a mutex.
     @return 0 if the mutex could not be created, otherwise a handle to the mutex.
 */
 SAL_DLLPUBLIC oslMutex SAL_CALL osl_createMutex(void);
