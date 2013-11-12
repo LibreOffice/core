@@ -149,7 +149,6 @@ class FilterPropertyInfo_Impl
 {
     const OUString     sApiName;
     std::list<sal_uInt32>   aIndexes;
-    sal_uInt32              nCount;
 
 public:
 
@@ -158,12 +157,6 @@ public:
 
     const OUString& GetApiName() const { return sApiName; }
     std::list<sal_uInt32>& GetIndexes() { return aIndexes; }
-
-    void AddIndex( sal_uInt32 nIndex )
-    {
-        aIndexes.push_back(nIndex);
-        nCount++;
-    }
 
     // for sort
     sal_Bool operator< ( const FilterPropertyInfo_Impl& rArg ) const
@@ -175,9 +168,7 @@ public:
 FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
         const OUString& rApiName,
         const sal_uInt32 nIndex ) :
-    sApiName( rApiName ),
-    aIndexes(),
-    nCount(1)
+    sApiName( rApiName )
 {
     aIndexes.push_back(nIndex);
 }
