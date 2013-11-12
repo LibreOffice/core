@@ -923,7 +923,8 @@ public:
       @param str the substring to be compared
 
       @param rest if non-null, and this function returns true, then assign a
-      copy of the remainder of this string to *rest
+      copy of the remainder of this string to *rest. Available since
+      LibreOffice 4.2
 
       @return true if and only if the given str appears as a substring at the
       start of this string
@@ -968,7 +969,8 @@ public:
       @param str the substring to be compared
 
       @param rest if non-null, and this function returns true, then assign a
-      copy of the remainder of this string to *rest
+      copy of the remainder of this string to *rest. Available since
+      LibreOffice 4.2
 
       @return true if and only if the given str appears as a substring at the
       start of this string, ignoring the case of ASCII letters ("A"--"Z" and
@@ -1013,7 +1015,8 @@ public:
       @param str the substring to be compared
 
       @param rest if non-null, and this function returns true, then assign a
-      copy of the remainder of this string to *rest
+      copy of the remainder of this string to *rest. Available since
+      LibreOffice 4.2
 
       @return true if and only if the given str appears as a substring at the
       end of this string
@@ -1083,7 +1086,8 @@ public:
       @param str the substring to be compared
 
       @param rest if non-null, and this function returns true, then assign a
-      copy of the remainder of this string to *rest
+      copy of the remainder of this string to *rest. Available since
+      LibreOffice 4.2
 
       @return true if and only if the given str appears as a substring at the
       end of this string, ignoring the case of ASCII letters ("A"--"Z" and
