@@ -1587,6 +1587,34 @@ DECLARE_OOXML_TEST(testCustomXmlGrabBag, "customxml.docx")
    CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
 }
 
+DECLARE_OOXML_TEST(testActiveXGrabBag, "activex.docx")
+{
+   // The problem was that activeX.xml files were missing from docx file after saving file.
+   // This test case tests whether activex files grabbagged properly in correct object.
+
+   uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+   uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+   CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+   bool bActiveX = sal_False;
+   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   {
+       if (aGrabBag[i].Name == "OOXActiveX")
+       {
+           bActiveX = sal_True;
+           uno::Reference<xml::dom::XDocument> aActiveXDom;
+           uno::Sequence<uno::Reference<xml::dom::XDocument> > aActiveXDomList;
+           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aActiveXDomList); // PropertyValue of proper type
+           sal_Int32 length = aActiveXDomList.getLength();
+           CPPUNIT_ASSERT_EQUAL(sal_Int32(5), length);
+           aActiveXDom = aActiveXDomList[0];
+           CPPUNIT_ASSERT(aActiveXDom.get()); // Reference not empty
+       }
+   }
+   CPPUNIT_ASSERT(bActiveX); // Grab Bag has all the expected elements
+}
+
 DECLARE_OOXML_TEST(testFdo69644, "fdo69644.docx")
 {
     // The problem was that the exporter exported the table definition

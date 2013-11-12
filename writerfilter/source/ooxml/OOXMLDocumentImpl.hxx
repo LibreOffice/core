@@ -45,6 +45,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomList;
     uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomPropsList;
     uno::Reference<xml::dom::XDocument> mxCustomXmlProsDom;
+    uno::Sequence<uno::Reference<xml::dom::XDocument> > mxActiveXDomList;
     bool mbIsSubstream;
 
 protected:
@@ -69,6 +70,7 @@ protected:
 
     void setIsSubstream( bool bSubstream ) { mbIsSubstream = bSubstream; };
     void resolveCustomXmlStream(Stream & rStream);
+    void resolveActiveXStream(Stream & rStream);
 
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
@@ -117,6 +119,7 @@ public:
     virtual uno::Reference<xml::dom::XDocument> getThemeDom();
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList();
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList();
+    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getActiveXDomList();
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX

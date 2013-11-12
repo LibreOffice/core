@@ -353,6 +353,8 @@ void DocxExport::ExportDocument_Impl()
 
     WriteCustomXml();
 
+    WriteActiveX();
+
     delete pStyles, pStyles = NULL;
     delete m_pSections, m_pSections = NULL;
 }
@@ -853,6 +855,48 @@ void DocxExport::WriteCustomXml()
 
         }
     }
+}
+
+void DocxExport::WriteActiveX()
+{
+    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+        return;
+
+    uno::Sequence<uno::Reference<xml::dom::XDocument> > activeXDomlist;
+    uno::Sequence< beans::PropertyValue > propList;
+    xPropSet->getPropertyValue( pName ) >>= propList;
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+    {
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXActiveX" )
+        {
+             propList[nProp].Value >>= activeXDomlist;
+             break;
+        }
+    }
+
+    for (sal_Int32 j = 0; j < activeXDomlist.getLength(); j++)
+    {
+        uno::Reference<xml::dom::XDocument> activeXDom = activeXDomlist[j];
+
+        if ( activeXDom.is() )
+        {
+            m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control",
+                    "activeX/activeX"+OUString::number((j+1))+".xml" );
+
+            uno::Reference< xml::sax::XSAXSerializable > serializer( activeXDom, uno::UNO_QUERY );
+            uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
+            writer->setOutputStream( GetFilter().openFragmentStream( "word/activeX/activeX"+OUString::number((j+1))+".xml",
+                "application/vnd.ms-office.activeX+xml" ) );
+            serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+                uno::Sequence< beans::StringPair >() );
+         }
+     }
 }
 
 VMLExport& DocxExport::VMLExporter()
