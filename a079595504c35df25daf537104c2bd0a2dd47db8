@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///4o\u003d",
+        "filename": "editeng/source/items/paraitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-12T08:28:56Z",
+      "side": 1,
+      "message": "Why changing this?",
+      "revId": "a079595504c35df25daf537104c2bd0a2dd47db8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaX///4k\u003d",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1505,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-12T08:28:56Z",
+      "side": 1,
+      "message": "If you add a testcase in the export suite already, why don\u0027t you put these tests there as well? Then you could avoid adding the test files twice with no good reason.",
+      "revId": "a079595504c35df25daf537104c2bd0a2dd47db8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaX///4g\u003d",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4537,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-12T08:28:56Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make sense to avoid hardcoding 240 here, and using nSpace instead?",
+      "revId": "a079595504c35df25daf537104c2bd0a2dd47db8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaX///4c\u003d",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4541,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-12T08:28:56Z",
+      "side": 1,
+      "message": "Could you please fix indenting here?",
+      "revId": "a079595504c35df25daf537104c2bd0a2dd47db8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
