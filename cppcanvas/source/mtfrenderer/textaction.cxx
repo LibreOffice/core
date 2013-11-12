@@ -1763,6 +1763,7 @@ namespace cppcanvas
                                          maReliefOffset );
             }
 
+#if 0 // see #if'ed out use in OutlineAction::renderSubset below:
             class OutlineTextArrayRenderHelper : public TextRenderer
             {
             public:
@@ -1831,6 +1832,7 @@ namespace cppcanvas
                 const uno::Reference< rendering::XPolyPolygon2D >&  mrLinePolygon;
                 const rendering::ViewState&                         mrViewState;
             };
+#endif
 
             bool OutlineAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
                                               const Subset&                   rSubset ) const
