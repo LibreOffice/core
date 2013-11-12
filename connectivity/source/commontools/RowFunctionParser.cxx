@@ -197,11 +197,6 @@ public:
     {
         mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( new ORowSetValueDecorator( n ) ) ) );
     }
-    void operator()( StringIteratorT rFirst,StringIteratorT rSecond) const
-    {
-        OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-        (void)sVal;
-    }
 };
 
 /** Implements a binary function over two ExpressionNodes
