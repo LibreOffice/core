@@ -2185,7 +2185,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $msifilename, $languagestringref, $onelanguage, $languagefile, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
                 if (( $installer::globals::globallogging ) && ($installer::globals::globalloggingform21)) { installer::files::save_array_of_hashes($loggingdir . "productfiles21_" . $onelanguage . ".log", $filesinproductlanguageresolvedarrayref); }
                 $installer::globals::globalloggingform21 = 0;
-                if ( $installer::globals::use_packages_for_cabs ) { installer::windows::media::create_media_table($filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref, $allupdatelastsequences, $allupdatediskids); }
 
                 # copy msi database into installation directory
 

@@ -422,7 +422,6 @@ BEGIN
     $cabfilecompressionlevel = 2;
     $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 0;
-    $use_packages_for_cabs = 0;
     $msidatabasename = "";
     $prepare_winpatch = 0;
     $previous_idt_dir = "";

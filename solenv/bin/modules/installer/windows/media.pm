@@ -243,68 +243,7 @@ sub create_media_table
 
     if ( $allvariables->{'INCLUDE_CAB_IN_MSI'} ) { $installer::globals::include_cab_in_msi = 1; }
 
-    if ( $installer::globals::use_packages_for_cabs )
-    {
-        my $cabfile;
-        foreach $cabfile ( sort keys %installer::globals::lastsequence )
-        {
-            my %media = ();
-            $diskid++;
-
-            $media{'DiskId'} = get_media_diskid($diskid);
-            $media{'LastSequence'} = get_last_sequence($cabfile, $alludpatelastsequences);
-            $media{'DiskPrompt'} = get_media_diskprompt();
-            $media{'Cabinet'} = get_cabfilename($cabfile);
-            $media{'VolumeLabel'} = get_media_volumelabel();
-            $media{'Source'} = get_media_source();
-
-            my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                        . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
-
-            push(@mediatable, $oneline);
-
-            # Comparing the disk id with the disk id from update database. Both have to be identical. New files have to be added
-            # to the new pff cabinet file. And existing cab files must not be removed.
-            if ( $installer::globals::updatedatabase )
-            {
-                # Comparing lines in new media table with line from media table in udpate database.
-                if ( exists($allupdatediskids->{$media{'Cabinet'}}) )
-                {
-                    if ( $media{'DiskId'} != $allupdatediskids->{$media{'Cabinet'}} )
-                    {
-                        installer::exiter::exit_program("ERROR: Different DiskIDs for cab file \"$media{'Cabinet'}\".\nCurrent installation set: \"$media{'DiskId'}\", but update database used \"$allupdatediskids->{$media{'Cabinet'}}\".\nWere cabinet files removed or added?", "create_media_table");
-                    }
-                }
-                else
-                {
-                    $installer::logger::Lang->printf(
-                        "Warning: Could not find cabinet file \"%s}\" in update database. This seems to be an new cabinet file!?\n",
-                        $media{'Cabinet'});
-                }
-            }
-        }
-
-        # one new cabinet file for all files added after the final release
-        if (( $installer::globals::updatedatabase ) && ( $installer::globals::pfffileexists ))
-        {
-            my %media = ();
-            $diskid++;
-
-            $media{'DiskId'} = get_media_diskid($diskid) + $installer::globals::mergemodulenumber;  # Adding mergemodulenumber, because this files are included later
-            $media{'LastSequence'} = $installer::globals::updatesequencecounter;
-            $media{'DiskPrompt'} = get_media_diskprompt();
-            $media{'Cabinet'} = get_cabfilename($installer::globals::pffcabfilename);
-            $media{'VolumeLabel'} = get_media_volumelabel();
-            $media{'Source'} = get_media_source();
-
-            my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                        . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
-
-            push(@mediatable, $oneline);
-        }
-
-    }
-    elsif ( $installer::globals::fix_number_of_cab_files )
+    if ( $installer::globals::fix_number_of_cab_files )
     {
         # number of cabfiles
         my $maxcabfilenumber = $installer::globals::number_of_cabfiles;
