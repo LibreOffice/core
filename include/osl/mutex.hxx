@@ -32,7 +32,7 @@ namespace osl
     class SAL_WARN_UNUSED Mutex {
 
     public:
-        /** Create a thread-local mutex.
+        /** Create a mutex.
             @return 0 if the mutex could not be created, otherwise a handle to the mutex.
             @see ::osl_createMutex()
         */
