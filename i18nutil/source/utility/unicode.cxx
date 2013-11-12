@@ -352,7 +352,7 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
 
 }
 
-#define bit(name)   (1 << name)
+#define bit(name)   (1U << name)
 
 #define UPPERMASK   bit(UnicodeType::UPPERCASE_LETTER)
 
