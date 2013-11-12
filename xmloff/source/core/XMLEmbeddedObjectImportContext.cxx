@@ -25,11 +25,11 @@
 #include <comphelper/classids.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 #include <xmloff/attrlist.hxx>
-#include "xmloff/XMLFilterServiceNames.h"
+#include <xmloff/XMLFilterServiceNames.h>
 #include "XMLEmbeddedObjectImportContext.hxx"
 
 using namespace ::com::sun::star::uno;

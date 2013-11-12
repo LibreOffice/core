@@ -21,7 +21,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/SettingsExportHelper.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

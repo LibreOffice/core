@@ -27,7 +27,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmltypes.hxx>
-#include "xmloff/NamedBoolPropertyHdl.hxx"
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #include "formenums.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>

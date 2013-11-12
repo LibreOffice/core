@@ -20,7 +20,7 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLTEXTLISTCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace xml { namespace sax {

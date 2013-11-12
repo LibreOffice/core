@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xmloff/ImageStyle.hxx"
+#include <xmloff/ImageStyle.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>

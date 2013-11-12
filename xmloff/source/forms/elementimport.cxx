@@ -18,16 +18,16 @@
  */
 
 #include "elementimport.hxx"
-#include "xmloff/xmlimp.hxx"
-#include "xmloff/nmspmap.hxx"
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/nmspmap.hxx>
 #include "strings.hxx"
 #include "callbacks.hxx"
 #include "attriblistmerge.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include "eventimport.hxx"
-#include "xmloff/txtstyli.hxx"
+#include <xmloff/txtstyli.hxx>
 #include "formenums.hxx"
-#include "xmloff/xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #include "gridcolumnproptranslator.hxx"
 #include "property_description.hxx"
 #include "property_meta_data.hxx"

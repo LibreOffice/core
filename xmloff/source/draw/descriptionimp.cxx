@@ -21,7 +21,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 
 #include "descriptionimp.hxx"

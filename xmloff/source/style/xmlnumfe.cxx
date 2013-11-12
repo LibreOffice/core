@@ -35,7 +35,7 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/families.hxx>

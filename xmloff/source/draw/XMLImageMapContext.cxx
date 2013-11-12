@@ -31,11 +31,11 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLStringBufferImportContext.hxx"
 #include <tools/debug.hxx>

@@ -28,7 +28,7 @@
 #include <vcl/embeddedfontshelper.hxx>
 
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "fonthdl.hxx"
 #include <xmloff/xmlimp.hxx>

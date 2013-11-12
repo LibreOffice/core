@@ -19,7 +19,7 @@
 
 #include <tools/debug.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextPropertySetContext.hxx"
 #include <xmloff/xmlimp.hxx>

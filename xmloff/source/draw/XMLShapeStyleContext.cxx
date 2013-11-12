@@ -22,13 +22,13 @@
 #include "XMLShapePropertySetContext.hxx"
 #include <xmloff/contextid.hxx>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include "com/sun/star/beans/XPropertySetInfo.hpp"
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 #include <xmloff/maptype.hxx>
 
 #include "sdpropls.hxx"

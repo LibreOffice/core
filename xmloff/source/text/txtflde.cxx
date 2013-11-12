@@ -29,7 +29,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnume.hxx>
-#include "xmloff/numehelp.hxx"
+#include <xmloff/numehelp.hxx>
 
 #include <xmloff/families.hxx>
 #include <xmloff/XMLEventExport.hxx>

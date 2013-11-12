@@ -26,17 +26,17 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include "xmloff/table/XMLTableImport.hxx"
-#include "xmloff/xmltkmap.hxx"
-#include "xmloff/maptype.hxx"
-#include "xmloff/xmlprmap.hxx"
-#include "xmloff/txtimp.hxx"
-#include "xmloff/xmlimp.hxx"
-#include "xmloff/nmspmap.hxx"
-#include "xmloff/xmlstyle.hxx"
-#include "xmloff/prstylei.hxx"
+#include <xmloff/table/XMLTableImport.hxx>
+#include <xmloff/xmltkmap.hxx>
+#include <xmloff/maptype.hxx>
+#include <xmloff/xmlprmap.hxx>
+#include <xmloff/txtimp.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlstyle.hxx>
+#include <xmloff/prstylei.hxx>
 
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include "table.hxx"
 
 #include <boost/shared_ptr.hpp>

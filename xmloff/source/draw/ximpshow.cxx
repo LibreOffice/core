@@ -28,7 +28,7 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/extract.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpshow.hxx"

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TABLE_TABLE_HXX
 #define INCLUDED_XMLOFF_SOURCE_TABLE_TABLE_HXX
 
-#include "xmloff/xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 
 struct XMLPropertyMapEntry;
 

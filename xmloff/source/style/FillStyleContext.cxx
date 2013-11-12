@@ -20,15 +20,15 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "FillStyleContext.hxx"
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/GradientStyle.hxx"
-#include "xmloff/HatchStyle.hxx"
-#include "xmloff/ImageStyle.hxx"
+#include <xmloff/GradientStyle.hxx>
+#include <xmloff/HatchStyle.hxx>
+#include <xmloff/ImageStyle.hxx>
 #include "TransGradientStyle.hxx"
-#include "xmloff/MarkerStyle.hxx"
-#include "xmloff/DashStyle.hxx"
+#include <xmloff/MarkerStyle.hxx>
+#include <xmloff/DashStyle.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 
 using namespace ::com::sun::star;

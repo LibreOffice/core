@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include <osl/diagnose.h>
 
 #include <rtl/ustring.hxx>
@@ -36,8 +36,8 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
-#include "xmloff/table/XMLTableExport.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/table/XMLTableExport.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlexp.hxx>

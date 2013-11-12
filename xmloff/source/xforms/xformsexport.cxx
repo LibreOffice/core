@@ -18,14 +18,14 @@
  */
 
 
-#include "xmloff/xformsexport.hxx"
+#include <xmloff/xformsexport.hxx>
 
 #include "XFormsModelExport.hxx"
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "DomExport.hxx"
 
@@ -33,7 +33,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

@@ -25,7 +25,7 @@
 #include <sax/tools/converter.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include "IgnoreTContext.hxx"
 #include "RenameElemTContext.hxx"
 #include "ProcAttrTContext.hxx"

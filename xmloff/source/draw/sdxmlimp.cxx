@@ -26,7 +26,7 @@
 
 #include <xmloff/xmlmetai.hxx>
 #include "ximpstyl.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
@@ -37,7 +37,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/settingsstore.hxx>
 #include <com/sun/star/style/XStyle.hpp>

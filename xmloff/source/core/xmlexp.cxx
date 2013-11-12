@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <officecfg/Office/Common.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -39,7 +39,7 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnumfe.hxx>
@@ -62,20 +62,20 @@
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include "XMLImageMapExport.hxx"
 #include "XMLBase64Export.hxx"
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "xmloff/XMLFilterServiceNames.h"
-#include "xmloff/XMLEmbeddedObjectExportFilter.hxx"
+#include <xmloff/XMLFilterServiceNames.h>
+#include <xmloff/XMLEmbeddedObjectExportFilter.hxx>
 #include "XMLBasicExportFilter.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "PropertySetMerger.hxx"
 
-#include "svl/urihelper.hxx"
-#include "xmloff/xformsexport.hxx"
+#include <svl/urihelper.hxx>
+#include <xmloff/xformsexport.hxx>
 
 #include <unotools/docinfohelper.hxx>
 #include <unotools/bootstrap.hxx>

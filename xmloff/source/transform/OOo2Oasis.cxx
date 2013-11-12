@@ -22,7 +22,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "MutableAttrList.hxx"
 #include "DeepTContext.hxx"

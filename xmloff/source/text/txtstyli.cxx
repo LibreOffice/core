@@ -19,16 +19,16 @@
 
 
 #include "XMLTextPropertySetContext.hxx"
-#include "xmloff/xmlnmspe.hxx"
-#include "xmloff/XMLEventsImportContext.hxx"
-#include "xmloff/attrlist.hxx"
-#include "xmloff/families.hxx"
-#include "xmloff/txtprmap.hxx"
-#include "xmloff/txtstyli.hxx"
-#include "xmloff/xmlimp.hxx"
-#include "xmloff/xmltkmap.hxx"
-#include "xmloff/xmltoken.hxx"
-#include "xmloff/xmluconv.hxx"
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/XMLEventsImportContext.hxx>
+#include <xmloff/attrlist.hxx>
+#include <xmloff/families.hxx>
+#include <xmloff/txtprmap.hxx>
+#include <xmloff/txtstyli.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmluconv.hxx>
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

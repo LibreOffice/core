@@ -21,7 +21,7 @@
 #include "propertyexport.hxx"
 #include <xmloff/xmlexp.hxx>
 #include "strings.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
 #include <sax/tools/converter.hxx>

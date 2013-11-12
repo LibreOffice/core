@@ -18,9 +18,9 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "xmloff/dllapi.h"
+#include <xmloff/dllapi.h>
 
 #include <string.h>
 #include <com/sun/star/container/XSet.hpp>
@@ -29,7 +29,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>
-#include "xmloff/xmlreg.hxx"
+#include <xmloff/xmlreg.hxx>
 
 using namespace com::sun::star;
 

@@ -26,7 +26,7 @@
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include "PropType.hxx"
 #include "DeepTContext.hxx"
 #include "RenameElemTContext.hxx"

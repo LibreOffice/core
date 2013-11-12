@@ -18,7 +18,7 @@
  */
 
 #include "MetaImportComponent.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetai.hxx>

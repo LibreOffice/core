@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/xmlnume.hxx>

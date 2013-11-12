@@ -20,8 +20,8 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLPARAGRAPHCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace com { namespace sun { namespace star { namespace xml { namespace sax {
         class XAttributeList;

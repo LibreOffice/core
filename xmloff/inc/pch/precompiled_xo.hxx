@@ -14,14 +14,14 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/beans/XPropertySetInfo.hpp"
-#include "com/sun/star/text/XLineNumberingProperties.hpp"
-#include "comphelper/processfactory.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "sal/config.h"
-#include "svl/urihelper.hxx"
-#include "tools/debug.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/text/XLineNumberingProperties.hpp>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <sal/config.h>
+#include <svl/urihelper.hxx>
+#include <tools/debug.hxx>
 #include <algorithm>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

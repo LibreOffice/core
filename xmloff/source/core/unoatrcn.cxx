@@ -26,7 +26,7 @@
 
 #include <xmloff/xmlcnimp.hxx>
 
-#include "xmloff/unoatrcn.hxx"
+#include <xmloff/unoatrcn.hxx>
 
 using namespace ::com::sun::star;
 

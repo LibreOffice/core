@@ -25,7 +25,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include "XMLTextNumRuleInfo.hxx"
-#include "xmloff/XMLTextListAutoStylePool.hxx"
+#include <xmloff/XMLTextListAutoStylePool.hxx>
 
 
 using namespace ::com::sun::star::uno;

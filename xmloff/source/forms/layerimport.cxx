@@ -47,9 +47,9 @@
 #include "controlpropertymap.hxx"
 #include "formevents.hxx"
 #include "formcellbinding.hxx"
-#include "xmloff/xformsimport.hxx"
+#include <xmloff/xformsimport.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <rtl/strbuf.hxx>
 #include <algorithm>
 

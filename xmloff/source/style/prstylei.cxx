@@ -19,7 +19,7 @@
 
 #include <tools/debug.hxx>
 #include <set>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <com/sun/star/style/XStyle.hpp>
@@ -33,7 +33,7 @@
 
 #include <xmloff/prstylei.hxx>
 #include <xmloff/attrlist.hxx>
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 
 
 using namespace ::com::sun::star;

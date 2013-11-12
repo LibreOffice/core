@@ -23,7 +23,7 @@
 #include "forms/property_handler.hxx"
 #include "property_group.hxx"
 
-#include "xmloff/xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 
 #include <vector>
 #include <list>

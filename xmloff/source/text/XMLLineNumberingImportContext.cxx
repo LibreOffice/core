@@ -19,14 +19,14 @@
 
 #include "XMLLineNumberingImportContext.hxx"
 #include "XMLLineNumberingSeparatorImportContext.hxx"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/text/XLineNumberingProperties.hpp"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnumi.hxx>

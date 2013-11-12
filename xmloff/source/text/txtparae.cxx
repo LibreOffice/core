@@ -73,7 +73,7 @@
 
 #include <sax/tools/converter.hxx>
 
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
 #include "txtexppr.hxx"
@@ -89,7 +89,7 @@
 #include <xmloff/txtprmap.hxx>
 #include "XMLImageMapExport.hxx"
 #include "XMLTextNumRuleInfo.hxx"
-#include "xmloff/XMLTextListAutoStylePool.hxx"
+#include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <xmloff/txtparae.hxx>
 #include "XMLSectionExport.hxx"
 #include "XMLIndexMarkExport.hxx"

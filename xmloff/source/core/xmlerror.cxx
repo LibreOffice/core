@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/xml/sax/XLocator.hpp>

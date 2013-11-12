@@ -30,11 +30,11 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 
-#include "xmloff/unoatrcn.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/unoatrcn.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlerror.hxx"
-#include "xmloff/contextid.hxx"
+#include <xmloff/xmlerror.hxx>
+#include <xmloff/contextid.hxx>
 
 // STL includes
 #include <algorithm>

@@ -32,7 +32,7 @@
 #include <tools/debug.hxx>
 #include <svl/itemset.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 
 #include <xmloff/families.hxx>

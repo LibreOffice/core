@@ -19,11 +19,11 @@
 
 #include "elementexport.hxx"
 #include "strings.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include "eventexport.hxx"
 #include "formenums.hxx"
 #include "formcellbinding.hxx"
-#include "xmloff/xformsexport.hxx"
+#include <xmloff/xformsexport.hxx>
 #include "property_meta_data.hxx"
 
 #include <com/sun/star/text/XText.hpp>

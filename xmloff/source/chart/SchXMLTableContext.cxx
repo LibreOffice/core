@@ -27,7 +27,7 @@
 #include "transporttypes.hxx"
 #include "XMLStringBufferImportContext.hxx"
 #include <rtl/math.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/frame/XModel.hpp>

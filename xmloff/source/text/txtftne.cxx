@@ -42,7 +42,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>

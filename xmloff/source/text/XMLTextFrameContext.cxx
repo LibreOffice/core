@@ -33,7 +33,7 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
@@ -41,7 +41,7 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include "XMLReplacementImageContext.hxx"
 #include <xmloff/prstylei.hxx>
-#include "xmloff/i18nmap.hxx"
+#include <xmloff/i18nmap.hxx>
 #include "xexptran.hxx"
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>

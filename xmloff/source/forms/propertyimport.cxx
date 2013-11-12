@@ -27,7 +27,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include "callbacks.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <com/sun/star/util/Date.hpp>

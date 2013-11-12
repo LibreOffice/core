@@ -44,7 +44,7 @@
 // header for define DBG_ERROR1
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>

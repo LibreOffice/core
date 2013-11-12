@@ -25,7 +25,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlexp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include "XMLBase64Export.hxx"
 
 using namespace ::com::sun::star::uno;

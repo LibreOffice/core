@@ -24,9 +24,9 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;

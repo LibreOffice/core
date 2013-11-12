@@ -24,7 +24,7 @@
 #include "AttrTransformerAction.hxx"
 #include "ElemTransformerAction.hxx"
 #include "IgnoreTContext.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

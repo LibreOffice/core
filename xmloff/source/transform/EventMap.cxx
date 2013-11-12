@@ -18,7 +18,7 @@
  */
 
 #include "EventMap.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 
 
 XMLTransformerEventMapEntry aTransformerEventMap[] =

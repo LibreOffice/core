@@ -19,7 +19,7 @@
 
 #include "ximpstyl.hxx"
 #include <xmloff/XMLShapeStyleContext.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
@@ -43,7 +43,7 @@
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include "XMLNumberStylesImport.hxx"
-#include "xmloff/xmlerror.hxx"
+#include <xmloff/xmlerror.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

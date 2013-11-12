@@ -19,7 +19,7 @@
 
 #include "XMLChartStyleContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/families.hxx>
 

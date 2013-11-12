@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "XMLAutoTextContainerEventImport.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>

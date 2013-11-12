@@ -28,7 +28,7 @@
 
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "ximpstyl.hxx"
 #include "ximpshap.hxx"

@@ -18,7 +18,7 @@
  */
 
 #include "XMLTextCharStyleNamesElementExport.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>
 

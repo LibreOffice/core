@@ -19,7 +19,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
-#include "xmloff/i18nmap.hxx"
+#include <xmloff/i18nmap.hxx>
 
 bool SvI18NMap::Add( sal_uInt16 nKind, const OUString& rName,
                      const OUString& rNewName )

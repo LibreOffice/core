@@ -19,7 +19,7 @@
 
 #include "XMLStringBufferImportContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 
 
 using ::com::sun::star::uno::Reference;

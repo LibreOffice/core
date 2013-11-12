@@ -30,16 +30,16 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/xmlnumi.hxx>
 
 #include "txtparai.hxx"
 #include <xmloff/txtprmap.hxx>
-#include "xmloff/txtimppr.hxx"
+#include <xmloff/txtimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "txtvfldi.hxx"
-#include "xmloff/i18nmap.hxx"
+#include <xmloff/i18nmap.hxx>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include "XMLTextFrameContext.hxx"

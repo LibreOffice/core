@@ -18,7 +18,7 @@
  */
 
 #include "PageHeaderFooterContext.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "PagePropertySetContext.hxx"
 
