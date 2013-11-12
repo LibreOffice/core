@@ -193,6 +193,46 @@ public:
     }
 };
 
+class DynamicKernelPiArgument: public DynamicKernelArgument
+{
+public:
+    DynamicKernelPiArgument(const std::string &s,
+        FormulaTreeNodeRef ft):
+            DynamicKernelArgument(s, ft) {}
+    /// Generate declaration
+    virtual void GenDecl(std::stringstream &ss) const
+    {
+        ss << "double " << mSymName;
+    }
+    virtual void GenDeclRef(std::stringstream &ss) const
+    {
+        ss << "3.14159265358979";
+    }
+    virtual void GenSlidingWindowDecl(std::stringstream &ss) const
+    {
+        GenDecl(ss);
+    }
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const
+    {
+        return mSymName;
+    }
+    virtual size_t GetWindowSize(void) const
+    {
+        return 1;
+    }
+    /// Create buffer and pass the buffer to a given kernel
+    virtual size_t Marshal(cl_kernel k, int argno, int)
+    {
+        double tmp = 0.0;
+        // Pass the scalar result back to the rest of the formula kernel
+        cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+        return 1;
+    }
+};
+
+
 class DynamicKernelStringArgument: public DynamicKernelArgument
 {
 public:
@@ -1376,6 +1416,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocZTest:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpZTest));
+                break;
+            case ocPi:
+                mvSubArguments.push_back(
+                SubArgument(new DynamicKernelPiArgument(ts,
+                ft->Children[i])));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
