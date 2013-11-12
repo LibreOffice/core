@@ -106,11 +106,7 @@ namespace basegfx
             const B2DRectangle& getRect() const { return *mpAssociatedRect; }
             std::ptrdiff_t      getTargetPolygonIndex() const { return mnPolygonIdx; }
             void                setTargetPolygonIndex( std::ptrdiff_t nIdx ) { mnPolygonIdx = nIdx; }
-            EdgeType            getEdgeType() const { return meEdgeType; }
             EdgeDirection       getEdgeDirection() const { return meEdgeDirection; }
-
-            /// For STL sort
-            bool operator<( const ActiveEdge& rRHS ) const { return mfInvariantCoord < rRHS.mfInvariantCoord; }
 
         private:
             /** The invariant coordinate value of this edge (e.g. the
@@ -362,8 +358,6 @@ namespace basegfx
             }
 
         private:
-            std::ptrdiff_t getPolygonPoolIndex() const { return mnIdx; }
-
             void handleInitialOwnEdge(SweepLineEvent& rEvent,
                                       ActiveEdge&     rActiveEdge)
             {
