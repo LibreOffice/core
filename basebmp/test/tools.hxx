@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basebmp/bitmapdevice.hxx"
+#include <basebmp/bitmapdevice.hxx>
 
 int countPixel( const basebmp::BitmapDeviceSharedPtr& rDevice,
                 basebmp::Color                        checkColor );

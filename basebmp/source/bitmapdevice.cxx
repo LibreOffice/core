@@ -17,38 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <string.h>
 
-#include "basebmp/bitmapdevice.hxx"
+#include <basebmp/bitmapdevice.hxx>
 
-#include "basebmp/compositeiterator.hxx"
-#include "basebmp/iteratortraits.hxx"
+#include <basebmp/compositeiterator.hxx>
+#include <basebmp/iteratortraits.hxx>
 
-#include "basebmp/accessor.hxx"
-#include "basebmp/accessortraits.hxx"
-#include "basebmp/accessoradapters.hxx"
-#include "basebmp/colorblendaccessoradapter.hxx"
+#include <basebmp/accessor.hxx>
+#include <basebmp/accessortraits.hxx>
+#include <basebmp/accessoradapters.hxx>
+#include <basebmp/colorblendaccessoradapter.hxx>
 
-#include "basebmp/color.hxx"
-#include "basebmp/colormisc.hxx"
-#include "basebmp/colortraits.hxx"
+#include <basebmp/color.hxx>
+#include <basebmp/colormisc.hxx>
+#include <basebmp/colortraits.hxx>
 
-#include "basebmp/greylevelformats.hxx"
-#include "basebmp/paletteformats.hxx"
-#include "basebmp/rgbmaskpixelformats.hxx"
-#include "basebmp/rgb24pixelformats.hxx"
+#include <basebmp/greylevelformats.hxx>
+#include <basebmp/paletteformats.hxx>
+#include <basebmp/rgbmaskpixelformats.hxx>
+#include <basebmp/rgb24pixelformats.hxx>
 
-#include "basebmp/scanlineformats.hxx"
-#include "basebmp/fillimage.hxx"
-#include "basebmp/scaleimage.hxx"
-#include "basebmp/clippedlinerenderer.hxx"
-#include "basebmp/polypolygonrenderer.hxx"
-#include "basebmp/genericcolorimageaccessor.hxx"
+#include <basebmp/scanlineformats.hxx>
+#include <basebmp/fillimage.hxx>
+#include <basebmp/scaleimage.hxx>
+#include <basebmp/clippedlinerenderer.hxx>
+#include <basebmp/polypolygonrenderer.hxx>
+#include <basebmp/genericcolorimageaccessor.hxx>
 
-#include "basebmp/tools.hxx"
+#include <basebmp/tools.hxx>
 #include "intconversion.hxx"
 
 #include <rtl/alloc.h>
