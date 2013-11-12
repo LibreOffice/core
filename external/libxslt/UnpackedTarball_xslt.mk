@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,xslt,$(LIBXSLT_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xslt,\
 	external/libxslt/libxslt-config.patch.1 \
+	external/libxslt/libxslt-configure.patch.1 \
 	external/libxslt/libxslt-freebsd.patch.1 \
 	external/libxslt/libxslt-internal-symbols.patch \
 	external/libxslt/libxslt-vc10.patch \
