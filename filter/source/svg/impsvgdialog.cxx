@@ -35,8 +35,8 @@ inline sal_Int32 implMap( Window& /*rWnd*/, sal_Int32 nVal )
 // - ImpSVGDialog -
 // ----------------
 
-ImpSVGDialog::ImpSVGDialog( Window* pParent/*, ResMgr& rResMgr*/, Sequence< PropertyValue >& rFilterData ) :
-    ModalDialog( pParent/*KA, ResId( DLG_OPTIONS, &rResMgr*/ ),
+ImpSVGDialog::ImpSVGDialog( Window* pParent, Sequence< PropertyValue >& rFilterData ) :
+    ModalDialog( pParent ),
     maFI( this ),
     maCBTinyProfile( this ),
     maCBEmbedFonts( this ),
