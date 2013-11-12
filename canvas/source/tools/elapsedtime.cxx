@@ -18,9 +18,9 @@
  */
 
 
-#include "osl/time.h"
-#include "osl/diagnose.h"
-#include "canvas/elapsedtime.hxx"
+#include <osl/time.h>
+#include <osl/diagnose.h>
+#include <canvas/elapsedtime.hxx>
 
 #if defined(WNT)
 

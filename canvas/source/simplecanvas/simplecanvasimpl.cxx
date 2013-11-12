@@ -35,7 +35,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include "canvas/canvastools.hxx"
+#include <canvas/canvastools.hxx>
 
 #include <boost/bind.hpp>
 
