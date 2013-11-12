@@ -48,6 +48,9 @@
 
 #include <bordertest.hxx>
 
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
+
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define EMU_TO_MM100(EMU) (EMU / 360)
 
@@ -1499,6 +1502,17 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69548, "fdo69548.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("#this is a bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testLineSpacing,"test_line_spacing.docx")
+{
+    // The Problem was that the w:line attribute value in w:spacing tag was incorrect
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+
+    style::LineSpacing alineSpacing = getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(13200), static_cast<sal_Int16>(alineSpacing.Height));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

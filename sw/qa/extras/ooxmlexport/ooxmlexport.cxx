@@ -1580,6 +1580,14 @@ DECLARE_OOXML_TEST(testPgMargin, "testPgMargin.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
 }
 
+
+DECLARE_OOXML_TEST(testLineSpacingexport, "test_line_spacing.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "line", "31680");
+}
+
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
