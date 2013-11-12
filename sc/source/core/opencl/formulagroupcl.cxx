@@ -1416,19 +1416,8 @@ public:
     virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat );
     virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
                 const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode );
-    void generateRPNCode(ScDocument& rDoc,
-                const ScAddress& rPos, ScTokenArray& rCode);
     DynamicKernel *mpKernel;
 };
-
-void FormulaGroupInterpreterOpenCL::generateRPNCode(ScDocument& rDoc,
-            const ScAddress& rPos, ScTokenArray& rCode)
-{
-    // First, generate an RPN (reverse polish notation) token array.
-    ScCompiler aComp(&rDoc, rPos, rCode);
-    aComp.SetGrammar(rDoc.GetGrammar());
-    aComp.CompileTokenArray(); // Create RPN token array.
-}
 
 ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
 {
@@ -1439,7 +1428,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup,
     ScTokenArray& rCode )
 {
-    generateRPNCode(rDoc, rTopPos, rCode);
     // printf("Vector width = %d\n", xGroup->mnLength);
     // Constructing "AST"
     FormulaTokenIterator aCode = rCode;

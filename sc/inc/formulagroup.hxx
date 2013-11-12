@@ -85,8 +85,6 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
     FormulaGroupInterpreter() {}
     virtual ~FormulaGroupInterpreter() {}
 
-    static void generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode);
-
  public:
     static FormulaGroupInterpreter *getStatic();
     static void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms);

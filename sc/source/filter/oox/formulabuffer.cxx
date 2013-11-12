@@ -135,7 +135,10 @@ void applySharedFormulas(
             aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
+            {
+                aComp.CompileTokenArray(); // Generate RPN tokens.
                 aGroups.set(nId, pArray);
+            }
         }
     }
 
@@ -222,6 +225,7 @@ void applyCellFormulas(
         if (!pCode)
             continue;
 
+        aCompiler.CompileTokenArray(); // Generate RPN tokens.
         ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pCode);
         rDoc.setFormulaCell(aPos, pCell);
         rCache.store(aPos, pCell);

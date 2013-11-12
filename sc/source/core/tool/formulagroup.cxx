@@ -425,7 +425,6 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
         if (!pDest)
             return false;
 
-        generateRPNCode(rDoc, aTmpPos, aCode2);
         ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
         aInterpreter.Interpret();
         aResults.push_back(aInterpreter.GetResultToken());
@@ -674,15 +673,6 @@ void FormulaGroupInterpreter::enableOpenCL(bool bEnable)
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
     aConfig.mbOpenCLEnabled = bEnable;
     ScInterpreter::SetGlobalConfig(aConfig);
-}
-
-void FormulaGroupInterpreter::generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode)
-{
-    // First, generate an RPN (reverse polish notation) token array.
-    ScCompiler aComp(&rDoc, rPos, rCode);
-    aComp.SetGrammar(rDoc.GetGrammar());
-    aComp.CompileTokenArray(); // Create RPN token array.
-    // Now, calling FirstRPN() and NextRPN() will return tokens from the RPN token array.
 }
 
 }
