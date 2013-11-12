@@ -283,6 +283,13 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Log10"; }
 };
+class OpConvert: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "Convert"; }
+};
 class OpEven: public Normal
 {
 public:

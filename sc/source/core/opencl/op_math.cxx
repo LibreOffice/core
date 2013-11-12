@@ -1851,7 +1851,66 @@ void OpKombin::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return result;                        \n";
     ss << "}                                         \n";
 }
+void OpConvert::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName,
+    SubArguments &vSubArguments)
+{
+    int arg1=vSubArguments[1]->GetFormulaToken()->GetString().\
+        getString().toAsciiUpperCase().hashCode();
+    int arg2=vSubArguments[2]->GetFormulaToken()->GetString().\
+        getString().toAsciiUpperCase().hashCode();
+    if( !((arg1==5584&&arg2==108)||
+        (arg1==108&&arg2==5584)||
+        (arg1==5665&&arg2==268206)||
+        (arg1==268206&&arg2==5665)) )
+        throw Unhandled();
 
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur);
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss <<"    int gid0=get_global_id(0);\n";
+    ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    double arg1 = " << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+    ss << "    double arg2 = " << vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss << ";\n";
+#ifdef ISNAN
+    ss<< "    if(isNan(arg0)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg0 = 0;\n";
+    ss<< "    if(isNan(arg1)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg1 = 0;\n";
+    ss<< "    if(isNan(arg2)||(gid0>=";
+    ss<<tmpCurDVR->GetArrayLength();
+    ss<<"))\n";
+    ss<<"        arg2 = 0;\n";
+#endif
+    ss<<"    if(arg1==5584U&&arg2==108U)\n";
+    ss<<"        return arg0*1000.0;\n";
+    ss<<"    else if(arg1==108U&&arg2==3385U)\n";
+    ss<<"        return arg0/1000.0;\n";
+    ss<<"    else if(arg1==5665U&&arg2==268206U)\n";
+    ss<<"        return arg0*60.0;\n";
+    ss<<"    else if(arg1==268206U&&arg2==5665U)\n";
+    ss<<"        return arg0/60.0;\n";
+    ss<<"    else\n";
+    ss<<"        return -9999999999;\n";
+    ss << "}\n";
+
+}
 
 
 }}
