@@ -211,10 +211,6 @@ namespace
         {
             check( RTL_TEXTENCODING_MS_1258, RTL_TEXTENCODING_MS_1258 );
         }
-        void MimeCharsetFromTextEncoding_APPLE_ARABIC()
-        {
-            check( RTL_TEXTENCODING_APPLE_ARABIC, RTL_TEXTENCODING_APPLE_ARABIC );
-        }
         void MimeCharsetFromTextEncoding_APPLE_CENTEURO()
         {
             check( RTL_TEXTENCODING_APPLE_CENTEURO, RTL_TEXTENCODING_ISO_8859_2 );
@@ -227,29 +223,9 @@ namespace
         {
             check( RTL_TEXTENCODING_APPLE_CYRILLIC, RTL_TEXTENCODING_ISO_8859_5 );
         }
-        void MimeCharsetFromTextEncoding_APPLE_DEVANAGARI()
-        {
-            check( RTL_TEXTENCODING_APPLE_DEVANAGARI, RTL_TEXTENCODING_ISO_8859_7 );
-        }
-        void MimeCharsetFromTextEncoding_APPLE_FARSI()
-        {
-            check( RTL_TEXTENCODING_APPLE_FARSI, RTL_TEXTENCODING_ISO_8859_1 );
-        }
         void MimeCharsetFromTextEncoding_APPLE_GREEK()
         {
             check( RTL_TEXTENCODING_APPLE_GREEK, RTL_TEXTENCODING_ISO_8859_7 );
-        }
-        void MimeCharsetFromTextEncoding_APPLE_GUJARATI()
-        {
-            check( RTL_TEXTENCODING_APPLE_GUJARATI, RTL_TEXTENCODING_ISO_8859_2 );
-        }
-        void MimeCharsetFromTextEncoding_APPLE_GURMUKHI()
-        {
-            check( RTL_TEXTENCODING_APPLE_GURMUKHI, RTL_TEXTENCODING_ISO_8859_2 );
-        }
-        void MimeCharsetFromTextEncoding_APPLE_HEBREW()
-        {
-            check( RTL_TEXTENCODING_APPLE_HEBREW, RTL_TEXTENCODING_ISO_8859_9 );
         }
         void MimeCharsetFromTextEncoding_APPLE_ICELAND()
         {
@@ -258,10 +234,6 @@ namespace
         void MimeCharsetFromTextEncoding_APPLE_ROMANIAN()
         {
             check( RTL_TEXTENCODING_APPLE_ROMANIAN, RTL_TEXTENCODING_ISO_8859_2 );
-        }
-        void MimeCharsetFromTextEncoding_APPLE_THAI()
-        {
-            check( RTL_TEXTENCODING_APPLE_THAI, RTL_TEXTENCODING_ISO_8859_9 );
         }
         void MimeCharsetFromTextEncoding_APPLE_TURKISH()
         {
@@ -407,10 +379,6 @@ namespace
         {
             check( RTL_TEXTENCODING_ISCII_DEVANAGARI, RTL_TEXTENCODING_ISCII_DEVANAGARI );
         }
-        void MimeCharsetFromTextEncoding_JAVA_UTF8()
-        {
-            check( RTL_TEXTENCODING_JAVA_UTF8, RTL_TEXTENCODING_JAVA_UTF8 );
-        }
 
         CPPUNIT_TEST_SUITE( testBestMime );
 
@@ -453,27 +421,12 @@ namespace
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_1256 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_1257 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_MS_1258 );
-#if 0
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_ARABIC );
-#endif
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_CENTEURO );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_CROATIAN );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_CYRILLIC );
-#if 0
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_DEVANAGARI );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_FARSI );
-#endif
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_GREEK );
-#if 0
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_GUJARATI );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_GURMUKHI );
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_HEBREW );
-#endif
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_ICELAND );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_ROMANIAN );
-#if 0
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_THAI );
-#endif
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_TURKISH );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_UKRAINIAN );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_APPLE_CHINSIMP );
@@ -510,9 +463,6 @@ namespace
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_TIS_620 );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_KOI8_U );
         CPPUNIT_TEST( MimeCharsetFromTextEncoding_ISCII_DEVANAGARI );
-#if 0
-        CPPUNIT_TEST( MimeCharsetFromTextEncoding_JAVA_UTF8 );
-#endif
 
         CPPUNIT_TEST_SUITE_END( );
     };
@@ -728,11 +678,6 @@ namespace
             check( RTL_TEXTENCODING_MS_1258, RTL_TEXTENCODING_ISO_8859_1 );
         }
 
-        void UnixCharsetFromTextEncoding_APPLE_ARABIC()
-        {
-            check( RTL_TEXTENCODING_APPLE_ARABIC, RTL_TEXTENCODING_ISO_8859_2 );
-        }
-
         void UnixCharsetFromTextEncoding_APPLE_CENTEURO()
         {
             check( RTL_TEXTENCODING_APPLE_CENTEURO, RTL_TEXTENCODING_ISO_8859_2 );
@@ -748,34 +693,9 @@ namespace
             check( RTL_TEXTENCODING_APPLE_CYRILLIC, RTL_TEXTENCODING_ISO_8859_5 );
         }
 
-        void UnixCharsetFromTextEncoding_APPLE_DEVANAGARI()
-        {
-            check( RTL_TEXTENCODING_APPLE_DEVANAGARI, RTL_TEXTENCODING_ISO_8859_7 );
-        }
-
-        void UnixCharsetFromTextEncoding_APPLE_FARSI()
-        {
-            check( RTL_TEXTENCODING_APPLE_FARSI, RTL_TEXTENCODING_ISO_8859_1 );
-        }
-
         void UnixCharsetFromTextEncoding_APPLE_GREEK()
         {
             check( RTL_TEXTENCODING_APPLE_GREEK, RTL_TEXTENCODING_ISO_8859_7 );
-        }
-
-        void UnixCharsetFromTextEncoding_APPLE_GUJARATI()
-        {
-            check( RTL_TEXTENCODING_APPLE_GUJARATI, RTL_TEXTENCODING_ISO_8859_9 );
-        }
-
-        void UnixCharsetFromTextEncoding_APPLE_GURMUKHI()
-        {
-            check( RTL_TEXTENCODING_APPLE_GURMUKHI, RTL_TEXTENCODING_ISO_8859_5 );
-        }
-
-        void UnixCharsetFromTextEncoding_APPLE_HEBREW()
-        {
-            check( RTL_TEXTENCODING_APPLE_HEBREW, RTL_TEXTENCODING_ISO_8859_1 );
         }
 
         void UnixCharsetFromTextEncoding_APPLE_ICELAND()
@@ -786,11 +706,6 @@ namespace
         void UnixCharsetFromTextEncoding_APPLE_ROMANIAN()
         {
             check( RTL_TEXTENCODING_APPLE_ROMANIAN, RTL_TEXTENCODING_ISO_8859_2 );
-        }
-
-        void UnixCharsetFromTextEncoding_APPLE_THAI()
-        {
-            check( RTL_TEXTENCODING_APPLE_THAI, RTL_TEXTENCODING_APPLE_THAI );
         }
 
         void UnixCharsetFromTextEncoding_APPLE_TURKISH()
@@ -968,16 +883,6 @@ namespace
             check( RTL_TEXTENCODING_KOI8_U, RTL_TEXTENCODING_KOI8_U );
         }
 
-        void UnixCharsetFromTextEncoding_ISCII_DEVANAGARI()
-        {
-            check( RTL_TEXTENCODING_ISCII_DEVANAGARI, RTL_TEXTENCODING_ISCII_DEVANAGARI );
-        }
-
-        void UnixCharsetFromTextEncoding_JAVA_UTF8()
-        {
-            check( RTL_TEXTENCODING_JAVA_UTF8, RTL_TEXTENCODING_JAVA_UTF8 );
-        }
-
         CPPUNIT_TEST_SUITE( testBestUnix );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_1252 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_ROMAN );
@@ -1019,27 +924,12 @@ namespace
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_1256 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_1257 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_MS_1258 );
-#if 0
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_ARABIC );
-#endif
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_CENTEURO );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_CROATIAN );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_CYRILLIC );
-#if 0
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_DEVANAGARI );
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_FARSI );
-#endif
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_GREEK );
-#if 0
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_GUJARATI );
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_GURMUKHI );
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_HEBREW );
-#endif
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_ICELAND );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_ROMANIAN );
-#if 0
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_THAI );
-#endif
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_TURKISH );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_UKRAINIAN );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_APPLE_CHINSIMP );
@@ -1075,10 +965,6 @@ namespace
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_BIG5_HKSCS );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_TIS_620 );
         CPPUNIT_TEST( UnixCharsetFromTextEncoding_KOI8_U );
-#if 0
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_ISCII_DEVANAGARI );
-        CPPUNIT_TEST( UnixCharsetFromTextEncoding_JAVA_UTF8 );
-#endif
 
         CPPUNIT_TEST_SUITE_END( );
     };
