@@ -346,6 +346,11 @@ void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const sal_Bool skipFirst)
 template <class T>
 Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
 {
+    bool bRecordOk = nPoints <= SAL_MAX_UINT16;
+    SAL_WARN_IF(!bRecordOk, "svtools.filter", "polygon record has more polygons than we can handle");
+    if (!bRecordOk)
+        return Polygon();
+
     Polygon aPolygon(nPoints);
     for (sal_uInt16 i = nStartIndex ; i < nPoints && pWMF->good(); i++ )
     {
