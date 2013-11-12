@@ -137,7 +137,7 @@ pushd "${CORE_DIR}" > /dev/null
 
 
 echo "archiving core..."
-git archive --format=tar --prefix="${base_name?}/" -o "${OUT_DIR}/${base_name}.tar" ${LABEL?}
+git archive --format=tar -o "${OUT_DIR}/${base_name}.tar" ${LABEL?}
 
 
 concatenate_list=
@@ -146,34 +146,40 @@ for module in dictionaries helpcontent2 translations ; do
 	echo "Warning: module $module is not present" 1>&2
     else
 	echo "archiving ${module?}..."
-	git archive --format=tar --prefix="${base_name?}/${module?}" -o "${OUT_DIR}/${base_name}-${module?}.tar" ${LABEL?}
-	concatenate_list="${concatenate_list?} ${OUT_DIR}/${base_name}-${module?}.tar"
+        cd ${module?}
+	git archive --format=tar --prefix="${module?}/" -o "${OUT_DIR}/${base_name}-${module?}.tar" ${LABEL?}
+        cd ..
     fi
 done
 
-if [ -n "${concatenate_list?}" ] ; then
-    tar --concatenate --file="${OUT_DIR}/${base_name}.tar" ${concatenate_list?}
-    rm ${concatenate_list?}
-fi
-
 if ${GEN_BZ2?} ; then
     echo "bzip2 compression..."
-    bzip2 -fkz "${OUT_DIR}/${base_name}.tar"
+    for i in ${OUT_DIR}/${base_name}*tar; do
+        bzip2 -fkz "$i"
+    done
     if ${GEN_MD5?} ; then
 	echo "md5sum..."
-	md5sum "${OUT_DIR}/${base_name}.tar.bz2" > "${OUT_DIR}/${base_name}.tar.bz2.md5"
+        for i in ${OUT_DIR}/${base_name}*tar.bz2; do
+	    md5sum "$i" > "$i.md5"
+        done
     fi
 fi
 
 if ${GEN_XZ?} ; then
     echo "xz compression..."
-    xz -fz "${OUT_DIR}/${base_name}.tar"
+    for i in ${OUT_DIR}/${base_name}*tar; do
+        xz -fz "$i"
+    done
     if ${GEN_MD5?} ; then
 	echo "md5sum..."
-	md5sum "${OUT_DIR}/${base_name}.tar.xz" > "${OUT_DIR}/${base_name}.tar.xz.md5"
+        for i in ${OUT_DIR}/${base_name}*tar.xz; do
+	    md5sum "$i" > "$i.md5"
+        done
     fi
 else
-    rm "${OUT_DIR}/${base_name}.tar"
+    for i in ${OUT_DIR}/${base_name}*tar; do
+        rm "$i"
+    done
 fi
 
 echo "Done."
