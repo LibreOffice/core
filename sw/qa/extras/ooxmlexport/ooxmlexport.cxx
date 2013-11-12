@@ -1387,6 +1387,14 @@ DECLARE_OOXML_TEST(testQuicktables, "quicktables.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumShading2-Accent5']/w:tblStylePr[@w:type='firstRow']/w:tcPr/w:tcBorders/w:top", "color", "auto");
 }
 
+DECLARE_OOXML_TEST(testFdo71302, "fdo71302.docx")
+{
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+
+    // This got renamed to "Strong Emphasis" without a good reason.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']", 1);
+}
+
 DECLARE_OOXML_TEST(testSmartart, "smartart.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

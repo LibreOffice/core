@@ -1440,7 +1440,6 @@ static const sal_Char* const aStyleNamePairs[] =
     "Block Text",                "",
     "Hyperlink",                 "Internet link",
     "Followed Hyperlink",        "Visited Internet Link",
-    "Strong",                    "Strong Emphasis",
     "Emphasis",                  "Emphasis",
     "Document Map",              "",
     "Plain Text",                "",
