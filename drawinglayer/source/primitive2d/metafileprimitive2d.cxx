@@ -221,11 +221,6 @@ namespace
             maPropertyHolders.push_back(new PropertyHolder());
         }
 
-        sal_uInt32 size() const
-        {
-            return maPropertyHolders.size();
-        }
-
         void PushDefault()
         {
             PropertyHolder* pNew = new PropertyHolder();
