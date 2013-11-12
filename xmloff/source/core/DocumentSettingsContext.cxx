@@ -273,12 +273,6 @@ namespace
         OUString sGroupName;
         uno::Any        aSettings;
 
-        SettingsGroup()
-            :sGroupName()
-            ,aSettings()
-        {
-        }
-
         SettingsGroup( const OUString& _rGroupName, const uno::Any& _rSettings )
             :sGroupName( _rGroupName )
             ,aSettings( _rSettings )
