@@ -37,12 +37,10 @@ class RandRWrapper
 
     // function pointers
     Bool(*m_pXRRQueryExtension)(Display*,int*,int*);
-    Status(*m_pXRRQueryVersion)(Display*,int*,int*);
     XRRScreenConfiguration*(*m_pXRRGetScreenInfo)(Display*,Drawable);
     void(*m_pXRRFreeScreenConfigInfo)(XRRScreenConfiguration*);
     void(*m_pXRRSelectInput)(Display*,XLIB_Window,int);
     int(*m_pXRRUpdateConfiguration)(XEvent*);
-    XRRScreenSize*(*m_pXRRSizes)(Display*,int,int*);
     XRRScreenSize*(*m_pXRRConfigSizes)(XRRScreenConfiguration*,int*);
     SizeID(*m_pXRRConfigCurrentConfiguration)(XRRScreenConfiguration*,Rotation*);
     int(*m_pXRRRootToScreen)(Display*, XLIB_Window);
@@ -64,10 +62,6 @@ public:
             bRet = m_pXRRQueryExtension( i_pDisp, o_event_base, o_error_base );
         return bRet;
     }
-    Status XRRQueryVersion( Display* i_pDisp, int* o_major, int* o_minor )
-    {
-        return m_bValid ? m_pXRRQueryVersion( i_pDisp, o_major, o_minor ) : 0;
-    }
     XRRScreenConfiguration* XRRGetScreenInfo( Display* i_pDisp, Drawable i_aDrawable )
     {
         return m_bValid ? m_pXRRGetScreenInfo( i_pDisp, i_aDrawable ) : NULL;
@@ -86,10 +80,6 @@ public:
     {
         return m_bValid ? m_pXRRUpdateConfiguration( i_pEvent ) : 0;
     }
-    XRRScreenSize* XRRSizes( Display* i_pDisp, int i_screen, int* o_nscreens )
-    {
-        return m_bValid ? m_pXRRSizes( i_pDisp, i_screen, o_nscreens ) : NULL;
-    }
     XRRScreenSize* XRRConfigSizes( XRRScreenConfiguration* i_pConfig, int* o_nSizes )
     {
         return m_bValid ? m_pXRRConfigSizes( i_pConfig, o_nSizes ) : NULL;
@@ -107,23 +97,19 @@ public:
 void RandRWrapper::initFromModule()
 {
     m_pXRRQueryExtension = (Bool(*)(Display*,int*,int*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRQueryExtension" );
-    m_pXRRQueryVersion = (Status(*)(Display*,int*,int*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRQueryVersion" );
     m_pXRRGetScreenInfo = (XRRScreenConfiguration*(*)(Display*,Drawable))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRGetScreenInfo" );
     m_pXRRFreeScreenConfigInfo = (void(*)(XRRScreenConfiguration*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRFreeScreenConfigInfo" );
     m_pXRRSelectInput = (void(*)(Display*,XLIB_Window,int))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRSelectInput" );
     m_pXRRUpdateConfiguration = (int(*)(XEvent*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRUpdateConfiguration" );
-    m_pXRRSizes = (XRRScreenSize*(*)(Display*,int,int*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRSizes" );
     m_pXRRConfigSizes = (XRRScreenSize*(*)(XRRScreenConfiguration*,int*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRConfigSizes" );
     m_pXRRConfigCurrentConfiguration = (SizeID(*)(XRRScreenConfiguration*,Rotation*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRConfigCurrentConfiguration" );
     m_pXRRRootToScreen = (int(*)(Display*,XLIB_Window))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRRootToScreen" );
 
     m_bValid = m_pXRRQueryExtension             &&
-               m_pXRRQueryVersion               &&
                m_pXRRGetScreenInfo              &&
                m_pXRRFreeScreenConfigInfo       &&
                m_pXRRSelectInput                &&
                m_pXRRUpdateConfiguration        &&
-               m_pXRRSizes                      &&
                m_pXRRConfigSizes                &&
                m_pXRRConfigCurrentConfiguration &&
                m_pXRRRootToScreen
@@ -133,12 +119,10 @@ void RandRWrapper::initFromModule()
 RandRWrapper::RandRWrapper( Display* pDisplay ) :
         m_pRandRLib( NULL ),
         m_pXRRQueryExtension( NULL ),
-        m_pXRRQueryVersion( NULL ),
         m_pXRRGetScreenInfo( NULL ),
         m_pXRRFreeScreenConfigInfo( NULL ),
         m_pXRRSelectInput( NULL ),
         m_pXRRUpdateConfiguration( NULL ),
-        m_pXRRSizes( NULL ),
         m_pXRRConfigSizes( NULL ),
         m_pXRRConfigCurrentConfiguration( NULL ),
         m_pXRRRootToScreen( NULL ),
@@ -204,10 +188,6 @@ public:
             bRet = ::XRRQueryExtension( i_pDisp, o_event_base, o_error_base );
         return bRet;
     }
-    Status XRRQueryVersion( Display* i_pDisp, int* o_major, int* o_minor )
-    {
-        return m_bValid ? ::XRRQueryVersion( i_pDisp, o_major, o_minor ) : 0;
-    }
     XRRScreenConfiguration* XRRGetScreenInfo( Display* i_pDisp, Drawable i_aDrawable )
     {
         return m_bValid ? ::XRRGetScreenInfo( i_pDisp, i_aDrawable ) : NULL;
@@ -225,10 +205,6 @@ public:
     int XRRUpdateConfiguration( XEvent* i_pEvent )
     {
         return m_bValid ? ::XRRUpdateConfiguration( i_pEvent ) : 0;
-    }
-    XRRScreenSize* XRRSizes( Display* i_pDisp, int i_screen, int* o_nscreens )
-    {
-        return m_bValid ? ::XRRSizes( i_pDisp, i_screen, o_nscreens ) : NULL;
     }
     XRRScreenSize* XRRConfigSizes( XRRScreenConfiguration* i_pConfig, int* o_nSizes )
     {
