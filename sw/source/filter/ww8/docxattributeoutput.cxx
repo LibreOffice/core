@@ -5897,21 +5897,29 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 
         const XGradient& rGradient = rFillGradient.GetGradientValue();
         OString sStartColor = msfilter::util::ConvertColor(rGradient.GetStartColor());
-        m_pFlyFillAttrList->add(XML_color2, "#" + sStartColor);
         OString sEndColor = msfilter::util::ConvertColor(rGradient.GetEndColor());
-        m_pFlyAttrList->add(XML_fillcolor, "#" + sEndColor);
+
+        OString sColor1 = sStartColor;
+        OString sColor2 = sEndColor;
 
         switch (rGradient.GetGradientStyle())
         {
-            case XGRAD_LINEAR: break;
             case XGRAD_AXIAL:
                 m_pFlyFillAttrList->add(XML_focus, "50%");
+                // If it is an 'axial' gradient - swap the colors
+                // (because in the import process they were imported swapped)
+                sColor1 = sEndColor;
+                sColor2 = sStartColor;
                 break;
+            case XGRAD_LINEAR: break;
             case XGRAD_RADIAL: break;
             case XGRAD_ELLIPTICAL: break;
             case XGRAD_SQUARE: break;
             case XGRAD_RECT: break;
         }
+
+        m_pFlyAttrList->add(XML_fillcolor , "#" + sColor1);
+        m_pFlyFillAttrList->add(XML_color2, "#" + sColor2);
     }
     m_oFillStyle.reset();
 }
