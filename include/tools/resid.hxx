@@ -28,7 +28,7 @@
 struct RSHEADER_TYPE;
 typedef sal_uInt32 RESOURCE_TYPE;
 #define RSC_NOTYPE              0x100
-#define RSC_DONTRELEASE         (sal_uInt32(1 << 31))
+#define RSC_DONTRELEASE         (sal_uInt32(1U << 31))
 
 class ResMgr;
 
