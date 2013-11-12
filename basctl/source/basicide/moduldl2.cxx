@@ -33,7 +33,7 @@
 #include <sbxitem.hxx>
 #include <basdoc.hxx>
 #include <ucbhelper/content.hxx>
-#include "rtl/uri.hxx"
+#include <rtl/uri.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
@@ -41,7 +41,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <sot/storage.hxx>
 #include <com/sun/star/io/Pipe.hpp>
@@ -55,9 +55,9 @@
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include "com/sun/star/packages/manifest/ManifestWriter.hpp"
+#include <com/sun/star/packages/manifest/ManifestWriter.hpp>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
 

@@ -30,7 +30,7 @@
 #include <svtools/svtabbx.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
-#include "com/sun/star/task/XInteractionHandler.hpp"
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <vcl/tabctrl.hxx>
 #include <vcl/lstbox.hxx>

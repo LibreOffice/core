@@ -20,7 +20,7 @@
 #ifndef BASCTL_DLGEDPAGE_HXX
 #define BASCTL_DLGEDPAGE_HXX
 
-#include "svx/svdpage.hxx"
+#include <svx/svdpage.hxx>
 
 namespace basctl
 {

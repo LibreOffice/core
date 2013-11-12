@@ -39,7 +39,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmlscript/xmldlg_imexp.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 namespace basctl
 {

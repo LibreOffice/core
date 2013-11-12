@@ -21,11 +21,11 @@
 #include "bastypes.hxx"
 #include "basidesh.hrc"
 
-#include "com/sun/star/awt/XDevice.hpp"
-#include "toolkit/awt/vclxdevice.hxx"
-#include "vcl/print.hxx"
-#include "tools/multisel.hxx"
-#include "tools/resary.hxx"
+#include <com/sun/star/awt/XDevice.hpp>
+#include <toolkit/awt/vclxdevice.hxx>
+#include <vcl/print.hxx>
+#include <tools/multisel.hxx>
+#include <tools/resary.hxx>
 
 namespace basctl
 {

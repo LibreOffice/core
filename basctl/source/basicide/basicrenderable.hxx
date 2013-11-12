@@ -19,10 +19,10 @@
 #ifndef BASCTL_BASICRENDERABLE_HXX
 #define BASCTL_BASICRENDERABLE_HXX
 
-#include "com/sun/star/view/XRenderable.hpp"
-#include "cppuhelper/compbase1.hxx"
+#include <com/sun/star/view/XRenderable.hpp>
+#include <cppuhelper/compbase1.hxx>
 
-#include "vcl/print.hxx"
+#include <vcl/print.hxx>
 
 namespace basctl
 {

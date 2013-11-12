@@ -22,7 +22,7 @@
 #include "doceventnotifier.hxx"
 
 #include <memory>
-#include "tools/solar.h"
+#include <tools/solar.h>
 
 #include <svtools/treelistbox.hxx>
 #include <svl/lstner.hxx>

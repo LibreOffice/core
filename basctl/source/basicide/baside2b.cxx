@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
@@ -47,15 +47,15 @@
 #include <svtools/textwindowpeer.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/syntaxhighlight.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 
 #include <vector>
-#include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
-#include "com/sun/star/reflection/XIdlMethod.hpp"
-#include "com/sun/star/reflection/XIdlField.hpp"
-#include "com/sun/star/uno/Exception.hpp"
+#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
+#include <com/sun/star/reflection/XIdlMethod.hpp>
+#include <com/sun/star/reflection/XIdlField.hpp>
+#include <com/sun/star/uno/Exception.hpp>
 
 namespace basctl
 {

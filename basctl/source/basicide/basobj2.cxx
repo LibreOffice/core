@@ -42,7 +42,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
-#include "basic/basmgr.hxx"
+#include <basic/basmgr.hxx>
 namespace basctl
 {
 

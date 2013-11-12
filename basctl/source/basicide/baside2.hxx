@@ -41,8 +41,8 @@ class SvxSearchItem;
 #include <vcl/split.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
-#include "vcl/lstbox.hxx"
-#include "vcl/scrbar.hxx"
+#include <vcl/lstbox.hxx>
+#include <vcl/scrbar.hxx>
 
 #include <sfx2/progress.hxx>
 #include <unotools/options.hxx>
@@ -53,12 +53,12 @@ class SvxSearchItem;
 
 #include <vcl/textdata.hxx>
 #include <basic/codecompletecache.hxx>
-#include "com/sun/star/reflection/XIdlClass.hpp"
+#include <com/sun/star/reflection/XIdlClass.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/syntaxhighlight.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include "com/sun/star/reflection/XIdlReflection.hpp"
+#include <com/sun/star/reflection/XIdlReflection.hpp>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XMultiPropertySet;

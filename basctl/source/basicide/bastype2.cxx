@@ -36,7 +36,7 @@
 #include <tools/diagnose_ex.h>
 #include <basic/sbx.hxx>
 #include <svtools/imagemgr.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
