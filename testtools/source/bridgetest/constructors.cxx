@@ -205,9 +205,6 @@ public:
     Impl2(): m_attr1(0.0) {}
 
 private:
-    Impl2(Impl &); // not defined
-    void operator =(Impl &); // not defined
-
     virtual ~Impl2() {}
 
     virtual void SAL_CALL initialize(
