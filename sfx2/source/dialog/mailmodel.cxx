@@ -55,7 +55,7 @@
 
 #include <sfx2/mailmodelapi.hxx>
 #include "sfxtypes.hxx"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
 #include "dialog.hrc"
 

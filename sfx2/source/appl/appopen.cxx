@@ -88,7 +88,7 @@
 #include "openflag.hxx"
 #include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/viewsh.hxx>
 #include "app.hrc"
 #include <sfx2/viewfrm.hxx>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
 
-#include "sfx2/sidebar/EnumContext.hxx"
+#include <sfx2/sidebar/EnumContext.hxx>
 #include "ContextList.hxx"
 #include <boost/shared_ptr.hpp>
 

@@ -79,7 +79,7 @@
 #include "arrdecl.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/genlink.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/module.hxx>
 #include <sfx2/docfile.hxx>
@@ -89,9 +89,9 @@
 #include <sfx2/unoctitm.hxx>
 #include "helpid.hrc"
 #include "workwin.hxx"
-#include "sfx2/imgmgr.hxx"
+#include <sfx2/imgmgr.hxx>
 #include "virtmenu.hxx"
-#include "sfx2/imagemgr.hxx"
+#include <sfx2/imagemgr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

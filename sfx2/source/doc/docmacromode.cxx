@@ -18,9 +18,9 @@
  */
 
 
-#include "sfx2/docmacromode.hxx"
-#include "sfx2/signaturestate.hxx"
-#include "sfx2/docfile.hxx"
+#include <sfx2/docmacromode.hxx>
+#include <sfx2/signaturestate.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>

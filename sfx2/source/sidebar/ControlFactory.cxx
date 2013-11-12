@@ -20,7 +20,7 @@
 
 #include "MenuButton.hxx"
 #include "TabItem.hxx"
-#include "sfx2/sidebar/SidebarToolBox.hxx"
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/toolbox.hxx>
 
 

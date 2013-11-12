@@ -20,12 +20,12 @@
 #include "Panel.hxx"
 #include "PanelTitleBar.hxx"
 #include "PanelDescriptor.hxx"
-#include "sfx2/sidebar/Theme.hxx"
+#include <sfx2/sidebar/Theme.hxx>
 #include "Paint.hxx"
 #include "ResourceManager.hxx"
 
 #ifdef DEBUG
-#include "sfx2/sidebar/Tools.hxx"
+#include <sfx2/sidebar/Tools.hxx>
 #include "Deck.hxx"
 #endif
 

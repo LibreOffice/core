@@ -81,7 +81,7 @@
 #include <svtools/sfxecode.hxx>
 #include <unotools/syslocale.hxx>
 
-#include "sfx2/sfxhelp.hxx"
+#include <sfx2/sfxhelp.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include "sfxtypes.hxx"
@@ -90,7 +90,7 @@
 #include <sfx2/progress.hxx>
 #include "openflag.hxx"
 #include "bastyp.hrc"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/dispatch.hxx>

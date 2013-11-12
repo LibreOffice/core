@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
@@ -105,7 +105,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/request.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>

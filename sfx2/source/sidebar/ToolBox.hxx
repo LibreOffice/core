@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TOOLBOX_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TOOLBOX_HXX
 
-#include "vcl/toolbox.hxx"
+#include <vcl/toolbox.hxx>
 
 
 namespace sfx2 { namespace sidebar {

@@ -22,7 +22,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/docfac.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>

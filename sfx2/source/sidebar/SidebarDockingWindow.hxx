@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARDOCKINGWINDOW_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARDOCKINGWINDOW_HXX
 
-#include "sfx2/dockwin.hxx"
-#include "sfx2/dockwin.hxx"
+#include <sfx2/dockwin.hxx>
+#include <sfx2/dockwin.hxx>
 
 #include <rtl/ref.hxx>
 

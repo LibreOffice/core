@@ -58,7 +58,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfx2/sfxhelp.hxx"
+#include <sfx2/sfxhelp.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -70,7 +70,7 @@
 #include "workwin.hxx"
 #include "helper.hxx"
 #include "app.hrc"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "shutdownicon.hxx"
 
 using namespace ::com::sun::star::uno;

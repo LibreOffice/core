@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/sfxhelp.hxx"
+#include <sfx2/sfxhelp.hxx>
 
 #include <set>
 #include <algorithm>
@@ -60,7 +60,7 @@
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "helper.hxx"
 #include "app.hrc"
 #include <sfx2/sfxuno.hxx>

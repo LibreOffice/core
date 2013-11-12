@@ -18,11 +18,11 @@
  */
 
 #include "TabBar.hxx"
-#include "sfx2/sidebar/SidebarChildWindow.hxx"
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include "SidebarDockingWindow.hxx"
-#include "sfx2/sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include "helpid.hrc"
-#include "sfx2/dockwin.hxx"
+#include <sfx2/dockwin.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 
 

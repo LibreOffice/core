@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/htmlkywd.hxx"
+#include <svtools/htmlkywd.hxx>
 
 #include <rtl/tencinfo.h>
 
 #include <unotools/configmgr.hxx>
-#include "svl/urihelper.hxx"
+#include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
 
 #include <sfx2/frmhtmlw.hxx>
@@ -31,7 +31,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfx.hrc>
 #include "bastyp.hrc"

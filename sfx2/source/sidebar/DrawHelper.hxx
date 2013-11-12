@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_DRAWHELPER_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_DRAWHELPER_HXX
 
-#include "vcl/window.hxx"
+#include <vcl/window.hxx>
 
 #include <tools/svborder.hxx>
 

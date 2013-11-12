@@ -23,10 +23,10 @@
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
-#include "sfx2/sfxhelp.hxx"
+#include <sfx2/sfxhelp.hxx>
 #include <sfx2/templdlg.hxx>
 #include "inettbc.hxx"
-#include "sfx2/stbitem.hxx"
+#include <sfx2/stbitem.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/navigat.hxx>
 #include <sfx2/taskpane.hxx>

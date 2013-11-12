@@ -28,14 +28,14 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/datetime.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <svtools/miscopt.hxx>
 
 #include "versdlg.hxx"
 #include "dialog.hrc"
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>

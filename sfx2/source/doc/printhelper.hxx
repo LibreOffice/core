@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_SOURCE_DOC_PRINTHELPER_HXX
 #define INCLUDED_SFX2_SOURCE_DOC_PRINTHELPER_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
 
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XPrintJobBroadcaster.hpp>

@@ -18,23 +18,23 @@
  */
 
 
-#include "unotools/moduleoptions.hxx"
-#include "unotools/dynamicmenuoptions.hxx"
-#include "unotools/historyoptions.hxx"
+#include <unotools/moduleoptions.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <rtl/ustring.hxx>
-#include "tools/urlobj.hxx"
-#include "osl/file.h"
-#include "comphelper/sequenceashashmap.hxx"
-#include "osl/mutex.hxx"
-#include "sfx2/app.hxx"
+#include <tools/urlobj.hxx>
+#include <osl/file.h>
+#include <comphelper/sequenceashashmap.hxx>
+#include <osl/mutex.hxx>
+#include <sfx2/app.hxx>
 #include <sal/macros.h>
 #include "app.hrc"
 #define USE_APP_SHORTCUTS
 #include "shutdownicon.hxx"
 
-#include "com/sun/star/util/XStringWidth.hpp"
+#include <com/sun/star/util/XStringWidth.hpp>
 
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase1.hxx>
 
 #include <set>
 #include <vector>

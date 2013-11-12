@@ -59,7 +59,7 @@
 #endif
 #include <vcl/timer.hxx>
 
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

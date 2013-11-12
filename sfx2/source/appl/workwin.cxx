@@ -34,7 +34,7 @@
 #include <sfx2/viewsh.hxx>
 #include "splitwin.hxx"
 #include <sfx2/msgpool.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>

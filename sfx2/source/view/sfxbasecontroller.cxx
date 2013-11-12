@@ -77,7 +77,7 @@
 #include <boost/unordered_map.hpp>
 
 #include <sfx2/event.hxx>
-#include "sfx2/viewfac.hxx"
+#include <sfx2/viewfac.hxx>
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 

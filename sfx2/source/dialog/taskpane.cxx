@@ -18,11 +18,11 @@
  */
 
 
-#include "sfx2/taskpane.hxx"
+#include <sfx2/taskpane.hxx>
 #include <sfx2/imagemgr.hxx>
-#include "sfx2/sfxsids.hrc"
-#include "sfx2/bindings.hxx"
-#include "sfx2/dispatch.hxx"
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "sfxlocal.hrc"
 #include "helpid.hrc"

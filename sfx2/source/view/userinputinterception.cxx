@@ -18,7 +18,7 @@
  */
 
 
-#include "sfx2/userinputinterception.hxx"
+#include <sfx2/userinputinterception.hxx>
 
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>

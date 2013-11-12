@@ -19,7 +19,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

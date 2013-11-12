@@ -26,7 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/dateitem.hxx>
 #include <vcl/wrkwin.hxx>
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include "appdata.hxx"
@@ -40,7 +40,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include "app.hrc"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "objshimp.hxx"
 #include <sfx2/appuno.hxx>
 #include "imestatuswindow.hxx"

@@ -7,22 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/system/SystemShellExecute.hpp"
-#include "com/sun/star/system/SystemShellExecuteException.hpp"
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "comphelper/processfactory.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sfx2/app.hxx"
-#include "sfx2/sfxresid.hxx"
-#include "vcl/msgbox.hxx"
-#include "vcl/svapp.hxx"
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteException.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <comphelper/processfactory.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 
 #include "openuriexternally.hxx"
 

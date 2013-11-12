@@ -20,7 +20,7 @@
 
 #include "srchdlg.hxx"
 #include <comphelper/string.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxuno.hxx>
 
 #include "srchdlg.hrc"

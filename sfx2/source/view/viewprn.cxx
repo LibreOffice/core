@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include "com/sun/star/view/XRenderable.hpp"
+#include <com/sun/star/view/XRenderable.hpp>
 
 #include <svl/itempool.hxx>
 #include <vcl/msgbox.hxx>
@@ -37,7 +37,7 @@
 #include "viewimp.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/prnmon.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
@@ -45,7 +45,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 
-#include "toolkit/awt/vclxdevice.hxx"
+#include <toolkit/awt/vclxdevice.hxx>
 
 #include "view.hrc"
 #include "helpid.hrc"

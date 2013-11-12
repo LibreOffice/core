@@ -55,9 +55,9 @@
 #include <sfx2/module.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfx2/imgmgr.hxx"
-#include "sfx2/imagemgr.hxx"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/imgmgr.hxx>
+#include <sfx2/imagemgr.hxx>
+#include <sfx2/sfxresid.hxx>
 #include "../doc/doc.hrc"
 
 using namespace ::com::sun::star::uno;

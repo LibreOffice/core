@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/sidebar/Sidebar.hxx"
+#include <sfx2/sidebar/Sidebar.hxx>
 #include "SidebarController.hxx"
 #include "ResourceManager.hxx"
 

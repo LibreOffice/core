@@ -30,7 +30,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/splitwin.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -118,10 +118,10 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/request.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/ipclient.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "appbas.hxx"
 #include <sfx2/objitem.hxx>
-#include "sfx2/viewfac.hxx"
+#include <sfx2/viewfac.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
@@ -136,7 +136,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/progress.hxx>
 #include "workwin.hxx"
 #include "helper.hxx"
-#include "sfx2/minfitem.hxx"
+#include <sfx2/minfitem.hxx>
 #include "../appl/app.hrc"
 #include "impviewframe.hxx"
 

@@ -21,7 +21,7 @@
 #include "SidebarPanel.hxx"
 
 #include "Panel.hxx"
-#include "sfx2/sidebar/Theme.hxx"
+#include <sfx2/sidebar/Theme.hxx>
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>

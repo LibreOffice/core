@@ -14,7 +14,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
-#include "sfx2/dllapi.h"
+#include <sfx2/dllapi.h>
 #include <sfx2/mailmodelapi.hxx>
 
 

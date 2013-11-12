@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <sfx2/docfile.hxx>
-#include "sfx2/signaturestate.hxx"
+#include <sfx2/signaturestate.hxx>
 
 #include <uno/mapping.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -116,10 +116,10 @@
 #include <sfx2/docfac.hxx>
 #include "doc.hrc"
 #include "openflag.hxx"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/appuno.hxx>
 #include "sfxacldetect.hxx"
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>

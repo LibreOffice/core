@@ -25,8 +25,8 @@
 #include "PanelTitleBar.hxx"
 #include "Paint.hxx"
 #include "Panel.hxx"
-#include "sfx2/sidebar/Tools.hxx"
-#include "sfx2/sidebar/Theme.hxx"
+#include <sfx2/sidebar/Tools.hxx>
+#include <sfx2/sidebar/Theme.hxx>
 
 #include <vcl/dockwin.hxx>
 #include <vcl/scrbar.hxx>

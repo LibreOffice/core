@@ -50,12 +50,12 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/tbxctrl.hxx>
-#include "sfx2/stbitem.hxx"
+#include <sfx2/stbitem.hxx>
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>

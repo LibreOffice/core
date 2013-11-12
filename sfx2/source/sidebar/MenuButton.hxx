@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_MENUBUTTON_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_MENUBUTTON_HXX
 
-#include "vcl/button.hxx"
+#include <vcl/button.hxx>
 
 
 namespace sfx2 { namespace sidebar {

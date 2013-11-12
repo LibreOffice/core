@@ -85,7 +85,7 @@
 #include <unotools/ucbhelper.hxx>
 
 #include <sfx2/sfxbasecontroller.hxx>
-#include "sfx2/viewfac.hxx"
+#include <sfx2/viewfac.hxx>
 #include "workwin.hxx"
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -106,8 +106,8 @@
 #include "appdata.hxx"
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
-#include "sfx2/docstoragemodifylistener.hxx"
-#include "sfx2/brokenpackageint.hxx"
+#include <sfx2/docstoragemodifylistener.hxx>
+#include <sfx2/brokenpackageint.hxx>
 #include "graphhelp.hxx"
 #include "docundomanager.hxx"
 #include <sfx2/msgpool.hxx>

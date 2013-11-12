@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/sidebar/Tools.hxx"
+#include <sfx2/sidebar/Tools.hxx>
 
-#include "sfx2/sidebar/Theme.hxx"
+#include <sfx2/sidebar/Theme.hxx>
 
-#include "sfx2/imagemgr.hxx"
+#include <sfx2/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <vcl/gradient.hxx>

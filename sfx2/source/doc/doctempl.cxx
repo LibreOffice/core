@@ -84,7 +84,7 @@ using namespace ::ucbhelper;
 #include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/templatelocnames.hrc>
 #include "doc.hrc"
 #include <sfx2/fcontnr.hxx>

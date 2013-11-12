@@ -24,15 +24,15 @@
 #include "SidebarPanel.hxx"
 #include "SidebarResource.hxx"
 #include "TabBar.hxx"
-#include "sfx2/sidebar/Theme.hxx"
-#include "sfx2/sidebar/SidebarChildWindow.hxx"
-#include "sfx2/sidebar/Tools.hxx"
+#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <sfx2/sidebar/Tools.hxx>
 #include "SidebarDockingWindow.hxx"
 #include "Context.hxx"
 
 #include <sfx2/sfxresid.hxx>
-#include "sfx2/sfxsids.hrc"
-#include "sfx2/titledockwin.hxx"
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/titledockwin.hxx>
 #include "sfxlocal.hrc"
 #include <vcl/floatwin.hxx>
 #include <vcl/fixed.hxx>

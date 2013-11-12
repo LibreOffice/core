@@ -21,7 +21,7 @@
 #include "Panel.hxx"
 #include "DeckTitleBar.hxx"
 #include "PanelTitleBar.hxx"
-#include "sfx2/sidebar/Tools.hxx"
+#include <sfx2/sidebar/Tools.hxx>
 #include "TitleBar.hxx"
 #include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>

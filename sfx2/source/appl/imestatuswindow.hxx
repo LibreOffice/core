@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SFX2_SOURCE_APPL_IMESTATUSWINDOW_HXX
 #define INCLUDED_SFX2_SOURCE_APPL_IMESTATUSWINDOW_HXX
 
-#include "com/sun/star/beans/XPropertyChangeListener.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "osl/mutex.hxx"
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }

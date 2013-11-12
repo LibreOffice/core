@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_SFXDOCUMENTMETADATA_HXX
 #define INCLUDED_SFX2_SOURCE_INC_SFXDOCUMENTMETADATA_HXX
 
-#include "sal/config.h"
-#include "cppuhelper/factory.hxx"
+#include <sal/config.h>
+#include <cppuhelper/factory.hxx>
 
 
 // component helper namespace

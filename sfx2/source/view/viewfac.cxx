@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/app.hxx>
-#include "sfx2/viewfac.hxx"
+#include <sfx2/viewfac.hxx>
 #include <rtl/ustrbuf.hxx>
 
 // STATIC DATA -----------------------------------------------------------

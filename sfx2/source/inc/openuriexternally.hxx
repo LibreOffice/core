@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_OPENURIEXTERNALLY_HXX
 #define INCLUDED_SFX2_SOURCE_INC_OPENURIEXTERNALLY_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 
 namespace sfx2 {

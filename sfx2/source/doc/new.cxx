@@ -33,7 +33,7 @@
 #include "doc.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/docfile.hxx>
 #include "preview.hxx"
 #include <sfx2/printer.hxx>

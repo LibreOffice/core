@@ -20,17 +20,17 @@
 
 #include "newhelp.hxx"
 #include <sfx2/sfxuno.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "helpinterceptor.hxx"
 #include "helper.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 #include "panelist.hxx"
-#include "sfx2/imgmgr.hxx"
+#include <sfx2/imgmgr.hxx>
 #include "srchdlg.hxx"
-#include "sfx2/sfxhelp.hxx"
-#include "svtools/treelistentry.hxx"
+#include <sfx2/sfxhelp.hxx>
+#include <svtools/treelistentry.hxx>
 
 #include "app.hrc"
 #include "newhelp.hrc"

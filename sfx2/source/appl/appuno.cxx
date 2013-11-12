@@ -21,7 +21,7 @@
 #pragma warning( disable : 4290 )
 #endif
 
-#include "sfx2/appuno.hxx"
+#include <sfx2/appuno.hxx>
 
 #include "backingcomp.hxx"
 #include "SfxDocumentMetaData.hxx"
@@ -33,28 +33,28 @@
 #include "iframe.hxx"
 #include "objshimp.hxx"
 #include "plugin.hxx"
-#include "sfx2/app.hxx"
-#include "sfx2/brokenpackageint.hxx"
-#include "sfx2/dispatch.hxx"
-#include "sfx2/dllapi.h"
-#include "sfx2/docfile.hxx"
-#include "sfx2/fcontnr.hxx"
-#include "sfx2/frame.hxx"
-#include "sfx2/module.hxx"
-#include "sfx2/msg.hxx"
-#include "sfx2/msgpool.hxx"
-#include "sfx2/objsh.hxx"
-#include "sfx2/request.hxx"
-#include "sfx2/sfxbasecontroller.hxx"
-#include "sfx2/sfxsids.hrc"
-#include "sfx2/sfxuno.hxx"
-#include "sfx2/unoctitm.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/brokenpackageint.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/dllapi.h>
+#include <sfx2/docfile.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/unoctitm.hxx>
 #include "sfxslots.hxx"
 #include "sfxtypes.hxx"
 #include "shutdownicon.hxx"
 #include "xpackcreator.hxx"
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbmeth.hxx>

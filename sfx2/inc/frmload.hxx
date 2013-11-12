@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SFX2_INC_FRMLOAD_HXX
 #define INCLUDED_SFX2_INC_FRMLOAD_HXX
 
-#include "sfx2/sfxuno.hxx"
-#include "sfx2/objsh.hxx"
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>

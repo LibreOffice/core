@@ -18,7 +18,7 @@
  */
 
 
-#include "sfx2/securitypage.hxx"
+#include <sfx2/securitypage.hxx>
 
 #include <sfx2/sfxresid.hxx>
 

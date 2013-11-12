@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TABITEM_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TABITEM_HXX
 
-#include "vcl/button.hxx"
+#include <vcl/button.hxx>
 
 #include "DeckDescriptor.hxx"
 

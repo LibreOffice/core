@@ -84,7 +84,7 @@
 #include <sfx2/docfac.hxx>
 #include "openflag.hxx"
 #include <sfx2/passwd.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
 #include "filedlghelper.hrc"
 #include "filtergrouping.hxx"

@@ -64,10 +64,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/appuno.hxx>
-#include "sfx2/sfxhelp.hxx"
+#include <sfx2/sfxhelp.hxx>
 #include <sfx2/request.hxx>
 #include "sfxtypes.hxx"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/progress.hxx>
 #include <sfx2/objsh.hxx>
@@ -91,7 +91,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include "sfx2/stbitem.hxx"
+#include <sfx2/stbitem.hxx>
 #include "eventsupplier.hxx"
 #include <sfx2/dockwin.hxx>
 
@@ -138,7 +138,7 @@ namespace
 
 #include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
-#include "sfx2/imagemgr.hxx"
+#include <sfx2/imagemgr.hxx>
 #include "fwkhelper.hxx"
 
 SfxApplication* SfxApplication::GetOrCreate()

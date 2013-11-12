@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "sfx2/sidebar/Theme.hxx"
+#include <sfx2/sidebar/Theme.hxx>
 #include "Paint.hxx"
 #include "SidebarResource.hxx"
-#include "sfx2/sidebar/Tools.hxx"
+#include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/app.hxx>
 
 #include <tools/svborder.hxx>

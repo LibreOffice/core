@@ -65,7 +65,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/signaturestate.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
@@ -84,7 +84,7 @@
 #include "doc.hrc"
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
-#include "sfx2/sfxhelp.hxx"
+#include <sfx2/sfxhelp.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/checkin.hxx>

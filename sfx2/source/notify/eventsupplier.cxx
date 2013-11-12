@@ -40,7 +40,7 @@
 #include "eventsupplier.hxx"
 
 #include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include "sfxlocal.hrc"

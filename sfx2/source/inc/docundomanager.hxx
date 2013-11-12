@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_DOCUNDOMANAGER_HXX
 #define INCLUDED_SFX2_SOURCE_INC_DOCUNDOMANAGER_HXX
 
-#include "sfx2/sfxbasemodel.hxx"
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <com/sun/star/document/XUndoManager.hpp>
 

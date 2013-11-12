@@ -103,10 +103,10 @@
 #include <sfx2/sfx.hrc>
 #include "app.hrc"
 #include <sfx2/passwd.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/childwin.hxx>
 #include "appdata.hxx"
-#include "sfx2/minfitem.hxx"
+#include <sfx2/minfitem.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -115,7 +115,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/dialogs.hrc>
 #include "sorgitm.hxx"
-#include "sfx2/sfxhelp.hxx"
+#include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
 #include "templatedlg.hxx"
 

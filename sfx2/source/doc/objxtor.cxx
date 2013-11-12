@@ -79,7 +79,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "objshimp.hxx"
 #include "appbas.hxx"
 #include "sfxtypes.hxx"
@@ -92,7 +92,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <basic/basmgr.hxx>
 #include <svtools/svtools.hrc>
-#include "sfx2/QuerySaveDocument.hxx"
+#include <sfx2/QuerySaveDocument.hxx>
 #include "helpid.hrc"
 #include <sfx2/msg.hxx>
 #include "appbaslib.hxx"

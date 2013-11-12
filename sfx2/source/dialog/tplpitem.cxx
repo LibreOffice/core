@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/tplpitem.hxx"
+#include <sfx2/tplpitem.hxx>
 #include <com/sun/star/frame/status/Template.hpp>
 
 

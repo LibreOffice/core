@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/imagemgr.hxx"
+#include <sfx2/imagemgr.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -30,7 +30,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
 
-#include "sfx2/imgmgr.hxx"
+#include <sfx2/imgmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/dispatch.hxx>

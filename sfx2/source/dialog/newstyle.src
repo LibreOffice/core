@@ -20,7 +20,7 @@
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 #include "newstyle.hrc"
-#include "sfx2/sfxcommands.h"
+#include <sfx2/sfxcommands.h>
 
 ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
 {

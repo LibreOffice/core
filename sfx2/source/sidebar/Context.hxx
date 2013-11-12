@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_CONTEXT_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_CONTEXT_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <vector>
 

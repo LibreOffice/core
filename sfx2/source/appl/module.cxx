@@ -24,10 +24,10 @@
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
 #include "arrdecl.hxx"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include "sfx2/stbitem.hxx"
+#include <sfx2/stbitem.hxx>
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/mnumgr.hxx>
@@ -35,7 +35,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
-#include "sfx2/taskpane.hxx"
+#include <sfx2/taskpane.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>

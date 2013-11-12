@@ -33,7 +33,7 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/app.hxx>
 #include "dialog.hrc"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/mnumgr.hxx>
 #include "virtmenu.hxx"
 #include <sfx2/msgpool.hxx>

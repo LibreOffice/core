@@ -37,7 +37,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/opengrf.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "fileobj.hxx"
 #include "app.hrc"
 #include <vcl/dibtools.hxx>

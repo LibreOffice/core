@@ -18,7 +18,7 @@
  */
 
 #include "DeckLayouter.hxx"
-#include "sfx2/sidebar/Theme.hxx"
+#include <sfx2/sidebar/Theme.hxx>
 #include "Panel.hxx"
 #include "PanelTitleBar.hxx"
 #include "Deck.hxx"

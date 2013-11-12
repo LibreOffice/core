@@ -18,14 +18,14 @@
  */
 
 #include "DeckTitleBar.hxx"
-#include "sfx2/sidebar/Theme.hxx"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/sfxresid.hxx>
 #include "Sidebar.hrc"
 
 #include <vcl/image.hxx>
 
 #ifdef DEBUG
-#include "sfx2/sidebar/Tools.hxx"
+#include <sfx2/sidebar/Tools.hxx>
 #endif
 
 

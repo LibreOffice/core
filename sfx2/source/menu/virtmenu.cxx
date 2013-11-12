@@ -43,9 +43,9 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include "sfxpicklist.hxx"
-#include "sfx2/sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "menu.hrc"
-#include "sfx2/imagemgr.hxx"
+#include <sfx2/imagemgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <framework/addonsoptions.hxx>
