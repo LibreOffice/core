@@ -59,12 +59,20 @@ struct DerivedInterface1: css::uno::XInterface {
 private:
     ~DerivedInterface1() {}
         // avoid warnings about virtual members and non-virtual dtor
+
+public:
+    static void dummy(DerivedInterface1 * p) { p->~DerivedInterface1(); }
+        // ...and avoid warnings about unused ~DerivedInterface1 (see below)
 };
 
 struct DerivedInterface2: css::uno::XComponentContext {
 private:
     ~DerivedInterface2() {}
         // avoid warnings about virtual members and non-virtual dtor
+
+public:
+    static void dummy(DerivedInterface2 * p) { p->~DerivedInterface2(); }
+        // ...and avoid warnings about unused ~DerivedInterface2 (see below)
 };
 
 class Test: public ::CppUnit::TestFixture {
@@ -83,6 +91,12 @@ public:
 };
 
 void Test::testUnoType() {
+    // Avoid warnings about unused ~DerivedInterface1/2 (see above):
+    if (false) {
+        DerivedInterface1::dummy(0);
+        DerivedInterface2::dummy(0);
+    }
+
     css::uno::Type t;
     t = ::cppu::UnoType< ::cppu::UnoVoidType >::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_VOID, +t.getTypeClass());
