@@ -1720,6 +1720,78 @@ void OpSqrtPi::GenSlidingWindowFunction(std::stringstream &ss,
     ss << " 3.1415926535897932384626433832795f);\n";
     ss << "}";
 }
+void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i) ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0   = get_global_id(0);\n";
+    ss << "    double num = " << GetBottom() << ";\n";
+    ss << "    double significance = " << GetBottom() << ";\n";
+    ss << "    double bAbs = 0;\n";
+#ifdef ISNAN
+    FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVRNum=
+        dynamic_cast<const formula::SingleVectorRefToken*>(iNum);
+    FormulaToken *iSignificance = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVRSignificance=
+        dynamic_cast<const formula::SingleVectorRefToken*>(iSignificance);
+    ss << "    int buffer_num_len = "<<tmpCurDVRNum->GetArrayLength() << ";\n";
+    ss << "    int buffer_significance_len = ";
+    ss << tmpCurDVRSignificance->GetArrayLength() << ";\n";
+    ss << "    if((gid0)>=buffer_num_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        num = " << GetBottom() << ";\n";
+    ss << "    else\n    ";
+#endif
+    ss << "    num = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef ISNAN
+    ss << "    if((gid0)>=buffer_significance_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        significance = " << GetBottom() << ";\n";
+    ss << "    else\n    ";
+#endif
+    ss << "    significance = ";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+    if (vSubArguments.size() > 2)
+    {
+#ifdef ISNAN
+        FormulaToken *bAbs = vSubArguments[2]->GetFormulaToken();
+        if(bAbs->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken* tmpCurSVRIsAbs=
+                dynamic_cast<const formula::SingleVectorRefToken*>(bAbs);
+            ss<< "    if((gid0)>=" << tmpCurSVRIsAbs->GetArrayLength() << " ||";
+        }
+        if(bAbs->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* tmpCurDVRIsAbs=
+                dynamic_cast<const formula::DoubleVectorRefToken*>(bAbs);
+            ss<< "    if((gid0)>=" << tmpCurDVRIsAbs->GetArrayLength() << " ||";
+        }
+        if(bAbs->GetType() == formula::svDouble)
+        {
+            ss<< "    if(";
+        }
+        ss << "isNan(";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << "))\n";
+        ss << "        bAbs = 0;\n";
+        ss << "    else\n    ";
+#endif
+        ss << "    bAbs = "<<vSubArguments[2]->GenSlidingWindowDeclRef()<<";\n";
+    }
+    ss << "    return ";
+    ss << "( !(int)bAbs && num < 0.0 ? floor( num / significance ) : ";
+    ss << "ceil( num / significance ) )";
+    ss << "*significance;\n";
+    ss << "}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
