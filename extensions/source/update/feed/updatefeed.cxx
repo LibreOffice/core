@@ -122,8 +122,6 @@ class ActiveDataSink : public ::cppu::WeakImplHelper1< io::XActiveDataSink >
 public:
     ActiveDataSink() {};
 
-    inline operator uno::Reference< io::XActiveDataSink > () { return this; };
-
     virtual uno::Reference< io::XInputStream > SAL_CALL getInputStream()
         throw (uno::RuntimeException) { return m_xStream; };
     virtual void SAL_CALL setInputStream( uno::Reference< io::XInputStream > const & rStream )
