@@ -39,6 +39,7 @@
 #include <rtl/uri.hxx>
 #include "rtl/allocator.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
 #include <list>
 
@@ -628,7 +629,7 @@ void Bootstrap_Impl::expandValue(
 
 namespace {
 
-struct bootstrap_map {
+struct bootstrap_map: private boost::noncopyable {
     typedef boost::unordered_map<
         rtl::OUString, Bootstrap_Impl *,
         rtl::OUStringHash, std::equal_to< rtl::OUString >,
@@ -652,8 +653,6 @@ struct bootstrap_map {
     }
 
 private:
-    bootstrap_map(); // not defined
-
     static t * m_map;
 };
 
