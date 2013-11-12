@@ -20,7 +20,6 @@ class DataStreamsDlg : public ModalDialog
 
     SvtURLBox*      m_pCbUrl;
     PushButton*     m_pBtnBrowse;
-    PushButton*     m_pBtnStop;
     RadioButton*    m_pRBDirectData;
     RadioButton*    m_pRBScriptData;
     RadioButton*    m_pRBDataDown;
@@ -34,7 +33,6 @@ class DataStreamsDlg : public ModalDialog
 
     DECL_LINK(UpdateHdl, void *);
     DECL_LINK(BrowseHdl, void *);
-    DECL_LINK(StopHdl, void *);
 
     void UpdateEnable();
 
@@ -50,7 +48,6 @@ DataStreamsDlg::DataStreamsDlg(DataStreams *pDataStreams, Window* pParent)
 {
     get(m_pCbUrl, "url");
     get(m_pBtnBrowse, "browse");
-    get(m_pBtnStop, "stop");
     get(m_pRBDirectData, "directdata");
     get(m_pRBScriptData, "scriptdata");
     get(m_pRBDataDown, "datadown");
@@ -65,7 +62,6 @@ DataStreamsDlg::DataStreamsDlg(DataStreams *pDataStreams, Window* pParent)
     m_pCbUrl->SetSelectHdl( LINK( this, DataStreamsDlg, UpdateHdl ) );
     m_pEdRange->SetModifyHdl( LINK( this, DataStreamsDlg, UpdateHdl ) );
     m_pBtnBrowse->SetClickHdl( LINK( this, DataStreamsDlg, BrowseHdl ) );
-    m_pBtnStop->SetClickHdl( LINK( this, DataStreamsDlg, StopHdl ) );
     UpdateEnable();
 }
 
@@ -89,12 +85,6 @@ IMPL_LINK_NOARG(DataStreamsDlg, BrowseHdl)
 
     m_pCbUrl->SetText( aFileDialog.GetPath() );
     UpdateEnable();
-    return 0;
-}
-
-IMPL_LINK_NOARG(DataStreamsDlg, StopHdl)
-{
-    mpDataStreams->Stop();
     return 0;
 }
 

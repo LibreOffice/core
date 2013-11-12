@@ -43,13 +43,13 @@ public:
     ~DataStreams();
     bool ImportData();
     void ShowDialog(Window *pParent);
+    void Start();
+    void Stop();
 
 private:
     void MoveData();
     void Set(const OUString& rUrl, bool bIsScript, const OUString& rRange,
             sal_Int32 nLimit, MoveEnum eMove);
-    void Start();
-    void Stop();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

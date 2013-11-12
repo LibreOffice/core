@@ -738,6 +738,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 pImpl->m_pDataStreams = new DataStreams(GetViewData()->GetDocShell());
             pImpl->m_pDataStreams->ShowDialog( pTabViewShell->GetDialogParent() );
             break;
+        case SID_DATA_STREAMS_PLAY:
+            if (pImpl->m_pDataStreams)
+                pImpl->m_pDataStreams->Start();
+            break;
+        case SID_DATA_STREAMS_STOP:
+            if (pImpl->m_pDataStreams)
+                pImpl->m_pDataStreams->Stop();
+            break;
         case SID_MANAGE_XML_SOURCE:
             ExecuteXMLSourceDialog();
         break;

@@ -57,6 +57,7 @@ DataStreams::DataStreams(ScDocShell *pScDocShell):
     mpScDocShell(pScDocShell)
     , mpScDocument(mpScDocShell->GetDocument())
     , meMove(NO_MOVE)
+    , mbRunning(false)
 {
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
@@ -73,6 +74,8 @@ DataStreams::~DataStreams()
 
 void DataStreams::Start()
 {
+    if (mbRunning)
+        return;
     mbIsUndoEnabled = mpScDocument->IsUndoEnabled();
     mpScDocument->EnableUndo(false);
     mbRunning = true;
@@ -81,6 +84,8 @@ void DataStreams::Start()
 
 void DataStreams::Stop()
 {
+    if (!mbRunning)
+        return;
     mbRunning = false;
     mpScDocument->EnableUndo(mbIsUndoEnabled);
 }

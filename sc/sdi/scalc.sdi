@@ -6148,6 +6148,52 @@ SfxVoidItem DataStreams SID_DATA_STREAMS
     GroupId = GID_DATA;
 ]
 
+SfxVoidItem DataStreamsPlay SID_DATA_STREAMS_PLAY
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DATA;
+]
+
+SfxVoidItem DataStreamsStop SID_DATA_STREAMS_STOP
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DATA;
+]
+
 SfxVoidItem ManageXMLSource SID_MANAGE_XML_SOURCE
 (SfxStringItem DbName SID_MANAGE_XML_SOURCE)
 [

@@ -103,6 +103,7 @@ modules/scalc/toolbar/arrowshapes.xml
 modules/scalc/toolbar/basicshapes.xml
 modules/scalc/toolbar/calloutshapes.xml
 modules/scalc/toolbar/colorbar.xml
+modules/scalc/toolbar/datastreams.xml
 modules/scalc/toolbar/drawbar.xml
 modules/scalc/toolbar/drawobjectbar.xml
 modules/scalc/toolbar/extrusionobjectbar.xml
