@@ -138,10 +138,6 @@ public:
     ::boost::shared_ptr<PresenterBitmapContainer> mpBitmaps;
 
     PresenterTheme::SharedFontDescriptor GetFont (void) const;
-
-private:
-
-    void UpdateBorderSize (BorderSize& rBorderSize, bool bInner);
 };
 
 typedef ::boost::shared_ptr<PaneStyle> SharedPaneStyle;
@@ -949,22 +945,6 @@ PaneStyle::PaneStyle (void)
 
 PaneStyle::~PaneStyle (void)
 {
-}
-
-void PaneStyle::UpdateBorderSize (BorderSize& rBorderSize, bool bInner)
-{
-    if (mpParentStyle.get() != NULL)
-        mpParentStyle->UpdateBorderSize(rBorderSize, bInner);
-
-    BorderSize& rThisBorderSize (bInner ? maInnerBorderSize : maOuterBorderSize);
-    if (rThisBorderSize.mnLeft >= 0)
-        rBorderSize.mnLeft = rThisBorderSize.mnLeft;
-    if (rThisBorderSize.mnTop >= 0)
-        rBorderSize.mnTop = rThisBorderSize.mnTop;
-    if (rThisBorderSize.mnRight >= 0)
-        rBorderSize.mnRight = rThisBorderSize.mnRight;
-    if (rThisBorderSize.mnBottom >= 0)
-        rBorderSize.mnBottom = rThisBorderSize.mnBottom;
 }
 
 const SharedBitmapDescriptor PaneStyle::GetBitmap (const OUString& rsBitmapName) const
