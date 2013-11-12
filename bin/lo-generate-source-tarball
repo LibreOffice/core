@@ -173,7 +173,7 @@ if ${GEN_XZ?} ; then
     xz -fz "${OUT_DIR}/${base_name}.tar"
     if ${GEN_MD5?} ; then
 	echo "md5sum..."
-	md5sum "${OUT_DIR}/${base_name}.tar.xz" > "${OUT_DIR}/${base_name}.tar.zx.md5"
+	md5sum "${OUT_DIR}/${base_name}.tar.xz" > "${OUT_DIR}/${base_name}.tar.xz.md5"
     fi
 else
     rm "${OUT_DIR}/${base_name}.tar"
