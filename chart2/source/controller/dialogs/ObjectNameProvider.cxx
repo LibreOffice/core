@@ -559,6 +559,18 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                     try
                     {
                         Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_QUERY_THROW );
+                        sal_Int32 aDegree = 2;
+                        sal_Bool aForceIntercept = false;
+                        double aInterceptValue = 0.0;
+                        uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                        if ( xProperties.is())
+                        {
+                                xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
+                                xProperties->getPropertyValue( "ForceIntercept") >>= aForceIntercept;
+                                if (aForceIntercept)
+                                        xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
+                        }
+                        xCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, 2);
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
                         // replace formula
