@@ -210,6 +210,9 @@ private:
     /// Write customXml/item[n].xml and customXml/itemProps[n].xml
     void WriteCustomXml();
 
+    /// Write word/activeX/activeX[n].xml
+    void WriteActiveX();
+
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
     sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
 

@@ -431,6 +431,8 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         // Custom xml's are handled as part of grab bag.
         resolveCustomXmlStream(rStream);
 
+        resolveActiveXStream(rStream);
+
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
         resolveFastSubStream(rStream, OOXMLStream::STYLES);
         resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
@@ -511,6 +513,55 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
     }
 }
 
+void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
+{
+    // Resolving all ActiveX[n].xml files from ActiveX folder.
+    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
+    mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    if (mxRelationshipAccess.is())
+    {
+        OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
+        OUString sTarget("Target");
+        bool bFound = false;
+        sal_Int32 counter = 0;
+        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
+                mxRelationshipAccess->getAllRelationships();
+        uno::Sequence<uno::Reference<xml::dom::XDocument> > mxActiveXDomListTemp(aSeqs.getLength());
+        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        {
+            uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
+            for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
+            {
+                beans::StringPair aPair = aSeq[i];
+                // Need to resolve only ActiveX files from document relationships.
+                // Skipping other files.
+                if (aPair.Second.compareTo(sCustomType) == 0)
+                    bFound = true;
+                else if(aPair.First.compareTo(sTarget) == 0 && bFound)
+                {
+                    // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
+                    // to ensure ActiveX.xml target is visited in lcl_getTarget.
+                    customTarget = aPair.Second;
+                }
+            }
+            if(bFound)
+            {
+                uno::Reference<xml::dom::XDocument> activeXTemp = importSubStream(OOXMLStream::ACTIVEX);
+                // This will add all ActiveX[n].xml to grabbag list.
+                if(activeXTemp.is())
+                {
+                    mxActiveXDomListTemp[counter] = activeXTemp;
+                    counter++;
+                    resolveFastSubStream(rStream, OOXMLStream::ACTIVEX);
+                }
+                bFound = false;
+            }
+        }
+        mxActiveXDomListTemp.realloc(counter);
+        mxActiveXDomList = mxActiveXDomListTemp;
+    }
+}
+
 uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const OUString & rId)
 {
     OOXMLStream::Pointer_t pStream(OOXMLDocumentFactory::createStream(mpStream, rId));
@@ -581,6 +632,11 @@ uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustom
 uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomPropsList( )
 {
     return mxCustomXmlDomPropsList;
+}
+
+uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getActiveXDomList( )
+{
+    return mxActiveXDomList;
 }
 
 OOXMLDocument *
