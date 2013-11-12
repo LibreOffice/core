@@ -19,8 +19,8 @@
 
 
 #include "comphelper/docpasswordhelper.hxx"
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include "comphelper/mediadescriptor.hxx"
 
 #include <osl/time.h>
 #include <rtl/digest.h>
@@ -411,37 +411,6 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
     return (eResult == DocPasswordVerifierResult_OK) ? aEncData : uno::Sequence< beans::NamedValue >();
 }
-
-/*static*/ ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > DocPasswordHelper::requestAndVerifyDocPassword(
-        IDocPasswordVerifier& rVerifier,
-        MediaDescriptor& rMediaDesc,
-        DocPasswordRequestType eRequestType,
-        const ::std::vector< OUString >* pDefaultPasswords )
-{
-    uno::Sequence< beans::NamedValue > aMediaEncData = rMediaDesc.getUnpackedValueOrDefault(
-        MediaDescriptor::PROP_ENCRYPTIONDATA(), uno::Sequence< beans::NamedValue >() );
-    OUString aMediaPassword = rMediaDesc.getUnpackedValueOrDefault(
-        MediaDescriptor::PROP_PASSWORD(), OUString() );
-    Reference< XInteractionHandler > xInteractHandler = rMediaDesc.getUnpackedValueOrDefault(
-        MediaDescriptor::PROP_INTERACTIONHANDLER(), Reference< XInteractionHandler >() );
-    OUString aDocumentName = rMediaDesc.getUnpackedValueOrDefault(
-        MediaDescriptor::PROP_URL(), OUString() );
-
-    bool bIsDefaultPassword = false;
-    uno::Sequence< beans::NamedValue > aEncryptionData = requestAndVerifyDocPassword(
-        rVerifier, aMediaEncData, aMediaPassword, xInteractHandler, aDocumentName, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
-
-    rMediaDesc.erase( MediaDescriptor::PROP_PASSWORD() );
-    rMediaDesc.erase( MediaDescriptor::PROP_ENCRYPTIONDATA() );
-
-    // insert valid password into media descriptor (but not a default password)
-    if( (aEncryptionData.getLength() > 0) && !bIsDefaultPassword )
-        rMediaDesc[ MediaDescriptor::PROP_ENCRYPTIONDATA() ] <<= aEncryptionData;
-
-    return aEncryptionData;
-}
-
-// ============================================================================
 
 } // namespace comphelper
 

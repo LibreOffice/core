@@ -30,10 +30,6 @@ namespace com { namespace sun { namespace star { namespace beans { struct Proper
 
 namespace comphelper {
 
-class MediaDescriptor;
-
-// ============================================================================
-
 enum DocPasswordVerifierResult
 {
     DocPasswordVerifierResult_OK,
@@ -289,56 +285,6 @@ public:
                             DocPasswordRequestType eRequestType,
                             const ::std::vector< OUString >* pDefaultPasswords = 0,
                             bool* pbIsDefaultPassword = 0 );
-
-    // ------------------------------------------------------------------------
-
-    /** This helper function tries to find a password for the document
-        described by the passed media descriptor.
-
-        First, the list of default passwords will be tried if provided. This is
-        needed by import filters for external file formats that have to check a
-        predefined password in some cases without asking the user for a
-        password. Every password is checked using the passed password verifier.
-
-        If not successful, the passed media descriptor is asked for a password,
-        that has been set e.g. by an API call to load a document. If existing,
-        the password is checked using the passed password verifier.
-
-        If still not successful, the interaction handler contained in the
-        passed nmedia descriptor is used to request a password from the user.
-        This will be repeated until the passed password verifier validates the
-        entered password, or if the user chooses to cancel password input.
-
-        @param rVerifier
-            The password verifier used to check every processed password.
-
-        @param rMediaDesc
-            The media descriptor of the document that needs to be opened with
-            a password. If a valid password (that is not contained in the
-            passed list of default passwords) was found, it will be inserted
-            into the "Password" property of this descriptor.
-
-        @param eRequestType
-            The password request type that will be passed to the
-            DocPasswordRequest object created internally. See
-            docpasswordrequest.hxx for more details.
-
-        @param pDefaultPasswords
-            If not null, contains default passwords that will be tried before a
-            password will be requested from the media descriptor or the user.
-
-        @return
-            If not empty, contains the password that has been validated by the
-            passed password verifier. If empty, no valid password has been
-            found, or the user has chossen to cancel password input.
-     */
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestAndVerifyDocPassword(
-                            IDocPasswordVerifier& rVerifier,
-                            MediaDescriptor& rMediaDesc,
-                            DocPasswordRequestType eRequestType,
-                            const ::std::vector< OUString >* pDefaultPasswords = 0 );
-
-    // ------------------------------------------------------------------------
 
 private:
                         ~DocPasswordHelper();

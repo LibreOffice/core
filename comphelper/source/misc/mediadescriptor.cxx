@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
@@ -442,6 +443,34 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
                 rCompDataAny = aCompDataMap.getAsConstAny( bHasPropValues );
         }
     }
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > MediaDescriptor::requestAndVerifyDocPassword(
+        IDocPasswordVerifier& rVerifier,
+        DocPasswordRequestType eRequestType,
+        const ::std::vector< OUString >* pDefaultPasswords )
+{
+    css::uno::Sequence< css::beans::NamedValue > aMediaEncData = getUnpackedValueOrDefault(
+        PROP_ENCRYPTIONDATA(), css::uno::Sequence< css::beans::NamedValue >() );
+    OUString aMediaPassword = getUnpackedValueOrDefault(
+        PROP_PASSWORD(), OUString() );
+    css::uno::Reference< css::task::XInteractionHandler > xInteractHandler = getUnpackedValueOrDefault(
+        PROP_INTERACTIONHANDLER(), css::uno::Reference< css::task::XInteractionHandler >() );
+    OUString aDocumentName = getUnpackedValueOrDefault(
+        PROP_URL(), OUString() );
+
+    bool bIsDefaultPassword = false;
+    css::uno::Sequence< css::beans::NamedValue > aEncryptionData = DocPasswordHelper::requestAndVerifyDocPassword(
+        rVerifier, aMediaEncData, aMediaPassword, xInteractHandler, aDocumentName, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
+
+    erase( PROP_PASSWORD() );
+    erase( PROP_ENCRYPTIONDATA() );
+
+    // insert valid password into media descriptor (but not a default password)
+    if( (aEncryptionData.getLength() > 0) && !bIsDefaultPassword )
+        (*this)[ PROP_ENCRYPTIONDATA() ] <<= aEncryptionData;
+
+    return aEncryptionData;
 }
 
 sal_Bool MediaDescriptor::addInputStream()

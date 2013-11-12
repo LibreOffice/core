@@ -343,8 +343,8 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     user has cancelled the password input dialog. */
                 PasswordVerifier aVerifier( aDecryptor );
                 Sequence<NamedValue> aEncryptionData;
-                aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-                                                aVerifier, rMediaDescriptor,
+                aEncryptionData = rMediaDescriptor.requestAndVerifyDocPassword(
+                                                aVerifier,
                                                 comphelper::DocPasswordRequestType_MS,
                                                 &aDefaultPasswords );
 
