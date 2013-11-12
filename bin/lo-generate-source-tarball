@@ -140,7 +140,7 @@ pushd "${CORE_DIR}" > /dev/null
 
 
 echo "archiving core..."
-git archive --format=tar --prefix="${base_name?}" -o "${OUT_DIR}/${base_name}.tar" ${LABEL?}
+git archive --format=tar --prefix="${base_name?}/" -o "${OUT_DIR}/${base_name}.tar" ${LABEL?}
 
 
 concatenate_list=
