@@ -287,7 +287,7 @@ Behaviour of Delete-Redline:
 */
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
-    bool bError = true;
+    bool bMerged = false;
     _CHECK_REDLINE( this )
 
     if( IsRedlineOn() && !IsShowOriginal( meRedlineMode ) &&
@@ -404,7 +404,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 mpRedlineTbl->Insert( pRedl );
                             }
 
-                            bError = false;
+                            bMerged = true;
                             bDelete = true;
                         }
                         else if( (( POS_BEFORE == eCmpPos &&
@@ -420,7 +420,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             mpRedlineTbl->Remove( n );
                             mpRedlineTbl->Insert( pRedl );
 
-                            bError = false;
+                            bMerged = true;
                             bDelete = true;
                         }
                         else if ( POS_OUTSIDE == eCmpPos )
@@ -1227,7 +1227,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
     }
     _CHECK_REDLINE( this )
 
-    return ( 0 != pNewRedl ) || !bError;
+    return ( 0 != pNewRedl ) || bMerged;
 }
 
 void SwDoc::CompressRedlines()
