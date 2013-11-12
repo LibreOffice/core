@@ -53,6 +53,7 @@
 #include "docpool.hxx"
 #include "paramisc.hxx"
 #include "documentimport.hxx"
+#include "formulabuffer.hxx"
 
 namespace oox {
 namespace xls {
@@ -199,7 +200,9 @@ void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const ::com::sun
 
 void SheetDataBuffer::setBooleanCell( const CellModel& rModel, bool bValue )
 {
-    setCellFormula( rModel.maCellAddr, getFormulaParser().convertBoolToFormula( bValue ) );
+    getFormulaBuffer().setCellFormula(
+        rModel.maCellAddr, bValue ? OUString("TRUE()") : OUString("FALSE()"));
+
     // #108770# set 'Standard' number format for all Boolean cells
     setCellFormat( rModel, 0 );
 }
@@ -211,7 +214,12 @@ void SheetDataBuffer::setErrorCell( const CellModel& rModel, const OUString& rEr
 
 void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode )
 {
-    setCellFormula( rModel.maCellAddr, getFormulaParser().convertErrorToFormula( nErrorCode ) );
+    OUStringBuffer aBuf;
+    aBuf.append(sal_Unicode('{'));
+    aBuf.append(BiffHelper::calcDoubleFromError(nErrorCode));
+    aBuf.append(sal_Unicode('}'));
+
+    getFormulaBuffer().setCellFormula(rModel.maCellAddr, aBuf.makeStringAndClear());
     setCellFormat( rModel );
 }
 
