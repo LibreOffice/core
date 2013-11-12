@@ -40,8 +40,6 @@ namespace
             AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,
             ScRangeList aRangeList, const OUString& aTemplateString)
     {
-        OUString aFormulaString;
-
         for (size_t i = 0; i < aRangeList.size(); i++)
         {
             aOutput.resetRow();
