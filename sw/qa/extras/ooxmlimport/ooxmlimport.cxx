@@ -128,6 +128,7 @@ public:
     void testN816593();
     void testN820509();
     void testN820788();
+    void testN830205();
     void testTableAutoColumnFixedSize();
     void testFdo66474();
     void testBnc780044Spacing();
@@ -215,6 +216,7 @@ void Test::run()
         {"n816593.docx", &Test::testN816593},
         {"n820509.docx", &Test::testN820509},
         {"n820788.docx", &Test::testN820788},
+        {"n830205.docx", &Test::testN830205},
         {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
         {"fdo66474.docx", &Test::testFdo66474},
         {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
@@ -1291,6 +1293,12 @@ void Test::testN820788()
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     // This was text::SizeType::FIX.
     CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xFrame, "SizeType"));
+}
+
+void Test::testN830205()
+{
+    // Previously import just crashed (due to infinite recursion).
+    getParagraph(1, "XXX");
 }
 
 void Test::testTableAutoColumnFixedSize()

@@ -2694,7 +2694,9 @@ bool SwRedlineTbl::InsertWithValidRanges( SwRedline* p, sal_uInt16* pInsPos )
 #if OSL_DEBUG_LEVEL > 0
             CheckPosition( pNew->GetPoint(), pNew->GetMark() );
 #endif
+
             if( *pNew->GetPoint() != *pNew->GetMark() &&
+                pNew->HasValidRange() &&
                 Insert( pNew, nInsPos ) )
             {
                 pNew->CallDisplayFunc();
