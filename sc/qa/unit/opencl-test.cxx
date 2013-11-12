@@ -223,6 +223,7 @@ public:
     void testStatisticalFormulaDevSq();
     void testStatisticalFormulaStDev();
     void testStatisticalFormulaSlope();
+    void testStatisticalFormulaSTEYX();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -377,6 +378,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaDevSq);
     CPPUNIT_TEST(testStatisticalFormulaStDev);
     CPPUNIT_TEST(testStatisticalFormulaSlope);
+    CPPUNIT_TEST(testStatisticalFormulaSTEYX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4228,6 +4230,31 @@ void ScOpenclTest::testStatisticalFormulaSlope()
     pDoc->CalcAll();
 
     ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Slope.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 20; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-187]
+void ScOpenclTest::testStatisticalFormulaSTEYX()
+{
+    if (!detectOpenCLDevice())
+        return;
+
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/STEYX.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/STEYX.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
