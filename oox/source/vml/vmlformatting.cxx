@@ -739,8 +739,10 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                             start and stop colors, effectively reversing the
                             gradient. BUT: For angles >= 180 deg., the
                             behaviour is reversed. This means that in this case
-                            a focus of 0% swaps the gradient. */
-                        if( ((fFocus < -0.75) || (fFocus > 0.75)) == (nVmlAngle < 180) )
+                            a focus of 0% swaps the gradient.
+                        //if( ((fFocus < -0.75) || (fFocus > 0.75)) == (nVmlAngle < 180) )
+                            */
+                        if ( fFocus < -0.5 || fFocus > 0.5 )
                             (nVmlAngle += 180) %= 360;
                         // set the start and stop colors
                         aFillProps.maGradientProps.maGradientStops[ 0.0 ] = aColor1;
