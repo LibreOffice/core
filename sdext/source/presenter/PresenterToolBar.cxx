@@ -156,8 +156,6 @@ namespace {
         virtual bool IsFilling (void) const;
         void UpdateState (void);
 
-        OUString GetAction (void) const;
-
         // lang::XEventListener
 
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
