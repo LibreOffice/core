@@ -219,13 +219,6 @@ struct StringTraits
         rtl_string_new_WithLength(pBuffer, *pCapacity);
     }
 
-    static inline void appendChar(rtl_String ** pBuffer, sal_Int32 * pCapacity,
-                                  sal_Int32 * pOffset, sal_Char cChar)
-    {
-        rtl_stringbuffer_insert(pBuffer, pCapacity, *pOffset, &cChar, 1);
-        ++*pOffset;
-    }
-
     static inline void appendChars(rtl_String ** pBuffer, sal_Int32 * pCapacity,
                                    sal_Int32 * pOffset, sal_Char const * pChars,
                                    sal_Int32 nLen)
@@ -259,13 +252,6 @@ struct UStringTraits
                                     sal_Int32 * pCapacity)
     {
         rtl_uString_new_WithLength(pBuffer, *pCapacity);
-    }
-
-    static inline void appendChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
-                                  sal_Int32 * pOffset, sal_Unicode cChar)
-    {
-        rtl_uStringbuffer_insert(pBuffer, pCapacity, *pOffset, &cChar, 1);
-        ++*pOffset;
     }
 
     static inline void appendChars(rtl_uString ** pBuffer,
