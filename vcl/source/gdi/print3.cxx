@@ -311,13 +311,13 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // check if there is a default printer; if not, show an error box (if appropriate)
     if( GetDefaultPrinterName().isEmpty() )
     {
-        if(  pController->isShowDialogs()
+        /*if(  pController->isShowDialogs()
              // && ! pController->isDirectPrint()
            )
         {
             ErrorBox aBox( NULL, VclResId( SV_PRINT_NOPRINTERWARNING ) );
             aBox.Execute();
-        }
+        }*/
         pController->setValue( OUString( "IsDirect" ),
                                makeAny( sal_False ) );
     }
