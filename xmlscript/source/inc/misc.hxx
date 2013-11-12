@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLSCRIPT_MISC_HXX
 #define INCLUDED_XMLSCRIPT_MISC_HXX
 
-#include "com/sun/star/uno/Any.hxx"
+#include <com/sun/star/uno/Any.hxx>
 
 namespace xmlscript
 {

@@ -20,7 +20,7 @@
 #include <config_folders.h>
  
 #include <stdio.h>
-#include "osl/file.h"
+#include <osl/file.h>
 
 #include <rtl/ustrbuf.hxx>
 

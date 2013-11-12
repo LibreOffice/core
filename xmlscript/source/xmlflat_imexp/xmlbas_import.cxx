@@ -18,8 +18,8 @@
  */
 
 #include "xmlbas_import.hxx"
-#include "xmlscript/xmlns.h"
-#include "xmlscript/xml_helper.hxx"
+#include <xmlscript/xmlns.h>
+#include <xmlscript/xml_helper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>

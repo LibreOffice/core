@@ -25,8 +25,8 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 
-#include "com/sun/star/xml/input/XRoot.hpp"
-#include "com/sun/star/xml/sax/XExtendedDocumentHandler.hpp"
+#include <com/sun/star/xml/input/XRoot.hpp>
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 namespace xmlscript
 {

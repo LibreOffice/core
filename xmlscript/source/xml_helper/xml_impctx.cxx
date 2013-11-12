@@ -19,14 +19,14 @@
 
 #include "xml_import.hxx"
 
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase3.hxx"
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
 
-#include "com/sun/star/xml/input/XAttributes.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <com/sun/star/xml/input/XAttributes.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
 #include <boost/unordered_map.hpp>

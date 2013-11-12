@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMMON_HXX
 #define INCLUDED_COMMON_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 namespace xmlscript {
 
