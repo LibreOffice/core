@@ -1792,6 +1792,68 @@ void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "*significance;\n";
     ss << "}";
 }
+void OpKombin::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i) ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double num = " << GetBottom() << ";\n";
+    ss << "    double num_chosen = " << GetBottom() << ";\n";
+    ss << "    double result = " << GetBottom() << ";\n";
+#ifdef ISNAN
+    FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVRNum=
+        dynamic_cast<const formula::SingleVectorRefToken *>(iNum);
+    FormulaToken *iNumChosen = vSubArguments[1]->GetFormulaToken();
+    const formula::SingleVectorRefToken* tmpCurDVRNumChosen=
+        dynamic_cast<const formula::SingleVectorRefToken *>(iNumChosen);
+    ss << "    int buffer_num_len = ";
+    ss << tmpCurDVRNum->GetArrayLength() << ";\n";
+    ss << "    int buffer_num_chosen_len = ";
+    ss << tmpCurDVRNumChosen->GetArrayLength() << ";\n";
+
+    ss << "    if((gid0)>=buffer_num_len || isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        num = " << GetBottom() << ";\n";
+    ss << "    else\n    ";
+#endif
+    ss << "    num = floor(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
+#ifdef ISNAN
+    ss << "    if((gid0)>=buffer_num_chosen_len || isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        num_chosen = " << GetBottom() << ";\n";
+    ss << "    else\n    ";
+#endif
+    ss << "    num_chosen = floor(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+    ss << "    if (num < num_chosen)                 \n";
+    ss << "        result = 0;                       \n";
+    ss << "    else if (num_chosen == 0)             \n";
+    ss << "        result = 1;                       \n";
+    ss << "    else{                                 \n";
+    ss << "        result = num / num_chosen;        \n";
+    ss << "        num = num - 1.0;                  \n";
+    ss << "        num_chosen = num_chosen - 1.0;    \n";
+    ss << "        while (num_chosen > 0){           \n";
+    ss << "            result *= num / num_chosen;   \n";
+    ss << "            num = num - 1.0;              \n";
+    ss << "            num_chosen = num_chosen - 1.0;\n";
+    ss << "        }                                 \n";
+    ss << "    }                                     \n";
+    ss << "    return result;                        \n";
+    ss << "}                                         \n";
+}
+
+
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
