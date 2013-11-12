@@ -2495,6 +2495,12 @@ COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`
 # Set the ENABLE_LTO variable
 # ===================================================================
 AC_MSG_CHECKING([whether to use link-time optimization])
+if test $_os = WINNT -a "$WITH_MINGW" != yes -a -z "$enable_lto" -a \
+        \( -z "$enable_dbgutil" -o "$enable_dbgutil" = no \) -a \
+        \( -z "$enable_debug" -o "$enable_debug" = no \); then
+    # Turn on LTO for MSVC when optimising unless told not to
+    enable_lto=yes
+fi
 if test -n "$enable_lto" -a "$enable_lto" != "no"; then
     ENABLE_LTO="TRUE"
     AC_MSG_RESULT([yes])
