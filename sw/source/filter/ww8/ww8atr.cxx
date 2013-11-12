@@ -4529,6 +4529,17 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
         default:
             break;
         case SVX_LINE_SPACE_AUTO:
+        {
+            switch ( rSpacing.GetInterLineSpaceRule() )
+            {
+            case SVX_INTER_LINE_SPACE_OFF:
+            case SVX_INTER_LINE_SPACE_PROP:
+                nSpace = (short)( ( nSpace * rSpacing.GetPropLineSpace() ) / 100L );
+                nMulti = 1;
+                break;
+            }
+        }
+        break;
         case SVX_LINE_SPACE_FIX:
         case SVX_LINE_SPACE_MIN:
         {
