@@ -100,8 +100,6 @@ private:
     ::osl::Mutex maCurrentTaskMutex;
     SharedTimerTask mpCurrentTask;
 
-    static void Release (void);
-
     TimerScheduler (void);
     virtual ~TimerScheduler (void);
     class Deleter {public: void operator () (TimerScheduler* pScheduler) { delete pScheduler; } };
