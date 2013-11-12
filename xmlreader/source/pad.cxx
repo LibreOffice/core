@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "sal/types.h"
-#include "xmlreader/pad.hxx"
-#include "xmlreader/span.hxx"
+#include <sal/types.h>
+#include <xmlreader/pad.hxx>
+#include <xmlreader/span.hxx>
 
 namespace xmlreader {
 

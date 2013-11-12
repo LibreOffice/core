@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "rtl/textcvt.h"
-#include "rtl/textenc.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "xmlreader/span.hxx"
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <rtl/textcvt.h>
+#include <rtl/textenc.h>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <xmlreader/span.hxx>
 
 namespace xmlreader {
 
