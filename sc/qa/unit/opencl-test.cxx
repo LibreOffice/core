@@ -225,6 +225,7 @@ public:
     void testStatisticalFormulaSlope();
     void testStatisticalFormulaSTEYX();
     void testStatisticalFormulaZTest();
+    void testMathFormulaPi();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -381,6 +382,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaSlope);
     CPPUNIT_TEST(testStatisticalFormulaSTEYX);
     CPPUNIT_TEST(testStatisticalFormulaZTest);
+    CPPUNIT_TEST(testMathFormulaPi);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -695,7 +697,29 @@ void ScOpenclTest::testMathFormulaSinh()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-196]
+void ScOpenclTest::testMathFormulaPi()
+{
+    if (!detectOpenCLDevice())
+        return;
 
+    ScDocShellRef xDocSh = loadDoc("opencl/math/pi.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/pi.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 15; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(0,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(0,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 void ScOpenclTest::testFinacialFormula()
 {
     if (!detectOpenCLDevice())
