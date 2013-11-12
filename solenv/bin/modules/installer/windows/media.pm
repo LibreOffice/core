@@ -304,43 +304,6 @@ sub create_media_table
         }
 
     }
-    elsif ( $installer::globals::cab_file_per_component )
-    {
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-        {
-            my $onefile = ${$filesref}[$i];
-            my $nextfile = ${$filesref}[$i+1];
-
-            my $filecomponent = "";
-            my $nextcomponent = "";
-
-            if ( $onefile->{'componentname'} ) { $filecomponent = $onefile->{'componentname'}; }
-            if ( $nextfile->{'componentname'} ) { $nextcomponent = $nextfile->{'componentname'}; }
-
-            if ( $filecomponent eq $nextcomponent )
-            {
-                next;       # nothing to do, this is not the last file of a component
-            }
-
-            my %media = ();
-            $diskid++;
-
-            $media{'DiskId'} = get_media_diskid($diskid);
-            $media{'LastSequence'} = get_media_lastsequence($onefile);
-            $media{'DiskPrompt'} = get_media_diskprompt();
-            $media{'Cabinet'} = get_media_cabinet($diskid);
-            $media{'VolumeLabel'} = get_media_volumelabel();
-            $media{'Source'} = get_media_source();
-
-            my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                    . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
-
-            push(@mediatable, $oneline);
-
-            $media{'Cabinet'} =~ s/^\s*\#//;    # removing leading hash
-            set_cabinetfilename_for_component_in_file_collector($media{'Cabinet'}, $filesref, $filecomponent, $i);
-        }
-    }
     elsif ( $installer::globals::fix_number_of_cab_files )
     {
         # number of cabfiles

@@ -259,7 +259,7 @@ sub generate_cab_file_list
             push(@installer::globals::allddffiles, $ddffilename);
         }
     }
-    elsif ((( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files )) && ( $installer::globals::updatedatabase ))
+    elsif (( $installer::globals::fix_number_of_cab_files ) && ( $installer::globals::updatedatabase ))
     {
         my $sequenceorder = get_sequenceorder($filesref);
 
@@ -352,7 +352,7 @@ sub generate_cab_file_list
             push(@installer::globals::allddffiles, $ddffilename);
         }
     }
-    elsif (( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files ))
+    elsif ( $installer::globals::fix_number_of_cab_files )
     {
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
