@@ -56,7 +56,7 @@ PanelTitleBar::PanelTitleBar (
     OSL_ASSERT(mpPanel != NULL);
 
 #ifdef DEBUG
-    SetText(A2S("PanelTitleBar"));
+    SetText(OUString("PanelTitleBar"));
 #endif
 }
 

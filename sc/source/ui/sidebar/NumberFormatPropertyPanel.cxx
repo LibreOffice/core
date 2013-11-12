@@ -43,8 +43,6 @@ const char UNO_NUMBERFORMATCURRENCY[] = ".uno:NumberFormatCurrency";
 const char UNO_NUMBERFORMATDATE[]     = ".uno:NumberFormatDate";
 const char UNO_INSERTFIXEDTEXT[]      = ".uno:InsertFixedText";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 //////////////////////////////////////////////////////////////////////////////
 // namespace open
 
@@ -193,11 +191,11 @@ NumberFormatPropertyPanel* NumberFormatPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(A2S("no parent Window given to NumberFormatPropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException("no parent Window given to NumberFormatPropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(A2S("no XFrame given to NumberFormatPropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to NumberFormatPropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(A2S("no SfxBindings given to NumberFormatPropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException("no SfxBindings given to NumberFormatPropertyPanel::Create", NULL, 2);
 
     return new NumberFormatPropertyPanel(
         pParent,

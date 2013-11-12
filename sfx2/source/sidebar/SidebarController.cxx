@@ -145,7 +145,7 @@ SidebarController::SidebarController (
 
     // Listen for theme property changes.
     Theme::GetPropertySet()->addPropertyChangeListener(
-        A2S(""),
+        OUString(""),
         static_cast<css::beans::XPropertyChangeListener*>(this));
 
     // Get the dispatch object as preparation to listen for changes of
@@ -155,7 +155,7 @@ SidebarController::SidebarController (
     if (mxReadOnlyModeDispatch.is())
         mxReadOnlyModeDispatch->addStatusListener(this, aURL);
 
-    SwitchToDeck(A2S("default"));
+    SwitchToDeck(OUString("default"));
 
     WeakReference<SidebarController> xWeakController (this);
     maSidebarControllerContainer.insert(
@@ -230,7 +230,7 @@ void SAL_CALL SidebarController::disposing (void)
     mpTabBar.reset();
 
     Theme::GetPropertySet()->removePropertyChangeListener(
-        A2S(""),
+        OUString(""),
         static_cast<css::beans::XPropertyChangeListener*>(this));
 
     maContextChangeUpdate.CancelRequest();

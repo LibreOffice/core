@@ -22,8 +22,6 @@
 
 namespace sfx2 { namespace sidebar {
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace {
 
 typedef ::std::map<rtl::OUString,EnumContext::Application> ApplicationMap;
@@ -164,18 +162,18 @@ void EnumContext::ProvideApplicationContainers (void)
     if (maApplicationMap.empty())
     {
         maApplicationVector.resize(static_cast<size_t>(EnumContext::__LastApplicationEnum)+1);
-        AddEntry(A2S("com.sun.star.text.TextDocument"), EnumContext::Application_Writer);
-        AddEntry(A2S("com.sun.star.text.GlobalDocument"), EnumContext::Application_WriterGlobal);
-        AddEntry(A2S("com.sun.star.text.WebDocument"), EnumContext::Application_WriterWeb);
-        AddEntry(A2S("com.sun.star.xforms.XMLFormDocument"), EnumContext::Application_WriterXML);
-        AddEntry(A2S("com.sun.star.sdb.FormDesign"), EnumContext::Application_WriterForm);
-        AddEntry(A2S("com.sun.star.sdb.TextReportDesign"), EnumContext::Application_WriterReport);
-        AddEntry(A2S("com.sun.star.sheet.SpreadsheetDocument"), EnumContext::Application_Calc);
-        AddEntry(A2S("com.sun.star.drawing.DrawingDocument"), EnumContext::Application_Draw);
-        AddEntry(A2S("com.sun.star.presentation.PresentationDocument"), EnumContext::Application_Impress);
+        AddEntry(OUString("com.sun.star.text.TextDocument"), EnumContext::Application_Writer);
+        AddEntry(OUString("com.sun.star.text.GlobalDocument"), EnumContext::Application_WriterGlobal);
+        AddEntry(OUString("com.sun.star.text.WebDocument"), EnumContext::Application_WriterWeb);
+        AddEntry(OUString("com.sun.star.xforms.XMLFormDocument"), EnumContext::Application_WriterXML);
+        AddEntry(OUString("com.sun.star.sdb.FormDesign"), EnumContext::Application_WriterForm);
+        AddEntry(OUString("com.sun.star.sdb.TextReportDesign"), EnumContext::Application_WriterReport);
+        AddEntry(OUString("com.sun.star.sheet.SpreadsheetDocument"), EnumContext::Application_Calc);
+        AddEntry(OUString("com.sun.star.drawing.DrawingDocument"), EnumContext::Application_Draw);
+        AddEntry(OUString("com.sun.star.presentation.PresentationDocument"), EnumContext::Application_Impress);
 
-        AddEntry(A2S("any"), EnumContext::Application_Any);
-        AddEntry(A2S("none"), EnumContext::Application_None);
+        AddEntry(OUString("any"), EnumContext::Application_Any);
+        AddEntry(OUString("none"), EnumContext::Application_None);
     }
 }
 
@@ -228,10 +226,10 @@ void EnumContext::ProvideContextContainers (void)
     if (maContextMap.empty())
     {
         maContextVector.resize(static_cast<size_t>(__LastContextEnum)+1);
-        AddEntry(A2S("any"), Context_Any);
-        AddEntry(A2S("default"), Context_Default);
-        AddEntry(A2S("empty"), Context_Empty);
-#define AddContext(context) AddEntry(A2S(#context), Context_##context);
+        AddEntry(OUString("any"), Context_Any);
+        AddEntry(OUString("default"), Context_Default);
+        AddEntry(OUString("empty"), Context_Empty);
+#define AddContext(context) AddEntry(OUString(#context), Context_##context);
         AddContext(3DObject);
         AddContext(Annotation);
         AddContext(Auditing);

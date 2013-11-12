@@ -96,11 +96,11 @@ ParaPropertyPanel* ParaPropertyPanel::Create (
     const cssu::Reference<css::ui::XSidebar>& rxSidebar)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(A2S("no parent Window given to ParaPropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException("no parent Window given to ParaPropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(A2S("no XFrame given to ParaPropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to ParaPropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(A2S("no SfxBindings given to ParaPropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException("no SfxBindings given to ParaPropertyPanel::Create", NULL, 2);
 
     return new ParaPropertyPanel(
         pParent,
@@ -1457,22 +1457,22 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       m_last_eMetricUnit(FUNIT_NONE),
       m_eLRSpaceUnit(),
       m_eULSpaceUnit(),
-      maLeftAlignControl(SID_ATTR_PARA_ADJUST_LEFT, *pBindings, *this, A2S("LeftPara"), rxFrame),
-      maCenterAlignControl(SID_ATTR_PARA_ADJUST_CENTER, *pBindings, *this, A2S("CenterPara"), rxFrame),
-      maRightAlignControl(SID_ATTR_PARA_ADJUST_RIGHT, *pBindings, *this, A2S("RightPara"), rxFrame),
-      maJustifyAlignControl(SID_ATTR_PARA_ADJUST_BLOCK, *pBindings, *this, A2S("JustifyPara"), rxFrame),
+      maLeftAlignControl(SID_ATTR_PARA_ADJUST_LEFT, *pBindings, *this, OUString("LeftPara"), rxFrame),
+      maCenterAlignControl(SID_ATTR_PARA_ADJUST_CENTER, *pBindings, *this, OUString("CenterPara"), rxFrame),
+      maRightAlignControl(SID_ATTR_PARA_ADJUST_RIGHT, *pBindings, *this, OUString("RightPara"), rxFrame),
+      maJustifyAlignControl(SID_ATTR_PARA_ADJUST_BLOCK, *pBindings, *this, OUString("JustifyPara"), rxFrame),
       maLRSpaceControl (SID_ATTR_PARA_LRSPACE,*pBindings,*this),
       maLNSpaceControl (SID_ATTR_PARA_LINESPACE, *pBindings,*this),
       maULSpaceControl (SID_ATTR_PARA_ULSPACE, *pBindings,*this),
-      maOutLineLeftControl(SID_OUTLINE_LEFT, *pBindings, *this, A2S("OutlineRight"), rxFrame),
-      maOutLineRightControl(SID_OUTLINE_RIGHT, *pBindings, *this, A2S("OutlineLeft"), rxFrame),
-      maDecIndentControl(SID_DEC_INDENT, *pBindings,*this, A2S("DecrementIndent"), rxFrame),
-      maIncIndentControl(SID_INC_INDENT, *pBindings,*this, A2S("IncrementIndent"), rxFrame),
-      maVertTop (SID_TABLE_VERT_NONE, *pBindings, *this, A2S("CellVertTop"), rxFrame),
-      maVertCenter (SID_TABLE_VERT_CENTER, *pBindings,*this, A2S("CellVertCenter"), rxFrame),
-      maVertBottom (SID_TABLE_VERT_BOTTOM,*pBindings,*this, A2S("CellVertBottom"), rxFrame),
-      maBulletOnOff(FN_NUM_BULLET_ON, *pBindings, *this, A2S("DefaultBullet"), rxFrame),
-      maNumberOnOff(FN_NUM_NUMBERING_ON, *pBindings, *this, A2S("DefaultNumbering"), rxFrame),
+      maOutLineLeftControl(SID_OUTLINE_LEFT, *pBindings, *this, OUString("OutlineRight"), rxFrame),
+      maOutLineRightControl(SID_OUTLINE_RIGHT, *pBindings, *this, OUString("OutlineLeft"), rxFrame),
+      maDecIndentControl(SID_DEC_INDENT, *pBindings,*this, OUString("DecrementIndent"), rxFrame),
+      maIncIndentControl(SID_INC_INDENT, *pBindings,*this, OUString("IncrementIndent"), rxFrame),
+      maVertTop (SID_TABLE_VERT_NONE, *pBindings, *this, OUString("CellVertTop"), rxFrame),
+      maVertCenter (SID_TABLE_VERT_CENTER, *pBindings,*this, OUString("CellVertCenter"), rxFrame),
+      maVertBottom (SID_TABLE_VERT_BOTTOM,*pBindings,*this, OUString("CellVertBottom"), rxFrame),
+      maBulletOnOff(FN_NUM_BULLET_ON, *pBindings, *this, OUString("DefaultBullet"), rxFrame),
+      maNumberOnOff(FN_NUM_NUMBERING_ON, *pBindings, *this, OUString("DefaultNumbering"), rxFrame),
       maBackColorControl (SID_BACKGROUND_COLOR, *pBindings,*this),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
       maBulletNumRuleIndex (FN_BUL_NUM_RULE_INDEX, *pBindings,*this),

@@ -323,29 +323,29 @@ void Theme::UpdateTheme (void)
             Any(sal_Int32(aBorderColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Grip],
-            Any(A2S("private:graphicrepository/sfx2/res/grip.png")));
+            Any(OUString("private:graphicrepository/sfx2/res/grip.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Expand],
-            Any(A2S("private:graphicrepository/res/plus.png")));
+            Any(OUString("private:graphicrepository/res/plus.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Collapse],
-            Any(A2S("private:graphicrepository/res/minus.png")));
+            Any(OUString("private:graphicrepository/res/minus.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_TabBarMenu],
-            Any(A2S("private:graphicrepository/sfx2/res/symphony/open_more.png")));
+            Any(OUString("private:graphicrepository/sfx2/res/symphony/open_more.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_PanelMenu],
-            Any(A2S("private:graphicrepository/sfx2/res/symphony/morebutton.png")));
+            Any(OUString("private:graphicrepository/sfx2/res/symphony/morebutton.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Closer],
-            Any(A2S("private:graphicrepository/sfx2/res/closedoc.png")));
+            Any(OUString("private:graphicrepository/sfx2/res/closedoc.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
-            Any(A2S("private:graphicrepository/cmd/lc_decrementlevel.png")));
+            Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_ToolBoxItemSeparator],
             Any(
-                A2S("private:graphicrepository/sfx2/res/separator.png")));
+                OUString("private:graphicrepository/sfx2/res/separator.png")));
 
         // ToolBox
 
@@ -754,7 +754,7 @@ void Theme::SetupPropertyMaps (void)
     maBooleans.resize(__Bool_Rect - __Int_Bool - 1);
     maRectangles.resize(__Post_Rect - __Bool_Rect - 1);
 
-    #define AddEntry(e) maPropertyNameToIdMap[A2S(#e)]=e; maPropertyIdToNameMap[e]=A2S(#e)
+    #define AddEntry(e) maPropertyNameToIdMap[OUString(#e)]=e; maPropertyIdToNameMap[e]=OUString(#e)
 
     AddEntry(Image_Grip);
     AddEntry(Image_Expand);

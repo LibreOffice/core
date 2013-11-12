@@ -40,7 +40,7 @@ TabItem::TabItem (Window* pParentWindow)
     SetStyle(GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL | WB_NOPOINTERFOCUS);
     SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
 #ifdef DEBUG
-    SetText(A2S("TabItem"));
+    SetText(OUString("TabItem"));
 #endif
 }
 

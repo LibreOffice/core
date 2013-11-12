@@ -49,7 +49,7 @@ SidebarToolBox::SidebarToolBox (Window* pParentWindow)
     SetToolboxButtonSize( TOOLBOX_BUTTONSIZE_SMALL );
 
 #ifdef DEBUG
-    SetText(A2S("SidebarToolBox"));
+    SetText(OUString("SidebarToolBox"));
 #endif
 }
 

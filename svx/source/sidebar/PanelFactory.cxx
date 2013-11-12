@@ -55,7 +55,7 @@ namespace svx { namespace sidebar {
 
 ::rtl::OUString SAL_CALL PanelFactory::getImplementationName (void)
 {
-    return A2S(IMPLEMENTATION_NAME);
+    return OUString(IMPLEMENTATION_NAME);
 }
 
 
@@ -77,7 +77,7 @@ cssu::Reference<cssu::XInterface> SAL_CALL PanelFactory::createInstance (
 cssu::Sequence<OUString> SAL_CALL PanelFactory::getSupportedServiceNames (void)
 {
     cssu::Sequence<OUString> aServiceNames (1);
-    aServiceNames[0] = A2S(SERVICE_NAME);
+    aServiceNames[0] = SERVICE_NAME;
     return aServiceNames;
 
 }
@@ -121,15 +121,15 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( ! xParentWindow.is() || pParentWindow==NULL)
         throw RuntimeException(
-            A2S("PanelFactory::createUIElement called without ParentWindow"),
+            "PanelFactory::createUIElement called without ParentWindow",
             NULL);
     if ( ! xFrame.is())
         throw RuntimeException(
-            A2S("PanelFactory::createUIElement called without Frame"),
+            "PanelFactory::createUIElement called without Frame",
             NULL);
     if (pBindings == NULL)
         throw RuntimeException(
-            A2S("PanelFactory::createUIElement called without SfxBindings"),
+            "PanelFactory::createUIElement called without SfxBindings",
             NULL);
 
     Window* pControl = NULL;

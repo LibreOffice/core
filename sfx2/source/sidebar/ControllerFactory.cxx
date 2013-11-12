@@ -84,15 +84,15 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         beans::PropertyValue aPropValue;
         std::vector<Any> aPropertyVector;
 
-        aPropValue.Name = A2S("Frame");
+        aPropValue.Name = "Frame";
         aPropValue.Value <<= rxFrame;
         aPropertyVector.push_back(makeAny(aPropValue));
 
-        aPropValue.Name = A2S("ServiceManager");
+        aPropValue.Name = "ServiceManager";
         aPropValue.Value <<= ::comphelper::getProcessServiceFactory();
         aPropertyVector.push_back(makeAny(aPropValue));
 
-        aPropValue.Name = A2S("CommandURL");
+        aPropValue.Name = "CommandURL";
         aPropValue.Value <<= rsCommandName;
         aPropertyVector.push_back(makeAny(aPropValue));
 
@@ -155,25 +155,25 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
             beans::PropertyValue aPropValue;
             std::vector<Any> aPropertyVector;
 
-            aPropValue.Name = A2S("ModuleIdentifier");
+            aPropValue.Name = "ModuleIdentifier";
             aPropValue.Value <<= sModuleName;
             aPropertyVector.push_back( makeAny( aPropValue ));
 
-            aPropValue.Name = A2S("Frame");
+            aPropValue.Name = "Frame";
             aPropValue.Value <<= rxFrame;
             aPropertyVector.push_back( makeAny( aPropValue ));
 
-            aPropValue.Name = A2S("ServiceManager");
+            aPropValue.Name = "ServiceManager";
             aPropValue.Value <<= comphelper::getProcessServiceFactory();
             aPropertyVector.push_back( makeAny( aPropValue ));
 
-            aPropValue.Name = A2S("ParentWindow");
+            aPropValue.Name = "ParentWindow";
             aPropValue.Value <<= VCLUnoHelper::GetInterface(pToolBox);
             aPropertyVector.push_back( makeAny( aPropValue ));
 
             if (nWidth > 0)
             {
-                aPropValue.Name = A2S("Width");
+                aPropValue.Name = "Width";
                 aPropValue.Value <<= nWidth;
                 aPropertyVector.push_back( makeAny( aPropValue ));
             }

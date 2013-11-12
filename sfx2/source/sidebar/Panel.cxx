@@ -68,7 +68,7 @@ Panel::Panel (
     SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 
 #ifdef DEBUG
-    SetText(A2S("Panel"));
+    SetText(OUString("Panel"));
 #endif
 }
 

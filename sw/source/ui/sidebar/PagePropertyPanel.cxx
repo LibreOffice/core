@@ -55,8 +55,6 @@ const char UNO_MARGIN[]      = ".uno:Margin";
 const char UNO_SIZE[]        = ".uno:Size";
 const char UNO_COLUMN[]      = ".uno:Column";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace {
     const cssu::Reference< css::document::XUndoManager > getUndoManager( const cssu::Reference< css::frame::XFrame >& rxFrame )
     {
@@ -88,11 +86,11 @@ PagePropertyPanel* PagePropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no parent Window given to PagePropertyPanel::Create"), NULL, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no XFrame given to PagePropertyPanel::Create"), NULL, 1);
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no SfxBindings given to PagePropertyPanel::Create"), NULL, 2);
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
     return new PagePropertyPanel(
         pParent,
@@ -172,16 +170,16 @@ PagePropertyPanel::PagePropertyPanel(
 
     , maOrientationPopup( this,
                           ::boost::bind( &PagePropertyPanel::CreatePageOrientationControl, this, _1 ),
-                          A2S("Page orientation") )
+                          OUString("Page orientation") )
     , maMarginPopup( this,
                      ::boost::bind( &PagePropertyPanel::CreatePageMarginControl, this, _1 ),
-                     A2S("Page margins") )
+                     OUString("Page margins") )
     , maSizePopup( this,
                    ::boost::bind( &PagePropertyPanel::CreatePageSizeControl, this, _1 ),
-                   A2S("Page size") )
+                   OUString("Page size") )
     , maColumnPopup( this,
                      ::boost::bind( &PagePropertyPanel::CreatePageColumnControl, this, _1 ),
-                     A2S("Page columns") )
+                     OUString("Page columns") )
 
     , mxUndoManager( getUndoManager( rxFrame ) )
 
@@ -757,7 +755,7 @@ void PagePropertyPanel::StartUndo()
 {
     if ( mxUndoManager.is() )
     {
-        mxUndoManager->enterUndoContext( A2S("") );
+        mxUndoManager->enterUndoContext( OUString("") );
     }
 }
 

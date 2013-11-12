@@ -21,8 +21,6 @@
 
 using ::rtl::OUString;
 
-#define A2S(s) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 using namespace css;
 using namespace cssu;
 
@@ -92,7 +90,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
 {
     if ( ! rxListener.is())
         throw css::lang::IllegalArgumentException(
-            A2S("can not add an empty reference"),
+            "can not add an empty reference",
             static_cast<XWeak*>(this),
             0);
 
@@ -106,7 +104,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
         {
             // The listener was added for the same event focus
             // previously.  That is an error.
-            throw cssl::IllegalArgumentException(A2S("listener added twice"), static_cast<XWeak*>(this), 0);
+            throw cssl::IllegalArgumentException("listener added twice", static_cast<XWeak*>(this), 0);
         }
     }
 
@@ -132,7 +130,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
 {
     if ( ! rxListener.is())
         throw cssl::IllegalArgumentException(
-            A2S("can not remove an empty reference"),
+            "can not remove an empty reference",
             static_cast<XWeak*>(this), 0);
 
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, false);
@@ -161,7 +159,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListener
 {
     if ( ! rxListener.is())
         throw cssl::IllegalArgumentException(
-            A2S("can not remove an empty reference"),
+            "can not remove an empty reference",
             static_cast<XWeak*>(this), 0);
 
     for (ListenerMap::iterator
@@ -341,7 +339,7 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing (
 
 OUString SAL_CALL ContextChangeEventMultiplexer::impl_getStaticImplementationName (void)
 {
-    return A2S(IMPLEMENTATION_NAME);
+    return OUString(IMPLEMENTATION_NAME);
 }
 
 
@@ -350,8 +348,8 @@ OUString SAL_CALL ContextChangeEventMultiplexer::impl_getStaticImplementationNam
 cssu::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::static_GetSupportedServiceNames (void)
 {
     cssu::Sequence<OUString> aServiceNames (2);
-    aServiceNames[0] = A2S(SERVICE_NAME);
-    aServiceNames[1] = A2S(SINGLETON_NAME);
+    aServiceNames[0] = SERVICE_NAME;
+    aServiceNames[1] = SINGLETON_NAME;
     return aServiceNames;
 }
 

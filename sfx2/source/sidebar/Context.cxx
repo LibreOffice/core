@@ -28,11 +28,9 @@ const sal_Int32 Context::ApplicationWildcardMatch = 1;
 const sal_Int32 Context::ContextWildcardMatch = 2;
 const sal_Int32 Context::OptimalMatch = 0;  // Neither application nor context name is "any".
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 Context::Context (void)
-    : msApplication(A2S(AnyApplicationName)),
-      msContext(A2S(AnyContextName))
+    : msApplication(AnyApplicationName),
+      msContext(AnyContextName)
 {
 }
 

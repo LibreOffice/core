@@ -62,7 +62,7 @@ TabBar::TabBar (
     Layout();
 
 #ifdef DEBUG
-    SetText(A2S("TabBar"));
+    SetText(OUString("TabBar"));
 #endif
 }
 

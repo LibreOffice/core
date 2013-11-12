@@ -51,8 +51,6 @@ const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
 const char UNO_LINESTYLE[] = ".uno:LineStyle";
 const char UNO_FRAMELINECOLOR[] = ".uno:FrameLineColor";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 //////////////////////////////////////////////////////////////////////////////
 // helpers
 
@@ -373,11 +371,11 @@ CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(A2S("no parent Window given to CellAppearancePropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException("no parent Window given to CellAppearancePropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(A2S("no XFrame given to CellAppearancePropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to CellAppearancePropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(A2S("no SfxBindings given to CellAppearancePropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException("no SfxBindings given to CellAppearancePropertyPanel::Create", NULL, 2);
 
     return new CellAppearancePropertyPanel(
         pParent,

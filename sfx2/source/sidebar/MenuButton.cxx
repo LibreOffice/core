@@ -37,7 +37,7 @@ MenuButton::MenuButton (Window* pParentWindow)
       mePaintType(PT_Theme)
 {
 #ifdef DEBUG
-    SetText(A2S("MenuButton"));
+    SetText(OUString("MenuButton"));
 #endif
 }
 

@@ -36,8 +36,6 @@ using namespace css;
 using namespace cssu;
 
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace
 {
     typedef ::cppu::WeakComponentImplHelper1 <
@@ -197,7 +195,7 @@ void ControllerItem::ResetFrame (void)
 ::rtl::OUString ControllerItem::GetLabel (void) const
 {
     return CommandInfoProvider::Instance().GetLabelForCommand(
-        A2S(".uno:")+msCommandName,
+        ".uno:" + msCommandName,
         mxFrame);
 }
 
@@ -211,7 +209,7 @@ void ControllerItem::ResetFrame (void)
     {
         if (msCommandName.getLength() > 0)
         {
-            const ::rtl::OUString sHelp (pHelp->GetHelpText(A2S(".uno:")+msCommandName, NULL));
+            const ::rtl::OUString sHelp (pHelp->GetHelpText(".uno:" + msCommandName, NULL));
             return sHelp;
         }
     }
@@ -223,7 +221,7 @@ void ControllerItem::ResetFrame (void)
 
 Image ControllerItem::GetIcon (void) const
 {
-    return GetImage(mxFrame, A2S(".uno:")+msCommandName, sal_False);
+    return GetImage(mxFrame, ".uno:" + msCommandName, sal_False);
 }
 
 

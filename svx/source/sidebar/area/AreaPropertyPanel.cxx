@@ -48,8 +48,6 @@ using ::sfx2::sidebar::Theme;
 const char UNO_SIDEBARCOLOR[]    = ".uno:sidebarcolor";
 const char UNO_SIDEBARGRADIENT[] = ".uno:sidebargradient";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace svx { namespace sidebar {
 
 const sal_Int32 AreaPropertyPanel::DEFAULT_CENTERX = 50;
@@ -583,11 +581,11 @@ AreaPropertyPanel* AreaPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(A2S("no parent Window given to AreaPropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException("no parent Window given to AreaPropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(A2S("no XFrame given to AreaPropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to AreaPropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(A2S("no SfxBindings given to AreaPropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", NULL, 2);
 
     return new AreaPropertyPanel(
         pParent,

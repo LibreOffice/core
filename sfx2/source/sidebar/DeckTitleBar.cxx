@@ -50,7 +50,7 @@ DeckTitleBar::DeckTitleBar (
         SetCloserVisible(true);
 
 #ifdef DEBUG
-    SetText(A2S("DeckTitleBar"));
+    SetText(OUString("DeckTitleBar"));
 #endif
 }
 

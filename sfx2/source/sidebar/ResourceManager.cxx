@@ -229,7 +229,7 @@ void ResourceManager::ReadDeckList (void)
 {
     const ::utl::OConfigurationTreeRoot aDeckRootNode (
         ::comphelper::getProcessComponentContext(),
-        A2S("org.openoffice.Office.UI.Sidebar/Content/DeckList"),
+        OUString("org.openoffice.Office.UI.Sidebar/Content/DeckList"),
         false);
     if ( ! aDeckRootNode.isValid() )
         return;
@@ -284,7 +284,7 @@ void ResourceManager::ReadPanelList (void)
 {
     const ::utl::OConfigurationTreeRoot aPanelRootNode (
         ::comphelper::getProcessComponentContext(),
-        A2S("org.openoffice.Office.UI.Sidebar/Content/PanelList"),
+        OUString("org.openoffice.Office.UI.Sidebar/Content/PanelList"),
         false);
     if ( ! aPanelRootNode.isValid() )
         return;
@@ -544,7 +544,7 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
         rDeckDescriptor.mbIsEnabled = true;
         rDeckDescriptor.mnOrderIndex = 100000 + nReadIndex;
-        rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, A2S("any")), true, OUString());
+        rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, OUString("any")), true, OUString());
 
         PanelDescriptor& rPanelDescriptor (maPanels[nPanelWriteIndex++]);
         rPanelDescriptor.msTitle = ::comphelper::getString(aChildNode.getNodeValue("UIName"));
@@ -558,7 +558,7 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         rPanelDescriptor.mnOrderIndex = 100000 + nReadIndex;
         rPanelDescriptor.mbShowForReadOnlyDocuments = false;
         rPanelDescriptor.mbWantsCanvas = false;
-        rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, A2S("any")), true, OUString());
+        rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, OUString("any")), true, OUString());
     }
 
     // When there where invalid nodes then we have to adapt the size

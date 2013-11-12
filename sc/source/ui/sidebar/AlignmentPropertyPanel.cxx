@@ -44,8 +44,6 @@ const char UNO_ALIGNRIGHT[]            = ".uno:AlignRight";
 const char UNO_ALIGNTOP[]              = ".uno:AlignTop";
 const char UNO_ALIGNVCENTER[]          = ".uno:AlignVCenter";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 //////////////////////////////////////////////////////////////////////////////
 // namespace open
 
@@ -316,11 +314,11 @@ AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(A2S("no parent Window given to AlignmentPropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException("no parent Window given to AlignmentPropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(A2S("no XFrame given to AlignmentPropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to AlignmentPropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(A2S("no SfxBindings given to AlignmentPropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException("no SfxBindings given to AlignmentPropertyPanel::Create", NULL, 2);
 
     return new AlignmentPropertyPanel(
         pParent,

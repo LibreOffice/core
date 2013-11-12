@@ -35,8 +35,6 @@ using namespace cssu;
 using ::rtl::OUString;
 
 
-#define A2S(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 
 namespace
 {
@@ -126,7 +124,7 @@ OUString CommandInfoProvider::GetLabelForCommand (
     const OUString sLabel (GetCommandLabel(rsCommandName));
     const OUString sShortCut (GetCommandShortcut(rsCommandName));
     if (sShortCut.getLength() > 0)
-        return sLabel + A2S(" (") + sShortCut + A2S(")");
+        return sLabel + " (" + sShortCut + ")";
     else
         return sLabel;
 }

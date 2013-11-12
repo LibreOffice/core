@@ -69,10 +69,10 @@ Deck::Deck (
     mpVerticalScrollBar->SetScrollHdl(LINK(this, Deck, HandleVerticalScrollBarChange));
 
 #ifdef DEBUG
-    SetText(A2S("Deck"));
-    mpScrollClipWindow->SetText(A2S("ScrollClipWindow"));
-    mpFiller->SetText(A2S("Filler"));
-    mpVerticalScrollBar->SetText(A2S("VerticalScrollBar"));
+    SetText(OUString("Deck"));
+    mpScrollClipWindow->SetText(OUString("ScrollClipWindow"));
+    mpFiller->SetText(OUString("Filler"));
+    mpVerticalScrollBar->SetText(OUString("VerticalScrollBar"));
 #endif
 }
 
@@ -407,7 +407,7 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (Window* pParentWindow)
       maSeparators()
 {
 #ifdef DEBUG
-    SetText(A2S("ScrollContainerWindow"));
+    SetText(OUString("ScrollContainerWindow"));
 #endif
 }
 

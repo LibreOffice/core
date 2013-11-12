@@ -77,8 +77,6 @@ const char UNO_SUBSCRIPT[] = ".uno:SubScript";
 const char UNO_SUPERSCRIPT[] = ".uno:SuperScript";
 const char UNO_UNDERLINE[] = ".uno:Underline";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace svx { namespace sidebar {
 
 #undef HAS_IA2
@@ -111,11 +109,11 @@ TextPropertyPanel* TextPropertyPanel::Create (
     const ::sfx2::sidebar::EnumContext& rContext)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(A2S("no parent Window given to TextPropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException("no parent Window given to TextPropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(A2S("no XFrame given to TextPropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to TextPropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(A2S("no SfxBindings given to TextPropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException("no SfxBindings given to TextPropertyPanel::Create", NULL, 2);
 
     return new TextPropertyPanel(
         pParent,
@@ -132,19 +130,19 @@ TextPropertyPanel* TextPropertyPanel::Create (
 
 TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& rContext )
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
-        maFontNameControl   (SID_ATTR_CHAR_FONT,        *pBindings, *this, A2S("CharFontName"), rxFrame),
-        maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, A2S("FontHeight"),   rxFrame),
-        maWeightControl     (SID_ATTR_CHAR_WEIGHT,      *pBindings, *this, A2S("Bold"),         rxFrame),
-        maItalicControl     (SID_ATTR_CHAR_POSTURE,     *pBindings, *this, A2S("Italic"),       rxFrame),
-        maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, A2S("Underline"),    rxFrame),
-        maStrikeControl     (SID_ATTR_CHAR_STRIKEOUT,   *pBindings, *this, A2S("Strikeout"),    rxFrame),
-        maShadowControl     (SID_ATTR_CHAR_SHADOWED,    *pBindings, *this, A2S("Shadowed"),     rxFrame),
-        maScriptControlSw   (SID_ATTR_CHAR_ESCAPEMENT,  *pBindings, *this, A2S("Escapement"),   rxFrame),
-        maSuperScriptControl(SID_SET_SUPER_SCRIPT,      *pBindings, *this, A2S("SuperScript"),  rxFrame),
-        maSubScriptControl  (SID_SET_SUB_SCRIPT,        *pBindings, *this, A2S("SubScript"),    rxFrame),
-        maSpacingControl    (SID_ATTR_CHAR_KERNING,     *pBindings, *this, A2S("Spacing"),      rxFrame),
-        maSDFontGrow        (SID_GROW_FONT_SIZE,        *pBindings, *this, A2S("Grow"),         rxFrame),
-        maSDFontShrink      (SID_SHRINK_FONT_SIZE,      *pBindings, *this, A2S("Shrink"),       rxFrame),
+        maFontNameControl   (SID_ATTR_CHAR_FONT,        *pBindings, *this, OUString("CharFontName"), rxFrame),
+        maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, OUString("FontHeight"),   rxFrame),
+        maWeightControl     (SID_ATTR_CHAR_WEIGHT,      *pBindings, *this, OUString("Bold"),         rxFrame),
+        maItalicControl     (SID_ATTR_CHAR_POSTURE,     *pBindings, *this, OUString("Italic"),       rxFrame),
+        maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, OUString("Underline"),    rxFrame),
+        maStrikeControl     (SID_ATTR_CHAR_STRIKEOUT,   *pBindings, *this, OUString("Strikeout"),    rxFrame),
+        maShadowControl     (SID_ATTR_CHAR_SHADOWED,    *pBindings, *this, OUString("Shadowed"),     rxFrame),
+        maScriptControlSw   (SID_ATTR_CHAR_ESCAPEMENT,  *pBindings, *this, OUString("Escapement"),   rxFrame),
+        maSuperScriptControl(SID_SET_SUPER_SCRIPT,      *pBindings, *this, OUString("SuperScript"),  rxFrame),
+        maSubScriptControl  (SID_SET_SUB_SCRIPT,        *pBindings, *this, OUString("SubScript"),    rxFrame),
+        maSpacingControl    (SID_ATTR_CHAR_KERNING,     *pBindings, *this, OUString("Spacing"),      rxFrame),
+        maSDFontGrow        (SID_GROW_FONT_SIZE,        *pBindings, *this, OUString("Grow"),         rxFrame),
+        maSDFontShrink      (SID_SHRINK_FONT_SIZE,      *pBindings, *this, OUString("Shrink"),       rxFrame),
 
         mpFontList          (NULL),
         mbMustDelete        (false),
