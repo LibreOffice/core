@@ -230,6 +230,7 @@ public:
     void testMathFormulaConvert();
     void testMathFormulaProduct();
     void testStatisticalFormulaHypGeomDist();
+    void testArrayFormulaSumX2MY2();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -391,6 +392,7 @@ public:
     CPPUNIT_TEST(testMathFormulaConvert);
     CPPUNIT_TEST(testMathFormulaProduct);
     CPPUNIT_TEST(testStatisticalFormulaHypGeomDist);
+    CPPUNIT_TEST(testArrayFormulaSumX2MY2);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4439,6 +4441,34 @@ void ScOpenclTest::testMathFormulaKombin()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-198]
+void ScOpenclTest:: testArrayFormulaSumX2MY2()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/array/SUMX2MY2.", XLS);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/array/SUMX2MY2.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    for (SCROW i = 20; i <= 26; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 //[AMLOEXT-199]
 void ScOpenclTest::testStatisticalFormulaHypGeomDist()
 {
@@ -4462,6 +4492,7 @@ void ScOpenclTest::testStatisticalFormulaHypGeomDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
 {
