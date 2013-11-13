@@ -24,5 +24,3 @@ File gid_File_Share_Registry_Graphicfilter_Xcd
     Dir = gid_Brand_Dir_Share_Registry;
     Name = "graphicfilter.xcd";
 End
-
-STD_RES_FILE( gid_File_Res_Flash, flash )
