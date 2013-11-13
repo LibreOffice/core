@@ -1008,7 +1008,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             OUString sTmpl;
                             aTemplateValue >>= sTmpl;
 
-                            sal_Int32 nColonPos = sTmpl.indexOf( sal_Unicode(':') );
+                            sal_Int32 nColonPos = sTmpl.indexOf( ':' );
                             OUString sPrefix = sTmpl.copy( 0L, nColonPos );
                             if ( sPrefix == "Style" )
                             {

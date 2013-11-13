@@ -177,14 +177,14 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                         pNewNamespaceMap->Add( sPrefix, sNamespace );
 
                         sName.append( GetXMLToken(XML_XMLNS) );
-                        sName.append( sal_Unicode(':') );
+                        sName.append( ':' );
                         sName.append( sPrefix );
                         rAttrList.AddAttribute( sName.makeStringAndClear(),
                                                 sNamespace );
                     }
 
                     sName.append( sPrefix );
-                    sName.append( sal_Unicode(':') );
+                    sName.append( ':' );
                 }
 
                 sName.append( pUnknown->GetAttrLName( i ) );
@@ -524,9 +524,9 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             nY *= pShadow->GetWidth();
 
             ::sax::Converter::convertColor(aOut, pShadow->GetColor().GetColor());
-            aOut.append( sal_Unicode(' ') );
+            aOut.append( ' ' );
             rUnitConverter.convertMeasureToXML( aOut, nX );
-            aOut.append( sal_Unicode(' ') );
+            aOut.append( ' ' );
             rUnitConverter.convertMeasureToXML( aOut, nY );
 
             bOk = true;
@@ -773,9 +773,9 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                             ::sax::Converter::convertMeasure(aOut, nWidth,
                                    util::MeasureUnit::TWIP,
                                    util::MeasureUnit::POINT);
-                            aOut.append( sal_Unicode( ' ' ) );
+                            aOut.append( ' ' );
                             aOut.append( GetXMLToken( eStyle ) );
-                            aOut.append( sal_Unicode( ' ' ) );
+                            aOut.append( ' ' );
                             ::sax::Converter::convertColor(aOut,
                                     pLine->GetColor().GetColor());
                         }
@@ -813,9 +813,9 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                         return false;
                     }
                     rUnitConverter.convertMeasureToXML( aOut, pLine->GetInWidth() );
-                    aOut.append( sal_Unicode( ' ' ) );
+                    aOut.append( ' ' );
                     rUnitConverter.convertMeasureToXML( aOut, pLine->GetDistance() );
-                    aOut.append( sal_Unicode( ' ' ) );
+                    aOut.append( ' ' );
                     rUnitConverter.convertMeasureToXML( aOut, pLine->GetOutWidth() );
                     break;
                 }
@@ -944,7 +944,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
                     if( bOk )
                     {
-                        aOut.append( sal_Unicode( ' ' ) );
+                        aOut.append( ' ' );
 
                         switch( pBrush->GetGraphicPos() )
                         {

@@ -2745,7 +2745,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
         }
         else if ( rPropName == "Delimiter" )
         {
-            sal_Unicode uChar = sal_Unicode();
+            sal_Unicode uChar;
             if (aValue >>= uChar)
             {
                 rSortOpt.cDeli = uChar;

@@ -100,7 +100,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sOldPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently
     // only the last path is from interest.
-    sal_Int32 nIndex = sOldPathUrl.lastIndexOf( sal_Unicode(';') );
+    sal_Int32 nIndex = sOldPathUrl.lastIndexOf( ';' );
     if( nIndex != -1 )
     {
         sNewPathUrl = sOldPathUrl.copy( 0, nIndex + 1 ).concat( sNewPathUrl );
@@ -115,7 +115,7 @@ uno::Any SwVbaOptions::getValueEvent()
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently
     // only the last path is from interest.
-    sal_Int32 nIndex = sPathUrl.lastIndexOf( sal_Unicode(';') );
+    sal_Int32 nIndex = sPathUrl.lastIndexOf( ';' );
     if( nIndex != -1 )
     {
         sPathUrl = sPathUrl.copy( nIndex + 1 );

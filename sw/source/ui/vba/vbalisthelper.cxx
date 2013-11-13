@@ -204,43 +204,43 @@ void SwVbaListHelper::CreateNumberListTemplate() throw( css::uno::RuntimeExcepti
         case 1:
         {
             nNumberingType = style::NumberingType::ARABIC;
-            sSuffix = OUString( sal_Unicode('.') );
+            sSuffix = OUString( '.' );
             break;
         }
         case 2:
         {
             nNumberingType = style::NumberingType::ARABIC;
-            sSuffix = OUString( sal_Unicode(')') );
+            sSuffix = OUString( ')' );
             break;
         }
         case 3:
         {
             nNumberingType = style::NumberingType::ROMAN_UPPER;
-            sSuffix = OUString( sal_Unicode('.') );
+            sSuffix = OUString( '.' );
             break;
         }
         case 4:
         {
             nNumberingType = style::NumberingType::CHARS_UPPER_LETTER;
-            sSuffix = OUString( sal_Unicode('.') );
+            sSuffix = OUString( '.' );
             break;
         }
         case 5:
         {
             nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-            sSuffix = OUString( sal_Unicode(')') );
+            sSuffix = OUString( ')' );
             break;
         }
         case 6:
         {
             nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-            sSuffix = OUString( sal_Unicode('.') );
+            sSuffix = OUString( '.' );
             break;
         }
         case 7:
         {
             nNumberingType = style::NumberingType::ROMAN_LOWER;
-            sSuffix = OUString( sal_Unicode('.') );
+            sSuffix = OUString( '.' );
             break;
         }
         default:
@@ -319,56 +319,56 @@ void SwVbaListHelper::CreateOutlineNumberForType1() throw( css::uno::RuntimeExce
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode(')') );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 2:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode(')') );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 3:
             {
                 nNumberingType = style::NumberingType::ARABIC;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode(')') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 4:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode(')') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 5:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode(')') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 6:
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 break;
             }
             case 7:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 break;
             }
             case 8:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 break;
             }
             default:
@@ -387,7 +387,7 @@ void SwVbaListHelper::CreateOutlineNumberForType2() throw( css::uno::RuntimeExce
 {
     sal_Int16 nNumberingType = style::NumberingType::ARABIC;
     sal_Int16 nParentNumbering = 0;
-    OUString sSuffix = OUString( sal_Unicode('.') );
+    OUString sSuffix = OUString( '.' );
     uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
@@ -473,14 +473,14 @@ void SwVbaListHelper::CreateOutlineNumberForType4() throw( css::uno::RuntimeExce
             {
                 nNumberingType = style::NumberingType::ROMAN_UPPER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 break;
             }
             case 1:
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 sal_Int16 nParentNumbering = 0;
                 setOrAppendPropertyValue( aPropertyValues, OUString(UNO_NAME_PARENT_NUMBERING ), uno::makeAny( nParentNumbering ) );
                 break;
@@ -488,50 +488,50 @@ void SwVbaListHelper::CreateOutlineNumberForType4() throw( css::uno::RuntimeExce
             case 2:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode(')') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 3:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode(')') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 4:
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode(')') );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 5:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode(')') );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 6:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode(')') );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 7:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 break;
             }
             case 8:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 break;
             }
             default:
@@ -581,63 +581,63 @@ void SwVbaListHelper::CreateOutlineNumberForType6() throw( css::uno::RuntimeExce
             {
                 nNumberingType = style::NumberingType::ROMAN_UPPER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 break;
             }
             case 1:
             {
                 nNumberingType = style::NumberingType::CHARS_UPPER_LETTER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode('.') );
+                sSuffix = OUString( '.' );
                 break;
             }
             case 2:
             {
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode(')') );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 3:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
                 sPrefix = OUString();
-                sSuffix = OUString( sal_Unicode(')') );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 4:
             {
                 nNumberingType = style::NumberingType::ARABIC;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode(')') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 5:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode(')') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 6:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode(')') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( ')' );
                 break;
             }
             case 7:
             {
                 nNumberingType = style::NumberingType::CHARS_LOWER_LETTER;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode('.') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( '.' );
                 break;
             }
             case 8:
             {
                 nNumberingType = style::NumberingType::ROMAN_LOWER;
-                sPrefix = OUString( sal_Unicode('(') );
-                sSuffix = OUString( sal_Unicode('.') );
+                sPrefix = OUString( '(' );
+                sSuffix = OUString( '.' );
                 break;
             }
             default:

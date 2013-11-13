@@ -85,9 +85,9 @@ void lcl_getXMLStringForCell( const /*::chart::*/XMLRangeHelper::Cell & rCell, O
         return;
 
     sal_Int32 nCol = rCell.nColumn;
-    output->append( (sal_Unicode)'.' );
+    output->append( '.' );
     if( ! rCell.bRelativeColumn )
-        output->append( (sal_Unicode)'$' );
+        output->append( '$' );
 
     // get A, B, C, ..., AA, AB, ... representation of column number
     if( nCol < 26 )
@@ -106,7 +106,7 @@ void lcl_getXMLStringForCell( const /*::chart::*/XMLRangeHelper::Cell & rCell, O
 
     // write row number as number
     if( ! rCell.bRelativeRow )
-        output->append( (sal_Unicode)'$' );
+        output->append( '$' );
     output->append( rCell.nRow + (sal_Int32)1 );
 }
 
@@ -388,7 +388,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
     if( ! rRange.aLowerRight.empty())
     {
         // we have a range (not a single cell)
-        aBuffer.append( sal_Unicode( ':' ));
+        aBuffer.append( ':' );
         lcl_getXMLStringForCell( rRange.aLowerRight, &aBuffer );
     }
 

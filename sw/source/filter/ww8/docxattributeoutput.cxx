@@ -1213,7 +1213,7 @@ static void impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
         return; // we want to write at least one character
 
     // we have to add 'preserve' when starting/ending with space
-    if ( *pBegin == sal_Unicode( ' ' ) || *( pEnd - 1 ) == sal_Unicode( ' ' ) )
+    if ( *pBegin == ' ' || *( pEnd - 1 ) == ' ' )
     {
         pSerializer->startElementNS( XML_w, nTextToken, FSNS( XML_xml, XML_space ), "preserve", FSEND );
     }
@@ -5327,13 +5327,13 @@ static void impl_WriteTabElement( FSHelperPtr pSerializer,
 
     sal_Unicode cFillChar = rTab.GetFill();
 
-    if (sal_Unicode('.') == cFillChar )
+    if ('.' == cFillChar )
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "dot" ) );
-    else if ( sal_Unicode('-') == cFillChar )
+    else if ( '-' == cFillChar )
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "hyphen" ) );
     else if ( sal_Unicode(0xB7) == cFillChar ) // middle dot
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "middleDot" ) );
-    else if ( sal_Unicode('_') == cFillChar )
+    else if ( '_' == cFillChar )
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "underscore" ) );
     else
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( (sal_Char *) "none" ) );

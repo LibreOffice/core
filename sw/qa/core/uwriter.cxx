@@ -733,7 +733,7 @@ getRandString()
     int j = getRand(aText.getLength() - s);
     OUString aRet(aText.copy(s, j));
     if (!getRand(5))
-        aRet += OUString(sal_Unicode('\n'));
+        aRet += OUString('\n');
 //    fprintf (stderr, "rand string '%s'\n", OUStringToOString(aRet, RTL_TEXTENCODING_UTF8).getStr());
     return aRet;
 }

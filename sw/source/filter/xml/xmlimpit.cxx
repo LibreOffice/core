@@ -276,7 +276,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     sal_Int32 nProp = 100;
                     sal_Int32 nAbs = 0;
 
-                    if( rValue.indexOf( sal_Unicode('%') ) != -1 )
+                    if( rValue.indexOf( '%' ) != -1 )
                         bOk = ::sax::Converter::convertPercent(nProp, rValue);
                     else
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue);
@@ -300,7 +300,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     sal_Int32 nProp = 100;
                     sal_Int32 nAbs = 0;
 
-                    if( rValue.indexOf( sal_Unicode('%') ) != -1 )
+                    if( rValue.indexOf( '%' ) != -1 )
                         bOk = ::sax::Converter::convertPercent(nProp, rValue);
                     else
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
@@ -332,7 +332,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             sal_Int32 nProp = 100;
             sal_Int32 nAbs = 0;
 
-            if( rValue.indexOf( sal_Unicode('%') ) != -1 )
+            if( rValue.indexOf( '%' ) != -1 )
                 bOk = ::sax::Converter::convertPercent( nProp, rValue );
             else
                 bOk = rUnitConverter.convertMeasureToCore( nAbs, rValue );
@@ -708,7 +708,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         {
                             bOk = false;
                         }
-                        else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
+                        else if( -1 != aToken.indexOf( '%' ) )
                         {
                             sal_Int32 nPrc = 50;
                             if (::sax::Converter::convertPercent(nPrc, aToken))
@@ -905,7 +905,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     break;
                 case MID_FRMSIZE_REL_COL_WIDTH:
                 {
-                    sal_Int32 nPos = rValue.indexOf( (sal_Unicode)'*' );
+                    sal_Int32 nPos = rValue.indexOf( '*' );
                     if( -1L != nPos )
                     {
                         sal_Int32 nValue = rValue.toInt32();

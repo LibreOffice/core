@@ -91,10 +91,10 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     // the default template is "Normal.dot" in Word.
     OUString sGroup("Normal");
     OUString sName = getName();
-    sal_Int32 nIndex = sName.lastIndexOf( sal_Unicode('.') );
+    sal_Int32 nIndex = sName.lastIndexOf( '.' );
     if( nIndex > 0 )
     {
-        sGroup = sName.copy( 0, sName.lastIndexOf( sal_Unicode('.') ) );
+        sGroup = sName.copy( 0, sName.lastIndexOf( '.' ) );
     }
     OUString sNewGroup = lcl_CheckGroupName( sGroup );
 
