@@ -39,6 +39,7 @@ public:
     void testWeak();
     void testAsian();
     void testThai();
+    void testLao();
 #ifdef TODO
     void testNorthernThai();
 #endif
@@ -58,6 +59,9 @@ public:
     CPPUNIT_TEST(testWordBoundaries);
 #if (U_ICU_VERSION_MAJOR_NUM > 4)
     CPPUNIT_TEST(testKhmer);
+#endif
+#if (U_ICU_VERSION_MAJOR_NUM > 51)
+    CPPUNIT_TEST(testLao);
 #endif
     CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST_SUITE_END();
@@ -782,6 +786,27 @@ void TestBreakIterator::testAsian()
                 nScript == i18n::ScriptType::ASIAN);
         }
     }
+}
+
+//A test to ensure that our Lao word boundary detection is useful
+void TestBreakIterator::testLao()
+{
+    lang::Locale aLocale;
+    aLocale.Language = OUString("lo");
+    aLocale.Country = OUString("LA");
+    //ຍິນດີຕ້ອນຮັບ
+    const sal_Unicode LAO[] = { 0x0e8d, 0x0eb4, 0x0e99, 0x0e94, 0x0eb5, 0x0e95, 0x0ec9, 0x0ead, 0x0e99, 0x0eae, 0x0eb1, 0x0e9a };
+    OUString aTest(LAO, SAL_N_ELEMENTS(LAO));
+    i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
+        i18n::WordType::DICTIONARY_WORD, true);
+
+    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 5);
+
+    aBounds = m_xBreak->getWordBoundary(aTest, aBounds.endPos, aLocale,
+        i18n::WordType::DICTIONARY_WORD, true);
+
+    CPPUNIT_ASSERT(aBounds.startPos == 5 && aBounds.endPos == 9);
+
 }
 
 //A test to ensure that our thai word boundary detection is useful
