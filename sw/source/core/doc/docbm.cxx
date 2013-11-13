@@ -934,11 +934,6 @@ namespace
 
     public:
         _SwSaveTypeCountContent() { TYPECOUNT.nTypeCount = 0; nContent = 0; }
-        _SwSaveTypeCountContent( sal_uInt16 nType )
-            {
-                SetTypeAndCount( nType, 0 );
-                nContent = 0;
-            }
         _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
             {
                 TYPECOUNT.nTypeCount = rArr[ rPos++ ];
