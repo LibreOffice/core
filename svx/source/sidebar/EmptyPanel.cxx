@@ -25,19 +25,6 @@
 
 namespace svx { namespace sidebar {
 
-namespace
-{
-    class SidebarResource : public Resource
-    {
-    public:
-        SidebarResource (const ResId& rResId) : Resource(rResId) {}
-        ~SidebarResource (void) { FreeResource(); }
-    };
-}
-
-
-
-
 EmptyPanel::EmptyPanel (::Window* pParent)
     : Control(pParent, SVX_RES(RID_SIDEBAR_EMPTY_PANEL)),
       maMessageControl(this, SVX_RES(FT_MESSAGE))
