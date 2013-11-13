@@ -5660,6 +5660,7 @@ wrapTopAndBottom
 wrapTrailSpaces
 wrapcoords
 writeProtection
+wsp
 wsDr
 x
 x14

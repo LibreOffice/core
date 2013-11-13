@@ -52,6 +52,7 @@ inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 #define VMLPPT_TOKEN( token )   OOX_TOKEN( vmlPowerpoint, token )
 #define DSP_TOKEN( token )      OOX_TOKEN( dsp, token )
 #define LC_TOKEN( token )       OOX_TOKEN( dmlLockedCanvas, token )
+#define WPS_TOKEN( token )      OOX_TOKEN( wps, token )
 
 // ============================================================================
 
