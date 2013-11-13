@@ -1462,6 +1462,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocProduct:
             case ocHypGeomDist:
             case ocSumX2MY2:
+            case ocSumX2DY2:
             // Don't change the state.
             break;
             default:
