@@ -2196,15 +2196,15 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
                     ? pFilter->GetImportFormatNumber( rFilterName )
                     : GRFILTER_FORMAT_DONTKNOW;
 
-    SvStream* pStream = NULL;
     INetURLObject aURL( rPath );
-
-    if ( aURL.HasError() || INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    if ( aURL.HasError() )
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( rPath );
     }
-    else if ( INET_PROT_FILE != aURL.GetProtocol() )
+
+    SvStream* pStream = NULL;
+    if ( INET_PROT_FILE != aURL.GetProtocol() )
     {
         pStream = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
     }
