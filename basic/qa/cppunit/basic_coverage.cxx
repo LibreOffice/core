@@ -21,16 +21,13 @@ class Coverage : public test::BootstrapFixture
 {
 private:
     typedef std::vector< OUString > StringVec;
-    int  m_nb_tests;
     int  m_nb_tests_ok;
     int  m_nb_tests_skipped;
     OUString m_sCurrentTest;
     void process_directory(OUString sDirName);
     void run_test(OUString sFileName);
-    void test_start(OUString /* sFileName */);
     void test_failed(void);
     void test_success(void);
-    void print_summary() {};
     StringVec get_subdirnames( const OUString& sDirName );
 
 public:
@@ -51,7 +48,6 @@ public:
 
 Coverage::Coverage()
     : BootstrapFixture(true, false)
-    , m_nb_tests(0)
     , m_nb_tests_ok(0)
     , m_nb_tests_skipped(0)
 {
@@ -60,12 +56,6 @@ Coverage::Coverage()
 Coverage::~Coverage()
 {
     fprintf(stderr,"basic coverage Summary : skipped:%d pass:%d\n", m_nb_tests_skipped, m_nb_tests_ok );
-}
-
-void Coverage::test_start(OUString sFileName)
-{
-    m_nb_tests += 1;
-    m_sCurrentTest = sFileName;
 }
 
 void Coverage::test_failed()
@@ -82,6 +72,7 @@ void Coverage::test_success()
 
 void Coverage::run_test(OUString sFileURL)
 {
+    m_sCurrentTest = sFileURL;
     bool result = false;
     MacroSnippet testMacro;
     testMacro.LoadSourceFromFile( sFileURL );
