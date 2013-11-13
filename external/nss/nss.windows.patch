@@ -1,5 +1,5 @@
---- misc/nss-3.13.5/mozilla/nsprpub/config/rules.mk	2008-12-03 00:24:39.000000000 +0100
-+++ misc/build/nss-3.13.5/mozilla/nsprpub/config/rules.mk	2009-11-27 13:36:22.662753328 +0100
+--- a/a/nspr/config/rules.mk	2008-12-03 00:24:39.000000000 +0100
++++ b/b/nspr/config/rules.mk	2009-11-27 13:36:22.662753328 +0100
 @@ -415,7 +415,7 @@
  
  ifdef NEED_ABSOLUTE_PATH
@@ -9,8 +9,8 @@
  endif
  
  $(OBJDIR)/%.$(OBJ_SUFFIX): %.cpp
---- misc/nss-3.13.5/mozilla/security/coreconf/rules.mk	2008-12-03 00:24:39.000000000 +0100
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/rules.mk	2009-11-27 13:36:22.662753328 +0100
+--- a/a/nss/coreconf/rules.mk	2008-12-03 00:24:39.000000000 +0100
++++ b/b/nss/coreconf/rules.mk	2009-11-27 13:36:22.662753328 +0100
 @@ -411,7 +411,7 @@
  endif
  
