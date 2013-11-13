@@ -81,7 +81,7 @@ component_wrapper_grab_focus (AtkComponent *component)
             return TRUE;
         }
     }
-    catch( const uno::Exception &e )
+    catch( const uno::Exception & )
     {
         g_warning( "Exception in grabFocus()" );
     }
@@ -103,7 +103,7 @@ component_wrapper_contains (AtkComponent *component,
         if( pComponent )
             return pComponent->containsPoint( translatePoint( pComponent, x, y, coord_type ) );
     }
-    catch( const uno::Exception &e )
+    catch( const uno::Exception & )
     {
         g_warning( "Exception in containsPoint()" );
     }
@@ -147,7 +147,7 @@ component_wrapper_ref_accessible_at_point (AtkComponent *component,
             return atk_object_wrapper_ref( xAccessible );
         }
     }
-    catch( const uno::Exception &e )
+    catch( const uno::Exception & )
     {
         g_warning( "Exception in getAccessibleAtPoint()" );
     }
@@ -183,7 +183,7 @@ component_wrapper_get_position (AtkComponent   *component,
 #endif
         }
     }
-    catch( const uno::Exception &e )
+    catch( const uno::Exception & )
     {
         g_warning( "Exception in getLocation[OnScreen]()" );
     }
@@ -210,7 +210,7 @@ component_wrapper_get_size (AtkComponent   *component,
 #endif
         }
     }
-    catch( const uno::Exception &e )
+    catch( const uno::Exception & )
     {
         g_warning( "Exception in getSize()" );
     }
