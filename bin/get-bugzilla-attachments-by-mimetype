@@ -347,6 +347,7 @@ mimetypes = {
     'image/x-svm': 'svm',
     'image/x-wmf': 'wmf',
     'image/x-pict': 'pict',
+    'image/x-cmx': 'cmx',
 }
 
 # disabled for now, this would download gigs of pngs/jpegs...
