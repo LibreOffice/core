@@ -365,7 +365,7 @@ void OpDISC::GenSlidingWindowFunction(
     ss<<"mode = ";
     ss << vSubArguments[4]->GenSlidingWindowDeclRef();
     ss<<";\n\t";
-    ss << "int nNullDate = GetNullDate( 30 , 12 , 1899 );\n\t";
+    ss << "int nNullDate = GetNullDate();\n\t";
     ss << "tmp = 1.0 - price / redemp;\n\t";
     ss << "tmp /= GetYearFrac( nNullDate , settle , maturity , mode );\n\t";
     ss << "return tmp;\n";
@@ -481,7 +481,7 @@ void OpINTRATE::GenSlidingWindowFunction(
     ss << "mode = ";
     ss << vSubArguments[4]->GenSlidingWindowDeclRef();
     ss << ";\n\t";
-    ss << "int nNullDate = GetNullDate(30,12,1899);\n\t";
+    ss << "int nNullDate = GetNullDate();\n\t";
     ss << "tmp = (redemp / price - 1.0) / GetYearDiff(nNullDate, settle, maturity, mode);\n\t";
     ss << "return tmp;\n";
     ss << "}";
@@ -678,7 +678,7 @@ void OpDuration_ADD::GenSlidingWindowFunction(std::stringstream& ss,
             ss << ";\n";
             }
         }
-    ss << "    int nNullDate = GetNullDate(30, 12, 1899);\n";
+    ss << "    int nNullDate = GetNullDate();\n";
     ss << "    tmp = GetDuration( nNullDate, (int)arg0, (int)arg1, arg2,";
     ss << " arg3, (int)arg4, (int)arg5);\n";
     ss << "    return tmp;\n";
