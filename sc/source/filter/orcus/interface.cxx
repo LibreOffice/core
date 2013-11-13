@@ -267,55 +267,6 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t 
     return eGrammar;
 }
 
-class SharedFormulaGroups
-{
-    struct Key
-    {
-        sal_Int32 mnId;
-        sal_Int32 mnCol;
-
-        Key(sal_Int32 nId, sal_Int32 nCol) : mnId(nId), mnCol(nCol) {}
-
-        bool operator== ( const Key& rOther ) const
-        {
-            return mnId == rOther.mnId && mnCol == rOther.mnCol;
-        }
-
-        bool operator!= ( const Key& rOther ) const
-        {
-            return !operator==(rOther);
-        }
-    };
-
-    struct KeyHash
-    {
-        size_t operator() ( const Key& rKey ) const
-        {
-            double nVal = rKey.mnId;
-            nVal *= 256.0;
-            nVal += rKey.mnCol;
-            return static_cast<size_t>(nVal);
-        }
-    };
-
-    typedef boost::unordered_map<Key, ScFormulaCellGroupRef, KeyHash> StoreType;
-    StoreType maStore;
-public:
-
-    void set( sal_Int32 nSharedId, sal_Int32 nCol, const ScFormulaCellGroupRef& xGroup )
-    {
-        Key aKey(nSharedId, nCol);
-        maStore.insert(StoreType::value_type(aKey, xGroup));
-    }
-
-    ScFormulaCellGroupRef get( sal_Int32 nSharedId, sal_Int32 nCol ) const
-    {
-        Key aKey(nSharedId, nCol);
-        StoreType::const_iterator it = maStore.find(aKey);
-        return it == maStore.end() ? ScFormulaCellGroupRef() : it->second;
-    }
-};
-
 }
 
 void ScOrcusSheet::set_formula(
