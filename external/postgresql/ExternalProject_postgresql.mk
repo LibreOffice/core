@@ -45,7 +45,7 @@ postgresql_LDFLAGS  += \
 	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs \
 	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs \
 	$(if $(filter NO,$(SYSTEM_NSS)),\
-		-L$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib) \
+		-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib) \
 
 endif
 

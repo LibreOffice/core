@@ -32,9 +32,9 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 			$(if $(filter YES,$(SYSTEM_NSS)), \
 				CPPFLAGS="$(NSS_CFLAGS)" CFLAGS="$(NSS_CFLAGS)" LDFLAGS="$(NSS_LIBS)" \
 				, \
-				CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include" \
-				CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include" \
-				LDFLAGS="-L$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib $(if $(filter AIX,$(OS)),-Wl$(COMMA)-brtl)" \
+				CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
+				CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
+				LDFLAGS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib $(if $(filter AIX,$(OS)),-Wl$(COMMA)-brtl)" \
 			) \
 		&& MAKEFLAGS= && $(MAKE) \
 	)

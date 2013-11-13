@@ -1,5 +1,5 @@
---- misc/nss-3.13.5/mozilla/nsprpub/configure	2010-02-08 19:41:35.000000000 +0100
-+++ misc/build/nss-3.13.5/mozilla/nsprpub/configure	2010-06-11 16:35:54.960188991 +0200
+--- a/a/nspr/configure	2010-02-08 19:41:35.000000000 +0100
++++ b/b/nspr/configure	2010-06-11 16:35:54.960188991 +0200
 @@ -3900,7 +3900,7 @@
      PR_MD_CSRCS=linux.c
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
@@ -9,8 +9,8 @@
      _OPTIMIZE_FLAGS=-O2
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
                                     # combo is not yet good at debugging inlined
---- misc/nss-3.13.5/mozilla/security/coreconf/Darwin.mk	2010-02-04 19:59:10.000000000 +0100
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/Darwin.mk	2010-06-11 16:35:54.966185975 +0200
+--- a/a/nss/coreconf/Darwin.mk	2010-02-04 19:59:10.000000000 +0100
++++ b/b/nss/coreconf/Darwin.mk	2010-06-11 16:35:54.966185975 +0200
 @@ -39,8 +39,12 @@
  
  DEFAULT_COMPILER = gcc
@@ -52,8 +52,8 @@
  endif
  endif
  
---- misc/nss-3.13.5/mozilla/security/coreconf/FreeBSD.mk	2009-11-23 05:06:29.000000000 -0500
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/FreeBSD.mk	2012-08-28 20:27:20.000000000 -0400
+--- a/a/nss/coreconf/FreeBSD.mk	2009-11-23 05:06:29.000000000 -0500
++++ b/b/nss/coreconf/FreeBSD.mk	2012-08-28 20:27:20.000000000 -0400
 @@ -57,6 +57,7 @@
  
  DSO_CFLAGS		= -fPIC
@@ -62,8 +62,8 @@
  
  #
  # The default implementation strategy for FreeBSD is pthreads.
---- misc/nss-3.13.5/mozilla/security/coreconf/Linux.mk	2010-01-15 23:19:00.000000000 +0100
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/Linux.mk	2010-06-11 16:35:54.981151732 +0200
+--- a/a/nss/coreconf/Linux.mk	2010-01-15 23:19:00.000000000 +0100
++++ b/b/nss/coreconf/Linux.mk	2010-06-11 16:35:54.981151732 +0200
 @@ -46,8 +46,11 @@
  	IMPL_STRATEGY = _PTH
  endif
@@ -101,8 +101,8 @@
  
  # The -rpath '$$ORIGIN' linker option instructs this library to search for its
  # dependencies in the same directory where it resides.
---- misc/nss-3.13.5/mozilla/security/coreconf/SunOS5.mk	2009-06-11 02:55:32.000000000 +0200
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/SunOS5.mk	2010-06-11 16:35:54.985571182 +0200
+--- a/a/nss/coreconf/SunOS5.mk	2009-06-11 02:55:32.000000000 +0200
++++ b/b/nss/coreconf/SunOS5.mk	2010-06-11 16:35:54.985571182 +0200
 @@ -89,8 +89,12 @@
  	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
  	endif
@@ -118,8 +118,8 @@
  	ASFLAGS   += -Wa,-P
  	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
  	ifndef BUILD_OPT
---- misc/nss-3.13.5/mozilla/security/coreconf/arch.mk	2009-06-05 04:14:49.000000000 +0200
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/arch.mk	2010-06-11 16:35:54.990913282 +0200
+--- a/a/nss/coreconf/arch.mk	2009-06-05 04:14:49.000000000 +0200
++++ b/b/nss/coreconf/arch.mk	2010-06-11 16:35:54.990913282 +0200
 @@ -324,10 +324,15 @@
  # IMPL_STRATEGY may be defined too.
  #
@@ -138,8 +138,8 @@
  #
  # Define USE_DEBUG_RTL if you want to use the debug runtime library
  # (RTL) in the debug build
---- misc/nss-3.13.5/mozilla/security/coreconf/rules.mk
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/rules.mk
+--- a/a/nss/coreconf/rules.mk
++++ b/b/nss/coreconf/rules.mk
 @@ -293,7 +293,7 @@
  ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
  	$(AR) $(subst /,\\,$(OBJS))
@@ -149,29 +149,25 @@
  endif
  	$(RANLIB) $@
  
---- misc/nss-3.13.5/mozilla/security/nss/Makefile
-+++ misc/build/nss-3.13.5/mozilla/security/nss/Makefile
-@@ 1,0 +1,0 @@
+--- a/a/nss/Makefile
++++ b/b/nss/Makefile
+@@ -1,3 +1,5 @@
 +export AR
 +export RANLIB
  #! gmake
  #
- # ***** BEGIN LICENSE BLOCK *****
---- misc/nss-3.13.5/mozilla/security/nss/cmd/platlibs.mk	2010-02-04 19:59:10.000000000 +0100
-+++ misc/build/nss-3.13.5/mozilla/security/nss/cmd/platlibs.mk	2010-06-11 16:35:55.004869805 +0200
-@@ -41,27 +41,32 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+--- a/a/nss/cmd/platlibs.mk	2010-02-04 19:59:10.000000000 +0100
++++ b/b/nss/cmd/platlibs.mk	2010-06-11 16:35:55.004869805 +0200
+@@ -41,17 +41,22 @@
+ 
  ifeq ($(OS_ARCH), SunOS) 
- ifeq ($(BUILD_SUN_PKG), 1)
  ifeq ($(USE_64), 1)
 -EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1/64:/usr/lib/mps/64'
 +#In OOo we would probable put the executables next to libs
 +EXTRA_SHARED_LIBS += -R '$$ORIGIN'
  else
 -EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1:/usr/lib/mps'
-+EXTRA_SHARED_LIBS += -R '$$ORIGIN'
- endif
- else
--EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib'
 +EXTRA_SHARED_LIBS += -R '$$ORIGIN'
  endif
  endif
@@ -181,7 +177,6 @@
 +endif
 +
  ifeq ($(OS_ARCH), Linux)
- ifeq ($(BUILD_SUN_PKG), 1)
  ifeq ($(USE_64), 1)
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:/opt/sun/private/lib64:$$ORIGIN/../lib'
 +EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
@@ -189,18 +184,10 @@
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib:/opt/sun/private/lib'
 +EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
  endif
- else
- ifeq ($(USE_64), 1)
--EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
- else
--EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -Wl,-z,origin -Wl,-rpath,'$$ORIGIN'
  endif
- endif
- endif
---- misc/nss-3.13.5/mozilla/security/coreconf/Darwin.mk
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/Darwin.mk
+ 
+--- a/a/nss/coreconf/Darwin.mk
++++ b/b/nss/coreconf/Darwin.mk
 @@ -64,12 +64,16 @@
  endif
  
