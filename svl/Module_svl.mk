@@ -20,10 +20,13 @@
 $(eval $(call gb_Module_Module,svl))
 
 $(eval $(call gb_Module_add_targets,svl,\
-    AllLangResTarget_svl \
     Library_fsstorage \
     Library_passwordcontainer \
     Library_svl \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,svl,\
+    AllLangResTarget_svl \
 ))
 
 $(eval $(call gb_Module_add_check_targets,svl,\

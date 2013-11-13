@@ -20,13 +20,16 @@
 $(eval $(call gb_Module_Module,scaddins))
 
 $(eval $(call gb_Module_add_targets,scaddins,\
-    AllLangResTarget_analysis \
-    AllLangResTarget_date \
-    AllLangResTarget_pricing \
-	InternalUnoApi_scaddins \
+    InternalUnoApi_scaddins \
     Library_analysis \
     Library_date \
     Library_pricing \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,scaddins,\
+    AllLangResTarget_analysis \
+    AllLangResTarget_date \
+    AllLangResTarget_pricing \
 ))
 
 # vim: set noet sw=4 ts=4:

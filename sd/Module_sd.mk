@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,sd))
 
 $(eval $(call gb_Module_add_targets,sd,\
-    AllLangResTarget_sd \
     Library_sd \
     Library_sdd \
     Library_sdfilt \
@@ -20,6 +19,10 @@ $(eval $(call gb_Module_add_targets,sd,\
     Package_xml \
     UIConfig_sdraw \
     UIConfig_simpress \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,sd,\
+    AllLangResTarget_sd \
 ))
 
 ifneq ($(OS),DRAGONFLY)

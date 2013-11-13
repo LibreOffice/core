@@ -11,8 +11,11 @@
 $(eval $(call gb_Module_Module,fpicker))
 
 $(eval $(call gb_Module_add_targets,fpicker,\
-	AllLangResTarget_fps_office \
 	Library_fps_office \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,fpicker,\
+	AllLangResTarget_fps_office \
 ))
 
 ifeq ($(OS),MACOSX)

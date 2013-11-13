@@ -10,14 +10,17 @@
 $(eval $(call gb_Module_Module,extensions))
 
 $(eval $(call gb_Module_add_targets,extensions,\
-	AllLangResTarget_abp \
-	AllLangResTarget_scn \
-	AllLangResTarget_upd \
 	Library_res \
 	$(if $(filter IOS ANDROID,$(OS)),, \
 		Library_abp \
 		Library_log \
 		Library_scn) \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,extensions,\
+	AllLangResTarget_abp \
+	AllLangResTarget_scn \
+	AllLangResTarget_upd \
 ))
 
 ifneq ($(filter-out IOS ANDROID,$(OS)),)
@@ -28,14 +31,16 @@ endif
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,extensions,\
-	AllLangResTarget_bib \
-	AllLangResTarget_dbp \
-	AllLangResTarget_pcr \
 	Library_bib \
 	Library_dbp \
 	Library_pcr \
 	UIConfig_sbibliography \
 	UIConfig_spropctrlr \
+))
+$(eval $(call gb_Module_add_l10n_targets,extensions,\
+	AllLangResTarget_bib \
+	AllLangResTarget_dbp \
+	AllLangResTarget_pcr \
 ))
 endif
 
@@ -46,10 +51,12 @@ $(eval $(call gb_Module_add_targets,extensions,\
 
 ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
 $(eval $(call gb_Module_add_targets,extensions,\
-	AllLangResTarget_updchk \
 	Configuration_updchk \
 	Library_updatecheckui \
 	Library_updchk \
+))
+$(eval $(call gb_Module_add_l10n_targets,extensions,\
+	AllLangResTarget_updchk \
 ))
 
 $(eval $(call gb_Module_add_check_targets,extensions,\

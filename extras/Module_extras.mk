@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,extras))
 
 $(eval $(call gb_Module_add_targets,extras,\
-	AllLangPackage_autotextshare \
 	CustomTarget_autocorr \
 	CustomTarget_glade \
 	Package_autocorr \
@@ -41,6 +40,10 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_tplwizreport \
 	Package_tplwizstyles \
 	Package_wordbook \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,extras,\
+	AllLangPackage_autotextshare \
 ))
 
 ifeq ($(WITH_GALLERY_BUILD),YES)

@@ -22,8 +22,11 @@ $(eval $(call gb_Module_Module,sccomp))
 ifeq ($(ENABLE_LPSOLVE),TRUE)
 
 $(eval $(call gb_Module_add_targets,sccomp,\
-	AllLangResTarget_solver \
 	Library_solver \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,sccomp,\
+	AllLangResTarget_solver \
 ))
 
 endif

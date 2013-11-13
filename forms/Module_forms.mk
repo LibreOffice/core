@@ -10,8 +10,11 @@
 $(eval $(call gb_Module_Module,forms))
 
 $(eval $(call gb_Module_add_targets,forms,\
-    AllLangResTarget_frm \
     Library_frm \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,forms,\
+    AllLangResTarget_frm \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,forms,\

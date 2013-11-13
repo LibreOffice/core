@@ -10,10 +10,13 @@
 $(eval $(call gb_Module_Module,formula))
 
 $(eval $(call gb_Module_add_targets,formula,\
-    AllLangResTarget_for \
-    AllLangResTarget_forui \
     Library_for \
     Library_forui \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,formula,\
+    AllLangResTarget_for \
+    AllLangResTarget_forui \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -10,9 +10,6 @@
 $(eval $(call gb_Module_Module,desktop))
 
 $(eval $(call gb_Module_add_targets,desktop,\
-    AllLangResTarget_deployment \
-    AllLangResTarget_deploymentgui \
-    AllLangResTarget_dkt \
     CustomTarget_desktop_unopackages_install \
     GeneratedPackage_desktop_unopackages_install \
     Library_deployment \
@@ -24,6 +21,12 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Package_branding \
     $(if $(CUSTOM_BRAND_DIR),Package_branding_custom) \
     UIConfig_deployment \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,desktop,\
+    AllLangResTarget_deployment \
+    AllLangResTarget_deploymentgui \
+    AllLangResTarget_dkt \
 ))
 
 ifeq ($(OS),LINUX)
