@@ -70,7 +70,8 @@ const double THRESHOLD = 0.0001;
 
 enum DrawObjectType
 {
-    OT_UNDEFINED,
+    OT_UNDEFINED   = 0,
+
     OT_SELECT      = 0,
     OT_HAND        = 1,
     OT_LINE        = 2,
