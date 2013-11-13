@@ -437,6 +437,18 @@ DockingWindow RID_ELEMENTSDOCKINGWINDOW
     };
 };
 
+String STR_ALIGN_LEFT
+{
+    Text [ en-US ] = "left" ;
+};
+String STR_ALIGN_CENTER
+{
+    Text [ en-US ] = "center" ;
+};
+String STR_ALIGN_RIGHT
+{
+    Text [ en-US ] = "right" ;
+};
 
 String STR_CMDBOXWINDOW
 {

@@ -70,6 +70,7 @@ const sal_uInt16 SmElementsControl::aRelationsList[][2] =
     {RID_XEQY, RID_XEQY_HELP}, {RID_XNEQY, RID_XNEQY_HELP}, {RID_XLTY, RID_XLTY_HELP},
     {RID_XLEY, RID_XLEY_HELP}, {RID_XLESLANTY, RID_XLESLANTY_HELP}, {RID_XGTY, RID_XGTY_HELP},
     {RID_XGEY, RID_XGEY_HELP}, {RID_XGESLANTY, RID_XGESLANTY_HELP},
+    {RID_XLLY, RID_XLLY_HELP}, {RID_XGGY, RID_XGGY_HELP},
     {0xFFFF, 0},
     {RID_XAPPROXY, RID_XAPPROXY_HELP}, {RID_XSIMY, RID_XSIMY_HELP}, {RID_XSIMEQY, RID_XSIMEQY_HELP},
     {RID_XEQUIVY, RID_XEQUIVY_HELP}, {RID_XPROPY, RID_XPROPY_HELP}, {RID_XPARALLELY, RID_XPARALLELY_HELP},
@@ -182,7 +183,10 @@ const sal_uInt16 SmElementsControl::aFormats[][2] =
     {RID_LSUBX, RID_LSUBX_HELP}, {RID_CSUPX, RID_CSUPX_HELP}, {RID_CSUBX, RID_CSUBX_HELP},
     {0xFFFF, 0},
     {RID_NEWLINE, RID_NEWLINE_HELP}, {RID_SBLANK, RID_SBLANK_HELP}, {RID_BLANK, RID_BLANK_HELP},
-    {RID_NOSPACE, RID_NOSPACE_HELP}, {RID_BINOMXY, RID_BINOMXY_HELP}, {RID_STACK, RID_STACK_HELP},
+    {RID_NOSPACE, RID_NOSPACE_HELP},
+    {RID_ALIGNLX, RID_ALIGNLX_HELP}, {RID_ALIGNCX, RID_ALIGNCX_HELP}, {RID_ALIGNRX, RID_ALIGNRX_HELP},
+    {0xFFFF, 0},
+    {RID_BINOMXY, RID_BINOMXY_HELP}, {RID_STACK, RID_STACK_HELP},
     {RID_MATRIX, RID_MATRIX_HELP},
 };
 
@@ -479,6 +483,12 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uI
                 addElement(OUString("color magenta { \"" + colorMagenta() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
             else if (aElementId == RID_COLORX_YELLOW)
                 addElement(OUString("color yellow { \"" + colorYellow() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
+            else if (aElementId == RID_ALIGNLX)
+                addElement("\"" + SM_RESSTR(STR_ALIGN_LEFT) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_ALIGNCX)
+                addElement("\"" + SM_RESSTR(STR_ALIGN_CENTER) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_ALIGNRX)
+                addElement("\"" + SM_RESSTR(STR_ALIGN_RIGHT) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else
                 addElement(SmResId(aElementId), SmResId(aElementId), SmResId(aElementIdHelp));
         }

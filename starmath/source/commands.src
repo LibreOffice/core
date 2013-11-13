@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sfx2/sfx.hrc>
 #include "starmath.hrc"
-
-
-////////////////////////////////////////////////////////////
 
 String RID_PLUSX            { Text = "+<?> " ; };
 String RID_PLUSX_HELP       { Text = "+ Sign" ; };
@@ -76,7 +72,9 @@ String RID_XLESLANTY_HELP   { Text = "Is Less Than Or Equal To" ; };
 String RID_XGESLANTY        { Text = "<?> geslant <?> " ; };
 String RID_XGESLANTY_HELP   { Text = "Is Greater Than Or Equal To" ; };
 String RID_XLLY             { Text = "<?> << <?> " ; };
+String RID_XLLY_HELP        { Text = "Is Much Less Than" ; };
 String RID_XGGY             { Text = "<?> >> <?> " ; };
+String RID_XGGY_HELP        { Text = "Is Much Greater Than" ; };
 String RID_XDEFY            { Text = "<?> def <?> " ; };
 String RID_XEQUIVY          { Text = "<?> equiv <?> " ; };
 String RID_XEQUIVY_HELP     { Text = "Is Congruent To" ; };
@@ -266,7 +264,7 @@ String RID_FROMX            { Text = "from{<?>} <?> " ; };
 String RID_TOX              { Text = "to{<?>} <?> " ; };
 String RID_FROMXTOY         { Text = "from{<?>} to{<?>} <?> " ; };
 String RID_ACUTEX           { Text = "acute <?> " ; };
-String RID_ACUTEX_HELP      { Text =  "Acute Accent" ; };
+String RID_ACUTEX_HELP      { Text = "Acute Accent" ; };
 String RID_BARX             { Text = "bar <?> " ; };
 String RID_BARX_HELP        { Text = "Line Above" ; };
 String RID_BREVEX           { Text = "breve <?> " ; };
@@ -389,8 +387,11 @@ String RID_STACK_HELP       { Text = "Vertical Stack" ; };
 String RID_MATRIX           { Text = "matrix{<?> # <?> ## <?> # <?>} " ; };
 String RID_MATRIX_HELP      { Text = "Matrix Stack" ; };
 String RID_ALIGNLX          { Text = "alignl <?> " ; };
+String RID_ALIGNLX_HELP     { Text = "Align Right" ; };
 String RID_ALIGNCX          { Text = "alignc <?> " ; };
+String RID_ALIGNCX_HELP     { Text = "Align Center" ; };
 String RID_ALIGNRX          { Text = "alignr <?> " ; };
+String RID_ALIGNRX_HELP     { Text = "Align Right" ; };
 String RID_ALEPH            { Text = "aleph " ; };
 String RID_ALEPH_HELP       { Text = "Aleph" ; };
 String RID_EMPTYSET         { Text = "emptyset " ; };
