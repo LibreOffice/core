@@ -16,7 +16,6 @@
 #include <boost/scoped_ptr.hpp>
 
 namespace datastreams { class CallerThread; }
-namespace { class DataStreamsDlg; }
 class ScDocShell;
 class ScDocument;
 class ScRange;
@@ -25,8 +24,19 @@ class Window;
 
 class DataStreams : boost::noncopyable
 {
-    friend DataStreamsDlg;
+public:
     enum MoveEnum { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
+    DataStreams(ScDocShell *pScDocShell);
+    ~DataStreams();
+    bool ImportData();
+    void MoveData();
+    void Set(const OUString& rUrl, bool bIsScript, const OUString& rRange,
+            sal_Int32 nLimit, MoveEnum eMove);
+    void ShowDialog(Window *pParent);
+    void Start();
+    void Stop();
+
+private:
     ScDocShell *mpScDocShell;
     ScDocument *mpScDocument;
     MoveEnum meMove;
@@ -37,19 +47,6 @@ class DataStreams : boost::noncopyable
     boost::scoped_ptr<ScRange> mpEndRange;
     boost::scoped_ptr<SvStream> mpStream;
     rtl::Reference<datastreams::CallerThread> mxThread;
-
-public:
-    DataStreams(ScDocShell *pScDocShell);
-    ~DataStreams();
-    bool ImportData();
-    void ShowDialog(Window *pParent);
-    void Start();
-    void Stop();
-
-private:
-    void MoveData();
-    void Set(const OUString& rUrl, bool bIsScript, const OUString& rRange,
-            sal_Int32 nLimit, MoveEnum eMove);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
