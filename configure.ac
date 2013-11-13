@@ -8831,14 +8831,7 @@ if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([nssutil3])
     libo_MINGW_CHECK_DLL([smime3])
     libo_MINGW_CHECK_DLL([ssl3])
-else
-    NSS_MAJOR="3"
-    NSS_MINOR="13"
-    NSS_PATCH="5"
 fi
-AC_SUBST(NSS_MAJOR)
-AC_SUBST(NSS_MINOR)
-AC_SUBST(NSS_PATCH)
 
 dnl ===================================================================
 dnl Check for system mozilla headers
