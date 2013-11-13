@@ -613,7 +613,6 @@ void ODBExport::exportConnectionData()
                             const sal_Char* pAsciiPropertyName;
                             sal_uInt16      nAttributeId;
 
-                            PropertyMap() :pAsciiPropertyName( NULL ), nAttributeId(0) { }
                             PropertyMap( const sal_Char* _pAsciiPropertyName, const sal_uInt16 _nAttributeId )
                                 :pAsciiPropertyName( _pAsciiPropertyName )
                                 ,nAttributeId( _nAttributeId )
