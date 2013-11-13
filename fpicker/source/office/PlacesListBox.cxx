@@ -71,12 +71,12 @@ PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const OUString& rTitle, c
 
     mpAddBtn = new ImageButton( this, 0 );
     mpAddBtn->SetText( OUString( "+" ) );
-    mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 24, 24 ) );
+    mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
     mpAddBtn->Show();
 
     mpDelBtn = new ImageButton( this, 0 );
     mpDelBtn->SetText( OUString( "-" ) );
-    mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 24, 24 ) );
+    mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
     mpDelBtn->Show();
 }
 
