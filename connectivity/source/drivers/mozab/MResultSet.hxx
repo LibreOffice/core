@@ -254,7 +254,6 @@ protected:
 
             sal_Bool isCount() const;
 
-            // XXX sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != STRING_NOTFOUND ;}
             sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty(); }
 
             enum eRowPosition {
