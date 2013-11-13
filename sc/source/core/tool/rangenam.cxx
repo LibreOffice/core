@@ -670,17 +670,6 @@ public:
     }
 };
 
-class MatchByIndex : public unary_function<ScRangeData, bool>
-{
-    sal_uInt16 mnIndex;
-public:
-    MatchByIndex(sal_uInt16 nIndex) : mnIndex(nIndex) {}
-    bool operator() (const ScRangeData& r) const
-    {
-        return mnIndex == r.GetIndex();
-    }
-};
-
 }
 
 ScRangeName::ScRangeName() {}
