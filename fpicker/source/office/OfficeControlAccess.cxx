@@ -121,15 +121,6 @@ namespace svt
             }
         };
 
-        // ................................................................
-        struct ExtractControlName : public ::std::unary_function< ControlDescription, OUString >
-        {
-            OUString operator()( const ControlDescription& _rDesc )
-            {
-                return OUString::createFromAscii( _rDesc.pControlName );
-            }
-        };
-
         // ----------------------------------------------------------------
         // ................................................................
         struct ControlProperty
