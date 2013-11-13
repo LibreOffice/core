@@ -445,9 +445,12 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 
 void ScFormulaCellGroup::scheduleCompilation()
 {
+    osl::ResettableMutexGuard aGuard(maMutex);
+    meCalcState = sc::GroupCalcOpenCLKernelCompilationScheduled;
     sc::CLBuildKernelWorkItem aWorkItem;
     aWorkItem.meWhatToDo = sc::CLBuildKernelWorkItem::COMPILE;
     aWorkItem.mxGroup = this;
+    aGuard.clear();
     mxCLKernelThread->push(aWorkItem);
 }
 

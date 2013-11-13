@@ -2659,8 +2659,22 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup,
     ScTokenArray& rCode )
 {
-    // printf("Vector width = %d\n", xGroup->mnLength);
-    DynamicKernel *pKernel = DynamicKernel::create(rDoc, rTopPos, rCode);
+    DynamicKernel *pKernel;
+
+    osl::ResettableMutexGuard aGuard(xGroup->maMutex);
+    if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
+    {
+        aGuard.clear();
+        xGroup->maCompilationDone.wait();
+        xGroup->maCompilationDone.reset();
+        pKernel = static_cast<DynamicKernel*>(xGroup->mpCompiledFormula);
+    }
+    else
+    {
+        aGuard.clear();
+        pKernel = DynamicKernel::create(rDoc, rTopPos, rCode);
+    }
+
     if (!pKernel)
         return false;
 

@@ -20,15 +20,19 @@
 #ifndef SC_FORMULACELL_HXX
 #define SC_FORMULACELL_HXX
 
-#include "formularesult.hxx"
+#include <set>
 
-#include "formula/tokenarray.hxx"
+#include <boost/noncopyable.hpp>
+
+#include <formula/tokenarray.hxx>
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
-#include "svl/listener.hxx"
+#include <svl/listener.hxx>
+
 #include "types.hxx"
 
-#include <set>
-#include <boost/noncopyable.hpp>
+#include "formularesult.hxx"
 
 namespace sc {
 
@@ -54,6 +58,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
 
     ScTokenArray* mpCode;
     osl::Mutex maMutex;
+    osl::Condition maCompilationDone;
     sc::CompiledFormula* mpCompiledFormula;
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?

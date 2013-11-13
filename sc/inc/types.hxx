@@ -59,6 +59,7 @@ const sal_uInt16 MatrixEdgeOpen    = 32;
 enum GroupCalcState
 {
     GroupCalcEnabled,
+    GroupCalcOpenCLKernelCompilationScheduled,
     GroupCalcOpenCLKernelBinaryCreated,
     GroupCalcRunning,
     GroupCalcDisabled

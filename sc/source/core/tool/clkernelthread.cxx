@@ -9,6 +9,8 @@
 
 #include <sal/log.hxx>
 
+#include "formulagroupinterpreter.hxx"
+
 #include "clkernelthread.hxx"
 
 using namespace std;
@@ -46,6 +48,13 @@ void CLBuildKernelThread::execute()
             {
             case CLBuildKernelWorkItem::COMPILE:
                 SAL_INFO("sc.opencl.thread", "told to compile group " << aWorkItem.mxGroup << " to binary");
+                assert(aWorkItem.mxGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled);
+                aWorkItem.mxGroup->mpCompiledFormula =
+                    sc::FormulaGroupInterpreter::getStatic()->createCompiledFormula(*aWorkItem.mxGroup->mpTopCell->GetDocument(),
+                                                                                    aWorkItem.mxGroup->mpTopCell->aPos,
+                                                                                    *aWorkItem.mxGroup->mpCode);
+                aWorkItem.mxGroup->meCalcState = sc::GroupCalcOpenCLKernelBinaryCreated;
+                aWorkItem.mxGroup->maCompilationDone.set();
                 break;
             case CLBuildKernelWorkItem::FINISH:
                 SAL_INFO("sc.opencl.thread", "told to finish");
