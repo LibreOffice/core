@@ -168,13 +168,13 @@ void FTPURL::parse(const OUString& url)
     OUString aExpr(OUString(buffer,strlen(buffer),
                                       RTL_TEXTENCODING_UTF8));
 
-    sal_Int32 l = aExpr.indexOf(sal_Unicode('@'));
+    sal_Int32 l = aExpr.indexOf('@');
     m_aHost = aExpr.copy(1+l);
 
     if(l != -1) {
         // Now username and password.
         aExpr = aExpr.copy(0,l);
-        l = aExpr.indexOf(sal_Unicode(':'));
+        l = aExpr.indexOf(':');
         if(l != -1) {
             aPassword = aExpr.copy(1+l);
             if(!aPassword.isEmpty())
@@ -187,8 +187,8 @@ void FTPURL::parse(const OUString& url)
             m_aUsername = aExpr;
     }
 
-    l = m_aHost.lastIndexOf(sal_Unicode(':'));
-    sal_Int32 ipv6Back = m_aHost.lastIndexOf(sal_Unicode(']'));
+    l = m_aHost.lastIndexOf(':');
+    sal_Int32 ipv6Back = m_aHost.lastIndexOf(']');
     if((ipv6Back == -1 && l != -1) // not ipv6, but a port
        ||
        (ipv6Back != -1 && 1+ipv6Back == l) // ipv6, and a port
@@ -230,7 +230,7 @@ void FTPURL::parse(const OUString& url)
 
     // now check for something like ";type=i" at end of url
     if(m_aPathSegmentVec.size() &&
-       (l = m_aPathSegmentVec.back().indexOf(sal_Unicode(';'))) != -1) {
+       (l = m_aPathSegmentVec.back().indexOf(';')) != -1) {
         m_aType = m_aPathSegmentVec.back().copy(l);
         m_aPathSegmentVec.back() = m_aPathSegmentVec.back().copy(0,l);
     }
@@ -258,28 +258,28 @@ OUString FTPURL::ident(bool withslash,bool internal) const
 
         if((m_bShowPassword || internal) &&
            !aPassword.isEmpty() )
-            bff.append(sal_Unicode(':'))
+            bff.append(':')
                 .append(aPassword);
 
-        bff.append(sal_Unicode('@'));
+        bff.append('@');
     }
     bff.append(m_aHost);
 
     if( m_aPort != "21" )
-        bff.append(sal_Unicode(':'))
+        bff.append(':')
             .append(m_aPort)
-            .append(sal_Unicode('/'));
+            .append('/');
     else
-        bff.append(sal_Unicode('/'));
+        bff.append('/');
 
     for(unsigned i = 0; i < m_aPathSegmentVec.size(); ++i)
         if(i == 0)
             bff.append(m_aPathSegmentVec[i]);
         else
-            bff.append(sal_Unicode('/')).append(m_aPathSegmentVec[i]);
+            bff.append('/').append(m_aPathSegmentVec[i]);
     if(withslash)
         if(!bff.isEmpty() && bff[bff.getLength()-1] != '/')
-            bff.append(sal_Unicode('/'));
+            bff.append('/');
 
     bff.append(m_aType);
     return bff.makeStringAndClear();
@@ -303,20 +303,20 @@ OUString FTPURL::parent(bool internal) const
                         aAccount);
 
         if((internal || m_bShowPassword) && !aPassword.isEmpty())
-            bff.append(sal_Unicode(':'))
+            bff.append(':')
                 .append(aPassword);
 
-        bff.append(sal_Unicode('@'));
+        bff.append('@');
     }
 
     bff.append(m_aHost);
 
     if( m_aPort != "21" )
-        bff.append(sal_Unicode(':'))
+        bff.append(':')
             .append(m_aPort)
-            .append(sal_Unicode('/'));
+            .append('/');
     else
-        bff.append(sal_Unicode('/'));
+        bff.append('/');
 
     OUString last;
 
@@ -326,7 +326,7 @@ OUString FTPURL::parent(bool internal) const
         else if(i == 0)
             bff.append(m_aPathSegmentVec[i]);
         else
-            bff.append(sal_Unicode('/')).append(m_aPathSegmentVec[i]);
+            bff.append('/').append(m_aPathSegmentVec[i]);
 
     if(last.isEmpty())
         bff.appendAscii("..");
@@ -549,11 +549,11 @@ OUString FTPURL::net_title() const
             // Format of current working directory:
             // 257 "/bla/bla" is current directory
             sal_Int32 index1 = aNetTitle.lastIndexOf("257");
-            index1 = 1+aNetTitle.indexOf(sal_Unicode('"'),index1);
-            sal_Int32 index2 = aNetTitle.indexOf(sal_Unicode('"'),index1);
+            index1 = 1+aNetTitle.indexOf('"',index1);
+            sal_Int32 index2 = aNetTitle.indexOf('"',index1);
             aNetTitle = aNetTitle.copy(index1,index2-index1);
             if( aNetTitle != "/" ) {
-                index1 = aNetTitle.lastIndexOf(sal_Unicode('/'));
+                index1 = aNetTitle.lastIndexOf('/');
                 aNetTitle = aNetTitle.copy(1+index1);
             }
             try_more = false;

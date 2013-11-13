@@ -241,7 +241,7 @@ static OUString decodeValue( const OUString & rValue )
                      &&
                      ( ';' == pValue[ nPos + 3 ] ) )
                 {
-                    aResult.append( sal_Unicode( '%' ) );
+                    aResult.append( '%' );
                     nPos += 3;
                 }
                 else
@@ -266,7 +266,7 @@ static OUString decodeValue( const OUString & rValue )
                      &&
                      ( ';' == pValue[ nPos + 2 ] ) )
                 {
-                    aResult.append( sal_Unicode( '<' ) );
+                    aResult.append( '<' );
                     nPos += 2;
                 }
                 else
@@ -291,7 +291,7 @@ static OUString decodeValue( const OUString & rValue )
                      &&
                      ( ';' == pValue[ nPos + 2 ] ) )
                 {
-                    aResult.append( sal_Unicode( '>' ) );
+                    aResult.append( '>' );
                     nPos += 2;
                 }
                 else

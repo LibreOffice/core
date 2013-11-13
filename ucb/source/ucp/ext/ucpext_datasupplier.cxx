@@ -159,7 +159,7 @@ namespace ucb { namespace ucp { namespace ext
 
                     const OUString& rLocalId = (*pExtInfo)[0];
                     ResultListEntry aEntry;
-                    aEntry.sId = ContentProvider::getRootURL() + Content::encodeIdentifier( rLocalId ) + OUString( sal_Unicode( '/' ) );
+                    aEntry.sId = ContentProvider::getRootURL() + Content::encodeIdentifier( rLocalId ) + OUString( '/' );
                     m_pImpl->m_aResults.push_back( aEntry );
                 }
             }

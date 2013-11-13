@@ -1668,7 +1668,7 @@ shell::mkdir( sal_Int32 CommandId,
     OUString aUnqPath;
 
     // remove trailing slash
-    if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+    if ( rUnqPath.endsWith("/") )
         aUnqPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
     else
         aUnqPath = rUnqPath;
@@ -2036,7 +2036,7 @@ shell::copy_recursive( const OUString& srcUnqPath,
                                           rtl_UriEncodeIgnoreEscapes,
                                           RTL_TEXTENCODING_UTF8 );
 
-                if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
+                if( !newDstUnqPath.endsWith( "/" ) )
                     newDstUnqPath += "/";
 
                 newDstUnqPath += tit;
@@ -2071,7 +2071,7 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
     if ( rUnqPath.isEmpty() )
         return sal_False;
 
-    if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+    if ( rUnqPath.endsWith("/") )
         aPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
     else
         aPath = rUnqPath;

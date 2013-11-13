@@ -190,7 +190,7 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
         return false;
 
     sal_Int32 nStart = RTL_CONSTASCII_LENGTH( "<prop:" );
-    sal_Int32 nEnd = rFullName.indexOf( sal_Unicode( ' ' ), nStart );
+    sal_Int32 nEnd = rFullName.indexOf( ' ', nStart );
     if ( nEnd == -1 )
         return false;
 
@@ -203,7 +203,7 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
         return false;
 
     nStart = nEnd + RTL_CONSTASCII_LENGTH( "xmlns:prop=\"" );
-    nEnd = rFullName.indexOf( sal_Unicode( '"' ), nStart );
+    nEnd = rFullName.indexOf( '"', nStart );
     if ( nEnd != nLen - RTL_CONSTASCII_LENGTH( "\">" ) )
         return false;
 
@@ -213,7 +213,7 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
 
     rtl::OUStringBuffer aBuff( sNamesp );
     if ( sNamesp[nLen - 1] != '/' )
-        aBuff.append( sal_Unicode( '/' ) );
+        aBuff.append( '/' );
     aBuff.append( sPropName );
     rParsedName = aBuff.makeStringAndClear();
 

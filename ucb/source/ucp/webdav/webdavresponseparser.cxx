@@ -193,7 +193,7 @@ namespace
             {
                 if(aName.match(aStrXmlns, 0))
                 {
-                    const sal_Int32 nIndex(aName.indexOf(sal_Unicode(':'), 0));
+                    const sal_Int32 nIndex(aName.indexOf(':', 0));
 
                     if(-1 != nIndex && nIndex + 1 < nLen)
                     {
@@ -235,7 +235,7 @@ namespace
 
         if(nLen)
         {
-            const sal_Int32 nIndex(rSource.indexOf(sal_Unicode(':'), 0));
+            const sal_Int32 nIndex(rSource.indexOf(':', 0));
 
             if(nIndex > 0 && ((nIndex + 1) < nLen))
             {
@@ -777,7 +777,7 @@ namespace
                 if(aNew.getLength())
                 {
                     // add one char when appending (see html1.1 spec)
-                    aNew += OUString(sal_Unicode(' '));
+                    aNew += OUString(' ');
                 }
 
                 aNew += aTrimmedChars;

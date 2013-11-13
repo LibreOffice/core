@@ -175,7 +175,7 @@ bool DAVProperties::isUCBSpecialProperty(
         return false;
 
     sal_Int32 nStart = strlen( "<prop:" );
-    sal_Int32 nEnd = rFullName.indexOf( sal_Unicode( ' ' ), nStart );
+    sal_Int32 nEnd = rFullName.indexOf( ' ', nStart );
     if ( nEnd <= nStart ) // incl. -1 for "not found"
         return false;
 
@@ -186,7 +186,7 @@ bool DAVProperties::isUCBSpecialProperty(
         return false;
 
     nStart = nEnd + strlen( "xmlns:prop=\"" );
-    nEnd = rFullName.indexOf( sal_Unicode( '"' ), nStart );
+    nEnd = rFullName.indexOf( '"', nStart );
     if ( nEnd != rFullName.getLength() - sal_Int32( strlen( "\">" ) )
          || nEnd == nStart )
     {

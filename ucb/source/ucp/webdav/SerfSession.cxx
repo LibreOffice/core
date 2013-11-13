@@ -352,7 +352,7 @@ namespace {
         if ( nContStart != -1 )
         {
             nContStart += sPartId.getLength();
-            sal_Int32 nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
+            sal_Int32 nContEnd = _rRawString.indexOf( ',', nContStart );
             sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
         }
         return sPart;
@@ -1565,7 +1565,7 @@ OUString SerfSession::makeAbsoluteURL( OUString const & rURL ) const
     try
     {
         // Is URL relative or already absolute?
-        if ( rURL[ 0 ] != sal_Unicode( '/' ) )
+        if ( rURL[ 0 ] != '/' )
         {
             // absolute.
             return OUString( rURL );

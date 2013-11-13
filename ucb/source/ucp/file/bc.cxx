@@ -893,7 +893,7 @@ BaseContent::setPropertyValues(
                         {
                             aBuf.append( NewTitle );
                             if ( bTrailingSlash )
-                                aBuf.append( sal_Unicode( '/' ) );
+                                aBuf.append( '/' );
                         }
                         else
                         {
@@ -909,7 +909,7 @@ BaseContent::setPropertyValues(
                             // Initial Title before "insert".
                             // m_aUncPath contains parent's URI.
 
-                            if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
+                            if( !m_aUncPath.endsWith( "/" ) )
                                 m_aUncPath += "/";
 
                             m_aUncPath += rtl::Uri::encode( NewTitle,
@@ -950,7 +950,7 @@ BaseContent::setPropertyValues(
 
 
             OUString aDstName = getParentName( m_aUncPath );
-            if( aDstName.lastIndexOf( sal_Unicode('/') ) != aDstName.getLength() - 1 )
+            if( !aDstName.endsWith("/") )
                 aDstName += "/";
 
             aDstName += rtl::Uri::encode( NewTitle,
@@ -1109,7 +1109,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
                                      rtl_UriEncodeIgnoreEscapes,
                                      RTL_TEXTENCODING_UTF8 );
     else
-        NewTitle = srcUncPath.copy( 1 + srcUncPath.lastIndexOf( sal_Unicode('/') ) );
+        NewTitle = srcUncPath.copy( 1 + srcUncPath.lastIndexOf( '/' ) );
 
     // Is destination a document or a folder ?
     Sequence< beans::Property > seq(1);
@@ -1129,7 +1129,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     OUString dstUncPath;
     if( IsDocument )
     {   // as sibling
-        sal_Int32 lastSlash = m_aUncPath.lastIndexOf( sal_Unicode('/') );
+        sal_Int32 lastSlash = m_aUncPath.lastIndexOf( '/' );
         dstUncPath = m_aUncPath.copy(0,lastSlash );
     }
     else
@@ -1246,7 +1246,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             // determine new uncpath
             m_pMyShell->clearError( nMyCommandIdentifier );
             m_aUncPath = getParentName( m_aUncPath );
-            if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
+            if( !m_aUncPath.endsWith( "/" ) )
                 m_aUncPath += "/";
 
             m_aUncPath += rtl::Uri::encode( aRequestImpl->newName(),

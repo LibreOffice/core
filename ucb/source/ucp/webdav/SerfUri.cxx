@@ -148,7 +148,7 @@ void SerfUri::calculateURI ()
     }
     // Is host a numeric IPv6 address?
     if ( ( mHostName.indexOf( ':' ) != -1 ) &&
-         ( mHostName[ 0 ] != sal_Unicode( '[' ) ) )
+         ( mHostName[ 0 ] != '[' ) )
     {
         aBuf.append( "[" );
         aBuf.append( mHostName );
@@ -254,7 +254,7 @@ OUString SerfUri::makeConnectionEndPointString(
 
     // Is host a numeric IPv6 address?
     if ( ( rHostName.indexOf( ':' ) != -1 ) &&
-         ( rHostName[ 0 ] != sal_Unicode( '[' ) ) )
+         ( rHostName[ 0 ] != '[' ) )
     {
         aBuf.append( "[" );
         aBuf.append( rHostName );

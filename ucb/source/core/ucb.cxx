@@ -76,7 +76,7 @@ bool fillPlaceholders(OUString const & rInput,
                     && p[3] == ';')
                 {
                     aBuffer.append(pCopy, p - 1 - pCopy);
-                    aBuffer.append(sal_Unicode('&'));
+                    aBuffer.append('&');
                     p += 4;
                     pCopy = p;
                 }
@@ -84,7 +84,7 @@ bool fillPlaceholders(OUString const & rInput,
                          && p[0] == 'l' && p[1] == 't' && p[2] == ';')
                 {
                     aBuffer.append(pCopy, p - 1 - pCopy);
-                    aBuffer.append(sal_Unicode('<'));
+                    aBuffer.append('<');
                     p += 3;
                     pCopy = p;
                 }
@@ -92,7 +92,7 @@ bool fillPlaceholders(OUString const & rInput,
                          && p[0] == 'g' && p[1] == 't' && p[2] == ';')
                 {
                     aBuffer.append(pCopy, p - 1 - pCopy);
-                    aBuffer.append(sal_Unicode('>'));
+                    aBuffer.append('>');
                     p += 3;
                     pCopy = p;
                 }

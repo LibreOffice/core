@@ -153,7 +153,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
                 // Parse the Content-Range to get the size
                 // vid. http://tools.ietf.org/html/rfc2616#section-14.16
                 // Content-Range: <range unit> <bytes range>/<size>
-                sal_Int32 nSlash = aContentRange.lastIndexOf( sal_Unicode('/'));
+                sal_Int32 nSlash = aContentRange.lastIndexOf( '/' );
                 if ( nSlash != -1 )
                 {
                     rtl::OUString aSize = aContentRange.copy( nSlash + 1 );

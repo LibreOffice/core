@@ -209,10 +209,10 @@ void appendStringLiteral(OUStringBuffer * pBuffer,
     {
         sal_Unicode c = *p++;
         if (c == '"' || c == '\\')
-            pBuffer->append(sal_Unicode('\\'));
+            pBuffer->append('\\');
         pBuffer->append(c);
     }
-    pBuffer->append(sal_Unicode('"'));
+    pBuffer->append('"');
 }
 
 }

@@ -151,7 +151,7 @@ namespace ucb { namespace ucp { namespace ext
         {
             if ( sRemaining[0] != '/' )
             {
-                aComposer.append( sal_Unicode( '/' ) );
+                aComposer.append( '/' );
                 aComposer.append( sRemaining );
             }
             else
@@ -161,7 +161,7 @@ namespace ucb { namespace ucp { namespace ext
                 if ( sRemaining.isEmpty() )
                 {
                     // again, it's the root content, but one / is missing
-                    aComposer.append( sal_Unicode( '/' ) );
+                    aComposer.append( '/' );
                 }
                 else
                 {

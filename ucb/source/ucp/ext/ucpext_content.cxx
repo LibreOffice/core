@@ -352,7 +352,7 @@ namespace ucb { namespace ucp { namespace ext
             OUString sRelativeURL( sURL.copy( sRootURL.getLength() ) );
 
             // cut the extension ID
-            const OUString sSeparatedExtensionId( encodeIdentifier( m_sExtensionId ) + OUString( sal_Unicode( '/' ) ) );
+            const OUString sSeparatedExtensionId( encodeIdentifier( m_sExtensionId ) + OUString( '/' ) );
             if ( !sRelativeURL.match( sSeparatedExtensionId ) )
             {
                 SAL_INFO( "ucb.ucp.ext", "illegal URL structure - no extension ID" );
