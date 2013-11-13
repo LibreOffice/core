@@ -27,16 +27,6 @@
 
 namespace
 {
-    class SameName: public std::unary_function<const sal_Char*, bool>
-    {
-    private:
-        const OUString &mrName;
-    public:
-        explicit SameName(const OUString &rName) : mrName(rName) {}
-        bool operator() (const sal_Char *pEntry) const
-            { return mrName.equalsAscii(pEntry); }
-    };
-
     const sal_Char **GetStiNames() throw()
     {
         static const sal_Char *stiName[] =
