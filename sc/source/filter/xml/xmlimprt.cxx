@@ -3086,37 +3086,6 @@ void ScXMLImport::SetLabelRanges()
 
 namespace {
 
-/**
- * Used to switch off document modify and broadcast while populating named
- * ranges during import.
- */
-class NamedRangesSwitch
-{
-public:
-    NamedRangesSwitch(Reference<beans::XPropertySet>& xPropSet) :
-        mxPropSet(xPropSet), maPropName(SC_UNO_MODIFY_BROADCAST)
-    {
-        uno::Any any;
-        any <<= false;
-        mxPropSet->setPropertyValue(maPropName, any);
-    }
-
-    ~NamedRangesSwitch()
-    {
-        uno::Any any;
-        any <<= sal_True;
-        mxPropSet->setPropertyValue(maPropName, any);
-    }
-
-private:
-    Reference<beans::XPropertySet>& mxPropSet;
-    OUString maPropName;
-};
-
-}
-
-namespace {
-
 class RangeNameInserter : public ::std::unary_function<ScMyNamedExpression, void>
 {
     ScDocument* mpDoc;
