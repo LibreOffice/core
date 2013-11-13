@@ -23,6 +23,7 @@ use File::Copy;
 use File::stat;
 use File::Temp qw(tmpnam);
 use File::Path;
+use File::Basename;
 use installer::control;
 use installer::converter;
 use installer::exiter;
@@ -369,7 +370,9 @@ sub install_simple ($$$$$$)
         my $onelink = ${$unixlinksarray}[$i];
         my $target = $onelink->{'Target'};
         my $destination = $onelink->{'destination'};
-        my $cmd = "ln -sf '$target' '$destdir$destination'";
+        my $cmd = "mkdir -p '" . dirname($destdir . $destination) . "'";
+        system($cmd) && die "Failed to execute \"$cmd\"";
+        $cmd = "ln -sf '$target' '$destdir$destination'";
 
         system($cmd) && die "Failed \"$cmd\"";
         push @lines, "$destination\n";
