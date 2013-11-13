@@ -59,7 +59,7 @@ selection_add_selection( AtkSelection *selection,
             return TRUE;
         }
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in selectAccessibleChild()" );
     }
 
@@ -77,7 +77,7 @@ selection_clear_selection( AtkSelection *selection )
             return TRUE;
         }
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in selectAccessibleChild()" );
     }
 
@@ -93,7 +93,7 @@ selection_ref_selection( AtkSelection *selection,
         if( pSelection )
             return atk_object_wrapper_ref( pSelection->getSelectedAccessibleChild( i ) );
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChild()" );
     }
 
@@ -108,7 +108,7 @@ selection_get_selection_count( AtkSelection   *selection)
         if( pSelection )
             return pSelection->getSelectedAccessibleChildCount();
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
     }
 
@@ -124,7 +124,7 @@ selection_is_child_selected( AtkSelection   *selection,
         if( pSelection )
             return pSelection->isAccessibleChildSelected( i );
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
     }
 
@@ -143,7 +143,7 @@ selection_remove_selection( AtkSelection *selection,
             return TRUE;
         }
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
     }
 
@@ -161,7 +161,7 @@ selection_select_all_selection( AtkSelection   *selection)
             return TRUE;
         }
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getSelectedAccessibleChildCount()" );
     }
 
