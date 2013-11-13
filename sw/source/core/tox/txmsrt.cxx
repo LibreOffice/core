@@ -525,7 +525,7 @@ SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, sal_uInt16 nLevel
     eType( eT ),
     m_nLevel(nLevel),
     nStartIndex(0),
-    nEndIndex(STRING_LEN),
+    nEndIndex(-1),
     m_sSequenceName( sSeqName )
 {
 }
@@ -543,7 +543,7 @@ TextAndReading SwTOXPara::GetText_Impl() const
             xub_StrLen nStt = nStartIndex;
             return TextAndReading(((SwTxtNode*)pNd)->GetExpandTxt(
                     nStt,
-                    STRING_NOTFOUND == nEndIndex ? STRING_LEN : nEndIndex - nStt),
+                    nEndIndex == -1 ? STRING_LEN : nEndIndex - nStt),
                     OUString());
         }
         break;
@@ -578,7 +578,7 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) c
         SwTxtNode* pSrc = (SwTxtNode*)aTOXSources[0].pNd;
         xub_StrLen nStt = nStartIndex;
         pSrc->GetExpandTxt( rNd, &rInsPos, nStt,
-                nEndIndex == STRING_LEN ? STRING_LEN : nEndIndex - nStt,
+                nEndIndex == -1 ? STRING_LEN : nEndIndex - nStt,
                 sal_False, sal_False, sal_True );
     }
     else

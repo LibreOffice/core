@@ -240,8 +240,8 @@ struct SwTOXPara : public SwTOXSortTabBase
     SwTOXPara( const SwCntntNode&, SwTOXElement, sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER, OUString sSeqName = OUString() );
     virtual ~SwTOXPara() {}
 
-    void    SetStartIndex( xub_StrLen nSet)     { nStartIndex = nSet;}
-    void    SetEndIndex( xub_StrLen nSet )      { nEndIndex = nSet;}
+    void    SetStartIndex(sal_Int32 nSet)    { nStartIndex = nSet; }
+    void    SetEndIndex(sal_Int32 nSet)      { nEndIndex = nSet; }
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
     virtual sal_uInt16  GetLevel() const;
@@ -252,8 +252,8 @@ private:
 
     SwTOXElement eType;
     sal_uInt16 m_nLevel;
-    xub_StrLen nStartIndex;
-    xub_StrLen nEndIndex;
+    sal_Int32 nStartIndex;
+    sal_Int32 nEndIndex;
     OUString m_sSequenceName;
 };
 
