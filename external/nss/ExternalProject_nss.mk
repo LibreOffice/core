@@ -67,19 +67,21 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		NSDISTMODE=copy \
 		$(MAKE) -j1 AR=$(AR) RANLIB=$(RANLIB) NMEDIT=$(NM)edit nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
-		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
-			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libfreebl3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnspr4.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnss3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssckbi.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssdbm3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssutil3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplc4.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplds4.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libsmime3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libsoftokn3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libssl3.dylib) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& chmod u+w $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dylib \
+			&& $(PERL) \
+				$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libfreebl3.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnspr4.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnss3.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssckbi.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssdbm3.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssutil3.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplc4.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplds4.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libsmime3.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libsoftokn3.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libssl3.dylib) \
 	,nss)
 
 endif
