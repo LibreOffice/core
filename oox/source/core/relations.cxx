@@ -40,7 +40,7 @@ OUString lclRemoveFileName( const OUString& rPath )
 OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
 {
     return rPath.isEmpty() ? rFileName :
-        OUStringBuffer( rPath ).append( sal_Unicode( '/' ) ).append( rFileName ).makeStringAndClear();
+        OUStringBuffer( rPath ).append( '/' ).append( rFileName ).makeStringAndClear();
 }
 
 } // namespace

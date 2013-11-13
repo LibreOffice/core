@@ -150,7 +150,7 @@ VbaDummyFormControl::VbaDummyFormControl( const OUString& rName )
 {
     mxSiteModel.reset( new VbaSiteModel );
     mxSiteModel->importProperty( XML_Name, rName );
-    mxSiteModel->importProperty( XML_VariousPropertyBits, OUString( sal_Unicode( '0' ) ) );
+    mxSiteModel->importProperty( XML_VariousPropertyBits, OUString( '0' ) );
 
     mxCtrlModel.reset( new AxLabelModel );
     mxCtrlModel->setAwtModelMode();
@@ -229,9 +229,9 @@ OUString VbaSiteModel::getSubStorageName() const
     if( mnId >= 0 )
     {
         OUStringBuffer aBuffer;
-        aBuffer.append( sal_Unicode( 'i' ) );
+        aBuffer.append( 'i' );
         if( mnId < 10 )
-            aBuffer.append( sal_Unicode( '0' ) );
+            aBuffer.append( '0' );
         aBuffer.append( mnId );
         return aBuffer.makeStringAndClear();
     }

@@ -55,7 +55,7 @@ static OUString lclGenerateApiString( const OUString& rString )
     sal_Int32 nQuotePos = aRetString.getLength();
     while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
         aRetString = aRetString.replaceAt( nQuotePos, 1, "\"\"" );
-    return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
+    return OUStringBuffer().append( '"' ).append( aRetString ).append( '"' ).makeStringAndClear();
 }
 
 static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )

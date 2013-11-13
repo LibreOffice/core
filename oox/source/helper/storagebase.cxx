@@ -120,7 +120,7 @@ OUString StorageBase::getPath() const
 {
     OUStringBuffer aBuffer( maParentPath );
     if( !aBuffer.isEmpty() )
-        aBuffer.append( sal_Unicode( '/' ) );
+        aBuffer.append( '/' );
     aBuffer.append( maStorageName );
     return aBuffer.makeStringAndClear();
 }

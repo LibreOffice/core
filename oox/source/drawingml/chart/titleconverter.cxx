@@ -125,7 +125,7 @@ Reference< XFormattedString > TextConverter::appendFormattedString(
     try
     {
         xFmtStr = FormattedString::create( ConverterRoot::getComponentContext() );
-        xFmtStr->setString( bAddNewLine ? (rString + OUString( sal_Unicode( '\n' ) )) : rString );
+        xFmtStr->setString( bAddNewLine ? (rString + OUString( '\n' )) : rString );
         orStringVec.push_back( xFmtStr );
     }
     catch( Exception& )

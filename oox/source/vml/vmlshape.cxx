@@ -288,7 +288,7 @@ OUString ShapeBase::getShapeName() const
     {
         sal_Int32 nShapeIdx = mrDrawing.getLocalShapeIndex( getShapeId() );
         if( nShapeIdx > 0 )
-            return OUStringBuffer( aBaseName ).append( sal_Unicode( ' ' ) ).append( nShapeIdx ).makeStringAndClear();
+            return OUStringBuffer( aBaseName ).append( ' ' ).append( nShapeIdx ).makeStringAndClear();
     }
 
     return OUString();

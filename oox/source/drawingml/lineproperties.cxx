@@ -209,7 +209,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         sal_Int32 nWidth  = lclGetArrowSize( rArrowProps.moArrowWidth.get( XML_med ) );
 
         sal_Int32 nNameIndex = nWidth * 3 + nLength + 1;
-        aBuffer.append( sal_Unicode( ' ' ) ).append( nNameIndex );
+        aBuffer.append( ' ' ).append( nNameIndex );
         OUString aMarkerName = aBuffer.makeStringAndClear();
 
         bool bIsArrow = nArrowType == XML_arrow;

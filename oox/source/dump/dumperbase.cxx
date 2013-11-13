@@ -533,7 +533,7 @@ void StringHelper::appendToken( OUStringBuffer& rStr, const OUString& rToken, sa
 
 void StringHelper::appendIndex( OUStringBuffer& rStr, const OUString& rIdx )
 {
-    rStr.append( sal_Unicode( '[' ) ).append( rIdx ).append( sal_Unicode( ']' ) );
+    rStr.append( '[' ).append( rIdx ).append( ']' );
 }
 
 void StringHelper::appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx )
@@ -1544,7 +1544,7 @@ void Output::newLine()
     if( maLine.getLength() > 0 )
     {
         mxStrm->writeString( maIndent );
-        maLine.append( sal_Unicode( '\n' ) );
+        maLine.append( '\n' );
         mxStrm->writeString( maLine.makeStringAndClear() );
         mnCol = 0;
         mnLastItem = 0;
@@ -1554,7 +1554,7 @@ void Output::newLine()
 void Output::emptyLine( size_t nCount )
 {
     for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
-        mxStrm->writeString( OUString( sal_Unicode( '\n' ) ) );
+        mxStrm->writeString( OUString( '\n' ) );
 }
 
 void Output::incIndent()
@@ -1933,7 +1933,7 @@ OUString StorageObjectBase::getSysFileName( const OUString& rStrmName, const OUS
         aFileName = aFileName.replace( *pcChar, '_' );
 
     // build full path
-    return rSysOutPath + OUString( sal_Unicode( '/' ) ) + aFileName;
+    return rSysOutPath + OUString( '/' ) + aFileName;
 }
 
 void StorageObjectBase::extractStream( StorageBase& rStrg, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
@@ -2313,18 +2313,18 @@ OUString InputObjectBase::dumpGuid( const String& rName )
 
     *mxStrm >> nData32;
     StringHelper::appendHex( aBuffer, nData32, false );
-    aBuffer.append( sal_Unicode( '-' ) );
+    aBuffer.append( '-' );
     *mxStrm >> nData16;
     StringHelper::appendHex( aBuffer, nData16, false );
-    aBuffer.append( sal_Unicode( '-' ) );
+    aBuffer.append( '-' );
     *mxStrm >> nData16;
     StringHelper::appendHex( aBuffer, nData16, false );
-    aBuffer.append( sal_Unicode( '-' ) );
+    aBuffer.append( '-' );
     *mxStrm >> nData8;
     StringHelper::appendHex( aBuffer, nData8, false );
     *mxStrm >> nData8;
     StringHelper::appendHex( aBuffer, nData8, false );
-    aBuffer.append( sal_Unicode( '-' ) );
+    aBuffer.append( '-' );
     for( int nIndex = 0; nIndex < 6; ++nIndex )
     {
         *mxStrm >> nData8;
@@ -2470,7 +2470,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
         {
             while( (nPos < aElem.getLength()) && (aElem[ nPos ] >= 32) ) ++nPos;
             if( nPos < aElem.getLength() )
-                aElem = OUStringBuffer( aElem.copy( 0, nPos ) ).append( sal_Unicode( ' ' ) ).append( aElem.copy( nPos ).trim() ).makeStringAndClear();
+                aElem = OUStringBuffer( aElem.copy( 0, nPos ) ).append( ' ' ).append( aElem.copy( nPos ).trim() ).makeStringAndClear();
             ++nPos;
         }
 

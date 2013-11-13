@@ -289,19 +289,19 @@ void OleHelper::exportGuid( BinaryOutputStream& rOStr, const SvGlobalName& rId )
 OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
 {
     OUStringBuffer aBuffer;
-    aBuffer.append( sal_Unicode( '{' ) );
+    aBuffer.append( '{' );
     lclAppendHex( aBuffer, rInStrm.readuInt32() );
-    aBuffer.append( sal_Unicode( '-' ) );
+    aBuffer.append( '-' );
     lclAppendHex( aBuffer, rInStrm.readuInt16() );
-    aBuffer.append( sal_Unicode( '-' ) );
+    aBuffer.append( '-' );
     lclAppendHex( aBuffer, rInStrm.readuInt16() );
-    aBuffer.append( sal_Unicode( '-' ) );
+    aBuffer.append( '-' );
     lclAppendHex( aBuffer, rInStrm.readuInt8() );
     lclAppendHex( aBuffer, rInStrm.readuInt8() );
-    aBuffer.append( sal_Unicode( '-' ) );
+    aBuffer.append( '-' );
     for( int nIndex = 0; nIndex < 6; ++nIndex )
         lclAppendHex( aBuffer, rInStrm.readuInt8() );
-    aBuffer.append( sal_Unicode( '}' ) );
+    aBuffer.append( '}' );
     return aBuffer.makeStringAndClear();
 }
 

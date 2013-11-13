@@ -167,7 +167,7 @@ void TextPortionContext::onEndElement()
         meantime, the space character has to be added manually.
      */
     if( mrTextBox.getPortionCount() == mnInitialPortions )
-        mrTextBox.appendPortion( maParagraph, maFont, OUString( sal_Unicode( ' ' ) ) );
+        mrTextBox.appendPortion( maParagraph, maFont, OUString( ' ' ) );
 }
 
 // ============================================================================

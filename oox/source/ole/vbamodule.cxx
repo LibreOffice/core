@@ -317,7 +317,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                     // normal source code line
                     if( !mbExecutable )
                         aSourceCode.appendAscii( "Rem " );
-                    aSourceCode.append( aCodeLine ).append( sal_Unicode( '\n' ) );
+                    aSourceCode.append( aCodeLine ).append( '\n' );
                 }
             }
         }
@@ -364,7 +364,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
         default:
             aSourceCode.appendAscii( "VBAUnknown" );
     }
-    aSourceCode.append( sal_Unicode( '\n' ) );
+    aSourceCode.append( '\n' );
     if( mbExecutable )
     {
         aSourceCode.appendAscii( "Option VBASupport 1\n" );
@@ -375,7 +375,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     {
         // add a subroutine named after the module itself
         aSourceCode.appendAscii( "Sub " ).
-            append( maName.replace( ' ', '_' ) ).append( sal_Unicode( '\n' ) );
+            append( maName.replace( ' ', '_' ) ).append( '\n' );
     }
 
     // append passed VBA source code
