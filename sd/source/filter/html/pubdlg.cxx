@@ -350,9 +350,8 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
 class SdDesignNameDlg : public ModalDialog
 {
 private:
-    Edit            m_aEdit;
-    OKButton        m_aBtnOK;
-    CancelButton    m_aBtnCancel;
+    Edit*           m_pEdit;
+    OKButton*       m_pBtnOK;
 
 public:
     SdDesignNameDlg(Window* pWindow, const OUString& aName );
@@ -1581,26 +1580,24 @@ sal_Bool SdPublishingDlg::Save()
 }
 
 // SdDesignNameDlg Methods
-SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const OUString& aName):
-                ModalDialog             (pWindow, SdResId( DLG_DESIGNNAME )),
-                m_aEdit                 (this, SdResId(EDT_NAME)),
-                m_aBtnOK                (this, SdResId(BTN_SAVE)),
-                m_aBtnCancel            (this, SdResId(BTN_NOSAVE))
+SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const OUString& aName)
+    : ModalDialog(pWindow, "NameDesignDialog", "modules/sdraw/ui/namedesign.ui")
 {
-    FreeResource();
-    m_aEdit.SetModifyHdl(LINK(this, SdDesignNameDlg, ModifyHdl ));
-    m_aEdit.SetText(aName);
-    m_aBtnOK.Enable(!aName.isEmpty());
+    get(m_pEdit, "entry");
+    get(m_pBtnOK, "ok");
+    m_pEdit->SetModifyHdl(LINK(this, SdDesignNameDlg, ModifyHdl ));
+    m_pEdit->SetText(aName);
+    m_pBtnOK->Enable(!aName.isEmpty());
 }
 
 OUString SdDesignNameDlg::GetDesignName()
 {
-    return m_aEdit.GetText();
+    return m_pEdit->GetText();
 }
 
 IMPL_LINK_NOARG(SdDesignNameDlg, ModifyHdl)
 {
-    m_aBtnOK.Enable(!m_aEdit.GetText().isEmpty());
+    m_pBtnOK->Enable(!m_pEdit->GetText().isEmpty());
 
     return 0;
 }

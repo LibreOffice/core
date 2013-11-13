@@ -123,11 +123,4 @@
 
 #define DLG_PUBLISHING 739
 
-//////////////////////////////
-
-#define BTN_SAVE    1
-#define BTN_NOSAVE  2
-#define EDT_NAME    3
-#define DLG_DESIGNNAME 740
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

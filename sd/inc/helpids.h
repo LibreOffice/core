@@ -88,8 +88,6 @@
 #define HID_SD_CHGFOIL_OBJECTS                                  "SD_HID_SD_CHGFOIL_OBJECTS"
 #define HID_SD_CHGFOIL_NAME                                     "SD_HID_SD_CHGFOIL_NAME"
 
-#define HID_SD_HTMLEXPORT_DLG_DNAME                             "SD_HID_SD_HTMLEXPORT_DLG_DNAME"
-
 #define HID_FM_CTL_SELECTION                                    "SD_HID_FM_CTL_SELECTION"
 
 #define HID_SD_AUTOPILOT_REGION                                 "SD_HID_SD_AUTOPILOT_REGION"

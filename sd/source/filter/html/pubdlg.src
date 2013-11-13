@@ -693,42 +693,4 @@ ModalDialog DLG_PUBLISHING
     };
 };
 
-ModalDialog DLG_DESIGNNAME
-{
-    HelpID = HID_SD_HTMLEXPORT_DLG_DNAME;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 160 , 40 ) ;
-    Moveable = TRUE ;
-
-    Edit EDT_NAME
-    {
-        HelpID = "sd:Edit:DLG_DESIGNNAME:EDT_NAME";
-        BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 4, 4 );
-        Size = MAP_APPFONT ( 152, 14 );
-        LEFT = TRUE;
-    };
-
-    OKButton BTN_SAVE
-    {
-        OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 25 , 22 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Save";
-    };
-
-    CancelButton BTN_NOSAVE
-    {
-        OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 22 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Do Not Save";
-    };
-    Text [ en-US ] = "Name HTML Design";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
