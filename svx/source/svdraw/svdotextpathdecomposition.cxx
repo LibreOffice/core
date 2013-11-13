@@ -75,7 +75,6 @@ namespace
         xub_StrLen                                  mnTextStart;
         xub_StrLen                                  mnTextLength;
         sal_Int32                                   mnParagraph;
-        xub_StrLen                                  mnIndex;
         SvxFont                                     maFont;
         ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
         ::com::sun::star::lang::Locale              maLocale;
@@ -90,7 +89,6 @@ namespace
             mnTextStart(rInfo.mnTextStart),
             mnTextLength(rInfo.mnTextLen),
             mnParagraph(rInfo.mnPara),
-            mnIndex(rInfo.mnIndex),
             maFont(rInfo.mrFont),
             maDblDXArray(),
             maLocale(rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale()),
@@ -123,12 +121,10 @@ namespace
             return (maOffset.getY() < rComp.maOffset.getY());
         }
 
-        const basegfx::B2DVector& getOffset() const { return maOffset; }
         const OUString& getText() const { return maText; }
         xub_StrLen getTextStart() const { return mnTextStart; }
         xub_StrLen getTextLength() const { return mnTextLength; }
         sal_Int32 getParagraph() const { return mnParagraph; }
-        xub_StrLen getIndex() const { return mnIndex; }
         const SvxFont& getFont() const { return maFont; }
         bool isRTL() const { return mbRTL; }
         const ::std::vector< double >& getDoubleDXArray() const { return maDblDXArray; }
