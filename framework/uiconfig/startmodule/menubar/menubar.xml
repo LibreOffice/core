@@ -25,63 +25,18 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:CloseDoc"/>
-            <menu:menuitem menu:id=".uno:Save"/>
-            <menu:menuitem menu:id=".uno:SaveAs"/>
-            <menu:menuitem menu:id=".uno:SaveAll"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SendMail"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Print"/>
-            <menu:menuitem menu:id=".uno:PrinterSetup"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Quit"/>
-        </menu:menupopup>
-    </menu:menu>
-    <menu:menu menu:id=".uno:EditMenu">
-        <menu:menupopup>
-            <menu:menuitem menu:id=".uno:Undo"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Cut"/>
-            <menu:menuitem menu:id=".uno:Copy"/>
-            <menu:menuitem menu:id=".uno:Paste"/>
-        </menu:menupopup>
-    </menu:menu>
-    <menu:menu menu:id=".uno:ViewMenu">
-        <menu:menupopup>
-            <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-            <menu:menuitem menu:id=".uno:StatusBarVisible"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
         <menu:menupopup>
-            <menu:menu menu:id=".uno:MacrosMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:MacroRecorder"/>
-                    <menu:menuitem menu:id=".uno:RunMacro"/>
-                    <menu:menu menu:id=".uno:ScriptOrganizer"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
-                </menu:menupopup>
-            </menu:menu>
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
-            <menu:menuitem menu:id=".uno:ConfigureDialog"/>
             <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
-        </menu:menupopup>
-    </menu:menu>
-    <menu:menu menu:id=".uno:WindowList">
-        <menu:menupopup>
-            <menu:menuitem menu:id=".uno:NewWindow"/>
-            <menu:menuitem menu:id=".uno:CloseWin"/>
-            <menu:menuseparator/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:HelpMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex"/>
-            <menu:menuitem menu:id=".uno:ExtendedHelp"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SendFeedback"/>
             <menu:menuseparator/>
