@@ -38,7 +38,6 @@ public:
     WriterHelper( xmlTextWriterPtr );
     ~WriterHelper();
     operator xmlTextWriterPtr();
-    xmlTextWriterPtr operator->();
     void startElement( const char* element );
     void endElement();
     void writeFormatAttribute( const char* attribute, const char* format, ... )
@@ -73,11 +72,6 @@ WriterHelper::~WriterHelper()
 }
 
 WriterHelper::operator xmlTextWriterPtr()
-{
-    return writer;
-}
-
-xmlTextWriterPtr WriterHelper::operator->()
 {
     return writer;
 }
