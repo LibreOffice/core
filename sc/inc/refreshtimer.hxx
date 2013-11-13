@@ -22,6 +22,7 @@
 
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
+#include <scdllapi.h>
 
 class ScRefreshTimerControl
 {
@@ -55,8 +56,8 @@ public:
     sal_uLong GetRefreshDelay() const;
     void StopRefreshTimer();
 
-    virtual void SetRefreshDelay( sal_uLong nSeconds );
-    virtual void Timeout();
+    SC_DLLPUBLIC virtual void SetRefreshDelay( sal_uLong nSeconds );
+    SC_DLLPUBLIC virtual void Timeout() SAL_OVERRIDE;
 
 private:
     void Start();
