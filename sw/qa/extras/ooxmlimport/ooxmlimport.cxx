@@ -1505,6 +1505,13 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69548, "fdo69548.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("#this is a bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
+{
+    // Document has wp:anchor, not wp:inline, so handle it accordingly.
+    text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eValue);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

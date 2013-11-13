@@ -986,6 +986,16 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
 
                         m_pImpl->bIsGraphic = true;
                     }
+
+                    if (bUseShape && m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+                    {
+                        // If we are here, this is a drawingML shape. For those, only dmapper (and not oox) knows the anchoring infos (just like for Writer pictures).
+                        // But they aren't Writer pictures, either (which are already handled above).
+                        uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
+                        xShapeProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+
+                        // TODO handle more properties here like HoriOrientPosition, etc.
+                    }
                 }
             }
         break;
