@@ -1,6 +1,5 @@
-diff -uriwb build/icu.old/source/common/uposixdefs.h misc/build/icu/source/common/uposixdefs.h
---- build/icu.old/source/common/uposixdefs.h	2012-04-05 21:46:18.000000000 +0100
-+++ build/icu/source/common/uposixdefs.h	2012-06-21 15:45:17.613369477 +0100
+--- build/icu.old/source/common/uposixdefs.h
++++ build/icu/source/common/uposixdefs.h
 @@ -52,7 +52,7 @@
   *
   * z/OS needs this definition for timeval and to get usleep.
@@ -10,3 +9,4 @@ diff -uriwb build/icu.old/source/common/uposixdefs.h misc/build/icu/source/commo
  #   define _XOPEN_SOURCE_EXTENDED 1
  #endif
  
+

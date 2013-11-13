@@ -1,17 +1,17 @@
---- misc/icu/source/config/mh-linux
-+++ misc/build/icu/source/config/mh-linux
-@@ -30,7 +30,7 @@
+--- misc/icu/source/config/mh-linux	2013-10-05 03:50:00.000000000 +0700
++++ misc/build/icu/source/config/mh-linux	2013-11-10 17:11:46.856222557 +0700
+@@ -25,7 +25,7 @@
  
  ## Compiler switch to embed a library name
  # The initial tab in the next line is to prevent icu-config from reading it.
 -	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
-+#	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
++	#LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
  #SH# # We can't depend on MIDDLE_SO_TARGET being set.
  #SH# LD_SONAME=
  
---- misc/icu/source/configure
-+++ misc/build/icu/source/configure
-@@ -5053,7 +5053,7 @@
+--- misc/icu/source/configure	2013-10-05 03:54:58.000000000 +0700
++++ misc/build/icu/source/configure	2013-11-10 17:19:19.200218763 +0700
+@@ -4872,7 +4872,7 @@
  	else
  		icu_cv_host_frag=mh-linux-va
  	fi ;;
@@ -20,17 +20,18 @@
  *-*-cygwin|*-*-mingw32|*-*-mingw64)
  	if test "$GCC" = yes; then
  		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-@@ -6127,6 +6127,9 @@
+@@ -6032,6 +6032,10 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
  case "${host}" in
 +arm-*-linux-androideabi)
-+    GENCCODE_ASSEMBLY="-a gcc-android-arm"
-+    ;;
++    if test "$GCC" = yes; then
++        GENCCODE_ASSEMBLY="-a gcc-android-arm"
++    fi ;;
  *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
      if test "$GCC" = yes; then
          # We're using gcc, and the simple -a gcc command line works for genccode
-@@ -7200,6 +7203,10 @@
+@@ -7104,6 +7108,10 @@
      # wchar_t can be used
      CHECK_UTF16_STRING_RESULT="available"
      ;;
@@ -41,9 +42,10 @@
  *)
      ;;
  esac
---- misc/icu/source/common/putilimp.h
-+++ misc/build/icu/source/common/putilimp.h
-@@ -86,6 +86,8 @@
+
+--- misc/icu/source/common/putilimp.h	2013-10-05 03:49:30.000000000 +0700
++++ misc/build/icu/source/common/putilimp.h	2013-11-10 17:21:26.224217698 +0700
+@@ -87,6 +87,8 @@
      /* Use the predefined value. */
  #elif U_PLATFORM_HAS_WIN32_API
  #   define U_HAVE_NL_LANGINFO_CODESET 0
@@ -52,9 +54,10 @@
  #else
  #   define U_HAVE_NL_LANGINFO_CODESET 1
  #endif
---- misc/icu/source/common/unicode/platform.h
-+++ misc/build/icu/source/common/unicode/platform.h
-@@ -641,7 +641,7 @@
+
+--- misc/icu/source/common/unicode/platform.h	2013-10-05 03:49:10.000000000 +0700
++++ misc/build/icu/source/common/unicode/platform.h	2013-11-10 17:22:27.160217186 +0700
+@@ -703,7 +703,7 @@
  #elif defined(U_STATIC_IMPLEMENTATION)
  #   define U_EXPORT
  #elif defined(__GNUC__)
@@ -63,3 +66,4 @@
  #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
     || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
  #   define U_EXPORT __global
+

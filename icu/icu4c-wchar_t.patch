@@ -1,5 +1,5 @@
---- misc/icu/source/config/mh-cygwin-msvc	2012-05-10 11:42:22.886869800 +0100
-+++ misc/build/icu/source/config/mh-cygwin-msvc	2012-05-10 11:42:45.110227500 +0100
+--- misc/icu/source/config/mh-cygwin-msvc
++++ misc/build/icu/source/config/mh-cygwin-msvc
 @@ -43,10 +43,9 @@
  
  # /GF pools strings and places them into read-only memory
@@ -13,3 +13,4 @@
  CPPFLAGS+=-D_CRT_SECURE_NO_DEPRECATE
  DEFS+=-DWIN32 -DCYGWINMSVC
  LDFLAGS+=/nologo
+

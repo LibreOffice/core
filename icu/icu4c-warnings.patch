@@ -1,6 +1,6 @@
 --- misc/icu/source/common/unicode/utf16.h
 +++ misc/build/icu/source/common/unicode/utf16.h
-@@ -316,6 +316,7 @@
+@@ -319,6 +319,7 @@
          (s)[(i)++]=(uint16_t)(((c)&0x3ff)|0xdc00); \
      } else /* c>0x10ffff or not enough space */ { \
          (isError)=TRUE; \
@@ -10,7 +10,7 @@
  
 --- misc/icu/source/common/unicode/utypes.h
 +++ misc/build/icu/source/common/unicode/utypes.h
-@@ -399,7 +399,7 @@ typedef double UDate;
+@@ -399,7 +399,7 @@
   * some Linux/Unix compilers have problems with defining global new/delete.
   * On Windows, it is _MSC_VER>=1200 for MSVC 6.0 and higher.
   */
@@ -19,3 +19,4 @@
  
  #ifndef U_HIDE_INTERNAL_API
  /**
+

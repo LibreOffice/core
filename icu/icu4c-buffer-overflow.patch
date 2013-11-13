@@ -11,7 +11,7 @@ Index: icu/source/tools/pkgdata/pkgdata.cpp
 ===================================================================
 --- build/icu.orig/source/tools/pkgdata/pkgdata.cpp
 +++ build/icu/source/tools/pkgdata/pkgdata.cpp
-@@ -1914,12 +1914,12 @@ static void loadLists(UPKGOptions *o, UE
+@@ -1980,12 +1980,12 @@
      const char cmd[] = "icu-config --incpkgdatafile";
  
      /* #1 try the same path where pkgdata was called from. */
@@ -27,3 +27,4 @@ Index: icu/source/tools/pkgdata/pkgdata.cpp
        
        if(verbose) {
          fprintf(stdout, "# Calling icu-config: %s\n", cmdBuf);
+
