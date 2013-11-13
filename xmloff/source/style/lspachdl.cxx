@@ -44,7 +44,7 @@ bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     style::LineSpacing aLSp;
     sal_Int32 nTemp = 0;
 
-    if( -1 != rStrImpValue.indexOf( sal_Unicode( '%' ) ) )
+    if( -1 != rStrImpValue.indexOf( '%' ) )
     {
         aLSp.Mode = style::LineSpacingMode::PROP;
         if (!::sax::Converter::convertPercent( nTemp, rStrImpValue ))

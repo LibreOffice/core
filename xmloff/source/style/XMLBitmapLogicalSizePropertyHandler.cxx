@@ -40,7 +40,7 @@ bool XMLBitmapLogicalSizePropertyHandler::importXML(
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    rValue = ::cppu::bool2any( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 );
+    rValue = ::cppu::bool2any( rStrImpValue.indexOf( '%' ) == -1 );
     return true;
 }
 

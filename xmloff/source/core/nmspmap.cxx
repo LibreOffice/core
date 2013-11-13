@@ -180,7 +180,7 @@ OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
         const OUString & prefix( (*aIter).second->sPrefix );
         if (!prefix.isEmpty()) // not default namespace
         {
-            sAttrName.append( sal_Unicode(':') );
+            sAttrName.append( ':' );
             sAttrName.append( prefix );
         }
     }
@@ -209,7 +209,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
             sQName.append ( sXMLNS );
             if (!rLocalName.isEmpty()) // not default namespace
             {
-                sQName.append ( sal_Unicode(':') );
+                sQName.append ( ':' );
                 sQName.append ( rLocalName );
             }
             return sQName.makeStringAndClear();
@@ -219,7 +219,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
             // this namespace is reserved, and needs not to be declared
             OUStringBuffer sQName;
             sQName.append ( GetXMLToken(XML_XML) );
-            sQName.append ( sal_Unicode(':') );
+            sQName.append ( ':' );
             sQName.append ( rLocalName );
             return sQName.makeStringAndClear();
         }
@@ -243,7 +243,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                     if (!prefix.isEmpty()) // not default namespace
                     {
                         sQName.append( prefix );
-                        sQName.append( sal_Unicode(':') );
+                        sQName.append( ':' );
                     }
                     sQName.append ( rLocalName );
                     if (bCache)
@@ -307,7 +307,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
     {
     rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry());
 
-        sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
+        sal_Int32 nColonPos = rAttrName.indexOf( ':' );
         if( -1L == nColonPos )
         {
             // case: no ':' found -> default namespace

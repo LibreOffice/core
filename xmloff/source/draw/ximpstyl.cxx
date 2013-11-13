@@ -1219,7 +1219,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
     {
         uno::Reference< container::XNameAccess > xMasterPageStyles( rStyleFamilies->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
         OUString sPrefix(rMaster.GetDisplayName());
-        sPrefix += OUString(static_cast<sal_Unicode>('-'));
+        sPrefix += OUString('-');
         ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
     }
     catch (const uno::Exception&)
@@ -1329,7 +1329,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
 
                 if( nPrefLen )
                 {
-                    sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( sal_Unicode('-') ) + 1;
+                    sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( '-' ) + 1;
                     if( (nPrefLen != nStylePrefLen) ||  (aStyleName.compareTo( rPrefix, nPrefLen ) != 0) )
                         continue;
 
@@ -1425,7 +1425,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
             OUString aStyleName(pStyle->GetDisplayName());
             if( nPrefLen )
             {
-                sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( sal_Unicode('-') ) + 1;
+                sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( '-' ) + 1;
                 if( (nPrefLen != nStylePrefLen) ||  (aStyleName.compareTo( rPrefix, nPrefLen ) != 0) )
                     continue;
 
@@ -1439,7 +1439,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                 OUString sParentStyleDisplayName( const_cast< SvXMLImport& >( GetImport() ).GetStyleDisplayName( pStyle->GetFamily(), pStyle->GetParentName() ) );
                 if( nPrefLen )
                 {
-                    sal_Int32 nStylePrefLen = sParentStyleDisplayName.lastIndexOf( sal_Unicode('-') ) + 1;
+                    sal_Int32 nStylePrefLen = sParentStyleDisplayName.lastIndexOf( '-' ) + 1;
                     if( (nPrefLen != nStylePrefLen) || (sParentStyleDisplayName.compareTo( rPrefix, nPrefLen ) != 0) )
                         continue;
 

@@ -141,7 +141,7 @@ sal_Bool XMLDashStyleImport::importXML(
 
         case XML_TOK_DASH_DOTS1LEN:
             {
-                if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // it's a percentage
+                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
                 {
                     bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.DotLen, rStrValue);
@@ -160,7 +160,7 @@ sal_Bool XMLDashStyleImport::importXML(
 
         case XML_TOK_DASH_DOTS2LEN:
             {
-                if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // it's a percentage
+                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
                 {
                     bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.DashLen, rStrValue);
@@ -175,7 +175,7 @@ sal_Bool XMLDashStyleImport::importXML(
 
         case XML_TOK_DASH_DISTANCE:
             {
-                if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // it's a percentage
+                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
                 {
                     bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.Distance, rStrValue);

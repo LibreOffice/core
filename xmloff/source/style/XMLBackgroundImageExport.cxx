@@ -92,7 +92,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
 
         if( !aOut.isEmpty() )
         {
-            aOut.append( sal_Unicode( ' ' ) );
+            aOut.append( ' ' );
 
             switch( ePos )
             {

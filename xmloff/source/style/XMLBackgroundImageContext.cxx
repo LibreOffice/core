@@ -209,7 +209,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     {
                         bOK = sal_False;
                     }
-                    else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
+                    else if( -1 != aToken.indexOf( '%' ) )
                     {
                         sal_Int32 nPrc = 50;
                         if (::sax::Converter::convertPercent( nPrc, aToken ))

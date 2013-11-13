@@ -168,9 +168,9 @@ bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
         return false;
 
     rUnitConverter.convertMeasureToXML( aOut, aBorderLine.InnerLineWidth );
-    aOut.append( sal_Unicode( ' ' ) );
+    aOut.append( ' ' );
     rUnitConverter.convertMeasureToXML( aOut, aBorderLine.LineDistance );
-    aOut.append( sal_Unicode( ' ' ) );
+    aOut.append( ' ' );
     rUnitConverter.convertMeasureToXML( aOut, aBorderLine.OuterLineWidth );
 
     rStrExpValue = aOut.makeStringAndClear();
@@ -304,7 +304,7 @@ bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, co
         ::sax::Converter::convertMeasure( aOut, nWidth,
                util::MeasureUnit::MM_100TH, util::MeasureUnit::POINT);
 
-        aOut.append( sal_Unicode( ' ' ) );
+        aOut.append( ' ' );
 
         XMLTokenEnum eStyleToken = XML_SOLID;
         switch ( aBorderLine.LineStyle )
@@ -345,7 +345,7 @@ bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, co
         }
         aOut.append( GetXMLToken( eStyleToken ) );
 
-        aOut.append( sal_Unicode( ' ' ) );
+        aOut.append( ' ' );
 
         ::sax::Converter::convertColor( aOut, aBorderLine.Color );
     }

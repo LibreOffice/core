@@ -377,35 +377,35 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     }
     sal_uInt16 nTemp = aDate.GetYear();
     if (nTemp < 1000)
-        rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( '0');
     if (nTemp < 100)
-        rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( '0');
     if (nTemp < 10)
-        rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( '0');
     rBuffer.append( sal_Int32( nTemp));
-    rBuffer.append( sal_Unicode('-'));
+    rBuffer.append( '-');
     nTemp = aDate.GetMonth();
     if (nTemp < 10)
-        rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( '0');
     rBuffer.append( sal_Int32( nTemp));
-    rBuffer.append( sal_Unicode('-'));
+    rBuffer.append( '-');
     nTemp = aDate.GetDay();
     if (nTemp < 10)
-        rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( '0');
     rBuffer.append( sal_Int32( nTemp));
     if(bHasTime || bAddTimeIf0AM)
     {
-        rBuffer.append( sal_Unicode('T'));
+        rBuffer.append( 'T');
         if (fHoursValue < 10)
-            rBuffer.append( sal_Unicode('0'));
+            rBuffer.append( '0');
         rBuffer.append( sal_Int32( fHoursValue));
-        rBuffer.append( sal_Unicode(':'));
+        rBuffer.append( ':');
         if (fMinsValue < 10)
-            rBuffer.append( sal_Unicode('0'));
+            rBuffer.append( '0');
         rBuffer.append( sal_Int32( fMinsValue));
-        rBuffer.append( sal_Unicode(':'));
+        rBuffer.append( ':');
         if (fSecsValue < 10)
-            rBuffer.append( sal_Unicode('0'));
+            rBuffer.append( '0');
         rBuffer.append( sal_Int32( fSecsValue));
         if (f100SecsValue > 0.0)
         {
@@ -414,7 +414,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
                         XML_MAXDIGITSCOUNT_TIME - nCount, '.', sal_True));
             if ( a100th.getLength() > 2 )
             {
-                rBuffer.append( sal_Unicode('.'));
+                rBuffer.append( '.');
                 rBuffer.append( a100th.copy( 2 ) );     // strip 0.
             }
         }
@@ -448,7 +448,7 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
 }
 
 
-SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator /* = sal_Unicode(' ') */ )
+SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator /* = ' ' */ )
 : maTokenString( rString ), mnNextTokenPos(0), mcSeparator( cSeparator )
 {
 }
@@ -485,7 +485,7 @@ static bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUStri
         return false;
 
     sal_Int32 nPos(1L);
-    sal_Int32 nFound = _sValue.indexOf(sal_Unicode(' '), nPos);
+    sal_Int32 nFound = _sValue.indexOf(' ', nPos);
 
     if(nFound == -1 || nFound <= nPos)
         return false;
@@ -493,7 +493,7 @@ static bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUStri
     _rContentX = _sValue.copy(nPos, nFound - nPos);
 
     nPos = nFound + 1;
-    nFound = _sValue.indexOf(sal_Unicode(' '), nPos);
+    nFound = _sValue.indexOf(' ', nPos);
 
     if(nFound == -1 || nFound <= nPos)
         return false;
@@ -501,7 +501,7 @@ static bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUStri
     _rContentY = _sValue.copy(nPos, nFound - nPos);
 
     nPos = nFound + 1;
-    nFound = _sValue.indexOf(sal_Unicode(')'), nPos);
+    nFound = _sValue.indexOf(')', nPos);
 
     if(nFound == -1 || nFound <= nPos)
         return false;
@@ -519,20 +519,20 @@ sal_Bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, co
 
     rtl_math_ConversionStatus eStatus;
 
-    rVector.setX(::rtl::math::stringToDouble(aContentX, sal_Unicode('.'),
-            sal_Unicode(','), &eStatus, NULL));
+    rVector.setX(::rtl::math::stringToDouble(aContentX, '.',
+            ',', &eStatus, NULL));
 
     if( eStatus != rtl_math_ConversionStatus_Ok )
         return sal_False;
 
-    rVector.setY(::rtl::math::stringToDouble(aContentY, sal_Unicode('.'),
-            sal_Unicode(','), &eStatus, NULL));
+    rVector.setY(::rtl::math::stringToDouble(aContentY, '.',
+            ',', &eStatus, NULL));
 
     if( eStatus != rtl_math_ConversionStatus_Ok )
         return sal_False;
 
-    rVector.setZ(::rtl::math::stringToDouble(aContentZ, sal_Unicode('.'),
-            sal_Unicode(','), &eStatus, NULL));
+    rVector.setZ(::rtl::math::stringToDouble(aContentZ, '.',
+            ',', &eStatus, NULL));
 
 
     return ( eStatus == rtl_math_ConversionStatus_Ok );
@@ -541,13 +541,13 @@ sal_Bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, co
 /** convert ::basegfx::B3DVector to string */
 void SvXMLUnitConverter::convertB3DVector( OUStringBuffer &rBuffer, const ::basegfx::B3DVector& rVector )
 {
-    rBuffer.append(sal_Unicode('('));
+    rBuffer.append('(');
     ::sax::Converter::convertDouble(rBuffer, rVector.getX());
-    rBuffer.append(sal_Unicode(' '));
+    rBuffer.append(' ');
     ::sax::Converter::convertDouble(rBuffer, rVector.getY());
-    rBuffer.append(sal_Unicode(' '));
+    rBuffer.append(' ');
     ::sax::Converter::convertDouble(rBuffer, rVector.getZ());
-    rBuffer.append(sal_Unicode(')'));
+    rBuffer.append(')');
 }
 
 /** convert string to Position3D */
@@ -569,13 +569,13 @@ sal_Bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
 void SvXMLUnitConverter::convertPosition3D( OUStringBuffer &rBuffer,
                                            const drawing::Position3D& rPosition )
 {
-    rBuffer.append( sal_Unicode('(') );
+    rBuffer.append( '(' );
     convertDouble( rBuffer, rPosition.PositionX, sal_True );
-    rBuffer.append( sal_Unicode(' ') );
+    rBuffer.append( ' ' );
     convertDouble( rBuffer, rPosition.PositionY, sal_True );
-    rBuffer.append( sal_Unicode(' ') );
+    rBuffer.append( ' ' );
     convertDouble( rBuffer, rPosition.PositionZ, sal_True );
-    rBuffer.append( sal_Unicode(')') );
+    rBuffer.append( ')' );
 }
 
 sal_Bool SvXMLUnitConverter::convertNumFormat(
@@ -599,11 +599,11 @@ sal_Bool SvXMLUnitConverter::convertNumFormat(
     {
         switch( rNumFmt[0] )
         {
-        case sal_Unicode('1'):  rType = NumberingType::ARABIC;          break;
-        case sal_Unicode('a'):  rType = NumberingType::CHARS_LOWER_LETTER;  break;
-        case sal_Unicode('A'):  rType = NumberingType::CHARS_UPPER_LETTER;  break;
-        case sal_Unicode('i'):  rType = NumberingType::ROMAN_LOWER; break;
-        case sal_Unicode('I'):  rType = NumberingType::ROMAN_UPPER; break;
+        case '1':  rType = NumberingType::ARABIC;          break;
+        case 'a':  rType = NumberingType::CHARS_LOWER_LETTER;  break;
+        case 'A':  rType = NumberingType::CHARS_UPPER_LETTER;  break;
+        case 'i':  rType = NumberingType::ROMAN_LOWER; break;
+        case 'I':  rType = NumberingType::ROMAN_UPPER; break;
         default:                bExt = true; break;
         }
         if( !bExt && IsXMLToken( rNumLetterSync, XML_TRUE ) )
@@ -818,7 +818,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
         }
         else
         {
-            aBuffer.append( static_cast< sal_Unicode >( '_' ) );
+            aBuffer.append( '_' );
             if( c > 0x0fff )
                 aBuffer.append( static_cast< sal_Unicode >(
                             aHexTab[ (c >> 12) & 0x0f ]  ) );
@@ -830,7 +830,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
                         aHexTab[ (c >> 4) & 0x0f ] ) );
             aBuffer.append( static_cast< sal_Unicode >(
                         aHexTab[ c & 0x0f ] ) );
-            aBuffer.append( static_cast< sal_Unicode >( '_' ) );
+            aBuffer.append( '_' );
             if( pEncoded )
                 *pEncoded = sal_True;
         }

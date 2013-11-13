@@ -66,7 +66,7 @@ bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno
         {
             bRet = false;
         }
-        else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
+        else if( -1 != aToken.indexOf( '%' ) )
         {
             sal_Int32 nPrc = 50;
             if (::sax::Converter::convertPercent( nPrc, aToken ))
@@ -181,7 +181,7 @@ bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const uno
 
         if( bRet )
         {
-            aOut.append( sal_Unicode( ' ' ) );
+            aOut.append( ' ' );
 
             switch( eLocation )
             {

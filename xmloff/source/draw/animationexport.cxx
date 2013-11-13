@@ -607,7 +607,7 @@ void AnimationsExporterImpl::exportTransitionNode()
                 mxPageProps->getPropertyValue("TransitionDuration") >>= fDuration;
 
                 ::sax::Converter::convertDouble( sTmp, fDuration );
-                sTmp.append( sal_Unicode('s'));
+                sTmp.append( 's');
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
 
                 SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTransition, getAnimationsEnumMap(Animations_EnumMap_TransitionType) );
@@ -792,7 +792,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
             if( aTemp >>= fTemp )
             {
                 ::sax::Converter::convertDouble( sTmp, fTemp );
-                sTmp.append( sal_Unicode('s'));
+                sTmp.append( 's');
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
             }
             else
@@ -1059,7 +1059,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
                 else
                 {
                     sTmp.append( fTemp );
-                    sTmp.append( (sal_Unicode)'s' );
+                    sTmp.append( 's' );
                     mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, sTmp.makeStringAndClear() );
                 }
             }
@@ -1201,7 +1201,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 while( nLength-- )
                 {
                     if( !sTmp.isEmpty() )
-                        sTmp.append( (sal_Unicode)';' );
+                        sTmp.append( ';' );
 
                     sTmp.append( *p++ );
                 }
@@ -1245,7 +1245,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 while( nLength-- )
                 {
                     if( !sTmp.isEmpty() )
-                        sTmp.append( (sal_Unicode)';' );
+                        sTmp.append( ';' );
 
                     sTmp.append( OUString::number(p->Time) + "," + OUString::number(p->Progress) );
 
@@ -1458,7 +1458,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         const ValuePair* pValuePair = static_cast< const ValuePair* >( rValue.getValue() );
         OUStringBuffer sTmp2;
         convertValue( eAttributeName, sTmp, pValuePair->First );
-        sTmp.append( (sal_Unicode)',' );
+        sTmp.append( ',' );
         convertValue( eAttributeName, sTmp2, pValuePair->Second );
         sTmp.append( sTmp2.makeStringAndClear() );
     }
@@ -1474,7 +1474,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         for( nElement = 0; nElement < nLength; nElement++, pAny++ )
         {
             if( !sTmp.isEmpty() )
-                sTmp.append( (sal_Unicode)';' );
+                sTmp.append( ';' );
             convertValue( eAttributeName, sTmp2, *pAny );
             sTmp.append( sTmp2.makeStringAndClear() );
         }
@@ -1556,7 +1556,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
         for( nElement = 0; nElement < nLength; nElement++, pAny++ )
         {
             if( !sTmp.isEmpty() )
-                sTmp.append( (sal_Unicode)';' );
+                sTmp.append( ';' );
             convertTiming( sTmp2, *pAny );
             sTmp.append( sTmp2.makeStringAndClear() );
         }
@@ -1564,7 +1564,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
     else if( rValue.getValueType() == ::getCppuType((const double*)0) )
     {
         sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
-        sTmp.append( sal_Unicode('s'));
+        sTmp.append( 's');
     }
     else if( rValue.getValueType() == ::getCppuType((const Timing*)0) )
     {
@@ -1582,7 +1582,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
             if( pEvent->Source.hasValue() )
             {
                 convertSource( sTmp, pEvent->Source );
-                sTmp.append( (sal_Unicode)'.' );
+                sTmp.append( '.' );
             }
 
             SvXMLUnitConverter::convertEnum( sTmp2, (sal_uInt16)pEvent->Trigger, getAnimationsEnumMap(Animations_EnumMap_EventTrigger) );
@@ -1595,7 +1595,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
             convertTiming( sTmp2, pEvent->Offset );
 
             if( !sTmp.isEmpty() )
-                sTmp.append( (sal_Unicode)'+' );
+                sTmp.append( '+' );
 
             sTmp.append( sTmp2.makeStringAndClear() );
         }

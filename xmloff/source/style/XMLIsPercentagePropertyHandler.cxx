@@ -34,7 +34,7 @@ bool XMLIsPercentagePropertyHandler::importXML(
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    rValue <<= (sal_Bool)(rStrImpValue.indexOf( sal_Unicode('%') ) != -1);
+    rValue <<= (sal_Bool)(rStrImpValue.indexOf( '%' ) != -1);
     return true;
 }
 

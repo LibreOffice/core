@@ -80,7 +80,7 @@ void XMLStarBasicExportHandler::Export(
     {
         OUStringBuffer sTmp( sLocation.getLength() + sName.getLength() + 1 );
         sTmp = sLocation;
-        sTmp.append( sal_Unicode( ':' ) );
+        sTmp.append( ':' );
         sTmp.append( sName );
         rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME,
                             sTmp.makeStringAndClear());

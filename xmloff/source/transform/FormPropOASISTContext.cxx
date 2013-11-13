@@ -44,10 +44,10 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
     sal_Int32 nLen = rValue.getLength();
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rValue[nPos] )
+    while( nPos < nLen && ' ' == rValue[nPos] )
         nPos++;
 
-    if( nPos < nLen && sal_Unicode('-') == rValue[nPos] )
+    if( nPos < nLen && '-' == rValue[nPos] )
     {
         bNeg = sal_True;
         nPos++;
@@ -56,17 +56,17 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
     // get number
     sal_Bool bOverflow = sal_False;
     while( nPos < nLen &&
-           sal_Unicode('0') <= rValue[nPos] &&
-           sal_Unicode('9') >= rValue[nPos] )
+           '0' <= rValue[nPos] &&
+           '9' >= rValue[nPos] )
     {
         nVal *= 10;
-        nVal += (rValue[nPos] - sal_Unicode('0'));
+        nVal += (rValue[nPos] - '0');
         bOverflow |= (nVal > (bNeg ? 2147483648UL : 2147483647UL));
         nPos++;
     }
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rValue[nPos] )
+    while( nPos < nLen && ' ' == rValue[nPos] )
         nPos++;
 
     if( nPos == nLen )

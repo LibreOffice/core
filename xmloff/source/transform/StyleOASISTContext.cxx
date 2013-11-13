@@ -454,7 +454,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_CAPTION_ESCAPE_OASIS:
                     {
                         OUString aAttrValue( rAttrValue );
-                        if( aAttrValue.indexOf( sal_Unicode('%') ) != -1 )
+                        if( aAttrValue.indexOf( '%' ) != -1 )
                         {
                             sal_Int32 nValue = 0;
                             ::sax::Converter::convertPercent(nValue, rAttrValue);
@@ -538,7 +538,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_OPACITY_FIX:
                     {
                         sal_Int32 nValue;
-                        if( rAttrValue.indexOf( sal_Unicode('%') ) != -1 )
+                        if( rAttrValue.indexOf( '%' ) != -1 )
                         {
                             ::sax::Converter::convertPercent(nValue, rAttrValue);
                         }

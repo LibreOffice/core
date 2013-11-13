@@ -1662,7 +1662,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             eClickAction == presentation::ClickAction_DOCUMENT )
         {
             if( eClickAction == presentation::ClickAction_BOOKMARK )
-                msBuffer.append( sal_Unicode('#') );
+                msBuffer.append( '#' );
 
             msBuffer.append( aStrBookmark );
             mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(msBuffer.makeStringAndClear()) );
@@ -3637,7 +3637,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
 void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter )
 {
     if ( !rStrBuffer.isEmpty() )
-        rStrBuffer.append( (sal_Unicode)' ' );
+        rStrBuffer.append( ' ' );
     if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
         double fNumber = 0.0;
@@ -3659,7 +3659,7 @@ void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing:
 
             case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
             {
-                rStrBuffer.append( (sal_Unicode)'$' );
+                rStrBuffer.append( '$' );
                 rStrBuffer.append( OUString::number( nValue ) );
             }
             break;
@@ -3699,7 +3699,7 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUString >& 
     sal_Int32 i;
     for ( i = 0; i < rEquations.getLength(); i++ )
     {
-        OUString aStr(static_cast<sal_Unicode>('f'));
+        OUString aStr('f');
         aStr += OUString::number( i );
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStr );
 
@@ -3707,11 +3707,11 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUString >& 
         sal_Int32 nIndex = 0;
         do
         {
-            nIndex = aStr.indexOf( (sal_Unicode)'?', nIndex );
+            nIndex = aStr.indexOf( '?', nIndex );
             if ( nIndex != -1 )
             {
                 OUString aNew( aStr.copy( 0, nIndex + 1 ) );
-                aNew += OUString(static_cast<sal_Unicode>('f'));
+                aNew += OUString('f');
                 aNew += aStr.copy( nIndex + 1, ( aStr.getLength() - nIndex ) - 1 );
                 aStr = aNew;
                 nIndex++;
@@ -3921,47 +3921,47 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
             aSegment = rSegments[ j ];
 
         if ( !aStrBuffer.isEmpty() )
-            aStrBuffer.append( (sal_Unicode)' ' );
+            aStrBuffer.append( ' ' );
 
         sal_Int32 nParameter = 0;
         switch( aSegment.Command )
         {
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
-                aStrBuffer.append( (sal_Unicode)'Z' ); break;
+                aStrBuffer.append( 'Z' ); break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
-                aStrBuffer.append( (sal_Unicode)'N' ); break;
+                aStrBuffer.append( 'N' ); break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
-                aStrBuffer.append( (sal_Unicode)'F' ); break;
+                aStrBuffer.append( 'F' ); break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
-                aStrBuffer.append( (sal_Unicode)'S' ); break;
+                aStrBuffer.append( 'S' ); break;
 
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
-                aStrBuffer.append( (sal_Unicode)'M' ); nParameter = 1; break;
+                aStrBuffer.append( 'M' ); nParameter = 1; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO :
-                aStrBuffer.append( (sal_Unicode)'L' ); nParameter = 1; break;
+                aStrBuffer.append( 'L' ); nParameter = 1; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
-                aStrBuffer.append( (sal_Unicode)'C' ); nParameter = 3; break;
+                aStrBuffer.append( 'C' ); nParameter = 3; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
-                aStrBuffer.append( (sal_Unicode)'T' ); nParameter = 3; break;
+                aStrBuffer.append( 'T' ); nParameter = 3; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
-                aStrBuffer.append( (sal_Unicode)'U' ); nParameter = 3; break;
+                aStrBuffer.append( 'U' ); nParameter = 3; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
-                aStrBuffer.append( (sal_Unicode)'A' ); nParameter = 4; break;
+                aStrBuffer.append( 'A' ); nParameter = 4; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARC :
-                aStrBuffer.append( (sal_Unicode)'B' ); nParameter = 4; break;
+                aStrBuffer.append( 'B' ); nParameter = 4; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
-                aStrBuffer.append( (sal_Unicode)'W' ); nParameter = 4; break;
+                aStrBuffer.append( 'W' ); nParameter = 4; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
-                aStrBuffer.append( (sal_Unicode)'V' ); nParameter = 4; break;
+                aStrBuffer.append( 'V' ); nParameter = 4; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
-                aStrBuffer.append( (sal_Unicode)'X' ); nParameter = 1; break;
+                aStrBuffer.append( 'X' ); nParameter = 1; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
-                aStrBuffer.append( (sal_Unicode)'Y' ); nParameter = 1; break;
+                aStrBuffer.append( 'Y' ); nParameter = 1; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO :
-                aStrBuffer.append( (sal_Unicode)'Q' ); nParameter = 2; break;
+                aStrBuffer.append( 'Q' ); nParameter = 2; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
                 if ( bExtended ) {
-                    aStrBuffer.append( (sal_Unicode)'G' );
+                    aStrBuffer.append( 'G' );
                     nParameter = 2;
                 } else {
                     aStrBuffer.setLength( aStrBuffer.getLength() - 1);
@@ -3971,25 +3971,25 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                 break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKEN :
                 if ( bExtended )
-                    aStrBuffer.append( (sal_Unicode)'H' );
+                    aStrBuffer.append( 'H' );
                 else
                     bNeedExtended = true;
                 break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS :
                 if ( bExtended )
-                    aStrBuffer.append( (sal_Unicode)'I' );
+                    aStrBuffer.append( 'I' );
                 else
                     bNeedExtended = true;
                 break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN :
                 if ( bExtended )
-                    aStrBuffer.append( (sal_Unicode)'J' );
+                    aStrBuffer.append( 'J' );
                 else
                     bNeedExtended = true;
                 break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS :
                 if ( bExtended )
-                    aStrBuffer.append( (sal_Unicode)'K' );
+                    aStrBuffer.append( 'K' );
                 else
                     bNeedExtended = true;
                 break;
@@ -4137,7 +4137,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 false,
                                                 util::MeasureUnit::PERCENT,
                                                 util::MeasureUnit::PERCENT);
-                                            aStrBuffer.append( (sal_Unicode)'%' );
+                                            aStrBuffer.append( '%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_BRIGHTNESS, aStr );
                                         }
@@ -4170,7 +4170,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 false,
                                                 util::MeasureUnit::PERCENT,
                                                 util::MeasureUnit::PERCENT);
-                                            aStrBuffer.append( (sal_Unicode)'%' );
+                                            aStrBuffer.append( '%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_DIFFUSION, aStr );
                                         }
@@ -4218,7 +4218,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 false,
                                                 util::MeasureUnit::PERCENT,
                                                 util::MeasureUnit::PERCENT);
-                                            aStrBuffer.append( (sal_Unicode)'%' );
+                                            aStrBuffer.append( '%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_LEVEL, aStr );
                                         }
@@ -4235,7 +4235,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 false,
                                                 util::MeasureUnit::PERCENT,
                                                 util::MeasureUnit::PERCENT);
-                                            aStrBuffer.append( (sal_Unicode)'%' );
+                                            aStrBuffer.append( '%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_LEVEL, aStr );
                                         }
@@ -4334,7 +4334,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 false,
                                                 util::MeasureUnit::PERCENT,
                                                 util::MeasureUnit::PERCENT);
-                                            aStrBuffer.append( (sal_Unicode)'%' );
+                                            aStrBuffer.append( '%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SHININESS, aStr );
                                         }
@@ -4363,7 +4363,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 false,
                                                 util::MeasureUnit::PERCENT,
                                                 util::MeasureUnit::PERCENT);
-                                            aStrBuffer.append( (sal_Unicode)'%' );
+                                            aStrBuffer.append( '%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SPECULARITY, aStr );
                                         }
@@ -4648,7 +4648,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                 for ( i = 0; i < nAdjustmentValues; i++ )
                 {
                     if ( i )
-                        aStrBuffer.append( (sal_Unicode)' ' );
+                        aStrBuffer.append( ' ' );
 
                     const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue& rAdj = aAdjustmentValues[ i ];
                     if ( rAdj.State == beans::PropertyState_DIRECT_VALUE )

@@ -66,7 +66,7 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
 {
     const sal_uInt16 nAttrCount = mpContainer->GetAttrCount();
 
-    sal_Int32 nPos = aName.indexOf( sal_Unicode(':') );
+    sal_Int32 nPos = aName.indexOf( ':' );
     if( nPos == -1L )
     {
         for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
@@ -142,7 +142,7 @@ uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames(void
     {
         OUStringBuffer sBuffer( mpContainer->GetAttrPrefix(nAttr) );
         if( !sBuffer.isEmpty() )
-            sBuffer.append( (sal_Unicode)':' );
+            sBuffer.append( ':' );
         sBuffer.append( mpContainer->GetAttrLName(nAttr) );
         *pNames++ = sBuffer.makeStringAndClear();
     }
@@ -167,7 +167,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
 
         xml::AttributeData* pData = (xml::AttributeData*)aElement.getValue();
 
-        sal_Int32 nPos = aName.indexOf( sal_Unicode(':') );
+        sal_Int32 nPos = aName.indexOf( ':' );
         if( nPos != -1L )
         {
             const OUString aPrefix( aName.copy( 0L, nPos ));
@@ -210,7 +210,7 @@ throw( lang::IllegalArgumentException, container::ElementExistException, lang::W
 
     xml::AttributeData* pData = (xml::AttributeData*)aElement.getValue();
 
-    sal_Int32 nPos = aName.indexOf( sal_Unicode(':') );
+    sal_Int32 nPos = aName.indexOf( ':' );
     if( nPos != -1L )
     {
         const OUString aPrefix( aName.copy( 0L, nPos ));

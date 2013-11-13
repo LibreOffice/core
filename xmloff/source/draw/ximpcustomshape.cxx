@@ -160,7 +160,7 @@ void GetDoublePercentage( std::vector< com::sun::star::beans::PropertyValue >& r
     {
         rtl_math_ConversionStatus eStatus;
         double fAttrDouble = ::rtl::math::stringToDouble( rValue,
-            (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
+            '.', ',', &eStatus, NULL );
         if ( eStatus == rtl_math_ConversionStatus_Ok )
         {
             beans::PropertyValue aProp;
@@ -218,13 +218,13 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
     sal_Bool bMustBePositiveWholeNumbered = sal_False;
 
     rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL;
-    if ( rParaString[ nIndex ] == (sal_Unicode)'$' )
+    if ( rParaString[ nIndex ] == '$' )
     {
         rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
         bMustBePositiveWholeNumbered = sal_True;
         nIndex++;
     }
-    else if ( rParaString[ nIndex ] == (sal_Unicode)'?' )
+    else if ( rParaString[ nIndex ] == '?' )
     {
         nIndex++;
         bNumberRequired = sal_False;
@@ -237,7 +237,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
             nIndex += aEquationName.getLength();
         }
     }
-    else if ( rParaString[ nIndex ] > (sal_Unicode)'9' )
+    else if ( rParaString[ nIndex ] > '9' )
     {
         bNumberRequired = sal_False;
         if ( rParaString.matchIgnoreAsciiCaseAsciiL( "left", 4, nIndex ) )
@@ -420,8 +420,8 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
     if ( bValid )
     {
         // skipping white spaces and commas (#i121507#)
-        const sal_Unicode aSpace(sal_Unicode(' '));
-        const sal_Unicode aCommata(sal_Unicode(','));
+        const sal_Unicode aSpace(' ');
+        const sal_Unicode aCommata(',');
 
         while(nIndex < rParaString.getLength())
         {
@@ -990,7 +990,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                             nIndex += aUnitStr.getLength();
 
                         // skipping white spaces
-                        while( ( nIndex < rValue.getLength() ) && rValue[ nIndex ] == (sal_Unicode)' ' )
+                        while( ( nIndex < rValue.getLength() ) && rValue[ nIndex ] == ' ' )
                             nIndex++;
 
                         if ( GetNextParameter( rFraction, nIndex, rValue ) )

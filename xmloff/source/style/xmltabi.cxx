@@ -86,8 +86,8 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
 {
     aTabStop.Position = 0;
     aTabStop.Alignment = style::TabAlign_LEFT;
-    aTabStop.DecimalChar = sal_Unicode( ',' );
-    aTabStop.FillChar = sal_Unicode( ' ' );
+    aTabStop.DecimalChar = ',';
+    aTabStop.FillChar = ' ';
     sal_Unicode cTextFillChar = 0;
 
     SvXMLTokenMap aTokenMap( aTabsAttributesAttrTokenMap );

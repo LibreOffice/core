@@ -82,7 +82,7 @@ bool XMLBitmapRepeatOffsetPropertyHandler::exportXML(
     if( rValue >>= nValue )
     {
         ::sax::Converter::convertPercent( aOut, nValue );
-        aOut.append( sal_Unicode( ' ' ) );
+        aOut.append( ' ' );
         aOut.append( mbX ? msHorizontal : msVertical );
         rStrExpValue = aOut.makeStringAndClear();
 

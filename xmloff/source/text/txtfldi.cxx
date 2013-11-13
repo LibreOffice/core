@@ -3201,7 +3201,7 @@ void XMLDdeFieldImportContext::EndElement()
         OUStringBuffer sBuf;
         sBuf.appendAscii(sAPI_fieldmaster_prefix);
         sBuf.appendAscii(sAPI_dde);
-        sBuf.append(sal_Unicode('.'));
+        sBuf.append('.');
         sBuf.append(sName);
         OUString sMasterName = sBuf.makeStringAndClear();
 
