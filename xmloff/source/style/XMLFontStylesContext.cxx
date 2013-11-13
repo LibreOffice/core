@@ -267,6 +267,13 @@ void XMLFontStyleContextFontFaceUri::SetFormat( const OUString& rFormat )
 {
     format = rFormat;
 }
+
+// the CSS2 standard ( http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#referencing )
+// defines these format strings.
+const char* OPENTYPE_FORMAT = "opentype";
+const char* TRUETYPE_FORMAT = "truetype";
+const char* EOT_FORMAT      = "embedded-opentype";
+
 void XMLFontStyleContextFontFaceUri::EndElement()
 {
     if( linkPath.getLength() == 0 )

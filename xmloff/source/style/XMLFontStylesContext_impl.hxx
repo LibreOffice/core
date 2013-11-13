@@ -88,12 +88,6 @@ public:
 /// Handles <style:font-face-uri>
 class XMLFontStyleContextFontFaceUri : public SvXMLStyleContext
 {
-    // the CSS2 standard ( http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#referencing )
-    // defines these format strings.
-    const char* OPENTYPE_FORMAT = "opentype";
-    const char* TRUETYPE_FORMAT = "truetype";
-    const char* EOT_FORMAT      = "embedded-opentype";
-
     const XMLFontStyleContextFontFace& font;
     OUString format;
     OUString linkPath;
