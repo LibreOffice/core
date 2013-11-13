@@ -26,7 +26,6 @@
 #include <vcl/msgbox.hxx>
 
 #include "sdattr.hxx"
-#include "brkdlg.hrc"
 #include "sdresid.hxx"
 #include "View.hxx"
 #include "drawview.hxx"
@@ -45,18 +44,16 @@ BreakDlg::BreakDlg(
     DrawDocShell* pShell,
     sal_uLong nSumActionCount,
     sal_uLong nObjCount )
-    : SfxModalDialog     ( pWindow, SdResId( DLG_BREAK ) ),
-      aFtObjInfo            ( this, SdResId( FT_OBJ_INFO ) ),
-      aFtActInfo            ( this, SdResId( FT_ACT_INFO ) ),
-      aFtInsInfo            ( this, SdResId( FT_INS_INFO ) ),
-      aFiObjInfo            ( this, SdResId( FI_OBJ_INFO ) ),
-      aFiActInfo            ( this, SdResId( FI_ACT_INFO ) ),
-      aFiInsInfo            ( this, SdResId( FI_INS_INFO ) ),
-      aBtnCancel            ( this, SdResId( BTN_CANCEL ) ),
-      aLink             ( LINK( this, BreakDlg, UpDate)),
-      mpProgress            ( NULL )
+    : SfxModalDialog(pWindow, "BreakDialog", "modules/sdraw/ui/breakdialog.ui")
+    , aLink( LINK(this, BreakDlg, UpDate))
+    , mpProgress( NULL )
 {
-    aBtnCancel.SetClickHdl( LINK( this, BreakDlg, CancelButtonHdl));
+    get(m_pFiObjInfo, "metafiles");
+    get(m_pFiActInfo, "metaobjects");
+    get(m_pFiInsInfo, "drawingobjects");
+    get(m_pBtnCancel, "cancel");
+
+    m_pBtnCancel->SetClickHdl( LINK( this, BreakDlg, CancelButtonHdl));
 
     mpProgress = new SfxProgress( pShell, SD_RESSTR(STR_BREAK_METAFILE), nSumActionCount*3 );
 
@@ -66,24 +63,19 @@ BreakDlg::BreakDlg(
 
     pDrView = _pDrView;
     bCancel = sal_False;
-
-    FreeResource();
 }
 
 BreakDlg::~BreakDlg()
 {
-    if( mpProgress )
-        delete mpProgress;
-
-    if( pProgrInfo )
-        delete pProgrInfo;
+    delete mpProgress;
+    delete pProgrInfo;
 }
 
 // Control-Handler for cancel button
 IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
 {
   bCancel = sal_True;
-  aBtnCancel.Disable();
+  m_pBtnCancel->Disable();
   return( 0L );
 }
 
@@ -114,32 +106,32 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     OUString info = OUString::number( pProgrInfo->GetCurObj() )
             + "/"
             + OUString::number( pProgrInfo->GetObjCount() );
-    aFiObjInfo.SetText(info);
+    m_pFiObjInfo->SetText(info);
 
     // how many actions are started?
     if(pProgrInfo->GetActionCount() == 0)
     {
-        aFiActInfo.SetText( OUString() );
+        m_pFiActInfo->SetText( OUString() );
     }
     else
     {
         info = OUString::number( pProgrInfo->GetCurAction() )
             + "/"
             + OUString::number( pProgrInfo->GetActionCount() );
-        aFiActInfo.SetText(info);
+        m_pFiActInfo->SetText(info);
     }
 
     // and inserted????
     if(pProgrInfo->GetInsertCount() == 0)
     {
-        aFiInsInfo.SetText( OUString() );
+        m_pFiInsInfo->SetText( OUString() );
     }
     else
     {
         info = OUString::number( pProgrInfo->GetCurInsert() )
             + "/"
             + OUString::number( pProgrInfo->GetInsertCount() );
-        aFiInsInfo.SetText(info);
+        m_pFiInsInfo->SetText(info);
     }
 
     Application::Reschedule();

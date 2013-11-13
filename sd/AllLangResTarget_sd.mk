@@ -42,7 +42,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/app/strings.src \
     sd/source/ui/app/toolbox.src \
     sd/source/ui/dlg/animobjs.src \
-    sd/source/ui/dlg/brkdlg.src \
     sd/source/ui/dlg/dlgass.src \
     sd/source/ui/dlg/dlgfield.src \
     sd/source/ui/dlg/dlgolbul.src \

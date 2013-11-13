@@ -56,15 +56,11 @@ public:
     short Execute();
 
 private:
-    FixedText       aFtObjInfo;
-    FixedText       aFtActInfo;
-    FixedText       aFtInsInfo;
+    FixedText*      m_pFiObjInfo;
+    FixedText*      m_pFiActInfo;
+    FixedText*      m_pFiInsInfo;
+    CancelButton*   m_pBtnCancel;
 
-    FixedInfo       aFiObjInfo;
-    FixedInfo       aFiActInfo;
-    FixedInfo       aFiInsInfo;
-
-    CancelButton    aBtnCancel;
     DrawView*   pDrView;
 
     sal_Bool            bCancel;

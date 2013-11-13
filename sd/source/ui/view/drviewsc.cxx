@@ -49,7 +49,6 @@
 #include "DrawDocShell.hxx"
 #include "drawview.hxx"
 #include "sdabstdlg.hxx"
-#include "brkdlg.hrc"
 namespace sd {
 
 /**
