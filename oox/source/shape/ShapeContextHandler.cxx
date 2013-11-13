@@ -22,6 +22,7 @@
 #include "ShapeContextHandler.hxx"
 #include "ShapeDrawingFragmentHandler.hxx"
 #include "LockedCanvasContext.hxx"
+#include "WpsContext.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
@@ -115,6 +116,26 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getChartShape
     return mxChartShapeContext;
 }
 
+uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWpsContext(sal_Int32 nElement)
+{
+    if (!mxWpsContext.is())
+    {
+        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        ShapePtr pMasterShape;
+
+        switch (getBaseToken(nElement))
+        {
+            case XML_wsp:
+                mxWpsContext.set(new WpsContext(*rFragmentHandler));
+                break;
+            default:
+                break;
+        }
+    }
+
+    return mxWpsContext;
+}
+
 uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
@@ -192,6 +213,9 @@ ShapeContextHandler::getContextHandler()
         case NMSP_dmlChart:
             xResult.set(getChartShapeContext(mnStartToken));
             break;
+        case NMSP_wps:
+            xResult.set(getWpsContext(mnStartToken));
+            break;
         default:
             xResult.set(getGraphicShapeContext(mnStartToken));
             break;
@@ -216,7 +240,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
 
     mpThemePtr.reset(new Theme());
 
-    if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) )
+    if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) || Element == WPS_TOKEN(wsp))
     {
         // Parse the theme relation, if available; the diagram won't have colors without it.
         if (!msRelationFragmentPath.isEmpty())
@@ -395,6 +419,17 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
             xResult = pShapePtr->getXShape();
             mxChartShapeContext.clear();
+        }
+        else if (mxWpsContext.is())
+        {
+            ShapePtr pShape = dynamic_cast<WpsContext*>(mxWpsContext.get())->getShape();
+            if (pShape)
+            {
+                basegfx::B2DHomMatrix aMatrix;
+                pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+                xResult = pShape->getXShape();
+                mxWpsContext.clear();
+            }
         }
         else if (mpShape.get() != NULL)
         {
