@@ -5154,7 +5154,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
             }
             pPtr++;
         }
-        xub_StrLen nLen = sal::static_int_cast< xub_StrLen >( pPtr - pBuf );
+        sal_Int32 nLen = pPtr - pBuf;
         if ( nLen )
             aString = OUString( pBuf, nLen, RTL_TEXTENCODING_MS_1252 );
         delete[] pBuf;
@@ -6704,12 +6704,11 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     // idea.
                                                     if (nVal == 0)
                                                     {
-                                                        sal_Unicode n;
-                                                        xub_StrLen nLen;
                                                         OUString aStr;
                                                         bool inquote = sal_False;
-                                                        for (nLen = 0, n = 0; nLen < 64; nLen++)
+                                                        for (int nLen = 0; nLen < 64; ++nLen)
                                                         {
+                                                            sal_Unicode n(0);
                                                             rIn >> n;
 
                                                             // Collect quoted characters into aStr

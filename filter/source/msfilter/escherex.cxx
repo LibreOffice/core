@@ -1365,8 +1365,7 @@ sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
     sal_Int32 nIndex = aBmpUrl.indexOf( aVndUrl, 0 );
     if( nIndex != -1 )
     {
-        // note: += ist not defined for xub_StrLen -> conversion to int and back to xub_StrLen
-        nIndex = nIndex + aVndUrl.getLength();
+        nIndex += aVndUrl.getLength();
         if( aBmpUrl.getLength() > nIndex )
         {
             OString aUniqueId(OUStringToOString(aBmpUrl.copy(nIndex, aBmpUrl.getLength() - nIndex), RTL_TEXTENCODING_UTF8));
