@@ -167,21 +167,6 @@ namespace slideshow
                 }
             };
 
-            class ComposedExpression : public BinaryExpressionBase
-            {
-            public:
-                ComposedExpression( const ExpressionNodeSharedPtr&  rFirstArg,
-                                    const ExpressionNodeSharedPtr&  rSecondArg ) :
-                    BinaryExpressionBase( rFirstArg, rSecondArg )
-                {
-                }
-
-                virtual double operator()( double t ) const
-                {
-                    return (*mpFirstArg)( (*mpSecondArg)(t) );
-                }
-            };
-
             class MinExpression : public BinaryExpressionBase
             {
             public:
