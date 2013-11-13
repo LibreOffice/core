@@ -98,7 +98,7 @@ bool XMLOpacityPropertyHdl::importXML(
     bool bRet = false;
     sal_Int32 nValue = 0;
 
-    if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
+    if( rStrImpValue.indexOf( '%' ) != -1 )
     {
         if (::sax::Converter::convertPercent( nValue, rStrImpValue ))
             bRet = true;

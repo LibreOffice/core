@@ -641,7 +641,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                                 aStyleName = GetImport().GetStyleDisplayName(
                                     XML_STYLE_FAMILY_SD_PRESENTATION_ID,
                                     aStyleName );
-                                sal_Int32 nPos = aStyleName.lastIndexOf( sal_Unicode('-') );
+                                sal_Int32 nPos = aStyleName.lastIndexOf( '-' );
                                 if( -1 != nPos )
                                 {
                                     OUString aFamily( aStyleName.copy( 0, nPos ) );

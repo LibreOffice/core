@@ -45,7 +45,7 @@ bool XMLFillBitmapSizePropertyHandler::importXML(
     sal_Int32 nValue;
     bool bRet;
 
-    if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
+    if( rStrImpValue.indexOf( '%' ) != -1 )
     {
         bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
         nValue *= -1;

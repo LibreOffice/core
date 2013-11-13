@@ -150,7 +150,7 @@ bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::A
     if( rValue >>= nValue )
     {
         if( !rStrExpValue.isEmpty() )
-            aOut.append( sal_Unicode(' '));
+            aOut.append( ' ');
 
         ::sax::Converter::convertPercent( aOut, nValue );
     }

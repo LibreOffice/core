@@ -219,7 +219,7 @@ OUString DomExport::qualifiedName( const OUString& sPrefix,
     {
         addNamespace( sPrefix, sURI );
         sBuffer.append( sPrefix );
-        sBuffer.append( sal_Unicode( ':' ) );
+        sBuffer.append( ':' );
     }
     sBuffer.append( sLocalName );
     return sBuffer.makeStringAndClear();

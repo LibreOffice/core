@@ -1825,7 +1825,7 @@ void SdXMLExport::_ExportContent()
 
                     if( !aBookmarkURL.isEmpty() )
                     {
-                        sal_Int32 nIndex = aBookmarkURL.lastIndexOf( (sal_Unicode)'#' );
+                        sal_Int32 nIndex = aBookmarkURL.lastIndexOf( '#' );
                         if( nIndex != -1 )
                         {
                             OUString aFileName( aBookmarkURL.copy( 0, nIndex ) );
@@ -2117,7 +2117,7 @@ void SdXMLExport::exportPresentationSettings()
                         continue;
 
                     if( !sTmp.isEmpty() )
-                        sTmp.append( sal_Unicode( ',' ) );
+                        sTmp.append(  ',' );
                     sTmp.append( xPageName->getName() );
 
                 }
@@ -2624,7 +2624,7 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
                 if( !sId.isEmpty() )
                 {
                     if( !sNavOrder.isEmpty() )
-                        sNavOrder.append( (sal_Unicode)' ' );
+                        sNavOrder.append( ' ' );
                     sNavOrder.append( sId );
                 }
             }

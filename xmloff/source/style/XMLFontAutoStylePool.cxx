@@ -174,7 +174,7 @@ OUString XMLFontAutoStylePool::Add(
         }
 
         if( sName.isEmpty() )
-            sName = OUString( sal_Unicode( 'F' ) );
+            sName = OUString( 'F' );
 
         if( m_aNames.find(sName) != m_aNames.end() )
         {

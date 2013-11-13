@@ -1079,7 +1079,7 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
         }
         else
         {
-            aBuffer.append( static_cast< sal_Unicode >( '_' ) );
+            aBuffer.append( '_' );
             if( c > 0x0fff )
                 aBuffer.append( static_cast< sal_Unicode >(
                             aHexTab[ (c >> 12) & 0x0f ]  ) );
@@ -1091,7 +1091,7 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
                         aHexTab[ (c >> 4) & 0x0f ] ) );
             aBuffer.append( static_cast< sal_Unicode >(
                         aHexTab[ c & 0x0f ] ) );
-            aBuffer.append( static_cast< sal_Unicode >( '_' ) );
+            aBuffer.append( '_' );
             bEncoded = sal_True;
         }
     }
@@ -1173,10 +1173,10 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
     sal_Int32 nLen = rValue.getLength();
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rValue[nPos] )
+    while( nPos < nLen && ' ' == rValue[nPos] )
         nPos++;
 
-    if( nPos < nLen && sal_Unicode('-') == rValue[nPos] )
+    if( nPos < nLen && '-' == rValue[nPos] )
     {
         bNeg = sal_True;
         nPos++;
@@ -1184,35 +1184,35 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
 
     // get number
     while( nPos < nLen &&
-           sal_Unicode('0') <= rValue[nPos] &&
-           sal_Unicode('9') >= rValue[nPos] )
+           '0' <= rValue[nPos] &&
+           '9' >= rValue[nPos] )
     {
         // TODO: check overflow!
         nVal *= 10;
-        nVal += (rValue[nPos] - sal_Unicode('0'));
+        nVal += (rValue[nPos] - '0');
         nPos++;
     }
-    if( nPos < nLen && sal_Unicode('.') == rValue[nPos] )
+    if( nPos < nLen && '.' == rValue[nPos] )
     {
         nPos++;
         double nDiv = 1.;
 
         while( nPos < nLen &&
-               sal_Unicode('0') <= rValue[nPos] &&
-               sal_Unicode('9') >= rValue[nPos] )
+               '0' <= rValue[nPos] &&
+               '9' >= rValue[nPos] )
         {
             // TODO: check overflow!
             nDiv *= 10;
-            nVal += ( static_cast<double>(rValue[nPos] - sal_Unicode('0')) / nDiv );
+            nVal += ( static_cast<double>(rValue[nPos] - '0') / nDiv );
             nPos++;
         }
     }
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rValue[nPos] )
+    while( nPos < nLen && ' ' == rValue[nPos] )
         nPos++;
 
-    if( nPos < nLen &&  sal_Unicode('%') == rValue[nPos] )
+    if( nPos < nLen && '%' == rValue[nPos] )
     {
         if( bNeg )
                nVal = -nVal;
@@ -1374,7 +1374,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
 
         if( bPackage && bSupportPackage )
         {
-            OUString sTmp( OUString( sal_Unicode( '#' ) ) );
+            OUString sTmp( OUString( '#' ) );
             if( rURI.startsWith( "./" ) )
                 rURI = rURI.copy( 2 );
             sTmp += rURI;
@@ -1401,9 +1401,9 @@ sal_Bool XMLTransformerBase::RenameAttributeValue(
 bool XMLTransformerBase::ConvertRNGDateTimeToISO( OUString& rDateTime )
 {
     if( !rDateTime.isEmpty() &&
-        rDateTime.indexOf( sal_Unicode('.')) != -1 )
+        rDateTime.indexOf( '.' ) != -1 )
     {
-        rDateTime = rDateTime.replace( sal_Unicode('.'), sal_Unicode(','));
+        rDateTime = rDateTime.replace( '.', ',');
         return true;
     }
 

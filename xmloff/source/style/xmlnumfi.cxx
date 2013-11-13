@@ -813,7 +813,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         //  (one occurrence is enough even if there are several percent characters in the string)
 
         OUString aString( rContent.getStr() );
-        sal_Int32 nPos = aString.indexOf( (sal_Unicode) '%' );
+        sal_Int32 nPos = aString.indexOf( '%' );
         if ( nPos >= 0 )
         {
             if ( nPos + 1 < nLength )
@@ -825,8 +825,8 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
                 else
                 {
                     //  quote text behind percent character
-                    rContent.insert( nPos + 1, (sal_Unicode) '"' );
-                    rContent.append( (sal_Unicode) '"' );
+                    rContent.insert( nPos + 1, '"' );
+                    rContent.append( '"' );
                 }
             }
             if ( nPos > 0 )
@@ -838,8 +838,8 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
                 else
                 {
                     //  quote text before percent character
-                    rContent.insert( nPos, (sal_Unicode) '"' );
-                    rContent.insert( 0, (sal_Unicode) '"' );
+                    rContent.insert( nPos, '"' );
+                    rContent.insert( 0, '"' );
                 }
             }
             bQuote = sal_False;
@@ -850,7 +850,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
     if ( bQuote )
     {
         // #i55469# quotes in the string itself have to be escaped
-        bool bEscape = ( rContent.indexOf( (sal_Unicode) '"' ) >= 0 );
+        bool bEscape = ( rContent.indexOf( '"' ) >= 0 );
         if ( bEscape )
         {
             // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
@@ -860,7 +860,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
             sal_Int32 nPos = 0;
             while ( nPos < rContent.getLength() )
             {
-                if ( rContent[nPos] == (sal_Unicode) '"' )
+                if ( rContent[nPos] == '"' )
                 {
                     rContent.insert( nPos, aInsert );
                     nPos += aInsert.getLength();
@@ -870,23 +870,23 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         }
 
         //  quote string literals
-        rContent.insert( 0, (sal_Unicode) '"' );
-        rContent.append( (sal_Unicode) '"' );
+        rContent.insert( 0, '"' );
+        rContent.append( '"' );
 
         // remove redundant double quotes at start or end
         if ( bEscape )
         {
             if ( rContent.getLength() > 2 &&
-                 rContent[0] == (sal_Unicode) '"' &&
-                 rContent[1] == (sal_Unicode) '"' )
+                 rContent[0] == '"' &&
+                 rContent[1] == '"' )
             {
                 rContent.remove(0, 2);
             }
 
             sal_Int32 nLen = rContent.getLength();
             if ( nLen > 2 &&
-                 rContent[nLen - 1] == (sal_Unicode) '"' &&
-                 rContent[nLen - 2] == (sal_Unicode) '"' )
+                 rContent[nLen - 1] == '"' &&
+                 rContent[nLen - 2] == '"' )
             {
                 rContent.truncate(nLen - 2);
             }
@@ -1085,12 +1085,12 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
 
         case XML_TOK_STYLE_TEXT_CONTENT:
-            rParent.AddToCode( (sal_Unicode)'@');
+            rParent.AddToCode( '@');
             break;
         case XML_TOK_STYLE_FILL_CHARACTER:
             if ( !aContent.isEmpty() )
             {
-                rParent.AddToCode( (sal_Unicode)'*' );
+                rParent.AddToCode( '*' );
                 rParent.AddToCode( aContent[0] );
             }
             break;
@@ -1178,7 +1178,7 @@ void SvXMLNumFmtElementContext::EndElement()
                 rParent.AddToCode(rParent.GetLocaleData().getNumDecimalSep());
                 for (sal_Int32 i=0; i<aNumInfo.nDecimals; i++)
                 {
-                    rParent.AddToCode( (sal_Unicode)'0');
+                    rParent.AddToCode( '0');
                 }
             }
             break;
@@ -1190,7 +1190,7 @@ void SvXMLNumFmtElementContext::EndElement()
                     // add integer part only if min-integer-digits attribute is there
                     aNumInfo.nDecimals = 0;
                     rParent.AddNumber( aNumInfo );      // number without decimals
-                    rParent.AddToCode( (sal_Unicode)' ' );
+                    rParent.AddToCode( ' ' );
                 }
 
                 //! build string and add at once
@@ -1198,9 +1198,9 @@ void SvXMLNumFmtElementContext::EndElement()
                 sal_Int32 i;
                 for (i=0; i<aNumInfo.nNumerDigits; i++)
                 {
-                    rParent.AddToCode( (sal_Unicode)'?' );
+                    rParent.AddToCode( '?' );
                 }
-                rParent.AddToCode( (sal_Unicode)'/' );
+                rParent.AddToCode( '/' );
                 if ( aNumInfo.nFracDenominator > 0 )
                 {
                     rParent.AddToCode(  OUString::number( aNumInfo.nFracDenominator ) );
@@ -1209,7 +1209,7 @@ void SvXMLNumFmtElementContext::EndElement()
                 {
                     for (i=0; i<aNumInfo.nDenomDigits; i++)
                     {
-                        rParent.AddToCode( (sal_Unicode)'?');
+                        rParent.AddToCode( '?');
                     }
                 }
             }
@@ -1222,7 +1222,7 @@ void SvXMLNumFmtElementContext::EndElement()
                 rParent.AddToCode( OUString("E+") );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
                 {
-                    rParent.AddToCode( (sal_Unicode)'0' );
+                    rParent.AddToCode( '0' );
                 }
             }
             break;
@@ -1396,7 +1396,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                 // language code in upper hex:
                 aFormatCode.append(OUString::number(eLang, 16).toAsciiUpperCase());
             }
-            aFormatCode.append( sal_Unicode(']') );
+            aFormatCode.append( ']' );
         }
     }
 }
@@ -1594,7 +1594,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //  and no color definition (detected by the '[' at the start)
 
         if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
-                aMyConditions.empty() && sFormat.toChar() != (sal_Unicode)'[' )
+                aMyConditions.empty() && sFormat.toChar() != '[' )
             nIndex = pFormatter->GetStandardIndex( nFormatLang );
     }
     if ( bAutoInt )         // automatic integer digits
@@ -1602,7 +1602,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //! only if two decimal places was set?
 
         if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
-                aMyConditions.empty() && sFormat.toChar() != (sal_Unicode)'[' )
+                aMyConditions.empty() && sFormat.toChar() != '[' )
             nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
     }
 
@@ -1787,7 +1787,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         // #i43959# For scientific numbers, "#" in the integer part forces a digit,
         // so it has to be removed if nLeading is 0 (".00E+0", not "#.00E+0").
 
-        aNumStr.stripStart((sal_Unicode)'#');
+        aNumStr.stripStart('#');
     }
 
     if ( nEmbeddedCount )
@@ -1813,7 +1813,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
             sal_Int32 nAddCount = nLastFormatPos + 1 - nZeroPos;
             for(sal_Int32 index = 0; index < nAddCount; ++index)
             {
-                aNumStr.insert(0, (sal_Unicode)'#');
+                aNumStr.insert(0, '#');
             }
             nZeroPos = nZeroPos + nAddCount;
         }
@@ -1929,7 +1929,7 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
             aFormatCode.append("-" + OUString::number(sal_Int32(nLang), 16).toAsciiUpperCase());
         }
 
-        aFormatCode.append( (sal_Unicode) ']' );    // end of "new" currency symbol
+        aFormatCode.append( ']' );    // end of "new" currency symbol
     }
 }
 
@@ -2084,7 +2084,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
         if ( pFormat )
             aConditions.append( OUString( pFormat->GetFormatstring() ) );
 
-        aConditions.append( (sal_Unicode) ';' );
+        aConditions.append( ';' );
     }
 }
 
@@ -2112,8 +2112,8 @@ void SvXMLNumFormatContext::AddColor( sal_uInt32 const nColor )
 
     if ( !aColName.isEmpty() )
     {
-        aColName.insert( 0, (sal_Unicode) '[' );
-        aColName.append( (sal_Unicode) ']' );
+        aColName.insert( 0, '[' );
+        aColName.append( ']' );
         aFormatCode.insert( 0, aColName.makeStringAndClear() );
     }
 }
@@ -2127,7 +2127,7 @@ void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar )
         {
             aFormatCode.appendAscii( "[~" );            // intro for calendar code
             aFormatCode.append( sCalendar );
-            aFormatCode.append( (sal_Unicode) ']' );    // end of "new" currency symbolcalendar code
+            aFormatCode.append( ']' );    // end of "new" currency symbolcalendar code
         }
     }
 }

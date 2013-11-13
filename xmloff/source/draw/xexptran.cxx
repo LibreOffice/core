@@ -59,28 +59,28 @@ void Imp_CalcVectorValues(::basegfx::B2DVector& aVec1, ::basegfx::B2DVector& aVe
 void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
-        && sal_Unicode(' ') == rStr[rPos])
+        && ' ' == rStr[rPos])
         rPos++;
 }
 
 void Imp_SkipSpacesAndOpeningBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
-        && (sal_Unicode(' ') == rStr[rPos] || sal_Unicode('(') == rStr[rPos]))
+        && (' ' == rStr[rPos] || '(' == rStr[rPos]))
         rPos++;
 }
 
 void Imp_SkipSpacesAndCommas(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
-        && (sal_Unicode(' ') == rStr[rPos] || sal_Unicode(',') == rStr[rPos]))
+        && (' ' == rStr[rPos] || ',' == rStr[rPos]))
         rPos++;
 }
 
 void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
-        && (sal_Unicode(' ') == rStr[rPos] || sal_Unicode(')') == rStr[rPos]))
+        && (' ' == rStr[rPos] || ')' == rStr[rPos]))
         rPos++;
 }
 
@@ -90,9 +90,9 @@ bool Imp_IsOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAl
 {
     sal_Unicode aChar(rStr[nPos]);
 
-    if((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-        || (bSignAllowed && sal_Unicode('+') == aChar)
-        || (bSignAllowed && sal_Unicode('-') == aChar)
+    if(('0' <= aChar && '9' >= aChar)
+        || (bSignAllowed && '+' == aChar)
+        || (bSignAllowed && '-' == aChar)
     )
         return true;
     return false;
@@ -102,9 +102,9 @@ bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
 {
     sal_Unicode aChar(rStr[nPos]);
 
-    if((sal_Unicode('a') <= aChar && sal_Unicode('z') >= aChar)
-        || (sal_Unicode('A') <= aChar && sal_Unicode('Z') >= aChar)
-        || sal_Unicode('%') == aChar
+    if(('a' <= aChar && 'z' >= aChar)
+        || ('A' <= aChar && 'Z' >= aChar)
+        || '%' == aChar
     )
         return true;
     return false;
@@ -140,7 +140,7 @@ void Imp_PutNumberCharWithSpace(OUString& rStr, sal_Int32 nValue)
     const sal_Int32 aLen(rStr.getLength());
     if(aLen)
         if(Imp_IsOnNumberChar(rStr, aLen - 1, false) && nValue >= 0)
-            rStr += OUString(static_cast<sal_Unicode>(' '));
+            rStr += OUString(' ');
     Imp_PutNumberChar(rStr, nValue);
 }
 
@@ -150,31 +150,31 @@ void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32)
 {
     sal_Unicode aChar(rStr[rPos]);
 
-    if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+    if('+' == aChar || '-' == aChar)
     {
         ++rPos;
         aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
     }
 
-    while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-        || sal_Unicode('.') == aChar)
+    while(('0' <= aChar && '9' >= aChar)
+        || '.' == aChar)
     {
         ++rPos;
         aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
     }
 
-    if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
+    if('e' == aChar || 'E' == aChar)
     {
         ++rPos;
         aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
 
-        if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+        if('+' == aChar || '-' == aChar)
         {
             ++rPos;
             aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
         }
 
-        while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
+        while('0' <= aChar && '9' >= aChar)
         {
             ++rPos;
             aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
@@ -188,35 +188,35 @@ double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 
     sal_Unicode aChar(rStr[rPos]);
     OUStringBuffer sNumberString;
 
-    if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+    if('+' == aChar || '-' == aChar)
     {
         sNumberString.append(rStr[rPos]);
         ++rPos;
         aChar = rPos >= nLen ? 0 : rStr[rPos];
     }
 
-    while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-        || sal_Unicode('.') == aChar)
+    while(('0' <= aChar && '9' >= aChar)
+        || '.' == aChar)
     {
         sNumberString.append(rStr[rPos]);
         ++rPos;
         aChar = rPos >= nLen ? 0 : rStr[rPos];
     }
 
-    if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
+    if('e' == aChar || 'E' == aChar)
     {
         sNumberString.append(rStr[rPos]);
         ++rPos;
         aChar = rPos >= nLen ? 0 : rStr[rPos];
 
-        if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+        if('+' == aChar || '-' == aChar)
         {
             sNumberString.append(rStr[rPos]);
             ++rPos;
             aChar = rPos >= nLen ? 0 : rStr[rPos];
         }
 
-        while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
+        while('0' <= aChar && '9' >= aChar)
         {
             sNumberString.append(rStr[rPos]);
             ++rPos;

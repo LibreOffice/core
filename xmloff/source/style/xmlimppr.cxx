@@ -299,7 +299,7 @@ void SvXMLImportPropertyMapper::importXML(
                         if( XML_NAMESPACE_NONE != nPrefix )
                         {
                             sName.append( aPrefix );
-                            sName.append( sal_Unicode(':') );
+                            sName.append( ':' );
                             aData.Namespace = aNamespace;
                         }
 

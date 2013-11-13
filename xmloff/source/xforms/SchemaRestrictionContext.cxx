@@ -182,8 +182,8 @@ Any xforms_date( const OUString& rValue )
     Any aAny;
 
     // parse ISO date
-    sal_Int32 nPos1 = rValue.indexOf( sal_Unicode('-') );
-    sal_Int32 nPos2 = rValue.indexOf( sal_Unicode('-'), nPos1 + 1 );
+    sal_Int32 nPos1 = rValue.indexOf( '-' );
+    sal_Int32 nPos2 = rValue.indexOf( '-', nPos1 + 1 );
     if( nPos1 > 0  &&  nPos2 > 0 )
     {
         util::Date aDate;

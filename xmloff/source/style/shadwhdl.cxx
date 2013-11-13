@@ -151,9 +151,9 @@ bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 
         ::sax::Converter::convertColor( aOut, aShadow.Color );
 
-        aOut.append( sal_Unicode(' ') );
+        aOut.append( ' ' );
         rUnitConverter.convertMeasureToXML( aOut, nX );
-        aOut.append( sal_Unicode(' ') );
+        aOut.append( ' ' );
         rUnitConverter.convertMeasureToXML( aOut, nY );
 
         rStrExpValue = aOut.makeStringAndClear();

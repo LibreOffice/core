@@ -208,7 +208,7 @@ void XMLEventOOoTransformerContext::StartElement(
             aLocation = GetXMLToken( XML_DOCUMENT );
         OUStringBuffer sTmp( aLocation.getLength() + aMacroName.getLength() + 1 );
         sTmp = aLocation;
-        sTmp.append( sal_Unicode( ':' ) );
+        sTmp.append( ':' );
         sTmp.append( aMacroName );
         pMutableAttrList->SetValueByIndex( nMacroName,
                                            sTmp.makeStringAndClear() );

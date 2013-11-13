@@ -117,7 +117,7 @@ SvXMLImportContext* TokenContext::CreateChildContext(
 
 static bool lcl_IsWhiteSpace( sal_Unicode c )
 {
-    return c == sal_Unicode(  ' ' )
+    return c == ' '
         || c == sal_Unicode( 0x09 )
         || c == sal_Unicode( 0x0A )
         || c == sal_Unicode( 0x0D );

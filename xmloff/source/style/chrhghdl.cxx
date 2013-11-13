@@ -40,7 +40,7 @@ XMLCharHeightHdl::~XMLCharHeightHdl()
 
 bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    if( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 )
+    if( rStrImpValue.indexOf( '%' ) == -1 )
     {
         double fSize;
         sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
@@ -67,8 +67,8 @@ bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
         fSize = ::std::max<float>(fSize, 1.0f); // fdo#49876: 0pt is invalid
         ::sax::Converter::convertDouble(aOut, (double)fSize, true,
                 util::MeasureUnit::POINT, util::MeasureUnit::POINT);
-        aOut.append( sal_Unicode('p'));
-        aOut.append( sal_Unicode('t'));
+        aOut.append( 'p');
+        aOut.append( 't');
     }
 
     rStrExpValue = aOut.makeStringAndClear();
@@ -86,7 +86,7 @@ XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
 
 bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
+    if( rStrImpValue.indexOf( '%' ) != -1 )
     {
         sal_Int32 nPrc = 100;
         if (::sax::Converter::convertPercent( nPrc, rStrImpValue ))

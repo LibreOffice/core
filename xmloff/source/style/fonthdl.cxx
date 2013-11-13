@@ -73,16 +73,16 @@ bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any
         sal_Int32 nLast = (-1 == nPos ? rStrImpValue.getLength() - 1 : nPos - 1);
 
         // skip trailing blanks
-        while( nLast > nFirst && sal_Unicode(' ') == rStrImpValue[nLast] )
+        while( nLast > nFirst && ' ' == rStrImpValue[nLast] )
             nLast--;
 
         // skip leading blanks
-        while(nFirst <= nLast && sal_Unicode(' ') == rStrImpValue[nFirst])
+        while(nFirst <= nLast && ' ' == rStrImpValue[nFirst])
             nFirst++;
 
         // remove quotes
         sal_Unicode c = nFirst > nLast ? 0 : rStrImpValue[nFirst];
-        if( nFirst < nLast && (sal_Unicode('\'') == c || sal_Unicode('\"') == c) && rStrImpValue[nLast] == c )
+        if( nFirst < nLast && ('\'' == c || '\"' == c) && rStrImpValue[nLast] == c )
         {
             nFirst++;
             nLast--;
@@ -122,7 +122,7 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
         do
         {
             sal_Int32 nFirst = nPos;
-            nPos = aStrFamilyName.indexOf( sal_Unicode(';'), nPos );
+            nPos = aStrFamilyName.indexOf( ';', nPos );
             sal_Int32 nLast = (-1 == nPos ? aStrFamilyName.getLength() : nPos);
 
             // Set position to the character behind the ';', so we won't
@@ -141,19 +141,19 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
             nLast--;
 
             // skip trailing blanks
-            while(  nLast > nFirst && sal_Unicode(' ') == aStrFamilyName[nLast] )
+            while(  nLast > nFirst && ' ' == aStrFamilyName[nLast] )
                 nLast--;
 
             // skip leading blanks
-            while( nFirst <= nLast && sal_Unicode(' ') == aStrFamilyName[nFirst] )
+            while( nFirst <= nLast && ' ' == aStrFamilyName[nFirst] )
                 nFirst++;
 
             if( nFirst <= nLast )
             {
                 if( !sValue.isEmpty() )
                 {
-                    sValue.append( sal_Unicode( ',' ) );
-                    sValue.append( sal_Unicode( ' ' ));
+                    sValue.append( ',' );
+                    sValue.append( ' ' );
                 }
                 sal_Int32 nLen = nLast-nFirst+1;
                 OUString sFamily( aStrFamilyName.copy( nFirst, nLen ) );
@@ -161,17 +161,17 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
                 for( sal_Int32 i=0; i < nLen; i++ )
                 {
                     sal_Unicode c = sFamily[i];
-                    if( sal_Unicode(' ') == c || sal_Unicode(',') == c )
+                    if( ' ' == c || ',' == c )
                     {
                         bQuote = true;
                         break;
                     }
                 }
                 if( bQuote )
-                    sValue.append( sal_Unicode('\'') );
+                    sValue.append( '\'' );
                 sValue.append( sFamily );
                 if( bQuote )
-                    sValue.append( sal_Unicode('\'') );
+                    sValue.append( '\'' );
             }
         }
         while( -1L != nPos );

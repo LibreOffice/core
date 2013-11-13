@@ -946,11 +946,11 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 
         OUStringBuffer aRoleBuffer("error-bars-");
         if( bYError )
-            aRoleBuffer.append( sal_Unicode( 'y' ));
+            aRoleBuffer.append( 'y' );
         else
-            aRoleBuffer.append( sal_Unicode( 'x' ));
+            aRoleBuffer.append( 'x');
 
-        aRoleBuffer.append( sal_Unicode( '-' ));
+        aRoleBuffer.append( '-' );
 
         if( bPositiveValue )
             aRoleBuffer = aRoleBuffer.appendAscii( "positive" );

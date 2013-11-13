@@ -928,7 +928,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                 // extract namespace prefix from attribute name if it exists
                 OUString sPrefix;
                 const sal_Int32 nColonPos =
-                    pAttribName->indexOf( sal_Unicode(':') );
+                    pAttribName->indexOf( ':' );
                 if( nColonPos != -1 )
                     sPrefix = pAttribName->copy( 0, nColonPos );
 

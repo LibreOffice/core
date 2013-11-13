@@ -227,7 +227,7 @@ SvXMLImportContext * SdXMLShowsContext::CreateChildContext( sal_uInt16 p_nPrefix
             Reference< XIndexContainer > xShow( mpImpl->mxShowFactory->createInstance(), UNO_QUERY );
             if( xShow.is() )
             {
-                SvXMLTokenEnumerator aPageNames( aPages, sal_Unicode(',') );
+                SvXMLTokenEnumerator aPageNames( aPages, ',' );
                 OUString sPageName;
                 Any aAny;
 

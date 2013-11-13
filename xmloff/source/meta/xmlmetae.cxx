@@ -45,7 +45,7 @@ using namespace ::xmloff::token;
 static void lcl_AddTwoDigits( OUStringBuffer& rStr, sal_Int32 nVal )
 {
     if ( nVal < 10 )
-        rStr.append( sal_Unicode('0') );
+        rStr.append( '0' );
     rStr.append( nVal );
 }
 
@@ -56,15 +56,15 @@ SvXMLMetaExport::GetISODateTimeString( const util::DateTime& rDateTime )
 
     OUStringBuffer sTmp;
     sTmp.append( (sal_Int32) rDateTime.Year );
-    sTmp.append( sal_Unicode('-') );
+    sTmp.append( '-' );
     lcl_AddTwoDigits( sTmp, rDateTime.Month );
-    sTmp.append( sal_Unicode('-') );
+    sTmp.append( '-' );
     lcl_AddTwoDigits( sTmp, rDateTime.Day );
-    sTmp.append( sal_Unicode('T') );
+    sTmp.append( 'T' );
     lcl_AddTwoDigits( sTmp, rDateTime.Hours );
-    sTmp.append( sal_Unicode(':') );
+    sTmp.append( ':' );
     lcl_AddTwoDigits( sTmp, rDateTime.Minutes );
-    sTmp.append( sal_Unicode(':') );
+    sTmp.append( ':' );
     lcl_AddTwoDigits( sTmp, rDateTime.Seconds );
 
     return sTmp.makeStringAndClear();
