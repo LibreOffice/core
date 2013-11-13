@@ -27,7 +27,6 @@
 #include "delayevent.hxx"
 #include "unoview.hxx"
 
-#include <rtl/instance.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -69,14 +68,6 @@ namespace slideshow {
 namespace internal {
 
 namespace {
-
-struct StaticUnitRectPoly : public rtl::StaticWithInit<basegfx::B2DPolygon, StaticUnitRectPoly>
-{
-    basegfx::B2DPolygon operator()()
-    {
-        return basegfx::tools::createUnitPolygon();
-    }
-};
 
 /** Sprite entry, to store sprite plus priority
 
