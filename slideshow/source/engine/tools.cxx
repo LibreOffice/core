@@ -58,23 +58,6 @@ namespace slideshow
     {
         namespace
         {
-            class NamedValueStringComparator
-            {
-            public:
-                NamedValueStringComparator( const OUString& rSearchString ) :
-                    mrSearchString( rSearchString )
-                {
-                }
-
-                bool operator()( const beans::NamedValue& rValue ) const
-                {
-                    return rValue.Name == mrSearchString;
-                }
-
-            private:
-                const OUString&      mrSearchString;
-            };
-
             class NamedValueComparator
             {
             public:
