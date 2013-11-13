@@ -89,6 +89,13 @@ function patch_opensymbol_lhm {
 	fi
 }
 
+function patch_tmp_path {
+	if [ -f "package-data/${LO_MAIN_XCD}" ]; then
+		echo patching temp path
+		sed -i -e 's|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>$(temp)</value></prop></node></node>|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>file:///var/tmp/</value></prop></node></node>|' package-data/${LO_MAIN_XCD}
+	fi
+}
+
 function patch_paths_xcu {
 	if [ -f "package-data/${LO_PATHS_XCU}" ]; then
 		echo "Exchanging Paths.xcu"
@@ -352,6 +359,7 @@ function patch_deb {
 		patch_libldap2
 		patch_sdk_exec
 		patch_paths_xcu
+		patch_tmp_path
 		patch_opensymbol_lhm
 
 		echo "Packaging ${NEW_BASE} ..."
