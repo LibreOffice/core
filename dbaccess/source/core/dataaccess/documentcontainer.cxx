@@ -642,7 +642,7 @@ OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i
 {
     OUStringBuffer aBuffer;
     aBuffer.append( getHierarchicalName() );
-    aBuffer.append( sal_Unicode( '/' ) );
+    aBuffer.append( '/' );
     aBuffer.append( i_rRelativeName );
     return aBuffer.makeStringAndClear();
 }

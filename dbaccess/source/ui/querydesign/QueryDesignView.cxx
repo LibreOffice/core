@@ -860,7 +860,7 @@ namespace
                     if (!rRetStr.isEmpty())                            // are there conditions on the field?
                         rRetStr.append(C_OR);
                     else                                        // open bracket for the OR branch
-                        rRetStr.append(sal_Unicode('('));
+                        rRetStr.append('(');
                     rRetStr.append(aWhereStr);
                 }
                 if (!aHavingStr.isEmpty())
@@ -869,15 +869,15 @@ namespace
                     if (!rHavingStr.isEmpty())                         // are there conditions on the field?
                         rHavingStr.append(C_OR);
                     else                                        // Open bracket for the OR branch
-                        rHavingStr.append(sal_Unicode('('));
+                        rHavingStr.append('(');
                     rHavingStr.append(aHavingStr);
                 }
             }
 
             if (!rRetStr.isEmpty())
-                rRetStr.append(sal_Unicode(')'));                               // close bracket for the OR branch
+                rRetStr.append(')');                               // close bracket for the OR branch
             if (!rHavingStr.isEmpty())
-                rHavingStr.append(sal_Unicode(')'));                                // close bracket for the OR branch
+                rHavingStr.append(')');                                // close bracket for the OR branch
         }
         catch(SQLException&)
         {

@@ -2570,7 +2570,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
         SvTreeListEntry* pTemp = pContainer;
         while( m_pTreeModel->GetParent(pTemp) != pConnection )
         {
-            sNameBuffer.insert(0,sal_Unicode('/'));
+            sNameBuffer.insert(0,'/');
             pString = (SvLBoxString*)pTemp->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
             OSL_ENSURE(pString,"There must be a string item!");
             sNameBuffer.insert(0,pString->GetText());

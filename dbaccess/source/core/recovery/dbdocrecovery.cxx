@@ -79,15 +79,15 @@ namespace dbaccess
         static void lcl_getPersistentRepresentation( const MapStringToCompDesc::value_type& i_rComponentDesc, OUStringBuffer& o_rBuffer )
         {
             o_rBuffer.append( i_rComponentDesc.first );
-            o_rBuffer.append( sal_Unicode( '=' ) );
+            o_rBuffer.append( '=' );
             o_rBuffer.append( i_rComponentDesc.second.sName );
-            o_rBuffer.append( sal_Unicode( ',' ) );
+            o_rBuffer.append( ',' );
             o_rBuffer.append( sal_Unicode( i_rComponentDesc.second.bForEditing ? '1' : '0' ) );
         }
 
         static bool lcl_extractCompDesc( const OUString& i_rIniLine, OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
         {
-            const sal_Int32 nEqualSignPos = i_rIniLine.indexOf( sal_Unicode( '=' ) );
+            const sal_Int32 nEqualSignPos = i_rIniLine.indexOf( '=' );
             if ( nEqualSignPos < 1 )
             {
                 OSL_FAIL( "lcl_extractCompDesc: invalid map file entry - unexpected pos of '='" );
@@ -95,7 +95,7 @@ namespace dbaccess
             }
             o_rStorName = i_rIniLine.copy( 0, nEqualSignPos );
 
-            const sal_Int32 nCommaPos = i_rIniLine.lastIndexOf( sal_Unicode( ',' ) );
+            const sal_Int32 nCommaPos = i_rIniLine.lastIndexOf( ',' );
             if ( nCommaPos != i_rIniLine.getLength() - 2 )
             {
                 OSL_FAIL( "lcl_extractCompDesc: invalid map file entry - unexpected pos of ','" );

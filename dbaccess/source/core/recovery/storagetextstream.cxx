@@ -60,7 +60,7 @@ namespace dbaccess
 
         static const OUString& lcl_getLineFeed()
         {
-            static const OUString s_sLineFeed( sal_Unicode( '\n' ) );
+            static const OUString s_sLineFeed( '\n' );
             return s_sLineFeed;
         }
     }

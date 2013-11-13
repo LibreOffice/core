@@ -394,7 +394,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
             {
                 OUStringBuffer buffer;
                 buffer.append( pList->GetEntryText( pParent ) );
-                buffer.append( sal_Unicode( '/' ) );
+                buffer.append( '/' );
                 buffer.append( sName );
                 sName = buffer.makeStringAndClear();
 

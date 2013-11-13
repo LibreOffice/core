@@ -363,18 +363,18 @@ namespace dbmm
                     ++error
                 )
             {
-                _rBuffer.append( sal_Unicode( '-' ) );
-                _rBuffer.append( sal_Unicode( ' ' ) );
+                _rBuffer.append( '-' );
+                _rBuffer.append( ' ' );
                 lcl_appendErrorDescription( _rBuffer, *error );
-                _rBuffer.append( sal_Unicode( '\n' ) );
+                _rBuffer.append( '\n' );
 
                 if ( !error->aCaughtException.hasValue() )
                     continue;
 
                 _rBuffer.append( sException );
                 _rBuffer.append( ::comphelper::anyToString( error->aCaughtException ) );
-                _rBuffer.append( sal_Unicode( '\n' ) );
-                _rBuffer.append( sal_Unicode( '\n' ) );
+                _rBuffer.append( '\n' );
+                _rBuffer.append( '\n' );
             }
         }
     }
@@ -440,7 +440,7 @@ namespace dbmm
                     aBuffer.append( sMovedLib + "\n" );
                 }
 
-                aBuffer.append( sal_Unicode( '\n' ) );
+                aBuffer.append( '\n' );
             }
         }
 

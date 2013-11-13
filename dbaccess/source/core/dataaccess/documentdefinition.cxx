@@ -521,7 +521,7 @@ void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int3
         {
             OUStringBuffer aBuffer;
             aBuffer.append( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) );
-            aBuffer.append( sal_Unicode( '/' ) );
+            aBuffer.append( '/' );
             aBuffer.append( m_pImpl->m_aProps.sPersistentName );
             sPersistentPath = aBuffer.makeStringAndClear();
         }
@@ -1936,7 +1936,7 @@ OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const OUString& 
 {
     OUStringBuffer aBuffer;
     aBuffer.append( getHierarchicalName() );
-    aBuffer.append( sal_Unicode( '/' ) );
+    aBuffer.append( '/' );
     aBuffer.append( i_rRelativeName );
     return aBuffer.makeStringAndClear();
 }

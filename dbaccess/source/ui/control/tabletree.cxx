@@ -500,7 +500,7 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry 
             if ( nParentEntryType == DatabaseObjectContainer::SCHEMA )
             {
                 buffer.append( GetEntryText( pParent ) );
-                buffer.append( sal_Unicode( '.' ) );
+                buffer.append( '.' );
             }
             buffer.append( GetEntryText( _pEntry ) );
         }
@@ -509,7 +509,7 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry 
             if ( nParentEntryType == DatabaseObjectContainer::CATALOG )
             {
                 buffer.append( GetEntryText( pParent ) );
-                buffer.append( sal_Unicode( '.' ) );
+                buffer.append( '.' );
             }
             buffer.append( GetEntryText( _pEntry ) );
         }

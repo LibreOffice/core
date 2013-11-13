@@ -1733,11 +1733,11 @@ static OUString concatComment( const OUString& rQuery, const ::std::vector< Comm
     for ( ; i < nComments; ++i)
     {
         if (!bNewLine)
-            aBuf.append( sal_Unicode(' '));
+            aBuf.append( ' ');
         aBuf.append( rComments[i].maComment);
         if (rComments[i].mbLastOnLine)
         {
-            aBuf.append( sal_Unicode('\n'));
+            aBuf.append( '\n');
             bNewLine = true;
         }
         else
