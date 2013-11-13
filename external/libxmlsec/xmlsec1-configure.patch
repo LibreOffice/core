@@ -109,8 +109,8 @@
  
 -    ac_nss_lib_dir="/usr/lib /usr/lib64 /usr/local/lib /usr/lib/$ac_mozilla_name /usr/local/lib/$ac_mozilla_name"
 -    ac_nss_inc_dir="/usr/include /usr/include/mozilla /usr/local/include /usr/local/include/mozilla /usr/include/$ac_mozilla_name /usr/local/include/$ac_mozilla_name"
-+    ac_nss_lib_dir="${WORKDIR}/UnpackedTarball/nss/mozilla/dist/out/lib"
-+    ac_nss_inc_dir="${WORKDIR}/UnpackedTarball/nss/mozilla/dist/out/include ${WORKDIR}/UnpackedTarball/nss/mozilla/dist/public"
++    ac_nss_lib_dir="${WORKDIR}/UnpackedTarball/nss/dist/out/lib"
++    ac_nss_inc_dir="${WORKDIR}/UnpackedTarball/nss/dist/out/include ${WORKDIR}/UnpackedTarball/nss/dist/public"
  
      AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
      NSPR_INCLUDES_FOUND="no"

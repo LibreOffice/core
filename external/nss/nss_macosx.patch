@@ -1,5 +1,5 @@
---- misc/nss-3.13.5/mozilla/security/nss/Makefile	2008-12-03 00:24:39.000000000 +0100
-+++ misc/build/nss-3.13.5/mozilla/security/nss/Makefile	2009-11-27 13:36:22.662753328 +0100
+--- a/a/nss/Makefile	2008-12-03 00:24:39.000000000 +0100
++++ b/b/nss/Makefile	2009-11-27 13:36:22.662753328 +0100
 @@ -104,6 +104,9 @@
  ifeq ($(OS_TARGET),WIN95)
  NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95
@@ -10,8 +10,8 @@
  ifdef USE_DEBUG_RTL
  NSPR_CONFIGURE_OPTS += --enable-debug-rtl
  endif
---- misc/nss-3.13.5/mozilla/nsprpub/configure
-+++ misc/build/nss-3.13.5/mozilla/nsprpub/configure
+--- a/a/nspr/configure
++++ b/b/nspr/configure
 @@ -3888,7 +3889,7 @@
  fi
  
@@ -21,8 +21,8 @@
      _OPTIMIZE_FLAGS=-O2
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      STRIP="$STRIP -x -S"
---- misc/nss-3.13.5/mozilla/nsprpub/lib/ds/Makefile.in
-+++ misc/build/nss-3.13.5/mozilla/nsprpub/lib/ds/Makefile.in
+--- a/a/nspr/lib/ds/Makefile.in
++++ b/b/nspr/lib/ds/Makefile.in
 @@ -143,7 +143,7 @@
  
  export:: $(TARGETS)
@@ -32,8 +32,8 @@
  ifdef SHARED_LIBRARY
  ifeq ($(OS_ARCH),HP-UX)
  	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
---- misc/nss-3.13.5/mozilla/nsprpub/lib/libc/src/Makefile.in
-+++ misc/build/nss-3.13.5/mozilla/nsprpub/lib/libc/src/Makefile.in
+--- a/a/nspr/lib/libc/src/Makefile.in
++++ b/b/nspr/lib/libc/src/Makefile.in
 @@ -144,7 +144,7 @@
  #
  
@@ -43,8 +43,8 @@
  ifdef SHARED_LIBRARY
  ifeq ($(OS_ARCH),HP-UX)
  	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
---- misc/nss-3.13.5/mozilla/nsprpub/pr/src/Makefile.in
-+++ misc/build/nss-3.13.5/mozilla/nsprpub/pr/src/Makefile.in
+--- a/a/nspr/pr/src/Makefile.in
++++ b/b/nspr/pr/src/Makefile.in
 @@ -365,7 +365,7 @@
  #
  
@@ -54,8 +54,8 @@
  ifdef SHARED_LIBRARY
  ifeq ($(OS_ARCH),HP-UX)
  	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
---- misc/nss-3.13.5/mozilla/security/coreconf/Darwin.mk
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/Darwin.mk
+--- a/a/nss/coreconf/Darwin.mk
++++ b/b/nss/coreconf/Darwin.mk
 @@ -150,7 +150,7 @@
  # May override this with different compatibility and current version numbers.
  DARWIN_DYLIB_VERSIONS = -compatibility_version 1 -current_version 1
@@ -65,14 +65,3 @@
  
  MKSHLIB		= $(CC) $(DSO_LDOPTS) $(DARWIN_SDK_SHLIBFLAGS)
  DLL_SUFFIX	= dylib
---- misc/nss-3.13.5/mozilla/security/coreconf/rules.mk
-+++ misc/build/nss-3.13.5/mozilla/security/coreconf/rules.mk
-@@ -342,7 +342,7 @@
- 	chmod +x $@
- ifeq ($(OS_TARGET),Darwin)
- ifdef MAPFILE
--	nmedit -s $(MAPFILE) $@
-+	$(NMEDIT) -s $(MAPFILE) $@
- endif
- endif
- endif
