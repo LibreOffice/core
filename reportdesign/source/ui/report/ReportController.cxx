@@ -183,10 +183,6 @@ namespace
         {
             return x.Name.equals(y);
         }
-        bool operator() (const OUString& x,const beans::PropertyValue& y) const
-        {
-            return x.equals(y.Name);
-        }
     };
 
     void lcl_setFontWPU_nothrow(const uno::Reference< report::XReportControlFormat>& _xReportControlFormat,const sal_Int32 _nId)
