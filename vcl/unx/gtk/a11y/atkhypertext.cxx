@@ -63,7 +63,7 @@ hyper_link_get_uri( AtkHyperlink *pLink,
         OUString aUri = aAny.get< OUString > ();
         return OUStringToGChar(aUri);
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in hyper_link_get_uri" );
     }
     return NULL;
@@ -78,7 +78,7 @@ hyper_link_get_object( AtkHyperlink *pLink,
         uno::Reference< accessibility::XAccessible > xObj( aAny, uno::UNO_QUERY_THROW );
         return atk_object_wrapper_ref( xObj );
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in hyper_link_get_object" );
     }
     return NULL;
@@ -89,7 +89,7 @@ hyper_link_get_end_index( AtkHyperlink *pLink )
     try {
         return getHyperlink( pLink )->getEndIndex();
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
     }
     return -1;
 }
@@ -99,7 +99,7 @@ hyper_link_get_start_index( AtkHyperlink *pLink )
     try {
         return getHyperlink( pLink )->getStartIndex();
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
     }
     return -1;
 }
@@ -109,7 +109,7 @@ hyper_link_is_valid( AtkHyperlink *pLink )
     try {
         return getHyperlink( pLink )->isValid();
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
     }
     return FALSE;
 }
@@ -119,7 +119,7 @@ hyper_link_get_n_anchors( AtkHyperlink *pLink )
     try {
         return getHyperlink( pLink )->getAccessibleActionCount();
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
     }
     return 0;
 }
@@ -230,7 +230,7 @@ hypertext_get_link( AtkHypertext *hypertext,
             return ATK_HYPERLINK( pLink );
         }
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getHyperLink()" );
     }
 
@@ -245,7 +245,7 @@ hypertext_get_n_links( AtkHypertext *hypertext )
         if( pHypertext )
             return pHypertext->getHyperLinkCount();
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getHyperLinkCount()" );
     }
 
@@ -261,7 +261,7 @@ hypertext_get_link_index( AtkHypertext *hypertext,
         if( pHypertext )
             return pHypertext->getHyperLinkIndex( index );
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getHyperLinkIndex()" );
     }
 
