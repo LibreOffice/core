@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///0w\u003d",
+        "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-13T09:26:58Z",
+      "side": 1,
+      "message": "Please always put the { to the start of the next line, like surrounding code does so.",
+      "revId": "6c64ff8cff1a69dc0e69a04745b6c09c4e41282d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
