@@ -11,15 +11,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,icu))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,icu,$(ICU_TARBALL)))
 
-# *ONLY* for ICU 51(.1)!
-# http://site.icu-project.org/download/51#TOC-Known-Issues
-$(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
-	$(GNUTAR) -x -z -f $(gb_UnpackedTarget_TARFILE_LOCATION)/$(ICU_51_LAYOUT_FIX_TARBALL) \
-))
-
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
-	external/icu/icu4c.10318.CVE-2013-2924_changeset_34076.patch \
-	external/icu/icu4c.10129.wintz.patch \
 	external/icu/icu4c-build.patch \
 	external/icu/icu4c-aix.patch \
 	external/icu/icu4c-wchar_t.patch \

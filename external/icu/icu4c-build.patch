@@ -1,22 +1,3 @@
---- misc/icu/source/common/umutex.h
-+++ misc/icu/source/common/umutex.h
-@@ -48,16 +48,8 @@
- #endif  /* win32 */
- 
- #if U_PLATFORM_IS_DARWIN_BASED
--#if defined(__STRICT_ANSI__)
--#define UPRV_REMAP_INLINE
--#define inline
--#endif
- #include <libkern/OSAtomic.h>
- #define USE_MAC_OS_ATOMIC_INCREMENT 1
--#if defined(UPRV_REMAP_INLINE)
--#undef inline
--#undef UPRV_REMAP_INLINE
--#endif
- #endif
- 
- /*
 --- misc/icu/source/tools/toolutil/pkg_genc.h
 +++ misc/build/icu/source/tools/toolutil/pkg_genc.h
 @@ -58,7 +58,7 @@
@@ -27,10 +8,10 @@
 +#define SMALL_BUFFER_MAX_SIZE 2048
  #define SMALL_BUFFER_FLAG_NAMES 32
  #define BUFFER_PADDING_SIZE 20
- 
+
 --- misc/icu/source/tools/toolutil/pkg_genc.c
 +++ misc/build/icu/source/tools/toolutil/pkg_genc.c
-@@ -145,6 +145,28 @@
+@@ -152,6 +152,28 @@
  
          ".long ","",HEX_0X
      },
@@ -56,13 +37,13 @@
 +	"\t.section .note.GNU-stack,\"\",%%progbits\n",
 +	HEX_0X
 +    },
+ // 16 bytes alignment.
+ // http://docs.oracle.com/cd/E19641-01/802-1947/802-1947.pdf
      {"sun",
-         "\t.section \".rodata\"\n"
-         "\t.align   8\n"
 
 --- misc/icu/source/config/mh-darwin	2010-09-29 20:37:36.000000000 +0200
 +++ misc/build/icu/source/config/mh-darwin	2011-03-15 10:56:26.653056004 +0100
-@@ -25,11 +25,7 @@
+@@ -28,11 +28,7 @@
  SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) $(LD_SOOPTIONS)
  
  ## Compiler switches to embed a library name and version information
@@ -75,7 +56,7 @@
  
  ## Compiler switch to embed a runtime search path
  LD_RPATH=
-@@ -45,10 +41,6 @@
+@@ -48,10 +44,6 @@
  ## Non-shared intermediate object suffix
  STATIC_O = ao
  
@@ -85,8 +66,8 @@
 -
  ## Compilation and dependency rules
  %.$(STATIC_O): $(srcdir)/%.c
-	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -MMD -MT "$*.d $*.o $*.$(STATIC_O)" -o $@ $<)
-@@ -80,16 +72,10 @@
+ 	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -MMD -MT "$*.d $*.o $*.$(STATIC_O)" -o $@ $<)
+@@ -65,16 +57,10 @@
  
  ## Versioned libraries rules
  
