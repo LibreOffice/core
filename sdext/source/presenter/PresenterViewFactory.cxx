@@ -57,29 +57,7 @@ const OUString PresenterViewFactory::msSlideSorterURL(
 const OUString PresenterViewFactory::msHelpViewURL(
     "private:resource/view/Presenter/Help");
 
-//===== SimpleView ============================================================
-
 namespace {
-
-typedef ::cppu::WeakComponentImplHelper1 <XView> SimpleViewInterfaceBase;
-
-class SimpleView
-    : private ::cppu::BaseMutex,
-      public SimpleViewInterfaceBase
-{
-public:
-    SimpleView (const Reference<XResourceId>& rxViewId)
-        : SimpleViewInterfaceBase(m_aMutex),mxResourceId(rxViewId) {};
-    virtual ~SimpleView (void) {};
-
-    // XView
-
-    virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException)
-    { return mxResourceId; };
-
-private:
-    Reference<XResourceId> mxResourceId;
-};
 
 /** By default the PresenterSlidePreview shows the preview of the current
     slide.  This adapter class makes it display the preview of the next
