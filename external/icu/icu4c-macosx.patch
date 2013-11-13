@@ -1,6 +1,6 @@
 --- misc/icu/source/common/putil.cpp
 +++ misc/build/icu/source/common/putil.cpp
-@@ -1080,8 +1080,16 @@
+@@ -1111,8 +1111,16 @@
          static const time_t decemberSolstice=1198332540; /*2007-12-22 06:09 UT*/
  
          /* This probing will tell us when daylight savings occurs.  */
@@ -17,3 +17,4 @@
          if(decemberSol.tm_isdst > 0) {
            daylightType = U_DAYLIGHT_DECEMBER;
          } else if(juneSol.tm_isdst > 0) {
+
