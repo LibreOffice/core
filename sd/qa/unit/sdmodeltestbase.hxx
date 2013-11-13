@@ -18,6 +18,7 @@
 
 #include "drawdoc.hxx"
 #include "../source/ui/inc/DrawDocShell.hxx"
+#include "unotools/tempfile.hxx"
 
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfile.hxx>
@@ -51,6 +52,10 @@ FileFormat aFileFormats[] = {
     { "pptx", "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", "", PPTX_FORMAT_TYPE },
     { 0, 0, 0, 0, 0 }
 };
+
+#define ODP 0
+#define PPT 1
+#define PPTX 2
 
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
@@ -113,6 +118,33 @@ protected:
         }
 
         return xDocShRef;
+    }
+
+    ::sd::DrawDocShellRef saveAndReload( ::sd::DrawDocShell *pShell, sal_uLong nExportType )
+    {
+        FileFormat *pFmt = &aFileFormats[0];
+        if( nExportType < SAL_N_ELEMENTS( aFileFormats ) )
+            pFmt = &aFileFormats[ nExportType ];
+        OUString aExt = OUString( "." ) + OUString::createFromAscii( pFmt->pName );
+        utl::TempFile aTempFile( OUString(), &aExt );
+        aTempFile.EnableKillingFile();
+        SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
+        sal_uInt32 nExportFormat = 0;
+        if( pFmt->nFormatType == ODP_FORMAT_TYPE )
+            nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+        SfxFilter* pExportFilter = new SfxFilter(
+                OUString::createFromAscii( pFmt->pFilterName ),
+                OUString(), pFmt->nFormatType, nExportFormat,
+                OUString::createFromAscii( pFmt->pTypeName ),
+                0, OUString(),
+                OUString::createFromAscii( pFmt->pUserData ),
+                OUString("private:factory/simpress*") );
+        pExportFilter->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+        aStoreMedium.SetFilter( pExportFilter );
+        pShell->DoSaveAs( aStoreMedium );
+        pShell->DoClose();
+
+        return loadURL( aTempFile.GetURL() );
     }
 
     /** Dump shapes in xDocShRef, and compare the dump against content of pShapesDumpFileNameBase<number>.xml.
