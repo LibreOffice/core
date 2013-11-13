@@ -1869,8 +1869,6 @@ class NumberFormatFinalizer
 public:
     explicit            NumberFormatFinalizer( const WorkbookHelper& rHelper );
 
-    inline bool         is() const { return mxNumFmts.is(); }
-
     inline void         operator()( NumberFormat& rNumFmt ) const
                             { rNumFmt.finalizeImport( mxNumFmts, maEnUsLocale ); }
 
