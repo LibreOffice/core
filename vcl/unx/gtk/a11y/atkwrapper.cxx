@@ -338,7 +338,7 @@ wrapper_get_name( AtkObject *atk_obj )
                 atk_obj->name = g_strdup(aName.getStr());
             }
         }
-        catch(const uno::Exception& e) {
+        catch(const uno::Exception&) {
             g_warning( "Exception in getAccessibleName()" );
         }
     }
@@ -365,7 +365,7 @@ wrapper_get_description( AtkObject *atk_obj )
             g_free(atk_obj->description);
             atk_obj->description = g_strdup(aDescription.getStr());
         }
-        catch(const uno::Exception& e) {
+        catch(const uno::Exception&) {
             g_warning( "Exception in getAccessibleDescription()" );
         }
     }
@@ -388,7 +388,7 @@ wrapper_get_n_children( AtkObject *atk_obj )
         try {
             n = xContext->getAccessibleChildCount();
         }
-        catch(const uno::Exception& e) {
+        catch(const uno::Exception&) {
             OSL_FAIL("Exception in getAccessibleChildCount()" );
         }
     }
@@ -421,7 +421,7 @@ wrapper_ref_child( AtkObject *atk_obj,
 
             child = atk_object_wrapper_ref( xAccessible );
         }
-        catch(const uno::Exception& e) {
+        catch(const uno::Exception&) {
             OSL_FAIL("Exception in getAccessibleChild");
         }
     }
@@ -448,7 +448,7 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
                 obj->mpAccessible, i);
 #endif
         }
-        catch(const uno::Exception& e) {
+        catch(const uno::Exception&) {
             g_warning( "Exception in getAccessibleIndexInParent()" );
         }
     }
@@ -494,7 +494,7 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
                 g_object_unref( G_OBJECT( pRel ) );
             }
         }
-        catch(const uno::Exception &e) {
+        catch(const uno::Exception &) {
             g_object_unref( G_OBJECT( pSet ) );
             pSet = NULL;
         }
@@ -533,7 +533,7 @@ wrapper_ref_state_set( AtkObject *atk_obj )
             }
         }
 
-        catch(const uno::Exception &e) {
+        catch(const uno::Exception &) {
             g_warning( "Exception in wrapper_ref_state_set" );
             atk_state_set_add_state( pSet, ATK_STATE_DEFUNCT );
         }
@@ -640,7 +640,7 @@ isOfType( uno::XInterface *pInterface, const uno::Type & rType )
 
         bIs = ( ( typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass ) &&
                 ( aRet.pReserved != NULL ) );
-    } catch( const uno::Exception &e) { }
+    } catch( const uno::Exception &) { }
 
     return bIs;
 }
@@ -826,7 +826,7 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
 
         return ATK_OBJECT( pWrap );
     }
-    catch (const uno::Exception &e)
+    catch (const uno::Exception &)
     {
         if( pWrap )
             g_object_unref( pWrap );
