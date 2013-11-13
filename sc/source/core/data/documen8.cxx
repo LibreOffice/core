@@ -540,15 +540,12 @@ public:
     SCCOL Col() const { return mrCalcPos.Col(); }
     SCROW Row() const { return mrCalcPos.Row(); }
 
-    const ScAddress& Pos() const { return mrCalcPos; }
-
     void setTab(SCTAB nTab) { mrCalcPos.SetTab(nTab); }
     void setCol(SCCOL nCol) { mrCalcPos.SetCol(nCol); }
     void setRow(SCROW nRow) { mrCalcPos.SetRow(nRow); }
 
     void incTab(SCTAB nInc=1) { mrCalcPos.IncTab(nInc); }
     void incCol(SCCOL nInc=1) { mrCalcPos.IncCol(nInc); }
-    void incRow(SCROW nInc=1) { mrCalcPos.IncRow(nInc); }
 
     void setOldMapMode(const MapMode& rOldMapMode) { maOldMapMode = rOldMapMode; }
 
