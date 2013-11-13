@@ -472,9 +472,6 @@ public:
         mbRowHeaders = bRowHeaders;
     }
 
-    bool hasColHeaders() const { return mbColHeaders; }
-    bool hasRowHeaders() const { return mbRowHeaders; }
-
     Chart2PositionMap* getPositionMap()
     {
         createPositionMap();
@@ -482,8 +479,6 @@ public:
     }
 
 private:
-    Chart2Positioner(); // disabled
-
     void invalidateGlue();
     void glueState();
     void calcGlueState(SCCOL nCols, SCROW nRows);
@@ -880,9 +875,6 @@ public:
     }
 
 private:
-    Tokens2RangeString(); // disabled
-
-private:
     shared_ptr<OUStringBuffer>  mpRangeStr;
     ScDocument*         mpDoc;
     FormulaGrammar::Grammar  meGrammar;
@@ -952,8 +944,6 @@ public:
     }
 
 private:
-    Tokens2RangeStringXML(); // disabled
-
     bool splitRangeToken(const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd) const
     {
         ScComplexRefData aData;
@@ -3193,8 +3183,6 @@ public:
     Sequence<OUString> getLabels() const { return *mpLabels; }
 
 private:
-    GenerateLabelStrings(); // disabled
-
     shared_ptr< Sequence<OUString> >    mpLabels;
     chart2::data::LabelOrigin           meOrigin;
     sal_Int32                           mnCount;
