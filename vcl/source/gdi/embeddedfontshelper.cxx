@@ -149,7 +149,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
     {
         sufficientFontRights = sufficientTTFRights( &fontData.front(), fontData.size(), EditingAllowed );
     }
-    if( sufficientFontRights )
+    if( !sufficientFontRights )
     {
         // It would be actually better to open the document in read-only mode in this case,
         // warn the user about this, and provide a button to drop the font(s) in order
