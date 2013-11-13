@@ -54,8 +54,6 @@ public:
         ScFormulaCell* mpCell;
 
         Item() : mnRow(-1), mpCell(NULL) {}
-        Item( SCROW nRow, ScFormulaCell* pCell ) :
-            mnRow(nRow), mpCell(pCell) {}
     };
 
     CachedTokenArray( ScDocument& rDoc ) : mrDoc(rDoc) {}
