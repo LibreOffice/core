@@ -109,15 +109,6 @@ namespace
                 xNameCont->dropByName(_sTableName);
         }
     }
-    struct OTableRowCompare : public ::std::binary_function<  ::boost::shared_ptr<OTableRow> , OUString, bool>
-    {
-        bool operator() (const  ::boost::shared_ptr<OTableRow>  lhs, const OUString& rhs) const
-        {
-            OFieldDescription* pField = lhs->GetActFieldDescr();
-            return pField && pField->GetName() == rhs;
-        }
-    };
-
 }
 
 OUString SAL_CALL OTableController::getImplementationName() throw( RuntimeException )
