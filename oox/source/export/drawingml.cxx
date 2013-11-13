@@ -697,6 +697,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     const char* italic = NULL;
     const char* underline = NULL;
     sal_Int32 nSize = 1800;
+    sal_Int32 nCharEscapement = 0;
 
     if( GETAD( CharHeight ) )
         nSize = (sal_Int32) (100*(*((float*) mAny.getValue())));
@@ -777,12 +778,24 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
             usLanguage = aLanguageTag.getBcp47();
     }
 
+    if( GETAD( CharEscapement ) )
+        mAny >>= nCharEscapement;
+
+    if( nCharEscapement && GETAD( CharEscapementHeight ) ) {
+        sal_uInt32 nCharEscapementHeight;
+        mAny >>= nCharEscapementHeight;
+        nSize = (nSize * nCharEscapementHeight) / 100;
+        // MSO uses default ~58% size
+        nSize = (nSize / 0.58);
+    }
+
     mpFS->startElementNS( XML_a, XML_rPr,
                           XML_b, bold,
                           XML_i, italic,
                           XML_lang, usLanguage.isEmpty() ? NULL : USS( usLanguage ),
                           XML_sz, nSize == 1800 ? NULL : IS( nSize ),
                           XML_u, underline,
+                          XML_baseline, nCharEscapement == 0 ? NULL : IS( nCharEscapement*1000 ),
                           FSEND );
 
     // mso doesn't like text color to be placed after typeface
