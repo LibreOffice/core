@@ -85,10 +85,8 @@ public:
             mbAlternate(bAlternate)
         {}
 
-    sal_uInt32 GetDuration() const { return mnDuration; }
     sal_uInt32 GetRepeat() const { return mnRepeat; }
     sal_uInt32 GetFullTime() const { return mnDuration * mnRepeat; }
-    double GetStart() const { return mfStart; }
     double GetStop() const { return mfStop; }
     sal_uInt32 GetFrequency() const { return mnFrequency; }
     bool DoAlternate() const { return mbAlternate; }
