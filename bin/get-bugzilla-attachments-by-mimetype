@@ -348,11 +348,6 @@ mimetypes = {
     'image/x-wmf': 'wmf',
     'image/x-pict': 'pict',
     'image/x-cmx': 'cmx',
-}
-
-# disabled for now, this would download gigs of pngs/jpegs...
-common_noncore_mimetypes = {
-# graphics
     'image/svg+xml': 'svg',
     'image/x-MS-bmp': 'bmp',
     'image/x-wpg': 'wpg',
@@ -367,6 +362,11 @@ common_noncore_mimetypes = {
     'image/x-cmu-raster': 'ras',
     'image/x-xbitmap': 'xbm',
     'image/x-xpixmap': 'xpm',
+}
+
+# disabled for now, this would download gigs of pngs/jpegs...
+common_noncore_mimetypes = {
+# graphics
     'image/gif': 'gif',
     'image/jpeg': 'jpeg',
     'image/png': 'png',
