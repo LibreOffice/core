@@ -755,14 +755,6 @@
 
 #define BMP_ARROW_RIGHT     1
 
-#define MN_WIN 60
-#define MN_SUB_VIEW 31
-#define MN_SUB_TOOLBAR 32
-#define MN_SUB_GRAPHIC 33
-#define MN_SUB_SPELLING 34
-#define MN_SUB_TEMPLATES 35
-
-#define FT_1 1
 
 // 342 == SCH_IF_SMAVIEWSHELL, because SFX_INTERFACE_LIB is no
 // Define but latterly an Enum
