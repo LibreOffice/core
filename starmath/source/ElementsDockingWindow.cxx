@@ -454,35 +454,35 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uI
             addSeparator();
         } else {
             if (aElementId == RID_NEWLINE)
-                addElement(OStringToOUString( "\xe2\x86\xb5", RTL_TEXTENCODING_UTF8 ), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement(OStringToOUString( "\xe2\x86\xb5", RTL_TEXTENCODING_UTF8 ), SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_SBLANK)
-                addElement(OUString("\"`\""), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("\"`\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_BLANK)
-                addElement(OUString("\"~\""), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("\"~\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_PHANTOMX)
-                addElement(OUString("\"" + stringHide() +"\""), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("\"" + stringHide() +"\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_BOLDX)
-                addElement(OUString("bold B"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("bold B", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_ITALX)
-                addElement(OUString("ital I"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("ital I", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_SIZEXY)
-                addElement(OUString("\"" + stringSize() + "\""), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("\"" + stringSize() + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_FONTXY)
-                addElement(OUString("\"" + stringFont() + "\""), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("\"" + stringFont() + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_BLACK)
-                addElement(OUString("color black { \"" + colorBlack() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("color black { \"" + colorBlack() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_BLUE)
-                addElement(OUString("color blue { \"" + colorBlue() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("color blue { \"" + colorBlue() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_GREEN)
-                addElement(OUString("color green { \"" + colorGreen() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("color green { \"" + colorGreen() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_RED)
-                addElement(OUString("color red { \"" + colorRed() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("color red { \"" + colorRed() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_CYAN)
-                addElement(OUString("color cyan { \"" + colorCyan() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("color cyan { \"" + colorCyan() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_MAGENTA)
-                addElement(OUString("color magenta { \"" + colorMagenta() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("color magenta { \"" + colorMagenta() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_YELLOW)
-                addElement(OUString("color yellow { \"" + colorYellow() + "\" }"), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement("color yellow { \"" + colorYellow() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_ALIGNLX)
                 addElement("\"" + SM_RESSTR(STR_ALIGN_LEFT) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_ALIGNCX)
@@ -490,7 +490,7 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uI
             else if (aElementId == RID_ALIGNRX)
                 addElement("\"" + SM_RESSTR(STR_ALIGN_RIGHT) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else
-                addElement(SmResId(aElementId), SmResId(aElementId), SmResId(aElementIdHelp));
+                addElement(SM_RESSTR(aElementId), SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
         }
     }
 }
