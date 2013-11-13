@@ -1514,14 +1514,33 @@ void Test::testFuncSUM()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    double val = 1;
-    double result;
-    m_pDoc->SetValue (0, 0, 0, val);
-    m_pDoc->SetValue (0, 1, 0, val);
-    m_pDoc->SetString (0, 2, 0, OUString("=SUM(A1:A2)"));
+    // Single argument case.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1);
+    m_pDoc->SetValue(ScAddress(0,1,0), 1);
+    m_pDoc->SetString(ScAddress(0,2,0), "=SUM(A1:A2)");
     m_pDoc->CalcAll();
-    m_pDoc->GetValue (0, 2, 0, result);
-    CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    // Multiple argument case.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1);
+    m_pDoc->SetValue(ScAddress(0,1,0), 22);
+    m_pDoc->SetValue(ScAddress(0,2,0), 4);
+    m_pDoc->SetValue(ScAddress(0,3,0), 5);
+    m_pDoc->SetValue(ScAddress(0,4,0), 6);
+
+    m_pDoc->SetValue(ScAddress(1,0,0), 3);
+    m_pDoc->SetValue(ScAddress(1,1,0), 4);
+    m_pDoc->SetValue(ScAddress(1,2,0), 5);
+    m_pDoc->SetValue(ScAddress(1,3,0), 6);
+    m_pDoc->SetValue(ScAddress(1,4,0), 7);
+
+    m_pDoc->SetString(ScAddress(3,0,0), "=SUM(A1:A2;B1:B2)");
+    m_pDoc->SetString(ScAddress(3,1,0), "=SUM(A2:A3;B2:B3)");
+    m_pDoc->SetString(ScAddress(3,2,0), "=SUM(A3:A4;B3:B4)");
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+    CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(ScAddress(3,1,0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(3,2,0)));
 
     m_pDoc->DeleteTab(0);
 }

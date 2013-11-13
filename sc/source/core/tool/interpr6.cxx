@@ -806,7 +806,7 @@ void ScInterpreter::ScSum()
 
                 FuncSum aAction;
                 aSet.executeColumnAction(*pDok, aAction);
-                fRes = aAction.getSum();
+                fRes += aAction.getSum();
 
                 // Get the number format of the last iterated cell.
                 nFuncFmtIndex = aAction.getNumberFormat();
