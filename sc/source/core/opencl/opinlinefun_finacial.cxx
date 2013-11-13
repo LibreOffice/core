@@ -189,10 +189,10 @@ std::string DateToDays=
 
 
 std::string GetNullDateDecl=
-"int GetNullDate();\n";
+"int GetNullDate(void);\n";
 
 std::string GetNullDate=
-"int GetNullDate()\n"
+"int GetNullDate(void)\n"
 "{\n"
 "    return DateToDays(30,12,1899 );\n"
 "}\n";
