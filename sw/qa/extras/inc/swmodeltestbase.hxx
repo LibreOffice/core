@@ -139,8 +139,10 @@ protected:
     void executeImportExportImportTest(const char* filename)
     {
         header();
+        preTest(filename);
         load(mpTestDocumentPath, filename);
-        reload(mpFilter);
+        reload(mpFilter, filename);
+        postTest(filename);
         verify();
         finish();
     }
@@ -172,6 +174,14 @@ protected:
      */
     virtual void postTest(const char* /*filename*/)
     {
+    }
+
+    /**
+     * Override this function if not calcing layout is needed
+     */
+    virtual bool mustCalcLayoutOf(const char* /*filename*/)
+    {
+        return true;
     }
 
 private:
@@ -391,7 +401,7 @@ protected:
         std::cerr << "File tested,Execution Time (ms)" << std::endl;
     }
 
-    void load(const char* pDir, const char* pName, bool bCalcLayout = true)
+    void load(const char* pDir, const char* pName)
     {
         if (mxComponent.is())
             mxComponent->dispose();
@@ -399,11 +409,11 @@ protected:
         std::cerr << pName << ",";
         m_nStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
-        if (bCalcLayout)
+        if (mustCalcLayoutOf(pName))
             calcLayout();
     }
 
-    void reload(const char* pFilter)
+    void reload(const char* pFilter, const char* filename)
     {
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aArgs(1);
@@ -420,7 +430,8 @@ protected:
             xmlBufferFree(mpXmlBuffer);
             mpXmlBuffer = 0;
         }
-        calcLayout();
+        if (mustCalcLayoutOf(filename))
+            calcLayout();
     }
 
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.

@@ -8,6 +8,9 @@
  */
 
 #include <swmodeltestbase.hxx>
+
+#if !defined(MACOSX) && !defined(WNT)
+
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <swmodule.hxx>
@@ -16,56 +19,55 @@
 class Test : public SwModelTestBase
 {
 public:
-    void testFdo62336();
-    void testCharacterBorder();
-
-    CPPUNIT_TEST_SUITE(Test);
-#if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(run);
-#endif
-    CPPUNIT_TEST_SUITE_END();
+    Test()
+        : SwModelTestBase("/sw/qa/extras/htmlexport/data/", "HTML (StarWriter)"),
+        m_eUnit(FUNIT_NONE)
+    {
+    }
 
 private:
-    void run();
-};
-
-void Test::run()
-{
-    MethodEntry<Test> aMethods[] = {
-        {"fdo62336.docx", &Test::testFdo62336},
-        {"charborder.odt", &Test::testCharacterBorder},
-    };
-    header();
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    bool mustCalcLayoutOf(const char* filename) SAL_OVERRIDE
     {
-        MethodEntry<Test>& rEntry = aMethods[i];
-        FieldUnit eUnit = FUNIT_NONE;
-        if (OString(rEntry.pName) == "charborder.odt")
+        return OString(filename) != "fdo62336.docx";
+    }
+
+    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE
+    {
+        return OString(filename) != "fdo62336.docx";
+    }
+
+    void preTest(const char* filename) SAL_OVERRIDE
+    {
+        if (OString(filename) == "charborder.odt")
         {
             // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
             SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
-            eUnit = pPref->GetMetric();
+            m_eUnit = pPref->GetMetric();
             pPref->SetMetric(FUNIT_CM);
         }
-        load("/sw/qa/extras/htmlexport/data/", rEntry.pName,
-             false /* not doing layout is required for this test */);
-        reload("HTML (StarWriter)");
-        if (OString(rEntry.pName) == "charborder.odt")
+    }
+
+    void postTest(const char* filename) SAL_OVERRIDE
+    {
+        if (OString(filename) == "charborder.odt")
         {
             SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
-            pPref->SetMetric(eUnit);
+            pPref->SetMetric(m_eUnit);
         }
-        (this->*rEntry.pMethod)();
-        finish();
     }
-}
 
-void Test::testFdo62336()
+    FieldUnit m_eUnit;
+};
+
+#define DECLARE_HTMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+
+DECLARE_HTMLEXPORT_TEST(testFdo62336, "fdo62336.docx")
 {
     // The problem was essentially a crash during table export as docx/rtf/html
+    // If either of no-calc-layout or no-test-import is enabled, the crash does not occur
 }
 
-void Test::testCharacterBorder()
+DECLARE_HTMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
 
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
@@ -88,7 +90,7 @@ void Test::testCharacterBorder()
     // No shadow
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
