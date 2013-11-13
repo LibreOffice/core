@@ -106,7 +106,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
         if( read <= 0 )
             break;
     }
-    bool sufficientFontRights;
+    bool sufficientFontRights(false);
 #if ENABLE_EOT
     if( eot )
     {
