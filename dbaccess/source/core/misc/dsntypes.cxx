@@ -385,12 +385,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         const DATASOURCE_TYPE   eType;
         const bool              bMatchComplete;
 
-        KnownPrefix()
-            :pAsciiPrefix( NULL )
-            ,eType( DST_UNKNOWN )
-            ,bMatchComplete( false )
-        {
-        }
         KnownPrefix( const sal_Char* _p, const DATASOURCE_TYPE _t, const bool _m )
             :pAsciiPrefix( _p )
             ,eType ( _t )
