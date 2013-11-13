@@ -50,16 +50,6 @@ using namespace ::com::sun::star::uno;
 namespace sd { namespace slidesorter { namespace model {
 
 namespace {
-    class CompareToXDrawPage
-    {
-    public:
-        CompareToXDrawPage (const Reference<drawing::XDrawPage>& rxSlide) : mxSlide(rxSlide) {}
-        bool operator() (const SharedPageDescriptor& rpDescriptor)
-        { return rpDescriptor.get()!=NULL && rpDescriptor->GetXDrawPage()==mxSlide; }
-    private:
-        Reference<drawing::XDrawPage> mxSlide;
-    };
-
     bool PrintModel (const SlideSorterModel& rModel)
     {
         for (sal_Int32 nIndex=0,nCount=rModel.GetPageCount(); nIndex<nCount; ++nIndex)
