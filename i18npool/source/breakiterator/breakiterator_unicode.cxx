@@ -121,7 +121,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
                     OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
             }
             //use icu's breakiterator for Thai, Khmer, Tibetan and Dzongkha
-            else if (rLocale.Language != "th" && rLocale.Language != "km" && rLocale.Language != "bo" && rLocale.Language != "dz")
+            else if (rLocale.Language != "th" && rLocale.Language != "lo" && rLocale.Language != "km" && rLocale.Language != "bo" && rLocale.Language != "dz")
             {
                 status = U_ZERO_ERROR;
                 OStringBuffer aUDName(64);
