@@ -2581,8 +2581,8 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
     return NULL;
 }
 
-DynamicKernel* DynamicKernel::create(ScDocument& rDoc,
-                                     const ScAddress& rTopPos,
+DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
+                                     const ScAddress& /* rTopPos */,
                                      ScTokenArray& rCode)
 {
     // Constructing "AST"
