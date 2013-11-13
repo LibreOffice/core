@@ -1,5 +1,5 @@
---- misc/nss-3.13.5/mozilla/security/nss/lib/zlib/gzguts.h	2010-08-22 03:07:03.000000000 +0200
-+++ misc/build/nss-3.13.5/mozilla/security/nss/lib/zlib/gzguts.h	2012-07-17 08:52:14.821552788 +0200
+--- a/a/nss/lib/zlib/gzguts.h	2010-08-22 03:07:03.000000000 +0200
++++ b/b/nss/lib/zlib/gzguts.h	2012-07-17 08:52:14.821552788 +0200
 @@ -26,6 +26,9 @@
  #  include <limits.h>
  #endif

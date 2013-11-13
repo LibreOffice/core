@@ -2571,8 +2571,8 @@ define gb_LinkTarget__use_nss3
 $(call gb_LinkTarget_use_package,$(1),nss)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss \
-	-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include \
 )
 
 $(call gb_LinkTarget_use_libraries,$(1),\

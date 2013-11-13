@@ -1,5 +1,5 @@
----  misc/build/nss-3.13.5/mozilla/nsprpub/config/autoconf.mk.in	2011-08-29 19:02:51.000000000 +0200
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/config/autoconf.mk.in	2012-03-22 11:24:22.137097336 +0100
+---  a/a/a/nspr/config/autoconf.mk.in	2011-08-29 19:02:51.000000000 +0200
++++  a/a/a/nspr/config/autoconf.mk.in	2012-03-22 11:24:22.137097336 +0100
 @@ -27,6 +27,7 @@
  OBJ_SUFFIX	= $(error config/config.mk needs to be included before using OBJ_SUFFIX)
  _OBJ_SUFFIX	= @OBJ_SUFFIX@
@@ -8,8 +8,8 @@
  DLL_SUFFIX	= @DLL_SUFFIX@
  ASM_SUFFIX	= @ASM_SUFFIX@
  MOD_NAME	= @NSPR_MODNAME@
----  misc/build/nss-3.13.5/mozilla/nsprpub/config/rules.mk	2011-08-29 19:02:51.000000000 +0200
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/config/rules.mk	2012-03-22 11:24:22.138097311 +0100
+---  a/a/a/nspr/config/rules.mk	2011-08-29 19:02:51.000000000 +0200
++++  a/a/a/nspr/config/rules.mk	2012-03-22 11:24:22.138097311 +0100
 @@ -115,21 +115,21 @@
  #
  
@@ -36,8 +36,8 @@
  SHARED_LIB_PDB	= $(OBJDIR)/lib$(LIBRARY_NAME)$(LIBRARY_VERSION).pdb
  endif
  
----  misc/build/nss-3.13.5/mozilla/nsprpub/configure	2012-02-14 20:06:00.000000000 +0100
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/configure	2012-03-22 11:24:22.139097286 +0100
+---  a/a/a/nspr/configure	2012-02-14 20:06:00.000000000 +0100
++++  a/a/a/nspr/configure	2012-03-22 11:24:22.139097286 +0100
 @@ -3034,6 +3034,7 @@
  
  OBJ_SUFFIX=o
@@ -121,8 +121,8 @@
  s%@DLL_SUFFIX@%$DLL_SUFFIX%g
  s%@ASM_SUFFIX@%$ASM_SUFFIX%g
  s%@WRAP_LDFLAGS@%$WRAP_LDFLAGS%g
----  misc/build/nss-3.13.5/mozilla/nsprpub/configure.in	2012-02-14 20:06:00.000000000 +0100
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/configure.in	2012-03-22 11:24:22.139097286 +0100
+---  a/a/a/nspr/configure.in	2012-02-14 20:06:00.000000000 +0100
++++  a/a/a/nspr/configure.in	2012-03-22 11:24:22.139097286 +0100
 @@ -834,6 +834,7 @@
  dnl ========================================================
  OBJ_SUFFIX=o
@@ -206,8 +206,8 @@
  AC_SUBST(DLL_SUFFIX)
  AC_SUBST(ASM_SUFFIX)
  AC_SUBST(WRAP_LDFLAGS)
----  misc/build/nss-3.13.5/mozilla/nsprpub/pr/include/md/_win95.cfg	2010-01-27 03:45:49.000000000 +0100
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/pr/include/md/_win95.cfg	2012-03-22 11:24:22.139097286 +0100
+---  a/a/a/nspr/pr/include/md/_win95.cfg	2010-01-27 03:45:49.000000000 +0100
++++  a/a/a/nspr/pr/include/md/_win95.cfg	2012-03-22 11:24:22.139097286 +0100
 @@ -106,7 +106,7 @@
  #define PR_BYTES_PER_WORD_LOG2	2
  #define PR_BYTES_PER_DWORD_LOG2	3
@@ -217,8 +217,8 @@
  
  #define IS_LITTLE_ENDIAN 1
  #undef  IS_BIG_ENDIAN
----  misc/build/nss-3.13.5/mozilla/nsprpub/pr/include/md/_winnt.cfg	2010-01-27 03:45:49.000000000 +0100
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/pr/include/md/_winnt.cfg	2012-03-22 11:24:22.140097261 +0100
+---  a/a/a/nspr/pr/include/md/_winnt.cfg	2010-01-27 03:45:49.000000000 +0100
++++  a/a/a/nspr/pr/include/md/_winnt.cfg	2012-03-22 11:24:22.140097261 +0100
 @@ -100,7 +100,7 @@
  #define PR_BYTES_PER_WORD_LOG2	2
  #define PR_BYTES_PER_DWORD_LOG2	2
@@ -228,8 +228,8 @@
  
  #define IS_LITTLE_ENDIAN 1
  #undef  IS_BIG_ENDIAN
----  misc/build/nss-3.13.5/mozilla/nsprpub/pr/src/Makefile.in	2011-09-22 17:21:06.000000000 +0200
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/pr/src/Makefile.in	2012-03-22 11:24:22.140097261 +0100
+---  a/a/a/nspr/pr/src/Makefile.in	2011-09-22 17:21:06.000000000 +0200
++++  a/a/a/nspr/pr/src/Makefile.in	2012-03-22 11:24:22.140097261 +0100
 @@ -9,6 +9,9 @@
  topsrcdir	= @top_srcdir@
  srcdir		= @srcdir@
@@ -261,8 +261,8 @@
  
  RELEASE_LIBS = $(TARGETS)
  
----  misc/build/nss-3.13.5/mozilla/nsprpub/pr/src/md/windows/ntgc.c	2010-11-30 00:26:19.000000000 +0100
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/pr/src/md/windows/ntgc.c	2012-03-22 11:24:22.140097261 +0100
+---  a/a/a/nspr/pr/src/md/windows/ntgc.c	2010-11-30 00:26:19.000000000 +0100
++++  a/a/a/nspr/pr/src/md/windows/ntgc.c	2012-03-22 11:24:22.140097261 +0100
 @@ -44,7 +44,7 @@
  
  PRWord *_MD_HomeGCRegisters(PRThread *t, int isCurrent, int *np) 
@@ -272,8 +272,8 @@
      CONTEXT context;
      context.ContextFlags = CONTEXT_INTEGER;
  
----  misc/build/nss-3.13.5/mozilla/nsprpub/tools/Makefile.in	2008-05-04 00:28:44.000000000 +0200
-+++  misc/build/nss-3.13.5/mozilla/nsprpub/tools/Makefile.in	2012-03-22 11:24:22.140097261 +0100
+---  a/a/a/nspr/tools/Makefile.in	2008-05-04 00:28:44.000000000 +0200
++++  a/a/a/nspr/tools/Makefile.in	2012-03-22 11:24:22.140097261 +0100
 @@ -219,7 +219,7 @@
  	echo winsock.lib     >>w16link
  	wlink @w16link.

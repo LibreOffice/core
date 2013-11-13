@@ -16,10 +16,10 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 
 $(call gb_ExternalProject_get_state_target,nss,configure):
 	$(call gb_ExternalProject_run,configure,\
-	$(if $(filter MSC,$(COM)),LIB="$(ILIB)") \
-	mozilla/nsprpub/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
-		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		$(if $(filter MSCX,$(COM)$(CPU)),--enable-64bit) \
+		$(if $(filter MSC,$(COM)),LIB="$(ILIB)") \
+		nspr/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
+			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter MSC-X86_64,$(COM)-$(CPUNAME)),--enable-64bit) \
 	&& sed -e 's%@prefix@%$(OUTDIR)%' \
 		-e 's%@includedir@%$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss%' \
 		-e 's%@MOD_MAJOR_VERSION@%$(NSS_MAJOR)%' \
@@ -40,7 +40,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		XCFLAGS="$(SOLARINC)" \
 		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py' \
-	,mozilla/security/nss)
+	,nss)
 
 
 else
@@ -58,7 +58,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 			IMPORT_LIB_SUFFIX=dll.a \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" \
 			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py" \
-	,mozilla/security/nss)
+	,nss)
 
 endif
 else # OS!=WNT
@@ -74,18 +74,18 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(MAKE) -j1 nss_build_all \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libfreebl3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnspr4.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnss3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnssckbi.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnssdbm3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnssutil3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libplc4.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libplds4.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libsmime3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libsoftokn3.dylib \
-			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libssl3.dylib) \
-	,mozilla/security/nss)
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libfreebl3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnspr4.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnss3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssckbi.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssdbm3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssutil3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplc4.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplds4.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libsmime3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libsoftokn3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libssl3.dylib) \
+	,nss)
 
 endif
 
