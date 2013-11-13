@@ -58,9 +58,6 @@ namespace {
         }
         return bFound ? n : -1;
     }
-    class JustReleaseDeleter {public:
-            void operator() (XColorList*) const {/* release but don't delete pointer */}
-    };
     XColorListRef GetColorTable (void)
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
