@@ -1250,7 +1250,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     getResolution( nDPIX, nDPIY );
     aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
 
-    aStyleSettings.SetToolbarIconSize( nDPIY > 160 ? STYLE_TOOLBAR_ICONSIZE_LARGE : STYLE_TOOLBAR_ICONSIZE_SMALL );
+    aStyleSettings.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
 
     // TODO: better mapping of aqua<->ooo font settings
     aStyleSettings.SetAppFont( aAppFont );
