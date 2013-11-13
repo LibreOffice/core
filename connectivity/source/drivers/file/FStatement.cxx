@@ -616,7 +616,7 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
         OSQLParseNode * pRow_Value_Const;
-        xub_StrLen nIndex=0;
+        sal_Int32 nIndex=0;
         for (sal_uInt32 i = 0; i < pInsertAtomCommalist->count(); i++)
         {
             pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
@@ -626,7 +626,7 @@ void OStatement_Base::GetAssignValues()
                 ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // only one Columnname allowed per loop
             }
             else if(pRow_Value_Const->isToken())
-                ParseAssignValues(aColumnNameList,pRow_Value_Const,static_cast<xub_StrLen>(i));
+                ParseAssignValues(aColumnNameList,pRow_Value_Const,i);
             else
             {
                 if(pRow_Value_Const->count() == aColumnNameList.size())
@@ -686,10 +686,10 @@ void OStatement_Base::GetAssignValues()
     }
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex)
+void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::ParseAssignValues" );
-    OSL_ENSURE(nIndex <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
+    OSL_ENSURE(size_t(nIndex) <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
     OUString aColumnName(aColumnNameList[nIndex]);
     OSL_ENSURE(aColumnName.getLength() > 0,"OResultSet: Column-Name nicht gefunden");
     OSL_ENSURE(pRow_Value_Constructor_Elem != NULL,"OResultSet: pRow_Value_Constructor_Elem darf nicht NULL sein!");

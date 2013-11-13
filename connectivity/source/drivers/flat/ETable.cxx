@@ -106,7 +106,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         aHeaderLine = m_aCurrentLine;
     }
     // column count
-    const xub_StrLen nFieldCount = aHeaderLine.GetTokenCount(m_cFieldDelimiter,m_cStringDelimiter);
+    const sal_Int32 nFieldCount = aHeaderLine.GetTokenCount(m_cFieldDelimiter,m_cStringDelimiter);
 
     if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
@@ -239,9 +239,9 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                 else
                 {
                     bNumeric = sal_True;
-                    xub_StrLen nDot = 0;
-                    xub_StrLen nDecimalDelCount = 0;
-                    xub_StrLen nSpaceCount = 0;
+                    sal_Int32 nDot = 0;
+                    sal_Int32 nDecimalDelCount = 0;
+                    sal_Int32 nSpaceCount = 0;
                     for( sal_Int32 j = 0; j < aField2.getLength(); j++ )
                     {
                         const sal_Unicode c = aField2[j];

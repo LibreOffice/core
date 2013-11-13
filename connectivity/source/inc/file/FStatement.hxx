@@ -127,7 +127,7 @@ namespace connectivity
                                    sal_Bool bSetNull = sal_False,
                                    sal_uInt32 nParameter=SQL_NO_PARAMETER);
             void ParseAssignValues( const ::std::vector< OUString>& aColumnNameList,
-                                    connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
+                                    connectivity::OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex);
 
             virtual void parseParamterElem(const OUString& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
             // factory method for resultset's
