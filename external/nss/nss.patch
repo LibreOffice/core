@@ -9,49 +9,6 @@
      _OPTIMIZE_FLAGS=-O2
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
                                     # combo is not yet good at debugging inlined
---- a/a/nss/coreconf/Darwin.mk	2010-02-04 19:59:10.000000000 +0100
-+++ b/b/nss/coreconf/Darwin.mk	2010-06-11 16:35:54.966185975 +0200
-@@ -39,8 +39,12 @@
- 
- DEFAULT_COMPILER = gcc
- 
--CC		= gcc
--CCC		= g++
-+# CC is taken from environment automatically.
-+#CC		= cc
-+# Use CCC from environment.
-+#CCC		= c++
-+CCC		= $(CXX)
-+
- RANLIB		= ranlib
- 
- ifndef CPU_ARCH
-@@ -57,19 +57,25 @@
- 
- ifeq (,$(filter-out i%86,$(CPU_ARCH)))
- ifdef USE_64
-+ifeq (,$(findstring -arch ,$(CC)))
- CC              += -arch x86_64
-+endif
- override CPU_ARCH	= x86_64
- else
- OS_REL_CFLAGS	= -Di386
-+ifeq (,$(findstring -arch ,$(CC)))
- CC              += -arch i386
-+endif
- override CPU_ARCH	= x86
- endif
- else
- ifeq (arm,$(CPU_ARCH))
- # Nothing set for arm currently.
- else
- OS_REL_CFLAGS	= -Dppc
-+ifeq (,$(findstring -arch ,$(CC)))
- CC              += -arch ppc
-+endif
- endif
- endif
- 
 --- a/a/nss/coreconf/FreeBSD.mk	2009-11-23 05:06:29.000000000 -0500
 +++ b/b/nss/coreconf/FreeBSD.mk	2012-08-28 20:27:20.000000000 -0400
 @@ -57,6 +57,7 @@
@@ -186,23 +143,3 @@
  endif
  endif
  
---- a/a/nss/coreconf/Darwin.mk
-+++ b/b/nss/coreconf/Darwin.mk
-@@ -64,12 +64,16 @@
- endif
- 
- ifneq (,$(MACOS_SDK_DIR))
-+    CLANG_VERSION_FULL := $(shell $(CC) -v 2>&1 | grep "clang version" | sed -e "s/^.*clang version[  ]*//" | awk '{ print $$1 }')
-     GCC_VERSION_FULL := $(shell $(CC) -dumpversion)
-     GCC_VERSION_MAJOR := $(shell echo $(GCC_VERSION_FULL) | awk -F. '{ print $$1 }')
-     GCC_VERSION_MINOR := $(shell echo $(GCC_VERSION_FULL) | awk -F. '{ print $$2 }')
-     GCC_VERSION = $(GCC_VERSION_MAJOR).$(GCC_VERSION_MINOR)
-+    ifneq (,$(CLANG_VERSION_FULL))
-+        DARWIN_SDK_CFLAGS = -isysroot $(MACOS_SDK_DIR)
-+        DARWIN_SDK_SHLIBFLAGS = -isysroot $(MACOS_SDK_DIR)
- 
--    ifeq (,$(filter-out 2 3,$(GCC_VERSION_MAJOR)))
-+    else ifeq (,$(filter-out 2 3,$(GCC_VERSION_MAJOR)))
-         # GCC <= 3
-         DARWIN_SDK_FRAMEWORKS = -F$(MACOS_SDK_DIR)/System/Library/Frameworks
-         ifneq (,$(shell find $(MACOS_SDK_DIR)/Library/Frameworks -maxdepth 0))
