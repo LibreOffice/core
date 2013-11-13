@@ -1273,36 +1273,6 @@ class CopyToClipHandler
             maDestPos.miCellTextAttrPos, nRow, aAttrs.begin(), aAttrs.end());
     }
 
-    void groupFormulaCells(std::vector<ScFormulaCell*>& rCells)
-    {
-        if (rCells.empty())
-            return;
-
-        std::vector<ScFormulaCell*>::iterator it = rCells.begin(), itEnd = rCells.end();
-        ScFormulaCell* pPrev = *it;
-        ScFormulaCell* pCur = NULL;
-        for (++it; it != itEnd; ++it, pPrev = pCur)
-        {
-            pCur = *it;
-            ScFormulaCell::CompareState eState = pPrev->CompareByTokenArray(*pCur);
-            if (eState == ScFormulaCell::NotEqual)
-                continue;
-
-            ScFormulaCellGroupRef xGroup = pPrev->GetCellGroup();
-            if (xGroup)
-            {
-                // Extend the group.
-                ++xGroup->mnLength;
-                pCur->SetCellGroup(xGroup);
-                continue;
-            }
-
-            // Create a new group.
-            xGroup = pPrev->CreateCellGroup(pPrev->aPos.Row(), 2, eState == ScFormulaCell::EqualInvariant);
-            pCur->SetCellGroup(xGroup);
-        }
-    }
-
     void duplicateNotes(SCROW nStartRow, size_t nDataSize )
     {
         mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos);
