@@ -67,11 +67,6 @@ public:
     OUString msURL;
     OUString msName;
     ::sd::sidebar::MasterPageContainer::Token maToken;
-    Descriptor (const OUString& rsURL, const OUString& rsName)
-        : msURL(rsURL),
-          msName(rsName),
-          maToken(::sd::sidebar::MasterPageContainer::NIL_TOKEN)
-    {}
     Descriptor (::sd::sidebar::MasterPageContainer::Token aToken,
         const OUString& rsURL, const OUString& rsName)
         : msURL(rsURL),
