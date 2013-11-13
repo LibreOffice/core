@@ -603,37 +603,6 @@ sal_Int32 ScXMLExport::GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const
     return itr->second;
 }
 
-namespace {
-
-/**
- * Update the progress bar state when an instance of this class goes out of
- * scope.
- */
-class ProgressBarUpdater
-{
-    ProgressBarHelper& mrHelper;
-    const sal_Int32& mrTableCount;
-    const sal_Int32& mrShapesCount;
-    const sal_Int32 mnCellCount;
-public:
-    ProgressBarUpdater(ProgressBarHelper& rHelper,
-                       const sal_Int32& rTableCount, const sal_Int32& rShapesCount,
-                       const sal_Int32 nCellCount) :
-        mrHelper(rHelper),
-        mrTableCount(rTableCount),
-        mrShapesCount(rShapesCount),
-        mnCellCount(nCellCount) {}
-
-    ~ProgressBarUpdater()
-    {
-        sal_Int32 nRef = mnCellCount + (2 * mrTableCount) + (2 * mrShapesCount);
-        mrHelper.SetReference(nRef);
-        mrHelper.SetValue(0);
-    }
-};
-
-}
-
 void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount)
 {
     if (!GetModel().is())
