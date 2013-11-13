@@ -111,7 +111,7 @@ OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
         // Replace an empty label string with column name.
         OUStringBuffer aBuf;
         aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
 
         ScAddress aColAddr(nCol, 0, 0);
         aBuf.append(aColAddr.Format(SCA_VALID_COL, NULL));

@@ -143,7 +143,7 @@ void Comment::finalizeImport()
         Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
         Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
         // non-empty string required by note implementation (real text will be added below)
-        xAnnos->insertNew( aNotePos, OUString( sal_Unicode( ' ' ) ) );
+        xAnnos->insertNew( aNotePos, OUString( ' ' ) );
 
         // receive created note from cell (insertNew does not return the note)
         Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );

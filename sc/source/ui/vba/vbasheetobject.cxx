@@ -282,7 +282,7 @@ void SAL_CALL ScVbaSheetObjectBase::setPrintObject( sal_Bool /*bPrintObject*/ ) 
 
 void ScVbaSheetObjectBase::setDefaultProperties( sal_Int32 nIndex ) throw (uno::RuntimeException)
 {
-    OUString aName = OUStringBuffer( implGetBaseName() ).append( sal_Unicode( ' ' ) ).append( nIndex + 1 ).makeStringAndClear();
+    OUString aName = OUStringBuffer( implGetBaseName() ).append( ' ' ).append( nIndex + 1 ).makeStringAndClear();
     setName( aName );
     implSetDefaultProperties();
 }

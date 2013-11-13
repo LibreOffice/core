@@ -124,14 +124,14 @@ bool lclConvertWildcardsToRegExp( OUString& rValue )
             switch( *pcChar )
             {
                 case '?':
-                    aBuffer.append( sal_Unicode( '.' ) );
+                    aBuffer.append( '.' );
                 break;
                 case '*':
-                    aBuffer.append( sal_Unicode( '.' ) ).append( sal_Unicode( '*' ) );
+                    aBuffer.append( '.' ).append( '*' );
                 break;
                 case '\\': case '.': case '|': case '(': case ')': case '^': case '$':
                     // quote RE meta characters
-                    aBuffer.append( sal_Unicode( '\\' ) ).append( *pcChar );
+                    aBuffer.append( '\\' ).append( *pcChar );
                 break;
                 default:
                     aBuffer.append( *pcChar );

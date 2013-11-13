@@ -872,7 +872,7 @@ void Font::finalizeImport()
                 // Western fonts
                 bool bHasLatin =
                     (!bHasAsian && !bHasCmplx) ||
-                    xFont->hasGlyphs( OUString( sal_Unicode( 'A' ) ) );
+                    xFont->hasGlyphs( OUString( 'A' ) );
 
                 lclSetFontName( maApiData.maLatinFont, maApiData.maDesc, bHasLatin );
                 lclSetFontName( maApiData.maAsianFont, maApiData.maDesc, bHasAsian );
@@ -2784,7 +2784,7 @@ void CellStyleBuffer::finalizeImport()
         sal_Int32 nIndex = 0;
         do
         {
-            aUnusedName = OUStringBuffer( aStyleName ).append( sal_Unicode( ' ' ) ).append( ++nIndex ).makeStringAndClear();
+            aUnusedName = OUStringBuffer( aStyleName ).append( ' ' ).append( ++nIndex ).makeStringAndClear();
         }
         while( aCellStyles.count( aUnusedName ) > 0 );
         aCellStyles[ aUnusedName ] = *aIt;

@@ -630,11 +630,11 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
     for( sal_Int32 i = 0; i < nLen; ++i )
     {
         sal_Unicode c = aString[i];
-        if (c == sal_Unicode('-'))
+        if (c == '-')
             ++nSignCount;
         else if (c == cDecSep)
             ++nDecimalCount;
-        else if (c == sal_Unicode('E'))
+        else if (c == 'E')
             ++nExpCount;
     }
 

@@ -750,7 +750,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
     OUStringBuffer aBuf;
     aComp.CreateStringFromTokenArray(aBuf);
     OUString aFormula = aBuf.makeStringAndClear();
-    aBuf.append(sal_Unicode('='));
+    aBuf.append('=');
     aBuf.append(aFormula);
     return aBuf.makeStringAndClear();
 }

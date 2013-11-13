@@ -117,7 +117,7 @@ struct lcl_appendTableNumber : public ::std::unary_function< SCTAB, void >
     {
         // there is no append with SCTAB or sal_Int16
         m_rBuffer.append( static_cast< sal_Int32 >( nTab ));
-        m_rBuffer.append( sal_Unicode( ' ' ));
+        m_rBuffer.append( ' ' );
     }
 private:
     OUStringBuffer & m_rBuffer;
@@ -2281,7 +2281,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
                     aUIString = aUIString.copy( 1 );
 
                 if( !sRet.isEmpty() )
-                    sRet.append( (sal_Unicode) ';' );
+                    sRet.append( ';' );
                 sRet.append( aUIString );
             }
         }

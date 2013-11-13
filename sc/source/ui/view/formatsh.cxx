@@ -1142,7 +1142,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     {
                         sal_Unicode cChar = aCode[nCount];
 
-                        if(cChar == sal_Unicode(','))
+                        if(cChar == ',')
                         {
                             sFormat[nStrCount] = sTmpStr;
                             sTmpStr = "";

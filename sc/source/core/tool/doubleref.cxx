@@ -107,23 +107,23 @@ bool lcl_createStarQuery(
             aCellStr = pQueryRef->getString(2, nRow);
             lcl_uppercase(aCellStr);
             const sal_Unicode* p = aCellStr.getStr();
-            if (p[0] == sal_Unicode('<'))
+            if (p[0] == '<')
             {
-                if (p[1] == sal_Unicode('>'))
+                if (p[1] == '>')
                     rEntry.eOp = SC_NOT_EQUAL;
-                else if (p[1] == sal_Unicode('='))
+                else if (p[1] == '=')
                     rEntry.eOp = SC_LESS_EQUAL;
                 else
                     rEntry.eOp = SC_LESS;
             }
-            else if (p[0] == sal_Unicode('>'))
+            else if (p[0] == '>')
             {
-                if (p[1] == sal_Unicode('='))
+                if (p[1] == '=')
                     rEntry.eOp = SC_GREATER_EQUAL;
                 else
                     rEntry.eOp = SC_GREATER;
             }
-            else if (p[0] == sal_Unicode('='))
+            else if (p[0] == '=')
                 rEntry.eOp = SC_EQUAL;
 
         }

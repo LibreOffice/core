@@ -983,7 +983,7 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
     for (sal_Int32 i = 0; i < n; ++i)
     {
         const sal_Unicode c = p[i];
-        if (c == sal_Unicode(' '))
+        if (c == ' ')
         {
             if (!aBuf.isEmpty())
                 aTokens.push_back( aBuf.makeStringAndClear() );
@@ -1749,7 +1749,7 @@ sal_Int32 getTextSepPos(
     sal_Int32 nPos = rStr.indexOf(rTextSep);
     rNeedQuotes = rAsciiOpt.bQuoteAllText || (nPos >= 0) ||
         (rStr.indexOf(rFieldSep) >= 0) ||
-        (rStr.indexOf(sal_Unicode('\n')) >= 0);
+        (rStr.indexOf('\n') >= 0);
     return nPos;
 }
 

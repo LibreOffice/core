@@ -93,25 +93,25 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
     // separator, which in English locales is a comma.  However, OOo's list
     // separator value is set to ';' for all English locales.  Because of this
     // discrepancy, we will hardcode the separator value here, for now.
-    if (cDecSep == sal_Unicode('.'))
-        cListSep = sal_Unicode(',');
+    if (cDecSep == '.')
+        cListSep = ',';
 
     // Special case for de_CH locale.
     if (rLocale.Language.equalsAsciiL("de", 2) && rLocale.Country.equalsAsciiL("CH", 2))
-        cListSep = sal_Unicode(';');
+        cListSep = ';';
 
     // by default, the parameter separator equals the locale-specific
     // list separator.
     rSepArg = OUString(cListSep);
 
-    if (cDecSep == cListSep && cDecSep != sal_Unicode(';'))
+    if (cDecSep == cListSep && cDecSep != ';')
         // if the decimal and list separators are equal, set the
         // parameter separator to be ';', unless they are both
         // semicolon in which case don't change the decimal separator.
         rSepArg = ";";
 
     rSepArrayCol = ",";
-    if (cDecSep == sal_Unicode(','))
+    if (cDecSep == ',')
         rSepArrayCol = ".";
     rSepArrayRow = ";";
 }

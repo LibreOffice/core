@@ -1295,25 +1295,25 @@ static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const
     for (sal_Int32 i = 0; i < n; ++i)
     {
         sal_Unicode c = p[i];
-        if (c == sal_Unicode(' '))
+        if (c == ' ')
         {
             OUString aWord = aWordBuf.makeStringAndClear();
             if (aWord.equals(rMemberName))
-                aBuf.append(sal_Unicode('?'));
+                aBuf.append('?');
             else
                 aBuf.append(aWord);
             aBuf.append(c);
         }
-        else if (c == sal_Unicode('\\'))
+        else if (c == '\\')
         {
             // Escape a backslash character.
             aWordBuf.append(c);
             aWordBuf.append(c);
         }
-        else if (c == sal_Unicode('?'))
+        else if (c == '?')
         {
             // A literal '?' must be escaped with a backslash ('\');
-            aWordBuf.append(sal_Unicode('\\'));
+            aWordBuf.append('\\');
             aWordBuf.append(c);
         }
         else
@@ -1324,7 +1324,7 @@ static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const
     {
         OUString aWord = aWordBuf.makeStringAndClear();
         if (aWord.equals(rMemberName))
-            aBuf.append(sal_Unicode('?'));
+            aBuf.append('?');
         else
             aBuf.append(aWord);
     }

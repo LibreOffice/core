@@ -997,7 +997,7 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
     if( !rHyperlink.maTarget.isEmpty() )
         aUrlBuffer.append( getBaseFilter().getAbsoluteUrl( rHyperlink.maTarget ) );
     if( !rHyperlink.maLocation.isEmpty() )
-        aUrlBuffer.append( sal_Unicode( '#' ) ).append( rHyperlink.maLocation );
+        aUrlBuffer.append( '#' ).append( rHyperlink.maLocation );
     OUString aUrl = aUrlBuffer.makeStringAndClear();
 
     // convert '#SheetName!A1' to '#SheetName.A1'
@@ -1007,7 +1007,7 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
         if( nSepPos > 0 )
         {
             // replace the exclamation mark with a period
-            aUrl = aUrl.replaceAt( nSepPos, 1, OUString( sal_Unicode( '.' ) ) );
+            aUrl = aUrl.replaceAt( nSepPos, 1, OUString( '.' ) );
             // #i66592# convert sheet names that have been renamed on import
             OUString aSheetName = aUrl.copy( 1, nSepPos - 1 );
             OUString aCalcName = getWorksheets().getCalcSheetName( aSheetName );

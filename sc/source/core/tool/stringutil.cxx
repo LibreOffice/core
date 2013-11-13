@@ -99,7 +99,7 @@ bool ScStringUtil::parseSimpleNumber(
             // ascii space to unicode space if that is group separator
             c = 0x00A0;
 
-        if (sal_Unicode('0') <= c && c <= sal_Unicode('9'))
+        if ('0' <= c && c <= '9')
         {
             // this is a digit.
             aBuf.append(c);
@@ -146,7 +146,7 @@ bool ScStringUtil::parseSimpleNumber(
             nPosGSep = i;
             nDigitCount = 0;
         }
-        else if (c == sal_Unicode('-') || c == sal_Unicode('+'))
+        else if (c == '-' || c == '+')
         {
             // A sign must be the first character if it's given, or immediately
             // follow the exponent character if present.
@@ -155,7 +155,7 @@ bool ScStringUtil::parseSimpleNumber(
             else
                 return false;
         }
-        else if (c == sal_Unicode('E') || c == sal_Unicode('e'))
+        else if (c == 'E' || c == 'e')
         {
             // this is an exponent designator.
 

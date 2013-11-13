@@ -117,7 +117,7 @@ void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
         if( nSepPos > 0 )
         {
             // replace the exclamation mark with a period
-            sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( sal_Unicode( '.' ) ) );
+            sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
             // #i66592# convert sheet names that have been renamed on import
             OUString aSheetName = sSheetNameRef.copy( 1, nSepPos - 1 );
             OUString aCalcName = getCalcSheetName( aSheetName );
@@ -153,9 +153,9 @@ OUString lclQuoteName( const OUString& rName )
     // duplicate all quote characters
     for( sal_Int32 nPos = aBuffer.getLength() - 1; nPos >= 0; --nPos )
         if( aBuffer[nPos] == '\'' )
-            aBuffer.insert( nPos, sal_Unicode( '\'' ) );
+            aBuffer.insert( nPos, '\'' );
     // add outer quotes and return
-    return aBuffer.insert( 0, sal_Unicode( '\'' ) ).append( sal_Unicode( '\'' ) ).makeStringAndClear();
+    return aBuffer.insert( 0, '\'' ).append( '\'' ).makeStringAndClear();
 }
 
 } // namespace

@@ -455,7 +455,7 @@ void ScChangeAction::GetDescription(
     {
         aBuf.append(
             ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
         rStr = aBuf.makeStringAndClear();
         return;
     }
@@ -464,7 +464,7 @@ void ScChangeAction::GetDescription(
     {
         aBuf.append(
             ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
         rStr = aBuf.makeStringAndClear();
         return;
     }
@@ -480,7 +480,7 @@ void ScChangeAction::GetDescription(
             {
                 aBuf.append(
                     ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
-                aBuf.append(sal_Unicode(' '));
+                aBuf.append(' ');
                 rStr = aBuf.makeStringAndClear();
                 return;
             }
@@ -489,7 +489,7 @@ void ScChangeAction::GetDescription(
             {
                 aBuf.append(
                     ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
-                aBuf.append(sal_Unicode(' '));
+                aBuf.append(' ');
                 rStr = aBuf.makeStringAndClear();
                 return;
             }
@@ -516,10 +516,10 @@ OUString ScChangeAction::GetRefString(
                     OUString aTmp;
                     pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
                     aBuf.append(aTmp);
-                    aBuf.append(sal_Unicode('.'));
+                    aBuf.append('.');
                 }
                 aBuf.append(ScColToAlpha(aTmpRange.aStart.Col()));
-                aBuf.append(sal_Unicode(':'));
+                aBuf.append(':');
                 aBuf.append(ScColToAlpha(aTmpRange.aEnd.Col()));
             break;
             case SC_CAT_INSERT_ROWS :
@@ -529,10 +529,10 @@ OUString ScChangeAction::GetRefString(
                     OUString aTmp;
                     pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
                     aBuf.append(aTmp);
-                    aBuf.append(sal_Unicode('.'));
+                    aBuf.append('.');
                 }
                 aBuf.append(static_cast<sal_Int32>(aTmpRange.aStart.Row()+1));
-                aBuf.append(sal_Unicode(':'));
+                aBuf.append(':');
                 aBuf.append(static_cast<sal_Int32>(aTmpRange.aEnd.Row()+1));
             break;
             default:
@@ -545,8 +545,8 @@ OUString ScChangeAction::GetRefString(
         }
         if ( (bFlag3D && IsDeleteType()) || IsDeletedIn() )
         {
-            aBuf.insert(0, sal_Unicode('('));
-            aBuf.append(sal_Unicode(')'));
+            aBuf.insert(0, '(');
+            aBuf.append(')');
         }
     }
     return aBuf.makeStringAndClear();
@@ -724,7 +724,7 @@ void ScChangeActionIns::GetDescription(
     {
         // Construct a range string to replace '#1' first.
         OUStringBuffer aBuf(ScGlobal::GetRscString(nWhatId));
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
         aBuf.append(GetRefString(GetBigRange(), pDoc));
         OUString aRangeStr = aBuf.makeStringAndClear();
 
@@ -972,7 +972,7 @@ void ScChangeActionDel::GetDescription(
         // Build a string to replace with.
         OUStringBuffer aBuf;
         aBuf.append(ScGlobal::GetRscString(nWhatId));
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
         aBuf.append(GetRefString(aTmpRange, pDoc));
         OUString aRangeStr = aBuf.makeStringAndClear();
         aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the string.
@@ -1532,9 +1532,9 @@ void ScChangeActionContent::GetRefString(
         {
             // Insert the parentheses.
             OUStringBuffer aBuf;
-            aBuf.append(sal_Unicode('('));
+            aBuf.append('(');
             aBuf.append(rStr);
-            aBuf.append(sal_Unicode(')'));
+            aBuf.append(')');
             rStr = aBuf.makeStringAndClear();
         }
     }
@@ -2151,7 +2151,7 @@ void ScChangeTrack::Init()
     const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
     OUStringBuffer aBuf;
     aBuf.append(rUserOpt.GetFirstName());
-    aBuf.append(sal_Unicode(' '));
+    aBuf.append(' ');
     aBuf.append(rUserOpt.GetLastName());
     maUser = aBuf.makeStringAndClear();
     maUserCollection.insert(maUser);
@@ -2230,7 +2230,7 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
 
         OUStringBuffer aBuf;
         aBuf.append(rUserOptions.GetFirstName());
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
         aBuf.append(rUserOptions.GetLastName());
         SetUser(aBuf.makeStringAndClear());
 

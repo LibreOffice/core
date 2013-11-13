@@ -406,27 +406,27 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
 
     pScChangeAction->GetRefString(aRefStr, pDoc, true);
 
-    aBuf.append(sal_Unicode('\t'));
+    aBuf.append('\t');
     aBuf.append(aRefStr);
-    aBuf.append(sal_Unicode('\t'));
+    aBuf.append('\t');
 
     bool bIsGenerated = false;
 
     if(!pChanges->IsGenerated(pScChangeAction->GetActionNumber()))
     {
         aBuf.append(aUser);
-        aBuf.append(sal_Unicode('\t'));
+        aBuf.append('\t');
         aBuf.append(ScGlobal::pLocaleData->getDate(aDateTime));
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
         aBuf.append(ScGlobal::pLocaleData->getTime(aDateTime));
-        aBuf.append(sal_Unicode('\t'));
+        aBuf.append('\t');
 
         bIsGenerated = false;
     }
     else
     {
-        aBuf.append(sal_Unicode('\t'));
-        aBuf.append(sal_Unicode('\t'));
+        aBuf.append('\t');
+        aBuf.append('\t');
         bIsGenerated = true;
     }
 

@@ -1328,13 +1328,13 @@ static OUString lcl_parseSubtotalName(const OUString& rSubStr, const OUString& r
     for (sal_Int32 i = 0; i < n; ++i)
     {
         sal_Unicode c = rSubStr[i];
-        if (!bEscaped && c == sal_Unicode('\\'))
+        if (!bEscaped && c == '\\')
         {
             bEscaped = true;
             continue;
         }
 
-        if (!bEscaped && c == sal_Unicode('?'))
+        if (!bEscaped && c == '?')
             aNewStr.append(rCaption);
         else
             aNewStr.append(c);

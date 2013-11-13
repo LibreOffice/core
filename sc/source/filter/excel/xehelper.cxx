@@ -898,7 +898,7 @@ OUString lclEncodeDosUrl(
         if ( aOldUrl.getLength() > 2 && aOldUrl.copy(0,2) == "\\\\" )
         {
             // UNC
-            aBuf.append(EXC_URL_DOSDRIVE).append(sal_Unicode('@'));
+            aBuf.append(EXC_URL_DOSDRIVE).append('@');
             aOldUrl = aOldUrl.copy(2);
         }
         else if ( aOldUrl.getLength() > 2 && aOldUrl.copy(1,2) == ":\\" )
@@ -930,7 +930,7 @@ OUString lclEncodeDosUrl(
 
         // file name
         if (pTableName)    // enclose file name in brackets if table name follows
-            aBuf.append(sal_Unicode('[')).append(aOldUrl).append(sal_Unicode(']'));
+            aBuf.append('[').append(aOldUrl).append(']');
         else
             aBuf.append(aOldUrl);
     }

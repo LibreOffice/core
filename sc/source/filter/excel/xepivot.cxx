@@ -1052,7 +1052,7 @@ static OUString lcl_convertCalcSubtotalName(const OUString& rName)
     for (sal_Int32 i = 0; i < n; ++i)
     {
         const sal_Unicode c = p[i];
-        if (!bEscaped && c == sal_Unicode('\\'))
+        if (!bEscaped && c == '\\')
         {
             bEscaped = true;
             continue;

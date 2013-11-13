@@ -637,7 +637,7 @@ static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& r
         aName = aName.replaceAll("'", aEscQuote);
     OUStringBuffer aBuf(aFile.getLength() + aName.getLength() + 9);
     if (bODF)
-        aBuf.append( sal_Unicode( '['));
+        aBuf.append( '[');
     aBuf.append( "'" + aFile + "'" + OUString(cSep));
     if (bODF)
         aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "$$'"));
@@ -762,9 +762,9 @@ struct ConventionOOO_A1 : public Convention_A1
             if (!ValidTab(rAbsRef.Tab()) || rRef.IsTabDeleted())
             {
                 if (!rRef.IsTabRel())
-                    rBuffer.append(sal_Unicode('$'));
+                    rBuffer.append('$');
                 rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
-                rBuffer.append(sal_Unicode('.'));
+                rBuffer.append('.');
             }
             else
             {
@@ -772,20 +772,20 @@ struct ConventionOOO_A1 : public Convention_A1
                 OUString aRefStr(MakeTabStr(rComp, rAbsRef.Tab(), aDoc));
                 rBuffer.append(aDoc);
                 if (!rRef.IsTabRel())
-                    rBuffer.append(sal_Unicode('$'));
+                    rBuffer.append('$');
                 rBuffer.append(aRefStr);
             }
         }
         else if (bODF)
-            rBuffer.append(sal_Unicode('.'));
+            rBuffer.append('.');
         if (!rRef.IsColRel())
-            rBuffer.append(sal_Unicode('$'));
+            rBuffer.append('$');
         if (!ValidCol(rAbsRef.Col()))
             rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
         else
             MakeColStr(rBuffer, rAbsRef.Col());
         if (!rRef.IsRowRel())
-            rBuffer.append(sal_Unicode('$'));
+            rBuffer.append('$');
         if (!ValidRow(rAbsRef.Row()))
             rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
         else
@@ -799,7 +799,7 @@ struct ConventionOOO_A1 : public Convention_A1
                          bool bODF ) const
     {
         if (bODF)
-            rBuffer.append(sal_Unicode('['));
+            rBuffer.append('[');
         ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
@@ -819,12 +819,12 @@ struct ConventionOOO_A1 : public Convention_A1
             MakeOneRefStrImpl(rBuffer, rComp, aRef.Ref1, aAbs1, false, bODF);
             if (!bSingleRef)
             {
-                rBuffer.append(sal_Unicode(':'));
+                rBuffer.append(':');
                 MakeOneRefStrImpl(rBuffer, rComp, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), bODF);
             }
         }
         if (bODF)
-            rBuffer.append(sal_Unicode(']'));
+            rBuffer.append(']');
     }
 
     void MakeRefStr( OUStringBuffer&   rBuffer,
@@ -853,12 +853,12 @@ struct ConventionOOO_A1 : public Convention_A1
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
     {
-        return lcl_parseExternalName(rSymbol, rFile, rName, sal_Unicode('#'), pDoc, pExternalLinks);
+        return lcl_parseExternalName(rSymbol, rFile, rName, '#', pDoc, pExternalLinks);
     }
 
     virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const
     {
-        return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), false);
+        return lcl_makeExternalNameStr( rFile, rName, '#', false);
     }
 
     bool makeExternalSingleRefStr(
@@ -882,17 +882,17 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append("'" + aFile.replaceAll("'", "''") + "'#");
 
             if (!rRef.IsTabRel())
-                rBuffer.append(sal_Unicode('$'));
+                rBuffer.append('$');
             ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
 
-            rBuffer.append(sal_Unicode('.'));
+            rBuffer.append('.');
         }
 
         if (!rRef.IsColRel())
-            rBuffer.append(sal_Unicode('$'));
+            rBuffer.append('$');
         MakeColStr( rBuffer, aAbsRef.Col());
         if (!rRef.IsRowRel())
-            rBuffer.append(sal_Unicode('$'));
+            rBuffer.append('$');
         MakeRowStr( rBuffer, aAbsRef.Row());
 
         return true;
@@ -903,7 +903,7 @@ struct ConventionOOO_A1 : public Convention_A1
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
         if (bODF)
-            rBuffer.append( sal_Unicode('['));
+            rBuffer.append( '[');
 
         bool bEncodeUrl = true;
         switch (rCompiler.GetEncodeUrlMode())
@@ -922,7 +922,7 @@ struct ConventionOOO_A1 : public Convention_A1
         }
         makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef, rCompiler.GetPos(), pRefMgr, true, bEncodeUrl);
         if (bODF)
-            rBuffer.append( sal_Unicode(']'));
+            rBuffer.append( ']');
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
@@ -939,7 +939,7 @@ struct ConventionOOO_A1 : public Convention_A1
         ScRange aAbsRange = rRef.toAbs(rCompiler.GetPos());
 
         if (bODF)
-            rBuffer.append( sal_Unicode('['));
+            rBuffer.append( '[');
         // Ensure that there's always a closing bracket, no premature returns.
         bool bEncodeUrl = true;
         switch (rCompiler.GetEncodeUrlMode())
@@ -962,7 +962,7 @@ struct ConventionOOO_A1 : public Convention_A1
             if (!makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef.Ref1, rCompiler.GetPos(), pRefMgr, true, bEncodeUrl))
                 break;
 
-            rBuffer.append(sal_Unicode(':'));
+            rBuffer.append(':');
 
             OUString aLastTabName;
             bool bDisplayTabName = (aAbsRange.aStart.Tab() != aAbsRange.aEnd.Tab());
@@ -983,12 +983,12 @@ struct ConventionOOO_A1 : public Convention_A1
                 }
             }
             else if (bODF)
-                rBuffer.append( sal_Unicode('.'));      // need at least the sheet separator in ODF
+                rBuffer.append( '.');      // need at least the sheet separator in ODF
             makeExternalSingleRefStr( rBuffer, nFileId, aLastTabName,
                     rRef.Ref2, rCompiler.GetPos(), pRefMgr, bDisplayTabName, bEncodeUrl);
         } while (0);
         if (bODF)
-            rBuffer.append( sal_Unicode(']'));
+            rBuffer.append( ']');
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
@@ -1015,7 +1015,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 
     virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const
     {
-        return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), true);
+        return lcl_makeExternalNameStr( rFile, rName, '#', true);
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
@@ -1100,19 +1100,19 @@ struct ConventionXL
                 if( !bEndHasDoc )
                     return;
 
-                rBuf.append( sal_Unicode( '[' ) );
+                rBuf.append( '[' );
                 rBuf.append( aStartDocName );
-                rBuf.append( sal_Unicode( ']' ) );
+                rBuf.append( ']' );
             }
 
             rBuf.append( aStartTabName );
             if( !bSingleRef && rRef.Ref2.IsFlag3D() && aStartTabName != aEndTabName )
             {
-                rBuf.append( sal_Unicode( ':' ) );
+                rBuf.append( ':' );
                 rBuf.append( aEndTabName );
             }
 
-            rBuf.append( sal_Unicode( '!' ) );
+            rBuf.append( '!' );
         }
     }
 
@@ -1133,12 +1133,12 @@ struct ConventionXL
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks )
     {
-        return lcl_parseExternalName( rSymbol, rFile, rName, sal_Unicode('!'), pDoc, pExternalLinks);
+        return lcl_parseExternalName( rSymbol, rFile, rName, '!', pDoc, pExternalLinks);
     }
 
     static OUString makeExternalNameStr( const OUString& rFile, const OUString& rName )
     {
-        return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('!'), false);
+        return lcl_makeExternalNameStr( rFile, rName, '!', false);
     }
 
     static void makeExternalDocStr( OUStringBuffer& rBuffer, const OUString& rFullName, bool bEncodeUrl )
@@ -1150,8 +1150,8 @@ struct ConventionXL
         //
         //   ['file:///path/to/source/filename.xls']
 
-        rBuffer.append(sal_Unicode('['));
-        rBuffer.append(sal_Unicode('\''));
+        rBuffer.append('[');
+        rBuffer.append('\'');
         OUString aFullName;
         if (bEncodeUrl)
             aFullName = rFullName;
@@ -1163,12 +1163,12 @@ struct ConventionXL
         for (sal_Int32 i = 0; i < nLen; ++i)
         {
             const sal_Unicode c = pBuf[i];
-            if (c == sal_Unicode('\''))
+            if (c == '\'')
                 rBuffer.append(c);
             rBuffer.append(c);
         }
-        rBuffer.append(sal_Unicode('\''));
-        rBuffer.append(sal_Unicode(']'));
+        rBuffer.append('\'');
+        rBuffer.append(']');
     }
 
     static void makeExternalTabNameRange( OUStringBuffer& rBuf, const OUString& rTabName,
@@ -1185,7 +1185,7 @@ struct ConventionXL
         ScRangeStringConverter::AppendTableName(rBuf, rTabName);
         if (rTabName != aLastTabName)
         {
-            rBuf.append(sal_Unicode(':'));
+            rBuf.append(':');
             ScRangeStringConverter::AppendTableName(rBuf, rTabName);
         }
     }
@@ -1252,10 +1252,10 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs ) const
     {
         if (!rRef.IsColRel())
-            rBuf.append(sal_Unicode('$'));
+            rBuf.append('$');
         MakeColStr(rBuf, rAbs.Col());
         if (!rRef.IsRowRel())
-            rBuf.append(sal_Unicode('$'));
+            rBuf.append('$');
         MakeRowStr(rBuf, rAbs.Row());
     }
 
@@ -1290,11 +1290,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             if (aAbs1.Col() == 0 && aAbs2.Col() >= MAXCOL)
             {
                 if (!aRef.Ref1.IsRowRel())
-                    rBuf.append(sal_Unicode( '$' ));
+                    rBuf.append( '$' );
                 MakeRowStr(rBuf, aAbs1.Row());
-                rBuf.append(sal_Unicode( ':' ));
+                rBuf.append( ':' );
                 if (!aRef.Ref2.IsRowRel())
-                    rBuf.append(sal_Unicode( '$' ));
+                    rBuf.append( '$' );
                 MakeRowStr(rBuf, aAbs2.Row());
                 return;
             }
@@ -1302,11 +1302,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             if (aAbs1.Row() == 0 && aAbs2.Row() >= MAXROW)
             {
                 if (!aRef.Ref1.IsColRel())
-                    rBuf.append(sal_Unicode( '$' ));
+                    rBuf.append( '$' );
                 MakeColStr(rBuf, aAbs1.Col());
-                rBuf.append(sal_Unicode( ':' ));
+                rBuf.append( ':' );
                 if (!aRef.Ref2.IsColRel())
-                    rBuf.append(sal_Unicode( '$' ));
+                    rBuf.append( '$' );
                 MakeColStr(rBuf, aAbs2.Col());
                 return;
             }
@@ -1315,7 +1315,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         makeSingleCellStr(rBuf, aRef.Ref1, aAbs1);
         if (!bSingleRef)
         {
-            rBuf.append(sal_Unicode( ':' ));
+            rBuf.append( ':' );
             makeSingleCellStr(rBuf, aRef.Ref2, aAbs2);
         }
     }
@@ -1372,7 +1372,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         ConventionXL::makeExternalDocStr(
             rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
-        rBuffer.append(sal_Unicode('!'));
+        rBuffer.append('!');
 
         makeSingleCellStr(rBuffer, rRef, rRef.toAbs(rCompiler.GetPos()));
     }
@@ -1395,12 +1395,12 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         ConventionXL::makeExternalDocStr(
             rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
-        rBuffer.append(sal_Unicode('!'));
+        rBuffer.append('!');
 
         makeSingleCellStr(rBuffer, rRef.Ref1, aAbsRef.aStart);
         if (aAbsRef.aStart != aAbsRef.aEnd)
         {
-            rBuffer.append(sal_Unicode(':'));
+            rBuffer.append(':');
             makeSingleCellStr(rBuffer, rRef.Ref2, aAbsRef.aEnd);
         }
     }
@@ -1420,7 +1420,7 @@ const ScCompiler::Convention * const ScCompiler::pConvXL_OOX = &ConvXL_OOX;
 static void
 r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress& rAbsRef )
 {
-    rBuf.append( sal_Unicode( 'C' ) );
+    rBuf.append( 'C' );
     if( rRef.IsColRel() )
     {
         SCCOL nCol = rRef.Col();
@@ -1433,7 +1433,7 @@ r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
 static void
 r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress& rAbsRef )
 {
-    rBuf.append( sal_Unicode( 'R' ) );
+    rBuf.append( 'R' );
     if( rRef.IsRowRel() )
     {
         if (rRef.Row() != 0)
@@ -1480,7 +1480,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                 if (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() ||
                     rRef.Ref1.IsRowRel() != rRef.Ref2.IsRowRel() )
                 {
-                    rBuf.append (sal_Unicode ( ':' ) );
+                    rBuf.append( ':' );
                     r1c1_add_row(rBuf,  rRef.Ref2, aAbsRef.aEnd);
                 }
                 return;
@@ -1493,7 +1493,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                 if (aAbsRef.aStart.Col() != aAbsRef.aEnd.Col() ||
                     rRef.Ref1.IsColRel() != rRef.Ref2.IsColRel())
                 {
-                    rBuf.append (sal_Unicode ( ':' ) );
+                    rBuf.append( ':' );
                     r1c1_add_col(rBuf, rRef.Ref2, aAbsRef.aEnd);
                 }
                 return;
@@ -1504,7 +1504,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         r1c1_add_col(rBuf, rRef.Ref1, aAbsRef.aStart);
         if (!bSingleRef)
         {
-            rBuf.append (sal_Unicode ( ':' ) );
+            rBuf.append( ':' );
             r1c1_add_row(rBuf, rRef.Ref2, aAbsRef.aEnd);
             r1c1_add_col(rBuf, rRef.Ref2, aAbsRef.aEnd);
         }
@@ -1567,7 +1567,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         ConventionXL::makeExternalDocStr(
             rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
-        rBuffer.append(sal_Unicode('!'));
+        rBuffer.append('!');
 
         r1c1_add_row(rBuffer, rRef, aAbsRef);
         r1c1_add_col(rBuffer, rRef, aAbsRef);
@@ -1591,7 +1591,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         ConventionXL::makeExternalDocStr(
             rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
-        rBuffer.append(sal_Unicode('!'));
+        rBuffer.append('!');
 
         if (!ValidCol(aAbsRef.aEnd.Col()) || !ValidRow(aAbsRef.aEnd.Row()))
         {
@@ -1604,7 +1604,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             r1c1_add_row(rBuffer, rRef.Ref1, aAbsRef.aStart);
             if (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() || rRef.Ref1.IsRowRel() != rRef.Ref2.IsRowRel())
             {
-                rBuffer.append (sal_Unicode(':'));
+                rBuffer.append(':');
                 r1c1_add_row(rBuffer, rRef.Ref2, aAbsRef.aEnd);
             }
             return;
@@ -1615,7 +1615,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             r1c1_add_col(rBuffer, rRef.Ref1, aAbsRef.aStart);
             if (aAbsRef.aStart.Col() != aAbsRef.aEnd.Col() || rRef.Ref1.IsColRel() != rRef.Ref2.IsColRel())
             {
-                rBuffer.append (sal_Unicode(':'));
+                rBuffer.append(':');
                 r1c1_add_col(rBuffer, rRef.Ref2, aAbsRef.aEnd);
             }
             return;
@@ -1623,7 +1623,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         r1c1_add_row(rBuffer, rRef.Ref1, aAbsRef.aStart);
         r1c1_add_col(rBuffer, rRef.Ref1, aAbsRef.aStart);
-        rBuffer.append (sal_Unicode (':'));
+        rBuffer.append(':');
         r1c1_add_row(rBuffer, rRef.Ref2, aAbsRef.aEnd);
         r1c1_add_col(rBuffer, rRef.Ref2, aAbsRef.aEnd);
     }
@@ -1696,7 +1696,7 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
         case FormulaGrammar::CONV_XL_OOX :
             if( bNeedsQuote )
             {
-                const OUString one_quote(static_cast<sal_Unicode>('\''));
+                const OUString one_quote('\'');
                 const OUString two_quote("''");
                 // escape embedded quotes
                 rString = rString.replaceAll( one_quote, two_quote );

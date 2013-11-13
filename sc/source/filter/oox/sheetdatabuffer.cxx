@@ -215,9 +215,9 @@ void SheetDataBuffer::setErrorCell( const CellModel& rModel, const OUString& rEr
 void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode )
 {
     OUStringBuffer aBuf;
-    aBuf.append(sal_Unicode('{'));
+    aBuf.append('{');
     aBuf.append(BiffHelper::calcDoubleFromError(nErrorCode));
-    aBuf.append(sal_Unicode('}'));
+    aBuf.append('}');
 
     getFormulaBuffer().setCellFormula(rModel.maCellAddr, aBuf.makeStringAndClear());
     setCellFormat( rModel );

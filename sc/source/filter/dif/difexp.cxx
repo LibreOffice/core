@@ -124,7 +124,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.append(pKeyVECTORS);
     aOS.appendAscii("\n0,");
     aOS.append(static_cast<sal_Int32>(nNumCols));
-    aOS.append(sal_Unicode('\n'));
+    aOS.append('\n');
     aOS.appendAscii(p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
@@ -132,7 +132,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.append(pKeyTUPLES);
     aOS.appendAscii("\n0,");
     aOS.append(static_cast<sal_Int32>(nNumRows));
-    aOS.append(sal_Unicode('\n'));
+    aOS.append('\n');
     aOS.appendAscii(p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
@@ -152,7 +152,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
         OSL_ASSERT(aOS.getLength() == 0);
         aOS.appendAscii(pSpecDataType_LF);
         aOS.append(pKeyBOT);
-        aOS.append(sal_Unicode('\n'));
+        aOS.append('\n');
         rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
         for( nColCnt = rRange.aStart.Col() ; nColCnt <= nEndCol ; nColCnt++ )
         {
@@ -287,7 +287,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     OSL_ASSERT(aOS.getLength() == 0);
     aOS.appendAscii(pSpecDataType_LF);
     aOS.append(pKeyEOD);
-    aOS.append(sal_Unicode('\n'));
+    aOS.append('\n');
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // restore original value

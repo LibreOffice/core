@@ -308,7 +308,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 while( nCount < aLen )
                 {
                     sal_Unicode cChar = aCode[nCount];
-                    if(cChar == sal_Unicode(','))
+                    if(cChar == ',')
                     {
                         sFormat[nStrCount] = sTmpStr;
                         sTmpStr = "";

@@ -358,7 +358,7 @@ void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData, const OUS
     Field& rField = maFields.back();
 
     sal_Int32 nPos = maParagraph.getLength();
-    maParagraph.append(sal_Unicode('\1')); // Placeholder text for inserted field item.
+    maParagraph.append('\1'); // Placeholder text for inserted field item.
     rField.maSelection.nStartPara = mnCurParagraph;
     rField.maSelection.nEndPara = mnCurParagraph;
     rField.maSelection.nStartPos = nPos;

@@ -188,7 +188,7 @@ OUString lcl_RangeSequenceToString(
 {
     OUStringBuffer aResult;
     const sal_Int32 nMaxIndex( rRanges.getLength() - 1 );
-    const sal_Unicode cSep( sal_Char(' '));
+    const sal_Unicode cSep(' ');
     for( sal_Int32 i=0; i<=nMaxIndex; ++i )
     {
         OUString aRange( rRanges[i] );
@@ -3088,15 +3088,15 @@ void writeContent(
                 OUStringBuffer aBuf;
                 sal_Int32 nVal = aDate.GetYear();
                 aBuf.append(nVal);
-                aBuf.append(sal_Unicode('-'));
+                aBuf.append('-');
                 nVal = aDate.GetMonth();
                 if (nVal < 10)
-                    aBuf.append(sal_Unicode('0'));
+                    aBuf.append('0');
                 aBuf.append(nVal);
-                aBuf.append(sal_Unicode('-'));
+                aBuf.append('-');
                 nVal = aDate.GetDay();
                 if (nVal < 10)
-                    aBuf.append(sal_Unicode('0'));
+                    aBuf.append('0');
                 aBuf.append(nVal);
                 rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, "N2");
                 rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_DATE_VALUE, aBuf.makeStringAndClear());

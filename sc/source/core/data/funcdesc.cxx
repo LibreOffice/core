@@ -167,11 +167,11 @@ OUString ScFuncDesc::GetParamList() const
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
             aSig.append(*(ppDefArgNames[nFix]));
-            aSig.append(sal_Unicode('1'));
+            aSig.append('1');
             aSig.append(sep);
-            aSig.append(sal_Unicode(' '));
+            aSig.append(' ');
             aSig.append(*(ppDefArgNames[nFix]));
-            aSig.append(sal_Unicode('2'));
+            aSig.append('2');
             aSig.append(sep);
             aSig.appendAscii(" ... ");
         }
@@ -189,17 +189,17 @@ OUString ScFuncDesc::GetParamList() const
             }
 
             aSig.append(*(ppDefArgNames[nFix]));
-            aSig.append(sal_Unicode('1'));
+            aSig.append('1');
             aSig.appendAscii( ", " );
             aSig.append(*(ppDefArgNames[nFix+1]));
-            aSig.append(sal_Unicode('1'));
+            aSig.append('1');
             aSig.append(sep);
             aSig.appendAscii( " " );
             aSig.append(*(ppDefArgNames[nFix]));
-            aSig.append(sal_Unicode('2'));
+            aSig.append('2');
             aSig.appendAscii( ", " );
             aSig.append(*(ppDefArgNames[nFix+1]));
-            aSig.append(sal_Unicode('2'));
+            aSig.append('2');
             aSig.append(sep);
             aSig.appendAscii( " ... " );
         }
@@ -480,7 +480,7 @@ ScFunctionList::ScFunctionList() :
         pDesc->pFuncName   = new OUString(pAddInFuncData->GetInternalName().toAsciiUpperCase());
 
         OUStringBuffer aBuf(aArgDesc);
-        aBuf.append(sal_Unicode('\n'));
+        aBuf.append('\n');
         aBuf.appendAscii("( AddIn: ");
         aBuf.append(pAddInFuncData->GetModuleName());
         aBuf.appendAscii(" )");

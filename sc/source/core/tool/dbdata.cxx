@@ -212,7 +212,7 @@ OUString ScDBData::GetSourceString() const
     if (mpImportParam->bImport)
     {
         aBuf.append(mpImportParam->aDBName);
-        aBuf.append(sal_Unicode('/'));
+        aBuf.append('/');
         aBuf.append(mpImportParam->aStatement);
     }
     return aBuf.makeStringAndClear();

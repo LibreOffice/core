@@ -71,7 +71,7 @@ OUString ScDPUtil::createDuplicateDimensionName(const OUString& rOriginal, size_
 
     OUStringBuffer aBuf(rOriginal);
     for (size_t i = 0; i < nDupCount; ++i)
-        aBuf.append(sal_Unicode('*'));
+        aBuf.append('*');
 
     return aBuf.makeStringAndClear();
 }
@@ -231,7 +231,7 @@ OUString lcl_GetNumGroupName(
     {
         rtl::math::doubleToUStringBuffer( aBuffer, fStartValue, rtl_math_StringFormat_Automatic,
             rtl_math_DecimalPlaces_Max, cDecSep, true );
-        aBuffer.append( (sal_Unicode) '-' );
+        aBuffer.append( '-' );
         rtl::math::doubleToUStringBuffer( aBuffer, fEndValue, rtl_math_StringFormat_Automatic,
             rtl_math_DecimalPlaces_Max, cDecSep, true );
     }

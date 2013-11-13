@@ -185,7 +185,7 @@ void removeChars(OUString& rStr, sal_Unicode c)
     for (sal_Int32 i = 0, n = aBuf.getLength(); i < n; ++i)
     {
         if (aBuf[i] == c)
-            aBuf[i] = sal_Unicode(' ');
+            aBuf[i] = ' ';
     }
     rStr = aBuf.makeStringAndClear();
 }
@@ -386,13 +386,13 @@ inline OUString GetEditText(EditEngine* pEng)
 
 static void lcl_RemoveTabs(OUString& rStr)
 {
-    removeChars(rStr, sal_Unicode('\t'));
+    removeChars(rStr, '\t');
 }
 
 static void lcl_RemoveLineEnd(OUString& rStr)
 {
     rStr = convertLineEnd(rStr, LINEEND_LF);
-    removeChars(rStr, sal_Unicode('\n'));
+    removeChars(rStr, '\n');
 }
 
 static sal_Int32 lcl_MatchParenthesis( const OUString& rStr, xub_StrLen nPos )

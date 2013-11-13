@@ -330,7 +330,7 @@ OUString ScLinkedAreaDlg::GetSource()
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         if (i > 0)
-            aBuf.append(sal_Unicode(';'));
+            aBuf.append(';');
         aBuf.append(m_pLbRanges->GetSelectEntry(i));
     }
     return aBuf.makeStringAndClear();

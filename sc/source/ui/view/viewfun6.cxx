@@ -184,9 +184,9 @@ void ScViewFunc::DetectiveMarkPred()
             OUString aTabName = p->GetString().getString();
             OUStringBuffer aBuf;
             aBuf.append(*pPath);
-            aBuf.append(sal_Unicode('#'));
+            aBuf.append('#');
             aBuf.append(aTabName);
-            aBuf.append(sal_Unicode('.'));
+            aBuf.append('.');
 
             OUString aRangeStr(aRange.Format(SCA_VALID));
             aBuf.append(aRangeStr);

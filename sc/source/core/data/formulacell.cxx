@@ -807,13 +807,11 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
         aComp.CreateStringFromTokenArray( rBuffer );
     }
 
-    sal_Unicode ch('=');
-    rBuffer.insert( 0, &ch, 1 );
+    rBuffer.insert( 0, '=');
     if( cMatrixFlag )
     {
-        sal_Unicode ch2('{');
-        rBuffer.insert( 0, &ch2, 1);
-        rBuffer.append( sal_Unicode('}'));
+        rBuffer.insert( 0, '{');
+        rBuffer.append( '}');
     }
 }
 

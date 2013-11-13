@@ -1237,7 +1237,7 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
     while ( nSpace > nStart && pStr[nSpace-1] == ' ' )
         --nSpace;
 
-    rbIsQuoted = (pStr[nStart] == sal_Unicode('"') && pStr[nSpace-1] == sal_Unicode('"'));
+    rbIsQuoted = (pStr[nStart] == '"' && pStr[nSpace-1] == '"');
     if (rbIsQuoted)
     {
         bool bFits = (nSpace - nStart - 3 <= STRING_MAXLEN);
@@ -2386,7 +2386,7 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                 nLastOffset = aStr.getLength();
                 OUString aNext;
                 rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
-                aStr += OUString( sal_Unicode('\n'));
+                aStr += OUString('\n');
                 aStr += aNext;
             }
         }

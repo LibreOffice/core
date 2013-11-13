@@ -2961,7 +2961,7 @@ ScVbaRange::AddComment( const uno::Any& Text ) throw (uno::RuntimeException)
     if( Text.hasValue() && !(Text >>= aNoteText) )
         throw uno::RuntimeException();
     if( aNoteText.isEmpty() )
-        aNoteText = OUString( sal_Unicode( ' ' ) );
+        aNoteText = OUString( ' ' );
 
     // try to create a new annotation
     table::CellRangeAddress aRangePos = lclGetRangeAddress( mxRange );

@@ -181,7 +181,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         OUStringBuffer aBuf;
         aBuf.appendAscii(" (");
         aBuf.append(theDbName);
-        aBuf.append(sal_Unicode(')'));
+        aBuf.append(')');
         aFtDbArea.SetText(aBuf.makeStringAndClear());
     }
     else

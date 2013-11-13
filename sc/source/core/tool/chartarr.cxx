@@ -282,7 +282,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             {
                 OUStringBuffer aBuf;
                 aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
-                aBuf.append(sal_Unicode(' '));
+                aBuf.append(' ');
 
                 ScAddress aPos( aCols[ nCol ], 0, 0 );
                 aBuf.append(aPos.Format(SCA_VALID_COL, NULL));
@@ -308,7 +308,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             {
                 OUStringBuffer aBuf;
                 aBuf.append(ScGlobal::GetRscString(STR_ROW));
-                aBuf.append(sal_Unicode(' '));
+                aBuf.append(' ');
                 aBuf.append(static_cast<sal_Int32>(aRows[nRow]+1));
                 aString = aBuf.makeStringAndClear();
             }
@@ -402,7 +402,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             if (aString.isEmpty())
             {
                 OUStringBuffer aBuf(ScGlobal::GetRscString(STR_COLUMN));
-                aBuf.append(sal_Unicode(' '));
+                aBuf.append(' ');
                 if ( pPos )
                     nPosCol = pPos->Col() + 1;
                 else
@@ -429,7 +429,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             if (aString.isEmpty())
             {
                 OUStringBuffer aBuf(ScGlobal::GetRscString(STR_ROW));
-                aBuf.append(sal_Unicode(' '));
+                aBuf.append(' ');
                 if ( pPos )
                     nPosRow = pPos->Row() + 1;
                 else

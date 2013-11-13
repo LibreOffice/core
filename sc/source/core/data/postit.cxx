@@ -585,7 +585,7 @@ OUString ScPostIt::GetText() const
         for( sal_Int32 nPara = 0, nParaCount = pEditObj->GetParagraphCount(); nPara < nParaCount; ++nPara )
         {
             if( nPara > 0 )
-                aBuffer.append( sal_Unicode( '\n' ) );
+                aBuffer.append( '\n' );
             aBuffer.append( pEditObj->GetText( nPara ) );
         }
         return aBuffer.makeStringAndClear();

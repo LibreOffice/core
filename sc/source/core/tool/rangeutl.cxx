@@ -771,10 +771,10 @@ static void lcl_appendCellAddress(
         rBuf.append(cQuote);
         rBuf.append(*pFilePath);
         rBuf.append(cQuote);
-        rBuf.append(sal_Unicode('#'));
-        rBuf.append(sal_Unicode('$'));
+        rBuf.append('#');
+        rBuf.append('$');
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo.maTabName);
-        rBuf.append(sal_Unicode('.'));
+        rBuf.append('.');
 
         OUString aAddr(rCell.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
@@ -804,10 +804,10 @@ static void lcl_appendCellRangeAddress(
         rBuf.append(cQuote);
         rBuf.append(*pFilePath);
         rBuf.append(cQuote);
-        rBuf.append(sal_Unicode('#'));
-        rBuf.append(sal_Unicode('$'));
+        rBuf.append('#');
+        rBuf.append('$');
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo1.maTabName);
-        rBuf.append(sal_Unicode('.'));
+        rBuf.append('.');
 
         OUString aAddr(rCell1.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
@@ -816,9 +816,9 @@ static void lcl_appendCellRangeAddress(
 
         if (rExtInfo1.maTabName != rExtInfo2.maTabName)
         {
-            rBuf.append(sal_Unicode('$'));
+            rBuf.append('$');
             ScRangeStringConverter::AppendTableName(rBuf, rExtInfo2.maTabName);
-            rBuf.append(sal_Unicode('.'));
+            rBuf.append('.');
         }
 
         aAddr = rCell2.Format(SCA_ABS, NULL, pDoc->GetAddressConvention());
@@ -867,7 +867,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             if (nEndCellDotPos <= 0)
             {
                 // initialize buffer with table name...
-                sal_Int32 nDotPos = IndexOf(aBeginCell, sal_Unicode('.'), 0, cQuote);
+                sal_Int32 nDotPos = IndexOf(aBeginCell, '.', 0, cQuote);
                 OUStringBuffer aBuf = aBeginCell.copy(0, nDotPos);
 
                 if (nEndCellDotPos == 0)
@@ -879,7 +879,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                 else if (nEndCellDotPos < 0)
                 {
                     // sheet name in the end cell is omitted (e.g. Sheet2.A1:B2).
-                    aBuf.append(sal_Unicode('.'));
+                    aBuf.append('.');
                     aBuf.append(aEndCell);
                 }
                 aEndCell = aBuf.makeStringAndClear();

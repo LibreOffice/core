@@ -1567,10 +1567,10 @@ OUString FormulaProcessorBase::generateAddress2dString( const BinAddress& rAddre
     for( sal_Int32 nTemp = rAddress.mnCol; nTemp >= 0; (nTemp /= 26) -= 1 )
         aBuffer.insert( 0, sal_Unicode( 'A' + (nTemp % 26) ) );
     if( bAbsolute )
-        aBuffer.insert( 0, sal_Unicode( '$' ) );
+        aBuffer.insert( 0, '$' );
     // row
     if( bAbsolute )
-        aBuffer.append( sal_Unicode( '$' ) );
+        aBuffer.append( '$' );
     aBuffer.append( static_cast< sal_Int32 >( rAddress.mnRow + 1 ) );
     return aBuffer.makeStringAndClear();
 }
@@ -1583,7 +1583,7 @@ OUString FormulaProcessorBase::generateApiString( const OUString& rString )
     sal_Int32 nQuotePos = aRetString.getLength();
     while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
         aRetString = aRetString.replaceAt( nQuotePos, 1, OUString( "\"\"" ) );
-    return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
+    return OUStringBuffer().append( '"' ).append( aRetString ).append( '"' ).makeStringAndClear();
 }
 
 OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )

@@ -2230,7 +2230,7 @@ void ScInterpreter::ScCell()
                         if( pShell && pShell->GetMedium() )
                         {
                             OUStringBuffer aBuf;
-                            aBuf.append(sal_Unicode('\''));
+                            aBuf.append('\'');
                             const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
                             aBuf.append(rURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS));
                             aBuf.appendAscii("'#$");
@@ -2251,7 +2251,7 @@ void ScInterpreter::ScCell()
                 ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
                     (SCA_COL_ABSOLUTE|SCA_VALID_COL), NULL, pDok->GetAddressConvention() );
                 aFuncResult.append(aCellStr);
-                aFuncResult.append(sal_Unicode(':'));
+                aFuncResult.append(':');
                 aCellStr = aCellPos.Format((SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW),
                                  NULL, pDok->GetAddressConvention());
                 aFuncResult.append(aCellStr);
@@ -2420,7 +2420,7 @@ void ScInterpreter::ScCellExternal()
         }
 
         OUStringBuffer aBuf;
-        aBuf.append(sal_Unicode('\''));
+        aBuf.append('\'');
         aBuf.append(*p);
         aBuf.appendAscii("'#$");
         aBuf.append(aTabName);

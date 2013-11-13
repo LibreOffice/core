@@ -785,7 +785,7 @@ void HeaderFooterParser::appendText()
 void HeaderFooterParser::appendLineBreak()
 {
     getEndPos()->gotoEnd( sal_False );
-    getEndPos()->setString( OUString( sal_Unicode( '\n' ) ) );
+    getEndPos()->setString( OUString( '\n' ) );
     getPortion().mfTotalHeight += getCurrHeight();
     getPortion().mfCurrHeight = 0;
 }

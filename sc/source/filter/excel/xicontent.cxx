@@ -360,7 +360,7 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
         sal_Unicode c = rUrl[i];
         if (c == '\'')
         {
-            if (bInQuote && i+1 < n && rUrl[i+1] == sal_Unicode('\''))
+            if (bInQuote && i+1 < n && rUrl[i+1] == '\'')
             {
                 // Two consecutive single quotes ('') signify a single literal
                 // quite.  When this occurs, the whole table name needs to be

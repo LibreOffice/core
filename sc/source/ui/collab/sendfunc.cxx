@@ -170,7 +170,7 @@ class ScChangeOpWriter
     OUStringBuffer aMessage;
     void appendSeparator()
     {
-        aMessage.append( sal_Unicode( ';' ) );
+        aMessage.append( ';' );
     }
 
 public:
@@ -182,11 +182,11 @@ public:
 
     void appendString( const OUString &rStr )
     {
-        if ( rStr.indexOf( sal_Unicode( '"' ) ) >= 0 ||
-             rStr.indexOf( sal_Unicode( ';' ) ) >= 0 )
+        if ( rStr.indexOf( '"' ) >= 0 ||
+             rStr.indexOf( ';' ) >= 0 )
         {
             OUString aQuoted( rStr );
-            ScGlobal::AddQuotes( aQuoted, sal_Unicode( '"' ) );
+            ScGlobal::AddQuotes( aQuoted, '"' );
             aMessage.append( aQuoted );
         }
         else

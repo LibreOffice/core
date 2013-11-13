@@ -252,7 +252,7 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
     aBuf.append(aStrSource);
     if (pDBData)
     {
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
         aBuf.append(pDBData->GetSourceString());
     }
     m_pFTSource->SetText(aBuf.makeStringAndClear());
@@ -260,7 +260,7 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
     aBuf.append(aStrOperations);
     if (pDBData)
     {
-        aBuf.append(sal_Unicode(' '));
+        aBuf.append(' ');
         aBuf.append(pDBData->GetOperations());
     }
     m_pFTOperations->SetText(aBuf.makeStringAndClear());
