@@ -239,8 +239,8 @@ void HTMLOption::GetColor( Color& rColor ) const
     if( SAL_MAX_UINT32 == nColor )
     {
         nColor = 0;
-        xub_StrLen nPos = 0;
-        for( sal_uInt32 i=0; i<6; i++ )
+        sal_Int32 nPos = 0;
+        for (sal_uInt32 i=0; i<6; ++i)
         {
             // Whatever Netscape does to get color values,
             // at maximum three characters < '0' are ignored.
@@ -1162,7 +1162,7 @@ int HTMLParser::_GetNextToken()
                         sal_uLong nCStreamPos = 0;
                         sal_uLong nCLineNr = 0;
                         sal_uLong nCLinePos = 0;
-                        xub_StrLen nCStrLen = 0;
+                        sal_Int32 nCStrLen = 0;
 
                         bool bDone = false;
                         // Read until closing -->. If not found restart at first >
@@ -1421,7 +1421,7 @@ scan_text:
 
 void HTMLParser::UnescapeToken()
 {
-    xub_StrLen nPos=0;
+    sal_Int32 nPos=0;
 
     bool bEscape = false;
     while( nPos < aToken.getLength() )
@@ -1447,7 +1447,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
     if (!maOptions.empty())
         return maOptions;
 
-    xub_StrLen nPos = 0;
+    sal_Int32 nPos = 0;
     while( nPos < aToken.getLength() )
     {
         // A letter? Option beginning here.
@@ -1455,7 +1455,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
         {
             int nToken;
             OUString aValue;
-            xub_StrLen nStt = nPos;
+            sal_Int32 nStt = nPos;
             sal_Unicode cChar = 0;
 
             // Actually only certain characters allowed.
@@ -1492,7 +1492,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
 
                 if( nPos != aToken.getLength() )
                 {
-                    xub_StrLen nLen = 0;
+                    sal_Int32 nLen = 0;
                     nStt = nPos;
                     if( ('"'==cChar) || ('\'')==cChar )
                     {

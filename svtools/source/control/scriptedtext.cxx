@@ -145,8 +145,8 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
         DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(),
             "SvtScriptedTextHelper_Impl::CalculateWidth - invalid vectors" );
 
-        xub_StrLen nThisPos = static_cast< xub_StrLen >( maPosVec[ 0 ] );
-        xub_StrLen nNextPos;
+        sal_Int32 nThisPos = maPosVec[ 0 ];
+        sal_Int32 nNextPos;
         sal_Int32 nPosVecSize = maPosVec.size();
         sal_Int32 nPosVecIndex = 1;
 
@@ -157,7 +157,7 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
 
         while( nPosVecIndex < nPosVecSize )
         {
-            nNextPos = static_cast< xub_StrLen >( maPosVec[ nPosVecIndex++ ] );
+            nNextPos = maPosVec[ nPosVecIndex++ ];
             nScript = maScriptVec[ nScriptVecIndex++ ];
 
             SetOutDevFont( nScript );
@@ -284,8 +284,8 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 
     maDefltFont = mrOutDevice.GetFont();
     Point aCurrPos( _rPos );
-    xub_StrLen nThisPos = static_cast< xub_StrLen >( maPosVec[ 0 ] );
-    xub_StrLen nNextPos;
+    sal_Int32 nThisPos = maPosVec[ 0 ];
+    sal_Int32 nNextPos;
     sal_Int32 nPosVecSize = maPosVec.size();
     sal_Int32 nPosVecIndex = 1;
 
@@ -294,7 +294,7 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 
     while( nPosVecIndex < nPosVecSize )
     {
-        nNextPos = static_cast< xub_StrLen >( maPosVec[ nPosVecIndex++ ] );
+        nNextPos = maPosVec[ nPosVecIndex++ ];
         nScript = maScriptVec[ nVecIndex ];
 
         SetOutDevFont( nScript );
