@@ -121,10 +121,6 @@ struct PropertyCompare : public ::std::binary_function< beans::Property, OUStrin
     {
         return x.Name.equals(y);
     }
-    bool operator() (const OUString& x,const beans::Property& y) const
-    {
-        return x.equals(y.Name);
-    }
 };
 
 // -----------------------------------------------------------------------------
