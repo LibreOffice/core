@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///z4\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-13T11:44:03Z",
+      "side": 1,
+      "message": "In the commit summary we mention the bug ID in the form fdo#..., here fdo#70995, so everyone can trace this back and the commit bot can add a commit notification to the bug. The summary line could be something like\n\n upgrade to ICU 52.1, fdo#70995",
+      "revId": "d35d3977c4f72b8d05e61e91a58595c9e2c88a14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaX///0A\u003d",
+        "filename": "download.lst",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-13T11:44:03Z",
+      "side": 1,
+      "message": "The ICU_51_LAYOUT_FIX_TARBALL line should be removed, the tarball isn\u0027t needed any longer.",
+      "revId": "d35d3977c4f72b8d05e61e91a58595c9e2c88a14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

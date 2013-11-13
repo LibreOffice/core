@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///z8\u003d",
+        "filename": "external/icu/UnpackedTarball_icu.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-13T11:44:03Z",
+      "side": 0,
+      "message": "Do not remove only the comment, remove the entire $eval() statement as well :-)\n\nThat layout \"patch\" isn\u0027t needed any longer, the code is in 52.1",
+      "revId": "606d778347298b9e6eba8fda050452887c30da47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAaX///z0\u003d",
+        "filename": "external/icu/UnpackedTarball_icu.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-13T11:44:03Z",
+      "side": 0,
+      "message": "As these two patches are unused now the files should be removed from the tree using git rm, the change https://gerrit.libreoffice.org/6661 correctly did that.",
+      "revId": "606d778347298b9e6eba8fda050452887c30da47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
