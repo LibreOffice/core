@@ -10,8 +10,11 @@
 $(eval $(call gb_Module_Module,avmedia))
 
 $(eval $(call gb_Module_add_targets,avmedia,\
-	AllLangResTarget_avmedia \
 	Library_avmedia \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,avmedia,\
+	AllLangResTarget_avmedia \
 ))
 
 ifeq ($(ENABLE_GSTREAMER),TRUE)

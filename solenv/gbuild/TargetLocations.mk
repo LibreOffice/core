@@ -113,7 +113,8 @@ gb_LinkTarget_get_dep_target = \
 gb_LinkTarget_get_clean_target = \
  $(WORKDIR)/Clean/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 gb_LinkTarget_get_target = $(lastword $(subst <>,  ,$(1)))
-gb_Module_get_almost_target = $(WORKDIR)/Module/almost/$(1)
+gb_Module_get_nonl10n_target = $(WORKDIR)/Module/nonl10n/$(1)
+gb_Module_get_l10n_target = $(WORKDIR)/Module/l10n/$(1)
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
 gb_Module_get_slowcheck_target = $(WORKDIR)/Module/slowcheck/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)

@@ -20,7 +20,6 @@
 $(eval $(call gb_Module_Module,framework))
 
 $(eval $(call gb_Module_add_targets,framework,\
-    AllLangResTarget_fwe \
     Library_fwe \
     Library_fwi \
     Library_fwk \
@@ -28,6 +27,10 @@ $(eval $(call gb_Module_add_targets,framework,\
     Library_fwm \
     Package_dtd \
     UIConfig_startmodule \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,framework,\
+    AllLangResTarget_fwe \
 ))
 
 ifneq ($(OOO_JUNIT_JAR),)

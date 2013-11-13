@@ -10,12 +10,15 @@
 $(eval $(call gb_Module_Module,reportdesign))
 
 $(eval $(call gb_Module_add_targets,reportdesign,\
-    AllLangResTarget_rpt \
-    AllLangResTarget_rptui \
     Library_rpt \
     Library_rptui \
     Library_rptxml \
     UIConfig_dbreport \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,reportdesign,\
+    AllLangResTarget_rpt \
+    AllLangResTarget_rptui \
 ))
 
 # deactivated since sb123;

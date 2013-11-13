@@ -10,8 +10,11 @@
 $(eval $(call gb_Module_Module,accessibility))
 
 $(eval $(call gb_Module_add_targets,accessibility,\
-    AllLangResTarget_acc \
     Library_acc \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,accessibility,\
+    AllLangResTarget_acc \
 ))
 
 ifneq ($(ENABLE_JAVA),)

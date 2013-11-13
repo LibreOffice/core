@@ -243,7 +243,7 @@ $(if $(findstring in,$(5)),
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_IS_BIN_TARBALL := YES
 $(call gb_ExternalProject_get_state_target,$(1),%) : UNPACKED_IS_BIN_TARBALL := YES)
 $(if $(findstring out,$(5)),$(call gb_Module_get_target,$(4)) : $(gb_UnpackedTarget_TARFILE_LOCATION)/$(6)
-$(gb_UnpackedTarget_TARFILE_LOCATION)/$(6) : $(call gb_Module_get_almost_target,$(4))
+$(gb_UnpackedTarget_TARFILE_LOCATION)/$(6) : $(call gb_Module_get_nonl10n_target,$(4))
 	$$(call gb_Output_announce,$(6),$(true),PKB,3)
 	if test ! -f "$$@" ; then cd $(call gb_UnpackedTarball_get_dir,) && $(GNUTAR) -czf "$$@" $(1)/ || $(GNUTAR) -czf "$$@" $(1)/ ; else touch "$$@" ; fi)
 

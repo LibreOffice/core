@@ -11,10 +11,13 @@
 $(eval $(call gb_Module_Module,starmath))
 
 $(eval $(call gb_Module_add_targets,starmath,\
-    AllLangResTarget_sm \
     Library_sm \
     Library_smd \
     UIConfig_smath \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,starmath,\
+    AllLangResTarget_sm \
 ))
 
 $(eval $(call gb_Module_add_check_targets,starmath,\

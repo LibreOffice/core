@@ -40,6 +40,7 @@
 gb_Module_ALLMODULES :=
 gb_Module_MODULELOCATIONS :=
 gb_Module_TARGETSTACK :=
+gb_Module_L10NTARGETSTACK :=
 gb_Module_CHECKTARGETSTACK :=
 gb_Module_SLOWCHECKTARGETSTACK :=
 gb_Module_SUBSEQUENTCHECKTARGETSTACK :=
@@ -53,8 +54,8 @@ gb_Module_CLEANTARGETSTACK :=
 # on $(MAKEFILE_LIST).
 gb_Module_CURRENTMAKEFILE :=
 
-$(call gb_Module_get_almost_target,%) :
-	$(call gb_Output_announce,$*,$(true),ALM,5)
+$(call gb_Module_get_nonl10n_target,%) :
+	$(call gb_Output_announce,$*,$(true),BIN,5)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		touch $@)
@@ -64,7 +65,14 @@ $(call gb_Module_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),MOD,5)
 	$(call gb_Output_announce_title,module $* cleared.)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_almost_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*))
+		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_nonl10n_target,$*) $(call gb_Module_get_l10n_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*)
+
+$(call gb_Module_get_l10n_target,%) :
+	$(call gb_Output_announce,$*,$(true),LOC,5)
+	$(call gb_Output_announce_title,module $* done.)
+	-$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		touch $@)
 
 $(call gb_Module_get_check_target,%) :
 	$(call gb_Output_announce,$*,$(true),CHK,5)
@@ -94,7 +102,7 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : all build unitcheck slowcheck subsequentcheck clean check debugrun help showmodules translations
+.PHONY : all build build-l10n-only build-non-l10n-only unitcheck slowcheck subsequentcheck clean check debugrun help showmodules translations
 .DEFAULT_GOAL := all
 
 all : build $(if $(CROSS_COMPILING),,unitcheck $(if $(gb_PARTIAL_BUILD),,slowcheck))
@@ -108,6 +116,18 @@ build :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
 	$(call gb_Output_announce_title,build done.)
+	$(call gb_Output_announce_bell)
+
+build-l10n-only :
+	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),LOC,6)
+	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),LOC,6)
+	$(call gb_Output_announce_title,l10n done.)
+	$(call gb_Output_announce_bell)
+
+build-non-l10n-only :
+	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),NLC,6)
+	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),BIN,6)
+	$(call gb_Output_announce_title,non-l10n done.)
 	$(call gb_Output_announce_bell)
 
 unitcheck :
@@ -167,6 +187,7 @@ define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 gb_Module_TARGETSTACK := $(call gb_Module_get_target,$(1)) $(gb_Module_TARGETSTACK)
+gb_Module_L10NTARGETSTACK := $(call gb_Module_get_l10n_target,$(1)) $(gb_Module_L10NTARGETSTACK)
 gb_Module_CHECKTARGETSTACK := $(call gb_Module_get_check_target,$(1)) $(gb_Module_CHECKTARGETSTACK)
 gb_Module_SLOWCHECKTARGETSTACK := $(call gb_Module_get_slowcheck_target,$(1)) $(gb_Module_SLOWCHECKTARGETSTACK)
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_target,$(1)) $(gb_Module_SUBSEQUENTCHECKTARGETSTACK)
@@ -206,9 +227,19 @@ endif
 endef
 
 define gb_Module_add_target
+$(if $(filter AllLang% Dictionary%,$(2)),$(warning target $(2) should be a l10n target))
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
-$(call gb_Module_get_almost_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_nonl10n_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
+
+endef
+
+define gb_Module_add_l10n_target
+$(if $(filter AllLang% Dictionary%,$(2)),,$(warning target $(2) should not be a l10n target))
+$(call gb_Module__read_targetfile,$(1),$(2),target)
+
+$(call gb_Module_get_l10n_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
@@ -244,11 +275,13 @@ endef
 define gb_Module_add_moduledir
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
 $(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
+$(call gb_Module_get_l10n_target,$(1)) : $$(firstword $$(gb_Module_L10NTARGETSTACK))
 $(call gb_Module_get_check_target,$(1)) : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
 $(call gb_Module_get_slowcheck_target,$(1)) : $$(firstword $$(gb_Module_SLOWCHECKTARGETSTACK))
 $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 $(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
+gb_Module_L10NTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_L10NTARGETSTACK)),$$(gb_Module_L10NTARGETSTACK))
 gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
 gb_Module_SLOWCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SLOWCHECKTARGETSTACK)),$$(gb_Module_SLOWCHECKTARGETSTACK))
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
@@ -257,8 +290,14 @@ gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTA
 endef
 
 define gb_Module_add_targets
-$(call gb_Module_get_target,$(1)) : $(call gb_Module_get_almost_target,$(1))
+$(call gb_Module_get_target,$(1)) : $(call gb_Module_get_nonl10n_target,$(1))
 $(foreach target,$(2),$(call gb_Module_add_target,$(1),$(target)))
+
+endef
+
+define gb_Module_add_l10n_targets
+$(call gb_Module_get_target,$(1)) : $(call gb_Module_get_l10n_target,$(1))
+$(foreach target,$(2),$(call gb_Module_add_l10n_target,$(1),$(target)))
 
 endef
 
@@ -291,7 +330,9 @@ endif
 
 include $(1)
 
-build : $$(firstword $$(gb_Module_TARGETSTACK))
+build : build-non-l10n-only build-l10n-only
+build-non-l10n-only : $$(firstword $$(gb_Module_TARGETSTACK))
+build-l10n-only : $$(firstword $$(gb_Module_L10NTARGETSTACK))
 unitcheck : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
 slowcheck : $$(firstword $$(gb_Module_SLOWCHECKTARGETSTACK))
 subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
@@ -302,12 +343,13 @@ $$(eval $$(call gb_Output_error,Corrupted module target stack! $(gb_Module_TARGE
 endif
 
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
+gb_Module_L10NTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_L10NTARGETSTACK)),$$(gb_Module_L10NTARGETSTACK))
 gb_Module_CHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CHECKTARGETSTACK)),$$(gb_Module_CHECKTARGETSTACK))
 gb_Module_SLOWCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SLOWCHECKTARGETSTACK)),$$(gb_Module_SLOWCHECKTARGETSTACK))
 gb_Module_SUBSEQUENTCHECKTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
-ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SLOWCHECKTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK)),)
+ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Module_SLOWCHECKTARGETSTACK),$$(gb_Module_SUBSEQUENTCHECKTARGETSTACK),$$(gb_Module_L10NTARGETSTACK)),)
 $$(eval $$(call gb_Output_error,Corrupted module target stack!3))
 endif
 

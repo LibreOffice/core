@@ -20,8 +20,11 @@
 $(eval $(call gb_Module_Module,editeng))
 
 $(eval $(call gb_Module_add_targets,editeng,\
-    AllLangResTarget_editeng \
     Library_editeng \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,editeng,\
+    AllLangResTarget_editeng \
 ))
 
 # add any runtime tests (unit tests) here

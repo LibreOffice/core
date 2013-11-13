@@ -20,13 +20,16 @@
 $(eval $(call gb_Module_Module,vcl))
 
 $(eval $(call gb_Module_add_targets,vcl,\
-    AllLangResTarget_vcl \
     CustomTarget_afm_hash \
     Library_vcl \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
 		StaticLibrary_vclmain \
 		Executable_ui-previewer) \
     UIConfig_vcl \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,vcl,\
+    AllLangResTarget_vcl \
 ))
 
 ifeq ($(GUIBASE),unx)

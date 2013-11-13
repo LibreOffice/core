@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,basic))
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)
 
-$(eval $(call gb_Module_add_targets,basic,\
+$(eval $(call gb_Module_add_l10n_targets,basic,\
 	AllLangResTarget_sb \
 ))
 

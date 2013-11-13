@@ -11,9 +11,6 @@
 $(eval $(call gb_Module_Module,connectivity))
 
 $(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_cnr \
-	AllLangResTarget_sdbcl \
-	AllLangResTarget_sdberr \
 	Configuration_calc \
 	Configuration_dbase \
 	Configuration_flat \
@@ -30,6 +27,12 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 		Library_odbc \
 		Library_odbcbase) \
 	Library_sdbc2 \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,connectivity,\
+	AllLangResTarget_cnr \
+	AllLangResTarget_sdbcl \
+	AllLangResTarget_sdberr \
 ))
 
 ifneq ($(ENABLE_JAVA),)

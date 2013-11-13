@@ -22,8 +22,11 @@ $(eval $(call gb_Module_Module,basctl))
 ifneq ($(DISABLE_SCRIPTING),TRUE)
 
 $(eval $(call gb_Module_add_targets,basctl,\
-	AllLangResTarget_basctl \
 	Library_basctl \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,basctl,\
+	AllLangResTarget_basctl \
 ))
 
 endif

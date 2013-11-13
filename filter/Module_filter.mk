@@ -19,10 +19,6 @@
 $(eval $(call gb_Module_Module,filter))
 
 $(eval $(call gb_Module_add_targets,filter,\
-	AllLangResTarget_eps \
-	AllLangResTarget_pdffilter \
-	AllLangResTarget_t602filter \
-	AllLangResTarget_xsltdlg \
 	Configuration_filter \
 	CustomTarget_svg \
 	$(if $(filter EXPORT,$(BUILD_TYPE)), \
@@ -66,6 +62,14 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Package_xhtml \
 	Package_xslt \
 	UIConfig_xsltdlg \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,filter,\
+	AllLangResTarget_eps \
+	AllLangResTarget_flash \
+	AllLangResTarget_pdffilter \
+	AllLangResTarget_t602filter \
+	AllLangResTarget_xsltdlg \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

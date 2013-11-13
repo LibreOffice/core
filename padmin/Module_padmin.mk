@@ -25,10 +25,14 @@ ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Module_add_targets,padmin,\
     Executable_spadmin.bin \
     Library_spa \
-    AllLangResTarget_spa \
     Package_padmin \
     UIConfig_spa \
 ))
+
+$(eval $(call gb_Module_add_l10n_targets,padmin,\
+    AllLangResTarget_spa \
+))
+
 endif
 
 # vim: set noet sw=4 ts=4:
