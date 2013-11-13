@@ -63,8 +63,6 @@ private:
     */
     inline void AdvanceToNextValidElement (void);
 
-    // Default constructor not implemented.
-    PageEnumerationImpl (void);
     // Assignment operator not implemented.
     PageEnumerationImpl& operator= (const PageEnumerationImpl&);
 };
