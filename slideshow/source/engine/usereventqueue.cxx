@@ -121,11 +121,6 @@ public:
         maEvents.push( rEvent );
     }
 
-    bool isEmpty()
-    {
-        return maEvents.empty();
-    }
-
 protected:
     ImpEventQueue maEvents;
 };
