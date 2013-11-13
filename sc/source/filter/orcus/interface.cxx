@@ -257,7 +257,7 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t 
             break;
         case orcus::spreadsheet::xlsx_2007:
         case orcus::spreadsheet::xlsx_2010:
-            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX;
+            eGrammar = formula::FormulaGrammar::GRAM_OOXML;
             break;
         case orcus::spreadsheet::gnumeric:
             eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;

@@ -333,6 +333,7 @@ private:
     void InitSymbolsPODF() const;      /// only SymbolsPODF, on demand
     void InitSymbolsODFF() const;      /// only SymbolsODFF, on demand
     void InitSymbolsEnglishXL() const; /// only SymbolsEnglishXL, on demand
+    void InitSymbolsOOXML() const;     /// only SymbolsOOXML, on demand
 
     void loadSymbols(sal_uInt16 _nSymbols,FormulaGrammar::Grammar _eGrammar,NonConstOpCodeMapPtr& _xMap) const;
 
@@ -382,11 +383,12 @@ private:
     };
 
 
-    mutable NonConstOpCodeMapPtr  mxSymbolsODFF;                          // ODFF symbols
-    mutable NonConstOpCodeMapPtr  mxSymbolsPODF;                          // ODF 1.1 symbols
-    mutable NonConstOpCodeMapPtr  mxSymbolsNative;                        // native symbols
-    mutable NonConstOpCodeMapPtr  mxSymbolsEnglish;                       // English symbols
-    mutable NonConstOpCodeMapPtr  mxSymbolsEnglishXL;                     // English Excel symbols (for VBA formula parsing)
+    mutable NonConstOpCodeMapPtr  mxSymbolsODFF;      // ODFF symbols
+    mutable NonConstOpCodeMapPtr  mxSymbolsPODF;      // ODF 1.1 symbols
+    mutable NonConstOpCodeMapPtr  mxSymbolsNative;    // native symbols
+    mutable NonConstOpCodeMapPtr  mxSymbolsEnglish;   // English symbols
+    mutable NonConstOpCodeMapPtr  mxSymbolsEnglishXL; // English Excel symbols (for VBA formula parsing)
+    mutable NonConstOpCodeMapPtr  mxSymbolsOOXML;     // Excel OOXML symbols
 };
 // =============================================================================
 } // formula

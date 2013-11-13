@@ -76,7 +76,7 @@ public:
 
         Item& rCached = *it->second;
         ScCompiler aComp(&mrDoc, rPos, *rCached.mpCell->GetCode());
-        aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+        aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
         OUStringBuffer aBuf;
         aComp.CreateStringFromTokenArray(aBuf);
         OUString aPredicted = aBuf.makeStringAndClear();
@@ -132,7 +132,7 @@ void applySharedFormulas(
             ScUnoConversion::FillScAddress(aPos, rAddr);
             ScCompiler aComp(&rDoc.getDoc(), aPos);
             aComp.SetNumberFormatter(&rFormatter);
-            aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+            aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
             {
@@ -220,7 +220,7 @@ void applyCellFormulas(
 
         ScCompiler aCompiler(&rDoc.getDoc(), aPos);
         aCompiler.SetNumberFormatter(&rFormatter);
-        aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+        aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
         ScTokenArray* pCode = aCompiler.CompileString(it->maTokenStr);
         if (!pCode)
             continue;
@@ -246,10 +246,10 @@ void applyArrayFormulas(
 
         ScCompiler aComp(&rDoc.getDoc(), aPos);
         aComp.SetNumberFormatter(&rFormatter);
-        aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+        aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
         boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(it->maTokenAndAddress.maTokenStr));
         if (pArray)
-            rDoc.setMatrixCells(aRange, *pArray, formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+            rDoc.setMatrixCells(aRange, *pArray, formula::FormulaGrammar::GRAM_OOXML);
     }
 }
 

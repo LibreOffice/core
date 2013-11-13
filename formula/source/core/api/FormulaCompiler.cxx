@@ -144,25 +144,25 @@ void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVe
 class OpCodeList : public Resource        // temp object for resource
 {
 public:
+    enum SeparatorType
+    {
+        SEMICOLON_BASE,
+        COMMA_BASE
+    };
 
-    OpCodeList( sal_uInt16, FormulaCompiler::NonConstOpCodeMapPtr );
+    OpCodeList( sal_uInt16, FormulaCompiler::NonConstOpCodeMapPtr, SeparatorType = SEMICOLON_BASE );
 
 private:
     bool getOpCodeString( OUString& rStr, sal_uInt16 nOp );
     void putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp );
 
 private:
-    enum SeparatorType
-    {
-        SEMICOLON_BASE,
-        COMMA_BASE
-    };
     SeparatorType meSepType;
 };
 
-OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr xMap ) :
+OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr xMap, SeparatorType eSepType ) :
     Resource( ResId( nRID, *ResourceManager::getResManager()))
-    , meSepType( SEMICOLON_BASE)
+    , meSepType( eSepType)
 {
     for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
     {
@@ -589,6 +589,11 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
                 InitSymbolsEnglishXL();
             xMap = mxSymbolsEnglishXL;
             break;
+        case FormulaLanguage::OOXML:
+            if (!mxSymbolsOOXML)
+                InitSymbolsOOXML();
+            xMap = mxSymbolsOOXML;
+            break;
         default:
             ;   // nothing, NULL map returned
     }
@@ -703,7 +708,7 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
     mxSymbolsEnglishXL = aMap.mxSymbolMap;
 
     // TODO: For now, just replace the separators to the Excel English
@@ -712,6 +717,15 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
     mxSymbolsEnglishXL->putOpCode( OUString(','), ocSep);
     mxSymbolsEnglishXL->putOpCode( OUString(','), ocArrayColSep);
     mxSymbolsEnglishXL->putOpCode( OUString(';'), ocArrayRowSep);
+}
+
+void FormulaCompiler::InitSymbolsOOXML() const
+{
+    static OpCodeMapData aMap;
+    osl::MutexGuard aGuard(&aMap.maMtx);
+    if (!aMap.mxSymbolMap)
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_OOXML, aMap.mxSymbolMap);
+    mxSymbolsOOXML = aMap.mxSymbolMap;
 }
 
 
@@ -723,7 +737,10 @@ void FormulaCompiler::loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar 
         // not Core
         rxMap.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar ));
         OModuleClient aModuleClient;
-        OpCodeList aOpCodeList( nSymbols, rxMap );
+        OpCodeList aOpCodeList( nSymbols, rxMap,
+                ((eGrammar == FormulaGrammar::GRAM_OOXML) ?
+                 OpCodeList::SeparatorType::COMMA_BASE :
+                 OpCodeList::SeparatorType::SEMICOLON_BASE));
 
         fillFromAddInMap( rxMap, eGrammar);
         // Fill from collection for AddIns not already present.

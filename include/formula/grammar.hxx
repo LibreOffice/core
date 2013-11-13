@@ -134,6 +134,11 @@ public:
                                 ((CONV_XL_OOX        +
                                   kConventionOffset) << kConventionShift)            |
                                 kEnglishBit,
+        /// Excel OOXML with Excel OOXML reference style.
+        GRAM_OOXML           = ::com::sun::star::sheet::FormulaLanguage::OOXML  |
+                                ((CONV_XL_OOX        +
+                                  kConventionOffset) << kConventionShift)       |
+                                kEnglishBit,
         /// Central definition of the default grammar to be used.
         GRAM_DEFAULT        = GRAM_NATIVE_UI,
 
@@ -187,6 +192,7 @@ public:
             case GRAM_ENGLISH_XL_A1  :
             case GRAM_ENGLISH_XL_R1C1:
             case GRAM_ENGLISH_XL_OOX :
+            case GRAM_OOXML          :
                 return true;
             default:
                 return extractFormulaLanguage( eGrammar) == GRAM_EXTERNAL;
