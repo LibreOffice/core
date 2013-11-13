@@ -80,7 +80,7 @@ sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal
     {
         aData.realloc( nBytesToRead );
     }
-    catch ( const uno::Exception &e )
+    catch ( const uno::Exception & )
     {
         throw io::BufferSizeExceededException();
     }
