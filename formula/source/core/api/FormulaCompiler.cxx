@@ -144,33 +144,40 @@ void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVe
 class OpCodeList : public Resource        // temp object for resource
 {
 public:
-    enum SeparatorType
-    {
-        SEMICOLON_BASE,
-        COMMA_BASE
-    };
 
-    OpCodeList( sal_uInt16, FormulaCompiler::NonConstOpCodeMapPtr, SeparatorType = SEMICOLON_BASE );
+    OpCodeList( sal_uInt16, FormulaCompiler::NonConstOpCodeMapPtr,
+            FormulaCompiler::SeparatorType = FormulaCompiler::SEMICOLON_BASE );
 
 private:
     bool getOpCodeString( OUString& rStr, sal_uInt16 nOp );
     void putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp );
 
 private:
-    SeparatorType meSepType;
+    FormulaCompiler::SeparatorType meSepType;
 };
 
-OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr xMap, SeparatorType eSepType ) :
+OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr xMap,
+        FormulaCompiler::SeparatorType eSepType ) :
     Resource( ResId( nRID, *ResourceManager::getResManager()))
     , meSepType( eSepType)
 {
-    for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+    if (meSepType == FormulaCompiler::RESOURCE_BASE)
     {
-        OUString aOpStr;
-        if ( getOpCodeString( aOpStr, i) )
-            xMap->putOpCode( aOpStr, OpCode(i));
-        else
+        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        {
             putDefaultOpCode( xMap, i);
+        }
+    }
+    else
+    {
+        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        {
+            OUString aOpStr;
+            if ( getOpCodeString( aOpStr, i) )
+                xMap->putOpCode( aOpStr, OpCode(i));
+            else
+                putDefaultOpCode( xMap, i);
+        }
     }
 
     FreeResource();
@@ -182,12 +189,12 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
     {
         case SC_OPCODE_SEP:
         {
-            if (meSepType == COMMA_BASE)
+            if (meSepType == FormulaCompiler::COMMA_BASE)
             {
                 rStr = ",";
                 return true;
             }
-            else if (meSepType == SEMICOLON_BASE)
+            else if (meSepType == FormulaCompiler::SEMICOLON_BASE)
             {
                 rStr = ";";
                 return true;
@@ -196,12 +203,12 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
         break;
         case SC_OPCODE_ARRAY_COL_SEP:
         {
-            if (meSepType == COMMA_BASE)
+            if (meSepType == FormulaCompiler::COMMA_BASE)
             {
                 rStr = ",";
                 return true;
             }
-            else if (meSepType == SEMICOLON_BASE)
+            else if (meSepType == FormulaCompiler::SEMICOLON_BASE)
             {
                 rStr = ";";
                 return true;
@@ -210,12 +217,12 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
         break;
         case SC_OPCODE_ARRAY_ROW_SEP:
         {
-            if (meSepType == COMMA_BASE)
+            if (meSepType == FormulaCompiler::COMMA_BASE)
             {
                 rStr = ";";
                 return true;
             }
-            else if (meSepType == SEMICOLON_BASE)
+            else if (meSepType == FormulaCompiler::SEMICOLON_BASE)
             {
                 rStr = "|";
                 return true;
@@ -690,7 +697,7 @@ void FormulaCompiler::InitSymbolsPODF() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, RESOURCE_BASE);
     mxSymbolsPODF = aMap.mxSymbolMap;
 }
 
@@ -699,7 +706,7 @@ void FormulaCompiler::InitSymbolsODFF() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, aMap.mxSymbolMap);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, aMap.mxSymbolMap, RESOURCE_BASE);
     mxSymbolsODFF = aMap.mxSymbolMap;
 }
 
@@ -724,23 +731,20 @@ void FormulaCompiler::InitSymbolsOOXML() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_OOXML, aMap.mxSymbolMap);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_OOXML, aMap.mxSymbolMap, RESOURCE_BASE);
     mxSymbolsOOXML = aMap.mxSymbolMap;
 }
 
 
 void FormulaCompiler::loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar eGrammar,
-        NonConstOpCodeMapPtr& rxMap) const
+        NonConstOpCodeMapPtr& rxMap, SeparatorType eSepType) const
 {
     if ( !rxMap.get() )
     {
         // not Core
         rxMap.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar ));
         OModuleClient aModuleClient;
-        OpCodeList aOpCodeList( nSymbols, rxMap,
-                ((eGrammar == FormulaGrammar::GRAM_OOXML) ?
-                 OpCodeList::COMMA_BASE :
-                 OpCodeList::SEMICOLON_BASE));
+        OpCodeList aOpCodeList( nSymbols, rxMap, eSepType);
 
         fillFromAddInMap( rxMap, eGrammar);
         // Fill from collection for AddIns not already present.

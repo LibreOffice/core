@@ -256,6 +256,18 @@ public:
     static void UpdateSeparatorsNative( const OUString& rSep, const OUString& rArrayColSep, const OUString& rArrayRowSep );
     static void ResetNativeSymbols();
     static void SetNativeSymbols( const OpCodeMapPtr& xMap );
+
+    /** Separators mapped when loading opcodes from the resource, values other
+        than RESOURCE_BASE may override the resource strings. Used by OpCodeList
+        implementation via loadSymbols().
+     */
+    enum SeparatorType
+    {
+        RESOURCE_BASE,
+        SEMICOLON_BASE,
+        COMMA_BASE
+    };
+
 protected:
     virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
@@ -327,6 +339,7 @@ protected:
     bool                bIgnoreErrors;          // on AutoCorrect and CompileForFAP
                                                 // ignore errors and create RPN nevertheless
     bool                glSubTotal;             // if code contains one or more subtotal functions
+
 private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation
     void InitSymbolsEnglish() const;   /// only SymbolsEnglish, maybe later
@@ -335,7 +348,8 @@ private:
     void InitSymbolsEnglishXL() const; /// only SymbolsEnglishXL, on demand
     void InitSymbolsOOXML() const;     /// only SymbolsOOXML, on demand
 
-    void loadSymbols(sal_uInt16 _nSymbols,FormulaGrammar::Grammar _eGrammar,NonConstOpCodeMapPtr& _xMap) const;
+    void loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar eGrammar, NonConstOpCodeMapPtr& rxMap,
+            SeparatorType eSepType = SEMICOLON_BASE ) const;
 
     static inline void ForceArrayOperator( FormulaTokenRef& rCurr, const FormulaTokenRef& rPrev )
         {
