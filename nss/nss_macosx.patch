@@ -21,39 +21,6 @@
      _OPTIMIZE_FLAGS=-O2
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      STRIP="$STRIP -x -S"
---- a/a/nspr/lib/ds/Makefile.in
-+++ b/b/nspr/lib/ds/Makefile.in
-@@ -143,7 +143,7 @@
- 
- export:: $(TARGETS)
- 	$(INSTALL) -m 444 $(HEADERS) $(dist_includedir)
--	$(INSTALL) -m 444 $(TARGETS) $(dist_libdir)
-+	$(INSTALL) -m 664 $(TARGETS) $(dist_libdir)
- ifdef SHARED_LIBRARY
- ifeq ($(OS_ARCH),HP-UX)
- 	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
---- a/a/nspr/lib/libc/src/Makefile.in
-+++ b/b/nspr/lib/libc/src/Makefile.in
-@@ -144,7 +144,7 @@
- #
- 
- export:: $(TARGETS)
--	$(INSTALL) -m 444 $(TARGETS) $(dist_libdir)
-+	$(INSTALL) -m 664 $(TARGETS) $(dist_libdir)
- ifdef SHARED_LIBRARY
- ifeq ($(OS_ARCH),HP-UX)
- 	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
---- a/a/nspr/pr/src/Makefile.in
-+++ b/b/nspr/pr/src/Makefile.in
-@@ -365,7 +365,7 @@
- #
- 
- build:: $(TARGETS)
--	$(INSTALL) -m 444 $(TARGETS) $(dist_libdir)
-+	$(INSTALL) -m 664 $(TARGETS) $(dist_libdir)
- ifdef SHARED_LIBRARY
- ifeq ($(OS_ARCH),HP-UX)
- 	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
 --- a/a/nss/coreconf/Darwin.mk
 +++ b/b/nss/coreconf/Darwin.mk
 @@ -39,8 +39,12 @@
