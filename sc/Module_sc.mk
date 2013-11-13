@@ -49,7 +49,7 @@ endif
 
 # Disabled because fails on too many machines in
 # the OpenCL compiler
-# CppunitTest_sc_opencl_test \
+# CppunitTest_sc_opencl_test
 $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_ucalc \
     CppunitTest_sc_filters_test \
