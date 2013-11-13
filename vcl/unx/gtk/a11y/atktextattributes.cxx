@@ -269,7 +269,7 @@ get_color_value(const uno::Sequence< beans::PropertyValue >& rAttributeList,
             }
         }
 
-        catch(const uno::Exception& e) {
+        catch(const uno::Exception&) {
             g_warning( "Exception in get[Fore|Back]groundColor()" );
         }
     }
