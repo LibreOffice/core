@@ -7,10 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <queue>
+
 #include <osl/conditn.hxx>
 #include <salhelper/thread.hxx>
 
+#include "formulacell.hxx"
+
 namespace sc {
+
+struct CLBuildKernelWorkItem
+{
+    enum { COMPILE, FINISH } meWhatToDo;
+    ScFormulaCellGroupRef mxGroup;
+};
 
 class CLBuildKernelThread : public salhelper::Thread
 {
@@ -20,11 +30,15 @@ public:
 
     void finish();
 
+    void push(CLBuildKernelWorkItem item);
+
 protected:
     virtual void execute();
 
 private:
-    osl::Condition maConsumeCondition;
+    osl::Mutex maMutex;
+    osl::Condition maCondition;
+    std::queue<CLBuildKernelWorkItem> maQueue;
     void produce();
     void consume();
 };

@@ -26,7 +26,43 @@ CLBuildKernelThread::~CLBuildKernelThread()
 
 void CLBuildKernelThread::execute()
 {
-    SAL_INFO("sc.opencl", "opencl-buildkernel-thread running");
+    SAL_INFO("sc.opencl.thread", "running");
+
+    bool done = false;
+    while (!done)
+    {
+        SAL_INFO("sc.opencl.thread", "waiting for condition");
+        maCondition.wait();
+        SAL_INFO("sc.opencl.thread", "got condition");
+        osl::ResettableMutexGuard aGuard(maMutex);
+        maCondition.reset();
+        while (!maQueue.empty())
+        {
+            CLBuildKernelWorkItem aWorkItem = maQueue.front();
+            maQueue.pop();
+            aGuard.clear();
+
+            switch (aWorkItem.meWhatToDo)
+            {
+            case CLBuildKernelWorkItem::COMPILE:
+                SAL_INFO("sc.opencl.thread", "told to compile group " << aWorkItem.mxGroup << " to binary");
+                break;
+            case CLBuildKernelWorkItem::FINISH:
+                SAL_INFO("sc.opencl.thread", "told to finish");
+                done = true;
+                break;
+            }
+
+            aGuard.reset();
+        }
+    }
+}
+
+void CLBuildKernelThread::push(CLBuildKernelWorkItem item)
+{
+    osl::MutexGuard guard(maMutex);
+    maQueue.push(item);
+    maCondition.set();
 }
 
 void CLBuildKernelThread::produce()
@@ -39,7 +75,10 @@ void CLBuildKernelThread::consume()
 
 void CLBuildKernelThread::finish()
 {
-    SAL_INFO("sc.opencl", "opencl-buildkernel-thread request to finish");
+    SAL_INFO("sc.opencl", "telling thread to finish");
+    CLBuildKernelWorkItem aWorkItem;
+    aWorkItem.meWhatToDo = CLBuildKernelWorkItem::FINISH;
+    push(aWorkItem);
 }
 
 }

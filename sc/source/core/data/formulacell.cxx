@@ -418,11 +418,11 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     {
         osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
         if (mnCount++ == 0)
-            {
-                assert(!mxCLKernelThread.is());
-                mxCLKernelThread.set(new sc::CLBuildKernelThread);
-                mxCLKernelThread->launch();
-            }
+        {
+            assert(!mxCLKernelThread.is());
+            mxCLKernelThread.set(new sc::CLBuildKernelThread);
+            mxCLKernelThread->launch();
+        }
     }
 }
 
@@ -441,6 +441,14 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
             }
     }
     delete mpCode;
+}
+
+void ScFormulaCellGroup::scheduleCompilation()
+{
+    sc::CLBuildKernelWorkItem aWorkItem;
+    aWorkItem.meWhatToDo = sc::CLBuildKernelWorkItem::COMPILE;
+    aWorkItem.mxGroup = this;
+    mxCLKernelThread->push(aWorkItem);
 }
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
@@ -929,7 +937,9 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
 {
     // Not already compiled?
     if( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
+    {
         Compile( aResult.GetHybridFormula(), bNoListening, eTempGrammar);
+    }
     else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetCodeError() )
     {
         // RPN length may get changed
@@ -3319,6 +3329,7 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
     mxGroup->mpCode = pCode; // Move this to the shared location.
+    mxGroup->scheduleCompilation();
     return mxGroup;
 }
 
@@ -3509,7 +3520,6 @@ public:
             aComp.SetGrammar(formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
             OUStringBuffer aAsString;
             aComp.CreateStringFromTokenArray(aAsString);
-            SAL_DEBUG("interpret formula: " << aAsString.makeStringAndClear());
         }
 #endif
 

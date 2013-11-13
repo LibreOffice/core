@@ -53,6 +53,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     mutable size_t mnRefCount;
 
     ScTokenArray* mpCode;
+    osl::Mutex maMutex;
     sc::CompiledFormula* mpCompiledFormula;
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
@@ -63,6 +64,8 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
+
+    void scheduleCompilation();
 
     void setCode( const ScTokenArray& rCode );
     void compileCode(
