@@ -24,7 +24,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <osl/module.h>
 
-#include "warnings_guard_unicode_tblcoll.h"
+#include <unicode/tblcoll.h>
 
 //      ----------------------------------------------------
 //      class Collator_Unicode

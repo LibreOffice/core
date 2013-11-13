@@ -22,7 +22,7 @@
 #include "calendarImpl.hxx"
 #include "nativenumbersupplier.hxx"
 
-#include "warnings_guard_unicode_calendar.h"
+#include <unicode/calendar.h>
 
 //  ----------------------------------------------------
 //  class Calendar_gregorian

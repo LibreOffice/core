@@ -26,7 +26,7 @@
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 
-#include "warnings_guard_unicode_tblcoll.h"
+#include <unicode/tblcoll.h>
 
 U_CAPI void U_EXPORT2 uprv_free(void *mem);
 

@@ -31,7 +31,8 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "warnings_guard_unicode_regex.h"
+
+#include <unicode/regex.h>
 
 #include <memory>
 

@@ -21,7 +21,7 @@
 
 #include <breakiteratorImpl.hxx>
 
-#include "warnings_guard_unicode_brkiter.h"
+#include <unicode/brkiter.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
