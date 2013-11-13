@@ -359,39 +359,6 @@ private:
 
 } } // end of namespace sd::framework
 
-
-
-namespace sd { namespace framework {
-
-namespace {
-
-    class FrameworkHelperAllPassFilter
-    {
-    public:
-        bool operator() (const cssdf::ConfigurationChangeEvent&) { return true; }
-    };
-
-
-    class FrameworkHelperResourceIdFilter
-    {
-    public:
-        FrameworkHelperResourceIdFilter (
-            const cssu::Reference<cssdf::XResourceId>& rxResourceId);
-        bool operator() (const cssdf::ConfigurationChangeEvent& rEvent)
-        { return mxResourceId.is() && rEvent.ResourceId.is()
-                && mxResourceId->compareTo(rEvent.ResourceId) == 0; }
-    private:
-        cssu::Reference<cssdf::XResourceId> mxResourceId;
-    };
-
-} // end of anonymous namespace
-
-
-
-
-} } // end of namespace sd::framework
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
