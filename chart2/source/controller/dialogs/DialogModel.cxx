@@ -180,8 +180,12 @@ struct lcl_DataSeriesContainerAppend : public
         return *this;
     }
 
+    // Implement output operator requirements as required by std::copy (and
+    // implement prefix increment in terms of postfix increment to avoid unused
+    // member function warnings for the latter in the common case where
+    // std::copy would not actually need it):
     lcl_DataSeriesContainerAppend & operator* ()     { return *this; }
-    lcl_DataSeriesContainerAppend & operator++ ()    { return *this; }
+    lcl_DataSeriesContainerAppend & operator++ ()    { return operator++(0); }
     lcl_DataSeriesContainerAppend & operator++ (int) { return *this; }
     lcl_DataSeriesContainerAppend & operator= ( lcl_DataSeriesContainerAppend& ) { return *this; }
 
@@ -239,8 +243,12 @@ struct lcl_RolesWithRangeAppend : public
         return *this;
     }
 
+    // Implement output operator requirements as required by std::copy (and
+    // implement prefix increment in terms of postfix increment to avoid unused
+    // member function warnings for the latter in the common case where
+    // std::copy would not actually need it):
     lcl_RolesWithRangeAppend & operator* ()     { return *this; }
-    lcl_RolesWithRangeAppend & operator++ ()    { return *this; }
+    lcl_RolesWithRangeAppend & operator++ ()    { return operator++(0); }
     lcl_RolesWithRangeAppend & operator++ (int) { return *this; }
     lcl_RolesWithRangeAppend & operator= ( lcl_RolesWithRangeAppend& ) { return *this; }
 
