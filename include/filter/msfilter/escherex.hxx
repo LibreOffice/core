@@ -42,42 +42,42 @@
 
         /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/
 // In the Microsoft documentation the naming scheme is msofbt... instead of ESCHER_...
-#define ESCHER_DggContainer     0xF000  /*                           per-document data                                                  X   X   X     */
-#define ESCHER_Dgg              0xF006  /*                           an FDGG and several FIDCLs                                         X   X   X   0 */
-#define ESCHER_CLSID            0xF016  /*                           the CLSID of the application that put the data on the clipboard    C   C   C   0 */
-#define ESCHER_OPT              0xF00B  /* count of properties       the document-wide default shape properties                         X   X   X   3 */
-#define ESCHER_ColorMRU         0xF11A  /* count of colors           the colors in the MRU swatch                                       X   X   X   0 */
-#define ESCHER_SplitMenuColors  0xF11E  /* count of colors           the colors in the top-level split menus                            X   X   X   0 */
-#define ESCHER_BstoreContainer  0xF001  /* count of BLIPs            all images in the document (JPEGs, metafiles, etc.)                X   X   X     */
-#define ESCHER_BSE              0xF007  /* BLIP type                 an FBSE (one per BLIP)                                             X   X   X   2 */
-#define ESCHER_BlipFirst        0xF018  /*                           range of fbts reserved for various kinds of BLIPs                  X   X   X     */
-#define ESCHER_BlipLast         0xF117  /*                           range of fbts reserved for various kinds of BLIPs                  X   X   X     */
+#define ESCHER_DggContainer     0xF000u /*                           per-document data                                                  X   X   X     */
+#define ESCHER_Dgg              0xF006u /*                           an FDGG and several FIDCLs                                         X   X   X   0 */
+#define ESCHER_CLSID            0xF016u /*                           the CLSID of the application that put the data on the clipboard    C   C   C   0 */
+#define ESCHER_OPT              0xF00Bu /* count of properties       the document-wide default shape properties                         X   X   X   3 */
+#define ESCHER_ColorMRU         0xF11Au /* count of colors           the colors in the MRU swatch                                       X   X   X   0 */
+#define ESCHER_SplitMenuColors  0xF11Eu /* count of colors           the colors in the top-level split menus                            X   X   X   0 */
+#define ESCHER_BstoreContainer  0xF001u /* count of BLIPs            all images in the document (JPEGs, metafiles, etc.)                X   X   X     */
+#define ESCHER_BSE              0xF007u /* BLIP type                 an FBSE (one per BLIP)                                             X   X   X   2 */
+#define ESCHER_BlipFirst        0xF018u /*                           range of fbts reserved for various kinds of BLIPs                  X   X   X     */
+#define ESCHER_BlipLast         0xF117u /*                           range of fbts reserved for various kinds of BLIPs                  X   X   X     */
 
-#define ESCHER_DgContainer      0xF002  /*                           per-sheet/page/slide data                                          X   X   X     */
-#define ESCHER_Dg               0xF008  /* drawing ID                an FDG                                                             X   X   X   0 */
-#define ESCHER_RegroupItems     0xF118  /* count of regroup entries  several FRITs                                                      X   X   X   0 */
-#define ESCHER_ColorScheme      0xF120  /* count of colors           the colors of the source host's color scheme                           C   C   0 */
-#define ESCHER_SpgrContainer    0xF003  /*                           several SpContainers, the first of which is the group shape itself X   X   X     */
-#define ESCHER_SpContainer      0xF004  /*                           a shape                                                            X   X   X     */
-#define ESCHER_Spgr             0xF009  /*                           an FSPGR; only present if the shape is a group shape               X   X   X   1 */
-#define ESCHER_Sp               0xF00A  /* shape type                an FSP                                                             X   X   X   2 */
-//#define     ESCHER_OPT           0xF00B /* count of properties       a shape property table                                             X   X   X   3 */
-#define ESCHER_Textbox          0xF00C  /*                           RTF text                                                           C   C   C   0 */
-#define ESCHER_ClientTextbox    0xF00D  /* host-defined              the text in the textbox, in host-defined format                    X   X   X     */
-#define ESCHER_Anchor           0xF00E  /*                           a RECT, in 100000ths of an inch                                    C   C   C   0 */
-#define ESCHER_ChildAnchor      0xF00F  /*                           a RECT, in units relative to the parent group                      X   X   X   0 */
-#define ESCHER_ClientAnchor     0xF010  /* host-defined              the location of the shape, in a host-defined format                X   X   X     */
-#define ESCHER_ClientData       0xF011  /* host-defined              host-specific data                                                 X   X   X     */
-#define ESCHER_OleObject        0xF11F  /*                           a serialized IStorage for an OLE object                            C   C   C   0 */
-#define ESCHER_DeletedPspl      0xF11D  /*                           an FPSPL; only present in top-level deleted shapes                 X           0 */
-#define ESCHER_SolverContainer  0xF005  /* count of rules            the rules governing shapes                                         X   X   X     */
-#define ESCHER_ConnectorRule    0xF012  /*                           an FConnectorRule                                                      X   X   1 */
-#define ESCHER_AlignRule        0xF013  /*                           an FAlignRule                                                      X   X   X   0 */
-#define ESCHER_ArcRule          0xF014  /*                           an FARCRU                                                          X   X   X   0 */
-#define ESCHER_ClientRule       0xF015  /* host-defined              host-defined                                                                     */
-#define ESCHER_CalloutRule      0xF017  /*                           an FCORU                                                           X   X   X   0 */
-#define ESCHER_Selection        0xF119  /*                           an FDGSL followed by the SPIDs of the shapes in the selection              X   0 */
-#define ESCHER_UDefProp         0xF122
+#define ESCHER_DgContainer      0xF002u /*                           per-sheet/page/slide data                                          X   X   X     */
+#define ESCHER_Dg               0xF008u /* drawing ID                an FDG                                                             X   X   X   0 */
+#define ESCHER_RegroupItems     0xF118u /* count of regroup entries  several FRITs                                                      X   X   X   0 */
+#define ESCHER_ColorScheme      0xF120u /* count of colors           the colors of the source host's color scheme                           C   C   0 */
+#define ESCHER_SpgrContainer    0xF003u /*                           several SpContainers, the first of which is the group shape itself X   X   X     */
+#define ESCHER_SpContainer      0xF004u /*                           a shape                                                            X   X   X     */
+#define ESCHER_Spgr             0xF009u /*                           an FSPGR; only present if the shape is a group shape               X   X   X   1 */
+#define ESCHER_Sp               0xF00Au /* shape type                an FSP                                                             X   X   X   2 */
+//#define     ESCHER_OPT           0xF00Bu /* count of properties       a shape property table                                             X   X   X   3 */
+#define ESCHER_Textbox          0xF00Cu /*                           RTF text                                                           C   C   C   0 */
+#define ESCHER_ClientTextbox    0xF00Du /* host-defined              the text in the textbox, in host-defined format                    X   X   X     */
+#define ESCHER_Anchor           0xF00Eu /*                           a RECT, in 100000ths of an inch                                    C   C   C   0 */
+#define ESCHER_ChildAnchor      0xF00Fu /*                           a RECT, in units relative to the parent group                      X   X   X   0 */
+#define ESCHER_ClientAnchor     0xF010u /* host-defined              the location of the shape, in a host-defined format                X   X   X     */
+#define ESCHER_ClientData       0xF011u /* host-defined              host-specific data                                                 X   X   X     */
+#define ESCHER_OleObject        0xF11Fu /*                           a serialized IStorage for an OLE object                            C   C   C   0 */
+#define ESCHER_DeletedPspl      0xF11Du /*                           an FPSPL; only present in top-level deleted shapes                 X           0 */
+#define ESCHER_SolverContainer  0xF005u /* count of rules            the rules governing shapes                                         X   X   X     */
+#define ESCHER_ConnectorRule    0xF012u /*                           an FConnectorRule                                                      X   X   1 */
+#define ESCHER_AlignRule        0xF013u /*                           an FAlignRule                                                      X   X   X   0 */
+#define ESCHER_ArcRule          0xF014u /*                           an FARCRU                                                          X   X   X   0 */
+#define ESCHER_ClientRule       0xF015u /* host-defined              host-defined                                                                     */
+#define ESCHER_CalloutRule      0xF017u /*                           an FCORU                                                           X   X   X   0 */
+#define ESCHER_Selection        0xF119u /*                           an FDGSL followed by the SPIDs of the shapes in the selection              X   0 */
+#define ESCHER_UDefProp         0xF122u
 
 #define SHAPEFLAG_GROUP         0x001   /* This shape is a group shape */
 #define SHAPEFLAG_CHILD         0x002   /* Not a top-level shape */
