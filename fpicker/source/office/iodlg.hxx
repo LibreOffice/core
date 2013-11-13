@@ -268,7 +268,7 @@ public:
     inline void                 SetHasFilename( bool bHasFilename );
     inline const OUString&      GetPath() const;
     inline void                 SetDefaultExt( const OUString& rExt );
-    inline void                 EraseDefaultExt( xub_StrLen _nIndex = 0 );
+    inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
     inline void                 SetOKHdl( const Link& rLink );
     inline const Link&          GetOKHdl() const;
@@ -374,7 +374,7 @@ inline void SvtFileDialog::SetDefaultExt( const OUString& rExt )
     _aDefExt = rExt;
 }
 
-inline void SvtFileDialog::EraseDefaultExt( xub_StrLen _nIndex )
+inline void SvtFileDialog::EraseDefaultExt( sal_Int32 _nIndex )
 {
     _aDefExt = _aDefExt.copy( 0, _nIndex );
 }
