@@ -306,7 +306,7 @@ void CUPSManager::initialize()
         {
             OUStringBuffer aBuf( 256 );
             aBuf.append( aPrinterName );
-            aBuf.append( sal_Unicode( '/' ) );
+            aBuf.append( '/' );
             aBuf.append( OStringToOUString( pDest->instance, aEncoding ) );
             aPrinterName = aBuf.makeStringAndClear();
         }

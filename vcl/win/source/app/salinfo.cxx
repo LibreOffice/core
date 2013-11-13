@@ -145,7 +145,7 @@ bool WinSalSystem::initMonitors()
                 aBuf.append( rDev );
                 aBuf.appendAscii( " (" );
                 aBuf.append( sal_Int32( nInstance ) );
-                aBuf.append( sal_Unicode(')') );
+                aBuf.append( ')' );
                 m_aMonitors[ i ].m_aName = aBuf.makeStringAndClear();
             }
         }

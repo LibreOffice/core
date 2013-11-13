@@ -237,7 +237,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     {
         aBuf.appendAscii( " (" );
         aBuf.append( i_rPaperName );
-        aBuf.append( sal_Unicode(')') );
+        aBuf.append( ')' );
     }
     maHorzDim.SetText( aBuf.makeStringAndClear() );
 

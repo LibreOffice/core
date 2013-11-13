@@ -1270,7 +1270,7 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
                         aBuf.append( i_rJobName );
                         if( i > 0 || nCurJob > 0 )
                         {
-                            aBuf.append( sal_Unicode(' ') );
+                            aBuf.append( ' ' );
                             aBuf.append( sal_Int32( i + nCurJob * aPDFFiles.size() ) );
                         }
                         PrinterInfoManager::get().endSpool( pPrinter->GetName(), aBuf.makeStringAndClear(), fp, m_aJobData, bFirstJob );

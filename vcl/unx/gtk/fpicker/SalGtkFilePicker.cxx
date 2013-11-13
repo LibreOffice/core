@@ -1995,7 +1995,7 @@ void SalGtkFilePicker::SetFilters()
             for (std::set<OUString>::const_iterator aIter = aAllFormats.begin(); aIter != aEnd; ++aIter)
             {
                 if (!sAllFilter.isEmpty())
-                    sAllFilter += OUString(sal_Unicode(';'));
+                    sAllFilter += OUString(';');
                 sAllFilter += *aIter;
             }
             sPseudoFilter = getResString(FILE_PICKER_ALLFORMATS);

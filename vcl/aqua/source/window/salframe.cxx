@@ -1047,7 +1047,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         for( i = KEY_F1; i <= KEY_F26; i++ )
         {
             OUStringBuffer aKey( 3 );
-            aKey.append( sal_Unicode( 'F' ) );
+            aKey.append( 'F' );
             aKey.append( sal_Int32( i - KEY_F1 + 1 ) );
             aKeyMap[ i ] = aKey.makeStringAndClear();
         }
@@ -1066,15 +1066,15 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aKeyMap[ KEY_BACKSPACE ]= OUString( sal_Unicode( 0x232b ) );
         aKeyMap[ KEY_SPACE ]    = OUString( sal_Unicode( 0x2423 ) );
         aKeyMap[ KEY_DELETE ]   = OUString( sal_Unicode( 0x2326 ) );
-        aKeyMap[ KEY_ADD ]      = OUString( sal_Unicode( '+' ) );
-        aKeyMap[ KEY_SUBTRACT ] = OUString( sal_Unicode( '-' ) );
-        aKeyMap[ KEY_DIVIDE ]   = OUString( sal_Unicode( '/' ) );
-        aKeyMap[ KEY_MULTIPLY ] = OUString( sal_Unicode( '*' ) );
-        aKeyMap[ KEY_POINT ]    = OUString( sal_Unicode( '.' ) );
-        aKeyMap[ KEY_COMMA ]    = OUString( sal_Unicode( ',' ) );
-        aKeyMap[ KEY_LESS ]     = OUString( sal_Unicode( '<' ) );
-        aKeyMap[ KEY_GREATER ]  = OUString( sal_Unicode( '>' ) );
-        aKeyMap[ KEY_EQUAL ]    = OUString( sal_Unicode( '=' ) );
+        aKeyMap[ KEY_ADD ]      = OUString( '+' );
+        aKeyMap[ KEY_SUBTRACT ] = OUString( '-' );
+        aKeyMap[ KEY_DIVIDE ]   = OUString( '/' );
+        aKeyMap[ KEY_MULTIPLY ] = OUString( '*' );
+        aKeyMap[ KEY_POINT ]    = OUString( '.' );
+        aKeyMap[ KEY_COMMA ]    = OUString( ',' );
+        aKeyMap[ KEY_LESS ]     = OUString( '<' );
+        aKeyMap[ KEY_GREATER ]  = OUString( '>' );
+        aKeyMap[ KEY_EQUAL ]    = OUString( '=' );
         aKeyMap[ KEY_OPEN ]     = OUString( sal_Unicode( 0x23cf ) );
 
         /* yet unmapped KEYCODES:

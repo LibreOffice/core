@@ -4815,7 +4815,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                     long nW = 0;
                     do
                     {
-                        nSpacePos = rStr.lastIndexOf( sal_Unicode(' '), nSpacePos );
+                        nSpacePos = rStr.lastIndexOf( ' ', nSpacePos );
                         if( nSpacePos != -1 )
                         {
                             if( nSpacePos > nPos )

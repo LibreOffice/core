@@ -97,7 +97,7 @@ OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
         aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
         aBuf.appendAscii( " [" );
         aBuf.append( static_cast<sal_Int32>(nScreen) );
-        aBuf.append( sal_Unicode(']') );
+        aBuf.append( ']' );
         aScreenName = aBuf.makeStringAndClear();
     }
     else
@@ -118,7 +118,7 @@ OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
         if( nPos < aBuf.getLength() )
             aBuf.setLength( nPos+1 );
         else
-            aBuf.append( sal_Unicode('.') );
+            aBuf.append( '.' );
         aBuf.append( static_cast<sal_Int32>(nScreen) );
         aScreenName = aBuf.makeStringAndClear();
     }

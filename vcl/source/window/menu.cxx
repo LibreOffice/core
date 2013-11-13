@@ -2607,7 +2607,7 @@ static OUString getShortenedString( const OUString& i_rLong, Window* i_pWin, lon
         {
             OUStringBuffer aBuf( i_rLong.getLength() );
             aBuf.append( aNonMnem.copy( 0, nPos) );
-            aBuf.append( sal_Unicode('~') );
+            aBuf.append( '~' );
             aBuf.append( aNonMnem.copy(nPos) );
             aNonMnem = aBuf.makeStringAndClear();
         }

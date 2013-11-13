@@ -2989,9 +2989,9 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
     if( !rSeq.isEmpty() )
     {
         // range check
-        if( (c >= sal_Unicode('0') && c <= sal_Unicode('9')) ||
-            (c >= sal_Unicode('a') && c <= sal_Unicode('f')) ||
-            (c >= sal_Unicode('A') && c <= sal_Unicode('F')) )
+        if( (c >= '0' && c <= '9') ||
+            (c >= 'a' && c <= 'f') ||
+            (c >= 'A' && c <= 'F') )
         {
             OUStringBuffer aBuf( rSeq.getLength() + 1 );
             aBuf.append( rSeq );

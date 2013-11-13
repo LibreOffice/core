@@ -683,10 +683,10 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     */
     if( mbMenuBar )
     {
-        sal_Int32 nPos = aText.lastIndexOf( sal_Unicode(  '(' ) );
+        sal_Int32 nPos = aText.lastIndexOf( '(' );
         if( nPos != -1 )
         {
-            sal_Int32 nPos2 = aText.indexOf( sal_Unicode( ')' ) );
+            sal_Int32 nPos2 = aText.indexOf( ')' );
             if( nPos2 != -1 )
                 aText = aText.replaceAt( nPos, nPos2-nPos+1, "" );
         }

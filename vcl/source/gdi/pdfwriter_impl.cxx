@@ -2742,7 +2742,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             aLocBuf.append( aLanguage );
             if( !aCountry.isEmpty() )
             {
-                aLocBuf.append( sal_Unicode('-') );
+                aLocBuf.append( '-' );
                 aLocBuf.append( aCountry );
             }
             aLine.append( "/Lang" );
@@ -5801,7 +5801,7 @@ bool PDFWriterImpl::emitCatalog()
             aLocBuf.append( aLanguage );
             if( !aCountry.isEmpty() )
             {
-                aLocBuf.append( sal_Unicode('-') );
+                aLocBuf.append( '-' );
                 aLocBuf.append( aCountry );
             }
             aLine.append( "/Lang" );

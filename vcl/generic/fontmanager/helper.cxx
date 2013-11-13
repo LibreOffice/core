@@ -121,7 +121,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
         aPathBuffer.appendAscii( "/" LIBO_SHARE_FOLDER "/psprint" );
         if( pSubDir )
         {
-            aPathBuffer.append( sal_Unicode('/') );
+            aPathBuffer.append( '/' );
             aPathBuffer.appendAscii( pSubDir );
         }
         rPathList.push_back( aPathBuffer.makeStringAndClear() );
@@ -133,7 +133,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
         aPathBuffer.appendAscii( "/user/psprint" );
         if( pSubDir )
         {
-            aPathBuffer.append( sal_Unicode('/') );
+            aPathBuffer.append( '/' );
             aPathBuffer.appendAscii( pSubDir );
         }
         rPathList.push_back( aPathBuffer.makeStringAndClear() );

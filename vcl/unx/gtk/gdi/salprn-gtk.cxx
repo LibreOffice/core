@@ -1089,12 +1089,12 @@ GtkPrintDialog::updateControllerPrintRange()
                         sBuf.append(sal_Int32(pRanges[i].start+1));
                         if (pRanges[i].start != pRanges[i].end)
                         {
-                            sBuf.append(sal_Unicode('-'));
+                            sBuf.append('-');
                             sBuf.append(sal_Int32(pRanges[i].end+1));
                         }
 
                         if (i != num_ranges-1)
-                            sBuf.append(sal_Unicode(','));
+                            sBuf.append(',');
                     }
                     pVal->Value <<= sBuf.makeStringAndClear();
                 }

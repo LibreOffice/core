@@ -169,12 +169,12 @@ namespace psp
         aKey.append( i_rKey );
         if( !i_rOption.isEmpty() || !i_rValue.isEmpty() )
         {
-            aKey.append( sal_Unicode( ':' ) );
+            aKey.append( ':' );
             aKey.append( i_rOption );
         }
         if( !i_rValue.isEmpty() )
         {
-            aKey.append( sal_Unicode( ':' ) );
+            aKey.append( ':' );
             aKey.append( i_rValue );
         }
         if( !aKey.isEmpty() && !i_rTranslation.isEmpty() )
@@ -202,12 +202,12 @@ namespace psp
         aKey.append( i_rKey );
         if( !i_rOption.isEmpty() || !i_rValue.isEmpty() )
         {
-            aKey.append( sal_Unicode( ':' ) );
+            aKey.append( ':' );
             aKey.append( i_rOption );
         }
         if( !i_rValue.isEmpty() )
         {
-            aKey.append( sal_Unicode( ':' ) );
+            aKey.append( ':' );
             aKey.append( i_rValue );
         }
         if( !aKey.isEmpty() )
@@ -523,13 +523,13 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
             // some PPD files contain dots beside the extension, so try name first
             // and cut of points after that
             OUString aBase( rFile );
-            sal_Int32 nLastIndex = aBase.lastIndexOf( sal_Unicode( '/' ) );
+            sal_Int32 nLastIndex = aBase.lastIndexOf( '/' );
             if( nLastIndex >= 0 )
                 aBase = aBase.copy( nLastIndex+1 );
             do
             {
                 it = rPPDCache.pAllPPDFiles->find( aBase );
-                nLastIndex = aBase.lastIndexOf( sal_Unicode( '.' ) );
+                nLastIndex = aBase.lastIndexOf( '.' );
                 if( nLastIndex > 0 )
                     aBase = aBase.copy( 0, nLastIndex );
             } while( it == rPPDCache.pAllPPDFiles->end() && nLastIndex > 0 );
