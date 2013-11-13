@@ -255,7 +255,6 @@ public:
 
     virtual SfxObjectFactory&   GetFactory() const=0;
     SfxMedium *                 GetMedium() const { return pMedium; }
-    void                        ForgetMedium() { pMedium = 0; }
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties > getDocProperties();
     void                        UpdateDocInfoForSave(  );

@@ -1351,10 +1351,10 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
             // setting the new storage the medium will be based on
             pTmpMedium->SetStorage_Impl( xTmpStor );
 
-            ForgetMedium();
-            if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
-            else
+            pMedium = 0;
+            bool ok = DoSaveCompleted( pTmpMedium );
+            assert(pMedium != 0);
+            if( ok )
             {
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
                 sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
@@ -1367,6 +1367,10 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 
                 // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
                 pTmpMedium->CanDisposeStorage_Impl( sal_False );
+            }
+            else
+            {
+                SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
             }
         }
         else
