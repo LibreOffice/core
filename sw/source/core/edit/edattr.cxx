@@ -357,7 +357,7 @@ sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
                 OUString sTxt( rFtn.GetViewNumStr( *mpDoc ));
                 if( !sTxt.isEmpty() )
                     sTxt += " ";
-                sTxt += pTxtNd->GetExpandTxt( 0, USHRT_MAX );
+                sTxt += pTxtNd->GetExpandTxt( 0, STRING_LEN );
 
                 _SeqFldLstElem* pNew = new _SeqFldLstElem( sTxt,
                                             pTxtFtn->GetSeqRefNo() );
