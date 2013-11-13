@@ -179,16 +179,16 @@ namespace svgio
             while(nPos < nLen)
             {
                 const sal_Int32 nInitPos(nPos);
-                skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
+                skip_char(rCandidate, ' ', nPos, nLen);
                 OUStringBuffer aTokenName;
                 copyString(rCandidate, nPos, aTokenName, nLen);
 
                 if(!aTokenName.isEmpty())
                 {
-                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(':'), nPos, nLen);
+                    skip_char(rCandidate, ' ', ':', nPos, nLen);
                     OUStringBuffer aTokenValue;
-                    copyToLimiter(rCandidate, sal_Unicode(';'), nPos, aTokenValue, nLen);
-                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(';'), nPos, nLen);
+                    copyToLimiter(rCandidate, ';', nPos, aTokenValue, nLen);
+                    skip_char(rCandidate, ' ', ';', nPos, nLen);
                     const OUString aOUTokenName(aTokenName.makeStringAndClear());
                     const OUString aOUTokenValue(aTokenValue.makeStringAndClear());
 
@@ -2244,7 +2244,7 @@ namespace svgio
             if(maFontSize.isSet())
             {
                 // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
-                // spec 10.10 Font selection properties ‘font-size’, lastline (klick 'normative
+                // spec 10.10 Font selection properties \91font-size\92, lastline (klick 'normative
                 // definition of the property')
                 if(Unit_percent == maFontSize.getUnit())
                 {

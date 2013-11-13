@@ -51,14 +51,14 @@ namespace svgio
                         sal_Int32 nPos(0);
                         const SvgStyleAttributes* pNew = 0;
 
-                        skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
+                        skip_char(*pClassList, ' ', nPos, nLen);
 
                         while(nPos < nLen)
                         {
                             rtl::OUStringBuffer aTokenValue;
 
-                            copyToLimiter(*pClassList, sal_Unicode(' '), nPos, aTokenValue, nLen);
-                            skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
+                            copyToLimiter(*pClassList, ' ', nPos, aTokenValue, nLen);
+                            skip_char(*pClassList, ' ', nPos, nLen);
 
                             rtl::OUString aId(rtl::OUString::createFromAscii("."));
                             const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());

@@ -562,7 +562,7 @@ namespace svgio
 
         void SvgCharacterNode::addGap()
         {
-            maText += OUString(sal_Unicode(' '));
+            maText += OUString(' ');
         }
 
         void SvgCharacterNode::concatenate(const OUString& rText)
@@ -613,7 +613,7 @@ namespace svgio
                 mfTextLength = rSvgTextPositions.getTextLength().solve(rInfoProvider, length);
             }
 
-            // SVG does not really define in which units a ‘rotate’ for Text/TSpan is given,
+            // SVG does not really define in which units a \91rotate\92 for Text/TSpan is given,
             // but it seems to be degrees. Convert here to radians
             if(!maRotate.empty())
             {

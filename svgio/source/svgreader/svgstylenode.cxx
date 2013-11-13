@@ -84,15 +84,15 @@ namespace svgio
                 while(nPos < nLen)
                 {
                     const sal_Int32 nInitPos(nPos);
-                    skip_char(aContent, sal_Unicode(' '), sal_Unicode('#'), nPos, nLen);
-                    copyToLimiter(aContent, sal_Unicode('{'), nPos, aTokenValue, nLen);
+                    skip_char(aContent, ' ', '#', nPos, nLen);
+                    copyToLimiter(aContent, '{', nPos, aTokenValue, nLen);
                     const OUString aStyleName = aTokenValue.makeStringAndClear().trim();
 
                     if(!aStyleName.isEmpty() && nPos < nLen)
                     {
-                        skip_char(aContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
-                        copyToLimiter(aContent, sal_Unicode('}'), nPos, aTokenValue, nLen);
-                        skip_char(aContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
+                        skip_char(aContent, ' ', '{', nPos, nLen);
+                        copyToLimiter(aContent, '}', nPos, aTokenValue, nLen);
+                        skip_char(aContent, ' ', '}', nPos, nLen);
                         const OUString aStyleContent = aTokenValue.makeStringAndClear().trim();
 
                         if(!aStyleContent.isEmpty())

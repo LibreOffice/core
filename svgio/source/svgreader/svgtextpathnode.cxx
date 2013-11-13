@@ -338,7 +338,7 @@ namespace svgio
                 {
                     const sal_Int32 nLen(aContent.getLength());
 
-                    if(nLen && sal_Unicode('#') == aContent[0])
+                    if(nLen && '#' == aContent[0])
                     {
                         maXLink = aContent.copy(1);
                     }

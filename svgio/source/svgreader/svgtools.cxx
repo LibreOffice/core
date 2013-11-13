@@ -307,7 +307,7 @@ namespace svgio
             {
                 const sal_Unicode aChar(rCandidate[nPos]);
 
-                if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+                if('+' == aChar || '-' == aChar)
                 {
                     rTarget.append(aChar);
                     nPos++;
@@ -323,7 +323,7 @@ namespace svgio
             {
                 const sal_Unicode aChar(rCandidate[nPos]);
 
-                bOnNumber = (sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar) || sal_Unicode('.') == aChar;
+                bOnNumber = ('0' <= aChar && '9' >= aChar) || '.' == aChar;
 
                 if(bOnNumber)
                 {
@@ -341,9 +341,9 @@ namespace svgio
             {
                 const sal_Unicode aChar(rCandidate[nPos]);
 
-                bOnHex = (sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                    || (sal_Unicode('A') <= aChar && sal_Unicode('F') >= aChar)
-                    || (sal_Unicode('a') <= aChar && sal_Unicode('f') >= aChar);
+                bOnHex = ('0' <= aChar && '9' >= aChar)
+                    || ('A' <= aChar && 'F' >= aChar)
+                    || ('a' <= aChar && 'f' >= aChar);
 
                 if(bOnHex)
                 {
@@ -361,9 +361,9 @@ namespace svgio
             {
                 const sal_Unicode aChar(rCandidate[nPos]);
 
-                bOnChar = (sal_Unicode('a') <= aChar && sal_Unicode('z') >= aChar)
-                    || (sal_Unicode('A') <= aChar && sal_Unicode('Z') >= aChar)
-                    || sal_Unicode('-') == aChar;
+                bOnChar = ('a' <= aChar && 'z' >= aChar)
+                    || ('A' <= aChar && 'Z' >= aChar)
+                    || '-' == aChar;
 
                 if(bOnChar)
                 {
@@ -395,7 +395,7 @@ namespace svgio
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
 
-                    if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
+                    if('e' == aChar || 'E' == aChar)
                     {
                         // try to read exponential number, but be careful. I had
                         // a case where dx="2em" was used, thus the 'e' was consumed
@@ -424,7 +424,7 @@ namespace svgio
                     rtl_math_ConversionStatus eStatus;
 
                     fNum = rtl::math::stringToDouble(
-                        aNum.makeStringAndClear(), (sal_Unicode)('.'), (sal_Unicode)(','),
+                        aNum.makeStringAndClear(), '.', ',',
                         &eStatus, 0);
 
                     return eStatus == rtl_math_ConversionStatus_Ok;
@@ -451,13 +451,13 @@ namespace svgio
                     {
                         case sal_Unicode('e') :
                         {
-                            if(sal_Unicode('m') == aCharB)
+                            if('m' == aCharB)
                             {
                                 // 'em' Relative to current font size
                                 aRetval = Unit_em;
                                 bTwoCharValid = true;
                             }
-                            else if(sal_Unicode('x') == aCharB)
+                            else if('x' == aCharB)
                             {
                                 // 'ex' Relative to current font x-height
                                 aRetval = Unit_ex;
@@ -467,18 +467,18 @@ namespace svgio
                         }
                         case sal_Unicode('p') :
                         {
-                            if(sal_Unicode('x') == aCharB)
+                            if('x' == aCharB)
                             {
                                 // 'px' UserUnit (default)
                                 bTwoCharValid = true;
                             }
-                            else if(sal_Unicode('t') == aCharB)
+                            else if('t' == aCharB)
                             {
                                 // 'pt' == 1.25 px
                                 aRetval = Unit_pt;
                                 bTwoCharValid = true;
                             }
-                            else if(sal_Unicode('c') == aCharB)
+                            else if('c' == aCharB)
                             {
                                 // 'pc' == 15 px
                                 aRetval = Unit_pc;
@@ -488,7 +488,7 @@ namespace svgio
                         }
                         case sal_Unicode('i') :
                         {
-                            if(sal_Unicode('n') == aCharB)
+                            if('n' == aCharB)
                             {
                                 // 'in' == 90 px
                                 aRetval = Unit_in;
@@ -498,7 +498,7 @@ namespace svgio
                         }
                         case sal_Unicode('c') :
                         {
-                            if(sal_Unicode('m') == aCharB)
+                            if('m' == aCharB)
                             {
                                 // 'cm' == 35.43307 px
                                 aRetval = Unit_cm;
@@ -508,7 +508,7 @@ namespace svgio
                         }
                         case sal_Unicode('m') :
                         {
-                            if(sal_Unicode('m') == aCharB)
+                            if('m' == aCharB)
                             {
                                 // 'mm' == 3.543307 px
                                 aRetval = Unit_mm;
@@ -525,7 +525,7 @@ namespace svgio
                 }
                 else
                 {
-                    if(sal_Unicode('%') == aCharA)
+                    if('%' == aCharA)
                     {
                         // percent used, relative to current
                         nPos++;
@@ -543,7 +543,7 @@ namespace svgio
 
             if(readNumber(rCandidate, nPos, fNum, nLen))
             {
-                skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
+                skip_char(rCandidate, ' ', nPos, nLen);
                 aNum = SvgNumber(fNum, readUnit(rCandidate, nPos, nLen));
 
                 return true;
@@ -556,7 +556,7 @@ namespace svgio
         {
             if(readNumber(rCandidate, nPos, fAngle, nLen))
             {
-                skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
+                skip_char(rCandidate, ' ', nPos, nLen);
 
                 enum DegreeType
                 {
@@ -617,15 +617,15 @@ namespace svgio
 
         sal_Int32 read_hex(const sal_Unicode& rChar)
         {
-            if(rChar >= sal_Unicode('0') && rChar <=sal_Unicode('9'))
+            if(rChar >= '0' && rChar <= '9')
             {
                 return sal_Int32(rChar - sal_Unicode('0'));
             }
-            else if(rChar >= sal_Unicode('A') && rChar <=sal_Unicode('F'))
+            else if(rChar >= 'A' && rChar <= 'F')
             {
                 return 10 + sal_Int32(rChar - sal_Unicode('A'));
             }
-            else if(rChar >= sal_Unicode('a') && rChar <=sal_Unicode('f'))
+            else if(rChar >= 'a' && rChar <= 'f')
             {
                 return 10 + sal_Int32(rChar - sal_Unicode('a'));
             }
@@ -818,7 +818,7 @@ namespace svgio
                 const sal_Unicode aChar(rCandidate[0]);
                 const double fFactor(1.0 / 255.0);
 
-                if(aChar == sal_Unicode('#'))
+                if(aChar == '#')
                 {
                     // hex definition
                     OUStringBuffer aNum;
@@ -863,25 +863,25 @@ namespace svgio
                     {
                         // rgb definition
                         sal_Int32 nPos(aStrRgb.getLength());
-                        skip_char(rCandidate, sal_Unicode(' '), sal_Unicode('('), nPos, nLen);
+                        skip_char(rCandidate, ' ', '(', nPos, nLen);
                         double fR(0.0);
 
                         if(readNumber(rCandidate, nPos, fR, nLen))
                         {
-                            skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
+                            skip_char(rCandidate, ' ', nPos, nLen);
 
                             if(nPos < nLen)
                             {
                                 const sal_Unicode aPercentChar(rCandidate[nPos]);
-                                const bool bIsPercent(sal_Unicode('%') == aPercentChar);
+                                const bool bIsPercent('%' == aPercentChar);
                                 double fG(0.0);
 
                                 if(bIsPercent)
                                 {
-                                    skip_char(rCandidate, sal_Unicode('%'), nPos, nLen);
+                                    skip_char(rCandidate, '%', nPos, nLen);
                                 }
 
-                                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                 if(readNumber(rCandidate, nPos, fG, nLen))
                                 {
@@ -889,10 +889,10 @@ namespace svgio
 
                                     if(bIsPercent)
                                     {
-                                        skip_char(rCandidate, sal_Unicode('%'), nPos, nLen);
+                                        skip_char(rCandidate, '%', nPos, nLen);
                                     }
 
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     if(readNumber(rCandidate, nPos, fB, nLen))
                                     {
@@ -904,10 +904,10 @@ namespace svgio
 
                                         if(bIsPercent)
                                         {
-                                            skip_char(rCandidate, sal_Unicode('%'), nPos, nLen);
+                                            skip_char(rCandidate, '%', nPos, nLen);
                                         }
 
-                                        skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(')'), nPos, nLen);
+                                        skip_char(rCandidate, ' ', ')', nPos, nLen);
                                         return true;
                                     }
                                 }
@@ -936,22 +936,22 @@ namespace svgio
             {
                 sal_Int32 nPos(0);
                 SvgNumber aMinX;
-                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                 if(readNumberAndUnit(rCandidate, nPos, aMinX, nLen))
                 {
                     SvgNumber aMinY;
-                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                     if(readNumberAndUnit(rCandidate, nPos, aMinY, nLen))
                     {
                         SvgNumber aWidth;
-                        skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                        skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                         if(readNumberAndUnit(rCandidate, nPos, aWidth, nLen))
                         {
                             SvgNumber aHeight;
-                            skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                            skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                             if(readNumberAndUnit(rCandidate, nPos, aHeight, nLen))
                             {
@@ -977,7 +977,7 @@ namespace svgio
             if(nLen)
             {
                 sal_Int32 nPos(0);
-                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                 while(nPos < nLen)
                 {
@@ -998,40 +998,40 @@ namespace svgio
                             {
                                 // matrix element
                                 nPos += aStrMatrix.getLength();
-                                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode('('), nPos, nLen);
+                                skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aVal;
                                 basegfx::B2DHomMatrix aNew;
 
                                 if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                 {
                                     aNew.set(0, 0, aVal.solve(rInfoProvider)); // Element A
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                     {
                                         aNew.set(1, 0, aVal.solve(rInfoProvider)); // Element B
-                                        skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                        skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                         if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                         {
                                             aNew.set(0, 1, aVal.solve(rInfoProvider)); // Element C
-                                            skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                            skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                             if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                             {
                                                 aNew.set(1, 1, aVal.solve(rInfoProvider)); // Element D
-                                                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                                skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                                 if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                                 {
                                                     aNew.set(0, 2, aVal.solve(rInfoProvider, xcoordinate)); // Element E
-                                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                                     if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                                     {
                                                         aNew.set(1, 2, aVal.solve(rInfoProvider, ycoordinate)); // Element F
-                                                        skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(')'), nPos, nLen);
-                                                        skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                                        skip_char(rCandidate, ' ', ')', nPos, nLen);
+                                                        skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                                         // caution: String is evaluated from left to right, but matrix multiplication
                                                         // in SVG is right to left, so put the new transformation before the current
@@ -1052,16 +1052,16 @@ namespace svgio
                             {
                                 // translate element
                                 nPos += aStrTranslate.getLength();
-                                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode('('), nPos, nLen);
+                                skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aTransX;
 
                                 if(readNumberAndUnit(rCandidate, nPos, aTransX, nLen))
                                 {
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
                                     SvgNumber aTransY;
                                     readNumberAndUnit(rCandidate, nPos, aTransY, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(')'), nPos, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ')', nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     aMatrix = aMatrix * basegfx::tools::createTranslateB2DHomMatrix(
                                         aTransX.solve(rInfoProvider, xcoordinate),
@@ -1076,16 +1076,16 @@ namespace svgio
                             {
                                 // scale element
                                 nPos += aStrScale.getLength();
-                                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode('('), nPos, nLen);
+                                skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aScaleX;
 
                                 if(readNumberAndUnit(rCandidate, nPos, aScaleX, nLen))
                                 {
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
                                     SvgNumber aScaleY(aScaleX);
                                     readNumberAndUnit(rCandidate, nPos, aScaleY, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(')'), nPos, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ')', nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     aMatrix = aMatrix * basegfx::tools::createScaleB2DHomMatrix(
                                         aScaleX.solve(rInfoProvider),
@@ -1096,13 +1096,13 @@ namespace svgio
                             {
                                 // skewx element
                                 nPos += aStrSkewX.getLength();
-                                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode('('), nPos, nLen);
+                                skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewX(0.0);
 
                                 if(readAngle(rCandidate, nPos, fSkewX, nLen))
                                 {
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(')'), nPos, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ')', nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     aMatrix = aMatrix * basegfx::tools::createShearXB2DHomMatrix(tan(fSkewX));
                                 }
@@ -1111,13 +1111,13 @@ namespace svgio
                             {
                                 // skewy element
                                 nPos += aStrSkewY.getLength();
-                                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode('('), nPos, nLen);
+                                skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewY(0.0);
 
                                 if(readAngle(rCandidate, nPos, fSkewY, nLen))
                                 {
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(')'), nPos, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ')', nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     aMatrix = aMatrix * basegfx::tools::createShearYB2DHomMatrix(tan(fSkewY));
                                 }
@@ -1130,19 +1130,19 @@ namespace svgio
                             {
                                 // rotate element
                                 nPos += aStrRotate.getLength();
-                                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode('('), nPos, nLen);
+                                skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fAngle(0.0);
 
                                 if(readAngle(rCandidate, nPos, fAngle, nLen))
                                 {
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
                                     SvgNumber aX;
                                     readNumberAndUnit(rCandidate, nPos, aX, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
                                     SvgNumber aY;
                                     readNumberAndUnit(rCandidate, nPos, aY, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(')'), nPos, nLen);
-                                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                    skip_char(rCandidate, ' ', ')', nPos, nLen);
+                                    skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     const double fX(aX.isSet() ? aX.solve(rInfoProvider, xcoordinate) : 0.0);
                                     const double fY(aY.isSet() ? aY.solve(rInfoProvider, ycoordinate) : 0.0);
@@ -1191,9 +1191,9 @@ namespace svgio
                 const sal_Int32 nLen(rCandidate.getLength());
                 sal_Int32 nPos(aStrUrl.getLength());
 
-                skip_char(rCandidate, sal_Unicode('('), sal_Unicode('#'), nPos, nLen);
+                skip_char(rCandidate, '(', '#', nPos, nLen);
                 OUStringBuffer aTokenValue;
-                copyToLimiter(rCandidate, sal_Unicode(')'), nPos, aTokenValue, nLen);
+                copyToLimiter(rCandidate, ')', nPos, aTokenValue, nLen);
                 rURL = aTokenValue.makeStringAndClear();
 
                 return true;
@@ -1248,12 +1248,12 @@ namespace svgio
             {
                 sal_Int32 nPos(0);
                 SvgNumber aNum;
-                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                 while(readNumberAndUnit(rCandidate, nPos, aNum, nLen))
                 {
                     rSvgNumberVector.push_back(aNum);
-                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                    skip_char(rCandidate, ' ', ',', nPos, nLen);
                 }
 
                 return !rSvgNumberVector.empty();
@@ -1277,7 +1277,7 @@ namespace svgio
                 while(nPos < nLen)
                 {
                     const sal_Int32 nInitPos(nPos);
-                    skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
+                    skip_char(rCandidate, ' ', nPos, nLen);
                     OUStringBuffer aTokenName;
                     copyString(rCandidate, nPos, aTokenName, nLen);
 
@@ -1395,12 +1395,12 @@ namespace svgio
             {
                 sal_Int32 nPos(0);
                 OUStringBuffer aTokenValue;
-                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                 while(nPos < nLen)
                 {
-                    copyToLimiter(rCandidate, sal_Unicode(','), nPos, aTokenValue, nLen);
-                    skip_char(rCandidate, sal_Unicode(','), sal_Unicode(' '), nPos, nLen);
+                    copyToLimiter(rCandidate, ',', nPos, aTokenValue, nLen);
+                    skip_char(rCandidate, ',', ' ', nPos, nLen);
                     const OUString aString = aTokenValue.makeStringAndClear();
 
                     if(!aString.isEmpty())
@@ -1417,7 +1417,7 @@ namespace svgio
         {
             rXLink = rUrl = rMimeType = rData = OUString();
 
-            if(sal_Unicode('#') == rCandidate[0])
+            if('#' == rCandidate[0])
             {
                 // local link
                 rXLink = rCandidate.copy(1);
@@ -1434,9 +1434,9 @@ namespace svgio
                     OUStringBuffer aBuffer;
 
                     // read mime type
-                    skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
-                    copyToLimiter(rCandidate, sal_Unicode(';'), nPos, aBuffer, nLen);
-                    skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(';'), nPos, nLen);
+                    skip_char(rCandidate, ' ', nPos, nLen);
+                    copyToLimiter(rCandidate, ';', nPos, aBuffer, nLen);
+                    skip_char(rCandidate, ' ', ';', nPos, nLen);
                     rMimeType = aBuffer.makeStringAndClear();
 
                     if(!rMimeType.isEmpty() && nPos < nLen)
@@ -1455,7 +1455,7 @@ namespace svgio
                                 nPos = aStrBase64.getLength();
                                 nLen = aData.getLength();
 
-                                skip_char(aData, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                                skip_char(aData, ' ', ',', nPos, nLen);
 
                                 if(nPos < nLen)
                                 {
