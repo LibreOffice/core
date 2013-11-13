@@ -188,7 +188,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pExtHelpCB, "exthelp");
     if (!lcl_HasSystemFilePicker())
         get<VclContainer>("filedlgframe")->Hide();
-#if !defined(MACOSX) && ! ENABLE_GTK
+#if ! ENABLE_GTK
     get<VclContainer>("printdlgframe")->Hide();
 #else
     if (!SvtMiscOptions().IsExperimentalMode())
