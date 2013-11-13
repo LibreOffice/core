@@ -1784,25 +1784,22 @@ void OpAccrint::GenSlidingWindowFunction(
 #ifdef ISNAN
     FormulaToken* tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-    FormulaToken* tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
+        formula::SingleVectorRefToken *>(tmpCur0);
     FormulaToken* tmpCur2 = vSubArguments[2]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur2);
+        formula::SingleVectorRefToken *>(tmpCur2);
     FormulaToken* tmpCur3 = vSubArguments[3]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur3);
+        formula::SingleVectorRefToken *>(tmpCur3);
     FormulaToken* tmpCur4 = vSubArguments[4]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur4);
+        formula::SingleVectorRefToken *>(tmpCur4);
     FormulaToken* tmpCur5 = vSubArguments[5]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR5= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur5);
+        formula::SingleVectorRefToken *>(tmpCur5);
     FormulaToken* tmpCur6 = vSubArguments[6]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR6= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur6);
+        formula::SingleVectorRefToken *>(tmpCur6);
     ss<< "    int buffer_nIssue_len = ";
     ss<< tmpCurDVR0->GetArrayLength();
     ss<< ";\n";
