@@ -311,7 +311,7 @@ PowerPointExport::PowerPointExport( const Reference< XComponentContext > & rxCtx
       PPTWriterBase(),
       mnLayoutFileIdMax( 1 ),
       mnSlideIdMax( 1 << 8 ),
-      mnSlideMasterIdMax( 1 << 31 ),
+      mnSlideMasterIdMax( 1U << 31 ),
       mnAnimationNodeIdMax( 1 )
 {
     memset( mLayoutInfo, 0, sizeof(mLayoutInfo) );
