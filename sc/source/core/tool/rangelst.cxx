@@ -148,29 +148,6 @@ private:
     bool mbFirst;
 };
 
-class FindDeletedRange : public ::std::unary_function<const ScRange*, bool>
-{
-public:
-    FindDeletedRange( SCsCOL nDx, SCsROW nDy): mnDx(nDx), mnDy(nDy) {}
-    FindDeletedRange( const FindDeletedRange& r) : mnDx(r.mnDx), mnDy(r.mnDy) {}
-    bool operator() (const ScRange* p)
-    {
-        const ScAddress& rStart = p->aStart;
-        const ScAddress& rEnd = p->aEnd;
-
-        if( rEnd.Col() +mnDx < rStart.Col() )
-            return true;
-        if( rEnd.Row() + mnDy < rStart.Row() )
-            return true;
-
-        return false;
-    }
-
-private:
-    SCsCOL mnDx;
-    SCsROW mnDy;
-};
-
 }
 
 //  ScRangeList
