@@ -3305,21 +3305,6 @@ public:
 
         update(fVal, bVal);
     }
-
-    void operator() (mdds::mtv::element_t eType, size_t nTopRow, size_t nDataSize)
-    {
-        if (eType == sc::element_type_empty)
-            return;
-
-        for (size_t i = 0; i < nDataSize; ++i)
-        {
-            size_t nRow = nTopRow + i;
-            if (mrHiddenRows.getValue(nRow))
-                continue;
-
-            update(0.0, false);
-        }
-    }
 };
 
 }
