@@ -233,23 +233,6 @@ namespace {
         }
 
         /** Return <TRUE/> when the value of the property with name pName is
-            a string and its value equals pValue. When the property is
-            unknown then bDefaultValue is returned.  Otherwise <FALSE/> is
-            returned.
-        */
-        bool GetBoolValue (
-            const sal_Char* pName,
-            const sal_Char* pValue,
-            const bool bDefaultValue = false) const
-        {
-            OUString sValue( mrProperties.getStringValue( pName ) );
-            if (!sValue.isEmpty())
-                return sValue.equalsAscii(pValue);
-            else
-                return bDefaultValue;
-        }
-
-        /** Return <TRUE/> when the value of the property with name pName is
             an integer and its value is nTriggerValue. Otherwise <FALSE/> is
             returned.
         */
