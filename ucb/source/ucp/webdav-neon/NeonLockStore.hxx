@@ -30,7 +30,9 @@
 
 #include <config_lgpl.h>
 #include <map>
-#include "warnings_guard_ne_locks.h"
+
+#include <ne_locks.h>
+
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "NeonTypes.hxx"

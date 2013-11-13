@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include "warnings_guard_ne_locks.h"
+#include <ne_locks.h>
 #include <ne_uri.h>
 #include "rtl/ustring.hxx"
 #include "osl/time.h"
