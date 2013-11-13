@@ -61,10 +61,6 @@ namespace
         {
             return rPropValue.Name.equals( rName );
         }
-        bool operator() ( const OUString& rName, const beans::PropertyValue& rPropValue ) const
-        {
-            return rName.equals( rPropValue.Name );
-        }
     };
 
 } // anonymous namespace
