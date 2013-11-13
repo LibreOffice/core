@@ -88,16 +88,17 @@ the test, and re-running; it should break.
 */
 void SdFiltersTest::testDocumentLayout()
 {
-    struct { const char *pInput, *pDump; } aFilesToCompare[] =
+    struct { const char *pInput, *pDump; sal_Int32 nExportType; } aFilesToCompare[] =
     {
-        { "odp/shapes-test.odp", "xml/shapes-test_page" },
-        { "pptx/fdo47434-all.pptx", "pptx/xml/fdo47434_page" },
-        { "n758621.ppt", "xml/n758621_" },
-        { "fdo64586.ppt", "xml/fdo64586_" },
-        { "n819614.pptx", "xml/n819614_" },
-        { "n820786.pptx", "xml/n820786_" },
-        { "n762695.pptx", "xml/n762695_" },
-        { "n593612.pptx", "xml/n593612_" },
+        { "odp/shapes-test.odp", "xml/shapes-test_page", -1 },
+        { "pptx/fdo47434-all.pptx", "pptx/xml/fdo47434_page", -1 },
+        { "n758621.ppt", "xml/n758621_", -1 },
+        { "fdo64586.ppt", "xml/fdo64586_", -1 },
+        { "n819614.pptx", "xml/n819614_", -1 },
+        { "n820786.pptx", "xml/n820786_", -1 },
+        { "n762695.pptx", "xml/n762695_", -1 },
+        { "n593612.pptx", "xml/n593612_", -1 },
+        // { "pptx/n828390.pptx", "pptx/xml/n828390_", PPTX }, // Example
     };
 
     for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
@@ -105,6 +106,8 @@ void SdFiltersTest::testDocumentLayout()
         int nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
 
         ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ) );
+        if( aFilesToCompare[i].nExportType >= 0 )
+            xDocShRef = saveAndReload( xDocShRef, aFilesToCompare[i].nExportType );
         compareWithShapesDump( xDocShRef,
                 getPathFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump ),
                 i == nUpdateMe );

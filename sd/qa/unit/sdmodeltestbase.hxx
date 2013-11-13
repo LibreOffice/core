@@ -120,10 +120,10 @@ protected:
         return xDocShRef;
     }
 
-    ::sd::DrawDocShellRef saveAndReload( ::sd::DrawDocShell *pShell, sal_uLong nExportType )
+    ::sd::DrawDocShellRef saveAndReload( ::sd::DrawDocShell *pShell, sal_Int32 nExportType )
     {
         FileFormat *pFmt = &aFileFormats[0];
-        if( nExportType < SAL_N_ELEMENTS( aFileFormats ) )
+        if( ( (sal_uInt32) nExportType ) < SAL_N_ELEMENTS( aFileFormats ) )
             pFmt = &aFileFormats[ nExportType ];
         OUString aExt = OUString( "." ) + OUString::createFromAscii( pFmt->pName );
         utl::TempFile aTempFile( OUString(), &aExt );
