@@ -915,7 +915,7 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
         }
 
         if(bNeg)
-            aText.insert(0, sal_Unicode('-'));
+            aText.insert(0, '-');
 
         if ( pMyIntlWrapper )
         {

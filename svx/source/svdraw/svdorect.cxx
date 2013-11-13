@@ -457,7 +457,7 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             OUStringBuffer aBuf(aStr);
             aBuf.appendAscii(" (");
             aBuf.append(GetMetrStr(nRad));
-            aBuf.append(sal_Unicode(')'));
+            aBuf.append(')');
 
             return aBuf.makeStringAndClear();
         }

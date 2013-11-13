@@ -1261,7 +1261,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
         sal_Int32 nAnz(-nKomma);
 
         for(sal_Int32 i=0; i<nAnz; i++)
-            aBuf.append(sal_Unicode('0'));
+            aBuf.append('0');
 
         nKomma = 0;
     }
@@ -1277,7 +1277,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
             nAnz++;
 
         for(sal_Int32 i=0; i<nAnz; i++)
-            aBuf.insert(0, sal_Unicode('0'));
+            aBuf.insert(0, '0');
     }
 
     sal_Unicode cDec( rLoc.getNumDecimalSep()[0] );
@@ -1291,7 +1291,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     if(!rLoc.isNumTrailingZeros())
     {
         // Remove all trailing zeros.
-        while (!aBuf.isEmpty() && aBuf[aBuf.getLength()-1] == sal_Unicode('0'))
+        while (!aBuf.isEmpty() && aBuf[aBuf.getLength()-1] == '0')
             aBuf.remove(aBuf.getLength()-1, 1);
 
         // Remove decimal if it's the last character.
@@ -1348,12 +1348,12 @@ void SdrModel::TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar) const
         nAnz++;
 
     while(aBuf.getLength() < nAnz)
-        aBuf.insert(0, sal_Unicode('0'));
+        aBuf.insert(0, '0');
 
     aBuf.insert(aBuf.getLength()-2, rLoc.getNumDecimalSep()[0]);
 
     if(bNeg)
-        aBuf.insert(0, sal_Unicode('-'));
+        aBuf.insert(0, '-');
 
     if(!bNoDegChar)
         aBuf.append(DEGREE_CHAR);

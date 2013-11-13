@@ -1166,9 +1166,9 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
             sal_uInt16 nSepLen=1;
             long nLongX = aNewText.toInt32();
             long nLongY=0;
-            sal_Int32 nPos = aNewText.indexOf(sal_Unicode('/'));
-            if (nPos==-1) nPos=aNewText.indexOf(sal_Unicode(':'));
-            if (nPos==-1) nPos=aNewText.indexOf(sal_Unicode(' '));
+            sal_Int32 nPos = aNewText.indexOf('/');
+            if (nPos==-1) nPos=aNewText.indexOf(':');
+            if (nPos==-1) nPos=aNewText.indexOf(' ');
             if (nPos==-1) { nPos=aNewText.indexOf(".."); if (nPos!=-1) nSepLen=2; }
             if (nPos!=01)
             {
@@ -1227,7 +1227,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 case ITEM_FONTHEIGHT: {
                     sal_uIntPtr nHgt=0;
                     sal_uInt16 nProp=100;
-                    if (aNewText.indexOf(sal_Unicode('%')) != -1) {
+                    if (aNewText.indexOf('%') != -1) {
                         nProp=(sal_uInt16)nLongVal;
                     } else {
                         nHgt=nLongVal;
@@ -1236,7 +1236,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 } break;
                 case ITEM_FONTWIDTH: {
                     sal_uInt16 nProp=100;
-                    if (aNewText.indexOf(sal_Unicode('%')) != -1) {
+                    if (aNewText.indexOf('%') != -1) {
                         nProp=(sal_uInt16)nLongVal;
                     }
                     ((SvxCharScaleWidthItem*)pNewItem)->SetValue(nProp);

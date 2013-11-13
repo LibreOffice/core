@@ -96,12 +96,12 @@ void DescriptionGenerator::Initialize (OUString sPrefix)
         {
             SolarMutexGuard aGuard;
 
-            msDescription.append (sal_Unicode (' '));
-            msDescription.append (OUString (SVX_RESSTR(RID_SVXSTR_A11Y_WITH)));
-            msDescription.append (sal_Unicode (' '));
+            msDescription.append(' ');
+            msDescription.append(OUString (SVX_RESSTR(RID_SVXSTR_A11Y_WITH)));
+            msDescription.append(' ');
 
-            msDescription.append (OUString (SVX_RESSTR (RID_SVXSTR_A11Y_STYLE)));
-            msDescription.append (sal_Unicode ('='));
+            msDescription.append(OUString (SVX_RESSTR (RID_SVXSTR_A11Y_STYLE)));
+            msDescription.append('=');
         }
 
         try
@@ -128,7 +128,7 @@ void DescriptionGenerator::Initialize (OUString sPrefix)
 
 OUString DescriptionGenerator::operator() (void)
 {
-    msDescription.append (sal_Unicode ('.'));
+    msDescription.append('.');
     return msDescription.makeStringAndClear();
 }
 
@@ -162,14 +162,14 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
         {
             // Append a separator from previous Properties.
             if ( ! mbIsFirstProperty)
-                msDescription.append (sal_Unicode (','));
+                msDescription.append(',');
             else
             {
                 SolarMutexGuard aGuard;
 
-                msDescription.append (sal_Unicode (' '));
-                msDescription.append (OUString (SVX_RESSTR(RID_SVXSTR_A11Y_AND)));
-                msDescription.append (sal_Unicode (' '));
+                msDescription.append(' ');
+                msDescription.append(OUString (SVX_RESSTR(RID_SVXSTR_A11Y_AND)));
+                msDescription.append(' ');
                 mbIsFirstProperty = false;
             }
 
@@ -251,8 +251,8 @@ void DescriptionGenerator::AddTextProperties (void)
 void DescriptionGenerator::AddColor (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
-    msDescription.append (sLocalizedName);
-    msDescription.append (sal_Unicode('='));
+    msDescription.append(sLocalizedName);
+    msDescription.append('=');
 
     try
     {
@@ -278,8 +278,8 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
 void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
-    msDescription.append (sLocalizedName);
-    msDescription.append (sal_Unicode('='));
+    msDescription.append(sLocalizedName);
+    msDescription.append('=');
 
     try
     {
@@ -303,8 +303,8 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
 void DescriptionGenerator::AddString (const OUString& sPropertyName,
     const OUString& sLocalizedName, long nWhichId)
 {
-    msDescription.append (sLocalizedName);
-    msDescription.append (sal_Unicode('='));
+    msDescription.append(sLocalizedName);
+    msDescription.append('=');
 
     try
     {
@@ -338,8 +338,8 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
 void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
-    msDescription.append (sLocalizedName);
-    msDescription.append (sal_Unicode('='));
+    msDescription.append(sLocalizedName);
+    msDescription.append('=');
 
     try
     {

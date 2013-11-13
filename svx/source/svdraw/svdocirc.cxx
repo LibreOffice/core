@@ -586,7 +586,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             }
 
             aBuf.append(GetWinkStr(nWink,false));
-            aBuf.append(sal_Unicode(')'));
+            aBuf.append(')');
         }
 
         return aBuf.makeStringAndClear();
@@ -604,7 +604,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             OUStringBuffer aBuf(aStr);
             aBuf.appendAscii(" (");
             aBuf.append(GetWinkStr(nWink,false));
-            aBuf.append(sal_Unicode(')'));
+            aBuf.append(')');
 
             return aBuf.makeStringAndClear();
         }

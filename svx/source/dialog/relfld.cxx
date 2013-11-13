@@ -55,8 +55,8 @@ void SvxRelativeField::Modify()
 
             while ( *pStr )
             {
-                if( ( ( *pStr < sal_Unicode( '0' ) ) || ( *pStr > sal_Unicode( '9' ) ) ) &&
-                    ( *pStr != sal_Unicode( '%' ) ) )
+                if( ( ( *pStr < '0' ) || ( *pStr > '9' ) ) &&
+                    ( *pStr != '%' ) )
                 {
                     bNewMode = sal_False;
                     break;

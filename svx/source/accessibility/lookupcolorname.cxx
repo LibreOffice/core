@@ -98,7 +98,7 @@ OUString ColorNameMap::lookUp(long color) const {
     }
     // Did not find the given color; return its RGB tuple representation:
     OUStringBuffer buf;
-    buf.append(sal_Unicode('#'));
+    buf.append('#');
     buf.append(color, 16);
     return buf.makeStringAndClear();
 }
