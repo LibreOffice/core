@@ -17,7 +17,6 @@ namespace
 
     class VBATest : public test::BootstrapFixture
     {
-        bool hasOLEEnv();
         public:
         VBATest() : BootstrapFixture(true, false) {}
         ~VBATest(){}
@@ -28,43 +27,12 @@ namespace
 
         // Declares the method as a test to call
         CPPUNIT_TEST(testMiscVBAFunctions);
-// not much point even trying to run except on windows
-#if defined(WNT)
         CPPUNIT_TEST(testMiscOLEStuff);
-#endif
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
 
     };
-
-bool VBATest::hasOLEEnv()
-{
-    // test if we have the necessary runtime environment
-    // to run the OLE tests.
-    static uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
-    if ( !xOLEFactory.is() )
-    {
-        uno::Reference< uno::XComponentContext > xContext(
-            comphelper::getProcessComponentContext() );
-        if( xContext.is() )
-        {
-            uno::Reference<lang::XMultiComponentFactory> xSMgr = xContext->getServiceManager();
-            xOLEFactory = uno::Reference<lang::XMultiServiceFactory>(
-                xSMgr->createInstanceWithContext(
-                    "com.sun.star.bridge.OleObjectFactory",
-                        xContext ), uno::UNO_QUERY );
-        }
-    }
-    bool bOk = false;
-    if( xOLEFactory.is() )
-    {
-        uno::Reference< uno::XInterface > xExcel = xOLEFactory->createInstance( "Excel.Application" );
-        uno::Reference< uno::XInterface > xADODB = xOLEFactory->createInstance( "ADODB.Connection" );
-       bOk = xExcel.is() && xADODB.is();
-    }
-    return bOk;
-}
 
 void VBATest::testMiscVBAFunctions()
 {
@@ -107,8 +75,29 @@ void VBATest::testMiscVBAFunctions()
 
 void VBATest::testMiscOLEStuff()
 {
-    bool bCanRunOleTests = hasOLEEnv();
-    if ( !bCanRunOleTests )
+// not much point even trying to run except on windows
+#if defined(WNT)
+    // test if we have the necessary runtime environment
+    // to run the OLE tests.
+    uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
+    uno::Reference< uno::XComponentContext > xContext(
+        comphelper::getProcessComponentContext() );
+    if( xContext.is() )
+    {
+        uno::Reference<lang::XMultiComponentFactory> xSMgr = xContext->getServiceManager();
+        xOLEFactory = uno::Reference<lang::XMultiServiceFactory>(
+            xSMgr->createInstanceWithContext(
+                "com.sun.star.bridge.OleObjectFactory",
+                xContext ), uno::UNO_QUERY );
+    }
+    bool bOk = false;
+    if( xOLEFactory.is() )
+    {
+        uno::Reference< uno::XInterface > xExcel = xOLEFactory->createInstance( "Excel.Application" );
+        uno::Reference< uno::XInterface > xADODB = xOLEFactory->createInstance( "ADODB.Connection" );
+       bOk = xExcel.is() && xADODB.is();
+    }
+    if ( !bOk )
         return; // can't do anything, skip test
 
     const char* macroSource[] = {
@@ -142,6 +131,7 @@ void VBATest::testMiscOLEStuff()
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn != NULL );
         CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == "OK" );
     }
+#endif
 }
 
   // Put the test suite in the registry
