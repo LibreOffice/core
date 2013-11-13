@@ -758,12 +758,6 @@ namespace
         const bool  bCatalogs;
         const bool  bSchemas;
 
-        NameComponentSupport( )
-            :bCatalogs( true )
-            ,bSchemas( true )
-        {
-        }
-
         NameComponentSupport( const bool _bCatalogs, const bool _bSchemas )
             :bCatalogs( _bCatalogs )
             ,bSchemas( _bSchemas )
