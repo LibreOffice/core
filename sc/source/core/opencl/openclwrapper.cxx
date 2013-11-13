@@ -207,11 +207,11 @@ std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const 
             if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
             {
                 aGeneratedFiles.push_back(boost::shared_ptr<osl::File>(pNewFile));
-                printf("opencl-wrapper: opening binary for reading [%s] success\n", fileName.getStr());
+                SAL_INFO("sc.opencl", "Opening binary file '" << fileName << "' for reading: success");
             }
             else
             {
-                printf("opencl-wrapper: opening binary for reading [%s] fail\n", fileName.getStr());
+                SAL_INFO("sc.opencl", "Opening binary file '" << fileName << "' for reading: FAIL");
                 delete pNewFile;
                 break;
             }
@@ -288,11 +288,9 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
             OString fileName = createFileName(mpArryDevsID[i], clFileName);
             if ( !writeBinaryToFile( fileName,
                         binaries[i], binarySizes[i] ) )
-            {
-                printf("opencl-wrapper: write binary [%s] fail\n", fileName.getStr());
-            }
+                SAL_INFO("sc.opencl", "Writing binary file '" << fileName << "': FAIL");
             else
-                printf("opencl-wrapper: write binary [%s] success\n", fileName.getStr());
+                SAL_INFO("sc.opencl", "Writing binary file '" << fileName << "': success");
         }
     }
 
@@ -351,7 +349,6 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
     cl_int clStatus;
     //char options[512];
     // create a cl program executable for all the devices specified
-    printf("BuildProgram.\n");
     if (!gpuInfo->mnIsUserCreated)
     {
         clStatus = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, gpuInfo->mpArryDevsID,
@@ -366,7 +363,6 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
     if ( clStatus != CL_SUCCESS )
     {
         size_t length;
-        printf ("BuildProgram error!\n");
         if ( !gpuInfo->mnIsUserCreated )
         {
             clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpArryDevsID[0],
@@ -379,7 +375,6 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
         }
         if ( clStatus != CL_SUCCESS )
         {
-            printf("opencl create build log fail\n");
             return 0;
         }
 
@@ -396,7 +391,6 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
         }
         if ( clStatus != CL_SUCCESS )
         {
-            printf("opencl program build info fail\n");
             return false;
         }
 
@@ -465,7 +459,6 @@ bool OpenclDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
 
         cl_int binary_status;
 
-        fprintf(stderr, "Create kernel from binary\n");
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
                                            mpArryDevsID.get(), length.get(), (const unsigned char**) pBinary.get(),
                                            &binary_status, &clStatus );
@@ -503,10 +496,8 @@ int OpenclDevice::initOpenclRunEnv( int argc )
         int status = initOpenclRunEnv( &gpuEnv );
         if ( status )
         {
-            printf("init_opencl_env failed.\n");
             return 1;
         }
-        printf("init_opencl_env successed.\n");
         //initialize program, kernelName, kernelCount
         if( getenv( "SC_FLOAT" ) )
         {
@@ -515,15 +506,15 @@ int OpenclDevice::initOpenclRunEnv( int argc )
         }
         if( gpuEnv.mnKhrFp64Flag )
         {
-            printf("----use khr double type in kernel----\n");
+            SAL_INFO("sc.opencl", "Use Khr double");
         }
         else if( gpuEnv.mnAmdFp64Flag )
         {
-            printf("----use amd double type in kernel----\n");
+            SAL_INFO("sc.opencl", "Use AMD double type");
         }
         else
         {
-            printf("----use float type in kernel----\n");
+            SAL_INFO("sc.opencl", "USE float type");
         }
         isInited = 1;
     }
@@ -710,7 +701,6 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
 
 void OpenclDevice::setOpenclState( int state )
 {
-    //printf("OpenclDevice::setOpenclState...\n");
     isInited = state;
 }
 
