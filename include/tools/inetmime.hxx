@@ -410,11 +410,6 @@ public:
     static OUString decodeHeaderFieldBody(HeaderFieldType eType,
                                            const OString& rBody);
 
-// #i70651#: Prevent warnings on Mac OS X.
-#ifdef MACOSX
-#pragma GCC system_header
-#endif
-
     /** Get the UTF-32 character at the head of a UTF-16 encoded string.
 
         @param rBegin  Points to the start of the UTF-16 encoded string, must
