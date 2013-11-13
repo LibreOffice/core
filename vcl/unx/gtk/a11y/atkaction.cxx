@@ -77,7 +77,7 @@ action_wrapper_do_action (AtkAction *action,
         if( pAction )
             return pAction->doAccessibleAction( i );
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in doAccessibleAction()" );
     }
 
@@ -92,7 +92,7 @@ action_wrapper_get_n_actions (AtkAction *action)
         if( pAction )
             return pAction->getAccessibleActionCount();
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getAccessibleActionCount()" );
     }
 
@@ -150,7 +150,7 @@ action_wrapper_get_name (AtkAction *action,
                 return aNewVal.second;
         }
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in getAccessibleActionDescription()" );
     }
 
@@ -238,7 +238,7 @@ action_wrapper_get_keybinding (AtkAction *action,
             }
         }
     }
-    catch(const uno::Exception& e) {
+    catch(const uno::Exception&) {
         g_warning( "Exception in get_keybinding()" );
     }
 
