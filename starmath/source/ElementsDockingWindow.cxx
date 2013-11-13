@@ -605,6 +605,14 @@ SmElementsDockingWindow::~SmElementsDockingWindow ()
 {
 }
 
+void SmElementsDockingWindow::ToggleFloatingMode()
+{
+    SfxDockingWindow::ToggleFloatingMode();
+
+    if (GetFloatingWindow())
+        GetFloatingWindow()->SetMinOutputSizePixel( Size(100, 100) );
+}
+
 void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, sal_Bool bFloatMode)
 {
     SfxDockingWindow::EndDocking(rReactangle, bFloatMode);

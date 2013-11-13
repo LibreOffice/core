@@ -180,6 +180,7 @@ public:
     ~SmElementsDockingWindow();
 
     virtual void EndDocking( const Rectangle& rReactangle, sal_Bool bFloatMode);
+    virtual void ToggleFloatingMode();
 };
 
 class SmElementsDockingWindowWrapper : public SfxChildWindow
