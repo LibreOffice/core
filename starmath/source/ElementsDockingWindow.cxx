@@ -18,7 +18,6 @@
  */
 
 #include <ElementsDockingWindow.hxx>
-#include <ElementsDockingWindow.hrc>
 
 #include <starmath.hrc>
 #include <smmod.hxx>
@@ -460,29 +459,29 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uI
             else if (aElementId == RID_BLANK)
                 addElement("\"~\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_PHANTOMX)
-                addElement("\"" + stringHide() +"\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("\"" + SM_RESSTR(STR_HIDE) +"\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_BOLDX)
                 addElement("bold B", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_ITALX)
                 addElement("ital I", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_SIZEXY)
-                addElement("\"" + stringSize() + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("\"" + SM_RESSTR(STR_SIZE) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_FONTXY)
-                addElement("\"" + stringFont() + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("\"" + SM_RESSTR(STR_FONT) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_BLACK)
-                addElement("color black { \"" + colorBlack() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("color black { \"" + SM_RESSTR(STR_BLACK) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_BLUE)
-                addElement("color blue { \"" + colorBlue() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("color blue { \"" + SM_RESSTR(STR_BLUE) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_GREEN)
-                addElement("color green { \"" + colorGreen() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("color green { \"" + SM_RESSTR(STR_GREEN) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_RED)
-                addElement("color red { \"" + colorRed() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("color red { \"" + SM_RESSTR(STR_RED) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_CYAN)
-                addElement("color cyan { \"" + colorCyan() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("color cyan { \"" + SM_RESSTR(STR_CYAN) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_MAGENTA)
-                addElement("color magenta { \"" + colorMagenta() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("color magenta { \"" + SM_RESSTR(STR_MAGENTA) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_YELLOW)
-                addElement("color yellow { \"" + colorYellow() + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement("color yellow { \"" + SM_RESSTR(STR_YELLOW) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_ALIGNLX)
                 addElement("\"" + SM_RESSTR(STR_ALIGN_LEFT) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_ALIGNCX)
@@ -578,17 +577,6 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     maElementListBox    (this, SmResId(1))
 {
     maElementsControl.SetBorderStyle( WINDOW_BORDER_MONO );
-    maElementsControl.setColorBlack(SmResId(STR_BLACK));
-    maElementsControl.setColorBlue(SmResId(STR_BLUE));
-    maElementsControl.setColorGreen(SmResId(STR_GREEN));
-    maElementsControl.setColorRed(SmResId(STR_RED));
-    maElementsControl.setColorCyan(SmResId(STR_CYAN));
-    maElementsControl.setColorMagenta(SmResId(STR_MAGENTA));
-    maElementsControl.setColorYellow(SmResId(STR_YELLOW));
-
-    maElementsControl.setStringHide(SmResId(STR_HIDE));
-    maElementsControl.setStringSize(SmResId(STR_SIZE));
-    maElementsControl.setStringFont(SmResId(STR_FONT));
 
     maElementListBox.SetDropDownLineCount( 11 );
 
