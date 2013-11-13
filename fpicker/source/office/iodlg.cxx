@@ -307,20 +307,6 @@ namespace
         return  aWorkPathObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
-    //---------------------------------------------------------------------
-    struct RemoveFinalSlash : public ::std::unary_function< OUString, void >
-    {
-        void operator()( OUString& _rURL )
-        {
-            INetURLObject aURL( _rURL );
-#if defined(WNT)
-            if ( aURL.getSegmentCount() > 1 )
-#endif
-                aURL.removeFinalSlash( );
-            _rURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
-        }
-    };
-
     // -----------------------------------------------------------------------
     /** retrieves the value of an environment variable
         @return <TRUE/> if and only if the retrieved string value is not empty
