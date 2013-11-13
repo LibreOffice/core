@@ -52,8 +52,6 @@ namespace sd { namespace slidesorter { namespace model {
 class PageDescriptor;
 } } }
 
-namespace { class NavigatorDropEvent; }
-
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
@@ -229,8 +227,6 @@ private:
         nDropAction, disguised as void*.
     */
     DECL_LINK(ProcessDragFinished, void*);
-
-    DECL_LINK(ExecuteNavigatorDrop, NavigatorDropEvent*);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
