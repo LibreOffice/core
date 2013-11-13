@@ -22,7 +22,7 @@
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -41,7 +41,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-using ::comphelper::MediaDescriptor;
 using ::oox::core::CodecHelper;
 
 // ============================================================================

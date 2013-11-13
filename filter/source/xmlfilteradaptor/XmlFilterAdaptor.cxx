@@ -45,7 +45,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -77,9 +77,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     sal_Int32 nSteps= 0;
     sal_Int32 nProgressRange = 4;
 
-    comphelper::MediaDescriptor aMediaMap(aDescriptor);
+    utl::MediaDescriptor aMediaMap(aDescriptor);
     Reference< XStatusIndicator > xStatusIndicator(aMediaMap.getUnpackedValueOrDefault(
-        comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
+        utl::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is()){
         xStatusIndicator->start(OUString( "Loading :" ),nProgressRange);
@@ -203,9 +203,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     // Status Bar
     sal_Int32 nSteps= 1;
     sal_Int32 nProgressRange(3);
-    comphelper::MediaDescriptor aMediaMap(aDescriptor);
+    utl::MediaDescriptor aMediaMap(aDescriptor);
     Reference< XStatusIndicator > xStatusIndicator(aMediaMap.getUnpackedValueOrDefault(
-        comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
+        utl::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is())
        xStatusIndicator->start(OUString( "Saving :" ),nProgressRange);

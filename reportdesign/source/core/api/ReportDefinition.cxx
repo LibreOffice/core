@@ -82,7 +82,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -203,7 +203,7 @@ void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStorage,::b
 
     _rModel->SetReadOnly((nOpenMode & embed::ElementModes::WRITE) != embed::ElementModes::WRITE);
 }
-void lcl_stripLoadArguments( ::comphelper::MediaDescriptor& _rDescriptor, uno::Sequence< beans::PropertyValue >& _rArgs )
+void lcl_stripLoadArguments( utl::MediaDescriptor& _rDescriptor, uno::Sequence< beans::PropertyValue >& _rArgs )
 {
     _rDescriptor.erase( OUString( "StatusIndicator" ) );
     _rDescriptor.erase( OUString( "InteractionHandler" ) );
@@ -211,7 +211,7 @@ void lcl_stripLoadArguments( ::comphelper::MediaDescriptor& _rDescriptor, uno::S
     _rDescriptor >> _rArgs;
 }
 // -----------------------------------------------------------------------------
-void lcl_extractAndStartStatusIndicator( const ::comphelper::MediaDescriptor& _rDescriptor, uno::Reference< task::XStatusIndicator >& _rxStatusIndicator,
+void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDescriptor, uno::Reference< task::XStatusIndicator >& _rxStatusIndicator,
     uno::Sequence< uno::Any >& _rCallArgs )
 {
     try
@@ -1263,7 +1263,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
-    ::comphelper::MediaDescriptor aDescriptor( _aArguments );
+    utl::MediaDescriptor aDescriptor( _aArguments );
 
     m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( false );
     try
@@ -1280,7 +1280,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-void OReportDefinition::fillArgs(::comphelper::MediaDescriptor& _aDescriptor)
+void OReportDefinition::fillArgs(utl::MediaDescriptor& _aDescriptor)
 {
     uno::Sequence<beans::PropertyValue> aComponentData;
     aComponentData = _aDescriptor.getUnpackedValueOrDefault("ComponentData",aComponentData);
@@ -1383,7 +1383,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
 {
     m_pImpl->m_xStorage = _xStorageToLoadFrom;
 
-    ::comphelper::MediaDescriptor aDescriptor( _aMediaDescriptor );
+    utl::MediaDescriptor aDescriptor( _aMediaDescriptor );
     fillArgs(aDescriptor);
     aDescriptor.createItemIfMissing(OUString("Storage"),uno::makeAny(_xStorageToLoadFrom));
 
@@ -1412,7 +1412,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
         uno::Reference<XComponent> xComponent(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
         xImporter->setTargetDocument(xComponent);
 
-        ::comphelper::MediaDescriptor aTemp;
+        utl::MediaDescriptor aTemp;
         aTemp << aDelegatorArguments;
         xFilter->filter(aTemp.getAsConstPropertyValueList());
 
@@ -1443,7 +1443,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     // create XStatusIndicator
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     uno::Sequence< uno::Any > aDelegatorArguments;
-    ::comphelper::MediaDescriptor aDescriptor( _aMediaDescriptor );
+    utl::MediaDescriptor aDescriptor( _aMediaDescriptor );
     lcl_extractAndStartStatusIndicator( aDescriptor, xStatusIndicator, aDelegatorArguments );
 
     // properties

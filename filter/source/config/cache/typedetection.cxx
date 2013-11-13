@@ -370,14 +370,14 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
     throw (css::uno::RuntimeException)
 {
     // make the descriptor more useable :-)
-    ::comphelper::MediaDescriptor stlDescriptor(lDescriptor);
+    utl::MediaDescriptor stlDescriptor(lDescriptor);
 
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     //*******************************************
     // parse given URL to split it into e.g. main and jump marks ...
-    OUString sURL = stlDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), OUString());
+    OUString sURL = stlDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
 
 #if OSL_DEBUG_LEVEL > 0
     if (stlDescriptor.find( "FileName" ) != stlDescriptor.end())
@@ -390,13 +390,13 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
     xParser->parseStrict(aURL);
 
     OUString aSelectedFilter = stlDescriptor.getUnpackedValueOrDefault(
-        comphelper::MediaDescriptor::PROP_FILTERNAME(), OUString());
+        utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
     if (!aSelectedFilter.isEmpty())
     {
         // Caller specified the filter type.  Honor it.  Just get the default
         // type for that filter, and bail out.
         if (impl_validateAndSetFilterOnDescriptor(stlDescriptor, aSelectedFilter))
-            return stlDescriptor[comphelper::MediaDescriptor::PROP_TYPENAME()].get<OUString>();
+            return stlDescriptor[utl::MediaDescriptor::PROP_TYPENAME()].get<OUString>();
     }
 
     FlatDetection lFlatTypes;
@@ -466,13 +466,13 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
 
 
 
-void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescriptor& rDescriptor,
+void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDescriptor,
                                                       OUString&               sType      )
 {
     // a)
     // Dont overwrite a might preselected filter!
     OUString sFilter = rDescriptor.getUnpackedValueOrDefault(
-                                ::comphelper::MediaDescriptor::PROP_FILTERNAME(),
+                                utl::MediaDescriptor::PROP_FILTERNAME(),
                                 OUString());
     if (!sFilter.isEmpty())
         return;
@@ -481,7 +481,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
     // check a preselected document service too.
     // Then we have to search a suitable filter witin this module.
     OUString sDocumentService = rDescriptor.getUnpackedValueOrDefault(
-                                            ::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(),
+                                            utl::MediaDescriptor::PROP_DOCUMENTSERVICE(),
                                             OUString());
     if (!sDocumentService.isEmpty())
     {
@@ -528,8 +528,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
 
             if (!sFilter.isEmpty())
             {
-                rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sRealType;
-                rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+                rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= sRealType;
+                rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
                 sType = sRealType;
                 return;
             }
@@ -559,8 +559,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
         // <- SAFE
 
         // no exception => found valid type and filter => set it on the given descriptor
-        rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
-        rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+        rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
+        rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
         return;
     }
     catch(const css::uno::Exception&)
@@ -614,8 +614,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
 
         if (!sFilter.isEmpty())
         {
-            rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
-            rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+            rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
+            rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
             return;
         }
     }
@@ -797,7 +797,7 @@ OUString TypeDetection::impl_getTypeFromFilter(const OUString& rFilterName)
 }
 
 void TypeDetection::impl_getAllFormatTypes(
-    const util::URL& aParsedURL, comphelper::MediaDescriptor& rDescriptor, FlatDetection& rFlatTypes)
+    const util::URL& aParsedURL, utl::MediaDescriptor& rDescriptor, FlatDetection& rFlatTypes)
 {
     rFlatTypes.clear();
 
@@ -858,19 +858,19 @@ void TypeDetection::impl_getAllFormatTypes(
     rFlatTypes.unique(EqualByType());
 
     // Mark pre-selected type (if any) to have it prioritized.
-    OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(comphelper::MediaDescriptor::PROP_TYPENAME(), OUString());
+    OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
     if (!sSelectedType.isEmpty())
         impl_getPreselectionForType(sSelectedType, aParsedURL, rFlatTypes, false);
 
     // Mark all types preferred by the current document service, to have it prioritized.
-    OUString sSelectedDoc = rDescriptor.getUnpackedValueOrDefault(comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(), OUString());
+    OUString sSelectedDoc = rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE(), OUString());
     if (!sSelectedDoc.isEmpty())
         impl_getPreselectionForDocumentService(sSelectedDoc, aParsedURL, rFlatTypes);
 }
 
 
 
-OUString TypeDetection::impl_detectTypeFlatAndDeep(      ::comphelper::MediaDescriptor& rDescriptor   ,
+OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                           const FlatDetection&                 lFlatTypes    ,
                                                                 sal_Bool                       bAllowDeep    ,
                                                                 OUStringList&                  rUsedDetectors,
@@ -957,12 +957,12 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      ::comphelper::MediaDesc
     // <- SAFE ----------------------------------
 }
 
-void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor)
+void TypeDetection::impl_seekStreamToZero(utl::MediaDescriptor& rDescriptor)
 {
     // try to seek to 0 ...
     // But because XSeekable is an optional interface ... try it only .-)
     css::uno::Reference< css::io::XInputStream > xStream = rDescriptor.getUnpackedValueOrDefault(
-                                                            ::comphelper::MediaDescriptor::PROP_INPUTSTREAM(),
+                                                            utl::MediaDescriptor::PROP_INPUTSTREAM(),
                                                             css::uno::Reference< css::io::XInputStream >());
     css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
     if (xSeek.is())
@@ -982,7 +982,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
 }
 
 OUString TypeDetection::impl_askDetectService(const OUString&               sDetectService,
-                                                           ::comphelper::MediaDescriptor& rDescriptor   )
+                                                           utl::MediaDescriptor& rDescriptor   )
 {
     // Open the stream and add it to the media descriptor if this method is called for the first time.
     // All following requests to this method will detect, that there already exists a stream .-)
@@ -1068,21 +1068,21 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
 
 
 
-OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor)
+OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor)
 {
     css::uno::Reference< css::task::XInteractionHandler > xInteraction =
-        rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER(),
+        rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INTERACTIONHANDLER(),
         css::uno::Reference< css::task::XInteractionHandler >());
 
     if (!xInteraction.is())
         return OUString();
 
     OUString sURL =
-        rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(),
+        rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(),
         OUString());
 
     css::uno::Reference< css::io::XInputStream > xStream =
-        rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_INPUTSTREAM(),
+        rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INPUTSTREAM(),
         css::uno::Reference< css::io::XInputStream >());
 
     // Dont distrub the user for "non existing files - means empty URLs" or
@@ -1118,7 +1118,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(::comphelper::Medi
             return OUString();
 
         OUString sType;
-        rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] >>= sType;
+        rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] >>= sType;
         return sType;
     }
     catch(const css::uno::Exception&)
@@ -1129,12 +1129,12 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(::comphelper::Medi
 
 
 
-void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
+void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
     throw (css::uno::Exception)
 {
     sal_Bool bSuccess = sal_False;
-    OUString sURL = rDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_URL(), OUString() );
-    sal_Bool bRequestedReadOnly = rDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_READONLY(), sal_False );
+    OUString sURL = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
+    sal_Bool bRequestedReadOnly = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_READONLY(), sal_False );
     if ( !sURL.isEmpty() && ::utl::LocalFileHelper::IsLocalFile( INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE ) ) )
     {
         // OOo uses own file locking mechanics in case of local file
@@ -1154,16 +1154,16 @@ void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
         // this argument should be either removed or an additional argument should be added so that application
         // can separate the case when the user explicitly requests readonly document.
         // The current solution is to remove it here.
-        rDescriptor.erase( ::comphelper::MediaDescriptor::PROP_READONLY() );
+        rDescriptor.erase( utl::MediaDescriptor::PROP_READONLY() );
     }
 }
 
 
 
-void TypeDetection::impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescriptor& rDescriptor)
+void TypeDetection::impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor)
 {
-    ::comphelper::MediaDescriptor::iterator pItType   = rDescriptor.find(::comphelper::MediaDescriptor::PROP_TYPENAME()  );
-    ::comphelper::MediaDescriptor::iterator pItFilter = rDescriptor.find(::comphelper::MediaDescriptor::PROP_FILTERNAME());
+    utl::MediaDescriptor::iterator pItType   = rDescriptor.find(utl::MediaDescriptor::PROP_TYPENAME()  );
+    utl::MediaDescriptor::iterator pItFilter = rDescriptor.find(utl::MediaDescriptor::PROP_FILTERNAME());
     if (pItType != rDescriptor.end())
         rDescriptor.erase(pItType);
     if (pItFilter != rDescriptor.end())
@@ -1172,14 +1172,14 @@ void TypeDetection::impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescr
 
 
 
-sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
+sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                             const OUString&               sType      )
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (m_rCache->hasItem(FilterCache::E_TYPE, sType))
     {
-        rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sType;
+        rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
         return sal_True;
     }
     aLock.clear();
@@ -1192,7 +1192,7 @@ sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      ::comphelper::
 
 
 
-sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
+sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                               const OUString&               sFilter    )
 {
     try
@@ -1209,8 +1209,8 @@ sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper
         // <- SAFE
 
         // found valid type and filter => set it on the given descriptor
-        rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
-        rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+        rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
+        rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
         return sal_True;
     }
     catch(const css::container::NoSuchElementException&){}

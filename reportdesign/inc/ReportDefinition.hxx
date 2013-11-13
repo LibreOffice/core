@@ -57,7 +57,7 @@ namespace rptui
 {
     class OReportModel;
 }
-namespace comphelper
+namespace utl
 {
     class MediaDescriptor;
 }
@@ -147,7 +147,7 @@ namespace reportdesign
 
         void notifyEvent(const OUString& _sEventName);
         void init();
-        void fillArgs(::comphelper::MediaDescriptor& _aDescriptor);
+        void fillArgs(utl::MediaDescriptor& _aDescriptor);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >             impl_getTitleHelper_throw();
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >   impl_getUntitledHelper_throw();

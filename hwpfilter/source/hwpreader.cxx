@@ -125,11 +125,11 @@ HwpReader::~HwpReader()
 
 sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(RuntimeException)
 {
-    comphelper::MediaDescriptor aDescriptor(rDescriptor);
+    utl::MediaDescriptor aDescriptor(rDescriptor);
     aDescriptor.addInputStream();
 
     Reference< XInputStream > xInputStream(
-        aDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY_THROW);
+        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY_THROW);
 
     HStream stream;
     Sequence < sal_Int8 > aBuffer;

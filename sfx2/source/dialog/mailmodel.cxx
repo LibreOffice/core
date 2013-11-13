@@ -65,7 +65,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/useroptions.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include <retrieveinputstream.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/io/XStream.hpp>
 
 /* class for a thread to retrieve an input stream given by an URL
@@ -52,16 +52,16 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > xProps( 1 );
     xProps[0].Name = "URL";
     xProps[0].Value <<= OUString( mrLinkedURL );
-    comphelper::MediaDescriptor aMedium( xProps );
+    utl::MediaDescriptor aMedium( xProps );
 
     aMedium.addInputStream();
 
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream;
-    aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+    aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
     if ( !xInputStream.is() )
     {
         com::sun::star::uno::Reference<com::sun::star::io::XStream> xStream;
-        aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= xStream;
+        aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= xStream;
         if ( xStream.is() )
         {
             xInputStream = xStream->getInputStream();

@@ -66,7 +66,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/property.hxx>

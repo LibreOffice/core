@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/shapes.hxx"
 #include "oox/export/utils.hxx"
@@ -103,7 +103,6 @@ using ::oox::core::XmlFilterBase;
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::sheet::XSpreadsheetDocument;
-using ::comphelper::MediaDescriptor;
 using ::sax_fastparser::FSHelperPtr;
 
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
@@ -1321,7 +1320,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                         // export the embedded document
                         Sequence< PropertyValue > rMedia(1);
 
-                        rMedia[0].Name = MediaDescriptor::PROP_STREAMFOROUTPUT();
+                        rMedia[0].Name = utl::MediaDescriptor::PROP_STREAMFOROUTPUT();
                         rMedia[0].Value <<= xOutStream;
 
                         Reference< XExporter > xExporter(

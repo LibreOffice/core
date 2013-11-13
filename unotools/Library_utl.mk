@@ -99,6 +99,7 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/misc/eventlisteneradapter \
     unotools/source/misc/fontcvt \
     unotools/source/misc/fontdefs \
+    unotools/source/misc/mediadescriptor \
     unotools/source/misc/sharedunocomponent \
     unotools/source/misc/syslocale \
     unotools/source/streaming/streamhelper \

@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
 
@@ -46,7 +46,7 @@
 #include <ucbhelper/activedatasink.hxx>
 #include <comphelper/processfactory.hxx>
 
-namespace comphelper{
+namespace utl {
 
 namespace {
 
@@ -372,7 +372,7 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
                 bReadOnly = sal_True;
             else
             {
-                ::ucbhelper::Content aContent(xContent, css::uno::Reference< css::ucb::XCommandEnvironment >(), getProcessComponentContext());
+                ::ucbhelper::Content aContent(xContent, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
                 aContent.getPropertyValue(CONTENTPROP_ISREADONLY) >>= bReadOnly;
             }
         }
@@ -390,9 +390,9 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
 css::uno::Any MediaDescriptor::getComponentDataEntry( const OUString& rName ) const
 {
     css::uno::Any aEntry;
-    SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA() );
+    comphelper::SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA() );
     if( aPropertyIter != end() )
-        return NamedValueCollection( aPropertyIter->second ).get( rName );
+        return comphelper::NamedValueCollection( aPropertyIter->second ).get( rName );
     return css::uno::Any();
 }
 
@@ -409,7 +409,7 @@ void MediaDescriptor::setComponentDataEntry( const OUString& rName, const css::u
         if( bHasNamedValues || bHasPropValues )
         {
             // insert or overwrite the passed value
-            SequenceAsHashMap aCompDataMap( rCompDataAny );
+            comphelper::SequenceAsHashMap aCompDataMap( rCompDataAny );
             aCompDataMap[ rName ] = rValue;
             // write back the sequence (restore sequence with correct element type)
             rCompDataAny = aCompDataMap.getAsConstAny( bHasPropValues );
@@ -424,7 +424,7 @@ void MediaDescriptor::setComponentDataEntry( const OUString& rName, const css::u
 
 void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
 {
-    SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA() );
+    comphelper::SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA() );
     if( aPropertyIter != end() )
     {
         css::uno::Any& rCompDataAny = aPropertyIter->second;
@@ -434,7 +434,7 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
         if( bHasNamedValues || bHasPropValues )
         {
             // remove the value with the passed name
-            SequenceAsHashMap aCompDataMap( rCompDataAny );
+            comphelper::SequenceAsHashMap aCompDataMap( rCompDataAny );
             aCompDataMap.erase( rName );
             // write back the sequence, or remove it completely if it is empty
             if( aCompDataMap.empty() )
@@ -446,8 +446,8 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > MediaDescriptor::requestAndVerifyDocPassword(
-        IDocPasswordVerifier& rVerifier,
-        DocPasswordRequestType eRequestType,
+        comphelper::IDocPasswordVerifier& rVerifier,
+        comphelper::DocPasswordRequestType eRequestType,
         const ::std::vector< OUString >* pDefaultPasswords )
 {
     css::uno::Sequence< css::beans::NamedValue > aMediaEncData = getUnpackedValueOrDefault(
@@ -460,7 +460,7 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
         PROP_URL(), OUString() );
 
     bool bIsDefaultPassword = false;
-    css::uno::Sequence< css::beans::NamedValue > aEncryptionData = DocPasswordHelper::requestAndVerifyDocPassword(
+    css::uno::Sequence< css::beans::NamedValue > aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
         rVerifier, aMediaEncData, aMediaPassword, xInteractHandler, aDocumentName, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
 
     erase( PROP_PASSWORD() );
@@ -561,7 +561,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
             xSeek->seek( 0 );
 
         // a content for the URL
-        ::ucbhelper::Content aContent( sURL, xCommandEnv, getProcessComponentContext() );
+        ::ucbhelper::Content aContent( sURL, xCommandEnv, comphelper::getProcessComponentContext() );
 
         // use post command
         css::ucb::PostCommandArgument2 aPostArgument;
@@ -601,7 +601,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
         MediaDescriptor::PROP_INTERACTIONHANDLER(),
         css::uno::Reference< css::task::XInteractionHandler >());
 
-    StillReadWriteInteraction* pInteraction = new StillReadWriteInteraction(xOrgInteraction);
+    comphelper::StillReadWriteInteraction* pInteraction = new comphelper::StillReadWriteInteraction(xOrgInteraction);
     css::uno::Reference< css::task::XInteractionHandler > xInteraction(static_cast< css::task::XInteractionHandler* >(pInteraction), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::ucb::XProgressHandler > xProgress;
@@ -614,7 +614,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
     css::uno::Reference< css::ucb::XContent > xContent;
     try
     {
-        aContent = ::ucbhelper::Content(sURL, xCommandEnv, getProcessComponentContext());
+        aContent = ::ucbhelper::Content(sURL, xCommandEnv, comphelper::getProcessComponentContext());
         xContent = aContent.get();
     }
     catch(const css::uno::RuntimeException&)

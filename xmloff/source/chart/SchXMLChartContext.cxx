@@ -25,7 +25,7 @@
 #include "SchXMLTableContext.hxx"
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
@@ -636,9 +636,9 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         uno::Reference< frame::XModel > xModel(xNewDoc, uno::UNO_QUERY );
         if( xModel.is() )
         {
-            comphelper::MediaDescriptor aMediaDescriptor( xModel->getArgs() );
+            utl::MediaDescriptor aMediaDescriptor( xModel->getArgs() );
 
-            comphelper::MediaDescriptor::const_iterator aIt(
+            utl::MediaDescriptor::const_iterator aIt(
                 aMediaDescriptor.find( OUString(  "HierarchicalDocumentName" )));
             if( aIt != aMediaDescriptor.end() )
             {

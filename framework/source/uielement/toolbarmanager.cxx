@@ -59,7 +59,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/imageitm.hxx>
@@ -1652,9 +1652,9 @@ sal_Bool ToolBarManager::IsPluginMode() const
         if ( xModel.is() )
         {
             Sequence< PropertyValue > aSeq = xModel->getArgs();
-            comphelper::MediaDescriptor aMediaDescriptor( aSeq );
+            utl::MediaDescriptor aMediaDescriptor( aSeq );
             bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault< sal_Bool >(
-                            comphelper::MediaDescriptor::PROP_VIEWONLY(), sal_False );
+                            utl::MediaDescriptor::PROP_VIEWONLY(), sal_False );
         }
     }
 

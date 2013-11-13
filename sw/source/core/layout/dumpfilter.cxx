@@ -14,7 +14,7 @@
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <libxml/xmlwriter.h>
 
@@ -97,11 +97,11 @@ namespace sw
     {
         sal_Bool bRet = sal_False;
 
-        comphelper::MediaDescriptor aMediaDesc = aDescriptor;
+        utl::MediaDescriptor aMediaDesc = aDescriptor;
 
         // Get the output stream
         uno::Reference< io::XOutputStream > xOut = aMediaDesc.getUnpackedValueOrDefault(
-                comphelper::MediaDescriptor::PROP_OUTPUTSTREAM(),
+                utl::MediaDescriptor::PROP_OUTPUTSTREAM(),
                 uno::Reference< io::XOutputStream >() );
 
         // Actually get the SwRootFrm to call dumpAsXml

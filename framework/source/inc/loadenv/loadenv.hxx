@@ -35,7 +35,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase2.hxx>
 
@@ -148,7 +148,7 @@ private:
         @descr  Inside this struct e.g. the URL, its type and filter name,
                 the stream or a model directly are saved.
      */
-    ::comphelper::MediaDescriptor m_lMediaDescriptor;
+    utl::MediaDescriptor m_lMediaDescriptor;
 
     /** @short  because the mediadescriptor contains the complete URL ... but
                 some functionality need the structured version, we hold it twice :-(.
@@ -370,7 +370,7 @@ public:
     /** TODO document me ... */
     static  void initializeUIDefaults(
                 const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
-                ::comphelper::MediaDescriptor& io_lMediaDescriptor,
+                utl::MediaDescriptor& io_lMediaDescriptor,
                 const bool _bUIMode,
                 QuietInteraction** o_ppQuiteInteraction
             );

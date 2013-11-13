@@ -71,7 +71,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/cmdoptions.hxx>

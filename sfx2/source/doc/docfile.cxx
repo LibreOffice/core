@@ -87,7 +87,7 @@
 #include <osl/file.hxx>
 
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/ucblockbytes.hxx>
@@ -2250,13 +2250,13 @@ void SfxMedium::GetLockingStream_Impl()
             // open the original document
             uno::Sequence< beans::PropertyValue > xProps;
             TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
-            comphelper::MediaDescriptor aMedium( xProps );
+            utl::MediaDescriptor aMedium( xProps );
 
             aMedium.addInputStreamOwnLock();
 
             uno::Reference< io::XInputStream > xInputStream;
-            aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->m_xLockingStream;
-            aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+            aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= pImp->m_xLockingStream;
+            aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
 
             if ( !pImp->pTempFile && pImp->m_aName.isEmpty() )
             {
@@ -2336,7 +2336,7 @@ void SfxMedium::GetMedium_Impl()
             else
             {
                 TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
-                comphelper::MediaDescriptor aMedium( xProps );
+                utl::MediaDescriptor aMedium( xProps );
 
                 if ( pImp->m_xLockingStream.is() && !bFromTempFile )
                 {
@@ -2347,8 +2347,8 @@ void SfxMedium::GetMedium_Impl()
                 {
                     if ( bFromTempFile )
                     {
-                        aMedium[comphelper::MediaDescriptor::PROP_URL()] <<= OUString( aFileName );
-                        aMedium.erase( comphelper::MediaDescriptor::PROP_READONLY() );
+                        aMedium[utl::MediaDescriptor::PROP_URL()] <<= OUString( aFileName );
+                        aMedium.erase( utl::MediaDescriptor::PROP_READONLY() );
                         aMedium.addInputStream();
                     }
                     else if ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
@@ -2363,8 +2363,8 @@ void SfxMedium::GetMedium_Impl()
                     // the check is done in LockOrigFileOnDemand() for file and non-file URLs
 
                     //TODO/MBA: what happens if property is not there?!
-                    aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->xStream;
-                    aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImp->xInputStream;
+                    aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= pImp->xStream;
+                    aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImp->xInputStream;
                 }
 
                 GetContent();

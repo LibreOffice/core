@@ -127,11 +127,9 @@ using namespace nsHdFtFlags;
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-#include <comphelper/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
-
-using ::comphelper::MediaDescriptor;
 
 //#define VT_EMPTY            0
 //#define VT_I4               3

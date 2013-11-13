@@ -250,7 +250,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -337,6 +336,7 @@
 #include <unotools/configpaths.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/streamwrap.hxx>

@@ -64,7 +64,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
@@ -2028,13 +2028,13 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
            css::lang::WrappedTargetException, css::io::IOException)
 {
     css::uno::Reference<css::io::XInputStream> xIn;
-    ::comphelper::MediaDescriptor md(Medium);
+    utl::MediaDescriptor md(Medium);
     // if we have an URL parameter, it replaces the one in the media descriptor
     if (!URL.isEmpty()) {
-        md[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= URL;
+        md[ utl::MediaDescriptor::PROP_URL() ] <<= URL;
     }
     if (sal_True == md.addInputStream()) {
-        md[ ::comphelper::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
+        md[ utl::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
     }
     css::uno::Reference<css::embed::XStorage> xStorage;
     try {
@@ -2069,9 +2069,9 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
     throw (css::uno::RuntimeException,
            css::lang::WrappedTargetException, css::io::IOException)
 {
-    ::comphelper::MediaDescriptor md(Medium);
+    utl::MediaDescriptor md(Medium);
     if (!URL.isEmpty()) {
-        md[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= URL;
+        md[ utl::MediaDescriptor::PROP_URL() ] <<= URL;
     }
     SfxMedium aMedium(md.getAsConstPropertyValueList());
     css::uno::Reference<css::embed::XStorage> xStorage
@@ -2084,13 +2084,13 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
                 *this);
     }
     // set MIME type of the storage
-    ::comphelper::MediaDescriptor::const_iterator iter
-        = md.find(::comphelper::MediaDescriptor::PROP_MEDIATYPE());
+    utl::MediaDescriptor::const_iterator iter
+        = md.find(utl::MediaDescriptor::PROP_MEDIATYPE());
     if (iter != md.end()) {
         css::uno::Reference< css::beans::XPropertySet > xProps(xStorage,
             css::uno::UNO_QUERY_THROW);
         xProps->setPropertyValue(
-            ::comphelper::MediaDescriptor::PROP_MEDIATYPE(),
+            utl::MediaDescriptor::PROP_MEDIATYPE(),
             iter->second);
     }
     storeToStorage(xStorage, md.getAsConstPropertyValueList());

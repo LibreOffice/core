@@ -17,21 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_MEDIADESCRIPTOR_HXX
-#define INCLUDED_COMPHELPER_MEDIADESCRIPTOR_HXX
+#ifndef INCLUDED_UNOTOOLS_MEDIADESCRIPTOR_HXX
+#define INCLUDED_UNOTOOLS_MEDIADESCRIPTOR_HXX
 
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustring.hxx>
-#include <comphelper/comphelperdllapi.h>
+#include <unotools/unotoolsdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;
 } } } }
+namespace comphelper { class IDocPasswordVerifier; }
 
-namespace comphelper{
-
-class IDocPasswordVerifier;
+namespace utl {
 
 /** @short  can be used to work with a ::com::sun::star::document::MediaDescriptor
             struct.
@@ -43,7 +42,7 @@ class IDocPasswordVerifier;
 
     @attention  This class isnt threadsafe and must be guarded from outside!
  */
-class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
+class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
 {
     public:
 
@@ -260,8 +259,8 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
             found, or the user has chossen to cancel password input.
         */
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestAndVerifyDocPassword(
-            IDocPasswordVerifier& rVerifier,
-            DocPasswordRequestType eRequestType,
+            comphelper::IDocPasswordVerifier& rVerifier,
+            comphelper::DocPasswordRequestType eRequestType,
             const ::std::vector< OUString >* pDefaultPasswords = 0 );
 
     //-------------------------------------------
@@ -288,7 +287,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
             @throw  [css::lang::IllegalArgumentException]
                     if the given PostData stream is <NULL/>.
          */
-        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithPostData(
+        SAL_DLLPRIVATE sal_Bool impl_openStreamWithPostData(
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& _rxPostData
             )   throw(::com::sun::star::uno::RuntimeException);
 
@@ -314,7 +313,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
             @throw  [css::uno::RuntimeException]
                     if the MediaDescriptor seems to be invalid!
          */
-        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithURL(
+        SAL_DLLPRIVATE sal_Bool impl_openStreamWithURL(
             const OUString& sURL,
             sal_Bool bLockFile
             ) throw(::com::sun::star::uno::RuntimeException);
@@ -336,11 +335,11 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
             @return TRUE, if the stream was already part of the descriptor or could
                     be created as new item. FALSE otherwise.
          */
-        COMPHELPER_DLLPRIVATE sal_Bool impl_addInputStream( sal_Bool bLockFile );
+        SAL_DLLPRIVATE sal_Bool impl_addInputStream( sal_Bool bLockFile );
 };
 
-} // namespace comphelper
+}
 
-#endif // INCLUDED_COMPHELPER_MEDIADESCRIPTOR_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

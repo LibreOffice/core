@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
 } } }
 
-namespace comphelper { class MediaDescriptor; }
+namespace utl { class MediaDescriptor; }
 
 namespace oox { class AttributeList; }
 
@@ -118,7 +118,7 @@ public:
         its input stream is returned.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        extractUnencryptedPackage( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+                        extractUnencryptedPackage( utl::MediaDescriptor& rMediaDesc ) const;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 

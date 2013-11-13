@@ -22,7 +22,7 @@
 
 #include "ViewTabBar.hxx"
 #include "framework/FrameworkHelper.hxx"
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "DrawController.hxx"
@@ -128,9 +128,9 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
             if (pController != NULL)
                 mpViewShellBase = pController->GetViewShellBase();
 
-            ::comphelper::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
+            utl::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
             if ( ! aDescriptor.getUnpackedValueOrDefault(
-                ::comphelper::MediaDescriptor::PROP_PREVIEW(),
+                utl::MediaDescriptor::PROP_PREVIEW(),
                 sal_False))
             {
                 // Register the factory for its supported tool bars.

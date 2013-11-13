@@ -31,7 +31,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -274,8 +274,8 @@ sal_Bool implts_isPreviewModel( const uno::Reference< frame::XModel >& xModel )
 {
     if ( xModel.is() )
     {
-        ::comphelper::MediaDescriptor aDesc( xModel->getArgs() );
-        return aDesc.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PREVIEW(), (sal_Bool)sal_False);
+        utl::MediaDescriptor aDesc( xModel->getArgs() );
+        return aDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), (sal_Bool)sal_False);
     }
     else
         return sal_False;

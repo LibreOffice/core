@@ -40,7 +40,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
@@ -538,7 +538,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             { MAP_LEN( "StreamRelPath"), 0, &::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
-        ::comphelper::MediaDescriptor aDescriptor(rDescriptor);
+        utl::MediaDescriptor aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
         const OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),OUString()) );
         xProp->setPropertyValue("BaseURI", uno::makeAny(sVal));

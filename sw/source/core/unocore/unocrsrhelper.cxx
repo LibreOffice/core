@@ -77,7 +77,7 @@
 #include <redline.hxx>
 #include <numrule.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <SwNodeNum.hxx>
 #include <fmtmeta.hxx>
@@ -966,23 +966,23 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     SfxMedium* pMed = 0;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwDocShell* pDocSh = pDoc->GetDocShell();
-    comphelper::MediaDescriptor aMediaDescriptor( rOptions );
+    utl::MediaDescriptor aMediaDescriptor( rOptions );
     OUString sFileName = rURL;
     OUString sFilterName, sFilterOptions, sPassword, sBaseURL;
     uno::Reference < io::XStream > xStream;
     uno::Reference < io::XInputStream > xInputStream;
 
     if( sFileName.isEmpty() )
-        aMediaDescriptor[comphelper::MediaDescriptor::PROP_URL()] >>= sFileName;
+        aMediaDescriptor[utl::MediaDescriptor::PROP_URL()] >>= sFileName;
     if( sFileName.isEmpty() )
-        aMediaDescriptor[comphelper::MediaDescriptor::PROP_FILENAME()] >>= sFileName;
-    aMediaDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
-    aMediaDescriptor[comphelper::MediaDescriptor::PROP_STREAM()] >>= xStream;
-    aMediaDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
-    aMediaDescriptor[comphelper::MediaDescriptor::PROP_FILTERNAME()] >>= sFilterName;
-    aMediaDescriptor[comphelper::MediaDescriptor::PROP_FILTEROPTIONS()] >>= sFilterOptions;
-    aMediaDescriptor[comphelper::MediaDescriptor::PROP_PASSWORD()] >>= sPassword;
-    aMediaDescriptor[comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL() ] >>= sBaseURL;
+        aMediaDescriptor[utl::MediaDescriptor::PROP_FILENAME()] >>= sFileName;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_STREAM()] >>= xStream;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= sFilterName;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS()] >>= sFilterOptions;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_PASSWORD()] >>= sPassword;
+    aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL() ] >>= sBaseURL;
     if ( !xInputStream.is() && xStream.is() )
         xInputStream = xStream->getInputStream();
 

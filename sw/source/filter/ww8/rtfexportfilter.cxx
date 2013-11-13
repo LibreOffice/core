@@ -24,10 +24,9 @@
 #include <editsh.hxx>
 #include <unotxdoc.hxx>
 
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-using namespace ::comphelper;
 using namespace ::com::sun::star;
 
 RtfExportFilter::RtfExportFilter( const uno::Reference< uno::XComponentContext >& xCtx) :
@@ -44,9 +43,9 @@ sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    MediaDescriptor aMediaDesc = aDescriptor;
+    utl::MediaDescriptor aMediaDesc = aDescriptor;
     ::uno::Reference< io::XStream > xStream =
-        aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference< io::XStream >() );
+          aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference< io::XStream >() );
     m_pStream = utl::UcbStreamHelper::CreateStream( xStream, sal_True );
     m_aWriter.SetStream(m_pStream);
 

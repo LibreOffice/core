@@ -22,7 +22,7 @@
 #include <osl/module.hxx>
 #include <tools/solar.h>
 #include <RtfFilter.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <rtftok/RTFDocument.hxx>
@@ -39,7 +39,7 @@
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using ::comphelper::MediaDescriptor;
+using utl::MediaDescriptor;
 
 RtfFilter::RtfFilter( const uno::Reference< uno::XComponentContext >& rxContext)  :
     m_xContext( rxContext )

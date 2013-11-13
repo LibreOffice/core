@@ -41,7 +41,7 @@
 #include "reportformula.hxx"
 
 #include <comphelper/documentconstants.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -1685,7 +1685,7 @@ void OReportController::impl_initialize( )
             m_xFormatter.set(util::NumberFormatter::create(m_xContext), UNO_QUERY_THROW);
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
-            ::comphelper::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
+            utl::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
             OUString sHierarchicalDocumentName;
             sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",sHierarchicalDocumentName);
 

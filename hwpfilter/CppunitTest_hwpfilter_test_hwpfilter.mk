@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_ure,hwpfilter_test_hwpfilter))
 
 $(eval $(call gb_CppunitTest_use_components,hwpfilter_test_hwpfilter,\
     configmgr/source/configmgr \
+    framework/util/fwk \
     hwpfilter/source/hwp \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

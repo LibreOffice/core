@@ -72,7 +72,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <tools/urlobj.hxx>
 
 #include <rtl/instance.hxx>
@@ -440,19 +440,19 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
         // stream exists => deep detection (with preselection ... if possible)
         if (xInStream.is())
         {
-            ::comphelper::MediaDescriptor aDescriptor;
+            utl::MediaDescriptor aDescriptor;
 
-            aDescriptor[::comphelper::MediaDescriptor::PROP_URL()               ] <<= sURL;
-            aDescriptor[::comphelper::MediaDescriptor::PROP_INPUTSTREAM()       ] <<= xInStream;
-            aDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= rMedium.GetInteractionHandler();
+            aDescriptor[utl::MediaDescriptor::PROP_URL()               ] <<= sURL;
+            aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()       ] <<= xInStream;
+            aDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= rMedium.GetInteractionHandler();
 
             if ( !m_rImpl.aName.isEmpty() )
-                aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= m_rImpl.aName;
+                aDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= m_rImpl.aName;
 
             if ( pOldFilter )
             {
-                aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= OUString( pOldFilter->GetTypeName()   );
-                aDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= OUString( pOldFilter->GetFilterName() );
+                aDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= OUString( pOldFilter->GetTypeName()   );
+                aDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= OUString( pOldFilter->GetFilterName() );
             }
 
             uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();

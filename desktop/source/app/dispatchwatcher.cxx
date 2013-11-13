@@ -48,7 +48,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <tools/urlobj.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <vector>
 #include <osl/thread.hxx>
@@ -231,7 +231,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
         if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
         {
-            aArgs[nCount-1].Name = ::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE();
+            aArgs[nCount-1].Name = utl::MediaDescriptor::PROP_DOCUMENTSERVICE();
             aArgs[nCount-1].Value <<= aDispatchRequest.aPreselectedFactory;
         }
 

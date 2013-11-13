@@ -94,7 +94,6 @@
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -267,6 +266,7 @@
 #include <unotools/fontcvt.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>

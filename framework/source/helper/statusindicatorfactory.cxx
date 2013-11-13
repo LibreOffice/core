@@ -41,7 +41,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
@@ -392,9 +392,9 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
             xModel = xController->getModel();
         if (xModel.is())
         {
-            ::comphelper::MediaDescriptor lDocArgs(xModel->getArgs());
+            utl::MediaDescriptor lDocArgs(xModel->getArgs());
             bHiddenDoc = lDocArgs.getUnpackedValueOrDefault(
-                ::comphelper::MediaDescriptor::PROP_HIDDEN(),
+                utl::MediaDescriptor::PROP_HIDDEN(),
                 (sal_Bool)sal_False);
         }
     }

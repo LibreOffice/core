@@ -21,7 +21,7 @@
 #include "servicenames.hxx"
 #include "MediaDescriptorHelper.hxx"
 #include "macros.hxx"
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -78,9 +78,9 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     uno::Reference< frame::XModel >         xModel;
     bool bHaveLoadedModel = false;
 
-    comphelper::MediaDescriptor aMediaDescriptor(rMediaDescriptor);
+    utl::MediaDescriptor aMediaDescriptor(rMediaDescriptor);
     {
-        comphelper::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_MODEL()));
+        utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_MODEL()));
         if( aIt != aMediaDescriptor.end())
         {
             xModel.set( (*aIt).second.get< uno::Reference< frame::XModel > >());
@@ -136,7 +136,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     if(!bHaveLoadedModel)
         try
         {
-            comphelper::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_URL()));
+            utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_URL()));
             if( aIt != aMediaDescriptor.end())
             {
                 OUString aURL( (*aIt).second.get< OUString >());

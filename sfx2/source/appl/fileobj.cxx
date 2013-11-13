@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sfx2/docfac.hxx>
 #include <com/sun/star/document/XTypeDetection.hpp>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/opengrf.hxx>
@@ -392,8 +392,8 @@ OUString impl_getFilter( const OUString& _rURL )
                 css::uno::UNO_QUERY );
         if ( xTypeDetection.is() )
         {
-            ::comphelper::MediaDescriptor aDescr;
-            aDescr[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= OUString( _rURL );
+            utl::MediaDescriptor aDescr;
+            aDescr[ utl::MediaDescriptor::PROP_URL() ] <<= OUString( _rURL );
             css::uno::Sequence< css::beans::PropertyValue > aDescrList =
                 aDescr.getAsConstPropertyValueList();
             OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, sal_True );

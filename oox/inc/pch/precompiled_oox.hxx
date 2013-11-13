@@ -327,7 +327,6 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -395,6 +394,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>

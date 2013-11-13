@@ -55,6 +55,8 @@ namespace com { namespace sun { namespace star {
 
 namespace comphelper {
     class IDocPasswordVerifier;
+}
+namespace utl {
     class MediaDescriptor;
 }
 
@@ -141,7 +143,7 @@ public:
     ::comphelper::SequenceAsHashMap& getFilterData() const;
 
     /** Returns the media descriptor. */
-    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
+    utl::MediaDescriptor& getMediaDescriptor() const;
 
     /** Returns the URL of the imported or exported file. */
     const OUString& getFileUrl() const;
@@ -253,11 +255,11 @@ public:
     // ------------------------------------------------------------------------
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+                        implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
-                        implGetOutputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+                        implGetOutputStream( utl::MediaDescriptor& rMediaDesc ) const;
 
-    virtual bool        implFinalizeExport( ::comphelper::MediaDescriptor& rMediaDescriptor );
+    virtual bool        implFinalizeExport( utl::MediaDescriptor& rMediaDescriptor );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
                         getMainDocumentStream( ) const;

@@ -66,7 +66,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -534,7 +533,6 @@
 #include <comphelper/flagguard.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/makesequence.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
@@ -775,6 +773,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/localisationoptions.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/misccfg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>

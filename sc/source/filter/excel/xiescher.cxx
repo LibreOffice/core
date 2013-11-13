@@ -106,7 +106,6 @@
 
 #include "namebuff.hxx"
 #include <boost/shared_ptr.hpp>
-#include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 
 using ::com::sun::star::uno::makeAny;

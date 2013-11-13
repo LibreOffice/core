@@ -19,7 +19,7 @@
 
 #include "vbahelper/vbadocumentsbase.hxx"
 
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -251,8 +251,8 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
         throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
 
     // prepare the media descriptor
-    ::comphelper::MediaDescriptor aMediaDesc;
-    aMediaDesc[ ::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE() ] <<= document::MacroExecMode::USE_CONFIG;
+    utl::MediaDescriptor aMediaDesc;
+    aMediaDesc[ utl::MediaDescriptor::PROP_MACROEXECUTIONMODE() ] <<= document::MacroExecMode::USE_CONFIG;
     aMediaDesc.setComponentDataEntry( "ApplyFormDesignMode" , uno::Any( false ) );
 
     // create the new document

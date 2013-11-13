@@ -25,7 +25,6 @@
 #include <osl/diagnose.h>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/classids.hxx>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>

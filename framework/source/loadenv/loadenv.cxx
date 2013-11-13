@@ -210,18 +210,18 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 }
 
 //-----------------------------------------------
-::comphelper::MediaDescriptor impl_mergeMediaDescriptorWithMightExistingModelArgs(const css::uno::Sequence< css::beans::PropertyValue >& lOutsideDescriptor)
+utl::MediaDescriptor impl_mergeMediaDescriptorWithMightExistingModelArgs(const css::uno::Sequence< css::beans::PropertyValue >& lOutsideDescriptor)
 {
-    ::comphelper::MediaDescriptor lDescriptor(lOutsideDescriptor);
+    utl::MediaDescriptor lDescriptor(lOutsideDescriptor);
     css::uno::Reference< css::frame::XModel > xModel     = lDescriptor.getUnpackedValueOrDefault(
-                                                            ::comphelper::MediaDescriptor::PROP_MODEL (),
+                                                            utl::MediaDescriptor::PROP_MODEL (),
                                                             css::uno::Reference< css::frame::XModel > ());
     if (xModel.is ())
     {
-        ::comphelper::MediaDescriptor lModelDescriptor(xModel->getArgs());
-        ::comphelper::MediaDescriptor::iterator pIt = lModelDescriptor.find( ::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE() );
+        utl::MediaDescriptor lModelDescriptor(xModel->getArgs());
+        utl::MediaDescriptor::iterator pIt = lModelDescriptor.find( utl::MediaDescriptor::PROP_MACROEXECUTIONMODE() );
         if ( pIt != lModelDescriptor.end() )
-            lDescriptor[::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()] = pIt->second;
+            lDescriptor[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()] = pIt->second;
     }
 
     return lDescriptor;
@@ -269,7 +269,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
     // make URL part of the MediaDescriptor
     // It doesn't mater, if it is already an item of it.
     // It must be the same value ... so we can overwrite it :-)
-    m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_URL()] <<= sURL;
+    m_lMediaDescriptor[utl::MediaDescriptor::PROP_URL()] <<= sURL;
 
     // parse it - because some following code require that
     m_aURL.Complete = sURL;
@@ -279,10 +279,10 @@ void LoadEnv::initializeLoading(const OUString&                                 
     // BTW: Split URL and JumpMark ...
     // Because such mark is an explicit value of the media descriptor!
     if (!m_aURL.Mark.isEmpty())
-        m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_JUMPMARK()] <<= m_aURL.Mark;
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_JUMPMARK()] <<= m_aURL.Mark;
 
     // By the way: remove the old and deprecated value "FileName" from the descriptor!
-    ::comphelper::MediaDescriptor::iterator pIt = m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_FILENAME());
+    utl::MediaDescriptor::iterator pIt = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FILENAME());
     if (pIt != m_lMediaDescriptor.end())
         m_lMediaDescriptor.erase(pIt);
 
@@ -295,8 +295,8 @@ void LoadEnv::initializeLoading(const OUString&                                 
     // UI mode
     const bool bUIMode =
         ( ( m_eFeature & E_WORK_WITH_UI )                                                                          == E_WORK_WITH_UI ) &&
-        ( m_lMediaDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_HIDDEN() , sal_False ) == sal_False      ) &&
-        ( m_lMediaDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_PREVIEW(), sal_False ) == sal_False      );
+        ( m_lMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN() , sal_False ) == sal_False      ) &&
+        ( m_lMediaDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW(), sal_False ) == sal_False      );
 
     initializeUIDefaults(
         m_xContext,
@@ -311,7 +311,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
 
 
 void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
-                                    ::comphelper::MediaDescriptor& io_lMediaDescriptor, const bool i_bUIMode,
+                                    utl::MediaDescriptor& io_lMediaDescriptor, const bool i_bUIMode,
                                     QuietInteraction** o_ppQuietInteraction )
 {
     css::uno::Reference< css::task::XInteractionHandler > xInteractionHandler;
@@ -345,17 +345,17 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
 
     if (
         (xInteractionHandler.is()                                                                                       ) &&
-        (io_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()) == io_lMediaDescriptor.end())
+        (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_INTERACTIONHANDLER()) == io_lMediaDescriptor.end())
        )
     {
-        io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
+        io_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
     }
 
-    if (io_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()) == io_lMediaDescriptor.end())
-        io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()] <<= nMacroMode;
+    if (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()) == io_lMediaDescriptor.end())
+        io_lMediaDescriptor[utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()] <<= nMacroMode;
 
-    if (io_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_UPDATEDOCMODE()) == io_lMediaDescriptor.end())
-        io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
+    if (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_UPDATEDOCMODE()) == io_lMediaDescriptor.end())
+        io_lMediaDescriptor[utl::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
 }
 
 
@@ -613,11 +613,11 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
         return E_CAN_BE_LOADED;
 
     // using of an existing input stream
-    ::comphelper::MediaDescriptor                 stlMediaDescriptor(lMediaDescriptor);
-    ::comphelper::MediaDescriptor::const_iterator pIt;
+    utl::MediaDescriptor                 stlMediaDescriptor(lMediaDescriptor);
+    utl::MediaDescriptor::const_iterator pIt;
     if (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_PRIVATE_STREAM))
     {
-        pIt = stlMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_INPUTSTREAM());
+        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_INPUTSTREAM());
         css::uno::Reference< css::io::XInputStream > xStream;
         if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xStream;
@@ -630,7 +630,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     // using of a full featured document
     if (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_PRIVATE_OBJECT))
     {
-        pIt = stlMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_MODEL());
+        pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_MODEL());
         css::uno::Reference< css::frame::XModel > xModel;
         if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xModel;
@@ -816,9 +816,9 @@ void LoadEnv::impl_detectTypeAndFilter()
     {
         // Orcus type detected.  Skip the normal type detection process.
         m_lMediaDescriptor << lDescriptor;
-        m_lMediaDescriptor[comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sType;
-        m_lMediaDescriptor[comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
-        m_lMediaDescriptor[comphelper::MediaDescriptor::PROP_FILTERPROVIDER()] <<= OUString("orcus");
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERPROVIDER()] <<= OUString("orcus");
         return;
     }
 
@@ -838,10 +838,10 @@ void LoadEnv::impl_detectTypeAndFilter()
 
     // detection was successfully => update the descriptor member of this class
     m_lMediaDescriptor << lDescriptor;
-    m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sType;
+    m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
     // Is there an already detected (may be preselected) filter?
     // see below ...
-    sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), OUString());
+    sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
 
     aWriteLock.unlock();
     // <- SAFE
@@ -866,7 +866,7 @@ void LoadEnv::impl_detectTypeAndFilter()
             {
                 // SAFE ->
                 aWriteLock.lock();
-                m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+                m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
                 aWriteLock.unlock();
                 // <- SAFE
             }
@@ -901,9 +901,9 @@ void LoadEnv::impl_detectTypeAndFilter()
         // SAFE ->
         aWriteLock.lock();
         // Don't overwrite external decisions! See comments before ...
-        ::comphelper::MediaDescriptor::const_iterator pAsTemplateItem = m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_ASTEMPLATE());
+        utl::MediaDescriptor::const_iterator pAsTemplateItem = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_ASTEMPLATE());
         if (pAsTemplateItem == m_lMediaDescriptor.end())
-            m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
+            m_lMediaDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
         aWriteLock.unlock();
         // <- SAFE
     }
@@ -917,7 +917,7 @@ sal_Bool LoadEnv::impl_handleContent()
     ReadGuard aReadLock(m_aLock);
 
     // the type must exist inside the descriptor ... otherwise this class is implemented wrong :-)
-    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), OUString());
+    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
     if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
@@ -1027,7 +1027,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
         // SAFE ->
         aReadLock.lock();
         css::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
-                                                                                ::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER(),
+                                                                                utl::MediaDescriptor::PROP_INTERACTIONHANDLER(),
                                                                                 css::uno::Reference< css::task::XInteractionHandler >());
         aReadLock.unlock();
         // <- SAFE
@@ -1138,10 +1138,10 @@ sal_Bool LoadEnv::impl_loadContent()
     // So we prevent our code against wrong using. Why?
     // It could be, that using of this progress could make trouble. e.g. He make window visible ...
     // but shouldn't do that. But if no indicator is available ... nobody has a chance to do that!
-    sal_Bool                                           bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()         , sal_False                                           );
-    sal_Bool                                           bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_MINIMIZED()      , sal_False                                           );
-    sal_Bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PREVIEW()        , sal_False                                           );
-    css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
+    sal_Bool                                           bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()         , sal_False                                           );
+    sal_Bool                                           bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED()      , sal_False                                           );
+    sal_Bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW()        , sal_False                                           );
+    css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
     if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
     {
@@ -1151,7 +1151,7 @@ sal_Bool LoadEnv::impl_loadContent()
         {
             xProgress = xProgressFactory->createStatusIndicator();
             if (xProgress.is())
-                m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
+                m_lMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
         }
     }
 
@@ -1221,7 +1221,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     // Otherwise ...
     // We need this type information to locate an registered frame loader
     // Without such information we can't work!
-    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), OUString());
+    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
     if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
@@ -1306,9 +1306,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // or better its not allowed for some requests in general :-)
     if (
         ( ! TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                               ) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
-//      (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()     , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
+//      (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()     , sal_False) == sal_True) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
@@ -1337,7 +1337,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // Note: To detect if a document was already loaded before
     // we check URLs here only. But might the existing and the required
     // document has different versions! Then its URLs are the same ...
-    sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_VERSION(), (sal_Int16)(-1));
+    sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), (sal_Int16)(-1));
 
     // will be used to save the first hidden frame referring the searched model
     // Normally we are interested on visible frames ... but if there is no such visible
@@ -1384,9 +1384,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // and decide if its really the same then the one will be.
             // It must be visible and must use the same file revision ...
             // or must not have any file revision set (-1 == -1!)
-            ::comphelper::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
+            utl::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
 
-            if (lOldDocDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_VERSION(), (sal_Int32)(-1)) != nNewVersion)
+            if (lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), (sal_Int32)(-1)) != nNewVersion)
             {
                 xTask.clear ();
                 continue;
@@ -1395,7 +1395,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // Hidden frames are special.
             // They will be used as "last chance" if there is no visible frame pointing to the same model.
             // Safe the result but continue with current loop might be looking for other visible frames.
-            ::sal_Bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False);
+            ::sal_Bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
             if (
                 (   bIsHidden       ) &&
                 ( ! xHiddenTask.is())
@@ -1466,7 +1466,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // It doesn't matter if somewhere wants to create a new view
     // or open a new untitled document ...
     // The only exception form that - hidden frames!
-    if (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False) == sal_True)
+    if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False) == sal_True)
         return css::uno::Reference< css::frame::XFrame >();
 
     css::uno::Reference< css::frame::XFramesSupplier > xSupplier( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY);
@@ -1483,8 +1483,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
 
     // These states indicates a wish for creation of a new view in general.
     if (
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
@@ -1602,8 +1602,8 @@ void LoadEnv::impl_reactForLoadingState()
         // Note: We show new created frames here only.
         // We dont hide already visible frames here ...
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
-        sal_Bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False);
-        sal_Bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_MINIMIZED(), sal_False);
+        sal_Bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
+        sal_Bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), sal_False);
 
         if (bMinimized)
         {
@@ -1623,7 +1623,7 @@ void LoadEnv::impl_reactForLoadingState()
         // Note: Only if an existing property "FrameName" is given by this media descriptor,
         // it should be used. Otherwise we should do nothing. May be the outside code has already
         // set a frame name on the target!
-        ::comphelper::MediaDescriptor::const_iterator pFrameName = m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_FRAMENAME());
+        utl::MediaDescriptor::const_iterator pFrameName = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FRAMENAME());
         if (pFrameName != m_lMediaDescriptor.end())
         {
             OUString sFrameName;
@@ -1722,7 +1722,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     if ( pWindow )
     {
         bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
-                ::comphelper::MediaDescriptor::PROP_PREVIEW(), sal_False) );
+                utl::MediaDescriptor::PROP_PREVIEW(), sal_False) );
 
         bool bForceFrontAndFocus(false);
         if ( !preview )
@@ -1788,7 +1788,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
     // no filter -> no module -> no persistent window state
     OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(
-                                    ::comphelper::MediaDescriptor::PROP_FILTERNAME(),
+                                    utl::MediaDescriptor::PROP_FILTERNAME(),
                                     OUString());
     if (sFilter.isEmpty())
         return;

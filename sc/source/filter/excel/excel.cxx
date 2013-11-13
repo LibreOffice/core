@@ -26,7 +26,6 @@
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <tools/globname.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XFilter.hpp>

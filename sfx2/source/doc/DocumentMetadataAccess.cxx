@@ -40,7 +40,7 @@
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/makesequence.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -552,7 +552,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                 try {
                     OUString mimeType;
                     xDirProps->getPropertyValue(
-                            ::comphelper::MediaDescriptor::PROP_MEDIATYPE() )
+                            utl::MediaDescriptor::PROP_MEDIATYPE() )
                         >>= mimeType;
                     if (mimeType.matchAsciiL(s_odfmime, sizeof(s_odfmime) - 1))
                     {
@@ -655,7 +655,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
             try {
                 OUString mimeType;
                 xDirProps->getPropertyValue(
-                        ::comphelper::MediaDescriptor::PROP_MEDIATYPE() )
+                        utl::MediaDescriptor::PROP_MEDIATYPE() )
                     >>= mimeType;
                 if (mimeType.matchAsciiL(s_odfmime, sizeof(s_odfmime) - 1)) {
                     OSL_TRACE("writeStream: "
@@ -1275,13 +1275,13 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     lang::WrappedTargetException)
 {
     uno::Reference<io::XInputStream> xIn;
-    ::comphelper::MediaDescriptor md(i_rMedium);
+    utl::MediaDescriptor md(i_rMedium);
     OUString URL;
-    md[ ::comphelper::MediaDescriptor::PROP_URL() ] >>= URL;
+    md[ utl::MediaDescriptor::PROP_URL() ] >>= URL;
     OUString BaseURL;
-    md[ ::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL() ] >>= BaseURL;
+    md[ utl::MediaDescriptor::PROP_DOCUMENTBASEURL() ] >>= BaseURL;
     if (md.addInputStream()) {
-        md[ ::comphelper::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
+        md[ utl::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
     }
     if (!xIn.is() && URL.isEmpty()) {
         throw lang::IllegalArgumentException(OUString(
@@ -1324,7 +1324,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         }
     }
     uno::Reference<task::XInteractionHandler> xIH;
-    md[ ::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER() ] >>= xIH;
+    md[ utl::MediaDescriptor::PROP_INTERACTIONHANDLER() ] >>= xIH;
     loadMetadataFromStorage(xStorage, xBaseURI, xIH);
 }
 
@@ -1334,9 +1334,9 @@ DocumentMetadataAccess::storeMetadataToMedium(
 throw (uno::RuntimeException, lang::IllegalArgumentException,
     lang::WrappedTargetException)
 {
-    ::comphelper::MediaDescriptor md(i_rMedium);
+    utl::MediaDescriptor md(i_rMedium);
     OUString URL;
-    md[ ::comphelper::MediaDescriptor::PROP_URL() ] >>= URL;
+    md[ utl::MediaDescriptor::PROP_URL() ] >>= URL;
     if (URL.isEmpty()) {
         throw lang::IllegalArgumentException(OUString(
             "DocumentMetadataAccess::storeMetadataToMedium: "
@@ -1360,15 +1360,15 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "cannot get Storage"), *this);
     }
     // set MIME type of the storage
-    ::comphelper::MediaDescriptor::const_iterator iter
-        = md.find(::comphelper::MediaDescriptor::PROP_MEDIATYPE());
+    utl::MediaDescriptor::const_iterator iter
+        = md.find(utl::MediaDescriptor::PROP_MEDIATYPE());
     if (iter != md.end()) {
         uno::Reference< beans::XPropertySet > xProps(xStorage,
             uno::UNO_QUERY_THROW);
         try {
             // this is NOT supported in FileSystemStorage
             xProps->setPropertyValue(
-                ::comphelper::MediaDescriptor::PROP_MEDIATYPE(),
+                utl::MediaDescriptor::PROP_MEDIATYPE(),
                 iter->second);
         } catch (const uno::Exception &) { }
     }

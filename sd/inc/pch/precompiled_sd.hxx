@@ -352,7 +352,6 @@
 #include <comphelper/expandmacro.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -838,6 +837,7 @@
 #include <unotools/linguprops.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/saveopt.hxx>

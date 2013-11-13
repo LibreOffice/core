@@ -44,7 +44,6 @@
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
 #include <comphelper/interaction.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>

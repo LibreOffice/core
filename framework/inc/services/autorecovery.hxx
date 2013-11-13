@@ -41,7 +41,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/evntpost.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -800,13 +800,13 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
         //---------------------------------------
         // TODO document me
         void implts_openOneDoc(const OUString&               sURL       ,
-                                     ::comphelper::MediaDescriptor& lDescriptor,
+                                     utl::MediaDescriptor& lDescriptor,
                                      AutoRecovery::TDocumentInfo&   rInfo      );
 
         //---------------------------------------
         // TODO document me
         void implts_generateNewTempURL(const OUString&               sBackupPath     ,
-                                             ::comphelper::MediaDescriptor& rMediaDescriptor,
+                                             utl::MediaDescriptor& rMediaDescriptor,
                                              AutoRecovery::TDocumentInfo&   rInfo           );
 
         //---------------------------------------
@@ -1006,11 +1006,11 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
                     is used to set the new created progress as parameter on these set.
          */
         void impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
-                                          ::comphelper::MediaDescriptor&             rArgs    ,
+                                          utl::MediaDescriptor&             rArgs    ,
                                     const css::uno::Reference< css::frame::XFrame >& xNewFrame);
 
         void impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
-                                       ::comphelper::MediaDescriptor&             rArgs    ,
+                                       utl::MediaDescriptor&             rArgs    ,
                                  const css::uno::Reference< css::frame::XFrame >& xNewFrame);
 
         //---------------------------------------

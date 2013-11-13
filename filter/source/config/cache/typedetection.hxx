@@ -22,7 +22,7 @@
 #include "basecontainer.hxx"
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 
@@ -77,7 +77,7 @@ private:
      * Get all format types that we handle.
      */
     void impl_getAllFormatTypes(
-        const com::sun::star::util::URL& aParsedURL, comphelper::MediaDescriptor& rDescriptor,
+        const com::sun::star::util::URL& aParsedURL, utl::MediaDescriptor& rDescriptor,
         FlatDetection& rFlatTypes);
 
     //---------------------------------------
@@ -126,7 +126,7 @@ private:
                     An empty value if detection failed. .... but see rLastChance
                     for additional returns!
      */
-    OUString impl_detectTypeFlatAndDeep(      ::comphelper::MediaDescriptor& rDescriptor   ,
+    OUString impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                const FlatDetection&                 lFlatTypes    ,
                                                      sal_Bool                       bAllowDeep    ,
                                                      OUStringList&                  rUsedDetectors,
@@ -144,7 +144,7 @@ private:
         @param      rDescriptor
                     a stl representation of the MediaDescriptor as in/out parameter.
      */
-    void impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor);
+    void impl_seekStreamToZero(utl::MediaDescriptor& rDescriptor);
 
     //---------------------------------------
 
@@ -166,7 +166,7 @@ private:
                     a stl representation of the MediaDescriptor as in/out parameter.
      */
     OUString impl_askDetectService(const OUString&               sDetectService,
-                                                ::comphelper::MediaDescriptor& rDescriptor   );
+                                                utl::MediaDescriptor& rDescriptor   );
 
     //---------------------------------------
 
@@ -183,7 +183,7 @@ private:
         @return     [string]
                     a valid type name or an empty string if user canceled interaction.
      */
-    OUString impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor);
+    OUString impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor);
 
     //---------------------------------------
 
@@ -220,7 +220,7 @@ private:
                     Note: If an interactionHandler is part of the given descriptor too, it was already used.
                     Means: let the exception pass trough the top most interface method!
      */
-    void impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
+    void impl_openStream(utl::MediaDescriptor& rDescriptor)
         throw (css::uno::Exception);
 
     //---------------------------------------
@@ -243,7 +243,7 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    sal_Bool impl_validateAndSetTypeOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
+    sal_Bool impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                  const OUString&               sType      );
 
     //---------------------------------------
@@ -265,7 +265,7 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    sal_Bool impl_validateAndSetFilterOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
+    sal_Bool impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                    const OUString&               sFilter    );
 
     //---------------------------------------
@@ -281,7 +281,7 @@ private:
                     reference to the MediaDescriptor (represented by an easy-to-use
                     stl interface!), which should be patched.
      */
-    void impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescriptor& rDescriptor);
+    void impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor);
 
     //---------------------------------------
 
@@ -315,7 +315,7 @@ private:
                     rDescriptor will be changed by selecting another filter.
                     (see code)
      */
-    void impl_checkResultsAndAddBestFilter(::comphelper::MediaDescriptor& rDescriptor,
+    void impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDescriptor,
                                            OUString&               sType      );
 
 //-------------------------------------------

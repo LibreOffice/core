@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_libraries,scriptframe,\
 	sal \
 	tl \
 	ucbhelper \
+	utl \
 	$(gb_UWINAPI) \
 ))
 

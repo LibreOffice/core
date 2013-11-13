@@ -22,7 +22,7 @@
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <services.h>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -181,8 +181,8 @@ OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyV
     OUString sTypeName;
 
     // Analyze given descriptor to find filename or input stream or ...
-    ::comphelper::MediaDescriptor aDescriptor( lDescriptor );
-    OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_URL(), OUString() );
+    utl::MediaDescriptor aDescriptor( lDescriptor );
+    OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
 
     long nLength = sURL.getLength();
     if ( ( nLength > 4 ) && sURL.matchIgnoreAsciiCase( ".oxt", nLength-4 ) )
@@ -193,7 +193,7 @@ OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyV
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
         sTypeName = "oxt_OpenOffice_Extension";
-        aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
+        aDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
 

@@ -26,7 +26,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
@@ -52,7 +52,7 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
 
 using ::com::sun::star::container::XNameAccess;
-using ::comphelper::MediaDescriptor;
+using utl::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 using ::oox::ole::OleObjectHelper;
 using ::oox::ole::VbaProject;

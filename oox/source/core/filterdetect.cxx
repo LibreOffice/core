@@ -22,7 +22,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "oox/core/fastparser.hxx"
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uri;
 
-using comphelper::MediaDescriptor;
+using utl::MediaDescriptor;
 using comphelper::SequenceAsHashMap;
 using comphelper::IDocPasswordVerifier;
 using comphelper::DocPasswordVerifierResult;

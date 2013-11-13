@@ -12,7 +12,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <config_version.h>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>

@@ -54,7 +54,7 @@ using namespace ::com::sun::star::xml::sax;
 
 #include <assert.h>
 
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include "hwpfile.h"
 #include "hcode.h"
@@ -273,11 +273,11 @@ OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::s
 {
     OUString sTypeName;
 
-    comphelper::MediaDescriptor aDescriptor(rDescriptor);
+    utl::MediaDescriptor aDescriptor(rDescriptor);
     aDescriptor.addInputStream();
 
     Reference< XInputStream > xInputStream(
-        aDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
 
     if (xInputStream.is())
     {

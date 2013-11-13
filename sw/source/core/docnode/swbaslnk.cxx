@@ -23,7 +23,6 @@
 
 #include <osl/thread.hxx>
 #include <salhelper/condition.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/objsh.hxx>

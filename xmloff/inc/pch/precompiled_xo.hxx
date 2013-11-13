@@ -489,7 +489,6 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
@@ -563,6 +562,7 @@
 #include <unotools/datetime.hxx>
 #include <unotools/docinfohelper.hxx>
 #include <unotools/fontcvt.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>

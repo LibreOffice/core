@@ -447,7 +447,6 @@
 #include <comphelper/flagguard.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/makesequence.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scoped_disposing_ptr.hxx>
@@ -1020,6 +1019,7 @@
 #include <unotools/linguprops.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/misccfg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>

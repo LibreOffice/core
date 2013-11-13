@@ -154,7 +154,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -221,6 +220,7 @@
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/embeddedfontshelper.hxx>

@@ -19,7 +19,7 @@
 
 #include "soundhandler.hxx"
 
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -267,10 +267,10 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
     {
     //close streams otherwise on windows we can't reopen the file in the
     //media player when we pass the url to directx as it'll already be open
-        ::comphelper::MediaDescriptor aDescriptor(lDescriptor);
+        utl::MediaDescriptor aDescriptor(lDescriptor);
 
     css::uno::Reference< css::io::XInputStream > xInputStream =
-        aDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_INPUTSTREAM(),
+        aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INPUTSTREAM(),
         css::uno::Reference< css::io::XInputStream >());
     if (xInputStream.is()) xInputStream->closeInput();
     }
@@ -344,8 +344,8 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
     OUString sTypeName;
 
     // Analyze given descriptor to find filename or input stream or ...
-    ::comphelper::MediaDescriptor aDescriptor(lDescriptor);
-    OUString                      sURL       = aDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), OUString());
+    utl::MediaDescriptor aDescriptor(lDescriptor);
+    OUString                      sURL       = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
 
     if (
         (sURL.getLength()           ) &&
@@ -357,7 +357,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
         sTypeName = "wav_Wave_Audio_File";
-        aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
+        aDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
 

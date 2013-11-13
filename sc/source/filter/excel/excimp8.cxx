@@ -23,7 +23,6 @@
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <unotools/fltrcfg.hxx>
 
 #include <vcl/wmf.hxx>

@@ -21,7 +21,6 @@
 #include "macros.hxx"
 #include "MediaDescriptorHelper.hxx"
 #include "ContainerHelper.hxx"
-#include <comphelper/mediadescriptor.hxx>
 
 // for ERRCODE_SFX_GENERAL etc.
 // header contains only macros

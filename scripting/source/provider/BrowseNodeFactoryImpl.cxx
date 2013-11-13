@@ -24,7 +24,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -332,10 +332,10 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
             css::uno::Reference< css::frame::XController > xCurrentController = model->getCurrentController();
             if( xCurrentController.is() )
             {
-                comphelper::MediaDescriptor aMD( model->getArgs() );
+                utl::MediaDescriptor aMD( model->getArgs() );
                 sal_Bool bDefault = false;
-                sal_Bool bHidden  = aMD.getUnpackedValueOrDefault( comphelper::MediaDescriptor::PROP_HIDDEN(),  bDefault );
-                sal_Bool bPreview = aMD.getUnpackedValueOrDefault( comphelper::MediaDescriptor::PROP_PREVIEW(), bDefault );
+                sal_Bool bHidden  = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_HIDDEN(),  bDefault );
+                sal_Bool bPreview = aMD.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_PREVIEW(), bDefault );
                 if( !bHidden && !bPreview )
                 {
                     Reference< document::XEmbeddedScripts > xScripts( model, UNO_QUERY );

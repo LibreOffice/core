@@ -23,7 +23,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <dmapper/DomainMapper.hxx>
@@ -41,7 +41,7 @@
 #include <oox/helper/graphichelper.hxx>
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using ::comphelper::MediaDescriptor;
+using utl::MediaDescriptor;
 
 
 

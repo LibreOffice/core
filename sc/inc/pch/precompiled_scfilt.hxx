@@ -332,7 +332,6 @@
 #include <com/sun/star/util/XProtectable.hpp>
 #include <comphelper/classids.hxx>
 #include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
@@ -525,6 +524,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>

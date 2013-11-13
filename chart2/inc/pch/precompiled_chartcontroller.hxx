@@ -157,7 +157,6 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/InlineContainer.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -301,6 +300,7 @@
 #include <tools/gen.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>

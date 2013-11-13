@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,scd,\
 	svt \
 	tl \
 	ucbhelper \
+	utl \
 	vcl \
 	$(gb_UWINAPI) \
 ))

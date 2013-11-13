@@ -17,11 +17,11 @@
 #include "sfx2/app.hxx"
 #include "sfx2/docfile.hxx"
 #include "sfx2/sfxsids.hrc"
-#include "comphelper/mediadescriptor.hxx"
+#include "unotools/mediadescriptor.hxx"
 #include "sot/storage.hxx"
 
 using namespace com::sun::star;
-using comphelper::MediaDescriptor;
+using utl::MediaDescriptor;
 
 ScExcelBiffDetect::ScExcelBiffDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ ) {}
 ScExcelBiffDetect::~ScExcelBiffDetect() {}

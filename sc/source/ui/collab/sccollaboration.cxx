@@ -12,7 +12,7 @@
 #include "docsh.hxx"
 #include "sendfunc.hxx"
 #include <com/sun/star/document/XDocumentRecovery.hpp>
-#include <comphelper/mediadescriptor.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 
@@ -50,9 +50,9 @@ void ScCollaboration::SaveAndSendFile( TpContact* pContact ) const
     OUString aFileURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
 
-    ::comphelper::MediaDescriptor aDescriptor;
+    utl::MediaDescriptor aDescriptor;
     // some issue with hyperlinks:
-    aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= OUString();
+    aDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= OUString();
     try {
         css::uno::Reference< css::document::XDocumentRecovery > xDocRecovery(
                     mpScDocShell->GetBaseModel(), css::uno::UNO_QUERY_THROW);

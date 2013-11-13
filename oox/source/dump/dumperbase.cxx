@@ -47,7 +47,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 
-using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 namespace {
