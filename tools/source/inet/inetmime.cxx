@@ -178,7 +178,7 @@ namespace unnamed_tools_inetmime {
 void appendISO88591(OUString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd)
 {
-    xub_StrLen nLength = static_cast< xub_StrLen >(pEnd - pBegin);
+    sal_Int32 nLength = pEnd - pBegin;
     sal_Unicode * pBuffer = new sal_Unicode[nLength];
     for (sal_Unicode * p = pBuffer; pBegin != pEnd;)
         *p++ = sal_uChar(*pBegin++);
@@ -2670,7 +2670,7 @@ OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                 if (eType == HEADER_FIELD_TEXT)
                     sDecoded += OUString(
                         pUnicodeBuffer,
-                        static_cast< xub_StrLen >(nUnicodeSize));
+                        static_cast< sal_Int32 >(nUnicodeSize));
                 else if (nCommentLevel == 0)
                 {
                     sEncodedText = OUString(pUnicodeBuffer, nUnicodeSize);
@@ -2781,8 +2781,7 @@ OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                 {
                     appendISO88591(sDecoded, pCopyBegin, p - 1);
                     sal_Unicode aUTF16Buf[2];
-                    xub_StrLen nUTF16Len = static_cast< xub_StrLen >(
-                        putUTF32Character(aUTF16Buf, nCharacter) - aUTF16Buf);
+                    sal_Int32 nUTF16Len = putUTF32Character(aUTF16Buf, nCharacter) - aUTF16Buf;
                     sDecoded += OUString(aUTF16Buf, nUTF16Len);
                     p = pUTF8End;
                     pCopyBegin = p;
