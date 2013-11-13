@@ -739,8 +739,8 @@ void FormulaCompiler::loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar 
         OModuleClient aModuleClient;
         OpCodeList aOpCodeList( nSymbols, rxMap,
                 ((eGrammar == FormulaGrammar::GRAM_OOXML) ?
-                 OpCodeList::SeparatorType::COMMA_BASE :
-                 OpCodeList::SeparatorType::SEMICOLON_BASE));
+                 OpCodeList::COMMA_BASE :
+                 OpCodeList::SEMICOLON_BASE));
 
         fillFromAddInMap( rxMap, eGrammar);
         // Fill from collection for AddIns not already present.
