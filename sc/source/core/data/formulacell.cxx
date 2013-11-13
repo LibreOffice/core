@@ -3329,7 +3329,8 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
     mxGroup->mpCode = pCode; // Move this to the shared location.
-    mxGroup->scheduleCompilation();
+    if (mxGroup->mxCLKernelThread.is())
+        mxGroup->scheduleCompilation();
     return mxGroup;
 }
 
