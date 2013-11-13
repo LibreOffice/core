@@ -1576,29 +1576,6 @@ struct ShapeWritingVisitor
     }
 
 
-    void writeTransformAttribute(const basegfx::B2DHomMatrix rMatrix, rtl::Reference<SvXMLAttributeList>& xAttrs)
-    {
-        basegfx::B2DTuple rScale, rTranslate;
-        double rRotate, rShearX;
-        OUString sTransformValue;
-        if (!rMatrix.decompose(rScale, rTranslate, rRotate, rShearX))
-            return;
-        if (rScale.getX() != 1.0 || rScale.getY() != 1.0)
-            sTransformValue += "scale("+OUString::number(rScale.getX())+" "
-                 +OUString::number(rScale.getY())+") ";
-        if (rTranslate.getX() != 0.0f || rTranslate.getY() != 0.0f)
-            sTransformValue += "translate("+OUString::number(rTranslate.getX()/100.0f)+"mm "
-                 +OUString::number(rTranslate.getY()/100.0f)+"mm) ";
-        if (rRotate != 0.0f)
-            sTransformValue += "rotate("+OUString::number(rRotate)+") ";
-
-        if (rShearX != 0.0f)
-            sTransformValue += "skewX("+OUString::number(rShearX)+") ";
-        if (sTransformValue.isEmpty())
-            return;
-        xAttrs->AddAttribute( "draw:transform", sTransformValue);
-    }
-
     void writeEllipseShape( rtl::Reference<SvXMLAttributeList>&          xAttrs,
                          const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
                          const uno::Reference<xml::dom::XElement>&       xElem,
