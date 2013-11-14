@@ -9,6 +9,7 @@
 
 import gdb
 import gdb.types
+import six
 
 from libreoffice.util import printing
 from libreoffice.util.string import StringPrinterHelper
@@ -86,7 +87,7 @@ class OslFileStatusPrinter(object):
         if etype is not None:
             pretty_etype = '<unknown type>' # in case it's not one of the fields
 
-            for field_name, field_val in fields_to_enum_val.iteritems():
+            for field_name, field_val in six.iteritems(fields_to_enum_val):
                 if etype == field_val:
                     pretty_etype = self.pretty_file_type(field_name)
         else:

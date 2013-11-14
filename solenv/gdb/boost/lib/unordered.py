@@ -19,6 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import gdb
+import six
 
 class Unordered(object):
     '''Common representation of Boost.Unordered types'''
@@ -57,7 +58,7 @@ class Unordered(object):
         assert node_type != None
         return node_type
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
         '''Iterator for Boost.Unordered types'''
 
         def __init__(self, first_bucket, last_bucket, node_type, extractor):
@@ -71,7 +72,7 @@ class Unordered(object):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             if self.node:
                 self.node = self.node.dereference()['next_']
 
