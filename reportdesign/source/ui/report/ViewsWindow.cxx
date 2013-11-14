@@ -948,8 +948,6 @@ namespace
     {
         eEndDragObj,
         eEndAction,
-        eMoveAction,
-        eMarkAction,
         eForceToAnotherPage,
         eBreakAction
     };
@@ -958,12 +956,10 @@ namespace
     private:
         SectionViewAction   m_eAction;
         sal_Bool            m_bCopy;
-        Point               m_aPoint;
 
     public:
         ApplySectionViewAction( sal_Bool _bCopy ) : m_eAction( eEndDragObj ), m_bCopy( _bCopy ) { }
         ApplySectionViewAction(SectionViewAction _eAction = eEndAction ) : m_eAction( _eAction ) { }
-        ApplySectionViewAction( const Point& _rPoint, SectionViewAction _eAction = eMoveAction ) : m_eAction( _eAction ), m_bCopy( sal_False ), m_aPoint( _rPoint ) { }
 
         void operator() ( const OViewsWindow::TSectionsMap::value_type& _rhs )
         {
@@ -976,12 +972,6 @@ namespace
             case eEndAction:
                 if ( rView.IsAction() )
                     rView.EndAction (      );
-                break;
-            case eMoveAction:
-                rView.MovAction ( m_aPoint );
-                break;
-            case eMarkAction:
-                rView.BegMarkObj ( m_aPoint );
                 break;
             case eForceToAnotherPage:
                 rView.ForceMarkedToAnotherPage();
