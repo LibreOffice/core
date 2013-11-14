@@ -20,6 +20,10 @@
 #ifndef INCLUDED_UNOTOOLS_MEDIADESCRIPTOR_HXX
 #define INCLUDED_UNOTOOLS_MEDIADESCRIPTOR_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustring.hxx>
