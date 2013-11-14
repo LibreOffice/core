@@ -19,6 +19,7 @@
 
 #include <vcl/lazydelete.hxx>
 #include <vcl/gradient.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/opaqitem.hxx>
@@ -1835,7 +1836,12 @@ void DrawGraphic( const SvxBrushItem *pBrush,
             else
                 ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
                                     rSh.GetDoc(), SwDoc, BackgroundDone ) );
-            const Graphic* pGrf = pBrush->GetGraphic();
+            OUString referer;
+            SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
+            if (sh != 0 && sh->HasName()) {
+                referer = sh->GetMedium()->GetName();
+            }
+            const Graphic* pGrf = pBrush->GetGraphic(referer);
             if( pGrf && GRAPHIC_NONE != pGrf->GetType() )
             {
                 ePos = pBrush->GetGraphicPos();
@@ -7137,7 +7143,15 @@ const Color& SwPageFrm::GetDrawBackgrdColor() const
 
     if ( GetBackgroundBrush( pBrushItem, pFillStyleItem, pFillGradientItem, pDummyColor, aDummyRect, true) )
     {
-        const Graphic* pGraphic = pBrushItem->GetGraphic();
+        OUString referer;
+        SwViewShell * sh1 = getRootFrm()->GetCurrShell();
+        if (sh1 != 0) {
+            SfxObjectShell * sh2 = sh1->GetDoc()->GetPersist();
+            if (sh2 != 0 && sh2->HasName()) {
+                referer = sh2->GetMedium()->GetName();
+            }
+        }
+        const Graphic* pGraphic = pBrushItem->GetGraphic(referer);
 
         if(pGraphic)
         {

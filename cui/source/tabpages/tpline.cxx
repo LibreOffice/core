@@ -266,7 +266,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
                 pUIName = &aPhysicalName;
             }
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, ""/*TODO?*/, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
+            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
             pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();

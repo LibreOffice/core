@@ -3410,7 +3410,7 @@ SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj,
 // -----------------------------------------------------------------------
 
 SvxBrushItem::SvxBrushItem(
-    const OUString& rLink, const OUString& rReferer, const OUString& rFilter,
+    const OUString& rLink, const OUString& rFilter,
     SvxGraphicPosition ePos, sal_uInt16 _nWhich ) :
 
     SfxPoolItem( _nWhich ),
@@ -3419,7 +3419,6 @@ SvxBrushItem::SvxBrushItem(
     nShadingValue     ( ShadingPattern::CLEAR ),
     pImpl             ( new SvxBrushItem_Impl( NULL ) ),
     maStrLink         ( rLink ),
-    maReferer         ( rReferer ),
     maStrFilter       ( rFilter ),
     eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
     bLoadAgain        ( sal_True )
@@ -3822,13 +3821,11 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
 
     DELETEZ( pImpl->pGraphicObject );
     maStrLink = "";
-    maReferer = "";
     maStrFilter = "";
 
     if ( GPOS_NONE != eGraphicPos )
     {
         maStrLink = rItem.maStrLink;
-        maReferer = rItem.maReferer;
         maStrFilter = rItem.maStrFilter;
         if ( rItem.pImpl->pGraphicObject )
         {
@@ -3856,7 +3853,7 @@ int SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     {
         if ( GPOS_NONE != eGraphicPos )
         {
-            bEqual = maStrLink == rCmp.maStrLink && maReferer == rCmp.maReferer;
+            bEqual = maStrLink == rCmp.maStrLink;
 
             if ( bEqual )
             {
@@ -3942,12 +3939,12 @@ void SvxBrushItem::PurgeMedium() const
 }
 
 // -----------------------------------------------------------------------
-const GraphicObject* SvxBrushItem::GetGraphicObject() const
+const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) const
 {
     if ( bLoadAgain && !maStrLink.isEmpty() && !pImpl->pGraphicObject )
     // when graphics already loaded, use as a cache
     {
-        if (SvtSecurityOptions().isUntrustedReferer(maReferer)) {
+        if (SvtSecurityOptions().isUntrustedReferer(referer)) {
             return 0;
         }
         pImpl->pStream = utl::UcbStreamHelper::CreateStream( maStrLink, STREAM_STD_READ );
@@ -3982,9 +3979,9 @@ const GraphicObject* SvxBrushItem::GetGraphicObject() const
 
 // -----------------------------------------------------------------------
 
-const Graphic* SvxBrushItem::GetGraphic() const
+const Graphic* SvxBrushItem::GetGraphic(OUString const & referer) const
 {
-    const GraphicObject* pGrafObj = GetGraphicObject();
+    const GraphicObject* pGrafObj = GetGraphicObject(referer);
     return( pGrafObj ? &( pGrafObj->GetGraphic() ) : NULL );
 }
 
@@ -3998,7 +3995,6 @@ void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
     {
         DELETEZ( pImpl->pGraphicObject );
         maStrLink = "";
-        maReferer = "";
         maStrFilter = "";
     }
     else

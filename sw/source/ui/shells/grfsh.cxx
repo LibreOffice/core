@@ -209,6 +209,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                             SID_DOCFRAME,           SID_DOCFRAME,
                             SID_HTML_MODE,          SID_HTML_MODE,
                             FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
+                            SID_REFERER,            SID_REFERER,
                             0);
 
             sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
@@ -262,17 +263,11 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             rSh.GetGrfNms( &sGrfNm, &sFilterNm );
             if( !sGrfNm.isEmpty() )
             {
-                OUString sReferer;
-                SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
-                if (sh != 0 && sh->HasName())
-                {
-                    sReferer = sh->GetMedium()->GetName();
-                }
                 aSet.Put( SvxBrushItem( INetURLObject::decode( sGrfNm,
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ),
-                                        sReferer, sFilterNm, GPOS_LT,
+                                        sFilterNm, GPOS_LT,
                                         SID_ATTR_GRAF_GRAPHIC ));
             }
             else
@@ -300,6 +295,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxBoolItem( SID_ATTR_GRAF_KEEP_ZOOM, aUsrPref.IsGrfKeepZoom()));
 
             aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
+
+            SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
+            if (sh != 0 && sh->HasName())
+            {
+                aSet.Put(
+                    SfxStringItem(SID_REFERER, sh->GetMedium()->GetName()));
+            }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "no dialog factory!");

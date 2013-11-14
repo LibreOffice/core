@@ -424,7 +424,7 @@ void SvxNumberFormat::SetGraphic( const OUString& rName )
         return ;
 
     delete pGraphicBrush;
-    pGraphicBrush = new SvxBrushItem( rName, ""/*TODO?*/, "", GPOS_AREA, 0 );
+    pGraphicBrush = new SvxBrushItem( rName, "", GPOS_AREA, 0 );
     pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
     if( eVertOrient == text::VertOrientation::NONE )
         eVertOrient = text::VertOrientation::TOP;

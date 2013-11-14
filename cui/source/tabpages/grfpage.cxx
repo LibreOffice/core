@@ -19,6 +19,7 @@
 
 #include <tools/shl.hxx>
 #include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -206,7 +207,13 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     sal_Bool bFound = sal_False;
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
     {
-        const Graphic* pGrf = ((SvxBrushItem*)pItem)->GetGraphic();
+        OUString referer;
+        SfxStringItem const * it = static_cast<SfxStringItem const *>(
+            rSet.GetItem(SID_REFERER));
+        if (it != 0) {
+            referer = it->GetValue();
+        }
+        const Graphic* pGrf = ((SvxBrushItem*)pItem)->GetGraphic(referer);
         if( pGrf ) {
             aOrigSize = GetGrfOrigSize( *pGrf );
             if (pGrf->GetType() == GRAPHIC_BITMAP && aOrigSize.Width() && aOrigSize.Height()) {
@@ -353,7 +360,13 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             aGraphicName != rBrush.GetGraphicLink() )
             aGraphicName = rBrush.GetGraphicLink();
 
-        const Graphic* pGrf = rBrush.GetGraphic();
+        OUString referer;
+        SfxStringItem const * it = static_cast<SfxStringItem const *>(
+            rSet.GetItem(SID_REFERER));
+        if (it != 0) {
+            referer = it->GetValue();
+        }
+        const Graphic* pGrf = rBrush.GetGraphic(referer);
         if( pGrf )
         {
             aExampleWN.SetGraphic( *pGrf );

@@ -2445,7 +2445,13 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
             aGrfName = aNewGrfName = rBrush.GetGraphicLink();
             m_pConnectED->SetText( aNewGrfName );
         }
-        const Graphic* pGrf = rBrush.GetGraphic();
+        OUString referer;
+        SfxStringItem const * it = static_cast<SfxStringItem const *>(
+            rSet.GetItem(SID_REFERER));
+        if (it != 0) {
+            referer = it->GetValue();
+        }
+        const Graphic* pGrf = rBrush.GetGraphic(referer);
         if( pGrf )
             m_pBmpWin->SetGraphic( *pGrf );
     }
@@ -2499,7 +2505,7 @@ sal_Bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
     {
         bModified = sal_True;
         aGrfName = m_pConnectED->GetText();
-        rSet.Put( SvxBrushItem( aGrfName, ""/*TODO?*/, aFilterName, GPOS_LT,
+        rSet.Put( SvxBrushItem( aGrfName, aFilterName, GPOS_LT,
                                 SID_ATTR_GRAF_GRAPHIC ));
     }
     return bModified;
