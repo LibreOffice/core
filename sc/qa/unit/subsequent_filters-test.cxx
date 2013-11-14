@@ -381,15 +381,15 @@ void ScFiltersTest::testFunctionsExcel2010()
     pDoc->CalcAll(); // perform hard re-calculation.
 
     // B2:B6 and B8 should all be formula cells, and shouldn't have errors.
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,4,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,5,0)));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,5,0)));
     // Skip B7.
 
 #if 0 //F.DIST.RT not yet supported in the core.
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without errro.", isFormulaWithoutError(*pDoc, ScAddress(1,7,0)));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,7,0)));
 #endif
 
     xDocSh->DoClose();
