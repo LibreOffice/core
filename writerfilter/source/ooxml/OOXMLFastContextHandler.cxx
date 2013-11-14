@@ -186,8 +186,8 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
             break;
         case OOXML_Choice:
         {
-            OUString aRequires = rAttribs->getOptionalValue(OOXML_Requires);
 #if 0 // Disabled for now: enabling "wps" would introduce regressions, and SAL_N_ELEMENTS() needs at least one element.
+            OUString aRequires = rAttribs->getOptionalValue(OOXML_Requires);
             static const char* aFeatures[] = {
                 "wps",
             };
