@@ -41,19 +41,14 @@ public:
     virtual ~MorphDlg (void);
 
     void            SaveSettings() const;
-    sal_uInt16          GetFadeSteps() const { return (sal_uInt16) aMtfSteps.GetValue(); }
-    sal_Bool            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
-    sal_Bool            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
+    sal_uInt16      GetFadeSteps() const { return (sal_uInt16) m_pMtfSteps->GetValue(); }
+    bool            IsAttributeFade() const { return m_pCbxAttributes->IsChecked(); }
+    bool            IsOrientationFade() const { return m_pCbxOrientation->IsChecked(); }
 
 private:
-    FixedLine       aGrpPreset;
-    FixedText       aFtSteps;
-    MetricField     aMtfSteps;
-    CheckBox        aCbxAttributes;
-    CheckBox        aCbxOrientation;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    NumericField*   m_pMtfSteps;
+    CheckBox*       m_pCbxAttributes;
+    CheckBox*       m_pCbxOrientation;
 
     void            LoadSettings();
 };

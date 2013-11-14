@@ -23,7 +23,6 @@
 #include "sdresid.hxx"
 #include "sdmod.hxx"
 #include "sdiocmpt.hxx"
-#include "morphdlg.hrc"
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xenum.hxx>
@@ -33,18 +32,14 @@
 
 namespace sd {
 
-MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 ) :
-            ModalDialog     ( pParent, SdResId( DLG_MORPH ) ),
-            aGrpPreset      ( this, SdResId( GRP_PRESET ) ),
-            aFtSteps        ( this, SdResId( FT_STEPS ) ),
-            aMtfSteps       ( this, SdResId( MTF_STEPS ) ),
-            aCbxAttributes  ( this, SdResId( CBX_ATTRIBUTES ) ),
-            aCbxOrientation ( this, SdResId( CBX_ORIENTATION ) ),
-            aBtnOK          ( this, SdResId( BTN_OK ) ),
-            aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
-            aBtnHelp        ( this, SdResId( BTN_HELP ) )
+MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 )
+    : ModalDialog(pParent, "CrossFadeDialog",
+        "modules/sdraw/ui/crossfadedialog.ui")
 {
-    FreeResource();
+    get(m_pMtfSteps, "increments");
+    get(m_pCbxAttributes, "attributes");
+    get(m_pCbxOrientation, "orientation");
+
     LoadSettings();
 
     SfxItemPool*    pPool = (SfxItemPool*) pObj1->GetObjectItemPool();
@@ -62,7 +57,7 @@ MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* 
     if ( ( ( eLineStyle1 == XLINE_NONE ) || ( eLineStyle2 == XLINE_NONE ) ) &&
          ( ( eFillStyle1 != XFILL_SOLID ) || ( eFillStyle2 != XFILL_SOLID ) ) )
     {
-        aCbxAttributes.Disable();
+        m_pCbxAttributes->Disable();
     }
 }
 
@@ -89,9 +84,9 @@ void MorphDlg::LoadSettings()
         bOrient = bAttrib = sal_True;
     }
 
-    aMtfSteps.SetValue( nSteps );
-    aCbxOrientation.Check( bOrient );
-    aCbxAttributes.Check( bAttrib );
+    m_pMtfSteps->SetValue( nSteps );
+    m_pCbxOrientation->Check( bOrient );
+    m_pCbxAttributes->Check( bAttrib );
 }
 
 // -----------------------------------------------------------------------------
@@ -105,9 +100,9 @@ void MorphDlg::SaveSettings() const
     {
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
 
-        *xOStm << (sal_uInt16) aMtfSteps.GetValue()
-               << aCbxOrientation.IsChecked()
-               << aCbxAttributes.IsChecked();
+        *xOStm << (sal_uInt16) m_pMtfSteps->GetValue()
+               << m_pCbxOrientation->IsChecked()
+               << m_pCbxAttributes->IsChecked();
     }
 }
 
