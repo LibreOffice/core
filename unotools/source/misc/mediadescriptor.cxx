@@ -19,6 +19,7 @@
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/securityoptions.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
 
@@ -596,6 +597,11 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
 sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool bLockFile )
     throw(::com::sun::star::uno::RuntimeException)
 {
+    OUString referer(getUnpackedValueOrDefault(PROP_REFERRER(), OUString()));
+    if (SvtSecurityOptions().isUntrustedReferer(referer)) {
+        return false;
+    }
+
     // prepare the environment
     css::uno::Reference< css::task::XInteractionHandler > xOrgInteraction = getUnpackedValueOrDefault(
         MediaDescriptor::PROP_INTERACTIONHANDLER(),

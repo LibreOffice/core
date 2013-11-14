@@ -653,8 +653,11 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 public:
-    SvxGraphicObject( SdrObject* pObj ) throw();
+    SvxGraphicObject( SdrObject* pObj, OUString const & referer ) throw();
     virtual ~SvxGraphicObject() throw();
+
+private:
+    OUString referer_;
 };
 
 /***********************************************************************

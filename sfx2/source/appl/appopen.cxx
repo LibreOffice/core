@@ -1064,6 +1064,19 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // convert items to properties for framework API calls
         Sequence < PropertyValue > aArgs;
         TransformItems( SID_OPENDOC, *rReq.GetArgs(), aArgs );
+        // Any Referer (that was relevant in the above call to
+        // SvtSecurityOptions::isSecureMacroUri) is no longer relevant, assuming
+        // this "open" request is initiated directly by the user:
+        for (sal_Int32 i = 0; i != aArgs.getLength(); ++i) {
+            if (aArgs[i].Name == "Referer") {
+                ++i;
+                for (; i != aArgs.getLength(); ++i) {
+                    aArgs[i - 1] = aArgs[i];
+                }
+                aArgs.realloc(aArgs.getLength()-1);
+                break;
+            }
+        }
 
         // TODO/LATER: either remove LinkItem or create an asynchronous process for it
         if( bHidden || pLinkItem || rReq.IsSynchronCall() )

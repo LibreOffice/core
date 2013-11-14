@@ -32,6 +32,7 @@
 
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/msgpool.hxx>
 #include <svtools/sores.hxx>
 #include <svtools/insdlg.hxx>
@@ -144,7 +145,11 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
                     // store as link
                     OUString aFltName(aDlg.GetCurrentFilter());
                     OUString aPath(aDlg.GetPath());
-                    pGrafObj->SetGraphicLink(aPath, aFltName);
+                    OUString aReferer;
+                    if (mpDocSh->HasName()) {
+                        aReferer = mpDocSh->GetMedium()->GetName();
+                    }
+                    pGrafObj->SetGraphicLink(aPath, aReferer, aFltName);
                 }
             }
         }

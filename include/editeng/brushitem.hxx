@@ -51,6 +51,7 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     sal_Int32           nShadingValue;
     SvxBrushItem_Impl*  pImpl;
     OUString            maStrLink;
+    OUString            maReferer;
     OUString            maStrFilter;
     SvxGraphicPosition  eGraphicPos;
     sal_Bool            bLoadAgain;
@@ -71,7 +72,7 @@ public:
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const GraphicObject& rGraphicObj,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
-    SvxBrushItem( const OUString& rLink, const OUString& rFilter,
+    SvxBrushItem( const OUString& rLink, const OUString& rReferer, const OUString& rFilter,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );

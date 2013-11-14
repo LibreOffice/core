@@ -839,7 +839,7 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
     uno::Sequence<beans::PropertyValue> aFiltered;
     if( pFilter )
     {
-        aFiltered = pFilter->filterStreamsFromStorage( GetSourceStorage(), aConfigProps );
+        aFiltered = pFilter->filterStreamsFromStorage( GetDocumentBase(), GetSourceStorage(), aConfigProps );
         nCount = aFiltered.getLength();
         pValues = aFiltered.getConstArray();
     }

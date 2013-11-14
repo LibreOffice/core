@@ -79,6 +79,7 @@ private:
     GraphicAttr             aGrafInfo;
 
     OUString aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
+    OUString aReferer;
     OUString aFilterName;
     GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
     GraphicObject*          mpReplacementGraphic;
@@ -137,7 +138,7 @@ public:
     void                    ForceSwapIn() const;
     void                    ForceSwapOut() const;
 
-    void                    SetGraphicLink(const OUString& rFileName, const OUString& rFilterName);
+    void                    SetGraphicLink(const OUString& rFileName, const OUString& rReferer, const OUString& rFilterName);
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;
 

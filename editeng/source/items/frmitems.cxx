@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 
+#include <unotools/securityoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>
 #include <comphelper/processfactory.hxx>
@@ -3409,7 +3410,7 @@ SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj,
 // -----------------------------------------------------------------------
 
 SvxBrushItem::SvxBrushItem(
-    const OUString& rLink, const OUString& rFilter,
+    const OUString& rLink, const OUString& rReferer, const OUString& rFilter,
     SvxGraphicPosition ePos, sal_uInt16 _nWhich ) :
 
     SfxPoolItem( _nWhich ),
@@ -3418,6 +3419,7 @@ SvxBrushItem::SvxBrushItem(
     nShadingValue     ( ShadingPattern::CLEAR ),
     pImpl             ( new SvxBrushItem_Impl( NULL ) ),
     maStrLink         ( rLink ),
+    maReferer         ( rReferer ),
     maStrFilter       ( rFilter ),
     eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
     bLoadAgain        ( sal_True )
@@ -3820,11 +3822,13 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
 
     DELETEZ( pImpl->pGraphicObject );
     maStrLink = "";
+    maReferer = "";
     maStrFilter = "";
 
     if ( GPOS_NONE != eGraphicPos )
     {
         maStrLink = rItem.maStrLink;
+        maReferer = rItem.maReferer;
         maStrFilter = rItem.maStrFilter;
         if ( rItem.pImpl->pGraphicObject )
         {
@@ -3852,7 +3856,7 @@ int SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     {
         if ( GPOS_NONE != eGraphicPos )
         {
-            bEqual = maStrLink == rCmp.maStrLink;
+            bEqual = maStrLink == rCmp.maStrLink && maReferer == rCmp.maReferer;
 
             if ( bEqual )
             {
@@ -3943,6 +3947,9 @@ const GraphicObject* SvxBrushItem::GetGraphicObject() const
     if ( bLoadAgain && !maStrLink.isEmpty() && !pImpl->pGraphicObject )
     // when graphics already loaded, use as a cache
     {
+        if (SvtSecurityOptions().isUntrustedReferer(maReferer)) {
+            return 0;
+        }
         pImpl->pStream = utl::UcbStreamHelper::CreateStream( maStrLink, STREAM_STD_READ );
         if( pImpl->pStream && !pImpl->pStream->GetError() )
         {
@@ -3991,6 +3998,7 @@ void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
     {
         DELETEZ( pImpl->pGraphicObject );
         maStrLink = "";
+        maReferer = "";
         maStrFilter = "";
     }
     else

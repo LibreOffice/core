@@ -77,7 +77,7 @@ public:
 
 SvxUnoColorTable::SvxUnoColorTable() throw()
 {
-    pList = XPropertyList::CreatePropertyList( XCOLOR_LIST, SvtPathOptions().GetPalettePath() )->AsColorList();
+    pList = XPropertyList::CreatePropertyList( XCOLOR_LIST, SvtPathOptions().GetPalettePath(), "" )->AsColorList();
 }
 
 SvxUnoColorTable::~SvxUnoColorTable() throw()

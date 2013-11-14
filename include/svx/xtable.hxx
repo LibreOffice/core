@@ -201,13 +201,14 @@ protected:
     XPropertyListType   meType;
     OUString            maName; // not persistent
     OUString            maPath;
+    OUString            maReferer;
 
     XPropertyEntryList_impl maList;
 
     bool                mbListDirty;
     bool                mbEmbedInDocument;
 
-    XPropertyList(XPropertyListType t, const OUString& rPath);
+    XPropertyList(XPropertyListType t, const OUString& rPath, const OUString& rReferer);
 
     virtual Bitmap CreateBitmapForUI(long nIndex) = 0;
 
@@ -246,7 +247,7 @@ public:
     bool Load();
     bool LoadFrom(const ::com::sun::star::uno::Reference<
                        ::com::sun::star::embed::XStorage > &xStorage,
-                   const OUString &rURL);
+                  const OUString &rURL, const OUString &rReferer);
     bool Save();
     bool SaveTo  (const ::com::sun::star::uno::Reference<
                        ::com::sun::star::embed::XStorage > &xStorage,
@@ -256,7 +257,8 @@ public:
 
     // Factory method for sub-classes
     static XPropertyListRef CreatePropertyList(XPropertyListType t,
-                                                const OUString& rPath);
+                                               const OUString& rPath,
+                                               const OUString& rReferer);
     // as above but initializes name as expected
     static XPropertyListRef CreatePropertyListFromURL(XPropertyListType t,
                                                        const OUString & rUrl);
@@ -280,8 +282,8 @@ protected:
     virtual Bitmap  CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XColorList(const OUString& rPath)
-        : XPropertyList(XCOLOR_LIST, rPath) {}
+    XColorList(const OUString& rPath, const OUString& rReferer)
+        : XPropertyList(XCOLOR_LIST, rPath, rReferer) {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
@@ -306,7 +308,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XLineEndList(const OUString& rPath);
+    XLineEndList(const OUString& rPath, const OUString& rReferer);
     virtual ~XLineEndList();
 
     using XPropertyList::Remove;
@@ -333,7 +335,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XDashList(const OUString& rPath);
+    XDashList(const OUString& rPath, const OUString& rReferer);
     virtual ~XDashList();
 
     using XPropertyList::Replace;
@@ -366,7 +368,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XHatchList(const OUString& rPath);
+    XHatchList(const OUString& rPath, const OUString& rReferer);
     virtual ~XHatchList();
 
     using XPropertyList::Replace;
@@ -388,7 +390,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XGradientList(const OUString& rPath);
+    XGradientList(const OUString& rPath, const OUString& rReferer);
     virtual ~XGradientList();
 
     using XPropertyList::Replace;
@@ -411,8 +413,8 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XBitmapList(const OUString& rPath)
-        : XPropertyList(XBITMAP_LIST, rPath) {}
+    XBitmapList(const OUString& rPath, const OUString& rReferer)
+        : XPropertyList(XBITMAP_LIST, rPath, rReferer) {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;

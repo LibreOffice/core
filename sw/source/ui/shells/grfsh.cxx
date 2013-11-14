@@ -66,6 +66,7 @@
 #include <popup.hrc>
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
+#include <doc.hxx>
 
 #define SwGrfShell
 
@@ -261,11 +262,17 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             rSh.GetGrfNms( &sGrfNm, &sFilterNm );
             if( !sGrfNm.isEmpty() )
             {
+                OUString sReferer;
+                SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
+                if (sh != 0 && sh->HasName())
+                {
+                    sReferer = sh->GetMedium()->GetName();
+                }
                 aSet.Put( SvxBrushItem( INetURLObject::decode( sGrfNm,
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ),
-                                        sFilterNm, GPOS_LT,
+                                        sReferer, sFilterNm, GPOS_LT,
                                         SID_ATTR_GRAF_GRAPHIC ));
             }
             else

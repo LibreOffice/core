@@ -102,11 +102,11 @@ sal_uInt32 getCacheTimeInMs()
     return 0;
 }
 
-const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& aFilterName )
+const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& aReferer, const OUString& aFilterName )
 {
     Graphic aGraphic;
 
-    SfxMedium xMed( aFileName, STREAM_STD_READ );
+    SfxMedium xMed( aFileName, aReferer, STREAM_STD_READ );
     xMed.DownLoad();
 
     SvStream* pInStrm = xMed.GetInStream();
@@ -152,6 +152,8 @@ public:
     bool                Connect() { return 0 != GetRealObject(); }
     void                UpdateAsynchron();
     void                RemoveGraphicUpdater();
+
+    OUString getReferer() const { return rGrafObj.aReferer; }
 };
 
 class SdrGraphicUpdater : public ::osl::Thread
@@ -210,7 +212,7 @@ void SAL_CALL SdrGraphicUpdater::onTerminated(void)
 
 void SAL_CALL SdrGraphicUpdater::run(void)
 {
-    Graphic aGraphic( ImpLoadLinkedGraphic( maFileName, maFilterName ) );
+    Graphic aGraphic( ImpLoadLinkedGraphic( maFileName, mrGraphicLink.getReferer(), maFilterName ) );
     SolarMutexGuard aSolarGuard;
     if ( !mbIsTerminated )
     {
@@ -655,10 +657,11 @@ void SdrGrafObj::ImpLinkAbmeldung()
     }
 }
 
-void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rFilterName)
+void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rReferer, const OUString& rFilterName)
 {
     ImpLinkAbmeldung();
     aFileName = rFileName;
+    aReferer = rReferer;
     aFilterName = rFilterName;
     ImpLinkAnmeldung();
     pGraphic->SetUserData();
@@ -671,6 +674,7 @@ void SdrGrafObj::ReleaseGraphicLink()
 {
     ImpLinkAbmeldung();
     aFileName = OUString();
+    aReferer = "";
     aFilterName = OUString();
 }
 
@@ -733,7 +737,7 @@ bool SdrGrafObj::ImpUpdateGraphicLink( bool bAsynchron ) const
         if ( bAsynchron )
             pGraphicLink->UpdateAsynchron();
         else
-            pGraphicLink->DataChanged( ImpLoadLinkedGraphic( aFileName, aFilterName ) );
+            pGraphicLink->DataChanged( ImpLoadLinkedGraphic( aFileName, aReferer, aFilterName ) );
         bRet = true;
     }
     return bRet;
@@ -889,7 +893,7 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
 
     if( rObj.pGraphicLink != NULL)
     {
-        SetGraphicLink( aFileName, aFilterName );
+        SetGraphicLink( aFileName, rObj.aReferer, aFilterName );
     }
 
     ImpSetAttrToGrafInfo();

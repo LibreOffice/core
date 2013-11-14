@@ -76,6 +76,14 @@ public:
                                    StreamMode nOpenMode,
                                    const SfxFilter *pFilter = 0,
                                    SfxItemSet *pSet = 0 );
+                        /**
+                         * @param pSet Takes ownership
+                         */
+                        SfxMedium( const OUString &rName,
+                                   const OUString &rReferer,
+                                   StreamMode nOpenMode,
+                                   const SfxFilter *pFilter = 0,
+                                   SfxItemSet *pSet = 0 );
 
                         /**
                          * @param pSet does NOT take ownership

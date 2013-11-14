@@ -122,10 +122,11 @@ XBitmapEntry::XBitmapEntry(const XBitmapEntry& rOther)
 
 XPropertyList::XPropertyList(
     XPropertyListType type,
-    const OUString& rPath
+    const OUString& rPath, const OUString& rReferer
 ) : meType           ( type ),
     maName           ( RTL_CONSTASCII_USTRINGPARAM( "standard" ) ),
     maPath           ( rPath ),
+    maReferer        ( rReferer ),
     mbListDirty      ( true ),
     mbEmbedInDocument( false )
 {
@@ -249,7 +250,7 @@ bool XPropertyList::Load()
         if( aURL.getExtension().isEmpty() )
             aURL.setExtension( GetDefaultExt() );
 
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), maReferer,
                                          uno::Reference < embed::XStorage >(),
                                          createInstance(), NULL );
     }
@@ -257,12 +258,12 @@ bool XPropertyList::Load()
 }
 
 bool XPropertyList::LoadFrom( const uno::Reference < embed::XStorage > &xStorage,
-                                  const OUString &rURL )
+                              const OUString &rURL, const OUString &rReferer )
 {
     if( !mbListDirty )
         return false;
     mbListDirty = false;
-    return SvxXMLXTableImport::load( rURL, xStorage, createInstance(), &mbEmbedInDocument );
+    return SvxXMLXTableImport::load( rURL, rReferer, xStorage, createInstance(), &mbEmbedInDocument );
 }
 
 bool XPropertyList::Save()
@@ -292,12 +293,13 @@ bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,
 }
 
 XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType t,
-                                                    const OUString& rPath )
+                                                    const OUString& rPath,
+                                                    const OUString& rReferer )
 {
     XPropertyListRef pRet;
 
 #define MAP(e,c) \
-        case e: pRet = XPropertyListRef (new c( rPath ) ); break
+        case e: pRet = XPropertyListRef (new c( rPath, rReferer ) ); break
     switch (t) {
         MAP( XCOLOR_LIST, XColorList );
         MAP( XLINE_END_LIST, XLineEndList );
@@ -326,7 +328,7 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
     aPathURL.removeFinalSlash();
 
     XPropertyListRef pList = XPropertyList::CreatePropertyList(
-        t, aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        t, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" );
     pList->SetName( aURL.getName() );
 
     return pList;

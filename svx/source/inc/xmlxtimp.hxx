@@ -41,7 +41,7 @@ public:
 
     virtual ~SvxXMLXTableImport() throw ();
 
-    static bool load( const OUString &rPath,
+    static bool load( const OUString &rPath, const OUString &rReferer,
                       const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > &xStorage,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xTable,
                       bool *bOptLoadedFromStorage ) throw();

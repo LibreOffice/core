@@ -792,7 +792,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 
             // save table
             XBitmapListRef pBmpList = XPropertyList::CreatePropertyList(
-                XBITMAP_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ) )->AsBitmapList();
+                XBITMAP_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), "" )->AsBitmapList();
             pBmpList->SetName( aURL.getName() );
             if( pBmpList->Load() )
             {

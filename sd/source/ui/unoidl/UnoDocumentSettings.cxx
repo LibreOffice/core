@@ -104,7 +104,8 @@ namespace sd
 
         // DocumentSettingsSerializer cf. xmloff
         virtual uno::Sequence<beans::PropertyValue>
-                filterStreamsFromStorage(const uno::Reference< embed::XStorage > &xStorage,
+                filterStreamsFromStorage(OUString const & referer,
+                                         const uno::Reference< embed::XStorage > &xStorage,
                                          const uno::Sequence<beans::PropertyValue>& aConfigProps );
         virtual uno::Sequence<beans::PropertyValue>
                 filterStreamsToStorage(const uno::Reference< embed::XStorage > &xStorage,
@@ -116,6 +117,7 @@ namespace sd
 
     private:
         bool LoadList( XPropertyListType t, const OUString &rPath,
+                       const OUString &rReferer,
                        const uno::Reference< embed::XStorage > &xStorage );
         void AssignURL( XPropertyListType t, const Any* pValue, bool *pOk, bool *pChanged );
         void ExtractURL( XPropertyListType t, Any* pValue );
@@ -225,6 +227,7 @@ DocumentSettings::~DocumentSettings() throw()
 }
 
 bool DocumentSettings::LoadList( XPropertyListType t, const OUString &rInPath,
+                                 const OUString &rReferer,
                                  const uno::Reference< embed::XStorage > &xStorage )
 {
     SdDrawDocument* pDoc = mxModel->GetDoc();
@@ -239,10 +242,10 @@ bool DocumentSettings::LoadList( XPropertyListType t, const OUString &rInPath,
     }
 
     XPropertyListRef pList = XPropertyList::CreatePropertyList(
-        t, aPath );
+        t, aPath, rReferer );
     pList->SetName( aName );
 
-    if( pList->LoadFrom( xStorage, rInPath ) )
+    if( pList->LoadFrom( xStorage, rInPath, rReferer ) )
     {
         pDoc->SetPropertyList( pList );
         return true;
@@ -258,7 +261,7 @@ void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue,
     if( !(bool)( *pValue >>= aURL ) )
         return;
 
-    if( LoadList( t, aURL, uno::Reference< embed::XStorage >() ) )
+    if( LoadList( t, aURL, ""/*TODO?*/, uno::Reference< embed::XStorage >() ) )
         *pOk = *pChanged = true;
 }
 
@@ -296,6 +299,7 @@ static OUString getNameOfType( XPropertyListType t )
 
 uno::Sequence<beans::PropertyValue>
         DocumentSettings::filterStreamsFromStorage(
+                OUString const & referer,
                 const uno::Reference< embed::XStorage > &xStorage,
                 const uno::Sequence<beans::PropertyValue>& aConfigProps )
 {
@@ -310,7 +314,7 @@ uno::Sequence<beans::PropertyValue>
         {
             OUString aURL;
             aConfigProps[i].Value >>= aURL;
-            LoadList( t, aURL, xStorage );
+            LoadList( t, aURL, referer, xStorage );
         }
     }
     aRet.realloc( nRet );

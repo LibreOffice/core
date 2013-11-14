@@ -1443,8 +1443,8 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 #include <toolkit/helper/vclunohelper.hxx>
 
 //----------------------------------------------------------------------
-SvxGraphicObject::SvxGraphicObject( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_GRAPHICOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxGraphicObject::SvxGraphicObject( SdrObject* pObj, OUString const & referer ) throw()
+:   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_GRAPHICOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) ), referer_(referer)
 {
 }
 
@@ -1529,7 +1529,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 // normal link
                 OUString            aFilterName;
                 const SfxFilter*    pSfxFilter = NULL;
-                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE );
+                SfxMedium           aSfxMedium( aURL, referer_, STREAM_READ | STREAM_SHARE_DENYNONE );
 
                 SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
@@ -1558,7 +1558,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 //          it is possible that our shape is removed while where in this
                 //          method.
                 if( mpObj.is() )
-                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicLink( aURL, aFilterName );
+                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicLink( aURL, referer_, aFilterName );
 
             }
             bOk = true;

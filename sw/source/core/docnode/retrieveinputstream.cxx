@@ -27,19 +27,21 @@
 */
 ::rtl::Reference< ObservableThread > SwAsyncRetrieveInputStreamThread::createThread(
                         const SwRetrievedInputStreamDataManager::tDataKey nDataKey,
-                        const OUString& rLinkedURL )
+                        const OUString& rLinkedURL, const OUString& rReferer )
 {
     SwAsyncRetrieveInputStreamThread* pNewThread =
-            new SwAsyncRetrieveInputStreamThread( nDataKey, rLinkedURL );
+        new SwAsyncRetrieveInputStreamThread( nDataKey, rLinkedURL, rReferer );
     return pNewThread;
 }
 
 SwAsyncRetrieveInputStreamThread::SwAsyncRetrieveInputStreamThread(
                             const SwRetrievedInputStreamDataManager::tDataKey nDataKey,
-                            const OUString& rLinkedURL )
+                            const OUString& rLinkedURL,
+                            const OUString& rReferer )
     : ObservableThread(),
       mnDataKey( nDataKey ),
-      mrLinkedURL( rLinkedURL )
+      mrLinkedURL( rLinkedURL ),
+      mrReferer( rReferer )
 {
 }
 
@@ -49,9 +51,11 @@ SwAsyncRetrieveInputStreamThread::~SwAsyncRetrieveInputStreamThread()
 
 void SwAsyncRetrieveInputStreamThread::threadFunction()
 {
-    com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > xProps( 1 );
+    com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > xProps( 2 );
     xProps[0].Name = "URL";
-    xProps[0].Value <<= OUString( mrLinkedURL );
+    xProps[0].Value <<= mrLinkedURL;
+    xProps[1].Name = "Referer";
+    xProps[1].Value <<= mrReferer;
     utl::MediaDescriptor aMedium( xProps );
 
     aMedium.addInputStream();

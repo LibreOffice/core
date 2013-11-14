@@ -168,8 +168,10 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
     return sal_True;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
-    throw( uno::Exception, uno::RuntimeException )
+namespace {
+
+css::uno::Reference<css::uno::XInterface> create(
+    OUString const & rServiceSpecifier, OUString const & referer)
 {
     if( rServiceSpecifier.startsWith("com.sun.star.drawing.") )
     {
@@ -179,7 +181,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
             sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
             sal_uInt32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
 
-            return uno::Reference< uno::XInterface >( (drawing::XShape*) SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI ) );
+            return uno::Reference< uno::XInterface >( (drawing::XShape*) SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI, 0, 0, referer ) );
         }
     }
     else if ( rServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
@@ -190,11 +192,19 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
         return xRet;
     }
 
-    uno::Reference< uno::XInterface > xRet( createTextField( rServiceSpecifier ) );
+    uno::Reference< uno::XInterface > xRet( SvxUnoDrawMSFactory::createTextField( rServiceSpecifier ) );
     if( !xRet.is() )
         throw lang::ServiceNotRegisteredException();
 
     return xRet;
+}
+
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
+    throw( uno::Exception, uno::RuntimeException )
+{
+    return create(rServiceSpecifier, "");
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField( const OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
@@ -202,9 +212,15 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField(
     return SvxUnoTextCreateTextField( ServiceSpecifier );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString&, const uno::Sequence< ::com::sun::star::uno::Any >& )
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< ::com::sun::star::uno::Any >& Arguments )
     throw( uno::Exception, uno::RuntimeException )
 {
+    OUString arg;
+    if (ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
+        && Arguments.getLength() == 1 && (Arguments[0] >>= arg))
+    {
+        return create(ServiceSpecifier, arg);
+    }
     throw lang::NoSupportException();
 }
 

@@ -843,7 +843,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                     SvxBrushItem aTmpBrush(nWhich);
                     if ( bIsLink )
                     {
-                        aTmpBrush = SvxBrushItem( aBgdGraphicPath,
+                        aTmpBrush = SvxBrushItem( aBgdGraphicPath, ""/*TODO?*/,
                                                 aBgdGraphicFilter,
                                                 eNewPos,
                                                 nWhich );
@@ -881,7 +881,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 SvxBrushItem* pTmpBrush = 0;
                 if ( m_pBtnLink->IsChecked() )
                 {
-                    pTmpBrush = new SvxBrushItem( aBgdGraphicPath,
+                    pTmpBrush = new SvxBrushItem( aBgdGraphicPath, ""/*TODO?*/,
                                                 aBgdGraphicFilter,
                                                 GetGraphicPosition_Impl(),
                                                 nWhich );
@@ -1665,7 +1665,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
                 bIsGraphicValid = LoadLinkedGraphic_Impl();
 
             if ( bIsLink )
-                *pActItem = SvxBrushItem( aBgdGraphicPath,
+                *pActItem = SvxBrushItem( aBgdGraphicPath, ""/*TODO?*/,
                                             aBgdGraphicFilter,
                                             eNewPos,
                                             pActItem->Which() );
@@ -1746,7 +1746,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
 
                 if ( bIsLink )
-                    *pActItem = SvxBrushItem( aBgdGraphicPath,
+                    *pActItem = SvxBrushItem( aBgdGraphicPath, ""/*TODO?*/,
                                                 aBgdGraphicFilter,
                                                 eNewPos,
                                                 pActItem->Which() );

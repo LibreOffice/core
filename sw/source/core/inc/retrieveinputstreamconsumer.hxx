@@ -40,7 +40,7 @@ class SwAsyncRetrieveInputStreamThreadConsumer
 
         /** method to create thread
         */
-        void CreateThread( const OUString& rURL );
+        void CreateThread( const OUString& rURL, const OUString& rReferer );
 
         /** method called to provide the retrieved input stream to the thread Consumer
         */

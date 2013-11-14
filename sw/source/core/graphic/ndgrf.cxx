@@ -25,6 +25,7 @@
 #include <svtools/imap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sot/storage.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>
 #include <sot/formats.hxx>
@@ -1157,8 +1158,13 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
 
         OUString sGrfNm;
         refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
-
-        mpThreadConsumer->CreateThread( sGrfNm );
+        OUString sReferer;
+        SfxObjectShell * sh = GetDoc()->GetPersist();
+        if (sh != 0 && sh->HasName())
+        {
+            sReferer = sh->GetMedium()->GetName();
+        }
+        mpThreadConsumer->CreateThread( sGrfNm, sReferer );
     }
 }
 

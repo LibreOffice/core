@@ -302,7 +302,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                         XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetGradientValue(), aTmpStr );
-                        XGradientList aGradientList( "" );
+                        XGradientList aGradientList( "", ""/*TODO?*/ );
                         aGradientList.Insert( pEntry );
                         aGradientList.SetDirty( sal_False );
                         const Bitmap aBmp = aGradientList.GetUiBitmap( 0 );
@@ -347,7 +347,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                         XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetHatchValue(), aTmpStr );
-                        XHatchList aHatchList( "" );
+                        XHatchList aHatchList( "", ""/*TODO?*/ );
                         aHatchList.Insert( pEntry );
                         aHatchList.SetDirty( sal_False );
                         const Bitmap aBmp = aHatchList.GetUiBitmap( 0 );
@@ -401,7 +401,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         XBitmapEntry* pEntry = new XBitmapEntry(pBitmapItem->GetGraphicObject(), aTmpStr);
                         XBitmapListRef xBitmapList =
                             XPropertyList::CreatePropertyList(XBITMAP_LIST,
-                            OUString("TmpList"))->AsBitmapList();
+                            OUString("TmpList"), ""/*TODO?*/)->AsBitmapList();
                         xBitmapList->Insert( pEntry );
                         xBitmapList->SetDirty( sal_False );
                         pFillAttrLB->Fill( xBitmapList );

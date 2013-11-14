@@ -23,6 +23,7 @@ public:
   // Import objects and update properties (eliding URLs)
   virtual com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>
 	filterStreamsFromStorage(
+        OUString const & referer,
 		const com::sun::star::uno::Reference< com::sun::star::embed::XStorage > &xStorage,
 		const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps ) = 0;
   // Export objects and update properties with relative URLs into this storage

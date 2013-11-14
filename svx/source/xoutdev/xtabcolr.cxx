@@ -30,7 +30,7 @@ using namespace com::sun::star;
 XColorListRef XColorList::CreateStdColorList()
 {
     return XPropertyList::CreatePropertyList(
-        XCOLOR_LIST, SvtPathOptions().GetPalettePath() )->AsColorList();
+        XCOLOR_LIST, SvtPathOptions().GetPalettePath(), "" )->AsColorList();
 }
 
 XColorListRef XColorList::GetStdColorList()

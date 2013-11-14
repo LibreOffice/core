@@ -33,8 +33,8 @@
 
 using namespace com::sun::star;
 
-XDashList::XDashList(const OUString& rPath)
-    : XPropertyList(XDASH_LIST, rPath)
+XDashList::XDashList(const OUString& rPath, const OUString& rReferer)
+    : XPropertyList(XDASH_LIST, rPath, rReferer)
     , maBitmapSolidLine()
     , maStringSolidLine()
     , maStringNoLine()

@@ -33,8 +33,8 @@
 
 using namespace com::sun::star;
 
-XLineEndList::XLineEndList( const OUString& rPath )
-    : XPropertyList( XLINE_END_LIST, rPath )
+XLineEndList::XLineEndList( const OUString& rPath, const OUString& rReferer )
+    : XPropertyList( XLINE_END_LIST, rPath, rReferer )
 {
 }
 

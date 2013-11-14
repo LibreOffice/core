@@ -3924,7 +3924,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     if ( pRet->ISA( SdrGrafObj ) )
     {
         if( aLinkFileName.getLength() )
-            ((SdrGrafObj*)pRet)->SetGraphicLink( aLinkFileName, aLinkFilterName );
+            ((SdrGrafObj*)pRet)->SetGraphicLink( aLinkFileName, ""/*TODO?*/, aLinkFilterName );
 
         if ( bLinkGrf && !bGrfRead )
         {

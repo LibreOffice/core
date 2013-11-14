@@ -2854,6 +2854,20 @@ SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, const SfxFilte
     Init_Impl();
 }
 
+SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
+    pImp(new SfxMedium_Impl(this))
+{
+    pImp->m_pSet = pInSet;
+    SfxItemSet * s = GetItemSet();
+    if (s->GetItem(SID_REFERER) == 0) {
+        s->Put(SfxStringItem(SID_REFERER, rReferer));
+    }
+    pImp->m_pFilter = pFlt;
+    pImp->m_aLogicName = rName;
+    pImp->m_nStorOpenMode = nOpenMode;
+    Init_Impl();
+}
+
 SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     pImp(new SfxMedium_Impl(this))
 {

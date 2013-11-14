@@ -416,7 +416,7 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
     if (!rFile.isEmpty())
-        pGrafObj->SetGraphicLink( rFile, rFilter );
+        pGrafObj->SetGraphicLink( rFile, ""/*TODO?*/, rFilter );
 
     return sal_True;
 }

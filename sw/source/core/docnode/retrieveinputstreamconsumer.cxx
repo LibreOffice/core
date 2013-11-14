@@ -39,7 +39,7 @@ SwAsyncRetrieveInputStreamThreadConsumer::~SwAsyncRetrieveInputStreamThreadConsu
     SwThreadManager::GetThreadManager().RemoveThread( mnThreadID );
 }
 
-void SwAsyncRetrieveInputStreamThreadConsumer::CreateThread( const OUString& rURL )
+void SwAsyncRetrieveInputStreamThreadConsumer::CreateThread( const OUString& rURL, const OUString& rReferer )
 {
     // Get new data container for input stream data
     SwRetrievedInputStreamDataManager::tDataKey nDataKey =
@@ -47,7 +47,7 @@ void SwAsyncRetrieveInputStreamThreadConsumer::CreateThread( const OUString& rUR
                                                 mrGrfNode.GetThreadConsumer() );
 
     rtl::Reference< ObservableThread > pNewThread =
-        SwAsyncRetrieveInputStreamThread::createThread( nDataKey, rURL );
+        SwAsyncRetrieveInputStreamThread::createThread( nDataKey, rURL, rReferer );
 
     // Add thread to thread manager and pass ownership of thread to thread manager.
     mnThreadID = SwThreadManager::GetThreadManager().AddThread( pNewThread );

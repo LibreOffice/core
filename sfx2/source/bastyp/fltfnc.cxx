@@ -445,6 +445,12 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
             aDescriptor[utl::MediaDescriptor::PROP_URL()               ] <<= sURL;
             aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()       ] <<= xInStream;
             aDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= rMedium.GetInteractionHandler();
+            SfxStringItem const * it = static_cast<SfxStringItem const *>(
+                rMedium.GetItemSet()->GetItem(SID_REFERER));
+            if (it != 0) {
+                aDescriptor[utl::MediaDescriptor::PROP_REFERRER()]
+                    <<= it->GetValue();
+            }
 
             if ( !m_rImpl.aName.isEmpty() )
                 aDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= m_rImpl.aName;

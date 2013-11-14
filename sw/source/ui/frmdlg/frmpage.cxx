@@ -2499,7 +2499,7 @@ sal_Bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
     {
         bModified = sal_True;
         aGrfName = m_pConnectED->GetText();
-        rSet.Put( SvxBrushItem( aGrfName, aFilterName, GPOS_LT,
+        rSet.Put( SvxBrushItem( aGrfName, ""/*TODO?*/, aFilterName, GPOS_LT,
                                 SID_ATTR_GRAF_GRAPHIC ));
     }
     return bModified;

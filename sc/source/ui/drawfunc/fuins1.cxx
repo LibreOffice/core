@@ -146,7 +146,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
     if ( bAsLink )
-        pObj->SetGraphicLink( rFileName, rFilterName );
+        pObj->SetGraphicLink( rFileName, ""/*TODO?*/, rFilterName );
 }
 
 //------------------------------------------------------------------------

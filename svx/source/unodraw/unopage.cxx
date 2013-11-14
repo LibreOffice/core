@@ -565,7 +565,7 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
     }
 }
 
-SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj, SvxDrawPage *mpPage ) throw()
+SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer ) throw()
 {
     SvxShape* pRet = NULL;
     switch( nInventor )
@@ -647,7 +647,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxShapeText( pObj );
                     break;
                 case OBJ_GRAF:
-                    pRet = new SvxGraphicObject( pObj );
+                    pRet = new SvxGraphicObject( pObj, referer );
                     break;
                 case OBJ_FRAME:
                     pRet = new SvxFrameShape( pObj );
