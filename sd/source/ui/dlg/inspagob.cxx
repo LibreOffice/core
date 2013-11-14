@@ -25,30 +25,27 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"
-#include "inspagob.hrc"
 
 
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
-    ::Window* pWindow,
-    const SdDrawDocument* pInDoc,
-    SfxMedium* pSfxMedium,
-    const OUString& rFileName )
-    : ModalDialog     ( pWindow, SdResId( DLG_INSERT_PAGES_OBJS ) ),
-      aLbTree         ( this, SdResId( LB_TREE ) ),
-      aCbxLink        ( this, SdResId( CBX_LINK ) ),
-      aCbxMasters     ( this, SdResId( CBX_CHECK_MASTERS ) ),
-      aBtnOk          ( this, SdResId( BTN_OK ) ),
-      aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
-      aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-      pMedium       ( pSfxMedium ),
-      mpDoc         ( pInDoc ),
-      rName         ( rFileName )
+    ::Window* pWindow, const SdDrawDocument* pInDoc,
+    SfxMedium* pSfxMedium, const OUString& rFileName )
+    : ModalDialog(pWindow, "InsertSlidesDialog",
+        "modules/sdraw/ui/insertslidesdialog.ui")
+    , pMedium(pSfxMedium)
+    , mpDoc(pInDoc)
+    , rName(rFileName)
 {
-    FreeResource();
+    get(m_pLbTree, "tree");
+    get(m_pCbxMasters, "backgrounds");
+    get(m_pCbxLink, "links");
 
-    aLbTree.SetViewFrame( ( (SdDrawDocument*) pInDoc )->GetDocSh()->GetViewShell()->GetViewFrame() );
+    m_pLbTree->set_width_request(m_pLbTree->approximate_char_width() * 50);
+    m_pLbTree->set_height_request(m_pLbTree->GetTextHeight() * 12);
 
-    aLbTree.SetSelectHdl( LINK( this, SdInsertPagesObjsDlg, SelectObjectHdl ) );
+    m_pLbTree->SetViewFrame( ( (SdDrawDocument*) pInDoc )->GetDocSh()->GetViewShell()->GetViewFrame() );
+
+    m_pLbTree->SetSelectHdl( LINK( this, SdInsertPagesObjsDlg, SelectObjectHdl ) );
 
     // insert text
     if( !pMedium )
@@ -70,20 +67,20 @@ void SdInsertPagesObjsDlg::Reset()
 {
     if( pMedium )
     {
-        aLbTree.SetSelectionMode( MULTIPLE_SELECTION );
+        m_pLbTree->SetSelectionMode( MULTIPLE_SELECTION );
 
         // transfer ownership of Medium
-        aLbTree.Fill( mpDoc, pMedium, rName );
+        m_pLbTree->Fill( mpDoc, pMedium, rName );
     }
     else
     {
         Color aColor( COL_WHITE );
         Bitmap aBmpText( SdResId( BMP_DOC_TEXT ) );
         Image aImgText( aBmpText, aColor );
-        aLbTree.InsertEntry( rName, aImgText, aImgText );
+        m_pLbTree->InsertEntry( rName, aImgText, aImgText );
     }
 
-    aCbxMasters.Check( sal_True );
+    m_pCbxMasters->Check( sal_True );
 }
 
 std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
@@ -93,16 +90,16 @@ std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
     {
         // to ensure that bookmarks are opened
         // (when the whole document is selected)
-        aLbTree.GetBookmarkDoc();
+        m_pLbTree->GetBookmarkDoc();
 
         // If the document is selected (too) or nothing is selected,
         // the whole document is inserted (but not more!)
-        if( aLbTree.GetSelectionCount() == 0 ||
-            ( aLbTree.IsSelected( aLbTree.First() ) ) )
+        if( m_pLbTree->GetSelectionCount() == 0 ||
+            ( m_pLbTree->IsSelected( m_pLbTree->First() ) ) )
             return std::vector<OUString>();
     }
 
-    return aLbTree.GetSelectEntryList( nType );
+    return m_pLbTree->GetSelectEntryList( nType );
 }
 
 /**
@@ -110,7 +107,7 @@ std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
  */
 sal_Bool SdInsertPagesObjsDlg::IsLink()
 {
-    return( aCbxLink.IsChecked() );
+    return( m_pCbxLink->IsChecked() );
 }
 
 /**
@@ -118,7 +115,7 @@ sal_Bool SdInsertPagesObjsDlg::IsLink()
  */
 sal_Bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 {
-    return( aCbxMasters.IsChecked() );
+    return( m_pCbxMasters->IsChecked() );
 }
 
 /**
@@ -126,10 +123,10 @@ sal_Bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
  */
 IMPL_LINK_NOARG(SdInsertPagesObjsDlg, SelectObjectHdl)
 {
-    if( aLbTree.IsLinkableSelected() )
-        aCbxLink.Enable();
+    if( m_pLbTree->IsLinkableSelected() )
+        m_pCbxLink->Enable();
     else
-        aCbxLink.Disable();
+        m_pCbxLink->Disable();
 
     return( 0 );
 }

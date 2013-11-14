@@ -100,8 +100,14 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
 {
 }
 
-
-
+extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeSdPageObjsTLB(::Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SdPageObjsTLB(pParent, nWinStyle);
+}
 
 SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
 {
@@ -216,6 +222,35 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 
 SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 :   SvTreeListBox       ( pParentWin, rSdResId )
+,   mpParent            ( pParentWin )
+,   mpDoc               ( NULL )
+,   mpBookmarkDoc       ( NULL )
+,   mpMedium            ( NULL )
+,   mpOwnMedium         ( NULL )
+,   maImgOle             ( BitmapEx( SdResId( BMP_OLE ) ) )
+,   maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
+,   mbLinkableSelected  ( sal_False )
+,   mpDropNavWin        ( NULL )
+,   mbShowAllShapes     ( false )
+,   mbShowAllPages      ( false )
+
+{
+    // add lines to Tree-ListBox
+    SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
+                           WB_HASBUTTONS | // WB_HASLINESATROOT |
+                           WB_HSCROLL |
+                           WB_HASBUTTONSATROOT |
+                           WB_QUICK_SEARCH /* i31275 */ );
+    SetNodeBitmaps( Image(Bitmap( SdResId(BMP_EXPAND) )),
+                    Image(Bitmap( SdResId(BMP_COLLAPSE) )));
+
+    SetDragDropMode(
+         SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY |
+            SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_COPY  | SV_DRAGDROP_APP_DROP );
+}
+
+SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, WinBits nStyle )
+:   SvTreeListBox       ( pParentWin, nStyle )
 ,   mpParent            ( pParentWin )
 ,   mpDoc               ( NULL )
 ,   mpBookmarkDoc       ( NULL )

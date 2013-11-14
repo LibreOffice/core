@@ -31,12 +31,9 @@ class SdDrawDocument;
 class SdInsertPagesObjsDlg : public ModalDialog
 {
 private:
-    SdPageObjsTLB           aLbTree;
-    CheckBox                aCbxLink;
-    CheckBox                aCbxMasters;
-    OKButton                aBtnOk;
-    CancelButton            aBtnCancel;
-    HelpButton              aBtnHelp;
+    SdPageObjsTLB*          m_pLbTree;
+    CheckBox*               m_pCbxLink;
+    CheckBox*               m_pCbxMasters;
 
     SfxMedium*              pMedium;
     const SdDrawDocument*   mpDoc;

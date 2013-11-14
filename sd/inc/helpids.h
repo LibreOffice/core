@@ -101,8 +101,6 @@
 #define HID_SD_UNDODELETEWARNING_DLG                            "SD_HID_SD_UNDODELETEWARNING_DLG"
 #define HID_SD_UNDODELETEWARNING_CBX                            "SD_HID_SD_UNDODELETEWARNING_CBX"
 
-#define HID_SD_PAGEOBJSTLB                                      "SD_HID_SD_PAGEOBJSTLB"
-
 #define HID_SD_NAMEDIALOG_OBJECT                                "SD_HID_SD_NAMEDIALOG_OBJECT"
 #define HID_SD_NAMEDIALOG_PAGE                                  "SD_HID_SD_NAMEDIALOG_PAGE"
 #define HID_SD_NAMEDIALOG_LINEEND                               "SD_HID_SD_NAMEDIALOG_LINEEND"
@@ -157,7 +155,6 @@
 #define HID_SD_TABLE_DESIGN                                     "SD_HID_SD_TABLE_DESIGN"
 #define HID_SD_ANNOTATIONS                                      "SD_HID_SD_ANNOTATIONS"
 
-#define HID_DLG_INSERT_PAGES_OBJS                               "SD_HID_DLG_INSERT_PAGES_OBJS"
 #define HID_VECTORIZE_DLG                                       "SD_HID_VECTORIZE_DLG"
 
 #define HID_MN_SUB_GRAPHIC                                      "SD_HID_MN_SUB_GRAPHIC"

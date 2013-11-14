@@ -179,7 +179,8 @@ protected:
 
 public:
 
-                            SdPageObjsTLB( Window* pParent, const SdResId& rSdResId );
+    SdPageObjsTLB( Window* pParent, const SdResId& rSdResId );
+    SdPageObjsTLB( Window* pParent, WinBits nStyle );
                             ~SdPageObjsTLB();
 
     virtual void            SelectHdl();
