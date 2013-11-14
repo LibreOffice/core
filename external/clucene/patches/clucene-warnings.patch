@@ -72,7 +72,7 @@
  #endif
 --- src/core/CLucene/util/Array.h	2012-02-22 12:37:22.510637696 +0000
 +++ src/core/CLucene/util/Array.h	2012-02-22 12:38:33.714444884 +0000
-@@ -7,6 +7,12 @@
+@@ -7,6 +7,13 @@
  #ifndef _lucene_util_Array_
  #define _lucene_util_Array_
  
@@ -80,6 +80,7 @@
 +#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wshadow"
++# pragma GCC diagnostic ignored "-Wunused-parameter"
 +#endif
 +
  #include <stdlib.h>
