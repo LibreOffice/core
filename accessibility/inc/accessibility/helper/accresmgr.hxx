@@ -24,11 +24,13 @@
 
 class SimpleResMgr;
 
-#define TK_RES_STRING(id) TkResMgr::loadString(id)
+#define TK_RES_STRING(id) ::accessibility::TkResMgr::loadString(id)
 
 // -----------------------------------------------------------------------------
 // TkResMgr
 // -----------------------------------------------------------------------------
+namespace accessibility
+{
 
 class TkResMgr
 {
@@ -57,6 +59,7 @@ public:
     static OUString loadString( sal_uInt16 nResId );
 };
 
+}
 
 #endif // ACCESSIBILITY_HELPER_TKARESMGR_HXX
 
