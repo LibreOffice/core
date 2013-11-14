@@ -100,7 +100,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_PLUS_MINUS { Text = "SIGN" ; };
     String SC_OPCODE_ABS { Text = "ABS" ; };
     String SC_OPCODE_INT { Text = "INT" ; };
-    String SC_OPCODE_PHI { Text = "_xlfn.PHI" ; };
+    String SC_OPCODE_PHI { Text = "PHI" ; };
     String SC_OPCODE_GAUSS { Text = "GAUSS" ; };
     String SC_OPCODE_IS_EMPTY { Text = "ISBLANK" ; };
     String SC_OPCODE_IS_STRING { Text = "ISTEXT" ; };
@@ -201,13 +201,13 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
     String SC_OPCODE_KOMBIN_2 { Text = "COMBINA" ; };
     String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
-    String SC_OPCODE_VARIATIONEN_2 { Text = "_xlfn.PERMUTATIONA" ; };
+    String SC_OPCODE_VARIATIONEN_2 { Text = "PERMUTATIONA" ; };
     String SC_OPCODE_BW { Text = "PV" ; };
     String SC_OPCODE_DIA { Text = "SYD" ; };
     String SC_OPCODE_GDA { Text = "DDB" ; };
     String SC_OPCODE_GDA_2 { Text = "DB" ; };
     String SC_OPCODE_VBD { Text = "VDB" ; };
-    String SC_OPCODE_LAUFZ { Text = "_xlfn.PDURATION" ; };
+    String SC_OPCODE_LAUFZ { Text = "PDURATION" ; };
     String SC_OPCODE_LIA { Text = "SLN" ; };
     String SC_OPCODE_RMZ { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
@@ -216,7 +216,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_COLUMN { Text = "COLUMN" ; };
     String SC_OPCODE_ROW { Text = "ROW" ; };
     String SC_OPCODE_TABLE { Text = "SHEET" ; };
-    String SC_OPCODE_ZGZ { Text = "_xlfn.RRI" ; };
+    String SC_OPCODE_ZGZ { Text = "RRI" ; };
     String SC_OPCODE_ZW { Text = "FV" ; };
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_ZINS { Text = "RATE" ; };
@@ -461,7 +461,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_PLUS_MINUS { Text = "SIGN" ; };
     String SC_OPCODE_ABS { Text = "ABS" ; };
     String SC_OPCODE_INT { Text = "INT" ; };
-    String SC_OPCODE_PHI { Text = "PHI" ; };
+    String SC_OPCODE_PHI { Text = "_xlfn.PHI" ; };
     String SC_OPCODE_GAUSS { Text = "_xlfn.GAUSS" ; };
     String SC_OPCODE_IS_EMPTY { Text = "ISBLANK" ; };
     String SC_OPCODE_IS_STRING { Text = "ISTEXT" ; };
@@ -562,13 +562,13 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
     String SC_OPCODE_KOMBIN_2 { Text = "_xlfn.COMBINA" ; };
     String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
-    String SC_OPCODE_VARIATIONEN_2 { Text = "PERMUTATIONA" ; };
+    String SC_OPCODE_VARIATIONEN_2 { Text = "_xlfn.PERMUTATIONA" ; };
     String SC_OPCODE_BW { Text = "PV" ; };
     String SC_OPCODE_DIA { Text = "SYD" ; };
     String SC_OPCODE_GDA { Text = "DDB" ; };
     String SC_OPCODE_GDA_2 { Text = "DB" ; };
     String SC_OPCODE_VBD { Text = "VDB" ; };
-    String SC_OPCODE_LAUFZ { Text = "DURATION" ; };
+    String SC_OPCODE_LAUFZ { Text = "_xlfn.DURATION" ; };
     String SC_OPCODE_LIA { Text = "SLN" ; };
     String SC_OPCODE_RMZ { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
@@ -577,7 +577,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_COLUMN { Text = "COLUMN" ; };
     String SC_OPCODE_ROW { Text = "ROW" ; };
     String SC_OPCODE_TABLE { Text = "_xlfn.SHEET" ; };
-    String SC_OPCODE_ZGZ { Text = "ZGZ" ; };
+    String SC_OPCODE_ZGZ { Text = "_xlfn.RRI" ; };
     String SC_OPCODE_ZW { Text = "FV" ; };
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_ZINS { Text = "RATE" ; };
