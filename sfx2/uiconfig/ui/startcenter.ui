@@ -309,7 +309,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="extensions">
-                            <property name="label" translatable="yes">_Extensions</property>
+                            <property name="label" translatable="yes">E_xtensions</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
