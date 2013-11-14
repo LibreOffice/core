@@ -1471,7 +1471,6 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 {
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const Rectangle& rVis = GetVisArea();
-    Any aAny;
 
     rSequence.realloc ( NUM_VIEW_SETTINGS );
     sal_Int16 nIndex = 0;

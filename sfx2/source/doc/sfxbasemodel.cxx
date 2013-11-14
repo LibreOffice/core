@@ -3531,7 +3531,6 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, Reference< container::
 {
     if ( pDoc )
     {
-        Any           aAny;
         SfxModule*    pModule( pDoc->GetFactory().GetModule() );
         OUString aSlotCmd( "slot:" );
         OUString aUnoCmd( ".uno:" );

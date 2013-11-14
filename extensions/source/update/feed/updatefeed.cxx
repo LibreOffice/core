@@ -457,7 +457,7 @@ UpdateInformationProvider::load(const OUString& rURL)
     storeCommandInfo(nCommandId, xCommandProcessor);
     try
     {
-        uno::Any aResult = xCommandProcessor->execute(aCommand, nCommandId,
+        xCommandProcessor->execute(aCommand, nCommandId,
             static_cast < XCommandEnvironment *> (this));
     }
     catch( const uno::Exception & /* e */ )

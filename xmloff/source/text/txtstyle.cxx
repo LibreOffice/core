@@ -47,7 +47,6 @@ void XMLTextParagraphExport::exportStyleAttributes(
                 ::com::sun::star::style::XStyle > & rStyle )
 {
     OUString sName;
-    Any aAny;
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo(
             xPropSet->getPropertySetInfo());

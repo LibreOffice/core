@@ -1708,7 +1708,6 @@ namespace pcr
                 OSL_VERIFY( _rNewValue >>= bUseSep );
 
             // propagate the changes to the min/max/default fields
-            Any aCurrentProp;
             OUString aAffectedProps[] = { OUString(PROPERTY_VALUE), OUString(PROPERTY_DEFAULT_VALUE), OUString(PROPERTY_VALUEMIN), OUString(PROPERTY_VALUEMAX) };
             for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(aAffectedProps); ++i)
             {

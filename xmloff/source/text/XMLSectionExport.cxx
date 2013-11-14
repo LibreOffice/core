@@ -564,9 +564,6 @@ void XMLSectionExport::ExportTableOfContentStart(
 
     // scope for table-of-content-source element
     {
-
-        Any aAny;
-
         // TOC specific index source attributes:
 
         // outline-level: 1..10

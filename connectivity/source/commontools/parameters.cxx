@@ -551,7 +551,6 @@ namespace dbtools
             const OUString* pDetailFields = m_aDetailFields.getConstArray();
 
             sal_Int32 nMasterLen = m_aMasterFields.getLength();
-            Any aParamType, aScale, aValue;
 
             // loop through all master fields. For each of them, get the respective column from the
             // parent , and forward it's current value as paramter value to the (inner) row set

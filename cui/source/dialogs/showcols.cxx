@@ -61,7 +61,6 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
     DBG_ASSERT(m_xColumns.is(), "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
     if (m_xColumns.is())
     {
-        ::com::sun::star::uno::Any aCol;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
         for (sal_uInt16 i=0; i<m_aList.GetSelectEntryCount(); ++i)
         {

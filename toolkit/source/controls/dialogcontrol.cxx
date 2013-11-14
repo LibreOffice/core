@@ -496,7 +496,6 @@ throw (::com::sun::star::uno::RuntimeException)
     if ( pOutDev && !mbPosModified )
     {
         // Currentley we are simply using MAP_APPFONT
-        Any    aAny;
         ::Size aTmp( e.X, e.Y );
         aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
 

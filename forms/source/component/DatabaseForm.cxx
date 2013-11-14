@@ -2467,7 +2467,6 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
     // HiddenControls and forms are not listed
     if (nNewCount <= nCount)
     {
-        Any aElement;
         sal_Int16 nTabIndex = 1;
         for (sal_Int32 i=0; i < nNewCount; ++i, ++pControls)
         {

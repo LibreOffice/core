@@ -142,7 +142,6 @@ void OFileControlModel::disposing()
 //------------------------------------------------------------------------------
 Any OFileControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
-    Any aReturn;
     switch ( _nHandle )
     {
         case PROPERTY_ID_DEFAULT_TEXT:

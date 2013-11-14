@@ -83,7 +83,6 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
     Reference<XController> xController;
     if(xFrame.is())
         xController = xFrame->getController();
-    Any aViewData;
     if(xController.is() && !m_pHistory->empty())
     {
         m_pHistory->at( m_nCurPos )->aViewData = xController->getViewData();

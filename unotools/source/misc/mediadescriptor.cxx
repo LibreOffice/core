@@ -390,7 +390,6 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
 
 css::uno::Any MediaDescriptor::getComponentDataEntry( const OUString& rName ) const
 {
-    css::uno::Any aEntry;
     comphelper::SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA() );
     if( aPropertyIter != end() )
         return comphelper::NamedValueCollection( aPropertyIter->second ).get( rName );

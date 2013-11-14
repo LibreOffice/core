@@ -2663,7 +2663,6 @@ RTLFUNC(Round)
 void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const OUString& sFuncName, SbxVariable* pRet )
 {
     static Reference< XFunctionAccess > xFunc;
-    Any aRes;
     try
     {
         if ( !xFunc.is() )

@@ -1750,9 +1750,6 @@ void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
 //------------------------------------------------------------------------------
 sal_Bool DbCheckBox::commitControl()
 {
-#if OSL_DEBUG_LEVEL > 0
-    Any aVal = makeAny( (sal_Int16)( static_cast< CheckBoxControl* >( m_pWindow )->GetBox().GetState() ) );
-#endif
     m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE,
                     makeAny( (sal_Int16)( static_cast< CheckBoxControl* >( m_pWindow )->GetBox().GetState() ) ) );
     return sal_True;

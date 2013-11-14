@@ -213,7 +213,6 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const OUString & Propert
 void SAL_CALL DataProviderHandler::setPropertyValue(const OUString & PropertyName, const uno::Any & Value) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    uno::Any aPropertyValue;
     const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
     switch(nId)
     {

@@ -83,8 +83,6 @@ IMPL_LINK( ToolbarMenuAcc, WindowEventListener, VclSimpleEvent*, pEvent )
 
 void ToolbarMenuAcc::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    Any aOldValue, aNewValue;
-
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_OBJECT_DYING:

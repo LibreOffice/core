@@ -604,8 +604,6 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     rISet.Put( aBoxItem );
 
-    Any aDefaultCellStyle( Reference< XStyle >( static_cast< XWeak* >( pSheet ), UNO_QUERY ) );
-
     // ---- default --------------------------------------------------
 
     Any aGray1( implMakeSolidCellStyle( pSSPool, "gray1" , aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));

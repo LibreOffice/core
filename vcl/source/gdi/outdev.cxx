@@ -2608,7 +2608,6 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
 
 ::com::sun::star::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
-    ::com::sun::star::uno::Any aRet;
     const SystemGraphicsData aSysData = GetSystemGfxData();
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)&aSysData,
                                                       aSysData.nSize );

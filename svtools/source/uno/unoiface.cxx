@@ -1987,8 +1987,6 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Any aReturn;
-
     DoubleCurrencyField* pField = (DoubleCurrencyField*)GetFormattedField();
     if ( pField )
     {

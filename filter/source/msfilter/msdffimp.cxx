@@ -2704,7 +2704,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
     }
     if ( !bRotateTextWithShape )
     {
-        const com::sun::star::uno::Any* pAny, aAny;
+        const com::sun::star::uno::Any* pAny;
         SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
         const OUString sTextRotateAngle( "TextRotateAngle" );
         pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );

@@ -376,7 +376,6 @@ void Container::dropByIndex( sal_Int32 index )
         }
     }
 
-    Any oldElement = m_values[index];
     for( int i = index +1 ; i < m_values.getLength() ; i ++ )
     {
         m_values[i-1] = m_values[i];

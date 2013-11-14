@@ -3300,7 +3300,6 @@ void FmXFormShell::CreateExternalView()
 
             FmXBoundFormFieldIterator aModelIterator(xCurrentNavController->getModel());
             Reference< XPropertySet> xCurrentModelSet;
-            Any aCurrentBoundField;
             OUString sColumnType,aGroupName,sControlSource;
             Sequence< Property> aProps;
             Reference< XPropertySet> xCurrentBoundField;

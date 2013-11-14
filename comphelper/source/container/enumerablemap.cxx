@@ -417,7 +417,6 @@ namespace comphelper
 
         const Pair< Any, Any >* mapping = _initialValues.getConstArray();
         const Pair< Any, Any >* mappingEnd = mapping + _initialValues.getLength();
-        Any normalizedValue;
         for ( ; mapping != mappingEnd; ++mapping )
         {
             impl_checkValue_throw( mapping->Second );
@@ -454,7 +453,6 @@ namespace comphelper
             else
             {
                 Reference< XInterface > xValue( _value, UNO_QUERY );
-                Any aTypedValue;
                 if ( xValue.is() )
                     // XInterface is not-NULL, but is X(ValueType) not-NULL, too?
                     xValue.set( xValue->queryInterface( m_aData.m_aValueType ), UNO_QUERY );

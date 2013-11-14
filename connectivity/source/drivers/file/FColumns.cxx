@@ -37,7 +37,6 @@ using namespace ::com::sun::star::lang;
 
 sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
 {
-    const Any aCatalog;
     const OUString sCatalogName;
     const OUString sSchemaName(m_pTable->getSchema());
     const OUString sTableName(m_pTable->getName());

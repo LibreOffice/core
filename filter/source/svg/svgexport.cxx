@@ -1338,7 +1338,6 @@ sal_Bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
     /*  We collect info on master page elements visibility,
      *  and placeholder text shape content.
      */
-    Any result;
     Reference< XPropertySet > xPropSet( rxPage, UNO_QUERY );
     if( xPropSet.is() )
     {

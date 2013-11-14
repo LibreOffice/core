@@ -302,7 +302,6 @@ bool DataPointItemConverter::ApplySpecialItem(
     throw( uno::Exception )
 {
     bool bChanged = false;
-    uno::Any aValue;
 
     switch( nWhichId )
     {

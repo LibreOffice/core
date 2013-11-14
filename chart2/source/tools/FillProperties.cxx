@@ -185,9 +185,6 @@ void lcl_AddDefaultsToMap_without_BitmapProperties(
 void lcl_AddDefaultsToMap_only_BitmapProperties(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    uno::Any aSalInt16Zero = uno::makeAny( sal_Int16( 0 ));
-    uno::Any aSalInt32SizeDefault = uno::makeAny( sal_Int32( 0 ));
-
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETX, 0 );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETY, 0 );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX, 0 );

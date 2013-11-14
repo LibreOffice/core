@@ -301,7 +301,6 @@ Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 
     if ( m_xConfigAccess.is() )
     {
-        Any                      a;
         Reference< XNameAccess > xNameAccess;
 
         try

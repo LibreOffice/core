@@ -404,7 +404,6 @@ uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceS
 uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( uno::Reference< container::XIndexAccess >  xShapes, uno::Reference< drawing::XShape >  xCurrentShape ) throw()
 {
     uno::Reference< drawing::XShape >  xFound;
-    uno::Any aAny;
 
     if(xShapes.is() && xCurrentShape.is())
     {

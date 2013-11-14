@@ -120,7 +120,6 @@ bool DigitalSignaturesDialog::isXML(const OUString& rURI )
 
     for (int i = 0; i < m_manifest.getLength(); i++)
     {
-        Any digest;
         const Sequence< css::beans::PropertyValue >& entry = m_manifest[i];
         OUString sPath, sMediaType;
         bool bEncrypted = false;

@@ -435,7 +435,6 @@ namespace pcr
     {
         ScriptEventDescriptor aDescriptor( impl_getDescriptor_throw( _rName ) );
 
-        Any aRet;
         Sequence< PropertyValue > aScriptDescriptor( 2 );
         aScriptDescriptor[0].Name = "EventType";
         aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;

@@ -68,7 +68,6 @@ PyObject* PyUNO_callable_call(
     Sequence<Any> aOutParam;
     Sequence<Any> aParams;
     Any any_params;
-    Any out_params;
     Any ret_value;
     RuntimeCargo *cargo = 0;
     me = (PyUNO_callable*) self;

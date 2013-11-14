@@ -461,7 +461,6 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
 
             const OUString aCommand( ".uno:ExtrusionDepthDialog" );
 
-            Any a;
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Name = OUString( "Depth" );
             aArgs[0].Value <<= mfDepth;

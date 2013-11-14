@@ -2562,7 +2562,6 @@ namespace
         {
             if( !aData.getLength() )
                 aData = xDataSequence->getData();
-            uno::Any aAny;
             OUString aString;
             sal_Int32 nCount = aData.getLength();
             for( sal_Int32 i = 0; i < nCount; ++i )

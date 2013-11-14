@@ -2278,7 +2278,6 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
 
     if(!pEntry)
         throw UnknownPropertyException();
-    Any aAny;
     switch(pEntry->nWID)
     {
         case 0:default:break;

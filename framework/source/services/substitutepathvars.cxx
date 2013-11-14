@@ -1119,8 +1119,6 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     aPreDefPathVariables.m_FixedVar[PREDEFVAR_SHARE_SUBDIR_NAME] = rtl::OUString(LIBO_SHARE_FOLDER);
 
-    Any             aAny;
-
     // Get inspath and userpath from bootstrap mechanism in every case as file URL
     ::utl::Bootstrap::PathStatus aState;
     OUString              sVal  ;

@@ -341,8 +341,6 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
     Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
 
-    Any aAny;
-
     // <style:default-style ...>
     GetExport().CheckAttrList();
 

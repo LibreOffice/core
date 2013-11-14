@@ -501,7 +501,6 @@ Any AccFrameSelector::getAccessibleKeyBinding(  ) throw (RuntimeException)
 sal_Int32 AccFrameSelector::getForeground(  )
         throw (RuntimeException)
 {
-    Any aRet;
     SolarMutexGuard aGuard;
     IsValid();
     return mpFrameSel->GetControlForeground().GetColor();
@@ -512,7 +511,6 @@ sal_Int32 AccFrameSelector::getForeground(  )
 sal_Int32 AccFrameSelector::getBackground(  )
         throw (RuntimeException)
 {
-    Any aRet;
     SolarMutexGuard aGuard;
     IsValid();
     return mpFrameSel->GetControlBackground().GetColor();

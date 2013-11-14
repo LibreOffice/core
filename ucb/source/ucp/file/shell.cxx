@@ -2261,7 +2261,6 @@ shell::commit( const shell::ContentMap::iterator& it,
                const osl::FileStatus& aFileStatus )
 {
     uno::Any aAny;
-    uno::Any emptyAny;
     shell::PropertySet::iterator it1;
 
     if( it->second.properties == 0 )

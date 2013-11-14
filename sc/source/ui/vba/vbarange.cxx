@@ -2652,7 +2652,6 @@ ScVbaRange::setWrapText( const uno::Any& aIsWrapped ) throw (script::BasicErrorE
     if ( m_Areas->getCount() > 1 )
     {
         sal_Int32 nItems = m_Areas->getCount();
-        uno::Any aResult;
         for ( sal_Int32 index=1; index <= nItems; ++index )
         {
             uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny(index), uno::Any() ), uno::UNO_QUERY_THROW );

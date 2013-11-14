@@ -4582,7 +4582,6 @@ void SwWW8ImplReader::ReadDocVars()
 
         for(size_t i=0; i<aDocVarStrings.size(); i++)
         {
-            uno::Any aDefaultValue;
             const OUString &rName = aDocVarStrings[i];
             uno::Any aValue;
             aValue <<= OUString(aDocValueStrings[i]);
