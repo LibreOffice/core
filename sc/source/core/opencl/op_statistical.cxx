@@ -3599,16 +3599,15 @@ void OpFTest::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp = 0;\n";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
+        FormulaToken *pCurSub = vSubArguments[i]->GetFormulaToken();
+        assert(pCurSub);
+        if (pCurSub->GetType() == formula::svDoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCurSub);
             ss << "    for (int i = ";
 #ifdef  ISNAN
-            ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+            ss << "0; i < "<< pDVR->GetRefRowSize() << "; i++){\n";
             ss << "        double arg"<<i<<" = ";
             ss << vSubArguments[i]->GenSlidingWindowDeclRef();
             ss << ";\n";
@@ -3626,21 +3625,21 @@ void OpFTest::GenSlidingWindowFunction(std::stringstream &ss,
             ss << " * arg"<<i<<";\n";
             ss << "    }\n";
 #endif
-            }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-#ifdef  ISNAN
-                ss << "return HUGE_VAL";
-#endif
-            }
-            else if (pCur->GetType() == formula::svDouble)
-            {
-#ifdef  ISNAN
-                ss << "return HUGE_VAL";
-#endif
-            }
         }
-        ss << "    double fS1 = (fSumSqr1-fSum1*fSum1/length0)/(length0-1.0);\n"
+        else if (pCurSub->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            ss << "return HUGE_VAL";
+#endif
+        }
+        else if (pCurSub->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "return HUGE_VAL";
+#endif
+        }
+    }
+    ss << "    double fS1 = (fSumSqr1-fSum1*fSum1/length0)/(length0-1.0);\n"
         "    double fS2 = (fSumSqr2-fSum2*fSum2/length1)/(length1-1.0);\n"
         "    double fF, fF1, fF2;\n"
         "    if (fS1 > fS2)\n"
@@ -3656,8 +3655,8 @@ void OpFTest::GenSlidingWindowFunction(std::stringstream &ss,
         "        fF2 = length0-1.0;\n"
         "    }\n"
         "    tmp = 2.0*GetFDist(fF, fF1, fF2);\n";
-        ss << "    return tmp;\n";
-        ss << "}";
+    ss << "    return tmp;\n";
+    ss << "}";
 }
 void OpB::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
