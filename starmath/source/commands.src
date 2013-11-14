@@ -270,6 +270,7 @@ String RID_BARX_HELP        { Text = "Line Above" ; };
 String RID_BREVEX           { Text = "breve <?> " ; };
 String RID_BREVEX_HELP      { Text = "Breve" ; };
 String RID_CHECKX           { Text = "check <?> " ; };
+String RID_CHECKX_HELP      { Text = "Reverse Circumflex" ; };
 String RID_CIRCLEX          { Text = "circle <?> " ; };
 String RID_CIRCLEX_HELP     { Text = "Circle" ; };
 String RID_DOTX             { Text = "dot <?> " ; };
