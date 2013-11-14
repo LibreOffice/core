@@ -66,7 +66,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 
 $(eval $(call gb_Module_add_l10n_targets,filter,\
 	AllLangResTarget_eps \
-	AllLangResTarget_flash \
 	AllLangResTarget_pdffilter \
 	AllLangResTarget_t602filter \
 	AllLangResTarget_xsltdlg \
