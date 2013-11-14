@@ -618,8 +618,7 @@ sub outputparameter ()
     else  { push(@output, "Not unzipping ARCHIVE files\n"); }
     if (!($installer::globals::languages_defined_in_productlist))
     {
-        push(@output, "Languages:\n");
-        foreach my $element (@installer::globals::languageproducts) { push(@output, "\t$element\n"); }
+        push(@output, sprintf("Languages: %s\n", $installer::globals::languageproduct));
     }
     else
     {

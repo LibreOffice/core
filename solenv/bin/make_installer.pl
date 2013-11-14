@@ -612,10 +612,11 @@ if ( $installer::globals::debug ) { installer::logger::savedebug($installer::glo
 
 if ( $installer::globals::debug ) { installer::logger::debuginfo("\nPart 1b: The language dependent part\n"); }
 
-
-for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
+# Run the following code block exactly once.
+# This strange version of a do{}while(false) loop exists only to allow (legacy) next statements.
+for (;1;last)
 {
-    my $languagesarrayref = installer::languages::get_all_languages_for_one_product($installer::globals::languageproducts[$n], $allvariableshashref);
+    my $languagesarrayref = installer::languages::get_all_languages_for_one_product($installer::globals::languageproduct, $allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "languages.log" ,$languagesarrayref); }
 
     $installer::globals::alllanguagesinproductarrayref = $languagesarrayref;
@@ -2259,8 +2260,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # saving file_info file for later analysis
     my $speciallogfilename = "fileinfo_" . $installer::globals::product . "\.log";
     installer::files::save_array_of_hashes($loggingdir . $speciallogfilename, $filesinproductlanguageresolvedarrayref);
-
-}   # end of iteration for one language group
+}
 
 # saving debug info at end
 if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }

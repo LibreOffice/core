@@ -113,7 +113,7 @@ BEGIN
 
     $required_dotnet_version = "2.0.0.0";
     $productextension = "";
-    @languageproducts = ();
+    $languageproduct = undef;
     $build = "";
     $minor = "";
     $lastminor = "";

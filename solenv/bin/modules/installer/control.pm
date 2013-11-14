@@ -497,7 +497,7 @@ sub check_updatepack
 
                     # try to write into $shipdrive
 
-                    my $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test_$$";
+                    my $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproduct . "_test_$$";
                     $directory =~ s/\,/\_/g;    # for the list of languages
                     $directory =~ s/\-/\_/g;    # for en-US, pt-BR, ...
                     $directory = $shipdrive . $installer::globals::separator . $directory;

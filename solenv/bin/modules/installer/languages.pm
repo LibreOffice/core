@@ -30,30 +30,45 @@ use installer::globals;
 use installer::remover;
 use installer::ziplist;
 
-#############################################################################
-# Analyzing the laguage list parameter and language list from zip list file
-#############################################################################
+=head2 analyze_languagelist()
 
-sub analyze_languagelist
+    Convert $installer::globals::languagelist into $installer::globals::languageproduct.
+
+    That is now just a replacement of '_' with ','.
+
+    $installer::globals::languageproduct (specified by the -l option
+    on the command line) can contain multiple languages separated by
+    '_' to specify multilingual builds.
+
+    Separation by '#' to build multiple languages (single or
+    multilingual) in one make_installer.pl run is not supported
+    anymore.  Call make_installer.pl with all languages separately instead:
+    make_installer.pl -l L1#L2
+    ->
+    make_installer.pl -l L1
+    make_installer.pl -l L2
+
+=cut
+sub analyze_languagelist()
 {
-    my $first = $installer::globals::languagelist;
+    my $languageproduct = $installer::globals::languagelist;
 
-    $first =~ s/\_/\,/g;    # substituting "_" by ",", in case of dmake definition 01_49
+    $languageproduct =~ s/\_/\,/g;  # substituting "_" by ",", in case of dmake definition 01_49
 
-    # Products are separated by a "#", if defined in zip-list by a "|". But "get_info_about_languages"
-    # substitutes already "|" to "#". This procedure only knows "#" as product separator.
-    # Different languages for one product are separated by ",". But on the command line the "_" is used.
-    # Therefore "_" is replaced by "," at the beginning of this procedure.
-
-    while ($first =~ /^(\S+)\#(\S+?)$/) # Minimal matching, to keep the order of languages
+    if ($languageproduct =~ /\#/)
     {
-        $first = $1;
-        my $last = $2;
-        unshift(@installer::globals::languageproducts, $last);
+        installer::exiter::exit_program(
+            "building more than one language (or language set) is not supported anymore\n"
+            ."please replace one call of 'make_installer.pl -l language1#language2'\n"
+            ."with two calls 'make_installer.pl -l language1' and 'make_installer.pl -l language2'",
+            "installer::language::analyze_languagelist");
     }
 
-    unshift(@installer::globals::languageproducts, $first);
+    $installer::globals::languageproduct = $languageproduct;
 }
+
+
+
 
 ####################################################
 # Reading languages from zip list file
