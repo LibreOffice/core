@@ -134,7 +134,9 @@ void ScChartPositioner::GlueState()
     SCROW nMaxRows, nEndRow;
     nMaxCols = nEndCol = 0;
     nMaxRows = nEndRow = 0;
-    for ( size_t i = 1, nRanges = aRangeListRef->size(); i <= nRanges; ++i )     // <= so 1 extra pass after last item
+
+    // <= so 1 extra pass after last item
+    for ( size_t i = 1, nRanges = aRangeListRef->size(); i <= nRanges; ++i )
     {   // detect spanning/surrounding area etc.
         SCCOLROW nTmp, n1, n2;
         if ( (n1 = pR->aStart.Col()) < nStartCol ) nStartCol = static_cast<SCCOL>(n1  );
@@ -143,7 +145,9 @@ void ScChartPositioner::GlueState()
         if ( (n1 = pR->aStart.Row()) < nStartRow ) nStartRow = static_cast<SCROW>(n1  );
         if ( (n2 = pR->aEnd.Row()  ) > nEndRow   ) nEndRow   = static_cast<SCROW>(n2  );
         if ( (nTmp = n2 - n1 + 1   ) > nMaxRows  ) nMaxRows  = static_cast<SCROW>(nTmp);
-        if ( i < nRanges )                      // in last pass; i = nRanges so don't use at()
+
+        // in last pass; i = nRanges so don't use at()
+        if ( i < nRanges )
             pR = (*aRangeListRef)[i];
     }
     SCCOL nC = nEndCol - nStartCol + 1;
@@ -159,14 +163,15 @@ void ScChartPositioner::GlueState()
         return;
     }
     sal_uLong nCR = (sal_uLong)nC * nR;
-//2do:
-/*
+
+    /*
+    TODO:
     First do it simple without bit masking. A maximum of 8MB could be allocated
     this way (256 Cols x 32000 Rows). That could be reduced to 2MB by
     using 2 Bits per entry, but it is faster this way.
-    Another optimizing would be to store only used rows/columns in the array, but
-    would mean another iteration of the RangeList indirect access to the array.
- */
+    Another optimization would be to store only used rows/columns in the array, but
+    would mean another iteration of the RangeList indirect access to the array. */
+
     const sal_uInt8 nHole = 0;
     const sal_uInt8 nOccu = 1;
     const sal_uInt8 nFree = 2;
@@ -200,11 +205,11 @@ void ScChartPositioner::GlueState()
         for ( nRow = 0; bGlue && nRow < nR; nRow++, p++ )
         {
             if ( *p == nOccu )
-            {   // Wenn einer mittendrin liegt ist keine Zusammenfassung
-                // moeglich. Am Rand koennte ok sein, wenn in dieser Spalte
-                // in jeder belegten Zeile einer belegt ist.
+            {   // If there's one right in the middle, we can't combine.
+                // If it were at the edge, we could combine, if in this Column
+                // in every set line, one is set.
                 if ( nRow > 0 && nCol > 0 )
-                    bGlue = false;      // nCol==0 can be DummyUpperLeft
+                    bGlue = false; // nCol==0 can be DummyUpperLeft
                 else
                     nRow = nR;
             }
@@ -214,7 +219,7 @@ void ScChartPositioner::GlueState()
         if ( bGlue && *(p = (pA + ((((sal_uLong)nCol+1) * nR) - 1))) == nFree )
         {   // mark column as totally unused
             *p = nGlue;
-            bGlueCols = sal_True;       // one unused column at least
+            bGlueCols = sal_True; // one unused column at least
         }
     }
 
@@ -227,7 +232,7 @@ void ScChartPositioner::GlueState()
             if ( *p == nOccu )
             {
                 if ( nCol > 0 && nRow > 0 )
-                    bGlue = false;      // nRow==0 can be DummyUpperLeft
+                    bGlue = false; // nRow==0 can be DummyUpperLeft
                 else
                     nCol = nC;
             }
@@ -237,16 +242,15 @@ void ScChartPositioner::GlueState()
         if ( bGlue && *(p = (pA + ((((sal_uLong)nC-1) * nR) + nRow))) == nFree )
         {   // mark row as totally unused
             *p = nGlue;
-            bGlueRows = sal_True;       // one unused row at least
+            bGlueRows = sal_True; // one unused row at least
         }
     }
 
-    // n=1: die linke obere Ecke koennte bei Beschriftung automagisch
-    // hinzugezogen werden
+    // If n=1: The upper left corner could be automagically pulled in for labeling
     p = pA + 1;
     for ( sal_uLong n = 1; bGlue && n < nCR; n++, p++ )
-    {   // ein unberuehrtes Feld heisst, dass es weder spaltenweise noch
-        // zeilenweise zu erreichen war, also nichts zusamenzufassen
+    {   // An untouched field means we could neither reach it through rows nor columns,
+        // thus we can't combine anything
         if ( *p == nHole )
             bGlue = false;
     }
@@ -403,7 +407,7 @@ void ScChartPositioner::CreatePositionMap()
                 }
             }
         }
-        // bei NoGlue werden zusammengehoerige Tabellen als ColGlue dargestellt
+        // For NoGlue: associated tables will be rendered as ColGlue
         nNoGlueRow += nRow2 - nRow1 + 1;
     }
 
@@ -413,7 +417,7 @@ void ScChartPositioner::CreatePositionMap()
     {
         RowMap* pCol = pCols->begin()->second;
         if ( bDummyUpperLeft )
-            (*pCol)[ 0 ] = NULL;        // Dummy for labeling
+            (*pCol)[ 0 ] = NULL; // Dummy for labeling
         nRowCount = static_cast< SCSIZE >( pCol->size());
     }
     else
@@ -471,7 +475,7 @@ void ScChartPositioner::CreatePositionMap()
 
     //  cleanup
     for (ColumnMap::const_iterator it = pCols->begin(); it != pCols->end(); ++it )
-    {   //! nur Tables loeschen, nicht die ScAddress*
+    {   // Only delete tables, not the ScAddress*!
         delete it->second;
     }
     delete pCols;
@@ -537,7 +541,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
             {
                 if ( nRowAdd )
                 {
-                    ppColHeader[ nCol ] = pPosIter->second;     // independent
+                    ppColHeader[ nCol ] = pPosIter->second; // independent
                     ++pPosIter;
                 }
                 else

@@ -105,7 +105,7 @@ ScMemChart* ScChartArray::CreateMemChart()
             return CreateMemChartSingle();
     }
     else
-        return CreateMemChartMulti();   // kann 0 Range besser ab als Single
+        return CreateMemChartMulti(); // Can handle 0 range better than Single
 }
 
 namespace {
@@ -163,7 +163,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     ScRangeListRef aRangeListRef(GetRangeList());
     aRangeListRef->front()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
-    SCCOL nStrCol = nCol1;      // remember for labeling
+    SCCOL nStrCol = nCol1; // remember for labeling
     SCROW nStrRow = nRow1;
     // Skip hidden columns.
     // TODO: make use of last column value once implemented.
@@ -239,7 +239,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     }
 
         //
-        //  Daten
+        //  Data
         //
 
     ScMemChart* pMemChart = new ScMemChart(
@@ -262,17 +262,15 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         }
         else
         {
-            //! Flag, dass Daten ungueltig ??
-
+            // Flag marking data as invalid?
             for (nCol=0; nCol<nColCount; nCol++)
                 for (nRow=0; nRow<nRowCount; nRow++)
                     pMemChart->SetData( static_cast<short>(nCol), static_cast<short>(nRow), DBL_MIN );
         }
 
         //
-        //  Spalten-Header
+        //  Column Header
         //
-
         for (nCol=0; nCol<nColCount; nCol++)
         {
             OUString aString;
@@ -293,9 +291,8 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         }
 
         //
-        //  Zeilen-Header
+        //  Row Header
         //
-
         for (nRow=0; nRow<nRowCount; nRow++)
         {
             OUString aString;
@@ -344,7 +341,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     }
 
     //
-    //  Daten
+    //  Data
     //
 
     ScMemChart* pMemChart = new ScMemChart(
@@ -361,7 +358,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             {
                 for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
                 {
-                    double nVal = DBL_MIN;      // Hack for Chart to recognize empty cells
+                    double nVal = DBL_MIN; // Hack for Chart to recognize empty cells
                     const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                     if (pPos)
                         // otherwise: Gap
@@ -375,7 +372,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         {
             for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
-                double nVal = DBL_MIN;      // Hack for Chart to recognize empty cells
+                double nVal = DBL_MIN; // Hack for Chart to recognize empty cells
                 const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                 if (pPos)
                     // otherwise: Gap
@@ -385,7 +382,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             }
         }
 
-//2do: Label when gaps
+        //TODO: Label when gaps
 
         //
         //  Column header
