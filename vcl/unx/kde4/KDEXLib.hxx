@@ -54,14 +54,14 @@ class KDEXLib : public QObject, public SalXLib
     private:
         void setupEventLoop();
 
-    private slots:
+    private Q_SLOTS:
         void socketNotifierActivated( int fd );
         void timeoutActivated();
         void userEventActivated();
         void startTimeoutTimer();
         void startUserEventTimer();
         bool processYield( bool bWait, bool bHandleAllCurrentEvents );
-    signals:
+    Q_SIGNALS:
         void startTimeoutTimerSignal();
         void startUserEventTimerSignal();
         void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
