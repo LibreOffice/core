@@ -8,6 +8,7 @@
  */
 
 #include "formulagroup.hxx"
+#include "grouptokenconverter.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
@@ -2568,12 +2569,13 @@ public:
     {
     }
 
-    virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat );
+    virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat ) SAL_OVERRIDE;
     virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
                                                    const ScAddress& rTopPos,
-                                                   ScTokenArray& rCode);
+                                                   ScFormulaCellGroupRef& xGroup,
+                                                   ScTokenArray& rCode) SAL_OVERRIDE;
     virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
-                const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode );
+                            ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode ) SAL_OVERRIDE;
 };
 
 ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
@@ -2631,9 +2633,10 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
     if (!pDynamicKernel)
         return NULL;
 
-    // OpenCL source code generation
+    // OpenCL source code generation and kernel compilation
     try {
         pDynamicKernel->CodeGen();
+        pDynamicKernel->CreateKernel();
     }
     catch (const UnhandledToken &ut) {
         std::cerr << "\nDynamic formual compiler: unhandled token: ";
@@ -2650,29 +2653,46 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
 
 CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument& rDoc,
                                                                       const ScAddress& rTopPos,
+                                                                      ScFormulaCellGroupRef& xGroup,
                                                                       ScTokenArray& rCode)
 {
-    return DynamicKernel::create(rDoc, rTopPos, rCode);
+    ScTokenArray aCode;
+    ScGroupTokenConverter aConverter(aCode, rDoc, *xGroup->mpTopCell, rTopPos);
+    if (!aConverter.convert(rCode))
+    {
+        return NULL;
+    }
+
+    return DynamicKernel::create(rDoc, rTopPos, aCode);
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
-    const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup,
+    const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup,
     ScTokenArray& rCode )
 {
     DynamicKernel *pKernel;
 
     osl::ResettableMutexGuard aGuard(xGroup->maMutex);
-    if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
+    if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled ||
+        xGroup->meCalcState == sc::GroupCalcOpenCLKernelBinaryCreated)
     {
-        aGuard.clear();
-        xGroup->maCompilationDone.wait();
-        xGroup->maCompilationDone.reset();
+        if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
+        {
+            aGuard.clear();
+            xGroup->maCompilationDone.wait();
+            xGroup->maCompilationDone.reset();
+        }
+        else
+        {
+            aGuard.clear();
+        }
+
         pKernel = static_cast<DynamicKernel*>(xGroup->mpCompiledFormula);
     }
     else
     {
         aGuard.clear();
-        pKernel = DynamicKernel::create(rDoc, rTopPos, rCode);
+        pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, xGroup, rCode));
     }
 
     if (!pKernel)
@@ -2682,8 +2702,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         // Obtain cl context
         KernelEnv kEnv;
         OpenclDevice::setKernelEnv(&kEnv);
-        // Compile kernel here!!!
-        pKernel->CreateKernel();
         // Run the kernel.
         pKernel->Launch(xGroup->mnLength);
         // Map results back

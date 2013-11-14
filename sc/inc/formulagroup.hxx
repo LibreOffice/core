@@ -101,8 +101,9 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
     virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
                                                    const ScAddress& rTopPos,
+                                                   ScFormulaCellGroupRef& xGroup,
                                                    ScTokenArray& rCode) = 0;
-    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;
+    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;
 };
 
 /// Inherit from this for alternate formula group calculation approaches.
@@ -115,8 +116,9 @@ public:
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat);
     virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
                                                    const ScAddress& rTopPos,
+                                                   ScFormulaCellGroupRef& xGroup,
                                                    ScTokenArray& rCode) SAL_OVERRIDE;
-    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
+    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) SAL_OVERRIDE;
 };
 
 }

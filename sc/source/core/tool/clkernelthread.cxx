@@ -10,6 +10,7 @@
 #include <sal/log.hxx>
 
 #include "formulagroupinterpreter.hxx"
+#include "grouptokenconverter.hxx"
 
 #include "clkernelthread.hxx"
 
@@ -52,8 +53,10 @@ void CLBuildKernelThread::execute()
                 aWorkItem.mxGroup->mpCompiledFormula =
                     sc::FormulaGroupInterpreter::getStatic()->createCompiledFormula(*aWorkItem.mxGroup->mpTopCell->GetDocument(),
                                                                                     aWorkItem.mxGroup->mpTopCell->aPos,
+                                                                                    aWorkItem.mxGroup,
                                                                                     *aWorkItem.mxGroup->mpCode);
                 aWorkItem.mxGroup->meCalcState = sc::GroupCalcOpenCLKernelBinaryCreated;
+                SAL_INFO("sc.opencl.thread", "group " << aWorkItem.mxGroup << " compilation done");
                 aWorkItem.mxGroup->maCompilationDone.set();
                 break;
             case CLBuildKernelWorkItem::FINISH:

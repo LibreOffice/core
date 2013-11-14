@@ -287,13 +287,14 @@ ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMa
 
 CompiledFormula* FormulaGroupInterpreterSoftware::createCompiledFormula(ScDocument& /* rDoc */,
                                                                         const ScAddress& /* rTopPos */,
+                                                                        ScFormulaCellGroupRef& /* xGroup */,
                                                                         ScTokenArray& /* rCode */)
 {
     return NULL;
 }
 
 bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
-                                                const ScFormulaCellGroupRef& xGroup,
+                                                ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)
 {
     typedef boost::unordered_map<const formula::FormulaToken*, formula::FormulaTokenRef> CachedTokensType;
@@ -494,8 +495,8 @@ public:
     FormulaGroupInterpreterOpenCLMissing() : FormulaGroupInterpreter() {}
     virtual ~FormulaGroupInterpreterOpenCLMissing() {}
     virtual ScMatrixRef inverseMatrix(const ScMatrix&) { return ScMatrixRef(); }
-    virtual CompiledFormula* createCompiledFormula(ScDocument&, const ScAddress&, ScTokenArray&) SAL_OVERRIDE { return NULL; }
-    virtual bool interpret(ScDocument&, const ScAddress&, const ScFormulaCellGroupRef&, ScTokenArray&) { return false; }
+    virtual CompiledFormula* createCompiledFormula(ScDocument&, const ScAddress&, ScFormulaCellGroupRef&, ScTokenArray&) SAL_OVERRIDE { return NULL; }
+    virtual bool interpret(ScDocument&, const ScAddress&, ScFormulaCellGroupRef&,  ScTokenArray&) { return false; }
 };
 
 static void SAL_CALL thisModule() {}
