@@ -134,10 +134,73 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     setMultiSelectionMode( false );
     //default mode
     _dialog->setOperationMode(KFileDialog::Opening);
+
+    // XExecutableDialog functions
+    connect( this, SIGNAL( setTitleSignal( const OUString & ) ),
+             this, SLOT( setTitleSlot( const OUString & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( executeSignal() ),
+             this, SLOT( executeSlot() ), Qt::BlockingQueuedConnection );
+
+    // XFilePicker functions
+    connect( this, SIGNAL( setMultiSelectionModeSignal( sal_Bool ) ),
+             this, SLOT( setMultiSelectionModeSlot( sal_Bool ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( setDefaultNameSignal( const OUString & ) ),
+             this, SLOT( setDefaultNameSlot( const OUString & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( setDisplayDirectorySignal( const OUString & ) ),
+             this, SLOT( setDisplayDirectorySlot( const OUString & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( getDisplayDirectorySignal() ),
+             this, SLOT( getDisplayDirectorySlot() ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( getFilesSignal() ),
+             this, SLOT( getFilesSlot() ), Qt::BlockingQueuedConnection );
+
+    // XFilterManager functions
+    connect( this, SIGNAL( appendFilterSignal( const OUString &, const OUString & ) ),
+             this, SLOT( appendFilterSlot( const OUString &, const OUString & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( setCurrentFilterSignal( const OUString & ) ),
+             this, SLOT( setCurrentFilterSlot( const OUString & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( getCurrentFilterSignal() ),
+             this, SLOT( getCurrentFilterSlot() ), Qt::BlockingQueuedConnection );
+
+    // XFilterGroupManager functions
+    connect( this, SIGNAL( appendFilterGroupSignal( const OUString &, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > & ) ),
+             this, SLOT( appendFilterGroupSlot( const OUString &, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > & ) ), Qt::BlockingQueuedConnection );
+
+    // XFilePickerControlAccess functions
+    connect( this, SIGNAL( setValueSignal( sal_Int16, sal_Int16, const ::com::sun::star::uno::Any & ) ),
+             this, SLOT( setValueSlot( sal_Int16, sal_Int16, const ::com::sun::star::uno::Any & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( getValueSignal( sal_Int16, sal_Int16 ) ),
+             this, SLOT( getValueSlot( sal_Int16, sal_Int16 ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( enableControlSignal( sal_Int16, sal_Bool ) ),
+             this, SLOT( enableControlSlot( sal_Int16, sal_Bool ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( setLabelSignal( sal_Int16, const OUString & ) ),
+             this, SLOT( setLabelSlot( sal_Int16, const OUString & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( getLabelSignal( sal_Int16 ) ),
+             this, SLOT( getLabelSlot( sal_Int16 ) ), Qt::BlockingQueuedConnection );
+
+    // XFilePicker2 functions
+    connect( this, SIGNAL( getSelectedFilesSignal() ),
+             this, SLOT( getSelectedFilesSlot() ), Qt::BlockingQueuedConnection );
+
+    // XInitialization
+    connect( this, SIGNAL( initializeSignal( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & ) ),
+             this, SLOT( initializeSlot( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & ) ), Qt::BlockingQueuedConnection );
+
+    // Destructor proxy
+    connect( this, SIGNAL( cleanupProxySignal() ), this, SLOT( cleanupProxy() ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( checkProtocolSignal() ), this, SLOT( checkProtocol() ), Qt::BlockingQueuedConnection );
 }
 
 KDE4FilePicker::~KDE4FilePicker()
 {
+    cleanupProxy();
+}
+
+void KDE4FilePicker::cleanupProxy()
+{
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser aReleaser;
+        return Q_EMIT cleanupProxySignal();
+    }
     delete _resMgr;
     delete _dialog;
 }
@@ -159,12 +222,22 @@ void SAL_CALL KDE4FilePicker::removeFilePickerListener( const uno::Reference<XFi
 void SAL_CALL KDE4FilePicker::setTitle( const OUString &title )
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser aReleaser;
+        return Q_EMIT setTitleSignal( title );
+    }
+
     _dialog->setCaption(toQString(title));
 }
 
 sal_Int16 SAL_CALL KDE4FilePicker::execute()
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser aReleaser;
+        return Q_EMIT executeSignal();
+    }
+
     //get the window id of the main OO window to set it for the dialog as a parent
     Window *pParentWin = Application::GetDefDialogParent();
     if ( pParentWin )
@@ -211,6 +284,11 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
 void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT setMultiSelectionModeSignal( multiSelect );
+    }
+
     if( allowRemoteUrls )
     {
         if (multiSelect)
@@ -230,6 +308,11 @@ void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
 void SAL_CALL KDE4FilePicker::setDefaultName( const OUString &name )
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT setDefaultNameSignal( name );
+    }
+
     const QString url = toQString(name);
     _dialog->setSelection(url);
 }
@@ -237,6 +320,11 @@ void SAL_CALL KDE4FilePicker::setDefaultName( const OUString &name )
 void SAL_CALL KDE4FilePicker::setDisplayDirectory( const OUString &dir )
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT setDisplayDirectorySignal( dir );
+    }
+
     const QString url = toQString(dir);
     _dialog->setUrl(KUrl(url));
 }
@@ -244,6 +332,11 @@ void SAL_CALL KDE4FilePicker::setDisplayDirectory( const OUString &dir )
 OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT getDisplayDirectorySignal();
+    }
+
     QString dir = _dialog->baseUrl().url();
     return toOUString(dir);
 }
@@ -251,6 +344,11 @@ OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
 uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT getFilesSignal();
+    }
+
     KUrl::List urls = _dialog->selectedUrls();
     uno::Sequence< OUString > seq( urls.size());
     int i = 0;
@@ -262,12 +360,22 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
 uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSelectedFiles()
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT getSelectedFilesSignal();
+    }
+
     return getFiles();
 }
 
 void SAL_CALL KDE4FilePicker::appendFilter( const OUString &title, const OUString &filter )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT appendFilterSignal( title, filter );
+    }
+
     QString t = toQString(title);
     QString f = toQString(filter);
 
@@ -290,6 +398,11 @@ void SAL_CALL KDE4FilePicker::appendFilter( const OUString &title, const OUStrin
 void SAL_CALL KDE4FilePicker::setCurrentFilter( const OUString &title )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT setCurrentFilterSignal( title );
+    }
+
     QString t = toQString(title);
     t.replace("/", "\\/");
     _dialog->filterWidget()->setCurrentFilter(t);
@@ -298,6 +411,11 @@ void SAL_CALL KDE4FilePicker::setCurrentFilter( const OUString &title )
 OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT getCurrentFilterSignal();
+    }
+
     // _dialog->currentFilter() wouldn't quite work, because it returns only e.g. "*.doc",
     // without the description, and there may be several filters with the same pattern
     QString filter = _dialog->filterWidget()->currentText();
@@ -311,9 +429,14 @@ OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
     return toOUString(filter);
 }
 
-void SAL_CALL KDE4FilePicker::appendFilterGroup( const OUString& , const uno::Sequence<beans::StringPair>& filters)
+void SAL_CALL KDE4FilePicker::appendFilterGroup( const OUString& rGroupTitle, const uno::Sequence<beans::StringPair>& filters)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT appendFilterGroupSignal( rGroupTitle, filters );
+    }
+
     const sal_uInt16 length = filters.getLength();
     for (sal_uInt16 i = 0; i < length; ++i)
     {
@@ -322,9 +445,14 @@ void SAL_CALL KDE4FilePicker::appendFilterGroup( const OUString& , const uno::Se
     }
 }
 
-void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16, const uno::Any &value )
+void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16 nControlAction, const uno::Any &value )
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT setValueSignal( controlId, nControlAction, value );
+    }
+
     QWidget* widget = _customWidgets[controlId];
 
     if (widget)
@@ -359,9 +487,14 @@ void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16, const un
     }
 }
 
-uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 )
+uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nControlAction )
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT getValueSignal( controlId, nControlAction );
+    }
+
     uno::Any res(false);
 
     QWidget* widget = _customWidgets[controlId];
@@ -407,6 +540,11 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 )
 void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enable )
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT enableControlSignal( controlId, enable );
+    }
+
     QWidget* widget = _customWidgets[controlId];
 
     if (widget)
@@ -418,6 +556,11 @@ void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enabl
 void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &label )
     throw( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT setLabelSignal( controlId, label );
+    }
+
     QWidget* widget = _customWidgets[controlId];
 
     if (widget)
@@ -452,6 +595,11 @@ void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &lab
 OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
     throw ( uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT getLabelSignal( controlId );
+    }
+
     QWidget* widget = _customWidgets[controlId];
     QString label;
 
@@ -580,6 +728,11 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     throw( uno::Exception, uno::RuntimeException )
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT initializeSignal( args );
+    }
+
     _filter.clear();
 
     // parameter checking
@@ -715,6 +868,11 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNames()
 
 void KDE4FilePicker::checkProtocol()
 {
+    if( qApp->thread() != QThread::currentThread() ) {
+        SalYieldMutexReleaser release;
+        return Q_EMIT checkProtocolSignal();
+    }
+
     // There's no libreoffice.desktop :(, so find a matching one.
     KService::List services = KServiceTypeTrader::self()->query( "Application", "Exec =~ 'libreoffice %U'" );
     QStringList protocols;
