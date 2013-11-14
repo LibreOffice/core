@@ -1595,7 +1595,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
         OSL_ENSURE( nLvl < GetTOXForm().GetFormMax(), "invalid FORM_LEVEL");
 
         SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-        xub_StrLen nLinkStartPosition = STRING_NOTFOUND;
+        sal_Int32 nLinkStartPosition = -1;
         OUString  sLinkCharacterStyle; // default to "Default" character style - which is none
         OUString sURL;
         // create an enumerator
@@ -1781,7 +1781,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
             case TOKEN_LINK_END:
                     //TODO: only paired start/end tokens are valid
-                if( STRING_NOTFOUND != nLinkStartPosition)
+                if (nLinkStartPosition != -1)
                 {
                     SwIndex aIdx( pTOXNd, nLinkStartPosition );
                     // pTOXNd->Erase( aIdx, SwForm::nFormLinkSttLen );
@@ -1810,7 +1810,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                         pNewLink->aINetFmt.SetINetFmtId(USHRT_MAX);
                     }
                     aLinkArr.push_back(pNewLink);
-                    nLinkStartPosition = STRING_NOTFOUND;
+                    nLinkStartPosition = -1;
                     sLinkCharacterStyle = "";
                 }
                 break;
