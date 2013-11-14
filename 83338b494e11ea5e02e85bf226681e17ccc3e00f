@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///tI\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-14T11:29:10Z",
+      "side": 1,
+      "message": "Please use CPPUNIT_ASSERT_EQUAL(expected, actual) next time, that way if the values don\u0027t match, we have them in the log, not just a \"they didn\u0027t match\".",
+      "revId": "83338b494e11ea5e02e85bf226681e17ccc3e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
