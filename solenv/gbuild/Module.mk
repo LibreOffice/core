@@ -65,7 +65,7 @@ $(call gb_Module_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),MOD,5)
 	$(call gb_Output_announce_title,module $* cleared.)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_nonl10n_target,$*) $(call gb_Module_get_l10n_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*)
+		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_nonl10n_target,$*) $(call gb_Module_get_l10n_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_slowcheck_target,$*) $(call gb_Module_get_subsequentcheck_target,$*))
 
 $(call gb_Module_get_l10n_target,%) :
 	$(call gb_Output_announce,$*,$(true),LOC,5)
