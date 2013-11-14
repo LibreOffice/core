@@ -651,7 +651,11 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
             SwWriteTableCol aSrchCol( nCPos );
             SwWriteTableCols::const_iterator it = aCols.find( &aSrchCol );
             OSL_ENSURE( it != aCols.end(), "missing column" );
-            nCol = it - aCols.begin();
+            if(it != aCols.end())
+            {
+                // if find fails for some nCPos value then it used to set nCol value with size of aCols.
+                nCol = it - aCols.begin();
+            }
 
             if( !ShouldExpandSub( pBox, bSubExpanded, nDepth ) )
             {

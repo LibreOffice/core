@@ -1647,6 +1647,16 @@ DECLARE_OOXML_TEST(testImageCrop, "ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2290 ), aGraphicCropStruct.Bottom );
 }
 
+DECLARE_OOXML_TEST(testCellGridSpan, "cell-grid-span.docx")
+{
+    // The problem was during export gridSpan value for 1st & 2nd cells for test document
+    // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
+    // Varifying gridSpan element is not present in RoundTriped Document (As it's Default value is 1).
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan",0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
