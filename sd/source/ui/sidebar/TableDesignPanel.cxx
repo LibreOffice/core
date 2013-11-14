@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "precompiled_sd.hxx"
 
 #include "TableDesignPanel.hxx"
 
@@ -61,10 +60,11 @@ TableDesignPanel::~TableDesignPanel (void)
 
 
 
-css::ui::LayoutSize TableDesignPanel::GetHeightForWidth (const sal_Int32 nWidth)
+css::ui::LayoutSize TableDesignPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
-    //TODO: make the sizes depend on the font size.
-    return css::ui::LayoutSize(350,-1, 400);
+    Window *pControl = mpWrappedControl.get();
+    sal_Int32 nMinimumHeight = pControl ? pControl->get_preferred_size().Height() : 0;
+    return css::ui::LayoutSize(nMinimumHeight,-1, nMinimumHeight);
 }
 
 } } // end of namespace sd::sidebar

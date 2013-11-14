@@ -26,8 +26,9 @@
 #include "RecentMasterPagesSelector.hxx"
 #include "AllMasterPagesSelector.hxx"
 #include "CustomAnimationPanel.hxx"
-#include "SlideTransitionPanel.hxx"
 #include "NavigatorWrapper.hxx"
+#include "SlideTransitionPanel.hxx"
+#include "TableDesignPanel.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -39,10 +40,6 @@ using namespace css;
 using namespace cssu;
 using namespace ::sd::framework;
 using ::rtl::OUString;
-
-namespace sd {
-    extern ::Window * createTableDesignPanel (::Window* pParent, ViewShellBase& rBase);
-}
 
 namespace sd { namespace sidebar {
 
@@ -181,7 +178,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameSlideTransitions))
         pControl = new SlideTransitionPanel(pParentWindow, *pBase, xFrame);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameTableDesign))
-        pControl = createTableDesignPanel(pParentWindow, *pBase);
+        pControl = new TableDesignPanel(pParentWindow, *pBase);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameNavigator))
         pControl = new NavigatorWrapper(pParentWindow, *pBase, pBindings);
 #undef EndsWith

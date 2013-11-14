@@ -281,6 +281,9 @@
     <glade-widget-class title="ValueSet" name="swuilo-ColumnValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="TableValueSet" name="sdlo-TableValueSet"
+                        generic-name="Set of Table Value Options" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="CsvTableBox" name="sclo-ScCsvTableBox"
                         generic-name="CSV Table Box" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

@@ -69,12 +69,17 @@ namespace sd {
 
 static const sal_Int32 nPreviewColumns = 5;
 static const sal_Int32 nPreviewRows = 5;
+static const sal_Int32 nCellWidth = 12; // one pixel is shared with the next cell!
+static const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cell!
+static const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1);
+static const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
+
 
 // --------------------------------------------------------------------
 
 static const OUString* getPropertyNames()
 {
-    static const OUString gPropNames[ CB_BANDED_COLUMNS-CB_HEADER_ROW+1 ] =
+    static const OUString gPropNames[ CB_COUNT ] =
     {
         OUString("UseFirstRowStyle") ,
         OUString("UseLastRowStyle") ,
@@ -87,50 +92,36 @@ static const OUString* getPropertyNames()
 }
 // --------------------------------------------------------------------
 
-TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool bModal )
-: Control( pParent, SdResId(DLG_TABLEDESIGNPANE) )
-, mrBase( rBase )
-, msTableTemplate( "TableTemplate" )
-, mbModal( bModal )
-, mbStyleSelected( false )
-, mbOptionsChanged( false )
+TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase,
+    bool bModal )
+    : PanelLayout(pParent, "TableDesignPanel",
+        "modules/simpress/ui/tabledesignpanel.ui", cssu::Reference<css::frame::XFrame>())
+    , mrBase( rBase )
+    , msTableTemplate( "TableTemplate" )
+    , mbModal( bModal )
+    , mbStyleSelected( false )
+    , mbOptionsChanged( false )
 {
-    Window* pControlParent = mbModal ? pParent : this;
-
-    //  mxControls[FL_TABLE_STYLES].reset( new FixedLine( pControlParent, SdResId( FL_TABLE_STYLES + 1 ) ) );
-
-    ValueSet* pValueSet = new ValueSet( pControlParent, SdResId( CT_TABLE_STYLES+1 ) );
-    mxControls[CT_TABLE_STYLES].reset( pValueSet );
+    get(m_pValueSet, "previews");
+    m_pValueSet->SetStyle(m_pValueSet->GetStyle() | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_ITEMBORDER);
+    m_pValueSet->SetExtraSpacing(8);
+    m_pValueSet->setModal(mbModal);
     if( !mbModal )
     {
-        pValueSet->SetStyle( (pValueSet->GetStyle() & ~(WB_ITEMBORDER|WB_BORDER)) | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_NOBORDER );
-        pValueSet->SetColor();
-        pValueSet->SetExtraSpacing(8);
+        m_pValueSet->SetColor();
     }
     else
     {
-        pValueSet->SetColor( Color( COL_WHITE ) );
-        pValueSet->SetBackground( Color( COL_WHITE ) );
+        m_pValueSet->SetColor( Color( COL_WHITE ) );
+        m_pValueSet->SetBackground( Color( COL_WHITE ) );
     }
-    pValueSet->SetSelectHdl (LINK(this, TableDesignPane, implValueSetHdl));
+    m_pValueSet->SetSelectHdl (LINK(this, TableDesignPane, implValueSetHdl));
 
-    //  mxControls[FL_STYLE_OPTIONS].reset( new FixedLine( pControlParent, SdResId( FL_STYLE_OPTIONS + 1 ) ) );
-    sal_uInt16 i;
-    for( i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
+    const OUString* pPropNames = getPropertyNames();
+    for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
-        CheckBox *pCheckBox = new CheckBox( pControlParent, SdResId( i+1 ) );
-        mxControls[i].reset( pCheckBox );
-        pCheckBox->SetClickHdl( LINK( this, TableDesignPane, implCheckBoxHdl ) );
-    }
-
-    for( i = 0; i < DESIGNPANE_CONTROL_COUNT; i++ )
-    {
-        if (mxControls[i])
-            mnOrgOffsetY[i] = mxControls[i]->GetPosPixel().Y();
-        else if (i > 0)
-            mnOrgOffsetY[i] = mnOrgOffsetY[i-1];
-        else
-            mnOrgOffsetY[i] = 0;
+        get(m_aCheckBoxes[i], OUStringToOString(pPropNames[i], RTL_TEXTENCODING_UTF8));
+        m_aCheckBoxes[i]->SetClickHdl( LINK( this, TableDesignPane, implCheckBoxHdl ) );
     }
 
     // get current controller and initialize listeners
@@ -144,17 +135,14 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
         const OUString sFamilyName( "table" );
         mxTableFamily = Reference< XIndexAccess >( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
-
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 
     onSelectionChanged();
     updateControls();
-
-    FreeResource();
 }
 
 // --------------------------------------------------------------------
@@ -168,69 +156,8 @@ TableDesignPane::~TableDesignPane()
 
 void TableDesignPane::DataChanged( const DataChangedEvent& /*rDCEvt*/ )
 {
-    updateLayout();
+    m_pValueSet->updateSettings();
 }
-
-// --------------------------------------------------------------------
-
-void TableDesignPane::Resize()
-{
-    updateLayout();
-}
-
-
-
-
-LayoutSize TableDesignPane::GetHeightForWidth (const sal_Int32 nWidth)
-{
-    if ( ! IsVisible() || nWidth<=0)
-        return LayoutSize(0,0,0);
-
-    // Initialize the height with the offset above and below the value
-    // set and below the check boxes.
-    const Point aOffset (LogicToPixel( Point(3,3), MAP_APPFONT));
-    sal_Int32 nHeight (3 * aOffset.Y());
-
-    // Add the height for the check boxes.
-    nHeight += mnOrgOffsetY[CB_BANDED_COLUMNS] - mnOrgOffsetY[CB_HEADER_ROW]
-        + mxControls[CB_BANDED_COLUMNS]->GetSizePixel().Height();
-
-    // Setup minimal and maximal heights that include all check boxes
-    // and a small or large value set.
-    const sal_Int32 nMinimalHeight (nHeight+100);
-    const sal_Int32 nMaximalHeight (nHeight+450);
-
-    // Calculate the number of rows and columns and then add the
-    // preferred size of the value set.
-    ValueSet* pValueSet = static_cast< ValueSet* >( mxControls[CT_TABLE_STYLES].get() );
-    if (pValueSet->GetItemCount() > 0)
-    {
-        Image aImage = pValueSet->GetItemImage(pValueSet->GetItemId(0));
-        Size aItemSize = pValueSet->CalcItemSizePixel(aImage.GetSizePixel());
-        aItemSize.Width() += 10;
-        aItemSize.Height() += 10;
-
-        int nColumnCount = (pValueSet->GetSizePixel().Width() - pValueSet->GetScrollWidth()) / aItemSize.Width();
-        if (nColumnCount < 1)
-            nColumnCount = 1;
-
-        int nRowCount = (pValueSet->GetItemCount() + nColumnCount - 1) / nColumnCount;
-        if (nRowCount < 1)
-            nRowCount = 1;
-
-        nHeight += nRowCount * aItemSize.Height();
-    }
-
-    // Clip the requested height.
-    if (nHeight<nMinimalHeight)
-        nHeight = nMinimalHeight;
-    else if (nHeight>nMaximalHeight)
-        nHeight = nMaximalHeight;
-    return LayoutSize(nMinimalHeight, nMaximalHeight, nHeight);
-}
-
-
-
 
 // --------------------------------------------------------------------
 
@@ -269,8 +196,7 @@ void TableDesignPane::ApplyStyle()
     try
     {
         OUString sStyleName;
-        ValueSet* pValueSet = static_cast< ValueSet* >( mxControls[CT_TABLE_STYLES].get() );
-        sal_Int32 nIndex = static_cast< sal_Int32 >( pValueSet->GetSelectItemId() ) - 1;
+        sal_Int32 nIndex = static_cast< sal_Int32 >( m_pValueSet->GetSelectItemId() ) - 1;
 
         if( (nIndex >= 0) && (nIndex < mxTableFamily->getCount()) )
         {
@@ -331,7 +257,7 @@ IMPL_LINK_NOARG(TableDesignPane, implCheckBoxHdl)
 
 void TableDesignPane::ApplyOptions()
 {
-    static const sal_uInt16 gParamIds[CB_BANDED_COLUMNS-CB_HEADER_ROW+1] =
+    static const sal_uInt16 gParamIds[CB_COUNT] =
     {
         ID_VAL_USEFIRSTROWSTYLE, ID_VAL_USELASTROWSTYLE, ID_VAL_USEBANDINGROWSTYLE,
         ID_VAL_USEFIRSTCOLUMNSTYLE, ID_VAL_USELASTCOLUMNSTYLE, ID_VAL_USEBANDINGCOLUMNSTYLE
@@ -341,9 +267,9 @@ void TableDesignPane::ApplyOptions()
     {
         SfxRequest aReq( SID_TABLE_STYLE_SETTINGS, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
 
-        for( sal_uInt16 i = 0; i < (CB_BANDED_COLUMNS-CB_HEADER_ROW+1); ++i )
+        for( sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
         {
-            aReq.AppendItem( SfxBoolItem( gParamIds[i], static_cast< CheckBox* >( mxControls[CB_HEADER_ROW+i].get() )->IsChecked() ) );
+            aReq.AppendItem( SfxBoolItem( gParamIds[i], m_aCheckBoxes[i]->IsChecked() ) );
         }
 
         SdrView* pView = mrBase.GetDrawView();
@@ -411,127 +337,87 @@ void TableDesignPane::onSelectionChanged()
 
 // --------------------------------------------------------------------
 
-void TableDesignPane::updateLayout()
+void TableValueSet::Resize()
 {
-    ::Size aPaneSize( GetSizePixel() );
-    if(IsVisible() && aPaneSize.Width() > 0)
+    ValueSet::Resize();
+    // Calculate the number of rows and columns.
+    if( GetItemCount() > 0 )
     {
-        Point aOffset( LogicToPixel( Point(3,3), MAP_APPFONT ) );
+        Size aValueSetSize = GetSizePixel();
 
-        ValueSet* pValueSet = static_cast< ValueSet* >( mxControls[CT_TABLE_STYLES].get() );
+        Image aImage = GetItemImage(GetItemId(0));
+        Size aItemSize = aImage.GetSizePixel();
 
-        Size aValueSetSize;
+        aItemSize.Width() += 10;
+        aItemSize.Height() += 10;
+        int nColumnCount = (aValueSetSize.Width() - GetScrollWidth()) / aItemSize.Width();
+        if (nColumnCount < 1)
+            nColumnCount = 1;
 
-        if( !mbModal )
+        int nRowCount = (GetItemCount() + nColumnCount - 1) / nColumnCount;
+        if (nRowCount < 1)
+            nRowCount = 1;
+
+        int nVisibleRowCount = (aValueSetSize.Height()+2) / aItemSize.Height();
+
+        SetColCount ((sal_uInt16)nColumnCount);
+        SetLineCount ((sal_uInt16)nRowCount);
+
+        if( !m_bModal )
         {
-            const long nOptionsHeight = mnOrgOffsetY[CB_BANDED_COLUMNS] + mxControls[CB_BANDED_COLUMNS]->GetSizePixel().Height() + aOffset.Y();
-
-            const long nStylesHeight = aPaneSize.Height() - nOptionsHeight;
-
-            // set width of controls to size of pane
-            for( sal_Int32 nId = 0; nId < DESIGNPANE_CONTROL_COUNT; ++nId )
+            WinBits nStyle = GetStyle() & ~(WB_VSCROLL);
+            if( nRowCount > nVisibleRowCount )
             {
-                if (mxControls[nId])
-                {
-                    Size aSize( mxControls[nId]->GetSizePixel() );
-                    aSize.Width() = aPaneSize.Width() - aOffset.X() - mxControls[nId]->GetPosPixel().X();
-                    mxControls[nId]->SetSizePixel( aSize );
-                    mxControls[nId]->SetPaintTransparent(sal_True);
-                    mxControls[nId]->SetBackground();
-                }
+                nStyle |= WB_VSCROLL;
             }
-            aValueSetSize = Size( pValueSet->GetSizePixel().Width(), nStylesHeight  );
-        }
-        else
-        {
-            aValueSetSize = pValueSet->GetSizePixel();
-        }
-
-
-        // Calculate the number of rows and columns.
-        if( pValueSet->GetItemCount() > 0 )
-        {
-            Image aImage = pValueSet->GetItemImage(pValueSet->GetItemId(0));
-            Size aItemSize = pValueSet->CalcItemSizePixel(aImage.GetSizePixel());
-            pValueSet->SetItemWidth( aItemSize.Width() );
-            pValueSet->SetItemHeight( aItemSize.Height() );
-
-            aItemSize.Width() += 10;
-            aItemSize.Height() += 10;
-            int nColumnCount = (aValueSetSize.Width() - pValueSet->GetScrollWidth()) / aItemSize.Width();
-            if (nColumnCount < 1)
-                nColumnCount = 1;
-
-            int nRowCount = (pValueSet->GetItemCount() + nColumnCount - 1) / nColumnCount;
-            if (nRowCount < 1)
-                nRowCount = 1;
-
-            int nVisibleRowCount = (aValueSetSize.Height()+2) / aItemSize.Height();
-
-            pValueSet->SetLineCount ( (nRowCount < nVisibleRowCount) ? (sal_uInt16)nRowCount : 0 );
-
-            pValueSet->SetColCount ((sal_uInt16)nColumnCount);
-            pValueSet->SetLineCount ((sal_uInt16)nRowCount);
-
-            if( !mbModal )
-            {
-                WinBits nStyle = pValueSet->GetStyle() & ~(WB_VSCROLL);
-                if( nRowCount < nVisibleRowCount )
-                {
-                    aValueSetSize.Height() = nRowCount * aItemSize.Height();
-                }
-                else if( nRowCount > nVisibleRowCount )
-                {
-                    nStyle |= WB_VSCROLL;
-                }
-                pValueSet->SetStyle( nStyle );
-            }
-       }
-
-        if( !mbModal )
-        {
-            pValueSet->SetSizePixel( aValueSetSize );
-            pValueSet->SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-            pValueSet->SetColor( GetSettings().GetStyleSettings().GetWindowColor() );
-
-            Point aPos( pValueSet->GetPosPixel() );
-
-            // The following line may look like a no-op but without it the
-            // control is placed off-screen when RTL is active.
-            pValueSet->SetPosPixel(pValueSet->GetPosPixel());
-
-            // shift show options section down
-            const long nOptionsPos = aPos.Y() + aValueSetSize.Height();
-            sal_Int32 nMaxY (0);
-            for( sal_Int32 nId = FL_STYLE_OPTIONS+1; nId <= CB_BANDED_COLUMNS; ++nId )
-            {
-                if (mxControls[nId])
-                {
-                    Point aCPos( mxControls[nId]->GetPosPixel() );
-                    aCPos.X() = ( nId == FL_STYLE_OPTIONS ?  1 : 2 ) * aOffset.X();
-                    aCPos.Y() = mnOrgOffsetY[nId] + nOptionsPos;
-                    mxControls[nId]->SetPosPixel( aCPos );
-                    const sal_Int32 nBottom (aCPos.Y() + mxControls[nId]->GetSizePixel().Height());
-                    if (nBottom > nMaxY)
-                        nMaxY = nBottom;
-                }
-            }
+            SetStyle( nStyle );
         }
     }
+}
+
+TableValueSet::TableValueSet(Window *pParent, WinBits nStyle)
+    : ValueSet(pParent, nStyle)
+    , m_bModal(false)
+{
+}
+
+void TableValueSet::updateSettings()
+{
+    if( !m_bModal )
+    {
+        SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+        SetColor( GetSettings().GetStyleSettings().GetWindowColor() );
+        SetExtraSpacing(8);
+    }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeTableValueSet(::Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("border"));
+    if (aFind != rMap.end())
+    {
+        if (toBool(aFind->second))
+            nWinBits |= WB_BORDER;
+        rMap.erase(aFind);
+    }
+
+    return new TableValueSet(pParent, nWinBits);
 }
 
 // --------------------------------------------------------------------
 
 void TableDesignPane::updateControls()
 {
-    static const sal_Bool gDefaults[CB_BANDED_COLUMNS-CB_HEADER_ROW+1] = { sal_True, sal_False, sal_True, sal_False, sal_False, sal_False };
+    static const sal_Bool gDefaults[CB_COUNT] = { sal_True, sal_False, sal_True, sal_False, sal_False, sal_False };
 
     const bool bHasTable = mxSelectedTable.is();
     const OUString* pPropNames = getPropertyNames();
 
-    for( sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
+    for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
-        sal_Bool bUse = gDefaults[i-CB_HEADER_ROW];
+        sal_Bool bUse = gDefaults[i];
         if( bHasTable ) try
         {
             mxSelectedTable->getPropertyValue( *pPropNames++ ) >>= bUse;
@@ -540,12 +426,13 @@ void TableDesignPane::updateControls()
         {
             OSL_FAIL("sd::TableDesignPane::updateControls(), exception caught!");
         }
-        static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? sal_True : sal_False );
-        mxControls[i]->Enable(bHasTable ? sal_True : sal_False );
+        m_aCheckBoxes[i]->Check(bUse ? true : false);
+        m_aCheckBoxes[i]->Enable(bHasTable ? true : false);
     }
 
     FillDesignPreviewControl();
-    updateLayout();
+    m_pValueSet->updateSettings();
+    m_pValueSet->Resize();
 
 
     sal_uInt16 nSelection = 0;
@@ -571,8 +458,7 @@ void TableDesignPane::updateControls()
             }
         }
     }
-    ValueSet* pValueSet = static_cast< ValueSet* >( mxControls[CT_TABLE_STYLES].get() );
-    pValueSet->SelectItem( nSelection );
+    m_pValueSet->SelectItem( nSelection );
 }
 
 // --------------------------------------------------------------------
@@ -798,10 +684,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
 // bbbbbbbbbbbb
 
 
-    const sal_Int32 nCellWidth = 12; // one pixel is shared with the next cell!
-    const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cell!
-
-    Bitmap aPreviewBmp( Size( (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1), (nCellHeight * nPreviewRows) - (nPreviewRows - 1)), 24, NULL );
+    Bitmap aPreviewBmp( Size( nBitmapWidth, nBitmapHeight), 24, NULL );
     BitmapWriteAccess* pAccess = aPreviewBmp.AcquireWriteAccess();
     if( pAccess )
     {
@@ -904,21 +787,19 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
 
 void TableDesignPane::FillDesignPreviewControl()
 {
-    ValueSet* pValueSet = static_cast< ValueSet* >( mxControls[CT_TABLE_STYLES].get() );
-
-    sal_uInt16 nSelectedItem = pValueSet->GetSelectItemId();
-    pValueSet->Clear();
+    sal_uInt16 nSelectedItem = m_pValueSet->GetSelectItemId();
+    m_pValueSet->Clear();
     try
     {
         TableStyleSettings aSettings;
         if( mxSelectedTable.is() )
         {
-            aSettings.mbUseFirstRow = static_cast< CheckBox* >(mxControls[CB_HEADER_ROW].get())->IsChecked();
-            aSettings.mbUseLastRow = static_cast< CheckBox* >(mxControls[CB_TOTAL_ROW].get())->IsChecked();
-            aSettings.mbUseRowBanding = static_cast< CheckBox* >(mxControls[CB_BANDED_ROWS].get())->IsChecked();
-            aSettings.mbUseFirstColumn = static_cast< CheckBox* >(mxControls[CB_FIRST_COLUMN].get())->IsChecked();
-            aSettings.mbUseLastColumn = static_cast< CheckBox* >(mxControls[CB_LAST_COLUMN].get())->IsChecked();
-            aSettings.mbUseColumnBanding = static_cast< CheckBox* >(mxControls[CB_BANDED_COLUMNS].get())->IsChecked();
+            aSettings.mbUseFirstRow = m_aCheckBoxes[CB_HEADER_ROW]->IsChecked();
+            aSettings.mbUseLastRow = m_aCheckBoxes[CB_TOTAL_ROW]->IsChecked();
+            aSettings.mbUseRowBanding = m_aCheckBoxes[CB_BANDED_ROWS]->IsChecked();
+            aSettings.mbUseFirstColumn = m_aCheckBoxes[CB_FIRST_COLUMN]->IsChecked();
+            aSettings.mbUseLastColumn = m_aCheckBoxes[CB_LAST_COLUMN]->IsChecked();
+            aSettings.mbUseColumnBanding = m_aCheckBoxes[CB_BANDED_COLUMNS]->IsChecked();
         }
 
         sal_Bool bIsPageDark = sal_False;
@@ -932,22 +813,28 @@ void TableDesignPane::FillDesignPreviewControl()
             }
         }
 
-        for( sal_Int32 nIndex = 0; nIndex < mxTableFamily->getCount(); nIndex++ ) try
+        sal_Int32 nCount = mxTableFamily->getCount();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex ) try
         {
             Reference< XIndexAccess > xTableStyle( mxTableFamily->getByIndex( nIndex ), UNO_QUERY );
             if( xTableStyle.is() )
-                pValueSet->InsertItem( sal::static_int_cast<sal_uInt16>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
+                m_pValueSet->InsertItem( sal::static_int_cast<sal_uInt16>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
         }
         catch( Exception& )
         {
             OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
         }
+        m_pValueSet->SetColCount(3);
+        m_pValueSet->SetLineCount((nCount+2)/3);
+        Size aSize(m_pValueSet->GetOptimalSize());
+        m_pValueSet->set_width_request(aSize.Width());
+        m_pValueSet->set_height_request(aSize.Height());
     }
     catch( Exception& )
     {
         OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
     }
-    pValueSet->SelectItem(nSelectedItem);
+    m_pValueSet->SelectItem(nSelectedItem);
 }
 
 // ====================================================================

@@ -26,14 +26,13 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
+#include <svtools/valueset.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <sfx2/sidebar/ILayoutableWindow.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 
 #include <boost/scoped_ptr.hpp>
-
-#include "TableDesignPane.hrc"
 
 namespace sd
 {
@@ -46,7 +45,26 @@ class ViewShellBase;
 
 // --------------------------------------------------------------------
 
-class TableDesignPane : public Control, public sfx2::sidebar::ILayoutableWindow
+#define CB_HEADER_ROW       0
+#define CB_TOTAL_ROW        1
+#define CB_BANDED_ROWS      2
+#define CB_FIRST_COLUMN     3
+#define CB_LAST_COLUMN      4
+#define CB_BANDED_COLUMNS   5
+#define CB_COUNT CB_BANDED_COLUMNS-CB_HEADER_ROW+1
+
+class TableValueSet : public ValueSet
+{
+private:
+    bool m_bModal;
+public:
+    TableValueSet(Window *pParent, WinBits nStyle);
+    virtual void Resize();
+    void updateSettings();
+    void setModal(bool bModal) { m_bModal = bModal; }
+};
+
+class TableDesignPane : public PanelLayout
 {
 public:
     TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool bModal );
@@ -54,12 +72,6 @@ public:
 
     // callbacks
     void onSelectionChanged();
-
-    // Control
-    virtual void Resize();
-
-    // ILayoutableWindow
-    virtual ::com::sun::star::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -72,7 +84,6 @@ public:
 private:
     void addListener();
     void removeListener();
-    void updateLayout();
     void updateControls();
 
     void FillDesignPreviewControl();
@@ -85,8 +96,8 @@ private:
     ViewShellBase& mrBase;
     const OUString msTableTemplate;
 
-    boost::scoped_ptr< Control > mxControls[DESIGNPANE_CONTROL_COUNT];
-    int mnOrgOffsetY[DESIGNPANE_CONTROL_COUNT];
+    TableValueSet* m_pValueSet;
+    CheckBox* m_aCheckBoxes[CB_COUNT];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxSelectedTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView > mxView;
