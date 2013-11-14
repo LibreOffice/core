@@ -19,7 +19,6 @@
 
 #include <sfx2/objsh.hxx>
 #include <svl/listener.hxx>
-#include <svl/listeneriter.hxx>
 
 #include "document.hxx"
 #include "brdcst.hxx"
@@ -419,11 +418,12 @@ void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
         if (pArea != pTarget)
         {
             SvtBroadcaster& rTarget = pTarget->GetBroadcaster();
-            SvtListenerIter it( pArea->GetBroadcaster());
-            for (SvtListener* pListener = it.GetCurr(); pListener;
-                    pListener = it.GoNext())
+            SvtBroadcaster::ListenersType& rListeners = pArea->GetBroadcaster().GetAllListeners();
+            SvtBroadcaster::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
+            for (; it != itEnd; ++it)
             {
-                pListener->StartListening( rTarget);
+                SvtListener& rListener = **it;
+                rListener.StartListening(rTarget);
             }
         }
     }

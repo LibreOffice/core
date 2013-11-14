@@ -20,36 +20,41 @@
 #define INCLUDED_SVL_BROADCAST_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/rtti.hxx>
+
+#include <boost/unordered_set.hpp>
 
 class SvtListener;
 class SfxHint;
-class SvtListenerBase;
-
-//-------------------------------------------------------------------------
 
 class SVL_DLLPUBLIC SvtBroadcaster
 {
-friend class SvtListener;
-friend class SvtListenerBase;
-friend class SvtListenerIter;
-    SvtListenerBase* pRoot;
+public:
+    friend class SvtListener;
 
+    typedef boost::unordered_set<SvtListener*> ListenersType;
+
+private:
     const SvtBroadcaster&   operator=(const SvtBroadcaster &); // verboten
+
+    void Add( SvtListener* p );
+    void Remove( SvtListener* p );
 
 protected:
     virtual void            ListenersGone();
 
 public:
-                            TYPEINFO();
-
                             SvtBroadcaster();
                             SvtBroadcaster( const SvtBroadcaster &rBC );
     virtual                 ~SvtBroadcaster();
 
     void                    Broadcast( const SfxHint &rHint );
 
-    sal_Bool                    HasListeners() const { return 0 != pRoot; }
+    ListenersType& GetAllListeners();
+
+    bool HasListeners() const;
+
+private:
+    ListenersType maListeners;
 };
 
 

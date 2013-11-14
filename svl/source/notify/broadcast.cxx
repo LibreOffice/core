@@ -17,85 +17,94 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <svl/listener.hxx>
-#include <svl/listeneriter.hxx>
 #include <svl/broadcast.hxx>
+#include <svl/listener.hxx>
 #include <svl/smplhint.hxx>
 
+namespace {
 
-TYPEINIT0(SvtBroadcaster);
-
-
-// simple ctor of class SvtBroadcaster
-
-SvtBroadcaster::SvtBroadcaster()
-    : pRoot( 0 )
+class StartListeningHandler : std::unary_function<SvtListener*, void>
 {
+    SvtBroadcaster& mrBC;
+public:
+    StartListeningHandler( SvtBroadcaster& rBC ) : mrBC(rBC) {}
+
+    void operator() ( SvtListener* p )
+    {
+        p->StartListening(mrBC);
+    }
+};
+
+class EndListeningHandler : std::unary_function<SvtListener*, void>
+{
+    SvtBroadcaster& mrBC;
+public:
+    EndListeningHandler( SvtBroadcaster& rBC ) : mrBC(rBC) {}
+
+    void operator() ( SvtListener* p )
+    {
+        p->EndListening(mrBC);
+    }
+};
+
+class NotifyHandler : std::unary_function<SvtListener*, void>
+{
+    SvtBroadcaster& mrBC;
+    const SfxHint& mrHint;
+public:
+    NotifyHandler( SvtBroadcaster& rBC, const SfxHint& rHint ) : mrBC(rBC), mrHint(rHint) {}
+
+    void operator() ( SvtListener* p )
+    {
+        p->Notify(mrBC, mrHint);
+    }
+};
+
 }
 
-
-// copy ctor of class SvtBroadcaster
-
-SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC )
-    : pRoot( 0 )
+void SvtBroadcaster::Add( SvtListener* p )
 {
-    SvtListenerIter aIter( (SvtBroadcaster&)rBC );
-    SvtListener* pLast = aIter.GoStart();
-    if( pLast )
-        do {
-            pLast->StartListening( *this );
-        } while( 0 != ( pLast = aIter.GoNext() ));
+    maListeners.insert(p);
 }
 
+void SvtBroadcaster::Remove( SvtListener* p )
+{
+    maListeners.erase(p);
+    if (maListeners.empty())
+        ListenersGone();
+}
 
-// unregister all listeners
+SvtBroadcaster::SvtBroadcaster() {}
+
+SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
+    maListeners(rBC.maListeners)
+{
+    std::for_each(maListeners.begin(), maListeners.end(), StartListeningHandler(*this));
+}
 
 SvtBroadcaster::~SvtBroadcaster()
 {
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
-    SvtListenerIter aIter( *this );
-    SvtListener* pLast = aIter.GoStart();
-    if( pLast )
-        do {
-            pLast->EndListening( *this );
-            if( !HasListeners() )       // all gone ??
-                break;
-        } while( 0 != ( pLast = aIter.GoNext() ));
+    // unregister all listeners.
+    std::for_each(maListeners.begin(), maListeners.end(), EndListeningHandler(*this));
 }
-
-
-// broadcast immedeately
 
 void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 {
-    // is anybody to notify?
-    if( HasListeners() /* && !IsModifyLocked()*/ )
-    {
-//      LockModify();
-//      bInModify = sal_True;
-
-        SvtListenerIter aIter( *this );
-        SvtListener* pLast = aIter.GoStart();
-        if( pLast )
-            do {
-                pLast->Notify( *this, rHint );
-                if( !HasListeners() )       // all gone ??
-                    break;
-            } while( 0 != ( pLast = aIter.GoNext() ));
-
-//      bInModify = sal_False;
-//      UnlockModify();
-    }
+    std::for_each(maListeners.begin(), maListeners.end(), NotifyHandler(*this, rHint));
 }
 
+void SvtBroadcaster::ListenersGone() {}
 
-
-// called, if no more listeners exists
-
-void SvtBroadcaster::ListenersGone()
+SvtBroadcaster::ListenersType& SvtBroadcaster::GetAllListeners()
 {
+    return maListeners;
+}
+
+bool SvtBroadcaster::HasListeners() const
+{
+    return !maListeners.empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,7 +60,6 @@
 #include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/broadcast.hxx>
-#include <svl/listeneriter.hxx>
 #include <vcl/outdev.hxx>
 #include "formula/errorcodes.hxx"
 #include "formula/vectortoken.hxx"
@@ -3075,11 +3074,13 @@ void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
         maBroadcasters.set(nDestRow, pBC);
     }
 
-    SvtListenerIter aIter(rSource);
-    for (SvtListener* pLst = aIter.GoStart(); pLst; pLst = aIter.GoNext())
+    SvtBroadcaster::ListenersType& rListeners = rSource.GetAllListeners();
+    SvtBroadcaster::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
+    for (; it != itEnd; ++it)
     {
-        pLst->StartListening(*pBC);
-        pLst->EndListening(rSource);
+        SvtListener& rLst = **it;
+        rLst.StartListening(*pBC);
+        rLst.EndListening(rSource);
     }
 }
 

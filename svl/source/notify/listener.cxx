@@ -17,117 +17,68 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <tools/debug.hxx>
-#include <svl/broadcast.hxx>
 #include <svl/listener.hxx>
-#include "listenerbase.hxx"
-#include <svl/listeneriter.hxx>
+#include <svl/broadcast.hxx>
+#include <tools/debug.hxx>
 
+SvtListener::SvtListener() {}
 
-TYPEINIT0(SvtListener);
-
-// simple ctor of class SvtListener
-
-SvtListener::SvtListener()
-    : pBrdCastLst( 0 )
-{
-}
-
-// copy ctor of class SvtListener
-
-SvtListener::SvtListener( const SvtListener &rListener )
-    : pBrdCastLst( 0 )
-{
-    SvtListenerBase* pLst = rListener.pBrdCastLst;
-    while( pLst )
-    {
-        new SvtListenerBase( *this, *pLst->GetBroadcaster() );
-        pLst = pLst->GetNext();
-    }
-}
-
-// unregisteres the SvtListener from its SvtBroadcasters
+SvtListener::SvtListener( const SvtListener &r ) :
+    maBroadcasters(r.maBroadcasters) {}
 
 SvtListener::~SvtListener()
 {
+    // Unregister itself from all broadcasters it's listening to.
     EndListeningAll();
 }
 
-
 // registeres at a specific SvtBroadcaster
 
-sal_Bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
+bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
 {
-    const SvtListenerBase* pLst = pBrdCastLst;
-    while( pLst )
+    std::pair<BroadcastersType::iterator, bool> r =
+        maBroadcasters.insert(&rBroadcaster);
+    if (r.second)
     {
-        if( &rBroadcaster == pLst->GetBroadcaster() )
-        {
-            // double, than return
-            return sal_False;
-        }
-        pLst = pLst->GetNext();
+        // This is a new broadcaster.
+        rBroadcaster.Add(this);
     }
-    new SvtListenerBase( *this, rBroadcaster );
-    return sal_True;
+    return r.second;
 }
 
-
-// unregisteres at a specific SvtBroadcaster
-
-sal_Bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
+bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 {
-    SvtListenerBase *pLst = pBrdCastLst, *pPrev = pLst;
-    while( pLst )
-    {
-        if( &rBroadcaster == pLst->GetBroadcaster() )
-        {
-            if( pBrdCastLst == pLst )
-                pBrdCastLst = pLst->GetNext();
-            else
-                pPrev->SetNext( pLst->GetNext() );
+    BroadcastersType::iterator it = maBroadcasters.find(&rBroadcaster);
+    if (it == maBroadcasters.end())
+        // Not listening to this broadcaster.
+        return false;
 
-            delete pLst;
-            return sal_True;
-        }
-        pPrev = pLst;
-        pLst = pLst->GetNext();
-    }
-    return sal_False;
+    rBroadcaster.Remove(this);
+    maBroadcasters.erase(it);
+    return true;
 }
-
-
-// unregisteres all Broadcasters
 
 void SvtListener::EndListeningAll()
 {
-    SvtListenerBase *pLst = pBrdCastLst;
-    while( pLst )
+    BroadcastersType::iterator it = maBroadcasters.begin(), itEnd = maBroadcasters.end();
+    for (; it != itEnd; ++it)
     {
-        SvtListenerBase *pDel = pLst;
-        pLst = pLst->GetNext();
-
-        delete pDel;
+        SvtBroadcaster& rBC = **it;
+        rBC.Remove(this);
     }
-    pBrdCastLst = 0;
+    maBroadcasters.clear();
 }
 
 
-sal_Bool SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
+bool SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
 {
-    const SvtListenerBase *pLst = pBrdCastLst;
-    while( pLst )
-    {
-        if( &rBroadcaster == pLst->GetBroadcaster() )
-            break;
-        pLst = pLst->GetNext();
-    }
-    return 0 != pLst;
+    return maBroadcasters.count(&rBroadcaster) > 0;
 }
 
-
-// base implementation of notification handler
+bool SvtListener::HasBroadcaster() const
+{
+    return !maBroadcasters.empty();
+}
 
 void SvtListener::Notify( SvtBroadcaster&
 #ifdef DBG_UTIL

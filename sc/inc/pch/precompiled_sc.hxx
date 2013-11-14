@@ -711,7 +711,6 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/listener.hxx>
-#include <svl/listeneriter.hxx>
 #include <svl/macitem.hxx>
 #include <svl/numuno.hxx>
 #include <svl/poolcach.hxx>
