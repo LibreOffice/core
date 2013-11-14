@@ -56,12 +56,6 @@ const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
-const int nTemplateItemMaxWidth = 160;
-const int nTemplateItemMaxHeight = 148;
-const int nTemplateItemPadding = 5;
-const int nTemplateItemMaxTextLength = 20;
-const int nTemplateItemThumbnailMaxHeight = 96;
-
 const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
 
