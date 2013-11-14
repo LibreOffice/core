@@ -1670,7 +1670,7 @@ DECLARE_OOXML_TEST(testFdo70838, "fdo70838.docx")
     {
         CPPUNIT_ASSERT(!aStyles[i].isEmpty());
 
-        int nextTokenPos = 0;
+        sal_Int32 nextTokenPos = 0;
         do
         {
             OUString aStyleCommand = aStyles[i].getToken( 0, ';', nextTokenPos );
