@@ -2119,7 +2119,7 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 
     if( nBorderLen < 3 )
     {
-        nBorderLen = std::min( 3, std::min( nPar1Len, nPar2Len ) );
+        nBorderLen = std::min<sal_Int32>( 3, std::min( nPar1Len, nPar2Len ) );
     }
 
     std::set<unsigned> aHashes;
