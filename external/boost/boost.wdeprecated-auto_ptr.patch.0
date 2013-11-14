@@ -69,6 +69,30 @@
 +#endif
 +
  #endif
+--- boost/ptr_container/ptr_vector.hpp
++++ boost/ptr_container/ptr_vector.hpp
+@@ -16,6 +16,12 @@
+ # pragma once
+ #endif
+ 
++#include <config_global.h>
++#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++#endif
++
+ #include <vector>
+ #include <boost/ptr_container/ptr_sequence_adapter.hpp>
+ 
+@@ -74,4 +80,8 @@
+     
+ }
+ 
++#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
++# pragma GCC diagnostic pop
++#endif
++
+ #endif
 --- boost/smart_ptr/detail/shared_count.hpp
 +++ boost/smart_ptr/detail/shared_count.hpp
 @@ -18,6 +18,12 @@
