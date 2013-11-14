@@ -70,9 +70,12 @@ class BackingWindow
     PushButton*                     mpExtensionsButton;
 
     VclBox*                         mpAllButtonsBox;
-    VclBox*                         mpPictureBox;
     VclBox*                         mpButtonsBox;
     VclBox*                         mpSmallButtonsBox;
+    VclBox*                         mpThinBox1;
+    VclBox*                         mpThinBox2;
+    VclBox*                         mpHelpBox;
+    VclBox*                         mpExtensionsBox;
 
     RecentDocsView*                 mpAllRecentThumbnails;
 

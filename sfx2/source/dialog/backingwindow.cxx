@@ -90,9 +90,12 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpExtensionsButton, "extensions");
 
     get(mpAllButtonsBox, "all_buttons_box");
-    get(mpPictureBox, "picture_box");
     get(mpButtonsBox, "buttons_box");
     get(mpSmallButtonsBox, "small_buttons_box");
+    get(mpThinBox1, "thin_box1");
+    get(mpThinBox2, "thin_box2");
+    get(mpHelpBox, "help_box");
+    get(mpExtensionsBox, "extensions_box");
 
     get(mpAllRecentThumbnails, "all_recent");
 
@@ -232,9 +235,13 @@ void BackingWindow::initControls()
     mpExtensionsButton->SetControlForeground(aButtonsText);
 
     mpAllButtonsBox->SetBackground(aButtonsBackground);
-    mpPictureBox->SetBackground(aButtonsBackground);
     mpButtonsBox->SetBackground(aButtonsBackground);
     mpSmallButtonsBox->SetBackground(aButtonsBackground);
+    mpHelpBox->SetBackground(aButtonsBackground);
+    mpExtensionsBox->SetBackground(aButtonsBackground);
+
+    mpThinBox1->SetBackground(aButtonsText);
+    mpThinBox2->SetBackground(aButtonsText);
 
     Resize();
 }
