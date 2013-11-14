@@ -5790,9 +5790,15 @@ void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
         if( !aWallpaper.IsBitmap() && !aWallpaper.IsGradient() )
         {
             if ( mpWindowImpl->mnStyle & WB_3DLOOK )
-                SetBackground( Wallpaper( rSettings.GetStyleSettings().GetFaceColor() ) );
+            {
+                if (aOldSettings.GetStyleSettings().GetFaceColor() != rSettings.GetStyleSettings().GetFaceColor())
+                    SetBackground( Wallpaper( rSettings.GetStyleSettings().GetFaceColor() ) );
+            }
             else
-                SetBackground( Wallpaper( rSettings.GetStyleSettings().GetWindowColor() ) );
+            {
+                if (aOldSettings.GetStyleSettings().GetWindowColor() != rSettings.GetStyleSettings().GetWindowColor())
+                    SetBackground( Wallpaper( rSettings.GetStyleSettings().GetWindowColor() ) );
+            }
         }
     }
 
