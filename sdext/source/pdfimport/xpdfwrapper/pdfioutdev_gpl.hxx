@@ -23,7 +23,7 @@
 #include <sal/types.h>
 
 #if defined __GNUC__
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
@@ -43,7 +43,7 @@
 #include "PDFDoc.h"
 
 #if defined __GNUC__
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 # pragma GCC diagnostic pop
 #endif
 #elif defined __SUNPRO_CC
