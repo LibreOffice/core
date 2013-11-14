@@ -60,7 +60,7 @@ class KDEXLib : public QObject, public SalXLib
         void userEventActivated();
         void startTimeoutTimer();
         void startUserEventTimer();
-        bool processYield( bool bWait, bool bHandleAllCurrentEvents );
+        void processYield( bool bWait, bool bHandleAllCurrentEvents );
     Q_SIGNALS:
         void startTimeoutTimerSignal();
         void startUserEventTimerSignal();
