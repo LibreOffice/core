@@ -34,8 +34,8 @@ class SampleLibLoader
 public:
     SampleLibLoader():
         ::salhelper::ODynamicLoader<SampleLib_Api>
-            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "samplelib") ) ),
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(SAMPLELIB_INIT_FUNCTION_NAME) ))
+            (::rtl::OUString( SAL_MODULENAME( "samplelib") ),
+             ::rtl::OUString( SAMPLELIB_INIT_FUNCTION_NAME) )
         {}
 
 };

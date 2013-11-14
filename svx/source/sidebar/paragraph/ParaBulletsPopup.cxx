@@ -28,7 +28,7 @@ ParaBulletsPopup::ParaBulletsPopup (
     : Popup(
         pParent,
         rControlCreator,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Paragraph Bullets")))
+        OUString( "Paragraph Bullets"))
 {
 }
 

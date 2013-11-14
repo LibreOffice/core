@@ -317,7 +317,7 @@ sal_Int32 compileFile(const OString * pathname)
     cpp += "ucpp";
 #endif
 #else // SYSTEM_UCPP
-    cpp = OUString( RTL_CONSTASCII_USTRINGPARAM(UCPP));
+    cpp = OUString(UCPP);
 #endif
     oslProcess      hProcess = NULL;
     oslProcessError procError = osl_Process_E_None;

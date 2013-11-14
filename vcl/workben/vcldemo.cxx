@@ -141,9 +141,9 @@ void MyWin::Paint( const Rectangle& rRect )
         DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
 
     SetTextColor( Color( COL_WHITE ) );
-    Font aFont( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 25 ) );
+    Font aFont( OUString( "Times" ), Size( 0, 25 ) );
     SetFont( aFont );
-    DrawText( Point( 20, 30 ), String( RTL_CONSTASCII_USTRINGPARAM( "Just a simple test text" ) ) );
+    DrawText( Point( 20, 30 ), OUString( "Just a simple test text" ) );
 }
 
 

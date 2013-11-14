@@ -51,15 +51,15 @@ bool SvxGalleryItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberId */ 
 {
     css::uno::Sequence< css::beans::PropertyValue > aSeq( SVXGALLERYITEM_PARAMS );
 
-    aSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_TYPE ));
+    aSeq[0].Name = SVXGALLERYITEM_TYPE;
     aSeq[0].Value <<= m_nType;
-    aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_URL ));
+    aSeq[1].Name = SVXGALLERYITEM_URL;
     aSeq[1].Value <<= m_aURL;
-    aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_FILTER ));
+    aSeq[2].Name = SVXGALLERYITEM_FILTER;
     aSeq[2].Value <<= m_aURL;
-    aSeq[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_DRAWING ));
+    aSeq[3].Name = SVXGALLERYITEM_DRAWING;
     aSeq[3].Value <<= m_xDrawing;
-    aSeq[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_GRAPHIC ));
+    aSeq[4].Name = SVXGALLERYITEM_GRAPHIC;
     aSeq[4].Value <<= m_xGraphic;
 
     rVal <<= aSeq;

@@ -822,7 +822,7 @@ static void AddInternal(
         //! TL TODO: word iterator should be used to break up the text
         static const char aDefWordDelim[] =
                 "!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n";
-        OUString aDelim(RTL_CONSTASCII_USTRINGPARAM(aDefWordDelim));
+        OUString aDelim(aDefWordDelim);
         OSL_ENSURE(aDelim.indexOf(static_cast<sal_Unicode>('.')) == -1,
             "ensure no '.'");
 

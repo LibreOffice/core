@@ -77,7 +77,7 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     //-------------------------------------------------
 
     // Get global factory for uno services.
-    OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
+    OUString rdbName = OUString( RDB_SYSPATH );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
     // Print a message if an error occurred.
@@ -96,7 +96,7 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     Reference< XFolderPicker2 > xFolderPicker;
 
     xFolderPicker = Reference< XFolderPicker2 >(
-        g_xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM ( FOLDER_PICKER_SERVICE_NAME ) ) ), UNO_QUERY );
+        g_xFactory->createInstance( OUString( FOLDER_PICKER_SERVICE_NAME ) ), UNO_QUERY );
 
     if ( xFolderPicker.is() == sal_False )
     {

@@ -77,18 +77,18 @@ GraphicPropertyPanel::~GraphicPropertyPanel()
 void GraphicPropertyPanel::Initialize()
 {
     mpMtrBrightness->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyBrightnessHdl ) );
-    mpMtrBrightness->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Brightness")));
+    mpMtrBrightness->SetAccessibleName(::rtl::OUString( "Brightness"));
     mpMtrContrast->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyContrastHdl ) );
-    mpMtrContrast->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Contrast")));
+    mpMtrContrast->SetAccessibleName(::rtl::OUString( "Contrast"));
     mpMtrTrans->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyTransHdl ) );
-    mpMtrTrans->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));
+    mpMtrTrans->SetAccessibleName(::rtl::OUString( "Transparency"));
 
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_STANDARD));
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_GREYS));
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_MONO));
     mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_WATERMARK));
     mpLBColorMode->SetSelectHdl( LINK( this, GraphicPropertyPanel, ClickColorModeHdl ));
-    mpLBColorMode->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Color mode")));
+    mpLBColorMode->SetAccessibleName(::rtl::OUString( "Color mode"));
 
     mpMtrRed->SetModifyHdl( LINK( this, GraphicPropertyPanel, RedHdl ) );
     mpMtrGreen->SetModifyHdl( LINK( this, GraphicPropertyPanel, GreenHdl ) );
@@ -97,7 +97,7 @@ void GraphicPropertyPanel::Initialize()
     mpMtrRed->SetAccessibleName(mpMtrRed->GetQuickHelpText());
     mpMtrGreen->SetAccessibleName(mpMtrGreen->GetQuickHelpText());
     mpMtrBlue->SetAccessibleName(mpMtrBlue->GetQuickHelpText());
-    mpMtrGamma->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Gamma value")));
+    mpMtrGamma->SetAccessibleName(::rtl::OUString( "Gamma value"));
 
     mpMtrRed->SetAccessibleRelationLabeledBy(mpMtrRed);
     mpMtrGreen->SetAccessibleRelationLabeledBy(mpMtrGreen);

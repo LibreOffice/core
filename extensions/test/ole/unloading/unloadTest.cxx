@@ -69,8 +69,7 @@ sal_Bool test1()
     OUString sService1("com.sun.star.bridge.oleautomation.BridgeSupplier");
     Reference<XInterface> xint1= fac->createInstanceWithContext( sService1, context);
 
-    OUString sModule(
-        RTL_CONSTASCII_USTRINGPARAM("oleautobridge.uno" SAL_DLLEXTENSION));
+    OUString sModule("oleautobridge.uno" SAL_DLLEXTENSION);
     oslModule hMod= osl_loadModule( sModule.pData, 0);
     osl_unloadModule( hMod);
 
@@ -104,8 +103,7 @@ sal_Bool test2()
       OUString sService2("com.sun.star.bridge.OleBridgeSupplierVar1");
     Reference<XInterface> xint= fac->createInstanceWithContext( sService2, context);
 
-    OUString sModule(
-        RTL_CONSTASCII_USTRINGPARAM("oleautobridge.uno" SAL_DLLEXTENSION));
+    OUString sModule("oleautobridge.uno" SAL_DLLEXTENSION);
     oslModule hMod= osl_loadModule( sModule.pData, 0);
     osl_unloadModule( hMod);
 
@@ -139,8 +137,7 @@ sal_Bool test3()
     Reference<XInterface> xint= fac->createInstanceWithContext( sService, context);
 
 
-    OUString sModule(
-        RTL_CONSTASCII_USTRINGPARAM("oleautobridge.uno" SAL_DLLEXTENSION));
+    OUString sModule("oleautobridge.uno" SAL_DLLEXTENSION);
     oslModule hMod= osl_loadModule( sModule.pData, 0);
     osl_unloadModule( hMod);
 
@@ -167,8 +164,7 @@ sal_Bool test4()
     sal_Bool bTest1= sal_False;
     sal_Bool bTest2= sal_False;
     oslModule hMod= NULL;
-    OUString sModule(
-        RTL_CONSTASCII_USTRINGPARAM("oleautobridge.uno" SAL_DLLEXTENSION));
+    OUString sModule("oleautobridge.uno" SAL_DLLEXTENSION);
     OUString sFactoryFunc("component_getFactory");
     {
     printf("Test4:  com.sun.star.bridge.oleautomation.ApplicationRegistration\n");

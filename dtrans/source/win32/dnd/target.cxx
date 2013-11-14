@@ -244,7 +244,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
 // XServiceInfo
 OUString SAL_CALL DropTarget::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(DNDTARGET_IMPL_NAME));
+    return OUString(DNDTARGET_IMPL_NAME);
 }
 // XServiceInfo
 sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName ) throw (RuntimeException)
@@ -256,7 +256,7 @@ sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName ) thr
 
 Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    OUString names[1]= {OUString(RTL_CONSTASCII_USTRINGPARAM(DNDTARGET_SERVICE_NAME))};
+    OUString names[1]= {OUString(DNDTARGET_SERVICE_NAME)};
     return Sequence<OUString>(names, 1);
 }
 

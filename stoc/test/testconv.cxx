@@ -671,8 +671,7 @@ SAL_IMPLEMENT_MAIN()
             xMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
-        OUString aLibName(
-            RTL_CONSTASCII_USTRINGPARAM("stocservices.uno" SAL_DLLEXTENSION) );
+        OUString aLibName("stocservices.uno" SAL_DLLEXTENSION );
         xImplReg->registerImplementation(
             OUString("com.sun.star.loader.SharedLibrary"),
             aLibName, Reference< XSimpleRegistry >() );

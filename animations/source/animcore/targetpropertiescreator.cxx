@@ -379,7 +379,7 @@ namespace animcore
                                             1,
                                             beans::NamedValue(
                                                 //xAnimateNode->getAttributeName(),
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("visibility")),
+                                                OUString("visibility"),
                                                 uno::makeAny( !bVisible ) ) ) ) );
                             //}
                         //}

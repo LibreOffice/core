@@ -91,8 +91,8 @@ static void lcl_sendPartialGETRequest( bool &bError,
     DAVRequestHeaders aPartialGet;
     aPartialGet.push_back(
         DAVRequestHeader(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Range" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bytes=0-0" ))));
+            OUString( "Range" ),
+            OUString( "bytes=0-0" )));
 
     for ( std::vector< rtl::OUString >::const_iterator it = aHeaderNames.begin();
             it != aHeaderNames.end(); ++it )
@@ -108,8 +108,8 @@ static void lcl_sendPartialGETRequest( bool &bError,
     {
         // we need to know if the server accepts range requests for a resource
         // and the range unit it uses
-        aHeaderNames.push_back( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accept-Ranges" ) ) );
-        aHeaderNames.push_back( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Content-Range" ) ) );
+        aHeaderNames.push_back( OUString( "Accept-Ranges" ) );
+        aHeaderNames.push_back( OUString( "Content-Range" ) );
     }
     try
     {
@@ -734,8 +734,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -751,8 +750,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                    OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -784,8 +782,7 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                    OUString( "Wrong argument type!" ),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -872,23 +869,20 @@ throw( beans::PropertyExistException,
     // check property Name
     if ( !aProperty.Name.getLength() )
         throw lang::IllegalArgumentException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "\"addProperty\" with empty Property.Name")),
+            OUString( "\"addProperty\" with empty Property.Name"),
             static_cast< ::cppu::OWeakObject * >( this ),
             -1 );
 
     // Check property type.
     if ( !UCBDeadPropertyValue::supportsType( aProperty.Type ) )
         throw beans::IllegalTypeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "\"addProperty\" unsupported Property.Type")),
+            OUString( "\"addProperty\" unsupported Property.Type"),
             static_cast< ::cppu::OWeakObject * >( this ) );
 
     // check default value
     if ( aDefaultValue.hasValue() && aDefaultValue.getValueType() != aProperty.Type )
         throw beans::IllegalTypeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "\"addProperty\" DefaultValue does not match Property.Type")),
+            OUString( "\"addProperty\" DefaultValue does not match Property.Type"),
             static_cast< ::cppu::OWeakObject * >( this ) );
 
     //////////////////////////////////////////////////////////////////////

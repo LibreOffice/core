@@ -25,7 +25,7 @@ namespace sc { namespace sidebar {
 CellBorderStylePopup::CellBorderStylePopup (
     Window* pParent,
     const ::boost::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator)
-:   Popup(pParent, rControlCreator,  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellBorderStyle")))
+:   Popup(pParent, rControlCreator,  ::OUString("CellBorderStyle"))
 {
 }
 

@@ -230,7 +230,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
         accessMode = VALUE_MODE_OPENREAD;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
@@ -301,7 +301,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
         return REG_INVALID_VALUE;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
@@ -371,7 +371,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
         return REG_REGISTRY_READONLY;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
@@ -430,7 +430,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
         return REG_REGISTRY_READONLY;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
@@ -498,7 +498,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         return REG_REGISTRY_READONLY;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
@@ -569,7 +569,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
         accessMode = VALUE_MODE_OPENREAD;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
@@ -662,7 +662,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
         accessMode = VALUE_MODE_OPENREAD;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
@@ -759,7 +759,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
         accessMode = VALUE_MODE_OPENREAD;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
@@ -865,7 +865,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
         accessMode = VALUE_MODE_OPENREAD;
     }
 
-    OUString sImplValueName( RTL_CONSTASCII_USTRINGPARAM(VALUE_PREFIX) );
+    OUString sImplValueName( VALUE_PREFIX );
     sImplValueName += valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);

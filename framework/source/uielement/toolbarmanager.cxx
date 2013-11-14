@@ -905,7 +905,7 @@ void ToolBarManager::CreateControllers()
             aPropValue.Name     = OUString( "ParentWindow" );
             aPropValue.Value    <<= xToolbarWindow;
             aPropertyVector.push_back( makeAny( aPropValue ));
-            aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+            aPropValue.Name     = "Identifier";
             aPropValue.Value    = uno::makeAny( nId );
             aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
@@ -1021,7 +1021,7 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name = OUString( "ModuleIdentifier" );
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+                aPropValue.Name     = "Identifier";
                 aPropValue.Value    = uno::makeAny( nId );
                 aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 

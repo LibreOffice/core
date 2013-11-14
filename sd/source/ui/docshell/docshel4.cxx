@@ -321,7 +321,7 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
             SetError( ERRCODE_IO_BROKENPACKAGE, OSL_LOG_PREFIX );
 
         // TODO/LATER: correct error handling?!
-        //pStore->SetError( SVSTREAM_WRONGVERSION, OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        //pStore->SetError( SVSTREAM_WRONGVERSION, OUString( OSL_LOG_PREFIX ) );
         else
             SetError( ERRCODE_ABORT, OSL_LOG_PREFIX );
     }

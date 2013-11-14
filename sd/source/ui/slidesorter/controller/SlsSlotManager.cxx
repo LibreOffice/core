@@ -190,7 +190,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         {
             // Make the slide transition panel visible in the sidebar.
             ::sfx2::sidebar::Sidebar::ShowPanel(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SlideTransitionPanel")),
+                OUString("SlideTransitionPanel"),
                 pShell->GetViewFrame()->GetFrame().GetFrameInterface());
             rRequest.Ignore ();
             break;

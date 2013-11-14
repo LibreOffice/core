@@ -89,7 +89,7 @@ void NumberFormatPropertyPanel::Initialize()
     Link aLink = LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl);
     mpLbCategory->SetSelectHdl ( aLink );
     mpLbCategory->SelectEntryPos(0);
-    mpLbCategory->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Category")));     //wj acc
+    mpLbCategory->SetAccessibleName(OUString( "Category"));     //wj acc
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
     aLink = LINK(this, NumberFormatPropertyPanel, NumFormatHdl);
@@ -99,8 +99,8 @@ void NumberFormatPropertyPanel::Initialize()
 
     mpEdDecimals->SetModifyHdl( aLink );
     mpEdLeadZeroes->SetModifyHdl( aLink );
-    mpEdDecimals->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Decimal Places")));       //wj acc
-    mpEdLeadZeroes->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Leading Zeroes")));     //wj acc
+    mpEdDecimals->SetAccessibleName(OUString( "Decimal Places"));       //wj acc
+    mpEdLeadZeroes->SetAccessibleName(OUString( "Leading Zeroes"));     //wj acc
     mpBtnNegRed->SetClickHdl( aLink );
     mpBtnThousand->SetClickHdl( aLink );
 

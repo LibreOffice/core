@@ -344,7 +344,7 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     FileFormat >>= nFileFormat;
 
     uno::Sequence<  beans::PropertyValue > storeProps(1);
-    storeProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+    storeProps[0].Name = "FilterName" ;
 
     setFilterPropsFromFormat( nFileFormat, storeProps );
 

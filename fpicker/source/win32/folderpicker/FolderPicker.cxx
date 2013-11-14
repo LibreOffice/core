@@ -147,7 +147,7 @@ sal_Int16 SAL_CALL CFolderPicker::execute( )
 OUString SAL_CALL CFolderPicker::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( FOLDERPICKER_IMPL_NAME ));
+    return OUString( FOLDERPICKER_IMPL_NAME );
 }
 
 //  XServiceInfo

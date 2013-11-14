@@ -95,12 +95,12 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          OUString("MergeContext" )
 #define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString("ToolBarItems" )
 
-#define PROPERTYNAME_MERGESTATUSBAR_MERGEPOINT               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMAND             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMANDPARAMETER    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
-#define PROPERTYNAME_MERGESTATUSBAR_MERGEFALLBACK            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
-#define PROPERTYNAME_MERGESTATUSBAR_STATUSBARITEMS           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StatusBarItems" ))
+#define PROPERTYNAME_MERGESTATUSBAR_MERGEPOINT               ::rtl::OUString("MergePoint")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMAND             ::rtl::OUString("MergeCommand")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMANDPARAMETER    ::rtl::OUString("MergeCommandParameter")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGEFALLBACK            ::rtl::OUString("MergeFallback")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGECONTEXT             ::rtl::OUString("MergeContext")
+#define PROPERTYNAME_MERGESTATUSBAR_STATUSBARITEMS           ::rtl::OUString("StatusBarItems")
 
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL               0
@@ -1152,7 +1152,7 @@ sal_Bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonIn
 
 sal_Bool AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
 {
-    const ::rtl::OUString aStatusbarMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeStatusbarMerging/" ));
+    const ::rtl::OUString aStatusbarMergeRootName( "AddonUI/OfficeStatusbarMerging/" );
 
     Sequence< ::rtl::OUString > aAddonMergeNodesSeq = GetNodeNames( aStatusbarMergeRootName );
     ::rtl::OUString aAddonMergeNode( aStatusbarMergeRootName );

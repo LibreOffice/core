@@ -124,7 +124,7 @@ XPropertyList::XPropertyList(
     XPropertyListType type,
     const OUString& rPath, const OUString& rReferer
 ) : meType           ( type ),
-    maName           ( RTL_CONSTASCII_USTRINGPARAM( "standard" ) ),
+    maName           ( "standard" ),
     maPath           ( rPath ),
     maReferer        ( rReferer ),
     mbListDirty      ( true ),

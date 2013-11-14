@@ -32,7 +32,7 @@ LineWidthPopup::LineWidthPopup (
     : Popup(
         pParent,
         rControlCreator,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width")))
+        OUString( "Width"))
 {
     SetPopupModeEndHandler(::boost::bind(&LineWidthPopup::PopupModeEndCallback, this));
 }
@@ -68,7 +68,7 @@ void LineWidthPopup::PopupModeEndCallback (void)
         {
             SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_LINE_WIDTH_GLOBAL_VALUE );
             ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
-            aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineWidth") );
+            aSeq[0].Name = "LineWidth";
             aSeq[0].Value <<= ::rtl::OUString::number(pControl->GetTmpCustomWidth());
             aWinOpt.SetUserData( aSeq );
         }

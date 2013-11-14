@@ -28,7 +28,7 @@ ParaNumberingPopup::ParaNumberingPopup (
     : Popup(
         pParent,
         rControlCreator,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Paragraph Numbering")))
+        OUString( "Paragraph Numbering"))
 {
 }
 

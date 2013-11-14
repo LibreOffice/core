@@ -289,7 +289,7 @@ NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
     if ( !m_aLastURL.getLength() )
         return;
 
-    OUString aTarget( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
+    OUString aTarget( "_default" );
     if ( m_xPopupMenu.is() )
     {
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
@@ -308,8 +308,8 @@ NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
     }
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer"  ));
-    aArgs[0].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ) );
+    aArgs[0].Name = "Referer";
+    aArgs[0].Value <<= OUString( "private:user" );
 
     dispatchCommand( m_aLastURL, aArgs, aTarget );
 }

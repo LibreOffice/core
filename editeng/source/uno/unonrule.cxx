@@ -168,7 +168,7 @@ sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& Service
 
 Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSvxUnoNumberingRulesService ) );
+    OUString aService( pSvxUnoNumberingRulesService );
     Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }

@@ -261,25 +261,20 @@ void Interceptor::generateFeatureStateEvent()
 
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
                 aStateEvent.FeatureDescriptor = "Update";
-                aStateEvent.State <<= (OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
-                                       aTitle);
+                aStateEvent.State <<= (OUString("($1) ") + aTitle);
 
             }
             else if ( i == 5 )
             {
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
                 aStateEvent.FeatureDescriptor = "SaveCopyTo";
-                aStateEvent.State <<= (OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("($3)")));
+                aStateEvent.State <<= (OUString("($3)"));
             }
             else
             {
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
                 aStateEvent.FeatureDescriptor = "Close and Return";
-                aStateEvent.State <<= (OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
-                                       aTitle);
+                aStateEvent.State <<= (OUString("($2) ") + aTitle);
 
             }
 
@@ -328,9 +323,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "Update";
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (OUString(
-            RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
-                               aTitle );
+        aStateEvent.State <<= (OUString("($1) ") + aTitle );
         Control->statusChanged(aStateEvent);
 
         {
@@ -368,9 +361,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "Close and Return";
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (OUString(
-            RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
-                               aTitle );
+        aStateEvent.State <<= (OUString("($2) ") + aTitle );
         Control->statusChanged(aStateEvent);
 
 
@@ -392,7 +383,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "SaveCopyTo";
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
+        aStateEvent.State <<= (OUString("($3)"));
         Control->statusChanged(aStateEvent);
 
         {

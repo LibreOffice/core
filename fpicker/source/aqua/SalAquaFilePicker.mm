@@ -79,9 +79,9 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
-        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFilePicker" ));
-        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.AquaFilePicker" ));
+        aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
+        aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
+        aRet[2] = "com.sun.star.ui.dialogs.AquaFilePicker";
         return aRet;
     }
 }
@@ -188,7 +188,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
                     rtl::OUString ouName = [windowTitle OUString];
                     //a window title will typically be something like "Untitled1 - OpenOffice.org Writer"
                     //but we only want the "Untitled1" part of it
-                    sal_Int32 indexOfDash = ouName.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")));
+                    sal_Int32 indexOfDash = ouName.indexOf(" - ");
                     if (indexOfDash > -1) {
                         m_sSaveFileName = ouName.copy(0,indexOfDash);
                         if (m_sSaveFileName.getLength() > 0) {
@@ -649,7 +649,7 @@ throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    rtl::OUString retVal(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
+    rtl::OUString retVal( FILE_PICKER_IMPL_NAME );
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 

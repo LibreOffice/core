@@ -429,7 +429,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
         Reference< XStorable > xStorable( xComp, UNO_QUERY );
         if( xStorable.is() )
         {
-            OUString const ext(RTL_CONSTASCII_USTRINGPARAM(".xml"));
+            OUString const ext(".xml");
             utl::TempFile aTempFile(OUString(), &ext);
             OUString aTempFileURL( aTempFile.GetURL() );
 
@@ -592,7 +592,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
         if( m_pCBXDisplaySource->IsChecked() )
         {
-            OUString const ext(RTL_CONSTASCII_USTRINGPARAM(".xml"));
+            OUString const ext(".xml");
             TempFile aTempFile(OUString(), &ext);
             OUString aTempFileURL( aTempFile.GetURL() );
 

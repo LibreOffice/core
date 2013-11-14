@@ -239,7 +239,7 @@ void LinePropertyPanel::Initialize()
     SelectLineStyle();
     aLink = LINK( this, LinePropertyPanel, ChangeLineStyleHdl );
     mpLBStyle->SetSelectHdl( aLink );
-    mpLBStyle->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Style")));
+    mpLBStyle->SetAccessibleName(OUString( "Style"));
     mpLBStyle->AdaptDropDownLineCountToMaximum();
 
     const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
@@ -254,16 +254,16 @@ void LinePropertyPanel::Initialize()
     SelectEndStyle(false);
     aLink = LINK( this, LinePropertyPanel, ChangeStartHdl );
     mpLBStart->SetSelectHdl( aLink );
-    mpLBStart->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Beginning Style"))); //wj acc
+    mpLBStart->SetAccessibleName(OUString( "Beginning Style")); //wj acc
     mpLBStart->AdaptDropDownLineCountToMaximum();
     aLink = LINK( this, LinePropertyPanel, ChangeEndHdl );
     mpLBEnd->SetSelectHdl( aLink );
-    mpLBEnd->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Ending Style")));  //wj acc
+    mpLBEnd->SetAccessibleName(OUString( "Ending Style"));  //wj acc
     mpLBEnd->AdaptDropDownLineCountToMaximum();
 
     aLink = LINK(this, LinePropertyPanel, ChangeTransparentHdl);
     mpMFTransparent->SetModifyHdl(aLink);
-    mpMFTransparent->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));  //wj acc
+    mpMFTransparent->SetAccessibleName(OUString( "Transparency"));  //wj acc
 
     mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
     mpTBColor->SetAccessibleRelationLabeledBy(mpFTColor);
@@ -274,11 +274,11 @@ void LinePropertyPanel::Initialize()
 
     aLink = LINK( this, LinePropertyPanel, ChangeEdgeStyleHdl );
     mpLBEdgeStyle->SetSelectHdl( aLink );
-    mpLBEdgeStyle->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Corner Style")));
+    mpLBEdgeStyle->SetAccessibleName(OUString( "Corner Style"));
 
     aLink = LINK( this, LinePropertyPanel, ChangeCapStyleHdl );
     mpLBCapStyle->SetSelectHdl( aLink );
-    mpLBCapStyle->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cap Style")));
+    mpLBCapStyle->SetAccessibleName(OUString( "Cap Style"));
 }
 
 

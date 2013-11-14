@@ -116,7 +116,7 @@ action_wrapper_get_localized_name (AtkAction *, gint)
 }
 
 #define ACTION_NAME_PAIR( OOoName, AtkName ) \
-    std::pair< const OUString, const gchar * > ( OUString( RTL_CONSTASCII_USTRINGPARAM( OOoName ) ), AtkName )
+    std::pair< const OUString, const gchar * > ( OUString( OOoName ), AtkName )
 
 static G_CONST_RETURN gchar *
 action_wrapper_get_name (AtkAction *action,

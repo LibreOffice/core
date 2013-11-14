@@ -420,12 +420,12 @@ Sequence<OUString> OPipeTest_getSupportedServiceNames(void) throw()
 
 OUString     OPipeTest_getServiceName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    return OUString( SERVICE_NAME );
 }
 
 OUString    OPipeTest_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+    return OUString( IMPLEMENTATION_NAME );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -478,7 +478,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 {
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "XInitialization::initialize() called without arguments." )),
+                OUString( "XInitialization::initialize() called without arguments." ),
                 static_cast< css::ui::dialogs::XFilePicker2* >( this ),
                 1);
 

@@ -368,11 +368,11 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sa
     DBG_CTOR(rpt_ORptFilter,NULL);
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
-    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__rpt) ),
+    GetNamespaceMap().Add( OUString( sXML_np__rpt ),
                         GetXMLToken(XML_N_RPT),
                         XML_NAMESPACE_REPORT );
 
-    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np___rpt) ),
+    GetNamespaceMap().Add( OUString( sXML_np___rpt ),
                         GetXMLToken(XML_N_RPT_OASIS),
                         XML_NAMESPACE_REPORT );
 

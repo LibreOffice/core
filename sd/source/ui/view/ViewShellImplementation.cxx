@@ -127,7 +127,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
             // Make the layout menu visible in the tool pane.
             sfx2::sidebar::Sidebar::ShowPanel(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImpressLayoutsPanel")),
+                OUString("ImpressLayoutsPanel"),
                 mrViewShell.GetViewFrame()->GetFrame().GetFrameInterface());
             break;
         }

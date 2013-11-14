@@ -131,8 +131,7 @@ SAL_IMPLEMENT_MAIN()
 
 
         OUString sLibLoader("com.sun.star.loader.SharedLibrary");
-        OUString sJenLib(
-            RTL_CONSTASCII_USTRINGPARAM( "javavm.uno" SAL_DLLEXTENSION ) );
+        OUString sJenLib( "javavm.uno" SAL_DLLEXTENSION );
         xImplReg->registerImplementation(
             sLibLoader, sJenLib, Reference< XSimpleRegistry >() );
 

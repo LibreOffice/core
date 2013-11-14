@@ -332,7 +332,7 @@ void StatusBarManager::CreateControllers()
         beans::PropertyValue aPropValue;
         std::vector< uno::Any > aPropVector;
 
-        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
+        aPropValue.Name     = "CommandURL";
         aPropValue.Value    <<= aCommandURL;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 

@@ -177,7 +177,7 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
         void * pSym;
 
         // ========================= LATEST VERSION =========================
-        OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
+        OUString aGetEnvName( COMPONENT_GETENV );
         if (pSym = osl_getSymbol( lib, aGetEnvName.pData ))
         {
             uno_Environment * pCurrentEnv = 0;
@@ -196,14 +196,14 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
                     uno_getEnvironment( &pEnv, aEnvTypeName.pData, 0 );
                 if (pEnv)
                 {
-                    OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+                    OUString aCppEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
                     uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
                     if (pCurrentEnv)
                         bNeedsMapping = (pEnv != pCurrentEnv);
                 }
             }
 
-            OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
+            OUString aGetFactoryName( COMPONENT_GETFACTORY );
             if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
             {
                 OString aImplName( OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
@@ -262,11 +262,11 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
         // ========================= PREVIOUS VERSION =========================
         else
         {
-            OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(CREATE_COMPONENT_FACTORY_FUNCTION) );
+            OUString aGetFactoryName( CREATE_COMPONENT_FACTORY_FUNCTION );
             if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
             {
-                OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-                OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
+                OUString aCppEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
+                OUString aUnoEnvTypeName( UNO_LB_UNO );
                 Mapping aUno2Cpp( aUnoEnvTypeName, aCppEnvTypeName );
                 Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
                 OSL_ENSURE( aUno2Cpp.is() && aCpp2Uno.is(), "### cannot get uno mappings!" );
@@ -394,7 +394,7 @@ static void createInstance( Reference< T > & rxOut,
 //--------------------------------------------------------------------------------------------------
 inline static Sequence< OUString > getSupportedServiceNames()
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+    OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
 }
 
@@ -443,7 +443,7 @@ static Reference< XInterface > SAL_CALL TestImpl_create( const Reference< XMulti
 OUString TestImpl::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return OUString( IMPLNAME );
 }
 //__________________________________________________________________________________________________
 sal_Bool TestImpl::supportsService( const OUString & rServiceName )
@@ -1043,7 +1043,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         {
             // in process uno dispatch
             Environment aCppEnv, aAnoCppEnv;
-            OUString aCurrentLanguageBindingName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+            OUString aCurrentLanguageBindingName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
             uno_getEnvironment( reinterpret_cast< uno_Environment ** >( &aCppEnv ),
                                 aCurrentLanguageBindingName.pData, 0 );
             // anonymous
@@ -1143,7 +1143,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             // remote
             OUString aUnoUrl( extractParam( rArgs, OUString("url") ) );
             if (! aUnoUrl.getLength())
-                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("performance test r(emote) needs additional uno url!") ), Reference< XInterface >() );
+                throw RuntimeException( OUString( "performance test r(emote) needs additional uno url!" ), Reference< XInterface >() );
 
             // connect and resolve outer process object
             Reference< XInterface > xResolvedObject( resolveObject( aUnoUrl ) );
@@ -1274,8 +1274,8 @@ sal_Bool SAL_CALL component_writeInfo(
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-            xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) ) );
+                    OUString( "/" IMPLNAME "/UNO/SERVICES" ) ) );
+            xNewKey->createKey( OUString( SERVICENAME ) );
 
             return sal_True;
         }
@@ -1296,7 +1296,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
+            OUString( IMPLNAME ),
             benchmark_test::TestImpl_create,
             benchmark_test::getSupportedServiceNames() ) );
 

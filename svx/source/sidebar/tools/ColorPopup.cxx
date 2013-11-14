@@ -27,7 +27,7 @@ ColorPopup::ColorPopup (
     : Popup(
         pParent,
         rControlCreator,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Color")))
+        OUString("Color"))
 {
 }
 

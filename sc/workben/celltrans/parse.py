@@ -54,9 +54,9 @@ class LocaleData(object):
         chars += "// " + "-"*75 + "\n"
         chars += "// %s language locale (automatically generated)\n"%getLocaleName(self.locale)
         chars += "// " + "-"*75 + "\n"
-        chars += "static const Locale a" + self.locale.capitalize() + "(OUString(RTL_CONSTASCII_USTRINGPARAM(\""
+        chars += "static const Locale a" + self.locale.capitalize() + "(OUString(\""
         chars += self.locale
-        chars += "\")), OUString(), OUString());\n\n"
+        chars += "\"), OUString(), OUString());\n\n"
 
         # pre instantiations of localized function names.
         funcs = sorted(self.funcList.keys())

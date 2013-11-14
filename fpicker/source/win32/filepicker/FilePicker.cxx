@@ -711,7 +711,7 @@ void SAL_CALL CFilePicker::cancel()
 OUString SAL_CALL CFilePicker::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(FILE_PICKER_IMPL_NAME));
+    return OUString(FILE_PICKER_IMPL_NAME);
 }
 
 //  XServiceInfo

@@ -28,7 +28,7 @@ TextCharacterSpacingPopup::TextCharacterSpacingPopup (
     : Popup(
         pParent,
         rControlCreator,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Character Spacing")))
+        OUString( "Character Spacing"))
 {
     SetPopupModeEndHandler(::boost::bind(&TextCharacterSpacingPopup::PopupModeEndCallback, this));
 }
@@ -63,7 +63,7 @@ void TextCharacterSpacingPopup::PopupModeEndCallback (void)
     {
         SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE );
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
-        aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Spacing") );
+        aSeq[0].Name = "Spacing";
         aSeq[0].Value <<= ::rtl::OUString::number(pControl->GetLastCustomValue());
         aWinOpt.SetUserData( aSeq );
 

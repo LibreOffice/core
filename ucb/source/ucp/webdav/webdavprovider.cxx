@@ -77,25 +77,23 @@ ContentProvider::ContentProvider(
             ::comphelper::getProcessComponentContext() );
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
             xContext->getServiceManager()->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.configuration.ConfigurationProvider")), xContext),
+                OUString("com.sun.star.configuration.ConfigurationProvider"), xContext),
             uno::UNO_QUERY_THROW );
 
         beans::NamedValue aNodePath;
-        aNodePath.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-        aNodePath.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Product"));
+        aNodePath.Name = "nodepath";
+        aNodePath.Value <<= OUString( "/org.openoffice.Setup/Product");
 
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[0] <<= aNodePath;
 
         uno::Reference< container::XNameAccess > xConfigAccess(
             xConfigProvider->createInstanceWithArguments(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationAccess")), aArgs),
+                OUString("com.sun.star.configuration.ConfigurationAccess"), aArgs),
             uno::UNO_QUERY_THROW );
 
         OUString aVal;
-        xConfigAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("ooName"))) >>= aVal;
+        xConfigAccess->getByName(OUString("ooName")) >>= aVal;
 
         OUString &aUserAgent = WebDAVUserAgent::get();
         sal_Int32 nIndex = aUserAgent.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "$ooName" ) );
@@ -103,7 +101,7 @@ ContentProvider::ContentProvider(
             return;
         aUserAgent = aUserAgent.replaceAt( nIndex, RTL_CONSTASCII_LENGTH( "$ooName" ), aVal );
 
-        xConfigAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupVersion"))) >>= aVal;
+        xConfigAccess->getByName(OUString("ooSetupVersion")) >>= aVal;
         nIndex = aUserAgent.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "$ooSetupVersion" ) );
         if ( !aVal.getLength() || nIndex == -1 )
             return;

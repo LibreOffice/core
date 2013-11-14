@@ -1514,7 +1514,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         }
         if ( rSet.GetItemState( SID_FAIL_ON_WARNING, sal_False, &pItem ) == SFX_ITEM_SET )
         {
-            pValue[nActProp].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(sFailOnWarning));
+            pValue[nActProp].Name = OUString(sFailOnWarning);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_VIEW_ID, sal_False, &pItem ) == SFX_ITEM_SET )

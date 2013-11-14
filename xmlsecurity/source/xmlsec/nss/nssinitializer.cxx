@@ -305,7 +305,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
 #if defined SYSTEM_NSS
         OUString rootModule("libnssckbi" SAL_DLLEXTENSION);
 #else
-        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${LO_LIB_DIR}/libnssckbi" SAL_DLLEXTENSION));
+        OUString rootModule("${LO_LIB_DIR}/libnssckbi" SAL_DLLEXTENSION);
 #endif
         ::rtl::Bootstrap::expandMacros(rootModule);
 

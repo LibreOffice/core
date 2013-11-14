@@ -541,8 +541,8 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
     sal_Int16 templateId = -1;
     aAny >>= templateId;
 
-    OUString aTypeOpen(RTL_CONSTASCII_USTRINGPARAM( "setType \"open\"" ));
-    OUString aTypeSaveAs(RTL_CONSTASCII_USTRINGPARAM( "setType \"save\"" ));
+    OUString aTypeOpen( "setType \"open\"" );
+    OUString aTypeSaveAs( "setType \"save\"" );
 
     switch ( templateId )
     {
@@ -647,7 +647,7 @@ void SAL_CALL UnxFilePicker::disposing( const lang::EventObject &rEvent )
 OUString SAL_CALL UnxFilePicker::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
+    return OUString( FILE_PICKER_IMPL_NAME );
 }
 
 sal_Bool SAL_CALL UnxFilePicker::supportsService( const OUString& ServiceName )

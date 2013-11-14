@@ -47,7 +47,7 @@ namespace benchmark_object
 //--------------------------------------------------------------------------------------------------
 inline static Sequence< OUString > getSupportedServiceNames()
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+    OUString aName( SERVICENAME);
     return Sequence< OUString >( &aName, 1 );
 }
 
@@ -205,7 +205,7 @@ public:
 OUString ServiceImpl::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return OUString( IMPLNAME );
 }
 //__________________________________________________________________________________________________
 sal_Bool ServiceImpl::supportsService( const OUString & rServiceName )
@@ -247,8 +247,8 @@ sal_Bool SAL_CALL component_writeInfo(
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-            xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) ) );
+                    OUString( ("/" IMPLNAME "/UNO/SERVICES") ) ) );
+            xNewKey->createKey( OUString( SERVICENAME ) );
 
             return sal_True;
         }
@@ -269,7 +269,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
+            OUString( IMPLNAME ),
             benchmark_object::ServiceImpl_create,
             benchmark_object::getSupportedServiceNames() ) );
 

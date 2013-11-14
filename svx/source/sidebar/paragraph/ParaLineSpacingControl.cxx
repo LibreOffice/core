@@ -166,12 +166,12 @@ void ParaLineSpacingControl::PopupModeEndCallback()
 
         SvtViewOptions aWinOpt( E_WINDOW, LSP_POS_GLOBAL_VALUE );
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
-        aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("maLinePos") );
+        aSeq[0].Name = "maLinePos";
         aSeq[0].Value <<= ::rtl::OUString::number(maPos);
         aWinOpt.SetUserData( aSeq );
 
         SvtViewOptions aWinOpt2( E_WINDOW, LSP_LV_GLOBAL_VALUE );
-        aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("maLineValue") );
+        aSeq[0].Name = "maLineValue";
         aSeq[0].Value <<= ::rtl::OUString::number(maValue);
         aWinOpt2.SetUserData( aSeq );
     }

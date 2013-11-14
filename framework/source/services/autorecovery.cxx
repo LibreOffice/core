@@ -910,7 +910,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
-    OUString sCFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM(CFG_PACKAGE_RECOVERY));
+    OUString sCFG_PACKAGE_RECOVERY(CFG_PACKAGE_RECOVERY);
     // throws a RuntimeException if an error occurs!
     css::uno::Reference< css::container::XNameAccess > xCFG(
         ::comphelper::ConfigurationHelper::openConfig(xContext, sCFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),

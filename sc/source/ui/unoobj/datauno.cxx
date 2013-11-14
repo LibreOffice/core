@@ -1669,7 +1669,7 @@ ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const OUString& rNm) 
 
 ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab) :
     pDocShell( pDocSh ),
-    aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)),
+    aName(STR_DB_LOCAL_NONAME),
     aPropSet( lcl_GetDBRangePropertyMap() ),
     bIsUnnamed(true),
     aTab( nTab )

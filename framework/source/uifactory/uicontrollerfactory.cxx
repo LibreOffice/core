@@ -229,7 +229,7 @@ DEFINE_INIT_SERVICE                     (   PopupMenuControllerFactory, {} )
 PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XComponentContext >& xContext ) :
     UIControllerFactory(
         xContext,
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PopupMenu" )) )
+        OUString( "PopupMenu") )
 {
 }
 
@@ -244,7 +244,7 @@ DEFINE_INIT_SERVICE                     (   ToolbarControllerFactory, {} )
 ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XComponentContext >& xContext ) :
     UIControllerFactory(
         xContext,
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToolBar" )))
+        OUString( "ToolBar" ))
 {
 }
 
@@ -259,7 +259,7 @@ DEFINE_INIT_SERVICE                     (   StatusbarControllerFactory, {} )
 StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XComponentContext >& xContext ) :
     UIControllerFactory(
         xContext,
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusBar" )) )
+        OUString( "StatusBar" ) )
 {
 }
 

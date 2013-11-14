@@ -55,7 +55,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL dnd_component_getFactory( const sal_Char* pI
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDSOURCE_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( DNDSOURCE_SERVICE_NAME ) );
+        aSNS.getArray( )[0] = OUString( DNDSOURCE_SERVICE_NAME );
 
         xFactory= createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -67,7 +67,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL dnd_component_getFactory( const sal_Char* pI
     else if( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDTARGET_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( DNDTARGET_SERVICE_NAME ) );
+        aSNS.getArray( )[0] = OUString( DNDTARGET_SERVICE_NAME );
 
         xFactory= createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

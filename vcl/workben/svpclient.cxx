@@ -131,7 +131,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aQuitButton( this, 0 )
 {
     m_aListButton.SetPosSizePixel( Point( 10, 10 ), Size( 120, 25 ) );
-    m_aListButton.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "List Elements" ) ) );
+    m_aListButton.SetText( OUString( "List Elements" ) );
     m_aListButton.SetClickHdl( LINK( this, MyWin, ListHdl ) );
     m_aListButton.Show();
 
@@ -144,7 +144,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aImage.Show();
 
     m_aQuitButton.SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );
-    m_aQuitButton.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Quit SVP server" ) ) );
+    m_aQuitButton.SetText( OUString( "Quit SVP server" ) );
     m_aQuitButton.SetClickHdl( LINK( this, MyWin, QuitHdl ) );
     m_aQuitButton.Show();
 }

@@ -78,28 +78,28 @@ using namespace ::com::sun::star::util;
         ShutdownIcon::FileOpen();
         break;
     case MI_WRITER:
-        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( WRITER_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        ShutdownIcon::OpenURL( OUString(  WRITER_URL ), OUString( "_default" ) );
         break;
     case MI_CALC:
-        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( CALC_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        ShutdownIcon::OpenURL( OUString( CALC_URL ), OUString( "_default" ) );
         break;
     case MI_IMPRESS:
-        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( IMPRESS_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        ShutdownIcon::OpenURL( OUString( IMPRESS_URL ), OUString( "_default" ) );
         break;
     case MI_DRAW:
-        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        ShutdownIcon::OpenURL( OUString( DRAW_URL ), OUString( "_default" ) );
         break;
     case MI_BASE:
-        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( BASE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        ShutdownIcon::OpenURL( OUString( BASE_URL ), OUString( "_default" ) );
         break;
     case MI_MATH:
-        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( MATH_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        ShutdownIcon::OpenURL( OUString( MATH_URL ), OUString( "_default" ) );
         break;
     case MI_TEMPLATE:
         ShutdownIcon::FromTemplate();
         break;
     case MI_STARTMODULE:
-        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( STARTMODULE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        ShutdownIcon::OpenURL( OUString( STARTMODULE_URL ), OUString( "_default" ) );
         break;
     default:
         break;
@@ -110,7 +110,7 @@ using namespace ::com::sun::star::util;
 {
     (void)pSender;
     // start start module
-    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( STARTMODULE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+    ShutdownIcon::OpenURL( OUString( STARTMODULE_URL ), OUString( "_default" ) );
 }
 
 @end
@@ -262,11 +262,11 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
         int NUM_OF_PICKLIST_ARGS = 3;
         Sequence< PropertyValue > aArgsList( NUM_OF_PICKLIST_ARGS );
         
-        aArgsList[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-        aArgsList[0].Value = makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ) ) );
+        aArgsList[0].Name = "Referer";
+        aArgsList[0].Value = makeAny( OUString( "private:user" ) );
 
         // documents in the picklist will never be opened as templates
-        aArgsList[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
+        aArgsList[1].Name = "AsTemplate";
         aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
 
         ::rtl::OUString  aFilter( rRecentFile.aFilter );
@@ -278,17 +278,17 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
             if ( nPos < ( aFilter.getLength() - 1 ) )
                 aFilterOptions = aFilter.copy( nPos+1 );
 
-            aArgsList[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+            aArgsList[2].Name = "FilterOptions";
             aArgsList[2].Value = makeAny( aFilterOptions );
 
             aFilter = aFilter.copy( 0, nPos-1 );
             aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
         }
 
-        aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+        aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = "FilterName";
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = makeAny( aFilter );
 
-        ShutdownIcon::OpenURL( rRecentFile.aURL, OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), aArgsList );
+        ShutdownIcon::OpenURL( rRecentFile.aURL, OUString( "_default" ), aArgsList );
     }
 }
 @end
@@ -451,7 +451,7 @@ void aqua_init_systray()
             // insert entry for startcenter
             if( aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SSTARTMODULE ) )
             {
-                appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "n" ) ) );
+                appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, OUString( "n" ) ) );
                 if( [NSApp respondsToSelector: @selector(setDockIconClickHandler:)] )
                     [NSApp performSelector:@selector(setDockIconClickHandler:) withObject: pExecute];
                 else

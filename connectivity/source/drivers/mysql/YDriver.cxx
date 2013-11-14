@@ -367,17 +367,15 @@ namespace connectivity
         else if ( eType == D_NATIVE )
         {
             aDriverInfo.push_back(DriverPropertyInfo(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("LocalSocket"))
-                    ,OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "The file path of a socket to connect to a local MySQL server."))
+                    OUString("LocalSocket")
+                    ,OUString("The file path of a socket to connect to a local MySQL server.")
                     ,sal_False
                     ,OUString()
                     ,Sequence< OUString >())
                     );
             aDriverInfo.push_back(DriverPropertyInfo(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("NamedPipe"))
-                    ,OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "The name of a pipe to connect to a local MySQL server."))
+                    OUString("NamedPipe")
+                    ,OUString("The name of a pipe to connect to a local MySQL server.")
                     ,sal_False
                     ,OUString()
                     ,Sequence< OUString >())

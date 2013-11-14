@@ -556,13 +556,13 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     ucb::PostCommandArgument2 * >( 0 ) ) );
     aCmdInfo[ 8 ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "addProperty" ) ),
+                OUString( "addProperty" ),
                 -1,
                 getCppuType( static_cast<
                     ucb::PropertyCommandArgument * >( 0 ) ) );
     aCmdInfo[ 9 ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "removeProperty" ) ),
+                OUString( "removeProperty" ),
                 -1,
                 getCppuType( static_cast<
                     rtl::OUString * >( 0 ) ) );

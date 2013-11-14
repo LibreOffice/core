@@ -25,7 +25,7 @@ NotYetImplementedPanel::NotYetImplementedPanel (::Window* pParent)
       maMessageControl(this, 0)
 {
     maMessageControl.setPosSizePixel(5,5, 250,15);
-    maMessageControl.SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not yet implemented")));
+    maMessageControl.SetText(OUString("not yet implemented"));
 
     maMessageControl.Show();
     Show();

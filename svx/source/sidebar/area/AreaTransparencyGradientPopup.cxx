@@ -27,7 +27,7 @@ AreaTransparencyGradientPopup::AreaTransparencyGradientPopup (
     : Popup(
         pParent,
         rControlCreator,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency and Gradient")))
+        OUString( "Transparency and Gradient"))
 {
 }
 

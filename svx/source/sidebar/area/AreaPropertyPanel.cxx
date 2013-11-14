@@ -154,8 +154,8 @@ void AreaPropertyPanel::Initialize()
     maGradientRect = maGradientLinear;
     maGradientRect.SetGradientStyle(XGRAD_RECT);
 
-    mpLbFillType->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Fill")));    //wj acc
-    mpLbFillAttr->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Fill")));    //wj acc
+    mpLbFillType->SetAccessibleName(OUString( "Fill"));    //wj acc
+    mpLbFillAttr->SetAccessibleName(OUString( "Fill"));    //wj acc
 
     Link aLink = LINK( this, AreaPropertyPanel, SelectFillTypeHdl );
     mpLbFillType->SetSelectHdl( aLink );
@@ -176,11 +176,11 @@ void AreaPropertyPanel::Initialize()
 
     //add end
     mpLBTransType->SetSelectHdl(LINK(this, AreaPropertyPanel, ChangeTrgrTypeHdl_Impl));
-    mpLBTransType->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));    //wj acc
+    mpLBTransType->SetAccessibleName(OUString( "Transparency"));    //wj acc
 
     mpMTRTransparent->SetValue( 50 );
     mpMTRTransparent->SetModifyHdl(LINK(this, AreaPropertyPanel, ModifyTransparentHdl_Impl));
-    mpMTRTransparent->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));    //wj acc
+    mpMTRTransparent->SetAccessibleName(OUString( "Transparency"));    //wj acc
 
     const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
     mpBTNGradient->SetItemBits( nIdGradient, mpBTNGradient->GetItemBits( nIdGradient ) | TIB_DROPDOWNONLY );

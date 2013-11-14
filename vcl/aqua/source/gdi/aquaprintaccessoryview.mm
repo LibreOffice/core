@@ -111,15 +111,15 @@ class ControllerProperties
     rtl::OUString getMoreString()
     {
         return maLocalizedStrings.Count() >= 4
-               ? rtl::OUString( maLocalizedStrings.GetString( 3 ) )
-               : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "More" ) );
+               ? OUString( maLocalizedStrings.GetString( 3 ) )
+               : OUString( "More" );
     }
     
     rtl::OUString getPrintSelectionString()
     {
         return maLocalizedStrings.Count() >= 5
-               ? rtl::OUString( maLocalizedStrings.GetString( 4 ) )
-               : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Print selection only" ) );
+               ? OUString( maLocalizedStrings.GetString( 4 ) )
+               : OUString( "Print selection only" );
     }
     
     void updatePrintJob()
@@ -1267,7 +1267,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                 
                 // new tab item
                 if( ! aText.getLength() )
-                    aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OOo" ) );
+                    aText = OUString( "OOo" );
                 NSString* pLabel = CreateNSString( aGroupTitle );
                 NSTabViewItem* pItem = [[NSTabViewItem alloc] initWithIdentifier: pLabel ];
                 [pItem setLabel: pLabel];
@@ -1288,7 +1288,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                 {
                     addBool( pCurParent, nCurX, nCurY, 0,
                              pControllerProperties->getPrintSelectionString(), bSelectionBoxEnabled,
-                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ), bSelectionBoxChecked,
+                             OUString( "PrintContent" ), bSelectionBoxChecked,
                              aRightColumn, pControllerProperties, pCtrlTarget );
                     bAddSelectionCheckBox = false;
                 }

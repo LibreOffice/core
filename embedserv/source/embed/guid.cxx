@@ -97,31 +97,31 @@ OUString getServiceNameFromGUID_Impl( GUID* guid )
 OUString getFilterNameFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Writer)" ) );
+        return OUString( "StarOffice XML (Writer)" );
 
     if ( *guid == OID_WriterOASISTextServer )
         return OUString( "writer8" );
 
     if ( *guid == OID_CalcServer )
-        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Calc)" ) );
+        return OUString( "StarOffice XML (Calc)" );
 
     if ( *guid == OID_CalcOASISServer )
         return OUString( "calc8" );
 
     if ( *guid == OID_DrawingServer )
-        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Draw)" ) );
+        return OUString( "StarOffice XML (Draw)" );
 
     if ( *guid == OID_DrawingOASISServer )
         return OUString( "draw8" );
 
     if ( *guid == OID_PresentationServer )
-        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Impress)" ) );
+        return OUString( "StarOffice XML (Impress)" );
 
     if ( *guid == OID_PresentationOASISServer )
         return OUString( "impress8" );
 
     if ( *guid == OID_MathServer )
-        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Math)" ) );
+        return OUString( "StarOffice XML (Math)" );
 
     if ( *guid == OID_MathOASISServer )
         return OUString( "math8" );

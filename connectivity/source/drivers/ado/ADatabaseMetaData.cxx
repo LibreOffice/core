@@ -910,7 +910,7 @@ OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, Runt
 
         aRecordset.MoveFirst();
         OLEVariant  aValue;
-        OUString aRet, aComma(RTL_CONSTASCII_USTRINGPARAM(","));
+        OUString aRet, aComma(",");
         while(!aRecordset.IsAtEOF())
         {
             WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());

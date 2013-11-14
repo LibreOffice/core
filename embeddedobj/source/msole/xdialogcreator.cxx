@@ -253,7 +253,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                 if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
                 {
                     datatransfer::DataFlavor aFlavor(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+                        OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
                         OUString( "Image WMF" ),
                         getCppuType( ( const uno::Sequence< sal_Int8 >* ) 0 ) );
 

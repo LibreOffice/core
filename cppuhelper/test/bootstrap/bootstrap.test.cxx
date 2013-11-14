@@ -145,7 +145,7 @@ static void s_test__loadSharedLibComponentFactory__purpose_purpose()
 
 static rtl::OUString s_getSDrive(void)
 {
-    rtl::OUString path;//(RTL_CONSTASCII_USTRINGPARAM("file://"));
+    rtl::OUString path;//("file://");
 
     // FIXME no more S drive
 

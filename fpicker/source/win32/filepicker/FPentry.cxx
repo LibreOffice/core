@@ -96,7 +96,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_win32_component_getFactory(
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, FILE_PICKER_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_SERVICE_NAME ));
+        aSNS.getArray( )[0] = FILE_PICKER_SERVICE_NAME;
 
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -113,7 +113,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_win32_component_getFactory(
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, FOLDER_PICKER_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+        aSNS.getArray( )[0] = FOLDER_PICKER_SERVICE_NAME;
 
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

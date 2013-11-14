@@ -727,7 +727,7 @@ sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& Servic
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSvxUnoDrawPagesAccessService ) );
+    OUString aService( pSvxUnoDrawPagesAccessService );
     uno::Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }

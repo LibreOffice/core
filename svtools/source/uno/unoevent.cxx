@@ -52,7 +52,7 @@ SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupport
         sJavaScript("JavaScript"),
         sScript("Script"),
         sNone("None"),
-        sServiceName(RTL_CONSTASCII_USTRINGPARAM(sAPI_ServiceName)),
+        sServiceName(sAPI_ServiceName),
         sEmpty(),
         mpSupportedMacroItems(pSupportedMacroItems),
         mnMacroItems(0)
@@ -437,7 +437,7 @@ void SvEventDescriptor::getByName(
 SvDetachedEventDescriptor::SvDetachedEventDescriptor(
     const SvEventDescription* pSupportedMacroItems) :
     SvBaseEventDescriptor(pSupportedMacroItems),
-    sImplName(RTL_CONSTASCII_USTRINGPARAM(sAPI_SvDetachedEventDescriptor))
+    sImplName(sAPI_SvDetachedEventDescriptor)
 {
     // allocate aMacros
     aMacros = new SvxMacro*[mnMacroItems];

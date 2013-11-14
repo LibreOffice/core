@@ -359,7 +359,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
                 changeState( embed::EmbedStates::RUNNING );
 
             datatransfer::DataFlavor aDataFlavor(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+                    OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
                     OUString( "Windows Metafile" ),
                     ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 

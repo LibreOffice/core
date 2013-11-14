@@ -164,8 +164,8 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             reinterpret_cast< jvmaccess::UnoVirtualMachine * >(nPointer));
         if (!xVirtualMachine.is())
         {
-            //throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-            //   "javaloader error - JavaVirtualMachine service could not provide a VM")),
+            //throw RuntimeException(OUString(
+            //   "javaloader error - JavaVirtualMachine service could not provide a VM"),
             //   css::uno::Reference<XInterface>());
             // We must not throw a RuntimeException, because this might end the applications.
             // It is ok if java components

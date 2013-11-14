@@ -77,9 +77,9 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sysdtrans_component_getFactory( const sal_Ch
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, WINCLIPBOARD_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( WINCLIPBOARD_SERVICE_NAME ) );
+        aSNS.getArray( )[0] = OUString( WINCLIPBOARD_SERVICE_NAME );
 
-        //OUString( RTL_CONSTASCII_USTRINGPARAM( FPS_IMPL_NAME ) )
+        //OUString( FPS_IMPL_NAME )
         Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),

@@ -152,14 +152,14 @@ void PosSizePropertyPanel::Initialize()
     //Position : Horizontal / Vertical
     mpMtrPosX->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
     mpMtrPosY->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
-    mpMtrPosX->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Horizontal")));  //wj acc
-    mpMtrPosY->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Vertical")));        //wj acc
+    mpMtrPosX->SetAccessibleName(OUString( "Horizontal"));  //wj acc
+    mpMtrPosY->SetAccessibleName(OUString( "Vertical"));        //wj acc
 
     //Size : Width / Height
     mpMtrWidth->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
     mpMtrHeight->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
-    mpMtrWidth->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width")));  //wj acc
-    mpMtrHeight->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Height")));    //wj acc
+    mpMtrWidth->SetAccessibleName(OUString( "Width"));  //wj acc
+    mpMtrHeight->SetAccessibleName(OUString( "Height"));    //wj acc
 
     //Size : Keep ratio
     mpCbxScale->SetClickHdl( LINK( this, PosSizePropertyPanel, ClickAutoHdl ) );
@@ -167,7 +167,7 @@ void PosSizePropertyPanel::Initialize()
     //rotation:
     mpMtrAngle->SetModifyHdl(LINK( this, PosSizePropertyPanel, AngleModifiedHdl));
     mpMtrAngle->EnableAutocomplete( false );
-    mpMtrAngle->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Rotation")));   //wj acc
+    mpMtrAngle->SetAccessibleName(OUString( "Rotation"));   //wj acc
 
     //rotation control
     mpDial->SetModifyHdl(LINK( this, PosSizePropertyPanel, RotationHdl));

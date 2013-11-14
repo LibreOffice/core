@@ -1738,7 +1738,7 @@ int Desktop::Main()
         catch( ...)
         {
             OfficeIPCThread::SetDowning();
-            FatalError( OUString(RTL_CONSTASCII_USTRINGPARAM( "Caught Unknown Exception: Aborting!")));
+            FatalError( OUString( "Caught Unknown Exception: Aborting!"));
         }
     }
     else

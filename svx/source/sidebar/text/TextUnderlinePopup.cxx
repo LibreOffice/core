@@ -27,7 +27,7 @@ TextUnderlinePopup::TextUnderlinePopup (
     : Popup(
         pParent,
         rControlCreator,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Character Spacing")))
+        OUString( "Character Spacing"))
 {
 }
 

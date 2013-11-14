@@ -257,10 +257,8 @@ void RecursiveTest::test()
 {
     properties_ = css::uno::Reference< css::beans::XPropertySet >(
         test_.createUpdateAccess(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                    "dotuno:WebHtml"))),
+            OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+                     "dotuno:WebHtml")),
         css::uno::UNO_QUERY_THROW);
     properties_->addPropertyChangeListener(
         OUString("Label"), this);
@@ -308,10 +306,8 @@ SimpleRecursiveTest::SimpleRecursiveTest(
 void SimpleRecursiveTest::step() const
 {
     test_.setKey(
-        OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                "dotuno:WebHtml")),
+        OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+                 "dotuno:WebHtml"),
         OUString("Label"),
         css::uno::makeAny(OUString("step")));
 }
@@ -335,16 +331,12 @@ void CrossThreadTest::step() const
     stop.set();
     WriterThread(
         stop, test_,
-        OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                "dotuno:WebHtml")),
+        OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+                 "dotuno:WebHtml"),
         OUString("Label")).join();
     test_.resetKey(
-        OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                "dotuno:WebHtml")),
+        OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+                 "dotuno:WebHtml"),
         OUString("Label"));
 }
 
@@ -409,20 +401,16 @@ void Test::testSetSetMemberName()
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                    ".uno:FontworkShapeType")),
+            OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+                     ".uno:FontworkShapeType"),
             OUString("Label")) >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Shape" );
 
     css::uno::Reference< css::container::XNameAccess > access(
         createUpdateAccess(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "/org.openoffice.UI.GenericCommands/UserInterface/"
-                    "Commands"))),
+            OUString("/org.openoffice.UI.GenericCommands/UserInterface/"
+                     "Commands")),
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNamed > member;
     access->getByName(
@@ -438,10 +426,8 @@ void Test::testSetSetMemberName()
 
     CPPUNIT_ASSERT(
         getKey(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                    ".uno:FontworkShapeType")),
+            OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+                    ".uno:FontworkShapeType"),
             OUString("Label")) >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Gallery" );
@@ -451,10 +437,8 @@ void Test::testReadCommands()
 {
     css::uno::Reference< css::container::XNameAccess > access(
         createViewAccess(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "/org.openoffice.UI.GenericCommands/UserInterface/"
-                    "Commands"))),
+            OUString("/org.openoffice.UI.GenericCommands/UserInterface/"
+                     "Commands")),
         css::uno::UNO_QUERY_THROW);
     css::uno::Sequence< OUString > names(access->getElementNames());
     CPPUNIT_ASSERT(names.getLength() == 695);

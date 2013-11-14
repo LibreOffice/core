@@ -491,27 +491,27 @@ void PageMarginControl::StoreUserCustomValues()
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
     SvtViewOptions aWinOpt( E_WINDOW, SWPAGE_LEFT_GVALUE );
 
-    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("mnPageLeftMargin") );
+    aSeq[0].Name = "mnPageLeftMargin";
     aSeq[0].Value <<= ::rtl::OUString::number( mnPageLeftMargin );
     aWinOpt.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt2( E_WINDOW, SWPAGE_RIGHT_GVALUE );
-    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("mnPageRightMargin") );
+    aSeq[0].Name = "mnPageRightMargin";
     aSeq[0].Value <<= ::rtl::OUString::number( mnPageRightMargin );
     aWinOpt2.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt3( E_WINDOW, SWPAGE_TOP_GVALUE );
-    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("mnPageTopMargin") );
+    aSeq[0].Name = "mnPageTopMargin";
     aSeq[0].Value <<= ::rtl::OUString::number( mnPageTopMargin );
     aWinOpt3.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt4( E_WINDOW, SWPAGE_DOWN_GVALUE );
-    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("mnPageBottomMargin") );
+    aSeq[0].Name = "mnPageBottomMargin";
     aSeq[0].Value <<= ::rtl::OUString::number( mnPageBottomMargin );
     aWinOpt4.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt5( E_WINDOW, SWPAGE_MIRROR_GVALUE );
-    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("mbMirrored") );
+    aSeq[0].Name = "mbMirrored";
     aSeq[0].Value <<= ::rtl::OUString::number( (mbMirrored ? 1 : 0) );
     aWinOpt5.SetUserData( aSeq );
 }
