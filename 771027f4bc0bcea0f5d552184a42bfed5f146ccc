@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///rE\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5837,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-14T15:03:00Z",
+      "side": 1,
+      "message": "Can\u0027t that 630 be 270 actually? You\u0027re doing a \u0027% 360\u0027 after it anyway, and that\u0027s more readable.",
+      "revId": "771027f4bc0bcea0f5d552184a42bfed5f146ccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
