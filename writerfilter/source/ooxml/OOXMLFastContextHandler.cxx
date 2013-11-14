@@ -199,6 +199,8 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
                     return false;
                 }
             }
+#else
+            (void) rAttribs;
 #endif
             return true;
         }
