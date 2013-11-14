@@ -88,6 +88,7 @@ LIBS = \
   $(HUNSPELL_LIBS) \
   $(HYPHEN_LIB) \
   $(MYTHES_LIBS) \
+  $(EBOOK_LIBS) \
   $(wildcard $(WORKDIR)/UnpackedTarball/curl/lib/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/fontconfig/src/.libs/libfontconfig.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/freetype/objs/.libs/libfreetype.a) \
