@@ -56,6 +56,8 @@ constants FormulaLanguage
     const long XL_ENGLISH = 4;
 
     /** Function names and operators as used in OOXML.
+
+        @since LibreOffice 4.2
      */
     const long OOXML = 5;
 };
