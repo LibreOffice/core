@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///pw\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-14T16:49:53Z",
+      "side": 1,
+      "message": "You can use plain bool here, sal_Bool is only needed if you interact with UNO. Also, we use capital first character for classes, please use the \"b\" prefix for boolean types.\n\nThis is not only about cosmetics, when the unit test fails, cppunit can properly print out \"bool\", but not \"sal_Bool\" variables (the later ones are handled as \"char\" types.)",
+      "revId": "a56bc4a1824c71f7d87aa3ffb0da6c4eb4a0c5eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
