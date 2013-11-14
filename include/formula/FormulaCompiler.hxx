@@ -245,9 +245,9 @@ public:
     FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
 
-    void AppendBoolean( OUStringBuffer& rBuffer, bool bVal );
-    void AppendDouble( OUStringBuffer& rBuffer, double fVal );
-    void AppendString( OUStringBuffer& rBuffer, const OUString & rStr );
+    void AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const;
+    void AppendDouble( OUStringBuffer& rBuffer, double fVal ) const;
+    void AppendString( OUStringBuffer& rBuffer, const OUString & rStr ) const;
 
     /** Set symbol map corresponding to one of predefined formula::FormulaGrammar::Grammar,
         including an address reference convention. */
@@ -282,14 +282,14 @@ protected:
     virtual bool HandleSingleRef();
     virtual bool HandleDbData();
 
-    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP);
-    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void CreateStringFromMatrix(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void LocalizeString(OUString& rName );   // modify rName - input: exact name
+    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP) const;
+    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;
+    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;
+    virtual void CreateStringFromMatrix(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;
+    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;
+    virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
 
-    void AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError );
+    void AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError ) const;
 
     bool   GetToken();
     OpCode NextToken();

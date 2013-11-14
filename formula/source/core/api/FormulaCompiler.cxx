@@ -963,7 +963,7 @@ sal_uInt16 FormulaCompiler::GetErrorConstant( const OUString& rName ) const
 }
 
 
-void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError )
+void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError ) const
 {
     OpCode eOp;
     switch (nError)
@@ -1875,7 +1875,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
 }
 
 
-void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal )
+void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal ) const
 {
     if ( mxSymbols->isEnglish() )
     {
@@ -1894,12 +1894,12 @@ void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal )
     }
 }
 
-void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal )
+void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const
 {
     rBuffer.append( mxSymbols->getSymbol( static_cast<OpCode>(bVal ? ocTrue : ocFalse)) );
 }
 
-void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rStr )
+void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rStr ) const
 {
     rBuffer.append( '"');
     if ( lcl_UnicodeStrChr( rStr.getStr(), '"' ) == NULL )
@@ -2074,27 +2074,27 @@ bool FormulaCompiler::HandleDbData()
     return true;
 }
 
-void FormulaCompiler::CreateStringFromSingleRef( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromSingleRef( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
 {
 }
 
-void FormulaCompiler::CreateStringFromDoubleRef( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromDoubleRef( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
 {
 }
 
-void FormulaCompiler::CreateStringFromIndex( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromIndex( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
 {
 }
 
-void FormulaCompiler::CreateStringFromMatrix( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromMatrix( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
 {
 }
 
-void FormulaCompiler::CreateStringFromExternal( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromExternal( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/) const
 {
 }
 
-void FormulaCompiler::LocalizeString( OUString& /*rName*/ )
+void FormulaCompiler::LocalizeString( OUString& /*rName*/ ) const
 {
 }
 

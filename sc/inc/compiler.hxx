@@ -472,12 +472,12 @@ private:
     virtual bool HandleDbData();
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef );
-    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP);
-    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
-    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
-    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);
-    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
-    virtual void LocalizeString( OUString& rName );   // modify rName - input: exact name
+    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP) const;
+    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const;
+    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const;
+    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP) const;
+    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const;
+    virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
 
     /// Access the CharTable flags
     inline sal_uLong GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )

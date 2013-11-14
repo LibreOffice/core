@@ -4122,7 +4122,7 @@ bool ScCompiler::IsCharFlagAllConventions(
         return false;
 }
 
-void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP)
+void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP) const
 {
     FormulaToken* t = pTokenP;
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -4150,8 +4150,8 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
     }
 }
 
-void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer,
-                                           FormulaToken* pTokenP)
+void ScCompiler::CreateStringFromMatrix(
+    OUStringBuffer& rBuffer, FormulaToken* pTokenP) const
 {
     const ScMatrix* pMatrix = static_cast<ScToken*>(pTokenP)->GetMatrix();
     SCSIZE nC, nMaxC, nR, nMaxR;
@@ -4195,10 +4195,10 @@ void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer,
     rBuffer.append( mxSymbols->getSymbol(ocArrayClose) );
 }
 
-void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
+void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
 {
     const OpCode eOp = _pTokenP->GetOpCode();
-    ScSingleRefData& rRef = static_cast<ScToken*>(_pTokenP)->GetSingleRef();
+    const ScSingleRefData& rRef = static_cast<const ScToken*>(_pTokenP)->GetSingleRef();
     ScComplexRefData aRef;
     aRef.Ref1 = aRef.Ref2 = rRef;
     if ( eOp == ocColRowName )
@@ -4220,12 +4220,12 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
         pConv->MakeRefStr( rBuffer, *this, aRef, true );
 }
 
-void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
+void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
 {
     pConv->MakeRefStr( rBuffer, *this, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false );
 }
 
-void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
+void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
 {
     const OpCode eOp = _pTokenP->GetOpCode();
     OUStringBuffer aBuffer;
@@ -4233,14 +4233,14 @@ void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pT
     {
         case ocName:
         {
-            ScRangeData* pData = GetRangeData( *_pTokenP);
+            const ScRangeData* pData = GetRangeData( *_pTokenP);
             if (pData)
                 aBuffer.append(pData->GetName());
         }
         break;
         case ocDBArea:
         {
-            ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(_pTokenP->GetIndex());
+            const ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(_pTokenP->GetIndex());
             if (pDBData)
                 aBuffer.append(pDBData->GetName());
         }
@@ -4254,7 +4254,7 @@ void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pT
         rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
 }
 
-void ScCompiler::LocalizeString( OUString& rName )
+void ScCompiler::LocalizeString( OUString& rName ) const
 {
     ScGlobal::GetAddInCollection()->LocalizeString( rName );
 }
