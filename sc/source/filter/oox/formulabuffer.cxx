@@ -269,6 +269,25 @@ void applyCellFormulaValues(
     }
 }
 
+void processSheetFormulaCells(
+    ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter& rFormatter )
+{
+    if (rItem.mpSharedFormulaEntries && rItem.mpSharedFormulaIDs)
+        applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries, *rItem.mpSharedFormulaIDs);
+
+    if (rItem.mpCellFormulas)
+    {
+        CachedTokenArray aCache(rDoc.getDoc());
+        applyCellFormulas(rDoc, aCache, rFormatter, *rItem.mpCellFormulas);
+    }
+
+    if (rItem.mpArrayFormulas)
+        applyArrayFormulas(rDoc, rFormatter, *rItem.mpArrayFormulas);
+
+    if (rItem.mpCellFormulaValues)
+        applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues);
+}
+
 class WorkerThread : public salhelper::Thread
 {
     ScDocumentImport& mrDoc;
@@ -288,20 +307,7 @@ public:
 protected:
     virtual void execute()
     {
-        if (mrItem.mpSharedFormulaEntries && mrItem.mpSharedFormulaIDs)
-            applySharedFormulas(mrDoc, *mpFormatter, *mrItem.mpSharedFormulaEntries, *mrItem.mpSharedFormulaIDs);
-
-        if (mrItem.mpCellFormulas)
-        {
-            CachedTokenArray aCache(mrDoc.getDoc());
-            applyCellFormulas(mrDoc, aCache, *mpFormatter, *mrItem.mpCellFormulas);
-        }
-
-        if (mrItem.mpArrayFormulas)
-            applyArrayFormulas(mrDoc, *mpFormatter, *mrItem.mpArrayFormulas);
-
-        if (mrItem.mpCellFormulaValues)
-            applyCellFormulaValues(mrDoc, *mrItem.mpCellFormulaValues);
+        processSheetFormulaCells(mrDoc, mrItem, *mpFormatter);
     }
 };
 
@@ -345,36 +351,43 @@ void FormulaBuffer::finalizeImport()
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
         aSheetItems.push_back(getSheetItem(nTab));
 
-    typedef rtl::Reference<WorkerThread> WorkerThreadRef;
-    std::vector<WorkerThreadRef> aThreads;
-    aThreads.reserve(nThreadCount);
-
     std::vector<SheetItem>::iterator it = aSheetItems.begin(), itEnd = aSheetItems.end();
 
-    // TODO: Right now we are spawning multiple threads all at once and block
-    // on them all at once.  Any more clever thread management would require
-    // use of condition variables which our own osl thread framework seems to
-    // lack.
-    while (it != itEnd)
+    if (nThreadCount == 1)
     {
-        for (size_t i = 0; i < nThreadCount; ++i)
+        for (; it != itEnd; ++it)
+            processSheetFormulaCells(rDoc, *it, *rDoc.getDoc().GetFormatTable());
+    }
+    else
+    {
+        typedef rtl::Reference<WorkerThread> WorkerThreadRef;
+        std::vector<WorkerThreadRef> aThreads;
+        aThreads.reserve(nThreadCount);
+        // TODO: Right now we are spawning multiple threads all at once and block
+        // on them all at once.  Any more clever thread management would require
+        // use of condition variables which our own osl thread framework seems to
+        // lack.
+        while (it != itEnd)
         {
-            if (it == itEnd)
-                break;
+            for (size_t i = 0; i < nThreadCount; ++i)
+            {
+                if (it == itEnd)
+                    break;
 
-            WorkerThreadRef xThread(new WorkerThread(rDoc, *it, rDoc.getDoc().CreateFormatTable()));
-            ++it;
-            aThreads.push_back(xThread);
-            xThread->launch();
+                WorkerThreadRef xThread(new WorkerThread(rDoc, *it, rDoc.getDoc().CreateFormatTable()));
+                ++it;
+                aThreads.push_back(xThread);
+                xThread->launch();
+            }
+
+            for (size_t i = 0, n = aThreads.size(); i < n; ++i)
+            {
+                if (aThreads[i].is())
+                    aThreads[i]->join();
+            }
+
+            aThreads.clear();
         }
-
-        for (size_t i = 0, n = aThreads.size(); i < n; ++i)
-        {
-            if (aThreads[i].is())
-                aThreads[i]->join();
-        }
-
-        aThreads.clear();
     }
 
     rDoc.getDoc().SetAutoNameCache(NULL);
