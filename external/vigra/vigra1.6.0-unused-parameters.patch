@@ -29,3 +29,14 @@
  
      static reference dereference(BaseType const & d)
          { return d; }
+--- misc/vigra1.6.0/include/vigra/rgbvalue.hxx
++++ misc/build/vigra1.6.0/include/vigra/rgbvalue.hxx
+@@ -184,7 +184,7 @@
+         /** Construct from another sequence (must have length 3!)
+         */
+     template <class Iterator>
+-    RGBValue(Iterator i, Iterator end)
++    RGBValue(Iterator i, __attribute__ ((unused)) Iterator)
+     : Base(i[0], i[1], i[2])
+     {
+         VIGRA_STATIC_ASSERT((RGBValue_bad_color_indices<RED_IDX, GREEN_IDX, BLUE_IDX>));
