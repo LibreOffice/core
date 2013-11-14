@@ -235,11 +235,18 @@ void BackingWindow::initControls()
     mpExtensionsButton->SetControlForeground(aButtonsText);
 
     mpAllButtonsBox->SetBackground(aButtonsBackground);
-    mpButtonsBox->SetBackground(aButtonsBackground);
     mpSmallButtonsBox->SetBackground(aButtonsBackground);
     mpHelpBox->SetBackground(aButtonsBackground);
     mpExtensionsBox->SetBackground(aButtonsBackground);
 
+    // motif image under the buttons
+    Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
+    aWallpaper.SetStyle(WALLPAPER_BOTTOMRIGHT);
+    aWallpaper.SetColor(aButtonsBackground);
+
+    mpButtonsBox->SetBackground(aWallpaper);
+
+    // thin white rectangle aronud the Help and Extensions buttons
     mpThinBox1->SetBackground(aButtonsText);
     mpThinBox2->SetBackground(aButtonsText);
 
