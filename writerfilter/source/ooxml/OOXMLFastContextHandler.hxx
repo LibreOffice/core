@@ -287,9 +287,12 @@ protected:
 
 private:
     void operator =(OOXMLFastContextHandler &); // not defined
+    /// Handles AlternateContent. Returns true, if children of the current element should be ignored.
+    bool prepareMceContext(Token_t nElement, const uno::Reference<xml::sax::XFastAttributeList>& Attribs);
 
     uno::Reference< uno::XComponentContext > m_xContext;
     bool m_bDiscardChildren;
+    bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
 
     static sal_uInt32 mnInstanceCount;
 

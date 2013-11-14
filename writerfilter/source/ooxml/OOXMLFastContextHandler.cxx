@@ -27,6 +27,7 @@
 #include <resourcemodel/util.hxx>
 #include <ooxml/resourceids.hxx>
 #include <doctok/sprmids.hxx>
+#include <oox/token/namespaces.hxx>
 #include <ooxml/OOXMLnamespaceids.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <dmapper/GraphicHelpers.hxx>
@@ -128,7 +129,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnRefCount(0),
   inPositionV(false),
   m_xContext(context),
-  m_bDiscardChildren(false)
+  m_bDiscardChildren(false),
+  m_bTookChoice(false)
 {
     mnInstanceCount++;
     aSetContexts.insert(this);
@@ -152,7 +154,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnRefCount(0),
   inPositionV(pContext->inPositionV),
   m_xContext(pContext->m_xContext),
-  m_bDiscardChildren(pContext->m_bDiscardChildren)
+  m_bDiscardChildren(pContext->m_bDiscardChildren),
+  m_bTookChoice(pContext->m_bTookChoice)
 {
     if (pContext != NULL)
     {
@@ -175,6 +178,42 @@ OOXMLFastContextHandler::~OOXMLFastContextHandler()
     aSetContexts.erase(this);
 }
 
+bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Reference<xml::sax::XFastAttributeList>& rAttribs)
+{
+    switch (oox::getBaseToken(nElement))
+    {
+        case OOXML_AlternateContent:
+            break;
+        case OOXML_Choice:
+        {
+            OUString aRequires = rAttribs->getOptionalValue(OOXML_Requires);
+#if 0 // Disabled for now: enabling "wps" would introduce regressions, and SAL_N_ELEMENTS() needs at least one element.
+            static const char* aFeatures[] = {
+                "wps",
+            };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aFeatures); ++i)
+            {
+                if (aRequires.equalsAscii(aFeatures[i]))
+                {
+                    m_bTookChoice = true;
+                    return false;
+                }
+            }
+#endif
+            return true;
+        }
+            break;
+        case OOXML_Fallback:
+            // If Choice is already taken, then let's ignore the Fallback.
+            return m_bTookChoice;
+            break;
+        default:
+            SAL_WARN("writerfilter", "OOXMLFastContextHandler::prepareMceContext: unhandled element:" << oox::getBaseToken(nElement));
+            break;
+    }
+    return false;
+}
+
 // ::com::sun::star::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastContextHandler::startFastElement
 (Token_t Element,
@@ -192,8 +231,8 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     dumpXml( debug_logger );
     debug_logger->endElement();
 #endif
-    if ((Element & 0xffff0000) == NS_mce && (Element & 0xffff) == OOXML_Choice)
-        m_bDiscardChildren = true;
+    if (oox::getNamespace(Element) == static_cast<sal_Int32>(NS_mce))
+        m_bDiscardChildren = prepareMceContext(Element, Attribs);
 
     if (!m_bDiscardChildren)
     {
@@ -226,7 +265,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
     (void) sToken;
 #endif
 
-    if ((Element & 0xffff0000) == NS_mce && (Element & 0xffff) == OOXML_Choice)
+    if (Element == (NS_mce | OOXML_Choice) || Element == (NS_mce | OOXML_Fallback))
         m_bDiscardChildren = false;
 
     if (!m_bDiscardChildren)
