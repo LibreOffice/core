@@ -174,19 +174,6 @@
  	    ctx->found = 1;
  	}
      }
---- src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
-+++ src/ne_locks.h	2011-02-03 10:26:21.000000000 +0100
-@@ -22,6 +22,10 @@
- #ifndef NE_LOCKS_H
- #define NE_LOCKS_H
- 
-+# if defined __GNUC__
-+# pragma GCC system_header
-+# endif
-+
- #include "ne_request.h" /* for ne_session + ne_request */
- #include "ne_uri.h" /* for ne_uri */
- 
 --- src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
 +++ src/ne_sspi.c	2011-02-03 10:26:21.000000000 +0100
 @@ -206,6 +206,45 @@

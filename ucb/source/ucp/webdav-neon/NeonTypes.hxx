@@ -34,7 +34,15 @@
 #include <ne_utils.h>
 #include <ne_basic.h>
 #include <ne_props.h>
+
+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include <ne_locks.h>
+#if defined(__GNUC__) && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
+# pragma GCC diagnostic pop
+#endif
 
 typedef ne_session                  HttpSession;
 typedef ne_status                   HttpStatus;
