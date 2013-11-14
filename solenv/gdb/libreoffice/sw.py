@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import six
 from libreoffice.util import printing
 
 class SwPositionPrinter(object):
@@ -205,7 +206,7 @@ class BigPtrArrayPrinter(object):
         return 'array'
 
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
 
         def __init__(self, array):
             self.blocks = array['ppInf']
@@ -255,7 +256,7 @@ class BigPtrArrayPrinter(object):
             return "\n[%4d] %s%s%s %s" % (self.pos, cur_indent, \
                                 node, self.max_indent[len(cur_indent):], value)
 
-        def next(self):
+        def __next__(self):
             if self.pos == self.count:
                 raise StopIteration()
 

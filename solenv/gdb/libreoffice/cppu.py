@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import six
+
 from libreoffice.util import printing
 from libreoffice.util.uno import TypeClass, make_uno_type, uno_cast
 
@@ -58,7 +60,7 @@ class UnoReferencePrinter(object):
 class UnoSequencePrinter(object):
     '''Prints UNO Sequence'''
 
-    class iterator(object):
+    class iterator(six.Iterator):
         '''Sequence iterator'''
 
         def __init__(self, first, size):
@@ -69,7 +71,7 @@ class UnoSequencePrinter(object):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             if self.count == self.size:
                 raise StopIteration
             count = self.count

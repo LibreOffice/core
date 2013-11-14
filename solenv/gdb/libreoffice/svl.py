@@ -8,6 +8,7 @@
 #
 
 import gdb
+import six
 
 from libreoffice.util import printing
 
@@ -30,7 +31,7 @@ class SvArrayPrinter(object):
     def display_hint(self):
         return 'array'
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
 
         def __init__(self, data, count):
             self.data = data
@@ -41,7 +42,7 @@ class SvArrayPrinter(object):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             if self.pos == self.count:
                 raise StopIteration()
 

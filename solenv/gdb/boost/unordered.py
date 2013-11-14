@@ -20,6 +20,7 @@
 
 
 import gdb
+import six
 
 from boost.lib.unordered import Map, Set
 
@@ -50,7 +51,7 @@ class UnorderedMapPrinter(PrinterBase):
     def display_hint(self):
         return 'map'
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
 
         def __init__(self, impl):
             self.impl = impl
@@ -60,7 +61,7 @@ class UnorderedMapPrinter(PrinterBase):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             if self.step:
                 self.value = self.impl.next()
                 value = self.value[0]
@@ -77,7 +78,7 @@ class UnorderedSetPrinter(PrinterBase):
     def display_hint(self):
         return 'array'
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
 
         def __init__(self, impl):
             self.impl = impl
@@ -85,7 +86,7 @@ class UnorderedSetPrinter(PrinterBase):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             return ("", self.impl.next()[1])
 
 printer = None

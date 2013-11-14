@@ -8,6 +8,7 @@
 #
 
 import gdb
+import six
 
 from libreoffice.util import printing
 
@@ -73,7 +74,7 @@ class B2DPolygonPrinter(object):
         else:
             return self._plainIterator(self._count(), self.value)
 
-    class _plainIterator(object):
+    class _plainIterator(six.Iterator):
         def __init__(self, count, value):
             self.count = count
             self.value = value
@@ -82,7 +83,7 @@ class B2DPolygonPrinter(object):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             if self.index >= self.count:
                 raise StopIteration()
             currPoint = gdb.parse_and_eval(
@@ -95,7 +96,7 @@ class B2DPolygonPrinter(object):
             return ('point %d' % (self.index-1),
                     '(%15f, %15f)' % (currPoint['mfX'], currPoint['mfY']))
 
-    class _bezierIterator(object):
+    class _bezierIterator(six.Iterator):
         def __init__(self, count, value):
             self.count = count
             self.value = value
@@ -104,7 +105,7 @@ class B2DPolygonPrinter(object):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             if self.index >= self.count:
                 raise StopIteration()
             currPoint = gdb.parse_and_eval(
