@@ -304,7 +304,7 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     else
     { // if this deadlocks, event processing needs to go into a separate thread
       // or some other solution needs to be found
-        emit processYieldSignal( bWait, bHandleAllCurrentEvents );
+        Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
     }
 }
 
@@ -334,7 +334,7 @@ void KDEXLib::StartTimer( sal_uLong nMS )
     if( qApp->thread() == QThread::currentThread())
         startTimeoutTimer();
     else
-        emit startTimeoutTimerSignal();
+        Q_EMIT startTimeoutTimerSignal();
 }
 
 void KDEXLib::startTimeoutTimer()
@@ -370,7 +370,7 @@ void KDEXLib::PostUserEvent()
     if( qApp->thread() == QThread::currentThread())
         startUserEventTimer();
     else
-        emit startUserEventTimerSignal();
+        Q_EMIT startUserEventTimerSignal();
 }
 
 void KDEXLib::startUserEventTimer()
