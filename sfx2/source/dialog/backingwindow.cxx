@@ -62,6 +62,9 @@ const int nTemplateItemPadding = 5;
 const int nTemplateItemMaxTextLength = 20;
 const int nTemplateItemThumbnailMaxHeight = 96;
 
+const Color aButtonsBackground(114, 168, 84); // TDF green
+const Color aButtonsText(COL_WHITE);
+
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
     mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
@@ -69,76 +72,31 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mnHideExternalLinks( 0 ),
     mpAccExec( NULL )
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
-      "sfx/ui/startcenter.ui",
-      "StartCenter" );
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" );
 
-    get(mpOpenButton,               "open_all");
-    get(mpOpenWriterButton,         "open_writer");
-    get(mpOpenCalcButton,           "open_calc");
-    get(mpOpenImpressButton,        "open_impress");
-    get(mpOpenDrawButton,           "open_draw");
-    get(mpOpenDatabaseButton,       "open_database");
-    get(mpOpenMathButton,           "open_math");
+    get(mpOpenButton, "open_all");
+    get(mpTemplateButton, "templates_all");
 
-    get(mpTemplateButton,           "templates_all");
-    get(mpTemplateWriterButton,     "templates_writer");
-    get(mpTemplateCalcButton,       "templates_calc");
-    get(mpTemplateImpressButton,    "templates_impress");
-    get(mpTemplateDrawButton,       "templates_draw");
-    get(mpTemplateDatabaseButton,   "templates_database");
-    get(mpTemplateMathButton,       "templates_math");
+    get(mpCreateLabel, "create_label");
 
-    get(mpModuleNotebook,   "modules_notebook");
-
-    get(mpWriterButton,     "writer");
-    get(mpCalcButton,       "calc");
-    get(mpImpressButton,    "impress");
-    get(mpDrawButton,       "draw");
-    get(mpDBButton,         "database");
-    get(mpMathButton,       "math");
-
-    get(mpWriterAllButton,  "writer_all");
-    get(mpCalcAllButton,    "calc_all");
+    get(mpWriterAllButton, "writer_all");
+    get(mpCalcAllButton, "calc_all");
     get(mpImpressAllButton, "impress_all");
-    get(mpDrawAllButton,    "draw_all");
-    get(mpDBAllButton,      "database_all");
-    get(mpMathAllButton,    "math_all");
+    get(mpDrawAllButton, "draw_all");
+    get(mpDBAllButton, "database_all");
+    get(mpMathAllButton, "math_all");
 
-    get(mpWriterShowTemplateButton,     "show_writer_template");
-    get(mpCalcShowTemplateButton,       "show_calc_template");
-    get(mpImpressShowTemplateButton,    "show_impress_template");
-    get(mpDrawShowTemplateButton,       "show_draw_template");
+    get(mpHelpButton, "help");
+    get(mpExtensionsButton, "extensions");
 
-    get(mpWriterShowRecentButton,       "show_writer_recent");
-    get(mpCalcShowRecentButton,         "show_calc_recent");
-    get(mpImpressShowRecentButton,      "show_impress_recent");
-    get(mpDrawShowRecentButton,         "show_draw_recent");
+    get(mpAllButtonsBox, "all_buttons_box");
+    get(mpPictureBox, "picture_box");
+    get(mpButtonsBox, "buttons_box");
+    get(mpSmallButtonsBox, "small_buttons_box");
 
-    get( mpAllRecentThumbnails,         "all_recent");
-    get( mpWriterRecentThumbnails,      "writer_recent");
-    get( mpCalcRecentThumbnails,        "calc_recent");
-    get( mpImpressRecentThumbnails,     "impress_recent");
-    get( mpDrawRecentThumbnails,        "draw_recent");
-    get( mpDatabaseRecentThumbnails,    "database_recent");
-    get( mpMathRecentThumbnails,        "math_recent");
-
-    get( mpWriterTemplateThumbnails,    "writer_templates");
-    get( mpCalcTemplateThumbnails,      "calc_templates");
-    get( mpImpressTemplateThumbnails,   "impress_templates");
-    get( mpDrawTemplateThumbnails,      "draw_templates");
+    get(mpAllRecentThumbnails, "all_recent");
 
     maDndWindows.push_back(mpAllRecentThumbnails);
-    maDndWindows.push_back(mpWriterRecentThumbnails);
-    maDndWindows.push_back(mpCalcRecentThumbnails);
-    maDndWindows.push_back(mpImpressRecentThumbnails);
-    maDndWindows.push_back(mpDrawRecentThumbnails);
-    maDndWindows.push_back(mpDatabaseRecentThumbnails);
-    maDndWindows.push_back(mpMathRecentThumbnails);
-    maDndWindows.push_back(mpWriterTemplateThumbnails);
-    maDndWindows.push_back(mpCalcTemplateThumbnails);
-    maDndWindows.push_back(mpImpressTemplateThumbnails);
-    maDndWindows.push_back(mpDrawTemplateThumbnails);
 
     try
     {
@@ -176,35 +134,15 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
 
-    mpOpenButton            ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
-    mpOpenWriterButton      ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
-    mpOpenCalcButton        ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
-    mpOpenImpressButton     ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
-    mpOpenDrawButton        ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
-    mpOpenDatabaseButton    ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
-    mpOpenMathButton        ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpOpenButton->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpTemplateButton->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
 
-    mpTemplateButton        ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpTemplateWriterButton  ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpTemplateCalcButton    ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpTemplateImpressButton ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpTemplateDrawButton    ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpTemplateDatabaseButton->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpTemplateMathButton    ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-
-    mpWriterButton      ->SetHelpId( ".HelpId:StartCenter:WriterButton" );
-    mpCalcButton        ->SetHelpId( ".HelpId:StartCenter:CalcButton" );
-    mpImpressButton     ->SetHelpId( ".HelpId:StartCenter:ImpressButton" );
-    mpDrawButton        ->SetHelpId( ".HelpId:StartCenter:DrawButton" );
-    mpDBButton          ->SetHelpId( ".HelpId:StartCenter:DBButton" );
-    mpMathButton        ->SetHelpId( ".HelpId:StartCenter:MathButton" );
-
-    mpWriterAllButton   ->SetHelpId( ".HelpId:StartCenter:WriterButton" );
-    mpCalcAllButton     ->SetHelpId( ".HelpId:StartCenter:CalcButton" );
-    mpImpressAllButton  ->SetHelpId( ".HelpId:StartCenter:ImpressButton" );
-    mpDrawAllButton     ->SetHelpId( ".HelpId:StartCenter:DrawButton" );
-    mpDBAllButton       ->SetHelpId( ".HelpId:StartCenter:DBButton" );
-    mpMathAllButton     ->SetHelpId( ".HelpId:StartCenter:MathButton" );
+    mpWriterAllButton->SetHelpId( ".HelpId:StartCenter:WriterButton" );
+    mpCalcAllButton->SetHelpId( ".HelpId:StartCenter:CalcButton" );
+    mpImpressAllButton->SetHelpId( ".HelpId:StartCenter:ImpressButton" );
+    mpDrawAllButton->SetHelpId( ".HelpId:StartCenter:DrawButton" );
+    mpDBAllButton->SetHelpId( ".HelpId:StartCenter:DBButton" );
+    mpMathAllButton->SetHelpId( ".HelpId:StartCenter:MathButton" );
 
     // init background
     SetBackground();
@@ -213,11 +151,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
 BackingWindow::~BackingWindow()
 {
-    mpWriterTemplateThumbnails  ->setOpenTemplateHdl(Link());
-    mpCalcTemplateThumbnails    ->setOpenTemplateHdl(Link());
-    mpImpressTemplateThumbnails ->setOpenTemplateHdl(Link());
-    mpDrawTemplateThumbnails    ->setOpenTemplateHdl(Link());
-
     // deregister drag&drop helper
     if (mxDropTargetListener.is())
     {
@@ -235,7 +168,6 @@ BackingWindow::~BackingWindow()
         }
         mxDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
     }
-
 }
 
 void BackingWindow::initControls()
@@ -262,37 +194,32 @@ void BackingWindow::initControls()
             aFileNewAppsAvailable.insert( sURL );
     }
 
-    setupModuleTab( "tab_writer", mpWriterRecentThumbnails, TYPE_WRITER,
-        WRITER_URL, aFileNewAppsAvailable, aModuleOptions,
-        SvtModuleOptions::E_SWRITER );
-    setupModuleTab( "tab_calc", mpCalcRecentThumbnails, TYPE_CALC,
-        DRAW_URL, aFileNewAppsAvailable, aModuleOptions,
-        SvtModuleOptions::E_SDRAW );
-    setupModuleTab( "tab_impress", mpImpressRecentThumbnails, TYPE_IMPRESS,
-        CALC_URL, aFileNewAppsAvailable, aModuleOptions,
-        SvtModuleOptions::E_SCALC );
-    setupModuleTab( "tab_draw", mpDrawRecentThumbnails, TYPE_DRAW,
-        BASE_URL, aFileNewAppsAvailable, aModuleOptions,
-        SvtModuleOptions::E_SDATABASE );
-    setupModuleTab( "tab_database", mpDatabaseRecentThumbnails, TYPE_DATABASE,
-        IMPRESS_WIZARD_URL, aFileNewAppsAvailable, aModuleOptions,
-        SvtModuleOptions::E_SIMPRESS );
-    setupModuleTab( "tab_math", mpMathRecentThumbnails, TYPE_MATH,
-        MATH_URL, aFileNewAppsAvailable, aModuleOptions,
-        SvtModuleOptions::E_SMATH );
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+        mpAllRecentThumbnails->mnFileTypes |= TYPE_WRITER;
 
-    // File types for mpAllRecentThumbnails are added in the above calls
-    // of setupModuleTab. TYPE_OTHER is always added.
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SCALC))
+        mpAllRecentThumbnails->mnFileTypes |= TYPE_CALC;
+
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
+        mpAllRecentThumbnails->mnFileTypes |= TYPE_IMPRESS;
+
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SDRAW))
+        mpAllRecentThumbnails->mnFileTypes |= TYPE_DRAW;
+
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
+        mpAllRecentThumbnails->mnFileTypes |= TYPE_DATABASE;
+
+    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::E_SMATH))
+        mpAllRecentThumbnails->mnFileTypes |= TYPE_MATH;
+
     mpAllRecentThumbnails->mnFileTypes |= TYPE_OTHER;
     mpAllRecentThumbnails->loadRecentDocs();
     mpAllRecentThumbnails->ShowTooltips( true );
 
-    setupButton( mpWriterButton );
-    setupButton( mpDrawButton );
-    setupButton( mpCalcButton );
-    setupButton( mpDBButton );
-    setupButton( mpImpressButton );
-    setupButton( mpMathButton );
+    setupButton( mpOpenButton );
+    setupButton( mpTemplateButton );
+
+    mpCreateLabel->SetControlForeground(aButtonsText);
 
     setupButton( mpWriterAllButton );
     setupButton( mpDrawAllButton );
@@ -301,88 +228,30 @@ void BackingWindow::initControls()
     setupButton( mpImpressAllButton );
     setupButton( mpMathAllButton );
 
-    setupButton( mpOpenButton );
-    setupButton( mpOpenWriterButton );
-    setupButton( mpOpenCalcButton );
-    setupButton( mpOpenImpressButton );
-    setupButton( mpOpenDrawButton );
-    setupButton( mpOpenDatabaseButton );
-    setupButton( mpOpenMathButton );
+    mpHelpButton->SetControlForeground(aButtonsText);
+    mpExtensionsButton->SetControlForeground(aButtonsText);
 
-    setupButton( mpTemplateButton );
-    setupButton( mpTemplateWriterButton );
-    setupButton( mpTemplateCalcButton );
-    setupButton( mpTemplateImpressButton );
-    setupButton( mpTemplateDrawButton );
-    setupButton( mpTemplateDatabaseButton );
-    setupButton( mpTemplateMathButton );
-
-    setupTemplateView( mpWriterTemplateThumbnails,  FILTER_APP_WRITER,
-                       mpWriterShowRecentButton,    mpWriterShowTemplateButton );
-    setupTemplateView( mpCalcTemplateThumbnails,    FILTER_APP_CALC,
-                       mpCalcShowRecentButton,      mpCalcShowTemplateButton );
-    setupTemplateView( mpImpressTemplateThumbnails, FILTER_APP_IMPRESS,
-                       mpImpressShowRecentButton,   mpImpressShowTemplateButton );
-    setupTemplateView( mpDrawTemplateThumbnails,    FILTER_APP_DRAW,
-                       mpDrawShowRecentButton,      mpDrawShowTemplateButton );
+    mpAllButtonsBox->SetBackground(aButtonsBackground);
+    mpPictureBox->SetBackground(aButtonsBackground);
+    mpButtonsBox->SetBackground(aButtonsBackground);
+    mpSmallButtonsBox->SetBackground(aButtonsBackground);
 
     Resize();
 }
 
-void BackingWindow::setupModuleTab(const OString& rTabName, RecentDocsView* pRecView, int nFileTypes,
-    const OUString &rURL, const std::set<OUString>& rURLS, SvtModuleOptions& rOpt,
-    SvtModuleOptions::EModule eMod)
-{
-    if( !rURL.isEmpty() && (!rOpt.IsModuleInstalled( eMod ) || rURLS.find( rURL ) == rURLS.end()) )
-    {
-        // disable the parts that are not installed
-        mpModuleNotebook->RemovePage( mpModuleNotebook->GetPageId(rTabName) );
-    }
-    else
-    {
-        // if a module is installed, add that filetype to the "All" page
-        mpAllRecentThumbnails-> mnFileTypes |= nFileTypes;
-        pRecView->mnFileTypes |= nFileTypes;
-        pRecView->loadRecentDocs();
-        pRecView->ShowTooltips( true );
-    }
-}
-
 void BackingWindow::setupButton( PushButton* pButton )
 {
+    // the buttons should have a bit bigger font
+    Font aFont(pButton->GetControlFont());
+    aFont.SetHeight(15);
+    pButton->SetControlFont(aFont);
+
+    // color that fits the theme
+    pButton->SetControlForeground(aButtonsText);
+
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
 }
 
-void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter,
-                                       PushButton* pRecentButton, PushButton* pTemplateButton )
-{
-    // setup view
-    pView->SetStyle(pView->GetStyle() | WB_VSCROLL);
-    pView->setItemMaxTextLength(nTemplateItemMaxTextLength);
-
-    pView->setItemDimensions(nTemplateItemMaxWidth, nTemplateItemThumbnailMaxHeight,
-                              nTemplateItemMaxHeight-nTemplateItemThumbnailMaxHeight,
-                              nTemplateItemPadding);
-    pView->filterItems(ViewFilter_Application(eFilter));
-    pView->Populate();
-    pView->Hide(); // hidden by default
-    pView->showRootRegion();
-    pView->setOpenTemplateHdl( LINK( this, BackingWindow, OpenTemplateHdl ) );
-
-    if( pView->HasUnfilteredItems(eFilter) )
-    {
-        // setup buttons
-        pRecentButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-        pTemplateButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-
-        pRecentButton->Hide();  // hidden by default
-    }
-    else // no templates, hide toggle button
-    {
-        pTemplateButton->Hide();
-        pRecentButton->Hide();
-    }
-}
 void BackingWindow::Paint( const Rectangle& )
 {
     Resize();
@@ -466,22 +335,19 @@ void BackingWindow::Resize()
 IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 {
     // dispatch the appropriate URL and end the dialog
-    if( pButton == mpWriterButton       || pButton == mpWriterAllButton )
+    if( pButton == mpWriterAllButton )
         dispatchURL( WRITER_URL );
-    else if( pButton == mpCalcButton    || pButton == mpCalcAllButton )
+    else if( pButton == mpCalcAllButton )
         dispatchURL( CALC_URL );
-    else if( pButton == mpImpressButton || pButton == mpImpressAllButton )
+    else if( pButton == mpImpressAllButton )
         dispatchURL( IMPRESS_WIZARD_URL );
-    else if( pButton == mpDrawButton    || pButton == mpDrawAllButton )
+    else if( pButton == mpDrawAllButton )
         dispatchURL( DRAW_URL );
-    else if( pButton == mpDBButton      || pButton == mpDBAllButton )
+    else if( pButton == mpDBAllButton )
         dispatchURL( BASE_URL );
-    else if( pButton == mpMathButton    || pButton == mpMathAllButton )
+    else if( pButton == mpMathAllButton )
         dispatchURL( MATH_URL );
-    else if( pButton == mpOpenButton         ||
-             pButton == mpOpenWriterButton   || pButton == mpOpenCalcButton ||
-             pButton == mpOpenImpressButton  || pButton == mpOpenDrawButton ||
-             pButton == mpOpenDatabaseButton || pButton == mpOpenMathButton )
+    else if( pButton == mpOpenButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
@@ -492,10 +358,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         dispatchURL( OPEN_URL, OUString(), xFrame, aArgs );
     }
-    else if( pButton == mpTemplateButton            ||
-             pButton == mpTemplateWriterButton      || pButton == mpTemplateCalcButton  ||
-             pButton == mpTemplateImpressButton     || pButton == mpTemplateDrawButton  ||
-             pButton == mpTemplateDatabaseButton    || pButton == mpTemplateMathButton )
+    else if( pButton == mpTemplateButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
@@ -505,79 +368,6 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         pArg[0].Value <<= OUString("private:user");
 
         dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
-    }
-    return 0;
-}
-
-IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
-{
-    // writer
-    if( pButton == mpWriterShowTemplateButton )
-    {
-        mpWriterRecentThumbnails->Hide();
-        mpWriterShowTemplateButton->Hide();
-        mpWriterTemplateThumbnails->Show();
-        mpWriterShowRecentButton->Show();
-        mpWriterShowRecentButton->GrabFocus();
-    }
-    else if( pButton == mpWriterShowRecentButton )
-    {
-        mpWriterTemplateThumbnails->Hide();
-        mpWriterShowRecentButton->Hide();
-        mpWriterRecentThumbnails->Show();
-        mpWriterShowTemplateButton->Show();
-        mpWriterShowTemplateButton->GrabFocus();
-    }
-    // calc
-    else if( pButton == mpCalcShowTemplateButton )
-    {
-        mpCalcRecentThumbnails->Hide();
-        mpCalcShowTemplateButton->Hide();
-        mpCalcTemplateThumbnails->Show();
-        mpCalcShowRecentButton->Show();
-        mpCalcShowRecentButton->GrabFocus();
-    }
-    else if( pButton == mpCalcShowRecentButton )
-    {
-        mpCalcTemplateThumbnails->Hide();
-        mpCalcShowRecentButton->Hide();
-        mpCalcRecentThumbnails->Show();
-        mpCalcShowTemplateButton->Show();
-        mpCalcShowTemplateButton->GrabFocus();
-    }
-    // impress
-    else if( pButton == mpImpressShowTemplateButton )
-    {
-        mpImpressRecentThumbnails->Hide();
-        mpImpressShowTemplateButton->Hide();
-        mpImpressTemplateThumbnails->Show();
-        mpImpressShowRecentButton->Show();
-        mpImpressShowRecentButton->GrabFocus();
-    }
-    else if( pButton == mpImpressShowRecentButton )
-    {
-        mpImpressTemplateThumbnails->Hide();
-        mpImpressShowRecentButton->Hide();
-        mpImpressRecentThumbnails->Show();
-        mpImpressShowTemplateButton->Show();
-        mpImpressShowTemplateButton->GrabFocus();
-    }
-    // draw
-    else if( pButton == mpDrawShowTemplateButton )
-    {
-        mpDrawRecentThumbnails->Hide();
-        mpDrawShowTemplateButton->Hide();
-        mpDrawTemplateThumbnails->Show();
-        mpDrawShowRecentButton->Show();
-        mpDrawShowRecentButton->GrabFocus();
-    }
-    else if( pButton == mpDrawShowRecentButton )
-    {
-        mpDrawTemplateThumbnails->Hide();
-        mpDrawShowRecentButton->Hide();
-        mpDrawRecentThumbnails->Show();
-        mpDrawShowTemplateButton->Show();
-        mpDrawShowTemplateButton->GrabFocus();
     }
     return 0;
 }

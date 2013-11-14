@@ -55,29 +55,9 @@ class BackingWindow
     com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
 
     PushButton*                     mpOpenButton;
-    PushButton*                     mpOpenWriterButton;
-    PushButton*                     mpOpenCalcButton;
-    PushButton*                     mpOpenImpressButton;
-    PushButton*                     mpOpenDrawButton;
-    PushButton*                     mpOpenDatabaseButton;
-    PushButton*                     mpOpenMathButton;
-
     PushButton*                     mpTemplateButton;
-    PushButton*                     mpTemplateWriterButton;
-    PushButton*                     mpTemplateCalcButton;
-    PushButton*                     mpTemplateImpressButton;
-    PushButton*                     mpTemplateDrawButton;
-    PushButton*                     mpTemplateDatabaseButton;
-    PushButton*                     mpTemplateMathButton;
 
-    TabControl*                     mpModuleNotebook;
-
-    PushButton*                     mpWriterButton;
-    PushButton*                     mpCalcButton;
-    PushButton*                     mpImpressButton;
-    PushButton*                     mpDrawButton;
-    PushButton*                     mpDBButton;
-    PushButton*                     mpMathButton;
+    FixedText*                      mpCreateLabel;
 
     PushButton*                     mpWriterAllButton;
     PushButton*                     mpCalcAllButton;
@@ -86,28 +66,15 @@ class BackingWindow
     PushButton*                     mpDBAllButton;
     PushButton*                     mpMathAllButton;
 
-    PushButton*                     mpWriterShowTemplateButton;
-    PushButton*                     mpCalcShowTemplateButton;
-    PushButton*                     mpImpressShowTemplateButton;
-    PushButton*                     mpDrawShowTemplateButton;
+    PushButton*                     mpHelpButton;
+    PushButton*                     mpExtensionsButton;
 
-    PushButton*                     mpWriterShowRecentButton;
-    PushButton*                     mpCalcShowRecentButton;
-    PushButton*                     mpImpressShowRecentButton;
-    PushButton*                     mpDrawShowRecentButton;
+    VclBox*                         mpAllButtonsBox;
+    VclBox*                         mpPictureBox;
+    VclBox*                         mpButtonsBox;
+    VclBox*                         mpSmallButtonsBox;
 
     RecentDocsView*                 mpAllRecentThumbnails;
-    RecentDocsView*                 mpWriterRecentThumbnails;
-    RecentDocsView*                 mpCalcRecentThumbnails;
-    RecentDocsView*                 mpImpressRecentThumbnails;
-    RecentDocsView*                 mpDrawRecentThumbnails;
-    RecentDocsView*                 mpDatabaseRecentThumbnails;
-    RecentDocsView*                 mpMathRecentThumbnails;
-
-    TemplateLocalView*              mpWriterTemplateThumbnails;
-    TemplateLocalView*              mpCalcTemplateThumbnails;
-    TemplateLocalView*              mpImpressTemplateThumbnails;
-    TemplateLocalView*              mpDrawTemplateThumbnails;
 
     std::vector<Window*>            maDndWindows;
 
@@ -117,12 +84,7 @@ class BackingWindow
     sal_Int32                       mnHideExternalLinks;
     svt::AcceleratorExecute*        mpAccExec;
 
-    void setupModuleTab( const OString& rTabName, RecentDocsView* pRecView, int nFileTypes,
-        const OUString& rURL, const std::set<OUString>& rURLS, SvtModuleOptions& rOpt,
-        SvtModuleOptions::EModule eMod );
     void setupButton( PushButton* pButton );
-    void setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter,
-                            PushButton* pRecentButton, PushButton* pTemplateButton );
 
     void dispatchURL( const OUString& i_rURL,
                       const OUString& i_rTarget = OUString( "_default" ),
@@ -131,7 +93,6 @@ class BackingWindow
                       );
 
     DECL_LINK( ClickHdl, Button* );
-    DECL_LINK( RecentTemplateToggleHdl, Button* );
     DECL_LINK( OpenTemplateHdl, ThumbnailViewItem* );
 
     void initControls();
