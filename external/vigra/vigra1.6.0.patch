@@ -1076,17 +1076,6 @@ diff -uprN misc/vigra1.6.0/include/vigra/recursiveconvolution.hxx misc/build/vig
 diff -uprN misc/vigra1.6.0/include/vigra/rgbvalue.hxx misc/build/vigra1.6.0/include/vigra/rgbvalue.hxx
 --- misc/vigra1.6.0/include/vigra/rgbvalue.hxx	2008-08-13 08:15:41.000000000 -0500
 +++ misc/build/vigra1.6.0/include/vigra/rgbvalue.hxx	2012-09-19 17:30:24.000000000 -0500
-@@ -39,6 +39,10 @@
- #ifndef VIGRA_RGBVALUE_HXX
- #define VIGRA_RGBVALUE_HXX
- 
-+#if defined __GNUC__
-+#pragma GCC system_header
-+#endif
-+
- #include <cmath>    // abs(double)
- #include <cstdlib>  // abs(int)
- #include "config.hxx"
 @@ -702,8 +706,6 @@ operator/=(RGBValue<V, RIDX, GIDX, BIDX>
      return l;
  }
@@ -1420,17 +1409,6 @@ diff -uprN misc/vigra1.6.0/include/vigra/static_assert.hxx misc/build/vigra1.6.0
 diff -uprN misc/vigra1.6.0/include/vigra/tinyvector.hxx misc/build/vigra1.6.0/include/vigra/tinyvector.hxx
 --- misc/vigra1.6.0/include/vigra/tinyvector.hxx	2008-08-13 08:15:42.000000000 -0500
 +++ misc/build/vigra1.6.0/include/vigra/tinyvector.hxx	2012-09-19 17:30:24.000000000 -0500
-@@ -39,6 +39,10 @@
- #ifndef VIGRA_TINYVECTOR_HXX
- #define VIGRA_TINYVECTOR_HXX
- 
-+#if defined __GNUC__
-+#pragma GCC system_header
-+#endif
-+
- #include <cmath>    // abs(double)
- #include <cstdlib>  // abs(int)
- #include <iosfwd>   // ostream
 @@ -49,7 +53,6 @@
  
  namespace vigra {
