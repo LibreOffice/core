@@ -346,6 +346,7 @@ String RID_SLRBRACKETX_HELP { Text = "Square Brackets (Scalable)" ; };
 String RID_SLRDBRACKETX     { Text = "left ldbracket <?> right rdbracket " ; };
 String RID_SLRDBRACKETX_HELP { Text = "Double Square Brackets (Scalable)" ; };
 String RID_SLRBRACEX        { Text = "left lbrace <?> right rbrace " ; };
+String RID_SLRBRACEX_HELP   { Text = "Braces (Scalable)" ; };
 String RID_SLRANGLEX        { Text = "left langle <?> right rangle " ; };
 String RID_SLRANGLEX_HELP   { Text = "Angle Brackets (Scalable)" ; };
 String RID_SLRCEILX         { Text = "left lceil <?> right rceil " ; };
