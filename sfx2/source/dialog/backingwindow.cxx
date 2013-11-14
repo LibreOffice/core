@@ -377,8 +377,12 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
                 sURL = value.get<OUString>();
                 localizeWebserviceURI(sURL);
 
-                Reference<system::XSystemShellExecute> xSystemShellExecute(system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-                xSystemShellExecute->execute(sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+                Reference<css::system::XSystemShellExecute> const
+                    xSystemShellExecute(
+                        css::system::SystemShellExecute::create(
+                            ::comphelper::getProcessComponentContext()));
+                xSystemShellExecute->execute(sURL, OUString(),
+                    css::system::SystemShellExecuteFlags::URIS_ONLY);
             }
         }
         catch (const Exception&)
