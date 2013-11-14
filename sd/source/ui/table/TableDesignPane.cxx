@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/layout.hxx>
 #include <svl/style.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
@@ -952,17 +953,11 @@ void TableDesignPane::FillDesignPreviewControl()
 // ====================================================================
 
 TableDesignDialog::TableDesignDialog(::Window* pParent, ViewShellBase& rBase )
-: ModalDialog( pParent, SdResId( DLG_TABLEDESIGNPANE ))
+    : ModalDialog(pParent, "TableDesignDialog",
+        "modules/sdraw/ui/tabledesigndialog.ui")
 {
-    mxFlSep1.reset( new FixedLine( this, SdResId( FL_SEP1 ) ) );
-    mxFlSep2.reset( new FixedLine( this, SdResId( FL_SEP2 ) ) );
-    mxHelpButton.reset( new HelpButton( this, SdResId( BTN_HELP ) ) );
-    mxOkButton.reset( new OKButton( this, SdResId( BTN_OK ) ) );
-    mxCancelButton.reset( new CancelButton( this, SdResId( BTN_CANCEL ) ) );
-    FreeResource();
-
-    mpDesignPane.reset( new TableDesignPane( this, rBase, true ) );
-    mpDesignPane->Hide();
+    mxDesignPane.reset( new TableDesignPane( get_content_area(), rBase, true ) );
+    mxDesignPane->Hide();
 }
 
 // --------------------------------------------------------------------
@@ -971,11 +966,11 @@ short TableDesignDialog::Execute()
 {
     if( ModalDialog::Execute() )
     {
-        if( mpDesignPane->isStyleChanged() )
-            mpDesignPane->ApplyStyle();
+        if( mxDesignPane->isStyleChanged() )
+            mxDesignPane->ApplyStyle();
 
-        if( mpDesignPane->isOptionsChanged() )
-            mpDesignPane->ApplyOptions();
+        if( mxDesignPane->isOptionsChanged() )
+            mxDesignPane->ApplyOptions();
         return sal_True;
     }
     return sal_False;

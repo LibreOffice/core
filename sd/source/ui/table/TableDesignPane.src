@@ -102,48 +102,4 @@ Control DLG_TABLEDESIGNPANE
     };
 };
 
-ModalDialog DLG_TABLEDESIGNPANE
-{
-    HelpID = "sd:ModalDialog:DLG_TABLEDESIGNPANE";
-    OutputSize = TRUE;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Size = MAP_APPFONT( 272, 198 );
-
-    Text [ en-US ] = "Table Design";
-
-    FixedLine FL_SEP1
-    {
-        Pos = MAP_APPFONT( 135, 14 );
-        Size = MAP_APPFONT( 8, 143 );
-        Vert = TRUE ;
-    };
-    FixedLine FL_SEP2
-    {
-        Pos = MAP_APPFONT ( 0 , 160 ) ;
-        Size = MAP_APPFONT ( 272 , 12 ) ;
-    };
-
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 6 , 176 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 158 , 176 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 211 , 176 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

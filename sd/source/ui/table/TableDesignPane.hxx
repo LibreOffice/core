@@ -107,13 +107,7 @@ public:
 
     virtual short Execute();
 private:
-    boost::scoped_ptr< TableDesignPane > mpDesignPane;
-
-    boost::scoped_ptr< FixedLine >       mxFlSep1;
-    boost::scoped_ptr< FixedLine >       mxFlSep2;
-    boost::scoped_ptr< HelpButton >      mxHelpButton;
-    boost::scoped_ptr< OKButton >        mxOkButton;
-    boost::scoped_ptr< CancelButton >    mxCancelButton;
+    boost::scoped_ptr< TableDesignPane > mxDesignPane;
 };
 
 }

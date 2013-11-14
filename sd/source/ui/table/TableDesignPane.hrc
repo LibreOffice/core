@@ -33,12 +33,6 @@
 
 #define DESIGNPANE_CONTROL_COUNT 9
 
-#define FL_SEP1 10
-#define FL_SEP2 11
-#define BTN_HELP 12
-#define BTN_OK 13
-#define BTN_CANCEL 14
-
 #endif // _SD_TABLEDESIGNPANE_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
