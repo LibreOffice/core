@@ -69,21 +69,25 @@ void SvtBroadcaster::Add( SvtListener* p )
 
 void SvtBroadcaster::Remove( SvtListener* p )
 {
+    if (mbDying)
+        return;
+
     maListeners.erase(p);
     if (maListeners.empty())
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster() {}
+SvtBroadcaster::SvtBroadcaster() : mbDying(false) {}
 
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
-    maListeners(rBC.maListeners)
+    maListeners(rBC.maListeners), mbDying(false)
 {
     std::for_each(maListeners.begin(), maListeners.end(), StartListeningHandler(*this));
 }
 
 SvtBroadcaster::~SvtBroadcaster()
 {
+    mbDying = true;
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // unregister all listeners.

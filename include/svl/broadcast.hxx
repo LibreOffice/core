@@ -55,6 +55,7 @@ public:
 
 private:
     ListenersType maListeners;
+    bool mbDying;
 };
 
 
