@@ -363,7 +363,10 @@ enum EENotifyType
     EE_NOTIFY_INPUT_START,
 
     /// Denotes the end of a high-level action triggered by a key press
-    EE_NOTIFY_INPUT_END
+    EE_NOTIFY_INPUT_END,
+//IAccessibility2 Implementation 2009-----
+    EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA
+//-----IAccessibility2 Implementation 2009
 };
 
 struct EENotify

@@ -470,10 +470,16 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 // changeover to the next object
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
                 {
-                    // #97016# No next object: go over open end and
-                    // get first from the other side
-                    mpView->UnmarkAllObj();
-                    mpView->MarkNextObj(!aCode.IsShift());
+                    //IAccessibility2 Implementation 2009-----
+                    //If there is only one object, don't do the UnmarkAlllObj() & MarkNextObj().
+                    if ( mpView->GetMarkableObjCount() > 1 && mpView->AreObjectsMarked() )
+                    {
+                        // #97016# No next object: go over open end and
+                        // get first from the other side
+                        mpView->UnmarkAllObj();
+                        mpView->MarkNextObj(!aCode.IsShift());
+                    }
+                    //-----IAccessibility2 Implementation 2009
                 }
 
                 // #97016# II

@@ -866,6 +866,45 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     CaptureMouse();
 }
 
+//IAccessibility2 Implementation 2009-----
+sal_Bool ScGridWindow::HasScenarioRange( sal_uInt16 nCol, sal_Int32 nRow, ScRange& rScenRange )
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    sal_uInt16 nTab = pViewData->GetTabNo();
+    sal_uInt16 nTabCount = pDoc->GetTableCount();
+    if ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) )
+    {
+        sal_uInt16 i;
+        ScMarkData aMarks;
+        for (i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
+            pDoc->MarkScenario( i, nTab, aMarks, sal_False, SC_SCENARIO_SHOWFRAME );
+        ScRangeList aRanges;
+        aMarks.FillRangeListWithMarks( &aRanges, sal_False );
+        sal_uInt16 nRangeCount = (sal_uInt16)aRanges.Count();
+        for (i=0; i<nRangeCount; i++)
+        {
+            ScRange aRange = *aRanges.GetObject(i);
+            pDoc->ExtendTotalMerge( aRange );
+            sal_Bool bTextBelow = ( aRange.aStart.Row() == 0 );
+            sal_Bool bIsInScen = sal_False;
+            if ( bTextBelow )
+            {
+                bIsInScen = (aRange.aStart.Col() == nCol && aRange.aEnd.Row() == nRow-1);
+            }
+            else
+            {
+                bIsInScen = (aRange.aStart.Col() == nCol && aRange.aStart.Row() == nRow+1);
+            }
+            if (bIsInScen)
+            {
+                rScenRange = aRange;
+                return sal_True;
+            }
+        }
+    }
+    return sal_False;
+}
+//-----IAccessibility2 Implementation 2009
 void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, sal_Bool bDataSelect )
 {
     delete pFilterBox;
@@ -2234,6 +2273,9 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
             pViewData->GetView()->InvalidateAttribs();
         }
+//IAccessibility2 Implementation 2009-----
+        pViewData->GetViewShell()->SelectionChanged();
+//-----IAccessibility2 Implementation 2009
         return;
     }
 }
@@ -3068,7 +3110,9 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         {
             SC_MOD()->EndReference();
-            return;
+//IAccessibility2 Implementation 2009-----
+            //return;
+//-----IAccessibility2 Implementation 2009
         }
         else if( pViewData->GetViewShell()->MoveCursorKeyInput( rKEvt ) )
         {
@@ -3076,8 +3120,14 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
                 pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                 pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
             SC_MOD()->SetReference( aRef, pViewData->GetDocument() );
-            return;
+//IAccessibility2 Implementation 2009-----
+            //return;
+//-----IAccessibility2 Implementation 2009
         }
+//IAccessibility2 Implementation 2009-----
+        pViewData->GetViewShell()->SelectionChanged();
+        return ;
+//-----IAccessibility2 Implementation 2009
     }
     // wenn semi-Modeless-SfxChildWindow-Dialog oben, keine KeyInputs:
     else if( !pViewData->IsAnyFillMode() )

@@ -297,6 +297,9 @@ public:
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();
+    //IAccessibility2 Implementation 2009-----
+    virtual void SwitchView();
+    //-----IAccessibility2 Implementation 2009
 };
 
 #endif

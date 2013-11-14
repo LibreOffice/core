@@ -102,6 +102,19 @@ public:
 
     SVX_DLLPRIVATE void onTableModified();
 
+//IAccessibility2 Implementation 2009-----
+    sal_Bool selectRow( sal_Int32 row );
+    sal_Bool selectColumn( sal_Int32 column );
+    sal_Bool deselectRow( sal_Int32 row );
+    sal_Bool deselectColumn( sal_Int32 column );
+    sal_Bool isRowSelected( sal_Int32 nRow );
+    sal_Bool isColumnSelected( sal_Int32 nColumn );
+    sal_Bool isRowHeader();
+    sal_Bool isColumnHeader();
+    ::sdr::table::SdrTableObj* GetTableObj() { return dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() ); }
+    //declare event notification method
+    void NotifySelection( const CellPos& firstPos, const CellPos& lastPos, const CellPos& newPos );
+//-----IAccessibility2 Implementation 2009
 private:
     SvxTableController(SvxTableController &); // not defined
     void operator =(SvxTableController &); // not defined

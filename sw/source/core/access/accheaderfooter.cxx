@@ -139,3 +139,20 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()
     }
     return aId;
 }
+
+//IAccessibility2 Implementation 2009-----
+sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< XAccessible > xParent =  getAccessibleParent();
+    if (xParent.is())
+    {
+        Reference< XAccessibleComponent > xAccContext (xParent,UNO_QUERY);
+        if(xAccContext.is())
+        {
+            return xAccContext->getBackground();
+        }
+    }
+    return SwAccessibleContext::getBackground();
+}
+//-----IAccessibility2 Implementation 2009

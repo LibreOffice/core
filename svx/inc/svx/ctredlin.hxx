@@ -299,6 +299,10 @@ public:
     void            Enable( bool bEnable = true, bool bChild = true );
     void            Disable( bool bChild = true );
 
+    //IAccessibility2 Implementation 2009-----
+    void            SetAccessibleRelationMemberOf( Window* pWindow);
+    //-----IAccessibility2 Implementation 2009
+
     // } Methoden fuer Calc
 };
 

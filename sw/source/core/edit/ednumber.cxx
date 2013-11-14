@@ -209,7 +209,7 @@ sal_Bool SwEditShell::SelectionHasNumber() const
 
     return bResult;
 }
-//Sym3_879 add a new function to determine number on/off status
+//add a new function to determine number on/off status
 sal_Bool SwEditShell::SelectionHasBullet() const
 {
     sal_Bool bResult = HasBullet();

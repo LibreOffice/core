@@ -482,6 +482,32 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { SW_PROP_NMID(UNO_NAME_IS_FIELD_USED),      FIELD_PROP_IS_FIELD_USED,      CPPU_E2T(CPPUTYPE_FLOAT), PropertyAttribute::READONLY, 0},\
                     { SW_PROP_NMID(UNO_NAME_IS_FIELD_DISPLAYED), FIELD_PROP_IS_FIELD_DISPLAYED, CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::READONLY, 0},\
 
+//IAccessibility2 Implementation 2009-----
+#define COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_BACK_COLOR), RES_CHRATR_BACKGROUND,    CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        }, \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_COLOR), RES_CHRATR_COLOR,      CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE, 0},  \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_CONTOURED), RES_CHRATR_CONTOUR,    CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0},  \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_EMPHASIS), RES_CHRATR_EMPHASIS_MARK,           CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, MID_EMPHASIS},   \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  CPPU_E2T(CPPUTYPE_INT16),             PROPERTY_NONE, MID_ESC          },  \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_FONT_NAME), RES_CHRATR_FONT,       CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME }, \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_HEIGHT), RES_CHRATR_FONTSIZE  ,  CPPU_E2T(CPPUTYPE_FLOAT),         PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},    \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_POSTURE), RES_CHRATR_POSTURE   ,  CPPU_E2T(CPPUTYPE_FONTSLANT),        PropertyAttribute::MAYBEVOID, MID_POSTURE}, \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_SHADOWED), RES_CHRATR_SHADOWED  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0},  \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_STRIKEOUT), RES_CHRATR_CROSSEDOUT,  CPPU_E2T(CPPUTYPE_INT16),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},   \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_COLOR), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_INT32),            PropertyAttribute::MAYBEVOID, MID_TL_COLOR},    \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_WEIGHT), RES_CHRATR_WEIGHT    ,  CPPU_E2T(CPPUTYPE_FLOAT),             PropertyAttribute::MAYBEVOID, MID_WEIGHT},  \
+                    { SW_PROP_NMID(UNO_NAME_NUMBERING_LEVEL), RES_PARATR_LIST_LEVEL,CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::MAYBEVOID, 0}, \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_INT16),              PropertyAttribute::MAYBEVOID, MID_TL_STYLE},    \
+                    { SW_PROP_NMID(UNO_NAME_NUMBERING_RULES), RES_PARATR_NUMRULE,CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},    \
+                    { SW_PROP_NMID(UNO_NAME_PARA_ADJUST), RES_PARATR_ADJUST,      CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_PARA_ADJUST}, \
+                    { SW_PROP_NMID(UNO_NAME_PARA_BOTTOM_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_LO_MARGIN|CONVERT_TWIPS}, \
+                    { SW_PROP_NMID(UNO_NAME_PARA_FIRST_LINE_INDENT), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32),      PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS}, \
+                    { SW_PROP_NMID(UNO_NAME_PARA_LEFT_MARGIN), RES_LR_SPACE,            CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},   \
+                    { SW_PROP_NMID(UNO_NAME_PARA_LINE_SPACING), RES_PARATR_LINESPACING, CPPU_E2T(CPPUTYPE_LINESPACE),       PropertyAttribute::MAYBEVOID,     CONVERT_TWIPS},   \
+                    { SW_PROP_NMID(UNO_NAME_PARA_RIGHT_MARGIN), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
+                    { SW_PROP_NMID(UNO_NAME_TABSTOPS), RES_PARATR_TABSTOP,   CPPU_E2T(CPPUTYPE_SEQTABSTOP),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
+
+//-----IAccessibility2 Implementation 2009
 
 const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
@@ -500,6 +526,18 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aCharAndParaMap_Impl;
             }
             break;
+            //IAccessibility2 Implementation 2009-----
+            case PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE:
+            {
+                static SfxItemPropertyMapEntry aAccessibilityTextAttrMap_Impl[] =
+                {
+                    COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE
+                    {0,0,0,0,0,0}
+                };
+                aMapEntriesArr[nPropertyId] = aAccessibilityTextAttrMap_Impl;
+            }
+            break;
+            //-----IAccessibility2 Implementation 2009
             case PROPERTY_MAP_PARAGRAPH:
             {
                 static SfxItemPropertyMapEntry aParagraphMap_Impl[] =

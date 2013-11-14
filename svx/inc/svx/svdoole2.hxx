@@ -84,6 +84,9 @@ protected:
     void Init();
 
 public:
+//IAccessibility2 Implementation 2009-----
+    String GetStyleString();
+//-----IAccessibility2 Implementation 2009
     TYPEINFO();
 
     SdrOle2Obj(FASTBOOL bFrame_=sal_False);

@@ -619,6 +619,9 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
         }
 
         pPage->ActivatePage();
+//IAccessibility2 Implementation 2009-----
+        pPage->Show();
+//-----IAccessibility2 Implementation 2009
 
         if ( pOldPage && pOldPage->HasChildPathFocus() )
         {
@@ -630,7 +633,9 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
                 GrabFocus();
         }
 
-        pPage->Show();
+//IAccessibility2 Implementation 2009-----
+        // pPage->Show();
+//-----IAccessibility2 Implementation 2009
     }
 
     if ( pOldPage )

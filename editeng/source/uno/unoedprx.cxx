@@ -508,6 +508,9 @@ String SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     EBulletInfo aBulletInfo1 = GetBulletInfo( static_cast< sal_uInt16 >(aStartIndex.GetParagraph()) );
     EBulletInfo aBulletInfo2 = GetBulletInfo( static_cast< sal_uInt16 >(aEndIndex.GetParagraph()) );
 
+    //IAccessibility2 Implementation 2009-----
+    // MT: This was done in OOo, commented out in IA2 CWS...
+    /*
     if( aStartIndex.InBullet() )
     {
         // prepend leading bullet
@@ -521,8 +524,8 @@ String SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
 
         sBullet += sStr;
         sStr = sBullet;
-    }
-
+    }*/
+    //-----IAccessibility2 Implementation 2009
     if( aEndIndex.InBullet() )
     {
         // append trailing bullet
@@ -751,7 +754,16 @@ EBulletInfo SvxAccessibleTextAdapter::GetBulletInfo( sal_uInt16 nPara ) const
 
     return mrTextForwarder->GetBulletInfo( nPara );
 }
-
+//IAccessible2 Implementation 2009----
+void    SvxAccessibleTextAdapter::SetUpdateModeForAcc( sal_Bool bUp)
+{
+    return mrTextForwarder->SetUpdateModeForAcc( bUp );
+}
+sal_Bool    SvxAccessibleTextAdapter::GetUpdateModeForAcc( ) const
+{
+    return mrTextForwarder->GetUpdateModeForAcc( );
+}
+//-----IAccessible2 Implementation 2009
 Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
@@ -976,8 +988,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_uInt16 nPara, sal_uInt16 
 
     return sal_True;
 }
-
-sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const
+sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex, sal_Bool /* bInCell */) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 

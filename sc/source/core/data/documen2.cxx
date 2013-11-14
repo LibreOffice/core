@@ -87,6 +87,11 @@
 #include "recursionhelper.hxx"
 #include "lookupcache.hxx"
 #include "externalrefmgr.hxx"
+//IAccessibility2 Implementation 2009-----
+#include "appoptio.hxx"
+#include "scmod.hxx"
+#include "../../ui/inc/viewutil.hxx"
+//-----IAccessibility2 Implementation 2009
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
@@ -211,6 +216,9 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         eGrammar( formula::FormulaGrammar::GRAM_NATIVE ),
         bStyleSheetUsageInvalid( sal_True ),
         mbUndoEnabled( true ),
+//IAccessibility2 Implementation 2009-----
+        bReadOnly(sal_False),
+//-----IAccessibility2 Implementation 2009
         mbAdjustHeightEnabled( true ),
         mbExecuteLinkEnabled( true ),
         mbChangeReadOnlyEnabled( false ),
@@ -1295,3 +1303,158 @@ void ScDocument::ClearLookupCaches()
     if( pLookupCacheMapImpl )
         pLookupCacheMapImpl->clear();
 }
+//IAccessibility2 Implementation 2009-----
+sal_Bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
+{
+    ScChangeTrack* pTrack = GetChangeTrack();
+    ScChangeViewSettings* pSettings = GetChangeViewSettings();
+    if ( !pTrack || !pTrack->GetFirst() || !pSettings || !pSettings->ShowChanges() )
+        return sal_False;           // nix da oder abgeschaltet
+    ScActionColorChanger aColorChanger(*pTrack);
+    //  Clipping passiert von aussen
+    //! ohne Clipping, nur betroffene Zeilen painten ??!??!?
+    const ScChangeAction* pAction = pTrack->GetFirst();
+    while (pAction)
+    {
+        ScChangeActionType eType;
+        if ( pAction->IsVisible() )
+        {
+            eType = pAction->GetType();
+            const ScBigRange& rBig = pAction->GetBigRange();
+            if ( rBig.aStart.Tab() == cell.Tab())
+            {
+                ScRange aRange = rBig.MakeRange();
+                if ( eType == SC_CAT_DELETE_ROWS )
+                    aRange.aEnd.SetRow( aRange.aStart.Row() );
+                else if ( eType == SC_CAT_DELETE_COLS )
+                    aRange.aEnd.SetCol( aRange.aStart.Col() );
+                if (ScViewUtil::IsActionShown( *pAction, *pSettings, *this ) )
+                {
+                    if (aRange.In(cell))
+                    {
+                        if (pColCellBoder != NULL)
+                        {
+                            aColorChanger.Update( *pAction );
+                            Color aColor( aColorChanger.GetColor() );
+                            *pColCellBoder = aColor;
+                        }
+                        return sal_True;
+                    }
+                }
+            }
+            if ( eType == SC_CAT_MOVE &&
+                ((const ScChangeActionMove*)pAction)->
+                GetFromRange().aStart.Tab() == cell.Col() )
+            {
+                ScRange aRange = ((const ScChangeActionMove*)pAction)->
+                    GetFromRange().MakeRange();
+                if (ScViewUtil::IsActionShown( *pAction, *pSettings, *this ) )
+                {
+                    if (aRange.In(cell))
+                    {
+                        if (pColCellBoder != NULL)
+                        {
+                            aColorChanger.Update( *pAction );
+                            Color aColor( aColorChanger.GetColor() );
+                            *pColCellBoder = aColor;
+                        }
+                        return sal_True;
+                    }
+                }
+            }
+        }
+        pAction = pAction->GetNext();
+    }
+    return sal_False;
+}
+void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos,String &aTrackText,sal_Bool &bLeftEdge)
+{
+    aTrackText=String();
+    //  Change-Tracking
+    ScChangeTrack* pTrack = GetChangeTrack();
+    ScChangeViewSettings* pSettings = GetChangeViewSettings();
+    if ( pTrack && pTrack->GetFirst() && pSettings && pSettings->ShowChanges())
+    {
+        const ScChangeAction* pFound = NULL;
+        const ScChangeAction* pFoundContent = NULL;
+        const ScChangeAction* pFoundMove = NULL;
+        long nModified = 0;
+        const ScChangeAction* pAction = pTrack->GetFirst();
+        while (pAction)
+        {
+            if ( pAction->IsVisible() &&
+                 ScViewUtil::IsActionShown( *pAction, *pSettings, *this ) )
+            {
+                ScChangeActionType eType = pAction->GetType();
+                const ScBigRange& rBig = pAction->GetBigRange();
+                if ( rBig.aStart.Tab() == aCellPos.Tab())
+                {
+                    ScRange aRange = rBig.MakeRange();
+                    if ( eType == SC_CAT_DELETE_ROWS )
+                        aRange.aEnd.SetRow( aRange.aStart.Row() );
+                    else if ( eType == SC_CAT_DELETE_COLS )
+                        aRange.aEnd.SetCol( aRange.aStart.Col() );
+                    if ( aRange.In( aCellPos ) )
+                    {
+                        pFound = pAction;       // der letzte gewinnt
+                        switch ( eType )
+                        {
+                            case SC_CAT_CONTENT :
+                                pFoundContent = pAction;
+                            break;
+                            case SC_CAT_MOVE :
+                                pFoundMove = pAction;
+                            break;
+                            default:
+                                break;
+                        }
+                        ++nModified;
+                    }
+                }
+                if ( eType == SC_CAT_MOVE )
+                {
+                    ScRange aRange =
+                        ((const ScChangeActionMove*)pAction)->
+                        GetFromRange().MakeRange();
+                    if ( aRange.In( aCellPos ) )
+                    {
+                        pFound = pAction;
+                        ++nModified;
+                    }
+                }
+            }
+            pAction = pAction->GetNext();
+        }
+        if ( pFound )
+        {
+            if ( pFoundContent && pFound->GetType() != SC_CAT_CONTENT )
+                pFound = pFoundContent;     // Content gewinnt
+            if ( pFoundMove && pFound->GetType() != SC_CAT_MOVE &&
+                    pFoundMove->GetActionNumber() >
+                    pFound->GetActionNumber() )
+                pFound = pFoundMove;        // Move gewinnt
+            //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
+            if ( pFound->GetType() == SC_CAT_DELETE_COLS )
+                bLeftEdge = sal_True;
+            DateTime aDT = pFound->GetDateTime();
+            aTrackText  = pFound->GetUser();
+            aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
+            aTrackText += ScGlobal::pLocaleData->getDate(aDT);
+            aTrackText += ' ';
+            aTrackText += ScGlobal::pLocaleData->getTime(aDT);
+            aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":\n" ));
+            String aComStr=pFound->GetComment();
+            if(aComStr.Len()>0)
+            {
+                aTrackText += aComStr;
+                aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "\n( " ));
+            }
+            pFound->GetDescription( aTrackText, this );
+            if(aComStr.Len()>0)
+            {
+                aTrackText +=')';
+            }
+        }
+    }
+}
+//-----IAccessibility2 Implementation 2009

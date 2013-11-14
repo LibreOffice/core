@@ -103,6 +103,16 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
 
         if ( pButton->IsPressed() )
             rStateSet.AddState( AccessibleStateType::PRESSED );
+
+        // IA2 CWS: If the button has a poppup menu,it should has the state EXPANDABLE
+        if( pButton->GetType() == WINDOW_MENUBUTTON )
+        {
+            rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+        }
+        if( pButton->GetStyle() & WB_DEFBUTTON )
+        {
+            rStateSet.AddState( AccessibleStateType::DEFAULT );
+        }
     }
 }
 
@@ -145,6 +155,13 @@ Sequence< ::rtl::OUString > VCLXAccessibleButton::getSupportedServiceNames() thr
     OExternalLockGuard aGuard( this );
 
     ::rtl::OUString aName( VCLXAccessibleTextComponent::getAccessibleName() );
+
+    // IA2 CWS: Removed special handling for browse/more buttons.
+    //          Comment was "the '...' or '<<' or '>>' should be kepted per the requirements from AT"
+    // MT: We did introduce this special handling by intention.
+    //     As the original text is still what you get via XAccessibleText,
+    //     I think for the accessible name the stuff below is correct.
+
     sal_Int32 nLength = aName.getLength();
 
     if ( nLength >= 3 && aName.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("..."), nLength - 3 ) )

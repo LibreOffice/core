@@ -75,8 +75,15 @@
 #define FT_TEXTDIRECTION        60
 #define LB_TEXTDIRECTION        61
 #define FL_VERT                 62
+//IAccessibility2 Impplementaton 2009-----
+#define STR_PAGESETUP_SPACING       32765
+//-----IAccessibility2 Impplementaton 2009
 #define LISTBOX_SELECTION       0
 #define LISTBOX_SECTION         1
 #define LISTBOX_SECTIONS        2
 #define LISTBOX_PAGE            3
 #define LISTBOX_FRAME           4
+
+//IAccessibility2 Impplementaton 2009-----
+#define STR_COLUMN_WIDTH    63
+//-----IAccessibility2 Impplementaton 2009

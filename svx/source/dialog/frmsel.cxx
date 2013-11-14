@@ -30,6 +30,12 @@
 #include "frmselimpl.hxx"
 #include "AccessibleFrameSelector.hxx"
 #include <svx/dialmgr.hxx>
+//IAccessibility2 Implementation 2009-----
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HDL_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+//-----IAccessibility2 Implementation 2009
 
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
@@ -43,8 +49,11 @@
 namespace svx {
 
 using ::com::sun::star::uno::Reference;
+//IAccessibility2 Implementation 2009-----
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::accessibility::XAccessible;
-
+using namespace ::com::sun::star::accessibility;
+//-----IAccessibility2 Implementation 2009
 // ============================================================================
 // global functions from framebordertype.hxx
 
@@ -696,10 +705,24 @@ void FrameSelectorImpl::DoInvalidate( bool bFullRepaint )
 void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState eState )
 {
     DBG_ASSERT( rBorder.IsEnabled(), "svx::FrameSelectorImpl::SetBorderState - access to disabled border" );
+    //IAccessibility2 Implementation 2009-----
+    Any aOld;
+    Any aNew;
+    Any& rMod = eState == FRAMESTATE_SHOW ? aNew : aOld;
+    rMod <<= AccessibleStateType::CHECKED;
+    Reference< XAccessible > xRet;
+    size_t nVecIdx = static_cast< size_t >( rBorder.GetType() );
+    if( GetBorder(rBorder.GetType()).IsEnabled() && (1 <= nVecIdx) && (nVecIdx <= maChildVec.size()) )
+        xRet = mxChildVec[ --nVecIdx ];
+    a11y::AccFrameSelector* pFrameSelector = static_cast<a11y::AccFrameSelector*>(xRet.get());
+
     if( eState == FRAMESTATE_SHOW )
         SetBorderCoreStyle( rBorder, &maCurrStyle );
     else
         rBorder.SetState( eState );
+    if (pFrameSelector)
+            pFrameSelector->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOld, aNew );
+    //-----IAccessibility2 Implementation 2009
     DoInvalidate( true );
 }
 
@@ -914,9 +937,23 @@ bool FrameSelector::IsBorderSelected( FrameBorderType eBorder ) const
     return mxImpl->GetBorder( eBorder ).IsSelected();
 }
 
-void FrameSelector::SelectBorder( FrameBorderType eBorder, bool bSelect )
+void FrameSelector::SelectBorder( FrameBorderType eBorder, bool bSelect /*, bool bFocus */ )
 {
     mxImpl->SelectBorder( mxImpl->GetBorderAccess( eBorder ), bSelect );
+    //IAccessibility2 Implementation 2009-----
+    // MT: bFireFox as API parameter is ugly...
+    // if (bFocus)
+    {
+        Reference< XAccessible > xRet = GetChildAccessible(eBorder);
+        a11y::AccFrameSelector* pFrameSelector = static_cast<a11y::AccFrameSelector*>(xRet.get());
+        if (pFrameSelector)
+        {
+            Any aOldValue, aNewValue;
+            aNewValue <<= AccessibleStateType::FOCUSED;
+            pFrameSelector->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+        }
+    }
+    //-----IAccessibility2 Implementation 2009
 }
 
 bool FrameSelector::IsAnyBorderSelected() const
@@ -1063,7 +1100,10 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
                 if( !(*aIt)->IsSelected() )
                 {
                     bNewSelected = true;
-                    mxImpl->SelectBorder( **aIt, true );
+            //IAccessibility2 Implementation 2009-----
+                    //mxImpl->SelectBorder( **aIt, true );
+            SelectBorder((**aIt).GetType(), true);
+            //-----IAccessibility2 Implementation 2009
                 }
             }
             else
@@ -1160,6 +1200,31 @@ void FrameSelector::GetFocus()
     mxImpl->DoInvalidate( false );
     if( mxImpl->mxAccess.is() )
         mxImpl->mpAccess->NotifyFocusListeners( sal_True );
+    //IAccessibility2 Implementation 2009-----
+    if (IsAnyBorderSelected())
+    {
+        FrameBorderType borderType = FRAMEBORDER_NONE;
+        if (mxImpl->maLeft.IsSelected())
+            borderType = FRAMEBORDER_LEFT;
+        else if (mxImpl->maRight.IsSelected())
+            borderType = FRAMEBORDER_RIGHT;
+        else if (mxImpl->maTop.IsSelected())
+            borderType = FRAMEBORDER_TOP;
+        else if (mxImpl->maBottom.IsSelected())
+            borderType = FRAMEBORDER_BOTTOM;
+        else if (mxImpl->maHor.IsSelected())
+            borderType = FRAMEBORDER_HOR;
+        else if (mxImpl->maVer.IsSelected())
+            borderType = FRAMEBORDER_VER;
+        else if (mxImpl->maTLBR.IsSelected())
+            borderType = FRAMEBORDER_TLBR;
+        else if (mxImpl->maBLTR.IsSelected())
+            borderType = FRAMEBORDER_BLTR;
+        SelectBorder(borderType);
+    }
+    for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
+            mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
+    //-----IAccessibility2 Implementation 2009
     Control::GetFocus();
 }
 

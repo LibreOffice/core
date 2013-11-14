@@ -351,7 +351,8 @@ throw(RuntimeException)
     // -----------------------------------------------------------------------------
     sal_Int16 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleRole(  ) throw (RuntimeException)
     {
-        return AccessibleRole::LABEL;
+        //return AccessibleRole::LABEL;
+        return AccessibleRole::LIST_ITEM;
     }
     // -----------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleDescription(  ) throw (RuntimeException)

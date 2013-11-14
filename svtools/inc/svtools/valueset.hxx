@@ -317,7 +317,7 @@ protected:
 
     sal_Bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
     sal_uInt16          ShowDropPos( const Point& rPos );
-    void            HideDropPos();
+    void                HideDropPos();
 
 protected:
 
@@ -358,6 +358,9 @@ public:
                                 sal_uInt16 nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
                                 sal_uInt16 nPos = VALUESET_APPEND );
+                    // IA2 implementation in 2009 - method to set accessible when the style is user draw.
+    void            InsertItem( sal_uInt16 nItemId, const XubString& rStr, sal_uInt16 nPos = VALUESET_APPEND );
+
     void            InsertSpace( sal_uInt16 nItemId,
                                  sal_uInt16 nPos = VALUESET_APPEND );
     void            RemoveItem( sal_uInt16 nItemId );
@@ -365,24 +368,24 @@ public:
     void            CopyItems( const ValueSet& rValueSet );
     void            Clear();
 
-    sal_uInt16          GetItemCount() const;
-    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
-    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
-    sal_uInt16          GetItemId( const Point& rPos ) const;
+    sal_uInt16      GetItemCount() const;
+    sal_uInt16      GetItemPos( sal_uInt16 nItemId ) const;
+    sal_uInt16      GetItemId( sal_uInt16 nPos ) const;
+    sal_uInt16      GetItemId( const Point& rPos ) const;
     Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
 
     void            EnableFullItemMode( bool bFullMode = true );
     bool            IsFullItemModeEnabled() const { return mbFullMode; }
     void            SetColCount( sal_uInt16 nNewCols = 1 );
-    sal_uInt16          GetColCount() const { return mnUserCols; }
+    sal_uInt16      GetColCount() const { return mnUserCols; }
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
-    sal_uInt16          GetLineCount() const { return mnUserVisLines; }
+    sal_uInt16      GetLineCount() const { return mnUserVisLines; }
     void            SetItemWidth( long nItemWidth = 0 );
     long            GetItemWidth() const { return mnUserItemWidth; }
     void            SetItemHeight( long nLineHeight = 0 );
     long            GetItemHeight() const { return mnUserItemHeight; }
     void            SetFirstLine( sal_uInt16 nNewLine = 0 );
-    sal_uInt16          GetFirstLine() const { return mnFirstLine; }
+    sal_uInt16      GetFirstLine() const { return mnFirstLine; }
 
     void            SelectItem( sal_uInt16 nItemId );
     sal_uInt16          GetSelectItemId() const { return mnSelItemId; }
@@ -392,7 +395,7 @@ public:
     bool            IsNoSelection() const { return mbNoSelection; }
 
     void            SetItemBits( sal_uInt16 nItemId, sal_uInt16 nBits );
-    sal_uInt16          GetItemBits( sal_uInt16 nItemId ) const;
+    sal_uInt16      GetItemBits( sal_uInt16 nItemId ) const;
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;
     void            SetItemColor( sal_uInt16 nItemId, const Color& rColor );
@@ -407,7 +410,7 @@ public:
     bool            IsColor() const { return maColor.GetTransparency() == 0; }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
-    sal_uInt16          GetExtraSpacing() { return mnSpacing; }
+    sal_uInt16      GetExtraSpacing() { return mnSpacing; }
 
     void            Format();
 

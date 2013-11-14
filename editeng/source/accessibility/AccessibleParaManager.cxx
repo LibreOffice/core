@@ -356,10 +356,10 @@ namespace accessibility
                                            const uno::Any& rOldValue ) const
     {
         DBG_ASSERT( maChildren.size() > nStartPara &&
-                    maChildren.size() >= nEndPara , "AccessibleParaManager::FireEvent: invalid index" );
+                    maChildren.size() >= nEndPara &&
+                    nEndPara >= nStartPara , "AccessibleParaManager::FireEvent: invalid index" );
 
-        if( maChildren.size() > nStartPara &&
-            maChildren.size() >= nEndPara )
+        if( maChildren.size() > nStartPara && maChildren.size() >= nEndPara && nEndPara >= nStartPara)
         {
             VectorOfChildren::const_iterator front = maChildren.begin();
             VectorOfChildren::const_iterator back = front;

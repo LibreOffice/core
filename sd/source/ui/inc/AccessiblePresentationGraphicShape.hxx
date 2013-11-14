@@ -27,6 +27,9 @@
 
 #include <svx/AccessibleGraphicShape.hxx>
 
+//IAccessibility2 Implementation 2009-----
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+//-----IAccessibility2 Implementation 2009
 namespace accessibility {
 
 /** This class makes Impress shapes accessible.
@@ -60,6 +63,10 @@ public:
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
+//IAccessibility2 Implementation 2009-----
+    /// Return this object's role.
+    virtual sal_Int16 SAL_CALL getAccessibleRole () throw (::com::sun::star::uno::RuntimeException);
+//-----IAccessibility2 Implementation 2009
 };
 
 } // end of namespace accessibility

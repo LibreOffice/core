@@ -277,6 +277,10 @@ TabPage SID_REDLIN_FILTER_PAGE
     {
         Text [ en-US ] = "End Time" ;
     };
+    String STR_TREE
+    {
+        Text [ en-US ] = "Changes" ;
+    };
     /*-----IAccessibility2 Implementation 2009*/
 };
 TabPage SID_REDLIN_VIEW_PAGE
@@ -353,10 +357,6 @@ TabPage SID_REDLIN_VIEW_PAGE
     String STR_TITLE5
     {
         Text [ en-US ] = "Comment" ;
-    };
-    String STR_TREE
-    {
-        Text [ en-US ] = "Changes" ;
     };
 };
 

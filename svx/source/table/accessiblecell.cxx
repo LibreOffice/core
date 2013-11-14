@@ -60,6 +60,8 @@ AccessibleCell::AccessibleCell( const ::com::sun::star::uno::Reference< ::com::s
 , mpText( NULL )
 , mxCell( rCell )
 {
+    //Init the pAccTable var
+    pAccTable = dynamic_cast <AccessibleTableShape *> (rxParent.get());
 }
 
 // --------------------------------------------------------------------
@@ -242,7 +244,41 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet (v
                 else
                     pStateSet->RemoveState (AccessibleStateType::FOCUSED);
             }
+            // Set the invisible state for merged cell
+            if (mxCell.is() && mxCell->isMerged())
+                pStateSet->RemoveState(AccessibleStateType::VISIBLE);
+            else
+                pStateSet->AddState(AccessibleStateType::VISIBLE);
 
+
+            //IAccessibility2 Implementation 2009-----
+            //Solution:Just when the parent table is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
+            ::com::sun::star::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
+            if( xTempAcc.is() )
+            {
+                ::com::sun::star::uno::Reference<XAccessibleContext>
+                                        xTempAccContext = xTempAcc->getAccessibleContext();
+                if( xTempAccContext.is() )
+                {
+                    ::com::sun::star::uno::Reference<XAccessibleStateSet> rState =
+                        xTempAccContext->getAccessibleStateSet();
+                    if( rState.is() )           {
+                        com::sun::star::uno::Sequence<short> pStates = rState->getStates();
+                        int count = pStates.getLength();
+                        for( int iIndex = 0;iIndex < count;iIndex++ )
+                        {
+                            if( pStates[iIndex] == AccessibleStateType::EDITABLE )
+                            {
+                                pStateSet->AddState (AccessibleStateType::EDITABLE);
+                                pStateSet->AddState (AccessibleStateType::RESIZABLE);
+                                pStateSet->AddState (AccessibleStateType::MOVEABLE);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            //-----IAccessibility2 Implementation 2009
             // Create a copy of the state set that may be modified by the
             // caller without affecting the current state set.
             xStateSet = Reference<XAccessibleStateSet>(new ::utl::AccessibleStateSetHelper (*pStateSet));
@@ -566,6 +602,75 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleIndexInParent (void) throw (Runt
     return mnIndexInParent;
 }
 
+//IAccessibility2 Implementation 2009-----
+sdr::table::CellRef AccessibleCell::getCellRef()
+{
+    return mxCell;
+}
+::rtl::OUString AccessibleCell::getCellName( sal_Int32 nCol, sal_Int32 nRow )
+{
+    rtl::OUStringBuffer aBuf;
+
+    if (nCol < 26*26)
+    {
+        if (nCol < 26)
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        static_cast<sal_uInt16>(nCol)));
+        else
+        {
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        (static_cast<sal_uInt16>(nCol) / 26) - 1));
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        (static_cast<sal_uInt16>(nCol) % 26)));
+        }
+    }
+    else
+    {
+        String aStr;
+        while (nCol >= 26)
+        {
+            sal_Int32 nC = nCol % 26;
+            aStr += static_cast<sal_Unicode>( 'A' +
+                    static_cast<sal_uInt16>(nC));
+            nCol = nCol - nC;
+            nCol = nCol / 26 - 1;
+        }
+        aStr += static_cast<sal_Unicode>( 'A' +
+                static_cast<sal_uInt16>(nCol));
+        aStr.Reverse();
+        aBuf.append( aStr);
+    }
+    aBuf.append( OUString::valueOf(nRow+1) );
+    return aBuf.makeStringAndClear();
+}
+::rtl::OUString SAL_CALL AccessibleCell::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException)
+{
+    ThrowIfDisposed ();
+    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+
+    if( pAccTable )
+    try
+    {
+        sal_Int32 nRow = 0, nCol = 0;
+        pAccTable->getColumnAndRow(mnIndexInParent, nCol, nRow);
+        return getCellName( nCol, nRow );
+    }
+    catch( Exception& )
+    {
+    }
+
+    return AccessibleCellBase::getAccessibleName();
+}
+void AccessibleCell::UpdateChildren()
+{
+    if (mpText)
+        mpText->UpdateChildren();
+}
+//-----IAccessibility2 Implementation 2009
+
+/* MT: Above getAccessibleName was introduced with IA2 CWS, while below was introduce in 3.3 meanwhile. Check which one is correct
+If this is correct, we also don't need  sdr::table::CellRef getCellRef(), UpdateChildren(), getCellName( sal_Int32 nCol, sal_Int32 nRow ) above
+
 ::rtl::OUString SAL_CALL AccessibleCell::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
@@ -576,5 +681,6 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleIndexInParent (void) throw (Runt
 
     return AccessibleCellBase::getAccessibleName();
 }
+*/
 
 } // end of namespace accessibility

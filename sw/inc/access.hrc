@@ -59,9 +59,12 @@
 #define STR_ACCESS_SW_CATEGORY                  (RC_ACCESS_BEGIN + 29)
 #define STR_ACCESS_TL_GLOBAL                    (RC_ACCESS_BEGIN + 30)
 #define STR_ACCESS_TL_CONTENT                   (RC_ACCESS_BEGIN + 31)
+#define STR_ACCESS_FORMULA_TYPE                 (RC_ACCESS_BEGIN + 32)
+#define STR_ACCESS_FORMULA_TEXT                 (RC_ACCESS_BEGIN + 33)
+#define STR_ACCESS_FORMULA_TOOLBAR              (RC_ACCESS_BEGIN + 34)
 //-----IAccessibility2 Implementation 2009
 
-#define ACCESS_ACT_END STR_ACCESS_TL_CONTENT
+#define ACCESS_ACT_END STR_ACCESS_FORMULA_TOOLBAR
 
 #if ACCESS_ACT_END > RC_ACCESS_END
 #error Resource-Id Ueberlauf in #file, #line

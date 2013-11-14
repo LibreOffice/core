@@ -1519,6 +1519,13 @@ sal_Bool Outliner::HasChilds( Paragraph* pParagraph ) const
 bool Outliner::ImplHasNumberFormat( sal_uInt16 nPara ) const
 {
     return GetNumberFormat(nPara) != 0;
+    if ( GetNumberFormat(nPara) )
+    {
+        const SfxBoolItem& rBulletState = (const SfxBoolItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE );
+        return rBulletState.GetValue();
+    }
+    else
+        return sal_False;
 }
 
 const SvxNumberFormat* Outliner::GetNumberFormat( sal_uInt16 nPara ) const

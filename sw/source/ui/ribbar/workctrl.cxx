@@ -503,6 +503,15 @@ SwScrollNaviPopup::SwScrollNaviPopup( sal_uInt16 nId, const Reference< XFrame >&
             sText = String(SW_RES(nResStr));
             nTbxBits = TIB_CHECKABLE;
         }
+        //IAccessibility2 Impplementaton 2009-----
+        else
+        {
+            if (nNaviId == NID_PREV)
+                sText = String(SW_RES(STR_IMGBTN_PGE_UP));
+            else if (nNaviId == NID_NEXT)
+                sText = String(SW_RES(STR_IMGBTN_PGE_DOWN));
+        }
+        //-----IAccessibility2 Impplementaton 2009
         aToolBox.InsertItem(nNaviId, sText, nTbxBits);
         aToolBox.SetHelpId( nNaviId, aNavigationHelpIds[i] );
     }

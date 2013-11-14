@@ -177,7 +177,11 @@ public:
 
     void SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable );
     void SetTableLines( const SwTable &rTable );
-    void DelFrms ( SwTable &rTable );
+    //IAccessibility2 Implementation 2009-----
+    //Solution:Add an input param to identify if acc table should be disposed
+    //void DelFrms ( SwTable &rTable );
+    void DelFrms ( SwTable &rTable,sal_Bool bAccTableDispose = sal_False );
+    //-----IAccessibility2 Implementation 2009
     void MakeFrms( SwTable &rTable );
     void MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                                        const sal_Bool bBehind );

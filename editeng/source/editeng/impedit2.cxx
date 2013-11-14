@@ -136,6 +136,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bIsFormatting       = sal_False;
     bFormatted          = sal_False;
     bUpdate             = sal_True;
+    bUpdateForAcc       = TRUE;     //IAccessible2 implementation 2009
     bUseAutoColor       = sal_True;
     bForceAutoColor     = sal_False;
     bAddExtLeading      = sal_False;

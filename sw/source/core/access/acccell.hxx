@@ -26,13 +26,27 @@
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
+//IAccessibility2 Implementation 2009-----
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XAccessibleExtendedAttributes_HPP_
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
+#endif
+
+#ifndef _ACCSELECTIONHELPER_HXX_
+#include <accselectionhelper.hxx>
+#endif
+//-----IAccessibility2 Implementation 2009
+
 class SwCellFrm;
+class SwAccessibleTable;
 class SwFrmFmt;
 
 class SwAccessibleCell : public SwAccessibleContext,
-                  ::com::sun::star::accessibility::XAccessibleValue
-
+                  ::com::sun::star::accessibility::XAccessibleValue,
+                  ::com::sun::star::accessibility::XAccessibleSelection,
+                    public  ::com::sun::star::accessibility::XAccessibleExtendedAttributes
 {
+    // Implementation for XAccessibleSelection interface
+    SwAccessibleSelectionHelper aSelectionHelper;
     sal_Bool    bIsSelected;    // protected by base class mutex
 
     sal_Bool    IsSelected();
@@ -110,6 +124,11 @@ public:
 
     //=====  XAccessibleValue  ================================================
 
+    //=====  XAccessibleExtendedAttributes ================================================
+    //IAccessibility2 Implementation 2009-----
+    ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+    //-----IAccessibility2 Implementation 2009
 private:
     SwFrmFmt* GetTblBoxFormat() const;
 
@@ -126,6 +145,41 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
         throw (::com::sun::star::uno::RuntimeException);
+    //IAccessibility2 Implementation 2009-----
+    //=====  XAccessibleComponent  ============================================
+    sal_Int32 SAL_CALL getBackground()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //=====  XAccessibleSelection  ============================================
+    virtual void SAL_CALL selectAccessibleChild(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL clearAccessibleSelection(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL selectAllAccessibleChildren(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL deselectAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+
+    SwAccessibleTable *GetTable();
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTableReference;
+    SwAccessibleTable *m_pAccTable;
+    //-----IAccessibility2 Implementation 2009
 };
 
 

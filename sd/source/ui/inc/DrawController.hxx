@@ -44,6 +44,9 @@
 #include <memory>
 #include <vector>
 #include <boost/scoped_ptr.hpp>
+//IAccessibility2 Implementation 2009-----
+#include <com/sun/star/drawing/XLayer.hpp>
+//-----IAccessibility2 Implementation 2009
 
 class SfxViewShell;
 class SdXImpressDocument;
@@ -102,6 +105,10 @@ public:
         PROPERTY_ZOOMVALUE = 7,
         PROPERTY_VIEWOFFSET = 8,
         PROPERTY_DRAWVIEWMODE = 9
+        //IAccessibility2 Implementation 2009-----
+        ,PROPERTY_UPDATEACC = 10
+        ,PROPERTY_PAGE_CHANGE = 11
+        //-----IAccessibility2 Implementation 2009
     };
 
     /** Create a new DrawController object for the given ViewShellBase.
@@ -147,6 +154,14 @@ public:
         switch.
     */
     void BroadcastContextChange (void) const;
+//IAccessibility2 Implementation 2009-----
+    void NotifyAccUpdate();
+    void fireChangeLayer( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>* pCurrentLayer ) throw();
+    // change the parameter to int
+    //void fireSwitchCurrentPage( String pageName) throw();
+    void fireSwitchCurrentPage( sal_Int32 pageIndex) throw();
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>* mpCurrentLayer;
+//-----IAccessibility2 Implementation 2009
 
     /** Return a pointer to the ViewShellBase object that the DrawController
         is connected to.

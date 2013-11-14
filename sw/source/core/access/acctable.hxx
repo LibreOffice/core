@@ -23,6 +23,12 @@
 #ifndef _ACCTABLE_HXX
 #define _ACCTABLE_HXX
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
+//IAccessibility2 Implementation 2009-----
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XAccessibleTableSelection_HPP_
+#include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
+#endif
+#include <vector>
+//-----IAccessibility2 Implementation 2009
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 #include <acccontext.hxx>
@@ -40,6 +46,7 @@ class SwAccessibleTable :
         public SwAccessibleContext,
         public ::com::sun::star::accessibility::XAccessibleTable,
         public ::com::sun::star::accessibility::XAccessibleSelection,
+        public   ::com::sun::star::accessibility::XAccessibleTableSelection,
         public SwClient
 {
     SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
@@ -85,6 +92,9 @@ protected:
     // Is table data evailable?
     sal_Bool HasTableData() const { return (mpTableData != 0); }
 
+    //IAccessibility2 Implementation 2009-----
+    void SetTableData(SwAccessibleTableData_Impl* mpNewTableData)  ;
+    //-----IAccessibility2 Implementation 2009
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
@@ -187,7 +197,17 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
-
+    //IAccessibility2 Implementation 2009-----
+    //=====  XAccessibleTableSelection  ============================================
+    virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+    virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+    virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+    virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+    //-----IAccessibility2 Implementation 2009
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -254,6 +274,17 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
+    //IAccessibility2 Implementation 2009-----
+    //=====  XAccessibleComponent  ============================================
+    sal_Int32 SAL_CALL getBackground()
+        throw (::com::sun::star::uno::RuntimeException);
+    typedef std::vector<const SwAccessibleContext*> VEC_CELL;
+    VEC_CELL m_vecCellAdd;
+    VEC_CELL m_vecCellRemove;
+    void FireSelectionEvent( );
+    void ClearSelectionCellCache();
+    void AddSelectionCell(const SwAccessibleContext* ,sal_Bool bAddOrRemove);
+    //-----IAccessibility2 Implementation 2009
 };
 
 inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()

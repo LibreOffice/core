@@ -190,9 +190,61 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
     if ( GetWindow() )
     {
         Font aFont = GetWindow()->GetControlFont();
+
         sal_Int32 nBackColor = GetWindow()->GetControlBackground().GetColor();
         sal_Int32 nColor = GetWindow()->GetControlForeground().GetColor();
+
+        // MT: Code with default font was introduced with the IA2 CWS, but I am not convinced that this is the correct font...
+        // Decide what to do when we have a concrete issue.
+        /*
+        Font aDefaultVCLFont;
+        OutputDevice* pDev = Application::GetDefaultDevice();
+        if ( pDev )
+        {
+            aDefaultVCLFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
+            if ( !aFont.GetName().Len() )
+            {
+                String aDefaultName = aDefaultVCLFont.GetName();
+                aFont.SetName( aDefaultName );
+            }
+            if ( !aFont.GetHeight() )
+            {
+                aFont.SetHeight( aDefaultVCLFont.GetHeight() );
+            }
+            if ( aFont.GetWeight() == WEIGHT_DONTKNOW )
+            {
+                aFont.SetWeight( aDefaultVCLFont.GetWeight() );
+            }
+
+            //if nColor is -1, it may indicate that the default color black is using.
+            if ( nColor == -1)
+            {
+                nColor = aDefaultVCLFont.GetColor().GetColor();
+            }
+        }
+        */
+
+        // MT: Adjustment stuff was introduced with the IA2 CWS, but adjustment is not a character attribute...
+        // In case we reintroduce it, use adjustment as extra parameter for the CharacterAttributesHelper...
+        /*
+        WinBits aBits = GetWindow()->GetStyle();
+        sal_Int16 nAdjust = -1;
+        if ( aBits & WB_LEFT )
+        {
+            nAdjust = style::ParagraphAdjust_LEFT;
+        }
+        else if ( aBits & WB_RIGHT )
+        {
+            nAdjust = style::ParagraphAdjust_RIGHT;
+        }
+        else if ( aBits & WB_CENTER )
+        {
+            nAdjust = style::ParagraphAdjust_CENTER;
+        }
+        */
+
         ::std::auto_ptr< CharacterAttributesHelper > pHelper( new CharacterAttributesHelper( aFont, nBackColor, nColor ) );
+
         aValues = pHelper->GetCharacterAttributes( aRequestedAttributes );
     }
 

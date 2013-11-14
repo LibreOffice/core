@@ -130,6 +130,10 @@ public:
         GetChild (long nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                ::com::sun::star::lang::IndexOutOfBoundsException);
+//IAccessibility2 Implementation 2009-----
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> GetChild (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& xShape) throw (::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> GetChildShape (long nIndex) throw (::com::sun::star::uno::RuntimeException);
+//-----IAccessibility2 Implementation 2009
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update

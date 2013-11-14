@@ -64,6 +64,10 @@ class SwAccessibleChild
         bool IsAccessible( sal_Bool bPagePreview ) const;
         bool IsBoundAsChar() const;
 
+        //IAccessibility2 Implementation 2009-----
+        sal_uInt32 GetAnchorPosition() const;
+        //-----IAccessibility2 Implementation 2009
+
         bool IsVisibleChildrenOnly() const;
         SwRect GetBox( const SwAccessibleMap& rAccMap ) const;
         SwRect GetBounds( const SwAccessibleMap& rAccMap ) const;

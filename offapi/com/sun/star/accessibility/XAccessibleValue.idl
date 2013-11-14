@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_accessibility_XAccessibleValue_idl__
 #define __com_sun_star_accessibility_XAccessibleValue_idl__
 

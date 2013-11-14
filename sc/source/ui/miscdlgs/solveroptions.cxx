@@ -84,9 +84,33 @@ public:
 
     void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
-
+    //IAccessibility2 Implementation 2009-----
+// MT: Commented out SV_ITEM_ID_EXTENDRLBOXSTRING and GetExtendText() in svlbitem.hxx - needed?
+//  virtual USHORT IsA() {return SV_ITEM_ID_EXTENDRLBOXSTRING;}
+//  virtual XubString GetExtendText() const;
+    //-----IAccessibility2 Implementation 2009
     virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
+
+//IAccessibility2 Implementation 2009-----
+// MT: Commented out SV_ITEM_ID_EXTENDRLBOXSTRING and GetExtendText() in svlbitem.hxx - needed?
+/*
+XubString ScSolverOptionsString::GetExtendText() const
+{
+    String aNormalStr( GetText() );
+    aNormalStr.Append( (sal_Unicode) ':' );
+    String sTxt( ' ' );
+    if ( mbIsDouble )
+        sTxt += (String)rtl::math::doubleToUString( mfDoubleValue,
+            rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+            ScGlobal::GetpLocaleData()->getNumDecimalSep().GetChar(0), true );
+    else
+        sTxt += String::CreateFromInt32( mnIntValue );
+    aNormalStr.Append(sTxt);
+    return aNormalStr;
+}
+*/
+//-----IAccessibility2 Implementation 2009
 
 void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* /* pEntry */ )
 {

@@ -196,8 +196,8 @@ ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_u
 
     if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->GetErrCode() )
     {
-        SetString ( aDocStr );      //[SODC_19347] add liyi
-        //bErr = sal_True;              //[SODC_19347] del liyi
+        SetString ( aDocStr );
+        //bErr = sal_True;
         mbFlag |= MK_ERR;
     }
     else if ( pDoc->HasValueData( nCol, nRow, nDocTab ) )
@@ -293,8 +293,7 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
     else
         return ScGlobal::GetCollator()->compareString( rA.aString, rB.aString );
 }
-//
-//Wang Xu Ming SODC_17561
+
 #ifdef DEBUG
 void    ScDPItemData::dump() const
 {
@@ -304,7 +303,6 @@ void    ScDPItemData::dump() const
     DBG_TRACE1( "mbFlag= %d", mbFlag);
 }
 #endif
-//End
 
 TypedStrData*  ScDPItemData::CreateTypeString( )
 {
@@ -740,9 +738,8 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, sal
                         if ( bMatchWholeCell )
                         {
                                         bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
-                            //Added by zhaosz,for sodc_2702,20060808
+
                             String aStr = *rEntry.pStr;//"f*"
-                            //modified by weihuaw,for SODC_16698
                             //use another way to find "*" in aStr
                             sal_Bool bHasStar = sal_False;
                             xub_StrLen nIndex;
@@ -1044,7 +1041,7 @@ const ScDPItemData* ScDPTableDataCache::GetSortedItemData(SCCOL nDim, SCROW nOrd
 
 SCCOL ScDPTableDataCache::GetDimensionIndex(String sName) const
 {
-    for ( size_t n = 1; n < mrLabelNames.size(); n ++ ) //defects, label name map wrong SODC_17590, SODC_18932,SODC_18827,SODC_18960,SODC_18923
+    for ( size_t n = 1; n < mrLabelNames.size(); n ++ ) //defects, label name map wrong
     {
         if ( mrLabelNames[n]->GetString() == sName )
             return (SCCOL)(n-1);

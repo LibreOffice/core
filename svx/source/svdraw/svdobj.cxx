@@ -3185,6 +3185,12 @@ bool SdrObject::HasText() const
     return false;
 }
 
+//IAccessibility2 Implementation 2009-----
+const SdrObject* SdrObject::GetCaptionObj() const
+{
+    return pCaptionObj;
+}
+//-----IAccessibility2 Implementation 2009
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //   @@@@  @@@@@  @@@@@@  @@@@@  @@@@   @@@@  @@@@@@  @@@@  @@@@@  @@  @@

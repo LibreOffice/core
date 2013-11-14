@@ -651,7 +651,9 @@ sal_Int32 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL AccessibleBase::getAccessibleRole()
     throw (RuntimeException)
 {
-    return AccessibleRole::LIST_ITEM; // #i73747# role SHAPE seems more appropriate, but is not read
+    //IAccessibility2 Implementation 2009-----
+    return AccessibleRole::SHAPE/*LIST_ITEM*/; // #i73747# role SHAPE seems more appropriate, but is not read
+    //-----IAccessibility2 Implementation 2009
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleBase::getAccessibleRelationSet()

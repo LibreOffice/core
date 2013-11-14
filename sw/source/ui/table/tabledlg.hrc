@@ -102,6 +102,9 @@
 #define FL_VERT_ORIENT          140
 #define RB_FROM_LEFT        144
 
+//IAccessibility2 Impplementaton 2009-----
+#define STR_COLUMN_WIDTH    145
+//-----IAccessibility2 Impplementaton 2009
 #define FT_VERTORIENT       150
 #define LB_VERTORIENT       151
 

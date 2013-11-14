@@ -299,6 +299,10 @@ void SvImpLBox::Clear()
 
     // #97680# ---------
     aContextBmpWidthVector.clear();
+
+//IAccessibility2 Implementation 2009-----
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, NULL );
+//-----IAccessibility2 Implementation 2009
 }
 
 // *********************************************************************
@@ -646,6 +650,9 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, sal_Bool bForceNoSelect )
         if(!bForceNoSelect && bSimpleTravel && !(nFlags & F_DESEL_ALL) && GetUpdateMode())
         {
             pView->Select( pCursor, sal_True );
+            //IAccessibility2 Implementation 2009-----
+            CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
+            //-----IAccessibility2 Implementation 2009
         }
         // Mehrfachselektion: Im Cursor-Move selektieren, wenn
         // nicht im Add-Mode (Ctrl-F8)
@@ -655,10 +662,19 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, sal_Bool bForceNoSelect )
                  !bForceNoSelect )
         {
             pView->Select( pCursor, sal_True );
+            //IAccessibility2 Implementation 2009-----
+            CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
+            //-----IAccessibility2 Implementation 2009
         }
         else
         {
             ShowCursor( sal_True );
+            //IAccessibility2 Implementation 2009-----
+            if (bForceNoSelect && GetUpdateMode())
+            {
+                CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor);
+            }
+            //-----IAccessibility2 Implementation 2009
         }
 
         if( pAnchor )
@@ -1700,6 +1716,10 @@ void SvImpLBox::EntrySelected( SvLBoxEntry* pEntry, sal_Bool bSelect )
 
 void SvImpLBox::RemovingEntry( SvLBoxEntry* pEntry )
 {
+    //IAccessibility2 Implementation 2009-----
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED , pEntry );
+    //-----IAccessibility2 Implementation 2009
+
     DestroyAnchor();
 
     if( !pView->IsEntryVisible( pEntry ) )
@@ -2359,7 +2379,10 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_LEFT:
         {
-            if ( bIsCellFocusEnabled )
+            //IAccessibility2 Implementation 2009-----
+            // if ( bIsCellFocusEnabled )
+            if ( bIsCellFocusEnabled && pCursor )
+            //-----IAccessibility2 Implementation 2009
             {
                 if ( nCurTabPos > FIRST_ENTRY_TAB )
                 {
@@ -2677,7 +2700,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             // is from SvTreeListBox::KeyInput. If we set bKeyUsed to sal_True here, then the key input
             // is just silenced. However, we want SvLBox::KeyInput to get a chance, to do the QuickSelection
             // handling.
-            // (The old code here which intentionally set bKeyUsed to TRUE said this was because of "quick search"
+            // (The old code here which intentionally set bKeyUsed to sal_True said this was because of "quick search"
             // handling, but actually there was no quick search handling anymore. We just re-implemented it.)
             // #i31275# / 2009-06-16 / frank.schoenheit@sun.com
             bKeyUsed = sal_False;

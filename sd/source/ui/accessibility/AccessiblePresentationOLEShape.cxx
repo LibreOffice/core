@@ -140,5 +140,13 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 
     return aDG();
 }
+//IAccessibility2 Implementation 2009-----
+//  Return this object's role.
+sal_Int16 SAL_CALL AccessiblePresentationOLEShape::getAccessibleRole ()
+    throw (::com::sun::star::uno::RuntimeException)
+{
 
+    return  AccessibleRole::EMBEDDED_OBJECT ;
+}
+//-----IAccessibility2 Implementation 2009
 } // end of namespace accessibility

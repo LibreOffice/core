@@ -780,6 +780,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     nFormSfxId( USHRT_MAX ),
     nLastPasteDestination( 0xFFFF ),
     nLeftBorderDistance( 0 ),
+    //IAccessibility2 Implementation 2009-----
+    nOldPageNum(0),
+    //-----IAccessibility2 Implementation 2009
     nRightBorderDistance( 0 ),
     bInMailMerge(sal_False),
     bInDtor(sal_False),

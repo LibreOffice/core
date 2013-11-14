@@ -1029,7 +1029,11 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     // loesche die Frames
     aFndBox.SetTableLines( *this );
-    aFndBox.DelFrms( *this );
+    //IAccessibility2 Implementation 2009-----
+    //Solution:Not dispose accessible table
+    //aFndBox.DelFrms( *this );
+    aFndBox.DelFrms( *this,sal_False );
+    //-----IAccessibility2 Implementation 2009
 
     if( 1 == rCpyTbl.GetTabSortBoxes().Count() )
     {

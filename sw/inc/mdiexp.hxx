@@ -70,5 +70,7 @@ TblChgMode GetTblChgDefaultMode();
 
 sal_Bool JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );
 
+// IAccessible2 Implementation
+extern void AccessibilityScrollMDI(ViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY, sal_Bool isLeftTop);
 
 #endif

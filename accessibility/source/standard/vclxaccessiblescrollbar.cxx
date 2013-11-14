@@ -88,7 +88,8 @@ void VCLXAccessibleScrollBar::FillAccessibleStateSet( utl::AccessibleStateSetHel
     VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
     if ( pVCLXScrollBar )
     {
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+        // IA2 CWS: scroll bar should not have FOCUSABLE state.
+        // rStateSet.AddState( AccessibleStateType::FOCUSABLE );
         if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::HORIZONTAL )
             rStateSet.AddState( AccessibleStateType::HORIZONTAL );
         else if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::VERTICAL )
@@ -274,3 +275,21 @@ Any VCLXAccessibleScrollBar::getMinimumValue(  ) throw (RuntimeException)
 }
 
 // -----------------------------------------------------------------------------
+
+// IAccessible2 implementation, 2009
+::rtl::OUString VCLXAccessibleScrollBar::getAccessibleName(  ) throw (uno::RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+
+    ::rtl::OUString aName;
+    VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
+    if ( pVCLXScrollBar )
+    {
+        if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::HORIZONTAL )
+            aName = TK_RES_STRING( RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL );
+        else if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::VERTICAL )
+            aName = TK_RES_STRING( RID_STR_ACC_SCROLLBAR_NAME_VERTICAL );
+    }
+    return aName;
+}
+

@@ -493,6 +493,30 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     {
         Text [ en-US ] = "Delete words with two initial capitals" ;
     };
+    String STR_PB_SGL_STD
+    {
+        Text [ en-US ] = "Single quotes default" ;
+    };
+    String STR_PB_DBL_STD
+    {
+        Text [ en-US ] = "Double quotes default" ;
+    };
+    String STR_PB_SGL_START
+    {
+        Text [ en-US ] = "Start quote of single quotes" ;
+    };
+    String STR_PB_DBL_START
+    {
+        Text [ en-US ] = "Start quote of double quotes" ;
+    };
+    String STR_PB_SGL_END
+    {
+        Text [ en-US ] = "End quote of single quotes" ;
+    };
+    String STR_PB_DBL_END
+    {
+        Text [ en-US ] = "End quote of double quotes" ;
+    };
 };
 /**************************************************************************/
 /*                                                                        */
@@ -660,30 +684,6 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     String ST_STANDARD
     {
         Text [ en-US ] = "Default" ;
-    };
-    String STR_PB_SGL_STD
-    {
-        Text [ en-US ] = "Single quotes default" ;
-    };
-    String STR_PB_DBL_STD
-    {
-        Text [ en-US ] = "Double quotes default" ;
-    };
-    String STR_PB_SGL_START
-    {
-        Text [ en-US ] = "Start quote of single quotes" ;
-    };
-    String STR_PB_DBL_START
-    {
-        Text [ en-US ] = "Start quote of double quotes" ;
-    };
-    String STR_PB_SGL_END
-    {
-        Text [ en-US ] = "End quote of single quotes" ;
-    };
-    String STR_PB_DBL_END
-    {
-        Text [ en-US ] = "End quote of double quotes" ;
     };
 };
 

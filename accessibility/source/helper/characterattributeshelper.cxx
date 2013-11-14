@@ -35,6 +35,8 @@ using namespace ::com::sun::star::beans;
 
 CharacterAttributesHelper::CharacterAttributesHelper( const Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor )
 {
+    // MT: IA2 CWS commented out CharFontCharSet, CharFontFamily, CharFontPitch, CharFontStyleName, CharScaleWidth - any AT interested in this?
+
     m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharBackColor" ), makeAny( (sal_Int32) nBackColor ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharColor" ), makeAny( (sal_Int32) nColor ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharFontCharSet" ), makeAny( (sal_Int16) rFont.GetCharSet() ) ) );
@@ -47,6 +49,9 @@ CharacterAttributesHelper::CharacterAttributesHelper( const Font& rFont, sal_Int
     m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharStrikeout" ), makeAny( (sal_Int16) rFont.GetStrikeout() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharUnderline" ), makeAny( (sal_Int16) rFont.GetUnderline() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharWeight" ), makeAny( (float) rFont.GetWeight() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "CharPosture" ), makeAny( (sal_Int16)rFont.GetItalic() ) ) );
+    // MT: Introduced with IA2 CWS, but adjustment is not a char attr...
+    // m_aAttributeMap.insert( AttributeMap::value_type( ::rtl::OUString::createFromAscii( "ParaAdjust" ), makeAny( nAjust ) ) );
 }
 
 // -----------------------------------------------------------------------------

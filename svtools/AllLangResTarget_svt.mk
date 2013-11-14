@@ -49,6 +49,7 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/control/ctrlbox.src \
     svtools/source/control/ctrltool.src \
     svtools/source/control/filectrl.src \
+    svtools/source/control/ruler.src \
     svtools/source/dialogs/addresstemplate.src \
     svtools/source/dialogs/filedlg2.src \
     svtools/source/dialogs/formats.src \

@@ -33,4 +33,14 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
     Text [ en-US ] = "Image bullet" ;
 };
 
+String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
+{
+    Text [ en-US ] = "Paragraph: $(ARG) " ;
+};
+
+String RID_SVXSTR_A11Y_PARAGRAPH_NAME
+{
+    Text [ en-US ] = "Paragraph $(ARG)" ;
+};
+
 

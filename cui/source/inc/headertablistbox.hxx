@@ -31,8 +31,8 @@
 class _HeaderTabListBox : public Control
 {
 private:
-    SvHeaderTabListBox          maListBox;
     HeaderBar                   maHeaderBar;
+    SvHeaderTabListBox          maListBox;
 protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
     virtual long                Notify( NotifyEvent& rNEvt );

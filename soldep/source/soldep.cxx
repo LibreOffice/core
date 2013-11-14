@@ -979,7 +979,7 @@ sal_Bool SolDep::MarkObjects( ObjectWin* pObjectWin )
 
 void SolDep::Resize()
 {
-//funzt! muß aber von der applikation aufgerufen werden.
+//funzt! mu?aber von der applikation aufgerufen werden.
     Point aOutPos = Point( 0, 0 );
     Size aOutSize = mpProcessWin->GetOutputSizePixel();
         // calculate output size
@@ -991,7 +991,7 @@ void SolDep::Resize()
     Point aGraphWinPos = Point(0,0);
     Size  aGraphWinSize = Size(0,0);
 
-//weiß nicht wie:    nMenuHeight = aMenuBar.GetWindow()->GetSizePixel().Height(); //Höhe des Menues
+//wei?nicht wie:    nMenuHeight = aMenuBar.GetWindow()->GetSizePixel().Height(); //Höhe des Menues
 
     //aInRect = pTBManager->Resize( Rectangle( aOutPos, aOutSize );
     // Set Docking-Rectangle for ToolBar
@@ -1714,7 +1714,7 @@ sal_uInt16 SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, sal_
 
     sal_uIntPtr nNewXSize = ( DEPPER_MAX_WIDTH + 1 )  * ( OBJWIN_X_SPACING + GetDefSize().Width() );
 
-    //    sal_uIntPtr aObjID = GetStart(pIdMapper, pObjLst) //hier muß man switchen GetStart/GetPrjStart oder so
+    //    sal_uIntPtr aObjID = GetStart(pIdMapper, pObjLst) //hier mu?man switchen GetStart/GetPrjStart oder so
 
     ObjectWin* pObjWin = ObjIdToPtr( pObjLst, aObjID);
 
@@ -1763,7 +1763,7 @@ sal_uInt16 SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, sal_
     aWorkList.Clear();
     GetDepWin()->EnablePaint( sal_True );
     GetDepWin()->Invalidate();
-//LevelListen loeschen                  Hä? Welche Levellisten?
+//LevelListen loeschen                  H? Welche Levellisten?
 
 //Update all Connectors
 // --> To be done: Don't call twice Object1-Connector-Object2

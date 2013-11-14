@@ -674,6 +674,24 @@ TabPage TP_TOX_ENTRY
         {
             Text [ en-US ] = "Character Style: ";
         };
+//IAccessibility2 Impplementaton 2009-----
+        String STR_STRUCTURE
+        {
+            Text [ en-US ] = "Structure text";
+        };
+        String STR_ADDITIONAL_ACCNAME_STRING1
+        {
+            Text [ en-US ] = "Press Ctrl+Alt+A to move focus for more operations";
+        };
+        String STR_ADDITIONAL_ACCNAME_STRING2
+        {
+            Text [ en-US ] = "Press left or right arrow to choose the structure controls";
+        };
+        String STR_ADDITIONAL_ACCNAME_STRING3
+        {
+            Text [ en-US ] = "Press Ctrl+Alt+B to move focus back to the current structure control";
+        };
+//-----IAccessibility2 Impplementaton 2009
     };
     PushButton PB_ALL_LEVELS
     {

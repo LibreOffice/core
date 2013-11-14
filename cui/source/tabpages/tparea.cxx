@@ -2213,6 +2213,11 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
     aMtrFldYOffset.Show();
     aFlPosition.Show();
     aRbtRow.Show();
+//IAccessible2 Implementation 2009-----
+    //Solution:Check one when initializing.
+    if(!aRbtRow.IsChecked()&&!aRbtColumn.IsChecked())
+            aRbtRow.Check();
+//-----IAccessible2 Implementation 2009
     aRbtColumn.Show();
     aMtrFldOffset.Show();
     aFlOffset.Show();

@@ -34,7 +34,14 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
-
+//IAccessibility2 Implementation 2009-----
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
+//-----IAccessibility2 Implementation 2009
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -936,6 +943,102 @@ sal_Bool EmbeddedObjectRef::IsChart() const
 
     return sal_False;
 }
+
+//IAccessibility2 Implementation 2009-----
+// MT: Only used for getting accessible attributes, which are not localized
+rtl::OUString EmbeddedObjectRef::GetChartType()
+{
+    rtl::OUString Style;
+    if ( mxObj.is() )
+    {
+        if ( IsChart() )
+        {
+            if ( svt::EmbeddedObjectRef::TryRunningState( mxObj ) )
+            {
+                uno::Reference< chart2::XChartDocument > xChart( mxObj->getComponent(), uno::UNO_QUERY );
+                if (xChart.is())
+                {
+                    uno::Reference< chart2::XDiagram > xDiagram( xChart->getFirstDiagram());
+                    if( ! xDiagram.is())
+                        return String();
+                    uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
+                    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+                    // IA2 CWS. Unused: int nCoordinateCount = aCooSysSeq.getLength();
+                    sal_Bool bGetChartType = sal_False;
+                    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+                    {
+                        uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
+                        uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+                        int nDimesionCount = aCooSysSeq[nCooSysIdx]->getDimension();
+                        if( nDimesionCount == 3 )
+                            Style += rtl::OUString::createFromAscii("3D ");
+                        else
+                            Style += rtl::OUString::createFromAscii("2D ");
+                        for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+                        {
+                            rtl::OUString strChartType = aChartTypes[nCTIdx]->getChartType();
+                            if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.AreaChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Areas");
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.BarChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Bars");
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.ColumnChartType")))
+                            {
+                                uno::Reference< beans::XPropertySet > xProp( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
+                                if( xProp.is())
+                                {
+                                    bool bCurrent = false;
+                                    if( xProp->getPropertyValue( rtl::OUString::createFromAscii("SwapXAndYAxis") ) >>= bCurrent )
+                                    {
+                                        if (bCurrent)
+                                            Style += rtl::OUString::createFromAscii("Bars");
+                                        else
+                                            Style += rtl::OUString::createFromAscii("Columns");
+                                        bGetChartType = sal_True;
+                                    }
+                                }
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.LineChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Lines");
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.ScatterChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("XY Chart");
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.PieChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Pies");
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.NetChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Radar");
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.CandleStickChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Candle Stick Chart");
+                                bGetChartType = sal_True;
+                            }
+                            if (bGetChartType)
+                                return Style;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return Style;
+}
+//-----IAccessibility2 Implementation 2009
 
 // #i104867#
 sal_uInt32 EmbeddedObjectRef::getGraphicVersion() const

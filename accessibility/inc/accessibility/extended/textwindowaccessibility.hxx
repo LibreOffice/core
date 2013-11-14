@@ -52,6 +52,22 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
 
+// IAccessible2 implementation, 2009
+#ifndef _SVTOOLS_HRC
+#include "svtools/svtools.hrc"
+#endif
+#ifndef _SVTOOLS_SVTDATA_HXX
+#include "svtools/svtdata.hxx"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
 #include <memory>
 #include <queue>
 #include <hash_map>
@@ -578,7 +594,9 @@ private:
     virtual ::css::uno::Reference< ::css::accessibility::XAccessible >
     SAL_CALL getAccessibleAtPoint(::css::awt::Point const & rPoint)
         throw (::css::uno::RuntimeException);
-
+// IAccessible2 implementation, 2009
+    virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+   virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
     // ??? Will be called with both the external (Solar) and internal mutex
     // locked:
     virtual void SAL_CALL disposing();
@@ -630,6 +648,9 @@ private:
     void handleSelectionChangeNotification();
 
     void notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast );
+// IAccessible2 implementation, 2009
+    ::sal_Int32 getSelectionType(::sal_Int32 nNewFirstPara, ::sal_Int32 nNewFirstPos, ::sal_Int32 nNewLastPara, ::sal_Int32 nNewLastPos);
+    void sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId);
 
     void justifySelection( TextPaM& rTextStart, TextPaM& rTextEnd );
 

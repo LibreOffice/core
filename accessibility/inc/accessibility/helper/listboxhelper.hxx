@@ -90,6 +90,11 @@ public:
         return m_aComboListBox.IsActive();
     }
     // -----------------------------------------------------------------------------
+    virtual sal_Bool            IsEnabled() const
+    {
+        return m_aComboListBox.IsEnabled();
+    }
+    // -----------------------------------------------------------------------------
     virtual sal_Bool            IsEntryVisible( sal_uInt16 nPos ) const
     {
         sal_uInt16 nTopEntry = m_aComboListBox.GetTopEntry();

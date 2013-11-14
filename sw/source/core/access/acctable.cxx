@@ -49,8 +49,13 @@
 #include <accmap.hxx>
 #include <access.hrc>
 #include <acctable.hxx>
-
+#include <rowfrm.hxx>
+#include <layfrm.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+
+#include <editeng/brshitem.hxx>
+#include <swatrset.hxx>
+#include <frmatr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -66,6 +71,8 @@ typedef ::std::set < sal_Int32, Int32Less_Impl > Int32Set_Impl;
 
 typedef ::std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
 typedef ::std::list < Int32Pair_Impl > Int32PairList_Impl;
+
+const int SELECTION_WITH_NUM =10;
 
 class SwAccTableSelHander_Impl
 {
@@ -88,6 +95,10 @@ class SwAccessibleTableData_Impl
     bool mbOnlyTableColumnHeader;
 
     void CollectData( const SwFrm *pFrm );
+    //IAccessibility2 Implementation 2009-----
+    void CollectColumnHeaderData( const SwFrm *pFrm );
+    void CollectRowHeaderData( const SwFrm *pFrm );
+    //-----IAccessibility2 Implementation 2009
     void CollectExtents( const SwFrm *pFrm );
 
     sal_Bool FindCell( const Point& rPos, const SwFrm *pFrm ,
@@ -182,6 +193,99 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrm *pFrm )
     }
 }
 
+//IAccessibility2 Implementation 2009-----
+void SwAccessibleTableData_Impl::CollectRowHeaderData( const SwFrm *pFrm )
+{
+    const SwAccessibleChildSList aList( *pFrm, mrAccMap );
+    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
+    SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
+    while( aIter != aEndIter )
+    {
+        const SwAccessibleChild& rLower = *aIter;
+        const SwFrm *pLower = rLower.GetSwFrm();
+        if( pLower )
+        {
+            if( pLower->IsRowFrm() )
+            {
+
+                const SwTableLine* pLine = ((SwRowFrm*)pLower)->GetTabLine();
+                while( pLine->GetUpper() )
+                    pLine = pLine->GetUpper()->GetUpper();
+
+                // Headerline?
+                //if(mpTabFrm->GetTable()->GetTabLines()[ 0 ] != pLine)
+                //return ;
+
+                maRows.insert( pLower->Frm().Top() - maTabFrmPos.Y() );
+
+                CollectRowHeaderData( pLower );
+
+
+            }
+            else if( pLower->IsCellFrm() &&
+                     rLower.IsAccessible( mbIsInPagePreview ) )
+            {
+                //Added by yanjun. Can't find the "GetRowHeaderFlag" function(Need vefiry).
+                //if(((SwCellFrm*)pLower)->GetRowHeaderFlag())
+                //  maColumns.insert( pLower->Frm().Left() - maTabFrmPos.X() );
+            }
+            else
+            {
+                CollectRowHeaderData( pLower );
+            }
+        }
+        ++aIter;
+    }
+}
+//-----IAccessibility2 Implementation 2009
+
+void SwAccessibleTableData_Impl::CollectColumnHeaderData( const SwFrm *pFrm )
+{
+    const SwAccessibleChildSList aList( *pFrm, mrAccMap );
+    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
+    SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
+    while( aIter != aEndIter )
+    {
+        const SwAccessibleChild& rLower = *aIter;
+        const SwFrm *pLower = rLower.GetSwFrm();
+        if( pLower )
+        {
+            if( pLower->IsRowFrm() )
+            {
+
+                const SwTableLine* pLine = ((SwRowFrm*)pLower)->GetTabLine();
+                while( pLine->GetUpper() )
+                    pLine = pLine->GetUpper()->GetUpper();
+
+                // Headerline?
+                //if(mpTabFrm->GetTable()->GetTabLines()[ 0 ] != pLine)
+                //return ;
+
+                //if the current line is now header line, then return ;
+                sal_Int16 iCurrentRowIndex = mpTabFrm->GetTable()->GetTabLines().GetPos( pLine);
+                if(iCurrentRowIndex >= mpTabFrm->GetTable()->_GetRowsToRepeat())
+                    return ;
+
+                maRows.insert( pLower->Frm().Top() - maTabFrmPos.Y() );
+
+                CollectColumnHeaderData( pLower );
+
+
+            }
+            else if( pLower->IsCellFrm() &&
+                     rLower.IsAccessible( mbIsInPagePreview ) )
+            {
+                maColumns.insert( pLower->Frm().Left() - maTabFrmPos.X() );
+            }
+            else
+            {
+                CollectColumnHeaderData( pLower );
+            }
+        }
+        ++aIter;
+    }
+}
+//-----IAccessibility2 Implementation 2009
 void SwAccessibleTableData_Impl::CollectExtents( const SwFrm *pFrm )
 {
     const SwAccessibleChildSList aList( *pFrm, mrAccMap );
@@ -396,7 +500,11 @@ const SwFrm *SwAccessibleTableData_Impl::GetCellAtPos(
 
 inline sal_Int32 SwAccessibleTableData_Impl::GetRowCount() const
 {
-    return static_cast< sal_Int32 >( maRows.size() );
+    //IAccessibility2 Implementation 2009-----
+    sal_Int32 count =  static_cast< sal_Int32 >( maRows.size() ) ;
+    count = (count <=0)? 1:count;
+    //-----IAccessibility2 Implementation 2009
+    return count;
 }
 
 inline sal_Int32 SwAccessibleTableData_Impl::GetColumnCount() const
@@ -696,8 +804,12 @@ void SwAccessibleTable::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
-
+    //IAccessibility2 Implementation 2009-----
+    //Solution:Add resizable state to table
+    rStateSet.AddState( AccessibleStateType::RESIZABLE );
     // MULTISELECTABLE
+    rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
+    //-----IAccessibility2 Implementation 2009
     SwCrsrShell* pCrsrShell = GetCrsrShell();
     if( pCrsrShell  )
         rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
@@ -727,6 +839,9 @@ SwAccessibleTable::SwAccessibleTable(
     OUString sArg2( GetFormattedPageNumber() );
 
     sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
+    //IAccessibility2 Implementation 2009-----
+    UpdateTableData();
+    //-----IAccessibility2 Implementation 2009
 }
 
 SwAccessibleTable::~SwAccessibleTable()
@@ -784,8 +899,7 @@ void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
 
     case RES_OBJECTDYING:
         // mba: it seems that this class intentionally does not call code in base class SwClient
-        if( GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) )
+        if( pOld && ( GetRegisteredIn() == static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) ) )
             GetRegisteredInNonConst()->Remove( this );
         break;
 
@@ -809,6 +923,13 @@ uno::Any SwAccessibleTable::queryInterface( const uno::Type& rType )
         uno::Reference<XAccessibleSelection> xSelection( this );
         aRet <<= xSelection;
     }
+    //IAccessibility2 Implementation 2009-----
+    else if ( rType == ::getCppuType((uno::Reference<XAccessibleTableSelection> *)0) )
+    {
+        uno::Reference<XAccessibleTableSelection> xTableExtent( this );
+        aRet <<= xTableExtent;
+    }
+    //-----IAccessibility2 Implementation 2009
     else
     {
         aRet = SwAccessibleContext::queryInterface(rType);
@@ -981,6 +1102,9 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
+    //IAccessibility2 Implementation 2009-----
+    UpdateTableData();
+    //-----IAccessibility2 Implementation 2009
     GetTableData().CheckRowAndCol( nRow, nColumn, this );
 
     Int32Set_Impl::const_iterator aSttCol(
@@ -1011,6 +1135,9 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
+    //IAccessibility2 Implementation 2009-----
+    UpdateTableData();
+    //-----IAccessibility2 Implementation 2009
 
     GetTableData().CheckRowAndCol( nRow, nColumn, this );
 
@@ -1045,6 +1172,25 @@ uno::Reference< XAccessibleTable > SAL_CALL
         SwAccessibleTable::getAccessibleColumnHeaders(  )
     throw (uno::RuntimeException)
 {
+// MT IA2: Which one should win nowadys???
+/*
+    // IA2 version:
+    uno::Reference< XAccessibleTable > xRet;
+    SwTabFrm* pTabFrm =( SwTabFrm*)( GetFrm() );
+    if (pTabFrm)
+    {
+        if(pTabFrm->GetTable()->_GetRowsToRepeat() > 0)
+        {
+            //for errata table header
+            SwAccessibleTableData_Impl *mpHeadTableData = new SwAccessibleTableData_Impl( pTabFrm, sal_False, sal_True);
+            //for errata table header
+            SwAccessibleTable *pHeadAccessibleTable = new SwAccessibleTable(GetMap(),pTabFrm);
+            pHeadAccessibleTable->SetTableData(mpHeadTableData);
+            xRet = pHeadAccessibleTable;
+        }
+    }
+    return xRet;
+*/
     // --> OD 2010-03-10 #i87532#
     // assure that return accesible object is empty, if no column header exists.
     SwAccessibleTableColHeaders* pTableColHeaders =
@@ -1346,6 +1492,15 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    //IAccessibility2 Implementation 2009-----
+    //need to update children
+    SwAccessibleTableData_Impl *pNewTableData = CreateNewTableData();
+    if( !pNewTableData->CompareExtents( GetTableData() ) )
+    {
+        delete mpTableData;
+        mpTableData = pNewTableData;
+        FireTableChangeEvent(*mpTableData);
+    }
     if( HasTableData() )
         GetTableData().SetTablePos( GetFrm()->Frm().Pos() );
 
@@ -1402,6 +1557,34 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
             // <--
             if( !pNewTableData->CompareExtents( GetTableData() ) )
             {
+                //IAccessibility2 Implementation 2009-----
+                if(pNewTableData->GetRowCount()!= mpTableData->GetRowCount())
+                {
+                    Int32Set_Impl::const_iterator aSttCol( GetTableData().GetColumnIter( 0 ) );
+                    Int32Set_Impl::const_iterator aSttRow( GetTableData().GetRowIter( 1 ) );
+                    const SwFrm *pCellFrm = GetTableData().GetCellAtPos( *aSttCol, *aSttRow, sal_False );
+                    Int32Set_Impl::const_iterator aSttCol2( pNewTableData->GetColumnIter( 0 ) );
+                    Int32Set_Impl::const_iterator aSttRow2( pNewTableData->GetRowIter( 0 ) );
+                    const SwFrm *pCellFrm2 = pNewTableData->GetCellAtPos( *aSttCol2, *aSttRow2, sal_False );
+
+                    if(pCellFrm == pCellFrm2)
+                    {
+                        AccessibleTableModelChange aModelChange;
+                        aModelChange.Type = AccessibleTableModelChangeType::UPDATE;
+                        aModelChange.FirstRow = 0;
+                        aModelChange.LastRow = mpTableData->GetRowCount() - 1;
+                        aModelChange.FirstColumn = 0;
+                        aModelChange.LastColumn = mpTableData->GetColumnCount() - 1;
+
+                        AccessibleEventObject aEvent;
+                        aEvent.EventId = AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED;
+                        aEvent.NewValue <<= aModelChange;
+
+                        FireAccessibleEvent( aEvent );
+                    }
+                }
+                else
+                //-----IAccessibility2 Implementation 2009
                 FireTableChangeEvent( GetTableData() );
                 ClearTableData();
                 mpTableData = pNewTableData;
@@ -1674,6 +1857,153 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     pCrsrShell->EndAction();
 }
 
+//IAccessibility2 Implementation 2009-----
+void  SwAccessibleTable::SetTableData(SwAccessibleTableData_Impl* mpNewTableData)
+{
+    mpTableData = mpNewTableData;
+}
+
+sal_Int32 SAL_CALL SwAccessibleTable::getBackground()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    const SvxBrushItem &rBack = GetFrm()->GetAttrSet()->GetBackground();
+    sal_uInt32 crBack = rBack.GetColor().GetColor();
+
+    if (COL_AUTO == crBack)
+    {
+        uno::Reference<XAccessible> xAccDoc = getAccessibleParent();
+        if (xAccDoc.is())
+        {
+            uno::Reference<XAccessibleComponent> xCompoentDoc(xAccDoc,uno::UNO_QUERY);
+            if (xCompoentDoc.is())
+            {
+                crBack = (sal_uInt32)xCompoentDoc->getBackground();
+            }
+        }
+    }
+    return crBack;
+}
+
+void SwAccessibleTable::FireSelectionEvent( )
+{
+    AccessibleEventObject aEvent;
+
+    aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
+
+//    int nRemove = m_vecCellRemove.size();
+//    int nAdd = m_vecCellAdd.size();
+
+    VEC_CELL::iterator vi = m_vecCellRemove.begin();
+    for (; vi != m_vecCellRemove.end()  ; ++vi)
+    {
+        SwAccessibleContext *pAccCell = const_cast<SwAccessibleContext *>(*vi);
+        OSL_ASSERT(pAccCell != NULL );
+        pAccCell->FireAccessibleEvent(aEvent);
+    }
+
+    if (m_vecCellAdd.size() <= SELECTION_WITH_NUM)
+    {
+        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
+        vi = m_vecCellAdd.begin();
+        for (; vi != m_vecCellAdd.end()  ; ++vi)
+        {
+            SwAccessibleContext *pAccCell = const_cast<SwAccessibleContext *>(*vi);
+            OSL_ASSERT(pAccCell != NULL );
+            pAccCell->FireAccessibleEvent(aEvent);
+        }
+        return ;
+    }
+    else
+    {
+        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
+        FireAccessibleEvent(aEvent);
+    }
+}
+
+void SwAccessibleTable::ClearSelectionCellCache()
+{
+    m_vecCellAdd.clear();
+    m_vecCellRemove.clear();
+}
+
+void SwAccessibleTable::AddSelectionCell(const SwAccessibleContext* pAccCell ,sal_Bool bAddOrRemove)
+{
+    if (bAddOrRemove)
+    {
+        m_vecCellAdd.push_back(pAccCell);
+    }
+    else
+    {
+        m_vecCellRemove.push_back(pAccCell);
+    }
+}
+
+//=====  XAccessibleTableSelection  ============================================
+sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    if( isAccessibleColumnSelected( row ) )
+        return sal_True;
+
+    long lCol, lColumnCount, lChildIndex;
+    lColumnCount = getAccessibleColumnCount();
+    for(lCol = 0; lCol < lColumnCount; lCol ++)
+    {
+        lChildIndex = getAccessibleIndex(row, lCol);
+        selectAccessibleChild(lChildIndex);
+    }
+
+    return sal_True;
+}
+sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    if( isAccessibleColumnSelected( column ) )
+        return sal_True;
+
+    long lRow, lRowCount, lChildIndex;
+    lRowCount = getAccessibleRowCount();
+
+    for(lRow = 0; lRow < lRowCount; lRow ++)
+    {
+        lChildIndex = getAccessibleIndex(lRow, column);
+        selectAccessibleChild(lChildIndex);
+    }
+    return sal_True;
+}
+sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    if( isAccessibleSelected( row , 0 ) &&  isAccessibleSelected( row , getAccessibleColumnCount()-1 ) )
+    {
+        SwCrsrShell* pCrsrShell = GetCrsrShell();
+        if( pCrsrShell != NULL )
+        {
+            pCrsrShell->StartAction();
+            pCrsrShell->ClearMark();
+            pCrsrShell->EndAction();
+            return sal_True;
+        }
+    }
+    return sal_True;
+}
+sal_Bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    if( isAccessibleSelected( 0 , column ) &&  isAccessibleSelected( getAccessibleRowCount()-1,column))
+    {
+        SwCrsrShell* pCrsrShell = GetCrsrShell();
+        if( pCrsrShell != NULL )
+        {
+            pCrsrShell->StartAction();
+            pCrsrShell->ClearMark();
+            pCrsrShell->EndAction();
+            return sal_True;
+        }
+    }
+    return sal_True;
+}
+//-----IAccessibility2 Implementation 2009
 // --> OD 2007-06-28 #i77106#
 // implementation of class <SwAccessibleTableColHeaders>
 SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2,

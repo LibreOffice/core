@@ -1,0 +1,5 @@
+wa	winaccessibility	:	vcl toolkit NULL
+wa	winaccessibility							usr1	-	w	wa_mkout NULL
+wa	winaccessibility\source\UAccComIDL			nmake	-	w	wa_UAccComIDL NULL
+wa	winaccessibility\source\UAccCOM				nmake	-	w	wa_UAccCOM wa_UAccComIDL.w NULL
+wa	winaccessibility\source\service				nmake	-	w	wa_service wa_UAccCOM.w NULL

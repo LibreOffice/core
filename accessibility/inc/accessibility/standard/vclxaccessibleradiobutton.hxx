@@ -31,7 +31,7 @@
 #endif
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
 

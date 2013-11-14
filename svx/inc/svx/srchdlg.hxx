@@ -155,8 +155,19 @@ public:
     PushButton&     GetReplaceBtn() { return aReplaceBtn; }
 
     sal_Int32           GetTransliterationFlags() const;
-
+//IAccessibility2 Impplementaton 2009-----
+    void SetDocWin( Window* pDocWin ) { mpDocWin = pDocWin; }
+    Window* GetDocWin() { return mpDocWin; }
+    void SetSrchFlag( sal_Bool bSuccess = sal_False ) { mbSuccess = bSuccess; }
+    sal_Bool GetSrchFlag() { return mbSuccess; }
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+        GetComponentInterface( sal_Bool bCreate );
+//-----IAccessibility2 Impplementaton 2009
 private:
+//IAccessibility2 Impplementaton 2009-----
+    Window*         mpDocWin;
+    sal_Bool            mbSuccess;
+//-----IAccessibility2 Impplementaton 2009
     FixedText       aSearchText;
     ComboBox        aSearchLB;
     ListBox         aSearchTmplLB;

@@ -183,6 +183,7 @@ public:
     void Hide();
     void Show();
 
+    void UpdateAccessibleNames();
 };
 
 }

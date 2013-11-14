@@ -187,6 +187,11 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
           css::io::IOException               ,
           css::uno::RuntimeException         )
 {
+    //IAccessibility2 Implementation 2009-----
+#ifdef WNT
+    CEnableAccessInterface e;
+#endif
+    //-----IAccessibility2 Implementation 2009
     css::uno::Reference< css::lang::XComponent > xComponent;
 
     try

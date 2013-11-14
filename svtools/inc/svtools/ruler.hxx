@@ -32,6 +32,10 @@
 #endif
 #include <vcl/field.hxx>
 
+//IAccessibility2 Implementation 2009-----
+#include <svtools/accessibleruler.hxx>
+//-----IAccessibility2 Implementation 2009
+
 class MouseEvent;
 class TrackingEvent;
 class DataChangedEvent;
@@ -706,6 +710,10 @@ private:
     Link                maDoubleClickHdl;
     Link                maExtraDownHdl;
 
+//IAccessibility2 Implementation 2009-----
+    SvtRulerAccessible* pAccContext;
+//-----IAccessibility2 Implementation 2009
+
 #ifdef _SV_RULER_CXX
     SVT_DLLPRIVATE void                ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void                ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
@@ -865,6 +873,10 @@ public:
 
     //set text direction right-to-left
     void                SetTextRTL(sal_Bool bRTL);
+
+//IAccessibility2 Implementation 2009-----
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+//-----IAccessibility2 Implementation 2009
 };
 
 #endif  // _RULER_HXX

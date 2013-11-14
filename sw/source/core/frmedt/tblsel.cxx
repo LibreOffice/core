@@ -2255,7 +2255,11 @@ inline void UnsetFollow( SwFlowFrm *pTab )
     pTab->bIsFollow = sal_False;
 }
 
-void _FndBox::DelFrms( SwTable &rTable )
+//IAccessibility2 Implementation 2009-----
+//Solution:When bAccTableDispose is FALSE,the acc table should not be disposed.
+//void _FndBox::DelFrms( SwTable &rTable )
+void _FndBox::DelFrms( SwTable &rTable,sal_Bool bAccTableDispose )
+//-----IAccessibility2 Implementation 2009
 {
     //Alle Lines zwischen pLineBefore und pLineBehind muessen aus dem
     //Layout ausgeschnitten und geloescht werden.
@@ -2373,9 +2377,14 @@ void _FndBox::DelFrms( SwTable &rTable )
                             // next turn.
                             ((SwTabFrm*)pTabFrm)->SetFollowFlowLine( sal_False );
                         }
-
+                        //IAccessibility2 Implementation 2009-----
+                        //Solution:Set acc table dispose state
+                        pFrm->SetAccTableDispose( bAccTableDispose );
                         pFrm->Cut();
+                        //Solution:Set acc table dispose state to default value.
+                        pFrm->SetAccTableDispose( sal_True );
                         delete pFrm;
+                        //-----IAccessibility2 Implementation 2009
                     }
                 }
         }

@@ -43,6 +43,11 @@ class TabBar;
 #define TREEFLAG_MANINS         0x0004
 #define TREEFLAG_RECALCTABS     0x0008
 
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_NOTSET 0x00
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_LIST   0x01
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_TREE   0x02
+
+
 typedef sal_Int64   ExtendedWinBits;
 
 // disable the behavior of automatically selecting a "CurEntry" upon painting the control
@@ -71,7 +76,9 @@ class SVT_DLLPUBLIC SvTreeListBox : public SvLBox
     short           nEntryHeightOffs;
     short           nIndent;
     short           nFocusWidth;
-    sal_uInt16          aContextBmpMode;
+    sal_uInt16      aContextBmpMode;
+
+    short           nAllItemAccRoleType;
 
 #ifdef _SVTREEBX_CXX
     DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData * );
@@ -399,6 +406,19 @@ public:
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     void                EnableCellFocus();
+
+// IAccessible2 implementation in 2009-----------
+                        // For overwriting accessible role for all entries - normally 0, so each entry can be different
+    void                SetAllEntriesAccessibleRoleType( short n ) { nAllItemAccRoleType = n; }
+    short               GetAllEntriesAccessibleRoleType() const { return nAllItemAccRoleType; }
+
+    sal_uInt16          GetTreeFlags() const {return nTreeFlags;}
+
+    XubString           headString ;
+    String              SearchEntryTextWithHeadTitle( SvLBoxEntry* pEntry ) ;
+    virtual String      GetEntryAltText( SvLBoxEntry* pEntry) const;
+    virtual String      GetEntryLongDescription( SvLBoxEntry* pEntry) const;
+// -----------IAccessible2 implementation in 2009
 
 protected:
     using SvListView::Expand;

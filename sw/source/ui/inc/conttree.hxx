@@ -36,6 +36,10 @@ class SwGlblDocContents;
 class SwGlblDocContent;
 class SfxObjectShell;
 
+//IAccessibility2 Implementation 2009-----
+//Solution:  Include  SdrObject  class
+class SdrObject;
+//-----IAccessibility2 Implementation 2009
 
 #define EDIT_MODE_EDIT          0
 #define EDIT_MODE_UPD_IDX       1
@@ -89,7 +93,10 @@ class SwContentTree : public SvTreeListBox
     sal_Bool                bIsImageListInitialized : 1;
 
     static sal_Bool         bIsInDrag;
-
+    //IAccessibility2 Implementation 2009-----
+    sal_Bool                bIsKeySpace;
+    Rectangle           oldRectangle;
+    //-----IAccessibility2 Implementation 2009
     void                FindActiveTypeAndRemoveUserData();
 
     using SvLBox::ExecuteDrop;
@@ -144,6 +151,11 @@ protected:
 public:
     SwContentTree(Window* pParent, const ResId& rResId);
     ~SwContentTree();
+    //IAccessibility2 Implementation 2009-----
+    String          GetEntryAltText( SvLBoxEntry* pEntry ) const;
+    String          GetEntryLongDescription( SvLBoxEntry* pEntry ) const;
+    SdrObject*  GetDrawingObjectsByContent(const SwContent *pCnt);
+    //-----IAccessibility2 Implementation 2009
 
     sal_Bool            ToggleToRoot();
     sal_Bool            IsRoot() const {return bIsRoot;}
@@ -196,6 +208,9 @@ public:
     virtual void    KeyInput(const KeyEvent& rKEvt);
 
     virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+    //IAccessibility2 Implementation 2009-----
+    virtual sal_Int32  GetEntryRealChildsNum( SvLBoxEntry* pEntry ) const;
+    //-----IAccessibility2 Implementation 2009
 };
 
 

@@ -59,6 +59,14 @@
 #include "fmtmeta.hxx" // lcl_NewMetaPortion
 
 
+//IAccessibility2 Implementation 2009-----
+#ifndef _REFFLD_HXX
+#include "reffld.hxx"
+#endif
+#ifndef _FLDDAT_HXX
+#include "flddat.hxx"
+#endif
+//-----IAccessibility2 Implementation 2009
 /*************************************************************************
  *                      SwTxtFormatter::NewFldPortion()
  *************************************************************************/
@@ -90,7 +98,9 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     SwCharFmt* pChFmt = 0;
     sal_Bool bNewFlyPor = sal_False,
          bINet = sal_False;
-
+    //IAccessibility2 Implementation 2009-----
+    sal_uInt16 subType;
+    //-----IAccessibility2 Implementation 2009
     // set language
     ((SwTxtFormatter*)this)->SeekAndChg( rInf );
     if (pFld->GetLanguage() != GetFnt()->GetLanguage())
@@ -162,6 +172,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                         : pFld->ExpandField(bInClipboard) );
                 pRet = new SwFldPortion( str );
             }
+            //IAccessibility2 Implementation 2009-----
+            if(pRet)
+                ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_PAGECOOUNTFLD;
+            //-----IAccessibility2 Implementation 2009
             break;
 
         case RES_PAGENUMBERFLD:
@@ -188,6 +202,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                         : pFld->ExpandField(bInClipboard) );
                 pRet = new SwFldPortion( str );
             }
+            //IAccessibility2 Implementation 2009-----
+            if(pRet)
+                ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_PAGENUMBERFLD;
+            //-----IAccessibility2 Implementation 2009
             break;
         }
         case RES_GETEXPFLD:
@@ -263,7 +281,40 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             bNewFlyPor = sal_True;
             bPlaceHolder = sal_True;
             break;
-
+        //IAccessibility2 Implementation 2009-----
+        case RES_GETREFFLD:
+            subType = ((SwGetRefField*)pFld)->GetSubType();
+            {
+                String const str( (bName)
+                        ? pFld->GetFieldName()
+                        : pFld->ExpandField(bInClipboard) );
+                pRet = new SwFldPortion(str);
+            }
+            if(pRet)
+            {
+                if( subType == REF_BOOKMARK  )
+                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_BOOKMARKFLD;
+                else if( subType == REF_SETREFATTR )
+                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_SETREFATTRFLD;
+                break;
+            }
+        case RES_DATETIMEFLD:
+            subType = ((SwDateTimeField*)pFld)->GetSubType();
+            {
+                String const str( (bName)
+                        ? pFld->GetFieldName()
+                        : pFld->ExpandField(bInClipboard) );
+                pRet = new SwFldPortion(str);
+            }
+            if(pRet)
+            {
+                if( subType & DATEFLD  )
+                    ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_DATEFLD;
+                else if( subType & TIMEFLD )
+                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_TIMEFLD;
+                break;
+            }
+        //-----IAccessibility2 Implementation 2009
         default:
             {
                 String const str( (bName)

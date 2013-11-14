@@ -941,7 +941,9 @@ void TextWindow::Command( const CommandEvent& rCEvt )
 
 void TextWindow::GetFocus()
 {
-    Window::GetFocus();
+//IAccessibility2 Implementation 2009-----
+    //Window::GetFocus();
+//-----IAccessibility2 Implementation 2009
     if ( !mbActivePopup )
     {
         sal_Bool bGotoCursor = !mpExtTextView->IsReadOnly();
@@ -1248,8 +1250,10 @@ void MultiLineEdit::GetFocus()
 {
     if ( !pImpSvMEdit )  // might be called from within the dtor, when pImpSvMEdit == NULL is a valid state
         return;
-
-    Edit::GetFocus();
+    //IAccessibility2 Implementation 2009-----
+    //Disable the focused event on scroll pane
+    //Edit::GetFocus();
+    //-----IAccessibility2 Implementation 2009
     pImpSvMEdit->GetFocus();
 }
 

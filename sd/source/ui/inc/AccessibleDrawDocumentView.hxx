@@ -26,6 +26,10 @@
 
 #include "AccessibleDocumentViewBase.hxx"
 
+//IAccessibility2 Implementation 2009-----
+#include <com/sun/star/accessibility/XAccessibleGroupPosition.hpp>
+//-----IAccessibility2 Implementation 2009
+
 namespace accessibility {
 
 
@@ -39,6 +43,9 @@ namespace accessibility {
 */
 class AccessibleDrawDocumentView :
     public AccessibleDocumentViewBase
+//IAccessibility2 Implementation 2009-----
+    ,public ::com::sun::star::accessibility::XAccessibleGroupPosition
+//-----IAccessibility2 Implementation 2009
 {
 public:
     //=====  internal  ========================================================
@@ -73,6 +80,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::lang::IndexOutOfBoundsException);
 
+//IAccessibility2 Implementation 2009-----
+    virtual ::rtl::OUString SAL_CALL
+        getAccessibleName(void)
+        throw (::com::sun::star::uno::RuntimeException);
+//-----IAccessibility2 Implementation 2009
 
     //=====  lang::XEventListener  ============================================
 
@@ -86,6 +98,28 @@ public:
     virtual void SAL_CALL
         propertyChange (const ::com::sun::star::beans::PropertyChangeEvent& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
+//IAccessibility2 Implementation 2009-----
+    //=====  XInterface  ======================================================
+
+    virtual com::sun::star::uno::Any SAL_CALL
+        queryInterface (const com::sun::star::uno::Type & rType)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        acquire (void)
+        throw ();
+
+    virtual void SAL_CALL
+        release (void)
+        throw ();
+
+    //=====  XAccessibleGroupPosition  =========================================
+    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
+        getGroupPosition( const ::com::sun::star::uno::Any& rAny )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getObjectLink( const ::com::sun::star::uno::Any& accoject )
+        throw (::com::sun::star::uno::RuntimeException);
+//-----IAccessibility2 Implementation 2009
 
 protected:
 
@@ -120,6 +154,10 @@ protected:
     virtual void
         implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+//IAccessibility2 Implementation 2009-----
+private:
+    ::sd::ViewShell* mpSdViewSh;
+//-----IAccessibility2 Implementation 2009
 
 protected:
     /** This object manages the shapes of the represented draw page.  It is
@@ -159,6 +197,15 @@ protected:
     virtual void Deactivated (void);
 
     virtual void impl_dispose (void);
+
+//IAccessibility2 Implementation 2009-----
+    //=====  XAccessibleGetAccFromXShape  ============================================
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        SAL_CALL get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
+        throw ( ::com::sun::star::uno::RuntimeException );
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        GetSelAccContextInTable();
+//-----IAccessibility2 Implementation 2009
 
 private:
     void UpdateAccessibleName (void);

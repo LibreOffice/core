@@ -457,6 +457,9 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aPasswdPB.SetAccessibleRelationMemberOf(&aProtectFL);
     aPasswdPB.SetAccessibleRelationLabeledBy(&aPasswdCB);
     aSubRegionED.SetAccessibleName(aSubRegionFT.GetText());
+//IAccessibility2 Impplementaton 2009-----
+    aTree.SetAllEntriesAccessibleRoleType(TREEBOX_ALLITEM_ACCROLE_TYPE_TREE);
+//-----IAccessibility2 Impplementaton 2009
 }
 /* -----------------------------26.04.01 14:56--------------------------------
 

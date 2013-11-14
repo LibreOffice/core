@@ -258,6 +258,10 @@ public:
     static bool doConstructOrthogonal(const ::rtl::OUString& rName);
 
     using SdrTextObj::NbcSetOutlinerParaObject;
+
+    //IAccessibility2 Implementation 2009-----
+    ::rtl::OUString GetCustomShapeName();
+    //-----IAccessibility2 Implementation 2009
 };
 
 #endif //_SVDOASHP_HXX

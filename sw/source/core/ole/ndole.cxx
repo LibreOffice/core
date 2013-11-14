@@ -794,6 +794,15 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
     }
 }
 
+//IAccessibility2 Implementation 2009-----
+String SwOLEObj::GetStyleString()
+{
+    String strStyle;
+    if (xOLERef.is() && xOLERef.IsChart())
+        strStyle = xOLERef.GetChartType();
+    return strStyle;
+}
+//-----IAccessibility2 Implementation 2009
 sal_Bool SwOLEObj::IsOleRef() const
 {
     return xOLERef.is();

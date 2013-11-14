@@ -1662,7 +1662,7 @@ SvxConfigPage::SvxConfigPage(
     aDescriptionField.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     aDescriptionField.SetAutoScroll( sal_True );
     aDescriptionField.EnableCursor( sal_False );
-
+    //IAccessibility2 Implementation 2009-----
     aMoveUpButton.SetAccessibleName(String(CUI_RES(BUTTON_STR_UP)));
     aMoveDownButton.SetAccessibleName(String(CUI_RES(BUTTON_STR_DOWN)));
     aMoveUpButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
@@ -1671,6 +1671,7 @@ SvxConfigPage::SvxConfigPage(
     aModifyTopLevelButton.SetAccessibleRelationMemberOf(&aTopLevelSeparator);
     aAddCommandsButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
     aModifyCommandButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
+    //-----IAccessibility2 Implementation 2009
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -2929,9 +2930,10 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
     aMoveDownButton.SetClickHdl (
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
-
+    //IAccessibility2 Implementation 2009-----
     aMoveUpButton.SetAccessibleName(String(CUI_RES(BUTTON_STR_UP)));
     aMoveDownButton.SetAccessibleName(String(CUI_RES(BUTTON_STR_DOWN)));
+    //-----IAccessibility2 Implementation 2009
 }
 
 IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)

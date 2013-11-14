@@ -24,7 +24,12 @@
 #define _ACCEMBEDDED_HXX
 #include "accnotextframe.hxx"
 
+//IAccessibility2 Implementation 2009-----
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
+//-----IAccessibility2 Implementation 2009
 class SwAccessibleEmbeddedObject : public   SwAccessibleNoTextFrame
+            , public ::com::sun::star::accessibility::XAccessibleExtendedAttributes
+
 {
 
 protected:
@@ -36,6 +41,21 @@ public:
     SwAccessibleEmbeddedObject( SwAccessibleMap* pInitMap,
                                 const SwFlyFrm* pFlyFrm );
 
+    //IAccessibility2 Implementation 2009-----
+    //=====  XInterface  ======================================================
+
+    virtual com::sun::star::uno::Any SAL_CALL
+        queryInterface (const com::sun::star::uno::Type & rType)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        acquire (void)
+        throw ();
+
+    virtual void SAL_CALL
+        release (void)
+        throw ();
+    //-----IAccessibility2 Implementation 2009
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -59,6 +79,12 @@ public:
 
     //=====  XTypeProvider  ====================================================
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    //IAccessibility2 Implementation 2009-----
+    // ====== XAccessibleExtendedAttributes =====================================
+        virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
+            throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+    //-----IAccessibility2 Implementation 2009
 };
 
 
