@@ -840,6 +840,8 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
 
     if ( nDrawFlags & WINDOW_DRAW_MONO )
         aColor = Color( COL_BLACK );
+    else if( (nDrawFlags & WINDOW_DRAW_ROLLOVER) && IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL) )
+        aColor = rStyleSettings.GetButtonRolloverTextColor();
     else if ( IsControlForeground() )
         aColor = GetControlForeground();
     else if( nDrawFlags & WINDOW_DRAW_ROLLOVER )
