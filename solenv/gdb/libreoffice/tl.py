@@ -8,6 +8,7 @@
 #
 
 import gdb
+import six
 
 from libreoffice.util import printing
 
@@ -159,7 +160,7 @@ class TimePrinter(object):
     def to_string(self):
         return str(TimeImpl.parse(self.val))
 
-class IteratorHelper(object):
+class IteratorHelper(six.Iterator):
     '''Implements a container iterator useable for both 'linear'
         containers (like DynArray or List) and Tables
     '''
@@ -179,7 +180,7 @@ class IteratorHelper(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         if self.pos == self.count:
             raise StopIteration()
 

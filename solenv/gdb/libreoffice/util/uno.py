@@ -9,6 +9,7 @@
 
 import gdb
 import re
+import six
 
 class UnsupportedType(Exception):
     '''Represents exception thrown when an unsupported UNO type(like
@@ -295,7 +296,7 @@ class CompoundType(Type):
         self.typename = self.uno2cpp(self.tag)
         self._type = full_type
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
 
         def __init__(self, count, types, names):
             self.count = count
@@ -306,7 +307,7 @@ class CompoundType(Type):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             assert self.pos >= 0 and self.pos <= self.count
             if self.pos == self.count:
                 raise StopIteration
@@ -349,7 +350,7 @@ class EnumType(Type):
         self.typename = self.uno2cpp(self.tag)
         self._type = full_type.cast(gdb.lookup_type('_typelib_EnumTypeDescription'))
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
 
         def __init__(self, count, values, names):
             self.count = count
@@ -360,7 +361,7 @@ class EnumType(Type):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             assert self.pos >= 0 and self.pos <= self.count
             if self.pos == self.count:
                 raise StopIteration
@@ -405,7 +406,7 @@ class InterfaceMethodType(InterfaceMemberType):
         self.oneway = full_type['bOneWay']
         self._type = full_type
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
 
         def __init__(self, count, values):
             self.count = count
@@ -416,7 +417,7 @@ class InterfaceMethodType(InterfaceMemberType):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             assert self.pos >= 0 and self.pos <= self.count
             if self.pos == self.count:
                 raise StopIteration
@@ -484,7 +485,7 @@ class InterfaceType(Type):
         self.uik = full_type['aUik']
         self._type = full_type
 
-    class _iterator(object):
+    class _iterator(six.Iterator):
 
         def __init__(self, count, values):
             assert values
@@ -495,7 +496,7 @@ class InterfaceType(Type):
         def __iter__(self):
             return self
 
-        def next(self):
+        def __next__(self):
             assert self.pos >= 0 and self.pos <= self.count
             pvalue = self.values[self.pos]
             assert pvalue

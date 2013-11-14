@@ -10,6 +10,7 @@
 from collections import Mapping
 import gdb
 import re
+import six
 
 from libreoffice.util.compatibility import use_gdb_printing
 
@@ -73,7 +74,7 @@ class FunctionLookup(Mapping):
         return len(self.map)
 
     def __getitem__(self, type):
-        for (test, printer) in self.map.iteritems():
+        for (test, printer) in six.iteritems(self.map):
             if test(type):
                 return printer
         return None
