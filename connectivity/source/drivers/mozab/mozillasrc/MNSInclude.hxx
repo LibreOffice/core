@@ -27,9 +27,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include "pre_include_mozilla.h"
-#if defined __GNUC__
-    #pragma GCC system_header
-#endif
 
 #include <nsDebug.h>
 

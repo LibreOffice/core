@@ -18,9 +18,6 @@
  */
 
 #include "pre_include_mozilla.h"
-#if defined __GNUC__
-    #pragma GCC system_header
-#endif
 
 #include "nsCOMPtr.h"
 #include "nsISupports.h"
