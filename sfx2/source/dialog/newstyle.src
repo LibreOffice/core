@@ -19,14 +19,13 @@
 
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
-#include "newstyle.hrc"
 #include <sfx2/sfxcommands.h>
 
-    QueryBox MSG_OVERWRITE
-    {
-        Buttons = WB_YES_NO ;
-        DefButton = WB_DEF_NO ;
-        Message [ en-US ] = "Style already exists. Overwrite?" ;
-    };
+QueryBox MSG_OVERWRITE
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Style already exists. Overwrite?" ;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
