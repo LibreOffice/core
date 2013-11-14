@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///sw\u003d",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-14T11:44:32Z",
+      "side": 1,
+      "message": "Please use the \"n\" prefix for number, \"a\" is for object instances.",
+      "revId": "fe5b8f96c2ba1911c6183f09c711017dc053452f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
