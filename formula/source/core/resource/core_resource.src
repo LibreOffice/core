@@ -694,7 +694,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
-    String SC_OPCODE_F_INV { Text = "_xlfn.FINV" ; };
+    String SC_OPCODE_F_INV { Text = "FINV" ; };
     String SC_OPCODE_CHI_TEST { Text = "CHITEST" ; };
     String SC_OPCODE_CHI_TEST_MS { Text = "_xlfn.CHISQ.TEST" ; };
     String SC_OPCODE_LOG_INV { Text = "LOGINV" ; };
