@@ -21,7 +21,7 @@
 
 #include <svl/svldllapi.h>
 
-#include <boost/unordered_set.hpp>
+#include <vector>
 
 class SvtListener;
 class SfxHint;
@@ -31,10 +31,17 @@ class SVL_DLLPUBLIC SvtBroadcaster
 public:
     friend class SvtListener;
 
-    typedef boost::unordered_set<SvtListener*> ListenersType;
+    typedef std::vector<SvtListener*> ListenersType;
 
 private:
     const SvtBroadcaster&   operator=(const SvtBroadcaster &); // verboten
+
+    /**
+     * Ensure that the container doesn't contain any duplicated listener
+     * entries. As a side effect, the listeners get sorted by pointer values
+     * after this call.
+     */
+    void Normalize();
 
     void Add( SvtListener* p );
     void Remove( SvtListener* p );
@@ -55,7 +62,8 @@ public:
 
 private:
     ListenersType maListeners;
-    bool mbDying;
+    bool mbDisposing:1;
+    bool mbNormalized:1;
 };
 
 

@@ -62,32 +62,49 @@ public:
 
 }
 
+void SvtBroadcaster::Normalize()
+{
+    if (mbNormalized)
+        return;
+
+    std::sort(maListeners.begin(), maListeners.end());
+    ListenersType::iterator itUniqueEnd = std::unique(maListeners.begin(), maListeners.end());
+    maListeners.erase(itUniqueEnd, maListeners.end());
+    mbNormalized = true;
+}
+
 void SvtBroadcaster::Add( SvtListener* p )
 {
-    maListeners.insert(p);
+    maListeners.push_back(p);
+    mbNormalized = false;
 }
 
 void SvtBroadcaster::Remove( SvtListener* p )
 {
-    if (mbDying)
+    if (mbDisposing)
         return;
 
-    maListeners.erase(p);
+    Normalize();
+    std::pair<ListenersType::iterator,ListenersType::iterator> r =
+        std::equal_range(maListeners.begin(), maListeners.end(), p);
+
+    if (r.first != r.second)
+        maListeners.erase(r.first, r.second);
     if (maListeners.empty())
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster() : mbDying(false) {}
+SvtBroadcaster::SvtBroadcaster() : mbDisposing(false), mbNormalized(false) {}
 
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
-    maListeners(rBC.maListeners), mbDying(false)
+    maListeners(rBC.maListeners), mbDisposing(false), mbNormalized(rBC.mbNormalized)
 {
     std::for_each(maListeners.begin(), maListeners.end(), StartListeningHandler(*this));
 }
 
 SvtBroadcaster::~SvtBroadcaster()
 {
-    mbDying = true;
+    mbDisposing = true;
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // unregister all listeners.
@@ -96,6 +113,7 @@ SvtBroadcaster::~SvtBroadcaster()
 
 void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 {
+    Normalize();
     std::for_each(maListeners.begin(), maListeners.end(), NotifyHandler(*this, rHint));
 }
 
