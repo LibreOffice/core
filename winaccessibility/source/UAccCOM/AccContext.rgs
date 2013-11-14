@@ -1,0 +1,23 @@
+HKCR
+{
+	UAccCOM.AccContext.1 = s 'AccContext Class'
+	{
+		CLSID = s '{F77CAEC2-F04C-4E74-A36C-F3B557BC59E1}'
+	}
+	UAccCOM.AccContext = s 'AccContext Class'
+	{
+		CLSID = s '{F77CAEC2-F04C-4E74-A36C-F3B557BC59E1}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {F77CAEC2-F04C-4E74-A36C-F3B557BC59E1} = s 'AccContext Class'
+		{
+			ProgID = s 'UAccCOM.AccContext.1'
+			VersionIndependentProgID = s 'UAccCOM.AccContext'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

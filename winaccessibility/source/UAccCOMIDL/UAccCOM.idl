@@ -1,0 +1,209 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+import "ia2_api_all.idl";
+import "defines.idl";
+
+    [
+        object,
+        uuid(D00F5EB7-588A-487F-A6F6-0B5D7D1815AA),
+        dual,
+        helpstring("IMAccessible Interface"),
+        pointer_default(unique)
+    ]
+    interface IMAccessible : IAccessible2
+    {
+        [id(1), helpstring("method Put_XAccName")] HRESULT Put_XAccName(const OLECHAR* pszName);
+        [id(2), helpstring("method Put_XAccRole")] HRESULT Put_XAccRole(unsigned short pRole);
+        [id(3), helpstring("method DecreaseState")] HRESULT DecreaseState(DWORD pXSate);
+        [id(4), helpstring("method IncreaseState")] HRESULT IncreaseState(DWORD pXSate);
+        [id(5), helpstring("method Put_XDescription")] HRESULT Put_XAccDescription(const OLECHAR* pszDescription);
+        [id(6), helpstring("method Put_XAccValue")] HRESULT Put_XAccValue(const OLECHAR* pszAccValue);
+        [id(7), helpstring("method SetState")] HRESULT SetState(DWORD pXSate);
+        [id(8), helpstring("method Put_XAccLocation")] HRESULT Put_XAccLocation(const Location sLocation);
+        [id(9), helpstring("method Put_XAccFocus")] HRESULT Put_XAccFocus(long dChildID);
+        [id(10), helpstring("method Put_XAccParent")] HRESULT Put_XAccParent(IMAccessible* pIParent);
+        [id(13), helpstring("method Put_XAccWindowHandle")] HRESULT Put_XAccWindowHandle(HWND hwnd);
+        [id(14), helpstring("method Put_XAccChildID")] HRESULT Put_XAccChildID(long dChildID);
+        [id(19), helpstring("method SetXAccessible")] HRESULT SetXAccessible( long XAccessible);
+        [id(20), helpstring("method GetUNOInterface")] HRESULT GetUNOInterface(long* UNOInterface);
+        [id(23), helpstring("method SetDefaultAction")] HRESULT SetDefaultAction(long pAction);
+        [id(24), helpstring("method Put_ActionDescription")] HRESULT Put_ActionDescription( const OLECHAR* szAction);
+        [id(25), helpstring("method Put_XAccAgent")] HRESULT Put_XAccAgent(long pAgent);
+        [id(26), helpstring("method NotifyDestroy")] HRESULT NotifyDestroy(BOOL isDestroy);
+        [id(30), helpstring("method Get_XAccChildID")] HRESULT Get_XAccChildID([out,retval] long* childID);
+    };
+    [
+        object,
+        uuid(951299EE-1841-4249-9E07-812C0739E489),
+        dual,
+        helpstring("IEnumVariant Interface"),
+        pointer_default(unique)
+    ]
+    interface IEnumVariant : IEnumVARIANT
+    {
+        [id(1), helpstring("method ClearEnumeration")] HRESULT ClearEnumeration();
+        [id(2), helpstring("method PutSelection")] HRESULT PutSelection(long pXSeletion);
+    };
+    [
+        object,
+        uuid(6641185C-E099-4C45-B753-3FBC0EE40646),
+        dual,
+        helpstring("IUNOXWrapper Interface"),
+        pointer_default(unique)
+    ]
+    interface IUNOXWrapper : IUnknown
+    {
+        [id(1), helpstring("method put_XInterface")] HRESULT put_XInterface(long pXInterface);
+        [id(2), helpstring("method put_XSubInterface")] HRESULT put_XSubInterface(long pXSubInterface);
+        [id(3), helpstring("method get_XInterface")] HRESULT get_XInterface([out,retval]long* pXInterface);
+        [id(4), helpstring("method get_XSubInterface")] HRESULT get_XSubInterface([out,retval]long* pXSubInterface);
+    };
+
+[
+    uuid(19ECB1B0-9376-4FF9-B580-223FC9C200B8),
+    version(1.0),
+    helpstring("UAccCOM 1.0 Type Library")
+]
+library UACCCOMLib
+{
+    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
+    importlib("oleacc.dll");
+
+    [
+        uuid(CF8DF8BA-44FE-4B10-BD2E-8C8CB322485F),
+        helpstring("MAccessible Class")
+    ]
+    coclass MAccessible
+    {
+        [default] interface IMAccessible;
+    };
+    [
+        uuid(152884E0-268B-4481-9AE7-1B372D3AA97F),
+        helpstring("EnumVariant Class")
+    ]
+    coclass EnumVariant
+    {
+        [default] interface IEnumVariant;
+    };
+    [
+        uuid(AA360FB0-BC98-41C1-A885-BB921F5ED601),
+        helpstring("UNOXWrapper Class")
+    ]
+    coclass UNOXWrapper
+    {
+        [default] interface IUNOXWrapper;
+    };
+
+    [
+        uuid(9FD9BA47-70AF-4160-99F1-526F2B9F111B),
+        helpstring("AccComponent Class")
+    ]
+    coclass AccComponent
+    {
+        [default] interface IAccessibleComponent;
+    };
+
+    [
+        uuid(8745CF0C-3104-4BAE-B7D0-D7B1717C006E),
+        helpstring("AccRelation Class")
+    ]
+    coclass AccRelation
+    {
+        [default] interface IAccessibleRelation;
+    };
+    [
+        uuid(AA49F20E-BB4E-400D-A5B0-6F5B7B770227),
+        helpstring("AccAction Class")
+    ]
+    coclass AccAction
+    {
+        [default] interface IAccessibleAction;
+    };
+
+    [
+        uuid(6D8AB08B-CCE9-471E-8A41-35773D5263F5),
+        helpstring("AccText Class")
+    ]
+    coclass AccText
+    {
+        [default] interface IAccessibleText;
+    };
+
+    [
+        uuid(79CE1450-1F61-48E2-BF76-C07BD10105E2),
+        helpstring("AccEditableText Class")
+    ]
+    coclass AccEditableText
+    {
+        [default] interface IAccessibleEditableText;
+    };
+
+    [
+        uuid(CC55D71B-1828-4EE0-89E2-C3749CF9C9AB),
+        helpstring("AccHypertext Class")
+    ]
+    coclass AccHypertext
+    {
+        [default] interface IAccessibletext;
+    };
+
+
+    [
+        uuid(73A45800-7A62-432C-A1A6-BF8852994331),
+        helpstring("AccImage Class")
+    ]
+    coclass AccImage
+    {
+        [default] interface IAccessibleImage;
+    };
+
+    [
+        uuid(730A561B-1AF6-49E1-9C04-9A2F48CD8512),
+        helpstring("AccValue Class")
+    ]
+    coclass AccValue
+    {
+        [default] interface IAccessibleValue;
+    };
+    [
+        uuid(92BAA62D-535A-4EAB-9ABB-BFA60B7A6DB6),
+        helpstring("AccTable Class")
+    ]
+    coclass AccTable
+    {
+        [default] interface IAccessibleTable;
+    };
+
+    [
+        uuid(519A64CD-F6A6-4793-BE50-4E36C4C593EF),
+        helpstring("AccHyperLink Class")
+    ]
+    coclass AccHyperLink
+    {
+        [default] interface IAccessibleAction;
+    };
+
+};

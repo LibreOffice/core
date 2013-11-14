@@ -1,0 +1,23 @@
+HKCR
+{
+	UAccCOM.AccHypertext.1 = s 'AccHypertext Class'
+	{
+		CLSID = s '{CC55D71B-1828-4EE0-89E2-C3749CF9C9AB}'
+	}
+	UAccCOM.AccHypertext = s 'AccHypertext Class'
+	{
+		CLSID = s '{CC55D71B-1828-4EE0-89E2-C3749CF9C9AB}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {CC55D71B-1828-4EE0-89E2-C3749CF9C9AB} = s 'AccHypertext Class'
+		{
+			ProgID = s 'UAccCOM.AccHypertext.1'
+			VersionIndependentProgID = s 'UAccCOM.AccHypertext'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}
