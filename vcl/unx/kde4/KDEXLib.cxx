@@ -19,6 +19,9 @@
 
 #include "VCLKDEApplication.hxx"
 
+#include "KDE4FilePicker.hxx"
+#include "KDESalInstance.hxx"
+
 #include <kapplication.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -66,14 +69,24 @@ KDEXLib::KDEXLib() :
     // the timers created here means they belong to the main thread
     connect( &timeoutTimer, SIGNAL( timeout()), this, SLOT( timeoutActivated()));
     connect( &userEventTimer, SIGNAL( timeout()), this, SLOT( userEventActivated()));
+
     // QTimer::start() can be called only in its (here main) thread, so this will
     // forward between threads if needed
     connect( this, SIGNAL( startTimeoutTimerSignal()), this, SLOT( startTimeoutTimer()), Qt::QueuedConnection );
     connect( this, SIGNAL( startUserEventTimerSignal()), this, SLOT( startUserEventTimer()), Qt::QueuedConnection );
+
     // this one needs to be blocking, so that the handling in main thread is processed before
     // the thread emitting the signal continues
     connect( this, SIGNAL( processYieldSignal( bool, bool )), this, SLOT( processYield( bool, bool )),
         Qt::BlockingQueuedConnection );
+
+    // Create the File picker in the main / GUI thread and block the calling thread until
+    // the FilePicker is created.
+    connect( this, SIGNAL( createFilePickerSignal( const com::sun::star::uno::Reference<
+                                                   com::sun::star::uno::XComponentContext >&) ),
+             this, SLOT( createFilePicker( const com::sun::star::uno::Reference<
+                                                 com::sun::star::uno::XComponentContext >&) ),
+             Qt::BlockingQueuedConnection );
 }
 
 KDEXLib::~KDEXLib()
@@ -393,6 +406,18 @@ void KDEXLib::doStartup()
         m_bStartupDone = true;
         SAL_INFO( "vcl.kde4", "called KStartupInfo::appStarted()" );
     }
+}
+
+using namespace com::sun::star;
+
+uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
+        const uno::Reference< uno::XComponentContext >& xMSF )
+{
+    if( qApp->thread() != QThread::currentThread()) {
+        SalYieldMutexReleaser aReleaser;
+        return Q_EMIT createFilePickerSignal( xMSF );
+    }
+    return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF ) );
 }
 
 #include "KDEXLib.moc"
