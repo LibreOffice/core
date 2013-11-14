@@ -25,18 +25,21 @@
 #include <unotools/dynamicmenuoptions.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/langhelp.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
@@ -141,6 +144,9 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mpDBAllButton->SetHelpId( ".HelpId:StartCenter:DBButton" );
     mpMathAllButton->SetHelpId( ".HelpId:StartCenter:MathButton" );
 
+    mpHelpButton->SetHelpId(".HelpId:StartCenter:Info");
+    mpExtensionsButton->SetHelpId(".HelpId:StartCenter:Extensions");
+
     // init background
     SetBackground();
 }
@@ -216,14 +222,18 @@ void BackingWindow::initControls()
     setupButton( mpOpenButton );
     setupButton( mpTemplateButton );
 
-    mpCreateLabel->SetControlForeground(aButtonsText);
-
     setupButton( mpWriterAllButton );
     setupButton( mpDrawAllButton );
     setupButton( mpCalcAllButton );
     setupButton( mpDBAllButton );
     setupButton( mpImpressAllButton );
     setupButton( mpMathAllButton );
+
+    mpHelpButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
+    mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
+
+    // setup nice colors
+    mpCreateLabel->SetControlForeground(aButtonsText);
 
     mpHelpButton->SetControlForeground(aButtonsText);
     mpExtensionsButton->SetControlForeground(aButtonsText);
@@ -338,6 +348,44 @@ void BackingWindow::Resize()
 
     if( !IsInPaint())
         Invalidate();
+}
+
+IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
+{
+    OUString aNode;
+
+    if (pButton == mpExtensionsButton)
+        aNode = "AddFeatureURL";
+    else if (pButton == mpHelpButton)
+        aNode = "InfoURL";
+
+    if (!aNode.isEmpty())
+    {
+        try
+        {
+            Sequence<Any> args(1);
+            PropertyValue val("nodepath", 0, Any(OUString("/org.openoffice.Office.Common/Help/StartCenter")), PropertyState_DIRECT_VALUE);
+            args.getArray()[0] <<= val;
+
+            Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
+            Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, args), UNO_QUERY);
+            if (xNameAccess.is())
+            {
+                OUString sURL;
+                Any value(xNameAccess->getByName(aNode));
+
+                sURL = value.get<OUString>();
+                localizeWebserviceURI(sURL);
+
+                Reference<system::XSystemShellExecute> xSystemShellExecute(system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
+                xSystemShellExecute->execute(sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+            }
+        }
+        catch (const Exception&)
+        {
+        }
+    }
+    return 0;
 }
 
 IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )

@@ -95,8 +95,9 @@ class BackingWindow
                       const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& = com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >()
                       );
 
-    DECL_LINK( ClickHdl, Button* );
-    DECL_LINK( OpenTemplateHdl, ThumbnailViewItem* );
+    DECL_LINK(ClickHdl, Button*);
+    DECL_LINK(ExtLinkClickHdl, Button*);
+    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
 
     void initControls();
 
