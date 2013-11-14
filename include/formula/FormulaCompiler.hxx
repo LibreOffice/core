@@ -320,7 +320,6 @@ protected:
     FormulaTokenRef     mpToken;                // current token
     FormulaTokenRef     pCurrentFactorToken;    // current factor token (of Factor() method)
     FormulaTokenArray*  pArr;
-    ExternalReferenceHelper* pExternalRef;
 
     FormulaToken**      pCode;
     FormulaArrayStack*  pStack;
