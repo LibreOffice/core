@@ -2826,6 +2826,19 @@ bool ScCompiler::IsMacro( const OUString& rName )
 
     return false;
 #else
+
+    // Calling SfxObjectShell::GetBasic() may result in all sort of things
+    // including obtaining the model and deep down in
+    // SfxBaseModel::getDocumentStorage() acquiring the SolarMutex, which when
+    // formulas are compiled from a threaded import may result in a deadlock.
+    // Check first if we actually could acquire it and if not bail out.
+    /* FIXME: yes, but how ... */
+    if (!Application::GetSolarMutex().tryToAcquire())
+    {
+        SAL_WARN( "sc.core", "ScCompiler::IsMacro - SolarMutex would deadlock, not obtaining Basic");
+        return false;   // bad luck
+    }
+
     OUString aName( rName);
     StarBASIC* pObj = 0;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
