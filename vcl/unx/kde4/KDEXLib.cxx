@@ -321,7 +321,7 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-bool KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
+void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
     bool wasEvent = false;
@@ -334,8 +334,7 @@ bool KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
         wasEvent = true;
     }
     if( bWait && !wasEvent )
-        wasEvent = dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
-    return wasEvent;
+        dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
 }
 
 void KDEXLib::StartTimer( sal_uLong nMS )
