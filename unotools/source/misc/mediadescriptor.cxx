@@ -60,7 +60,7 @@ OUString removeFragment(OUString const & uri) {
         ref->clearFragment();
         return ref->getUriReference();
     } else {
-        SAL_WARN("comphelper", "cannot parse <" << uri << ">");
+        SAL_WARN("unotools.misc", "cannot parse <" << uri << ">");
         return uri;
     }
 }
@@ -519,7 +519,8 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
     catch(const css::uno::Exception& ex)
     {
         SAL_WARN(
-            "comphelper", "invalid MediaDescriptor detected: " << ex.Message);
+            "unotools.misc",
+            "invalid MediaDescriptor detected: " << ex.Message);
         return false;
     }
 }
@@ -628,7 +629,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
     catch(const css::ucb::ContentCreationException& e)
         {
             SAL_WARN(
-                "comphelper",
+                "unotools.misc",
                 "caught ContentCreationException \"" << e.Message
                     << "\" while opening <" << sURL << ">");
             return sal_False; // TODO error handling
@@ -636,7 +637,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
     catch(const css::uno::Exception& e)
         {
             SAL_WARN(
-                "comphelper",
+                "unotools.misc",
                 "caught Exception \"" << e.Message << "\" while opening <"
                     << sURL << ">");
             return sal_False; // TODO error handling
@@ -679,7 +680,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
                 if (!pInteraction->wasWriteError() || bModeRequestedExplicitly)
                 {
                     SAL_WARN(
-                        "comphelper",
+                        "unotools.misc",
                         "caught Exception \"" << e.Message
                             << "\" while opening <" << sURL << ">");
                     return sal_False;
@@ -739,7 +740,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
         catch(const css::uno::Exception& e)
             {
                 SAL_WARN(
-                    "comphelper",
+                    "unotools.misc",
                     "caught Exception \"" << e.Message << "\" while opening <"
                         << sURL << ">");
                 return sal_False;
