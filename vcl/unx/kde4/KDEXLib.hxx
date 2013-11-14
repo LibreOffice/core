@@ -27,6 +27,8 @@
 #include <qsocketnotifier.h>
 #include <qtimer.h>
 
+#include <unx/salinst.h>
+
 class VCLKDEApplication;
 
 class KDEXLib : public QObject, public SalXLib
@@ -65,6 +67,9 @@ class KDEXLib : public QObject, public SalXLib
         void startTimeoutTimerSignal();
         void startUserEventTimerSignal();
         void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
+        com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+            createFilePickerSignal( const com::sun::star::uno::Reference<
+                                          com::sun::star::uno::XComponentContext >& );
 
     public:
         KDEXLib();
@@ -80,6 +85,11 @@ class KDEXLib : public QObject, public SalXLib
         virtual void PostUserEvent();
 
         void doStartup();
+
+    public Q_SLOTS:
+        virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+            createFilePicker( const com::sun::star::uno::Reference<
+                                  com::sun::star::uno::XComponentContext >& );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

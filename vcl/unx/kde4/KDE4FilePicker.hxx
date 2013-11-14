@@ -146,6 +146,78 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString &rServiceName ) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
+private Q_SLOTS:
+    // XExecutableDialog functions
+    void setTitleSlot( const OUString &rTitle ) throw( ::com::sun::star::uno::RuntimeException ) { return setTitle( rTitle ); }
+    sal_Int16 executeSlot() throw( ::com::sun::star::uno::RuntimeException ) { return execute(); }
+
+    // XFilePicker functions
+    void setMultiSelectionModeSlot( sal_Bool bMode ) throw( ::com::sun::star::uno::RuntimeException ) { return setMultiSelectionMode( bMode ); }
+    void setDefaultNameSlot( const OUString &rName ) throw( ::com::sun::star::uno::RuntimeException ) { return setDefaultName( rName ); }
+    void setDisplayDirectorySlot( const OUString &rDirectory ) throw( ::com::sun::star::uno::RuntimeException ) { return setDisplayDirectory( rDirectory ); }
+    OUString getDisplayDirectorySlot() throw( ::com::sun::star::uno::RuntimeException ) { return getDisplayDirectory(); }
+    ::com::sun::star::uno::Sequence< OUString > getFilesSlot() throw( ::com::sun::star::uno::RuntimeException ) { return getFiles(); }
+
+    // XFilterManager functions
+    void appendFilterSlot( const OUString &rTitle, const OUString &rFilter ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException ) { return appendFilter( rTitle, rFilter ); }
+    void setCurrentFilterSlot( const OUString &rTitle ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException ) { return setCurrentFilter( rTitle ); }
+    OUString getCurrentFilterSlot() throw( ::com::sun::star::uno::RuntimeException ) { return getCurrentFilter(); }
+
+    // XFilterGroupManager functions
+    void appendFilterGroupSlot( const OUString &rGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > &rFilters ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) { return appendFilterGroup( rGroupTitle, rFilters ); }
+
+    // XFilePickerControlAccess functions
+    void setValueSlot( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any &rValue ) throw (::com::sun::star::uno::RuntimeException) { return setValue( nControlId, nControlAction, rValue ); }
+    ::com::sun::star::uno::Any getValueSlot( sal_Int16 nControlId, sal_Int16 nControlAction ) throw (::com::sun::star::uno::RuntimeException) { return getValue( nControlId, nControlAction ); }
+    void enableControlSlot( sal_Int16 nControlId, sal_Bool bEnable ) throw( ::com::sun::star::uno::RuntimeException ) { return enableControl( nControlId, bEnable ); }
+    void setLabelSlot( sal_Int16 nControlId, const OUString &rLabel ) throw (::com::sun::star::uno::RuntimeException) { return setLabel( nControlId, rLabel ); }
+    OUString getLabelSlot( sal_Int16 nControlId ) throw (::com::sun::star::uno::RuntimeException) { return getLabel( nControlId ); }
+
+    // XFilePicker2 functions
+    ::com::sun::star::uno::Sequence< OUString > getSelectedFilesSlot() throw (::com::sun::star::uno::RuntimeException) { return getSelectedFiles(); }
+
+    // XInitialization
+    void initializeSlot( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &rArguments ) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException ) { return initialize( rArguments ); }
+
+Q_SIGNALS:
+    // XExecutableDialog functions
+    void setTitleSignal( const OUString &rTitle );
+    sal_Int16 executeSignal();
+
+    // XFilePicker functions
+    void setMultiSelectionModeSignal( sal_Bool bMode );
+    void setDefaultNameSignal( const OUString &rName );
+    void setDisplayDirectorySignal( const OUString &rDirectory );
+    OUString getDisplayDirectorySignal();
+    ::com::sun::star::uno::Sequence< OUString > getFilesSignal();
+
+    // XFilterManager functions
+    void appendFilterSignal( const OUString &rTitle, const OUString &rFilter );
+    void setCurrentFilterSignal( const OUString &rTitle );
+    OUString getCurrentFilterSignal();
+
+    // XFilterGroupManager functions
+    void appendFilterGroupSignal( const OUString &rGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > &rFilters );
+
+    // XFilePickerControlAccess functions
+    void setValueSignal( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any &rValue );
+    ::com::sun::star::uno::Any getValueSignal( sal_Int16 nControlId, sal_Int16 nControlAction );
+    void enableControlSignal( sal_Int16 nControlId, sal_Bool bEnable );
+    void setLabelSignal( sal_Int16 nControlId, const OUString &rLabel );
+    OUString getLabelSignal( sal_Int16 nControlId );
+
+    // XFilePicker2 functions
+    ::com::sun::star::uno::Sequence< OUString > getSelectedFilesSignal() ;
+
+    // XInitialization
+    void initializeSignal( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &rArguments );
+
+    // Destructor proxy
+    void cleanupProxySignal();
+
+    // KDE protocol lookup
+    void checkProtocolSignal();
+
 private:
     // prevent copy and assignment
     KDE4FilePicker( const KDE4FilePicker& );
@@ -155,6 +227,7 @@ private:
     void addCustomControl(sal_Int16 controlId);
 
 private Q_SLOTS:
+    void cleanupProxy();
     void checkProtocol();
 
 };
