@@ -14,6 +14,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/escapementitem.hxx>
 
 #include <svx/svdotext.hxx>
 #include <animations/animationnodehelper.hxx>
@@ -45,6 +46,7 @@ public:
     void testN778859();
     void testFdo64512();
     void testFdo71075();
+    void testN828390();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -53,6 +55,7 @@ public:
     CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testFdo64512);
     CPPUNIT_TEST(testFdo71075);
+    CPPUNIT_TEST(testN828390);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -66,9 +69,10 @@ why, instead of just updating .xml's blindly.
 
 Example: Let's say you are adding a test called fdoABCD.pptx.  You'll place it
 to the data/ subdirectory, and will add an entry to aFilesToCompare below,
+the 3rd parameter is for export test - can be -1 (don't export), ODP, PPT or PPTX
 like:
 
-        { "fdoABCD.pptx", "xml/fdoABCD_" },
+        { "fdoABCD.pptx", "xml/fdoABCD_", PPTX },
 
 and will count the index in the aFilesToCompare structure (1st is 0, 2nd is 1,
 etc.)  Temporarily you'll set nUpdateMe to this index (instead of -1), and run
@@ -179,6 +183,43 @@ void SdFiltersTest::testN759180()
             }
         }
     }
+}
+
+void SdFiltersTest::testN828390()
+{
+    bool bPassed = false;
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390.pptx") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        std::vector<EECharAttrib> rLst;
+        // Get the object
+        SdrObject *pObj = pPage->GetObj(0);
+        SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        aEdit.GetCharAttribs(0, rLst);
+        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+        {
+            const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>((*it).pAttr);
+            if(pFontEscapement)
+            {
+                if( pFontEscapement->GetEsc() == -25 )
+                {
+                    bPassed = true;
+                    break;
+                }
+            }
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Subscript not exported properly", bPassed);
 }
 
 void SdFiltersTest::testN778859()
