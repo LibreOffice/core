@@ -129,41 +129,6 @@ OUString getFilterNameFromGUID_Impl( GUID* guid )
     return OUString();
 }
 
-OUString getTestFileURLFromGUID_Impl( GUID* guid )
-{
-    if ( *guid == OID_WriterTextServer )
-        return OUString( "file:///d:/OLE_TEST/test.sxw" );
-
-    if ( *guid == OID_WriterOASISTextServer )
-        return OUString( "file:///d:/OLE_TEST/test.odt" );
-
-    if ( *guid == OID_CalcServer )
-        return OUString( "file:///d:/OLE_TEST/test.sxc" );
-
-    if ( *guid == OID_CalcOASISServer )
-        return OUString( "file:///d:/OLE_TEST/test.ods" );
-
-    if ( *guid == OID_DrawingServer )
-        return OUString( "file:///d:/OLE_TEST/test.sxd" );
-
-    if ( *guid == OID_DrawingOASISServer )
-        return OUString( "file:///d:/OLE_TEST/test.odg" );
-
-    if ( *guid == OID_PresentationServer )
-        return OUString( "file:///d:/OLE_TEST/test.sxi" );
-
-    if ( *guid == OID_PresentationOASISServer )
-        return OUString( "file:///d:/OLE_TEST/test.odp" );
-
-    if ( *guid == OID_MathServer )
-        return OUString( "file:///d:/OLE_TEST/test.sxm" );
-
-    if ( *guid == OID_MathOASISServer )
-        return OUString( "file:///d:/OLE_TEST/test.odf" );
-
-    return OUString();
-}
-
 // Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed

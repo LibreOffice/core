@@ -57,8 +57,6 @@ using namespace ::com::sun::star;
 extern OUString  getStorageTypeFromGUID_Impl( GUID* guid );
 extern OUString  getServiceNameFromGUID_Impl( GUID* );
 extern OUString  getFilterNameFromGUID_Impl( GUID* );
-// extern CLIPFORMAT        getClipFormatFromGUID_Impl( GUID* );
-OUString getTestFileURLFromGUID_Impl( GUID* guid );
 
 const OUString aOfficeEmbedStreamName( "package_stream" );
 const OUString aExtentStreamName( "properties_stream" );
