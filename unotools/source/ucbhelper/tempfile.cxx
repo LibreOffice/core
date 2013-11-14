@@ -61,7 +61,7 @@ struct TempFile_Impl
 
 OUString getParentName( const OUString& aFileName )
 {
-    sal_Int32 lastIndex = aFileName.lastIndexOf( sal_Unicode('/') );
+    sal_Int32 lastIndex = aFileName.lastIndexOf( '/' );
     OUString aParent = aFileName.copy( 0, lastIndex );
 
     if( aParent.endsWith(":") && aParent.getLength() == 6 )

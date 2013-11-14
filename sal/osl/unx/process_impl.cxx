@@ -241,7 +241,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
             {
 #if !defined(ANDROID) && !defined(IOS) // No use searching PATH on Android or iOS
                 /* see @ osl_getExecutableFile(). */
-                if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), sal_Unicode('/')) == -1)
+                if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), '/') == -1)
                 {
                     const rtl::OUString PATH ("PATH");
 

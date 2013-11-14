@@ -228,7 +228,7 @@ namespace pcr
         {
             OUStringBuffer aPropertyName;
             aPropertyName.append( _rListenerClassName );
-            aPropertyName.append( (sal_Unicode)';' );
+            aPropertyName.append( ';' );
             aPropertyName.append( _rMethodName.getStr() );
             return aPropertyName.makeStringAndClear();
         }
@@ -727,7 +727,7 @@ namespace pcr
                         aComposeBuffer.append( sLanguage );
                     }
 
-                    aComposeBuffer.append( sal_Unicode( ')' ) );
+                    aComposeBuffer.append( ')' );
                 }
 
                 sScript = aComposeBuffer.makeStringAndClear();

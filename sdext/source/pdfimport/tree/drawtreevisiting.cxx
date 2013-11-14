@@ -230,17 +230,17 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         if( fRotate != 0.0 )
         {
             if( !aBuf.isEmpty() )
-                aBuf.append( sal_Unicode(' ') );
+                aBuf.append( ' ' );
             aBuf.appendAscii( "rotate( " );
             aBuf.append( -fRotate );
             aBuf.appendAscii( " )" );
 
         }
         if( !aBuf.isEmpty() )
-            aBuf.append( sal_Unicode(' ') );
+            aBuf.append( ' ' );
         aBuf.appendAscii( "translate( " );
         aBuf.append( convertPixelToUnitString( rel_x ) );
-        aBuf.append( sal_Unicode(' ') );
+        aBuf.append( ' ' );
         aBuf.append( convertPixelToUnitString( rel_y ) );
         aBuf.appendAscii( " )" );
 
@@ -332,7 +332,7 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::
     OUStringBuffer aBuf( 64 );
     aBuf.appendAscii( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
-    aBuf.append( sal_Unicode(' ') );
+    aBuf.append( ' ' );
     aBuf.append( convPx2mmPrec2(elem.h)*100.0 );
     aProps[ "svg:viewBox" ] = aBuf.makeStringAndClear();
     aProps[ "svg:d" ]       = basegfx::tools::exportToSvgD( elem.PolyPoly, true, true, false );

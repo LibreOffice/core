@@ -104,11 +104,11 @@ namespace
     // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
     bool removeLastSegment( OUString & aURL )
     {
-        sal_Int32 aInd = aURL.lastIndexOf( sal_Unicode( '/' ) );
+        sal_Int32 aInd = aURL.lastIndexOf( '/' );
 
         if( aInd > 0  )
         {
-            sal_Int32 aPrevInd = aURL.lastIndexOf( sal_Unicode( '/' ), aInd );
+            sal_Int32 aPrevInd = aURL.lastIndexOf( '/', aInd );
             if ( aURL.indexOf( "://" ) != aPrevInd - 2 ||
                  aInd != aURL.getLength() - 1 )
             {

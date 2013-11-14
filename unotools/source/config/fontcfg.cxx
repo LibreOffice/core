@@ -919,7 +919,7 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
                 // count tokens
                 while( nLength-- )
                 {
-                    if( *pStr++ == sal_Unicode(';') )
+                    if( *pStr++ == ';' )
                         nTokens++;
                 }
                 rSubstVector.clear();

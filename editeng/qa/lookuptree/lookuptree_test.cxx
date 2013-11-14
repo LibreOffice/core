@@ -182,9 +182,9 @@ void LookupTreeTest::testLookupTree()
     a->gotoNode( "ne" );
     CPPUNIT_ASSERT_EQUAL( OUString("u"), a->suggestAutoCompletion() );
 
-    a->advance( sal_Unicode('u') );
-    a->advance( sal_Unicode('e') );
-    a->advance( sal_Unicode('r') );
+    a->advance( 'u' );
+    a->advance( 'e' );
+    a->advance( 'r' );
     a->insert();
     CPPUNIT_ASSERT ( a->suggestAutoCompletion().isEmpty() );
 
@@ -201,7 +201,7 @@ void LookupTreeTest::testLookupTree()
     OUString aQueryString = OStringToOUString( "H\xC3\xA4llo", RTL_TEXTENCODING_UTF8 );
     a->insert( aQueryString );
     a->returnToRoot();
-    a->advance( sal_Unicode('H') );
+    a->advance( 'H' );
 
     OUString aAutocompletedString = a->suggestAutoCompletion();
     OUString aExpectedString = OStringToOUString( "\xC3\xA4llo", RTL_TEXTENCODING_UTF8 );

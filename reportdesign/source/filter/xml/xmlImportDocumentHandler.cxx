@@ -170,7 +170,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
             {
                 OUString sLocalName;
                 const OUString sAttrName = _xAttrList->getNameByIndex( i );
-                const sal_Int32 nColonPos = sAttrName.indexOf( sal_Unicode(':') );
+                const sal_Int32 nColonPos = sAttrName.indexOf( ':' );
                 if( -1L == nColonPos )
                     sLocalName = sAttrName;
                 else
@@ -221,7 +221,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
             {
                 OUString sLocalName;
                 const OUString sAttrName = _xAttrList->getNameByIndex( i );
-                const sal_Int32 nColonPos = sAttrName.indexOf( sal_Unicode(':') );
+                const sal_Int32 nColonPos = sAttrName.indexOf( ':' );
                 if( -1L == nColonPos )
                     sLocalName = sAttrName;
                 else
@@ -266,7 +266,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
         {
             OUString sLocalName;
             const OUString sAttrName = _xAttrList->getNameByIndex( i );
-            const sal_Int32 nColonPos = sAttrName.indexOf( sal_Unicode(':') );
+            const sal_Int32 nColonPos = sAttrName.indexOf( ':' );
             if( -1L == nColonPos )
                 sLocalName = sAttrName;
             else

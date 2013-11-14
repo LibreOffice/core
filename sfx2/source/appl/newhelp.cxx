@@ -598,7 +598,7 @@ namespace sfx2 {
 #define INSERT_DATA( j )                                                                            \
     if ( aAnchorList[j].getLength() > 0 )                                                           \
     {                                                                                               \
-        aData.append( aRefList[j] ).append( sal_Unicode('#') ).append( aAnchorList[j] );            \
+        aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );            \
         aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );             \
     }                                                                                               \
     else                                                                                            \
@@ -613,7 +613,7 @@ void IndexTabPage_Impl::InitializeIndex()
     // By now more than 256 equal entries are not allowed
     sal_Unicode append[256];
     for( int k = 0; k < 256; ++k )
-        append[k] = sal_Unicode( ' ' );
+        append[k] =  ' ';
 
     sfx2::KeywordInfo aInfo;
     aIndexCB.SetUpdateMode( sal_False );
@@ -664,7 +664,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),"reference list and title list of different length" );
 
-                    insert = ( ( ndx = aKeywordPair.indexOf( sal_Unicode( ';' ) ) ) == -1 ? sal_False : sal_True );
+                    insert = ( ( ndx = aKeywordPair.indexOf( ';' ) ) == -1 ? sal_False : sal_True );
 
                     if ( insert )
                     {
@@ -695,9 +695,9 @@ void IndexTabPage_Impl::InitializeIndex()
                     {
                         aData
                             .append( aKeywordPair )
-                            .append( sal_Unicode(' ') )
-                            .append( sal_Unicode('-') )
-                            .append( sal_Unicode(' ') )
+                            .append( ' ' )
+                            .append( '-' )
+                            .append( ' ' )
                             .append( aTitleList[j] );
 
                         aTempString = aData.makeStringAndClear();

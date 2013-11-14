@@ -1516,7 +1516,7 @@ OUString SdGenericDrawPage::getBookmarkURL() const
         {
             const OUString aBookmarkName( SdDrawPage::getPageApiNameFromUiName( static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetBookmarkName() ) );
             aRet.append( aFileName );
-            aRet.append( (sal_Unicode)'#' );
+            aRet.append( '#' );
             aRet.append( aBookmarkName );
         }
     }
@@ -1529,7 +1529,7 @@ void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
 {
     if( SvxFmDrawPage::mpPage )
     {
-        sal_Int32 nIndex = rURL.indexOf( (sal_Unicode)'#' );
+        sal_Int32 nIndex = rURL.indexOf( '#' );
         if( nIndex != -1 )
         {
             const OUString aFileName( rURL.copy( 0, nIndex ) );
@@ -2198,7 +2198,7 @@ OUString getUiNameFromPageApiNameImpl( const OUString& rApiName )
         sal_Int32 nChar;
         for( nChar = 0; nChar < nChars; nChar++, pString++ )
         {
-            if((*pString < sal_Unicode('0')) || (*pString > sal_Unicode('9')))
+            if((*pString < '0') || (*pString > '9'))
             {
                 // found a non number character, so this is not the default
                 // name for this page
@@ -2211,7 +2211,7 @@ OUString getUiNameFromPageApiNameImpl( const OUString& rApiName )
         {
             OUStringBuffer sBuffer;
             sBuffer.append( SD_RESSTR(STR_PAGE) );
-            sBuffer.append( sal_Unicode( ' ' ) );
+            sBuffer.append( ' ' );
             sBuffer.append( aNumber );
             return sBuffer.makeStringAndClear();
         }

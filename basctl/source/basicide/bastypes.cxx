@@ -800,7 +800,7 @@ bool QueryDel( const OUString& rName, const ResId& rId, Window* pParent )
     OUString aQuery(rId.toString());
     OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
-    aNameBuf.insert(sal_Int32(0), sal_Unicode('\''));
+    aNameBuf.insert(0, '\'');
     aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
     return ( aQueryBox.Execute() == RET_YES );

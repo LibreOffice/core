@@ -396,7 +396,7 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
     {
         OUString basename;
         OUString suffix;
-        sal_Int32 const nIndex(rFilename.lastIndexOf(sal_Unicode('.')));
+        sal_Int32 const nIndex(rFilename.lastIndexOf('.'));
         if (0 < nIndex)
         {
             basename = rFilename.copy(0, nIndex);

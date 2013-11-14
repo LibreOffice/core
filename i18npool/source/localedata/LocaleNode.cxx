@@ -713,7 +713,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         // Ensure only one default per usage and type.
         if (bDefault)
         {
-            OUString aKey( aUsage + OUString( sal_Unicode(',')) + aType);
+            OUString aKey( aUsage + OUString( ',') + aType);
             if (!aDefaultsSet.insert( aKey).second)
             {
                 OUString aStr(  "Duplicated default for usage=\"");

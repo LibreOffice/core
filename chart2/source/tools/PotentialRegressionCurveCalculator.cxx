@@ -138,7 +138,7 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
 
     if( m_fIntercept == 0.0 )
     {
-        aBuf.append( sal_Unicode( '0' ));
+        aBuf.append( '0');
     }
     else if( m_fSlope == 0.0 )
     {
@@ -149,7 +149,7 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
         if( ! rtl::math::approxEqual( m_fIntercept, 1.0 ) )
         {
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
-            aBuf.append( sal_Unicode( ' ' ));
+            aBuf.append( ' ');
         }
         if( m_fSlope != 0.0 )
         {

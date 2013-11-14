@@ -1576,7 +1576,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
     {
         OUString aBookmark( pEvent->maStrBookmark );
 
-        sal_Int32 nPos = aBookmark.indexOf( sal_Unicode('#') );
+        sal_Int32 nPos = aBookmark.indexOf( '#' );
         if( nPos >= 0 )
         {
             OUString aURL( aBookmark.copy( 0, nPos+1 ) );
@@ -1688,7 +1688,7 @@ void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (Runtim
 {
     OUString aBookmark( aHyperLink );
 
-    sal_Int32 nPos = aBookmark.indexOf( sal_Unicode('#') );
+    sal_Int32 nPos = aBookmark.indexOf( '#' );
     if( nPos >= 0 )
     {
         OUString aURL( aBookmark.copy( 0, nPos+1 ) );

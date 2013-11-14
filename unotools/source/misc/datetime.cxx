@@ -40,10 +40,10 @@ namespace
         sal_Int32 nLen = rString.getLength();
 
         // skip white space
-        while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+        while( nPos < nLen && ' ' == rString[nPos] )
             nPos++;
 
-        if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
+        if( nPos < nLen && '-' == rString[nPos] )
         {
             bNeg = sal_True;
             nPos++;
@@ -51,8 +51,8 @@ namespace
 
         // get number
         while( nPos < nLen &&
-               sal_Unicode('0') <= rString[nPos] &&
-           sal_Unicode('9') >= rString[nPos] )
+               '0' <= rString[nPos] &&
+               '9' >= rString[nPos] )
         {
             // TODO: check overflow!
             rValue *= 10;
@@ -257,7 +257,7 @@ bool ISO8601parseDateTime(const OUString &rString, starutil::DateTime& rDateTime
     rtl::OUString aDateStr, aTimeStr;
     starutil::Date aDate;
     starutil::Time aTime;
-    sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
+    sal_Int32 nPos = rString.indexOf( 'T' );
     if ( nPos >= 0 )
     {
         aDateStr = rString.copy( 0, nPos );

@@ -146,8 +146,8 @@ void LatinLookupTree::clear()
 bool LatinLookupTree::isSeparatedlyHandled(const sal_Unicode cKey) const
 {
     return
-        ( cKey >= sal_Unicode('a') && cKey <= sal_Unicode('z') )
-    ||  ( cKey >= sal_Unicode('A') && cKey <= sal_Unicode('Z') );
+        ( cKey >= 'a' && cKey <= 'z' )
+    ||  ( cKey >= 'A' && cKey <= 'Z' );
 }
 
 Node*& LatinLookupTree::getChildRef(const sal_Unicode cKey, bool bCreatePlaceholder)
@@ -155,11 +155,11 @@ Node*& LatinLookupTree::getChildRef(const sal_Unicode cKey, bool bCreatePlacehol
     int pos = -1;
 
     // determine position in array if possible
-    if ( cKey >= sal_Unicode('a') && cKey <= sal_Unicode('z') )
+    if ( cKey >= 'a' && cKey <= 'z' )
     {
         pos = cKey - our_nLowerCaseA;
     }
-    else if ( cKey >= sal_Unicode('A') && cKey <= sal_Unicode('Z') )
+    else if ( cKey >= 'A' && cKey <= 'Z' )
     {
         pos = cKey - our_nUpperCaseA + 26;
     }

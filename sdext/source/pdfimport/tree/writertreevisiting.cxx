@@ -170,7 +170,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         if( fRotate != 0.0 )
         {
             if( !aBuf.isEmpty() )
-                aBuf.append( sal_Unicode(' ') );
+                aBuf.append( ' ' );
             aBuf.appendAscii( "rotate( " );
             aBuf.append( -fRotate );
             aBuf.appendAscii( " )" );
@@ -179,10 +179,10 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         if( ! rElem.isCharacter )
         {
             if( !aBuf.isEmpty() )
-                aBuf.append( sal_Unicode(' ') );
+                aBuf.append( ' ' );
             aBuf.appendAscii( "translate( " );
             aBuf.append( convertPixelToUnitString( rel_x ) );
-            aBuf.append( sal_Unicode(' ') );
+            aBuf.append( ' ' );
             aBuf.append( convertPixelToUnitString( rel_y ) );
             aBuf.appendAscii( " )" );
          }
@@ -272,7 +272,7 @@ void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >
     OUStringBuffer aBuf( 64 );
     aBuf.appendAscii( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
-    aBuf.append( sal_Unicode(' ') );
+    aBuf.append( ' ' );
     aBuf.append( convPx2mmPrec2(elem.h)*100.0 );
     aProps[ "svg:viewBox" ] = aBuf.makeStringAndClear();
     aProps[ "svg:d" ]       = basegfx::tools::exportToSvgD( elem.PolyPoly, true, true, false );
@@ -751,9 +751,9 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                     && ! rCurGC.isRotatedOrSkewed()
                     && ! rNextGC.isRotatedOrSkewed()
                     && ! pNext->Text.isEmpty()
-                    && pNext->Text[0] != sal_Unicode(' ')
+                    && pNext->Text[0] != ' '
                     && ! pCur->Text.isEmpty()
-                    && pCur->Text[pCur->Text.getLength() - 1] != sal_Unicode(' ')
+                    && pCur->Text[pCur->Text.getLength() - 1] != ' '
                     )
                 {
                     // check for new line in paragraph
@@ -774,7 +774,7 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                         // append a space unless there is a non breaking hyphen
                         else if( aLastCode != 0x2011 )
                         {
-                            pCur->Text.append( sal_Unicode( ' ' ) );
+                            pCur->Text.append( ' ' );
                         }
                     }
                     else // we're continuing the same line
@@ -783,7 +783,7 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                         // check for a small horizontal offset
                         if( pCur->x + pCur->w + pNext->h*0.15 < pNext->x )
                         {
-                            pCur->Text.append( sal_Unicode(' ') );
+                            pCur->Text.append( ' ' );
                         }
                     }
                 }

@@ -192,7 +192,7 @@ void SAL_CALL ConfigData::replaceName( OUString& oustring ) const
     bool cap = false;
     OUStringBuffer aStrBuf( 0 );
 
-    while( ( idx = oustring.indexOf( sal_Unicode('%'),++idx ) ) != -1 )
+    while( ( idx = oustring.indexOf( '%', ++idx ) ) != -1 )
     {
         if( oustring.indexOf( prodName,idx ) == idx )
             off = PRODUCTNAME;
@@ -358,7 +358,7 @@ TVRead::getByHierarchicalName( const OUString& aName )
     sal_Int32 idx;
     OUString name( aName );
 
-    if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1  &&
+    if( ( idx = name.indexOf( '/' ) ) != -1  &&
         name.copy( 0,idx ).equalsAscii( "Children" ) )
         return Children->getByHierarchicalName( name.copy( 1 + idx ) );
 
@@ -372,7 +372,7 @@ TVRead::hasByHierarchicalName( const OUString& aName )
     sal_Int32 idx;
     OUString name( aName );
 
-       if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1  &&
+       if( ( idx = name.indexOf( '/' ) ) != -1  &&
         name.copy( 0,idx ).equalsAscii( "Children" ) )
         return Children->hasByHierarchicalName( name.copy( 1 + idx ) );
 
@@ -619,7 +619,7 @@ TVChildTarget::getByHierarchicalName( const OUString& aName )
     sal_Int32 idx;
     OUString name( aName );
 
-    if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1 )
+    if( ( idx = name.indexOf( '/' ) ) != -1 )
     {
         OUString num( name.getStr()+2,idx-4 );
         sal_Int32 pref = num.toInt32() - 1;
@@ -640,7 +640,7 @@ TVChildTarget::hasByHierarchicalName( const OUString& aName )
     sal_Int32 idx;
     OUString name( aName );
 
-       if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1 )
+       if( ( idx = name.indexOf( '/' ) ) != -1 )
     {
         OUString num( name.getStr()+2,idx-4 );
         sal_Int32 pref = num.toInt32() - 1;
@@ -717,7 +717,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     OUString url;
     osl::FileBase::RC errFile = osl::FileBase::getFileURLFromSystemPath( instPath,url );
     if( errFile != osl::FileBase::E_None ) return configData;
-    if( url.lastIndexOf( sal_Unicode( '/' ) ) != url.getLength() - 1 )
+    if( !url.endsWith("/") )
         url += "/";
     OUString ret;
     sal_Int32 idx;
@@ -762,7 +762,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
           {
             aFileUrl = aFileStatus.getFileURL();
             aFileName = aFileStatus.getFileName();
-            idx_ = aFileName.lastIndexOf( sal_Unicode( '.' ) );
+            idx_ = aFileName.lastIndexOf( '.' );
             if( idx_ == -1 )
               continue;
 

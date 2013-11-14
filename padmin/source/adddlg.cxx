@@ -268,7 +268,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                     ::std::list< OUString > aFiles;
                     ::std::list< OUString >::iterator file;
                     OUStringBuffer aDir( *dir );
-                    aDir.append( sal_Unicode( '/' ) );
+                    aDir.append( '/' );
                     aDir.appendAscii( PRINTER_PPDDIR );
                     OUString aPPDDir( aDir.makeStringAndClear() );
                     FindFiles( aPPDDir, aFiles, OUString(  "PS;PPD;PS.GZ;PPD.GZ"  ), true );

@@ -497,7 +497,7 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
 {
     m_aExpr = m_aURL;
 
-    sal_Int32 lstIdx = m_aExpr.lastIndexOf( sal_Unicode( '#' ) );
+    sal_Int32 lstIdx = m_aExpr.lastIndexOf( '#' );
     if( lstIdx != -1 )
         m_aExpr = m_aExpr.copy( 0,lstIdx );
 
@@ -567,7 +567,7 @@ bool URLParameter::name( bool modulePresent )
 
     sal_Int32 length = m_aExpr.getLength();
 
-    if( length != 0 && (m_aExpr.getStr())[0] == sal_Unicode( '/' ) )
+    if( length != 0 && (m_aExpr.getStr())[0] == '/' )
     {
         sal_Int32 idx = 1;
         while( idx < length && (m_aExpr.getStr())[idx] != '?' )
@@ -592,7 +592,7 @@ bool URLParameter::query()
 
     if( m_aExpr.isEmpty() )
         return true;
-    else if( (m_aExpr.getStr())[0] == sal_Unicode( '?' ) )
+    else if( (m_aExpr.getStr())[0] == '?' )
         query_ = m_aExpr.copy( 1 ).trim();
     else
         return false;
@@ -604,8 +604,8 @@ bool URLParameter::query()
 
     while( !query_.isEmpty() )
     {
-        delimIdx = query_.indexOf( sal_Unicode( '&' ) );
-        equalIdx = query_.indexOf( sal_Unicode( '=' ) );
+        delimIdx = query_.indexOf( '&' );
+        equalIdx = query_.indexOf( '=' );
         parameter = query_.copy( 0,equalIdx ).trim();
         if( delimIdx == -1 )
         {
@@ -928,8 +928,8 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         bool bAddExtensionPath = false;
         OUString aExtensionRegistryPath;
-        sal_Int32 nQuestionMark1 = aJar.indexOf( sal_Unicode('?') );
-        sal_Int32 nQuestionMark2 = aJar.lastIndexOf( sal_Unicode('?') );
+        sal_Int32 nQuestionMark1 = aJar.indexOf( '?' );
+        sal_Int32 nQuestionMark2 = aJar.lastIndexOf( '?' );
         if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
         {
             aExtensionPath = aJar.copy( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );

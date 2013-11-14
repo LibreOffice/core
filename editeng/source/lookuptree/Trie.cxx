@@ -68,8 +68,8 @@ void TrieNode::markWord()
 
 void TrieNode::addNewChild(TrieNode* pChild)
 {
-    if (pChild->mCharacter >= sal_Unicode('a') &&
-        pChild->mCharacter <= sal_Unicode('z'))
+    if (pChild->mCharacter >= 'a' &&
+        pChild->mCharacter <= 'z')
     {
         mLatinArray[pChild->mCharacter - sal_Unicode('a')] = pChild;
     }
@@ -81,8 +81,8 @@ void TrieNode::addNewChild(TrieNode* pChild)
 
 TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
 {
-    if (aInputCharacter >= sal_Unicode('a') &&
-        aInputCharacter <= sal_Unicode('z'))
+    if (aInputCharacter >= 'a' &&
+        aInputCharacter <= 'z')
     {
         return mLatinArray[aInputCharacter - sal_Unicode('a')];
     }

@@ -178,7 +178,7 @@ void EditHTMLParser::NextToken( int nToken )
         {
             // Each token represents a single line.
             maStyleSource.append(aToken);
-            maStyleSource.append(sal_Unicode('\n'));
+            maStyleSource.append('\n');
         }
     break;
     case HTML_TEXTTOKEN:

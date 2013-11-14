@@ -889,7 +889,7 @@ void rtl_bootstrap_encode( rtl_uString const * value, rtl_uString ** encoded )
     for (sal_Int32 i = 0; i < value->length; ++i) {
         sal_Unicode c = value->buffer[i];
         if (c == '$' || c == '\\') {
-            b.append(sal_Unicode('\\'));
+            b.append('\\');
         }
         b.append(c);
     }

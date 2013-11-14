@@ -1724,7 +1724,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     rBuffer.ensureCapacity( pArr->GetLen() * 5 );
 
     if ( pArr->IsRecalcModeForced() )
-        rBuffer.append( sal_Unicode('='));
+        rBuffer.append( '=');
     FormulaToken* t = pArr->First();
     while( t )
         t = CreateStringFromToken( rBuffer, t, true );
@@ -1761,7 +1761,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
         bSpaces = ( !t || t->GetOpCode() != ocOpen );
     }
     if( bSpaces )
-        rBuffer.append( sal_Unicode(' '));
+        rBuffer.append( ' ');
 
     if( eOp == ocSpaces )
     {
@@ -1784,7 +1784,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
             sal_uInt8 n = t->GetByte();
             for ( sal_uInt8 j=0; j<n; ++j )
             {
-                rBuffer.append( sal_Unicode(' '));
+                rBuffer.append( ' ');
             }
         }
     }
@@ -1864,7 +1864,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
         }
     }
     if( bSpaces )
-        rBuffer.append( sal_Unicode(' '));
+        rBuffer.append( ' ');
     if ( bAllowArrAdvance )
     {
         if( bNext )
@@ -1901,7 +1901,7 @@ void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal )
 
 void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rStr )
 {
-    rBuffer.append( sal_Unicode('"'));
+    rBuffer.append( '"');
     if ( lcl_UnicodeStrChr( rStr.getStr(), '"' ) == NULL )
         rBuffer.append( rStr );
     else
@@ -1909,7 +1909,7 @@ void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rS
         OUString aStr = rStr.replaceAll( "\"", "\"\"" );
         rBuffer.append(aStr);
     }
-    rBuffer.append( sal_Unicode('"'));
+    rBuffer.append( '"');
 }
 
 void FormulaCompiler::UpdateSeparatorsNative(

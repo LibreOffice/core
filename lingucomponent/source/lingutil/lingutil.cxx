@@ -139,7 +139,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
             OUString sPath = aFileStatus.getFileURL();
             if (sPath.endsWith(aSystemSuffix))
             {
-                sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
+                sal_Int32 nStartIndex = sPath.lastIndexOf('/') + 1;
                 if (!sPath.match(aSystemPrefix, nStartIndex))
                     continue;
                 OUString sChunk = sPath.copy(nStartIndex + aSystemPrefix.getLength(),

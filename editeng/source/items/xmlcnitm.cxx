@@ -132,7 +132,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
                     return sal_False;
 
                 pData = (AttributeData*)aAny.getValue();
-                sal_Int32 pos = aName.indexOf( sal_Unicode(':') );
+                sal_Int32 pos = aName.indexOf( ':' );
                 if( pos != -1 )
                 {
                     const OUString aPrefix( aName.copy( 0, pos ));

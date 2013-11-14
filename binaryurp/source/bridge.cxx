@@ -907,7 +907,7 @@ OUString Bridge::getName() throw (css::uno::RuntimeException) {
 
 OUString Bridge::getDescription() throw (css::uno::RuntimeException) {
     OUStringBuffer b(name_);
-    b.append(sal_Unicode(':'));
+    b.append(':');
     b.append(connection_->getDescription());
     return b.makeStringAndClear();
 }

@@ -3947,7 +3947,7 @@ int RTFDocumentImpl::popState()
                     if (std::find(aState.aLevelNumbers.begin(), aState.aLevelNumbers.end(), i+1)
                             != aState.aLevelNumbers.end())
                     {
-                        aBuf.append(sal_Unicode('%'));
+                        aBuf.append('%');
                         // '1.1.1' -> '%1.%2.%3', but '1.' (with '2.' prefix omitted) is %2.
                         aBuf.append(sal_Int32(nReplaces++ + aState.nListLevelNum + 1 - aState.aLevelNumbers.size()));
                     }

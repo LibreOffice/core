@@ -377,11 +377,9 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
                 {
                     OUString aOldKeyWithSlash = rOldKey;
                     OUString aOldKeyWithoutSlash;
-                    if ( aOldKeyWithSlash.lastIndexOf(
-                             sal_Unicode('/')
-                                 != aOldKeyWithSlash.getLength() - 1 ) )
+                    if ( !aOldKeyWithSlash.endsWith("/") )
                     {
-                        aOldKeyWithSlash += OUString( sal_Unicode('/') );
+                        aOldKeyWithSlash += OUString( '/' );
                         aOldKeyWithoutSlash = rOldKey;
                     }
                     else if ( !rOldKey.isEmpty() )
@@ -464,11 +462,9 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
                 {
                     OUString aSrcKeyWithSlash = rSourceKey;
                     OUString aSrcKeyWithoutSlash;
-                    if ( aSrcKeyWithSlash.lastIndexOf(
-                             sal_Unicode('/')
-                             != aSrcKeyWithSlash.getLength() - 1 ) )
+                    if ( !aSrcKeyWithSlash.endsWith("/") )
                     {
-                        aSrcKeyWithSlash += OUString( sal_Unicode('/') );
+                        aSrcKeyWithSlash += OUString( '/' );
                         aSrcKeyWithoutSlash = rSourceKey;
                     }
                     else if ( !rSourceKey.isEmpty() )
@@ -603,11 +599,9 @@ sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
                 {
                     OUString aKeyWithSlash = rKey;
                     OUString aKeyWithoutSlash;
-                    if ( aKeyWithSlash.lastIndexOf(
-                             sal_Unicode('/')
-                             != aKeyWithSlash.getLength() - 1 ) )
+                    if ( !aKeyWithSlash.endsWith("/") )
                     {
-                        aKeyWithSlash += OUString( (sal_Unicode)'/' );
+                        aKeyWithSlash += OUString( '/' );
                         aKeyWithoutSlash = rKey;
                     }
                     else if ( !rKey.isEmpty() )

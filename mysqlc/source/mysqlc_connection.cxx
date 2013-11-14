@@ -660,7 +660,7 @@ OUString OConnection::getMysqlVariable(const char *varname)
     OUStringBuffer aStatement;
     aStatement.appendAscii( "SHOW SESSION VARIABLES LIKE '" );
     aStatement.appendAscii( varname );
-    aStatement.append( sal_Unicode( '\'' ) );
+    aStatement.append( '\'' );
 
     try {
         XStatement * stmt = new OStatement(this, m_settings.cppConnection->createStatement());

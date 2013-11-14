@@ -712,7 +712,7 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStric
     bool bSequence = false;
     while( *pInput )
     {
-        while( *pInput >= sal_Unicode('0') && *pInput <= sal_Unicode('9') )
+        while( *pInput >= '0' && *pInput <= '9' )
             aNumberBuf.append( *pInput++ );
         if( !aNumberBuf.isEmpty() )
         {
@@ -721,13 +721,13 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStric
             bSequence = false;
         }
 
-        if( *pInput == sal_Unicode('-') )
+        if( *pInput == '-' )
         {
             bSequence = true;
             if( aNumbers.empty() )
                 aNumbers.push_back( mnMin );
         }
-        else if( *pInput == sal_Unicode(',') || *pInput == sal_Unicode(';') )
+        else if( *pInput == ',' || *pInput == ';' )
         {
             if( bSequence && !aNumbers.empty() )
                 aNumbers.push_back( mnMax );
@@ -737,7 +737,7 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStric
             aNumbers.clear();
             bSequence = false;
         }
-        else if( *pInput && *pInput != sal_Unicode(' ') )
+        else if( *pInput && *pInput != ' ' )
             return false; // parse error
 
         if( *pInput )

@@ -334,7 +334,7 @@ UpdateInformationProvider::UpdateInformationProvider(
             xConfigurationProvider,
             "org.openoffice.Setup/Product",
             "ooName"));
-    buf.append(sal_Unicode(' '));
+    buf.append(' ');
     buf.append(
         getConfigurationItem(
             xConfigurationProvider,

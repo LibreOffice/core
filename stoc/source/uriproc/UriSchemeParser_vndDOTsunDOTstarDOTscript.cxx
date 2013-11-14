@@ -348,7 +348,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     if (!bExistent) {
         newPath.append(sal_Unicode(m_base.m_path.indexOf('?') < 0 ? '?' : '&'));
         newPath.append(encodeNameOrParamFragment(key));
-        newPath.append(sal_Unicode('='));
+        newPath.append('=');
     }
     newPath.append(encodeNameOrParamFragment(value));
     if (bExistent) {

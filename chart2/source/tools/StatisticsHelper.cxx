@@ -81,13 +81,13 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getErrorBarLabeledSequence(
 {
     OUStringBuffer aRole( "error-bars-");
     if( bYError )
-        aRole.append( sal_Unicode( 'y' ));
+        aRole.append( 'y');
     else
-        aRole.append( sal_Unicode( 'x' ));
+        aRole.append( 'x');
 
     OUString aPlainRole = aRole.makeStringAndClear();
     aRole.append( aPlainRole );
-    aRole.append( sal_Unicode( '-' ));
+    aRole.append( '-' );
 
     if( bPositiveValue )
         aRole = aRole.appendAscii( "positive" );

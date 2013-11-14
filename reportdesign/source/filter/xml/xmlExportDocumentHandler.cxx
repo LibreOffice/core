@@ -53,7 +53,7 @@ OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,cons
     OUStringBuffer sQName;
     // ...if it's in our map, make the prefix
     sQName.append ( xmloff::token::GetXMLToken(_eNamespace) );
-    sQName.append ( sal_Unicode(':') );
+    sQName.append ( ':' );
     sQName.append ( xmloff::token::GetXMLToken(_eAttribute) );
     return sQName.makeStringAndClear();
 }

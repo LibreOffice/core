@@ -152,9 +152,9 @@ static void lcl_OutPosition( OUStringBuffer& rBuffer,
     // output position (if necessary)
     if( nFound > 1 )
     {
-        rBuffer.insert( 0, sal_Unicode(']') );
+        rBuffer.insert( 0, ']' );
         rBuffer.insert( 0, nPosition );
-        rBuffer.insert( 0, sal_Unicode('[') );
+        rBuffer.insert( 0, '[' );
     }
 }
 
@@ -165,7 +165,7 @@ static void lcl_OutName( OUStringBuffer& rBuffer,
     OUString sPrefix = xNode->getPrefix();
     if( !sPrefix.isEmpty() )
     {
-        rBuffer.insert( 0, sal_Unicode(':') );
+        rBuffer.insert( 0, ':' );
         rBuffer.insert( 0, sPrefix );
     }
 }
@@ -220,7 +220,7 @@ OUString Model::getDefaultBindingExpressionForNode(
     {
         // insert a '/' for every step except the first
         if( !aBuffer.isEmpty() )
-            aBuffer.insert( 0, sal_Unicode('/') );
+            aBuffer.insert( 0, '/' );
 
         switch( xCurrent->getNodeType() )
         {
@@ -236,7 +236,7 @@ OUString Model::getDefaultBindingExpressionForNode(
 
         case NodeType_ATTRIBUTE_NODE:
             lcl_OutName( aBuffer, xCurrent );
-            aBuffer.insert( 0, sal_Unicode('@') );
+            aBuffer.insert( 0, '@' );
             break;
 
         case NodeType_DOCUMENT_NODE:
@@ -250,7 +250,7 @@ OUString Model::getDefaultBindingExpressionForNode(
             xCurrent.set( NULL );
             aBuffer.makeStringAndClear();
             // we'll remove the slash below
-            aBuffer.insert( 0, sal_Unicode('/') );
+            aBuffer.insert( 0, '/' );
             break;
         }
     }
@@ -307,12 +307,12 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
 
     case NodeType_ATTRIBUTE_NODE:
         lcl_OutName( aBuffer, xNode );
-        aBuffer.insert( 0, sal_Unicode('@') );
+        aBuffer.insert( 0, '@' );
         break;
 
     case NodeType_DOCUMENT_NODE:
         if( xNode == getDefaultInstance() )
-            aBuffer.append( sal_Unicode('/') );
+            aBuffer.append( '/' );
         else
             lcl_OutInstance( aBuffer, xNode, this );
         break;
@@ -846,7 +846,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
             && !sLine.startsWith( "<?xml" ) )
         {
             aBuffer.append( sLine );
-            aBuffer.append( sal_Unicode('\n') );
+            aBuffer.append( '\n' );
         }
     }
     sResult = aBuffer.makeStringAndClear();
@@ -929,7 +929,7 @@ OUString Model::getResultForExpression(
         {
             aExpression.evaluate( *aIter );
             aBuffer.append( lcl_serializeForDisplay(aExpression.getXPath()) );
-            aBuffer.append( sal_Unicode('\n') );
+            aBuffer.append( '\n' );
         }
     }
     return aBuffer.makeStringAndClear();

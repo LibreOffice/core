@@ -51,7 +51,7 @@ namespace
             nContStart = nContStart + _rPartId.getLength();
             ++nContStart;                   // now it's start of content, directly after Id
 
-            sal_Int32  nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
+            sal_Int32  nContEnd = _rRawString.indexOf( ',', nContStart );
 
             if ( nContEnd != -1 )
                 s = _rRawString.copy( nContStart, nContEnd - nContStart );

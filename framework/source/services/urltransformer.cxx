@@ -85,12 +85,12 @@ namespace
             OUStringBuffer aPath;
             for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                aPath.append( sal_Unicode( '/' ));
+                aPath.append( '/');
                 aPath.append( _rParser.getName( nIndex, false, INetURLObject::NO_DECODE ));
             }
 
             if ( nCount > 0 )
-                aPath.append( sal_Unicode( '/' )); // final slash!
+                aPath.append( '/' ); // final slash!
 
             _rURL.Path = aPath.makeStringAndClear();
             _rURL.Name = _rParser.getName( INetURLObject::LAST_SEGMENT, false, INetURLObject::NO_DECODE );
@@ -128,7 +128,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
         return sal_False;
     }
     // Try to extract the protocol
-    sal_Int32 nURLIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
+    sal_Int32 nURLIndex = aURL.Complete.indexOf( ':' );
     OUString aProtocol;
     if ( nURLIndex > 1 )
     {
@@ -200,7 +200,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
         if ( INetURLObject::CompareProtocolScheme( sSmartProtocol ) == INET_PROT_NOT_VALID )
         {
             // Try to extract the protocol
-            sal_Int32 nIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
+            sal_Int32 nIndex = aURL.Complete.indexOf( ':' );
             OUString aProtocol;
             if ( nIndex > 1 )
             {
@@ -244,12 +244,12 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         // Concat the name if it is provided, just support a final slash
         if ( !aURL.Name.isEmpty() )
         {
-            sal_Int32 nIndex = aURL.Path.lastIndexOf( sal_Unicode('/') );
+            sal_Int32 nIndex = aURL.Path.lastIndexOf( '/' );
             if ( nIndex == ( aURL.Path.getLength() -1 ))
                 aCompletePath.append( aURL.Name );
             else
             {
-                aCompletePath.append( sal_Unicode( '/' ) );
+                aCompletePath.append( '/' );
                 aCompletePath.append( aURL.Name );
             }
         }

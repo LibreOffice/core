@@ -674,7 +674,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             if (hyphens[i]&1 && (!rep || !rep[i]))
             {
                 pPos[nHyphCount] = i;
-                hyphenatedWordBuffer.append(sal_Unicode('='));
+                hyphenatedWordBuffer.append('=');
                 nHyphCount++;
             }
         }

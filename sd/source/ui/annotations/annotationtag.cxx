@@ -588,7 +588,7 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
     VirtualDevice aVDev;
 
     OUString sAuthor( getInitials( mxAnnotation->getAuthor() ) );
-    sAuthor += OUString( sal_Unicode( ' ' ) );
+    sAuthor += OUString( ' ' );
     sAuthor += OUString::number( mnIndex );
 
     aVDev.SetFont( mrFont );

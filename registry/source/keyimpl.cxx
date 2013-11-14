@@ -1051,7 +1051,7 @@ OUString ORegKey::getFullPath(OUString const & path) const {
         }
     } else {
         if (path[0] != '/') {
-            b.append(sal_Unicode('/'));
+            b.append('/');
         }
         b.append(path);
     }

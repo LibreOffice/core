@@ -121,7 +121,7 @@ namespace logging
 
             rtl::OUStringBuffer aBuff;
             aBuff.append( sDate );
-            aBuff.append( sal_Unicode( '.' ) );
+            aBuff.append( '.' );
             aBuff.append( sTime );
             rtl::OUString sDateTime = aBuff.makeStringAndClear();
 

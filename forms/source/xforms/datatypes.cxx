@@ -421,7 +421,7 @@ namespace xforms
         rtl_math_ConversionStatus eStatus;
         sal_Int32 nEnd;
         double f = ::rtl::math::stringToDouble(
-            rValue, sal_Unicode('.'), sal_Unicode(0), &eStatus, &nEnd );
+            rValue, '.', sal_Unicode(0), &eStatus, &nEnd );
 
         // error checking...
         bool bReturn = false;
@@ -691,13 +691,13 @@ namespace xforms
             sal_Int32 nTotalDigits = 0;
             sal_Int32 nFractionDigits = 0;
             const sal_Unicode* pValue = rValue.getStr();
-            for( ; pValue[n] != sal_Unicode('.') && n < nLength; n++ )
-                if( pValue[n] >= sal_Unicode('0')
-                    && pValue[n] <= sal_Unicode('9'))
+            for( ; pValue[n] != '.' && n < nLength; n++ )
+                if( pValue[n] >= '0'
+                    && pValue[n] <= '9')
                     nTotalDigits++;
             for( ; n < nLength; n++ )
-                if( pValue[n] >= sal_Unicode('0')
-                    && pValue[n] <= sal_Unicode('9'))
+                if( pValue[n] >= '0'
+                    && pValue[n] <= '9')
                     nFractionDigits++;
             nTotalDigits += nFractionDigits;
 

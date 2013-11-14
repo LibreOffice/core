@@ -320,8 +320,8 @@ void Databases::replaceName( OUString& oustring ) const
     while( true )
     {
         ++idx;
-        idx1 = oustring.indexOf( sal_Unicode('%'),idx);
-        idx2 = oustring.indexOf( sal_Unicode('$'),idx);
+        idx1 = oustring.indexOf( '%', idx);
+        idx2 = oustring.indexOf( '$', idx);
 
         if(idx1 == -1 && idx2 == -1)
             break;
@@ -408,7 +408,7 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
             fileName = aStatus.getFileName();
 
             // Check, whether fileName is of the form *.cfg
-            idx = fileName.lastIndexOf(  sal_Unicode( '.' ) );
+            idx = fileName.lastIndexOf( '.' );
 
             if( idx == -1 )
                 continue;
@@ -469,7 +469,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
             for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
             {
                 sal_Unicode ch = str[ i ];
-                if( ch == sal_Unicode( '\n' ) || ch == sal_Unicode( '\r' ) )
+                if( ch == '\n' || ch == '\r' )
                 {
                     if( pos )
                     {
@@ -477,7 +477,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
 
                         if( current.startsWith("Title") )
                         {
-                            title = current.copy( current.indexOf(sal_Unicode( '=' ) ) + 1 );
+                            title = current.copy( current.indexOf( '=' ) + 1 );
                         }
                         else if( current.startsWith("Start") )
                         {
@@ -679,10 +679,10 @@ namespace chelp {
 
             if( m_xCollator.is() )
             {
-                sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
+                sal_Int32 l1 = l.indexOf( ';' );
                 sal_Int32 l3 = ( l1 == -1 ? l.getLength() : l1 );
 
-                sal_Int32 r1 = r.indexOf( sal_Unicode( ';' ) );
+                sal_Int32 r1 = r.indexOf( ';' );
                 sal_Int32 r3 = ( r1 == -1 ? r.getLength() : r1 );
 
                 sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l3,r,0,r3 );
@@ -726,7 +726,7 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy:
     int idx = -1,k;
     while( ( idx = ids.indexOf( ';',k = ++idx ) ) != -1 )
     {
-        int h = ids.indexOf( sal_Unicode( '#' ),k );
+        int h = ids.indexOf( '#', k );
         if( h < idx )
         {
             // found an anchor
@@ -792,18 +792,18 @@ bool Databases::checkModuleMatchForExtension
     bool bFoundAtLeastOneModule = false;
     bool bModuleMatch = false;
     sal_Int32 nLen = doclist.getLength();
-    sal_Int32 nLastFound = doclist.lastIndexOf( sal_Unicode(';') );
+    sal_Int32 nLastFound = doclist.lastIndexOf( ';' );
     if( nLastFound == -1 )
         nLastFound = nLen;
     const sal_Unicode* pStr = doclist.getStr();
-    sal_Int32 nFound = doclist.lastIndexOf( sal_Unicode('_') );
+    sal_Int32 nFound = doclist.lastIndexOf( '_' );
     while( nFound != -1 )
     {
         // Simple optimization, stop if '_' is followed by "id"
         if( nLen - nFound > 2 )
         {
-            if( pStr[ nFound + 1 ] == sal_Unicode('i') &&
-                pStr[ nFound + 2 ] == sal_Unicode('d') )
+            if( pStr[ nFound + 1 ] == 'i' &&
+                pStr[ nFound + 2 ] == 'd' )
                     break;
         }
 
@@ -822,7 +822,7 @@ bool Databases::checkModuleMatchForExtension
         nLastFound = nFound;
         if( nLastFound == 0 )
             break;
-        nFound = doclist.lastIndexOf( sal_Unicode('_'), nLastFound - 1 );
+        nFound = doclist.lastIndexOf( '_', nLastFound - 1 );
     }
 
     if( bFoundAtLeastOneModule && !bModuleMatch )
@@ -929,8 +929,8 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
         try
         {
             // Extension jar file? Search for ?
-            sal_Int32 nQuestionMark1 = jar.indexOf( sal_Unicode('?') );
-            sal_Int32 nQuestionMark2 = jar.lastIndexOf( sal_Unicode('?') );
+            sal_Int32 nQuestionMark1 = jar.indexOf( '?' );
+            sal_Int32 nQuestionMark2 = jar.lastIndexOf( '?' );
             if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
             {
                 OUString aExtensionPath = jar.copy( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );

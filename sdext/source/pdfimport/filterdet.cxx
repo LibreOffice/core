@@ -699,7 +699,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                         break;
                                     }
 
-                                    OUString aDocName( rInPDFFileURL.copy( rInPDFFileURL.lastIndexOf( sal_Unicode('/') )+1 ) );
+                                    OUString aDocName( rInPDFFileURL.copy( rInPDFFileURL.lastIndexOf( '/' )+1 ) );
 
                                     bool bEntered = false;
                                     do

@@ -2190,7 +2190,7 @@ OUString ShapeFactory::getStackedString( const OUString& rString, bool bStacked 
     for( sal_Int32 nPosSrc=0; nPosSrc < nLen; nPosSrc++ )
     {
         if( nPosSrc )
-            aStackStr.append( sal_Unicode('\r') );
+            aStackStr.append( '\r' );
         aStackStr.append(rString[nPosSrc]);
     }
     return aStackStr.makeStringAndClear();

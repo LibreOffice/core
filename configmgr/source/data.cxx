@@ -57,13 +57,13 @@ bool decode(
         sal_Unicode c = encoded[begin++];
         if (c == '&') {
             if (encoded.match("amp;", begin)) {
-                buf.append(sal_Unicode('&'));
+                buf.append('&');
                 begin += RTL_CONSTASCII_LENGTH("amp;");
             } else if (encoded.match("quot;", begin)) {
-                buf.append(sal_Unicode('"'));
+                buf.append('"');
                 begin += RTL_CONSTASCII_LENGTH("quot;");
             } else if (encoded.match("apos;", begin)) {
-                buf.append(sal_Unicode('\''));
+                buf.append('\'');
                 begin += RTL_CONSTASCII_LENGTH("apos;");
             } else {
                 return false;
@@ -159,7 +159,7 @@ OUString Data::fullTemplateName(
             css::uno::Reference< css::uno::XInterface >());
     }
     OUStringBuffer buf(component);
-    buf.append(sal_Unicode(':'));
+    buf.append(':');
     buf.append(name);
     return buf.makeStringAndClear();
 }
@@ -232,7 +232,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             return p;
         }
         if (canonicRepresentation != 0) {
-            canonic.append(sal_Unicode('/'));
+            canonic.append('/');
             canonic.append(createSegment(templateName, seg));
         }
         if (path != 0) {

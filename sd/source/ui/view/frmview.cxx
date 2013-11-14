@@ -400,17 +400,17 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
         switch( rHelpLine.GetKind() )
         {
             case SDRHELPLINE_POINT:
-                aLines.append( (sal_Unicode)'P' );
+                aLines.append( 'P' );
                 aLines.append( (sal_Int32)rPos.X() );
-                aLines.append( (sal_Unicode)',' );
+                aLines.append( ',' );
                 aLines.append( (sal_Int32)rPos.Y() );
                 break;
             case SDRHELPLINE_VERTICAL:
-                aLines.append( (sal_Unicode)'V' );
+                aLines.append( 'V' );
                 aLines.append( (sal_Int32)rPos.X() );
                 break;
             case SDRHELPLINE_HORIZONTAL:
-                aLines.append( (sal_Unicode)'H' );
+                aLines.append( 'H' );
                 aLines.append( (sal_Int32)rPos.Y() );
                 break;
             default:
@@ -537,7 +537,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
 
         pStr++;
 
-        while( (*pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9')) || (*pStr == '+') || (*pStr == '-') )
+        while( (*pStr >= '0' && *pStr <= '9') || (*pStr == '+') || (*pStr == '-') )
         {
             sBuffer.append( *pStr++ );
         }
@@ -557,7 +557,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
                 if( *pStr++ != ',' )
                     return;
 
-                while( (*pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9')) || (*pStr == '+') || (*pStr == '-')  )
+                while( (*pStr >= '0' && *pStr <= '9') || (*pStr == '+') || (*pStr == '-')  )
                 {
                     sBuffer.append( *pStr++ );
                 }

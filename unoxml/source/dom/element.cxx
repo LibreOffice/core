@@ -76,14 +76,14 @@ namespace DOM
             OUString prefix = pNode->getPrefix();
             OUString name = (prefix.isEmpty())
                 ? pNode->getLocalName()
-                : prefix + OUString(static_cast<sal_Unicode>(':')) + pNode->getLocalName();
+                : prefix + OUString(':') + pNode->getLocalName();
             OUString val  = pNode->getNodeValue();
             pAttrs->AddAttribute(name, type, val);
         }
         OUString prefix = getPrefix();
         OUString name = (prefix.isEmpty())
             ? getLocalName()
-            : prefix + OUString(static_cast<sal_Unicode>(':')) + getLocalName();
+            : prefix + OUString(':') + getLocalName();
         Reference< XAttributeList > xAttrList(pAttrs);
         i_xHandler->startElement(name, xAttrList);
         // recurse
@@ -503,7 +503,7 @@ namespace DOM
         if (!oldAttr->getNamespaceURI().isEmpty()) {
             OUStringBuffer qname(oldAttr->getPrefix());
             if (!qname.isEmpty()) {
-                qname.append(sal_Unicode(':'));
+                qname.append(':');
             }
             qname.append(oldAttr->getName());
             aAttr = GetOwnerDocument().createAttributeNS(

@@ -111,8 +111,8 @@ namespace dbtools
     {
         if ( !io_appendTo.isEmpty() )
         {
-            io_appendTo.insert( 0, sal_Unicode( '(' ) );
-            io_appendTo.insert( 1, sal_Unicode( ' ' ) );
+            io_appendTo.insert( 0, '(' );
+            io_appendTo.insert( 1, ' ' );
             io_appendTo.appendAscii( " ) AND " );
         }
 

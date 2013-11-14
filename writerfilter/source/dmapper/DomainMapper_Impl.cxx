@@ -2127,7 +2127,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
     OUString sFieldMasterService( OUString::createFromAscii(pFieldMasterService) );
     OUStringBuffer aFieldMasterName;
     aFieldMasterName.appendAscii( pFieldMasterService );
-    aFieldMasterName.append(sal_Unicode('.'));
+    aFieldMasterName.append('.');
     aFieldMasterName.append(rFieldMasterName);
     OUString sFieldMasterName = aFieldMasterName.makeStringAndClear();
     if(xFieldMasterAccess->hasByName(sFieldMasterName))

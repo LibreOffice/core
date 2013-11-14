@@ -836,7 +836,7 @@ void MigrationImpl::copyConfig() {
                                 i->first, RTL_TEXTENCODING_UTF8).getStr());
                         goto next;
                     }
-                    buf.append(sal_Unicode('/'));
+                    buf.append('/');
                     buf.append(enc);
                 } while (n >= 0);
                 buf.appendAscii(".xcu");

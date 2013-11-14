@@ -165,7 +165,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     if (!aPresentation.isEmpty())
                         aContent = aPresentation;
 
-                    sal_Int32 nPos = aContent.lastIndexOf(sal_Unicode(' '), 0);
+                    sal_Int32 nPos = aContent.lastIndexOf(' ', 0);
                     if (nPos > 0)
                     {
                         aFirstName = aContent.copy(0, nPos);
@@ -1255,7 +1255,7 @@ OUString SvxDateTimeField::GetFormatted(
         OUStringBuffer aBuf(aRet);
 
         if (!aRet.isEmpty())
-            aBuf.append(sal_Unicode(' '));
+            aBuf.append(' ');
 
         aBuf.append(
             SvxExtTimeField::GetFormatted(rTime, eTimeFormat, rFormatter, eLanguage));

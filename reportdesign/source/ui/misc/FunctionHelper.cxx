@@ -38,15 +38,15 @@ sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::ETo
     switch(_eToken)
     {
         case eOk:
-            return sal_Unicode('(');
+            return '(';
         case eClose:
-            return sal_Unicode(')');
+            return ')';
         case eSep:
-            return sal_Unicode(';');
+            return ';';
         case eArrayOpen:
-            return sal_Unicode('{');
+            return '{';
         case eArrayClose:
-            return sal_Unicode('}');
+            return '}';
     }
     return 0;
 }

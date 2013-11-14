@@ -759,7 +759,7 @@ OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int3
         default:;
     }
 
-    OUStringBuffer aBuffer( sal_Unicode( '[' ) );
+    OUStringBuffer aBuffer( '[' );
     aBuffer.append( sSystemId );
     aBuffer.append( " line " );
     aBuffer.append( nLine );

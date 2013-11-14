@@ -193,7 +193,7 @@ void make_stc_char(FILE *sfp, FILE *cfp)
         OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         const sal_Unicode *Ustr = Ostr.getStr();
         sal_Int32  len = Ostr.getLength();
-        if (Ustr[1] == sal_Unicode('v'))
+        if (Ustr[1] == 'v')
             SChinese2VChineseData[Ustr[0]] = Ustr[2];
         else {
             SChinese2TChineseData[Ustr[0]] = Ustr[2];
@@ -363,9 +363,9 @@ void make_stc_word(FILE *sfp, FILE *cfp)
             return;
         }
         sal_Int32 sep=-1, eq=-1, gt=-1, lt=-1;
-        if (((sep = eq = Ostr.indexOf(sal_Unicode('='))) > 0) ||
-            ((sep = gt = Ostr.indexOf(sal_Unicode('>'))) > 0) ||
-            ((sep = lt = Ostr.indexOf(sal_Unicode('<'))) > 0)) {
+        if (((sep = eq = Ostr.indexOf('=')) > 0) ||
+            ((sep = gt = Ostr.indexOf('>')) > 0) ||
+            ((sep = lt = Ostr.indexOf('<')) > 0)) {
 
             if (eq > 0 || gt > 0) {
                 STC_WordEntry_S2T[count_S2T].address = sal::static_int_cast<sal_uInt16>( char_total );

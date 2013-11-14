@@ -234,7 +234,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
         getPropertyValue( aProps, ITEM_DESCRIPTOR_LABEL ) >>= sLabel;
         // handle the hotkey marker '~' (remove in toolbars (?), replace by '&' in menus)
         OUStringBuffer aBuffer;
-        sal_Int32 index = sLabel.indexOf( sal_Unicode('~') );
+        sal_Int32 index = sLabel.indexOf( '~' );
         if( index < 0 )
         {
             aBuffer = sLabel;
@@ -243,7 +243,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
         {
             aBuffer.append( sLabel.copy( 0, index ) );
             if( bMenu )
-                aBuffer.append( sal_Unicode( '&' ) );
+                aBuffer.append( '&' );
             aBuffer.append( sLabel.copy( index + 1 ) );
         }
         OUString sNewLabel = aBuffer.makeStringAndClear();

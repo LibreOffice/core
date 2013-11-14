@@ -2296,10 +2296,10 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
         // Rule name as rule
         _inout_rBuffer.appendAscii( "RULE_ID: " );
         _inout_rBuffer.append( (sal_Int32)getRuleID() );
-        _inout_rBuffer.append( sal_Unicode( '(' ) );
+        _inout_rBuffer.append( '(' );
         _inout_rBuffer.append( OSQLParser::RuleIDToStr( getRuleID() ) );
-        _inout_rBuffer.append( sal_Unicode( ')' ) );
-        _inout_rBuffer.append( sal_Unicode( '\n' ) );
+        _inout_rBuffer.append( ')' );
+        _inout_rBuffer.append( '\n' );
 
         // Get the first sub tree
         for (   OSQLParseNodes::const_iterator i = m_aChildren.begin();
@@ -2317,53 +2317,53 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
         case SQL_NODE_KEYWORD:
             _inout_rBuffer.appendAscii( "SQL_KEYWORD: " );
             _inout_rBuffer.append( OStringToOUString( OSQLParser::TokenIDToStr( getTokenID() ), RTL_TEXTENCODING_UTF8 ) );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_COMPARISON:
             _inout_rBuffer.appendAscii( "SQL_COMPARISON: " );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_NAME:
             _inout_rBuffer.appendAscii( "SQL_NAME: " );
-            _inout_rBuffer.append( sal_Unicode( '"' ) );
+            _inout_rBuffer.append( '"' );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '"' ) );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '"' );
+            _inout_rBuffer.append( '\n' );
              break;
 
         case SQL_NODE_STRING:
             _inout_rBuffer.appendAscii( "SQL_STRING: " );
-            _inout_rBuffer.append( sal_Unicode( '\'' ) );
+            _inout_rBuffer.append( '\'' );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\'' ) );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\'' );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_INTNUM:
             _inout_rBuffer.appendAscii( "SQL_INTNUM: " );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_APPROXNUM:
             _inout_rBuffer.appendAscii( "SQL_APPROXNUM: " );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
              break;
 
         case SQL_NODE_PUNCTUATION:
             _inout_rBuffer.appendAscii( "SQL_PUNCTUATION: " );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_AMMSC:
             _inout_rBuffer.appendAscii( "SQL_AMMSC: " );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_EQUAL:
@@ -2373,24 +2373,24 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
         case SQL_NODE_GREATEQ:
         case SQL_NODE_NOTEQUAL:
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_ACCESS_DATE:
             _inout_rBuffer.appendAscii( "SQL_ACCESS_DATE: " );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_DATE:
             _inout_rBuffer.appendAscii( "SQL_DATE: " );
             _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         case SQL_NODE_CONCAT:
             _inout_rBuffer.appendAscii( "||" );
-            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            _inout_rBuffer.append( '\n' );
             break;
 
         default:

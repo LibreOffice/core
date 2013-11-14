@@ -692,7 +692,7 @@ OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
     {
         OUStringBuffer aStr( rAbbrev.getLength() + 1 + aIsoStr.getLength() );
         aStr.append( rAbbrev );
-        aStr.append( sal_Unicode('-') );
+        aStr.append( '-' );
         aStr.append( aIsoStr );
         return aStr.makeStringAndClear();
     }

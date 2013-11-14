@@ -753,7 +753,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
                 else
                 {
                     aString = pInfo->GetBookmark() ;
-                    sal_Int32 nPos = aString.lastIndexOf( sal_Unicode('#') );
+                    sal_Int32 nPos = aString.lastIndexOf( '#' );
                     if( nPos >= 0 )
                     {
                         OUString aURL( aString.copy( 0, nPos+1 ) );
@@ -1351,7 +1351,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                     }
                     else if( eClickAction == presentation::ClickAction_DOCUMENT )
                     {
-                        sal_Int32 nPos = aStrBookmark.lastIndexOf( sal_Unicode('#') );
+                        sal_Int32 nPos = aStrBookmark.lastIndexOf( '#' );
                         if( nPos >= 0 )
                         {
                             OUString aURL( aStrBookmark.copy( 0, nPos+1 ) );
@@ -1432,11 +1432,11 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
 
                 OUStringBuffer sBuffer;
                 sBuffer.append( aMacroName );
-                sBuffer.append( sal_Unicode('.') );
+                sBuffer.append( '.' );
                 sBuffer.append( aModulName );
-                sBuffer.append( sal_Unicode('.') );
+                sBuffer.append( '.' );
                 sBuffer.append( aLibName );
-                sBuffer.append( sal_Unicode('.') );
+                sBuffer.append( '.' );
 
                 if ( aStrLibrary == "StarOffice" )
                 {
@@ -1547,9 +1547,9 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
             OUStringBuffer sBuffer;
             sBuffer.append( aLibName );
-            sBuffer.append( sal_Unicode('.') );
+            sBuffer.append( '.' );
             sBuffer.append( aModulName );
-            sBuffer.append( sal_Unicode('.') );
+            sBuffer.append( '.' );
             sBuffer.append( aMacroName );
 
             aAny <<= OUString( sBuffer.makeStringAndClear() );
@@ -1606,7 +1606,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         case presentation::ClickAction_PROGRAM:
             {
                 OUString aString( pInfo->GetBookmark());
-                sal_Int32 nPos = aString.lastIndexOf( sal_Unicode('#') );
+                sal_Int32 nPos = aString.lastIndexOf( '#' );
                 if( nPos >= 0 )
                 {
                     OUString aURL( aString.copy( 0, nPos+1 ) );

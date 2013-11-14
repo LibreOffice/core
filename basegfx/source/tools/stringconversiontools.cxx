@@ -29,7 +29,7 @@ namespace basegfx
                             const sal_Int32         nLen)
         {
             while( io_rPos < nLen &&
-                    sal_Unicode(' ') == rStr[io_rPos] )
+                    ' ' == rStr[io_rPos] )
             {
                 ++io_rPos;
             }
@@ -40,7 +40,7 @@ namespace basegfx
                                         const sal_Int32         nLen)
         {
             while(io_rPos < nLen
-                    && (sal_Unicode(' ') == rStr[io_rPos] || sal_Unicode(',') == rStr[io_rPos]))
+                    && (' ' == rStr[io_rPos] || ',' == rStr[io_rPos]))
             {
                 ++io_rPos;
             }
@@ -54,35 +54,35 @@ namespace basegfx
             OUStringBuffer sNumberString;
             bool separator_seen=false;
 
-            if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+            if('+' == aChar || '-' == aChar)
             {
                 sNumberString.append(rStr[io_rPos]);
                 aChar = rStr[++io_rPos];
             }
 
-            while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                     || (!separator_seen && sal_Unicode('.') == aChar))
+            while(('0' <= aChar && '9' >= aChar)
+                     || (!separator_seen && '.' == aChar))
             {
-                if (sal_Unicode('.') == aChar) separator_seen = true;
+                if ('.' == aChar) separator_seen = true;
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
             }
 
-            if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
+            if('e' == aChar || 'E' == aChar)
             {
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
 
-                if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
+                if('+' == aChar || '-' == aChar)
                 {
                     sNumberString.append(rStr[io_rPos]);
                     io_rPos++;
                     aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
                 }
 
-                while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
+                while('0' <= aChar && '9' >= aChar)
                 {
                     sNumberString.append(rStr[io_rPos]);
                     io_rPos++;
@@ -94,8 +94,8 @@ namespace basegfx
             {
                 rtl_math_ConversionStatus eStatus;
                 o_fRetval = ::rtl::math::stringToDouble( sNumberString.makeStringAndClear(),
-                                                            (sal_Unicode)('.'),
-                                                            (sal_Unicode)(','),
+                                                            '.',
+                                                            ',',
                                                             &eStatus,
                                                             NULL );
                 return ( eStatus == rtl_math_ConversionStatus_Ok );
@@ -124,12 +124,12 @@ namespace basegfx
         {
             sal_Unicode aChar( rStr[io_rPos] );
 
-            if(sal_Unicode('0') == aChar)
+            if('0' == aChar)
             {
                 o_nRetval = 0;
                 ++io_rPos;
             }
-            else if (sal_Unicode('1') == aChar)
+            else if ('1' == aChar)
             {
                 o_nRetval = 1;
                 ++io_rPos;
@@ -156,7 +156,7 @@ namespace basegfx
                 if( lcl_isOnNumberChar(rStr[aLen - 1], false) &&
                     fValue >= 0.0 )
                 {
-                    rStr.append( sal_Unicode(' ') );
+                    rStr.append( ' ' );
                 }
             }
 

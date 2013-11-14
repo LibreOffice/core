@@ -40,7 +40,7 @@
 
 namespace sd {
 
-#define TOKEN (sal_Unicode(';'))
+#define TOKEN ';'
 
 CopyDlg::CopyDlg(::Window* pWindow, const SfxItemSet& rInAttrs,
     const XColorListRef &pColList, ::sd::View* pInView)

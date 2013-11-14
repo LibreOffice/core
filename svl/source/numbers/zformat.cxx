@@ -91,7 +91,7 @@ sal_Int32 SvNumberformat::InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_U
         }
         while( n-- )
         {
-            r.insert( nPos++, (sal_Unicode)' ');
+            r.insert( nPos++, ' ');
         }
     }
     return nPos;
@@ -802,14 +802,14 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             fNumber = 0.0;
                             nPos = nPos - nAnzChars;
                             sBuff.remove(nPos, nAnzChars);
-                            sBuff.insert(nPos, (sal_Unicode)'0');
+                            sBuff.insert(nPos, '0');
                             nPos++;
                         }
                     }
                     else
                     {
                         fNumber = 0.0;
-                        sBuff.insert(nPos++,(sal_Unicode)'0');
+                        sBuff.insert(nPos++, '0');
                     }
                     if (nIndex == 0)
                     {
@@ -1487,7 +1487,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
             case '<':
             case '>':
             case '=':
-                sBuffSymbol.stripStart((sal_Unicode)'[');
+                sBuffSymbol.stripStart('[');
                 sBuffSymbol.append(cToken);
                 cLetter = cToken;
                 eState = SsGetCon;
@@ -1514,7 +1514,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 if ( rString[nPos] == '-' )
                 {
                     // [$-xxx] locale
-                    sBuffSymbol.stripStart((sal_Unicode)'[');
+                    sBuffSymbol.stripStart('[');
                     eSymbolType = BRACKET_SYMBOLTYPE_LOCALE;
                     eState = SsGetPrefix;
                 }
@@ -1541,7 +1541,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 if ( lcl_matchKeywordAndGetNumber( aBufStr, nPos-1, aNatNum, nNatNumNum) &&
                         0 <= nNatNumNum && nNatNumNum <= 19 )
                 {
-                    sBuffSymbol.stripStart((sal_Unicode)'[');
+                    sBuffSymbol.stripStart('[');
                     sBuffSymbol.append( aBufStr.copy( --nPos, aNatNum.getLength()+1 ));
                     nPos += aNatNum.getLength()+1;
                     //! SymbolType is negative
@@ -1551,7 +1551,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 else if ( lcl_matchKeywordAndGetNumber( aBufStr, nPos-1, aDBNum, nDBNum) &&
                         '1' <= nDBNum && nDBNum <= '9' )
                 {
-                    sBuffSymbol.stripStart((sal_Unicode)'[');
+                    sBuffSymbol.stripStart('[');
                     sBuffSymbol.append( aBufStr.copy( --nPos, aDBNum.getLength()+1 ));
                     nPos += aDBNum.getLength()+1;
                     //! SymbolType is negative
@@ -1571,7 +1571,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                     }
                     else
                     {
-                        sBuffSymbol.stripStart((sal_Unicode)'[');
+                        sBuffSymbol.stripStart('[');
                         sBuffSymbol.append(cToken);
                         eSymbolType = BRACKET_SYMBOLTYPE_COLOR;
                         eState = SsGetPrefix;
@@ -1611,14 +1611,14 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                     }
                     else
                     {
-                        sBuffSymbol.stripStart((sal_Unicode)'[');
+                        sBuffSymbol.stripStart('[');
                         sBuffSymbol.append(cToken);
                         eState = SsGetPrefix;
                     }
                 }
                 else
                 {
-                    sBuffSymbol.stripStart((sal_Unicode)'[');
+                    sBuffSymbol.stripStart('[');
                     sBuffSymbol.append(cToken);
                     eSymbolType = BRACKET_SYMBOLTYPE_COLOR;
                     eState = SsGetPrefix;
@@ -2165,7 +2165,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
     rOutString = ::rtl::math::doubleToUString( rNumber,
                                                rtl_math_StringFormat_F, nPrecision /*2*/,
                                                GetFormatter().GetNumDecimalSep()[0], true );
-    if (rOutString[0] == (sal_Unicode)'-' &&
+    if (rOutString[0] == '-' &&
         comphelper::string::getTokenCount(rOutString, '0') == rOutString.getLength())
     {
         rOutString = comphelper::string::stripStart(rOutString, '-'); // not -0
@@ -2494,7 +2494,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                     }
                     // #i112250# With the 10-decimal limit, small numbers are formatted as "0".
                     // Switch to scientific in that case, too:
-                    if (nLen > 11 || ((nLen == 1 && sBuff[0] == (sal_Unicode)'0') && fNumber != 0.0))
+                    if (nLen > 11 || ((nLen == 1 && sBuff[0] == '0') && fNumber != 0.0))
                     {
                         sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
                         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
@@ -2505,7 +2505,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                 }
                 if (bSign)
                 {
-                    sBuff.insert(0, (sal_Unicode)'-');
+                    sBuff.insert(0, '-');
                 }
                 OutString = sBuff.makeStringAndClear();
                 return false;
@@ -2651,7 +2651,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
                                          rInfo.nCntPre + rInfo.nCntPost - 1, '.' );
     OUStringBuffer ExpStr;
     short nExpSign = 1;
-    sal_Int32 nExPos = sStr.indexOf((sal_Unicode)'E');
+    sal_Int32 nExPos = sStr.indexOf('E');
 
     if ( nExPos >= 0 )
     {
@@ -2672,7 +2672,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         // cut any decimal delimiter
         sal_Int32 index = 0;
 
-        while((index = sStr.indexOf((sal_Unicode)'.', index)) >= 0)
+        while((index = sStr.indexOf('.', index)) >= 0)
         {
             sStr.remove(index, 1);
         }
@@ -2700,7 +2700,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
 
     bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
 
-    while (nZeros < k && ExpStr[nZeros] == (sal_Unicode)'0')
+    while (nZeros < k && ExpStr[nZeros] == '0')
     {
         ++nZeros;
     }
@@ -2716,11 +2716,11 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         const OUString& rStr = rInfo.sStrArray[j];
         if (nExpSign == -1)
         {
-            ExpStr.insert(0, (sal_Unicode)'-');
+            ExpStr.insert(0, '-');
         }
-        else if (rStr.getLength() > 1 && rStr[1] == (sal_Unicode)'+')
+        else if (rStr.getLength() > 1 && rStr[1] == '+')
         {
-            ExpStr.insert(0, (sal_Unicode)'+');
+            ExpStr.insert(0, '+');
         }
         ExpStr.insert(0, rStr[0]);
         if ( j )
@@ -2745,7 +2745,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     }
     if (bSign)
     {
-        sStr.insert(0, (sal_Unicode)'-');
+        sStr.insert(0, '-');
     }
     sStr.append(ExpStr);
 
@@ -3003,7 +3003,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     {
         if (rInfo.nCntPre > 0 && nFrac == 0)
         {
-            sDiv.insert(0, (sal_Unicode)' ');
+            sDiv.insert(0, ' ');
         }
         else
         {
@@ -3052,7 +3052,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     }
     if (bSign && !(nFrac == 0 && fNum == 0.0))
     {
-        sBuff.insert(0, (sal_Unicode)'-'); // Not -0
+        sBuff.insert(0, '-'); // Not -0
     }
     sBuff.append(sStr);
     sBuff.append(sFrac);
@@ -3122,14 +3122,14 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
 
     OUStringBuffer sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                                                           rtl_math_StringFormat_F, int(nCntPost), '.'));
-    sSecStr.stripStart((sal_Unicode)'0');
-    sSecStr.stripStart((sal_Unicode)'.');
+    sSecStr.stripStart('0');
+    sSecStr.stripStart('.');
     if ( bInputLine )
     {
-        sSecStr.stripEnd((sal_Unicode)'0');
+        sSecStr.stripEnd('0');
         for(sal_Int32 index = sSecStr.getLength(); index < rInfo.nCntPost; ++index)
         {
-            sSecStr.append((sal_Unicode)'0');
+            sSecStr.append('0');
         }
         impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
         nCntPost = sSecStr.getLength();
@@ -3252,11 +3252,11 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         case NF_KEY_AP:                 // A/P
             if (cAmPm == 'a')
             {
-                sBuff.append((sal_Unicode)'a');
+                sBuff.append('a');
             }
             else
             {
-                sBuff.append((sal_Unicode)'p');
+                sBuff.append('p');
             }
             break;
         case NF_KEY_MI:                 // M
@@ -3283,7 +3283,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
     if (bSign && rInfo.bThousand)
     {
-        sBuff.insert(0, (sal_Unicode)'-');
+        sBuff.insert(0, '-');
     }
     return bRes;
 }
@@ -3795,7 +3795,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
                 OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aYear.getLength(), sal_Unicode('0'));
+                padToLength(aBuf, 4 - aYear.getLength(), '0');
                 impTransliterate(aBuf, NumFor[nIx].GetNatNum());
                 aBuf.append(aYear);
                 sBuff.append(aBuf);
@@ -3906,14 +3906,14 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     sal_uLong nSeconds = (sal_uLong)floor( fTime );
     OUStringBuffer sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                                                   rtl_math_StringFormat_F, int(nCntPost), '.'));
-    sSecStr.stripStart((sal_Unicode)'0');
-    sSecStr.stripStart((sal_Unicode)'.');
+    sSecStr.stripStart('0');
+    sSecStr.stripStart('.');
     if ( bInputLine )
     {
-        sSecStr.stripEnd((sal_Unicode)'0');
+        sSecStr.stripEnd('0');
         for(sal_Int32 index = sSecStr.getLength(); index < rInfo.nCntPost; ++index)
         {
-            sSecStr.append((sal_Unicode)'0');
+            sSecStr.append('0');
         }
         impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
         nCntPost = sSecStr.getLength();
@@ -4038,11 +4038,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         case NF_KEY_AP:                 // A/P
             if (cAmPm == 'a')
             {
-                sBuff.append((sal_Unicode)'a');
+                sBuff.append('a');
             }
             else
             {
-                sBuff.append((sal_Unicode)'p');
+                sBuff.append('p');
             }
             break;
         case NF_KEY_MI:                 // M
@@ -4144,7 +4144,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 // can be distinguished from 2 digits display and edited
                 // without suddenly being hit by the 2-digit year magic.
                 OUStringBuffer aBuf;
-                padToLength(aBuf, 4 - aYear.getLength(), sal_Unicode('0'));
+                padToLength(aBuf, 4 - aYear.getLength(), '0');
                 impTransliterate(aBuf, NumFor[nIx].GetNatNum());
                 aBuf.append(aYear);
                 sBuff.append(aBuf);
@@ -4274,14 +4274,14 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, 15-nPrecExp, '.');
                 for (long l = 15-nPrecExp; l < (long) rInfo.nCntPost; l++)
                 {
-                    sStr.append((sal_Unicode)'0');
+                    sStr.append('0');
                 }
             }
             else
             {
                 sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, rInfo.nCntPost, '.' );
             }
-            sStr.stripStart((sal_Unicode)'0'); // Strip leading zeros
+            sStr.stripStart('0'); // Strip leading zeros
         }
         else if (fNumber == 0.0) // Null
         {
@@ -4291,9 +4291,9 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         else // Integer
         {
             sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, 0, '.');
-            sStr.stripStart((sal_Unicode)'0'); // Strip leading zeros
+            sStr.stripStart('0'); // Strip leading zeros
         }
-        sal_Int32 nPoint = sStr.indexOf((sal_Unicode)'.' );
+        sal_Int32 nPoint = sStr.indexOf('.' );
         if ( nPoint >= 0)
         {
             const sal_Unicode* p = sStr.getStr() + nPoint;
@@ -4357,7 +4357,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 {
                     const sal_Unicode c = *p;
                     k--;
-                    if ( sStr[k] != (sal_Unicode)'0' )
+                    if ( sStr[k] != '0' )
                     {
                         bTrailing = false;
                     }
@@ -4371,13 +4371,13 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                         {
                             if ( bInteger )
                             {
-                                sStr[ k ] = (sal_Unicode)'-';
+                                sStr[ k ] = '-';
                             }
                             bFilled = true;
                         }
                         else if ( c == '?' )
                         {
-                            sStr[ k ] = (sal_Unicode)' ';
+                            sStr[ k ] = ' ';
                             bFilled = true;
                         }
                         else if ( !bFilled ) // #
@@ -4395,7 +4395,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             {
                 OUStringBuffer sNum;
                 ImpGetOutputStandard(fNumber, sNum);
-                sNum.stripStart((sal_Unicode)'-');
+                sNum.stripStart('-');
                 sStr.insert(k, sNum.makeStringAndClear());
                 break;
             }
@@ -4419,7 +4419,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     }
     if (bSign)
     {
-        sStr.insert(0, (sal_Unicode)'-');
+        sStr.insert(0, '-');
     }
     impTransliterate(sStr, NumFor[nIx].GetNatNum());
     return bRes;
@@ -4525,7 +4525,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
                         // a literal ',' character instead that is
                         // inserted unconditionally. Should be changed
                         // on some occasion.
-                        sBuff.insert(k, (sal_Unicode)' ');
+                        sBuff.insert(k, ' ');
                         break;
                     default:
                         sBuff.insert(k, rInfo.sStrArray[j]);
@@ -4551,10 +4551,10 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
                     switch (*p)
                     {
                     case '0':
-                        sBuff.insert(0, (sal_Unicode)'0');
+                        sBuff.insert(0, '0');
                         break;
                     case '?':
-                        sBuff.insert(0, (sal_Unicode)' ');
+                        sBuff.insert(0, ' ');
                         break;
                     }
                 }
@@ -4573,7 +4573,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
         {
             OUStringBuffer sNum;
             ImpGetOutputStandard(rNumber, sNum);
-            sNum.stripStart((sal_Unicode)'-');
+            sNum.stripStart('-');
             sBuff.insert(k, sNum.makeStringAndClear());
             break;
         }
@@ -4681,10 +4681,10 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
                     switch (*p)
                     {
                     case '0':
-                        sBuff.insert(0, (sal_Unicode)'0');
+                        sBuff.insert(0, '0');
                         break;
                     case '?':
-                        sBuff.insert(0, (sal_Unicode)' ');
+                        sBuff.insert(0, ' ');
                         break;
                     }
                 }
@@ -4698,7 +4698,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
         {
             OUStringBuffer sNum;
             ImpGetOutputStandard(rNumber, sNum);
-            sNum.stripStart((sal_Unicode)'-');
+            sNum.stripStart('-');
             sBuff.insert(k, sNum.makeStringAndClear());
         }
         break;
@@ -5254,7 +5254,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats
-        aStr.append( (sal_Unicode)';' );
+        aStr.append( ';' );
     }
     return aStr.makeStringAndClear();
 }
@@ -5292,7 +5292,7 @@ OUString SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
                 OUStringBuffer aBuf;
                 for(sal_Int32 index = 0; index < nMinDigits - aValStr.getLength(); ++index)
                 {
-                    aBuf.append((sal_Unicode)'0');
+                    aBuf.append('0');
                 }
                 aBuf.append(aValStr);
                 aStr = aBuf.makeStringAndClear();
@@ -5362,23 +5362,23 @@ bool SvNumberformat::HasStringNegativeSign( const OUString& rStr )
     const sal_Unicode* p = pBeg;
     do
     {   // Start
-        if ( *p == (sal_Unicode)'-' )
+        if ( *p == '-' )
         {
             return true;
         }
     }
-    while ( *p == (sal_Unicode)' ' && ++p < pEnd );
+    while ( *p == ' ' && ++p < pEnd );
 
     p = pEnd - 1;
 
     do
     {   // End
-        if ( *p == (sal_Unicode)'-' )
+        if ( *p == '-' )
         {
             return true;
         }
     }
-    while ( *p == (sal_Unicode)' ' && pBeg < --p );
+    while ( *p == ' ' && pBeg < --p );
     return false;
 }
 

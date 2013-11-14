@@ -36,13 +36,13 @@ LatinTreeNode::~LatinTreeNode()
 
 bool LatinTreeNode::isSeparatedlyHandled(const sal_Unicode cKey) const
 {
-    return ( cKey >= sal_Unicode('a') && cKey <= sal_Unicode('z') );
+    return ( cKey >= 'a' && cKey <= 'z' );
 }
 
 Node*& LatinTreeNode::getChildRef(const sal_Unicode cKey, bool bCreatePlaceholder)
 {
     // determine position in array if possible
-    if ( cKey >= sal_Unicode('a') && cKey <= sal_Unicode('z') )
+    if ( cKey >= 'a' && cKey <= 'z' )
     {
         return m_pLeaves[cKey - LatinLookupTree::our_nLowerCaseA];
     }

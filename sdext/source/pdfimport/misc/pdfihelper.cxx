@@ -32,15 +32,15 @@ OUString pdfi::getColorString( const rendering::ARGBColor& rCol )
     const sal_uInt8 nRed  ( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Red * 255.0 ) ) );
     const sal_uInt8 nGreen( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Green * 255.0 ) ) );
     const sal_uInt8 nBlue ( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Blue * 255.0 ) ) );
-    aBuf.append( sal_Unicode('#') );
+    aBuf.append( '#' );
     if( nRed < 10 )
-        aBuf.append( sal_Unicode('0') );
+        aBuf.append( '0' );
     aBuf.append( sal_Int32(nRed), 16 );
     if( nGreen < 10 )
-        aBuf.append( sal_Unicode('0') );
+        aBuf.append( '0' );
     aBuf.append( sal_Int32(nGreen), 16 );
     if( nBlue < 10 )
-        aBuf.append( sal_Unicode('0') );
+        aBuf.append( '0' );
     aBuf.append( sal_Int32(nBlue), 16 );
 
     // TODO(F3): respect alpha transparency (polygons etc.)

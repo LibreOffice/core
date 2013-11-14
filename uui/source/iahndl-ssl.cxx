@@ -66,7 +66,7 @@ getContentPart( const OUString& _rRawString )
         if ( nContStart != -1 )
         {
             nContStart += sPartId.getLength();
-            sal_Int32 nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
+            sal_Int32 nContEnd = _rRawString.indexOf( ',', nContStart );
             if ( nContEnd != -1 )
                 sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
             else

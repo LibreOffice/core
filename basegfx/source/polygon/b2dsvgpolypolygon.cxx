@@ -674,11 +674,11 @@ namespace basegfx
 
                 if(a)
                 {
-                    aResult.append(sal_Unicode(' '));
+                    aResult.append(' ');
                 }
 
                 ::basegfx::internal::lcl_putNumberChar(aResult, aPoint.getX());
-                aResult.append(sal_Unicode(','));
+                aResult.append(',');
                 ::basegfx::internal::lcl_putNumberChar(aResult, aPoint.getY());
             }
 

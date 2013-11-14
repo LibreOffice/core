@@ -67,7 +67,7 @@ void normalize(
         *name = relative;
     } else {
         OUStringBuffer buf(path);
-        buf.append(sal_Unicode('/'));
+        buf.append('/');
         buf.append(relative.copy(0, i));
         *normalizedPath = buf.makeStringAndClear();
         *name = relative.copy(i + 1);

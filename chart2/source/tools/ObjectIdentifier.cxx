@@ -602,13 +602,13 @@ OUString ObjectIdentifier::createPieSegmentDragParameterString(
         , const awt::Point& rMaximumPosition )
 {
     OUStringBuffer aRet( OUString::number( nOffsetPercent ) );
-    aRet.append( sal_Unicode( ',' ));
+    aRet.append( ',');
     aRet.append( OUString::number( rMinimumPosition.X ) );
-    aRet.append( sal_Unicode( ',' ));
+    aRet.append( ',');
     aRet.append( OUString::number( rMinimumPosition.Y ) );
-    aRet.append( sal_Unicode( ',' ));
+    aRet.append( ',');
     aRet.append( OUString::number( rMaximumPosition.X ) );
-    aRet.append( sal_Unicode( ',' ));
+    aRet.append( ',');
     aRet.append( OUString::number( rMaximumPosition.Y ) );
     return aRet.makeStringAndClear();
 }

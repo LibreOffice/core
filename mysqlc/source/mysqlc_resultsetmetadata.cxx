@@ -440,7 +440,7 @@ void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
         buf.append( sal_Int32( meta->getColumnCount() ) );
         buf.appendAscii( ", got " );
         buf.append( sal_Int32( columnIndex ) );
-        buf.append( sal_Unicode( '.' ) );
+        buf.append( '.' );
         throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any() );
     }
 }

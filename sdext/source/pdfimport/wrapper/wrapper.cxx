@@ -494,7 +494,7 @@ void Parser::parseFontFamilyName( FontAttributes& rResult )
     const sal_Unicode* pCopy = rResult.familyName.getStr();
     sal_Int32 nLen = rResult.familyName.getLength();
     // parse out truetype subsets (e.g. BAAAAA+Thorndale)
-    if( nLen > 8 && pCopy[6] == sal_Unicode('+') )
+    if( nLen > 8 && pCopy[6] == '+' )
     {
         pCopy += 7;
         nLen -= 7;
@@ -1028,7 +1028,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
             "getSystemPathFromFileURL(" << rURL << ") failed");
         return false;
     }
-    OUString aDocName( rURL.copy( rURL.lastIndexOf( sal_Unicode('/') )+1 ) );
+    OUString aDocName( rURL.copy( rURL.lastIndexOf( '/' )+1 ) );
 
     // check for encryption, if necessary get password
     OUString aPwd( rPwd );

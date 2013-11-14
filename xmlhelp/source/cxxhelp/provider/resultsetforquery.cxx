@@ -102,7 +102,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         OUString query = m_aURLParameter.get_query();
         while( !query.isEmpty() )
         {
-            idx = query.indexOf( sal_Unicode( ' ' ) );
+            idx = query.indexOf( ' ' );
             if( idx == -1 )
                 idx = query.getLength();
 

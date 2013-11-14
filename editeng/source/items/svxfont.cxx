@@ -28,7 +28,7 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/escapementitem.hxx>
 
-const sal_Unicode CH_BLANK = sal_Unicode(' ');  // ' ' Space character
+const sal_Unicode CH_BLANK = ' ';  // ' ' Space character
 
 
 SvxFont::SvxFont()

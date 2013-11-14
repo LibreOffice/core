@@ -211,7 +211,7 @@ void SvSimpleTable::Paint( const Rectangle& rRect )
 void SvSimpleTable::InsertHeaderEntry(const OUString& rText,
     sal_uInt16 nCol, HeaderBarItemBits nBits)
 {
-    sal_Int32 nEnd = rText.indexOf( sal_Unicode( '\t' ) );
+    sal_Int32 nEnd = rText.indexOf( '\t' );
     if( nEnd == -1 )
     {
         aHeaderBar.InsertItem(nHeaderItemId++, rText, 0, nBits, nCol);

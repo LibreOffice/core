@@ -222,7 +222,7 @@ void SvxBulletItem::SetDefaults_Impl()
     nStart          = 1;
     nStyle          = BS_123;
     nJustify        = BJ_HLEFT | BJ_VCENTER;
-    cSymbol         = sal_Unicode(' ');
+    cSymbol         = ' ';
     nScale          = 75;
 }
 

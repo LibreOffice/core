@@ -427,7 +427,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     OUStringBuffer aBuffer;
 
     if ( ( rHost.indexOf( ':' ) != -1 ) &&
-         ( rHost[ 0 ] != sal_Unicode( '[' ) ) )
+         ( rHost[ 0 ] != '[' ) )
     {
         // host is given as numeric IPv6 address
         aBuffer.appendAscii( "[" );
@@ -440,7 +440,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
         aBuffer.append( rHost );
     }
 
-    aBuffer.append( sal_Unicode( ':' ) );
+    aBuffer.append( ':' );
     aBuffer.append( OUString::number( nPort ) );
     const OUString aHostAndPort( aBuffer.makeStringAndClear() );
 
@@ -496,7 +496,7 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
 
         OUString aHost;
 
-        if ( ( rHost[ 0 ] == sal_Unicode( '[' ) ) &&
+        if ( ( rHost[ 0 ] == '[' ) &&
              ( rHost.getLength() > 1 ) )
         {
             // host is given as numeric IPv6 address. name resolution

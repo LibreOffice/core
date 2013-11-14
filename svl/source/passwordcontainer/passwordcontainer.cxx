@@ -131,7 +131,7 @@ static vector< OUString > getInfoFromInd( OUString aInd )
 
 static sal_Bool shorterUrl( OUString& aURL )
 {
-    sal_Int32 aInd = aURL.lastIndexOf( sal_Unicode( '/' ) );
+    sal_Int32 aInd = aURL.lastIndexOf( '/' );
     if( aInd > 0 && aURL.indexOf( "://" ) != aInd-2 )
     {
         aURL = aURL.copy( 0, aInd );
@@ -911,8 +911,7 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
 
         if( aIter == m_aContainer.end() )
         {
-            sal_Int32 aInd = aUrl.lastIndexOf( sal_Unicode( '/' ) );
-            if( aInd > 0 && aUrl.getLength()-1 == aInd )
+            if( aUrl.endsWith("/") )
                 aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
             else
                 aUrl += "/";
@@ -952,8 +951,7 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
 
         if( aIter == m_aContainer.end() )
         {
-            sal_Int32 aInd = aUrl.lastIndexOf( sal_Unicode( '/' ) );
-            if( aInd > 0 && aUrl.getLength()-1 == aInd )
+            if( aUrl.endsWith("/") )
                 aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
             else
                 aUrl += "/";

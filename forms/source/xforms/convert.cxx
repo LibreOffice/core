@@ -235,7 +235,7 @@ namespace
     {
         rtl_math_ConversionStatus eStatus;
         double f = rtl::math::stringToDouble(
-            rString, sal_Unicode('.'), sal_Unicode(','), &eStatus, NULL );
+            rString, '.', ',', &eStatus, NULL );
         return ( eStatus == rtl_math_ConversionStatus_Ok ) ? makeAny( f ) : Any();
     }
 
@@ -243,11 +243,11 @@ namespace
     void lcl_appendInt32ToBuffer( const sal_Int32 _nValue, OUStringBuffer& _rBuffer, sal_Int16 _nMinDigits )
     {
         if ( ( _nMinDigits >= 4 ) && ( _nValue < 1000 ) )
-            _rBuffer.append( (sal_Unicode)'0' );
+            _rBuffer.append( '0' );
         if ( ( _nMinDigits >= 3 ) && ( _nValue < 100 ) )
-            _rBuffer.append( (sal_Unicode)'0' );
+            _rBuffer.append( '0' );
         if ( ( _nMinDigits >= 2 ) && ( _nValue < 10 ) )
-            _rBuffer.append( (sal_Unicode)'0' );
+            _rBuffer.append( '0' );
         _rBuffer.append( _nValue );
     }
 

@@ -114,7 +114,7 @@ OUString ChildAccess::getRelativePathRepresentation() {
     if (parent.is()) {
         path.append(parent->getRelativePathRepresentation());
         if (!path.isEmpty()) {
-            path.append(sal_Unicode('/'));
+            path.append('/');
         }
     }
     path.append(Data::createSegment(node_->getTemplateName(), name_));

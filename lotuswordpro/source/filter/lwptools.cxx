@@ -162,7 +162,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                     flag = sal_False;
                     if(sublen)
                     {
-                        unibuf[sublen] = sal_Unicode('\0');
+                        unibuf[sublen] = '\0';
                         strBuf.append( OUString(unibuf) );
                         sublen = 0;
                     }
@@ -173,7 +173,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                 }
                 if(sublen>=1023 || readLen==strlen)
                 {
-                    unibuf[sublen] = sal_Unicode('\0');
+                    unibuf[sublen] = '\0';
                     strBuf.append( OUString(unibuf) );
                     sublen = 0;
                 }

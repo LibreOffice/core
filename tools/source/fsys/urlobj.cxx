@@ -684,7 +684,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                                              pPrefix->m_pTranslatedPrefix :
                                              pPrefix->m_pPrefix));
         aSynAbsURIRef.append(sTemp);
-        m_aScheme = SubString( 0, sTemp.indexOf(static_cast< sal_Unicode >(':')) );
+        m_aScheme = SubString( 0, sTemp.indexOf(':') );
     }
     else
     {
@@ -825,7 +825,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             aSynScheme = OUString::createFromAscii(getSchemeInfo().m_pScheme);
         }
         m_aScheme.set(aSynAbsURIRef, aSynScheme, aSynAbsURIRef.getLength());
-        aSynAbsURIRef.append(sal_Unicode(':'));
+        aSynAbsURIRef.append(':');
     }
 
     sal_Char cEscapePrefix = getEscapePrefix();
@@ -1272,7 +1272,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             {
                 if (bSupportsPassword)
                 {
-                    aSynAbsURIRef.append(sal_Unicode(':'));
+                    aSynAbsURIRef.append(':');
                     OUStringBuffer aSynAuth;
                     while (p1 < pUserInfoEnd)
                     {
@@ -1311,7 +1311,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 }
             }
             if (pHostPortBegin)
-                aSynAbsURIRef.append(sal_Unicode('@'));
+                aSynAbsURIRef.append('@');
         }
 
         if (pHostPortBegin)
@@ -1365,7 +1365,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 aSynAbsURIRef.getLength());
             if (pPort != pHostPortEnd)
             {
-                aSynAbsURIRef.append(sal_Unicode(':'));
+                aSynAbsURIRef.append(':');
                 m_aPort.set(aSynAbsURIRef,
                     OUString(pPort + 1, pHostPortEnd - (pPort + 1)),
                     aSynAbsURIRef.getLength());
@@ -1390,7 +1390,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     // Parse ?<query>
     if (getSchemeInfo().m_bQuery && pPos < pEnd && *pPos == '?')
     {
-        aSynAbsURIRef.append(sal_Unicode('?'));
+        aSynAbsURIRef.append('?');
         OUStringBuffer aSynQuery;
         for (++pPos; pPos < pEnd && *pPos != nFragmentDelimiter;)
         {

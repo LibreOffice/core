@@ -92,10 +92,10 @@ static OUString ImpCurrencyToString( const sal_Int64 &rVal )
         // 0     0.0000     0
         // 0.1   0.1000     0.1
 
-            aBuf[nInsertIndex--] = (sal_Unicode)'0';
+            aBuf[nInsertIndex--] = '0';
     }
     if ( isNeg )
-            aBuf[nInsertIndex] = (sal_Unicode)'-';
+            aBuf[nInsertIndex] = '-';
 
     aAbsStr = aBuf.makeStringAndClear();
     return aAbsStr;
@@ -107,8 +107,8 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
 
     sal_Int32   nFractDigit = 4;
 
-    sal_Unicode cDeciPnt = sal_Unicode('.');
-    sal_Unicode c1000Sep = sal_Unicode(',');
+    sal_Unicode cDeciPnt = '.';
+    sal_Unicode c1000Sep = ',';
 
 #ifdef MAYBEFUTURE
     sal_Unicode cLocaleDeciPnt, cLocale1000Sep;
@@ -202,7 +202,7 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
         SbxBase::SetError( SbxERR_CONVERSION );
     while( nFractDigit )
     {
-        sNormalisedNumString.append( sal_Unicode('0') );
+        sNormalisedNumString.append( '0' );
         nFractDigit--;
     }
 

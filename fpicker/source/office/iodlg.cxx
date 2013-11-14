@@ -177,7 +177,7 @@ namespace
     {
         const sal_Unicode* p0 = rFile.getStr();
         const sal_Unicode* p1 = p0 + rFile.getLength() - 1;
-        while ( p1 >= p0 && *p1 != sal_Unicode( '.' ) )
+        while ( p1 >= p0 && *p1 != '.' )
             p1--;
         if ( p1 >= p0 )
             // remove old extension

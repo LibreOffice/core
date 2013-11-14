@@ -1736,11 +1736,11 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
             sal_Int32 nClassNameDot = rClass.lastIndexOf( '.' );
             if( nClassNameDot >= 0 )
             {
-                aClassName += rClass.copy( 0, nClassNameDot + 1 ) + OUString( sal_Unicode( 'X' ) ) + rClass.copy( nClassNameDot + 1 );
+                aClassName += rClass.copy( 0, nClassNameDot + 1 ) + OUString( 'X' ) + rClass.copy( nClassNameDot + 1 );
             }
             else
             {
-                aClassName += OUString( sal_Unicode( 'X' ) ) + rClass;
+                aClassName += OUString( 'X' ) + rClass;
             }
         }
         else // assume extended type declaration support for basic ( can't get here

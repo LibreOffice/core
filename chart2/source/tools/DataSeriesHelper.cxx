@@ -272,7 +272,7 @@ OUString lcl_getDataSequenceLabel( const Reference< chart2::data::XDataSequence 
         {
             aBuf.append( aSeq[i] );
             if( i < nMax )
-                aBuf.append( sal_Unicode( ' ' ));
+                aBuf.append( ' ');
         }
         aResult = aBuf.makeStringAndClear();
     }
@@ -291,13 +291,13 @@ OUString lcl_getDataSequenceLabel( const Reference< chart2::data::XDataSequence 
             {
                 aBuf.append( aVal );
                 if( i < nMax )
-                    aBuf.append( sal_Unicode( ' ' ));
+                    aBuf.append(  ' ');
             }
             else if( aSeq[ i ] >>= fNum )
             {
                 aBuf.append( fNum );
                 if( i < nMax )
-                    aBuf.append( sal_Unicode( ' ' ));
+                    aBuf.append( ' ');
             }
         }
         aResult = aBuf.makeStringAndClear();

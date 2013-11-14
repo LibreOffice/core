@@ -294,8 +294,8 @@ static const struct {
 
 #endif
 
-static const sal_Unicode cUnder = sal_Unicode('_');
-static const sal_Unicode cHyphen = sal_Unicode('-');
+static const sal_Unicode cUnder = '_';
+static const sal_Unicode cHyphen = '-';
 
 static const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
 

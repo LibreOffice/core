@@ -285,7 +285,7 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
         int i;
         for( i = 0; i < nLength; i++, pString++ )
         {
-            if( *pString == sal_Unicode( ';' ) )
+            if( *pString == ';' )
                 nExtensions++;
         }
     }

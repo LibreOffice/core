@@ -66,7 +66,7 @@ bool SmIsMathAlpha(const OUString &rText)
         const sal_Unicode *pChar = aMathAlpha;
         while (*pChar  &&  *pChar != cChar)
             pChar++;
-        return *pChar != sal_Unicode('\0');
+        return *pChar != '\0';
     }
 }
 

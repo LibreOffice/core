@@ -516,13 +516,13 @@ OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XContro
         Encode( aValue );
 
         aResult.append(aName);
-        aResult.append(sal_Unicode('='));
+        aResult.append('=');
         aResult.append(aValue);
 
         if (pSuccObj < aSuccObjList.end() - 1)
         {
             if ( _bURLEncoded )
-                aResult.append(sal_Unicode('&'));
+                aResult.append('&');
             else
                 aResult.appendAscii("\r\n");
         }
@@ -602,7 +602,7 @@ namespace
         sal_Int32 nCurLen = _rOut.getLength();
         _rOut.append( _nNumber );
         while ( _rOut.getLength() - nCurLen < nDigits )
-            _rOut.insert( nCurLen, (sal_Unicode)'0' );
+            _rOut.insert( nCurLen, '0' );
     }
 }
 
@@ -794,9 +794,9 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     ::Date aDate( nInt32Val );
                     OUStringBuffer aBuffer;
                     appendDigits( aDate.GetMonth(), 2, aBuffer );
-                    aBuffer.append( (sal_Unicode)'-' );
+                    aBuffer.append( '-' );
                     appendDigits( aDate.GetDay(), 2, aBuffer );
-                    aBuffer.append( (sal_Unicode)'-' );
+                    aBuffer.append( '-' );
                     appendDigits( aDate.GetYear(), 4, aBuffer );
                     aText = aBuffer.makeStringAndClear();
                 }
@@ -817,9 +817,9 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     ::Time aTime(nInt32Val);
                     OUStringBuffer aBuffer;
                     appendDigits( aTime.GetHour(), 2, aBuffer );
-                    aBuffer.append( (sal_Unicode)'-' );
+                    aBuffer.append( '-' );
                     appendDigits( aTime.GetMin(), 2, aBuffer );
-                    aBuffer.append( (sal_Unicode)'-' );
+                    aBuffer.append( '-' );
                     appendDigits( aTime.GetSec(), 2, aBuffer );
                     aText = aBuffer.makeStringAndClear();
                 }
@@ -971,7 +971,7 @@ void ODatabaseForm::Encode( OUString& rString ) const
         nCharCode = rString[nCurPos];
 
         // Handle chars, which are not an alphanumeric character and character codes > 127
-        if( (!isalnum(nCharCode) && nCharCode != (sal_Unicode)' ') || nCharCode > 127 )
+        if( (!isalnum(nCharCode) && nCharCode != ' ') || nCharCode > 127 )
         {
             switch( nCharCode )
             {

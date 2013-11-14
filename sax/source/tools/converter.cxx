@@ -64,10 +64,10 @@ bool Converter::convertMeasure( sal_Int32& rValue,
     sal_Int32 const nLen = rString.getLength();
 
     // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
+    while( (nPos < nLen) && (rString[nPos] <= ' ') )
         nPos++;
 
-    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
+    if( nPos < nLen && '-' == rString[nPos] )
     {
         bNeg = true;
         nPos++;
@@ -75,32 +75,32 @@ bool Converter::convertMeasure( sal_Int32& rValue,
 
     // get number
     while( nPos < nLen &&
-           sal_Unicode('0') <= rString[nPos] &&
-           sal_Unicode('9') >= rString[nPos] )
+           '0' <= rString[nPos] &&
+           '9' >= rString[nPos] )
     {
         // TODO: check overflow!
         nVal *= 10;
-        nVal += (rString[nPos] - sal_Unicode('0'));
+        nVal += (rString[nPos] - '0');
         nPos++;
     }
     double nDiv = 1.;
-    if( nPos < nLen && sal_Unicode('.') == rString[nPos] )
+    if( nPos < nLen && '.' == rString[nPos] )
     {
         nPos++;
 
         while( nPos < nLen &&
-               sal_Unicode('0') <= rString[nPos] &&
-               sal_Unicode('9') >= rString[nPos] )
+               '0' <= rString[nPos] &&
+               '9' >= rString[nPos] )
         {
             // TODO: check overflow!
             nDiv *= 10;
-            nVal += ( ((double)(rString[nPos] - sal_Unicode('0'))) / nDiv );
+            nVal += ( ((double)(rString[nPos] - '0')) / nDiv );
             nPos++;
         }
     }
 
     // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
+    while( (nPos < nLen) && (rString[nPos] <= ' ') )
         nPos++;
 
     if( nPos < nLen )
@@ -108,16 +108,16 @@ bool Converter::convertMeasure( sal_Int32& rValue,
 
         if( MeasureUnit::PERCENT == nTargetUnit )
         {
-            if( sal_Unicode('%') != rString[nPos] )
+            if( '%' != rString[nPos] )
                 return false;
         }
         else if( MeasureUnit::PIXEL == nTargetUnit )
         {
             if( nPos + 1 >= nLen ||
-                (sal_Unicode('p') != rString[nPos] &&
-                 sal_Unicode('P') != rString[nPos])||
-                (sal_Unicode('x') != rString[nPos+1] &&
-                 sal_Unicode('X') != rString[nPos+1]) )
+                ('p' != rString[nPos] &&
+                 'P' != rString[nPos])||
+                ('x' != rString[nPos+1] &&
+                 'X' != rString[nPos+1]) )
                 return false;
         }
         else
@@ -269,7 +269,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
                     "MeasureUnit::PERCENT only maps to MeasureUnit::PERCENT!" );
 
         rBuffer.append( nMeasure );
-        rBuffer.append( sal_Unicode('%' ) );
+        rBuffer.append( '%' );
 
         return;
     }
@@ -277,7 +277,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
     if( nMeasure < 0 )
     {
         nMeasure = -nMeasure;
-        rBuffer.append( sal_Unicode('-') );
+        rBuffer.append( '-' );
     }
 
     // The new length is (nVal * nMul)/(nDiv*nFac*10)
@@ -402,7 +402,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
     rBuffer.append( static_cast<sal_Int64>(nValue / nFac) );
     if (nFac > 1 && (nValue % nFac) != 0)
     {
-        rBuffer.append( sal_Unicode('.') );
+        rBuffer.append( '.' );
         while (nFac > 1 && (nValue % nFac) != 0)
         {
             nFac /= 10;
@@ -450,7 +450,7 @@ bool Converter::convertPercent( sal_Int32& rPercent, const OUString& rString )
 void Converter::convertPercent( OUStringBuffer& rBuffer, sal_Int32 nValue )
 {
     rBuffer.append( nValue );
-    rBuffer.append( sal_Unicode('%' ) );
+    rBuffer.append( '%' );
 }
 
 /** convert string to pixel measure */
@@ -463,8 +463,8 @@ bool Converter::convertMeasurePx( sal_Int32& rPixel, const OUString& rString )
 void Converter::convertMeasurePx( OUStringBuffer& rBuffer, sal_Int32 nValue )
 {
     rBuffer.append( nValue );
-    rBuffer.append( sal_Unicode('p' ) );
-    rBuffer.append( sal_Unicode('x' ) );
+    rBuffer.append( 'p' );
+    rBuffer.append( 'x' );
 }
 
 int lcl_gethex( int nChar )
@@ -501,7 +501,7 @@ static const sal_Char aHexTab[] = "0123456789abcdef";
 /** convert color to string */
 void Converter::convertColor( OUStringBuffer& rBuffer, sal_Int32 nColor )
 {
-    rBuffer.append( sal_Unicode( '#' ) );
+    rBuffer.append( '#' );
 
     sal_uInt8 nCol = (sal_uInt8)(nColor >> 16);
     rBuffer.append( sal_Unicode( aHexTab[ nCol >> 4 ] ) );
@@ -547,10 +547,10 @@ bool Converter::convertNumber64( sal_Int64& rValue,
     sal_Int32 const nLen = rString.getLength();
 
     // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
+    while( (nPos < nLen) && (rString[nPos] <= ' ') )
         nPos++;
 
-    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
+    if( nPos < nLen && '-' == rString[nPos] )
     {
         bNeg = true;
         nPos++;
@@ -558,8 +558,8 @@ bool Converter::convertNumber64( sal_Int64& rValue,
 
     // get number
     while( nPos < nLen &&
-           sal_Unicode('0') <= rString[nPos] &&
-           sal_Unicode('9') >= rString[nPos] )
+           '0' <= rString[nPos] &&
+           '9' >= rString[nPos] )
     {
         // TODO: check overflow!
         rValue *= 10;
@@ -590,7 +590,7 @@ void Converter::convertDouble(  OUStringBuffer& rBuffer,
         OSL_ENSURE( nTargetUnit == MeasureUnit::PERCENT, "MeasureUnit::PERCENT only maps to MeasureUnit::PERCENT!" );
         ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
         if(bWriteUnits)
-            rBuffer.append(sal_Unicode('%'));
+            rBuffer.append('%');
     }
     else
     {
@@ -615,7 +615,7 @@ bool Converter::convertDouble(double& rValue,
     const OUString& rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
 {
     rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
+    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus, NULL );
 
     if(eStatus == rtl_math_ConversionStatus_Ok)
     {
@@ -634,7 +634,7 @@ bool Converter::convertDouble(double& rValue,
 bool Converter::convertDouble(double& rValue, const OUString& rString)
 {
     rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
+    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus, NULL );
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
@@ -648,7 +648,7 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
     // XML Schema, W3C Working Draft 07 April 2000, section 3.2.6.1
     if (fValue < 0.0)
     {
-        rBuffer.append(sal_Unicode('-'));
+        rBuffer.append('-');
         fValue = - fValue;
     }
 
@@ -685,15 +685,15 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
     }
 
     if (fHoursValue < 10)
-        rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( '0');
     rBuffer.append( sal_Int32( fHoursValue));
-    rBuffer.append( sal_Unicode('H'));
+    rBuffer.append( 'H');
     if (fMinsValue < 10)
-        rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( '0');
     rBuffer.append( sal_Int32( fMinsValue));
-    rBuffer.append( sal_Unicode('M'));
+    rBuffer.append( 'M');
     if (fSecsValue < 10)
-        rBuffer.append( sal_Unicode('0'));
+        rBuffer.append( '0');
     rBuffer.append( sal_Int32( fSecsValue));
     if (fNanoSecsValue > 0.0)
     {
@@ -702,11 +702,11 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
                     true));
         if ( aNS.getLength() > 2 )
         {
-            rBuffer.append( sal_Unicode('.'));
+            rBuffer.append( '.');
             rBuffer.append( aNS.copy( 2 ) );     // strip "0."
         }
     }
-    rBuffer.append( sal_Unicode('S'));
+    rBuffer.append( 'S');
 }
 
 /** convert ISO "duration" string to double; negative durations allowed */
@@ -718,13 +718,13 @@ bool Converter::convertDuration(double& rfTime,
 
     // negative time duration?
     bool bIsNegativeDuration = false;
-    if ( sal_Unicode('-') == (*pStr) )
+    if ( '-' == (*pStr) )
     {
         bIsNegativeDuration = true;
         pStr++;
     }
 
-    if ( *(pStr++) != sal_Unicode('P') )            // duration must start with "P"
+    if ( *(pStr++) != 'P' )            // duration must start with "P"
         return false;
 
     OUString sDoubleStr;
@@ -743,7 +743,7 @@ bool Converter::convertDuration(double& rfTime,
         sal_Unicode c = *(pStr++);
         if ( !c )                               // end
             bDone = true;
-        else if ( sal_Unicode('0') <= c && sal_Unicode('9') >= c )
+        else if ( '0' <= c && '9' >= c )
         {
             if ( nTemp >= SAL_MAX_INT32 / 10 )
                 bSuccess = false;
@@ -762,24 +762,24 @@ bool Converter::convertDuration(double& rfTime,
         }
         else if ( bTimePart )
         {
-            if ( c == sal_Unicode('H') )
+            if ( c == 'H' )
             {
                 nHours = nTemp;
                 nTemp = 0;
             }
-            else if ( c == sal_Unicode('M') )
+            else if ( c == 'M' )
             {
                 nMins = nTemp;
                 nTemp = 0;
             }
-            else if ( (c == sal_Unicode(',')) || (c == sal_Unicode('.')) )
+            else if ( (c == ',') || (c == '.') )
             {
                 nSecs = nTemp;
                 nTemp = 0;
                 bIsFraction = true;
                 sDoubleStr = "0.";
             }
-            else if ( c == sal_Unicode('S') )
+            else if ( c == 'S' )
             {
                 if ( !bIsFraction )
                 {
@@ -793,14 +793,14 @@ bool Converter::convertDuration(double& rfTime,
         }
         else
         {
-            if ( c == sal_Unicode('T') )            // "T" starts time part
+            if ( c == 'T' )            // "T" starts time part
                 bTimePart = true;
-            else if ( c == sal_Unicode('D') )
+            else if ( c == 'D' )
             {
                 nDays = nTemp;
                 nTemp = 0;
             }
-            else if ( c == sal_Unicode('Y') || c == sal_Unicode('M') )
+            else if ( c == 'Y' || c == 'M' )
             {
                 //! how many days is a year or month?
 
@@ -843,42 +843,42 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
 {
     if (rDuration.Negative)
     {
-        rBuffer.append(sal_Unicode('-'));
+        rBuffer.append('-');
     }
-    rBuffer.append(sal_Unicode('P'));
+    rBuffer.append('P');
     const bool bHaveDate(rDuration.Years  != 0 ||
                          rDuration.Months != 0 ||
                          rDuration.Days   != 0);
     if (rDuration.Years)
     {
         rBuffer.append(static_cast<sal_Int32>(rDuration.Years));
-        rBuffer.append(sal_Unicode('Y'));
+        rBuffer.append('Y');
     }
     if (rDuration.Months)
     {
         rBuffer.append(static_cast<sal_Int32>(rDuration.Months));
-        rBuffer.append(sal_Unicode('M'));
+        rBuffer.append('M');
     }
     if (rDuration.Days)
     {
         rBuffer.append(static_cast<sal_Int32>(rDuration.Days));
-        rBuffer.append(sal_Unicode('D'));
+        rBuffer.append('D');
     }
     if ( rDuration.Hours != 0
          || rDuration.Minutes != 0
          || rDuration.Seconds != 0
          || rDuration.NanoSeconds != 0 )
     {
-        rBuffer.append(sal_Unicode('T')); // time separator
+        rBuffer.append('T'); // time separator
         if (rDuration.Hours)
         {
             rBuffer.append(static_cast<sal_Int32>(rDuration.Hours));
-            rBuffer.append(sal_Unicode('H'));
+            rBuffer.append('H');
         }
         if (rDuration.Minutes)
         {
             rBuffer.append(static_cast<sal_Int32>(rDuration.Minutes));
-            rBuffer.append(sal_Unicode('M'));
+            rBuffer.append('M');
         }
         if (rDuration.Seconds != 0 || rDuration.NanoSeconds != 0)
         {
@@ -894,14 +894,14 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
                 ostr << rDuration.NanoSeconds;
                 rBuffer.append(OUString::createFromAscii(ostr.str().c_str()));
             }
-            rBuffer.append(sal_Unicode('S'));
+            rBuffer.append('S');
         }
     }
     else if (!bHaveDate)
     {
         // zero duration: XMLSchema-2 says there must be at least one component
-        rBuffer.append(sal_Unicode('0'));
-        rBuffer.append(sal_Unicode('D'));
+        rBuffer.append('0');
+        rBuffer.append('D');
     }
 }
 
@@ -918,7 +918,7 @@ readUnsignedNumber(const OUString & rString,
     while (nPos < rString.getLength())
     {
         const sal_Unicode c = rString[nPos];
-        if ((sal_Unicode('0') <= c) && (c <= sal_Unicode('9')))
+        if (('0' <= c) && (c <= '9'))
         {
             nTemp *= 10;
             nTemp += (c - sal_Unicode('0'));
@@ -958,7 +958,7 @@ readUnsignedNumberMaxDigits(int maxDigits,
     while (nPos < rString.getLength())
     {
         const sal_Unicode c = rString[nPos];
-        if ((sal_Unicode('0') <= c) && (c <= sal_Unicode('9')))
+        if (('0' <= c) && (c <= '9'))
         {
             if (maxDigits > 0)
             {
@@ -993,7 +993,7 @@ static bool
 readDurationT(const OUString & rString, sal_Int32 & io_rnPos)
 {
     if ((io_rnPos < rString.getLength()) &&
-        (rString[io_rnPos] == sal_Unicode('T')))
+        (rString[io_rnPos] == 'T'))
     {
         ++io_rnPos;
         return true;
@@ -1039,14 +1039,14 @@ bool Converter::convertDuration(util::Duration& rDuration,
     sal_Int32 nPos(0);
 
     bool bIsNegativeDuration(false);
-    if (!string.isEmpty() && (sal_Unicode('-') == string[0]))
+    if (!string.isEmpty() && ('-' == string[0]))
     {
         bIsNegativeDuration = true;
         ++nPos;
     }
 
     if ((nPos < string.getLength())
-        && (string[nPos] != sal_Unicode('P'))) // duration must start with "P"
+        && (string[nPos] != 'P')) // duration must start with "P"
     {
         return false;
     }
@@ -1071,19 +1071,19 @@ bool Converter::convertDuration(util::Duration& rDuration,
     if (!bTimePart && bSuccess)
     {
         bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nYears, sal_Unicode('Y'));
+                     nYears, 'Y');
     }
 
     if (!bTimePart && bSuccess)
     {
         bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nMonths, sal_Unicode('M'));
+                     nMonths, 'M');
     }
 
     if (!bTimePart && bSuccess)
     {
         bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nDays, sal_Unicode('D'));
+                     nDays, 'D');
     }
 
     if (bTimePart)
@@ -1096,20 +1096,20 @@ bool Converter::convertDuration(util::Duration& rDuration,
         if (bSuccess)
         {
             bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                         nHours, sal_Unicode('H'));
+                         nHours, 'H');
         }
 
         if (bSuccess)
         {
             bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                         nMinutes, sal_Unicode('M'));
+                         nMinutes, 'M');
         }
 
         // eeek! seconds are icky.
         if ((nPos < string.getLength()) && bSuccess)
         {
-            if (string[nPos] == sal_Unicode('.') ||
-                string[nPos] == sal_Unicode(','))
+            if (string[nPos] == '.' ||
+                string[nPos] == ',')
             {
                 ++nPos;
                 if (-1 != nTemp)
@@ -1126,7 +1126,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
                             OSL_ENSURE(nDigits > 0, "bad code monkey: negative digits");
                             nNanoSeconds=static_cast<double>(nTemp)*(1000000000.0/pow(10.0,nDigits));
                             nTemp=-1;
-                            if (sal_Unicode('S') == string[nPos])
+                            if ('S' == string[nPos])
                             {
                                 ++nPos;
                             }
@@ -1146,7 +1146,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
                     bSuccess = false;
                 }
             }
-            else if (sal_Unicode('S') == string[nPos])
+            else if ('S' == string[nPos])
             {
                 ++nPos;
                 if (-1 != nTemp)
@@ -1193,17 +1193,17 @@ lcl_AppendTimezone(OUStringBuffer & i_rBuffer, sal_Int16 const nOffset)
 {
     if (0 == nOffset)
     {
-        i_rBuffer.append(sal_Unicode('Z'));
+        i_rBuffer.append('Z');
     }
     else
     {
         if (0 < nOffset)
         {
-            i_rBuffer.append(sal_Unicode('+'));
+            i_rBuffer.append('+');
         }
         else
         {
-            i_rBuffer.append(sal_Unicode('-'));
+            i_rBuffer.append('-');
         }
         const sal_Int32 nHours  (abs(nOffset) / 60);
         const sal_Int32 nMinutes(abs(nOffset) % 60);
@@ -1452,7 +1452,7 @@ bool Converter::parseDateOrDateTime(
     sal_Int32 nPos(0);
     if (string.getLength() > nPos)
     {
-        if (sal_Unicode('-') == string[nPos])
+        if ('-' == string[nPos])
         {
             isNegative = true;
             ++nPos;
@@ -1468,7 +1468,7 @@ bool Converter::parseDateOrDateTime(
         bSuccess &= (0 < nYear);
         bSuccess &= (nPos < string.getLength()); // not last token
     }
-    if (bSuccess && (sal_Unicode('-') != string[nPos])) // separator
+    if (bSuccess && ('-' != string[nPos])) // separator
     {
         bSuccess = false;
     }
@@ -1484,7 +1484,7 @@ bool Converter::parseDateOrDateTime(
         bSuccess &= (0 < nMonth) && (nMonth <= 12);
         bSuccess &= (nPos < string.getLength()); // not last token
     }
-    if (bSuccess && (sal_Unicode('-') != string[nPos])) // separator
+    if (bSuccess && ('-' != string[nPos])) // separator
     {
         bSuccess = false;
     }
@@ -1503,7 +1503,7 @@ bool Converter::parseDateOrDateTime(
     bool bHaveTime(false);
     if (bSuccess && (nPos < string.getLength()))
     {
-        if (sal_Unicode('T') == string[nPos]) // time separator
+        if ('T' == string[nPos]) // time separator
         {
             bHaveTime = true;
             ++nPos;
@@ -1521,7 +1521,7 @@ bool Converter::parseDateOrDateTime(
             bSuccess &= (0 <= nHours) && (nHours <= 24);
             bSuccess &= (nPos < string.getLength()); // not last token
         }
-        if (bSuccess && (sal_Unicode(':') != string[nPos])) // separator
+        if (bSuccess && (':' != string[nPos])) // separator
         {
             bSuccess = false;
         }
@@ -1536,7 +1536,7 @@ bool Converter::parseDateOrDateTime(
             bSuccess &= (0 <= nMinutes) && (nMinutes < 60);
             bSuccess &= (nPos < string.getLength()); // not last token
         }
-        if (bSuccess && (sal_Unicode(':') != string[nPos])) // separator
+        if (bSuccess && (':' != string[nPos])) // separator
         {
             bSuccess = false;
         }
@@ -1551,7 +1551,7 @@ bool Converter::parseDateOrDateTime(
             bSuccess &= (0 <= nSeconds) && (nSeconds < 60);
         }
         if (bSuccess && (nPos < string.getLength()) &&
-            (sal_Unicode('.') == string[nPos] || sal_Unicode(',') == string[nPos])) // fraction separator
+            ('.' == string[nPos] || ',' == string[nPos])) // fraction separator
         {
             ++nPos;
             const sal_Int32 nStart(nPos);
@@ -1583,19 +1583,19 @@ bool Converter::parseDateOrDateTime(
     if (bSuccess && (nPos < string.getLength()))
     {
         const sal_Unicode c(string[nPos]);
-        if (sal_Unicode('+') == c)
+        if ('+' == c)
         {
             bHaveTimezone = true;
             bHaveTimezonePlus = true;
             ++nPos;
         }
-        else if (sal_Unicode('-') == c)
+        else if ('-' == c)
         {
             bHaveTimezone = true;
             bHaveTimezoneMinus = true;
             ++nPos;
         }
-        else if (sal_Unicode('Z') == c)
+        else if ('Z' == c)
         {
             bHaveTimezone = true;
             ++nPos;
@@ -1613,7 +1613,7 @@ bool Converter::parseDateOrDateTime(
                         string, nPos, nTimezoneHours, 2, true);
         bSuccess &= (0 <= nTimezoneHours) && (nTimezoneHours <= 14);
         bSuccess &= (nPos < string.getLength()); // not last token
-        if (bSuccess && (sal_Unicode(':') != string[nPos])) // separator
+        if (bSuccess && (':' != string[nPos])) // separator
         {
             bSuccess = false;
         }
@@ -2281,26 +2281,26 @@ sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefau
     sal_Int16 nRetUnit = nDefaultUnit;
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+    while( nPos < nLen && ' ' == rString[nPos] )
         nPos++;
 
     // skip negative
-    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
+    if( nPos < nLen && '-' == rString[nPos] )
         nPos++;
 
     // skip number
-    while( nPos < nLen && sal_Unicode('0') <= rString[nPos] && sal_Unicode('9') >= rString[nPos] )
+    while( nPos < nLen && '0' <= rString[nPos] && '9' >= rString[nPos] )
         nPos++;
 
-    if( nPos < nLen && sal_Unicode('.') == rString[nPos] )
+    if( nPos < nLen && '.' == rString[nPos] )
     {
         nPos++;
-        while( nPos < nLen && sal_Unicode('0') <= rString[nPos] && sal_Unicode('9') >= rString[nPos] )
+        while( nPos < nLen && '0' <= rString[nPos] && '9' >= rString[nPos] )
             nPos++;
     }
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+    while( nPos < nLen && ' ' == rString[nPos] )
         nPos++;
 
     if( nPos < nLen )
@@ -2315,8 +2315,8 @@ sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefau
             case sal_Unicode('c'):
             case sal_Unicode('C'):
             {
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('m')
-                    || rString[nPos+1] == sal_Unicode('M')))
+                if(nPos+1 < nLen && (rString[nPos+1] == 'm'
+                    || rString[nPos+1] == 'M'))
                     nRetUnit = MeasureUnit::CM;
                 break;
             }
@@ -2329,27 +2329,27 @@ sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefau
             case sal_Unicode('i'):
             case sal_Unicode('I'):
             {
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('n')
-                    || rString[nPos+1] == sal_Unicode('n')))
+                if(nPos+1 < nLen && (rString[nPos+1] == 'n'
+                    || rString[nPos+1] == 'n'))
                     nRetUnit = MeasureUnit::INCH;
                 break;
             }
             case sal_Unicode('m'):
             case sal_Unicode('M'):
             {
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('m')
-                    || rString[nPos+1] == sal_Unicode('M')))
+                if(nPos+1 < nLen && (rString[nPos+1] == 'm'
+                    || rString[nPos+1] == 'M'))
                     nRetUnit = MeasureUnit::MM;
                 break;
             }
             case sal_Unicode('p'):
             case sal_Unicode('P'):
             {
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('t')
-                    || rString[nPos+1] == sal_Unicode('T')))
+                if(nPos+1 < nLen && (rString[nPos+1] == 't'
+                    || rString[nPos+1] == 'T'))
                     nRetUnit = MeasureUnit::POINT;
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('c')
-                    || rString[nPos+1] == sal_Unicode('C')))
+                if(nPos+1 < nLen && (rString[nPos+1] == 'c'
+                    || rString[nPos+1] == 'C'))
                     nRetUnit = MeasureUnit::TWIP;
                 break;
             }

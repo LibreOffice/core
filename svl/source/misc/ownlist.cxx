@@ -30,12 +30,12 @@ static OUString parseString(const OUString & rCmd, sal_Int32 * pIndex)
 {
     OUString result;
 
-    if(rCmd[*pIndex] == sal_Unicode('\"')) {
+    if(rCmd[*pIndex] == '\"') {
         (*pIndex) ++;
 
         sal_Int32 begin = *pIndex;
 
-        while(*pIndex < rCmd.getLength() && rCmd[(*pIndex) ++] != sal_Unicode('\"')) ;
+        while(*pIndex < rCmd.getLength() && rCmd[(*pIndex) ++] != '\"') ;
 
         result = rCmd.copy(begin, *pIndex - begin - 1);
     }
@@ -49,7 +49,7 @@ static OUString parseWord(const OUString & rCmd, sal_Int32 * pIndex)
 
     while(*pIndex < rCmd.getLength()
           && !isspace(sal::static_int_cast<int>(rCmd[*pIndex]))
-          && rCmd[*pIndex] != sal_Unicode('='))
+          && rCmd[*pIndex] != '=')
         (*pIndex) ++;
 
     return rCmd.copy(begin, *pIndex - begin);
@@ -83,16 +83,16 @@ bool SvCommandList::AppendCommands
     {
 
         eatSpace(rCmd, &index);
-        OUString name = (rCmd[index] == sal_Unicode('\"')) ? parseString(rCmd, &index) : parseWord(rCmd, &index);
+        OUString name = (rCmd[index] == '\"') ? parseString(rCmd, &index) : parseWord(rCmd, &index);
 
         eatSpace(rCmd, &index);
         OUString value;
-        if(index < rCmd.getLength() && rCmd[index] == sal_Unicode('='))
+        if(index < rCmd.getLength() && rCmd[index] == '=')
         {
             index ++;
 
             eatSpace(rCmd, &index);
-            value = (rCmd[index] == sal_Unicode('\"')) ? parseString(rCmd, &index) : parseWord(rCmd, &index);
+            value = (rCmd[index] == '\"') ? parseString(rCmd, &index) : parseWord(rCmd, &index);
         }
 
         aCommandList.push_back( SvCommand(name, value));

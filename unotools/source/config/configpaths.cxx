@@ -83,14 +83,14 @@ sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
     sal_Int32 nPos = _sInPath.getLength()-1;
 
     // strip trailing slash
-    if (nPos > 0 && _sInPath[ nPos ] == sal_Unicode('/'))
+    if (nPos > 0 && _sInPath[ nPos ] == '/')
     {
         OSL_FAIL("Invalid config path: trailing '/' is not allowed");
         --nPos;
     }
 
     // check for predicate ['xxx'] or ["yyy"]
-    if (nPos  > 0 && _sInPath[ nPos ] == sal_Unicode(']'))
+    if (nPos  > 0 && _sInPath[ nPos ] == ']')
     {
         sal_Unicode chQuote = _sInPath[--nPos];
 
