@@ -170,7 +170,7 @@ bluezGetDefaultService( DBusConnection *pConnection )
         return NULL;
 
     if( DBUS_TYPE_OBJECT_PATH != dbus_message_iter_get_arg_type( &it ) )
-        SAL_WARN( "sdremote.bluetooth", "invalid type of reply to DefaultAdapter: '"
+        SAL_INFO( "sdremote.bluetooth", "invalid type of reply to DefaultAdapter: '"
                   << dbus_message_iter_get_arg_type( &it ) << "'" );
     else
     {
