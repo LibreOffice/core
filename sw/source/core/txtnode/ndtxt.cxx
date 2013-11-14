@@ -3008,14 +3008,14 @@ Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
  * Expand fields
  *************************************************************************/
 // #i83479# - handling of new parameters
-OUString SwTxtNode::GetExpandTxt(  const xub_StrLen nIdx,
-                                   const xub_StrLen nLen,
+OUString SwTxtNode::GetExpandTxt(  const sal_Int32 nIdx,
+                                   const sal_Int32 nLen,
                                    const bool bWithNum,
                                    const bool bAddSpaceAfterListLabelStr,
                                    const bool bWithSpacesForLevel ) const
 {
     OUStringBuffer aTxt(
-        (STRING_LEN == nLen) ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
+        (nLen == -1) ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
     sal_Int32 nTxtStt = nIdx;
     Replace0xFF(*this, aTxt, nTxtStt, aTxt.getLength(), true);
     if( bWithNum )
@@ -3044,9 +3044,9 @@ OUString SwTxtNode::GetExpandTxt(  const xub_StrLen nIdx,
     return aTxt.makeStringAndClear();
 }
 
-sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
-                        xub_StrLen nIdx, xub_StrLen nLen, sal_Bool bWithNum,
-                        sal_Bool bWithFtn, sal_Bool bReplaceTabsWithSpaces ) const
+bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
+                        sal_Int32 nIdx, sal_Int32 nLen, bool bWithNum,
+                        bool bWithFtn, bool bReplaceTabsWithSpaces ) const
 {
     if( &rDestNd == this )
         return sal_False;
@@ -3066,7 +3066,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     SwScriptInfo::MaskHiddenRanges(*this, buf, 0, buf.getLength(), cChar);
 
     buf.remove(0, nIdx);
-    if (STRING_LEN != nLen)
+    if (nLen != -1)
     {
         buf.truncate(nLen);
     }
@@ -3211,7 +3211,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         nStartDelete = -1; // reset
     }
 
-    return sal_True;
+    return true;
 }
 
 struct block

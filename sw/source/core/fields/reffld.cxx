@@ -248,7 +248,7 @@ OUString SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
 {
     const SwTxtNode* pReferencedTxtNode( GetReferencedTxtNode() );
     return pReferencedTxtNode
-           ? OUString(pReferencedTxtNode->GetExpandTxt( 0, STRING_LEN, true, true ))
+           ? OUString(pReferencedTxtNode->GetExpandTxt( 0, -1, true, true ))
            : OUString();
 }
 

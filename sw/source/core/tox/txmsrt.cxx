@@ -540,10 +540,9 @@ TextAndReading SwTOXPara::GetText_Impl() const
     case nsSwTOXElement::TOX_TEMPLATE:
     case nsSwTOXElement::TOX_OUTLINELEVEL:
         {
-            xub_StrLen nStt = nStartIndex;
             return TextAndReading(((SwTxtNode*)pNd)->GetExpandTxt(
-                    nStt,
-                    nEndIndex == -1 ? STRING_LEN : nEndIndex - nStt),
+                    nStartIndex,
+                    nEndIndex == -1 ? -1 : nEndIndex - nStartIndex),
                     OUString());
         }
         break;
@@ -576,9 +575,8 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) c
     if( nsSwTOXElement::TOX_TEMPLATE == eType || nsSwTOXElement::TOX_SEQUENCE == eType  || nsSwTOXElement::TOX_OUTLINELEVEL == eType)
     {
         SwTxtNode* pSrc = (SwTxtNode*)aTOXSources[0].pNd;
-        xub_StrLen nStt = nStartIndex;
-        pSrc->GetExpandTxt( rNd, &rInsPos, nStt,
-                nEndIndex == -1 ? STRING_LEN : nEndIndex - nStt,
+        pSrc->GetExpandTxt( rNd, &rInsPos, nStartIndex,
+                nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
                 sal_False, sal_False, sal_True );
     }
     else

@@ -680,15 +680,15 @@ public:
        add 5th optional parameter <bWithSpacesForLevel> indicating, if additional
        spaces are inserted in front of the expanded text string depending on
        the list level. */
-    OUString GetExpandTxt(  const xub_StrLen nIdx = 0,
-                            const xub_StrLen nLen = STRING_LEN,
+    OUString GetExpandTxt(  const sal_Int32 nIdx = 0,
+                            const sal_Int32 nLen = -1,
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false ) const;
-    sal_Bool GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx = 0,
-                        xub_StrLen nIdx = 0, xub_StrLen nLen = STRING_LEN,
-                       sal_Bool bWithNum = sal_False, sal_Bool bWithFtn = sal_True,
-                       sal_Bool bReplaceTabsWithSpaces = sal_False ) const;
+    bool GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx = 0,
+                           sal_Int32 nIdx = 0, sal_Int32 nLen = -1,
+                           bool bWithNum = false, bool bWithFtn = true,
+                           bool bReplaceTabsWithSpaces = false ) const;
 
     OUString GetRedlineTxt( xub_StrLen nIdx = 0,
                           xub_StrLen nLen = STRING_LEN,

@@ -2376,7 +2376,7 @@ OUString SwDoc::getListItemText( const SwNodeNum& rNodeNum,
                                const bool bWithSpacesForLevel ) const
 {
     return rNodeNum.GetTxtNode()
-           ? rNodeNum.GetTxtNode()->GetExpandTxt( 0, STRING_LEN, bWithNumber,
+           ? rNodeNum.GetTxtNode()->GetExpandTxt( 0, -1, bWithNumber,
                                                   bWithNumber, bWithSpacesForLevel )
            : OUString();
 }
@@ -2429,7 +2429,7 @@ OUString SwDoc::getOutlineText( const sal_Int32 nIdx,
                               const bool bWithSpacesForLevel ) const
 {
     return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
-                GetTxtNode()->GetExpandTxt( 0, STRING_LEN, bWithNumber,
+                GetTxtNode()->GetExpandTxt( 0, -1, bWithNumber,
                                             bWithNumber, bWithSpacesForLevel );
 }
 
