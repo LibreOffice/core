@@ -1751,21 +1751,39 @@ void SwViewShell::Paint(const Rectangle &rRect)
     }
 }
 
-void SwViewShell::PaintTile(OutputDevice *pOut, const Rectangle &rRect)
+void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, long tileWidth, long tileHeight)
 {
-    assert(pOut);
-
-    // now we need to setup the SwViewShell's output device
+    // SwViewShell's output device setup
     // TODO clean up SwViewShell's approach to output devices (the many of
     // them - mpBufferedOut, mpOut, mpWin, ..., and get rid of
     // mbTiledRendering)
     OutputDevice *pSaveOut = mpOut;
-
     mbTiledRendering = true;
-    mpOut = pOut;
+    mpOut = &rDevice;
 
-    Paint(rRect);
+    // setup the output device to draw the tile
+    MapMode aMapMode(rDevice.GetMapMode());
+    aMapMode.SetMapUnit(MAP_TWIP);
+    aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
 
+    // Scaling. Must convert from pixels to twips. We know
+    // that VirtualDevises use a DPI of 96.
+    Fraction scaleX = Fraction(contextWidth, 96) * Fraction(1440L) / Fraction(tileWidth);
+    Fraction scaleY = Fraction(contextHeight, 96) * Fraction(1440L) / Fraction(tileHeight);
+    aMapMode.SetScaleX(scaleX);
+    aMapMode.SetScaleY(scaleY);
+    rDevice.SetMapMode(aMapMode);
+
+    // resizes the virtual device so to contain the entrie context
+    rDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
+
+    // scroll the requested area into view if necessary
+    MakeVisible(SwRect(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+
+    // draw - works in logic coordinates
+    Paint(Rectangle(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+
+    // SwViewShell's output device tear down
     mpOut = pSaveOut;
     mbTiledRendering = false;
 }
@@ -1803,22 +1821,10 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         // that we get direct rendering; something like:
         //
         VirtualDevice aDevice;
-        MapMode aMapMode(aDevice.GetMapMode());
-        aMapMode.SetMapUnit(MAP_TWIP);
-        aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
-        // Scaling. Must convert from pixels to twips. We know
-        // that VirtualDevises use a DPI of 96.
-        Fraction scaleX = Fraction(contextWidth,96) * Fraction(1440L) / Fraction(tileWidth);
-        Fraction scaleY = Fraction(contextHeight,96) * Fraction(1440L) / Fraction(tileHeight);
-        aMapMode.SetScaleX(scaleX);
-        aMapMode.SetScaleY(scaleY);
-        aDevice.SetMapMode(aMapMode);
-        // resizes the virtual device so to contain the entrie context
-        aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
-        // scroll the requested area into view if necessary
-        pViewShell->MakeVisible(SwRect(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
-        // draw - works in logic coordinates
-        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+
+        // paint to it
+        pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
+
         // copy the aDevice content to mpImage
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();

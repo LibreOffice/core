@@ -121,31 +121,8 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
         // VirtualDevice aDevice(&aData, [color depth]);
         VirtualDevice aDevice;
 
-        MapMode aMapMode(aDevice.GetMapMode());
-        aMapMode.SetMapUnit(MAP_TWIP);
-        aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
-
-        // Scaling. Must convert from pixels to twips. We know
-        // that VirtualDevises use a DPI of 96.
-        Fraction scaleX = Fraction(contextWidth,96) * Fraction(1440L) / Fraction(tileWidth);
-        Fraction scaleY = Fraction(contextHeight,96) * Fraction(1440L) / Fraction(tileHeight);
-        aMapMode.SetScaleX(scaleX);
-        aMapMode.SetScaleY(scaleY);
-
-        aDevice.SetMapMode(aMapMode);
-
-        // resizes the virtual device so to contain the entrie context
-        aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
-
-        // scroll the requested area into view if necessary
-        pViewShell->MakeVisible(SwRect(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
-
-        // draw - works in logic coordinates
-        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
-
-        // debug
-        // aDevice.SetFillColor(Color(COL_RED));
-        // aDevice.DrawRect(Rectangle(1000, 1000, 2000, 2000));
+        // paint to it
+        pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
 
         // copy the aDevice content to mpImage
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
