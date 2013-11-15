@@ -35,4 +35,13 @@ $(eval $(call gb_Library_add_libs,urelibs,\
 	) \
 ))
 
+$(if $(filter $(OS),WNT), \
+	$(eval $(call gb_Library_use_system_win32_libs,urelibs,\
+		mpr \
+		ole32 \
+		shell32 \
+		ws2_32 \
+	)) \
+)
+
 # vim: set noet sw=4 ts=4:
