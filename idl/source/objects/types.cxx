@@ -1416,7 +1416,7 @@ void SvMetaType::WriteSfxItem(
 
     // write the implementation part
     rOutStm << "#ifdef SFX_TYPEMAP" << endl
-            << "#if defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS)) || defined(LIBO_MERGELIBS)" << endl
+            << "#if !defined(_WIN32) && ((defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS))) || defined(LIBO_MERGELIBS))" << endl
             << "__attribute__((__weak__))" << endl
             << "#endif" << endl
             << aTypeName.getStr() << aVarName.getStr()
