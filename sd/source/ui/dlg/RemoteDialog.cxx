@@ -12,19 +12,18 @@
 #include "cusshow.hxx"
 
 #include "RemoteDialog.hxx"
-#include "RemoteDialog.hrc"
 #include "RemoteServer.hxx"
 
 using namespace ::sd;
 using namespace ::std;
 
-RemoteDialog::RemoteDialog( Window *pWindow ) :
-    ModalDialog( pWindow, SdResId( DLG_PAIR_REMOTE ) ),
-    mButtonConnect(     this, SdResId( BTN_CONNECT ) ),
-    mButtonCancel(      this, SdResId( BTN_CANCEL ) ),
-    mClientBox(         this, SdResId( LB_SERVERS ) )
+RemoteDialog::RemoteDialog( Window *pWindow )
+    : ModalDialog(pWindow, "RemoteDialog",
+        "modules/simpress/ui/remotedialog.ui")
 {
-    FreeResource();
+    get(m_pButtonConnect, "connect");
+    get(m_pButtonClose, "close");
+    get(m_pClientBox, "tree");
 
 #ifdef ENABLE_SDREMOTE
     RemoteServer::ensureDiscoverable();
@@ -36,30 +35,25 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     for ( vector<ClientInfo*>::const_iterator aIt( aClients.begin() );
         aIt != aEnd; ++aIt )
     {
-        mClientBox.addEntry( *aIt );
+        m_pClientBox->addEntry( *aIt );
     }
 #endif
 
-    mButtonConnect.SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
+    m_pButtonConnect->SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );
     SetCloseHdl( LINK( this, RemoteDialog, CloseHdl ) );
-    mButtonCancel.SetClickHdl( LINK( this, RemoteDialog, CloseHdl ) );
+    m_pButtonClose->SetClickHdl( LINK( this, RemoteDialog, CloseHdl ) );
 }
 
-RemoteDialog::~RemoteDialog()
-{
-}
-
-// -----------------------------------------------------------------------
 IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 {
 //     setBusy( true );
     // Fixme: Try and connect
 #if defined(ENABLE_SDREMOTE) && defined(ENABLE_SDREMOTE_BLUETOOTH)
-    long aSelected = mClientBox.GetActiveEntryIndex();
+    long aSelected = m_pClientBox->GetActiveEntryIndex();
     if ( aSelected < 0 )
         return 1;
-    TClientBoxEntry aEntry = mClientBox.GetEntryData(aSelected);
-    OUString aPin ( mClientBox.getPin() );
+    TClientBoxEntry aEntry = m_pClientBox->GetEntryData(aSelected);
+    OUString aPin ( m_pClientBox->getPin() );
     if ( RemoteServer::connectClient( aEntry->m_pClientInfo, aPin ) )
     {
         return CloseHdl( 0 );

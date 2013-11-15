@@ -387,17 +387,11 @@ void TableValueSet::updateSettings()
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeTableValueSet(::Window *pParent, VclBuilder::stringmap &rMap)
 {
-    WinBits nWinBits = WB_TABSTOP;
-
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString("border"));
-    if (aFind != rMap.end())
-    {
-        if (toBool(aFind->second))
-            nWinBits |= WB_BORDER;
-        rMap.erase(aFind);
-    }
-
-    return new TableValueSet(pParent, nWinBits);
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new TableValueSet(pParent, nWinStyle);
 }
 
 // --------------------------------------------------------------------

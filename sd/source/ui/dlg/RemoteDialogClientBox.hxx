@@ -106,9 +106,8 @@ class ClientBox:
     Link            m_aClickHdl;
 
     NumericBox      m_aPinBox;
-    FixedText       m_aPinDescription;
 
-    ScrollBar*      m_pScrollBar;
+    ScrollBar       m_aScrollBar;
 
     com::sun::star::uno::Reference< ClientRemovedListener > m_xRemoveListener;
 
@@ -140,12 +139,13 @@ class ClientBox:
 
 
 public:
-                    ClientBox( Dialog* pParent, const SdResId& aId );
+                    ClientBox( Window* pParent, WinBits nStyle );
                    ~ClientBox();
 
     void    MouseButtonDown( const MouseEvent& rMEvt );
     void    Paint( const Rectangle &rPaintRect );
     void    Resize();
+    Size    GetOptimalSize() const;
     long    Notify( NotifyEvent& rNEvt );
 
     const Size      GetMinOutputSizePixel() const;

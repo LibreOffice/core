@@ -48,7 +48,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/LayerDialog.src \
     sd/source/ui/dlg/navigatr.src \
     sd/source/ui/dlg/PaneDockingWindow.src \
-    sd/source/ui/dlg/RemoteDialog.src \
     sd/source/ui/dlg/sdpreslt.src \
     sd/source/ui/dlg/tpaction.src \
     sd/source/ui/dlg/vectdlg.src \

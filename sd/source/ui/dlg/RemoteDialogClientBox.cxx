@@ -20,13 +20,14 @@
 #include "svtools/controldims.hrc"
 
 #include "RemoteDialogClientBox.hxx"
-#include "RemoteDialog.hrc"
 #include "RemoteServer.hxx"
 
 #include "comphelper/processfactory.hxx"
 #include "com/sun/star/i18n/CollatorOptions.hpp"
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
+
+#include "glob.hrc"
 
 using namespace ::com::sun::star;
 
@@ -63,8 +64,8 @@ ClientRemovedListener::~ClientRemovedListener()
 //------------------------------------------------------------------------------
 // ClientBox
 //------------------------------------------------------------------------------
-ClientBox::ClientBox( Dialog* pParent, const SdResId& aId ) :
-    Control( pParent, aId ),
+ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
+    Control( pParent, nStyle ),
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
     m_bNeedsRecalc( true ),
@@ -75,15 +76,13 @@ ClientBox::ClientBox( Dialog* pParent, const SdResId& aId ) :
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
-    m_aPinBox( this, SdResId( INPUT_PIN ) ),
-    m_aPinDescription( this, SdResId( TEXT_PIN ) ),
-    m_pScrollBar( new ScrollBar( this, WB_VERT ) )
+    m_aPinBox( this, 0 ),
+    m_aScrollBar( this, WB_VERT )
 {
-    m_pScrollBar->SetScrollHdl( LINK( this, ClientBox, ScrollHdl ) );
-    m_pScrollBar->EnableDrag();
+    m_aScrollBar.SetScrollHdl( LINK( this, ClientBox, ScrollHdl ) );
+    m_aScrollBar.EnableDrag();
 
     m_aPinBox.SetUseThousandSep(false);
-//     m_aPinDescription.SetText( SD_RESSTR( STR_ENTER_PIN ) );
 
     SetPaintTransparent( true );
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
@@ -110,6 +109,20 @@ ClientBox::ClientBox( Dialog* pParent, const SdResId& aId ) :
     m_xRemoveListener = new ClientRemovedListener( this );
 
     Show();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeClientBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new ClientBox(pParent, nWinStyle);
+}
+
+Size ClientBox::GetOptimalSize() const
+{
+    return LogicToPixel(Size(200, 140), MAP_APPFONT);
 }
 
 //------------------------------------------------------------------------------
@@ -151,7 +164,7 @@ void ClientBox::CalcActiveHeight( const long nPos )
     // Text entry height
     Size aSize = GetOutputSizePixel();
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
+        aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
 
     aSize.Width() -= ICON_OFFSET;
 
@@ -173,7 +186,7 @@ Rectangle ClientBox::GetEntryRect( const long nPos ) const
     Size aSize( GetOutputSizePixel() );
 
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
+        aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
 
     if ( m_vEntries[ nPos ]->m_bActive )
         aSize.Height() = m_nActiveHeight;
@@ -334,11 +347,11 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
         Size  aBtnSize( m_aPinBox.GetSizePixel() );
         Point aBtnPos( aRect.Left(),
                    aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
-//         m_aPinDescription.SetPosPixel( aBtnPos );
+        OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
         DrawText( Rectangle( aBtnPos.X(), aBtnPos.Y(), rRect.Right(), rRect.Bottom() - TOP_OFFSET),
-                  SD_RESSTR( STR_ENTER_PIN ), 0 );
+                  sPinText, 0 );
 
-        aBtnPos = Point( aRect.Left() + GetTextWidth( SD_RESSTR( STR_ENTER_PIN ) ),
+        aBtnPos = Point( aRect.Left() + GetTextWidth( sPinText ),
                    aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
 
         m_aPinBox.SetPosPixel( aBtnPos );
@@ -407,7 +420,7 @@ void ClientBox::RecalcAll()
             }
 
             if ( m_bHasScrollBar )
-                m_pScrollBar->SetThumbPos( m_nTopIndex );
+                m_aScrollBar.SetThumbPos( m_nTopIndex );
         }
     }
 
@@ -478,7 +491,7 @@ void ClientBox::Paint( const Rectangle &/*rPaintRect*/ )
     Size aSize( GetOutputSizePixel() );
 
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
+        aSize.Width() -= m_aScrollBar.GetSizePixel().Width();
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
@@ -518,20 +531,20 @@ void ClientBox::SetupScrollBar()
         if ( m_nTopIndex + aSize.Height() > nTotalHeight )
             m_nTopIndex = nTotalHeight - aSize.Height();
 
-        m_pScrollBar->SetPosSizePixel( Point( aSize.Width() - nScrBarSize, 0 ),
+        m_aScrollBar.SetPosSizePixel( Point( aSize.Width() - nScrBarSize, 0 ),
                                        Size( nScrBarSize, aSize.Height() ) );
-        m_pScrollBar->SetRangeMax( nTotalHeight );
-        m_pScrollBar->SetVisibleSize( aSize.Height() );
-        m_pScrollBar->SetPageSize( ( aSize.Height() * 4 ) / 5 );
-        m_pScrollBar->SetLineSize( m_nStdHeight );
-        m_pScrollBar->SetThumbPos( m_nTopIndex );
+        m_aScrollBar.SetRangeMax( nTotalHeight );
+        m_aScrollBar.SetVisibleSize( aSize.Height() );
+        m_aScrollBar.SetPageSize( ( aSize.Height() * 4 ) / 5 );
+        m_aScrollBar.SetLineSize( m_nStdHeight );
+        m_aScrollBar.SetThumbPos( m_nTopIndex );
 
         if ( !m_bHasScrollBar )
-            m_pScrollBar->Show();
+            m_aScrollBar.Show();
     }
     else if ( m_bHasScrollBar )
     {
-        m_pScrollBar->Hide();
+        m_aScrollBar.Hide();
         m_nTopIndex = 0;
     }
 
@@ -607,11 +620,11 @@ long ClientBox::Notify( NotifyEvent& rNEvt )
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
             if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
             {
-                long nThumbPos = m_pScrollBar->GetThumbPos();
+                long nThumbPos = m_aScrollBar.GetThumbPos();
                 if ( pData->GetDelta() < 0 )
-                    m_pScrollBar->DoScroll( nThumbPos + m_nStdHeight );
+                    m_aScrollBar.DoScroll( nThumbPos + m_nStdHeight );
                 else
-                    m_pScrollBar->DoScroll( nThumbPos - m_nStdHeight );
+                    m_aScrollBar.DoScroll( nThumbPos - m_nStdHeight );
                 bHandled = true;
             }
         }
@@ -690,13 +703,13 @@ long ClientBox::addEntry( ClientInfo* pClientInfo )
 void ClientBox::DoScroll( long nDelta )
 {
     m_nTopIndex += nDelta;
-    Point aNewSBPt( m_pScrollBar->GetPosPixel() );
+    Point aNewSBPt( m_aScrollBar.GetPosPixel() );
 
     Rectangle aScrRect( Point(), GetOutputSizePixel() );
-    aScrRect.Right() -= m_pScrollBar->GetSizePixel().Width();
+    aScrRect.Right() -= m_aScrollBar.GetSizePixel().Width();
     Scroll( 0, -nDelta, aScrRect );
 
-    m_pScrollBar->SetPosPixel( aNewSBPt );
+    m_aScrollBar.SetPosPixel( aNewSBPt );
 }
 
 // -----------------------------------------------------------------------

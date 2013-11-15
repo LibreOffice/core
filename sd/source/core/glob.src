@@ -449,4 +449,9 @@ String STR_POOLSHEET_LAST_COLUMN
     Text [ en-US ] = "Last column" ;
 };
 
+String STR_ENTER_PIN
+{
+    Text [ en-US ] = "Enter PIN:";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

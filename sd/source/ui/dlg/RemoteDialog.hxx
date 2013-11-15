@@ -24,16 +24,14 @@ namespace sd
 class RemoteDialog : public ModalDialog
 {
 private:
-    OKButton        mButtonConnect;
-    CancelButton    mButtonCancel;
-    ClientBox       mClientBox;
+    PushButton*     m_pButtonConnect;
+    CloseButton*    m_pButtonClose;
+    ClientBox*      m_pClientBox;
 
     DECL_DLLPRIVATE_LINK( HandleConnectButton, void * );
     DECL_LINK( CloseHdl, void * );
 public:
     RemoteDialog( Window* pWindow );
-    ~RemoteDialog();
-
 };
 
 }

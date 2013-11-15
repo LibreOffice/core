@@ -127,6 +127,7 @@
 #define STR_SLIDE_NAME                          RID_GLOB_START+112
 #define STR_LEFT_IMPRESS_PANE_SHELL             RID_GLOB_START+113
 #define STR_LEFT_DRAW_PANE_SHELL                RID_GLOB_START+114
+#define STR_ENTER_PIN                           RID_GLOB_START+115
 #define STR_TOOL_PANEL_SHELL                    RID_GLOB_START+116
 
 #define STR_TASKPANEVIEWSHELL                   RID_GLOB_START+117
