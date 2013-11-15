@@ -150,7 +150,7 @@ void SwViewShell::DLPrePaint2(const Region& rRegion)
             MakeDrawView();
 
         // Prefer window; if tot available, get mpOut (e.g. printer)
-        mpPrePostOutDev = (GetWin() ? GetWin() : GetOut());
+        mpPrePostOutDev = (GetWin() && !mbTiledRendering)? GetWin(): GetOut();
 
         // #i74769# use SdrPaintWindow now direct
         mpTargetPaintWindow = Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion);
@@ -160,9 +160,7 @@ void SwViewShell::DLPrePaint2(const Region& rRegion)
         if(mpTargetPaintWindow->GetPreRenderDevice())
         {
             mpBufferedOut = mpOut;
-#ifndef IOS
             mpOut = &(mpTargetPaintWindow->GetTargetOutputDevice());
-#endif
         }
 
         // remember original paint MapMode for wrapped FlyFrame paints
@@ -192,13 +190,11 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
     mPrePostPaintRegions.pop(); // clear
     if(0 != mpTargetPaintWindow)
     {
-#ifndef IOS
         // #i74769# restore buffered OutDev
         if(mpTargetPaintWindow->GetPreRenderDevice())
         {
             mpOut = mpBufferedOut;
         }
-#endif
 
         // #i74769# use SdrPaintWindow now direct
         Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow, bPaintFormLayer);
@@ -1760,13 +1756,18 @@ void SwViewShell::PaintTile(OutputDevice *pOut, const Rectangle &rRect)
     assert(pOut);
 
     // now we need to setup the SwViewShell's output device
-    // TODO clean up SwViewShell's approach to output devices
-    OutputDevice *pSaveOut = GetOut();
-    SetOutDev(this, pOut);
+    // TODO clean up SwViewShell's approach to output devices (the many of
+    // them - mpBufferedOut, mpOut, mpWin, ..., and get rid of
+    // mbTiledRendering)
+    OutputDevice *pSaveOut = mpOut;
+
+    mbTiledRendering = true;
+    mpOut = pOut;
 
     Paint(rRect);
 
-    SetOutDev(this, pSaveOut);
+    mpOut = pSaveOut;
+    mbTiledRendering = false;
 }
 
 #if !HAVE_FEATURE_DESKTOP

@@ -159,6 +159,7 @@ class SW_DLLPUBLIC SwViewShell : public Ring
 
     // boolean, indicating that class in in constructor.
     bool mbInConstructor:1;
+    bool mbTiledRendering:1; ///< Set if we are doing the tiled rendering (using PaintTile()).
 
     SdrPaintWindow*         mpTargetPaintWindow;
     OutputDevice*           mpBufferedOut;

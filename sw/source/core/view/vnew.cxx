@@ -232,6 +232,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     mbShowHeaderSeparator( false ),
     mbShowFooterSeparator( false ),
     mbHeaderFooterEdit( false ),
+    mbTiledRendering(false),
     mpTargetPaintWindow(0), // #i74769#
     mpBufferedOut(0), // #i74769#
     mpDoc( rShell.GetDoc() ),
