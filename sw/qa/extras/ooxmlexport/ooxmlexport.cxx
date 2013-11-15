@@ -1820,6 +1820,18 @@ DECLARE_OOXML_TEST(testCellGridSpan, "cell-grid-span.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
 }
+DECLARE_OOXML_TEST(testFdo71646, "fdo71646.docx")
+{
+    // The problem was after save file created by MS the direction changed to RTL.
+    uno::Reference<uno::XInterface> xParaLTRLeft(getParagraph( 1, "LTR LEFT"));
+    sal_Int32 nLTRLeft = getProperty< sal_Int32 >( xParaLTRLeft, "ParaAdjust" );
+    // test the text Direction value for the pragraph
+    sal_Int16 nLRDir  = getProperty< sal_Int32 >( xParaLTRLeft, "WritingMode" );
+
+    // this will test the both the text direction and alignment for paragraph
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), nLTRLeft);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
+}
 
 #endif
 
