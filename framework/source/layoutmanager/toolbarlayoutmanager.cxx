@@ -294,7 +294,7 @@ Rectangle ToolbarLayoutManager::implts_calcDockingArea()
                 SolarMutexGuard aGuard;
 
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if ( pWindow && !xDockWindow->isFloating() && pConstIter->m_bVisible )
+                if ( pWindow && !xDockWindow->isFloating() && pConstIter->m_bVisible && !pConstIter->m_bMasterHide )
                 {
                     awt::Rectangle aPosSize = xWindow->getPosSize();
                     if ( pConstIter->m_aDockedData.m_nDockedArea != nCurrDockingArea )
@@ -442,7 +442,7 @@ bool ToolbarLayoutManager::requestToolbar( const OUString& rResourceURL )
     if ( !xUIElement.is() )
         bMustCallCreate = true;
 
-    bool bCreateOrShowToolbar( aRequestedToolbar.m_bVisible & !aRequestedToolbar.m_bMasterHide );
+    bool bCreateOrShowToolbar( aRequestedToolbar.m_bVisible && !aRequestedToolbar.m_bMasterHide );
 
     uno::Reference< awt::XWindow2 > xContainerWindow( m_xContainerWindow, uno::UNO_QUERY );
     if ( xContainerWindow.is() && aRequestedToolbar.m_bFloating )
@@ -681,28 +681,24 @@ void ToolbarLayoutManager::setVisible( bool bVisible )
     UIElementVector::iterator pIter;
     for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); ++pIter )
     {
-        pIter->m_bMasterHide = !bVisible;
+        if (!pIter->m_bFloating)
+        {
+            UIElement aUIElement(*pIter);
+            aUIElement.m_bMasterHide = !bVisible;
+            implts_setToolbar(aUIElement);
+            implts_setLayoutDirty();
+        }
+
         Window* pWindow = getWindowFromXUIElement( pIter->m_xUIElement );
         if ( pWindow )
         {
-            bool bSetVisible( pIter->m_bVisible & bVisible );
+            bool bSetVisible( pIter->m_bVisible && bVisible );
             if ( !bSetVisible )
-            {
                 pWindow->Hide();
-
-                UIElement aUIElement( *pIter );
-                if ( !aUIElement.m_bFloating )
-                    implts_setLayoutDirty();
-
-                aUIElement.m_bVisible = false;
-                implts_setToolbar( aUIElement );
-            }
             else
             {
                 if ( pIter->m_bFloating )
                     pWindow->Show(true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                else
-                    implts_setLayoutDirty();
             }
         }
     }
