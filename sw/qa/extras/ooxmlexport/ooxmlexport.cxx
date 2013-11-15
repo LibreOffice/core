@@ -1648,7 +1648,7 @@ DECLARE_OOXML_TEST(testVMLData, "TestVMLData.docx")
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data shoud not come under w:rPr element.
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:shape", "stroked").match("f"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:rect", "stroked").match("f"));
 }
 
 DECLARE_OOXML_TEST(testImageData, "image_data.docx")
@@ -1656,7 +1656,7 @@ DECLARE_OOXML_TEST(testImageData, "image_data.docx")
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:rect/v:imagedata", "detectmouseclick").match("t"));
 }
 
 DECLARE_OOXML_TEST(testImageCrop, "ImageCrop.docx")
