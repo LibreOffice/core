@@ -644,6 +644,8 @@ namespace
             return (VclResId(SV_BUTTONTEXT_FIND).toString());
         else if (rType == "gtk-stop")
             return (VclResId(SV_BUTTONTEXT_STOP).toString());
+        else if (rType == "gtk-connect")
+            return (VclResId(SV_BUTTONTEXT_CONNECT).toString());
         SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
         return OUString();
     }

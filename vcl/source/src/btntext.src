@@ -181,4 +181,9 @@ String SV_BUTTONTEXT_STOP
     Text [ en-US ] = "~Stop" ;
 };
 
+String SV_BUTTONTEXT_CONNECT
+{
+    Text [ en-US ] = "C~onnect" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
