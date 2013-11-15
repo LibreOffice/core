@@ -9529,7 +9529,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "No thousands separator. True value, if existing and TRUE (unequal to 0), no thousands separators are set." ;
+            Text [ en-US ] = "Thousands separator. If 0 or omitted the locale group separator is used else the separator is suppressed." ;
         };
     };
      // -=*# Resource for function LÄNGE #*=-
