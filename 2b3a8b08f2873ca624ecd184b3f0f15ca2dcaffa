@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaX///mA\u003d",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-15T17:35:19Z",
+      "side": 1,
+      "message": "Please use SAL_WARN() instead of OSL_FAIL() in new code.",
+      "revId": "2b3a8b08f2873ca624ecd184b3f0f15ca2dcaffa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
