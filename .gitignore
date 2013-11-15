@@ -16,7 +16,7 @@
 # if that is not the case, don't hide it here, but try to fix it
 #
 # The intent is that after a make distclean, .gitignore
-# should not catch anything but possibly /src
+# should not catch anything but possibly /external/tarballs
 #
 
 # where stuff are built
@@ -24,7 +24,7 @@
 /workdir
 
 # where the external downloads maybe located
-/src
+/external/tarballs
 
 # autoconf generated stuff
 /aclocal.m4
