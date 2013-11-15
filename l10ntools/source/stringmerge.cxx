@@ -68,17 +68,22 @@ void StringParser::Extract( const OString& rPOFile )
     {
         if (!xmlStrcmp(pCurrent->name, (const xmlChar*)("string")))
         {
-            xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("name"));
-            xmlChar* pText = xmlNodeGetContent(pCurrent);
-            const OString sTemp =
-                helper::unEscapeAll(helper::xmlStrToOString( pText ),"\\n""\\t""\\\"""\\\'","\n""\t""\"""\'");
-            common::writePoEntry(
-                "Stringex", aPOStream, m_pSource->name, "string",
-                helper::xmlStrToOString( pID ), OString(), OString(),
-                sTemp);
+            xmlChar* pTranslatable = xmlGetProp(pCurrent, (const xmlChar*)("translatable"));
+            if (xmlStrcmp(pTranslatable, (const xmlChar*)("false")))
+            {
+                xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("name"));
+                xmlChar* pText = xmlNodeGetContent(pCurrent);
+                const OString sTemp =
+                    helper::unEscapeAll(helper::xmlStrToOString( pText ),"\\n""\\t""\\\"""\\\'","\n""\t""\"""\'");
+                common::writePoEntry(
+                    "Stringex", aPOStream, m_pSource->name, "string",
+                    helper::xmlStrToOString( pID ), OString(), OString(),
+                    sTemp);
 
-            xmlFree( pID );
-            xmlFree( pText );
+                xmlFree( pID );
+                xmlFree( pText );
+            }
+            xmlFree( pTranslatable );
         }
     }
 
