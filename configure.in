@@ -4048,15 +4048,27 @@ if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
    with_system_python=yes
 
    _python="/Library/Frameworks/Python.framework/Versions/Current/bin/python" 
+   if test ! -f $_python; then
+   	  _python="/usr/bin/python"
+   fi
+   AC_MSG_RESULT([compiling against system python ($_python)])
+
    _python_hexversion=`$_python -c "import sys; print(sys.hexversion);"`
-   
+ 
    dnl hex version of Python 2.7.1 = 34013680
    if test $_python_hexversion -ge 34013680 ; then
+   	  _python_version=`$_python -c "import sys; print sys.version;" | head -n 1`
       AC_MSG_RESULT([compiling against system python (version $_python_version)])
 
 	  _python_ver=`$_python -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
 	  
-   	  PYTHON_CFLAGS="-I/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"
+	  if test -d "/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"; then
+	  	 PYTHON_CFLAGS="-I/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"
+	  elif test -d "/Developer/SDKs/MacOSX10.4u.sdk/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"; then
+	  	 PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"  
+	  else
+		 PYTHON_CFLAGS="-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"
+	  fi
    else
 		AC_MSG_ERROR([Python 2.7.1 or higher is required])
    fi
