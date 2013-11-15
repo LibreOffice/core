@@ -13,6 +13,7 @@ OPENSYMBOL_FONT="opens___.ttf"
 OPENSYMBOL_PACKAGE="ttf-opensymbol-lhm"
 OPENSYMBOL_PATH="${LO_BASE_PATH}/share/fonts/truetype/${OPENSYMBOL_FONT}"
 LO_PATHS_XCU="${LO_BASE_PATH}/share/registry/data/org/libreoffice/Office/Paths.xcu"
+LO_MAIN_XCD="${LO_BASE_PATH}/share/registry/main.xcd"
 
 function usage {
 	echo "    $1"
