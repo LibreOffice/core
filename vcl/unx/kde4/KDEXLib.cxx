@@ -329,20 +329,16 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
+// Qts processEvent always processes all pending events,
+// so we can ignore the second parameter 'bHandleAllCurrentEvents'.
+void KDEXLib::processYield( bool bWait, bool )
 {
-    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
-    bool wasEvent = false;
-    for( int cnt = bHandleAllCurrentEvents ? 100 : 1;
-         cnt > 0;
-         --cnt )
-    {
-        if( !dispatcher->processEvents( QEventLoop::AllEvents ))
-            break;
-        wasEvent = true;
-    }
-    if( bWait && !wasEvent )
+    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread() );
+
+    if ( bWait )
         dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+    else
+        dispatcher->processEvents( QEventLoop::AllEvents );
 }
 
 void KDEXLib::StartTimer( sal_uLong nMS )
