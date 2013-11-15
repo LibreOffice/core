@@ -44,7 +44,6 @@
 #include <svx/sdr/table/tabledesign.hxx>
 
 #include "TableDesignPane.hxx"
-#include <svtools/valueset.hxx>
 
 #include "DrawDocShell.hxx"
 #include "ViewShellBase.hxx"
@@ -92,17 +91,14 @@ static const OUString* getPropertyNames()
 }
 // --------------------------------------------------------------------
 
-TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase,
-    bool bModal )
-    : PanelLayout(pParent, "TableDesignPanel",
-        "modules/simpress/ui/tabledesignpanel.ui", cssu::Reference<css::frame::XFrame>())
-    , mrBase( rBase )
-    , msTableTemplate( "TableTemplate" )
-    , mbModal( bModal )
-    , mbStyleSelected( false )
-    , mbOptionsChanged( false )
+TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal )
+    : mrBase(rBase)
+    , msTableTemplate("TableTemplate")
+    , mbModal(bModal)
+    , mbStyleSelected(false)
+    , mbOptionsChanged(false)
 {
-    get(m_pValueSet, "previews");
+    pParent->get(m_pValueSet, "previews");
     m_pValueSet->SetStyle(m_pValueSet->GetStyle() | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_ITEMBORDER);
     m_pValueSet->SetExtraSpacing(8);
     m_pValueSet->setModal(mbModal);
@@ -115,13 +111,13 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase,
         m_pValueSet->SetColor( Color( COL_WHITE ) );
         m_pValueSet->SetBackground( Color( COL_WHITE ) );
     }
-    m_pValueSet->SetSelectHdl (LINK(this, TableDesignPane, implValueSetHdl));
+    m_pValueSet->SetSelectHdl (LINK(this, TableDesignWidget, implValueSetHdl));
 
     const OUString* pPropNames = getPropertyNames();
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
-        get(m_aCheckBoxes[i], OUStringToOString(pPropNames[i], RTL_TEXTENCODING_UTF8));
-        m_aCheckBoxes[i]->SetClickHdl( LINK( this, TableDesignPane, implCheckBoxHdl ) );
+        pParent->get(m_aCheckBoxes[i], OUStringToOString(pPropNames[i], RTL_TEXTENCODING_UTF8));
+        m_aCheckBoxes[i]->SetClickHdl( LINK( this, TableDesignWidget, implCheckBoxHdl ) );
     }
 
     // get current controller and initialize listeners
@@ -147,16 +143,9 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase,
 
 // --------------------------------------------------------------------
 
-TableDesignPane::~TableDesignPane()
+TableDesignWidget::~TableDesignWidget()
 {
     removeListener();
-}
-
-// --------------------------------------------------------------------
-
-void TableDesignPane::DataChanged( const DataChangedEvent& /*rDCEvt*/ )
-{
-    m_pValueSet->updateSettings();
 }
 
 // --------------------------------------------------------------------
@@ -181,7 +170,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 
 // --------------------------------------------------------------------
 
-IMPL_LINK_NOARG(TableDesignPane, implValueSetHdl)
+IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl)
 {
     mbStyleSelected = true;
     if( !mbModal )
@@ -191,7 +180,7 @@ IMPL_LINK_NOARG(TableDesignPane, implValueSetHdl)
 
 // --------------------------------------------------------------------
 
-void TableDesignPane::ApplyStyle()
+void TableDesignWidget::ApplyStyle()
 {
     try
     {
@@ -236,13 +225,13 @@ void TableDesignPane::ApplyStyle()
     }
     catch( Exception& )
     {
-        OSL_FAIL("TableDesignPane::implValueSetHdl(), exception caught!");
+        OSL_FAIL("TableDesignWidget::implValueSetHdl(), exception caught!");
     }
 }
 
 // --------------------------------------------------------------------
 
-IMPL_LINK_NOARG(TableDesignPane, implCheckBoxHdl)
+IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl)
 {
     mbOptionsChanged = true;
 
@@ -255,7 +244,7 @@ IMPL_LINK_NOARG(TableDesignPane, implCheckBoxHdl)
 
 // --------------------------------------------------------------------
 
-void TableDesignPane::ApplyOptions()
+void TableDesignWidget::ApplyOptions()
 {
     static const sal_uInt16 gParamIds[CB_COUNT] =
     {
@@ -293,7 +282,7 @@ void TableDesignPane::ApplyOptions()
 
 // --------------------------------------------------------------------
 
-void TableDesignPane::onSelectionChanged()
+void TableDesignWidget::onSelectionChanged()
 {
     Reference< XPropertySet > xNewSelection;
 
@@ -325,7 +314,7 @@ void TableDesignPane::onSelectionChanged()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::TableDesignPane::onSelectionChanged(), Exception caught!" );
+        OSL_FAIL( "sd::TableDesignWidget::onSelectionChanged(), Exception caught!" );
     }
 
     if( mxSelectedTable != xNewSelection )
@@ -381,6 +370,11 @@ TableValueSet::TableValueSet(Window *pParent, WinBits nStyle)
 {
 }
 
+void TableValueSet::DataChanged( const DataChangedEvent& /*rDCEvt*/ )
+{
+    updateSettings();
+}
+
 void TableValueSet::updateSettings()
 {
     if( !m_bModal )
@@ -408,7 +402,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeTableValueSet(::Window *p
 
 // --------------------------------------------------------------------
 
-void TableDesignPane::updateControls()
+void TableDesignWidget::updateControls()
 {
     static const sal_Bool gDefaults[CB_COUNT] = { sal_True, sal_False, sal_True, sal_False, sal_False, sal_False };
 
@@ -424,7 +418,7 @@ void TableDesignPane::updateControls()
         }
         catch( Exception& )
         {
-            OSL_FAIL("sd::TableDesignPane::updateControls(), exception caught!");
+            OSL_FAIL("sd::TableDesignWidget::updateControls(), exception caught!");
         }
         m_aCheckBoxes[i]->Check(bUse ? true : false);
         m_aCheckBoxes[i]->Enable(bHasTable ? true : false);
@@ -463,9 +457,9 @@ void TableDesignPane::updateControls()
 
 // --------------------------------------------------------------------
 
-void TableDesignPane::addListener()
+void TableDesignWidget::addListener()
 {
-    Link aLink( LINK(this,TableDesignPane,EventMultiplexerListener) );
+    Link aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -477,15 +471,15 @@ void TableDesignPane::addListener()
 
 // --------------------------------------------------------------------
 
-void TableDesignPane::removeListener()
+void TableDesignWidget::removeListener()
 {
-    Link aLink( LINK(this,TableDesignPane,EventMultiplexerListener) );
+    Link aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 // --------------------------------------------------------------------
 
-IMPL_LINK(TableDesignPane,EventMultiplexerListener,
+IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)
 {
     switch (pEvent->meEventId)
@@ -785,7 +779,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
     return aPreviewBmp;
 }
 
-void TableDesignPane::FillDesignPreviewControl()
+void TableDesignWidget::FillDesignPreviewControl()
 {
     sal_uInt16 nSelectedItem = m_pValueSet->GetSelectItemId();
     m_pValueSet->Clear();
@@ -822,52 +816,48 @@ void TableDesignPane::FillDesignPreviewControl()
         }
         catch( Exception& )
         {
-            OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
+            OSL_FAIL("sd::TableDesignWidget::FillDesignPreviewControl(), exception caught!");
         }
-        m_pValueSet->SetColCount(3);
-        m_pValueSet->SetLineCount((nCount+2)/3);
+        sal_Int32 nCols = 3;
+        sal_Int32 nRows = (nCount+2)/3;
+        m_pValueSet->SetColCount(nCols);
+        m_pValueSet->SetLineCount(nRows);
+        WinBits nStyle = m_pValueSet->GetStyle() & ~(WB_VSCROLL);
+        m_pValueSet->SetStyle(nStyle);
         Size aSize(m_pValueSet->GetOptimalSize());
+        aSize.Width() += (10 * nCols);
+        aSize.Height() += (10 * nRows);
         m_pValueSet->set_width_request(aSize.Width());
         m_pValueSet->set_height_request(aSize.Height());
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
+        OSL_FAIL("sd::TableDesignWidget::FillDesignPreviewControl(), exception caught!");
     }
     m_pValueSet->SelectItem(nSelectedItem);
 }
 
 // ====================================================================
 
-TableDesignDialog::TableDesignDialog(::Window* pParent, ViewShellBase& rBase )
-    : ModalDialog(pParent, "TableDesignDialog",
-        "modules/sdraw/ui/tabledesigndialog.ui")
-{
-    mxDesignPane.reset( new TableDesignPane( get_content_area(), rBase, true ) );
-    mxDesignPane->Hide();
-}
-
-// --------------------------------------------------------------------
-
 short TableDesignDialog::Execute()
 {
     if( ModalDialog::Execute() )
     {
-        if( mxDesignPane->isStyleChanged() )
-            mxDesignPane->ApplyStyle();
+        if( aImpl.isStyleChanged() )
+            aImpl.ApplyStyle();
 
-        if( mxDesignPane->isOptionsChanged() )
-            mxDesignPane->ApplyOptions();
-        return sal_True;
+        if( aImpl.isOptionsChanged() )
+            aImpl.ApplyOptions();
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // ====================================================================
 
 ::Window * createTableDesignPanel( ::Window* pParent, ViewShellBase& rBase )
 {
-    return new TableDesignPane( pParent, rBase, false );
+    return new TableDesignPane( pParent, rBase );
 }
 
 // ====================================================================

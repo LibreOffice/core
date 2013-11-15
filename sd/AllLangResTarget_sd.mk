@@ -53,7 +53,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/tpaction.src \
     sd/source/ui/dlg/vectdlg.src \
     sd/source/ui/slideshow/slideshow.src \
-    sd/source/ui/table/TableDesignPane.src \
     sd/source/ui/view/DocumentRenderer.src \
 ))
 

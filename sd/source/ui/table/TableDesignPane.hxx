@@ -60,20 +60,19 @@ private:
 public:
     TableValueSet(Window *pParent, WinBits nStyle);
     virtual void Resize();
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
     void updateSettings();
     void setModal(bool bModal) { m_bModal = bModal; }
 };
 
-class TableDesignPane : public PanelLayout
+class TableDesignWidget
 {
 public:
-    TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool bModal );
-    virtual ~TableDesignPane();
+    TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal );
+    virtual ~TableDesignWidget();
 
     // callbacks
     void onSelectionChanged();
-
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     void ApplyOptions();
     void ApplyStyle();
@@ -109,16 +108,33 @@ private:
     bool mbOptionsChanged;
 };
 
+class TableDesignPane : public PanelLayout
+{
+private:
+    TableDesignWidget aImpl;
+public:
+    TableDesignPane( ::Window* pParent, ViewShellBase& rBase )
+        : PanelLayout(pParent, "TableDesignPanel",
+        "modules/simpress/ui/tabledesignpanel.ui", com::sun::star::uno::Reference<css::frame::XFrame>())
+        , aImpl(this, rBase, false)
+    {
+    }
+};
+
 // --------------------------------------------------------------------
 
 class TableDesignDialog : public ModalDialog
 {
-public:
-    TableDesignDialog( ::Window* pParent, ViewShellBase& rBase );
-
-    virtual short Execute();
 private:
-    boost::scoped_ptr< TableDesignPane > mxDesignPane;
+    TableDesignWidget aImpl;
+public:
+    TableDesignDialog( ::Window* pParent, ViewShellBase& rBase )
+        : ModalDialog(pParent, "TableDesignDialog",
+        "modules/sdraw/ui/tabledesigndialog.ui")
+        , aImpl(this, rBase, true)
+    {
+    }
+    virtual short Execute();
 };
 
 }
