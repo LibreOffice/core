@@ -1821,6 +1821,17 @@ DECLARE_OOXML_TEST(testCellGridSpan, "cell-grid-span.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
 }
 
+DECLARE_OOXML_TEST(testSectionProperties, "testSectionProperties.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:type","val","nextPage");
+}
+
+DECLARE_OOXML_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[2]/w:pPr/w:pStyle", "val").match("Normal"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
