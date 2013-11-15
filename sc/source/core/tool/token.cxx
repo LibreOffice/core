@@ -3262,7 +3262,22 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             // TODO : Implement this.
         break;
         case svIndex:
-            // TODO : Implement this.
+        {
+            sal_uInt16 nIndex = rToken.GetIndex();
+            switch (eOp)
+            {
+                case ocName:
+                {
+                    sc::TokenStringContext::IndexNameMapType::const_iterator it = rCxt.maGlobalRangeNames.find(nIndex);
+                    if (it != rCxt.maGlobalRangeNames.end())
+                        rBuf.append(it->second);
+                }
+                break;
+                    // TODO : Handle other name types.
+                default:
+                    ;
+            }
+        }
         break;
         case svExternal:
             // TODO : Implement this.
@@ -3324,23 +3339,19 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
     {
         const FormulaToken* pToken = *p;
         OpCode eOp = pToken->GetOpCode();
-        switch (eOp)
+        bool bCheckType = true;
+        if (eOp == ocSpaces)
         {
-            case ocPush:
-                appendTokenByType(rCxt, aBuf, *pToken, rPos);
-            break;
-            case ocSpaces:
-                // TODO : Handle intersection operator '!!'.
-                aBuf.append(sal_Unicode(' '));
-            break;
-            default:
-            {
-                if (eOp < rCxt.mxOpCodeMap->getSymbolCount())
-                    aBuf.append(rCxt.mxOpCodeMap->getSymbol(eOp));
-                else
-                    return OUString();
-            }
+            // TODO : Handle intersection operator '!!'.
+            aBuf.append(' ');
+            continue;
         }
+
+        if (eOp < rCxt.mxOpCodeMap->getSymbolCount())
+            aBuf.append(rCxt.mxOpCodeMap->getSymbol(eOp));
+
+        if (bCheckType)
+            appendTokenByType(rCxt, aBuf, *pToken, rPos);
     }
 
     return aBuf.makeStringAndClear();

@@ -12,6 +12,10 @@
 
 #include "compiler.hxx"
 
+#include <boost/unordered_map.hpp>
+
+class ScDocument;
+
 namespace sc {
 
 /**
@@ -20,16 +24,19 @@ namespace sc {
  * between multiple CreateString() calls as long as the document content is
  * unmodified.
  */
-struct TokenStringContext
+struct SC_DLLPUBLIC TokenStringContext
 {
+    typedef boost::unordered_map<sal_uInt16, OUString> IndexNameMapType;
+
     formula::FormulaGrammar::Grammar meGram;
     formula::FormulaCompiler::OpCodeMapPtr mxOpCodeMap;
     const ScCompiler::Convention* mpRefConv;
     OUString maErrRef;
 
     std::vector<OUString> maTabNames;
+    IndexNameMapType maGlobalRangeNames;
 
-    TokenStringContext( formula::FormulaGrammar::Grammar eGram );
+    TokenStringContext( const ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram );
 };
 
 }

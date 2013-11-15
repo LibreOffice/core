@@ -32,6 +32,7 @@ using namespace formula;
 
 void Test::testFormulaCreateStringFromTokens()
 {
+    // Insert sheets.
     OUString aTabName1("Test");
     OUString aTabName2("Kevin's Data");
     OUString aTabName3("Past Data");
@@ -41,19 +42,42 @@ void Test::testFormulaCreateStringFromTokens()
     m_pDoc->InsertTab(2, aTabName3);
     m_pDoc->InsertTab(3, aTabName4);
 
+    // Insert named ranges.
+    struct {
+        const char* pName;
+        const char* pExpr;
+    } aNames[] = {
+        { "x", "Test.H1" },
+        { "y", "Test.H2" },
+        { "z", "Test.H3" }
+    };
+
+    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    {
+        ScRangeData* pName = new ScRangeData(
+            m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
+            ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+
+        bool bInserted = pGlobalNames->insert(pName);
+        CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
+    }
+
     const char* aTests[] = {
         "1+2",
         "SUM(A1:A10;B1:B10;C5;D6)",
         "IF(Test.B10<>10;\"Good\";\"Bad\")",
         "AVERAGE('2013'.B10:C20)",
         "'Kevin''s Data'.B10",
-        "'Past Data'.B1+'2013'.B2*(1+'Kevin''s Data'.C10)"
+        "'Past Data'.B1+'2013'.B2*(1+'Kevin''s Data'.C10)",
+        "x+y*z"
     };
 
     boost::scoped_ptr<ScTokenArray> pArray;
 
-    sc::TokenStringContext aCxt(formula::FormulaGrammar::GRAM_ENGLISH);
-    aCxt.maTabNames = m_pDoc->GetAllTableNames();
+    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     ScAddress aPos(0,0,0);
 
     for (size_t i = 0, n = SAL_N_ELEMENTS(aTests); i < n; ++i)

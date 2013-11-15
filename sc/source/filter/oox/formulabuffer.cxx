@@ -25,6 +25,7 @@
 #include "tokenarray.hxx"
 #include "sharedformulagroups.hxx"
 #include "externalrefmgr.hxx"
+#include "tokenstringcontext.hxx"
 #include "oox/token/tokens.hxx"
 
 using namespace com::sun::star;
@@ -56,7 +57,8 @@ public:
         Item() : mnRow(-1), mpCell(NULL) {}
     };
 
-    CachedTokenArray( ScDocument& rDoc ) : mrDoc(rDoc) {}
+    CachedTokenArray( ScDocument& rDoc ) :
+        mrDoc(rDoc), maCxt(&rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
 
     ~CachedTokenArray()
     {
@@ -73,11 +75,8 @@ public:
             return NULL;
 
         Item& rCached = *it->second;
-        ScCompiler aComp(&mrDoc, rPos, *rCached.mpCell->GetCode());
-        aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
-        OUStringBuffer aBuf;
-        aComp.CreateStringFromTokenArray(aBuf);
-        OUString aPredicted = aBuf.makeStringAndClear();
+        const ScTokenArray& rCode = *rCached.mpCell->GetCode();
+        OUString aPredicted = rCode.CreateString(maCxt, rPos);
         if (rFormula == aPredicted)
             return &rCached;
 
@@ -108,6 +107,7 @@ private:
     typedef boost::unordered_map<SCCOL, Item*> ColCacheType;
     ColCacheType maCache;
     ScDocument& mrDoc;
+    sc::TokenStringContext maCxt;
 };
 
 void applySharedFormulas(

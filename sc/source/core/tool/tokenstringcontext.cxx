@@ -9,12 +9,13 @@
 
 #include "tokenstringcontext.hxx"
 #include "compiler.hxx"
+#include "document.hxx"
 
 using namespace com::sun::star;
 
 namespace sc {
 
-TokenStringContext::TokenStringContext( formula::FormulaGrammar::Grammar eGram ) :
+TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) :
     meGram(eGram),
     mpRefConv(ScCompiler::GetRefConvention(formula::FormulaGrammar::extractRefConvention(eGram)))
 {
@@ -22,6 +23,21 @@ TokenStringContext::TokenStringContext( formula::FormulaGrammar::Grammar eGram )
     mxOpCodeMap = aComp.GetOpCodeMap(formula::FormulaGrammar::extractFormulaLanguage(eGram));
     if (mxOpCodeMap)
         maErrRef = mxOpCodeMap->getSymbol(ocErrRef);
+
+    if (pDoc)
+    {
+        maTabNames = pDoc->GetAllTableNames();
+        const ScRangeName* pNames = pDoc->GetRangeName();
+        if (pNames)
+        {
+            ScRangeName::const_iterator it = pNames->begin(), itEnd = pNames->end();
+            for (; it != itEnd; ++it)
+            {
+                const ScRangeData* pData = it->second;
+                maGlobalRangeNames.insert(IndexNameMapType::value_type(pData->GetIndex(), pData->GetName()));
+            }
+        }
+    }
 }
 
 }
