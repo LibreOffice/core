@@ -1595,6 +1595,11 @@ DECLARE_OOXML_TEST(testLineSpacingexport, "test_line_spacing.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "line", "31680");
 }
 
+DECLARE_OOXML_TEST(testTableLineSpacing, "table_atleast.docx")
+{
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
+}
 
 #endif
 

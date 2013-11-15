@@ -656,6 +656,9 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 const PropertyMap::iterator aDefaultRepeatIt = pAllCellProps->find(PROP_HEADER_ROW_COUNT);
                 if ( aDefaultRepeatIt != pAllCellProps->end( ) )
                     pAllCellProps->erase( aDefaultRepeatIt );
+                const PropertyMap::iterator aDefaultRepeatIt2 = pAllCellProps->find(PROP_PARA_LINE_SPACING);
+                if ( aDefaultRepeatIt2 != pAllCellProps->end( ) )
+                    pAllCellProps->erase( aDefaultRepeatIt2 );
 
                 // Then add the cell properties
                 pAllCellProps->InsertProps(*aCellIterator);
