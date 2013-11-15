@@ -155,6 +155,7 @@ class ScXMLExport : public SvXMLExport
     void ExportColumns(const sal_Int32 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const bool bHasColumnHeader);
     void ExportExternalRefCacheStyles();
     void ExportCellTextAutoStyles(sal_Int32 nTable);
+    void ExportAnnotationsTextAutoStyles();
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
@@ -279,6 +280,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void DisposingModel();
+
 };
 
 #endif
