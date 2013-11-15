@@ -60,7 +60,7 @@ public:
 inline LibLibreOffice *lo_cpp_init( const char *install_path )
 {
     LibreOffice *pThis = lo_init( install_path );
-    if( !pThis || !pThis->nSize > 0 )
+    if( !pThis || pThis->nSize == 0 )
         return NULL;
     return new LibLibreOffice( pThis );
 }
