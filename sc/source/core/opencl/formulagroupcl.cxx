@@ -775,7 +775,7 @@ public:
     virtual std::string GetBottom(void) { return "MAXFLOAT"; }
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
-        return "min("+lhs + "," + rhs +")";
+        return "fmin("+lhs + "," + rhs +")";
     }
     virtual std::string BinFuncName(void) const { return "min"; }
 };
@@ -785,7 +785,7 @@ public:
     virtual std::string GetBottom(void) { return "-MAXFLOAT"; }
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
-        return "max("+lhs + "," + rhs +")";
+        return "fmax("+lhs + "," + rhs +")";
     }
     virtual std::string BinFuncName(void) const { return "max"; }
 };
