@@ -1888,6 +1888,12 @@ DECLARE_OOXML_TEST(testFootnoteParagraphTag, "testFootnote.docx")
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:rPr/w:rStyle","val","Footnotereference");
 }
 
+DECLARE_OOXML_TEST(testSpacingLineRule,"table_lineRule.docx")
+{
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
