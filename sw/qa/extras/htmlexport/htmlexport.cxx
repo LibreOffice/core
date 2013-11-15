@@ -38,7 +38,7 @@ private:
 
     void preTest(const char* filename) SAL_OVERRIDE
     {
-        if (OString(filename) == "charborder.odt")
+        if (OString(filename) == "charborder.odt" && SW_MOD())
         {
             // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
             SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
@@ -49,7 +49,7 @@ private:
 
     void postTest(const char* filename) SAL_OVERRIDE
     {
-        if (OString(filename) == "charborder.odt")
+        if (OString(filename) == "charborder.odt" && SW_MOD())
         {
             SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
             pPref->SetMetric(m_eUnit);
