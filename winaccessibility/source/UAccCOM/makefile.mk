@@ -46,9 +46,6 @@ CFLAGS+=-D_UNICODE -DUNICODE
 .IF "$(PRODUCT)"!=""
 RC+=-DPRODUCT
 .ENDIF
-.IF "$(USE_STLP_DEBUG)"!=""
-CDEFS+=-D_DEBUG
-.ENDIF # "$(USE_STLP_DEBUG)"!=""
 
 RCFILES=\
         $(TARGET).rc
@@ -113,11 +110,7 @@ SHL1STDLIBS=\
     
 .IF "$(COM)"!="GCC"
 .IF "$(CCNUMVER)" > "001300000000"
-.IF "$(USE_STLP_DEBUG)" != ""
-    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
-.ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
-.ENDIF
 .ENDIF
 .ENDIF 
     
