@@ -27,6 +27,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -62,7 +63,7 @@ struct FormulaArrayStack
 typedef ::boost::unordered_map< OUString, OpCode, OUStringHash, ::std::equal_to< OUString > > OpCodeHashMap;
 typedef ::boost::unordered_map< OUString, OUString, OUStringHash, ::std::equal_to< OUString > > ExternalHashMap;
 
-class FORMULA_DLLPUBLIC FormulaCompiler
+class FORMULA_DLLPUBLIC FormulaCompiler : boost::noncopyable
 {
 public:
     FormulaCompiler();
