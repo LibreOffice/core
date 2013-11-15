@@ -18,65 +18,19 @@
  */
 
 #include <toolkit/helper/tkresmgr.hxx>
-#include <tools/simplerm.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <tools/resmgr.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <vcl/svapp.hxx>
+#include <vcl/image.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::graphic::XGraphicProvider;
 using namespace ::com::sun::star;
-// -----------------------------------------------------------------------------
-// TkResMgr
-// -----------------------------------------------------------------------------
 
-SimpleResMgr*   TkResMgr::m_pSimpleResMgr = NULL;
-ResMgr*         TkResMgr::m_pResMgr = NULL;
-
-// -----------------------------------------------------------------------------
-
-TkResMgr::EnsureDelete::~EnsureDelete()
-{
-    delete TkResMgr::m_pSimpleResMgr;
-//    delete TkResMgr::m_pResMgr;
-}
-
-// -----------------------------------------------------------------------------
-
-void TkResMgr::ensureImplExists()
-{
-    if (m_pSimpleResMgr)
-        return;
-
-    m_pSimpleResMgr = SimpleResMgr::Create( "tk", Application::GetSettings().GetUILanguageTag() );
-    m_pResMgr = ResMgr::CreateResMgr( "tk" );
-
-    if (m_pSimpleResMgr)
-    {
-        // now that we have a impl class, make sure it's deleted on unloading the library
-        static TkResMgr::EnsureDelete s_aDeleteTheImplClass;
-    }
-}
-
-// -----------------------------------------------------------------------------
-OUString TkResMgr::loadString( sal_uInt16 nResId )
-{
-    OUString sReturn;
-
-    ensureImplExists();
-    if ( m_pSimpleResMgr )
-        sReturn = m_pSimpleResMgr->ReadString( nResId );
-
-    return sReturn;
-}
-
-// -----------------------------------------------------------------------------
 Image TkResMgr::getImageFromURL( const OUString& i_rImageURL )
 {
     if ( i_rImageURL.isEmpty() )

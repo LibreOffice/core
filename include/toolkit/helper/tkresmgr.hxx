@@ -21,45 +21,12 @@
 #define INCLUDED_TOOLKIT_HELPER_TKRESMGR_HXX
 
 #include <rtl/ustring.hxx>
-#include <vcl/image.hxx>
 
-class SimpleResMgr;
-class ResMgr;
+class Image;
 
-#define TK_RES_STRING(id)   TkResMgr::loadString(id)
-
-// -----------------------------------------------------------------------------
-// TkResMgr
-// -----------------------------------------------------------------------------
-
-class TkResMgr
+namespace TkResMgr
 {
-    static SimpleResMgr* m_pSimpleResMgr;
-    static ResMgr* m_pResMgr;
-
-private:
-    // no instantiation allowed
-    TkResMgr() { }
-    ~TkResMgr() { }
-
-    // we'll instantiate one static member of the following class,
-    // which in it's dtor ensures that m_pSimpleResMgr will be deleted
-    class EnsureDelete
-    {
-    public:
-        EnsureDelete() { }
-        ~EnsureDelete();
-    };
-    friend class EnsureDelete;
-
-protected:
-    static void ensureImplExists();
-
-public:
-    // loads the string with the specified resource id
-    static OUString loadString( sal_uInt16 nResId );
-
-    static Image getImageFromURL( const OUString& i_rImageURL );
+    Image getImageFromURL( const OUString& i_rImageURL );
 };
 
 
