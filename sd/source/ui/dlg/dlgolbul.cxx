@@ -38,7 +38,6 @@
 #include "sdresid.hxx"
 
 #include "glob.hrc"
-#include "dlgolbul.hrc"
 #include "bulmaper.hxx"
 #include "DrawDocShell.hxx"
 #include <svl/aeitem.hxx>
@@ -52,13 +51,12 @@ OutlineBulletDlg::OutlineBulletDlg(
     ::Window* pParent,
     const SfxItemSet* pAttr,
     ::sd::View* pView )
-    : SfxTabDialog  ( pParent, SdResId(TAB_OUTLINEBULLET) ),
-      aInputSet     ( *pAttr ),
-      bTitle            ( sal_False ),
-      pSdView           ( pView )
+    : SfxTabDialog( pParent, "BulletsAndNumberingDialog",
+        "modules/sdraw/ui/bulletsandnumbering.ui")
+    , aInputSet( *pAttr )
+    , bTitle(false)
+    , pSdView(pView)
 {
-    FreeResource();
-
     aInputSet.MergeRange( SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL );
     aInputSet.Put( *pAttr );
 
@@ -128,15 +126,14 @@ OutlineBulletDlg::OutlineBulletDlg(
     SetInputSet( &aInputSet );
 
     if(!bTitle)
-        AddTabPage(RID_SVXPAGE_PICK_SINGLE_NUM);
+        AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM);
     else
-        RemoveTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
+        RemoveTabPage("singlenum");
 
-    AddTabPage( RID_SVXPAGE_PICK_BULLET  );
-    AddTabPage( RID_SVXPAGE_PICK_BMP   );
-    AddTabPage(RID_SVXPAGE_NUM_OPTIONS  );
-    AddTabPage(RID_SVXPAGE_NUM_POSITION );
-
+    AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
+    AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
+    m_nOptionsId = AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS);
+    m_nPositionId = AddTabPage("position", RID_SVXPAGE_NUM_POSITION);
 }
 
 OutlineBulletDlg::~OutlineBulletDlg()
@@ -146,30 +143,25 @@ OutlineBulletDlg::~OutlineBulletDlg()
 
 void OutlineBulletDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    switch ( nId )
+    if (nId == m_nOptionsId)
     {
-        case RID_SVXPAGE_NUM_OPTIONS:
+        if( pSdView )
         {
-            if( pSdView )
-            {
-                FieldUnit eMetric = pSdView->GetDoc().GetUIUnit();
-                SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-                aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,(sal_uInt16)eMetric));
-                rPage.PageCreated(aSet);
-            }
+            FieldUnit eMetric = pSdView->GetDoc().GetUIUnit();
+            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,(sal_uInt16)eMetric));
+            rPage.PageCreated(aSet);
         }
-        break;
-        case RID_SVXPAGE_NUM_POSITION:
+    }
+    else if (nId == m_nPositionId)
+    {
+        if( pSdView )
         {
-            if( pSdView )
-            {
-                FieldUnit eMetric = pSdView->GetDoc().GetUIUnit();
-                SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-                aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,(sal_uInt16)eMetric));
-                rPage.PageCreated(aSet);
-            }
+            FieldUnit eMetric = pSdView->GetDoc().GetUIUnit();
+            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,(sal_uInt16)eMetric));
+            rPage.PageCreated(aSet);
         }
-        break;
     }
 }
 

@@ -44,7 +44,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/animobjs.src \
     sd/source/ui/dlg/dlgass.src \
     sd/source/ui/dlg/dlgfield.src \
-    sd/source/ui/dlg/dlgolbul.src \
     sd/source/ui/dlg/LayerDialog.src \
     sd/source/ui/dlg/navigatr.src \
     sd/source/ui/dlg/PaneDockingWindow.src \

@@ -22,8 +22,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include "dlgolbul.hrc"
-
 namespace sd {
 
 class View;
@@ -39,7 +37,7 @@ public:
         ::Window* pParent,
         const SfxItemSet* pAttr,
         ::sd::View* pView );
-    virtual ~OutlineBulletDlg (void);
+    virtual ~OutlineBulletDlg ();
 
     const SfxItemSet* GetOutputItemSet() const;
 
@@ -51,8 +49,10 @@ private:
 
     SfxItemSet  aInputSet;
     SfxItemSet  *pOutputSet;
-    sal_Bool        bTitle;
-    ::sd::View      *pSdView;
+    sal_uInt16  m_nOptionsId;
+    sal_uInt16  m_nPositionId;
+    sal_Bool    bTitle;
+    ::sd::View  *pSdView;
 };
 
 } // end of namespace sd
