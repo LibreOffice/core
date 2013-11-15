@@ -254,6 +254,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/stylehelper \
     sc/source/core/tool/subtotal \
     sc/source/core/tool/token \
+    sc/source/core/tool/tokenstringcontext \
     sc/source/core/tool/typedstrdata \
     sc/source/core/tool/unitconv \
     sc/source/core/tool/userlist \

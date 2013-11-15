@@ -38,6 +38,7 @@
 #include "externalrefmgr.hxx"
 #include "document.hxx"
 #include "refupdatecontext.hxx"
+#include "tokenstringcontext.hxx"
 #include "types.hxx"
 #include "svl/sharedstring.hxx"
 
@@ -3163,6 +3164,163 @@ void ScTokenArray::CheckRelativeReferenceBounds(
                 ;
         }
     }
+}
+
+namespace {
+
+void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken, const ScAddress& rPos )
+{
+    if (rToken.IsExternalRef())
+    {
+        // TODO : Implement this.
+        return;
+    }
+
+    OpCode eOp = rToken.GetOpCode();
+    switch (rToken.GetType())
+    {
+        case svDouble:
+        {
+            if (rCxt.mxOpCodeMap->isEnglish())
+            {
+                rtl::math::doubleToUStringBuffer(
+                    rBuf, rToken.GetDouble(), rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
+            }
+            else
+            {
+                SvtSysLocale aSysLocale;
+                rtl::math::doubleToUStringBuffer(
+                    rBuf, rToken.GetDouble(),
+                    rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+                    aSysLocale.GetLocaleDataPtr()->getNumDecimalSep()[0], true);
+            }
+        }
+        break;
+        case svString:
+        {
+            OUString aStr = rToken.GetString().getString();
+            if (eOp == ocBad || eOp == ocStringXML)
+            {
+                rBuf.append(aStr);
+                return;
+            }
+
+            rBuf.append(sal_Unicode('"'));
+            rBuf.append(aStr.replaceAll("\"", "\"\""));
+            rBuf.append(sal_Unicode('"'));
+        }
+        break;
+        case svSingleRef:
+        {
+            if (rCxt.mpRefConv)
+            {
+                const ScSingleRefData& rRef = static_cast<const ScToken&>(rToken).GetSingleRef();
+                ScComplexRefData aRef;
+                aRef.Ref1 = rRef;
+                aRef.Ref2 = rRef;
+                rCxt.mpRefConv->makeRefStr(rBuf, rPos, rCxt.meGram, rCxt.maErrRef, rCxt.maTabNames, aRef, true);
+            }
+            else
+                rBuf.append(rCxt.maErrRef);
+        }
+        break;
+        case svDoubleRef:
+        {
+            if (rCxt.mpRefConv)
+            {
+                const ScComplexRefData& rRef = static_cast<const ScToken&>(rToken).GetDoubleRef();
+                rCxt.mpRefConv->makeRefStr(rBuf, rPos, rCxt.meGram, rCxt.maErrRef, rCxt.maTabNames, rRef, false);
+            }
+            else
+                rBuf.append(rCxt.maErrRef);
+        }
+        break;
+        case svMatrix:
+            // TODO : Implement this.
+        break;
+        case svIndex:
+            // TODO : Implement this.
+        break;
+        case svExternal:
+            // TODO : Implement this.
+        break;
+        case svError:
+        {
+            sal_uInt16 nErr = rToken.GetError();
+            OpCode eOpErr;
+            switch (nErr)
+            {
+                break;
+                case errDivisionByZero:
+                    eOpErr = ocErrDivZero;
+                break;
+                case errNoValue:
+                    eOpErr = ocErrValue;
+                break;
+                case errNoRef:
+                    eOpErr = ocErrRef;
+                break;
+                case errNoName:
+                    eOpErr = ocErrName;
+                break;
+                case errIllegalFPOperation:
+                    eOpErr = ocErrNum;
+                break;
+                case NOTAVAILABLE:
+                    eOpErr = ocErrNA;
+                break;
+                case errNoCode:
+                default:
+                    eOpErr = ocErrNull;
+            }
+            rBuf.append(rCxt.mxOpCodeMap->getSymbol(eOpErr));
+        }
+        break;
+        case svByte:
+        case svJump:
+        case svFAP:
+        case svMissing:
+        case svSep:
+        default:
+            ;
+    }
+}
+
+}
+
+OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const
+{
+    if (!nLen)
+        return OUString();
+
+    OUStringBuffer aBuf;
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        const FormulaToken* pToken = *p;
+        OpCode eOp = pToken->GetOpCode();
+        switch (eOp)
+        {
+            case ocPush:
+                appendTokenByType(rCxt, aBuf, *pToken, rPos);
+            break;
+            case ocSpaces:
+                // TODO : Handle intersection operator '!!'.
+                aBuf.append(sal_Unicode(' '));
+            break;
+            default:
+            {
+                if (eOp < rCxt.mxOpCodeMap->getSymbolCount())
+                    aBuf.append(rCxt.mxOpCodeMap->getSymbol(eOp));
+                else
+                    return OUString();
+            }
+        }
+    }
+
+    return aBuf.makeStringAndClear();
 }
 
 #if DEBUG_FORMULA_COMPILER

@@ -726,15 +726,15 @@ struct ConventionOOO_A1 : public Convention_A1
 {
     ConventionOOO_A1() : Convention_A1 (FormulaGrammar::CONV_OOO) { }
     ConventionOOO_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1 (eConv) { }
-    static OUString MakeTabStr( const ScCompiler& rComp, SCTAB nTab, OUString& aDoc )
+
+    static OUString MakeTabStr( const std::vector<OUString>& rTabNames, SCTAB nTab, OUString& aDoc )
     {
         OUString aString;
-        OUString aTmp;
-        if (!rComp.GetDoc()->GetName( nTab, aTmp ))
+        if (static_cast<size_t>(nTab) >= rTabNames.size())
             aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
         else
         {
-            aString = aTmp;
+            aString = rTabNames[nTab];
             // "'Doc'#Tab"
             sal_Int32 nPos = ScCompiler::GetDocTabPos( aString );
             if ( nPos != -1 )
@@ -753,7 +753,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     void MakeOneRefStrImpl(
-        OUStringBuffer& rBuffer, const ScCompiler& rComp,
+        OUStringBuffer& rBuffer, const OUString& rErrRef, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
         bool bForceTab, bool bODF ) const
     {
@@ -763,13 +763,13 @@ struct ConventionOOO_A1 : public Convention_A1
             {
                 if (!rRef.IsTabRel())
                     rBuffer.append('$');
-                rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
+                rBuffer.append(rErrRef);
                 rBuffer.append('.');
             }
             else
             {
                 OUString aDoc;
-                OUString aRefStr(MakeTabStr(rComp, rAbsRef.Tab(), aDoc));
+                OUString aRefStr(MakeTabStr(rTabNames, rAbsRef.Tab(), aDoc));
                 rBuffer.append(aDoc);
                 if (!rRef.IsTabRel())
                     rBuffer.append('$');
@@ -781,58 +781,38 @@ struct ConventionOOO_A1 : public Convention_A1
         if (!rRef.IsColRel())
             rBuffer.append('$');
         if (!ValidCol(rAbsRef.Col()))
-            rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
+            rBuffer.append(rErrRef);
         else
             MakeColStr(rBuffer, rAbsRef.Col());
         if (!rRef.IsRowRel())
             rBuffer.append('$');
         if (!ValidRow(rAbsRef.Row()))
-            rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
+            rBuffer.append(rErrRef);
         else
             MakeRowStr(rBuffer, rAbsRef.Row());
     }
 
-    void MakeRefStrImpl( OUStringBuffer&   rBuffer,
-                         const ScCompiler&      rComp,
-                         const ScComplexRefData&    rRef,
-                         bool bSingleRef,
-                         bool bODF ) const
-    {
-        if (bODF)
-            rBuffer.append('[');
-        ScComplexRefData aRef( rRef );
-        // In case absolute/relative positions weren't separately available:
-        // transform relative to absolute!
-        ScAddress aAbs1 = aRef.Ref1.toAbs(rComp.GetPos()), aAbs2;
-        if( !bSingleRef )
-            aAbs2 = aRef.Ref2.toAbs(rComp.GetPos());
-
-        if (bODF && FormulaGrammar::isODFF( rComp.GetGrammar()) && (!ValidAddress(aAbs1) || !ValidAddress(aAbs2)))
-        {
-            rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
-            // For ODFF write [#REF!], but not for PODF so apps reading ODF
-            // 1.0/1.1 may have a better chance if they implemented the old
-            // form.
-        }
-        else
-        {
-            MakeOneRefStrImpl(rBuffer, rComp, aRef.Ref1, aAbs1, false, bODF);
-            if (!bSingleRef)
-            {
-                rBuffer.append(':');
-                MakeOneRefStrImpl(rBuffer, rComp, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), bODF);
-            }
-        }
-        if (bODF)
-            rBuffer.append(']');
-    }
-
-    void MakeRefStr( OUStringBuffer&   rBuffer,
-                     const ScCompiler&      rComp,
+    void makeRefStr( OUStringBuffer&   rBuffer,
+                     const ScAddress& rPos,
+                     FormulaGrammar::Grammar /*eGram*/,
+                     const OUString& rErrRef,
+                     const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
-        MakeRefStrImpl( rBuffer, rComp, rRef, bSingleRef, false);
+        ScComplexRefData aRef( rRef );
+        // In case absolute/relative positions weren't separately available:
+        // transform relative to absolute!
+        ScAddress aAbs1 = aRef.Ref1.toAbs(rPos), aAbs2;
+        if( !bSingleRef )
+            aAbs2 = aRef.Ref2.toAbs(rPos);
+
+        MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref1, aAbs1, false, false);
+        if (!bSingleRef)
+        {
+            rBuffer.append(':');
+            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), false);
+        }
     }
 
     virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const
@@ -1005,12 +985,39 @@ const ScCompiler::Convention * const ScCompiler::pConvOOO_A1 = &ConvOOO_A1;
 struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
     ConventionOOO_A1_ODF() : ConventionOOO_A1 (FormulaGrammar::CONV_ODF) { }
-    void MakeRefStr( OUStringBuffer&   rBuffer,
-                     const ScCompiler&      rComp,
+    void makeRefStr( OUStringBuffer&   rBuffer,
+                     const ScAddress& rPos,
+                     FormulaGrammar::Grammar eGram,
+                     const OUString& rErrRef,
+                     const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
-        MakeRefStrImpl( rBuffer, rComp, rRef, bSingleRef, true);
+        rBuffer.append(sal_Unicode('['));
+        ScComplexRefData aRef( rRef );
+        // In case absolute/relative positions weren't separately available:
+        // transform relative to absolute!
+        ScAddress aAbs1 = aRef.Ref1.toAbs(rPos), aAbs2;
+        if( !bSingleRef )
+            aAbs2 = aRef.Ref2.toAbs(rPos);
+
+        if (FormulaGrammar::isODFF(eGram) && (!ValidAddress(aAbs1) || !ValidAddress(aAbs2)))
+        {
+            rBuffer.append(rErrRef);
+            // For ODFF write [#REF!], but not for PODF so apps reading ODF
+            // 1.0/1.1 may have a better chance if they implemented the old
+            // form.
+        }
+        else
+        {
+            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref1, aAbs1, false, true);
+            if (!bSingleRef)
+            {
+                rBuffer.append(sal_Unicode(':'));
+                MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), true);
+            }
+        }
+        rBuffer.append(sal_Unicode(']'));
     }
 
     virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const
@@ -1038,22 +1045,20 @@ const ScCompiler::Convention * const ScCompiler::pConvOOO_A1_ODF = &ConvOOO_A1_O
 
 struct ConventionXL
 {
-    static bool GetDocAndTab( const ScCompiler& rComp,
-                              const ScSingleRefData& rRef,
-                              OUString& rDocName,
-                              OUString& rTabName )
+    static bool GetDocAndTab(
+        const ScAddress& rPos, const std::vector<OUString>& rTabNames,
+        const ScSingleRefData& rRef, OUString& rDocName, OUString& rTabName )
     {
         bool bHasDoc = false;
 
         rDocName = "";
-        OUString aTmp;
-        ScAddress aAbs = rRef.toAbs(rComp.GetPos());
-        if (rRef.IsTabDeleted() || !rComp.GetDoc()->GetName(aAbs.Tab(), aTmp))
+        ScAddress aAbs = rRef.toAbs(rPos);
+        if (rRef.IsTabDeleted() || static_cast<size_t>(aAbs.Tab()) >= rTabNames.size())
         {
             rTabName = ScGlobal::GetRscString( STR_NO_REF_TABLE );
             return false;
         }
-        rTabName = aTmp;
+        rTabName = rTabNames[aAbs.Tab()];
 
         // Cheesy hack to unparse the OOO style "'Doc'#Tab"
         sal_Int32 nPos = ScCompiler::GetDocTabPos( rTabName);
@@ -1074,7 +1079,8 @@ struct ConventionXL
     }
 
     static void MakeDocStr( OUStringBuffer& rBuf,
-                            const ScCompiler& rComp,
+                            const ScAddress& rPos,
+                            const std::vector<OUString>& rTabNames,
                             const ScComplexRefData& rRef,
                             bool bSingleRef )
     {
@@ -1083,13 +1089,13 @@ struct ConventionXL
             OUString aStartTabName, aStartDocName, aEndTabName, aEndDocName;
             bool bStartHasDoc = false, bEndHasDoc = false;
 
-            bStartHasDoc = GetDocAndTab( rComp, rRef.Ref1,
-                                         aStartDocName, aStartTabName);
+            bStartHasDoc = GetDocAndTab(
+                rPos, rTabNames, rRef.Ref1, aStartDocName, aStartTabName);
 
             if( !bSingleRef && rRef.Ref2.IsFlag3D() )
             {
-                bEndHasDoc = GetDocAndTab( rComp, rRef.Ref2,
-                                           aEndDocName, aEndTabName);
+                bEndHasDoc = GetDocAndTab(
+                    rPos, rTabNames, rRef.Ref2, aEndDocName, aEndTabName);
             }
             else
                 bEndHasDoc = bStartHasDoc;
@@ -1259,8 +1265,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         MakeRowStr(rBuf, rAbs.Row());
     }
 
-    void MakeRefStr( OUStringBuffer&   rBuf,
-                     const ScCompiler&      rComp,
+    void makeRefStr( OUStringBuffer&   rBuf,
+                     const ScAddress& rPos,
+                     FormulaGrammar::Grammar /*eGram*/,
+                     const OUString& /*rErrRef*/,
+                     const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
@@ -1268,9 +1277,9 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
-        ScAddress aAbs1 = aRef.Ref1.toAbs(rComp.GetPos()), aAbs2;
+        ScAddress aAbs1 = aRef.Ref1.toAbs(rPos), aAbs2;
 
-        MakeDocStr( rBuf, rComp, aRef, bSingleRef );
+        MakeDocStr(rBuf, rPos, rTabNames, aRef, bSingleRef);
 
         if (!ValidAddress(aAbs1))
         {
@@ -1280,7 +1289,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
         if( !bSingleRef )
         {
-            aAbs2 = aRef.Ref2.toAbs(rComp.GetPos());
+            aAbs2 = aRef.Ref2.toAbs(rPos);
             if (!ValidAddress(aAbs2))
             {
                 rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
@@ -1448,15 +1457,18 @@ r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
 struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 {
     ConventionXL_R1C1() : ScCompiler::Convention( FormulaGrammar::CONV_XL_R1C1 ) { }
-    void MakeRefStr( OUStringBuffer&   rBuf,
-                     const ScCompiler&      rComp,
+    void makeRefStr( OUStringBuffer&   rBuf,
+                     const ScAddress& rPos,
+                     FormulaGrammar::Grammar /*eGram*/,
+                     const OUString& /*rErrRef*/,
+                     const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
-        ScRange aAbsRef = rRef.toAbs(rComp.GetPos());
+        ScRange aAbsRef = rRef.toAbs(rPos);
         ScComplexRefData aRef( rRef );
 
-        MakeDocStr( rBuf, rComp, aRef, bSingleRef );
+        MakeDocStr(rBuf, rPos, rTabNames, aRef, bSingleRef);
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
@@ -1662,7 +1674,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         :
         pDoc( pDocument ),
         aPos( rPos ),
-        mpFormatter(pDoc->GetFormatTable()),
+        mpFormatter(pDoc ? pDoc->GetFormatTable() : NULL),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
@@ -1729,16 +1741,31 @@ sal_Int32 ScCompiler::GetDocTabPos( const OUString& rString )
 
 void ScCompiler::SetRefConvention( FormulaGrammar::AddressConvention eConv )
 {
-    switch ( eConv ) {
-        case FormulaGrammar::CONV_UNSPECIFIED :
-            break;
-        default :
-        case FormulaGrammar::CONV_OOO :      SetRefConvention( pConvOOO_A1 ); break;
-        case FormulaGrammar::CONV_ODF :      SetRefConvention( pConvOOO_A1_ODF ); break;
-        case FormulaGrammar::CONV_XL_A1 :    SetRefConvention( pConvXL_A1 );  break;
-        case FormulaGrammar::CONV_XL_R1C1 :  SetRefConvention( pConvXL_R1C1 ); break;
-        case FormulaGrammar::CONV_XL_OOX :   SetRefConvention( pConvXL_OOX ); break;
+    const Convention* p = GetRefConvention(eConv);
+    if (p)
+        SetRefConvention(p);
+}
+
+const ScCompiler::Convention* ScCompiler::GetRefConvention( FormulaGrammar::AddressConvention eConv )
+{
+    switch (eConv)
+    {
+        case FormulaGrammar::CONV_OOO:
+            return pConvOOO_A1;
+        case FormulaGrammar::CONV_ODF:
+            return pConvOOO_A1_ODF;
+        case FormulaGrammar::CONV_XL_A1:
+            return pConvXL_A1;
+        case FormulaGrammar::CONV_XL_R1C1:
+            return pConvXL_R1C1;
+        case FormulaGrammar::CONV_XL_OOX:
+            return pConvXL_OOX;
+        case FormulaGrammar::CONV_UNSPECIFIED:
+        default:
+            ;
     }
+
+    return NULL;
 }
 
 void ScCompiler::SetRefConvention( const ScCompiler::Convention *pConvP )
@@ -4201,6 +4228,8 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
     const ScSingleRefData& rRef = static_cast<const ScToken*>(_pTokenP)->GetSingleRef();
     ScComplexRefData aRef;
     aRef.Ref1 = aRef.Ref2 = rRef;
+    OUString aErrRef = GetCurrentOpCodeMap()->getSymbol( ocErrRef);
+    std::vector<OUString> aTabNames = GetDoc()->GetAllTableNames();
     if ( eOp == ocColRowName )
     {
         ScAddress aAbs = rRef.toAbs(aPos);
@@ -4213,16 +4242,18 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
         else
         {
             rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
-            pConv->MakeRefStr (rBuffer, *this, aRef, true );
+            pConv->makeRefStr(rBuffer, aPos, meGrammar, aErrRef, aTabNames, aRef, true);
         }
     }
     else
-        pConv->MakeRefStr( rBuffer, *this, aRef, true );
+        pConv->makeRefStr(rBuffer, aPos, meGrammar, aErrRef, aTabNames, aRef, true);
 }
 
 void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
 {
-    pConv->MakeRefStr( rBuffer, *this, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false );
+    OUString aErrRef = GetCurrentOpCodeMap()->getSymbol( ocErrRef);
+    std::vector<OUString> aTabNames = GetDoc()->GetAllTableNames();
+    pConv->makeRefStr(rBuffer, aPos, meGrammar, aErrRef, aTabNames, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false);
 }
 
 void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const

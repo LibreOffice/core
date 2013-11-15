@@ -251,6 +251,22 @@ bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
     return false;
 }
 
+std::vector<OUString> ScDocument::GetAllTableNames() const
+{
+    std::vector<OUString> aNames;
+    aNames.reserve(maTabs.size());
+    TableContainer::const_iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        OUString aName;
+        const ScTable& rTab = **it;
+        rTab.GetName(aName);
+        aNames.push_back(aName);
+    }
+
+    return aNames;
+}
+
 ScDBData* ScDocument::GetAnonymousDBData(SCTAB nTab)
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])

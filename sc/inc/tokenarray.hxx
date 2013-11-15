@@ -36,6 +36,7 @@ struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 struct RefUpdateResult;
+struct TokenStringContext;
 
 }
 
@@ -170,6 +171,12 @@ public:
 
     void CheckRelativeReferenceBounds(
         const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const;
+
+    /**
+     * Create a string representation of formula token array without modifying
+     * the internal state of the token array.
+     */
+    OUString CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
 
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;

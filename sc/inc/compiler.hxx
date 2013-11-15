@@ -234,10 +234,11 @@ public:
         Convention( formula::FormulaGrammar::AddressConvention eConvP );
         virtual ~Convention();
 
-        virtual void MakeRefStr( OUStringBuffer&   rBuffer,
-                                 const ScCompiler&      rCompiler,
-                                 const ScComplexRefData&    rRef,
-                                 bool bSingleRef ) const = 0;
+        virtual void makeRefStr(
+            OUStringBuffer& rBuffer, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram,
+            const OUString& rErrRef, const std::vector<OUString>& rTabNames,
+            const ScComplexRefData& rRef, bool bSingleRef ) const = 0;
+
         virtual ::com::sun::star::i18n::ParseResult
                     parseAnyToken( const OUString& rFormula,
                                    sal_Int32 nSrcPos,
@@ -396,6 +397,8 @@ public:
     void            SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
     void            SetRefConvention( const Convention *pConvP );
     void            SetRefConvention( const formula::FormulaGrammar::AddressConvention eConv );
+
+    static const Convention* GetRefConvention( formula::FormulaGrammar::AddressConvention eConv );
 
     /// Set symbol map if not empty.
     void            SetFormulaLanguage( const OpCodeMapPtr & xMap );

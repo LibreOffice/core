@@ -22,12 +22,43 @@
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "paramisc.hxx"
+#include "tokenstringcontext.hxx"
 
 #include "formula/vectortoken.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
 using namespace formula;
+
+void Test::testFormulaCreateStringFromTokens()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    const char* aTests[] = {
+        "1+2",
+        "SUM(A1:A10;B1:B10;C5;D6)"
+    };
+
+    boost::scoped_ptr<ScTokenArray> pArray;
+
+    sc::TokenStringContext aCxt(formula::FormulaGrammar::GRAM_ENGLISH);
+    aCxt.maTabNames = m_pDoc->GetAllTableNames();
+    ScAddress aPos(0,0,0);
+
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aTests); i < n; ++i)
+    {
+        OUString aFormula = OUString::createFromAscii(aTests[i]);
+        ScCompiler aComp(m_pDoc, aPos);
+        aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
+        pArray.reset(aComp.CompileString(aFormula));
+        CPPUNIT_ASSERT_MESSAGE("Failed to compile formula string.", pArray.get());
+
+        OUString aCheck = pArray->CreateString(aCxt, aPos);
+        CPPUNIT_ASSERT_EQUAL(aFormula, aCheck);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
 
 namespace {
 
