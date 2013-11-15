@@ -1085,10 +1085,11 @@ static void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice *pOut,
 }
 
 static void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevice* pRefDev,
-                        const Rectangle &rOrg, const Rectangle &rOut )
+                        const Rectangle &rOrg, const Rectangle &rOut,
+                        OUString const & referer )
 {
     Size aGrfSize(0,0);
-    const Graphic *pGraphic = rBrush.GetGraphic();
+    const Graphic *pGraphic = rBrush.GetGraphic(referer);
     SvxGraphicPosition ePos;
     if ( pGraphic && pGraphic->IsSupportedGraphic() )
     {
@@ -1260,8 +1261,11 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
                 pRefDev = pDev;                 // don't use printer for PDF
             else
                 pRefDev = pDoc->GetPrinter();   // use printer also for preview
-
-            lcl_DrawGraphic( *pBackground, pDev, pRefDev, aFrameRect, aFrameRect );
+            OUString referer;
+            if (pDocShell->HasName()) {
+                referer = pDocShell->GetMedium()->GetName();
+            }
+            lcl_DrawGraphic( *pBackground, pDev, pRefDev, aFrameRect, aFrameRect, referer );
         }
         else
         {
