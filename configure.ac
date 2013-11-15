@@ -4669,7 +4669,11 @@ AC_SUBST([SYSTEM_FONTCONFIG])
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
 if test -z "$TARFILE_LOCATION"; then
-    TARFILE_LOCATION="$SRC_ROOT/src"
+    if test -d "$SRC_ROOT/src" ; then
+        mv "$SRC_ROOT/src" "$SRC_ROOT/external/tarballs"
+        ln -s "$SRC_ROOT/external/tarballs" "$SRC_ROOT/src"
+    fi
+    TARFILE_LOCATION="$SRC_ROOT/external/tarballs"
 fi
 AC_SUBST(TARFILE_LOCATION)
 
