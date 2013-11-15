@@ -67,7 +67,6 @@
 #include "formulaparserpool.hxx"
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
-#include "tokenstringcontext.hxx"
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -728,19 +727,20 @@ struct ConventionOOO_A1 : public Convention_A1
     ConventionOOO_A1() : Convention_A1 (FormulaGrammar::CONV_OOO) { }
     ConventionOOO_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1 (eConv) { }
 
-    static OUString MakeTabStr( const sc::TokenStringContext& rCxt, SCTAB nTab )
+    static OUString MakeTabStr( const std::vector<OUString>& rTabNames, SCTAB nTab )
     {
         OUString aString;
-        if (static_cast<size_t>(nTab) >= rCxt.maTabNames.size())
+        if (static_cast<size_t>(nTab) >= rTabNames.size())
             aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
         else
-            aString = rCxt.maTabNames[nTab];
+            aString = rTabNames[nTab];
         aString += ".";
         return aString;
     }
 
     void MakeOneRefStrImpl(
-        OUStringBuffer& rBuffer, const sc::TokenStringContext& rCxt,
+        OUStringBuffer& rBuffer,
+        const OUString& rErrRef, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
         bool bForceTab, bool bODF ) const
     {
@@ -750,12 +750,12 @@ struct ConventionOOO_A1 : public Convention_A1
             {
                 if (!rRef.IsTabRel())
                     rBuffer.append('$');
-                rBuffer.append(rCxt.maErrRef);
+                rBuffer.append(rErrRef);
                 rBuffer.append('.');
             }
             else
             {
-                OUString aRefStr(MakeTabStr(rCxt, rAbsRef.Tab()));
+                OUString aRefStr(MakeTabStr(rTabNames, rAbsRef.Tab()));
                 if (!rRef.IsTabRel())
                     rBuffer.append('$');
                 rBuffer.append(aRefStr);
@@ -766,20 +766,21 @@ struct ConventionOOO_A1 : public Convention_A1
         if (!rRef.IsColRel())
             rBuffer.append('$');
         if (!ValidCol(rAbsRef.Col()))
-            rBuffer.append(rCxt.maErrRef);
+            rBuffer.append(rErrRef);
         else
             MakeColStr(rBuffer, rAbsRef.Col());
         if (!rRef.IsRowRel())
             rBuffer.append('$');
         if (!ValidRow(rAbsRef.Row()))
-            rBuffer.append(rCxt.maErrRef);
+            rBuffer.append(rErrRef);
         else
             MakeRowStr(rBuffer, rAbsRef.Row());
     }
 
     void makeRefStr( OUStringBuffer&   rBuffer,
+                     formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
-                     const sc::TokenStringContext& rCxt,
+                     const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
@@ -790,11 +791,11 @@ struct ConventionOOO_A1 : public Convention_A1
         if( !bSingleRef )
             aAbs2 = aRef.Ref2.toAbs(rPos);
 
-        MakeOneRefStrImpl(rBuffer, rCxt, aRef.Ref1, aAbs1, false, false);
+        MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref1, aAbs1, false, false);
         if (!bSingleRef)
         {
             rBuffer.append(':');
-            MakeOneRefStrImpl(rBuffer, rCxt, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), false);
+            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), false);
         }
     }
 
@@ -969,8 +970,9 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
     ConventionOOO_A1_ODF() : ConventionOOO_A1 (FormulaGrammar::CONV_ODF) { }
     void makeRefStr( OUStringBuffer&   rBuffer,
+                     formula::FormulaGrammar::Grammar eGram,
                      const ScAddress& rPos,
-                     const sc::TokenStringContext& rCxt,
+                     const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
@@ -982,20 +984,20 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         if( !bSingleRef )
             aAbs2 = aRef.Ref2.toAbs(rPos);
 
-        if (FormulaGrammar::isODFF(rCxt.meGram) && (!ValidAddress(aAbs1) || !ValidAddress(aAbs2)))
+        if (FormulaGrammar::isODFF(eGram) && (!ValidAddress(aAbs1) || !ValidAddress(aAbs2)))
         {
-            rBuffer.append(rCxt.maErrRef);
+            rBuffer.append(rErrRef);
             // For ODFF write [#REF!], but not for PODF so apps reading ODF
             // 1.0/1.1 may have a better chance if they implemented the old
             // form.
         }
         else
         {
-            MakeOneRefStrImpl(rBuffer, rCxt, aRef.Ref1, aAbs1, false, true);
+            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref1, aAbs1, false, true);
             if (!bSingleRef)
             {
                 rBuffer.append(sal_Unicode(':'));
-                MakeOneRefStrImpl(rBuffer, rCxt, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), true);
+                MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), true);
             }
         }
         rBuffer.append(sal_Unicode(']'));
@@ -1027,21 +1029,21 @@ const ScCompiler::Convention * const ScCompiler::pConvOOO_A1_ODF = &ConvOOO_A1_O
 struct ConventionXL
 {
     static void GetTab(
-        const ScAddress& rPos, const sc::TokenStringContext& rCxt,
+        const ScAddress& rPos, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, OUString& rTabName )
     {
         ScAddress aAbs = rRef.toAbs(rPos);
-        if (rRef.IsTabDeleted() || static_cast<size_t>(aAbs.Tab()) >= rCxt.maTabNames.size())
+        if (rRef.IsTabDeleted() || static_cast<size_t>(aAbs.Tab()) >= rTabNames.size())
         {
             rTabName = ScGlobal::GetRscString( STR_NO_REF_TABLE );
             return;
         }
-        rTabName = rCxt.maTabNames[aAbs.Tab()];
+        rTabName = rTabNames[aAbs.Tab()];
     }
 
     static void MakeTabStr( OUStringBuffer& rBuf,
                             const ScAddress& rPos,
-                            const sc::TokenStringContext& rCxt,
+                            const std::vector<OUString>& rTabNames,
                             const ScComplexRefData& rRef,
                             bool bSingleRef )
     {
@@ -1049,11 +1051,11 @@ struct ConventionXL
         {
             OUString aStartTabName, aEndTabName;
 
-            GetTab(rPos, rCxt, rRef.Ref1, aStartTabName);
+            GetTab(rPos, rTabNames, rRef.Ref1, aStartTabName);
 
             if( !bSingleRef && rRef.Ref2.IsFlag3D() )
             {
-                GetTab(rPos, rCxt, rRef.Ref2, aEndTabName);
+                GetTab(rPos, rTabNames, rRef.Ref2, aEndTabName);
             }
 
             rBuf.append( aStartTabName );
@@ -1211,8 +1213,9 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     }
 
     void makeRefStr( OUStringBuffer&   rBuf,
+                     formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
-                     const sc::TokenStringContext& rCxt,
+                     const OUString& /*rErrRef*/, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
@@ -1222,7 +1225,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         // Foo!A1:#REF! versus #REF! at this point
         ScAddress aAbs1 = aRef.Ref1.toAbs(rPos), aAbs2;
 
-        MakeTabStr(rBuf, rPos, rCxt, aRef, bSingleRef);
+        MakeTabStr(rBuf, rPos, rTabNames, aRef, bSingleRef);
 
         if (!ValidAddress(aAbs1))
         {
@@ -1401,15 +1404,16 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 {
     ConventionXL_R1C1() : ScCompiler::Convention( FormulaGrammar::CONV_XL_R1C1 ) { }
     void makeRefStr( OUStringBuffer&   rBuf,
+                     formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
-                     const sc::TokenStringContext& rCxt,
+                     const OUString& /*rErrRef*/, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
         ScRange aAbsRef = rRef.toAbs(rPos);
         ScComplexRefData aRef( rRef );
 
-        MakeTabStr(rBuf, rPos, rCxt, aRef, bSingleRef);
+        MakeTabStr(rBuf, rPos, rTabNames, aRef, bSingleRef);
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
@@ -1606,10 +1610,19 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
         meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
-        mbRewind( false ),
-    mpTokenStringCxt(NULL)
+        mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
+
+    if (pDoc)
+    {
+        maTabNames = pDoc->GetAllTableNames();
+        {
+            std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
+            for (; it != itEnd; ++it)
+                ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGrammar));
+        }
+    }
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
@@ -1624,15 +1637,23 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
         meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
-        mbRewind( false ),
-    mpTokenStringCxt(NULL)
+        mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
+
+    if (pDoc)
+    {
+        maTabNames = pDoc->GetAllTableNames();
+        {
+            std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
+            for (; it != itEnd; ++it)
+                ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGrammar));
+        }
+    }
 }
 
 ScCompiler::~ScCompiler()
 {
-    delete mpTokenStringCxt;
 }
 
 void ScCompiler::CheckTabQuotes( OUString& rString,
@@ -4172,9 +4193,7 @@ void ScCompiler::CreateStringFromMatrix(
 
 void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
 {
-    if (!mpTokenStringCxt)
-        mpTokenStringCxt = new sc::TokenStringContext(pDoc, meGrammar);
-
+    OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     const OpCode eOp = _pTokenP->GetOpCode();
     const ScSingleRefData& rRef = static_cast<const ScToken*>(_pTokenP)->GetSingleRef();
     ScComplexRefData aRef;
@@ -4191,19 +4210,17 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
         else
         {
             rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
-            pConv->makeRefStr(rBuffer, aPos, *mpTokenStringCxt, aRef, true);
+            pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, maTabNames, aRef, true);
         }
     }
     else
-        pConv->makeRefStr(rBuffer, aPos, *mpTokenStringCxt, aRef, true);
+        pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, maTabNames, aRef, true);
 }
 
 void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
 {
-    if (!mpTokenStringCxt)
-        mpTokenStringCxt = new sc::TokenStringContext(pDoc, meGrammar);
-
-    pConv->makeRefStr(rBuffer, aPos, *mpTokenStringCxt, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false);
+    OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
+    pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, maTabNames, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false);
 }
 
 void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const

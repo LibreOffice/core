@@ -78,12 +78,6 @@ class ScRangeData;
 class ScExternalRefManager;
 class ScTokenArray;
 
-namespace sc {
-
-struct TokenStringContext;
-
-}
-
 // constants and data types internal to compiler
 
 /*
@@ -241,7 +235,10 @@ public:
         virtual ~Convention();
 
         virtual void makeRefStr(
-            OUStringBuffer& rBuffer, const ScAddress& rPos, const sc::TokenStringContext& rCxt,
+            OUStringBuffer& rBuffer,
+            formula::FormulaGrammar::Grammar eGram,
+            const ScAddress& rPos,
+            const OUString& rErrRef, const std::vector<OUString>& rTabNames,
             const ScComplexRefData& rRef, bool bSingleRef ) const = 0;
 
         virtual ::com::sun::star::i18n::ParseResult
@@ -338,7 +335,7 @@ private:
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
     std::vector<sal_uInt16> maExternalFiles;
-    mutable sc::TokenStringContext* mpTokenStringCxt;
+    std::vector<OUString> maTabNames;
 
     bool   NextNewToken(bool bInArray = false);
 
