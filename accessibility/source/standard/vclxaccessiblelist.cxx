@@ -369,7 +369,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
             break;
         case VCLEVENT_LISTBOX_FOCUSITEMCHANGED:
             if ( !m_bDisableProcessEvent )
-                UpdateFocus_Impl_Acc((sal_uInt16)reinterpret_cast<sal_uInt32>(rVclWindowEvent.GetData()),b_IsDropDownList);
+                UpdateFocus_Impl_Acc((sal_uInt16)reinterpret_cast<sal_uIntPtr>(rVclWindowEvent.GetData()),b_IsDropDownList);
             break;
         case VCLEVENT_WINDOW_GETFOCUS:
             break;
