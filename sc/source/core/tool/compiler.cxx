@@ -728,7 +728,7 @@ struct ConventionOOO_A1 : public Convention_A1
     ConventionOOO_A1() : Convention_A1 (FormulaGrammar::CONV_OOO) { }
     ConventionOOO_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1 (eConv) { }
 
-    static OUString MakeTabStr( const sc::TokenStringContext& rCxt, SCTAB nTab, OUString& aDoc )
+    static OUString MakeTabStr( const sc::TokenStringContext& rCxt, SCTAB nTab )
     {
         OUString aString;
         if (static_cast<size_t>(nTab) >= rCxt.maTabNames.size())
@@ -736,17 +736,6 @@ struct ConventionOOO_A1 : public Convention_A1
         else
         {
             aString = rCxt.maTabNames[nTab];
-            // "'Doc'#Tab"
-            sal_Int32 nPos = ScCompiler::GetDocTabPos( aString );
-            if ( nPos != -1 )
-            {
-                aDoc = aString.copy( 0, nPos + 1 );
-                aString = aString.copy( nPos + 1 );
-                aDoc = INetURLObject::decode( aDoc, INET_HEX_ESCAPE,
-                                              INetURLObject::DECODE_UNAMBIGUOUS );
-            }
-            else
-                aDoc = "";
             ScCompiler::CheckTabQuotes( aString, FormulaGrammar::CONV_OOO );
         }
         aString += ".";
@@ -769,9 +758,7 @@ struct ConventionOOO_A1 : public Convention_A1
             }
             else
             {
-                OUString aDoc;
-                OUString aRefStr(MakeTabStr(rCxt, rAbsRef.Tab(), aDoc));
-                rBuffer.append(aDoc);
+                OUString aRefStr(MakeTabStr(rCxt, rAbsRef.Tab()));
                 if (!rRef.IsTabRel())
                     rBuffer.append('$');
                 rBuffer.append(aRefStr);
@@ -1042,40 +1029,24 @@ const ScCompiler::Convention * const ScCompiler::pConvOOO_A1_ODF = &ConvOOO_A1_O
 
 struct ConventionXL
 {
-    static bool GetDocAndTab(
+    static void GetTab(
         const ScAddress& rPos, const sc::TokenStringContext& rCxt,
-        const ScSingleRefData& rRef, OUString& rDocName, OUString& rTabName )
+        const ScSingleRefData& rRef, OUString& rTabName )
     {
-        bool bHasDoc = false;
-
-        rDocName = "";
         ScAddress aAbs = rRef.toAbs(rPos);
         if (rRef.IsTabDeleted() || static_cast<size_t>(aAbs.Tab()) >= rCxt.maTabNames.size())
         {
             rTabName = ScGlobal::GetRscString( STR_NO_REF_TABLE );
-            return false;
+            return;
         }
         rTabName = rCxt.maTabNames[aAbs.Tab()];
-
-        // Cheesy hack to unparse the OOO style "'Doc'#Tab"
-        sal_Int32 nPos = ScCompiler::GetDocTabPos( rTabName);
-        if (nPos != -1)
-        {
-            rDocName = rTabName.copy( 0, nPos );
-            // TODO : More research into how XL escapes the doc path
-            rDocName = INetURLObject::decode( rDocName, INET_HEX_ESCAPE,
-                    INetURLObject::DECODE_UNAMBIGUOUS );
-            rTabName = rTabName.copy( nPos + 1 );
-            bHasDoc = true;
-        }
 
         // XL uses the same sheet name quoting conventions in both modes
         // it is safe to use A1 here
         ScCompiler::CheckTabQuotes( rTabName, FormulaGrammar::CONV_XL_A1 );
-        return bHasDoc;
     }
 
-    static void MakeDocStr( OUStringBuffer& rBuf,
+    static void MakeTabStr( OUStringBuffer& rBuf,
                             const ScAddress& rPos,
                             const sc::TokenStringContext& rCxt,
                             const ScComplexRefData& rRef,
@@ -1083,29 +1054,13 @@ struct ConventionXL
     {
         if( rRef.Ref1.IsFlag3D() )
         {
-            OUString aStartTabName, aStartDocName, aEndTabName, aEndDocName;
-            bool bStartHasDoc = false, bEndHasDoc = false;
+            OUString aStartTabName, aEndTabName;
 
-            bStartHasDoc = GetDocAndTab(
-                rPos, rCxt, rRef.Ref1, aStartDocName, aStartTabName);
+            GetTab(rPos, rCxt, rRef.Ref1, aStartTabName);
 
             if( !bSingleRef && rRef.Ref2.IsFlag3D() )
             {
-                bEndHasDoc = GetDocAndTab(
-                    rPos, rCxt, rRef.Ref2, aEndDocName, aEndTabName);
-            }
-            else
-                bEndHasDoc = bStartHasDoc;
-
-            if( bStartHasDoc )
-            {
-                // A ref across multipled workbooks ?
-                if( !bEndHasDoc )
-                    return;
-
-                rBuf.append( '[' );
-                rBuf.append( aStartDocName );
-                rBuf.append( ']' );
+                GetTab(rPos, rCxt, rRef.Ref2, aEndTabName);
             }
 
             rBuf.append( aStartTabName );
@@ -1274,7 +1229,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         // Foo!A1:#REF! versus #REF! at this point
         ScAddress aAbs1 = aRef.Ref1.toAbs(rPos), aAbs2;
 
-        MakeDocStr(rBuf, rPos, rCxt, aRef, bSingleRef);
+        MakeTabStr(rBuf, rPos, rCxt, aRef, bSingleRef);
 
         if (!ValidAddress(aAbs1))
         {
@@ -1461,7 +1416,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         ScRange aAbsRef = rRef.toAbs(rPos);
         ScComplexRefData aRef( rRef );
 
-        MakeDocStr(rBuf, rPos, rCxt, aRef, bSingleRef);
+        MakeTabStr(rBuf, rPos, rCxt, aRef, bSingleRef);
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
