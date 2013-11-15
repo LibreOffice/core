@@ -1927,10 +1927,11 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    int i = 0;\n";
     ss << "    double product=0.0;\n\n";
-    char sArgNoI[5];
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
-        sprintf(sArgNoI,"%d",i);
+        std::stringstream ssArgNoI;
+        ssArgNoI << i;
+        std::string sArgNoI = ssArgNoI.str();
         ss << std::string("    double arg")+sArgNoI+";\n";
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
