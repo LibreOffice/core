@@ -203,11 +203,15 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
                     // We want to keep the previous items
                     xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
-                    aGrabBag.realloc(length+1);
+                    aGrabBag.realloc(length+2);
 
                     beans::PropertyValue* pValue = aGrabBag.getArray();
                     pValue[length].Name = "OOXActiveX";
                     pValue[length].Value = uno::makeAny( pDocument->getActiveXDomList() );
+
+                    pValue[length+1].Name = "OOXActiveXBin";
+                    pValue[length+1].Value = uno::makeAny( pDocument->getActiveXBinList() );
+
                     xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
                  }
              }

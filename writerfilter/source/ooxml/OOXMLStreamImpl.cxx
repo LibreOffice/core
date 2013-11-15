@@ -113,6 +113,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
     static OUString sCustomPropsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps");
     static OUString sActiveXType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
+    static OUString sActiveXBinType("http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary");
     static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
     static OUString sTarget("Target");
     static OUString sTargetMode("TargetMode");
@@ -159,6 +160,9 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
         case ACTIVEX:
             sStreamType = sActiveXType;
             break;
+        case ACTIVEXBIN:
+            sStreamType = sActiveXBinType;
+            break;
         case SETTINGS:
             sStreamType = sSettingsType;
             break;
@@ -189,7 +193,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                     bFound = true;
                 else if (aPair.First.compareTo(sTarget) == 0)
                 {
-                    // checking item[n].xml is not visited already.
+                    // checking item[n].xml or activex[n].xml is not visited already.
                     if(customTarget != aPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType))
                     {
                         bFound = false;
