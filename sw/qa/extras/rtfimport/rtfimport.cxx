@@ -163,6 +163,7 @@ public:
     void testFdo69384();
     void testFdo70221();
     void testN823675();
+    void testCp1000018();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -309,6 +310,7 @@ void Test::run()
         {"hello.rtf", &Test::testFdo69384},
         {"fdo70221.rtf", &Test::testFdo70221},
         {"n823675.rtf", &Test::testN823675},
+        {"cp1000018.rtf", &Test::testCp1000018},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -582,7 +584,7 @@ void Test::testFdo45182()
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // Encoding in the footnote was wrong.
-    OUString aExpected("živností", 10, RTL_TEXTENCODING_UTF8);
+    OUString aExpected("živností\n", 11, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -1508,6 +1510,18 @@ void Test::testN823675()
     }
     // This was empty, i.e. no font name was set for the bullet numbering.
     CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), aFont.Name);
+}
+
+void Test::testCp1000018()
+{
+    // The problem was that the empty paragraph at the end of the footnote got
+    // lost during import.
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    // Why the tab has to be removed here?
+    OUString aExpected("Footnote first line.\n");
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString().replaceAll("\t", ""));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
