@@ -867,6 +867,7 @@ void DocxExport::WriteActiveX()
         return;
 
     uno::Sequence<uno::Reference<xml::dom::XDocument> > activeXDomlist;
+    uno::Sequence<uno::Reference<io::XInputStream> > activeXBinList;
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue( pName ) >>= propList;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
@@ -879,9 +880,20 @@ void DocxExport::WriteActiveX()
         }
     }
 
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+    {
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXActiveXBin" )
+        {
+            propList[nProp].Value >>= activeXBinList;
+            break;
+        }
+    }
+
     for (sal_Int32 j = 0; j < activeXDomlist.getLength(); j++)
     {
         uno::Reference<xml::dom::XDocument> activeXDom = activeXDomlist[j];
+        uno::Reference<io::XInputStream> activeXBin = activeXBinList[j];
 
         if ( activeXDom.is() )
         {
@@ -895,7 +907,47 @@ void DocxExport::WriteActiveX()
                 "application/vnd.ms-office.activeX+xml" ) );
             serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
                 uno::Sequence< beans::StringPair >() );
-         }
+        }
+
+        if ( activeXBin.is() )
+        {
+            uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream("word/activeX/activeX"+OUString::number((j+1))+".bin",
+                    "application/vnd.ms-office.activeX");
+
+            try
+            {
+                sal_Int32 nBufferSize = 512;
+                uno::Sequence< sal_Int8 > aDataBuffer(nBufferSize);
+                sal_Int32 nRead;
+                do
+                {
+                    nRead = activeXBin->readBytes( aDataBuffer, nBufferSize );
+                    if( nRead )
+                    {
+                        if( nRead < nBufferSize )
+                        {
+                            nBufferSize = nRead;
+                            aDataBuffer.realloc(nRead);
+                        }
+                        xOutStream->writeBytes( aDataBuffer );
+                    }
+                }
+                while( nRead );
+                xOutStream->flush();
+            }
+            catch(const uno::Exception&)
+            {
+                SAL_WARN("sw.ww8", "WriteActiveX() ::Failed to copy Inputstream to outputstream exception catched!");
+            }
+
+            xOutStream->closeOutput();
+            // Adding itemprops's relationship entry to item.xml.rels file
+            m_pFilter->addRelation( GetFilter().openFragmentStream( "/word/activeX/activeX"+OUString::number((j+1))+".xml",
+                    "application/vnd.ms-office.activeX+xml" ) ,
+                    "http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary",
+                    "activeX"+OUString::number((j+1))+".bin" );
+
+        }
      }
 }
 

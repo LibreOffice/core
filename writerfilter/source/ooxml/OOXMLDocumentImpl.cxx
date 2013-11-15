@@ -153,6 +153,10 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
     {
         importSubStreamRelations(pStream, OOXMLStream::CUSTOMXMLPROPS);
     }
+    if(OOXMLStream::ACTIVEX == nType)
+    {
+        importSubStreamRelations(pStream, OOXMLStream::ACTIVEXBIN);
+    }
 
     return xRet;
 }
@@ -160,46 +164,52 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
 
 void OOXMLDocumentImpl::importSubStreamRelations(OOXMLStream::Pointer_t pStream, OOXMLStream::StreamType_t nType)
 {
-    // imporing itemprops files for item.xml from customXml.
-    if(OOXMLStream::CUSTOMXMLPROPS == nType)
+    uno::Reference<xml::dom::XDocument> xRelation;
+    OOXMLStream::Pointer_t cStream;
+    try
     {
-        uno::Reference<xml::dom::XDocument> xCustomProps;
-        OOXMLStream::Pointer_t cStream;
-        try
-        {
-            cStream = OOXMLDocumentFactory::createStream(pStream, OOXMLStream::CUSTOMXMLPROPS);
-        }
-        catch (uno::Exception const& e)
-        {
-           SAL_WARN("writerfilter", "importSubStreamRelations: exception while "
-                    "importing stream " << nType << " : " << e.Message);
-           mxCustomXmlProsDom = xCustomProps;
-        }
+       cStream = OOXMLDocumentFactory::createStream(pStream, nType);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("writerfilter", "importSubStreamRelations: exception while "
+            "importing stream " << nType << " : " << e.Message);
+    }
 
-        uno::Reference<io::XInputStream> xcpInputStream =
-           cStream->getDocumentStream();
+    uno::Reference<io::XInputStream> xcpInputStream =
+            cStream->getDocumentStream();
 
-        if (xcpInputStream.is())
+    if (xcpInputStream.is())
+    {
+        // imporing itemprops files for item.xml from customXml.
+        if(OOXMLStream::CUSTOMXMLPROPS == nType)
         {
             try
             {
                  uno::Reference<uno::XComponentContext> xcpContext(pStream->getContext());
                  uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xcpContext));
-                 xCustomProps = xDomBuilder->parse(xcpInputStream);
+                 xRelation = xDomBuilder->parse(xcpInputStream);
             }
             catch (uno::Exception const& e)
             {
                 SAL_WARN("writerfilter", "importSubStream: exception while "
                          "parsing stream " << nType << " : " << e.Message);
-                mxCustomXmlProsDom = xCustomProps;
+                mxCustomXmlProsDom = xRelation;
+            }
+
+            if(xRelation.is())
+            {
+                mxCustomXmlProsDom = xRelation;
             }
         }
-
-        if(xCustomProps.is())
+        else if(OOXMLStream::ACTIVEXBIN == nType)
         {
-            mxCustomXmlProsDom = xCustomProps;
+            // imporing activex.bin files for activex.xml from activeX folder.
+            mxActiveXBin = xcpInputStream;
         }
     }
+
+
 }
 
 void OOXMLDocumentImpl::setXNoteId(const sal_Int32 nId)
@@ -527,6 +537,7 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
                 mxRelationshipAccess->getAllRelationships();
         uno::Sequence<uno::Reference<xml::dom::XDocument> > mxActiveXDomListTemp(aSeqs.getLength());
+        uno::Sequence<uno::Reference<io::XInputStream> > mxActiveXBinListTemp(aSeqs.getLength());
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -551,6 +562,10 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
                 if(activeXTemp.is())
                 {
                     mxActiveXDomListTemp[counter] = activeXTemp;
+                    if(mxActiveXBin.is())
+                    {
+                        mxActiveXBinListTemp[counter] = mxActiveXBin;
+                    }
                     counter++;
                     resolveFastSubStream(rStream, OOXMLStream::ACTIVEX);
                 }
@@ -558,7 +573,9 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
             }
         }
         mxActiveXDomListTemp.realloc(counter);
+        mxActiveXBinListTemp.realloc(counter);
         mxActiveXDomList = mxActiveXDomListTemp;
+        mxActiveXBinList = mxActiveXBinListTemp;
     }
 }
 
@@ -637,6 +654,11 @@ uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustom
 uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getActiveXDomList( )
 {
     return mxActiveXDomList;
+}
+
+uno::Sequence<uno::Reference<io::XInputStream> > OOXMLDocumentImpl::getActiveXBinList( )
+{
+    return mxActiveXBinList;
 }
 
 OOXMLDocument *

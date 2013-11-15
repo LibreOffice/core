@@ -46,6 +46,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomPropsList;
     uno::Reference<xml::dom::XDocument> mxCustomXmlProsDom;
     uno::Sequence<uno::Reference<xml::dom::XDocument> > mxActiveXDomList;
+    uno::Sequence<uno::Reference<io::XInputStream> > mxActiveXBinList;
+    uno::Reference<io::XInputStream> mxActiveXBin;
     bool mbIsSubstream;
 
 protected:
@@ -120,6 +122,7 @@ public:
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList();
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList();
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getActiveXDomList();
+    virtual uno::Sequence<uno::Reference<io::XInputStream> > getActiveXBinList();
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX

@@ -76,7 +76,7 @@ class WRITERFILTER_OOXML_DLLPUBLIC OOXMLStream
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING,
-        FOOTNOTES, ENDNOTES, COMMENTS, THEME, CUSTOMXML, CUSTOMXMLPROPS, ACTIVEX, SETTINGS, VBAPROJECT };
+        FOOTNOTES, ENDNOTES, COMMENTS, THEME, CUSTOMXML, CUSTOMXMLPROPS, ACTIVEX, ACTIVEXBIN, SETTINGS, VBAPROJECT };
     typedef boost::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
@@ -245,6 +245,7 @@ public:
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList( ) = 0;
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList( ) = 0;
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getActiveXDomList( ) = 0;
+    virtual uno::Sequence<uno::Reference<io::XInputStream> > getActiveXBinList() = 0;
 };
 
 
