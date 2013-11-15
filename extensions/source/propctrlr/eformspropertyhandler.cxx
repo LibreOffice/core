@@ -81,7 +81,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL EFormsPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
-        aSupported[0] = OUString( "com.sun.star.form.inspection.XMLFormsPropertyHandler" );
+        aSupported[0] = "com.sun.star.form.inspection.XMLFormsPropertyHandler";
         return aSupported;
     }
 
@@ -468,7 +468,7 @@ namespace pcr
         }
 
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-        aDescriptor.Category = OUString( "Data" );
+        aDescriptor.Category = "Data";
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
         return aDescriptor;
     }

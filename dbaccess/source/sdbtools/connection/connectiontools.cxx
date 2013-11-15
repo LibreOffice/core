@@ -119,7 +119,7 @@ namespace sdbtools
     Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames_static()
     {
         Sequence< OUString > aSupported( 1 );
-        aSupported[0] = OUString( "com.sun.star.sdb.tools.ConnectionTools" );
+        aSupported[0] = "com.sun.star.sdb.tools.ConnectionTools";
         return aSupported;
     }
 

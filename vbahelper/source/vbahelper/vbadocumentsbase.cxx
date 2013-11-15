@@ -274,7 +274,7 @@ void VbaDocumentsBase::closeDocuments() throw (uno::RuntimeException)
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    OUString url = OUString(  ".uno:CloseDoc");
+    OUString url = ".uno:CloseDoc";
     dispatchRequests(xModel,url);
 */
 }

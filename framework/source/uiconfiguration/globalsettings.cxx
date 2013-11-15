@@ -241,10 +241,10 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
             css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
                  css::configuration::theDefaultProvider::get( m_xContext );
 
-            aPropValue.Name  = OUString( "nodepath" );
+            aPropValue.Name  = "nodepath";
             aPropValue.Value = css::uno::makeAny( OUString( GLOBALSETTINGS_ROOT_ACCESS ));
             aArgs[0] = css::uno::makeAny( aPropValue );
-            aPropValue.Name = OUString( "lazywrite" );
+            aPropValue.Name = "lazywrite";
             aPropValue.Value = css::uno::makeAny( sal_True );
             aArgs[1] = css::uno::makeAny( aPropValue );
 

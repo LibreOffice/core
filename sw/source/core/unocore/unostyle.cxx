@@ -2438,7 +2438,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                 if (bExcept )
                 {
                     uno::RuntimeException aExcept;
-                    aExcept.Message = OUString( "No default value for: " ) + pNames[nProp];
+                    aExcept.Message = "No default value for: " + pNames[nProp];
                     throw aExcept;
                 }
             }

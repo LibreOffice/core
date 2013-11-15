@@ -464,13 +464,13 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
 
     if ( pLineStartItem )
     {
-        aArgs[0].Name = OUString( "LineStart" );
+        aArgs[0].Name = "LineStart";
         pLineStartItem->QueryValue( a );
         aArgs[0].Value = a;
     }
     else
     {
-        aArgs[0].Name = OUString( "LineEnd" );
+        aArgs[0].Name = "LineEnd";
         pLineEndItem->QueryValue( a );
         aArgs[0].Value = a;
     }

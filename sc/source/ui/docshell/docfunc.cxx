@@ -2894,16 +2894,16 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName
             genModuleName = sModuleName;
         else
         {
-             genModuleName = OUString( "Sheet1" );
+             genModuleName = "Sheet1";
              nNum = 1;
         }
         while( xLib->hasByName( genModuleName ) )
-            genModuleName = OUString( "Sheet") + OUString::number( ++nNum );
+            genModuleName = "Sheet" + OUString::number( ++nNum );
 
         uno::Any aSourceAny;
         OUString sTmpSource = sSource;
         if ( sTmpSource.isEmpty() )
-            sTmpSource = OUString( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" );
+            sTmpSource = "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n";
         aSourceAny <<= sTmpSource;
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )

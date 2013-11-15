@@ -358,7 +358,7 @@ namespace connectivity { namespace hsqldb
 
             // ask the provider to obtain a graphic
             Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = OUString( "URL" );
+            aMediaProperties[0].Name = "URL";
             aMediaProperties[0].Value <<= sImageURL;
             xGraphic = xProvider->queryGraphic( aMediaProperties );
             OSL_ENSURE( xGraphic.is(), "OHsqlConnection::impl_getTextTableIcon_nothrow: the provider did not give us a graphic object!" );

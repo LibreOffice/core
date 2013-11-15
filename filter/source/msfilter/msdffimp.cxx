@@ -6881,15 +6881,15 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
                 aFilterName = GetFilterNameFromClassID_Impl( aStgNm );
 
             uno::Sequence < beans::PropertyValue > aMedium( aFilterName.isEmpty() ? 2 : 3);
-            aMedium[0].Name = OUString( "InputStream" );
+            aMedium[0].Name = "InputStream";
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *xMemStream );
             aMedium[0].Value <<= xStream;
-            aMedium[1].Name = OUString( "URL" );
+            aMedium[1].Name = "URL";
             aMedium[1].Value <<= OUString( "private:stream" );
 
             if ( !aFilterName.isEmpty() )
             {
-                aMedium[2].Name = OUString( "FilterName" );
+                aMedium[2].Name = "FilterName";
                 aMedium[2].Value <<= aFilterName;
             }
 

@@ -293,13 +293,13 @@ XMLTokenEnum getTokenByChartType(
 
     if( bUseOldNames )
     {
-        aPrefix = OUString( "com.sun.star.chart.");
-        aPostfix = OUString( "Diagram");
+        aPrefix = "com.sun.star.chart.";
+        aPostfix = "Diagram";
     }
     else
     {
-        aPrefix = OUString( "com.sun.star.chart2.");
-        aPostfix = OUString( "ChartType");
+        aPrefix = "com.sun.star.chart2.";
+        aPostfix = "ChartType";
     }
 
     if( rChartTypeService.match( aPrefix ))

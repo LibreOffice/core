@@ -277,9 +277,9 @@ void test_SimpleRegistry(
 
         xKey = xRootKey->createKey(OUString( "ThirdKey" ));
         OUString pAscii[3];
-        pAscii[0] = OUString( "Hallo" );
-        pAscii[1] = OUString( "jetzt komm" );
-        pAscii[2] = OUString( "ich" );
+        pAscii[0] = "Hallo";
+        pAscii[1] = "jetzt komm";
+        pAscii[2] = "ich";
 
         Sequence<OUString> seqAscii(pAscii, 3);
         xKey->setAsciiListValue(seqAscii);
@@ -293,9 +293,9 @@ void test_SimpleRegistry(
 
         xKey = xRootKey->createKey(OUString( "FourthKey" ));
         OUString pUnicode[3];
-        pUnicode[0] = OUString( "Hallo" );
-        pUnicode[1] = OUString( "jetzt komm" );
-        pUnicode[2] = OUString( "ich als unicode" );
+        pUnicode[0] = "Hallo";
+        pUnicode[1] = "jetzt komm";
+        pUnicode[2] = "ich als unicode";
 
         Sequence<OUString> seqUnicode(pUnicode, 3);
         xKey->setStringListValue(seqUnicode);

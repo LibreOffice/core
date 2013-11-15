@@ -656,7 +656,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
         Sequence< PropertyValue > aArgs( 1 );
 
         // First set the style
-        aArgs[0].Name = OUString( "FillStyle" );
+        aArgs[0].Name = "FillStyle";
         aXFillStyleItem.QueryValue(  a );
         aArgs[0].Value = a;
         ((SvxFillToolBoxControl*)GetData())->Dispatch(
@@ -701,7 +701,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         XGradient aGradient = aItem.GetGradientList()->GetGradient( nPos )->GetGradient();
                         XFillGradientItem aXFillGradientItem( pLbFillAttr->GetSelectEntry(), aGradient );
 
-                        aArgs[0].Name = OUString( "FillGradient" );
+                        aArgs[0].Name = "FillGradient";
                         aXFillGradientItem.QueryValue( a );
                         aArgs[0].Value = a;
                         ((SvxFillToolBoxControl*)GetData())->Dispatch( OUString( ".uno:FillGradient" ),
@@ -724,7 +724,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         XHatch aHatch = aItem.GetHatchList()->GetHatch( nPos )->GetHatch();
                         XFillHatchItem aXFillHatchItem( pLbFillAttr->GetSelectEntry(), aHatch );
 
-                        aArgs[0].Name = OUString( "FillHatch" );
+                        aArgs[0].Name = "FillHatch";
                         aXFillHatchItem.QueryValue( a );
                         aArgs[0].Value = a;
                         ((SvxFillToolBoxControl*)GetData())->Dispatch( OUString( ".uno:FillHatch" ),
@@ -748,7 +748,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
                         const XFillBitmapItem aXFillBitmapItem(pLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
 
-                        aArgs[0].Name = OUString( "FillBitmap" );
+                        aArgs[0].Name = "FillBitmap";
                         aXFillBitmapItem.QueryValue( a );
                         aArgs[0].Value = a;
                         ((SvxFillToolBoxControl*)GetData())->Dispatch(OUString(".uno:FillBitmap"), aArgs);

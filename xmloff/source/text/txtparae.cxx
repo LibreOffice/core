@@ -1279,31 +1279,31 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
     xTextPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
-    sFamily = OUString( GetXMLToken(XML_TEXT) );
-    aPrefix = OUString(static_cast<sal_Unicode>('T'));
+    sFamily = GetXMLToken(XML_TEXT);
+    aPrefix = "T";
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_TEXT, sFamily,
                               xTextPropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_AUTO_FRAME );
     xAutoFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                                   GetExport() );
-    sFamily = OUString( XML_STYLE_FAMILY_SD_GRAPHICS_NAME );
-    aPrefix = OUString( "fr"  );
+    sFamily = XML_STYLE_FAMILY_SD_GRAPHICS_NAME;
+    aPrefix = "fr";
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_FRAME, sFamily,
                               xAutoFramePropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION );
     xSectionPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
-    sFamily = OUString( GetXMLToken( XML_SECTION ) );
-    aPrefix = OUString( "Sect"  );
+    sFamily = GetXMLToken( XML_SECTION );
+    aPrefix = "Sect" ;
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_SECTION, sFamily,
                               xSectionPropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY );
     xRubyPropMapper = new SvXMLExportPropertyMapper( xPropMapper );
-    sFamily = OUString( GetXMLToken( XML_RUBY ) );
-    aPrefix = OUString( "Ru"  );
+    sFamily = GetXMLToken( XML_RUBY );
+    aPrefix = "Ru";
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_RUBY, sFamily,
                               xRubyPropMapper, aPrefix );
 
@@ -1464,17 +1464,17 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
         {
             if ( 0 == i )
             {
-                sName = OUString( "CharacterStyles"  );
+                sName = "CharacterStyles" ;
                 nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
             }
             else if ( 1 == i )
             {
-                sName = OUString( "RubyStyles"  );
+                sName = "RubyStyles" ;
                 nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
             }
             else
             {
-                sName = OUString( "ParagraphStyles"  );
+                sName = "ParagraphStyles" ;
                 nFamily = XML_STYLE_FAMILY_TEXT_PARAGRAPH;
             }
 

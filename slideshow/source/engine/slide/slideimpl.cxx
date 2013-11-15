@@ -782,7 +782,7 @@ namespace
     public:
         MainSequenceSearcher()
         {
-            maSearchKey.Name = OUString( "node-type" );
+            maSearchKey.Name = "node-type";
             maSearchKey.Value <<= presentation::EffectNodeType::MAIN_SEQUENCE;
         }
 

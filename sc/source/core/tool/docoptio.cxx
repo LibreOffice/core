@@ -196,7 +196,7 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCDOCLAYOUTOPT_TABSTOP] = OUString( "TabStop/Metric" );
+        pNames[SCDOCLAYOUTOPT_TABSTOP] = "TabStop/Metric";
 
     return aNames;
 }

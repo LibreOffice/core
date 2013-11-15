@@ -1051,7 +1051,7 @@ OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBox
 
         case ::svt::BBTYPE_ROWHEADERBAR:
         case ::svt::BBTYPE_ROWHEADERCELL:
-            aRetText = OUString( "error" );
+            aRetText = "error";
             break;
 
         default:

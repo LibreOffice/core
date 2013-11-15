@@ -861,7 +861,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         xNumericControl->setDecimalDigits( 2 );
         xNumericControl->setValueUnit( util::MeasureUnit::MM_100TH );
         uno::Reference< drawing::XShapeDescriptor> xShapeDesc(m_xReportComponent,uno::UNO_QUERY);
-        bool bSetMin = !xShapeDesc.is() || xShapeDesc->getShapeType() != OUString("com.sun.star.drawing.CustomShape");
+        bool bSetMin = !xShapeDesc.is() || xShapeDesc->getShapeType() != "com.sun.star.drawing.CustomShape";
         if ( bSetMin )
             xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
         if ( nDisplayUnit != -1 )

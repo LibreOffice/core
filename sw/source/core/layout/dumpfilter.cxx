@@ -28,7 +28,7 @@ OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw( uno::RuntimeEx
 uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSeq( 1 );
-    aSeq[0] = OUString( "com.sun.star.document.ExportFilter" );
+    aSeq[0] = "com.sun.star.document.ExportFilter";
     return aSeq;
 }
 

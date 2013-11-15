@@ -616,10 +616,10 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
     if ( rCC.getLanguageTag().getLanguage() == "fr" )
     {
         bool bFrCA = (rCC.getLanguageTag().getCountry() == "CA");
-        OUString allChars = OUString( ":;?!%" );
+        OUString allChars = ":;?!%";
         OUString chars( allChars );
         if ( bFrCA )
-            chars = OUString( ":" );
+            chars = ":";
 
         sal_Unicode cChar = rTxt[ nEndPos ];
         bool bHasSpace = chars.indexOf( cChar ) != -1;

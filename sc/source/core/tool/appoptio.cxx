@@ -273,7 +273,7 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCLAYOUTOPT_MEASURE] = OUString( "Other/MeasureUnit/Metric" );
+        pNames[SCLAYOUTOPT_MEASURE] = "Other/MeasureUnit/Metric";
 
     return aNames;
 }

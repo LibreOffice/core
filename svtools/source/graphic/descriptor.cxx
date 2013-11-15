@@ -186,7 +186,7 @@ uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.graphic.GraphicDescriptor"  );
+    aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicDescriptor";
 
     return aSeq;
 }
@@ -380,7 +380,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                     }
 
                     if( aMimeType.isEmpty() && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
-                        aMimeType = OUString(MIMETYPE_VCLGRAPHIC );
+                        aMimeType = MIMETYPE_VCLGRAPHIC;
                 }
                 else
                     aMimeType = maMimeType;

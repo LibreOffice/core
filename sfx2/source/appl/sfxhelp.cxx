@@ -325,13 +325,13 @@ OUString SfxHelp::GetHelpModuleName_Impl()
     {
         // Map some module identifiers to their "real" help module string.
         if ( aFactoryShortName == "chart2" )
-            aFactoryShortName = OUString( "schart"  );
+            aFactoryShortName = "schart" ;
         else if ( aFactoryShortName == "BasicIDE" )
-            aFactoryShortName = OUString( "sbasic"  );
+            aFactoryShortName = "sbasic";
         else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sweb"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sglobal"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swxform")) )
-            aFactoryShortName = OUString( "swriter"  );
+            aFactoryShortName = "swriter" ;
         else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbquery"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbrelation"))
@@ -341,7 +341,7 @@ OUString SfxHelp::GetHelpModuleName_Impl()
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swreport"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swform")) )
-            aFactoryShortName = OUString( "sdatabase"  );
+            aFactoryShortName = "sdatabase";
         else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbibliography"))
                 || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StartModule")) )
             aFactoryShortName = sDefaultModule;

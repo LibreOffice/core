@@ -282,19 +282,19 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     Sequence< Any > aArgs(5);
                     PropertyValue   aPropValue;
 
-                    aPropValue.Name     = OUString( "ModuleIdentifier" );
+                    aPropValue.Name     = "ModuleIdentifier";
                     aPropValue.Value    <<= m_aModuleIdentifier;
                     aArgs[0] <<= aPropValue;
-                    aPropValue.Name     = OUString( "Frame" );
+                    aPropValue.Name     = "Frame";
                     aPropValue.Value    <<= m_xFrame;
                     aArgs[1] <<= aPropValue;
-                    aPropValue.Name     = OUString( "ServiceManager" );
+                    aPropValue.Name     = "ServiceManager";
                     aPropValue.Value    <<= Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW);
                     aArgs[2] <<= aPropValue;
-                    aPropValue.Name     = OUString( "ParentWindow" );
+                    aPropValue.Name     = "ParentWindow";
                     aPropValue.Value    <<= xToolbarWindow;
                     aArgs[3] <<= aPropValue;
-                    aPropValue.Name     = OUString( "ItemId" );
+                    aPropValue.Name     = "ItemId";
                     aPropValue.Value    = makeAny( sal_Int32( nId ));
                     aArgs[4] <<= aPropValue;
 
@@ -325,13 +325,13 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 {
                     PropertyValue aPropValue;
                     Sequence< Any > aArgs( 3 );
-                    aPropValue.Name = OUString( "Frame" );
+                    aPropValue.Name = "Frame";
                     aPropValue.Value <<= m_xFrame;
                     aArgs[0] <<= aPropValue;
-                    aPropValue.Name = OUString( "CommandURL" );
+                    aPropValue.Name = "CommandURL";
                     aPropValue.Value <<= aURL;
                     aArgs[1] <<= aPropValue;
-                    aPropValue.Name = OUString( "ServiceManager" );
+                    aPropValue.Name = "ServiceManager";
                     aPropValue.Value <<= Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW);
                     aArgs[2] <<= aPropValue;
                     try

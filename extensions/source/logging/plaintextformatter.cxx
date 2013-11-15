@@ -178,7 +178,7 @@ namespace logging
     Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames_static()
     {
         Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = OUString( "com.sun.star.logging.PlainTextFormatter" );
+        aServiceNames[0] = "com.sun.star.logging.PlainTextFormatter";
         return aServiceNames;
     }
 

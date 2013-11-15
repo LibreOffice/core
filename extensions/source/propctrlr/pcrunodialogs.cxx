@@ -99,8 +99,8 @@ namespace pcr
     ::comphelper::StringSequence OTabOrderDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(2);
-        aSupported.getArray()[0] = OUString(  "com.sun.star.form.ui.TabOrderDialog"  );
-        aSupported.getArray()[1] = OUString(  "com.sun.star.form.TabOrderDialog"  );
+        aSupported.getArray()[0] = "com.sun.star.form.ui.TabOrderDialog";
+        aSupported.getArray()[1] = "com.sun.star.form.TabOrderDialog";
         return aSupported;
     }
 

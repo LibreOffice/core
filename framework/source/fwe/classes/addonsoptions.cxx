@@ -467,7 +467,7 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     // Enable notification mechanism of ouer baseclass.
     // We need it to get information about changes outside these class on ouer used configuration keys!
     Sequence< OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = OUString( "AddonUI" );
+    aNotifySeq[0] = "AddonUI";
     EnableNotification( aNotifySeq );
 }
 
@@ -1056,7 +1056,7 @@ sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstr
 
     // extend the node names to have full path strings
     for ( sal_uInt32 i = 0; i < (sal_uInt32)aSubMenuNodeNames.getLength(); i++ )
-        aSubMenuNodeNames[i] = OUString( aMergeMenuBaseNode + aSubMenuNodeNames[i] );
+        aSubMenuNodeNames[i] = aMergeMenuBaseNode + aSubMenuNodeNames[i];
 
     return ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
 }
@@ -1321,7 +1321,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
             for ( sal_uInt32 n = 0; n < (sal_uInt32)aRootSubMenuNodeNames.getLength(); n++ )
-                aRootSubMenuNodeNames[n] = OUString( aSubMenuRootNodeName + aRootSubMenuNodeNames[n] );
+                aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aMenuItem[ OFFSET_MENUITEM_SUBMENU ].Value <<= aSubMenuSeq;
             bResult = sal_True;
@@ -1389,7 +1389,7 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, 
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
             for ( sal_uInt32 n = 0; n < (sal_uInt32)aRootSubMenuNodeNames.getLength(); n++ )
-                aRootSubMenuNodeNames[n] = OUString( aSubMenuRootNodeName + aRootSubMenuNodeNames[n] );
+                aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aSubMenuSeq;
             bResult = sal_True;
@@ -1677,12 +1677,12 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
     Sequence< OUString > lResult( PROPERTYCOUNT_MENUITEM );
 
     // Create property names dependent from the root node name
-    lResult[OFFSET_MENUITEM_URL]             = OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL          ] );
-    lResult[OFFSET_MENUITEM_TITLE]           = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE            ] );
-    lResult[OFFSET_MENUITEM_IMAGEIDENTIFIER] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER ] );
-    lResult[OFFSET_MENUITEM_TARGET]          = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET           ] );
-    lResult[OFFSET_MENUITEM_CONTEXT]         = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT      ] );
-    lResult[OFFSET_MENUITEM_SUBMENU]         = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU      ] );
+    lResult[OFFSET_MENUITEM_URL]             = aPropertyRootNode + m_aPropNames[ INDEX_URL          ] ;
+    lResult[OFFSET_MENUITEM_TITLE]           = aPropertyRootNode + m_aPropNames[ INDEX_TITLE            ];
+    lResult[OFFSET_MENUITEM_IMAGEIDENTIFIER] = aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER ];
+    lResult[OFFSET_MENUITEM_TARGET]          = aPropertyRootNode + m_aPropNames[ INDEX_TARGET           ];
+    lResult[OFFSET_MENUITEM_CONTEXT]         = aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT      ];
+    lResult[OFFSET_MENUITEM_SUBMENU]         = aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU      ];
 
     return lResult;
 }
@@ -1696,9 +1696,9 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
     Sequence< OUString > lResult( PROPERTYCOUNT_POPUPMENU-1 );
 
     // Create property names dependent from the root node name
-    lResult[OFFSET_POPUPMENU_TITLE]   = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE  ] );
-    lResult[OFFSET_POPUPMENU_CONTEXT] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT    ] );
-    lResult[OFFSET_POPUPMENU_SUBMENU] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU    ] );
+    lResult[OFFSET_POPUPMENU_TITLE]   = aPropertyRootNode + m_aPropNames[ INDEX_TITLE  ];
+    lResult[OFFSET_POPUPMENU_CONTEXT] = aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT    ];
+    lResult[OFFSET_POPUPMENU_SUBMENU] = aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU    ];
 
     return lResult;
 }
@@ -1711,13 +1711,13 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUSt
     Sequence< OUString > lResult( PROPERTYCOUNT_TOOLBARITEM );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL             ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE       ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER] );
-    lResult[3] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET          ] );
-    lResult[4] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT         ] );
-    lResult[5] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTROLTYPE     ] );
-    lResult[6] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_WIDTH       ] );
+    lResult[0] = aPropertyRootNode + m_aPropNames[ INDEX_URL             ];
+    lResult[1] = aPropertyRootNode + m_aPropNames[ INDEX_TITLE       ];
+    lResult[2] = aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER];
+    lResult[3] = aPropertyRootNode + m_aPropNames[ INDEX_TARGET          ];
+    lResult[4] = aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT         ];
+    lResult[5] = aPropertyRootNode + m_aPropNames[ INDEX_CONTROLTYPE     ];
+    lResult[6] = aPropertyRootNode + m_aPropNames[ INDEX_WIDTH       ];
 
     return lResult;
 }
@@ -1746,14 +1746,14 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString&
     Sequence< OUString > lResult( PROPERTYCOUNT_IMAGES );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL       ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG     ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC ] );
-    lResult[3] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC       ] );
-    lResult[4] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL  ] );
-    lResult[5] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL ] );
-    lResult[6] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL] );
-    lResult[7] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL   ] );
+    lResult[0] = aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL       ];
+    lResult[1] = aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG     ];
+    lResult[2] = aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC ];
+    lResult[3] = aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC       ];
+    lResult[4] = aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL  ];
+    lResult[5] = aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL ];
+    lResult[6] = aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL];
+    lResult[7] = aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL   ];
 
     return lResult;
 }

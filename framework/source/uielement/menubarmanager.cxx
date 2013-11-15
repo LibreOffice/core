@@ -499,7 +499,7 @@ throw ( RuntimeException )
                     if ( aItemText.matchAsciiL( "($1)", 4 ))
                     {
                         OUString aTmp(FWK_RESSTR(STR_UPDATEDOC));
-                        aTmp += OUString( " " );
+                        aTmp += " ";
                         aTmp += aItemText.copy( 4 );
                         aItemText = aTmp;
                     }
@@ -899,8 +899,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
                             if ( aItemCommand.isEmpty() )
                             {
-                                aItemCommand = OUString( "slot:" );
-                                aItemCommand += OUString::number( pMenuItemHandler->nItemId );
+                                aItemCommand = "slot:" + OUString::number( pMenuItemHandler->nItemId );
                                 pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
                             }
 
@@ -1072,7 +1071,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
                     {
                         // bookmark menu item selected
                         aArgs.realloc( 1 );
-                        aArgs[0].Name = OUString( "Referer" );
+                        aArgs[0].Name = "Referer";
                         aArgs[0].Value <<= OUString( "private:user" );
                     }
 
@@ -1158,10 +1157,10 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
     Sequence< Any > aSeq( 2 );
     PropertyValue aPropValue;
 
-    aPropValue.Name         = OUString( "ModuleIdentifier" );
+    aPropValue.Name         = "ModuleIdentifier";
     aPropValue.Value      <<= m_aModuleIdentifier;
     aSeq[0] <<= aPropValue;
-    aPropValue.Name         = OUString( "Frame" );
+    aPropValue.Name         = "Frame";
     aPropValue.Value      <<= m_xFrame;
     aSeq[1] <<= aPropValue;
 
@@ -1333,9 +1332,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         pPopup->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
 
                         // Set item command for popup menu to enable it for GetImageFromURL
-                        const OUString aSlotString( "slot:" );
-                        OUString aNewItemCommand( aSlotString );
-                        aNewItemCommand += OUString::number( ITEMID_ADDONLIST );
+                        OUString aNewItemCommand = "slot:" + OUString::number( ITEMID_ADDONLIST );
                         pPopup->SetItemCommand( ITEMID_ADDONLIST, aNewItemCommand );
                     }
                     else
@@ -1950,9 +1947,7 @@ sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
     if ( _rItemCommand.isEmpty() )
     {
-        const static OUString aSlotString( "slot:" );
-        _rItemCommand = aSlotString;
-        _rItemCommand += OUString::number( nItemId );
+        _rItemCommand = "slot:" + OUString::number( nItemId );
         _pMenu->SetItemCommand( nItemId, _rItemCommand );
     }
     return nItemId;

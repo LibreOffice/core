@@ -106,7 +106,7 @@ uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans:
     if ( !bAsTemplateSet )
     {
         aResult.realloc( nLength + 1 );
-        aResult[nLength].Name = OUString( "AsTemplate" );
+        aResult[nLength].Name = "AsTemplate";
         aResult[nLength].Value <<= sal_True;
     }
 
@@ -221,7 +221,7 @@ static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument, c
     if ( xDocument.is() )
     {
         uno::Sequence< beans::PropertyValue > aSeq( 1 );
-        aSeq[0].Name = OUString( "SetEmbedded" );
+        aSeq[0].Name = "SetEmbedded";
         aSeq[0].Value <<= sal_True;
         xDocument->attachResource( OUString(), aSeq );
 
@@ -377,14 +377,14 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 
     sal_Int32 nLen = 2;
     uno::Sequence< beans::PropertyValue > aArgs( nLen );
-    aArgs[0].Name = OUString( "URL" );
+    aArgs[0].Name = "URL";
     aArgs[0].Value <<= m_aLinkURL;
-    aArgs[1].Name = OUString( "FilterName" );
+    aArgs[1].Name = "FilterName";
     aArgs[1].Value <<= m_aLinkFilterName;
     if ( m_bLinkHasPassword )
     {
         aArgs.realloc( ++nLen );
-        aArgs[nLen-1].Name = OUString( "Password" );
+        aArgs[nLen-1].Name = "Password";
         aArgs[nLen-1].Value <<= m_aLinkPassword;
     }
 
@@ -590,13 +590,13 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
         throw io::IOException(); // TODO:
 
     uno::Sequence< beans::PropertyValue > aArgs( 4 );
-    aArgs[0].Name = OUString( "FilterName" );
+    aArgs[0].Name = "FilterName";
     aArgs[0].Value <<= aFilterName;
-    aArgs[1].Name = OUString( "OutputStream" );
+    aArgs[1].Name = "OutputStream";
     aArgs[1].Value <<= xTempOut;
-    aArgs[2].Name = OUString( "DocumentBaseURL" );
+    aArgs[2].Name = "DocumentBaseURL";
     aArgs[2].Value <<= aBaseURL;
-    aArgs[3].Name = OUString( "HierarchicalDocumentName" );
+    aArgs[3].Name = "HierarchicalDocumentName";
     aArgs[3].Value <<= aHierarchName;
 
     xStorable->storeToURL( OUString( "private:stream" ), aArgs );
@@ -751,11 +751,11 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
             throw io::IOException(); // TODO:
 
         uno::Sequence< beans::PropertyValue > aArgs( 3 );
-        aArgs[0].Name = OUString( "FilterName" );
+        aArgs[0].Name = "FilterName";
         aArgs[0].Value <<= aFilterName;
-        aArgs[2].Name = OUString( "DocumentBaseURL" );
+        aArgs[2].Name = "DocumentBaseURL";
         aArgs[2].Value <<= aBaseURL;
-        aArgs[1].Name = OUString( "HierarchicalDocumentName" );
+        aArgs[1].Name = "HierarchicalDocumentName";
         aArgs[1].Value <<= aHierarchName;
 
         xDoc->storeToStorage( xStorage, aArgs );
@@ -866,21 +866,21 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
 
         SAL_WARN_IF( aTempFileURL.isEmpty(), "embeddedobj.common", "Couldn't retrieve temporary file URL!" );
 
-        aTempMediaDescr[0].Name = OUString( "URL" );
+        aTempMediaDescr[0].Name = "URL";
         aTempMediaDescr[0].Value <<= aTempFileURL;
-        aTempMediaDescr[1].Name = OUString( "InputStream" );
+        aTempMediaDescr[1].Name = "InputStream";
         aTempMediaDescr[1].Value <<= xTempStream;
-        aTempMediaDescr[2].Name = OUString( "FilterName" );
+        aTempMediaDescr[2].Name = "FilterName";
         aTempMediaDescr[2].Value <<= GetFilterName( nStorageFormat );
-        aTempMediaDescr[3].Name = OUString( "AsTemplate" );
+        aTempMediaDescr[3].Name = "AsTemplate";
         aTempMediaDescr[3].Value <<= sal_True;
     }
     else
     {
         aTempMediaDescr.realloc( 2 );
-        aTempMediaDescr[0].Name = OUString( "URL" );
+        aTempMediaDescr[0].Name = "URL";
         aTempMediaDescr[0].Value <<= m_aLinkURL;
-        aTempMediaDescr[1].Name = OUString( "FilterName" );
+        aTempMediaDescr[1].Name = "FilterName";
         aTempMediaDescr[1].Value <<= m_aLinkFilterName;
     }
 
@@ -1692,7 +1692,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
             else
             {
                 uno::Sequence< beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name = OUString( "URL" );
+                aArgs[0].Name = "URL";
                 aArgs[0].Value <<= m_aLinkURL;
                 m_aLinkFilterName = aHelper.UpdateMediaDescriptorWithFilterName( aArgs, sal_False );
             }

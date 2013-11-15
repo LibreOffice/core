@@ -486,7 +486,7 @@ Sequence< OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString( "com.sun.star.security.DocumentDigitalSignatures" );
+    pArray[0] = "com.sun.star.security.DocumentDigitalSignatures";
     return aRet;
 }
 

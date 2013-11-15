@@ -653,7 +653,7 @@ void Parser::readFont()
         if( aResult.familyName.isEmpty() )
         {
             // last fallback
-            aResult.familyName  = OUString( "Arial"  );
+            aResult.familyName  = "Arial";
             aResult.isUnderline = false;
         }
 

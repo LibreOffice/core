@@ -672,8 +672,8 @@ Sequence< OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames() th
 Sequence< OUString > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames()
 {
     Sequence< OUString > seqServiceNames( 2 );
-    seqServiceNames.getArray() [0] = OUString( "com.sun.star.frame.SynchronousFrameLoader" );
-    seqServiceNames.getArray() [1] = OUString( "com.sun.star.frame.OfficeFrameLoader" );
+    seqServiceNames.getArray() [0] = "com.sun.star.frame.SynchronousFrameLoader";
+    seqServiceNames.getArray() [1] = "com.sun.star.frame.OfficeFrameLoader";
     return seqServiceNames ;
 }
 

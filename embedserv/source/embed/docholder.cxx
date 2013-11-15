@@ -718,7 +718,7 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, s
     {
         // set the document mode to embedded
         uno::Sequence< beans::PropertyValue > aSeq(1);
-        aSeq[0].Name = OUString( "SetEmbedded" );
+        aSeq[0].Name = "SetEmbedded";
         aSeq[0].Value <<= sal_True;
         m_xDocument->attachResource(OUString(),aSeq);
     }

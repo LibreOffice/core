@@ -92,7 +92,7 @@ bool SplitString( const OUString &sWhole,
     i18n::LocaleDataItem aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
 
     // Get prefix element
-    OUString sEmpty, sUser = OUString( "-" );
+    OUString sEmpty, sUser = "-";
     ParseResult aPRPre = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::IDENTNAME, sWhole, 0,
         KParseTokens::ANY_LETTER, sUser, KParseTokens::ANY_LETTER, sUser );
@@ -928,7 +928,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             //  wenn sortiert, ist "leer" eine eigene Gruppe
                             //  sonst sind leere Zellen unten erlaubt
                             bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
-                                            aString != OUString(*pCompString[i]) );
+                                            aString != *pCompString[i] );
                         }
                         if ( bChanged && bTestPrevSub )
                         {

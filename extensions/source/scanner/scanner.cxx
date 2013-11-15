@@ -88,7 +88,7 @@ Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
 {
     Sequence< OUString > aSNS( 1 );
 
-    aSNS.getArray()[0] = OUString( "com.sun.star.scanner.ScannerManager" );
+    aSNS.getArray()[0] = "com.sun.star.scanner.ScannerManager";
 
     return aSNS;
 }

@@ -120,22 +120,22 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
 
             uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
 
-            aArgs[0].Name = OUString( "URL" );
+            aArgs[0].Name = "URL";
             aArgs[0].Value <<= aFileURL;
 
-            aArgs[1].Name = OUString( "ReadOnly" );
+            aArgs[1].Name = "ReadOnly";
             aArgs[1].Value <<= sal_True;
 
-            aArgs[2].Name = OUString( "InteractionHandler" );
+            aArgs[2].Name = "InteractionHandler";
             aArgs[2].Value <<= uno::Reference< task::XInteractionHandler >(
                                 static_cast< ::cppu::OWeakObject* >( new DummyHandler_Impl() ), uno::UNO_QUERY );
 
-            aArgs[3].Name = OUString( "DontEdit" );
+            aArgs[3].Name = "DontEdit";
             aArgs[3].Value <<= sal_True;
 
             if ( !m_aFilterName.isEmpty() )
             {
-                aArgs[4].Name = OUString( "FilterName" );
+                aArgs[4].Name = "FilterName";
                 aArgs[4].Value <<= m_aFilterName;
             }
 
@@ -215,13 +215,13 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
     }
 
     uno::Sequence< beans::PropertyValue > aArgs( aTypeName.isEmpty() ? 2 : 3 );
-    aArgs[0].Name = OUString( "URL" );
+    aArgs[0].Name = "URL";
     aArgs[0].Value <<= OUString( "private:stream" );
-    aArgs[1].Name = OUString( "InputStream" );
+    aArgs[1].Name = "InputStream";
     aArgs[1].Value <<= xInputStream;
     if ( !aTypeName.isEmpty() )
     {
-        aArgs[2].Name = OUString( "TypeName" );
+        aArgs[2].Name = "TypeName";
         aArgs[2].Value <<= aTypeName;
     }
 
@@ -425,7 +425,7 @@ void OwnView_Impl::CreateNative()
                         aArgs ),
                 uno::UNO_QUERY_THROW );
 
-        OUString aSubStreamName = OUString( "\1Ole10Native" );
+        OUString aSubStreamName = "\1Ole10Native";
         uno::Reference< embed::XClassifiedObject > xStor( xNameAccess, uno::UNO_QUERY_THROW );
         uno::Sequence< sal_Int8 > aStorClassID = xStor->getClassID();
 

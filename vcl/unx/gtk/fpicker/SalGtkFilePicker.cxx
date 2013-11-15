@@ -932,7 +932,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
             if( !bExtensionTypedIn && ( sToken != "*" ) )
             {
                 //if the filename does not already have the auto extension, stick it on
-                OUString sExtension = OUString( "." ) + sToken;
+                OUString sExtension = "." + sToken;
                 OUString &rBase = aSelectedFiles[nIndex];
                 sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
                 OSL_TRACE( "idx are %d %d", rBase.lastIndexOf( sExtension ), nExtensionIdx );
@@ -1527,7 +1527,7 @@ void SalGtkFilePicker::implChangeType( GtkTreeSelection *selection )
     {
         gchar *title;
         gtk_tree_model_get (model, &iter, 2, &title, -1);
-        aLabel += OUString( ": " );
+        aLabel += ": ";
         aLabel += OUString( title, strlen(title), RTL_TEXTENCODING_UTF8 );
         g_free (title);
     }

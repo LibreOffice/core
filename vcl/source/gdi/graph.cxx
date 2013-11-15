@@ -390,11 +390,11 @@ uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
         uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xProv( graphic::GraphicProvider::create( xContext ) );
 
-        uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
-        OUString                                aURL( "private:memorygraphic/" );
+        uno::Sequence< beans::PropertyValue > aLoadProps( 1 );
+        OUString aURL = "private:memorygraphic/" + OUString::number( reinterpret_cast< sal_Int64 >( this ) );
 
-        aLoadProps[ 0 ].Name = OUString( "URL" );
-        aLoadProps[ 0 ].Value <<= ( aURL += OUString::number( reinterpret_cast< sal_Int64 >( this ) ) );
+        aLoadProps[ 0 ].Name = "URL";
+        aLoadProps[ 0 ].Value <<= aURL;
 
         xRet = xProv->queryGraphic( aLoadProps );
     }

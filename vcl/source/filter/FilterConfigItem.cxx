@@ -59,7 +59,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
 
         // creation arguments: nodepath
         PropertyValue aPathArgument;
-        aPathArgument.Name = OUString( "nodepath" );
+        aPathArgument.Name = "nodepath";
         aPathArgument.Value = aAny;
 
         Sequence< Any > aArguments( 1 );
@@ -124,14 +124,14 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
         // creation arguments: nodepath
         PropertyValue aPathArgument;
         aAny <<= sTree;
-        aPathArgument.Name = OUString( "nodepath" );
+        aPathArgument.Name = "nodepath";
         aPathArgument.Value = aAny;
 
         // creation arguments: commit mode
         PropertyValue aModeArgument;
         sal_Bool bAsyncron = sal_True;
         aAny <<= bAsyncron;
-        aModeArgument.Name = OUString( "lazywrite" );
+        aModeArgument.Name = "lazywrite";
         aModeArgument.Value = aAny;
 
         Sequence< Any > aArguments( 2 );

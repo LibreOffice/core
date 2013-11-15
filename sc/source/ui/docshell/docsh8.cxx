@@ -140,9 +140,9 @@ namespace
         }
 
         uno::Sequence<beans::PropertyValue> aProps(2);
-        aProps[0].Name = OUString(SC_DBPROP_EXTENSION);
+        aProps[0].Name = SC_DBPROP_EXTENSION;
         aProps[0].Value <<= OUString( aExtension );
-        aProps[1].Name = OUString(SC_DBPROP_CHARSET);
+        aProps[1].Name = SC_DBPROP_CHARSET;
         aProps[1].Value <<= aCharSetStr;
 
         _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );
@@ -175,7 +175,7 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
                             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext() );
         uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        OUString aTransferName = OUString( "transfer" );
+        OUString aTransferName = "transfer";
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, uno::makeAny(

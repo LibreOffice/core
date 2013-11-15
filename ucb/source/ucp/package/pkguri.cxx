@@ -76,7 +76,7 @@ void PackageUri::init() const
         if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
         {
             // error, but remember that we did a init().
-            m_aPath = OUString( "/" );
+            m_aPath = "/";
             return;
         }
 
@@ -88,7 +88,7 @@ void PackageUri::init() const
              ( m_aUri[ PACKAGE_URL_SCHEME_LENGTH + 2 ] != '/' ) )
         {
             // error, but remember that we did a init().
-            m_aPath = OUString( "/" );
+            m_aPath = "/";
             return;
         }
 
@@ -127,7 +127,7 @@ void PackageUri::init() const
                 // Only <scheme>:/// - Empty authority
 
                 // error, but remember that we did a init().
-                m_aPath = OUString( "/" );
+                m_aPath = "/";
                 return;
             }
             else if ( nEnd == ( aPureUri.getLength() - 1 ) )
@@ -137,7 +137,7 @@ void PackageUri::init() const
                     // Only <scheme>://// or <scheme>://<something>//
 
                     // error, but remember that we did a init().
-                    m_aPath = OUString( "/" );
+                    m_aPath = "/";
                     return;
                 }
 
@@ -158,7 +158,7 @@ void PackageUri::init() const
                     nStart, aPureUri.getLength() - nStart, aNormPackage );
                 m_aPackage
                     = ::ucb_impl::urihelper::decodeSegment( aNormPackage );
-                m_aPath = OUString( "/" );
+                m_aPath = "/";
                 m_aUri = m_aUri.replaceAt( 0,
                                            ( nParam >= 0 )
                                            ? nParam
@@ -188,7 +188,7 @@ void PackageUri::init() const
                   || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, OUString( "." ) ) )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = OUString( "/" );
+                    m_aPath = "/";
                     return;
                 }
 
@@ -225,7 +225,7 @@ void PackageUri::init() const
         else
         {
             // error, but remember that we did a init().
-            m_aPath = OUString( "/" );
+            m_aPath = "/";
         }
     }
 }

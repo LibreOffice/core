@@ -286,7 +286,7 @@ namespace dbmm
 
                 Reference< XCommandProcessor > xCommandProcessor( _rDocument.xCommandProcessor, UNO_SET_THROW );
                 Command aCommand;
-                aCommand.Name = OUString( "openDesign" );
+                aCommand.Name = "openDesign";
                 aCommand.Argument <<= aLoadArgs.getPropertyValues();
                 Reference< XComponent > xDocComponent(
                     xCommandProcessor->execute(

@@ -311,9 +311,9 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
 {
     // Retrieve filter from type
     css::uno::Sequence< css::beans::NamedValue > aQuery( 2 );
-    aQuery[0].Name  = OUString( "Type" );
+    aQuery[0].Name  = "Type";
     aQuery[0].Value = css::uno::makeAny( rType );
-    aQuery[1].Name  = OUString( "DocumentService" );
+    aQuery[1].Name  = "DocumentService";
     aQuery[1].Value = css::uno::makeAny( rModuleIdentifier );
 
     css::uno::Reference< css::container::XEnumeration > xEnumeration =
@@ -367,32 +367,32 @@ OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFra
             case E_MS_DOC:
             {
                 if ( sModule == "com.sun.star.text.TextDocument" )
-                    sType = OUString( "writer_MS_Word_97" );
+                    sType = "writer_MS_Word_97";
                 else
                 if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sType = OUString( "calc_MS_Excel_97" );
+                    sType = "calc_MS_Excel_97";
                 else
                 if ( sModule == "com.sun.star.drawing.DrawingDocument" )
-                    sType = OUString( "impress_MS_PowerPoint_97" );
+                    sType = "impress_MS_PowerPoint_97";
                 else
                 if ( sModule == "com.sun.star.presentation.PresentationDocument" )
-                    sType = OUString( "impress_MS_PowerPoint_97" );
+                    sType = "impress_MS_PowerPoint_97";
             }
             break;
 
             case E_OOO_DOC:
             {
                 if ( sModule == "com.sun.star.text.TextDocument" )
-                    sType = OUString( "writer8" );
+                    sType = "writer8";
                 else
                 if ( sModule == "com.sun.star.sheet.SpreadsheetDocument" )
-                    sType = OUString( "calc8" );
+                    sType = "calc8";
                 else
                 if ( sModule == "com.sun.star.drawing.DrawingDocument" )
-                    sType = OUString( "draw8" );
+                    sType = "draw8";
                 else
                 if ( sModule == "com.sun.star.presentation.PresentationDocument" )
-                    sType = OUString( "impress8" );
+                    sType = "impress8";
             }
             break;
         }
@@ -688,7 +688,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name  = OUString( "FilterName" );
+                aArgs[0].Name  = "FilterName";
                 aArgs[0].Value = css::uno::makeAny( aFilterName );
 
                 // Store document in the html format

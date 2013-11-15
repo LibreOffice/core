@@ -314,7 +314,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     }
 
     sal_Int32 replIdx = OUString( "#HLP#" ).getLength();
-    OUString replWith = OUString( "vnd.sun.star.help://" );
+    OUString replWith = "vnd.sun.star.help://";
 
     int nResultCount = aCompleteResultVector.size();
     for( int r = 0 ; r < nResultCount ; ++r )
@@ -328,7 +328,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = OUString( "getPropertyValues" );
+    aCommand.Name = "getPropertyValues";
     aCommand.Argument <<= m_sProperty;
 
     for( m_nRow = 0; sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aPath.size(); ++m_nRow )

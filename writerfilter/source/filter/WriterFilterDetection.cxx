@@ -136,7 +136,7 @@ uno::Sequence< OUString > WriterFilterDetection_getSupportedServiceNames(  ) thr
 {
    uno::Sequence < OUString > aRet(1);
    OUString* pArray = aRet.getArray();
-   pArray[0] =  OUString ( "com.sun.star.document.ExtendedTypeDetection" );
+   pArray[0] = "com.sun.star.document.ExtendedTypeDetection";
    return aRet;
 }
 

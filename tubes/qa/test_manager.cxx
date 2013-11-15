@@ -74,8 +74,8 @@ static gboolean timed_out( void * )
 void TestTeleTubes::setUp()
 {
     g_timeout_add_seconds (10, timed_out, NULL);
-    maTestConfigIniURL = OUString( "file://" +
-            OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini");
+    maTestConfigIniURL = "file://" +
+            OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini";
     rtl::Bootstrap aTestConfig( maTestConfigIniURL );
 
     TeleManager::addSuffixToNames( "TeleTest");

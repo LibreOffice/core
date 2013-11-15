@@ -2286,7 +2286,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             case NF_KEY_GGG :                       // GGG
             case NF_KEY_R :                         // R
             case NF_KEY_RR :                        // RR
-                sStrArray[i] = OUString(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
+                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;

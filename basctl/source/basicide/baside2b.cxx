@@ -252,8 +252,8 @@ EditorWindow::EditorWindow (Window* pParent, ModulWindow* pModulWindow) :
         notifier_ = n;
     }
     Sequence< OUString > s(2);
-    s[0] = OUString( "FontHeight" );
-    s[1] = OUString( "FontName" );
+    s[0] = "FontHeight";
+    s[1] = "FontName";
     n->addPropertiesChangeListener(s, listener_.get());
 }
 
@@ -779,9 +779,9 @@ void EditorWindow::HandleProcedureCompletion()
     OUString sText("\nEnd ");
     aSel = GetEditView()->GetSelection();
     if( sProcType.equalsIgnoreAsciiCase("function") )
-        sText += OUString( "Function\n" );
+        sText += "Function\n";
     if( sProcType.equalsIgnoreAsciiCase("sub") )
-        sText += OUString( "Sub\n" );
+        sText += "Sub\n";
 
     if( nLine+1 == pEditEngine->GetParagraphCount() )
     {
@@ -2539,7 +2539,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     }
                     else
                     {
-                        aWatchStr = OUString( "Null" );
+                        aWatchStr = "Null";
                         if( pItem->mpObject != NULL )
                         {
                             bCollapse = true;

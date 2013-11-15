@@ -665,7 +665,7 @@ void Shape::keepDiagramCompatibilityInfo( XmlFilterBase& rFilterBase )
         if ( !xSetInfo.is() )
             return;
 
-        const OUString& aGrabBagPropName = OUString( UNO_NAME_MISC_OBJ_INTEROPGRABBAG );
+        const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
         if( !xSetInfo->hasPropertyByName( aGrabBagPropName ) )
             return;
 
@@ -727,27 +727,27 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
                                      static_cast < sal_Int32 > ( ( fPixelsPer100thmm * aActualSize.Height ) + 0.5 ) );
 
         Sequence< PropertyValue > aFilterData( 7 );
-        aFilterData[ 0 ].Name = OUString( "Compression" );
+        aFilterData[ 0 ].Name = "Compression";
         aFilterData[ 0 ].Value <<= static_cast < sal_Int32 > ( 9 );
-        aFilterData[ 1 ].Name = OUString( "Interlaced" );
+        aFilterData[ 1 ].Name = "Interlaced";
         aFilterData[ 1 ].Value <<= static_cast < sal_Int32 > ( 1 );
-        aFilterData[ 2 ].Name = OUString( "Translucent" );
+        aFilterData[ 2 ].Name = "Translucent";
         aFilterData[ 2 ].Value <<= static_cast < sal_Int32 > ( 1 );
-        aFilterData[ 3 ].Name = OUString( "PixelWidth" );
+        aFilterData[ 3 ].Name = "PixelWidth";
         aFilterData[ 3 ].Value <<= aSize.Width;
-        aFilterData[ 4 ].Name = OUString( "PixelHeight" );
+        aFilterData[ 4 ].Name = "PixelHeight";
         aFilterData[ 4 ].Value <<= aSize.Height;
-        aFilterData[ 5 ].Name = OUString( "LogicalWidth" );
+        aFilterData[ 5 ].Name = "LogicalWidth";
         aFilterData[ 5 ].Value <<= aActualSize.Width;
-        aFilterData[ 6 ].Name = OUString( "LogicalHeight" );
+        aFilterData[ 6 ].Name = "LogicalHeight";
         aFilterData[ 6 ].Value <<= aActualSize.Height;
 
         Sequence < PropertyValue > aDescriptor( 3 );
-        aDescriptor[ 0 ].Name = OUString( "OutputStream" );
+        aDescriptor[ 0 ].Name = "OutputStream";
         aDescriptor[ 0 ].Value <<= xOutputStream;
-        aDescriptor[ 1 ].Name = OUString( "FilterName" );
+        aDescriptor[ 1 ].Name = "FilterName";
         aDescriptor[ 1 ].Value <<= sFormat;
-        aDescriptor[ 2 ].Name = OUString( "FilterData" );
+        aDescriptor[ 2 ].Name = "FilterData";
         aDescriptor[ 2 ].Value <<= aFilterData;
 
         Reference < lang::XComponent > xSourceDoc( mxShape, UNO_QUERY_THROW );

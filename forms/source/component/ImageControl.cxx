@@ -295,7 +295,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
                 OUString sNewImageURL;
                 if ( m_xGraphicObject.is() )
                 {
-                    sNewImageURL = OUString( "vnd.sun.star.GraphicObject:" );
+                    sNewImageURL = "vnd.sun.star.GraphicObject:";
                     sNewImageURL = sNewImageURL + m_xGraphicObject->getUniqueID();
                 }
                 m_sImageURL = sNewImageURL;

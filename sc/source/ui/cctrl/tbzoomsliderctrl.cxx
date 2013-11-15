@@ -311,7 +311,7 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
     aZoomSliderItem.QueryValue( a );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString( "ScalingFactor" );
+    aArgs[0].Name = "ScalingFactor";
     aArgs[0].Value = a;
 
     SfxToolBoxControl::Dispatch( m_xDispatchProvider, OUString(".uno:ScalingFactor"), aArgs );
@@ -351,7 +351,7 @@ void ScZoomSliderWnd::MouseMove( const MouseEvent& rMEvt )
             aZoomSliderItem.QueryValue( a );
 
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name = OUString( "ScalingFactor" );
+            aArgs[0].Name = "ScalingFactor";
             aArgs[0].Value = a;
 
             SfxToolBoxControl::Dispatch( m_xDispatchProvider, OUString(".uno:ScalingFactor"), aArgs );

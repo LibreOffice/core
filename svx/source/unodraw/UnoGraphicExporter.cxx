@@ -190,7 +190,7 @@ namespace svx
         throw()
     {
         Sequence< OUString > aSupportedServiceNames( 1 );
-        aSupportedServiceNames[0] = OUString( "com.sun.star.drawing.GraphicExportFilter" );
+        aSupportedServiceNames[0] = "com.sun.star.drawing.GraphicExportFilter";
         return aSupportedServiceNames;
     }
 
@@ -561,12 +561,12 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                 else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnWidth;
-                    pDataValues->Name = OUString( "PixelWidth" );
+                    pDataValues->Name = "PixelWidth";
                 }
                 else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
-                    pDataValues->Name = OUString( "PixelHeight" );
+                    pDataValues->Name = "PixelHeight";
                 }
                 else if ( pDataValues->Name == "ExportOnlyBackground" )
                 {

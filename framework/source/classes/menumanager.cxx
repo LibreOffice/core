@@ -162,9 +162,7 @@ MenuManager::MenuManager(
                         pPopupMenu->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
 
                         // Set item command for popup menu to enable it for GetImageFromURL
-                        const static OUString aSlotString( "slot:" );
-                        aItemCommand = aSlotString;
-                        aItemCommand += OUString::number( ITEMID_ADDONLIST );
+                        aItemCommand = "slot:" + OUString::number( ITEMID_ADDONLIST );
                         pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
 
                         AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
@@ -559,7 +557,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 if ( i <= 9 )
                 {
                     if ( i == 9 )
-                        aMenuShortCut = OUString( "1~0: " );
+                        aMenuShortCut = "1~0: ";
                     else
                     {
                         menuShortCut[1] = (char)( '1' + i );
@@ -688,11 +686,11 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
     Any a;
     aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
 
-    aArgsList[0].Name = OUString( "FileName" );
+    aArgsList[0].Name = "FileName";
     a <<= pMenuItemHandler->aMenuItemURL;
     aArgsList[0].Value = a;
 
-    aArgsList[1].Name = OUString( "Referer" );
+    aArgsList[1].Name = "Referer";
     a <<= OUString( "private:user" );
     aArgsList[1].Value = a;
 
@@ -706,7 +704,7 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
         if ( nPos < ( aFilter.getLength() - 1 ) )
             aFilterOptions = aFilter.copy( nPos+1 );
 
-        aArgsList[2].Name = OUString( "FilterOptions" );
+        aArgsList[2].Name = "FilterOptions";
         a <<= aFilterOptions;
         aArgsList[2].Value = a;
 
@@ -714,7 +712,7 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
         aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
     }
 
-    aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = OUString( "FilterName" );
+    aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = "FilterName";
     a <<= aFilter;
     aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = a;
 }
@@ -792,9 +790,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                             OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
                             if ( aItemCommand.isEmpty() )
                             {
-                                const static OUString aSlotString( "slot:" );
-                                aItemCommand = aSlotString;
-                                aItemCommand += OUString::number( pMenuItemHandler->nItemId );
+                                aItemCommand = "slot:" + OUString::number( pMenuItemHandler->nItemId );
                                 pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
                             }
 
@@ -893,7 +889,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                     {
                         // bookmark menu item selected
                         aArgs.realloc( 1 );
-                        aArgs[0].Name = OUString( "Referer" );
+                        aArgs[0].Name = "Referer";
                         aArgs[0].Value <<= OUString( "private:user" );
                     }
 
@@ -942,9 +938,7 @@ sal_uInt16 MenuManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sa
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
     if ( _rItemCommand.isEmpty() )
     {
-        const static OUString aSlotString( "slot:" );
-        _rItemCommand = aSlotString;
-        _rItemCommand += OUString::number( nItemId );
+        _rItemCommand = "slot:" + OUString::number( nItemId );
         _pMenu->SetItemCommand( nItemId, _rItemCommand );
     }
     return nItemId;

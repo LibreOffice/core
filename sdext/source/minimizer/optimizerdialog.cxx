@@ -597,8 +597,8 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                         mrOptimizerDialog.GetFrame()));
 
                 URL aURL;
-                aURL.Protocol = OUString( "vnd.com.sun.star.comp.PPPOptimizer:"  );
-                aURL.Path = OUString( "optimize"  );
+                aURL.Protocol = "vnd.com.sun.star.comp.PPPOptimizer:";
+                aURL.Path = "optimize";
 
                 Sequence< PropertyValue > lArguments( 3 );
                 lArguments[ 0 ].Name = "Settings";

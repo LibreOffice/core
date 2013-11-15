@@ -1316,13 +1316,13 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
 
         Sequence< Any > aPropSeq( 3 );
         PropertyValue aPropValue;
-        aPropValue.Name  = OUString( "UserConfigStorage" );
+        aPropValue.Name  = "UserConfigStorage";
         aPropValue.Value = makeAny( m_xUserConfigStorage );
         aPropSeq[0] = makeAny( aPropValue );
-        aPropValue.Name  = OUString( "ModuleIdentifier" );
+        aPropValue.Name  = "ModuleIdentifier";
         aPropValue.Value = makeAny( m_aModuleIdentifier );
         aPropSeq[1] = makeAny( aPropValue );
-        aPropValue.Name  = OUString( "UserRootCommit" );
+        aPropValue.Name  = "UserRootCommit";
         aPropValue.Value = makeAny( m_xUserRootCommit );
         aPropSeq[2] = makeAny( aPropValue );
 

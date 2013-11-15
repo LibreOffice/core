@@ -3248,13 +3248,13 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     sal_Bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE,sal_False);
     if ( bDate )
     {
-        sFunction = OUString ("TODAY()");
+        sFunction = "TODAY()";
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
     sal_Bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
     if ( bTime )
     {
-        sFunction = OUString ("TIMEVALUE(NOW())");
+        sFunction = "TIMEVALUE(NOW())";
         aMap[PROPERTY_FORMATKEY] <<= aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYTIME,sal_Int32(0));
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }

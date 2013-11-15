@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
-    OUString aStringID = OUString( "groupuinames.xml" );
+    OUString aStringID = "groupuinames.xml";
     return ReadLocalizationSequence_Impl( xInStream, aStringID, xContext );
 }
 

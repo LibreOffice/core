@@ -567,9 +567,9 @@ Sequence< OUString > AccFrameSelector::getSupportedServiceNames(  )
 {
     Sequence< OUString > aRet(3);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( "Accessible" );
-    pArray[1] = OUString( "AccessibleContext" );
-    pArray[2] = OUString( "AccessibleComponent" );
+    pArray[0] = "Accessible";
+    pArray[1] = "AccessibleContext";
+    pArray[2] = "AccessibleComponent";
     return aRet;
 }
 

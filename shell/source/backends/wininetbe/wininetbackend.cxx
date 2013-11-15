@@ -377,7 +377,7 @@ OUString SAL_CALL WinInetBackend::getImplementationName(void)
 uno::Sequence<OUString> SAL_CALL WinInetBackend::getBackendServiceNames(void)
 {
     uno::Sequence<OUString> aServiceNameList(1);
-    aServiceNameList[0] = OUString( "com.sun.star.configuration.backend.WinInetBackend") ;
+    aServiceNameList[0] = "com.sun.star.configuration.backend.WinInetBackend";
 
     return aServiceNameList ;
 }

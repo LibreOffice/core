@@ -163,7 +163,7 @@ cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServic
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( "com.sun.star.xml.crypto.SEInitializer" );
+    pArray[0] = "com.sun.star.xml.crypto.SEInitializer";
     return aRet;
 }
 

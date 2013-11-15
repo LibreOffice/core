@@ -196,8 +196,8 @@ namespace calc
     Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServices( 2 );
-        aServices[ 0 ] =  OUString( "com.sun.star.table.CellRangeListSource" );
-        aServices[ 1 ] =  OUString( "com.sun.star.form.binding.ListEntrySource" );
+        aServices[ 0 ] = "com.sun.star.table.CellRangeListSource";
+        aServices[ 1 ] = "com.sun.star.form.binding.ListEntrySource";
         return aServices;
     }
 

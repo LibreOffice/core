@@ -132,7 +132,7 @@ Reference< XInterface > openConfig(const char* sPackage)
         PropertyValue   aParam    ;
 
         // define cfg path for open
-        aParam.Name = OUString( "nodepath" );
+        aParam.Name = "nodepath";
         if (rtl_str_compareIgnoreAsciiCase(sPackage, "types") == 0)
             aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
         if (rtl_str_compareIgnoreAsciiCase(sPackage, "filters") == 0)

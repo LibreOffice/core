@@ -286,7 +286,7 @@ namespace xforms
             RegexMatcher aMatcher( aIcuPattern, 0, nMatchStatus );
             if ( U_FAILURE( nMatchStatus ) )
             {
-                _rErrorMessage = OUString( "This is no valid pattern." );
+                _rErrorMessage = "This is no valid pattern.";
                 return false;
             }
         }
@@ -544,7 +544,7 @@ namespace xforms
                 sal_Int32 nValue( 0 );
                 OSL_VERIFY( _rNewValue >>= nValue );
                 if ( nValue <= 0 )
-                    _rErrorMessage = OUString( "Length limits must denote positive integer values." );
+                    _rErrorMessage = "Length limits must denote positive integer values.";
                         // TODO/eforms: localize the error message
             }
             break;

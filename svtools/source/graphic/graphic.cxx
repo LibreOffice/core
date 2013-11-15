@@ -130,7 +130,7 @@ uno::Sequence< OUString > Graphic::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.graphic.Graphic" );
+    aSeq.getArray()[ 0 ] = "com.sun.star.graphic.Graphic";
 
     return aSeq;
 }

@@ -986,9 +986,9 @@ namespace svxform
             {
                 // legacy format: use the app-wide Basic, if it has a respective method, otherwise fall back to the doc's Basic
                 if ( SFX_APP()->GetBasicManager()->HasMacro( sScriptCode ) )
-                    sMacroLocation = OUString( "application" );
+                    sMacroLocation = "application";
                 else
-                    sMacroLocation = OUString( "document" );
+                    sMacroLocation = "document";
             }
 
             OUStringBuffer aScriptURI;

@@ -41,7 +41,7 @@ namespace comphelper {
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const OUString aStreamName, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
-    OUString aStringID = OUString( "_rels/" );
+    OUString aStringID = "_rels/";
     aStringID += aStreamName;
     return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, xContext );
 }
@@ -50,7 +50,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadContentTypeSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
-    OUString aStringID = OUString( "[Content_Types].xml" );
+    OUString aStringID = "[Content_Types].xml";
     return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, xContext );
 }
 

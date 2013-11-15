@@ -67,7 +67,7 @@ namespace migration
             if ( !pNames )
             {
                 static Sequence< OUString > aNames(1);
-                aNames.getArray()[0] = OUString( "com.sun.star.migration.Wordbooks" );
+                aNames.getArray()[0] = "com.sun.star.migration.Wordbooks";
                 pNames = &aNames;
             }
         }

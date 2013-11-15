@@ -228,14 +228,14 @@ namespace dbtools
         // format is:
         // <detail_column> = :<new_param_name>
         sFilter = quoteName( m_sIdentifierQuoteString, _rDetailLink );
-        sFilter += OUString( " = :" );
+        sFilter += " = :";
 
         // generate a parameter name which is not already used
-        _rNewParamName = OUString( "link_from_" );
+        _rNewParamName = "link_from_";
         _rNewParamName += convertName2SQLName( _rMasterColumn, m_sSpecialCharacters );
         while ( m_aParameterInformation.find( _rNewParamName ) != m_aParameterInformation.end() )
         {
-            _rNewParamName += OUString( "_" );
+            _rNewParamName += "_";
         }
 
         return sFilter += _rNewParamName;

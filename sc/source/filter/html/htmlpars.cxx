@@ -298,7 +298,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            OUString aContentType = OUString( "text/html; charset=" );
+            OUString aContentType = "text/html; charset=";
             aContentType += OUString::createFromAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
@@ -2949,7 +2949,7 @@ sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            OUString aContentType = OUString( "text/html; charset=" );
+            OUString aContentType = "text/html; charset=";
             aContentType += OUString::createFromAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;

@@ -4308,10 +4308,10 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     aGIFStream.Seek( STREAM_SEEK_TO_BEGIN );
                     aGIFStream.Read( pSeq, nGIFSreamLen );
                     com::sun::star::beans::PropertyValue aChunkProp, aFilterProp;
-                    aChunkProp.Name = OUString( "msOG" );
+                    aChunkProp.Name = "msOG";
                     aChunkProp.Value <<= aGIFSeq;
                     aAdditionalChunkSequence[ 0 ] = aChunkProp;
-                    aFilterProp.Name = OUString( "AdditionalChunks" );
+                    aFilterProp.Name = "AdditionalChunks";
                     aFilterProp.Value <<= aAdditionalChunkSequence;
                     aFilterData[ 0 ] = aFilterProp;
                     nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aStream,

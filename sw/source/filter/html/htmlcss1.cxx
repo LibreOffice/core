@@ -248,7 +248,7 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyVLinkSet |= bColorSet;
     }
 
-    OUString sTmp = OUString( OOO_STRING_SVTOOLS_HTML_anchor ) + ":" + "link";
+    OUString sTmp = OOO_STRING_SVTOOLS_HTML_anchor ":link";
 
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
@@ -262,7 +262,7 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyLinkSet |= bColorSet;
     }
 
-    sTmp = OUString( OOO_STRING_SVTOOLS_HTML_anchor ) + ":" + "visited";
+    sTmp = OOO_STRING_SVTOOLS_HTML_anchor ":visited";
 
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
@@ -1542,7 +1542,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         {
             do
             {
-                aName = OUString( "first-letter" ) + " " + OUString::number( (sal_Int32)(++nDropCapCnt) );
+                aName = "first-letter " + OUString::number( (sal_Int32)(++nDropCapCnt) );
             }
             while( pDoc->FindCharFmtByName(aName) );
         }

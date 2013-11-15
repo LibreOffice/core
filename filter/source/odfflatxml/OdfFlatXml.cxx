@@ -190,8 +190,8 @@ OUString OdfFlatXml::impl_getImplementationName()
 Sequence< OUString > OdfFlatXml::impl_getSupportedServiceNames()
 {
     Sequence< OUString > lServiceNames(2);
-    lServiceNames[0] = OUString( "com.sun.star.document.ImportFilter" );
-    lServiceNames[1] = OUString( "com.sun.star.document.ExportFilter" );
+    lServiceNames[0] = "com.sun.star.document.ImportFilter";
+    lServiceNames[1] = "com.sun.star.document.ExportFilter";
     return lServiceNames;
 }
 

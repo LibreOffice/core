@@ -792,9 +792,9 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
             aLineDash.Distance = rXD.GetDistance();
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[0].Name    = OUString( "Name" );
+            aPropSeq[0].Name    = "Name";
             aPropSeq[0].Value   = uno::makeAny( aApiName );
-            aPropSeq[1].Name    = OUString( "LineDash" );
+            aPropSeq[1].Name    = "LineDash";
             aPropSeq[1].Value   = uno::makeAny( aLineDash );
             rVal = uno::makeAny( aPropSeq );
             break;
@@ -2712,9 +2712,9 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
             aGradient2.StepCount = aXGradient.GetSteps();
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[0].Name    = OUString( "Name" );
+            aPropSeq[0].Name    = "Name";
             aPropSeq[0].Value   = uno::makeAny( aApiName );
-            aPropSeq[1].Name    = OUString( "FillGradient" );
+            aPropSeq[1].Name    = "FillGradient";
             aPropSeq[1].Value   = uno::makeAny( aGradient2 );
             rVal = uno::makeAny( aPropSeq );
             break;
@@ -3197,9 +3197,9 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
             aUnoHatch.Angle = aHatch.GetAngle();
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[0].Name    = OUString( "Name" );
+            aPropSeq[0].Name    = "Name";
             aPropSeq[0].Value   = uno::makeAny( aApiName );
-            aPropSeq[1].Name    = OUString( "FillHatch" );
+            aPropSeq[1].Name    = "FillHatch";
             aPropSeq[1].Value   = uno::makeAny( aUnoHatch );
             rVal = uno::makeAny( aPropSeq );
             break;

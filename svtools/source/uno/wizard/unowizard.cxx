@@ -245,7 +245,7 @@ namespace svt { namespace uno
     Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames_static() throw(RuntimeException)
     {
         Sequence< OUString > aServices(1);
-        aServices[0] = OUString( "com.sun.star.ui.dialogs.Wizard" );
+        aServices[0] = "com.sun.star.ui.dialogs.Wizard";
         return aServices;
     }
 

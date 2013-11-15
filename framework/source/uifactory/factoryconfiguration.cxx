@@ -211,7 +211,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
         Sequence< Any > aArgs( 1 );
         PropertyValue   aPropValue;
 
-        aPropValue.Name  = OUString( "nodepath" );
+        aPropValue.Name  = "nodepath";
         aPropValue.Value <<= m_sRoot;
         aArgs[0] <<= aPropValue;
 

@@ -477,7 +477,7 @@ OUString Service::getImplementationName_static() {
 
 css::uno::Sequence< OUString > Service::getSupportedServiceNames_static() {
     css::uno::Sequence< OUString > names(1);
-    names[0] = OUString( "com.sun.star.test.bridges.testacquire" );
+    names[0] = "com.sun.star.test.bridges.testacquire";
     return names;
 }
 
@@ -513,7 +513,7 @@ bool writeInfo(void * registryKey, OUString const & implementationName,
                css::uno::Sequence< OUString > const & serviceNames) {
     OUString keyName( "/" );
     keyName += implementationName;
-    keyName += OUString( "/UNO/SERVICES" );
+    keyName += "/UNO/SERVICES";
     css::uno::Reference< css::registry::XRegistryKey > key;
     try {
         key = static_cast< css::registry::XRegistryKey * >(registryKey)->

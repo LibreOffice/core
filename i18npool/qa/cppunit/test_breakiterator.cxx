@@ -792,8 +792,8 @@ void TestBreakIterator::testAsian()
 void TestBreakIterator::testLao()
 {
     lang::Locale aLocale;
-    aLocale.Language = OUString("lo");
-    aLocale.Country = OUString("LA");
+    aLocale.Language = "lo";
+    aLocale.Country = "LA";
     //ຍິນດີຕ້ອນຮັບ
     const sal_Unicode LAO[] = { 0x0e8d, 0x0eb4, 0x0e99, 0x0e94, 0x0eb5, 0x0e95, 0x0ec9, 0x0ead, 0x0e99, 0x0eae, 0x0eb1, 0x0e9a };
     OUString aTest(LAO, SAL_N_ELEMENTS(LAO));

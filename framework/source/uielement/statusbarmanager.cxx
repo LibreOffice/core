@@ -336,29 +336,29 @@ void StatusBarManager::CreateControllers()
         aPropValue.Value    <<= aCommandURL;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
-        aPropValue.Name     = OUString( "ModuleIdentifier" );
+        aPropValue.Name     = "ModuleIdentifier";
         aPropValue.Value    <<= m_aModuleIdentifier;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
-        aPropValue.Name     = OUString( "Frame" );
+        aPropValue.Name     = "Frame";
         aPropValue.Value    <<= m_xFrame;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
         // TODO remove this
-        aPropValue.Name     = OUString( "ServiceManager" );
+        aPropValue.Name     = "ServiceManager";
         aPropValue.Value    = uno::makeAny( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW) );
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
-        aPropValue.Name     = OUString( "ParentWindow" );
+        aPropValue.Name     = "ParentWindow";
         aPropValue.Value    <<= xStatusbarWindow;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
         // TODO still needing with the css::ui::XStatusbarItem?
-        aPropValue.Name     = OUString( "Identifier" );
+        aPropValue.Name     = "Identifier";
         aPropValue.Value    <<= nId;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
-        aPropValue.Name     = OUString( "StatusbarItem" );
+        aPropValue.Name     = "StatusbarItem";
         aPropValue.Value    <<= xStatusbarItem;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 

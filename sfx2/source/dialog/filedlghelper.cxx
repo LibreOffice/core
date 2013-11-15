@@ -1037,7 +1037,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                                     makeAny( nTemplateDescription )
                                 );
 
-            OUString sStandardDirTemp = OUString( sStandardDir );
+            OUString sStandardDirTemp = sStandardDir;
 
             aInitArguments[1] <<= NamedValue(
                                     OUString( "StandardDir"  ),
@@ -2307,9 +2307,9 @@ FileDialogHelper::FileDialogHelper(
     if ( aExtName.indexOf( (sal_Unicode)'*' ) != 0 )
     {
         if ( !aExtName.isEmpty() && aExtName.indexOf( (sal_Unicode)'.' ) != 0 )
-            aWildcard = OUString( "*."  );
+            aWildcard = "*.";
         else
-            aWildcard = OUString( "*"  );
+            aWildcard = "*";
     }
 
     aWildcard += aExtName;
@@ -2472,7 +2472,7 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
                 else
                     aPath.setName( lFiles[i] );
 
-                aResultSeq[i-1] = OUString(aPath.GetMainURL( INetURLObject::NO_DECODE ));
+                aResultSeq[i-1] = aPath.GetMainURL( INetURLObject::NO_DECODE );
             }
         }
         else

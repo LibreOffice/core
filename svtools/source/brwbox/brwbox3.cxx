@@ -214,19 +214,19 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
     switch( eObjType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
-            aRetText = OUString( "BrowseBox" );
+            aRetText = "BrowseBox";
             break;
         case ::svt::BBTYPE_TABLE:
-            aRetText = OUString( "Table" );
+            aRetText = "Table";
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
-            aRetText = OUString( "RowHeaderBar" );
+            aRetText = "RowHeaderBar";
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
-            aRetText = OUString( "ColumnHeaderBar" );
+            aRetText = "ColumnHeaderBar";
             break;
         case ::svt::BBTYPE_TABLECELL:
-            aRetText = OUString( "TableCell" );
+            aRetText = "TableCell";
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));
@@ -236,7 +236,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
-            aRetText = OUString( "RowHeaderCell" );
+            aRetText = "RowHeaderCell";
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));
@@ -246,7 +246,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            aRetText = OUString( "ColumnHeaderCell" );
+            aRetText = "ColumnHeaderCell";
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));
@@ -268,25 +268,25 @@ OUString BrowseBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxOb
     switch( eObjType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
-            aRetText = OUString( "BrowseBox description" );
+            aRetText = "BrowseBox description";
             break;
         case ::svt::BBTYPE_TABLE:
-            //  aRetText = OUString( "TABLE description" );
+            //  aRetText = "TABLE description";
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
-            //  aRetText = OUString( "ROWHEADERBAR description" );
+            //  aRetText = "ROWHEADERBAR description";
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
-            //  aRetText = OUString( "COLUMNHEADERBAR description" );
+            //  aRetText = "COLUMNHEADERBAR description";
             break;
         case ::svt::BBTYPE_TABLECELL:
-            //  aRetText = OUString( "TABLECELL description" );
+            //  aRetText = "TABLECELL description";
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
-            //  aRetText = OUString( "ROWHEADERCELL description" );
+            //  aRetText = "ROWHEADERCELL description";
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            //  aRetText = OUString( "COLUMNHEADERCELL description" );
+            //  aRetText = "COLUMNHEADERCELL description";
             break;
         case ::svt::BBTYPE_CHECKBOXCELL:
             break;

@@ -82,7 +82,7 @@ namespace svx
         throw()
     {
         Sequence< OUString > aSupportedServiceNames( 1 );
-        aSupportedServiceNames[0] = OUString( "com.sun.star.xml.NamespaceMap" );
+        aSupportedServiceNames[0] = "com.sun.star.xml.NamespaceMap";
         return aSupportedServiceNames;
     }
 

@@ -77,8 +77,8 @@ namespace ucb { namespace ucp { namespace ext
     Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServiceNames(2);
-        aServiceNames[0] = OUString(  "com.sun.star.ucb.ContentProvider"  );
-        aServiceNames[1] = OUString(  "com.sun.star.ucb.ExtensionContentProvider"  );
+        aServiceNames[0] = "com.sun.star.ucb.ContentProvider";
+        aServiceNames[1] = "com.sun.star.ucb.ExtensionContentProvider";
         return aServiceNames;
     }
 

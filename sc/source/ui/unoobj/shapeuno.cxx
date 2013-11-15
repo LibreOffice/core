@@ -1544,12 +1544,12 @@ uno::Sequence< OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  ) thro
         aSupported = xSI->getSupportedServiceNames();
 
     aSupported.realloc( aSupported.getLength() + 1 );
-    aSupported[ aSupported.getLength() - 1 ] = OUString( "com.sun.star.sheet.Shape" );
+    aSupported[ aSupported.getLength() - 1 ] = "com.sun.star.sheet.Shape";
 
     if( bIsNoteCaption )
     {
         aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported[ aSupported.getLength() - 1 ] = OUString( "com.sun.star.sheet.CellAnnotationShape" );
+        aSupported[ aSupported.getLength() - 1 ] = "com.sun.star.sheet.CellAnnotationShape";
     }
 
     return aSupported;

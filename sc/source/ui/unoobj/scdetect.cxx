@@ -374,7 +374,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    OUString aPrefix = OUString( "private:factory/" );
+    OUString aPrefix = "private:factory/";
     if( aURL.startsWith( aPrefix ) )
     {
         OUString aPattern = aPrefix + "scalc";

@@ -492,7 +492,7 @@ void OStorage_Impl::OpenOwnPackage()
             {
                 // let the package support OFOPXML media type handling
                 beans::NamedValue aNamedValue;
-                aNamedValue.Name = OUString( "StorageFormat" );
+                aNamedValue.Name = "StorageFormat";
                 aNamedValue.Value <<= OUString( "OFOPXMLFormat" );
                 aArguments.realloc( ++nArgNum );
                 aArguments[nArgNum-1] <<= aNamedValue;

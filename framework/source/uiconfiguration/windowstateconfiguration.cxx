@@ -256,7 +256,7 @@ ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString
 {
     // Create configuration hierachical access name
     m_aConfigWindowAccess += aModuleName;
-    m_aConfigWindowAccess += OUString( CONFIGURATION_WINDOWSTATE_ACCESS );
+    m_aConfigWindowAccess += CONFIGURATION_WINDOWSTATE_ACCESS;
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 
     // Initialize access array with property names.
@@ -1261,10 +1261,10 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 
     try
     {
-        aPropValue.Name  = OUString( "nodepath" );
+        aPropValue.Name  = "nodepath";
         aPropValue.Value <<= m_aConfigWindowAccess;
         aArgs[0] <<= aPropValue;
-        aPropValue.Name = OUString( "lazywrite" );
+        aPropValue.Name = "lazywrite";
         aPropValue.Value <<= sal_True;
         aArgs[1] <<= aPropValue;
 

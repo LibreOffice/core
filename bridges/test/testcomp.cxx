@@ -69,7 +69,7 @@ void parseCommandLine( char *argv[] ,
     if( -1 == nIndex )
     {
         *pConnection = sTemp;
-        *pProtocol    = OUString( "iiop" );
+        *pProtocol    = "iiop";
     }
     else
     {

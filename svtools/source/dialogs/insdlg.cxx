@@ -108,7 +108,7 @@ void SvObjectServerList::FillInsertObjects()
         OUString sReaderService( "com.sun.star.configuration.ConfigurationAccess" );
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue aPathProp;
-        aPathProp.Name = OUString( "nodepath" );
+        aPathProp.Name = "nodepath";
         aPathProp.Value <<= OUString( "/org.openoffice.Office.Embedding/ObjectNames" );
         aArguments[0] <<= aPathProp;
 

@@ -802,11 +802,11 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
         }
 
         Sequence< PropertyValue > aPropSeq( 3 );
-        aPropSeq[0].Name = OUString( "Frame" );
+        aPropSeq[0].Name = "Frame";
         aPropSeq[0].Value <<= xFrame;
-        aPropSeq[1].Name = OUString( "Persistent" );
+        aPropSeq[1].Name = "Persistent";
         aPropSeq[1].Value <<= sal_False;
-        aPropSeq[2].Name = OUString( "PopupMode" );
+        aPropSeq[2].Name = "PopupMode";
         aPropSeq[2].Value <<= sal_True;
 
         try

@@ -148,7 +148,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     sal_uInt16 nExportFlags = rExport.getExportFlags();
     sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
     if( bStylesOnly )
-        sPrefix = OUString( "ML" );
+        sPrefix = "ML";
 
 }
 

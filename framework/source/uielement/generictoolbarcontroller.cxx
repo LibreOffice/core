@@ -162,7 +162,7 @@ throw ( RuntimeException )
         Sequence<PropertyValue>   aArgs( 1 );
 
         // Add key modifier to argument list
-        aArgs[0].Name  = OUString( "KeyModifier" );
+        aArgs[0].Name  = "KeyModifier";
         aArgs[0].Value <<= KeyModifier;
 
         aTargetURL.Complete = aCommandURL;
@@ -228,7 +228,7 @@ throw ( RuntimeException )
                 if ( aStrValue.matchAsciiL( "($1)", 4 ))
                 {
                     OUString aTmp(FwkResId(STR_UPDATEDOC));
-                    aTmp += OUString( " " );
+                    aTmp += " ";
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }

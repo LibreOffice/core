@@ -458,7 +458,7 @@ namespace calc
         {
             OUString sMessage( "The given type (" );
             sMessage += _rType.getTypeName();
-            sMessage += OUString( ") is not supported by this binding." );
+            sMessage += ") is not supported by this binding.";
                 // TODO: localize this error message
 
             throw IncompatibleTypesException( sMessage, *pNonConstThis );
@@ -495,10 +495,10 @@ namespace calc
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
 
         Sequence< OUString > aServices( m_bListPos ? 3 : 2 );
-        aServices[ 0 ] =  OUString( "com.sun.star.table.CellValueBinding" );
-        aServices[ 1 ] =  OUString( "com.sun.star.form.binding.ValueBinding" );
+        aServices[ 0 ] = "com.sun.star.table.CellValueBinding";
+        aServices[ 1 ] = "com.sun.star.form.binding.ValueBinding";
         if ( m_bListPos )
-            aServices[ 2 ] =  OUString( "com.sun.star.table.ListPositionCellBinding" );
+            aServices[ 2 ] = "com.sun.star.table.ListPositionCellBinding";
         return aServices;
     }
 

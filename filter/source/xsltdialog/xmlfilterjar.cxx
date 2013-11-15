@@ -152,7 +152,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = OUString( "StorageFormat" );
+        aArg.Name = "StorageFormat";
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         aArguments[ 1 ] <<= aArg;
 
@@ -251,7 +251,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = OUString( "StorageFormat" );
+        aArg.Name = "StorageFormat";
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         aArguments[ 1 ] <<= aArg;
 

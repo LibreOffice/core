@@ -159,16 +159,16 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
 
     PropertyValue aPropValue;
     Sequence< Any > aPropSeq( _pExtraMode ? 5 : 4);
-    aPropValue.Name = OUString( "Frame" );
+    aPropValue.Name = "Frame";
     aPropValue.Value <<= xFrame;
     aPropSeq[0] <<= aPropValue;
-    aPropValue.Name = OUString( "ConfigurationSource" );
+    aPropValue.Name = "ConfigurationSource";
     aPropValue.Value <<= xCfgMgr;
     aPropSeq[1] <<= aPropValue;
-    aPropValue.Name = OUString( "ResourceURL" );
+    aPropValue.Name = "ResourceURL";
     aPropValue.Value <<= aResourceURL;
     aPropSeq[2] <<= aPropValue;
-    aPropValue.Name = OUString( "Persistent" );
+    aPropValue.Name = "Persistent";
     aPropValue.Value <<= bPersistent;
     aPropSeq[3] <<= aPropValue;
     if ( _pExtraMode )

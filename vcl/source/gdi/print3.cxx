@@ -1378,7 +1378,7 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
     if( aMergeSet.find( OUString( "IsFirstPage" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
-        aVal.Name = OUString( "IsFirstPage" );
+        aVal.Name = "IsFirstPage";
         aVal.Value <<= mpImplData->mbFirstPage;
         aResult[nCur++] = aVal;
     }
@@ -1386,7 +1386,7 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
     if( aMergeSet.find( OUString( "IsLastPage" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
-        aVal.Name = OUString( "IsLastPage" );
+        aVal.Name = "IsLastPage";
         aVal.Value <<= mpImplData->mbLastPage;
         aResult[nCur++] = aVal;
     }
@@ -1394,7 +1394,7 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
     if( aMergeSet.find( OUString( "IsPrinter" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
-        aVal.Name = OUString( "IsPrinter" );
+        aVal.Name = "IsPrinter";
         aVal.Value <<= sal_True;
         aResult[nCur++] = aVal;
     }
@@ -1817,7 +1817,7 @@ void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< beans::PropertyV
         sal_Int32 nIndex = io_rProps.getLength();
         io_rProps.realloc( nIndex+1 );
         PropertyValue aVal;
-        aVal.Name = OUString( "ExtraPrintUIOptions" );
+        aVal.Name = "ExtraPrintUIOptions";
         aVal.Value = makeAny( m_aUIProperties );
         io_rProps[ nIndex ] = aVal;
     }
@@ -1853,51 +1853,51 @@ Any PrinterOptionsHelper::setUIControlOpt(const com::sun::star::uno::Sequence< O
     sal_Int32 nUsed = 0;
     if( !i_rTitle.isEmpty() )
     {
-        aCtrl[nUsed  ].Name  = OUString( "Text" );
+        aCtrl[nUsed  ].Name  = "Text";
         aCtrl[nUsed++].Value = makeAny( i_rTitle );
     }
     if( i_rHelpIds.getLength() )
     {
-        aCtrl[nUsed  ].Name = OUString( "HelpId" );
+        aCtrl[nUsed  ].Name = "HelpId";
         aCtrl[nUsed++].Value = makeAny( i_rHelpIds );
     }
-    aCtrl[nUsed  ].Name  = OUString( "ControlType" );
+    aCtrl[nUsed  ].Name  = "ControlType";
     aCtrl[nUsed++].Value = makeAny( i_rType );
-    aCtrl[nUsed  ].Name  = OUString( "ID" );
+    aCtrl[nUsed  ].Name  = "ID";
     aCtrl[nUsed++].Value = makeAny( i_rIDs );
     if( i_pVal )
     {
-        aCtrl[nUsed  ].Name  = OUString( "Property" );
+        aCtrl[nUsed  ].Name  = "Property";
         aCtrl[nUsed++].Value = makeAny( *i_pVal );
     }
     if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
-        aCtrl[nUsed  ].Name  = OUString( "DependsOnName" );
+        aCtrl[nUsed  ].Name  = "DependsOnName";
         aCtrl[nUsed++].Value = makeAny( i_rControlOptions.maDependsOnName );
         if( i_rControlOptions.mnDependsOnEntry != -1 )
         {
-            aCtrl[nUsed  ].Name  = OUString( "DependsOnEntry" );
+            aCtrl[nUsed  ].Name  = "DependsOnEntry";
             aCtrl[nUsed++].Value = makeAny( i_rControlOptions.mnDependsOnEntry );
         }
         if( i_rControlOptions.mbAttachToDependency )
         {
-            aCtrl[nUsed  ].Name  = OUString( "AttachToDependency" );
+            aCtrl[nUsed  ].Name  = "AttachToDependency";
             aCtrl[nUsed++].Value = makeAny( i_rControlOptions.mbAttachToDependency );
         }
     }
     if( !i_rControlOptions.maGroupHint.isEmpty() )
     {
-        aCtrl[nUsed  ].Name    = OUString( "GroupingHint" );
+        aCtrl[nUsed  ].Name    = "GroupingHint";
         aCtrl[nUsed++].Value <<= i_rControlOptions.maGroupHint;
     }
     if( i_rControlOptions.mbInternalOnly )
     {
-        aCtrl[nUsed  ].Name    = OUString( "InternalUIOnly" );
+        aCtrl[nUsed  ].Name    = "InternalUIOnly";
         aCtrl[nUsed++].Value <<= sal_True;
     }
     if( ! i_rControlOptions.mbEnabled )
     {
-        aCtrl[nUsed  ].Name    = OUString( "Enabled" );
+        aCtrl[nUsed  ].Name    = "Enabled";
         aCtrl[nUsed++].Value <<= sal_False;
     }
 
@@ -1974,11 +1974,11 @@ Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const com::sun::star::uno::S
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.getLength();
     aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
-    aOpt.maAddProps[nUsed].Name = OUString( "Choices" );
+    aOpt.maAddProps[nUsed].Name = "Choices";
     aOpt.maAddProps[nUsed].Value = makeAny( i_rChoices );
     if( i_rDisabledChoices.getLength() )
     {
-        aOpt.maAddProps[nUsed+1].Name = OUString( "ChoicesDisabled" );
+        aOpt.maAddProps[nUsed+1].Name = "ChoicesDisabled";
         aOpt.maAddProps[nUsed+1].Value = makeAny( i_rDisabledChoices );
     }
 
@@ -2000,11 +2000,11 @@ Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rID,
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.getLength();
     aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
-    aOpt.maAddProps[nUsed].Name = OUString( "Choices" );
+    aOpt.maAddProps[nUsed].Name = "Choices";
     aOpt.maAddProps[nUsed].Value = makeAny( i_rChoices );
     if( i_rDisabledChoices.getLength() )
     {
-        aOpt.maAddProps[nUsed+1].Name = OUString( "ChoicesDisabled" );
+        aOpt.maAddProps[nUsed+1].Name = "ChoicesDisabled";
         aOpt.maAddProps[nUsed+1].Value = makeAny( i_rDisabledChoices );
     }
 
@@ -2030,9 +2030,9 @@ Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
     {
         sal_Int32 nUsed = aOpt.maAddProps.getLength();
         aOpt.maAddProps.realloc( nUsed + 2 );
-        aOpt.maAddProps[nUsed  ].Name  = OUString( "MinValue" );
+        aOpt.maAddProps[nUsed  ].Name  = "MinValue";
         aOpt.maAddProps[nUsed++].Value = makeAny( i_nMinValue );
-        aOpt.maAddProps[nUsed  ].Name  = OUString( "MaxValue" );
+        aOpt.maAddProps[nUsed  ].Name  = "MaxValue";
         aOpt.maAddProps[nUsed++].Value = makeAny( i_nMaxValue );
     }
 

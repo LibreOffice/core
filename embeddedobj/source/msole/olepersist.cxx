@@ -500,7 +500,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         throw io::IOException(); // TODO:
 
     // insert the result file as replacement image
-    OUString aCacheName = OUString( "\002OlePres000" );
+    OUString aCacheName = "\002OlePres000";
     if ( xNameContainer->hasByName( aCacheName ) )
         xNameContainer->replaceByName( aCacheName, uno::makeAny( xTempFile ) );
     else
@@ -535,8 +535,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
 
     for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
     {
-        OUString aStreamName( "\002OlePres00" );
-        aStreamName += OUString::number( nInd );
+        OUString aStreamName =  "\002OlePres00" + OUString::number( nInd );
         if ( xNameContainer->hasByName( aStreamName ) )
             xNameContainer->removeByName( aStreamName );
     }
@@ -603,8 +602,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
                 {
                     for ( sal_uInt8 nInd = 0; nInd < 10 && !bExists; nInd++ )
                     {
-                        OUString aStreamName( "\002OlePres00" );
-                        aStreamName += OUString::number( nInd );
+                        OUString aStreamName = "\002OlePres00" + OUString::number( nInd );
                         try
                         {
                             bExists = xNameContainer->hasByName( aStreamName );
@@ -653,8 +651,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         {
             for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
             {
-                OUString aStreamName( "\002OlePres00" );
-                aStreamName += OUString::number( nInd );
+                OUString aStreamName =  "\002OlePres00" + OUString::number( nInd );
                 uno::Reference< io::XStream > xCachedCopyStream;
                 try
                 {
@@ -671,7 +668,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                 if ( nInd == 0 )
                 {
                     // to be compatible with the old versions Ole10Native is checked after OlePress000
-                    aStreamName = OUString( "\001Ole10Native" );
+                    aStreamName = "\001Ole10Native";
                     try
                     {
                         if ( ( xNameContainer->getByName( aStreamName ) >>= xCachedCopyStream ) && xCachedCopyStream.is() )

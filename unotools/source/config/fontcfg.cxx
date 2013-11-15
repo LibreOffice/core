@@ -110,7 +110,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
             m_xConfigProvider = theDefaultProvider::get( xContext );
             Sequence< Any > aArgs(1);
             PropertyValue aVal;
-            aVal.Name = OUString( "nodepath" );
+            aVal.Name = "nodepath";
             aVal.Value <<= OUString( "/org.openoffice.VCL/DefaultFonts" );
             aArgs.getArray()[0] <<= aVal;
             m_xConfigAccess =
@@ -375,7 +375,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
             m_xConfigProvider = theDefaultProvider::get( xContext );
             Sequence< Any > aArgs(1);
             PropertyValue aVal;
-            aVal.Name = OUString( "nodepath" );
+            aVal.Name = "nodepath";
             aVal.Value <<= OUString( "/org.openoffice.VCL/FontSubstitutions" );
             aArgs.getArray()[0] <<= aVal;
             m_xConfigAccess =

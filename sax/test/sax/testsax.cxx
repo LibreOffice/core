@@ -454,7 +454,7 @@ void OSaxParserTest::testSimple(    const Reference < XParser > &rParser )
     Reference< XInputStream > rInStream;
     OUString sInput;
     rInStream = createStreamFromSequence( seqBytes , m_rFactory );
-    sInput = OUString( OUString( "internal") );
+    sInput = "internal";
 
     if( rParser.is() ) {
         InputSource source;
@@ -519,7 +519,7 @@ void OSaxParserTest::testNamespaces( const Reference < XParser > &rParser )
     OUString sInput;
 
     rInStream = createStreamFromSequence( seqBytes , m_rFactory );
-    sInput = OUString(  "internal" );
+    sInput = "internal";
 
     if( rParser.is() ) {
         InputSource source;
@@ -572,7 +572,7 @@ void OSaxParserTest::testEncoding( const Reference < XParser > &rParser )
     OUString sInput;
 
     rInStream = createStreamFromSequence( seqBytes , m_rFactory );
-    sInput = OUString( "internal" );
+    sInput = "internal";
 
     if( rParser.is() ) {
         InputSource source;
@@ -606,7 +606,7 @@ void OSaxParserTest::testFile( const Reference < XParser > & rParser )
 {
 
     Reference< XInputStream > rInStream = createStreamFromFile( "testsax.xml" , m_rFactory );
-    OUString sInput = OUString(  "testsax.xml"  );
+    OUString sInput = "testsax.xml";
 
     if( rParser.is() && rInStream.is() ) {
         InputSource source;
@@ -664,7 +664,7 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
 {
     Reference < XInputStream > rInStream =
         createStreamFromFile( "testPerformance.xml" , m_rFactory );
-    OUString sInput = OUString(  "testperformance.xml" );
+    OUString sInput = "testperformance.xml";
 
     if( rParser.is() && rInStream.is() ) {
         InputSource source;

@@ -259,37 +259,37 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     if ( sDocumentService == "writer" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = OUString( "com.sun.star.text.TextDocument" );
+        sDocumentService = "com.sun.star.text.TextDocument";
     }
     else if ( sDocumentService == "web" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = OUString( "com.sun.star.text.WebDocument" );
+        sDocumentService = "com.sun.star.text.WebDocument";
     }
     else if ( sDocumentService == "global" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = OUString( "com.sun.star.text.GlobalDocument" );
+        sDocumentService = "com.sun.star.text.GlobalDocument";
     }
     else if ( sDocumentService == "calc" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = OUString( "com.sun.star.sheet.SpreadsheetDocument" );
+        sDocumentService = "com.sun.star.sheet.SpreadsheetDocument";
     }
     else if ( sDocumentService == "draw" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = OUString( "com.sun.star.drawing.DrawingDocument" );
+        sDocumentService = "com.sun.star.drawing.DrawingDocument";
     }
     else if ( sDocumentService == "impress" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = OUString( "com.sun.star.presentation.PresentationDocument" );
+        sDocumentService = "com.sun.star.presentation.PresentationDocument";
     }
     else if ( sDocumentService == "math" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = OUString( "com.sun.star.formula.FormulaProperties" );
+        sDocumentService = "com.sun.star.formula.FormulaProperties";
     }
 #endif
 
@@ -582,7 +582,7 @@ OUString FilterFactory::impl_getImplementationName()
 css::uno::Sequence< OUString > FilterFactory::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > lServiceNames(1);
-    lServiceNames[0] = OUString( "com.sun.star.document.FilterFactory" );
+    lServiceNames[0] = "com.sun.star.document.FilterFactory";
     return lServiceNames;
 }
 

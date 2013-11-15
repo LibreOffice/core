@@ -105,12 +105,12 @@ int main( int argc, char *argv[] )
         fprintf(stderr, "bootstrap parameter couldn't be found\n");
 
     // test the default case
-    name = OUString( "no_one_has_set_this_name" );
+    name = "no_one_has_set_this_name";
       OSL_ASSERT( ! bootstrap.getFrom( name, value ) );
     result = result && !bootstrap.getFrom( name, value );
 
-    myDefault = OUString( "1" );
-    OUString myDefault2 = OUString( "2" );
+    myDefault = "1";
+    OUString myDefault2 = "2";
 
     bootstrap.getFrom( name, value, myDefault );
       OSL_ASSERT( value == myDefault );

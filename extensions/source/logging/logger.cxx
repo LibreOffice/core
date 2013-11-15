@@ -293,7 +293,7 @@ namespace logging
     Sequence< OUString > SAL_CALL EventLogger::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = OUString( "com.sun.star.logging.Logger" );
+        aServiceNames[0] = "com.sun.star.logging.Logger";
         return aServiceNames;
     }
 

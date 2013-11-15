@@ -201,8 +201,8 @@ namespace frm
     Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aServices( 2 );
-        aServices[ 0 ] = OUString( "com.sun.star.awt.UnoControl" );
-        aServices[ 1 ] = OUString( "com.sun.star.form.control.NavigationToolBar" );
+        aServices[ 0 ] = "com.sun.star.awt.UnoControl";
+        aServices[ 1 ] = "com.sun.star.form.control.NavigationToolBar";
         return aServices;
     }
 

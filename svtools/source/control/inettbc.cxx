@@ -364,8 +364,8 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
-        pProps[0] = OUString( "Title" );
-        pProps[1] = OUString( "IsFolder" );
+        pProps[0] = "Title";
+        pProps[1] = "IsFolder";
 
         try
         {

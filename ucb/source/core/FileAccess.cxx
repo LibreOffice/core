@@ -387,7 +387,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 
             Sequence<OUString> aNames(1);
             OUString* pNames = aNames.getArray();
-            pNames[0] = OUString( "Title"  );
+            pNames[0] = "Title";
             Sequence< Any > aValues(1);
             Any* pValues = aValues.getArray();
             pValues[0] = makeAny( OUString( aTitle ) );
@@ -660,8 +660,7 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
 
             Sequence<OUString> aNames(1);
             OUString* pNames = aNames.getArray();
-            pNames[0] = OUString(
-                            "Title"  );
+            pNames[0] = "Title";
             Sequence< Any > aValues(1);
             Any* pValues = aValues.getArray();
             pValues[0] = makeAny( OUString( rTitle ) );
@@ -769,7 +768,7 @@ Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMu
 Sequence< OUString > FileAccess_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString( SERVICE_NAME );
+    seqNames.getArray()[0] = SERVICE_NAME;
     return seqNames;
 }
 

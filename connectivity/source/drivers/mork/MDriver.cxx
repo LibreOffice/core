@@ -48,7 +48,7 @@ OUString MorkDriver::getImplementationName_Static(  ) throw(css::uno::RuntimeExc
 css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< OUString > aSNS(1);
-    aSNS[0] = OUString( "com.sun.star.sdbc.Driver");
+    aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
 

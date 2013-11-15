@@ -129,7 +129,7 @@ void SvxLineBox::Select()
 
                     Any a;
                     Sequence< PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = OUString( "LineDash" );
+                    aArgs[0].Name = "LineDash";
                     aLineDashItem.QueryValue ( a );
                     aArgs[0].Value = a;
                     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
@@ -143,7 +143,7 @@ void SvxLineBox::Select()
         XLineStyleItem aLineStyleItem( eXLS );
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString( "XLineStyle" );
+        aArgs[0].Name = "XLineStyle";
         aLineStyleItem.QueryValue ( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
@@ -504,7 +504,7 @@ void SvxMetricField::Modify()
 
     Any a;
     Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString( "LineWidth" );
+    aArgs[0].Name = "LineWidth";
     aLineWidthItem.QueryValue( a );
     aArgs[0].Value = a;
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),

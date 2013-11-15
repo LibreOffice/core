@@ -266,8 +266,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
 
             if ( aCommandURL.isEmpty() )
             {
-                aCommandURL = OUString( "slot:" );
-                aCommandURL += OUString::number( nItemId );
+                aCommandURL = "slot:" + OUString::number( nItemId );
             }
 
             a <<= aCommandURL;

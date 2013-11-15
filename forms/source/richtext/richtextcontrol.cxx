@@ -273,8 +273,8 @@ namespace frm
     Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aServices( 3 );
-        aServices[ 0 ] = OUString( "com.sun.star.awt.UnoControl" );
-        aServices[ 1 ] = OUString( "com.sun.star.awt.UnoControlEdit" );
+        aServices[ 0 ] = "com.sun.star.awt.UnoControl";
+        aServices[ 1 ] = "com.sun.star.awt.UnoControlEdit";
         aServices[ 2 ] = FRM_SUN_CONTROL_RICHTEXTCONTROL;
         return aServices;
     }

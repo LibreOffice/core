@@ -292,7 +292,7 @@ OUString VCLXAccessibleStatusBar::getImplementationName() throw (RuntimeExceptio
 Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< OUString > aNames(1);
-    aNames[0] = OUString( "com.sun.star.awt.AccessibleStatusBar" );
+    aNames[0] = "com.sun.star.awt.AccessibleStatusBar";
     return aNames;
 }
 

@@ -101,20 +101,20 @@ namespace svxform
                    || xDocumentSI->supportsService("com.sun.star.text.WebDocument")
                    )
                 {
-                    _rFamilyName = OUString( "ParagraphStyles" );
-                    _rStyleName = OUString( "Standard" );
+                    _rFamilyName = "ParagraphStyles";
+                    _rStyleName = "Standard";
                 }
                 else if ( xDocumentSI->supportsService("com.sun.star.sheet.SpreadsheetDocument") )
                 {
-                    _rFamilyName = OUString( "CellStyles" );
-                    _rStyleName = OUString( "Default" );
+                    _rFamilyName = "CellStyles";
+                    _rStyleName = "Default";
                 }
                 else if (  xDocumentSI->supportsService("com.sun.star.drawing.DrawingDocument")
                         || xDocumentSI->supportsService("com.sun.star.presentation.PresentationDocument")
                         )
                 {
-                    _rFamilyName = OUString( "graphics" );
-                    _rStyleName = OUString( "standard" );
+                    _rFamilyName = "graphics";
+                    _rStyleName = "standard";
                 }
                 else
                     bSuccess = false;
@@ -163,7 +163,7 @@ namespace svxform
                 // fall back to CharLocale property at the style
                 if ( aDocumentCharLocale.Language.isEmpty() )
                 {
-                    sCharLocalePropertyName = OUString( "CharLocale" );
+                    sCharLocalePropertyName = "CharLocale";
                     if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
                     {
                         OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
@@ -282,7 +282,7 @@ namespace svxform
     //--------------------------------------------------------------------
     ::utl::OConfigurationNode ControlLayouter::getLayoutSettings( DocumentType _eDocType )
     {
-        OUString sConfigName = OUString( "/org.openoffice.Office.Common/Forms/ControlLayout/" );
+        OUString sConfigName = "/org.openoffice.Office.Common/Forms/ControlLayout/";
         sConfigName += DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
         return OConfigurationTreeRoot::createWithComponentContext(
             ::comphelper::getProcessComponentContext(),    // TODO

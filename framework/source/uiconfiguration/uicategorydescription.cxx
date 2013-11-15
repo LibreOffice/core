@@ -144,7 +144,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& 
 {
     // Create configuration hierachical access name
     m_aConfigCategoryAccess += aModuleName;
-    m_aConfigCategoryAccess += OUString( CONFIGURATION_CATEGORY_ELEMENT_ACCESS );
+    m_aConfigCategoryAccess += CONFIGURATION_CATEGORY_ELEMENT_ACCESS;
 
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 }
@@ -341,7 +341,7 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
 
     try
     {
-        aPropValue.Name  = OUString( "nodepath" );
+        aPropValue.Name  = "nodepath";
         aPropValue.Value <<= m_aConfigCategoryAccess;
         aArgs[0] <<= aPropValue;
 

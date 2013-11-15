@@ -59,7 +59,7 @@ long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
         {
             nHandled = LimitBox::Notify( rNEvt );
             uno::Sequence< beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name  = OUString( "DBLimit.Value" );
+            aArgs[0].Name  = "DBLimit.Value";
             aArgs[0].Value = uno::makeAny( GetValue() );
             m_pControl->dispatchCommand( aArgs );
             break;
@@ -225,7 +225,7 @@ void LimitBoxController::dispatchCommand(
         uno::Reference< frame::XDispatch >      xDispatch;
         uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
 
-        aURL.Complete = OUString( ".uno:DBLimit" );
+        aURL.Complete = ".uno:DBLimit";
         xURLTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
         if ( xDispatch.is() )

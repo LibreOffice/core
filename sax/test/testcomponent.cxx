@@ -89,7 +89,7 @@ int main (int argc, char **argv)
 #ifdef SAL_W32
             OUString aDllName = OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
 #else
-            OUString aDllName = OUString( "lib");
+            OUString aDllName = "lib";
             aDllName += OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
             aDllName += ".so";
 #endif
@@ -117,7 +117,7 @@ int main (int argc, char **argv)
 #ifdef SAL_W32
         OUString aDllName = OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
 #else
-        OUString aDllName = OUString( "lib");
+        OUString aDllName = "lib";
         aDllName += OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
         aDllName += ".so";
 #endif

@@ -95,7 +95,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
-        aSupported[0] = OUString( "com.sun.star.form.inspection.XSDValidationPropertyHandler" );
+        aSupported[0] = "com.sun.star.form.inspection.XSDValidationPropertyHandler";
         return aSupported;
     }
 
@@ -323,8 +323,8 @@ namespace pcr
             aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_ADD_DATA_TYPE);
             aDescriptor.SecondaryButtonId = OUString::createFromAscii(UID_PROP_REMOVE_DATA_TYPE);;
             aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
-            aDescriptor.PrimaryButtonImageURL = OUString( "private:graphicrepository/extensions/res/buttonplus.png" );
-            aDescriptor.SecondaryButtonImageURL = OUString( "private:graphicrepository/extensions/res/buttonminus.png" );
+            aDescriptor.PrimaryButtonImageURL = "private:graphicrepository/extensions/res/buttonplus.png";
+            aDescriptor.SecondaryButtonImageURL = "private:graphicrepository/extensions/res/buttonminus.png";
             break;
 
         case PROPERTY_ID_XSD_WHITESPACES:
@@ -419,7 +419,7 @@ namespace pcr
             break;
         }
 
-        aDescriptor.Category = OUString( "Data" );
+        aDescriptor.Category = "Data";
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
 

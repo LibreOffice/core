@@ -230,7 +230,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         {
             aException = ::cppu::getCaughtException();
 
-            OUString reason = OUString( "ScriptProtocolHandler::dispatch: caught "  );
+            OUString reason = "ScriptProtocolHandler::dispatch: caught ";
 
             invokeResult <<= reason.concat( aException.getValueTypeName() ).concat( e.Message );
 

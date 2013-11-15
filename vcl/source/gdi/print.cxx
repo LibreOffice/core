@@ -151,7 +151,7 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
 
             Sequence< Any > aArgs(1);
             PropertyValue aVal;
-            aVal.Name = OUString( "nodepath" );
+            aVal.Name = "nodepath";
             if( i_bFile )
                 aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/File" );
             else

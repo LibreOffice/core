@@ -92,7 +92,7 @@ Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyMo
     Sequence<PropertyValue> aArgs( 1 );
 
     // Add key modifier to argument list
-    aArgs[0].Name = OUString( "KeyModifier" );
+    aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
     return aArgs;
 }
@@ -273,7 +273,7 @@ void ComplexToolbarController::addNotifyInfo(
         sal_Int32 nCount = rInfo.getLength();
         uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
         aInfoSeq.realloc( nCount+1 );
-        aInfoSeq[nCount].Name  = OUString( "Source" );
+        aInfoSeq[nCount].Name  = "Source";
         aInfoSeq[nCount].Value = uno::makeAny( getFrameInterface() );
         pNotifyInfo->aInfoSeq  = aInfoSeq;
 
@@ -343,7 +343,7 @@ void ComplexToolbarController::notifyTextChanged( const OUString& aText )
 {
     // send text changed notification
     uno::Sequence< beans::NamedValue > aInfo( 1 );
-    aInfo[0].Name  = OUString( "Text" );
+    aInfo[0].Name  = "Text";
     aInfo[0].Value <<= aText;
     addNotifyInfo( OUString( "TextChanged" ),
                    getDispatchFromCommand( m_aCommandURL ),

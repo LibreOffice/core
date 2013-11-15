@@ -177,12 +177,11 @@ int SAL_CALL main( int argc, char * argv[] )
         xMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
     OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
-    OUString aLibName =
-        OUString( "connector.uno" SAL_DLLEXTENSION );
+    OUString aLibName = "connector.uno" SAL_DLLEXTENSION;
     xImplReg->registerImplementation(
         OUString("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
-    aLibName = OUString( "acceptor.uno" SAL_DLLEXTENSION );
+    aLibName = "acceptor.uno" SAL_DLLEXTENSION;
     xImplReg->registerImplementation(
         OUString("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 

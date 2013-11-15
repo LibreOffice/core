@@ -113,7 +113,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
-        aSupported[0] = OUString( "com.sun.star.form.inspection.SubmissionPropertyHandler" );
+        aSupported[0] = "com.sun.star.form.inspection.SubmissionPropertyHandler";
         return aSupported;
     }
 
@@ -312,7 +312,7 @@ namespace pcr
         LineDescriptor aDescriptor;
         aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_True );
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-        aDescriptor.Category = OUString( "General" );
+        aDescriptor.Category = "General";
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
         return aDescriptor;
     }

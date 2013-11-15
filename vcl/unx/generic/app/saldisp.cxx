@@ -704,7 +704,7 @@ OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
     if( aKeyCode != 0 && aKeyCode != NoSymbol )
     {
         if( !nKeySym )
-            aRet = OUString( "???" );
+            aRet = "???";
         else
         {
             aRet = ::vcl_sal::getKeysymReplacementName( aLang, nKeySym );

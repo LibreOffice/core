@@ -140,7 +140,7 @@ namespace svt
     ::comphelper::StringSequence OAddressBookSourceDialogUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = OUString( "com.sun.star.ui.AddressBookSourceDialog" );
+        aSupported.getArray()[0] = "com.sun.star.ui.AddressBookSourceDialog";
         return aSupported;
     }
 

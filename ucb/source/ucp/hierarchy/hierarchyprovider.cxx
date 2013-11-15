@@ -226,7 +226,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                 {
                     uno::Sequence< uno::Any > aArguments( 1 );
                     beans::PropertyValue      aProperty;
-                    aProperty.Name = OUString( "nodepath"  );
+                    aProperty.Name = "nodepath" ;
                     aProperty.Value <<= OUString(); // root path
                     aArguments[ 0 ] <<= aProperty;
 

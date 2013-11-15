@@ -140,8 +140,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ]
-            = OUString( MYUCP_CONTENT_SERVICE_NAME );
+    aSNS.getArray()[ 0 ] = MYUCP_CONTENT_SERVICE_NAME ;
     return aSNS;
 }
 
@@ -486,8 +485,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             else if ( rProp.Name == "SearchScopes" )
             {
                 uno::Sequence< OUString > seq( 2 );
-                seq[0] = OUString( "Heading" );
-                seq[1] = OUString( "FullText" );
+                seq[0] = "Heading";
+                seq[1] = "FullText";
                 uno::Any aAny;
                 aAny <<= seq;
                 xRow->appendObject( rProp,aAny );

@@ -93,9 +93,9 @@ Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 
     Sequence<PropertyValue> aArgs( 2 );
 
     // Add key modifier to argument list
-    aArgs[0].Name = OUString( "KeyModifier" );
+    aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = OUString( "Text" );
+    aArgs[1].Name = "Text";
     aArgs[1].Value <<= m_aCurrentSelection;
     return aArgs;
 }
@@ -157,7 +157,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
 
                     // send notification
                     uno::Sequence< beans::NamedValue > aInfo( 1 );
-                    aInfo[0].Name  = OUString( "List" );
+                    aInfo[0].Name  = "List";
                     aInfo[0].Value <<= aList;
                     addNotifyInfo( OUString( "ListChanged" ),
                                 getDispatchFromCommand( m_aCommandURL ),
@@ -184,7 +184,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
 
                         // send notification
                         uno::Sequence< beans::NamedValue > aInfo( 1 );
-                        aInfo[0].Name  = OUString( "ItemChecked" );
+                        aInfo[0].Name  = "ItemChecked";
                         aInfo[0].Value <<= nPos;
                         addNotifyInfo( OUString( "Pos" ),
                                     getDispatchFromCommand( m_aCommandURL ),

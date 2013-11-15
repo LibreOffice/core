@@ -191,10 +191,10 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             //TODO/LATER: a "StoreTo" method at embedded object would be nice
             uno::Sequence < beans::PropertyValue > aSeq(2);
             SvStream* pStream = new SvMemoryStream;
-            aSeq[0].Name = OUString( "OutputStream" );
+            aSeq[0].Name = "OutputStream";
             ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
             aSeq[0].Value <<= xOut;
-            aSeq[1].Name = OUString( "FilterName" );
+            aSeq[1].Name = "FilterName";
             aSeq[1].Value <<= OUString( pExpFilter->GetName() );
             uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
         try
@@ -291,7 +291,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                         //TODO/LATER: is stream instead of outputstream a better choice?!
                         //TODO/LATER: a "StoreTo" method at embedded object would be nice
                         uno::Sequence < beans::PropertyValue > aSeq(1);
-                        aSeq[0].Name = OUString( "OutputStream" );
+                        aSeq[0].Name = "OutputStream";
                         ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
                         aSeq[0].Value <<= xOut;
                         uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );

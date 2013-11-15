@@ -242,7 +242,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         const OUString & rStr( *it );
-        if (rStr != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) )&&
+        if (rStr != aLanguageTable.GetString( LANGUAGE_NONE ) &&
             rStr != sAsterix &&
             rStr != sEmpty)
         {
@@ -324,10 +324,10 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 
         if ( m_bInitialized )
         {
-            m_aLangStatusCommandURL               = OUString( ".uno:LanguageStatus" );
+            m_aLangStatusCommandURL               = ".uno:LanguageStatus";
             m_aMenuCommandURL_Lang                = m_aLangStatusCommandURL;
-            m_aMenuCommandURL_Font                = OUString( ".uno:FontDialog" );
-            m_aMenuCommandURL_CharDlgForParagraph = OUString( ".uno:FontDialogForParagraph" );
+            m_aMenuCommandURL_Font                = ".uno:FontDialog";
+            m_aMenuCommandURL_CharDlgForParagraph = ".uno:FontDialogForParagraph";
         }
     }
 }

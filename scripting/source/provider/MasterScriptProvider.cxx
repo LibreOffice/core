@@ -820,9 +820,9 @@ throw( RuntimeException )
 {
     OUString names[3];
 
-    names[0] = OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
-    names[1] = OUString( "com.sun.star.script.browse.BrowseNode"  );
-    names[2] = OUString( "com.sun.star.script.provider.ScriptProvider"  );
+    names[0] = "com.sun.star.script.provider.MasterScriptProvider";
+    names[1] = "com.sun.star.script.browse.BrowseNode";
+    names[2] = "com.sun.star.script.provider.ScriptProvider";
 
     return Sequence< OUString >( names, 3 );
 }
@@ -852,9 +852,9 @@ Sequence< OUString > sp_getSupportedServiceNames( )
 {
     OUString names[3];
 
-    names[0] = OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
-    names[1] = OUString( "com.sun.star.script.browse.BrowseNode"  );
-    names[2] = OUString( "com.sun.star.script.provider.ScriptProvider"  );
+    names[0] = "com.sun.star.script.provider.MasterScriptProvider";
+    names[1] = "com.sun.star.script.browse.BrowseNode";
+    names[2] = "com.sun.star.script.provider.ScriptProvider";
 
     return Sequence< OUString >( names, 3 );
 }

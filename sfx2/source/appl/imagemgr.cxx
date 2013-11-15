@@ -97,7 +97,7 @@ Image SAL_CALL GetImage(
 
         if ( pSlot )
         {
-            aCommandURL = OUString( ".uno:" );
+            aCommandURL = ".uno:";
             aCommandURL += OUString::createFromAscii( pSlot->GetUnoName() );
         }
         else

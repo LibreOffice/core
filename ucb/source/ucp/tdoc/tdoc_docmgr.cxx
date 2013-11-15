@@ -76,7 +76,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
 {
     document::EventObject aDocEvent;
     aDocEvent.Source = Source.Source;
-    aDocEvent.EventName = OUString( "OfficeDocumentsListener::notifyClosing" );
+    aDocEvent.EventName = "OfficeDocumentsListener::notifyClosing";
     m_pManager->notifyEvent( aDocEvent );
 }
 

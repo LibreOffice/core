@@ -156,7 +156,7 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
 
                     // send notification
                     uno::Sequence< beans::NamedValue > aInfo( 1 );
-                    aInfo[0].Name  = OUString( "URL" );
+                    aInfo[0].Name  = "URL";
                     aInfo[0].Value <<= aURL;
                     addNotifyInfo( OUString( "ImageChanged" ),
                                 getDispatchFromCommand( m_aCommandURL ),

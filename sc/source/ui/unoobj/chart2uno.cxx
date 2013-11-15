@@ -2477,9 +2477,9 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
     // BM: don't use names of named ranges but the UI range strings
 //  String  aStr;
 //  rRangeList->Format( aStr, SCR_ABS_3D, m_pDocument );
-//    m_aIdentifier = OUString( aStr );
+//    m_aIdentifier = aStr;
 
-//      m_aIdentifier = OUString( "ID_");
+//      m_aIdentifier = "ID_";
 //      static sal_Int32 nID = 0;
 //      m_aIdentifier += OUString::valueOf( ++nID);
 }

@@ -316,7 +316,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             OUString aDestMimeType( "image/png"  );
                             if ( rGraphicSettings.mbJPEGCompression && !bTransparent && !bAlpha && !bAnimated )
                             {
-                                aDestMimeType = OUString( "image/jpeg"  );
+                                aDestMimeType = "image/jpeg";
 //                                      if( aSourceMimeType != aDestMimeType )
                                 bNeedsOptimizing = sal_True;
                             }
@@ -516,8 +516,8 @@ void ImpOptimizer::DispatchStatus()
     if ( mxStatusDispatcher.is() )
     {
         URL aURL;
-        aURL.Protocol = OUString( "vnd.com.sun.star.comp.PresentationMinimizer:"  );
-        aURL.Path = OUString( "statusupdate"  );
+        aURL.Protocol = "vnd.com.sun.star.comp.PresentationMinimizer:";
+        aURL.Path = "statusupdate";
         mxStatusDispatcher->dispatch( aURL, GetStatusSequence() );
     }
 }

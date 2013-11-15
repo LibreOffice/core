@@ -892,17 +892,17 @@ void ToolBarManager::CreateControllers()
             PropertyValue aPropValue;
             std::vector< Any > aPropertyVector;
 
-            aPropValue.Name     = OUString( "ModuleIdentifier" );
+            aPropValue.Name     = "ModuleIdentifier";
             aPropValue.Value    <<= m_aModuleIdentifier;
             aPropertyVector.push_back( makeAny( aPropValue ));
-            aPropValue.Name     = OUString( "Frame" );
+            aPropValue.Name     = "Frame";
             aPropValue.Value    <<= m_xFrame;
             aPropertyVector.push_back( makeAny( aPropValue ));
-            aPropValue.Name     = OUString( "ServiceManager" );
+            aPropValue.Name     = "ServiceManager";
             Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
             aPropValue.Value    <<= xMSF;
             aPropertyVector.push_back( makeAny( aPropValue ));
-            aPropValue.Name     = OUString( "ParentWindow" );
+            aPropValue.Name     = "ParentWindow";
             aPropValue.Value    <<= xToolbarWindow;
             aPropertyVector.push_back( makeAny( aPropValue ));
             aPropValue.Name     = "Identifier";
@@ -911,7 +911,7 @@ void ToolBarManager::CreateControllers()
 
             if ( nWidth > 0 )
             {
-                aPropValue.Name     = OUString( "Width" );
+                aPropValue.Name     = "Width";
                 aPropValue.Value    <<= nWidth;
                 aPropertyVector.push_back( makeAny( aPropValue ));
             }
@@ -1005,20 +1005,20 @@ void ToolBarManager::CreateControllers()
                 PropertyValue aPropValue;
                 std::vector< Any > aPropertyVector;
 
-                aPropValue.Name = OUString( "Frame" );
+                aPropValue.Name = "Frame";
                 aPropValue.Value <<= m_xFrame;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = OUString( "CommandURL" );
+                aPropValue.Name = "CommandURL";
                 aPropValue.Value <<= aCommandURL;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = OUString( "ServiceManager" );
+                aPropValue.Name = "ServiceManager";
                 Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
                 aPropValue.Value <<= xMSF;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = OUString( "ParentWindow" );
+                aPropValue.Name = "ParentWindow";
                 aPropValue.Value <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = OUString( "ModuleIdentifier" );
+                aPropValue.Name = "ModuleIdentifier";
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = "Identifier";
@@ -1027,7 +1027,7 @@ void ToolBarManager::CreateControllers()
 
                 if ( nWidth > 0 )
                 {
-                    aPropValue.Name     = OUString( "Width" );
+                    aPropValue.Name     = "Width";
                     aPropValue.Value    <<= nWidth;
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
@@ -1297,9 +1297,9 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                          OUString sShortCut;
                          if( RetrieveShortcut( aCommandURL, sShortCut ) )
                          {
-                             sQuickHelp += OUString( " ("  );
+                             sQuickHelp += " (";
                              sQuickHelp += sShortCut;
-                             sQuickHelp += OUString( ")" );
+                             sQuickHelp += ")";
                          }
 
                         m_pToolBar->SetQuickHelpText( nId, sQuickHelp );
@@ -1680,7 +1680,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     if ( m_xFrame.is() )
     {
         Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-        aURL.Complete = OUString( ".uno:ConfigureDialog" );
+        aURL.Complete = ".uno:ConfigureDialog";
         m_xURLTransformer->parseStrict( aURL );
         if ( xProv.is() )
             xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
@@ -1840,7 +1840,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 if ( m_xFrame.is() )
                 {
                     Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-                    aURL.Complete = OUString( ".uno:ConfigureDialog" );
+                    aURL.Complete = ".uno:ConfigureDialog";
                     m_xURLTransformer->parseStrict( aURL );
                     if ( xProv.is() )
                         xDisp = xProv->queryDispatch( aURL, OUString(), 0 );

@@ -101,7 +101,7 @@ throw ( uno::Exception, uno::RuntimeException )
                 uno::Reference< uno::XInterface >() );
     }
 
-    SCRIPTS_PART = OUString("/Scripts/");
+    SCRIPTS_PART = "/Scripts/";
     SCRIPTS_PART = SCRIPTS_PART.concat( m_sLanguage.toAsciiLowerCase() );
 
     if ( !initBaseURI() )
@@ -120,31 +120,30 @@ ScriptingFrameworkURIHelper::initBaseURI()
 
     if ( m_sLocation.equalsAscii(USER))
     {
-        test = OUString(USER);
-        uri = OUString(USER_URI);
+        test = USER;
+        uri = USER_URI;
         bAppendScriptsPart = true;
     }
     else if ( m_sLocation.equalsAscii(USER_UNO_PACKAGES))
     {
-        test = OUString("uno_packages");
-        uri = OUString(USER_URI);
-        uri = uri.concat(OUString(USER_UNO_PACKAGES_DIR));
+        test = "uno_packages";
+        uri = OUString( USER_URI ) + USER_UNO_PACKAGES_DIR;
     }
     else if (m_sLocation.equalsAscii(SHARE))
     {
-        test = OUString(SHARE);
-        uri = OUString(SHARE_URI);
+        test = SHARE;
+        uri = SHARE_URI;
         bAppendScriptsPart = true;
     }
     else if (m_sLocation.equalsAscii(SHARE_UNO_PACKAGES))
     {
-        test = OUString("uno_packages");
-        uri = OUString(SHARE_UNO_PACKAGES_URI);
+        test = "uno_packages";
+        uri = SHARE_UNO_PACKAGES_URI;
     }
     else if (m_sLocation.startsWith(TDOC_SCHEME))
     {
         m_sBaseURI = m_sLocation.concat( SCRIPTS_PART );
-        m_sLocation = OUString(DOCUMENT );
+        m_sLocation = DOCUMENT;
         return true;
     }
     else

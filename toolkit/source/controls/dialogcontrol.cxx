@@ -478,8 +478,8 @@ throw (::com::sun::star::uno::RuntimeException)
         Sequence< OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
         // Properties in a sequence must be sorted!
-        aProps[0] = OUString( "Height" );
-        aProps[1] = OUString( "Width" );
+        aProps[0] = "Height";
+        aProps[1] = "Width";
         aValues[0] <<= aAppFontSize.Height();
         aValues[1] <<= aAppFontSize.Width();
 
@@ -504,8 +504,8 @@ throw (::com::sun::star::uno::RuntimeException)
         mbPosModified = true;
         Sequence< OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
-        aProps[0] = OUString( "PositionX" );
-        aProps[1] = OUString( "PositionY" );
+        aProps[0] = "PositionX";
+        aProps[1] = "PositionY";
         aValues[0] <<= aTmp.Width();
         aValues[1] <<= aTmp.Height();
 

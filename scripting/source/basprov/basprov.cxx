@@ -93,10 +93,10 @@ namespace basprov
             if ( !pNames )
             {
                 static Sequence< OUString > aNames(4);
-                aNames.getArray()[0] = OUString( "com.sun.star.script.provider.ScriptProviderForBasic"  );
-                aNames.getArray()[1] = OUString( "com.sun.star.script.provider.LanguageScriptProvider"  );
-                aNames.getArray()[2] = OUString( "com.sun.star.script.provider.ScriptProvider"  );
-                aNames.getArray()[3] = OUString( "com.sun.star.script.browse.BrowseNode"  );
+                aNames.getArray()[0] = "com.sun.star.script.provider.ScriptProviderForBasic";
+                aNames.getArray()[1] = "com.sun.star.script.provider.LanguageScriptProvider";
+                aNames.getArray()[2] = "com.sun.star.script.provider.ScriptProvider";
+                aNames.getArray()[3] = "com.sun.star.script.browse.BrowseNode";
                 pNames = &aNames;
             }
         }

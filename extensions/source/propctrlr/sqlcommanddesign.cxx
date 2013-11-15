@@ -243,7 +243,7 @@ namespace pcr
             aArgs[3].Name  = PROPERTY_ESCAPE_PROCESSING;
             aArgs[3].Value <<= m_xObjectAdapter->getEscapeProcessing();
 
-            aArgs[4].Name  = OUString( "GraphicalDesign" );
+            aArgs[4].Name  = "GraphicalDesign";
             aArgs[4].Value <<= m_xObjectAdapter->getEscapeProcessing();
 
             Reference< XComponent > xQueryDesign = xLoader->loadComponentFromURL(

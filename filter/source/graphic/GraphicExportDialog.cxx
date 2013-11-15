@@ -70,7 +70,7 @@ Sequence<PropertyValue> GraphicExportDialog::getPropertyValues() throw ( Runtime
         maMediaDescriptor.realloc( nCount );
     }
 
-    maMediaDescriptor[ i ].Name = OUString( "FilterData" );
+    maMediaDescriptor[ i ].Name = "FilterData";
     maMediaDescriptor[ i ].Value <<= maFilterDataSequence;
     return maMediaDescriptor;
 }
@@ -128,15 +128,15 @@ void GraphicExportDialog::setSourceDocument( const Reference<XComponent>& xDocum
     {
         if ( xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
         {
-            aConfigPath = OUString( "Office.Impress/Layout/Other/MeasureUnit" );
+            aConfigPath = "Office.Impress/Layout/Other/MeasureUnit";
         }
         else if ( xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
         {
-            aConfigPath = OUString( "Office.Draw/Layout/Other/MeasureUnit" );
+            aConfigPath = "Office.Draw/Layout/Other/MeasureUnit";
         }
         else if ( xServiceInfo->supportsService("com.sun.star.text.TextDocument") )
         {
-            aConfigPath = OUString( "Office.Writer/Layout/Other/MeasureUnit" );
+            aConfigPath = "Office.Writer/Layout/Other/MeasureUnit";
         }
         if ( !aConfigPath.isEmpty() )
         {
@@ -146,11 +146,11 @@ void GraphicExportDialog::setSourceDocument( const Reference<XComponent>& xDocum
 
             if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MEASURE_METRIC )
             {
-                aPropertyName = OUString( "Metric" );
+                aPropertyName = "Metric";
             }
             else
             {
-                aPropertyName = OUString( "NonMetric" );
+                aPropertyName = "NonMetric";
             }
             meFieldUnit = (FieldUnit) aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
         }

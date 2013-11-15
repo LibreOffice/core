@@ -866,7 +866,7 @@ uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners() 
     osl::MutexGuard aGuard( maProtector );
     uno::Sequence< ScannerContext >   aRet( 1 );
 
-    aRet.getArray()[0].ScannerName = OUString( "TWAIN"  );
+    aRet.getArray()[0].ScannerName = "TWAIN" ;
     aRet.getArray()[0].InternalData = 0;
 
     return aRet;
@@ -878,7 +878,7 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rCont
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != OUString( "TWAIN"  ) )
+    if( rContext.InternalData != 0 || rContext.ScannerName != "TWAIN" )
         throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
 
     ReleaseData();
@@ -892,7 +892,7 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != OUString( "TWAIN"  ) )
+    if( rContext.InternalData != 0 || rContext.ScannerName != "TWAIN" )
         throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
 
     ReleaseData();
@@ -905,7 +905,7 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != OUString( "TWAIN"  ) )
+    if( rContext.InternalData != 0 || rContext.ScannerName != "TWAIN" )
         throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
 
     return( ( aTwain.GetState() == TWAIN_STATE_CANCELED ) ? ScanError_ScanCanceled : ScanError_ScanErrorNone );

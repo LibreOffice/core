@@ -595,7 +595,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
             OUString aNewName = rName;
             if( aNewName.isEmpty() )
             {
-                aNewName = OUString( "Temp Stg " ) + OUString::number( ++nTmpCount );
+                aNewName = "Temp Stg " + OUString::number( ++nTmpCount );
                 bTemp = true;
             }
             p = pIo->pTOC->Create( *pEntry, aNewName, STG_STORAGE );
@@ -654,7 +654,7 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
             OUString aNewName( rName );
             if( aNewName.isEmpty() )
             {
-                aNewName = OUString( "Temp Strm " ) + OUString::number( ++nTmpCount );
+                aNewName = "Temp Strm " + OUString::number( ++nTmpCount );
                 bTemp = true;
             }
             p = pIo->pTOC->Create( *pEntry, aNewName, STG_STREAM );

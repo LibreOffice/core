@@ -115,7 +115,7 @@ void SbiParser::Line()
         aGen.Statement();
 
         KeywordSymbolInfo aInfo;
-        aInfo.m_aKeywordSymbol = OUString( "line" );
+        aInfo.m_aKeywordSymbol = "line";
         aInfo.m_eSbxDataType = GetType();
         aInfo.m_eTok = SYMBOL;
 
@@ -278,7 +278,7 @@ void SbiParser::Name()
         aGen.Statement();
 
         KeywordSymbolInfo aInfo;
-        aInfo.m_aKeywordSymbol = OUString( "name" );
+        aInfo.m_aKeywordSymbol = "name";
         aInfo.m_eSbxDataType = GetType();
         aInfo.m_eTok = SYMBOL;
 

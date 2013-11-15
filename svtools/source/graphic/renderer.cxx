@@ -78,7 +78,7 @@ uno::Sequence< OUString > GraphicRendererVCL::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.graphic.GraphicRendererVCL" );
+    aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicRendererVCL";
 
     return aSeq;
 }

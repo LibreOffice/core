@@ -323,7 +323,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL FormGeometryHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
-        aSupported[0] = OUString( "com.sun.star.form.inspection.FormGeometryHandler" );
+        aSupported[0] = "com.sun.star.form.inspection.FormGeometryHandler";
         return aSupported;
     }
 

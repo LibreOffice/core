@@ -324,7 +324,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 SfxUInt16Item aItem( SID_PSZ_FUNCTION, nSelect );
 
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name  = OUString( "StatusBarFunc" );
+                aArgs[0].Name  = "StatusBarFunc";
                 aItem.QueryValue( a );
                 aArgs[0].Value = a;
 

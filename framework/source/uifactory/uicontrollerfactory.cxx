@@ -120,7 +120,7 @@ throw (Exception, RuntimeException)
 
     // Append the command URL to the Arguments sequence so that one controller can be
     // used for more than one command URL.
-    aPropValue.Name     = OUString( "CommandURL" );
+    aPropValue.Name     = "CommandURL";
     aPropValue.Value  <<= ServiceSpecifier;
     aNewArgs[nAppendIndex] <<= aPropValue;
 

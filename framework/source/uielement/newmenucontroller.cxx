@@ -417,7 +417,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
 
             xURLTransformer->parseStrict( aTargetURL );
 
-            aArgsList[0].Name = OUString( "Referer" );
+            aArgsList[0].Name = "Referer";
             aArgsList[0].Value = makeAny( OUString( "private:user" ));
 
             OUString aTargetFrame( m_aTargetFrame );

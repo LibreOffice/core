@@ -711,9 +711,9 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
 
     ReadGuard   aReadLock( m_aLock );
     Sequence< PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = OUString( "Frame" );
+    aPropSeq[0].Name = "Frame";
     aPropSeq[0].Value <<= m_xFrame;
-    aPropSeq[1].Name = OUString( "Persistent" );
+    aPropSeq[1].Name = "Persistent";
     aPropSeq[1].Value <<= sal_True;
 
     try

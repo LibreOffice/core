@@ -376,17 +376,17 @@ IMPL_LINK( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu )
     OUString aFilterName( mpBrowser->GetFilterName() );
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs( 6 );
-    aArgs[0].Name = OUString( "Background.Transparent" );
+    aArgs[0].Name = "Background.Transparent";
     aArgs[0].Value <<= sal_Int32( 0 ); // 0 - 100
-    aArgs[1].Name = OUString( "Background.BackColor" );
+    aArgs[1].Name = "Background.BackColor";
     aArgs[1].Value <<= sal_Int32( - 1 );
-    aArgs[2].Name = OUString( "Background.URL" );
+    aArgs[2].Name = "Background.URL";
     aArgs[2].Value <<= aURL;
-    aArgs[3].Name = OUString( "Background.Filtername" ); // FIXME should be FilterName
+    aArgs[3].Name = "Background.Filtername"; // FIXME should be FilterName
     aArgs[3].Value <<= aFilterName;
-    aArgs[4].Name = OUString( "Background.Position" );
+    aArgs[4].Name = "Background.Position";
     aArgs[4].Value <<= css::style::GraphicLocation_TILED;
-    aArgs[5].Name = OUString( "Position" );
+    aArgs[5].Name = "Position";
     aArgs[5].Value <<= nPos;
 
     const CommandInfoMap::const_iterator it = m_aCommandInfo.find( SID_GALLERY_BG_BRUSH );
@@ -1101,7 +1101,7 @@ void GalleryBrowser2::Dispatch(
                 if ( !xDispatchProvider.is() || !m_xTransformer.is() )
                     return;
 
-                aURL.Complete = OUString( CMD_SID_GALLERY_FORMATS );
+                aURL.Complete = CMD_SID_GALLERY_FORMATS;
                 m_xTransformer->parseStrict( aURL );
                 xDispatch = xDispatchProvider->queryDispatch(
                     aURL,
@@ -1146,19 +1146,19 @@ void GalleryBrowser2::Dispatch(
 
             css::uno::Sequence< css::beans::PropertyValue > aSeq( SVXGALLERYITEM_PARAMS );
 
-            aSeq[0].Name = OUString( SVXGALLERYITEM_TYPE );
+            aSeq[0].Name = SVXGALLERYITEM_TYPE;
             aSeq[0].Value <<= nType;
-            aSeq[1].Name = OUString( SVXGALLERYITEM_URL );
+            aSeq[1].Name = SVXGALLERYITEM_URL;
             aSeq[1].Value <<= aFileURL;
-            aSeq[2].Name = OUString( SVXGALLERYITEM_FILTER );
+            aSeq[2].Name = SVXGALLERYITEM_FILTER;
             aSeq[2].Value <<= aFilterName;
-            aSeq[3].Name = OUString( SVXGALLERYITEM_DRAWING );
+            aSeq[3].Name = SVXGALLERYITEM_DRAWING;
             aSeq[3].Value <<= xDrawing;
-            aSeq[4].Name = OUString( SVXGALLERYITEM_GRAPHIC );
+            aSeq[4].Name = SVXGALLERYITEM_GRAPHIC;
             aSeq[4].Value <<= xGraphic;
 
             css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name = OUString( SVXGALLERYITEM_ARGNAME );
+            aArgs[0].Name = SVXGALLERYITEM_ARGNAME;
             aArgs[0].Value <<= aSeq;
 
             DispatchInfo *pInfo = new DispatchInfo;

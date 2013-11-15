@@ -434,7 +434,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                             aChangeRanges.Append( aRange );
 
                             uno::Sequence< beans::PropertyValue > aProperties( 1 );
-                            aProperties[ 0 ].Name = OUString( "Name" );
+                            aProperties[ 0 ].Name = "Name";
                             aProperties[ 0 ].Value <<= aChartName;
 
                             pModelObj->NotifyChanges( OUString( "insert-chart" ), aChangeRanges, aProperties );

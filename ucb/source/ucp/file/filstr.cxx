@@ -291,7 +291,7 @@ XStream_impl::closeStream(
 
         if( err != osl::FileBase::E_None ) {
             io::IOException ex;
-            ex.Message = OUString( "could not close file");
+            ex.Message = "could not close file";
             throw ex;
         }
 

@@ -177,8 +177,8 @@ throw (RuntimeException)
     SAL_INFO("writerperfect", "MSPUBImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString ( "com.sun.star.document.ImportFilter" );
-    pArray[1] =  OUString ( "com.sun.star.document.ExtendedTypeDetection" );
+    pArray[0] =  "com.sun.star.document.ImportFilter";
+    pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
 

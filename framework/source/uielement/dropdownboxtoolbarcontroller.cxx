@@ -171,9 +171,9 @@ Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyM
     OUString aSelectedText = m_pListBoxControl->GetSelectEntry();
 
     // Add key modifier to argument list
-    aArgs[0].Name = OUString( "KeyModifier" );
+    aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = OUString( "Text" );
+    aArgs[1].Name = "Text";
     aArgs[1].Value <<= aSelectedText;
     return aArgs;
 }
@@ -231,7 +231,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
 
                 // send notification
                 uno::Sequence< beans::NamedValue > aInfo( 1 );
-                aInfo[0].Name  = OUString( "List" );
+                aInfo[0].Name  = "List";
                 aInfo[0].Value <<= aList;
                 addNotifyInfo( OUString( "ListChanged" ),
                                getDispatchFromCommand( m_aCommandURL ),

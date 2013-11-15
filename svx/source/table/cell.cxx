@@ -896,8 +896,8 @@ Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeE
     Sequence< OUString > aSeq( SvxUnoTextBase::getSupportedServiceNames() );
     sal_Int32 nIndex = aSeq.getLength();
     aSeq.realloc( nIndex + 2 );
-    aSeq[nIndex++] = OUString( "com.sun.star.table.cell" );
-    aSeq[nIndex++] = OUString( "com.sun.star.drawing.cell" );
+    aSeq[nIndex++] = "com.sun.star.table.cell";
+    aSeq[nIndex++] = "com.sun.star.drawing.cell";
     return aSeq;
 }
 

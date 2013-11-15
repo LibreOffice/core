@@ -46,7 +46,7 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< uno::XComponentContext
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = OUString( "getPropertyValues" );
+    aCommand.Name = "getPropertyValues";
     aCommand.Argument <<= m_sProperty;
 
     for( sal_uInt32 i = 0; i < m_aPath.size(); ++i )

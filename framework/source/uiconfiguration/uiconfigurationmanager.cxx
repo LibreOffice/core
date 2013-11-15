@@ -1028,10 +1028,10 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
 
         Sequence< Any > aPropSeq( 2 );
         PropertyValue aPropValue;
-        aPropValue.Name  = OUString( "UserConfigStorage" );
+        aPropValue.Name  = "UserConfigStorage";
         aPropValue.Value = makeAny( m_xDocConfigStorage );
         aPropSeq[0] = makeAny( aPropValue );
-        aPropValue.Name  = OUString( "ModuleIdentifier" );
+        aPropValue.Name  = "ModuleIdentifier";
         aPropValue.Value = makeAny( m_aModuleIdentifier );
         aPropSeq[1] = makeAny( aPropValue );
 

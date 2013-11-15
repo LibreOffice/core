@@ -383,7 +383,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 && m_bStockHasVolume
                 && mnSeriesIndex == 0 )
             {
-                maSeriesChartTypeName = OUString( "com.sun.star.chart2.ColumnChartType" );
+                maSeriesChartTypeName = "com.sun.star.chart2.ColumnChartType";
                 bIsCandleStick = false;
             }
             else
@@ -425,7 +425,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         {
             OUString aMainRole("values-y");
             if ( maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType" )
-                aMainRole = OUString( "values-size" );
+                aMainRole = "values-size";
             xSeqProp->setPropertyValue("Role", uno::makeAny( aMainRole ));
         }
         xLabeledSeq->setValues( xSeq );

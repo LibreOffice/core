@@ -421,7 +421,7 @@ void PPDParser::scanPPDDir( const OUString& rDir )
             {
                 OUString aFileURL, aFileName;
                 osl::FileStatus::Type eType = osl::FileStatus::Unknown;
-                OUString aURL = OUString(rDir + "/" + aStatus.getFileName());
+                OUString aURL = rDir + "/" + aStatus.getFileName();
 
                 if(resolveLink( aURL, aFileURL, aFileName, eType ) == osl::FileBase::E_None)
                 {
@@ -1972,7 +1972,7 @@ int PPDContext::getRenderResolution() const
 void PPDContext::getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) const
 {
     // initialize to reasonable default, if parser is not set
-    rPaper  = OUString( "A4" );
+    rPaper  = "A4";
     rWidth  = 595;
     rHeight = 842;
     if( m_pParser )

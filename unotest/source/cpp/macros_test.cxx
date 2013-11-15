@@ -41,7 +41,7 @@ uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(c
     }
 
     uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, args);
-    OUString sMessage = OUString( "loading failed: " ) + rURL;
+    OUString sMessage = "loading failed: " + rURL;
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());
     return xComponent;
 }

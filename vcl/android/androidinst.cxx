@@ -255,7 +255,7 @@ public:
         // Clobber the UI fonts
 #if 0
         psp::FastPrintFontInfo aInfo;
-        aInfo.m_aFamilyName = OUString( "Roboto" );
+        aInfo.m_aFamilyName = "Roboto";
         aInfo.m_eItalic = ITALIC_NORMAL;
         aInfo.m_eWeight = WEIGHT_NORMAL;
         aInfo.m_eWidth = WIDTH_NORMAL;

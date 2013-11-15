@@ -54,7 +54,7 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
         {
             uno::Reference < graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(comphelper::getProcessComponentContext()));
             uno::Sequence< beans::PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = OUString( "InputStream" );
+            aMediaProperties[0].Name = "InputStream";
             aMediaProperties[0].Value <<= xIn;
             uno::Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
             if( xGraphic.is() )
@@ -62,9 +62,9 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
                 SvMemoryStream aNewStream( 65535, 65535 );
                 uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
                 uno::Sequence< beans::PropertyValue > aOutMediaProperties( 2 );
-                aOutMediaProperties[0].Name = OUString( "OutputStream" );
+                aOutMediaProperties[0].Name = "OutputStream";
                 aOutMediaProperties[0].Value <<= xOut;
-                aOutMediaProperties[1].Name = OUString( "MimeType" );
+                aOutMediaProperties[1].Name = "MimeType";
                 aOutMediaProperties[1].Value <<= aMimeType;
 
                 xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );

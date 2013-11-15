@@ -80,7 +80,7 @@ Sequence< OUString > VCLXAccessibleComboBox::getSupportedServiceNames (void)
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = OUString( "com.sun.star.accessibility.AccessibleComboBox" );
+    aNames[nLength] = "com.sun.star.accessibility.AccessibleComboBox";
     return aNames;
 }
 

@@ -786,7 +786,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
     sal_Int32 nUser = rURL.indexOf( '?', 0 );
     if ( nUser >= 0 )
     {
-        aURL = OUString( rURL.copy( 0, nUser ) );
+        aURL = rURL.copy( 0, nUser );
         nUser++;
         aUserData = rURL.copy( nUser, rURL.getLength() - nUser );
     }
@@ -875,7 +875,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 
                 if( !aId.isEmpty() )
                 {
-                    aRet = OUString( XML_GRAPHICOBJECT_URL_BASE );
+                    aRet = XML_GRAPHICOBJECT_URL_BASE;
                     aRet += aId;
                 }
             }
@@ -1049,8 +1049,8 @@ Sequence< OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames(
 {
     // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
     Sequence< OUString > aSupportedServiceNames( 2 );
-    aSupportedServiceNames[0] = OUString(  "com.sun.star.document.GraphicObjectResolver"  );
-    aSupportedServiceNames[1] = OUString(  "com.sun.star.document.BinaryStreamResolver"  );
+    aSupportedServiceNames[0] = "com.sun.star.document.GraphicObjectResolver";
+    aSupportedServiceNames[1] = "com.sun.star.document.BinaryStreamResolver";
     return aSupportedServiceNames;
 }
 
@@ -1070,8 +1070,8 @@ Sequence< OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServiceNames(
 {
     // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
     Sequence< OUString > aSupportedServiceNames( 2 );
-    aSupportedServiceNames[0] = OUString(  "com.sun.star.document.GraphicObjectResolver"  );
-    aSupportedServiceNames[1] = OUString(  "com.sun.star.document.BinaryStreamResolver"  );
+    aSupportedServiceNames[0] = "com.sun.star.document.GraphicObjectResolver";
+    aSupportedServiceNames[1] = "com.sun.star.document.BinaryStreamResolver";
     return aSupportedServiceNames;
 }
 

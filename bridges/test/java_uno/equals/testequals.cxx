@@ -122,7 +122,7 @@ Service::get(OUString const & rName) throw (css::uno::RuntimeException)
 css::uno::Sequence< OUString > Service::getSupportedServiceNames_static()
 {
     css::uno::Sequence< OUString > aNames(1);
-    aNames[0] = OUString( "com.sun.star.test.bridges.testequals" );
+    aNames[0] = "com.sun.star.test.bridges.testequals";
     return aNames;
 }
 
@@ -175,7 +175,7 @@ bool writeInfo(void * pRegistryKey, sal_Char const * pImplementationName,
 {
     OUString aKeyName( "/" );
     aKeyName += OUString::createFromAscii(pImplementationName);
-    aKeyName += OUString( "/UNO/SERVICES" );
+    aKeyName += "/UNO/SERVICES";
     css::uno::Reference< css::registry::XRegistryKey > xKey;
     try
     {

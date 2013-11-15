@@ -1092,7 +1092,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
            uno::RuntimeException)
 {
     XMLRangeHelper::CellRange aRange;
-    aRange.aTableName = OUString( "local-table" );
+    aRange.aTableName = "local-table";
 
     // attention: this data provider has the limitation that it stores
     // internally if data comes from columns or rows. It is intended for

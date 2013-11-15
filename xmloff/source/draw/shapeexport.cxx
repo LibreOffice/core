@@ -208,10 +208,10 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
                     uno::Sequence< beans::PropertyValue > aPropValues( 2 );
-                    aPropValues[ 0 ].Name = OUString( "CustomShape" );
+                    aPropValues[ 0 ].Name = "CustomShape";
                     aPropValues[ 0 ].Value <<= xShape;
                     sal_Bool bForceGroupWithText = sal_True;
-                    aPropValues[ 1 ].Name = OUString( "ForceGroupWithText" );
+                    aPropValues[ 1 ].Name = "ForceGroupWithText";
                     aPropValues[ 1 ].Value <<= bForceGroupWithText;
                     aArgument[ 0 ] <<= aPropValues;
                     uno::Reference< uno::XInterface > xInterface(
@@ -2773,8 +2773,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 {
                     if( !sPersistName.isEmpty() )
                     {
-                        sURL = OUString(  "vnd.sun.star.EmbeddedObject:"  );
-                        sURL += sPersistName;
+                        sURL = "vnd.sun.star.EmbeddedObject:" + sPersistName;
                     }
                 }
 
@@ -2841,7 +2840,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
                     OUString sURLRequest( sURL );
                     if ( ( mrExport.getExportFlags() & EXPORT_OASIS ) == 0 )
-                        sURLRequest += OUString(  "?oasis=false"  );
+                        sURLRequest +=  "?oasis=false";
                     mrExport.AddEmbeddedObjectAsBase64( sURLRequest );
                 }
             }
@@ -3237,14 +3236,14 @@ void XMLShapeExport::ImpExportMediaShape(
         xPropSet->getPropertyValue("Zoom") >>= eZoom;
         switch( eZoom )
         {
-            case( media::ZoomLevel_ZOOM_1_TO_4 ): aZoomValue = OUString(  "25%"  ); break;
-            case( media::ZoomLevel_ZOOM_1_TO_2 ): aZoomValue = OUString(  "50%"  ); break;
-            case( media::ZoomLevel_ORIGINAL ): aZoomValue = OUString(  "100%"  ); break;
-            case( media::ZoomLevel_ZOOM_2_TO_1 ): aZoomValue = OUString(  "200%"  ); break;
-            case( media::ZoomLevel_ZOOM_4_TO_1 ): aZoomValue = OUString(  "400%"  ); break;
-            case( media::ZoomLevel_FIT_TO_WINDOW ): aZoomValue = OUString(  "fit"  ); break;
-            case( media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ): aZoomValue = OUString(  "fixedfit"  ); break;
-            case( media::ZoomLevel_FULLSCREEN ): aZoomValue = OUString(  "fullscreen"  ); break;
+            case( media::ZoomLevel_ZOOM_1_TO_4 )  : aZoomValue = "25%"; break;
+            case( media::ZoomLevel_ZOOM_1_TO_2 )  : aZoomValue = "50%"; break;
+            case( media::ZoomLevel_ORIGINAL )     : aZoomValue = "100%"; break;
+            case( media::ZoomLevel_ZOOM_2_TO_1 )  : aZoomValue = "200%"; break;
+            case( media::ZoomLevel_ZOOM_4_TO_1 )  : aZoomValue = "400%"; break;
+            case( media::ZoomLevel_FIT_TO_WINDOW ): aZoomValue = "fit"; break;
+            case( media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ): aZoomValue = "fixedfit"; break;
+            case( media::ZoomLevel_FULLSCREEN )   : aZoomValue = "fullscreen"; break;
 
             default:
             break;
@@ -4827,9 +4826,9 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
 
                 uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
                 uno::Sequence< beans::PropertyValue > aArgs( 2 );
-                aArgs[ 0 ].Name = OUString( "MimeType" );
+                aArgs[ 0 ].Name = "MimeType";
                 aArgs[ 0 ].Value <<= OUString( "image/x-vclgraphic" );
-                aArgs[ 1 ].Name = OUString( "OutputStream" );
+                aArgs[ 1 ].Name = "OutputStream";
                 aArgs[ 1 ].Value <<= xPictureStream->getOutputStream();
                 xProvider->storeGraphic( xGraphic, aArgs );
 

@@ -58,9 +58,9 @@ OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, sal_Bool b
     {
         aLibName += aDLLSuffix;
     }
-    aLibName += OUString( ".dll" );
+    aLibName += ".dll";
 #else
-    aLibName = OUString( "lib" );
+    aLibName = "lib";
     aLibName += OUString::createFromAscii( pModName );
     if ( bSUPD )
     {

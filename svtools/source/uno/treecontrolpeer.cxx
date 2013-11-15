@@ -1457,7 +1457,7 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
     if( mxGraphicProvider.is() ) try
     {
         ::com::sun::star::beans::PropertyValues aProps( 1 );
-        aProps[0].Name = OUString( "URL" );
+        aProps[0].Name = "URL";
         aProps[0].Value <<= rURL;
 
         Reference< XGraphic > xGraphic( mxGraphicProvider->queryGraphic( aProps ) );

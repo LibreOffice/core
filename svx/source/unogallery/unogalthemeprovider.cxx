@@ -90,7 +90,7 @@ SVX_DLLPUBLIC uno::Sequence< OUString > GalleryThemeProvider::getSupportedServic
 {
     uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.gallery.GalleryThemeProvider" );
+    aSeq.getArray()[ 0 ] = "com.sun.star.gallery.GalleryThemeProvider";
 
     return aSeq;
 }

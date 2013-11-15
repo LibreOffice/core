@@ -201,7 +201,7 @@ void FontMenuController::impl_setPopupMenu()
 
     com::sun::star::util::URL aTargetURL;
     // Register for font list updates to get the current font list from the controller
-    aTargetURL.Complete = OUString( ".uno:FontNameList" );
+    aTargetURL.Complete = ".uno:FontNameList";
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
@@ -213,7 +213,7 @@ void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::un
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xFontListDispatch );
     com::sun::star::util::URL aTargetURL;
-    aTargetURL.Complete = OUString( ".uno:FontNameList" );
+    aTargetURL.Complete = ".uno:FontNameList";
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.clear();
 

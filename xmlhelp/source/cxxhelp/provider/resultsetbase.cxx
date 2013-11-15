@@ -495,12 +495,12 @@ ResultSetBase::getPropertySetInfo()
     throw( uno::RuntimeException)
 {
     uno::Sequence< beans::Property > seq(2);
-    seq[0].Name = OUString( "RowCount" );
+    seq[0].Name = "RowCount";
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
 
-    seq[1].Name = OUString( "IsRowCountFinal" );
+    seq[1].Name = "IsRowCountFinal";
     seq[1].Handle = -1;
     seq[1].Type = getCppuType( static_cast< sal_Bool* >(0) );
     seq[1].Attributes = beans::PropertyAttribute::READONLY;

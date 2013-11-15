@@ -295,16 +295,16 @@ namespace svt { namespace table
         switch( eObjType )
         {
             case TCTYPE_GRIDCONTROL:
-                aRetText = OUString( "Grid control" );
+                aRetText = "Grid control";
                 break;
             case TCTYPE_TABLE:
-                aRetText = OUString( "Grid conrol" );
+                aRetText = "Grid conrol";
                 break;
             case TCTYPE_ROWHEADERBAR:
-                aRetText = OUString( "RowHeaderBar" );
+                aRetText = "RowHeaderBar";
                 break;
             case TCTYPE_COLUMNHEADERBAR:
-                aRetText = OUString( "ColumnHeaderBar" );
+                aRetText = "ColumnHeaderBar";
                 break;
             case TCTYPE_TABLECELL:
                 //the name of the cell constists of column name and row name if defined
@@ -338,16 +338,16 @@ namespace svt { namespace table
         switch( eObjType )
         {
             case TCTYPE_GRIDCONTROL:
-                aRetText = OUString( "Grid control description" );
+                aRetText = "Grid control description";
                 break;
             case TCTYPE_TABLE:
-                    aRetText = OUString( "TABLE description" );
+                    aRetText = "TABLE description";
                 break;
             case TCTYPE_ROWHEADERBAR:
-                    aRetText = OUString( "ROWHEADERBAR description" );
+                    aRetText = "ROWHEADERBAR description";
                 break;
             case TCTYPE_COLUMNHEADERBAR:
-                    aRetText = OUString( "COLUMNHEADERBAR description" );
+                    aRetText = "COLUMNHEADERBAR description";
                 break;
             case TCTYPE_TABLECELL:
                 // the description of the cell consists of column name and row name if defined
@@ -362,10 +362,10 @@ namespace svt { namespace table
                 }
                 break;
             case TCTYPE_ROWHEADERCELL:
-                    aRetText = OUString( "ROWHEADERCELL description" );
+                    aRetText = "ROWHEADERCELL description";
                 break;
             case TCTYPE_COLUMNHEADERCELL:
-                    aRetText = OUString( "COLUMNHEADERCELL description" );
+                    aRetText = "COLUMNHEADERCELL description";
                 break;
         }
         return aRetText;

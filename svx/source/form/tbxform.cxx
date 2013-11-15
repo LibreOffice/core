@@ -85,7 +85,7 @@ void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString( "Position" );
+        aArgs[0].Name = "Position";
         aPositionParam.QueryValue( a );
         aArgs[0].Value = a;
         m_pController->Dispatch( OUString( ".uno:AbsoluteRecord" ),
@@ -191,8 +191,7 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
             case SID_FM_SCROLLBAR:
             case SID_FM_SPINBUTTON:
             {   // set a new image, matching to this slot
-                OUString aSlotURL( "slot:" );
-                aSlotURL += OUString::number( nSlot);
+                OUString aSlotURL = "slot:" + OUString::number( nSlot);
                 Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
                 GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;

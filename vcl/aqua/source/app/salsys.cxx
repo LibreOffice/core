@@ -88,12 +88,12 @@ static NSString* getStandardString( int nButtonId, bool bUseResources )
     {
         switch( nButtonId )
         {
-        case BUTTON_OK:         aText = OUString( "OK" );break;
-        case BUTTON_ABORT:      aText = OUString( "Abort" );break;
-        case BUTTON_CANCEL:     aText = OUString( "Cancel" );break;
-        case BUTTON_RETRY:      aText = OUString( "Retry" );break;
-        case BUTTON_YES:        aText = OUString( "Yes" );break;
-        case BUTTON_NO :        aText = OUString( "No" );break;
+        case BUTTON_OK:         aText = "OK";break;
+        case BUTTON_ABORT:      aText = "Abort";break;
+        case BUTTON_CANCEL:     aText = "Cancel";break;
+        case BUTTON_RETRY:      aText = "Retry";break;
+        case BUTTON_YES:        aText = "Yes";break;
+        case BUTTON_NO :        aText = "No";break;
         }
     }
     return aText.isEmpty() ? nil : CreateNSString( aText);

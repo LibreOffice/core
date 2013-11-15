@@ -81,7 +81,7 @@ uno::Sequence< OUString > GraphicProvider::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.graphic.GraphicProvider" );
+    aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicProvider";
 
     return aSeq;
 }

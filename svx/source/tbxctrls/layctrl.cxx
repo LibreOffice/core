@@ -325,9 +325,9 @@ void TableWindow::PopupModeEnd()
     if ( !IsPopupModeCanceled() && nCol && nLine )
     {
         Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = OUString( "Columns" );
+        aArgs[0].Name = "Columns";
         aArgs[0].Value = makeAny( sal_Int16( nCol ));
-        aArgs[1].Name = OUString( "Rows" );
+        aArgs[1].Name = "Rows";
         aArgs[1].Value = makeAny( sal_Int16( nLine ));
 
         TableDialog( aArgs );
@@ -685,9 +685,9 @@ void ColumnsWindow::PopupModeEnd()
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
 
         Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = OUString( "Columns" );
+        aArgs[0].Name = "Columns";
         aArgs[0].Value = makeAny( sal_Int16( nCol ));
-        aArgs[1].Name = OUString( "Modifier" );
+        aArgs[1].Name = "Modifier";
         aArgs[1].Value = makeAny( sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ));
 
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),

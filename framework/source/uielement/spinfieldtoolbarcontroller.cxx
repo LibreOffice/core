@@ -229,9 +229,9 @@ Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 Key
     OUString aSpinfieldText = m_pSpinfieldControl->GetText();
 
     // Add key modifier to argument list
-    aArgs[0].Name = OUString( "KeyModifier" );
+    aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = OUString( "Value" );
+    aArgs[1].Name = "Value";
     if ( m_bFloat )
         aArgs[1].Value <<= aSpinfieldText.toDouble();
     else

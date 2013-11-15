@@ -354,7 +354,7 @@ void ImplGrafModeControl::Select()
     if ( !IsTravelSelect() )
     {
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString( "GrafMode" );
+        aArgs[0].Name = "GrafMode";
         aArgs[0].Value = makeAny( sal_Int16( GetSelectEntryPos() ));
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.

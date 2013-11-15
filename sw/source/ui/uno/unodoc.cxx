@@ -37,7 +37,7 @@ uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() thr
     // resolved by rtti!
     uno::Sequence< OUString > aRet ( 1 );
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( "com.sun.star.text.TextDocument" );
+    pArray[0] = "com.sun.star.text.TextDocument";
 
     return aRet;
 }
@@ -66,7 +66,7 @@ uno::Sequence< OUString > SAL_CALL SwWebDocument_getSupportedServiceNames() thro
     // resolved by rtti!
     uno::Sequence< OUString > aRet ( 1 );
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( "com.sun.star.text.WebDocument" );
+    pArray[0] = "com.sun.star.text.WebDocument";
 
     return aRet;
 }
@@ -93,7 +93,7 @@ uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNames() t
 {
     uno::Sequence< OUString > aRet ( 1 );
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( "com.sun.star.text.GlobalDocument" );
+    pArray[0] = "com.sun.star.text.GlobalDocument";
 
     return aRet;
 }

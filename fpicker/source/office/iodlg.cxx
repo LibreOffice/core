@@ -2025,8 +2025,8 @@ short SvtFileDialog::PrepareExecute()
                                  Reference< XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
             Sequence< OUString > aProps(2);
-            aProps[0] = OUString( "IsVolume" );
-            aProps[1] = OUString( "IsRemoveable" );
+            aProps[0] = "IsVolume";
+            aProps[1] = "IsRemoveable";
 
             Reference< XResultSet > xResultSet
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
@@ -2117,7 +2117,7 @@ short SvtFileDialog::PrepareExecute()
                 nPos = nFilterCount;
                 while ( nPos-- )
                 {
-                    if ( aAll != OUString( GetFilterName( nPos ) ) )
+                    if ( aAll != GetFilterName( nPos ) )
                         break;
                 }
             }

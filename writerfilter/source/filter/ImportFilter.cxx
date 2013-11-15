@@ -159,7 +159,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
               {
                   uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
 
-                  const OUString& aGrabBagPropName = OUString("InteropGrabBag");
+                  const OUString aGrabBagPropName = "InteropGrabBag";
                   if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
                   {
                       uno::Sequence<beans::PropertyValue> aGrabBag;

@@ -1543,7 +1543,7 @@ namespace cmis
     OUString Content::getParentURL( )
     {
         SAL_INFO( "ucb.ucp.cmis", "Content::getParentURL()" );
-        OUString parentUrl = OUString( "/" );
+        OUString parentUrl = "/";
         if ( m_sObjectPath == "/" )
             return parentUrl;
         else
@@ -1823,13 +1823,13 @@ namespace cmis
                 beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
             // file
-            seq[0].Type       = OUString(CMIS_FILE_TYPE);
+            seq[0].Type       =  CMIS_FILE_TYPE;
             seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                                   ucb::ContentInfoAttribute::KIND_DOCUMENT );
             seq[0].Properties = props;
 
             // folder
-            seq[1].Type       = OUString(CMIS_FOLDER_TYPE);
+            seq[1].Type       = CMIS_FOLDER_TYPE;
             seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
             seq[1].Properties = props;
 

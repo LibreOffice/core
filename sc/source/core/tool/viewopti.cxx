@@ -340,10 +340,10 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
     {
-        pNames[SCGRIDOPT_RESOLU_X] = OUString( "Resolution/XAxis/Metric" );
-        pNames[SCGRIDOPT_RESOLU_Y] = OUString( "Resolution/YAxis/Metric" );
-        pNames[SCGRIDOPT_OPTION_X] = OUString( "Option/XAxis/Metric" );
-        pNames[SCGRIDOPT_OPTION_Y] = OUString( "Option/YAxis/Metric" );
+        pNames[SCGRIDOPT_RESOLU_X] = "Resolution/XAxis/Metric";
+        pNames[SCGRIDOPT_RESOLU_Y] = "Resolution/YAxis/Metric";
+        pNames[SCGRIDOPT_OPTION_X] = "Option/XAxis/Metric";
+        pNames[SCGRIDOPT_OPTION_Y] = "Option/YAxis/Metric";
     }
 
     return aNames;

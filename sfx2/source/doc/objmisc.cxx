@@ -2061,17 +2061,17 @@ void SfxObjectShell::StoreLog()
 
     if ( pImp->m_xLogRing.is() )
     {
-        OUString aFileURL = OUString( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"  );
+        OUString aFileURL = ( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"  );
 
         ::rtl::Bootstrap::expandMacros( aFileURL );
 
-        OUString aBuildID = OUString( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("setup") ":buildid}"  );
+        OUString aBuildID = ( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("setup") ":buildid}"  );
 
         ::rtl::Bootstrap::expandMacros( aBuildID );
 
         if ( !aFileURL.isEmpty() )
         {
-            aFileURL += OUString( "/user/temp/document_io_logring.txt"  );
+            aFileURL += "/user/temp/document_io_logring.txt";
             try
             {
                 uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );

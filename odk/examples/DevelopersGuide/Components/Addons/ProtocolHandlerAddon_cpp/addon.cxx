@@ -66,7 +66,7 @@ static void ShowMessageBox( const Reference< XToolkit >& rToolkit, const Referen
         // describe window properties.
         WindowDescriptor                aDescriptor;
         aDescriptor.Type              = WindowClass_MODALTOP;
-        aDescriptor.WindowServiceName = OUString( "infobox" );
+        aDescriptor.WindowServiceName = "infobox";
         aDescriptor.ParentIndex       = -1;
         aDescriptor.Parent            = Reference< XWindowPeer >( rFrame->getContainerWindow(), UNO_QUERY );
         aDescriptor.Bounds            = Rectangle(0,0,300,200);

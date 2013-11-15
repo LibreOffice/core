@@ -209,7 +209,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     if (bTopWindow)
     {
         aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
-        aDescriptor.WindowServiceName   =   OUString("window");
+        aDescriptor.WindowServiceName   =   "window";
         aDescriptor.ParentIndex         =   -1                                              ;
         aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
         aDescriptor.Bounds              =   aPosSize                                        ;
@@ -222,7 +222,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     else
     {
         aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
-        aDescriptor.WindowServiceName   =   OUString("dockingwindow");
+        aDescriptor.WindowServiceName   =   "dockingwindow";
         aDescriptor.ParentIndex         =   1                                               ;
         aDescriptor.Parent              =   xParentWindowPeer                               ;
         aDescriptor.Bounds              =   aPosSize                                        ;

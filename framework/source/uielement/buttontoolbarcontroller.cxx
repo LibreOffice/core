@@ -252,7 +252,7 @@ throw (::com::sun::star::uno::RuntimeException)
             Sequence<PropertyValue>   aArgs( 1 );
 
             // Provide key modifier information to dispatch function
-            aArgs[0].Name   = OUString( "KeyModifier" );
+            aArgs[0].Name   = "KeyModifier";
             aArgs[0].Value  <<= KeyModifier;
 
             xDispatch->dispatch( aTargetURL, aArgs );

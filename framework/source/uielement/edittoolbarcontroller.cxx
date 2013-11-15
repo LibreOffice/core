@@ -168,9 +168,9 @@ Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModif
     OUString aSelectedText = m_pEditControl->GetText();
 
     // Add key modifier to argument list
-    aArgs[0].Name = OUString( "KeyModifier" );
+    aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = OUString( "Text" );
+    aArgs[1].Name = "Text";
     aArgs[1].Value <<= aSelectedText;
     return aArgs;
 }

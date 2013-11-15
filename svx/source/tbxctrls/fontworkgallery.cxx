@@ -465,7 +465,7 @@ OUString SAL_CALL FontworkAlignmentControl_getImplementationName()
 Sequence< OUString > SAL_CALL FontworkAlignmentControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -701,7 +701,7 @@ OUString SAL_CALL FontworkCharacterSpacingControl_getImplementationName()
 Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 

@@ -126,7 +126,7 @@ namespace dbtools
                         if ( _rData.sCommand.isEmpty() )
                             break;
 
-                        sStatement = OUString( "SELECT * FROM " );
+                        sStatement = "SELECT * FROM ";
 
                         OUString sCatalog, sSchema, sTable;
                         qualifiedNameComponents( _rData.xConnection->getMetaData(), _rData.sCommand, sCatalog, sSchema, sTable, eInDataManipulation );

@@ -373,9 +373,9 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
 
                 uno::Sequence< beans::NamedValue > aEncryptionAlgs( 3 );
-                aEncryptionAlgs[0].Name = OUString( "StartKeyGenerationAlgorithm"  );
-                aEncryptionAlgs[1].Name = OUString( "EncryptionAlgorithm"  );
-                aEncryptionAlgs[2].Name = OUString( "ChecksumAlgorithm"  );
+                aEncryptionAlgs[0].Name = "StartKeyGenerationAlgorithm";
+                aEncryptionAlgs[1].Name = "EncryptionAlgorithm";
+                aEncryptionAlgs[2].Name = "ChecksumAlgorithm";
                 // the default values, that should be used for ODF1.1 and older formats
                 aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA1;
                 aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
@@ -2238,13 +2238,13 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
         if ( !bHasBaseURL )
         {
             aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = OUString( "DocumentBaseURL"  );
+            aArgs[nEnd-1].Name = "DocumentBaseURL";
             aArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
         }
 
         if ( bInsert ) {
             aArgs.realloc( ++nEnd );
-            aArgs[nEnd-1].Name = OUString( "InsertMode"  );
+            aArgs[nEnd-1].Name = "InsertMode";
             aArgs[nEnd-1].Value <<= (sal_Bool) sal_True;
         }
 
@@ -2382,7 +2382,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         if ( !bHasBaseURL )
         {
             aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = OUString( "DocumentBaseURL"  );
+            aArgs[nEnd-1].Name = "DocumentBaseURL";
             aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( sal_True );
         }
 

@@ -274,7 +274,7 @@ void Desktop::CreateTemporaryDirectory()
         if ( aResId.GetResMgr()->IsAvailable( aResId ))
             aMsg = OUString( aResId );
         else
-            aMsg = OUString( "The path manager is not available.\n" );
+            aMsg = "The path manager is not available.\n";
         e.Message = aMsg + e.Message;
         throw;
     }

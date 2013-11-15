@@ -101,9 +101,9 @@ namespace /* private */
     {
         OUString senddocUrl = getAlternativeSenddocUrl();
 
-        if (senddocUrl.getLength() == 0)
+        if (senddocUrl.isEmpty())
         {
-            senddocUrl = OUString( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc.exe");
+            senddocUrl = ( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc.exe");
             rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
         }
         return senddocUrl;

@@ -94,7 +94,7 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
         {
 
             // get the symbol for the method creating the factory
-            const OUString sFactoryCreationFunc = OUString( "OMozillaBootstrap_CreateInstance");
+            const OUString sFactoryCreationFunc = "OMozillaBootstrap_CreateInstance";
             // reinterpret_cast<OMozabConnection_CreateInstanceFunction> removed GNU C
             OMozillaBootstrap_CreateInstanceFunction s_pCreationFunc = (OMozillaBootstrap_CreateInstanceFunction)osl_getFunctionSymbol(s_hModule, sFactoryCreationFunc.pData);
 
@@ -130,7 +130,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozab_component_getFactory(
         else if ( aImplName == "com.sun.star.comp.mozilla.MozillaBootstrap" )
         {
             Sequence< OUString > aSNS( 1 );
-            aSNS[0] = OUString( "com.sun.star.mozilla.MozillaBootstrap");
+            aSNS[0] = "com.sun.star.mozilla.MozillaBootstrap";
             aReq.CREATE_PROVIDER(
                 aImplName,
                 aSNS,

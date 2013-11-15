@@ -524,7 +524,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                     bStarSymbol = sal_True;
                 }
                 if( bStarSymbol )
-                    aFDesc.Name = OUString( "StarSymbol"  );
+                    aFDesc.Name = "StarSymbol" ;
             }
 
             // Must append 'cBullet' even if it is zero
@@ -1283,13 +1283,13 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     {
         // TODO: Bullet-Font
         awt::FontDescriptor aFDesc;
-        aFDesc.Name = OUString(
+        aFDesc.Name =
 #ifdef _WIN32
                         "StarBats"
 #else
                         "starbats"
 #endif
-                                        );
+                                        ;
         aFDesc.Family = FAMILY_DONTKNOW ;
         aFDesc.Pitch = PITCH_DONTKNOW ;
         aFDesc.CharSet = RTL_TEXTENCODING_SYMBOL ;

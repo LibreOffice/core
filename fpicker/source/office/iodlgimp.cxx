@@ -323,7 +323,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
 {
     OUString sName = _pFilterDesc->GetName();
     if ( _pFilterDesc->isGroupSeparator() )
-        sName = OUString( "------------------------------------------" );
+        sName = "------------------------------------------";
     else
         sName = _pFilterDesc->GetName();
 

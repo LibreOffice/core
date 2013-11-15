@@ -1232,7 +1232,7 @@ OUString TypeDetection::impl_getImplementationName()
 css::uno::Sequence< OUString > TypeDetection::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > lServiceNames(1);
-    lServiceNames[0] = OUString( "com.sun.star.document.TypeDetection" );
+    lServiceNames[0] = "com.sun.star.document.TypeDetection";
     return lServiceNames;
 }
 

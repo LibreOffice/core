@@ -360,7 +360,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     sal_Int32 nIndex = 0;
 
     Reference < XIndexContainer > xBox = IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
-    pValue[nIndex].Name = OUString( "Views");
+    pValue[nIndex].Name = "Views";
     pValue[nIndex++].Value <<= xBox;
 
     SwDoc *pDoc = getDoc();
@@ -370,16 +370,16 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 
    OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 
-    pValue[nIndex].Name = OUString( "ViewAreaTop");
+    pValue[nIndex].Name = "ViewAreaTop";
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Top() ) : rRect.Top();
 
-    pValue[nIndex].Name = OUString( "ViewAreaLeft");
+    pValue[nIndex].Name = "ViewAreaLeft";
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Left() ) : rRect.Left();
 
-    pValue[nIndex].Name = OUString( "ViewAreaWidth");
+    pValue[nIndex].Name = "ViewAreaWidth";
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetWidth() ) : rRect.GetWidth();
 
-    pValue[nIndex].Name = OUString( "ViewAreaHeight");
+    pValue[nIndex].Name = "ViewAreaHeight";
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetHeight() ) : rRect.GetHeight();
 
     // "show redline mode" cannot simply be read from the document
@@ -397,11 +397,11 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         }
     }
 
-    pValue[nIndex].Name = OUString( "ShowRedlineChanges");
+    pValue[nIndex].Name = "ShowRedlineChanges";
     pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
 
     sal_Bool bInBrowse =  pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
-    pValue[nIndex].Name = OUString( "InBrowseMode");
+    pValue[nIndex].Name = "InBrowseMode";
     pValue[nIndex++].Value.setValue( &bInBrowse, ::getBooleanCppuType() );
 
     if ( nIndex < NUM_EXPORTED_VIEW_SETTINGS )

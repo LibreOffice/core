@@ -138,7 +138,7 @@ namespace dbaui
         switch ( _eOpenMode )
         {
             case E_OPEN_NORMAL:
-                sOpenMode = OUString( "open" );
+                sOpenMode = "open";
                 break;
 
             case E_OPEN_FOR_MAIL:
@@ -146,7 +146,7 @@ namespace dbaui
                 // fall through
 
             case E_OPEN_DESIGN:
-                sOpenMode = OUString( "openDesign" );
+                sOpenMode = "openDesign";
                 break;
 
             default:
@@ -301,7 +301,7 @@ namespace dbaui
                 aCommandArgs.put( "OpenMode", aOpenModeArg );
 
                 Command aCommand;
-                aCommand.Name = OUString( "openDesign" );
+                aCommand.Name = "openDesign";
                 aCommand.Argument <<= aCommandArgs.getPropertyValues();
                 WaitObject aWaitCursor( m_pDialogParent );
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );

@@ -70,16 +70,16 @@ const StringSequence& getColumnTypes()
     if (aColumnTypes.getConstArray()[0].isEmpty())
     {
         OUString* pNames = aColumnTypes.getArray();
-        pNames[TYPE_CHECKBOX]       = OUString( "CheckBox" );
-        pNames[TYPE_COMBOBOX]       = OUString( "ComboBox" );
-        pNames[TYPE_CURRENCYFIELD]  = OUString( "CurrencyField" );
-        pNames[TYPE_DATEFIELD]      = OUString( "DateField" );
-        pNames[TYPE_FORMATTEDFIELD] = OUString( "FormattedField" );
-        pNames[TYPE_LISTBOX]        = OUString( "ListBox" );
-        pNames[TYPE_NUMERICFIELD]   = OUString( "NumericField" );
-        pNames[TYPE_PATTERNFIELD]   = OUString( "PatternField" );
-        pNames[TYPE_TEXTFIELD]      = OUString( "TextField" );
-        pNames[TYPE_TIMEFIELD]      = OUString( "TimeField" );
+        pNames[TYPE_CHECKBOX]       = "CheckBox";
+        pNames[TYPE_COMBOBOX]       = "ComboBox";
+        pNames[TYPE_CURRENCYFIELD]  = "CurrencyField";
+        pNames[TYPE_DATEFIELD]      = "DateField";
+        pNames[TYPE_FORMATTEDFIELD] = "FormattedField";
+        pNames[TYPE_LISTBOX]        = "ListBox";
+        pNames[TYPE_NUMERICFIELD]   = "NumericField";
+        pNames[TYPE_PATTERNFIELD]   = "PatternField";
+        pNames[TYPE_TEXTFIELD]      = "TextField";
+        pNames[TYPE_TIMEFIELD]      = "TimeField";
     }
     return aColumnTypes;
 }

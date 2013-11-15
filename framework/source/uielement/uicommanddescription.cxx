@@ -206,12 +206,12 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
 {
     // Create configuration hierachical access name
     m_aConfigCmdAccess += aModuleName;
-    m_aConfigCmdAccess += OUString( CONFIGURATION_CMD_ELEMENT_ACCESS );
+    m_aConfigCmdAccess += CONFIGURATION_CMD_ELEMENT_ACCESS;
 
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 
     m_aConfigPopupAccess += aModuleName;
-    m_aConfigPopupAccess += OUString( CONFIGURATION_POP_ELEMENT_ACCESS );
+    m_aConfigPopupAccess += CONFIGURATION_POP_ELEMENT_ACCESS;
 }
 
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
@@ -524,7 +524,7 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 
     try
     {
-        aPropValue.Name  = OUString( "nodepath" );
+        aPropValue.Name  = "nodepath";
         aPropValue.Value <<= m_aConfigCmdAccess;
         aArgs[0] <<= aPropValue;
 

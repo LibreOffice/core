@@ -891,7 +891,7 @@ sal_Bool SdXMLFilter::Export()
 
             if( !aName.isEmpty() )
             {
-                sPropName = OUString( "StreamRelPath" );
+                sPropName = "StreamRelPath";
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
             }
         }
@@ -986,7 +986,8 @@ sal_Bool SdXMLFilter::Export()
                     if( !xDocOut.is() || !xProps.is() )
                         return sal_False;
 
-                    uno::Any aAny; aAny <<= OUString( "text/xml");
+                    uno::Any aAny;
+                    aAny <<= OUString( "text/xml");
                     xProps->setPropertyValue( "MediaType" , aAny);
 
                     // encrypt all streams

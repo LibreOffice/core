@@ -356,7 +356,7 @@ eventMethodToDescriptor( const OUString& rEventMethod, ScriptEventDescriptor& ev
 
         // set this it VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
-        evtDesc.ScriptType = OUString( "VBAInterop" );
+        evtDesc.ScriptType = "VBAInterop";
         return true;
     }
     return false;

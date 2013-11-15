@@ -169,7 +169,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     {
                         nPwPos = aFilterData.getLength();
                         aFilterData.realloc( nPwPos+1 );
-                        aFilterData[nPwPos].Name = OUString( "Password" );
+                        aFilterData[nPwPos].Name = "Password";
                     }
                     aFilterData[nPwPos].Value <<= aPwd;
                     bRet = xSubFilter->filter( aFilterData );

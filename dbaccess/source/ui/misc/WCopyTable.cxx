@@ -892,7 +892,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                                 m_bCreatePrimaryKeyColumn = sal_True;
                                 m_aKeyName = pPage->GetKeyName();
                                 if ( m_aKeyName.isEmpty() )
-                                    m_aKeyName = OUString( "ID" );
+                                    m_aKeyName = "ID";
                                 m_aKeyName = createUniqueName( m_aKeyName );
                                 sal_Int32 nBreakPos2 = 0;
                                 CheckColumns(nBreakPos2);

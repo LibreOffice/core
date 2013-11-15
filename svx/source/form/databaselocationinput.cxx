@@ -194,7 +194,7 @@ namespace svx
         if ( m_aFilterExtensions.getLength() == 0 )
         {
             m_aFilterExtensions.realloc(1);
-            m_aFilterExtensions[0] = OUString( "*.odb" );
+            m_aFilterExtensions[0] = "*.odb";
         }
     }
 

@@ -152,18 +152,18 @@ namespace svt
             Reference< XResultSet > xResultSet;
             Sequence< OUString > aProps(12);
 
-            aProps[0] = OUString( "Title" );
-            aProps[1] = OUString( "Size" );
-            aProps[2] = OUString( "DateModified" );
-            aProps[3] = OUString( "DateCreated" );
-            aProps[4] = OUString( "IsFolder" );
-            aProps[5] = OUString( "TargetURL" );
-            aProps[6] = OUString( "IsHidden" );
-            aProps[7] = OUString( "IsVolume" );
-            aProps[8] = OUString( "IsRemote" );
-            aProps[9] = OUString( "IsRemoveable" );
-            aProps[10] = OUString( "IsFloppy" );
-            aProps[11] = OUString( "IsCompactDisc" );
+            aProps[0] = "Title";
+            aProps[1] = "Size";
+            aProps[2] = "DateModified";
+            aProps[3] = "DateCreated";
+            aProps[4] = "IsFolder";
+            aProps[5] = "TargetURL";
+            aProps[6] = "IsHidden";
+            aProps[7] = "IsVolume";
+            aProps[8] = "IsRemote";
+            aProps[9] = "IsRemoveable";
+            aProps[10] = "IsFloppy";
+            aProps[11] = "IsCompactDisc";
 
             Reference< XCommandEnvironment > xEnvironment;
             try

@@ -261,8 +261,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     OUString                aLBEntry;
     OUString                aDetails;
     // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
-    aLBEntry = OUString( "V" );
-    aLBEntry += OUString::number( xCert->getVersion() + 1 );
+    aLBEntry = "V" + OUString::number( xCert->getVersion() + 1 );
     InsertElement( XMLSEC_RES( STR_VERSION ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
@@ -278,12 +277,12 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
-    aLBEntry += OUString( " " );
+    aLBEntry += " ";
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( XMLSEC_RES( STR_VALIDFROM ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
-    aLBEntry += OUString( " " );
+    aLBEntry += " ";
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( XMLSEC_RES( STR_VALIDTO ), aLBEntry, aLBEntry );
 

@@ -106,7 +106,7 @@ bool isXMLStream(const OString& aHeaderStrm)
 OUString supportedByType( const OUString clipBoardFormat ,  const OString resultString, const OUString checkType)
 {
     OUString sTypeName;
-    if ( clipBoardFormat.match(OUString("doctype:")) )
+    if ( clipBoardFormat.match("doctype:") )
     {
         OString tryStr = OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
         if (resultString.indexOf(tryStr) >= 0)
@@ -207,7 +207,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
         if (location == aArguments.getLength())
         {
             aArguments.realloc(nLength+1);
-            aArguments[location].Name = OUString( "TypeName" );
+            aArguments[location].Name = "TypeName";
         }
         aArguments[location].Value <<=sTypeName;
     }

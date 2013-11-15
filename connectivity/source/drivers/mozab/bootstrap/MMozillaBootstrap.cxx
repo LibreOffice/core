@@ -90,7 +90,7 @@ Sequence< OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw
     // which service is supported
     // for more information @see com.sun.star.mozilla.MozillaBootstrap
     Sequence< OUString > aSNS( 1 );
-    aSNS[0] = OUString( "com.sun.star.mozilla.MozillaBootstrap");
+    aSNS[0] = "com.sun.star.mozilla.MozillaBootstrap";
     return aSNS;
 }
 
@@ -240,7 +240,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozbootstrap_component_getFactory
                 if ( aImplName == "com.sun.star.comp.mozilla.MozillaBootstrap" )
                 {
                     Sequence< OUString > aSNS( 1 );
-                    aSNS[0] = OUString( "com.sun.star.mozilla.MozillaBootstrap");
+                    aSNS[0] = "com.sun.star.mozilla.MozillaBootstrap";
 
                     xFactory = ::cppu::createSingleFactory(
                         reinterpret_cast< XMultiServiceFactory* > ( pServiceManager),

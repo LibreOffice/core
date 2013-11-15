@@ -267,7 +267,7 @@ OUString SAL_CALL ExtrusionDirectionControl_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -462,9 +462,9 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
             const OUString aCommand( ".uno:ExtrusionDepthDialog" );
 
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = OUString( "Depth" );
+            aArgs[0].Name = "Depth";
             aArgs[0].Value <<= mfDepth;
-            aArgs[1].Name = OUString( "Metric" );
+            aArgs[1].Name = "Metric";
             aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
 
             mrController.dispatchCommand( aCommand, aArgs );
@@ -532,7 +532,7 @@ OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -793,7 +793,7 @@ OUString SAL_CALL ExtrusionLightingControl_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -938,7 +938,7 @@ OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 

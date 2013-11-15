@@ -175,13 +175,13 @@ throw ( ::com::sun::star::container::NoSuchElementException,
     {
         PropertyValue aPropValue;
         Sequence< Any > aPropSeq( 3 );
-        aPropValue.Name = OUString( "Frame" );
+        aPropValue.Name = "Frame";
         aPropValue.Value <<= xFrame;
         aPropSeq[0] <<= aPropValue;
-        aPropValue.Name = OUString( "ConfigurationData" );
+        aPropValue.Name = "ConfigurationData";
         aPropValue.Value <<= aConfigData;
         aPropSeq[1] <<= aPropValue;
-        aPropValue.Name = OUString( "ResourceURL" );
+        aPropValue.Name = "ResourceURL";
         aPropValue.Value <<= aResourceURL;
         aPropSeq[2] <<= aPropValue;
 

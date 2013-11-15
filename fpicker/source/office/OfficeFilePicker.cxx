@@ -606,7 +606,7 @@ Sequence< OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeException 
     Sequence< OUString > aPath( nTotal );
 
     if ( nCount == 1 )
-        aPath[0] = OUString(aPathList[0]);
+        aPath[0] = aPathList[0];
     else if ( nCount > 1 )
     {
         INetURLObject aObj(aPathList[0]);
@@ -1132,7 +1132,7 @@ Sequence< OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 {
     Sequence< OUString > seqServiceNames( 1 );
     OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = OUString( "com.sun.star.ui.dialogs.OfficeFilePicker" );
+    pArray[0] = "com.sun.star.ui.dialogs.OfficeFilePicker";
     return seqServiceNames ;
 }
 

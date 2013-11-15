@@ -275,7 +275,7 @@ namespace dbaui
                 sal_Int32 nCommandIdentifier = _rxCommandProcessor->createCommandIdentifier();
 
                 Command aCommand;
-                aCommand.Name = OUString( "close" );
+                aCommand.Name = "close";
                 _rxCommandProcessor->execute( aCommand, nCommandIdentifier, NULL );
                 bSuccess = true;
             }

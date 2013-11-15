@@ -95,8 +95,8 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
         OUString aHeaderFooterIsOnStr( "HeaderIsOn" );
         if ( m_bFooter )
         {
-            aCmd = OUString( ".uno:InsertPageFooter" );
-            aHeaderFooterIsOnStr = OUString( "FooterIsOn" );
+            aCmd = ".uno:InsertPageFooter";
+            aHeaderFooterIsOnStr = "FooterIsOn";
         }
         const OUString aIsPhysicalStr( "IsPhysical" );
         const OUString aDisplayNameStr( "DisplayName" );

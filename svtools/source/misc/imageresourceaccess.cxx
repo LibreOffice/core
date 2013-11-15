@@ -148,7 +148,7 @@ namespace svt
 
             // let it create a graphic from the given URL
             Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = OUString( "URL" );
+            aMediaProperties[0].Name = "URL";
             aMediaProperties[0].Value <<= _rImageResourceURL;
             Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
             OSL_ENSURE( xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!" );
@@ -163,9 +163,9 @@ namespace svt
             );
 
             aMediaProperties.realloc( 2 );
-            aMediaProperties[0].Name = OUString( "OutputStream" );
+            aMediaProperties[0].Name = "OutputStream";
             aMediaProperties[0].Value <<= xBufferAccess;
-            aMediaProperties[1].Name = OUString( "MimeType" );
+            aMediaProperties[1].Name = "MimeType";
             aMediaProperties[1].Value <<= OUString( "image/png" );
             xProvider->storeGraphic( xGraphic, aMediaProperties );
 

@@ -95,7 +95,7 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString( "SelectedFormat" );
+        aArgs[0].Name = "SelectedFormat";
         aItem.QueryValue( a );
         aArgs[0].Value = a;
         Dispatch( OUString( ".uno:ClipboardFormatItems" ),

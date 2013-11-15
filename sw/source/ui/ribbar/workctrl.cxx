@@ -77,8 +77,7 @@ SwTbxInsertCtrl::~SwTbxInsertCtrl()
 void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
 {
     ToolBox& rTbx = GetToolBox();
-    OUString aSlotURL( "slot:" );
-    aSlotURL += OUString::number( nLastSlotId);
+    OUString aSlotURL = "slot:" + OUString::number( nLastSlotId);
     Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
 
     rTbx.SetItemImage(GetId(), aImage);
@@ -103,8 +102,7 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
             if( nLastSlotId )
                 nId = nLastSlotId;
 
-            OUString aSlotURL( "slot:" );
-            aSlotURL += OUString::number( nId);
+            OUString aSlotURL = "slot:" + OUString::number( nId);
             ToolBox& rBox = GetToolBox();
             Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
             rBox.SetItemImage(GetId(), aImage);
@@ -564,7 +562,7 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
         SfxBoolItem aNext(FN_SCROLL_NEXT_PREV, NID_NEXT == nSet);
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString( "ScrollNextPrev" );
+        aArgs[0].Name = "ScrollNextPrev";
         aNext.QueryValue( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
@@ -739,7 +737,7 @@ void    SwZoomBox_Impl::Select()
         {
             Any a;
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = OUString( "PreviewZoom" );
+            aArgs[0].Name = "PreviewZoom";
             aItem.QueryValue( a );
             aArgs[0].Value = a;
             SfxToolBoxControl::Dispatch(

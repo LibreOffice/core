@@ -516,7 +516,7 @@ OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLength ) 
         }
         else
         {
-            aValue = OUString( "<empty!?>" );
+            aValue = "<empty!?>";
         }
 
         aRet += aValue;

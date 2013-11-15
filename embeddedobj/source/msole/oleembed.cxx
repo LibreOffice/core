@@ -207,9 +207,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
 
     for ( sal_Int32 nInd = 0; nInd < 32000 && !xResult.is(); nInd++ )
     {
-        OUString aName = OUString::number( nInd );
-        aName += OUString( "TMPSTOR" );
-        aName += m_aEntryName;
+        OUString aName = OUString::number( nInd ) + "TMPSTOR" + m_aEntryName;
         if ( !m_xParentStorage->hasByName( aName ) )
         {
             xResult = m_xParentStorage->openStorageElement( aName, embed::ElementModes::READWRITE );
@@ -232,9 +230,7 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
     OUString aResult;
     for ( sal_Int32 nInd = 0; nInd < 32000 && aResult.isEmpty(); nInd++ )
     {
-        OUString aName = OUString::number( nInd );
-        aName += OUString( "TMPSTREAM" );
-        aName += m_aEntryName;
+        OUString aName = OUString::number( nInd ) + "TMPSTREAM" + m_aEntryName;
         if ( !m_xParentStorage->hasByName( aName ) )
         {
             m_xParentStorage->renameElement( m_aEntryName, aName );
@@ -300,21 +296,21 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 // let the model behave as embedded one
                 uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
                 uno::Sequence< beans::PropertyValue > aSeq( 1 );
-                aSeq[0].Name = OUString( "SetEmbedded" );
+                aSeq[0].Name = "SetEmbedded";
                 aSeq[0].Value <<= sal_True;
                 xModel->attachResource( OUString(), aSeq );
 
                 // load the model from the stream
                 uno::Sequence< beans::PropertyValue > aArgs( 5 );
-                aArgs[0].Name = OUString( "HierarchicalDocumentName" );
+                aArgs[0].Name = "HierarchicalDocumentName";
                 aArgs[0].Value <<= m_aEntryName;
-                aArgs[1].Name = OUString( "ReadOnly" );
+                aArgs[1].Name = "ReadOnly";
                 aArgs[1].Value <<= sal_True;
-                aArgs[2].Name = OUString( "FilterName" );
+                aArgs[2].Name = "FilterName";
                 aArgs[2].Value <<= aFilterName;
-                aArgs[3].Name = OUString( "URL" );
+                aArgs[3].Name = "URL";
                 aArgs[3].Value <<= OUString( "private:stream" );
-                aArgs[4].Name = OUString( "InputStream" );
+                aArgs[4].Name = "InputStream";
                 aArgs[4].Value <<= m_xObjectStream->getInputStream();
 
                 xSeekable->seek( 0 );

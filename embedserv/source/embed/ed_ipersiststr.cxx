@@ -204,19 +204,19 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
     uno::Sequence< beans::PropertyValue > aArgs( 3 );
 
     sal_Int32 nInd = 0; // must not be bigger than the preset size
-    aArgs[nInd].Name = OUString( "FilterName" );
+    aArgs[nInd].Name = "FilterName";
     aArgs[nInd++].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[nInd].Name = OUString( "InputStream" );
+        aArgs[nInd].Name = "InputStream";
         aArgs[nInd++].Value <<= xStream;
-        aArgs[nInd].Name = OUString( "URL" );
+        aArgs[nInd].Name = "URL";
         aArgs[nInd++].Value <<= OUString( "private:stream" );
     }
     else
     {
-        aArgs[nInd].Name = OUString( "URL" );
+        aArgs[nInd].Name = "URL";
 
         OUString sDocUrl;
         if ( pFilePath )
@@ -235,7 +235,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
 
     aArgs.realloc( nInd );
 
-    // aArgs[].Name = OUString( "ReadOnly" );
+    // aArgs[].Name = "ReadOnly";
     // aArgs[].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
 
     return aArgs;
@@ -245,12 +245,12 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStoring_Imp
 {
     uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
 
-    aArgs[0].Name = OUString( "FilterName" );
+    aArgs[0].Name = "FilterName";
     aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[1].Name = OUString( "OutputStream" );
+        aArgs[1].Name = "OutputStream";
         aArgs[1].Value <<= xStream;
     }
 

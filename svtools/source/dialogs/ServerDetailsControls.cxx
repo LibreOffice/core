@@ -95,9 +95,9 @@ void HostDetailsContainer::show( bool bShow )
 
 INetURLObject HostDetailsContainer::getUrl( )
 {
-    OUString sHost = OUString( m_pEDHost->GetText() ).trim( );
+    OUString sHost = m_pEDHost->GetText().trim( );
     sal_Int64 nPort = m_pEDPort->GetValue();
-    OUString sPath = OUString( m_pEDPath->GetText() ).trim( );
+    OUString sPath = m_pEDPath->GetText().trim( );
 
     OUString sUrl;
     if ( !sHost.isEmpty( ) )
@@ -204,9 +204,9 @@ SmbDetailsContainer::SmbDetailsContainer( VclBuilderContainer* pBuilder ) :
 
 INetURLObject SmbDetailsContainer::getUrl( )
 {
-    OUString sHost = OUString( m_pEDHost->GetText() ).trim( );
-    OUString sShare = OUString( m_pEDShare->GetText() ).trim( );
-    OUString sPath = OUString(  m_pEDPath->GetText() ).trim( );
+    OUString sHost = m_pEDHost->GetText().trim( );
+    OUString sShare = m_pEDShare->GetText().trim( );
+    OUString sPath = m_pEDPath->GetText().trim( );
 
     OUString sUrl;
     if ( !sHost.isEmpty( ) )
@@ -287,7 +287,7 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
     for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
     {
         OUString sUrl = aTypesUrlsList[i];
-        if ( !( sUrl == OUString( GDRIVE_BASE_URL ) && bSkipGDrive ) )
+        if ( !( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) )
         {
             m_pLBServerType->InsertEntry( aTypesNamesList[i] );
             m_aServerTypesURLs.push_back( sUrl );
@@ -297,8 +297,8 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
 
 INetURLObject CmisDetailsContainer::getUrl( )
 {
-    OUString sBindingUrl = OUString( m_pEDBinding->GetText() ).trim( );
-    OUString sPath = OUString( m_pEDPath->GetText() ).trim( );
+    OUString sBindingUrl = m_pEDBinding->GetText().trim( );
+    OUString sPath = m_pEDPath->GetText().trim( );
 
     OUString sUrl;
     if ( !sBindingUrl.isEmpty( ) && !m_sRepoId.isEmpty() )
@@ -337,7 +337,7 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
 
 void CmisDetailsContainer::setUsername( const OUString& rUsername )
 {
-    m_sUsername = OUString( rUsername );
+    m_sUsername = rUsername;
 }
 
 void CmisDetailsContainer::selectRepository( )
@@ -359,7 +359,7 @@ IMPL_LINK( CmisDetailsContainer, SelectServerTypeHdl, void *, EMPTYARG  )
 
 IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
 {
-    OUString sBindingUrl = OUString( m_pEDBinding->GetText() ).trim( );
+    OUString sBindingUrl = m_pEDBinding->GetText().trim( );
 
     // Clean the listbox
     m_pLBRepository->Clear( );
@@ -380,7 +380,7 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
     // Get the Content
     ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
     Sequence< OUString > aProps( 1 );
-    aProps[0] = OUString( "Title" );
+    aProps[0] = "Title";
 
     try
     {

@@ -260,8 +260,8 @@ XSERVICEINFO_IMPL_0_CTX( HierarchyDataSource,
                      OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
 {
     uno::Sequence< OUString > aSNS( 2 );
-    aSNS[ 0 ] = OUString( "com.sun.star.ucb.DefaultHierarchyDataSource" );
-    aSNS[ 1 ] = OUString( "com.sun.star.ucb.HierarchyDataSource" );
+    aSNS[ 0 ] = "com.sun.star.ucb.DefaultHierarchyDataSource";
+    aSNS[ 1 ] = "com.sun.star.ucb.HierarchyDataSource";
     return aSNS;
 }
 
@@ -328,7 +328,7 @@ HierarchyDataSource::createInstance( const OUString & aServiceSpecifier )
     // Create view to root node.
 
     beans::PropertyValue aProp;
-    aProp.Name = OUString( CFGPROPERTY_NODEPATH  );
+    aProp.Name = CFGPROPERTY_NODEPATH;
     aProp.Value <<= OUString( CONFIG_DATA_ROOT_KEY  );
 
     uno::Sequence< uno::Any > aArguments( 1 );
@@ -355,8 +355,8 @@ HierarchyDataSource::getAvailableServiceNames()
     throw ( uno::RuntimeException )
 {
     uno::Sequence< OUString > aNames( 2 );
-    aNames[ 0 ] = OUString( READ_SERVICE_NAME  );
-    aNames[ 1 ] = OUString( READWRITE_SERVICE_NAME  );
+    aNames[ 0 ] = READ_SERVICE_NAME;
+    aNames[ 1 ] = READWRITE_SERVICE_NAME;
     return aNames;
 }
 
@@ -483,7 +483,7 @@ HierarchyDataSource::createInstanceWithArguments(
                 aNewArgs.realloc( nLen + 1 );
 
                 beans::PropertyValue aProp;
-                aProp.Name = OUString( CFGPROPERTY_LAZYWRITE  );
+                aProp.Name = CFGPROPERTY_LAZYWRITE;
                 aProp.Value <<= sal_True;
                 aNewArgs[ nLen ] <<= aProp;
             }
@@ -726,8 +726,8 @@ XSERVICEINFO_NOFACTORY_IMPL_0(
         OUString( "com.sun.star.comp.ucb.HierarchyDataAccess"  ) )
 {
     uno::Sequence< OUString > aSNS( 2 );
-    aSNS[ 0 ] = OUString( READ_SERVICE_NAME  );
-    aSNS[ 1 ] = OUString( READWRITE_SERVICE_NAME  );
+    aSNS[ 0 ] = READ_SERVICE_NAME;
+    aSNS[ 1 ] = READWRITE_SERVICE_NAME;
     return aSNS;
 }
 

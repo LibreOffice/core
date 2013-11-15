@@ -121,7 +121,7 @@ void SvxFontSizeBox_Impl::Select()
         float fSelVal     = float( nSelVal ) / 10;
 
         uno::Sequence< beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name  = OUString( "FontHeight.Height" );
+        aArgs[0].Name  = "FontHeight.Height";
         aArgs[0].Value = uno::makeAny( fSelVal );
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -297,7 +297,7 @@ uno::Sequence< OUString > FontHeightToolBoxControl::getSupportedServiceNames_Sta
 throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -396,7 +396,7 @@ void FontHeightToolBoxControl::dispatchCommand(
         uno::Reference< frame::XDispatch >      xDispatch;
         uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
 
-        aURL.Complete = OUString( ".uno:FontHeight" );
+        aURL.Complete = ".uno:FontHeight";
         xURLTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
         if ( xDispatch.is() )

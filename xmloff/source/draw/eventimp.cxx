@@ -296,7 +296,7 @@ void SdXMLEventContext::EndElement()
         OUString sAPIEventName;
         uno::Sequence< beans::PropertyValue > aProperties;
 
-            sAPIEventName = OUString( "OnClick" );
+            sAPIEventName = "OnClick";
 
             if( mbScript )
                 meClickAction = ClickAction_MACRO;
@@ -359,19 +359,19 @@ void SdXMLEventContext::EndElement()
                         msMacroName = msMacroName.copy( rDoc.getLength()+1 );
                     }
 
-                    pProperties->Name = OUString( "EventType" );
+                    pProperties->Name = "EventType";
                     pProperties->Handle = -1;
                     pProperties->Value <<= OUString( "StarBasic" );
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 
-                    pProperties->Name = OUString( "MacroName" );
+                    pProperties->Name = "MacroName";
                     pProperties->Handle = -1;
                     pProperties->Value <<= msMacroName;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 
-                    pProperties->Name = OUString( "Library" );
+                    pProperties->Name = "Library";
                     pProperties->Handle = -1;
                     pProperties->Value <<= sLibrary;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -385,7 +385,7 @@ void SdXMLEventContext::EndElement()
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 
-                    pProperties->Name = OUString( "Script" );
+                    pProperties->Name = "Script";
                     pProperties->Handle = -1;
                     pProperties->Value <<= msMacroName;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -393,7 +393,7 @@ void SdXMLEventContext::EndElement()
             }
             else
             {
-                pProperties->Name = OUString( "EventType" );
+                pProperties->Name = "EventType";
                 pProperties->Handle = -1;
                 pProperties->Value <<= OUString( "Presentation" );
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -407,7 +407,7 @@ void SdXMLEventContext::EndElement()
                         meClickAction = ClickAction_DOCUMENT;
                 }
 
-                pProperties->Name = OUString( "ClickAction" );
+                pProperties->Name = "ClickAction";
                 pProperties->Handle = -1;
                 pProperties->Value <<= meClickAction;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -431,20 +431,20 @@ void SdXMLEventContext::EndElement()
 
                 case ClickAction_DOCUMENT:
                 case ClickAction_PROGRAM:
-                    pProperties->Name = OUString( "Bookmark" );
+                    pProperties->Name = "Bookmark";
                     pProperties->Handle = -1;
                     pProperties->Value <<= msBookmark;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     break;
 
                 case ClickAction_VANISH:
-                    pProperties->Name = OUString( "Effect" );
+                    pProperties->Name = "Effect";
                     pProperties->Handle = -1;
                     pProperties->Value <<= ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, true );
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 
-                    pProperties->Name = OUString( "Speed" );
+                    pProperties->Name = "Speed";
                     pProperties->Handle = -1;
                     pProperties->Value <<= meSpeed;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
@@ -453,20 +453,20 @@ void SdXMLEventContext::EndElement()
                     // NOTE: no break here!!!
 
                 case ClickAction_SOUND:
-                    pProperties->Name = OUString( "SoundURL" );
+                    pProperties->Name = "SoundURL";
                     pProperties->Handle = -1;
                     pProperties->Value <<= msSoundURL;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 
-                    pProperties->Name = OUString( "PlayFull" );
+                    pProperties->Name = "PlayFull";
                     pProperties->Handle = -1;
                     pProperties->Value = ::cppu::bool2any(mbPlayFull);
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     break;
 
                 case ClickAction_VERB:
-                    pProperties->Name = OUString( "Verb" );
+                    pProperties->Name = "Verb";
                     pProperties->Handle = -1;
                     pProperties->Value <<= mnVerb;
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;

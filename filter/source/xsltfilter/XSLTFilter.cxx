@@ -319,13 +319,13 @@ namespace XSLT
         Sequence<Any> args(3);
         NamedValue nv;
 
-        nv.Name = OUString( "StylesheetURL" );
+        nv.Name = "StylesheetURL";
         nv.Value <<= expandUrl(udStyleSheet);
         args[0] <<= nv;
-        nv.Name = OUString( "SourceURL" );
+        nv.Name = "SourceURL";
         nv.Value <<= aURL;
         args[1] <<= nv;
-        nv.Name = OUString( "SourceBaseURL" );
+        nv.Name = "SourceBaseURL";
         nv.Value <<= OUString(INetURLObject(aURL).getBase());
         args[2] <<= nv;
 
@@ -461,16 +461,16 @@ namespace XSLT
         // create transformer
         Sequence<Any> args(4);
         NamedValue nv;
-        nv.Name = OUString( "StylesheetURL" );
+        nv.Name = "StylesheetURL";
         nv.Value <<= expandUrl(udStyleSheet);
         args[0] <<= nv;
-        nv.Name = OUString( "TargetURL" );
+        nv.Name = "TargetURL";
         nv.Value <<= sURL;
         args[1] <<= nv;
-        nv.Name = OUString( "DoctypePublic" );
+        nv.Name = "DoctypePublic";
         nv.Value <<= aDoctypePublic;
         args[2] <<= nv;
-        nv.Name = OUString( "TargetBaseURL" );
+        nv.Name = "TargetBaseURL";
         INetURLObject ineturl(sURL);
         ineturl.removeSegment();
         m_aExportBaseUrl = ineturl.GetMainURL(INetURLObject::NO_DECODE);
@@ -581,9 +581,7 @@ extern "C"
                 if (rtl_str_compare(pImplName, FILTER_IMPL_NAME) == 0)
                     {
                         Sequence<OUString> serviceNames(1);
-                        serviceNames.getArray()[0]
-                                = OUString(
-                                         FILTER_SERVICE_NAME );
+                        serviceNames.getArray()[0] = FILTER_SERVICE_NAME;
 
                         css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
@@ -603,9 +601,7 @@ extern "C"
                 else if (rtl_str_compare(pImplName, TRANSFORMER_IMPL_NAME) == 0)
                     {
                         Sequence<OUString> serviceNames(1);
-                        serviceNames.getArray()[0]
-                                = OUString(
-                                         TRANSFORMER_SERVICE_NAME );
+                        serviceNames.getArray()[0] = TRANSFORMER_SERVICE_NAME;
                         css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
                                         createSingleFactory(

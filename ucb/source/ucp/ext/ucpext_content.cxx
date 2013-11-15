@@ -184,8 +184,8 @@ namespace ucb { namespace ucp { namespace ext
     Sequence< OUString > SAL_CALL Content::getSupportedServiceNames() throw( RuntimeException )
     {
         Sequence< OUString > aServiceNames(2);
-        aServiceNames[0] = OUString(  "com.sun.star.ucb.Content"  );
-        aServiceNames[1] = OUString(  "com.sun.star.ucb.ExtensionContent"  );
+        aServiceNames[0] = "com.sun.star.ucb.Content";
+        aServiceNames[1] = "com.sun.star.ucb.ExtensionContent";
         return aServiceNames;
     }
 
@@ -629,7 +629,7 @@ namespace ucb { namespace ucp { namespace ext
         try
         {
             Sequence< Property > aProps(1);
-            aProps[0].Name = OUString(  "IsFolder"  );
+            aProps[0].Name = "IsFolder";
             Reference< XRow > xRow( getPropertyValues( aProps, NULL ), UNO_SET_THROW );
             bIsFolder = xRow->getBoolean(1);
         }
@@ -653,7 +653,7 @@ namespace ucb { namespace ucp { namespace ext
             try
             {
                 Sequence< Property > aProps(1);
-                aProps[0].Name = OUString(  "ContentType"  );
+                aProps[0].Name = "ContentType";
                 Reference< XRow > xRow( getPropertyValues( aProps, NULL ), UNO_SET_THROW );
                 m_aContentType.reset( xRow->getString(1) );
             }

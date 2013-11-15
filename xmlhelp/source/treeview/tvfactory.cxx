@@ -175,7 +175,7 @@ TVFactory::getAvailableServiceNames( )
     throw( RuntimeException )
 {
     Sequence< OUString > seq( 1 );
-    seq[0] = OUString( "com.sun.star.ucb.HierarchyDataReadAccess" );
+    seq[0] = "com.sun.star.ucb.HierarchyDataReadAccess";
     return seq;
 }
 
@@ -191,8 +191,8 @@ Sequence< OUString > SAL_CALL
 TVFactory::getSupportedServiceNames_static()
 {
     Sequence< OUString > seq( 2 );
-    seq[0] = OUString( "com.sun.star.help.TreeView" );
-    seq[1] = OUString( "com.sun.star.ucb.HiearchyDataSource" );
+    seq[0] = "com.sun.star.help.TreeView";
+    seq[1] = "com.sun.star.ucb.HiearchyDataSource";
     return seq;
 }
 

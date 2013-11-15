@@ -996,9 +996,9 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
     OUString aElementType( "toolbar" );
 
     uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = OUString( "Frame" );
+    aPropSeq[0].Name = "Frame";
     aPropSeq[0].Value <<= xFrame;
-    aPropSeq[1].Name = OUString( "ConfigurationData" );
+    aPropSeq[1].Name = "ConfigurationData";
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         OUString aAddonToolBarName( aAddonsToolBarStaticName + m_pAddonOptions->GetAddonsToolbarResourceName(i) );
@@ -1399,9 +1399,9 @@ uno::Reference< ui::XUIElement > ToolbarLayoutManager::implts_createElement( con
 
     ReadGuard aReadLock( m_aLock );
     uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = OUString( "Frame" );
+    aPropSeq[0].Name = "Frame";
     aPropSeq[0].Value <<= m_xFrame;
-    aPropSeq[1].Name = OUString( "Persistent" );
+    aPropSeq[1].Name = "Persistent";
     aPropSeq[1].Value <<= true;
     uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
     aReadLock.unlock();
@@ -1614,28 +1614,28 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
         {
             uno::Sequence< beans::PropertyValue > aWindowState( 9 );
 
-            aWindowState[0].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_DOCKED );
+            aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
             aWindowState[0].Value = ::uno::makeAny( sal_Bool( !rElementData.m_bFloating ));
-            aWindowState[1].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_VISIBLE );
+            aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
             aWindowState[1].Value = uno::makeAny( sal_Bool( rElementData.m_bVisible ));
-            aWindowState[2].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_DOCKINGAREA );
+            aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
             aWindowState[2].Value = uno::makeAny( static_cast< ui::DockingArea >( rElementData.m_aDockedData.m_nDockedArea ) );
 
             awt::Point aPos = rElementData.m_aDockedData.m_aPos;
-            aWindowState[3].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_DOCKPOS );
+            aWindowState[3].Name  = WINDOWSTATE_PROPERTY_DOCKPOS;
             aWindowState[3].Value <<= aPos;
 
             aPos = rElementData.m_aFloatingData.m_aPos;
-            aWindowState[4].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_POS );
+            aWindowState[4].Name  = WINDOWSTATE_PROPERTY_POS;
             aWindowState[4].Value <<= aPos;
 
-            aWindowState[5].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_SIZE );
+            aWindowState[5].Name  = WINDOWSTATE_PROPERTY_SIZE;
             aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
-            aWindowState[6].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_UINAME );
+            aWindowState[6].Name  = WINDOWSTATE_PROPERTY_UINAME;
             aWindowState[6].Value = uno::makeAny( rElementData.m_aUIName );
-            aWindowState[7].Name  = OUString::createFromAscii( WINDOWSTATE_PROPERTY_LOCKED );
+            aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
             aWindowState[7].Value = uno::makeAny( rElementData.m_aDockedData.m_bLocked );
-            aWindowState[8].Name  = ::rtl::OUString::createFromAscii( WINDOWSTATE_PROPERTY_STYLE );
+            aWindowState[8].Name  = WINDOWSTATE_PROPERTY_STYLE;
             aWindowState[8].Value = uno::makeAny( rElementData.m_nStyle );
 
             OUString aName = rElementData.m_aName;

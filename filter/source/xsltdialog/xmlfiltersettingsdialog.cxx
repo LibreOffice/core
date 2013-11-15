@@ -1507,9 +1507,9 @@ OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
 {
     OUString aEntryStr( pInfo->maFilterName + "\t");
     if ( !pInfo->maExportService.isEmpty() )
-        aEntryStr += OUString( getApplicationUIName( pInfo->maExportService ) );
+        aEntryStr += getApplicationUIName( pInfo->maExportService );
     else
-        aEntryStr += OUString( getApplicationUIName( pInfo->maImportService ) );
+        aEntryStr += getApplicationUIName( pInfo->maImportService );
     aEntryStr += " - ";
 
     if( pInfo->maFlags & 1 )
@@ -1604,7 +1604,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
 {
     Sequence< OUString > aUserData(8);
 
-    aUserData[0] = OUString( "com.sun.star.documentconversion.XSLTFilter" );
+    aUserData[0] = "com.sun.star.documentconversion.XSLTFilter";
     aUserData[1] = OUString::boolean( mbNeedsXSLT2 );
     aUserData[2] = maImportService;
     aUserData[3] = maExportService;

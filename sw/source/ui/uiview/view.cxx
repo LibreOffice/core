@@ -1477,56 +1477,56 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     beans::PropertyValue *pValue = rSequence.getArray();
 
     sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
-    pValue->Name = OUString( "ViewId" );
+    pValue->Name = "ViewId";
     OUStringBuffer sBuffer ( OUString( "view" ) );
     ::sax::Converter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
     pValue->Value <<= sBuffer.makeStringAndClear();
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "ViewLeft" );
+    pValue->Name = "ViewLeft";
     pValue->Value <<= TWIP_TO_MM100 ( rRect.Left() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "ViewTop" );
+    pValue->Name = "ViewTop";
     pValue->Value <<= TWIP_TO_MM100 ( rRect.Top() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "VisibleLeft" );
+    pValue->Name = "VisibleLeft";
     pValue->Value <<= TWIP_TO_MM100 ( rVis.Left() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "VisibleTop" );
+    pValue->Name = "VisibleTop";
     pValue->Value <<= TWIP_TO_MM100 ( rVis.Top() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "VisibleRight" );
+    pValue->Name = "VisibleRight";
     pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Right() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "VisibleBottom" );
+    pValue->Name = "VisibleBottom";
     pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "ZoomType" );
+    pValue->Name = "ZoomType";
     const sal_Int16 nZoomType = static_cast< sal_Int16 >(m_pWrtShell->GetViewOptions()->GetZoomType());
     pValue->Value <<= nZoomType;
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "ViewLayoutColumns" );
+    pValue->Name = "ViewLayoutColumns";
     const sal_Int16 nViewLayoutColumns = static_cast< sal_Int16 >(m_pWrtShell->GetViewOptions()->GetViewLayoutColumns());
     pValue->Value <<= nViewLayoutColumns;
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "ViewLayoutBookMode" );
+    pValue->Name = "ViewLayoutBookMode";
     const sal_Bool bIsViewLayoutBookMode = m_pWrtShell->GetViewOptions()->IsViewLayoutBookMode();
     pValue->Value.setValue( &bIsViewLayoutBookMode, ::getBooleanCppuType() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "ZoomFactor" );
+    pValue->Name = "ZoomFactor";
     pValue->Value <<= static_cast < sal_Int16 > (m_pWrtShell->GetViewOptions()->GetZoom());
     pValue++;nIndex++;
 
-    pValue->Name = OUString( "IsSelectedFrame" );
+    pValue->Name = "IsSelectedFrame";
     const sal_Bool bIsSelected = FRMTYPE_NONE == m_pWrtShell->GetSelFrmType() ? sal_False : sal_True;
     pValue->Value.setValue ( &bIsSelected, ::getBooleanCppuType() );
     nIndex++;
