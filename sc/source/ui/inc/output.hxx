@@ -77,7 +77,9 @@ private:
     class DrawEditParam
     {
     public:
-        SvxCellHorJustify       meHorJust;
+        SvxCellHorJustify       meHorJustAttr;      ///< alignment attribute
+        SvxCellHorJustify       meHorJustContext;   ///< context depending on attribute, content and direction
+        SvxCellHorJustify       meHorJustResult;    ///< result for EditEngine
         SvxCellVerJustify       meVerJust;
         SvxCellJustifyMethod    meHorJustMethod;
         SvxCellJustifyMethod    meVerJustMethod;
@@ -96,7 +98,6 @@ private:
         bool                    mbAsianVertical:1;
         bool                    mbPixelToLogic:1;
         bool                    mbHyphenatorSet:1;
-        bool                    mbRTL:1;
         ScFieldEditEngine*      mpEngine;
         ScRefCellValue          maCell;
         const ScPatternAttr*    mpPattern;
