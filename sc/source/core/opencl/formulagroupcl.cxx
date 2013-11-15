@@ -22,6 +22,7 @@
 #include "op_database.hxx"
 #include "op_math.hxx"
 #include "op_statistical.hxx"
+#include "op_array.hxx"
 #include "formulagroupcl_public.hxx"
 
 #include <list>
@@ -1475,6 +1476,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocHypGeomDist:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpHypGeomDist));
+                break;
+            case ocSumX2MY2:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i],new OpSumX2MY2));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
