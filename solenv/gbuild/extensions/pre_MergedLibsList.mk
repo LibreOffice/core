@@ -39,7 +39,6 @@ gb_EXTRAMERGEDLIBS := \
 	flash \
 	for \
 	forui \
-	fpicker \
 	fps_office \
 	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fwl \
@@ -67,7 +66,7 @@ gb_EXTRAMERGEDLIBS := \
 	$(if $(ENABLE_LWP),lwpft) \
 	$(call gb_Helper_optional,DESKTOP,migrationoo2) \
 	$(call gb_Helper_optional,DESKTOP,migrationoo3) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,mork) \
+	$(if $(filter-out WNT,$(OS)),$(call gb_Helper_optional,DBCONNECTIVITY,mork)) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
