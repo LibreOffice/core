@@ -1795,7 +1795,7 @@ namespace accessibility
             if (rRes.Name.compareTo(::rtl::OUString::createFromAscii("CharColor"))==0)
             {
                 uno::Any &anyChar = rRes.Value;
-                sal_uInt32 crChar = (sal_uInt32)(anyChar.pReserved);
+                sal_uInt32 crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
                 if (COL_AUTO == crChar )
                 {
                     uno::Reference< ::com::sun::star::accessibility::XAccessibleComponent > xComponent;
@@ -1854,7 +1854,7 @@ namespace accessibility
             if(rRes.Name.compareTo(::rtl::OUString::createFromAscii("CharUnderlineColor"))==0)
             {
                 uno::Any &anyCharUnderLine = rRes.Value;
-                sal_uInt32 crCharUnderLine = (sal_uInt32)(anyCharUnderLine.pReserved);
+                sal_uInt32 crCharUnderLine = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>( anyCharUnderLine.pReserved));
                 if (COL_AUTO == crCharUnderLine )
                 {
                     uno::Reference< ::com::sun::star::accessibility::XAccessibleComponent > xComponent;
