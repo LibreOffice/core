@@ -308,21 +308,17 @@ SalYieldResult KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-SalYieldResult KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
+// Qts processEvent always processes all pending events,
+// so we can ignore the second parameter 'bHandleAllCurrentEvents'.
+SalYieldResult KDEXLib::processYield( bool bWait, bool )
 {
     blockIdleTimeout = !bWait;
-    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
-    bool wasEvent = false;
-    for( int cnt = bHandleAllCurrentEvents ? 100 : 1;
-         cnt > 0;
-         --cnt )
-    {
-        if( !dispatcher->processEvents( QEventLoop::AllEvents ))
-            break;
-        wasEvent = true;
-    }
-    if( bWait && !wasEvent )
-        dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread() );
+    bool wasEvent;
+    if ( bWait )
+        wasEvent = dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+    else
+        wasEvent = dispatcher->processEvents( QEventLoop::AllEvents );
     blockIdleTimeout = false;
     return wasEvent ? SalYieldResult::EVENT
                     : SalYieldResult::TIMEOUT;
@@ -366,7 +362,9 @@ void KDEXLib::timeoutActivated()
 
     // QGuiEventDispatcherGlib makes glib watch also X11 fd, but its hasPendingEvents()
     // doesn't check X11, so explicitly check XPending() here.
-    bool idle = QApplication::hasPendingEvents() && !blockIdleTimeout && !XPending( QX11Info::display());
+    bool idle = true;
+    if( blockIdleTimeout || XPending( QX11Info::display()) || QApplication::hasPendingEvents() )
+        idle = false;
     X11SalData::Timeout( idle );
     // QTimer is not single shot, so will be restarted immediately
 }
