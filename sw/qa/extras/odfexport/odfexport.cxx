@@ -28,9 +28,9 @@ public:
     }
 };
 
-#define DECLARE_ODT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
-DECLARE_ODT_TEST(testFdo38244, "fdo38244.odt")
+DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
 {
     // See ooxmlexport's testFdo38244().
 
@@ -56,7 +56,7 @@ DECLARE_ODT_TEST(testFdo38244, "fdo38244.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
-DECLARE_ODT_TEST(testFirstHeaderFooter, "first-header-footer.odt")
+DECLARE_ODFEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.odt")
 {
     // Test import and export of the header-first token.
 
@@ -75,7 +75,7 @@ DECLARE_ODT_TEST(testFirstHeaderFooter, "first-header-footer.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Left footer2"),  parseDump("/root/page[6]/footer/txt/text()"));
 }
 
-DECLARE_ODT_TEST(testTextframeGradient, "textframe-gradient.odt")
+DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -96,7 +96,7 @@ DECLARE_ODT_TEST(testTextframeGradient, "textframe-gradient.odt")
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 
-DECLARE_ODT_TEST(testFdo60769, "fdo60769.odt")
+DECLARE_ODFEXPORT_TEST(testFdo60769, "fdo60769.odt")
 {
     // Test multi-paragraph comment range feature.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -122,7 +122,7 @@ DECLARE_ODT_TEST(testFdo60769, "fdo60769.odt")
     }
 }
 
-DECLARE_ODT_TEST(testFdo58949, "fdo58949.docx")
+DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
 {
     /*
      * The problem was that the exporter didn't insert "Obj102" to the
@@ -139,7 +139,7 @@ DECLARE_ODT_TEST(testFdo58949, "fdo58949.docx")
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Obj102")));
 }
 
-DECLARE_ODT_TEST(testCharacterBorder, "charborder.odt")
+DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
     // Make sure paragraph and character attributes don't interfere
     // First paragraph has a paragraph border and a character border included by the paragraph style
@@ -294,7 +294,7 @@ DECLARE_ODT_TEST(testCharacterBorder, "charborder.odt")
     }
 }
 
-DECLARE_ODT_TEST(testFdo43807, "fdo43807.odt")
+DECLARE_ODFEXPORT_TEST(testFdo43807, "fdo43807.odt")
 {
     uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
@@ -303,7 +303,7 @@ DECLARE_ODT_TEST(testFdo43807, "fdo43807.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("User Defined Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
 }
 
-DECLARE_ODT_TEST(testTextframeTransparentShadow, "textframe-transparent-shadow.odt")
+DECLARE_ODFEXPORT_TEST(testTextframeTransparentShadow, "textframe-transparent-shadow.odt")
 {
     uno::Reference<drawing::XShape> xPicture = getShape(1);
     // ODF stores opacity of 75%, that means 25% transparency.

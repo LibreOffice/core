@@ -166,9 +166,9 @@ OUString Test::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString&
     return OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
 }
 
-#define DECLARE_OOXML_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
-DECLARE_OOXML_TEST(testZoom, "zoom.docx")
+DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -178,7 +178,7 @@ DECLARE_OOXML_TEST(testZoom, "zoom.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 }
 
-DECLARE_OOXML_TEST(defaultTabStopNotInStyles, "empty.odt")
+DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")
 {
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
@@ -191,7 +191,7 @@ DECLARE_OOXML_TEST(defaultTabStopNotInStyles, "empty.odt")
     CPPUNIT_ASSERT_EQUAL( style::TabAlign_DEFAULT, stops[ 0 ].Alignment );
 }
 
-DECLARE_OOXML_TEST(testFdo38244, "fdo38244.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
 {
     /*
      * Comments attached to a range was imported without the range, check for the fieldmark start/end positions.
@@ -255,12 +255,12 @@ DECLARE_OOXML_TEST(testFdo38244, "fdo38244.docx")
     CPPUNIT_ASSERT_EQUAL(true, bCaught);
 }
 
-DECLARE_OOXML_TEST(testMathEscape, "math-escape.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathEscape, "math-escape.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
-DECLARE_OOXML_TEST(testFdo51034, "fdo51034.odt")
+DECLARE_OOXMLEXPORT_TEST(testFdo51034, "fdo51034.odt")
 {
     // The problem was that the 'l' param of the HYPERLINK field was parsed with = "#", not += "#".
     CPPUNIT_ASSERT_EQUAL(OUString("http://Www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
@@ -275,7 +275,7 @@ DECLARE_OOXML_TEST(testFdo51034, "fdo51034.odt")
             .replaceAll( " ", "" ).replaceAll( OUString( "\xe2\x88\x92", strlen( "\xe2\x88\x92" ), RTL_TEXTENCODING_UTF8 ), "-" ), \
         OUString( actual ).replaceAll( " ", "" ).replaceAll( OUString( "\xe2\x88\x92", strlen( "\xe2\x88\x92" ), RTL_TEXTENCODING_UTF8 ), "-" ))
 
-DECLARE_OOXML_TEST(testMathAccents, "math-accents.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathAccents, "math-accents.docx")
 {
     CHECK_FORMULA(
         "acute {a} grave {a} check {a} breve {a} circle {a} widevec {a} widetilde {a}"
@@ -283,7 +283,7 @@ DECLARE_OOXML_TEST(testMathAccents, "math-accents.docx")
         getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testMathD, "math-d.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathD, "math-d.docx")
 {
     CHECK_FORMULA( "left (x mline y mline z right )", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "left (1 right )", getFormula( getRun( getParagraph( 1 ), 2 )));
@@ -296,27 +296,27 @@ DECLARE_OOXML_TEST(testMathD, "math-d.docx")
     CHECK_FORMULA( "left ({x} over {y} right )", getFormula( getRun( getParagraph( 1 ), 9 )));
 }
 
-DECLARE_OOXML_TEST(testMathEscaping, "math-escaping.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathEscaping, "math-escaping.docx")
 {
     CHECK_FORMULA( "\xe2\x88\x92 \xe2\x88\x9e < x < \xe2\x88\x9e", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testMathLim, "math-lim.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathLim, "math-lim.docx")
 {
     CHECK_FORMULA( "lim from {x \xe2\x86\x92 1} {x}", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testMathMalformedXml, "math-malformed_xml.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx")
 {
     CPPUNIT_ASSERT_EQUAL( 0, getLength());
 }
 
-DECLARE_OOXML_TEST(testMathMatrix, "math-matrix.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathMatrix, "math-matrix.docx")
 {
     CHECK_FORMULA( "left [matrix {1 # 2 ## 3 # 4} right ]", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testMathMso2k7, "math-mso2k7.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathMso2k7, "math-mso2k7.docx")
 {
     CHECK_FORMULA( "A = \xcf\x80 {r} ^ {2}", getFormula( getRun( getParagraph( 1 ), 1 )));
 // TODO check the stack/binom difference
@@ -347,36 +347,36 @@ DECLARE_OOXML_TEST(testMathMso2k7, "math-mso2k7.docx")
         getFormula( getRun( getParagraph( 9 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testMathNary, "math-nary.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathNary, "math-nary.docx")
 {
     CHECK_FORMULA( "lllint from {1} to {2} {x + 1}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "prod from {a} {b}", getFormula( getRun( getParagraph( 1 ), 2 )));
     CHECK_FORMULA( "sum to {2} {x}", getFormula( getRun( getParagraph( 1 ), 3 )));
 }
 
-DECLARE_OOXML_TEST(testMathOverbraceUnderbrace, "math-overbrace_underbrace.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathOverbraceUnderbrace, "math-overbrace_underbrace.docx")
 {
     CHECK_FORMULA( "{abcd} overbrace {4}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "{xyz} underbrace {3}", getFormula( getRun( getParagraph( 2 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testMathOverstrike, "math-overstrike.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathOverstrike, "math-overstrike.docx")
 {
     CHECK_FORMULA( "overstrike {abc}", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testMathPlaceholders, "math-placeholders.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathPlaceholders, "math-placeholders.docx")
 {
     CHECK_FORMULA( "sum from <?> to <?> <?>", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testMathRad, "math-rad.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathRad, "math-rad.docx")
 {
     CHECK_FORMULA( "sqrt {4}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "nroot {3} {x + 1}", getFormula( getRun( getParagraph( 1 ), 2 )));
 }
 
-DECLARE_OOXML_TEST(testMathSubscripts, "math-subscripts.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathSubscripts, "math-subscripts.docx")
 {
     CHECK_FORMULA( "{x} ^ {y} + {e} ^ {x}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "{x} ^ {b}", getFormula( getRun( getParagraph( 1 ), 2 )));
@@ -387,7 +387,7 @@ DECLARE_OOXML_TEST(testMathSubscripts, "math-subscripts.docx")
         getFormula( getRun( getParagraph( 1 ), 6 )));
 }
 
-DECLARE_OOXML_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 {
     CHECK_FORMULA( "{a} over {b}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "{a} / {b}", getFormula( getRun( getParagraph( 2 ), 1 )));
@@ -396,7 +396,7 @@ DECLARE_OOXML_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 //    CHECK_FORMULA( "binom {a} {binom {b} {c}}", getFormula( getRun( getParagraph( 4 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testTablePosition, "table-position.docx")
+DECLARE_OOXMLEXPORT_TEST(testTablePosition, "table-position.docx")
 {
     sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
     sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
@@ -431,7 +431,7 @@ DECLARE_OOXML_TEST(testTablePosition, "table-position.docx")
     }
 }
 
-DECLARE_OOXML_TEST(testFdo47669, "fdo47669.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo47669, "fdo47669.docx")
 {
     /*
      * Problem: we created imbalance </w:hyperlink> which shouldn't be there,
@@ -458,7 +458,7 @@ struct SingleLineBorders {
         }
     }
 };
-DECLARE_OOXML_TEST(testTableBorders, "table-borders.docx")
+DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -512,7 +512,7 @@ DECLARE_OOXML_TEST(testTableBorders, "table-borders.docx")
     }
 }
 
-DECLARE_OOXML_TEST(testFdo51550, "fdo51550.odt")
+DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
 {
     // The problem was that we lacked the fallback to export the replacement graphic for OLE objects.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -520,7 +520,7 @@ DECLARE_OOXML_TEST(testFdo51550, "fdo51550.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
 
-DECLARE_OOXML_TEST(testN789482, "n789482.docx")
+DECLARE_OOXMLEXPORT_TEST(testN789482, "n789482.docx")
 {
     // The problem was that w:del was exported before w:hyperlink, resulting in an invalid XML.
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
@@ -538,7 +538,7 @@ DECLARE_OOXML_TEST(testN789482, "n789482.docx")
     getRun(xParagraph, 5, " After.");
 }
 
-DECLARE_OOXML_TEST(test1Table1Page, "1-table-1-page.docx")
+DECLARE_OOXMLEXPORT_TEST(test1Table1Page, "1-table-1-page.docx")
 {
     // 2 problem for this document after export:
     //   - invalid sectPr inserted at the beginning of the page
@@ -550,7 +550,7 @@ DECLARE_OOXML_TEST(test1Table1Page, "1-table-1-page.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
-DECLARE_OOXML_TEST(testTextFrames, "textframes.odt")
+DECLARE_OOXMLEXPORT_TEST(testTextFrames, "textframes.odt")
 {
     // The frames were simply missing, so let's check if all 3 frames were imported back.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -558,7 +558,7 @@ DECLARE_OOXML_TEST(testTextFrames, "textframes.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
-DECLARE_OOXML_TEST(testTextFrameBorders, "textframe-borders.docx")
+DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -575,7 +575,7 @@ DECLARE_OOXML_TEST(testTextFrameBorders, "textframe-borders.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
 }
 
-DECLARE_OOXML_TEST(testTextframeGradient, "textframe-gradient.docx")
+DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -601,7 +601,7 @@ DECLARE_OOXML_TEST(testTextframeGradient, "textframe-gradient.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
 
-DECLARE_OOXML_TEST(testCellBtlr, "cell-btlr.docx")
+DECLARE_OOXMLEXPORT_TEST(testCellBtlr, "cell-btlr.docx")
 {
     /*
      * The problem was that the exporter didn't mirror the workaround of the
@@ -613,7 +613,7 @@ DECLARE_OOXML_TEST(testCellBtlr, "cell-btlr.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection", "val", "btLr");
 }
 
-DECLARE_OOXML_TEST(testTableStylerPrSz, "table-style-rPr-sz.docx")
+DECLARE_OOXMLEXPORT_TEST(testTableStylerPrSz, "table-style-rPr-sz.docx")
 {
     // Verify that font size inside the table is 20pt, despite the sz attribute in the table size.
     // Also check that other rPr attribute are used: italic, bold, underline
@@ -632,13 +632,13 @@ DECLARE_OOXML_TEST(testTableStylerPrSz, "table-style-rPr-sz.docx")
 //    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(getRun(xPara, 1), "CharPosture"));
 }
 
-DECLARE_OOXML_TEST(testMathLiteral, "math-literal.docx")
+DECLARE_OOXMLEXPORT_TEST(testMathLiteral, "math-literal.docx")
 {
     CHECK_FORMULA( "iiint from {V} to <?> {\"div\" \"F\"}  dV= llint from {S} to <?> {\"F\" \xe2\x88\x99 \"n \" dS}",
         getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXML_TEST(testFdo48557, "fdo48557.odt")
+DECLARE_OOXMLEXPORT_TEST(testFdo48557, "fdo48557.odt")
 {
     // Inner margins of the textframe wasn't exported.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -650,7 +650,7 @@ DECLARE_OOXML_TEST(testFdo48557, "fdo48557.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "BottomBorderDistance"));
 }
 
-DECLARE_OOXML_TEST(testI120928, "i120928.docx")
+DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
 {
     // w:numPicBullet was ignored, leading to missing graphic bullet in numbering.
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
@@ -671,20 +671,20 @@ DECLARE_OOXML_TEST(testI120928, "i120928.docx")
     CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
 }
 
-DECLARE_OOXML_TEST(testFdo64826, "fdo64826.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
 {
     // 'Track-Changes' (Track Revisions) wasn't exported.
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(mxComponent, "RecordChanges")));
 }
 
-DECLARE_OOXML_TEST(testPageBackground, "page-background.docx")
+DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
 {
     // 'Document Background' wasn't exported.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
-DECLARE_OOXML_TEST(testPageGraphicBackground, "page-graphic-background.odt")
+DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt")
 {
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
@@ -693,7 +693,7 @@ DECLARE_OOXML_TEST(testPageGraphicBackground, "page-graphic-background.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
-DECLARE_OOXML_TEST(testFdo65265, "fdo65265.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo65265, "fdo65265.docx")
 {
     // Redline (tracked changes) of text formatting were not exported
     uno::Reference<text::XTextRange> xParagraph1 = getParagraph(1);
@@ -703,7 +703,7 @@ DECLARE_OOXML_TEST(testFdo65265, "fdo65265.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Format"), getProperty<OUString>(getRun(xParagraph2, 2), "RedlineType"));
 }
 
-DECLARE_OOXML_TEST(testFdo65655, "fdo65655.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo65655, "fdo65655.docx")
 {
     // The problem was that the DOCX had a non-blank odd footer and a blank even footer
     // The 'Different Odd & Even Pages' was turned on
@@ -717,7 +717,7 @@ DECLARE_OOXML_TEST(testFdo65655, "fdo65655.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
 }
 
-DECLARE_OOXML_TEST(testFDO63053, "fdo63053.docx")
+DECLARE_OOXMLEXPORT_TEST(testFDO63053, "fdo63053.docx")
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
@@ -725,7 +725,7 @@ DECLARE_OOXML_TEST(testFDO63053, "fdo63053.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("test1&test2"), xDocumentProperties->getSubject());
 }
 
-DECLARE_OOXML_TEST(testWatermark, "watermark.docx")
+DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 {
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // 1st problem: last character was missing
@@ -753,7 +753,7 @@ DECLARE_OOXML_TEST(testWatermark, "watermark.docx")
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, getProperty<drawing::LineStyle>(xShape, "LineStyle"));
 }
 
-DECLARE_OOXML_TEST(testFdo43093, "fdo43093.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")
 {
     // The problem was that the alignment are not exchange when the paragraph are RTL.
     uno::Reference<uno::XInterface> xParaRtlLeft(getParagraph( 1, "RTL Left"));
@@ -787,7 +787,7 @@ DECLARE_OOXML_TEST(testFdo43093, "fdo43093.docx")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
 }
 
-DECLARE_OOXML_TEST(testFdo64238_a, "fdo64238_a.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo64238_a, "fdo64238_a.docx")
 {
     // The problem was that when 'Show Only Odd Footer' was marked in Word and the Even footer *was filled*
     // then LO would still import the Even footer and concatenate it to to the odd footer.
@@ -807,7 +807,7 @@ DECLARE_OOXML_TEST(testFdo64238_a, "fdo64238_a.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), numOfRuns);
 }
 
-DECLARE_OOXML_TEST(testFdo64238_b, "fdo64238_b.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo64238_b, "fdo64238_b.docx")
 {
     // The problem was that when 'Show Only Odd Footer' was marked in Word and the Even footer *was filled*
     // then LO would still import the Even footer and concatenate it to to the odd footer.
@@ -827,7 +827,7 @@ DECLARE_OOXML_TEST(testFdo64238_b, "fdo64238_b.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), numOfRuns);
 }
 
-DECLARE_OOXML_TEST(testFdo56679, "fdo56679.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo56679, "fdo56679.docx")
 {
     // The problem was that the DOCX importer and exporter did not handle the 'color' of an underline
     // (not the color of the text, the color of the underline itself)
@@ -838,7 +838,7 @@ DECLARE_OOXML_TEST(testFdo56679, "fdo56679.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), getProperty<sal_Int32>(xText, "CharUnderlineColor"));
 }
 
-DECLARE_OOXML_TEST(testFdo65400, "fdo65400.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo65400, "fdo65400.docx")
 {
     // The problem was that if in Word you choose 'Character Shading' - then the text portion
     // is marked with 'w:shd val=pct15'. LO did not store this value and so when importing and exporting
@@ -849,7 +849,7 @@ DECLARE_OOXML_TEST(testFdo65400, "fdo65400.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xd8d8d8 ), getProperty< sal_Int32 >( shaded, "CharBackColor" ));
 }
 
-DECLARE_OOXML_TEST(testFdo66543, "fdo66543.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo66543, "fdo66543.docx")
 {
     // The problem was that when importing DOCX with 'line numbers' - the 'start value' was imported
     // but nothing was done with it.
@@ -858,14 +858,14 @@ DECLARE_OOXML_TEST(testFdo66543, "fdo66543.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), getProperty< sal_Int32 >( paragraph1, "ParaLineNumberStartValue" ));
 }
 
-DECLARE_OOXML_TEST(testN822175, "n822175.odt")
+DECLARE_OOXMLEXPORT_TEST(testN822175, "n822175.odt")
 {
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     // Was text::WrapTextMode_THROUGH, due to missing Surround handling in the exporter.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(xFrame, "Surround"));
 }
 
-DECLARE_OOXML_TEST(testFdo66688, "fdo66688.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo66688, "fdo66688.docx")
 {
     // The problem was that TextFrame imported and exported the wrong value for transparency
     // (was stored as 'FillTransparence' instead of 'BackColorTransparency'
@@ -875,7 +875,7 @@ DECLARE_OOXML_TEST(testFdo66688, "fdo66688.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 80 ), getProperty< sal_Int32 >( xFrame, "BackColorTransparency" ) );
 }
 
-DECLARE_OOXML_TEST(testFdo66773, "fdo66773.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo66773, "fdo66773.docx")
 {
     // The problem was the line spacing was interpreted by Word as 'Multiple 1.08' if no default settings were written.
     // Now after the 'docDefaults' section is written in <styles.xml> - there is no more problem.
@@ -890,7 +890,7 @@ DECLARE_OOXML_TEST(testFdo66773, "fdo66773.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(100), static_cast<sal_Int32>(alineSpacing.Height));
 }
 
-DECLARE_OOXML_TEST(testFdo58577, "fdo58577.odt")
+DECLARE_OOXMLEXPORT_TEST(testFdo58577, "fdo58577.odt")
 {
     // The second frame was simply missing, so let's check if both frames were imported back.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -898,13 +898,13 @@ DECLARE_OOXML_TEST(testFdo58577, "fdo58577.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
-DECLARE_OOXML_TEST(testBnc581614, "bnc581614.doc")
+DECLARE_OOXMLEXPORT_TEST(testBnc581614, "bnc581614.doc")
 {
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
 }
 
-DECLARE_OOXML_TEST(testFdo66929, "fdo66929.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo66929, "fdo66929.docx")
 {
     // The problem was that the default 'inset' attribute of the 'textbox' node was exported incorrectly.
     // A node like '<v:textbox inset="0">' was exported back as '<v:textbox inset="0pt,0pt,0pt,0pt">'
@@ -918,7 +918,7 @@ DECLARE_OOXML_TEST(testFdo66929, "fdo66929.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
 }
 
-DECLARE_OOXML_TEST(testPageBorderSpacingExportCase2, "page-borders-export-case-2.docx")
+DECLARE_OOXMLEXPORT_TEST(testPageBorderSpacingExportCase2, "page-borders-export-case-2.docx")
 {
      // The problem was that the exporter didn't mirror the workaround of the
      // importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
@@ -939,21 +939,21 @@ DECLARE_OOXML_TEST(testPageBorderSpacingExportCase2, "page-borders-export-case-2
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders/w:right", "space", "24");
 }
 
-DECLARE_OOXML_TEST(testFdo66145, "fdo66145.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo66145, "fdo66145.docx")
 {
     // The Writer ignored the 'First Is Shared' flag
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xPropertySet, "FirstIsShared")));
 }
 
-DECLARE_OOXML_TEST(testGrabBag, "grabbag.docx")
+DECLARE_OOXMLEXPORT_TEST(testGrabBag, "grabbag.docx")
 {
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
     xmlDocPtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
 }
 
-DECLARE_OOXML_TEST(testFdo66781, "fdo66781.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
 {
     // The problem was that bullets with level=0 were shown in LO as normal bullets,
     // and when saved back to DOCX were saved with level=1 (so hidden bullets became visible)
@@ -976,7 +976,7 @@ DECLARE_OOXML_TEST(testFdo66781, "fdo66781.docx")
     CPPUNIT_FAIL("Did not find bullet with level 0");
 }
 
-DECLARE_OOXML_TEST(testFdo60990, "fdo60990.odt")
+DECLARE_OOXMLEXPORT_TEST(testFdo60990, "fdo60990.odt")
 {
     // The shape had no background, no paragraph adjust and no font color.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
@@ -987,7 +987,7 @@ DECLARE_OOXML_TEST(testFdo60990, "fdo60990.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF00), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
 }
 
-DECLARE_OOXML_TEST(testFdo65718, "fdo65718.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo65718, "fdo65718.docx")
 {
     // The problem was that the exporter always exported values of "0" for an images distance from text.
     // the actual attributes where 'distT', 'distB', 'distL', 'distR'
@@ -1006,14 +1006,14 @@ DECLARE_OOXML_TEST(testFdo65718, "fdo65718.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1), getProperty<sal_Int32>(xPropertySet, "RightMargin") );
 }
 
-DECLARE_OOXML_TEST(testFdo64350, "fdo64350.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo64350, "fdo64350.docx")
 {
     // The problem was that page border shadows were not exported
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "ShadowFormat");
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
 }
 
-DECLARE_OOXML_TEST(testFdo67013, "fdo67013.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo67013, "fdo67013.docx")
 {
     /*
      * The problem was that borders inside headers \ footers were not exported
@@ -1050,7 +1050,7 @@ DECLARE_OOXML_TEST(testFdo67013, "fdo67013.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(106), aFooterTopBorder.OuterLineWidth);
 }
 
-DECLARE_OOXML_TEST(testParaShadow, "para-shadow.docx")
+DECLARE_OOXMLEXPORT_TEST(testParaShadow, "para-shadow.docx")
 {
     // The problem was that in w:pBdr, child elements had a w:shadow attribute, but that was ignored.
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getParagraph(2), "ParaShadowFormat");
@@ -1060,7 +1060,7 @@ DECLARE_OOXML_TEST(testParaShadow, "para-shadow.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(24/8*20)), aShadow.ShadowWidth);
 }
 
-DECLARE_OOXML_TEST(testTableFloating, "table-floating.docx")
+DECLARE_OOXMLEXPORT_TEST(testTableFloating, "table-floating.docx")
 {
     // Both the size and the position of the table was incorrect.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1077,7 +1077,7 @@ DECLARE_OOXML_TEST(testTableFloating, "table-floating.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
 
-DECLARE_OOXML_TEST(testTableFloatingMargins, "table-floating-margins.docx")
+DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx")
 {
     // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1093,21 +1093,21 @@ DECLARE_OOXML_TEST(testTableFloatingMargins, "table-floating-margins.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
 }
 
-DECLARE_OOXML_TEST(testFdo44689_start_page_0, "fdo44689_start_page_0.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo44689_start_page_0, "fdo44689_start_page_0.docx")
 {
     // The problem was that the import & export process did not analyze the 'start from page' attribute of a section
     uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xPara, "PageNumberOffset"));
 }
 
-DECLARE_OOXML_TEST(testFdo44689_start_page_7, "fdo44689_start_page_7.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo44689_start_page_7, "fdo44689_start_page_7.docx")
 {
     // The problem was that the import & export process did not analyze the 'start from page' attribute of a section
     uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(7), getProperty<sal_Int16>(xPara, "PageNumberOffset"));
 }
 
-DECLARE_OOXML_TEST(testFdo67737, "fdo67737.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo67737, "fdo67737.docx")
 {
     // The problem was that imported shapes did not import and render the 'flip:x' and 'flip:y' attributes
     uno::Reference<drawing::XShape> xArrow = getShape(1);
@@ -1126,14 +1126,14 @@ DECLARE_OOXML_TEST(testFdo67737, "fdo67737.docx")
     CPPUNIT_FAIL("Did not find MirroredY=true property");
 }
 
-DECLARE_OOXML_TEST(testTransparentShadow, "transparent-shadow.docx")
+DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 {
     uno::Reference<drawing::XShape> xPicture = getShape(1);
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xPicture, "ShadowFormat");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x7f808080), aShadow.Color);
 }
 
-DECLARE_OOXML_TEST(testBnc834035, "bnc834035.odt")
+DECLARE_OOXMLEXPORT_TEST(testBnc834035, "bnc834035.odt")
 {
     // This is tricky, when saving manually, there are 2 hyperlinks, here only
     // one, no idea why. That one still shows that we're not using bookmarks, though.
@@ -1145,7 +1145,7 @@ DECLARE_OOXML_TEST(testBnc834035, "bnc834035.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink", "anchor", "_Toc363553908");
 }
 
-DECLARE_OOXML_TEST(testFdo68418, "fdo68418.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
 {
     // The problem was that in 'MSWordExportBase::SectionProperties' function in 'wrt8sty.cxx'
     // it checked if it 'IsPlausableSingleWordSection'.
@@ -1161,7 +1161,7 @@ DECLARE_OOXML_TEST(testFdo68418, "fdo68418.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("aaaa"), xFooterParagraph->getString());        // I get an error that it expects ''
 }
 
-DECLARE_OOXML_TEST(testA4AndBorders, "a4andborders.docx")
+DECLARE_OOXMLEXPORT_TEST(testA4AndBorders, "a4andborders.docx")
 {
     /*
      * The problem was that in case of a document with borders, the pgSz attribute
@@ -1173,14 +1173,14 @@ DECLARE_OOXML_TEST(testA4AndBorders, "a4andborders.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect Page Height (mm)", sal_Int32(297), getProperty<sal_Int32>(xPageStyle, "Height") / 100);
 }
 
-DECLARE_OOXML_TEST(testFdo68787, "fdo68787.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo68787, "fdo68787.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     // This was 25, the 'lack of w:separator' <-> '0 line width' mapping was missing.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
-DECLARE_OOXML_TEST(testCharacterBorder, "charborder.odt")
+DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // OOXML has just one border attribute (<w:bdr>) for text border so all side has
@@ -1228,7 +1228,7 @@ DECLARE_OOXML_TEST(testCharacterBorder, "charborder.odt")
     }
 }
 
-DECLARE_OOXML_TEST(testStyleInheritance, "style-inheritance.docx")
+DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
 {
     // Check that now styleId's are more like what MSO produces
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
@@ -1323,7 +1323,7 @@ DECLARE_OOXML_TEST(testStyleInheritance, "style-inheritance.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']", "default", "1");
 }
 
-DECLARE_OOXML_TEST(testCalendar1, "calendar1.docx")
+DECLARE_OOXMLEXPORT_TEST(testCalendar1, "calendar1.docx")
 {
     // Document has a non-trivial table style, test the roundtrip of it.
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
@@ -1345,7 +1345,7 @@ DECLARE_OOXML_TEST(testCalendar1, "calendar1.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='band2Horz']/w:tcPr/w:tcBorders/w:top", "themeColor", "text1");
 }
 
-DECLARE_OOXML_TEST(testCalendar2, "calendar2.docx")
+DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
 {
     // This paragraph property was missing in table style.
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
@@ -1363,7 +1363,7 @@ DECLARE_OOXML_TEST(testCalendar2, "calendar2.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblPr/w:tblBorders/w:insideV", "themeTint", "99");
 }
 
-DECLARE_OOXML_TEST(testQuicktables, "quicktables.docx")
+DECLARE_OOXMLEXPORT_TEST(testQuicktables, "quicktables.docx")
 {
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
 
@@ -1391,7 +1391,7 @@ DECLARE_OOXML_TEST(testQuicktables, "quicktables.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumShading2-Accent5']/w:tblStylePr[@w:type='firstRow']/w:tcPr/w:tcBorders/w:top", "color", "auto");
 }
 
-DECLARE_OOXML_TEST(testFdo71302, "fdo71302.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo71302, "fdo71302.docx")
 {
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
 
@@ -1399,7 +1399,7 @@ DECLARE_OOXML_TEST(testFdo71302, "fdo71302.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']", 1);
 }
 
-DECLARE_OOXML_TEST(testSmartart, "smartart.docx")
+DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
@@ -1478,7 +1478,7 @@ DECLARE_OOXML_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("RenderedShapes"), nValue); // Rendered bitmap has the proper name
 }
 
-DECLARE_OOXML_TEST(testFdo69636, "fdo69636.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
 {
     /*
      * The problem was that the exporter didn't mirror the workaround of the
@@ -1489,7 +1489,7 @@ DECLARE_OOXML_TEST(testFdo69636, "fdo69636.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox", "style").match("mso-layout-flow-alt:bottom-to-top"));
 }
 
-DECLARE_OOXML_TEST(testCharHighlight, "char_highlight.docx")
+DECLARE_OOXMLEXPORT_TEST(testCharHighlight, "char_highlight.docx")
 {
     const uno::Reference< text::XTextRange > xPara = getParagraph(1);
     // Both highlight and background
@@ -1536,7 +1536,7 @@ DECLARE_OOXML_TEST(testCharHighlight, "char_highlight.docx")
     }
 }
 
-DECLARE_OOXML_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
+DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
 {
     // Check no empty font name is exported
     // This test does not fail, if the document contains a font with empty name.
@@ -1553,14 +1553,14 @@ DECLARE_OOXML_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
     }
 }
 
-DECLARE_OOXML_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
+DECLARE_OOXMLEXPORT_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
 {
     // Check for the Column Separator value.It should be FALSE as the document doesnt contains separator line.
     xmlDocPtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep","false");
 }
 
-DECLARE_OOXML_TEST(testCustomXmlGrabBag, "customxml.docx")
+DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
 {
    // The problem was that item[n].xml and itemProps[n].xml and .rels files for item[n].xml
    // files were missing from docx file after saving file.
@@ -1589,7 +1589,7 @@ DECLARE_OOXML_TEST(testCustomXmlGrabBag, "customxml.docx")
    CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
 }
 
-DECLARE_OOXML_TEST(testActiveXGrabBag, "activex.docx")
+DECLARE_OOXMLEXPORT_TEST(testActiveXGrabBag, "activex.docx")
 {
    // The problem was that activeX.xml files were missing from docx file after saving file.
    // This test case tests whether activex files grabbagged properly in correct object.
@@ -1617,7 +1617,7 @@ DECLARE_OOXML_TEST(testActiveXGrabBag, "activex.docx")
    CPPUNIT_ASSERT(bActiveX); // Grab Bag has all the expected elements
 }
 
-DECLARE_OOXML_TEST(testActiveXBinGrabBag, "activexbin.docx")
+DECLARE_OOXMLEXPORT_TEST(testActiveXBinGrabBag, "activexbin.docx")
 {
    // The problem was that activeX.bin files were missing from docx file after saving file.
    // This test case tests whether activex bin files grabbagged properly in correct object.
@@ -1645,7 +1645,7 @@ DECLARE_OOXML_TEST(testActiveXBinGrabBag, "activexbin.docx")
    CPPUNIT_ASSERT(bActiveX); // Grab Bag has all the expected elements
 }
 
-DECLARE_OOXML_TEST(testFdo69644, "fdo69644.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo69644, "fdo69644.docx")
 {
     // The problem was that the exporter exported the table definition
     // with only 3 columns, instead of 5 columns.
@@ -1654,26 +1654,26 @@ DECLARE_OOXML_TEST(testFdo69644, "fdo69644.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
-DECLARE_OOXML_TEST(testCp1000015, "cp1000015.odt")
+DECLARE_OOXMLEXPORT_TEST(testCp1000015, "cp1000015.odt")
 {
     // Redline and hyperlink end got exported in an incorrect order.
     getParagraph(1, "Hello.");
     getParagraph(2, "http://www.google.com/");
 }
 
-DECLARE_OOXML_TEST(testFdo70812, "fdo70812.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
 {
     // Import just crashed.
     getParagraph(1, "Sample pages document.");
 }
 
-DECLARE_OOXML_TEST(testPgMargin, "testPgMargin.docx")
+DECLARE_OOXMLEXPORT_TEST(testPgMargin, "testPgMargin.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
 }
 
-DECLARE_OOXML_TEST(testVMLData, "TestVMLData.docx")
+DECLARE_OOXMLEXPORT_TEST(testVMLData, "TestVMLData.docx")
 {
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data shoud not come under w:rPr element.
@@ -1681,7 +1681,7 @@ DECLARE_OOXML_TEST(testVMLData, "TestVMLData.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:rect", "stroked").match("f"));
 }
 
-DECLARE_OOXML_TEST(testImageData, "image_data.docx")
+DECLARE_OOXMLEXPORT_TEST(testImageData, "image_data.docx")
 {
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
@@ -1689,7 +1689,7 @@ DECLARE_OOXML_TEST(testImageData, "image_data.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:rect/v:imagedata", "detectmouseclick").match("t"));
 }
 
-DECLARE_OOXML_TEST(testImageCrop, "ImageCrop.docx")
+DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
@@ -1705,7 +1705,7 @@ DECLARE_OOXML_TEST(testImageCrop, "ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2290 ), aGraphicCropStruct.Bottom );
 }
 
-DECLARE_OOXML_TEST(testFdo70838, "fdo70838.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
 {
     // The problem was that VMLExport::Commit didn't save the correct width and height,
     // and ImplEESdrWriter::ImplFlipBoundingBox made a mistake calculating the position
@@ -1762,7 +1762,7 @@ DECLARE_OOXML_TEST(testFdo70838, "fdo70838.docx")
     }
 }
 
-DECLARE_OOXML_TEST(testLineSpacingexport, "test_line_spacing.docx")
+DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
 {
      // The Problem was that the w:line attribute value in w:spacing tag was incorrect
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -1776,7 +1776,7 @@ DECLARE_OOXML_TEST(testLineSpacingexport, "test_line_spacing.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "line", "31680");
 }
 
-DECLARE_OOXML_TEST(testHyperlineIsEnd, "hyperlink.docx")
+DECLARE_OOXMLEXPORT_TEST(testHyperlineIsEnd, "hyperlink.docx")
 {
     // Check  that the document.xml contents all the tag properly closed.
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
@@ -1786,7 +1786,7 @@ DECLARE_OOXML_TEST(testHyperlineIsEnd, "hyperlink.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink",1);
 }
 
-DECLARE_OOXML_TEST(testTextBoxGradientAngle, "fdo65295.docx")
+DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -1841,7 +1841,7 @@ DECLARE_OOXML_TEST(testTextBoxGradientAngle, "fdo65295.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 45 * 10), aGradient8.Angle);
 }
 
-DECLARE_OOXML_TEST(testCellGridSpan, "cell-grid-span.docx")
+DECLARE_OOXMLEXPORT_TEST(testCellGridSpan, "cell-grid-span.docx")
 {
     // The problem was during export gridSpan value for 1st & 2nd cells for test document
     // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
@@ -1850,7 +1850,7 @@ DECLARE_OOXML_TEST(testCellGridSpan, "cell-grid-span.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
 }
-DECLARE_OOXML_TEST(testFdo71646, "fdo71646.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
 {
     // The problem was after save file created by MS the direction changed to RTL.
     uno::Reference<uno::XInterface> xParaLTRLeft(getParagraph( 1, "LTR LEFT"));
@@ -1863,14 +1863,14 @@ DECLARE_OOXML_TEST(testFdo71646, "fdo71646.docx")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
 }
 
-DECLARE_OOXML_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
+DECLARE_OOXMLEXPORT_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "beforeAutospacing").match("1"));
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "afterAutospacing").match("1"));
 }
 
-DECLARE_OOXML_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
+DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
@@ -1886,7 +1886,7 @@ DECLARE_OOXML_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1448 ), aGraphicCropStruct.Bottom );
 }
 
-DECLARE_OOXML_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
+DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
 {
     /* The problem was image cropping information was not getting saved
      * after roundtrip.
@@ -1906,7 +1906,7 @@ DECLARE_OOXML_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 737 ), aGraphicCropStruct.Bottom );
 }
 
-DECLARE_OOXML_TEST(testFootnoteParagraphTag, "testFootnote.docx")
+DECLARE_OOXMLEXPORT_TEST(testFootnoteParagraphTag, "testFootnote.docx")
 {
     /* In footnotes.xml, the paragraph tag inside <w:footnote w:id="2"> was getting written into document.xml.
      * Check for, paragraph tag is correctly written into footnotes.xml.
@@ -1916,13 +1916,13 @@ DECLARE_OOXML_TEST(testFootnoteParagraphTag, "testFootnote.docx")
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:rPr/w:rStyle","val","Footnotereference");
 }
 
-DECLARE_OOXML_TEST(testSpacingLineRule,"table_lineRule.docx")
+DECLARE_OOXMLEXPORT_TEST(testSpacingLineRule,"table_lineRule.docx")
 {
      xmlDocPtr pXmlDoc = parseExport("word/document.xml");
      assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
 }
 
-DECLARE_OOXML_TEST(testTableLineSpacing, "table_atleast.docx")
+DECLARE_OOXMLEXPORT_TEST(testTableLineSpacing, "table_atleast.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");

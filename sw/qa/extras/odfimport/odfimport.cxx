@@ -32,12 +32,14 @@ class Test : public SwModelTestBase
         Test() : SwModelTestBase("/sw/qa/extras/odfimport/data/", "writer8") {}
 };
 
-DECLARE_SW_IMPORT_TEST(testEmptySvgFamilyName, "empty-svg-family-name.odt", Test)
+#define DECLARE_ODFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
+
+DECLARE_ODFIMPORT_TEST(testEmptySvgFamilyName, "empty-svg-family-name.odt")
 {
     // .odt import did crash on the empty font list (which I think is valid according SVG spec)
 }
 
-DECLARE_SW_IMPORT_TEST(testHideAllSections, "fdo53210.odt", Test)
+DECLARE_ODFIMPORT_TEST(testHideAllSections, "fdo53210.odt")
 {
     // This document has a section that is conditionally hidden, but has no empty paragraph after it.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -49,7 +51,7 @@ DECLARE_SW_IMPORT_TEST(testHideAllSections, "fdo53210.odt", Test)
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
 }
 
-DECLARE_SW_IMPORT_TEST(testOdtBorders, "borders_ooo33.odt", Test)
+DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
 {
     AllBordersMap map;
     uno::Sequence< table::BorderLine > tempSequence(4);
@@ -236,21 +238,21 @@ DECLARE_SW_IMPORT_TEST(testOdtBorders, "borders_ooo33.odt", Test)
     } while(xParaEnum->hasMoreElements());
 }
 
-DECLARE_SW_IMPORT_TEST(testPageStyleLayoutDefault, "hello.odt", Test)
+DECLARE_ODFIMPORT_TEST(testPageStyleLayoutDefault, "hello.odt")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
     // This was style::PageStyleLayout_MIRRORED.
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, "PageStyleLayout"));
 }
 
-DECLARE_SW_IMPORT_TEST(testPageStyleLayoutRight, "hello.odt", Test)
+DECLARE_ODFIMPORT_TEST(testPageStyleLayoutRight, "hello.odt")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
     // This caused a crash.
     xPropertySet->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_RIGHT));
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo61952, "hello.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo61952, "hello.odt")
 {
     uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
     xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Left Page")));
@@ -259,7 +261,7 @@ DECLARE_SW_IMPORT_TEST(testFdo61952, "hello.odt", Test)
     xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Right Page")));
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo60842, "fdo60842.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo60842, "fdo60842.odt")
 {
     uno::Reference<text::XTextContent> const xTable(getParagraphOrTable(0));
     getCell(xTable, "A1", "");
@@ -269,14 +271,14 @@ DECLARE_SW_IMPORT_TEST(testFdo60842, "fdo60842.odt", Test)
     getCell(xTable, "E1", "01/04/2012");
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo56272, "fdo56272.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo56272, "fdo56272.odt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Vertical position was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo55814, "fdo55814.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo55814, "fdo55814.odt")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -298,7 +300,7 @@ void lcl_CheckShape(
     CPPUNIT_ASSERT_EQUAL(rExpected, xNamed->getName());
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo68839, "fdo68839.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo68839, "fdo68839.odt")
 {
     // check names
     lcl_CheckShape(getShape(1), "FrameXXX");
@@ -322,7 +324,7 @@ DECLARE_SW_IMPORT_TEST(testFdo68839, "fdo68839.odt", Test)
             getProperty<OUString>(xFrame2, "ChainNextName"));
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo37606, "fdo37606.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
@@ -360,7 +362,7 @@ DECLARE_SW_IMPORT_TEST(testFdo37606, "fdo37606.odt", Test)
     }
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo37606Copy, "fdo37606.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
@@ -384,7 +386,7 @@ DECLARE_SW_IMPORT_TEST(testFdo37606Copy, "fdo37606.odt", Test)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo69862, "fdo69862.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
 {
     // The test doc is special in that it starts with a table and it also has a footnote.
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -400,7 +402,7 @@ DECLARE_SW_IMPORT_TEST(testFdo69862, "fdo69862.odt", Test)
     CPPUNIT_ASSERT_EQUAL(OUString("H" "\x01" "ello."), rEnd.GetTxt());
 }
 
-DECLARE_SW_IMPORT_TEST(testFdo69979, "fdo69979.odt", Test)
+DECLARE_ODFIMPORT_TEST(testFdo69979, "fdo69979.odt")
 {
     // The test doc is special in that it starts with a table and it also has a header.
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -416,7 +418,7 @@ DECLARE_SW_IMPORT_TEST(testFdo69979, "fdo69979.odt", Test)
     CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
 }
 
-DECLARE_SW_IMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt", Test)
+DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
