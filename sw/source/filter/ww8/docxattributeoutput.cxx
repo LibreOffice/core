@@ -2689,8 +2689,7 @@ OString lcl_ConvertTransparency(const Color& rColor)
 }
 
 /* Writes <a:srcRect> tag back to document.xml if a file conatins a cropped image.
-   NOTE : It works only for images of type JPEG,EMF/WMF and BMP.
-          It does not work for images of type PNG and GIF.
+*  NOTE : Tested on images of type JPEG,EMF/WMF,BMP, PNG and GIF.
 */
 void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
 {
@@ -2703,6 +2702,13 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
 
     ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
     xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+
+    const MapMode aMap100mm( MAP_100TH_MM );
+    const MapMode& mapMode = GraphicObject::CreateGraphicObjectFromURL( sUrl ).GetPrefMapMode();
+    if( mapMode.GetMapUnit() == MAP_PIXEL )
+    {
+        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, aMap100mm );
+    }
 
     if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
     {

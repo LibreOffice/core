@@ -94,6 +94,7 @@ protected:
             "math-escape.docx",
             "math-mso2k7.docx",
             "ImageCrop.docx",
+            "test_GIF_ImageCrop.docx"
         };
         std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
@@ -1839,6 +1840,23 @@ DECLARE_OOXML_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "beforeAutospacing").match("1"));
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "afterAutospacing").match("1"));
 }
+
+DECLARE_OOXML_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
+{
+    uno::Reference<drawing::XShape> image = getShape(1);
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+
+    imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+
+    // FIXME import test is disabled (we only check after import-export-import)
+    // The reason is that after import this is 1171 -- why?
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1265 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4256 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1109 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1448 ), aGraphicCropStruct.Bottom );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
