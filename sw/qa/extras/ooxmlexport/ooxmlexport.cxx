@@ -1811,6 +1811,12 @@ DECLARE_OOXML_TEST(testTextBoxGradientAngle, "fdo65295.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 45 * 10), aGradient8.Angle);
 }
 
+DECLARE_OOXML_TEST(testSpacingLineRule,"table_lineRule.docx")
+{
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
