@@ -5656,6 +5656,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
             m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_before ),
                     OString::number( rULSpace.GetUpper() ) );
         }
+        m_bParaBeforeAutoSpacing = false;
         // check if after auto spacing was set during import and spacing we get from actual object is same
         // that we set in import. If yes just write afterAutoSpacing tag.
         if (m_bParaAfterAutoSpacing && m_iParaAfterSpacing == rULSpace.GetLower())
@@ -5668,6 +5669,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
             m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
                     OString::number( rULSpace.GetLower()) );
         }
+        m_bParaAfterAutoSpacing = false;
 
         if (rULSpace.GetContext())
             m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSEND );
@@ -6262,7 +6264,9 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bFrameBtLr(false),
       m_pTableStyleExport(new DocxTableStyleExport(rExport.pDoc, pSerializer)),
       m_bParaBeforeAutoSpacing(false),
-      m_bParaAfterAutoSpacing(false)
+      m_bParaAfterAutoSpacing(false),
+      m_iParaBeforeSpacing(0),
+      m_iParaAfterSpacing(0)
 {
 }
 
