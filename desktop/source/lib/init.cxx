@@ -97,6 +97,28 @@ aImpressExtensionMap[] = {
     { NULL, NULL }
 };
 
+static OUString getUString( const char *str )
+{
+    if( !str )
+        return OUString( "" );
+    return OStringToOUString( OString( str, strlen (str) ),
+                              RTL_TEXTENCODING_UTF8 );
+}
+
+// Try to convert a relative URL to an absolute one
+static OUString getAbsoluteURL( const char *pURL )
+{
+    OUString aURL( getUString( pURL ) );
+    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
+
+    // FIXME: this would appear to kill non-file URLs.
+    osl_getProcessWorkingDir(&sWorkingDir.pData);
+    osl::FileBase::getFileURLFromSystemPath( aURL, sDocPathUrl );
+    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
+
+    return sAbsoluteDocUrl;
+}
+
 extern "C" {
 
 SAL_DLLPUBLIC_EXPORT LibreOffice *liblibreoffice_hook(void);
@@ -150,28 +172,6 @@ struct LibLibreOffice_Impl : public _LibreOffice
 static uno::Reference<css::uno::XComponentContext> xContext;
 static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
 static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
-
-static OUString getUString( const char *str )
-{
-    if( !str )
-        return OUString( "" );
-    return OStringToOUString( OString( str, strlen (str) ),
-                              RTL_TEXTENCODING_UTF8 );
-}
-
-// Try to convert a relative URL to an absolute one
-static OUString getAbsoluteURL( const char *pURL )
-{
-    OUString aURL( getUString( pURL ) );
-    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
-
-    // FIXME: this would appear to kill non-file URLs.
-    osl_getProcessWorkingDir(&sWorkingDir.pData);
-    osl::FileBase::getFileURLFromSystemPath( aURL, sDocPathUrl );
-    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
-
-    return sAbsoluteDocUrl;
-}
 
 static LibreOfficeDocument *
 lo_documentLoad( LibreOffice *pThis, const char *pURL )
