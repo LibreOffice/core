@@ -357,7 +357,7 @@ DECLARE_RTFIMPORT_TEST(testFdo45182, "fdo45182.rtf")
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // Encoding in the footnote was wrong.
-    OUString aExpected("\xc5\xbeivnost\xc3\xad", 10, RTL_TEXTENCODING_UTF8);
+    OUString aExpected("\xc5\xbeivnost\xc3\xad\n", 11, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -1351,6 +1351,18 @@ DECLARE_RTFIMPORT_TEST(testFdo70221, "fdo70221.rtf")
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // The picture was imported twice.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+DECLARE_RTFIMPORT_TEST(testCp1000018, "cp1000018.rtf")
+{
+    // The problem was that the empty paragraph at the end of the footnote got
+    // lost during import.
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    // Why the tab has to be removed here?
+    OUString aExpected("Footnote first line.\n");
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString().replaceAll("\t", ""));
 }
 
 #endif

@@ -1625,7 +1625,6 @@ void DomainMapper_Impl::PushAnnotation()
 
 void DomainMapper_Impl::PopFootOrEndnote()
 {
-    RemoveLastParagraph();
     if (!m_aTextAppendStack.empty())
         m_aTextAppendStack.pop();
 

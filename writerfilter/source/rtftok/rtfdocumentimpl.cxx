@@ -331,14 +331,6 @@ bool RTFDocumentImpl::isSubstream() const
 void RTFDocumentImpl::finishSubstream()
 {
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
-    // At the end of a footnote stream, we need to emit a run break when importing from Word.
-    // We can't do so unconditionally, as Writer already writes a \par at the end of the footnote.
-    if (m_bNeedCr)
-    {
-        Mapper().startCharacterGroup();
-        runBreak();
-        Mapper().endCharacterGroup();
-    }
 }
 
 void RTFDocumentImpl::setIgnoreFirst(OUString& rIgnoreFirst)
@@ -529,7 +521,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     bool bContinuous = pBreak.get() && pBreak->getInt() == 0;
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer,
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
-    if (m_bNeedPar && !(bFinal && !m_bNeedSect && !bContinuous))
+    if (m_bNeedPar && !(bFinal && !m_bNeedSect && !bContinuous) && !isSubstream())
         dispatchSymbol(RTF_PAR);
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
@@ -4517,7 +4509,7 @@ int RTFDocumentImpl::popState()
     // This is the end of the doc, see if we need to close the last section.
     if (m_pTokenizer->getGroup() == 1 && !m_bFirstRun)
     {
-        if (m_bNeedCr)
+        if (m_bNeedCr && !isSubstream())
             dispatchSymbol(RTF_PAR);
         sectBreak(true);
     }
