@@ -16,6 +16,21 @@ using namespace com::sun::star;
 
 namespace sc {
 
+namespace {
+
+void insertAllNames( TokenStringContext::IndexNameMapType& rMap, const ScRangeName& rNames )
+{
+    ScRangeName::const_iterator it = rNames.begin(), itEnd = rNames.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScRangeData* pData = it->second;
+        rMap.insert(
+            TokenStringContext::IndexNameMapType::value_type(pData->GetIndex(), pData->GetName()));
+    }
+}
+
+}
+
 TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) :
     meGram(eGram),
     mpRefConv(ScCompiler::GetRefConvention(formula::FormulaGrammar::extractRefConvention(eGram)))
@@ -25,39 +40,50 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     if (mxOpCodeMap)
         maErrRef = mxOpCodeMap->getSymbol(ocErrRef);
 
-    if (pDoc)
+    if (!pDoc)
+        return;
+
+    // Fetch all sheet names.
+    maTabNames = pDoc->GetAllTableNames();
     {
-        // Fetch all sheet names.
-        maTabNames = pDoc->GetAllTableNames();
-        {
-            std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
-            for (; it != itEnd; ++it)
-                ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(eGram));
-        }
+        std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
+        for (; it != itEnd; ++it)
+            ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(eGram));
+    }
 
-        // Fetch all named range names.
-        const ScRangeName* pNames = pDoc->GetRangeName();
-        if (pNames)
-        {
-            ScRangeName::const_iterator it = pNames->begin(), itEnd = pNames->end();
-            for (; it != itEnd; ++it)
-            {
-                const ScRangeData* pData = it->second;
-                maGlobalRangeNames.insert(IndexNameMapType::value_type(pData->GetIndex(), pData->GetName()));
-            }
-        }
+    // Fetch all named range names.
+    const ScRangeName* pNames = pDoc->GetRangeName();
+    if (pNames)
+        // global names
+        insertAllNames(maGlobalRangeNames, *pNames);
 
-        // Fetch all named database ranges names.
-        const ScDBCollection* pDBs = pDoc->GetDBCollection();
-        if (pDBs)
+    {
+        ScRangeName::TabNameCopyMap aTabRangeNames;
+        pDoc->GetAllTabRangeNames(aTabRangeNames);
+        ScRangeName::TabNameCopyMap::const_iterator it = aTabRangeNames.begin(), itEnd = aTabRangeNames.end();
+        for (; it != itEnd; ++it)
         {
-            const ScDBCollection::NamedDBs& rNamedDBs = pDBs->getNamedDBs();
-            ScDBCollection::NamedDBs::const_iterator it = rNamedDBs.begin(), itEnd = rNamedDBs.end();
-            for (; it != itEnd; ++it)
-            {
-                const ScDBData& rData = *it;
-                maNamedDBs.insert(IndexNameMapType::value_type(rData.GetIndex(), rData.GetName()));
-            }
+            const ScRangeName* pSheetNames = it->second;
+            if (!pSheetNames)
+                continue;
+
+            SCTAB nTab = it->first;
+            IndexNameMapType aNames;
+            insertAllNames(aNames, *pSheetNames);
+            maSheetRangeNames.insert(TabIndexMapType::value_type(nTab, aNames));
+        }
+    }
+
+    // Fetch all named database ranges names.
+    const ScDBCollection* pDBs = pDoc->GetDBCollection();
+    if (pDBs)
+    {
+        const ScDBCollection::NamedDBs& rNamedDBs = pDBs->getNamedDBs();
+        ScDBCollection::NamedDBs::const_iterator it = rNamedDBs.begin(), itEnd = rNamedDBs.end();
+        for (; it != itEnd; ++it)
+        {
+            const ScDBData& rData = *it;
+            maNamedDBs.insert(IndexNameMapType::value_type(rData.GetIndex(), rData.GetName()));
         }
     }
 }

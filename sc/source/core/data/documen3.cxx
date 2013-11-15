@@ -109,7 +109,7 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
             // no more tables to iterate through.
             break;
 
-        const ScRangeName* p = maTabs[i]->GetRangeName();
+        const ScRangeName* p = maTabs[i]->mpRangeName;
         if (!p || p->empty())
             // ignore empty ones.
             continue;

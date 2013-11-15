@@ -27,6 +27,7 @@ namespace sc {
 struct SC_DLLPUBLIC TokenStringContext
 {
     typedef boost::unordered_map<sal_uInt16, OUString> IndexNameMapType;
+    typedef boost::unordered_map<SCTAB, IndexNameMapType> TabIndexMapType;
 
     formula::FormulaGrammar::Grammar meGram;
     formula::FormulaCompiler::OpCodeMapPtr mxOpCodeMap;
@@ -35,6 +36,7 @@ struct SC_DLLPUBLIC TokenStringContext
 
     std::vector<OUString> maTabNames;
     IndexNameMapType maGlobalRangeNames;
+    TabIndexMapType maSheetRangeNames;
     IndexNameMapType maNamedDBs;
 
     TokenStringContext( const ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram );

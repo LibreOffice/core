@@ -45,16 +45,21 @@ void Test::testFormulaCreateStringFromTokens()
 
     // Insert named ranges.
     struct {
+        bool bGlobal;
         const char* pName;
         const char* pExpr;
     } aNames[] = {
-        { "x", "Test.H1" },
-        { "y", "Test.H2" },
-        { "z", "Test.H3" }
+        { true, "x", "Test.H1" },
+        { true, "y", "Test.H2" },
+        { true, "z", "Test.H3" },
+
+        { false, "sheetx", "Test.J1" }
     };
 
     ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    ScRangeName* pSheetNames = m_pDoc->GetRangeName(0);
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+    CPPUNIT_ASSERT_MESSAGE("Failed to obtain sheet-local named expression object.", pSheetNames);
 
     for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
     {
@@ -62,8 +67,16 @@ void Test::testFormulaCreateStringFromTokens()
             m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
             ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
 
-        bool bInserted = pGlobalNames->insert(pName);
-        CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
+        if (aNames[i].bGlobal)
+        {
+            bool bInserted = pGlobalNames->insert(pName);
+            CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
+        }
+        else
+        {
+            bool bInserted = pSheetNames->insert(pName);
+            CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
+        }
     }
 
     // Insert DB ranges.
@@ -99,6 +112,7 @@ void Test::testFormulaCreateStringFromTokens()
         "'Kevin''s Data'.B10",
         "'Past Data'.B1+'2013'.B2*(1+'Kevin''s Data'.C10)",
         "x+y*z", // named ranges
+        "SUM(sheetx;x;y;z)", // sheet local and global named ranges mixed
         "MAX(Table1)+MIN(Table2)*SUM(Table3)" // database ranges
     };
 

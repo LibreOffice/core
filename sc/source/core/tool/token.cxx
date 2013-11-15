@@ -3264,19 +3264,50 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
         break;
         case svIndex:
         {
+            typedef sc::TokenStringContext::IndexNameMapType NameType;
+
             sal_uInt16 nIndex = rToken.GetIndex();
             switch (eOp)
             {
                 case ocName:
                 {
-                    sc::TokenStringContext::IndexNameMapType::const_iterator it = rCxt.maGlobalRangeNames.find(nIndex);
-                    if (it != rCxt.maGlobalRangeNames.end())
+                    if (rToken.IsGlobal())
+                    {
+                        // global named range
+                        NameType::const_iterator it = rCxt.maGlobalRangeNames.find(nIndex);
+                        if (it == rCxt.maGlobalRangeNames.end())
+                        {
+                            rBuf.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+                            break;
+                        }
+
                         rBuf.append(it->second);
+                    }
+                    else
+                    {
+                        // sheet-local named range
+                        sc::TokenStringContext::TabIndexMapType::const_iterator itTab = rCxt.maSheetRangeNames.find(rPos.Tab());
+                        if (itTab == rCxt.maSheetRangeNames.end())
+                        {
+                            rBuf.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+                            break;
+                        }
+
+                        const NameType& rNames = itTab->second;
+                        NameType::const_iterator it = rNames.find(nIndex);
+                        if (it == rNames.end())
+                        {
+                            rBuf.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+                            break;
+                        }
+
+                        rBuf.append(it->second);
+                    }
                 }
                 break;
                 case ocDBArea:
                 {
-                    sc::TokenStringContext::IndexNameMapType::const_iterator it = rCxt.maNamedDBs.find(nIndex);
+                    NameType::const_iterator it = rCxt.maNamedDBs.find(nIndex);
                     if (it != rCxt.maNamedDBs.end())
                         rBuf.append(it->second);
                 }
