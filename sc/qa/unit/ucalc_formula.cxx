@@ -32,11 +32,22 @@ using namespace formula;
 
 void Test::testFormulaCreateStringFromTokens()
 {
-    m_pDoc->InsertTab(0, "Test");
+    OUString aTabName1("Test");
+    OUString aTabName2("Kevin's Data");
+    OUString aTabName3("Past Data");
+    OUString aTabName4("2013");
+    m_pDoc->InsertTab(0, aTabName1);
+    m_pDoc->InsertTab(1, aTabName2);
+    m_pDoc->InsertTab(2, aTabName3);
+    m_pDoc->InsertTab(3, aTabName4);
 
     const char* aTests[] = {
         "1+2",
-        "SUM(A1:A10;B1:B10;C5;D6)"
+        "SUM(A1:A10;B1:B10;C5;D6)",
+        "IF(Test.B10<>10;\"Good\";\"Bad\")",
+        "AVERAGE('2013'.B10:C20)",
+        "'Kevin''s Data'.B10",
+        "'Past Data'.B1+'2013'.B2*(1+'Kevin''s Data'.C10)"
     };
 
     boost::scoped_ptr<ScTokenArray> pArray;
@@ -57,6 +68,9 @@ void Test::testFormulaCreateStringFromTokens()
         CPPUNIT_ASSERT_EQUAL(aFormula, aCheck);
     }
 
+    m_pDoc->DeleteTab(3);
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
