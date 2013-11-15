@@ -1111,29 +1111,6 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         {
             if( !bIsEmptyPresObj )
             {
-                OUString aReplacementUrl;
-                xPropSet->getPropertyValue( OUString("ReplacementGraphicURL")) >>= aReplacementUrl;
-
-                // If there is no url, then then graphic is empty
-                if(!aReplacementUrl.isEmpty())
-                {
-                    const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
-
-                    if(aStr.getLength())
-                    {
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr);
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
-                        // xlink:href for replacement, only written for Svg content
-                        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, sal_True, sal_True);
-
-                        // optional office:binary-data
-                        mrExport.AddEmbeddedGraphicObjectAsBase64(aReplacementUrl);
-                    }
-                }
-
                 OUString aStreamURL;
                 OUString aStr;
 
@@ -1200,6 +1177,34 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 }
                 if( !bIsEmptyPresObj )
                     ImpExportText( xShape );
+            }
+
+            //Resolves: fdo#62461 put preferred image first above, followed by
+            //fallback here
+            if( !bIsEmptyPresObj )
+            {
+                OUString aReplacementUrl;
+                xPropSet->getPropertyValue( OUString("ReplacementGraphicURL")) >>= aReplacementUrl;
+
+                // If there is no url, then then graphic is empty
+                if(!aReplacementUrl.isEmpty())
+                {
+                    const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
+
+                    if(aStr.getLength())
+                    {
+                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr);
+                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+
+                        // xlink:href for replacement, only written for Svg content
+                        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, sal_True, sal_True);
+
+                        // optional office:binary-data
+                        mrExport.AddEmbeddedGraphicObjectAsBase64(aReplacementUrl);
+                    }
+                }
             }
         }
 
