@@ -81,6 +81,7 @@ protected:
 public:
 
                         GraphCtrl( Window* pParent, const ResId& rResId );
+                        GraphCtrl( Window* pParent, WinBits nStyle );
                         ~GraphCtrl();
 
     void                SetWinStyle( WinBits nWinBits );

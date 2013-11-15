@@ -26,49 +26,45 @@
 #include "sdmod.hxx"
 #include "sdiocmpt.hxx"
 #include "vectdlg.hxx"
-#include "vectdlg.hrc"
 #include <vcl/bmpacc.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 
 #define VECTORIZE_MAX_EXTENT 512
 
-SdVectorizeDlg::SdVectorizeDlg(
-    Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell ) :
-        ModalDialog     ( pParent, SdResId( DLG_VECTORIZE ) ),
-        mpDocSh          ( pDocShell ),
-        aGrpSettings    ( this, SdResId( GRP_SETTINGS ) ),
-        aFtLayers       ( this, SdResId( FT_LAYERS ) ),
-        aNmLayers       ( this, SdResId( NM_LAYERS ) ),
-        aFtReduce       ( this, SdResId( FT_REDUCE ) ),
-        aMtReduce       ( this, SdResId( MT_REDUCE ) ),
-        aFtFillHoles    ( this, SdResId( FT_FILLHOLES ) ),
-        aMtFillHoles    ( this, SdResId( MT_FILLHOLES ) ),
-        aCbFillHoles    ( this, SdResId( CB_FILLHOLES ) ),
-        aFtOriginal     ( this, SdResId( FT_ORIGINAL ) ),
-        aBmpWin         ( this, SdResId( CTL_BMP ) ),
-        aFtVectorized   ( this, SdResId( FT_VECTORIZED ) ),
-        aMtfWin         ( this, SdResId( CTL_WMF ) ),
-        aGrpPrgs        ( this, SdResId( GRP_PRGS ) ),
-        aPrgs           ( this, SdResId( WND_PRGS ) ),
-        aBtnOK          ( this, SdResId( BTN_OK ) ),
-        aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-        aBtnPreview     ( this, SdResId( BTN_PREVIEW ) ),
-        aBmp            ( rBmp )
+SdVectorizeDlg::SdVectorizeDlg(Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
+    : ModalDialog(pParent, "VectorizeDialog", "modules/sdraw/ui/vectorize.ui")
+    , mpDocSh(pDocShell)
+    , aBmp(rBmp)
 {
-    FreeResource();
+    get(m_pNmLayers, "colors");
+    get(m_pMtReduce, "points");
+    get(m_pCbFillHoles, "fillholes");
+    get(m_pFtFillHoles, "tilesft");
+    get(m_pMtFillHoles, "tiles");
+    get(m_pBmpWin, "source");
+    get(m_pMtfWin, "vectorized");
 
-    aBtnPreview.SetClickHdl( LINK( this, SdVectorizeDlg, ClickPreviewHdl ) );
-    aBtnOK.SetClickHdl( LINK( this, SdVectorizeDlg, ClickOKHdl ) );
-    aNmLayers.SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
-    aMtReduce.SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
-    aMtFillHoles.SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
-    aCbFillHoles.SetToggleHdl( LINK( this, SdVectorizeDlg, ToggleHdl ) );
+    Size aSize(LogicToPixel(Size(92, 100), MAP_APPFONT));
+    m_pBmpWin->set_width_request(aSize.Width());
+    m_pMtfWin->set_width_request(aSize.Width());
+    m_pBmpWin->set_height_request(aSize.Height());
+    m_pMtfWin->set_height_request(aSize.Height());
+
+    get(m_pPrgs, "progressbar");
+    get(m_pBtnPreview, "preview");
+    get(m_pBtnOK, "ok");
+
+    m_pBtnPreview->SetClickHdl( LINK( this, SdVectorizeDlg, ClickPreviewHdl ) );
+    m_pBtnOK->SetClickHdl( LINK( this, SdVectorizeDlg, ClickOKHdl ) );
+    m_pNmLayers->SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
+    m_pMtReduce->SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
+    m_pMtFillHoles->SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
+    m_pCbFillHoles->SetToggleHdl( LINK( this, SdVectorizeDlg, ToggleHdl ) );
 
     // disable 3D border
-    aBmpWin.SetBorderStyle(WINDOW_BORDER_MONO);
-    aMtfWin.SetBorderStyle(WINDOW_BORDER_MONO);
+    m_pBmpWin->SetBorderStyle(WINDOW_BORDER_MONO);
+    m_pMtfWin->SetBorderStyle(WINDOW_BORDER_MONO);
 
     LoadSettings();
     InitPreviewBmp();
@@ -110,11 +106,11 @@ Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
 
 void SdVectorizeDlg::InitPreviewBmp()
 {
-    const Rectangle aRect( GetRect( aBmpWin.GetSizePixel(), aBmp.GetSizePixel() ) );
+    const Rectangle aRect( GetRect( m_pBmpWin->GetSizePixel(), aBmp.GetSizePixel() ) );
 
     aPreviewBmp = aBmp;
     aPreviewBmp.Scale( aRect.GetSize() );
-    aBmpWin.SetGraphic( aPreviewBmp );
+    m_pBmpWin->SetGraphic( aPreviewBmp );
 }
 
 Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
@@ -131,7 +127,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
     else
         rScale = Fraction( 1, 1 );
 
-    aNew.ReduceColors( (sal_uInt16) aNmLayers.GetValue(), BMP_REDUCE_SIMPLE );
+    aNew.ReduceColors( (sal_uInt16) m_pNmLayers->GetValue(), BMP_REDUCE_SIMPLE );
 
     return aNew;
 }
@@ -139,7 +135,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 {
     mpDocSh->SetWaitCursor( sal_True );
-    aPrgs.SetValue( 0 );
+    m_pPrgs->SetValue( 0 );
 
     Fraction    aScale;
     Bitmap      aTmp( GetPreparedBitmap( rBmp, aScale ) );
@@ -147,9 +143,9 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     if( !!aTmp )
     {
         const Link aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
-        aTmp.Vectorize( rMtf, (sal_uInt8) aMtReduce.GetValue(), BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES, &aPrgsHdl );
+        aTmp.Vectorize( rMtf, (sal_uInt8) m_pMtReduce->GetValue(), BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES, &aPrgsHdl );
 
-        if( aCbFillHoles.IsChecked() )
+        if( m_pCbFillHoles->IsChecked() )
         {
             GDIMetaFile         aNewMtf;
             BitmapReadAccess*   pRAcc = aTmp.AcquireReadAccess();
@@ -158,8 +154,8 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
             {
                 const long      nWidth = pRAcc->Width();
                 const long      nHeight = pRAcc->Height();
-                const long      nTileX = static_cast<long>(aMtFillHoles.GetValue());
-                const long      nTileY = static_cast<long>(aMtFillHoles.GetValue());
+                const long      nTileX = static_cast<long>(m_pMtFillHoles->GetValue());
+                const long      nTileY = static_cast<long>(m_pMtFillHoles->GetValue());
                 const long      nCountX = nWidth / nTileX;
                 const long      nCountY = nHeight / nTileY;
                 const long      nRestX = nWidth % nTileX;
@@ -205,7 +201,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
         }
     }
 
-    aPrgs.SetValue( 0 );
+    m_pPrgs->SetValue( 0 );
     mpDocSh->SetWaitCursor( sal_False );
 }
 
@@ -251,22 +247,22 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
 
 IMPL_LINK( SdVectorizeDlg, ProgressHdl, void*, pData )
 {
-    aPrgs.SetValue( (sal_uInt16)(sal_uLong) pData );
+    m_pPrgs->SetValue( (sal_uInt16)(sal_uLong) pData );
     return 0L;
 }
 
 IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl)
 {
     Calculate( aBmp, aMtf );
-    aMtfWin.SetGraphic( aMtf );
-    aBtnPreview.Disable();
+    m_pMtfWin->SetGraphic( aMtf );
+    m_pBtnPreview->Disable();
 
     return 0L;
 }
 
 IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl)
 {
-    if( aBtnPreview.IsEnabled() )
+    if( m_pBtnPreview->IsEnabled() )
         Calculate( aBmp, aMtf );
 
     SaveSettings();
@@ -279,13 +275,13 @@ IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )
 {
     if( pCb->IsChecked() )
     {
-        aFtFillHoles.Enable();
-        aMtFillHoles.Enable();
+        m_pFtFillHoles->Enable();
+        m_pMtFillHoles->Enable();
     }
     else
     {
-        aFtFillHoles.Disable();
-        aMtFillHoles.Disable();
+        m_pFtFillHoles->Disable();
+        m_pMtFillHoles->Disable();
     }
 
     ModifyHdl( NULL );
@@ -295,7 +291,7 @@ IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )
 
 IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl)
 {
-    aBtnPreview.Enable();
+    m_pBtnPreview->Enable();
     return 0L;
 }
 
@@ -322,12 +318,12 @@ void SdVectorizeDlg::LoadSettings()
         bFillHoles = sal_False;
     }
 
-    aNmLayers.SetValue( nLayers );
-    aMtReduce.SetValue( nReduce );
-    aMtFillHoles.SetValue( nFillHoles );
-    aCbFillHoles.Check( bFillHoles );
+    m_pNmLayers->SetValue( nLayers );
+    m_pMtReduce->SetValue( nReduce );
+    m_pMtFillHoles->SetValue( nFillHoles );
+    m_pCbFillHoles->Check( bFillHoles );
 
-    ToggleHdl( &aCbFillHoles );
+    ToggleHdl(m_pCbFillHoles);
 }
 
 void SdVectorizeDlg::SaveSettings() const
@@ -339,8 +335,8 @@ void SdVectorizeDlg::SaveSettings() const
     if( xOStm.Is() )
     {
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
-        *xOStm << (sal_uInt16) aNmLayers.GetValue() << (sal_uInt16) aMtReduce.GetValue();
-        *xOStm << (sal_uInt16) aMtFillHoles.GetValue() << aCbFillHoles.IsChecked();
+        *xOStm << (sal_uInt16) m_pNmLayers->GetValue() << (sal_uInt16) m_pMtReduce->GetValue();
+        *xOStm << (sal_uInt16) m_pMtFillHoles->GetValue() << m_pCbFillHoles->IsChecked();
     }
 }
 

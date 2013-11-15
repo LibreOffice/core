@@ -155,8 +155,6 @@
 #define HID_SD_TABLE_DESIGN                                     "SD_HID_SD_TABLE_DESIGN"
 #define HID_SD_ANNOTATIONS                                      "SD_HID_SD_ANNOTATIONS"
 
-#define HID_VECTORIZE_DLG                                       "SD_HID_VECTORIZE_DLG"
-
 #define HID_MN_SUB_GRAPHIC                                      "SD_HID_MN_SUB_GRAPHIC"
 #define HID_MN_SUB_FIELD                                        "SD_HID_MN_SUB_FIELD"
 #define HID_MN_SUB_TEMPLATES                                    "SD_HID_MN_SUB_TEMPLATES"

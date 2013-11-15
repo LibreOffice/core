@@ -81,6 +81,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/paranumberingtab \
 	sd/uiconfig/sdraw/ui/printeroptions \
 	sd/uiconfig/sdraw/ui/tabledesigndialog \
+	sd/uiconfig/sdraw/ui/vectorize \
 ))
 
 # vim: set noet sw=4 ts=4:

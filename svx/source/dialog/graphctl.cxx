@@ -74,6 +74,35 @@ GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
     EnableRTL( sal_False );
 }
 
+GraphCtrl::GraphCtrl( Window* pParent, WinBits nStyle ) :
+            Control         ( pParent, nStyle ),
+            aMap100         ( MAP_100TH_MM ),
+            nWinStyle       ( 0 ),
+            eObjKind        ( OBJ_NONE ),
+            nPolyEdit       ( 0 ),
+            bEditMode       ( sal_False ),
+            bSdrMode        ( sal_False ),
+            bAnim           ( sal_False ),
+            mpAccContext    ( NULL ),
+            pModel          ( NULL ),
+            pView           ( NULL )
+{
+    pUserCall = new GraphCtrlUserCall( *this );
+    aUpdateTimer.SetTimeout( 500 );
+    aUpdateTimer.SetTimeoutHdl( LINK( this, GraphCtrl, UpdateHdl ) );
+    aUpdateTimer.Start();
+    EnableRTL( sal_False );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGraphCtrl(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new GraphCtrl(pParent, nWinStyle);
+}
+
 GraphCtrl::~GraphCtrl()
 {
     if( mpAccContext )

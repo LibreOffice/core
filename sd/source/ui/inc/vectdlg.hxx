@@ -43,28 +43,20 @@ class DrawDocShell;
 class SdVectorizeDlg : public ModalDialog
 {
     ::sd::DrawDocShell *    mpDocSh;
-    FixedLine           aGrpSettings;
-    FixedText           aFtLayers;
-    NumericField        aNmLayers;
-    FixedText           aFtReduce;
-    MetricField         aMtReduce;
-    FixedText           aFtFillHoles;
-    MetricField         aMtFillHoles;
-    CheckBox            aCbFillHoles;
+    NumericField*       m_pNmLayers;
+    MetricField*        m_pMtReduce;
+    FixedText*          m_pFtFillHoles;
+    MetricField*        m_pMtFillHoles;
+    CheckBox*           m_pCbFillHoles;
 
-    FixedText           aFtOriginal;
-    GraphCtrl           aBmpWin;
+    GraphCtrl*          m_pBmpWin;
 
-    FixedText           aFtVectorized;
-    GraphCtrl           aMtfWin;
+    GraphCtrl*          m_pMtfWin;
 
-    FixedText           aGrpPrgs;
-    ProgressBar         aPrgs;
+    ProgressBar*        m_pPrgs;
 
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-    PushButton          aBtnPreview;
+    OKButton*           m_pBtnOK;
+    PushButton*         m_pBtnPreview;
 
     Bitmap              aBmp;
     Bitmap              aPreviewBmp;
