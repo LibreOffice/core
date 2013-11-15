@@ -219,8 +219,13 @@ inline int SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
     return nPos < rCol.nPos - COLFUZZY;
 }
 
+struct SwWriteTableColLess {
+    bool operator()(SwWriteTableCol const * lhs, SwWriteTableCol const * rhs) {
+        return lhs->GetPos() < rhs->GetPos();
+    }
+};
 
-class SwWriteTableCols : public o3tl::sorted_vector<SwWriteTableCol*, o3tl::less_ptr_to<SwWriteTableCol> > {
+class SwWriteTableCols : public o3tl::sorted_vector<SwWriteTableCol*, SwWriteTableColLess> {
 public:
     ~SwWriteTableCols() { DeleteAndDestroyAll(); }
 };
