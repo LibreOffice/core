@@ -159,6 +159,30 @@ void StringParser::Merge(
         }
     }
 
+    for( xmlNodePtr pCurrent = pRootNode->children; pCurrent; )
+    {
+        if (!xmlStrcmp(pCurrent->name, (const xmlChar*)("string")))
+        {
+            xmlChar* pTranslatable = xmlGetProp(pCurrent, (const xmlChar*)("translatable"));
+            if (!xmlStrcmp(pTranslatable, (const xmlChar*)("false")))
+            {
+                xmlNodePtr pNonTranslatable = pCurrent;
+                pCurrent = pCurrent->next;
+                xmlUnlinkNode( pNonTranslatable );
+                xmlFreeNode( pNonTranslatable );
+            }
+            else
+            {
+                pCurrent = pCurrent->next;
+            }
+            xmlFree( pTranslatable );
+        }
+        else
+        {
+            pCurrent = pCurrent->next;
+        }
+    }
+
     delete pMergeDataFile;
     xmlSaveFile( rDestinationFile.getStr(), m_pSource );
     xmlFreeDoc( m_pSource );
