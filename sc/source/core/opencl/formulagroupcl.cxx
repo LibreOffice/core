@@ -44,7 +44,7 @@ namespace sc { namespace opencl {
 
 
 /// Map the buffer used by an argument and do necessary argument setting
-size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
+size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int, cl_program)
 {
     FormulaToken *ref = mFormulaTree->GetFormulaToken();
     assert(mpClmem == NULL);
@@ -125,7 +125,7 @@ public:
         return 1;
     }
     /// Pass the 32-bit hash of the string to the kernel
-    virtual size_t Marshal(cl_kernel k, int argno, int)
+    virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         FormulaToken *ref = mFormulaTree->GetFormulaToken();
         assert(mpClmem == NULL);
@@ -183,7 +183,7 @@ public:
         return 1;
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal(cl_kernel k, int argno, int)
+    virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
@@ -222,7 +222,7 @@ public:
         return 1;
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal(cl_kernel k, int argno, int)
+    virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
@@ -264,7 +264,7 @@ public:
         return 1;
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal(cl_kernel k, int argno, int)
+    virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
@@ -292,11 +292,11 @@ public:
     {
         DynamicKernelStringArgument::GenDecl(ss);
     }
-    virtual size_t Marshal(cl_kernel, int, int);
+    virtual size_t Marshal(cl_kernel, int, int, cl_program);
 };
 
 /// Marshal a string vector reference
-size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
+size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_program)
 {
     FormulaToken *ref = mFormulaTree->GetFormulaToken();
     assert(mpClmem == NULL);
@@ -390,10 +390,10 @@ public:
         ss << ")";
         return ss.str();
     }
-    virtual size_t Marshal(cl_kernel k, int argno, int vw)
+    virtual size_t Marshal(cl_kernel k, int argno, int vw, cl_program p)
     {
-        int i = DynamicKernelArgument::Marshal(k, argno, vw);
-        i += mStringArgument.Marshal(k, argno+i, vw);
+        int i = DynamicKernelArgument::Marshal(k, argno, vw, p);
+        i += mStringArgument.Marshal(k, argno+i, vw, p);
         return i;
     }
 protected:
@@ -402,24 +402,61 @@ protected:
 
 /// Handling a Double Vector that is used as a sliding window input
 /// to either a sliding window average or sum-of-products
+class OpSum; // Forward Declaration
 template<class Base>
 class DynamicKernelSlidingArgument: public Base
 {
 public:
     DynamicKernelSlidingArgument(const std::string &s,
-        FormulaTreeNodeRef ft):
-        Base(s, ft)
+        FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase> &CodeGen):
+        Base(s, ft), mpCodeGen(CodeGen), needReductionKernel(true), mpClmem2(NULL)
     {
         FormulaToken *t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
             throw Unhandled();
-        const formula::DoubleVectorRefToken* pDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(t);
-        assert(pDVR);
-        bIsStartFixed = pDVR->IsStartFixed();
-        bIsEndFixed = pDVR->IsEndFixed();
+        mpDVR = dynamic_cast<const formula::DoubleVectorRefToken *>(t);
+        assert(mpDVR);
+        bIsStartFixed = mpDVR->IsStartFixed();
+        bIsEndFixed = mpDVR->IsEndFixed();
     }
-    virtual void GenSlidingWindowFunction(std::stringstream &) {}
+    virtual void GenSlidingWindowFunction(std::stringstream &ss) {
+        std::string name = Base::GetName();
+        ss << "__kernel void "<<name;
+        ss << "_reduction(__global double* A, "
+            "__global double *result,int arrayLength,int windowSize){\n";
+        ss << "    double tmp, current_result = 0.0;\n";
+        ss << "    int writePos = get_group_id(1);\n";
+        ss << "    int offset = get_group_id(1);\n";
+        ss << "    int lidx = get_local_id(0);\n";
+        ss << "    __local double shm_buf[256];\n";
+        ss << "    if (arrayLength == windowSize)\n";
+        ss << "        offset = 0;\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    int loop = arrayLength/512 + 1;\n";
+        ss << "    for (int l=0; l<loop; l++){\n";
+        ss << "    tmp = 0.0;\n";
+        ss << "    int loopOffset = l*512;\n";
+        ss << "    if((loopOffset + lidx + offset + 256) < ( offset + windowSize))\n";
+        ss << "        tmp = A[loopOffset + lidx + offset] + "
+            "A[loopOffset + lidx + offset + 256];\n";
+        ss << "    else if ((loopOffset + lidx + offset) < ( offset + windowSize))\n";
+        ss << "        tmp = A[loopOffset + lidx + offset];\n";
+        ss << "    shm_buf[lidx] = tmp;\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    for (int i = 128; i >0; i/=2) {\n";
+        ss << "        if (lidx < i)\n";
+        ss << "            shm_buf[lidx] += shm_buf[lidx + i];\n";
+        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "    if (lidx == 0)\n";
+        ss << "        current_result += shm_buf[0];\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "    if (lidx == 0)\n";
+        ss << "        result[writePos] = current_result;\n";
+        ss << "}\n";
+     }
+
 
     virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
@@ -430,8 +467,168 @@ public:
             ss << Base::GetName() << "[i]";
         return ss.str();
     }
+    /// Controls how the elements in the DoubleVectorRef are traversed
+    virtual size_t GenLoop(std::stringstream &ss, bool &needBody)
+    {
+        assert(mpDVR);
+        size_t nCurWindowSize = mpDVR->GetRefRowSize();
+        if (dynamic_cast<OpSum*>(mpCodeGen.get()))
+        {
+            if (!bIsStartFixed && !bIsEndFixed)
+            {
+                // set 100 as a threshold for invoking reduction kernel
+                if (nCurWindowSize > 100 )
+                {
+                    std::string temp = Base::GetName() + "[gid0]";
+                    ss << "tmp = ";
+                    ss << mpCodeGen->Gen2(temp, "tmp");
+                    ss << ";\n\t";
+                    needBody = false;
+                    needReductionKernel = false;
+                    return nCurWindowSize;
+                }
+            }
+
+            if (bIsStartFixed && bIsEndFixed)
+            {
+                // set 100 as a threshold for invoking reduction kernel
+                if (nCurWindowSize > 100 )
+                {
+                    std::string temp = Base::GetName() + "[0]";
+                    ss << "tmp = ";
+                    ss << mpCodeGen->Gen2(temp, "tmp");
+                    ss << ";\n\t";
+                    needBody = false;
+                    needReductionKernel = false;
+                    return nCurWindowSize;
+                }
+            }
+        }
+        needBody = true;
+        needReductionKernel = true;
+        ss << "for (int i = ";
+        if (!bIsStartFixed && bIsEndFixed)
+        {
+#ifdef  ISNAN
+            ss << "gid0; i < " << mpDVR->GetArrayLength();
+            ss << " && i < " << nCurWindowSize  << "; i++){\n\t\t";
+#else
+            ss << "gid0; i < "<< nCurWindowSize << "; i++)\n\t\t";
+#endif
+        }
+        else if (bIsStartFixed && !bIsEndFixed)
+        {
+#ifdef  ISNAN
+            ss << "0; i < " << mpDVR->GetArrayLength();
+            ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n\t\t";
+#else
+            ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n\t\t";
+#endif
+        }
+        else if (!bIsStartFixed && !bIsEndFixed)
+        {
+#ifdef  ISNAN
+            ss << "0; i + gid0 < " << mpDVR->GetArrayLength();
+            ss << " &&  i < "<< nCurWindowSize << "; i++){\n\t\t";
+#else
+            ss << "0; i < "<< nCurWindowSize << "; i++)\n\t\t";
+#endif
+        }
+        else
+        {
+#ifdef  ISNAN
+            ss << "0; i < "<< nCurWindowSize << "; i++){\n\t\t";
+#else
+            ss << "0; i < "<< nCurWindowSize << "; i++)\n\t\t";
+#endif
+        }
+
+        return nCurWindowSize;
+    }
+
+    virtual size_t Marshal(cl_kernel k, int argno, int w, cl_program mpProgram)
+    {
+        if (needReductionKernel)
+            return Base::Marshal(k, argno, w, mpProgram);
+
+        assert(Base::mpClmem == NULL);
+        // Obtain cl context
+        KernelEnv kEnv;
+        OpenclDevice::setKernelEnv(&kEnv);
+        cl_int err;
+        size_t nInput = mpDVR->GetArrayLength();
+        size_t nCurWindowSize = mpDVR->GetRefRowSize();
+        // create clmem buffer
+        if (mpDVR->GetArrays()[0].mpNumericArray == NULL)
+            throw Unhandled();
+        double *pHostBuffer = const_cast<double*>(
+                mpDVR->GetArrays()[0].mpNumericArray);
+        size_t szHostBuffer = nInput * sizeof(double);
+        Base::mpClmem = clCreateBuffer(kEnv.mpkContext,
+                (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
+                szHostBuffer,
+                pHostBuffer, &err);
+        mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_WRITE_ONLY,
+                sizeof(double)*w, NULL, NULL);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+        // reproduce the reduction function name
+        std::string kernelName = Base::GetName() + "_reduction";
+        cl_kernel redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
+        if (err != CL_SUCCESS)
+            throw OpenCLError(err);
+        // set kernel arg of reduction kernel
+        err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
+                (void *)&(Base::mpClmem));
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+
+        err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), (void *)&mpClmem2);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+
+        err = clSetKernelArg(redKernel, 2, sizeof(cl_int), (void*)&nInput);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+
+        err = clSetKernelArg(redKernel, 3, sizeof(cl_int), (void*)&nCurWindowSize);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+
+        // set work group size and execute
+        size_t global_work_size[] = {256, (size_t)w };
+        size_t local_work_size[] = {256, 1};
+        err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
+                global_work_size, local_work_size, 0, NULL, NULL);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+        err = clFinish(kEnv.mpkCmdQueue);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+
+        // set kernel arg
+        err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&(mpClmem2));
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+        return 1;
+    }
+    ~DynamicKernelSlidingArgument()
+    {
+        if (mpClmem2)
+        {
+            clReleaseMemObject(mpClmem2);
+            mpClmem2 = NULL;
+        }
+    }
+
 protected:
     bool bIsStartFixed, bIsEndFixed;
+    const formula::DoubleVectorRefToken *mpDVR;
+    // from parent nodes
+    boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
+    // controls whether to invoke the reduction kernel during marshaling or not
+    bool needReductionKernel;
+    cl_mem mpClmem2;
 };
 
 /// Abstract class for code generation
@@ -439,6 +636,9 @@ protected:
 class Reduction: public SlidingFunctionBase
 {
 public:
+    typedef DynamicKernelSlidingArgument<DynamicKernelArgument> NumericRange;
+    typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
+
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
     {
@@ -459,65 +659,48 @@ public:
         size_t nItems = 0;
         while (i--)
         {
-            FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-            assert(pCur);
-            if (pCur->GetType() == formula::svDoubleVectorRef)
+            if (NumericRange *NR = dynamic_cast<NumericRange *> (vSubArguments[i].get()))
             {
-                const formula::DoubleVectorRefToken* pDVR =
-                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
-                ss << "for (int i = ";
-                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-#ifdef  ISNAN
-                    ss << "gid0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < " << nCurWindowSize  << "; i++){\n\t\t";
-#else
-                    ss << "gid0; i < "<< nCurWindowSize << "; i++)\n\t\t";
-#endif
-                } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-#ifdef  ISNAN
-                    ss << "0; i < " << pDVR->GetArrayLength();
-                    ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n\t\t";
-#else
-                    ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n\t\t";
-#endif
-                } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-#ifdef  ISNAN
-                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                    ss << " &&  i < "<< nCurWindowSize << "; i++){\n\t\t";
-#else
-                    ss << "0; i < "<< nCurWindowSize << "; i++)\n\t\t";
-#endif
-                }
-                else
-                {
-                    ss << "0; i < "<< pDVR->GetArrayLength() << "; i++){\n\t\t";
-                }
-                nItems += nCurWindowSize;
+                bool needBody;
+                nItems += NR->GenLoop(ss, needBody);
+                if (needBody == false) continue;
             }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
+            else if (StringRange *SR = dynamic_cast<StringRange *> (vSubArguments[i].get()))
             {
-#ifdef  ISNAN
-                    const formula::SingleVectorRefToken* pSVR =
-                    dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
-                ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n\t\t";
-#else
-                nItems += 1;
-#endif
-            }
-            else if (pCur->GetType() == formula::svDouble)
-            {
-#ifdef  ISNAN
-                ss << "{\n\t\t";
-#endif
-                nItems += 1;
+                bool needBody;
+                nItems += SR->GenLoop(ss, needBody);   //did not handle yet
+                if (needBody == false) continue;
             }
             else
             {
+                FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+                assert(pCur);
+                assert(pCur->GetType() != formula::svDoubleVectorRef);
+
+                if (pCur->GetType() == formula::svSingleVectorRef)
+                {
 #ifdef  ISNAN
-                ss << "nCount += 1;\n\t";
+                    const formula::SingleVectorRefToken* pSVR =
+                        dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+                    ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n\t\t";
+#else
+                    nItems += 1;
 #endif
-                nItems += 1;
+                }
+                else if (pCur->GetType() == formula::svDouble)
+                {
+#ifdef  ISNAN
+                    ss << "{\n\t\t";
+#endif
+                    nItems += 1;
+                }
+                else
+                {
+#ifdef  ISNAN
+                    ss << "nCount += 1;\n\t\t";
+#endif
+                    nItems += 1;
+                }
             }
 #ifdef  ISNAN
             if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
@@ -810,13 +993,13 @@ public:
         const std::string &s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen);
 
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal(cl_kernel k, int argno, int nVectorWidth)
+    virtual size_t Marshal(cl_kernel k, int argno, int nVectorWidth, cl_program pProgram)
     {
         unsigned i = 0;
         for (SubArgumentsType::iterator it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
                 ++it)
         {
-            i += (*it)->Marshal(k, argno + i, nVectorWidth);
+            i += (*it)->Marshal(k, argno + i, nVectorWidth, pProgram);
         }
         return i;
     }
@@ -910,7 +1093,7 @@ public:
     }
 private:
     SubArgumentsType mvSubArguments;
-    boost::scoped_ptr<SlidingFunctionBase> mpCodeGen;
+    boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
 };
 
 boost::shared_ptr<DynamicKernelArgument> SoPHelper(
@@ -944,12 +1127,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     if (pDVR->GetArrays()[0].mpNumericArray)
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelSlidingArgument
-                                    <DynamicKernelArgument>(ts, ft->Children[i])));
+                                    <DynamicKernelArgument>(ts, ft->Children[i], mpCodeGen)));
                     else
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelSlidingArgument
                                     <DynamicKernelStringArgument>(
-                                        ts, ft->Children[i])));
+                                        ts, ft->Children[i], mpCodeGen)));
                 } else if (pChild->GetType() == formula::svSingleVectorRef) {
                     const formula::SingleVectorRefToken* pSVR =
                         dynamic_cast< const formula::SingleVectorRefToken* >(pChild);
@@ -1713,19 +1896,19 @@ public:
     }
     /// Memory mapping from host to device and pass buffers to the given kernel as
     /// arguments
-    void Marshal(cl_kernel, int);
+    void Marshal(cl_kernel, int, cl_program);
 private:
     unsigned int mCurId;
     ArgumentMap mSymbols;
     ArgumentList mParams;
 };
 
-void SymbolTable::Marshal(cl_kernel k, int nVectorWidth)
+void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
 {
     int i = 1; //The first argument is reserved for results
     for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
             ++it) {
-        i+=(*it)->Marshal(k, i, nVectorWidth);
+        i+=(*it)->Marshal(k, i, nVectorWidth, pProgram);
     }
 }
 
@@ -1816,7 +1999,7 @@ public:
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
         // The rest of buffers
-        mSyms.Marshal(mpKernel, nr);
+        mSyms.Marshal(mpKernel, nr, mpProgram);
         size_t global_work_size[] = {nr};
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
             global_work_size, NULL, 0, NULL, NULL);

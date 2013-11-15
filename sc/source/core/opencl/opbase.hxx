@@ -92,7 +92,7 @@ public:
     virtual void GenDeclRef(std::stringstream &ss) const;
 
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal(cl_kernel, int, int);
+    virtual size_t Marshal(cl_kernel, int, int, cl_program);
 
     virtual ~DynamicKernelArgument();
 
