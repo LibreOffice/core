@@ -94,7 +94,8 @@ protected:
             "math-escape.docx",
             "math-mso2k7.docx",
             "ImageCrop.docx",
-            "test_GIF_ImageCrop.docx"
+            "test_GIF_ImageCrop.docx",
+            "test_PNG_ImageCrop.docx"
         };
         std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
@@ -1855,6 +1856,26 @@ DECLARE_OOXML_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 4256 ), aGraphicCropStruct.Right );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1109 ), aGraphicCropStruct.Top );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1448 ), aGraphicCropStruct.Bottom );
+}
+
+DECLARE_OOXML_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
+{
+    /* The problem was image cropping information was not getting saved
+     * after roundtrip.
+     * Check for presenece of cropping parameters in exported file.
+     */
+    uno::Reference<drawing::XShape> image = getShape(1);
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+
+    imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+
+    // FIXME import test is disabled (we only check after import-export-import)
+    // The reason is that after import this is 1141 -- why?
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1231 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1295 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1358 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 737 ), aGraphicCropStruct.Bottom );
 }
 
 #endif
