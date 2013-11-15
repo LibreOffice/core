@@ -400,6 +400,16 @@ subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),build)
 debugrun help slowcheck translations unitcheck :
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
+define GbuildToIdeIntegration
+$(1)-ide-integration:
+	cd $(SRCDIR) && (make cmd -npf Makefile.gbuild all || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
+
+endef
+
+$(foreach ide,\
+	kdevelop, \
+$(eval $(call GbuildToIdeIntegration,$(ide))))
+
 endif # MAKE_RESTARTS
 
 # vim: set noet sw=4 ts=4:
