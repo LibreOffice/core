@@ -114,7 +114,8 @@ SvtBroadcaster::~SvtBroadcaster()
 void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 {
     Normalize();
-    std::for_each(maListeners.begin(), maListeners.end(), NotifyHandler(*this, rHint));
+    ListenersType listeners(maListeners);
+    std::for_each(listeners.begin(), listeners.end(), NotifyHandler(*this, rHint));
 }
 
 void SvtBroadcaster::ListenersGone() {}
