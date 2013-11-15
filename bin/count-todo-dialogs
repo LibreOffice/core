@@ -13,9 +13,9 @@
 converted=`ls */uiconfig/ui/*.ui */uiconfig/*/ui/*.ui|wc -l`
 echo $converted .ui files currently exist
 
-dialogs=`git grep -h Dialog -- *.src|grep -v DialogControl|grep -v HelpID|grep -v define|grep -v String|grep -v QuickHelpText|grep -v "Text \[ en-US \]"|grep -v HelpId|grep -v "Cancel-Button"|grep -v \"Dialog\"|grep -v "Dialog Controls" |grep -v .uno:|grep -v "//"|grep -v include|grep -v "paste region"|grep -v "Tabpage-Dialog"|sed -e 's/^ *//g' -e 's/ *$//g'|cut -d' ' -f2- |sort|uniq|wc -l`
+dialogs=`git grep -h Dialog -- *.src|grep -v DialogControl|grep -v HelpID|grep -v define|grep -v String|grep -v QuickHelpText|grep -v "Text \[ en-US \]"|grep -v HelpId|grep -v "Cancel-Button"|grep -v \"Dialog\"|grep -v "Dialog Controls" |grep -v .uno:|grep -v "//"|grep -v "*/"|grep -v include|grep -v "paste region"|grep -v "Tabpage-Dialog"|sed -e 's/^ *//g' -e 's/ *$//g'|cut -d' ' -f2- |sort|uniq|wc -l`
 
-tabpages=`git grep -h TabPage -- *.src|grep -v DialogControl|grep -v HelpID|grep -v define|grep -v String|grep -v QuickHelpText|grep -v "Text \[ en-US \]"|grep -v HelpId|grep -v "Cancel-Button"|grep -v \"Dialog\"|grep -v "Dialog Controls" |grep -v .uno:|grep -v "//"|grep -v include|grep -v "paste region"|grep -v "Tabpage-Dialog"|sed -e 's/^ *//g' -e 's/ *$//g'|cut -d' ' -f2- |sort|uniq|wc -l`
+tabpages=`git grep -h TabPage -- *.src|grep -v DialogControl|grep -v HelpID|grep -v define|grep -v String|grep -v QuickHelpText|grep -v "Text \[ en-US \]"|grep -v HelpId|grep -v "Cancel-Button"|grep -v \"Dialog\"|grep -v "Dialog Controls" |grep -v .uno:|grep -v "//"|grep -v "*/"|grep -v include|grep -v "paste region"|grep -v "Tabpage-Dialog"|sed -e 's/^ *//g' -e 's/ *$//g'|cut -d' ' -f2- |sort|uniq|wc -l`
 
 echo There are $dialogs unconverted dialogs
 echo There are $tabpages unconverted tabpages
