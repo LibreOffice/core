@@ -225,9 +225,6 @@ void KDEXLib::setupEventLoop()
         eventLoopType = GlibEventLoop;
         old_gpoll = g_main_context_get_poll_func( NULL );
         g_main_context_set_poll_func( NULL, gpoll_wrapper );
-        // set QClipboard to use event loop, otherwise the main thread will hold
-        // SolarMutex locked, which will prevent the clipboard thread from answering
-        m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
         return;
     }
 #endif
@@ -244,9 +241,6 @@ void KDEXLib::setupEventLoop()
         eventLoopType = QtUnixEventLoop;
         QInternal::callFunction( QInternal::GetUnixSelectFunction, reinterpret_cast< void** >( &qt_select ));
         QInternal::callFunction( QInternal::SetUnixSelectFunction, reinterpret_cast< void** >( lo_select ));
-        // set QClipboard to use event loop, otherwise the main thread will hold
-        // SolarMutex locked, which will prevent the clipboard thread from answering
-        m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
         return;
     }
 #endif
@@ -300,6 +294,9 @@ void KDEXLib::socketNotifierActivated( int fd )
 
 void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
+    // Nested yield loop counter.
+    static int loop_depth = 0;
+
     if( eventLoopType == LibreOfficeEventLoop )
     {
         if( qApp->thread() == QThread::currentThread())
@@ -310,13 +307,24 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         }
         return SalXLib::Yield( bWait, bHandleAllCurrentEvents );
     }
+
     // if we are the main thread (which is where the event processing is done),
     // good, just do it
-    if( qApp->thread() == QThread::currentThread())
+    if( qApp->thread() == QThread::currentThread()) {
+        // Release the yield lock before entering a nested loop.
+        if (loop_depth > 0)
+            SalYieldMutexReleaser aReleaser;
+        loop_depth++;
         processYield( bWait, bHandleAllCurrentEvents );
-    else
-    { // if this deadlocks, event processing needs to go into a separate thread
-      // or some other solution needs to be found
+        loop_depth--;
+    }
+    else {
+        // we were called from another thread;
+        // release the yield lock to prevent deadlock.
+        SalYieldMutexReleaser aReleaser;
+
+        // if this deadlocks, event processing needs to go into a separate
+        // thread or some other solution needs to be found
         Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
     }
 }
