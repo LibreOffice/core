@@ -2140,8 +2140,8 @@ bool Application::EnableAccessInterface(bool bEnable)
 #ifdef WNT
     return WNTEnableAccessInterface(bEnable);
 #else
-    bEnable = TRUE; // avoid compiler warning
-    return TRUE;
+    bEnable = true; // avoid compiler warning
+    return true;
 #endif
 }
 bool Application::IsEnableAccessInterface()
