@@ -555,7 +555,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             break;
 
         case RES_POOLCOLL_FOOTNOTE:             // paragraph style Footnote
-            aSet.Put( SvxEscapementItem( DFLT_ESC_AUTO_SUPER, 58, RES_CHRATR_ESCAPEMENT ) );
         case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
