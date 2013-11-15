@@ -40,8 +40,8 @@
 
 using namespace ::com::sun::star;
 
-class LibLODocument_Impl;
-class LibLibreOffice_Impl;
+struct LibLODocument_Impl;
+struct LibLibreOffice_Impl;
 
 static LibLibreOffice_Impl *gImpl = NULL;
 
