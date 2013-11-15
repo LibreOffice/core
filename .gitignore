@@ -58,6 +58,8 @@
 *~
 .*sw?
 \#*
+*.kdev4
+.kdev_include_paths
 
 # things below this point are targeted for elimination
 
