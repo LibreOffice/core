@@ -2956,8 +2956,9 @@ void XMLShapeExport::ImpExportCaptionShape(
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         if( bAnnotation )
-            mrExport.exportAnnotationMeta( xShape );
-        ImpExportText( xShape );
+            mrExport.exportAnnotationMeta( xShape ); // The text is processed at annotation level
+        else
+            ImpExportText( xShape );
     }
 }
 
