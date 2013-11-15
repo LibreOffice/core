@@ -33,9 +33,13 @@ public:
 class OpSumIfs: public CheckVariables
 {
 public:
+    OpSumIfs(void): CheckVariables(), mNeedReductionKernel(false) {}
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "SumIfs"; }
+    bool NeedReductionKernel(void) const { return mNeedReductionKernel; }
+protected:
+    bool mNeedReductionKernel;
 };
 class OpCosh: public Normal
 {

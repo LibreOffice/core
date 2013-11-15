@@ -104,6 +104,9 @@ public:
     virtual void DumpInlineFun(std::set<std::string>& ,
         std::set<std::string>& ) const {}
     const std::string& GetName(void) const { return mSymName; }
+    cl_mem GetCLBuffer(void) const {return mpClmem; }
+    virtual bool NeedParallelReduction(void) const { return false; }
+
 protected:
     const std::string mSymName;
     FormulaTreeNodeRef mFormulaTree;
@@ -157,6 +160,9 @@ public:
             SubArguments &vSubArguments, int argumentNum);
     void CheckAllSubArgumentIsNan(std::stringstream &ss,
             SubArguments &vSubArguments);
+    // only check isNan
+    void CheckSubArgumentIsNan2(std::stringstream &ss,
+            SubArguments &vSubArguments, int argumentNum, std::string p);
 };
 
 }}

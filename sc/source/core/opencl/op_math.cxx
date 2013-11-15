@@ -448,6 +448,142 @@ void OpSumIfs::GenSlidingWindowFunction(std::stringstream &ss,
     size_t nCurWindowSize = pCurDVR->GetArrayLength() <
     pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
     pCurDVR->GetRefRowSize() ;
+
+    mNeedReductionKernel = vSubArguments[0]->NeedParallelReduction();
+    if (mNeedReductionKernel)
+    {
+        // generate reduction functions
+        ss << "__kernel void ";
+        ss << "SumIfs_reduction(  ";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ", __global double *result,int arrayLength,int windowSize";
+
+        ss << ")\n{\n";
+        ss << "    double tmp =0;\n";
+        ss << "    int i ;\n";
+
+        GenTmpVariables(ss,vSubArguments);
+        ss << "    double current_result = 0.0;\n";
+        ss << "    int writePos = get_group_id(1);\n";
+        if (pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed())
+            ss << "    int offset = 0;\n";
+        else if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+            ss << "    int offset = get_group_id(1);\n";
+        else
+            throw Unhandled();
+        // actually unreachable
+        ss << "    int lidx = get_local_id(0);\n";
+        ss << "    __local double shm_buf[256];\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    int loop = arrayLength/512 + 1;\n";
+        ss << "    for (int l=0; l<loop; l++){\n";
+        ss << "        tmp = 0.0;\n";
+        ss << "        int loopOffset = l*512;\n";
+
+        ss << "        int p1 = loopOffset + lidx + offset, p2 = p1 + 256;\n";
+        ss << "        if (p2 < min(offset + windowSize, arrayLength)) {\n";
+        ss << "            tmp0 = 0.0;\n";
+        int mm=0;
+        std::string p1 = "p1";
+        std::string p2 = "p2";
+        for(unsigned j=1;j<vSubArguments.size();j+=2,mm++)
+        {
+            CheckSubArgumentIsNan2(ss,vSubArguments,j,p1);
+            CheckSubArgumentIsNan2(ss,vSubArguments,j+1,p1);
+            ss << "";
+            ss <<"    if(isequal(";
+            ss <<"tmp";
+            ss <<j;
+            ss <<" , ";
+            ss << "tmp";
+            ss << j+1;
+            ss << "))";
+            ss << "{\n";
+        }
+        CheckSubArgumentIsNan2(ss,vSubArguments,0,p1);
+        ss << "    tmp += tmp0;\n";
+        for(unsigned j=1;j<vSubArguments.size();j+=2,mm--)
+        {
+            for(int n = 0;n<mm+1;n++)
+            {
+                ss << "    ";
+            }
+            ss<< "}\n\n";
+        }
+        mm=0;
+        for(unsigned j=1;j<vSubArguments.size();j+=2,mm++)
+        {
+            CheckSubArgumentIsNan2(ss,vSubArguments,j,p2);
+            CheckSubArgumentIsNan2(ss,vSubArguments,j+1,p2);
+            ss <<"    if(isequal(";
+            ss <<"tmp";
+            ss <<j;
+            ss <<" , ";
+            ss << "tmp";
+            ss << j+1;
+            ss << ")){\n";
+        }
+        CheckSubArgumentIsNan2(ss,vSubArguments,0,p2);
+        ss << "    tmp += tmp0;\n";
+        for(unsigned j=1;j< vSubArguments.size();j+=2,mm--)
+        {
+            for(int n = 0;n<mm+1;n++)
+            {
+                ss << "    ";
+            }
+            ss<< "}\n";
+        }
+        ss << "    }\n";
+
+        ss << "    else if (p1 < min(arrayLength, offset + windowSize)) {\n";
+        mm=0;
+        for(unsigned j=1;j<vSubArguments.size();j+=2,mm++)
+        {
+            CheckSubArgumentIsNan2(ss,vSubArguments,j,p1);
+            CheckSubArgumentIsNan2(ss,vSubArguments,j+1,p1);
+
+            ss <<"    if(isequal(";
+            ss <<"tmp";
+            ss <<j;
+            ss <<" , ";
+            ss << "tmp";
+            ss << j+1;
+            ss << ")){\n";
+        }
+        CheckSubArgumentIsNan2(ss,vSubArguments,0,p1);
+        ss << "    tmp += tmp0;\n";
+        for(unsigned j=1;j<vSubArguments.size();j+=2,mm--)
+        {
+            for(int n = 0;n<mm+1;n++)
+            {
+                ss << "    ";
+            }
+            ss<< "}\n\n";
+        }
+
+        ss << "    }\n";
+        ss << "    shm_buf[lidx] = tmp;\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    for (int i = 128; i >0; i/=2) {\n";
+        ss << "        if (lidx < i)\n";
+        ss << "            shm_buf[lidx] += shm_buf[lidx + i];\n";
+        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "    if (lidx == 0)\n";
+        ss << "        current_result += shm_buf[0];\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+
+        ss << "    if (lidx == 0)\n";
+        ss << "        result[writePos] = current_result;\n";
+        ss << "}\n";
+    }// finish generate reduction code
+    // generate functions as usual
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -459,48 +595,57 @@ void OpSumIfs::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ")\n    {\n";
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
-    ss << "    int i ;\n";
-    GenTmpVariables(ss,vSubArguments);
-    ss << "    for (i = ";
-     if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-        ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-     } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-        ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-     } else {
-        ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-     }
-     ss << "    {\n";
-     if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-     {
-        ss<< "    int doubleIndex =i+gid0;\n";
-     }else
-     {
-        ss<< "    int doubleIndex =i;\n";
-     }
-     ss<< "    int singleIndex =gid0;\n";
-     int m=0;
-     for(unsigned j=1;j<vSubArguments.size();j+=2,m++)
-     {
-        CheckSubArgumentIsNan(ss,vSubArguments,j);
-        CheckSubArgumentIsNan(ss,vSubArguments,j+1);
-        ss <<"    if(isequal(";
-        ss <<"tmp";
-        ss <<j;
-        ss <<" , ";
-        ss << "tmp";
-        ss << j+1;
-        ss << ")){\n";
-     }
-     CheckSubArgumentIsNan(ss,vSubArguments,0);
-    ss << "    tmp += tmp0;\n";
-    for(unsigned j=1;j<=vSubArguments.size();j+=2,m--)
-     {
-         for(int n = 0;n<m+1;n++)
-        {
-            ss << "    ";
+    if (!mNeedReductionKernel)
+    {
+        ss << "    int i ;\n";
+        GenTmpVariables(ss,vSubArguments);
+        ss << "    for (i = ";
+        if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+            ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
+        } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+            ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
+        } else {
+            ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
         }
-        ss<< "}\n";
-     }
+        ss << "    {\n";
+        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+        {
+            ss<< "    int doubleIndex =i+gid0;\n";
+        }else
+        {
+            ss<< "    int doubleIndex =i;\n";
+        }
+        ss<< "    int singleIndex =gid0;\n";
+        int m=0;
+        for(unsigned j=1;j<vSubArguments.size();j+=2,m++)
+        {
+            CheckSubArgumentIsNan(ss,vSubArguments,j);
+            CheckSubArgumentIsNan(ss,vSubArguments,j+1);
+            ss <<"    if(isequal(";
+            ss <<"tmp";
+            ss <<j;
+            ss <<" , ";
+            ss << "tmp";
+            ss << j+1;
+            ss << ")){\n";
+        }
+        CheckSubArgumentIsNan(ss,vSubArguments,0);
+        ss << "    tmp += tmp0;\n";
+        for(unsigned j=1;j<=vSubArguments.size();j+=2,m--)
+        {
+            for(int n = 0;n<m+1;n++)
+            {
+                ss << "    ";
+            }
+            ss<< "}\n";
+        }
+    }
+    if (mNeedReductionKernel)
+    {
+        ss << "tmp =";
+        vSubArguments[0]->GenDeclRef(ss);
+        ss << "[gid0];\n";
+    }
     ss << "return tmp;\n";
     ss << "}";
 }

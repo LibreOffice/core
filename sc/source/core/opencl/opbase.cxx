@@ -156,6 +156,49 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
     ss << vSubArguments[i]->GenSlidingWindowDeclRef();
     ss<<";\n";
 }
+
+void CheckVariables::CheckSubArgumentIsNan2( std::stringstream & ss,
+    SubArguments &vSubArguments,  int argumentNum, std::string p)
+{
+    int i = argumentNum;
+    if(vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble)
+    {
+        ss <<"    tmp";
+        ss <<i;
+        ss << "=";
+        vSubArguments[i]->GenDeclRef(ss);
+        ss<<";\n";
+        return;
+    }
+
+#ifdef ISNAN
+    ss<< "    tmp";
+    ss<< i;
+    ss<< "= fsum(";
+    vSubArguments[i]->GenDeclRef(ss);
+    if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+     formula::svDoubleVectorRef)
+        ss<<"["<< p.c_str()<< "]";
+    else  if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+     formula::svSingleVectorRef)
+        ss<<"[get_group_id(1)]";
+    ss<<", 0);\n";
+    return;
+#endif
+    ss <<"    tmp";
+    ss <<i;
+    ss << "=";
+    vSubArguments[i]->GenDeclRef(ss);
+    if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+            formula::svDoubleVectorRef)
+        ss<<"["<< p.c_str()<< "]";
+    else  if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+            formula::svSingleVectorRef)
+        ss<<"[get_group_id(1)]";
+
+    ss<<";\n";
+}
+
 void CheckVariables::CheckAllSubArgumentIsNan(
     std::stringstream & ss, SubArguments & vSubArguments)
 {

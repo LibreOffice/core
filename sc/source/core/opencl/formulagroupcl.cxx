@@ -419,42 +419,51 @@ public:
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
     }
+    virtual bool NeedParallelReduction(void) const
+    {
+        return GetWindowSize()> 100 &&
+            ( (GetStartFixed() && GetEndFixed()) ||
+              (!GetStartFixed() && !GetEndFixed())  ) ;
+    }
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
-        std::string name = Base::GetName();
-        ss << "__kernel void "<<name;
-        ss << "_reduction(__global double* A, "
-            "__global double *result,int arrayLength,int windowSize){\n";
-        ss << "    double tmp, current_result = 0.0;\n";
-        ss << "    int writePos = get_group_id(1);\n";
-        ss << "    int offset = get_group_id(1);\n";
-        ss << "    int lidx = get_local_id(0);\n";
-        ss << "    __local double shm_buf[256];\n";
-        ss << "    if (arrayLength == windowSize)\n";
-        ss << "        offset = 0;\n";
-        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
-        ss << "    int loop = arrayLength/512 + 1;\n";
-        ss << "    for (int l=0; l<loop; l++){\n";
-        ss << "    tmp = 0.0;\n";
-        ss << "    int loopOffset = l*512;\n";
-        ss << "    if((loopOffset + lidx + offset + 256) < ( offset + windowSize))\n";
-        ss << "        tmp = A[loopOffset + lidx + offset] + "
-            "A[loopOffset + lidx + offset + 256];\n";
-        ss << "    else if ((loopOffset + lidx + offset) < ( offset + windowSize))\n";
-        ss << "        tmp = A[loopOffset + lidx + offset];\n";
-        ss << "    shm_buf[lidx] = tmp;\n";
-        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
-        ss << "    for (int i = 128; i >0; i/=2) {\n";
-        ss << "        if (lidx < i)\n";
-        ss << "            shm_buf[lidx] += shm_buf[lidx + i];\n";
-        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
-        ss << "    }\n";
-        ss << "    if (lidx == 0)\n";
-        ss << "        current_result += shm_buf[0];\n";
-        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
-        ss << "    }\n";
-        ss << "    if (lidx == 0)\n";
-        ss << "        result[writePos] = current_result;\n";
-        ss << "}\n";
+        if (dynamic_cast<OpSum*>(mpCodeGen.get()))
+        {
+            std::string name = Base::GetName();
+            ss << "__kernel void "<<name;
+            ss << "_reduction(__global double* A, "
+                "__global double *result,int arrayLength,int windowSize){\n";
+            ss << "    double tmp, current_result = 0.0;\n";
+            ss << "    int writePos = get_group_id(1);\n";
+            ss << "    int offset = get_group_id(1);\n";
+            ss << "    int lidx = get_local_id(0);\n";
+            ss << "    __local double shm_buf[256];\n";
+            ss << "    if (arrayLength == windowSize)\n";
+            ss << "        offset = 0;\n";
+            ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+            ss << "    int loop = arrayLength/512 + 1;\n";
+            ss << "    for (int l=0; l<loop; l++){\n";
+            ss << "    tmp = 0.0;\n";
+            ss << "    int loopOffset = l*512;\n";
+            ss << "    if((loopOffset + lidx + offset + 256) < ( offset + windowSize))\n";
+            ss << "        tmp = A[loopOffset + lidx + offset] + "
+                "A[loopOffset + lidx + offset + 256];\n";
+            ss << "    else if ((loopOffset + lidx + offset) < ( offset + windowSize))\n";
+            ss << "        tmp = A[loopOffset + lidx + offset];\n";
+            ss << "    shm_buf[lidx] = tmp;\n";
+            ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+            ss << "    for (int i = 128; i >0; i/=2) {\n";
+            ss << "        if (lidx < i)\n";
+            ss << "            shm_buf[lidx] += shm_buf[lidx + i];\n";
+            ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
+            ss << "    }\n";
+            ss << "    if (lidx == 0)\n";
+            ss << "        current_result += shm_buf[0];\n";
+            ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+            ss << "    }\n";
+            ss << "    if (lidx == 0)\n";
+            ss << "        result[writePos] = current_result;\n";
+            ss << "}\n";
+        }
      }
 
 
@@ -573,11 +582,16 @@ public:
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
         // reproduce the reduction function name
-        std::string kernelName = Base::GetName() + "_reduction";
+        std::string kernelName;
+        if (dynamic_cast<OpSum*>(mpCodeGen.get()))
+            kernelName = Base::GetName() + "_reduction";
+        else throw Unhandled();
+
         cl_kernel redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
         if (err != CL_SUCCESS)
             throw OpenCLError(err);
         // set kernel arg of reduction kernel
+        // TODO(Wei Wei): use unique name for kernel
         err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
                 (void *)&(Base::mpClmem));
         if (CL_SUCCESS != err)
@@ -620,6 +634,14 @@ public:
             mpClmem2 = NULL;
         }
     }
+
+    size_t GetArrayLength(void) const {return mpDVR->GetArrayLength(); }
+
+    size_t GetWindowSize(void) const {return mpDVR->GetRefRowSize(); }
+
+    size_t GetStartFixed(void) const {return bIsStartFixed; }
+
+    size_t GetEndFixed(void) const {return bIsEndFixed; }
 
 protected:
     bool bIsStartFixed, bIsEndFixed;
@@ -1000,6 +1022,75 @@ public:
                 ++it)
         {
             i += (*it)->Marshal(k, argno + i, nVectorWidth, pProgram);
+        }
+        if (OpSumIfs *OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
+        {
+            assert(mpClmem == NULL);
+            // Obtain cl context
+            KernelEnv kEnv;
+            OpenclDevice::setKernelEnv(&kEnv);
+            cl_int err;
+            DynamicKernelSlidingArgument<DynamicKernelArgument> *slidingArgPtr =
+                dynamic_cast< DynamicKernelSlidingArgument<DynamicKernelArgument> *>
+                (mvSubArguments[0].get());
+            cl_mem mpClmem2;
+
+            if (OpSumCodeGen->NeedReductionKernel())
+            {
+                assert(slidingArgPtr);
+                size_t nInput = slidingArgPtr -> GetArrayLength();
+                size_t nCurWindowSize = slidingArgPtr -> GetWindowSize();
+                std::vector<cl_mem> vclmem;
+
+                for (SubArgumentsType::iterator it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
+                ++it)
+                {
+                    vclmem.push_back((*it)->GetCLBuffer());
+                }
+                mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
+                        sizeof(double)*nVectorWidth, NULL, &err);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+
+                std::string kernelName = "SumIfs_reduction";
+                cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
+                if (err != CL_SUCCESS)
+                    throw OpenCLError(err);
+
+                    // set kernel arg of reduction kernel
+                for (size_t j=0; j< vclmem.size(); j++){
+                    err = clSetKernelArg(redKernel, j, sizeof(cl_mem),
+                            (void *)&vclmem[j]);
+                    if (CL_SUCCESS != err)
+                        throw OpenCLError(err);
+                }
+                err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void *)&mpClmem2);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+
+                err = clSetKernelArg(redKernel, vclmem.size()+1, sizeof(cl_int), (void*)&nInput);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+
+                err = clSetKernelArg(redKernel, vclmem.size()+2, sizeof(cl_int), (void*)&nCurWindowSize);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+                // set work group size and execute
+                size_t global_work_size[] = {256, (size_t)nVectorWidth };
+                size_t local_work_size[] = {256, 1};
+                err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
+                        global_work_size, local_work_size, 0, NULL, NULL);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+                err = clFinish(kEnv.mpkCmdQueue);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+
+                 // Pass mpClmem2 to the "real" kernel
+                err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&mpClmem2);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+            }
         }
         return i;
     }
