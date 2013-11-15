@@ -35,6 +35,7 @@ struct SC_DLLPUBLIC TokenStringContext
 
     std::vector<OUString> maTabNames;
     IndexNameMapType maGlobalRangeNames;
+    IndexNameMapType maNamedDBs;
 
     TokenStringContext( const ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram );
 };

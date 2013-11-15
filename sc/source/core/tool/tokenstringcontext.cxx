@@ -10,6 +10,7 @@
 #include "tokenstringcontext.hxx"
 #include "compiler.hxx"
 #include "document.hxx"
+#include "dbdata.hxx"
 
 using namespace com::sun::star;
 
@@ -26,6 +27,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
 
     if (pDoc)
     {
+        // Fetch all sheet names.
         maTabNames = pDoc->GetAllTableNames();
         {
             std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
@@ -33,6 +35,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
                 ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(eGram));
         }
 
+        // Fetch all named range names.
         const ScRangeName* pNames = pDoc->GetRangeName();
         if (pNames)
         {
@@ -41,6 +44,19 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
             {
                 const ScRangeData* pData = it->second;
                 maGlobalRangeNames.insert(IndexNameMapType::value_type(pData->GetIndex(), pData->GetName()));
+            }
+        }
+
+        // Fetch all named database ranges names.
+        const ScDBCollection* pDBs = pDoc->GetDBCollection();
+        if (pDBs)
+        {
+            const ScDBCollection::NamedDBs& rNamedDBs = pDBs->getNamedDBs();
+            ScDBCollection::NamedDBs::const_iterator it = rNamedDBs.begin(), itEnd = rNamedDBs.end();
+            for (; it != itEnd; ++it)
+            {
+                const ScDBData& rData = *it;
+                maNamedDBs.insert(IndexNameMapType::value_type(rData.GetIndex(), rData.GetName()));
             }
         }
     }

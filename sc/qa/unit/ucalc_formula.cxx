@@ -23,6 +23,7 @@
 #include "docfunc.hxx"
 #include "paramisc.hxx"
 #include "tokenstringcontext.hxx"
+#include "dbdata.hxx"
 
 #include "formula/vectortoken.hxx"
 
@@ -65,6 +66,31 @@ void Test::testFormulaCreateStringFromTokens()
         CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
     }
 
+    // Insert DB ranges.
+    struct {
+        const char* pName;
+        SCTAB nTab;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCCOL nCol2;
+        SCROW nRow2;
+    } aDBs[] = {
+        { "Table1", 0, 0, 0, 10, 10 },
+        { "Table2", 1, 0, 0, 10, 10 },
+        { "Table3", 2, 0, 0, 10, 10 }
+    };
+
+    ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
+
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aDBs); i < n; ++i)
+    {
+        ScDBData* pData = new ScDBData(
+            OUString::createFromAscii(
+                aDBs[i].pName), aDBs[i].nTab, aDBs[i].nCol1, aDBs[i].nRow1, aDBs[i].nCol2,aDBs[i].nRow2);
+        pDBs->getNamedDBs().insert(pData);
+    }
+
     const char* aTests[] = {
         "1+2",
         "SUM(A1:A10;B1:B10;C5;D6)",
@@ -72,7 +98,8 @@ void Test::testFormulaCreateStringFromTokens()
         "AVERAGE('2013'.B10:C20)",
         "'Kevin''s Data'.B10",
         "'Past Data'.B1+'2013'.B2*(1+'Kevin''s Data'.C10)",
-        "x+y*z"
+        "x+y*z", // named ranges
+        "MAX(Table1)+MIN(Table2)*SUM(Table3)" // database ranges
     };
 
     boost::scoped_ptr<ScTokenArray> pArray;

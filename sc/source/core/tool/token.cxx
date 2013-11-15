@@ -40,6 +40,7 @@
 #include "refupdatecontext.hxx"
 #include "tokenstringcontext.hxx"
 #include "types.hxx"
+#include "globstr.hrc"
 #include "svl/sharedstring.hxx"
 
 using ::std::vector;
@@ -3273,9 +3274,15 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                         rBuf.append(it->second);
                 }
                 break;
-                    // TODO : Handle other name types.
+                case ocDBArea:
+                {
+                    sc::TokenStringContext::IndexNameMapType::const_iterator it = rCxt.maNamedDBs.find(nIndex);
+                    if (it != rCxt.maNamedDBs.end())
+                        rBuf.append(it->second);
+                }
+                break;
                 default:
-                    ;
+                    rBuf.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
             }
         }
         break;
