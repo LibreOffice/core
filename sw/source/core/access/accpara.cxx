@@ -2533,7 +2533,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         if (rValue.Name.compareTo(::rtl::OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_BACK_COLOR ).pName ) )==0)
         {
             uno::Any &anyChar = rValue.Value;
-            sal_uInt32 crBack = (sal_uInt32)(anyChar.pReserved);
+            sal_uInt32 crBack = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
             if (COL_AUTO == crBack)
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
@@ -2552,7 +2552,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             if( GetPortionData().IsInGrayPortion( nIndex ) )
                  rValue.Value <<= SwViewOption::GetFieldShadingsColor().GetColor();
             uno::Any &anyChar = rValue.Value;
-            sal_uInt32 crChar = (sal_uInt32)(anyChar.pReserved);
+            sal_uInt32 crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
 
             if( COL_AUTO == crChar )
             {
@@ -2609,7 +2609,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             }
 
             uno::Any &anyChar = rValue.Value;
-            sal_uInt32 crUnderline = (sal_uInt32)(anyChar.pReserved);
+            sal_uInt32 crUnderline = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
             if ( COL_AUTO == crUnderline )
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);

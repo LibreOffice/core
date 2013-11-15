@@ -125,7 +125,7 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-    virtual long SAL_CALL getAccessibleChildCount (void)
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
