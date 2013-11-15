@@ -3241,7 +3241,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                 ScComplexRefData aRef;
                 aRef.Ref1 = rRef;
                 aRef.Ref2 = rRef;
-                rCxt.mpRefConv->makeRefStr(rBuf, rPos, rCxt.meGram, rCxt.maErrRef, rCxt.maTabNames, aRef, true);
+                rCxt.mpRefConv->makeRefStr(rBuf, rPos, rCxt, aRef, true);
             }
             else
                 rBuf.append(rCxt.maErrRef);
@@ -3252,7 +3252,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             if (rCxt.mpRefConv)
             {
                 const ScComplexRefData& rRef = static_cast<const ScToken&>(rToken).GetDoubleRef();
-                rCxt.mpRefConv->makeRefStr(rBuf, rPos, rCxt.meGram, rCxt.maErrRef, rCxt.maTabNames, rRef, false);
+                rCxt.mpRefConv->makeRefStr(rBuf, rPos, rCxt, rRef, false);
             }
             else
                 rBuf.append(rCxt.maErrRef);
