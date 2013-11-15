@@ -27,6 +27,12 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     if (pDoc)
     {
         maTabNames = pDoc->GetAllTableNames();
+        {
+            std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
+            for (; it != itEnd; ++it)
+                ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(eGram));
+        }
+
         const ScRangeName* pNames = pDoc->GetRangeName();
         if (pNames)
         {

@@ -734,10 +734,7 @@ struct ConventionOOO_A1 : public Convention_A1
         if (static_cast<size_t>(nTab) >= rCxt.maTabNames.size())
             aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
         else
-        {
             aString = rCxt.maTabNames[nTab];
-            ScCompiler::CheckTabQuotes( aString, FormulaGrammar::CONV_OOO );
-        }
         aString += ".";
         return aString;
     }
@@ -1040,10 +1037,6 @@ struct ConventionXL
             return;
         }
         rTabName = rCxt.maTabNames[aAbs.Tab()];
-
-        // XL uses the same sheet name quoting conventions in both modes
-        // it is safe to use A1 here
-        ScCompiler::CheckTabQuotes( rTabName, FormulaGrammar::CONV_XL_A1 );
     }
 
     static void MakeTabStr( OUStringBuffer& rBuf,
