@@ -1894,6 +1894,12 @@ DECLARE_OOXML_TEST(testSpacingLineRule,"table_lineRule.docx")
      assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
 }
 
+DECLARE_OOXML_TEST(testTableLineSpacing, "table_atleast.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
