@@ -166,7 +166,7 @@ struct FontCollectionEntry
 
     private :
 
-        FontCollectionEntry() {};
+        FontCollectionEntry() {}
 
         void ImplInit( const OUString& rName );
 };
