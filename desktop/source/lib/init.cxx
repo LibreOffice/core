@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "liblibreoffice.hxx"
+#include "liblibreoffice.h"
 
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
@@ -97,29 +97,53 @@ aImpressExtensionMap[] = {
     { NULL, NULL }
 };
 
+extern "C" {
 
-class LibLODocument_Impl : public LODocument
+SAL_DLLPUBLIC_EXPORT LibreOffice *liblibreoffice_hook(void);
+
+static void doc_destroy( LibreOfficeDocument *pThis );
+static int  doc_saveAs( LibreOfficeDocument *pThis, const char *pUrl, const char *pFormat );
+
+struct LibLODocument_Impl : public _LibreOfficeDocument
 {
     uno::Reference < css::lang::XComponent > mxComponent;
-public:
+
     LibLODocument_Impl( const uno::Reference < css::lang::XComponent > &xComponent )
             : mxComponent( xComponent )
-        { }
-    virtual bool saveAs (const char *url, const char *format);
+    {
+        nSize = sizeof( LibreOffice );
+
+        destroy = doc_destroy;
+        saveAs = doc_saveAs;
+    }
 };
 
-class LibLibreOffice_Impl : public LibLibreOffice
+static void doc_destroy( LibreOfficeDocument *pThis )
 {
-public:
-    rtl::OUString       maLastExceptionMsg;
+    LibLODocument_Impl *pDocument = static_cast< LibLODocument_Impl *>( pThis );
+    delete pDocument;
+}
 
-    virtual bool        initialize (const char *installPath);
+static void                 lo_destroy       (LibreOffice *pThis);
+static int                  lo_initialize    (LibreOffice *pThis,
+                                              const char *pInstallPath);
+static LibreOfficeDocument *lo_documentLoad  (LibreOffice *pThis,
+                                              const char *pURL);
+static char *               lo_getError      (LibreOffice *pThis);
 
-    virtual LODocument *documentLoad (const char *url);
+struct LibLibreOffice_Impl : public _LibreOffice
+{
+    rtl::OUString maLastExceptionMsg;
 
-    virtual char       *getError();
+    LibLibreOffice_Impl()
+    {
+        nSize = sizeof( LibreOfficeDocument );
 
-    virtual ~LibLibreOffice_Impl ();
+        destroy = lo_destroy;
+        initialize = lo_initialize;
+        documentLoad = lo_documentLoad;
+        getError = lo_getError;
+    }
 };
 
 // Wonder global state ...
@@ -149,15 +173,17 @@ static OUString getAbsoluteURL( const char *pURL )
     return sAbsoluteDocUrl;
 }
 
-LODocument *
-LibLibreOffice_Impl::documentLoad( const char *docUrl )
+static LibreOfficeDocument *
+lo_documentLoad( LibreOffice *pThis, const char *pURL )
 {
-    OUString aURL = getAbsoluteURL( docUrl );
+    LibLibreOffice_Impl *pLib = static_cast< LibLibreOffice_Impl *>( pThis );
+
+    OUString aURL = getAbsoluteURL( pURL );
 
     uno::Reference < css::frame::XDesktop2 > xComponentLoader =
             css::frame::Desktop::create(xContext);
 
-    maLastExceptionMsg = "";
+    pLib->maLastExceptionMsg = "";
     try {
         uno::Reference < css::lang::XComponent > xComponent =
             xComponentLoader->loadComponentFromURL(
@@ -166,21 +192,26 @@ LibLibreOffice_Impl::documentLoad( const char *docUrl )
         if( xComponentLoader.is() )
             return new LibLODocument_Impl( xComponent );
         else
-            maLastExceptionMsg = "unknown load failure";
+            pLib->maLastExceptionMsg = "unknown load failure";
     } catch (const uno::Exception &ex) {
-        maLastExceptionMsg = ex.Message;
+        pLib->maLastExceptionMsg = ex.Message;
     }
     return NULL;
 }
 
-bool LibLODocument_Impl::saveAs (const char *url, const char *format)
+static int
+doc_saveAs( LibreOfficeDocument *pThis,
+            const char *url, const char *format )
 {
+    LibLODocument_Impl *pDocument = static_cast< LibLODocument_Impl *>( pThis );
+
     OUString sFormat = getUString( format );
 
     OUString aURL = getAbsoluteURL( url );
 
     try {
-        uno::Reference< frame::XModel > xDocument( mxComponent, uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XModel > xDocument( pDocument->mxComponent,
+                                                   uno::UNO_QUERY_THROW );
         uno::Sequence< beans::PropertyValue > aSeq = xDocument->getArgs();
 
         OUString aDocumentService;
@@ -242,7 +273,8 @@ bool LibLODocument_Impl::saveAs (const char *url, const char *format)
         aSeq[1].Name = "FilterName";
         aSeq[1].Value <<= aFilterName;
 
-        uno::Reference< frame::XStorable > xStorable( mxComponent, uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XStorable > xStorable( pDocument->mxComponent,
+                                                      uno::UNO_QUERY_THROW );
         xStorable->storeToURL( aURL, aSeq );
 
         return true;
@@ -252,9 +284,11 @@ bool LibLODocument_Impl::saveAs (const char *url, const char *format)
     }
 }
 
-char *LibLibreOffice_Impl::getError()
+static char *
+lo_getError (LibreOffice *pThis)
 {
-    OString aStr = rtl::OUStringToOString( maLastExceptionMsg, RTL_TEXTENCODING_UTF8 );
+    LibLibreOffice_Impl *pLib = static_cast< LibLibreOffice_Impl *>( pThis );
+    OString aStr = rtl::OUStringToOString( pLib->maLastExceptionMsg, RTL_TEXTENCODING_UTF8 );
     char *pMem = (char *) malloc (aStr.getLength() + 1);
     strcpy( pMem, aStr.getStr() );
     return pMem;
@@ -308,21 +342,23 @@ initialize_uno( const OUString &aAppURL )
     // configmgr setup ?
 }
 
-bool
-LibLibreOffice_Impl::initialize( const char *app_path )
+static int
+lo_initialize( LibreOffice *pThis, const char *app_path )
 {
+    (void) pThis;
+
     static bool bInitialized = false;
     if( bInitialized )
-        return true;
+        return 1;
 
     if( !app_path )
-        return false;
+        return 0;
 
     OUString aAppPath( app_path, strlen( app_path ), RTL_TEXTENCODING_UTF8 );
     OUString aAppURL;
     if( osl::FileBase::getFileURLFromSystemPath( aAppPath, aAppURL ) !=
         osl::FileBase::E_None )
-        return false;
+        return 0;
 
     try {
         initialize_uno( aAppURL );
@@ -344,23 +380,23 @@ LibLibreOffice_Impl::initialize( const char *app_path )
     return bInitialized;
 }
 
-extern "C" {
-    SAL_DLLPUBLIC_EXPORT LibLibreOffice *liblibreoffice_hook(void);
-}
-
-LibLibreOffice *liblibreoffice_hook(void)
+LibreOffice *liblibreoffice_hook(void)
 {
     if( !gImpl )
     {
         fprintf( stderr, "create libreoffice object\n" );
         gImpl = new LibLibreOffice_Impl();
     }
-    return gImpl;
+    return static_cast< LibreOffice *>( gImpl );
 }
 
-LibLibreOffice_Impl::~LibLibreOffice_Impl ()
+static void lo_destroy (LibreOffice *pThis)
 {
+    LibLibreOffice_Impl *pLib = static_cast< LibLibreOffice_Impl *>( pThis );
+    delete pLib;
     gImpl = NULL;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

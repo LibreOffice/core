@@ -25,7 +25,7 @@ $(eval $(call gb_StaticLibrary_use_libraries,libreoffice,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,libreoffice,\
+$(eval $(call gb_StaticLibrary_add_cobjects,libreoffice,\
     desktop/source/lib/shim \
 ))
 

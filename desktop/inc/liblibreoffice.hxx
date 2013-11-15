@@ -10,30 +10,60 @@
 #ifndef INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
 #define INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
 
+#include <liblibreoffice.h>
+
+/*
+ * The reasons this C++ code is not as pretty as it could be are:
+ *  a) provide a pure C API - that's useful for some people
+ *  b) allow ABI stability - C++ vtables are not good for that.
+ *  c) avoid C++ types as part of the API.
+ */
+
 class LODocument
 {
+    LibreOfficeDocument *mpDoc;
 public:
-    virtual ~LODocument() {}
+    inline LODocument( LibreOfficeDocument *pDoc ) : mpDoc( pDoc ) {}
+    inline ~LODocument() { mpDoc->destroy( mpDoc ); }
 
     // Save as the given format, if format is NULL sniff from ext'n
-    virtual bool saveAs (const char *url, const char *format = NULL) = 0;
+    inline bool saveAs( const char *url, const char *format = NULL )
+    {
+        return mpDoc->saveAs( mpDoc, url, format );
+    }
 };
 
 class LibLibreOffice
 {
+    LibreOffice *mpThis;
 public:
-    virtual ~LibLibreOffice () {};
+    inline LibLibreOffice( LibreOffice *pThis ) : mpThis( pThis ) {}
+    inline ~LibLibreOffice() { mpThis->destroy( mpThis ); };
 
-    virtual bool        initialize (const char *installPath) = 0;
+    inline bool initialize( const char *installPath )
+    {
+        return mpThis->initialize( mpThis, installPath );
+    }
 
-    virtual LODocument *documentLoad (const char *url) = 0;
+    inline LODocument *documentLoad( const char *url )
+    {
+        LibreOfficeDocument *pDoc = mpThis->documentLoad( mpThis, url );
+        if( !pDoc )
+            return NULL;
+        return new LODocument( pDoc );
+    }
 
     // return the last error as a string, free me.
-    virtual char       *getError() = 0;
-
+    inline char *getError() { return mpThis->getError( mpThis ); }
 };
 
-LibLibreOffice *lo_init (const char *install_path);
+inline LibLibreOffice *lo_cpp_init( const char *install_path )
+{
+    LibreOffice *pThis = lo_init( install_path );
+    if( !pThis || !pThis->nSize > 0 )
+        return NULL;
+    return new LibLibreOffice( pThis );
+}
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

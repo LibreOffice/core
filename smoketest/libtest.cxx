@@ -44,7 +44,7 @@ int main (int argc, char **argv)
         return 1;
     }
 
-    LibLibreOffice *pOffice = lo_init( argv[1] );
+    LibLibreOffice *pOffice = lo_cpp_init( argv[1] );
     if( !pOffice )
     {
         fprintf( stderr, "Failed to initialize\n" );
