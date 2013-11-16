@@ -7699,9 +7699,9 @@ AC_SUBST([LIBEOT_CFLAGS])
 AC_SUBST([LIBEOT_LIBS])
 
 dnl ===================================================================
-dnl Check for system libebook
+dnl Check for system libe-book
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.0],["-I${WORKDIR}/UnpackedTarball/libebook/inc"],["-L${WORKDIR}/UnpackedTarball/libebook/src/lib/.libs -le-book-0.0"])
+libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.0 >= 0.0.2],["-I${WORKDIR}/UnpackedTarball/libebook/inc"],["-L${WORKDIR}/UnpackedTarball/libebook/src/lib/.libs -le-book-0.0"])
 
 dnl ===================================================================
 dnl Check for system libetonyek
