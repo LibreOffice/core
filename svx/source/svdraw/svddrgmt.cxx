@@ -1777,7 +1777,6 @@ SdrDragResize::SdrDragResize(SdrDragView& rNewView)
 void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethResize, rStr);
-    bool bEqual(aXFact == aYFact);
     Fraction aFact1(1,1);
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
@@ -1800,6 +1799,7 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 
         rStr += " (";
 
+        bool bEqual(aXFact == aYFact);
         if(bX)
         {
             if(!bEqual)

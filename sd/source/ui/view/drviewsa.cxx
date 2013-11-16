@@ -733,7 +733,6 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         {
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             SdrLayerID nLayer = 0, nOldLayer = 0;
-            SdrLayer*  pLayer = NULL;
             SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             sal_uLong nMarkCount = rMarkList.GetMarkCount();
@@ -759,7 +758,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             // Append the layer name to the current page number.
             if( bOneLayer && nMarkCount )
             {
-                pLayer = rLayerAdmin.GetLayerPerID( nLayer );
+                SdrLayer* pLayer = rLayerAdmin.GetLayerPerID( nLayer );
                 if( pLayer )
                 {
                     aOUString += " (" ;
