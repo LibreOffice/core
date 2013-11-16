@@ -24,7 +24,6 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <tools/urlobj.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 
 namespace svgio
 {
@@ -179,7 +178,7 @@ namespace svgio
         {
             const sal_uInt32 nAttributes(xAttribs->getLength());
             // #i122522# SVG defines that 'In general, this means that the presentation attributes have
-            // lower priority than other CSS style rules specified in author style sheets or ‘style’
+            // lower priority than other CSS style rules specified in author style sheets or style
             // attributes.' in http://www.w3.org/TR/SVG/styling.html#UsingPresentationAttributes
             // (6.4 Specifying properties using the presentation attributes SVG 1.1). That means that
             // e.g. font-size will appear as presentation attribute and CSS style attribute. In these
@@ -582,7 +581,5 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
