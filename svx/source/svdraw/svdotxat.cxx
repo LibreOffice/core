@@ -120,7 +120,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                 rOutliner.SetUpdateMode(sal_True);
                 // TODO: add the optimization with bPortionInfoChecked etc. here
                 OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-                if ( pOutlinerParaObject != NULL )
+                if ( pOutlinerParaObject != NULL && !bShuntSetText )
                 {
                     rOutliner.SetText(*pOutlinerParaObject);
                     rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
@@ -133,7 +133,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                 } else {
                     nHgt=rOutliner.GetTextHeight()+1; // a little tolerance
                 }
-                rOutliner.Clear();
+                //rOutliner.Clear();
             }
             if (nWdt<nMinWdt) nWdt=nMinWdt;
             if (nWdt>nMaxWdt) nWdt=nMaxWdt;

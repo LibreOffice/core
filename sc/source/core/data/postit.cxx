@@ -49,7 +49,6 @@
 
 #include <utility>
 
-
 // ============================================================================
 
 namespace {
@@ -676,13 +675,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             {
                 ScCaptionInitData& rInitData = *maNoteData.mxInitData;
 
-                // transfer ownership of outliner object to caption, or set simple text
-                OSL_ENSURE( rInitData.mxOutlinerObj.get() || !rInitData.maSimpleText.isEmpty(),
-                    "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
-                if( rInitData.mxOutlinerObj.get() )
-                    maNoteData.mpCaption->SetOutlinerParaObject( rInitData.mxOutlinerObj.release() );
-                else
-                    maNoteData.mpCaption->SetText( rInitData.maSimpleText );
+                maNoteData.mpCaption->bShuntSetText=true;
 
                 // copy all items or set default items; reset shadow items
                 ScCaptionUtil::SetDefaultItems( *maNoteData.mpCaption, mrDoc );
@@ -708,6 +701,12 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                     maNoteData.mpCaption->SetLogicRect( aCaptRect );
                     aCreator.FitCaptionToRect();
                 }
+
+                maNoteData.mpCaption->bShuntSetText=false;
+                if( rInitData.mxOutlinerObj.get() )
+                    maNoteData.mpCaption->SetOutlinerParaObject( rInitData.mxOutlinerObj.release() );
+                else
+                    maNoteData.mpCaption->SetText( rInitData.maSimpleText );
             }
         }
         // forget the initial caption data struct

@@ -1821,9 +1821,7 @@ void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
     NbcSetOutlinerParaObject(pTextObject);
     SetChanged();
     BroadcastObjectChange();
-    if (GetCurrentBoundRect()!=aBoundRect0) {
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    }
+    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
 void SdrObject::NbcSetOutlinerParaObject(OutlinerParaObject* /*pTextObject*/)

@@ -911,7 +911,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
 
         rOutliner.SetPaperSize(aAnchorTextSize);
-        rOutliner.SetUpdateMode(true);
+        rOutliner.SetUpdateMode(!bShuntSetText);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
     }
     else
