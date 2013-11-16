@@ -31,7 +31,7 @@
 #include <string.h>
 #include <fcntl.h>
 
-#if defined(__IBMC__) || defined(__EMX__)
+#if defined(__IBMC__) || defined(__EMX__) || defined(_MSC_VER)
 #   include <fcntl.h>
 #   define PATH_MAX _MAX_PATH
 #endif
