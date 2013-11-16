@@ -289,8 +289,10 @@ private:
                                                         const Reference< XShapes > & xShapes,
                                                         sal_Bool bMaster );
 
-    sal_Bool                            implExportShapes( const Reference< XShapes >& rxShapes );
-    sal_Bool                            implExportShape( const Reference< XShape >& rxShape );
+    sal_Bool                            implExportShapes( const Reference< XShapes >& rxShapes,
+                                                          sal_Bool bMaster );
+    sal_Bool                            implExportShape( const Reference< XShape >& rxShape,
+                                                         sal_Bool bMaster );
 
     sal_Bool                            implCreateObjects();
     sal_Bool                            implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes );

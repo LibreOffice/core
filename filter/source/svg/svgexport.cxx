@@ -1552,12 +1552,12 @@ sal_Bool SVGFilter::implExportPage( const OUString & sPageId,
             SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
 
             // append all shapes that make up the Master Slide
-            bRet = implExportShapes( xShapes ) || bRet;
+            bRet = implExportShapes( xShapes, true ) || bRet;
         }   // append the </g> closing tag related to the Background Objects
         else
         {
             // append all shapes that make up the Slide
-            bRet = implExportShapes( xShapes ) || bRet;
+            bRet = implExportShapes( xShapes, false ) || bRet;
         }
     }  // append the </g> closing tag related to the Slide/Master_Slide
 
@@ -1567,7 +1567,8 @@ sal_Bool SVGFilter::implExportPage( const OUString & sPageId,
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes )
+sal_Bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes,
+                                      sal_Bool bMaster )
 {
     Reference< XShape > xShape;
     sal_Bool            bRet = sal_False;
@@ -1575,7 +1576,7 @@ sal_Bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes )
     for( sal_Int32 i = 0, nCount = rxShapes->getCount(); i < nCount; ++i )
     {
         if( ( rxShapes->getByIndex( i ) >>= xShape ) && xShape.is() )
-            bRet = implExportShape( xShape ) || bRet;
+            bRet = implExportShape( xShape, bMaster ) || bRet;
 
         xShape = NULL;
     }
@@ -1585,7 +1586,8 @@ sal_Bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
+sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
+                                     sal_Bool bMaster )
 {
     Reference< XPropertySet >   xShapePropSet( rxShape, UNO_QUERY );
     sal_Bool                    bRet = sal_False;
@@ -1600,6 +1602,13 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
             xShapePropSet->getPropertyValue( "IsEmptyPresentationObject" )  >>= bHideObj;
         }
 
+        OUString aShapeClass = implGetClassFromShape( rxShape );
+        if( bMaster )
+        {
+            if( aShapeClass == "TitleText" || aShapeClass == "Outline" )
+                bHideObj = true;
+        }
+
         if( !bHideObj )
         {
             if( aShapeType.lastIndexOf( "drawing.GroupShape" ) != -1 )
@@ -1611,7 +1620,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "Group" );
                     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
 
-                    bRet = implExportShapes( xShapes );
+                    bRet = implExportShapes( xShapes, bMaster );
                 }
             }
 
@@ -1630,7 +1639,6 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                 if( rMtf.GetActionSize() )
                 {   // for text field shapes we set up text-adjust attributes
                     // and set visibility to hidden
-                    OUString aShapeClass = implGetClassFromShape( rxShape );
                     if( mbPresentation )
                     {
                         sal_Bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
@@ -1994,6 +2002,10 @@ OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
         aRet = "Date/Time";
     else if( aShapeType.lastIndexOf( "presentation.SlideNumberShape" ) != -1 )
         aRet = "Slide_Number";
+    else if( aShapeType.lastIndexOf( "presentation.TitleTextShape" ) != -1 )
+        aRet = "TitleText";
+    else if( aShapeType.lastIndexOf( "presentation.OutlinerShape" ) != -1 )
+        aRet = "Outline";
     else
         aRet = aShapeType;
 
