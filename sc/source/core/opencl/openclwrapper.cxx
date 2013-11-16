@@ -563,43 +563,34 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
     cl_int clStatus;
     cl_uint numPlatforms, numDevices;
     cl_platform_id *platforms;
-    cl_context_properties cps[3];
-    char platformName[256];
-    unsigned int i;
 
     // Have a look at the available platforms.
 
     if ( !gpuInfo->mnIsUserCreated )
     {
         clStatus = clGetPlatformIDs( 0, NULL, &numPlatforms );
-        if ( clStatus != CL_SUCCESS )
-        {
-            return 1;
-        }
+        CHECK_OPENCL(clStatus, "clGetPlatformIDs");
         gpuInfo->mpPlatformID = NULL;
 
         if ( 0 < numPlatforms )
         {
+            char platformName[256];
             platforms = (cl_platform_id*) malloc( numPlatforms * sizeof( cl_platform_id ) );
-            if ( platforms == (cl_platform_id*) NULL )
+            if (!platforms)
             {
                 return 1;
             }
             clStatus = clGetPlatformIDs( numPlatforms, platforms, NULL );
+            CHECK_OPENCL(clStatus, "clGetPlatformIDs");
 
-            if ( clStatus != CL_SUCCESS )
-            {
-                return 1;
-            }
-
-            for ( i = 0; i < numPlatforms; i++ )
+            for ( unsigned int i = 0; i < numPlatforms; i++ )
             {
                 clStatus = clGetPlatformInfo( platforms[i], CL_PLATFORM_VENDOR,
                     sizeof( platformName ), platformName, NULL );
 
                 if ( clStatus != CL_SUCCESS )
                 {
-                    return 1;
+                    break;
                 }
                 gpuInfo->mpPlatformID = platforms[i];
 
@@ -630,14 +621,15 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
                         break;
                 }
             }
+            free( platforms );
             if ( clStatus != CL_SUCCESS )
                 return 1;
-            free( platforms );
         }
         if ( NULL == gpuInfo->mpPlatformID )
             return 1;
 
         // Use available platform.
+        cl_context_properties cps[3];
         cps[0] = CL_CONTEXT_PLATFORM;
         cps[1] = (cl_context_properties) gpuInfo->mpPlatformID;
         cps[2] = 0;
@@ -676,17 +668,16 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
         // Now, get the device list data
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES, length,
                        gpuInfo->mpArryDevsID, NULL );
-        if ( clStatus != CL_SUCCESS )
-            return 1;
+        CHECK_OPENCL(clStatus, "clGetContextInfo");
 
         // Create OpenCL command queue.
         gpuInfo->mpCmdQueue = clCreateCommandQueue( gpuInfo->mpContext, gpuInfo->mpArryDevsID[0], 0, &clStatus );
 
-        if ( clStatus != CL_SUCCESS )
-            return 1;
+        CHECK_OPENCL(clStatus, "clCreateCommandQueue");
     }
 
     clStatus = clGetCommandQueueInfo( gpuInfo->mpCmdQueue, CL_QUEUE_THREAD_HANDLE_AMD, 0, NULL, NULL );
+    CHECK_OPENCL(clStatus, "clGetCommandQueueInfo");
 
     bool bKhrFp64 = false;
     bool bAmdFp64 = false;
