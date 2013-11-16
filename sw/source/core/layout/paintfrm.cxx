@@ -3760,9 +3760,9 @@ void SwPageFrm::PaintDecorators( ) const
 
     @return true, if background is transparent drawn.
 */
-sal_Bool SwFlyFrm::IsBackgroundTransparent() const
+bool SwFlyFrm::IsBackgroundTransparent() const
 {
-    sal_Bool bBackgroundTransparent = GetFmt()->IsBackgroundTransparent();
+    bool bBackgroundTransparent = GetFmt()->IsBackgroundTransparent();
     if ( !bBackgroundTransparent &&
          static_cast<const SwFlyFrmFmt*>(GetFmt())->IsBackgroundBrushInherited() )
     {
@@ -3777,14 +3777,14 @@ sal_Bool SwFlyFrm::IsBackgroundTransparent() const
                  (pSectionTOXColor->GetTransparency() != 0) &&
                  (pSectionTOXColor->GetColor() != COL_TRANSPARENT) )
             {
-                bBackgroundTransparent = sal_True;
+                bBackgroundTransparent = true;
             }
             else if ( pBackgrdBrush )
             {
                 if ( (pBackgrdBrush->GetColor().GetTransparency() != 0) &&
                      (pBackgrdBrush->GetColor() != COL_TRANSPARENT) )
                 {
-                    bBackgroundTransparent = sal_True;
+                    bBackgroundTransparent = true;
                 }
                 else
                 {
@@ -3794,7 +3794,7 @@ sal_Bool SwFlyFrm::IsBackgroundTransparent() const
                          (pTmpGrf->GetAttr().GetTransparency() != 0)
                        )
                     {
-                        bBackgroundTransparent = sal_True;
+                        bBackgroundTransparent = true;
                     }
                 }
             }
@@ -3814,7 +3814,7 @@ sal_Bool SwFlyFrm::IsBackgroundTransparent() const
 
     @return true, if shadow color is transparent.
 */
-sal_Bool SwFlyFrm::IsShadowTransparent() const
+bool SwFlyFrm::IsShadowTransparent() const
 {
     return GetFmt()->IsShadowTransparent();
 };

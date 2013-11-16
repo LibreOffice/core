@@ -2933,9 +2933,9 @@ OUString SwFlyFrmFmt::GetObjDescription() const
     @return true, if background color is transparent, but not "no fill"
     or the transparency of a existing background graphic is set.
 */
-sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
+bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     /// NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
     ///     and there is no background graphic, it "inherites" the background
@@ -2944,7 +2944,7 @@ sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
          (GetBackground().GetColor() != COL_TRANSPARENT)
        )
     {
-        bReturn = sal_True;
+        bReturn = true;
     }
     else
     {
@@ -2954,7 +2954,7 @@ sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
              (pTmpGrf->GetAttr().GetTransparency() != 0)
            )
         {
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 
@@ -2973,14 +2973,14 @@ sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 
     @return true, if background brush is "inherited" from parent/grandparent
 */
-sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
+bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
          !(GetBackground().GetGraphicObject()) )
     {
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     return bReturn;

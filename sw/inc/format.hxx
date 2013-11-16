@@ -46,10 +46,10 @@ class SW_DLLPUBLIC SwFmt : public SwModify
                                        (is not hard attribution!!!) */
     sal_uInt16 nPoolHelpId;       ///< HelpId for this Pool-style.
     sal_uInt8 nPoolHlpFileId;     ///< FilePos to Doc to these style helps.
-    sal_Bool   bWritten : 1;      ///< TRUE: already written.
+    bool   bWritten : 1;      ///< TRUE: already written.
     bool   bAutoFmt : 1;      /**< FALSE: it is a template.
                                        default is true! */
-    sal_Bool   bFmtInDTOR : 1;    /**< TRUE: Format becomes deleted. In order to be able
+    bool   bFmtInDTOR : 1;    /**< TRUE: Format becomes deleted. In order to be able
                                        to recognize this in FmtChg-message!! */
     sal_Bool   bAutoUpdateFmt : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
@@ -101,7 +101,7 @@ public:
     virtual sal_uInt16 ResetAllFmtAttr();
 
     inline SwFmt* DerivedFrom() const { return (SwFmt*)GetRegisteredIn(); }
-    inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
+    inline bool IsDefault() const { return DerivedFrom() == 0; }
 
     inline OUString GetName() const   { return aFmtName; }
     void SetName( const OUString& rNewName, sal_Bool bBroadcast=sal_False );
@@ -152,7 +152,7 @@ public:
         { aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
 
     /// Format-ID for reading/writing:
-    void   ResetWritten()    { bWritten = sal_False; }
+    void   ResetWritten()    { bWritten = false; }
 
     /// Query / set AutoFmt-flag.
     bool IsAuto() const                 { return bAutoFmt; }
@@ -168,7 +168,7 @@ public:
     sal_Bool IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }
     void SetAutoUpdateFmt( sal_Bool bNew = sal_True )   { bAutoUpdateFmt = bNew; }
 
-    sal_Bool IsFmtInDTOR() const { return bFmtInDTOR; }
+    bool IsFmtInDTOR() const { return bFmtInDTOR; }
 
     /** GetMethods: Bool indicates whether to search only in Set (FALSE)
      or also in Parents.
@@ -306,7 +306,7 @@ public:
 
         @return false, default implementation
     */
-    virtual sal_Bool IsBackgroundTransparent() const;
+    virtual bool IsBackgroundTransparent() const;
 
     /** SwFmt::IsShadowTransparent
 
@@ -318,7 +318,7 @@ public:
 
         @return false, default implementation
     */
-    virtual sal_Bool IsShadowTransparent() const;
+    virtual bool IsShadowTransparent() const;
 };
 
 // --------------- inline Implementations ------------------------

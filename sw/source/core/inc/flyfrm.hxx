@@ -237,7 +237,7 @@ public:
         @return true, if background color is transparent or a existing background
         graphic is transparent.
     */
-    sal_Bool IsBackgroundTransparent() const;
+    bool IsBackgroundTransparent() const;
 
     /** SwFlyFrm::IsShadowTransparent
 
@@ -247,7 +247,7 @@ public:
 
         @return true, if shadow color is transparent.
     */
-    sal_Bool IsShadowTransparent() const;
+    bool IsShadowTransparent() const;
 
     void Chain( SwFrm* _pAnchor );
     void Unchain();

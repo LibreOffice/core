@@ -191,7 +191,7 @@ public:
         @return true, if background color is transparent, but not "no fill"
         or a existing background graphic is transparent.
     */
-    virtual sal_Bool IsBackgroundTransparent() const;
+    virtual bool IsBackgroundTransparent() const;
 
     /** SwFlyFrmFmt::IsBackgroundBrushInherited
 
@@ -204,7 +204,7 @@ public:
 
         @return true, if background brush is "inherited" from parent/grandparent
     */
-    sal_Bool IsBackgroundBrushInherited() const;
+    bool IsBackgroundBrushInherited() const;
 
     const Point & GetLastFlyFrmPrtRectPos() const       { return m_aLastFlyFrmPrtRectPos; }
     void SetLastFlyFrmPrtRectPos( const Point &rPoint ) { m_aLastFlyFrmPrtRectPos = rPoint; }

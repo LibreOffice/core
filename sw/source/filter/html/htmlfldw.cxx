@@ -462,7 +462,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         // Kommentare werden im ANSI-Zeichensetz, aber mit System-Zeilen-
         // Umbruechen gesschrieben.
         const OUString& rComment = pFld->GetPar2();
-        sal_Bool bWritten = sal_False;
+        bool bWritten = false;
 
         if( (rComment.getLength() >= 6 && rComment.startsWith("<") && rComment.endsWith(">") &&
              rComment.copy( 1, 4 ).equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_meta) ) ||
@@ -477,7 +477,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             OString sTmp(OUStringToOString(sComment,
                 ((SwHTMLWriter&)rWrt).eDestEnc));
             rWrt.Strm() << sTmp.getStr();
-            bWritten = sal_True;
+            bWritten = true;
         }
         else if( rComment.getLength() >= 7 &&
                  rComment.endsWith(">") &&
@@ -493,7 +493,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
                 OString sTmp(OUStringToOString(sComment,
                     ((SwHTMLWriter&)rWrt).eDestEnc));
                 rWrt.Strm() << sTmp.getStr();
-                bWritten = sal_True;
+                bWritten = true;
             }
 
         }

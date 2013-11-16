@@ -43,9 +43,9 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
-    bWritten = bFmtInDTOR = bAutoUpdateFmt = sal_False; // LAYER_IMPL
-    bAutoFmt = sal_True;
-    bHidden = false;
+    bAutoUpdateFmt = sal_False; // LAYER_IMPL
+    bAutoFmt = true;
+    bWritten = bFmtInDTOR = bHidden = false;
 
     if( pDrvdFrm )
         aSet.SetParent( &pDrvdFrm->aSet );
@@ -62,9 +62,9 @@ SwFmt::SwFmt( SwAttrPool& rPool, const OUString& rFmtNm,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
-    bWritten = bFmtInDTOR = bAutoUpdateFmt = sal_False; // LAYER_IMPL
-    bAutoFmt = sal_True;
-    bHidden = false;
+    bAutoUpdateFmt = sal_False; // LAYER_IMPL
+    bAutoFmt = true;
+    bWritten = bFmtInDTOR = bHidden = false;
 
     if( pDrvdFrm )
         aSet.SetParent( &pDrvdFrm->aSet );
@@ -79,7 +79,7 @@ SwFmt::SwFmt( const SwFmt& rFmt )
     nPoolHelpId( rFmt.GetPoolHelpId() ),
     nPoolHlpFileId( rFmt.GetPoolHlpFileId() )
 {
-    bWritten = bFmtInDTOR = sal_False; // LAYER_IMPL
+    bWritten = bFmtInDTOR = false; // LAYER_IMPL
     bAutoFmt = rFmt.bAutoFmt;
     bHidden = rFmt.bHidden;
     bAutoUpdateFmt = rFmt.bAutoUpdateFmt;
@@ -219,7 +219,7 @@ SwFmt::~SwFmt()
     {
         OSL_ENSURE( DerivedFrom(), "SwFmt::~SwFmt: Def dependents!" );
 
-        bFmtInDTOR = sal_True;
+        bFmtInDTOR = true;
 
         SwFmt* pParentFmt = DerivedFrom();
         if( !pParentFmt )
@@ -577,9 +577,9 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
 
     @return false, default implementation
 */
-sal_Bool SwFmt::IsBackgroundTransparent() const
+bool SwFmt::IsBackgroundTransparent() const
 {
-    return sal_False;
+    return false;
 }
 
 /** SwFmt::IsShadowTransparent
@@ -590,9 +590,9 @@ sal_Bool SwFmt::IsBackgroundTransparent() const
 
     @return false, default implementation
 */
-sal_Bool SwFmt::IsShadowTransparent() const
+bool SwFmt::IsShadowTransparent() const
 {
-    return sal_False;
+    return false;
 }
 
 /*
