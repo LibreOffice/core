@@ -1155,9 +1155,9 @@ AC_ARG_ENABLE(ccache,
 
 AC_ARG_ENABLE(64-bit,
     AS_HELP_STRING([--enable-64-bit],
-        [Build a 64-bit LibreOffice on platforms where the normal and only supported build
-         is 32-bit. In other words, this option is experimental and possibly quite broken,
-         use only if you are hacking on 64-bit support.]), ,)
+        [Build a 64-bit LibreOffice on platforms where the normal build is 32-bit. Works fine for OS
+         X. In other cases this option is experimental and possibly quite broken, use only if you are
+         hacking on 64-bit support.]), ,)
 
 AC_ARG_ENABLE(extra-gallery,
     AS_HELP_STRING([--enable-extra-gallery],
