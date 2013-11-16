@@ -113,7 +113,8 @@ void Test::testFormulaCreateStringFromTokens()
         "'Past Data'.B1+'2013'.B2*(1+'Kevin''s Data'.C10)",
         "x+y*z", // named ranges
         "SUM(sheetx;x;y;z)", // sheet local and global named ranges mixed
-        "MAX(Table1)+MIN(Table2)*SUM(Table3)" // database ranges
+        "MAX(Table1)+MIN(Table2)*SUM(Table3)", // database ranges
+        "{1;TRUE;3|FALSE;5;\"Text\"|;;}", // inline matrix
     };
 
     boost::scoped_ptr<ScTokenArray> pArray;

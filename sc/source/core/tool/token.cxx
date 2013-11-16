@@ -3193,6 +3193,30 @@ void ScTokenArray::CheckRelativeReferenceBounds(
 
 namespace {
 
+void appendDouble( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, double fVal )
+{
+    if (rCxt.mxOpCodeMap->isEnglish())
+    {
+        rtl::math::doubleToUStringBuffer(
+            rBuf, fVal, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
+    }
+    else
+    {
+        SvtSysLocale aSysLocale;
+        rtl::math::doubleToUStringBuffer(
+            rBuf, fVal,
+            rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
+            aSysLocale.GetLocaleDataPtr()->getNumDecimalSep()[0], true);
+    }
+}
+
+void appendString( OUStringBuffer& rBuf, const OUString& rStr )
+{
+    rBuf.append(sal_Unicode('"'));
+    rBuf.append(rStr.replaceAll("\"", "\"\""));
+    rBuf.append(sal_Unicode('"'));
+}
+
 void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken, const ScAddress& rPos )
 {
     if (rToken.IsExternalRef())
@@ -3205,21 +3229,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
     switch (rToken.GetType())
     {
         case svDouble:
-        {
-            if (rCxt.mxOpCodeMap->isEnglish())
-            {
-                rtl::math::doubleToUStringBuffer(
-                    rBuf, rToken.GetDouble(), rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
-            }
-            else
-            {
-                SvtSysLocale aSysLocale;
-                rtl::math::doubleToUStringBuffer(
-                    rBuf, rToken.GetDouble(),
-                    rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                    aSysLocale.GetLocaleDataPtr()->getNumDecimalSep()[0], true);
-            }
-        }
+            appendDouble(rCxt, rBuf, rToken.GetDouble());
         break;
         case svString:
         {
@@ -3230,9 +3240,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                 return;
             }
 
-            rBuf.append(sal_Unicode('"'));
-            rBuf.append(aStr.replaceAll("\"", "\"\""));
-            rBuf.append(sal_Unicode('"'));
+            appendString(rBuf, aStr);
         }
         break;
         case svSingleRef:
@@ -3261,7 +3269,55 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
         }
         break;
         case svMatrix:
-            // TODO : Implement this.
+        {
+            const ScMatrix* pMat = static_cast<const ScToken&>(rToken).GetMatrix();
+            if (!pMat)
+                return;
+
+            size_t nC, nMaxC, nR, nMaxR;
+            pMat->GetDimensions(nMaxC, nMaxR);
+
+            rBuf.append(rCxt.mxOpCodeMap->getSymbol(ocArrayOpen));
+            for (nR = 0 ; nR < nMaxR ; ++nR)
+            {
+                if (nR > 0)
+                {
+                    rBuf.append(rCxt.mxOpCodeMap->getSymbol(ocArrayRowSep));
+                }
+
+                for (nC = 0 ; nC < nMaxC ; ++nC)
+                {
+                    if (nC > 0)
+                    {
+                        rBuf.append(rCxt.mxOpCodeMap->getSymbol(ocArrayColSep));
+                    }
+
+                    if (pMat->IsValue(nC, nR))
+                    {
+                        if (pMat->IsBoolean(nC, nR))
+                        {
+                            bool bVal = pMat->GetDouble(nC, nR) != 0.0;
+                            rBuf.append(rCxt.mxOpCodeMap->getSymbol(bVal ? ocTrue : ocFalse));
+                        }
+                        else
+                        {
+                            sal_uInt16 nErr = pMat->GetError(nC, nR);
+                            if (nErr)
+                                rBuf.append(ScGlobal::GetErrorString(nErr));
+                            else
+                                appendDouble(rCxt, rBuf, pMat->GetDouble(nC, nR));
+                        }
+                    }
+                    else if (pMat->IsEmpty(nC, nR))
+                    {
+                        // Skip it.
+                    }
+                    else if (pMat->IsString(nC, nR))
+                        appendString(rBuf, pMat->GetString(nC, nR).getString());
+                }
+            }
+            rBuf.append(rCxt.mxOpCodeMap->getSymbol(ocArrayClose));
+        }
         break;
         case svIndex:
         {
