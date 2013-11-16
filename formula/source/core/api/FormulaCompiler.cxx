@@ -1843,9 +1843,9 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
                     }
                 }
                 if (!bMapped && !mxSymbols->isEnglish())
-                        LocalizeString( aAddIn );
-                    rBuffer.append( aAddIn);
-                }
+                    LocalizeString( aAddIn );
+                rBuffer.append( aAddIn);
+            }
             break;
             case svError:
                 AppendErrorConstant( rBuffer, t->GetError());
