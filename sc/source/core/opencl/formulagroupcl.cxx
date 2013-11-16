@@ -2025,13 +2025,13 @@ public:
         decl << publicFunc;
         DK->DumpInlineFun(inlineDecl,inlineFun);
         for(std::set<std::string>::iterator set_iter=inlineDecl.begin();
-                                         set_iter!=inlineDecl.end();set_iter++)
+                                         set_iter!=inlineDecl.end();++set_iter)
         {
             decl<<*set_iter;
         }
 
         for(std::set<std::string>::iterator set_iter=inlineFun.begin();
-                                         set_iter!=inlineFun.end();set_iter++)
+                                         set_iter!=inlineFun.end();++set_iter)
         {
             decl<<*set_iter;
         }
