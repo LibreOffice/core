@@ -40,19 +40,22 @@ $(eval $(call gb_Module_add_targets,accessories,\
 endif
 
 ifeq ($(WITH_EXTRA_SAMPLE),YES)
-$(eval $(call gb_Module_add_targets,accessories,\
+$(eval $(call gb_Module_add_l10n_targets,accessories,\
 	AllLangPackage_accessoriessamples \
 	AllLangPackage_accessoriessamplesadvertisement \
 	AllLangPackage_accessoriessamplesdocumentation \
 	AllLangPackage_accessoriessamplesnonfree \
 	AllLangPackage_accessoriessamplesnonfreeadvertisement \
 	AllLangPackage_accessoriessamplesnonfreedocumentation \
+))
+
+$(eval $(call gb_Module_add_targets,accessories,\
 	UnpackedTarball_samples_pack \
 ))
 endif
 
 ifeq ($(WITH_EXTRA_TEMPLATE),YES)
-$(eval $(call gb_Module_add_targets,accessories,\
+$(eval $(call gb_Module_add_l10n_targets,accessories,\
 	AllLangPackage_accessoriestemplates \
 	AllLangPackage_accessoriestemplateseducate \
 	AllLangPackage_accessoriestemplatesfinance \
@@ -75,6 +78,9 @@ $(eval $(call gb_Module_add_targets,accessories,\
 	AllLangPackage_accessoriestemplatesoffimisc \
 	AllLangPackage_accessoriestemplatespersonal \
 	AllLangPackage_accessoriestemplatespresent \
+))
+
+$(eval $(call gb_Module_add_targets,accessories,\
 	ExternalPackage_accessoriestemplatescommon \
 	ExternalPackage_accessoriestemplatescommoneducate \
 	ExternalPackage_accessoriestemplatescommonfinance \
