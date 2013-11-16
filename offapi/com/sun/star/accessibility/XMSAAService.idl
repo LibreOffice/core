@@ -48,7 +48,7 @@ interface XMSAAService : ::com::sun::star::uno::XInterface
     */
     long getAccObjectPtr ([in] long hWnd, [in] long lParam, [in] long wParam);
 
-    [oneway] void handleWindowOpened ([in] long i);
+    void handleWindowOpened ([in] long i);
 };
 
 }; }; }; };

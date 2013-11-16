@@ -1611,6 +1611,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	AccessibleTextType \
 	IllegalAccessibleComponentStateException \
 	TextSegment \
+    MSAAService \
 	XAccessible \
 	XAccessibleAction \
 	XAccessibleComponent \
@@ -1618,7 +1619,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	XAccessibleEditableText \
 	XAccessibleEventBroadcaster \
 	XAccessibleEventListener \
+    XAccessibleExtendedAttributes \
 	XAccessibleExtendedComponent \
+    XAccessibleGroupPosition \
 	XAccessibleHyperlink \
 	XAccessibleHypertext \
 	XAccessibleImage \
@@ -1628,10 +1631,13 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	XAccessibleSelection \
 	XAccessibleStateSet \
 	XAccessibleTable \
+    XAccessibleTableSelection \
 	XAccessibleText \
 	XAccessibleTextAttributes \
 	XAccessibleTextMarkup \
+    XAccessibleTextSelection \
 	XAccessibleValue \
+    XMSAAService \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/animations,\
 	AnimationAdditiveMode \

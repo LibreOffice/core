@@ -36,9 +36,9 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-//#include <com/sun/star/accessibility/XAccessibleGroupPosition.hpp>
+#include <com/sun/star/accessibility/XAccessibleGroupPosition.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-//#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
