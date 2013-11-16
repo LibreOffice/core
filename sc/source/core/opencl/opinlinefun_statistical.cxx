@@ -432,6 +432,7 @@ std::string lcl_IterateInverseBetaInv =
 "{\n"
 "   *rConvError = false;\n"
 "    double fYEps = 1.0E-307;\n"
+"    double fXEps = fMachEps;\n"
 "   if(!(fAx < fBx))\n"
 "   {\n"
 "       //print error\n"
