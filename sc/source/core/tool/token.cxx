@@ -41,6 +41,7 @@
 #include "tokenstringcontext.hxx"
 #include "types.hxx"
 #include "globstr.hrc"
+#include "addincol.hxx"
 #include "svl/sharedstring.hxx"
 
 using ::std::vector;
@@ -3318,7 +3319,26 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
         }
         break;
         case svExternal:
-            // TODO : Implement this.
+        {
+            // mapped or translated name of AddIns
+            OUString aAddIn = rToken.GetExternal();
+            bool bMapped = rCxt.mxOpCodeMap->isPODF();     // ODF 1.1 directly uses programmatical name
+            if (!bMapped && rCxt.mxOpCodeMap->hasExternals())
+            {
+                const ExternalHashMap& rExtMap = *rCxt.mxOpCodeMap->getReverseExternalHashMap();
+                ExternalHashMap::const_iterator it = rExtMap.find(aAddIn);
+                if (it != rExtMap.end())
+                {
+                    aAddIn = it->second;
+                    bMapped = true;
+                }
+            }
+
+            if (!bMapped && !rCxt.mxOpCodeMap->isEnglish())
+                ScGlobal::GetAddInCollection()->LocalizeString(aAddIn);
+
+            rBuf.append(aAddIn);
+        }
         break;
         case svError:
         {
