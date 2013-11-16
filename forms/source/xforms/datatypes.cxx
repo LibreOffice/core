@@ -691,7 +691,7 @@ namespace xforms
             sal_Int32 nTotalDigits = 0;
             sal_Int32 nFractionDigits = 0;
             const sal_Unicode* pValue = rValue.getStr();
-            for( ; pValue[n] != '.' && n < nLength; n++ )
+            for( ; n < nLength && pValue[n] != '.'; n++ )
                 if( pValue[n] >= '0'
                     && pValue[n] <= '9')
                     nTotalDigits++;
