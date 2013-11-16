@@ -15,9 +15,15 @@ std::string fBigInvDecl ="#define fBigInv  2.22045e-016\n";
 std::string fMachEpsDecl ="#define fMachEps  2.22045e-016\n";
 std::string fLogDblMaxDecl ="#define fLogDblMax  log(1.79769e+308)\n";
 std::string fHalfMachEpsDecl ="#define fHalfMachEps  0.5*2.22045e-016\n";
-
-std::string fMaxGammaArgumentDecl =
-"#define fMaxGammaArgument  171.624376956302\n";
+std::string fMaxGammaArgumentDecl=
+"#define fMaxGammaArgument 171.624376956302\n";
+std::string GetValueDecl=
+"double  GetValue( double x,double fp,double fDF );";
+std::string GetValue=
+"double  GetValue( double x,double fp,double fDF )\n"
+"{\n"
+"    return fp - 2 * GetTDist(x, fDF);\n"
+"}\n";
 std::string GetGammaSeriesDecl=
 "double GetGammaSeries( double fA, double fX );\n";
 std::string GetGammaSeries =
