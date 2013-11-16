@@ -192,6 +192,7 @@ public:
             throw OpenCLError(err);
         return 1;
     }
+    virtual cl_mem GetCLBuffer(void) const { return NULL; }
 };
 
 class DynamicKernelPiArgument: public DynamicKernelArgument
@@ -1060,7 +1061,8 @@ public:
 
                     // set kernel arg of reduction kernel
                 for (size_t j=0; j< vclmem.size(); j++){
-                    err = clSetKernelArg(redKernel, j, sizeof(cl_mem),
+                    err = clSetKernelArg(redKernel, j,
+                            vclmem[j]?sizeof(cl_mem):sizeof(double),
                             (void *)&vclmem[j]);
                     if (CL_SUCCESS != err)
                         throw OpenCLError(err);
