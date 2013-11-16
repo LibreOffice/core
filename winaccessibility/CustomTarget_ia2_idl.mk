@@ -15,28 +15,12 @@ wina11y_SOURCE := $(SRCDIR)/winaccessibility/source/UAccCOMIDL
 # We cannot depend on *.tlb because they only produced by IDL compiler
 # if idl contains 'library' statement.
 $(call gb_CustomTarget_get_target,winaccessibility/ia2/idl) : \
-	$(wina11y_COMIDLDIR)/Accessible2.h \
-	$(wina11y_COMIDLDIR)/AccessibleAction.h \
-	$(wina11y_COMIDLDIR)/AccessibleApplication.h \
-	$(wina11y_COMIDLDIR)/AccessibleComponent.h \
-	$(wina11y_COMIDLDIR)/AccessibleEditableText.h \
-	$(wina11y_COMIDLDIR)/AccessibleEventId.h \
-	$(wina11y_COMIDLDIR)/AccessibleHyperlink.h \
-	$(wina11y_COMIDLDIR)/AccessibleHypertext.h \
-	$(wina11y_COMIDLDIR)/AccessibleImage.h \
 	$(wina11y_COMIDLDIR)/AccessibleKeyBinding.h \
 	$(wina11y_COMIDLDIR)/AccessibleKeyStroke.h \
-	$(wina11y_COMIDLDIR)/AccessibleRelation.h \
-	$(wina11y_COMIDLDIR)/AccessibleRole.h \
-	$(wina11y_COMIDLDIR)/AccessibleStates.h \
-	$(wina11y_COMIDLDIR)/AccessibleTable.h \
-	$(wina11y_COMIDLDIR)/AccessibleText.h \
-	$(wina11y_COMIDLDIR)/AccessibleValue.h \
 	$(wina11y_COMIDLDIR)/Charset.h \
-	$(wina11y_COMIDLDIR)/IA2CommonTypes.h \
-	$(wina11y_COMIDLDIR)/IA2TypeLibrary.h \
 	$(wina11y_COMIDLDIR)/UAccCOM.h \
-	$(wina11y_COMIDLDIR)/defines.h
+	$(wina11y_COMIDLDIR)/defines.h \
+	$(wina11y_COMIDLDIR)/ia2_api_all.h
 
 $(wina11y_COMIDLDIR)/%.h : $(wina11y_SOURCE)/%.idl \
 		| $(wina11y_COMIDLDIR)/.dir
