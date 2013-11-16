@@ -244,11 +244,6 @@ void ScCompiler::SetNumberFormatter( SvNumberFormatter* pFormatter )
     mpFormatter = pFormatter;
 }
 
-ScCompiler::EncodeUrlMode ScCompiler::GetEncodeUrlMode() const
-{
-    return meEncodeUrlMode;
-}
-
 void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
 {
     if (xMap.get())
@@ -869,21 +864,7 @@ struct ConventionOOO_A1 : public Convention_A1
         if (bODF)
             rBuffer.append( '[');
 
-        bool bEncodeUrl = true;
-        switch (rCompiler.GetEncodeUrlMode())
-        {
-            case ScCompiler::ENCODE_BY_GRAMMAR:
-                bEncodeUrl = bODF;
-            break;
-            case ScCompiler::ENCODE_ALWAYS:
-                bEncodeUrl = true;
-            break;
-            case ScCompiler::ENCODE_NEVER:
-                bEncodeUrl = false;
-            break;
-            default:
-                ;
-        }
+        bool bEncodeUrl = bODF;
         makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef, rCompiler.GetPos(), pRefMgr, true, bEncodeUrl);
         if (bODF)
             rBuffer.append( ']');
@@ -905,21 +886,7 @@ struct ConventionOOO_A1 : public Convention_A1
         if (bODF)
             rBuffer.append( '[');
         // Ensure that there's always a closing bracket, no premature returns.
-        bool bEncodeUrl = true;
-        switch (rCompiler.GetEncodeUrlMode())
-        {
-            case ScCompiler::ENCODE_BY_GRAMMAR:
-                bEncodeUrl = bODF;
-            break;
-            case ScCompiler::ENCODE_ALWAYS:
-                bEncodeUrl = true;
-            break;
-            case ScCompiler::ENCODE_NEVER:
-                bEncodeUrl = false;
-            break;
-            default:
-                ;
-        }
+        bool bEncodeUrl = bODF;
 
         do
         {
@@ -1324,8 +1291,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if (!pFullName)
             return;
 
-        ConventionXL::makeExternalDocStr(
-            rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
+        ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
 
@@ -1347,8 +1313,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
         ScRange aAbsRef = rRef.toAbs(rCompiler.GetPos());
 
-        ConventionXL::makeExternalDocStr(
-            rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
+        ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
         rBuffer.append('!');
 
@@ -1521,8 +1486,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         ScAddress aAbsRef = rRef.toAbs(rCompiler.GetPos());
 
-        ConventionXL::makeExternalDocStr(
-            rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
+        ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
 
@@ -1545,8 +1509,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         ScRange aAbsRef = rRef.toAbs(rCompiler.GetPos());
 
-        ConventionXL::makeExternalDocStr(
-            rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
+        ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
         rBuffer.append('!');
 
@@ -1607,7 +1570,6 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
-        meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
         meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
         mbRewind( false )
@@ -1634,7 +1596,6 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
-        meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
         meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
         mbRewind( false )

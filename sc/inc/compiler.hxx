@@ -213,13 +213,6 @@ class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
 {
 public:
 
-    enum EncodeUrlMode
-    {
-        ENCODE_BY_GRAMMAR,
-        ENCODE_ALWAYS,
-        ENCODE_NEVER,
-    };
-
     enum ExtendedErrorDetection
     {
         EXTENDED_ERROR_DETECTION_NONE = 0,      // no error on unknown symbols, default (interpreter handles it)
@@ -330,7 +323,6 @@ private:
     SCsTAB      nMaxTab;                    // last sheet in document
     sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
-    EncodeUrlMode   meEncodeUrlMode;
     ExtendedErrorDetection  meExtendedErrorDetection;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
@@ -411,7 +403,7 @@ public:
     void            SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
-    EncodeUrlMode   GetEncodeUrlMode() const;
+
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()
         or SetGrammar().
