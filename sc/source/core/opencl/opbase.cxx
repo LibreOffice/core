@@ -183,8 +183,7 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream & ss,
      formula::svSingleVectorRef)
         ss<<"[get_group_id(1)]";
     ss<<", 0);\n";
-    return;
-#endif
+#else
     ss <<"    tmp";
     ss <<i;
     ss << "=";
@@ -197,6 +196,7 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream & ss,
         ss<<"[get_group_id(1)]";
 
     ss<<";\n";
+#endif
 }
 
 void CheckVariables::CheckAllSubArgumentIsNan(
