@@ -592,8 +592,9 @@ public:
             throw OpenCLError(err);
         // set kernel arg of reduction kernel
         // TODO(Wei Wei): use unique name for kernel
+        cl_mem buf = Base::GetCLBuffer();
         err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
-                (void *)&(Base::mpClmem));
+                (void *)&buf);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
 
