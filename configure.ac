@@ -925,12 +925,11 @@ AC_ARG_ENABLE(ooenv,
 
 AC_ARG_ENABLE(lto,
     AS_HELP_STRING([--enable-lto],
-        [Enable link-time optimization. Suitable for product builds.
-         Building takes longer but libraries and executables are optimized for speed.
-         (For GCC, best to use GCC 4.6 or later and 'gold' linker.
-          Also possible for Clang.
-          Experimental work in progress,
-          don't use unless you are working on this.)]))
+        [Enable link-time optimization. Suitable for (optimised) product builds. Building might take
+         longer but libraries and executables are optimized for speed. (For GCC, best to use GCC 4.6
+         or later and 'gold' linker. Works fine (and is turned on automatically in an optimising
+         build) for MSVC, otherwise experimental work in progress that shouldn't be used unless you
+         are working on it.)]))
 
 AC_ARG_ENABLE(crashdump,
     AS_HELP_STRING([--enable-crashdump],
