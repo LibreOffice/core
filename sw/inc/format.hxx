@@ -341,8 +341,6 @@ inline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInPare
     return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
 }
 
-#undef inline
-
 #endif // INCLUDED_SW_INC_FORMAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
