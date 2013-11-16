@@ -857,7 +857,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return true;
     }
 
-    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
@@ -865,23 +865,23 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append( '[');
 
         bool bEncodeUrl = bODF;
-        makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef, rCompiler.GetPos(), pRefMgr, true, bEncodeUrl);
+        makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef, rPos, pRefMgr, true, bEncodeUrl);
         if (bODF)
             rBuffer.append( ']');
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
-        makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, false);
+        makeExternalRefStrImpl(rBuffer, rPos, nFileId, rTabName, rRef, pRefMgr, false);
     }
 
-    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
-        ScRange aAbsRange = rRef.toAbs(rCompiler.GetPos());
+        ScRange aAbsRange = rRef.toAbs(rPos);
 
         if (bODF)
             rBuffer.append( '[');
@@ -890,7 +890,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
         do
         {
-            if (!makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef.Ref1, rCompiler.GetPos(), pRefMgr, true, bEncodeUrl))
+            if (!makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef.Ref1, rPos, pRefMgr, true, bEncodeUrl))
                 break;
 
             rBuffer.append(':');
@@ -916,17 +916,17 @@ struct ConventionOOO_A1 : public Convention_A1
             else if (bODF)
                 rBuffer.append( '.');      // need at least the sheet separator in ODF
             makeExternalSingleRefStr( rBuffer, nFileId, aLastTabName,
-                    rRef.Ref2, rCompiler.GetPos(), pRefMgr, bDisplayTabName, bEncodeUrl);
+                    rRef.Ref2, rPos, pRefMgr, bDisplayTabName, bEncodeUrl);
         } while (0);
         if (bODF)
             rBuffer.append( ']');
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
-        makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, false);
+        makeExternalRefStrImpl(rBuffer, rPos, nFileId, rTabName, rRef, pRefMgr, false);
     }
 };
 
@@ -975,18 +975,18 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         return lcl_makeExternalNameStr( rFile, rName, '#', true);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
-        makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, true);
+        makeExternalRefStrImpl(rBuffer, rPos, nFileId, rTabName, rRef, pRefMgr, true);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
-        makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, true);
+        makeExternalRefStrImpl(rBuffer, rPos, nFileId, rTabName, rRef, pRefMgr, true);
     }
 };
 
@@ -1277,7 +1277,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1295,10 +1295,10 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
 
-        makeSingleCellStr(rBuffer, rRef, rRef.toAbs(rCompiler.GetPos()));
+        makeSingleCellStr(rBuffer, rRef, rRef.toAbs(rPos));
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1311,7 +1311,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if (aTabNames.empty())
             return;
 
-        ScRange aAbsRef = rRef.toAbs(rCompiler.GetPos());
+        ScRange aAbsRef = rRef.toAbs(rPos);
 
         ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
@@ -1470,7 +1470,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1484,7 +1484,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if (!pFullName)
             return;
 
-        ScAddress aAbsRef = rRef.toAbs(rCompiler.GetPos());
+        ScAddress aAbsRef = rRef.toAbs(rPos);
 
         ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
@@ -1494,7 +1494,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         r1c1_add_col(rBuffer, rRef, aAbsRef);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                      sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1507,7 +1507,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if (aTabNames.empty())
             return;
 
-        ScRange aAbsRef = rRef.toAbs(rCompiler.GetPos());
+        ScRange aAbsRef = rRef.toAbs(rPos);
 
         ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
@@ -4094,11 +4094,11 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(
-                   rBuffer, *this, t->GetIndex(), t->GetString().getString(), static_cast<ScToken*>(t)->GetSingleRef(), pRefMgr);
+                   rBuffer, GetPos(), t->GetIndex(), t->GetString().getString(), static_cast<ScToken*>(t)->GetSingleRef(), pRefMgr);
         break;
         case svExternalDoubleRef:
             pConv->makeExternalRefStr(
-                        rBuffer, *this, t->GetIndex(), t->GetString().getString(), static_cast<ScToken*>(t)->GetDoubleRef(), pRefMgr);
+                        rBuffer, GetPos(), t->GetIndex(), t->GetString().getString(), static_cast<ScToken*>(t)->GetDoubleRef(), pRefMgr);
            break;
         default:
             // warning, not error, otherwise we may end up with a never

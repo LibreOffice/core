@@ -252,11 +252,11 @@ public:
 
         virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const = 0;
 
-        virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+        virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                          sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                          ScExternalRefManager* pRefMgr ) const = 0;
 
-        virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+        virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                          sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                          ScExternalRefManager* pRefMgr ) const = 0;
 
