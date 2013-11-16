@@ -100,6 +100,14 @@ public:
     virtual std::string BinFuncName(void) const { return "TDist"; }
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
 };
+class OpTInv: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "TInv"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
+};
 class OpTTest: public Normal
 {
 public:

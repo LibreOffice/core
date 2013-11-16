@@ -2466,6 +2466,133 @@ void OpSkewp::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return xcube / fCount;\n";
     ss << "}\n";
 }
+void OpTInv::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(fMachEpsDecl);
+    funs.insert("");
+    decls.insert(fMaxGammaArgumentDecl);
+    funs.insert("");
+    decls.insert(lcl_getLanczosSumDecl);
+    funs.insert(lcl_getLanczosSum);
+    decls.insert(GetBetaDecl);
+    funs.insert(GetBeta);
+    decls.insert(GetLogBetaDecl);
+    funs.insert(GetLogBeta);
+    decls.insert(GetBetaDistPDFDecl);
+    funs.insert(GetBetaDistPDF);
+    decls.insert(lcl_GetBetaHelperContFracDecl);
+    funs.insert(lcl_GetBetaHelperContFrac);
+    decls.insert(GetBetaDistDecl);
+    funs.insert(GetBetaDist);
+    decls.insert(GetTDistDecl);
+    funs.insert(GetTDist);
+    decls.insert(GetValueDecl);
+    funs.insert(GetValue);
+    decls.insert(lcl_HasChangeOfSignDecl);
+    funs.insert(lcl_HasChangeOfSign);
+    decls.insert(lcl_IterateInverseDecl);
+    funs.insert(lcl_IterateInverse);
+}
+
+void OpTInv::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_" << BinFuncName() << "(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double x,fDF;\n";
+    if(vSubArguments.size() != 2)
+    {
+        ss << "    return DBL_MAX;\n" << "}\n";
+        return ;
+    }
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    assert(tmpCur0);
+    if(ocPush==vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        if(tmpCur0->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR0 =
+                dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
+#ifdef ISNAN
+            ss << "    int buffer_x_len = ";
+            ss << tmpCurDVR0->GetArrayLength() << ";\n";
+            ss << "    if(gid0 >= buffer_x_len || isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+            ss << "        x = 0.0;\n";
+            ss << "    else\n";
+#endif
+            ss << "        x = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+        }
+        else if(tmpCur0->GetType() == formula::svDouble)
+        {
+            ss << "    x = " << tmpCur0->GetDouble() << ";\n";
+        }
+        else
+        {
+            ss << "    return DBL_MAX;\n" << "}\n";
+            return ;
+        }
+    }
+    else
+    {
+        ss << "    x = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+    }
+    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    assert(tmpCur1);
+    if(ocPush==vSubArguments[1]->GetFormulaToken()->GetOpCode())
+    {
+        if(tmpCur1->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR1 =
+                dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur1);
+#ifdef ISNAN
+            ss << "    int buffer_fDF_len = ";
+            ss << tmpCurDVR1->GetArrayLength() << ";\n";
+            ss << "    if(gid0 >= buffer_fDF_len || isNan(";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+            ss << "        fDF = 0.0;\n";
+            ss << "    else\n";
+#endif
+            ss << "        fDF = floor(";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+        }
+        else if(tmpCur1->GetType() == formula::svDouble)
+        {
+            ss << "    fDF = floor(" << tmpCur1->GetDouble() << ");\n";
+        }
+        else
+        {
+            ss << "    return DBL_MAX;\n" << "}\n";
+            return ;
+        }
+    }
+    else
+    {
+        ss << "    fDF = floor(";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+    }
+    ss << "    if (x > 1.0||fDF < 1.0 || fDF > 1.0E10 || x <= 0.0)\n";
+    ss << "        return DBL_MAX;\n";
+    ss << "    bool bConvError;\n";
+    ss << "    double fVal = lcl_IterateInverse(\n";
+    ss << "        fDF*0.5, fDF, &bConvError,x,fDF );\n";
+    ss << "    if (bConvError)\n";
+    ss << "        return DBL_MAX;\n";
+    ss << "    return fVal;\n";
+    ss << "}\n";
+}
+
 void OpStDev::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
