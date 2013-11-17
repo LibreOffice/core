@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include "optaboutconfig.hxx"
 #include "optjava.hxx"
 #include <dialmgr.hxx>
 
@@ -149,6 +150,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     get(m_pClassPathBtn, "classpath");
     get(m_pExperimentalCB, "experimental");
     get(m_pMacroCB, "macrorecording");
+    get(m_pExpertConfigBtn, "expertconfig");
     m_sAccessibilityText = get<FixedText>("a11y")->GetText();
     m_sAddDialogText = get<FixedText>("selectruntime")->GetText();
 
@@ -179,6 +181,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_pClassPathBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
     m_aResetTimer.SetTimeoutHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
     m_aResetTimer.SetTimeout( RESET_TIMEOUT );
+
+    m_pExpertConfigBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ExpertConfigHdl_Impl) );
 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
 
@@ -407,6 +411,21 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
         AddFolder( xFolderPicker->getDirectory() );
     }
     return 0L;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
+{
+    CuiAboutConfigTabPage* m_pExpertConfigDlg = new CuiAboutConfigTabPage(this);
+    m_pExpertConfigDlg->Reset();//initialize and reset function
+
+    if( RET_OK == m_pExpertConfigDlg->Execute() )
+    {
+        m_pExpertConfigDlg->FillItemSet();//save changes if there are any
+    }
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------

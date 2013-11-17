@@ -122,10 +122,15 @@ Size CuiCustomMultilineEdit::GetOptimalSize() const
     return LogicToPixel(Size(150,30),MAP_APPFONT);
 }
 
-CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet ) :
-    SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet),
+Size CuiAboutConfigTabPage::GetOptimalSize() const
+{
+    return LogicToPixel(Size(1024,800),MAP_APPFONT);
+}
+
+CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
+    ModalDialog( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui"),
     m_pPrefCtrl( get<SvSimpleTableContainer>("preferences") ),
-    m_pDefaultBtn( get<PushButton>("default") ),
+    m_pResetBtn( get<PushButton>("reset") ),
     m_pEditBtn( get<PushButton>("edit") ),
     m_vectorOfModified(),
     m_pPrefBox( new OptHeaderTabListBox( *m_pPrefCtrl,
@@ -136,6 +141,8 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
     m_pPrefCtrl->set_height_request(aControlSize.Height());
 
     m_pEditBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, StandardHdl_Impl ) );
+    m_pResetBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, ResetBtnHdl_Impl ) );
+    m_pPrefBox->SetDoubleClickHdl( LINK(this, CuiAboutConfigTabPage, StandardHdl_Impl) );
 
     HeaderBar &rBar = m_pPrefBox->GetTheHeaderBar();
     rBar.InsertItem( ITEMID_PREFNAME, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER );
@@ -143,18 +150,13 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
     rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
     rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
 
-    long aTabs[] = {4,120,50,50,50};//TODO: Not works correctly hardcoded for now.
+    long aTabs[] = {4,900,50,50,50};//TODO: Not works correctly hardcoded for now.
 
     aTabs[2] += aTabs[1] + rBar.GetTextWidth(rBar.GetItemText(1));
     aTabs[3] += aTabs[2] + 160; //rBar.GetTextWidth(rBar.GetItemText(2));
     aTabs[4] += aTabs[3] + 40; //rBar.GetTextWidth(rBar.GetItemText(3));
 
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
-}
-
-SfxTabPage* CuiAboutConfigTabPage::Create( Window* pParent, const SfxItemSet& rItemSet )
-{
-    return ( new CuiAboutConfigTabPage( pParent, rItemSet) );
 }
 
 void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OUString& rType, OUString& rValue)
@@ -170,7 +172,7 @@ void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OU
     m_pPrefBox->Insert( pEntry );
 }
 
-void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
+void CuiAboutConfigTabPage::Reset(/* const SfxItemSet&*/ )
 {
     OUString sRootNodePath = "";
     m_pPrefBox->Clear();
@@ -178,15 +180,13 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
     m_vectorOfModified.clear();
     m_pPrefBox->GetModel()->SetSortMode( SortNone );
 
-    m_pDefaultBtn->Enable(sal_False);
-
     m_pPrefBox->SetUpdateMode(sal_False);
     Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
     FillItems( xConfigAccess, sRootNodePath );
     m_pPrefBox->SetUpdateMode(sal_True);
 }
 
-sal_Bool CuiAboutConfigTabPage::FillItemSet( SfxItemSet& )
+sal_Bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
 {
     sal_Bool bModified = sal_False;
     Reference< XNameAccess > xUpdateAccess = getConfigAccess( "/", sal_True );
@@ -432,30 +432,11 @@ IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, /*pBar*/ )
     return 0;
 }
 
-    //if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
-        //return 0;
-
-    //HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
-    //sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    //SvSortMode eMode = SortAscending;
-
-    //if ( bUp )
-    //{
-        //nBits &= ~HIB_UPARROW;
-        //nBits |= HIB_DOWNARROW;
-        //eMode = SortDescending;
-    //}
-    //else
-    //{
-        //nBits &= ~HIB_DOWNARROW;
-        //nBits |= HIB_UPARROW;
-    //}
-    //pBar->SetItemBits( ITEMID_TYPE, nBits );
-    //SvTreeList* pModel = m_pPrefBox->GetModel();
-    //pModel->SetSortMode( eMode );
-    //pModel->Resort();
-    //return 1;
-    //}
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl )
+{
+    Reset();
+    return 0;
+}
 
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 {

@@ -57,6 +57,7 @@ private:
     PushButton*                 m_pAddBtn;
     PushButton*                 m_pParameterBtn;
     PushButton*                 m_pClassPathBtn;
+    PushButton*                 m_pExpertConfigBtn;
 
     SvxJavaParameterDlg*    m_pParamDlg;
     SvxJavaClassPathDlg*    m_pPathDlg;
@@ -92,6 +93,8 @@ private:
 
     DECL_LINK(              StartFolderPickerHdl, void * );
     DECL_LINK(              DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
+
+    DECL_LINK(ExpertConfigHdl_Impl, void *);
 
     void                    ClearJavaInfo();
     void                    ClearJavaList();
