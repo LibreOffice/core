@@ -59,8 +59,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_ucalc \
     CppunitTest_sc_filters_test \
     CppunitTest_sc_rangelst_test \
-    $(if $(filter $(OS),MACOSX), \
-        CppunitTest_sc_opencl_test) \
+	CppunitTest_sc_opencl_test) \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
