@@ -767,6 +767,8 @@ void ScOpenclTest::testMathFormulaRandom()
         double fLibre = pDoc->GetValue(ScAddress(0,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(0,i,0));
         //because the random numbers will always change,so give the test "true"
+        (void) fLibre;
+        (void) fExcel;
         CPPUNIT_ASSERT(true);
     }
     xDocSh->DoClose();
