@@ -40,31 +40,33 @@ public:
     //void setBehaviour( bool bNumeric, int nLengthLimit);
 };
 
-class CuiAboutConfigTabPage : public SfxTabPage
+class CuiAboutConfigTabPage : public ModalDialog
 {
 private:
     SvSimpleTableContainer* m_pPrefCtrl;
-    PushButton* m_pDefaultBtn;
+    PushButton* m_pResetBtn;
     PushButton* m_pEditBtn;
 
     std::vector< boost::shared_ptr< Prop_Impl > > m_vectorOfModified;
     boost::scoped_ptr< svx::OptHeaderTabListBox > m_pPrefBox;
 
-    CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
     void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
     std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( StandardHdl_Impl, void * );
+    DECL_LINK( ResetBtnHdl_Impl, void * );
 
 public:
-   static SfxTabPage* Create( Window* pParent, const SfxItemSet& rItemset );
-
+   //static ModalDialog* Create( Window* pParent, const SfxItemSet& rItemset );
+   CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSet& rItemSet*/ );
    void     InsertEntry(OUString& rProp, OUString&  rStatus, OUString& rType, OUString& rValue);
-   void     Reset( const SfxItemSet& );
+   void     Reset(/* const SfxItemSet&*/ );
    void     FillItems( com::sun::star::uno::Reference < com::sun::star::container::XNameAccess > xNameAccess, OUString sPath);
    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( OUString sNodePath, sal_Bool bUpdate );
-   virtual sal_Bool FillItemSet( SfxItemSet& rSet );
+   virtual sal_Bool FillItemSet( /* SfxItemSet& rSet*/ );
+
+   virtual Size GetOptimalSize() const;
 };
 
 class CuiAboutConfigValueDialog : public ModalDialog
