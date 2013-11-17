@@ -21,6 +21,7 @@
 #include "op_financial.hxx"
 #include "op_database.hxx"
 #include "op_math.hxx"
+#include "op_logical.hxx"
 #include "op_statistical.hxx"
 #include "op_array.hxx"
 #include "formulagroupcl_public.hxx"
@@ -1791,6 +1792,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocCovar:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpCovar));
+                 break;
+            case ocAnd:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i], new OpAnd));
                  break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
