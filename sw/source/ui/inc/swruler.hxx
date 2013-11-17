@@ -45,6 +45,8 @@ protected:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
     SwEditWin * mpSwWin;         //< Used to get SwView to change the SideBar visibility
     bool        mbIsHighlighted; //< If comment control is highlighted (mouse is over it)
+    Timer       maFadeTimer;     //< Timer for high/'low'light fading
+    int         mnFadeRate;      //< From 0 to 100. 0 means not highlighted.
     VirtualDevice maVirDev;      //< VirtualDevice of this window. Just for convenience.
 
     /**
@@ -77,7 +79,7 @@ protected:
      * Get the rectangle area that should be used to draw the comment control.
      *
      * It is horizontally aligned to the SideBar panel.
-     * \param Rectangle The area where the comment control is.
+     * \return The area where the comment control is.
      */
     Rectangle GetCommentControlRegion();
 
@@ -98,6 +100,21 @@ protected:
      * Update the tooltip text.
      */
     void UpdateCommentHelpText();
+
+    /**
+     * Get the proper color between two options, according to current status.
+     *
+     * The return color can be one of the given colors, or a merged one.
+     * It depends on highlight fadind status.
+     *
+     * \param rHighColor color used to highlight status
+     * \param rLowColor color used to normal status
+     * \return The proper color to used in moment
+     */
+    Color GetFadedColor(const Color &rHighColor, const Color &rLowColor);
+
+    /// Fade timer callback.
+    DECL_LINK(FadeHandler, void *);
 };
 
 #endif
