@@ -17,22 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef __arm
+#ifdef __arm64
 
-// For iOS devices (ARM). Basically a copy of
+// For iOS devices (64-bit ARM). Originally a copy of
 // ../gcc3_linux_arm/cpp2uno.cxx with some cleanups and necessary
 // changes: No dynamic code generation as that is prohibited for apps
 // in the App Store. Instead we use a set of pre-generated snippets.
 
 // No attempts at factoring out the large amounts of more or less
-// common code in this and cpp2uno-i386.cxx have been done. Which is
-// sad. But then the whole bridges/source/cpp_uno is full of
-// copy/paste. So I continue in that tradition...
-
-// Note that for iOS, neither __ARM_EABI__ or __ARM_PCS_VFP are
-// defined.  The ifdefs for those have been left in place to keep this
-// file as close to ../gcc3_linux_arm/cpp2uno.cxx as possible, to make
-// future unification easier.
+// common code in this, cpp2uno-arm.cxx and cpp2uno-i386.cxx have been
+// done. Which is sad. But then the whole bridges/source/cpp_uno is
+// full of copy/paste. So I continue in that tradition...
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <uno/data.h>
@@ -87,7 +82,7 @@ namespace
             else // complex return via ptr (pCppReturn)
             {
                 pCppReturn = *(void **)pCppStack;
-                pCppStack += sizeof(void *);
+                pCppStack += 16;
 
                 pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(
                     pReturnTypeDescr )
@@ -98,18 +93,16 @@ namespace
         // pop this
         pCppStack += sizeof( void* );
 
-        // stack space
-        OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32),
-            "### unexpected size!" );
-        // parameters
-        void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
-        void ** pCppArgs = pUnoArgs + nParams;
-        // indices of values this have to be converted (interface conversion
+        // Parameters
+        void ** pUnoArgs = (void **)alloca( sizeof(void *) * nParams );
+        void ** pCppArgs = (void **)alloca( sizeof(void *) * nParams );
+
+        // Indices of values this have to be converted (interface conversion
         // cpp<=>uno)
-        sal_Int32 * pTempIndices = (sal_Int32 *)(pUnoArgs + (2 * nParams));
-        // type descriptions for reconversions
-        typelib_TypeDescription ** ppTempParamTypeDescr =
-            (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
+        sal_Int32 * pTempIndices = (sal_Int32 *)alloca( sizeof(sal_Int32) * nParams);
+
+        // Type descriptions for reconversions
+        typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)alloca( sizeof(typelib_TypeDescription *) * nParams);
 
         sal_Int32 nTempIndices   = 0;
 

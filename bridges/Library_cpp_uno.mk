@@ -21,7 +21,7 @@ ifeq ($(OS),IOS)
 $(eval $(call gb_Library_use_sdk_api,gcc3_uno))
 bridges_SELECTED_BRIDGE := gcc3_ios_arm
 bridge_asm_objects := helper
-bridge_exception_objects := cpp2uno cpp2uno-arm cpp2uno-i386 except uno2cpp uno2cpp-arm uno2cpp-i386
+bridge_exception_objects := cpp2uno cpp2uno-arm cpp2uno-arm64 cpp2uno-i386 except uno2cpp uno2cpp-arm uno2cpp-arm64 uno2cpp-i386
 $(eval $(call gb_Library_use_custom_headers,gcc3_uno,\
 	bridges/source/cpp_uno/gcc3_ios_arm \
 ))

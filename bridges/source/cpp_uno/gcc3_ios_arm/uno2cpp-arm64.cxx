@@ -17,16 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef __arm
-
-// For iOS devices (ARM). Basically a copy of
-// ../gcc3_linux_arm/cpp2uno.cxx with some cleanups and necessary
-// changes.
-
-// Note that for iOS, none of __ARM_EABI__, __ARM_ARCH_4T__ or
-// __ARM_PCS_VFP are defined.  The ifdefs for those have been left in
-// place to keep this file as close to ../gcc3_linux_arm/uno2cpp.cxx
-// as possible, to make future unification easier.
+#ifdef __arm64
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 
@@ -89,8 +80,9 @@ namespace arm
             typelib_TypeDescription * pTypeDescr = 0;
             TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
 
-            //A Composite Type not larger than 4 bytes is returned in r0
-            bool bRet = pTypeDescr->nSize > 4 || is_complex_struct(pTypeDescr);
+            // A Composite Type not larger than 16 bytes is returned in x0, x1
+            // FIXME: what about the "complex struct" thing, is that relevant at all?
+            bool bRet = pTypeDescr->nSize > 16 || is_complex_struct(pTypeDescr);
 
 #ifdef __ARM_PCS_VFP
             // In the VFP ABI, structs with only float/double values that fit in
@@ -184,56 +176,17 @@ void callVirtualMethod(
     sal_uInt32 nGPR,
     double *pFPR)
 {
-    // never called
-    if (! pThis)
-        CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
+    abort(); // arm64 code not yet implemented
 
-    if ( nStack )
-    {
-        // 8-bytes aligned
-        sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 8;
-        sal_uInt32 *stack = (sal_uInt32 *) __builtin_alloca( nStackBytes );
-        memcpy( stack, pStack, nStackBytes );
-    }
-
-    // Should not happen, but...
-    if ( nGPR > arm::MAX_GPR_REGS )
-        nGPR = arm::MAX_GPR_REGS;
-
-    sal_uInt32 pMethod = *((sal_uInt32*)pThis);
-    pMethod += 4 * nVtableIndex;
-    pMethod = *((sal_uInt32 *)pMethod);
-
-    //Return registers
-    sal_uInt32 r0;
-    sal_uInt32 r1;
-
-    __asm__ __volatile__ (
-        //Fill in general purpose register arguments
-        "ldr r4, %[pgpr]\n\t"
-        "ldmia r4, {r0-r3}\n\t"
-
-#ifdef __ARM_PCS_VFP
-        //Fill in VFP register arguments as double precision values
-        "ldr r4, %[pfpr]\n\t"
-        "vldmia r4, {d0-d7}\n\t"
-#endif
-        //Make the call
-        "ldr r5, %[pmethod]\n\t"
-#ifndef __ARM_ARCH_4T__
-        "blx r5\n\t"
-#else
-        "mov lr, pc ; bx r5\n\t"
-#endif
-
-        //Fill in return values
-        "mov %[r0], r0\n\t"
-        "mov %[r1], r1\n\t"
-        : [r0]"=r" (r0), [r1]"=r" (r1)
-        : [pmethod]"m" (pMethod), [pgpr]"m" (pGPR), [pfpr]"m" (pFPR)
-        : "r0", "r1", "r2", "r3", "r4", "r5");
-
-    MapReturn(r0, r1, pReturnType, (sal_uInt32*)pRegisterReturn);
+    (void) pThis;
+    (void) nVtableIndex;
+    (void) pRegisterReturn;
+    (void) pReturnType;
+    (void) pStack;
+    (void) nStack;
+    (void) pGPR;
+    (void) nGPR;
+    (void) pFPR;
 }
 }
 
