@@ -7145,6 +7145,94 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The degrees of freedom in the denominator of the F distribution." ;
         };
     };
+     // -=*# Resource for function F.DIST #*=-
+    Resource SC_OPCODE_F_DIST_LT
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the left tail F probability distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_F_DIST_LT );
+            4;  0;  0;  0; 0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the F distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom_1" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom in the numerator of the F distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "degrees_freedom_2" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The degrees of freedom in the denominator of the F distribution." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "cumulative" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Cumulative distribution function (TRUE) or probability density function (FALSE)." ;
+        };
+    };
+     // -=*# Resource for function F.DIST.RT #*=-
+    Resource SC_OPCODE_F_DIST_RT
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the right tail F probability distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_F_DIST_RT );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the F distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom_1" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom in the numerator of the F distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "degrees_freedom_2" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The degrees of freedom in the denominator of the F distribution." ;
+        };
+    };
      // -=*# Resource for function FINV #*=-
     Resource SC_OPCODE_F_INV
     {
@@ -7157,6 +7245,86 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_FINV );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse F distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom_1" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom in the numerator of the F distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "degrees_freedom_2" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The degrees of freedom in the denominator of the F distribution." ;
+        };
+    };
+     // -=*# Resource for function F.INV #*=-
+    Resource SC_OPCODE_F_INV_LT
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse left tail F distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_F_INV_LT );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse F distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom_1" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom in the numerator of the F distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "degrees_freedom_2" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The degrees of freedom in the denominator of the F distribution." ;
+        };
+    };
+     // -=*# Resource for function F.INV.RT #*=-
+    Resource SC_OPCODE_F_INV_RT
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse right tail F distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_F_INV_RT );
             3;  0;  0;  0;
             0;
         };
@@ -7806,6 +7974,38 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_FTEST );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data_1" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The first record array." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_2" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The second record array." ;
+        };
+    };
+     // -=*# Resource for function F.TEST #*=-
+    Resource SC_OPCODE_F_TEST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the F test." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_F_TEST_MS );
             2;  0;  0;
             0;
         };

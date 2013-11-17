@@ -445,7 +445,12 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_VR(         ocChiInv_MS,     2,  2,  0,  "CHISQ.INV.RT" ),
     EXC_FUNCENTRY_V_VR(         ocChiTest_MS,    2,  2,  0,  "CHISQ.TEST" ),
     EXC_FUNCENTRY_V_VR(         ocConfidence_N,  3,  3,  0,  "CONFIDENCE.NORM" ),
-    EXC_FUNCENTRY_V_VR(         ocConfidence_T,  3,  3,  0,  "CONFIDENCE.T" )
+    EXC_FUNCENTRY_V_VR(         ocConfidence_T,  3,  3,  0,  "CONFIDENCE.T" ),
+    EXC_FUNCENTRY_V_VR(         ocFDist_LT,      4,  4,  0,  "F.DIST" ),
+    EXC_FUNCENTRY_V_VR(         ocFDist_RT,      3,  3,  0,  "F.DIST.RT" ),
+    EXC_FUNCENTRY_V_VR(         ocFInv_LT,       3,  3,  0,  "F.INV" ),
+    EXC_FUNCENTRY_V_VR(         ocFInv_RT,       3,  3,  0,  "F.INV.RT" ),
+    EXC_FUNCENTRY_V_VR(         ocFTest_MS,      2,  2,  0,  "F.TEST" )
 };
 
 /** Functions new in Excel 2013.
