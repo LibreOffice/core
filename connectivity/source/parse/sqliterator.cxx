@@ -595,7 +595,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
                     //           and using its m_aSelectColumns
                     //           This is necessary in stuff like "SELECT * FROM tbl1 INNER JOIN (SELECT foo, bar FROM tbl2) AS tbl3"
                     //           so that setSelectColumnName() can expand the "*" correctly.
-                    //           See e.g. R_UserAndLastSubscription query of https://bugs.freedesktop.org/attachment.cgi?id=71871
+                    //           See e.g. R_UserAndLastSubscription query of https://bugs.libreoffice.org/attachment.cgi?id=71871
                 }
                 else
                 {

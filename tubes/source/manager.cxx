@@ -660,7 +660,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
 static void lcl_ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
 {
     /* This is a workaround for a Telepathy bug.
-     * <https://bugs.freedesktop.org/show_bug.cgi?id=47760>. The first time you
+     * <https://bugs.libreoffice.org/show_bug.cgi?id=47760>. The first time you
      * request a tube to a contact on an account, you actually get two channels
      * back: the tube you asked for, along with a legacy Channel.Type.Tubes
      * object. This breaks create_and_handle_channel_async(), which expects to

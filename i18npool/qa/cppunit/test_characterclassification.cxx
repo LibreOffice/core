@@ -70,7 +70,7 @@ void TestCharacterClassification::testTitleCase()
     }
 }
 
-//https://bugs.freedesktop.org/show_bug.cgi?id=69641
+//https://bugs.libreoffice.org/show_bug.cgi?id=69641
 void TestCharacterClassification::testStringType()
 {
     lang::Locale aLocale;

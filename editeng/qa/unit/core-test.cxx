@@ -296,7 +296,7 @@ private:
     }
 };
 
-//https://bugs.freedesktop.org/show_bug.cgi?id=55693
+//https://bugs.libreoffice.org/show_bug.cgi?id=55693
 //Two capitalized letters are not corrected if dash or slash are directly
 //before the two letters
 void Test::testAutocorrect()

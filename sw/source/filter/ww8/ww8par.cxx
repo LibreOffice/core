@@ -3167,7 +3167,7 @@ namespace
 // word, something we map to LATIN, so we consider all weaks chars in that range
 // to auto-bias to LATIN.
 //
-// See https://bugs.freedesktop.org/show_bug.cgi?id=34319 for an example
+// See https://bugs.libreoffice.org/show_bug.cgi?id=34319 for an example
 void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString)
 {
     if (rAddString.isEmpty())

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// FIX fdo#38246 https://bugs.freedesktop.org/show_bug.cgi?id=38246
+// FIX fdo#38246 https://bugs.libreoffice.org/show_bug.cgi?id=38246
 // Design proposal: https://wiki.documentfoundation.org/Design/Whiteboards/Comments_Ruler_Control
 // TODO Alpha blend border when it doesn't fit in window
 // TODO Delayed highlight fading when user moves mouse over and out the control

@@ -115,7 +115,7 @@ void SwDocTest::testPageDescName()
     CPPUNIT_ASSERT_MESSAGE("GetPageDescName results must be unique", aResults.size() == 3);
 }
 
-//See https://bugs.freedesktop.org/show_bug.cgi?id=32463
+//See https://bugs.libreoffice.org/show_bug.cgi?id=32463
 void SwDocTest::testFileNameFields()
 {
     //Here's a file name with some chars in it that will be %% encoded, when expanding
@@ -323,8 +323,8 @@ void SwDocTest::testSwScanner()
 
     CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTxtNode);
 
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=40449
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=39365
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=40449
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=39365
     //Use a temporary OUString as the arg, as that's the trouble behind
     //fdo#40449 and fdo#39365
     {
@@ -404,7 +404,7 @@ void SwDocTest::testSwScanner()
     }
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=89042
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=53399
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=53399
     {
         SwDocStat aDocStat;
 
@@ -439,7 +439,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("Should be 5", aDocStat.nWord == 5);
     }
 
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=49629
     {
         SwDocStat aDocStat;
 
@@ -488,7 +488,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
     }
 
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=46757
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=46757
     {
         SwDocStat aDocStat;
 
@@ -550,7 +550,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(aDocStat.nChar, static_cast<sal_uLong>(0));
     }
 
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=38983
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=38983
     {
         SwDocStat aDocStat;
 
@@ -661,7 +661,7 @@ void SwDocTest::testSwScanner()
     }
 }
 
-//See https://bugs.freedesktop.org/show_bug.cgi?id=40599
+//See https://bugs.libreoffice.org/show_bug.cgi?id=40599
 void SwDocTest::testGraphicAnchorDeletion()
 {
     CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);

@@ -424,7 +424,7 @@ PoHeader::PoHeader( const OString& rExtSrc )
     m_pGenPo->setExtractCom("extracted from " + rExtSrc);
     m_pGenPo->setMsgStr(
         OString("Project-Id-Version: PACKAGE VERSION\n"
-        "Report-Msgid-Bugs-To: https://bugs.freedesktop.org/enter_bug.cgi?"
+        "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?"
         "product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
         "POT-Creation-Date: ") + lcl_GetTime() +
         OString("\nPO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"

@@ -406,7 +406,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
                 }
                 catch(const css::uno::Exception& ex)
                 {
-                    // <https://bugs.freedesktop.org/show_bug.cgi?id=46074>
+                    // <https://bugs.libreoffice.org/show_bug.cgi?id=46074>
                     // "FILEOPEN: No Recent Documents..." discusses a problem
                     // with corrupted /org.openoffice.Office/Histories/Histories
                     // configuration items; to work around that problem, simply
@@ -536,7 +536,7 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
                 }
                 catch (css::container::NoSuchElementException &)
                 {
-                    // <https://bugs.freedesktop.org/show_bug.cgi?id=46074>
+                    // <https://bugs.libreoffice.org/show_bug.cgi?id=46074>
                     // "FILEOPEN: No Recent Documents..." discusses a problem
                     // with corrupted /org.openoffice.Office/Histories/Histories
                     // configuration items; to work around that problem, simply

@@ -75,7 +75,7 @@ void TestBreakIterator::testLineBreaking()
     i18n::LineBreakUserOptions aUserOptions;
     lang::Locale aLocale;
 
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=31271
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=31271
     {
         OUString aTest("(some text here)");
 
@@ -95,7 +95,7 @@ void TestBreakIterator::testLineBreaking()
         }
     }
 
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=49849
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=49849
     {
         const sal_Unicode HEBREW1[] = { 0x05DE, 0x05D9, 0x05DC, 0x05D9, 0x5DD };
         OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
@@ -142,7 +142,7 @@ void TestBreakIterator::testLineBreaking()
     }
 }
 
-//See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+//See https://bugs.libreoffice.org/show_bug.cgi?id=49629
 void TestBreakIterator::testWordBoundaries()
 {
     lang::Locale aLocale;
@@ -236,7 +236,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(aBounds.startPos == 88 && aBounds.endPos == 92);
     }
 
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=49629
     sal_Unicode aBreakTests[] = { ' ', 1, 2, 3, 4, 5, 6, 7, 0x91, 0x92, 0x200B, 0xE8FF, 0xF8FF };
     for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
     {
@@ -561,7 +561,7 @@ void TestBreakIterator::testWordBoundaries()
     }
 }
 
-//See https://bugs.freedesktop.org/show_bug.cgi?id=40292
+//See https://bugs.libreoffice.org/show_bug.cgi?id=40292
 //See https://issues.apache.org/ooo/show_bug.cgi?id=80412
 //See https://issues.apache.org/ooo/show_bug.cgi?id=111152
 //See https://issues.apache.org/ooo/show_bug.cgi?id=50172
@@ -752,7 +752,7 @@ void TestBreakIterator::testWeak()
 //A test to ensure that certain ranges and codepoints that are categorized as
 //asian remain as asian, so that existing docs that depend on this don't silently
 //change font for those asian chars.
-//See https://bugs.freedesktop.org/show_bug.cgi?id=38095
+//See https://bugs.libreoffice.org/show_bug.cgi?id=38095
 void TestBreakIterator::testAsian()
 {
     lang::Locale aLocale;
@@ -883,7 +883,7 @@ void TestBreakIterator::testNorthernThai()
 // dictionaries, 4.6 does not.
 
 //A test to ensure that our khmer word boundary detection is useful
-//https://bugs.freedesktop.org/show_bug.cgi?id=52020
+//https://bugs.libreoffice.org/show_bug.cgi?id=52020
 void TestBreakIterator::testKhmer()
 {
     lang::Locale aLocale;

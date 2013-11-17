@@ -44,4 +44,4 @@ g) there's more actually unused code then what's listed. The idea is that what's
 Symbols that are known to be false alarms are listed in: unusedcode.exclude
 
 [1] http://www.skynet.ie/~caolan/Packages/callcatcher.html
-[2] https://bugs.freedesktop.org/show_bug.cgi?id=38832
+[2] https://bugs.libreoffice.org/show_bug.cgi?id=38832

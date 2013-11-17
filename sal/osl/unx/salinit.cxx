@@ -49,7 +49,7 @@ void sal_detail_initialize(int argc, char ** argv) {
     // On OS X when not sandboxed, soffice can restart itself via exec (see
     // restartOnMac in desktop/source/app/app.cxx), which leaves all file
     // descriptors open, which in turn can have unwanted effects (see
-    // <https://bugs.freedesktop.org/show_bug.cgi?id=50603> "Unable to update
+    // <https://bugs.libreoffice.org/show_bug.cgi?id=50603> "Unable to update
     // LibreOffice without resetting user profile"). But closing fds in
     // restartOnMac before calling exec does not work, as additional threads
     // might still be running then, which can still use those fds and cause

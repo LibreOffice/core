@@ -3291,7 +3291,7 @@ public class TextPortionEnumerationTest
         assertFalse("gotoEndOfParagraph(): succeeded", bSuccess);
     }
 
-    /** See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+    /** See https://bugs.libreoffice.org/show_bug.cgi?id=49629
         ensure that gotoEndOfWord does not fail when footnote is at word end*/
     @Test public void testXTextCursor() throws Exception
     {
