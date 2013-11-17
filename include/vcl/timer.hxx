@@ -27,17 +27,13 @@
 struct ImplTimerData;
 struct ImplSVData;
 
-// ---------
-// - Timer -
-// ---------
-
 class VCL_DLLPUBLIC Timer
 {
 protected:
     ImplTimerData*  mpTimerData;
-    sal_uLong           mnTimeout;
-    sal_Bool            mbActive;
-    sal_Bool            mbAuto;
+    sal_uLong       mnTimeout;
+    bool            mbActive;
+    bool            mbAuto;
     Link            maTimeoutHdl;
 
 public:
@@ -51,8 +47,8 @@ public:
     void            Stop();
 
     void            SetTimeout( sal_uLong nTimeout );
-    sal_uLong           GetTimeout() const { return mnTimeout; }
-    sal_Bool            IsActive() const { return mbActive; }
+    sal_uLong       GetTimeout() const { return mnTimeout; }
+    sal_Bool        IsActive() const { return mbActive ? sal_True : sal_False; }
 
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
@@ -63,9 +59,6 @@ public:
     static void ImplTimerCallbackProc();
 };
 
-// -------------
-// - AutoTimer -
-// -------------
 
 class VCL_DLLPUBLIC AutoTimer : public Timer
 {
