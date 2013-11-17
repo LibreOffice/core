@@ -712,6 +712,9 @@ void ScOpenclTest::testMathFormulaCos()
 //[AMLOEXT-116]
 void ScOpenclTest::testMathFormulaSinh()
 {
+    if (!detectOpenCLDevice())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("opencl/math/sinh.", XLS);
     enableOpenCL();   ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
