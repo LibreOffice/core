@@ -24,7 +24,9 @@
 #include <stdlib.h>
 #include <string.h>
 #if defined(__IBMC__) || defined(__EMX__) || defined(_MSC_VER)
-#   define PATH_MAX _MAX_PATH
+#   ifndef PATH_MAX
+#       define PATH_MAX _MAX_PATH
+#   endif
 #endif
 #include <limits.h>
 

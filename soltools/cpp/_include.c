@@ -33,7 +33,9 @@
 
 #if defined(__IBMC__) || defined(__EMX__) || defined(_MSC_VER)
 #   include <fcntl.h>
-#   define PATH_MAX _MAX_PATH
+#   ifndef PATH_MAX
+#       define PATH_MAX _MAX_PATH
+#   endif
 #endif
 #include <limits.h>
 
