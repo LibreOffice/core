@@ -808,6 +808,8 @@ public:
             const std::string sSymName, SubArguments &vSubArguments)
     {
         size_t nCurWindowSize = 0;
+        FormulaToken *tmpCur = NULL;
+        const formula::DoubleVectorRefToken *pCurDVR = NULL;
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -816,15 +818,50 @@ public:
                 ss << ",";
             vSubArguments[i]->GenSlidingWindowDecl(ss);
             size_t nCurChildWindowSize = vSubArguments[i]->GetWindowSize();
-            nCurWindowSize = (nCurWindowSize < nCurChildWindowSize) ?
+            nCurWindowSize = (nCurWindowSize < nCurChildWindowSize)?
                 nCurChildWindowSize:nCurWindowSize;
+            tmpCur = vSubArguments[i]->GetFormulaToken();
+            if (  ocPush==tmpCur->GetOpCode() )
+            {
+
+                pCurDVR = dynamic_cast<
+                    const formula::DoubleVectorRefToken*>(tmpCur);
+                if ( !
+                    ( (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+                    || (pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) )
+                    )
+                    throw Unhandled();
+            }
+
         }
-        ss << ") {\n\t";
-        ss << "double tmp = 0.0;\n\t";
-        ss << "int gid0 = get_global_id(0);\n\t";
-        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++){\n\t\t";
-        ss << "int currentCount = i+gid0+1;\n";
-        ss << "tmp += ";
+        ss << ") {\n";
+        ss << "    double tmp = 0.0;\n";
+        ss << "    int gid0 = get_global_id(0);\n";
+        ss << "    int i ;\n";
+        ss  << "    for (i = 0; i < "<< nCurWindowSize <<"; i++)\n";
+        ss << "    {\n";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            tmpCur = vSubArguments[i]->GetFormulaToken();
+            if(ocPush==tmpCur->GetOpCode())
+            {
+                pCurDVR= dynamic_cast<
+                    const formula::DoubleVectorRefToken *>(tmpCur);
+                if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+                {
+                   ss << "        int currentCount";
+                   ss << i;
+                   ss <<" =i+gid0+1;\n";
+                }
+                else
+                {
+                    ss << "        int currentCount";
+                    ss << i;
+                    ss << " =i+1;\n";
+                }
+             }
+        }
+        ss << "        tmp += ";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
         {
             if (i)
@@ -833,7 +870,9 @@ public:
             if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
             {
                 ss <<"(";
-                ss <<"(currentCount>";
+                ss <<"(currentCount";
+                ss << i;
+                ss<< ">";
                 if(vSubArguments[i]->GetFormulaToken()->GetType() ==
                      formula::svSingleVectorRef)
                 {
@@ -850,7 +889,7 @@ public:
                           (vSubArguments[i]->GetFormulaToken());
                     ss<<pSVR->GetArrayLength();
                 }
-                ss << ")&&isNan("<<vSubArguments[i]
+                ss << ")||isNan("<<vSubArguments[i]
                     ->GenSlidingWindowDeclRef(true);
                 ss << ")?0:";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
