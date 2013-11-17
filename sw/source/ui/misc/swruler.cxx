@@ -10,7 +10,6 @@
 // FIX fdo#38246 https://bugs.libreoffice.org/show_bug.cgi?id=38246
 // Design proposal: https://wiki.documentfoundation.org/Design/Whiteboards/Comments_Ruler_Control
 // TODO Alpha blend border when it doesn't fit in window
-// TODO Delayed highlight fading when user moves mouse over and out the control
 
 #include "swruler.hxx"
 
@@ -40,8 +39,12 @@ SwCommentRuler::SwCommentRuler( SwViewShell* pViewSh, Window* pParent, SwEditWin
 , mpViewShell(pViewSh)
 , mpSwWin(pWin)
 , mbIsHighlighted(false)
+, mnFadeRate(0)
 , maVirDev( *this )
 {
+    // Set fading timeout: 5 x 40ms = 200ms
+    maFadeTimer.SetTimeout(40);
+    maFadeTimer.SetTimeoutHdl( LINK( this, SwCommentRuler, FadeHandler ) );
 }
 
 // Destructor
@@ -57,6 +60,7 @@ void SwCommentRuler::Paint( const Rectangle& rRect )
         DrawCommentControl();
 }
 
+
 void SwCommentRuler::DrawCommentControl()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -67,10 +71,8 @@ void SwCommentRuler::DrawCommentControl()
 
     // Paint comment control background
     // TODO Check if these are best colors to be used
-    if ( mbIsHighlighted )
-        maVirDev.SetFillColor( rStyleSettings.GetDarkShadowColor() );
-    else
-        maVirDev.SetFillColor( rStyleSettings.GetWorkspaceColor() );
+    Color aBgColor = GetFadedColor( rStyleSettings.GetDarkShadowColor(), rStyleSettings.GetWorkspaceColor() );
+    maVirDev.SetFillColor( aBgColor );
 
     if ( mbIsHighlighted || !bIsCollapsed )
     {
@@ -85,6 +87,7 @@ void SwCommentRuler::DrawCommentControl()
 
     maVirDev.DrawRect( Rectangle( Point(), aControlRect.GetSize() ) );
 
+    // Label and arrow tip
     OUString aLabel( SW_RESSTR ( STR_COMMENTS_LABEL ) );
     // Get label and arrow coordinates
     Point aLabelPos;
@@ -130,15 +133,15 @@ void SwCommentRuler::DrawCommentControl()
     }
 
     // Draw label
-    const Color &rTextColor = mbIsHighlighted ? rStyleSettings.GetButtonTextColor() : rStyleSettings.GetDeactiveTextColor();
-    maVirDev.SetTextColor( rTextColor );
+    Color aTextColor = GetFadedColor( rStyleSettings.GetButtonTextColor(), rStyleSettings.GetDeactiveTextColor() );
+    maVirDev.SetTextColor( aTextColor );
     // FIXME Expected font size?
     maVirDev.DrawText( aLabelPos, aLabel );
 
     // Draw arrow
     // FIXME consistence of button colors. http://opengrok.libreoffice.org/xref/core/vcl/source/control/button.cxx#785
-    const Color &rArrowColor = mbIsHighlighted ? Color( COL_BLACK ) : rStyleSettings.GetShadowColor();
-    ImplDrawArrow ( aArrowPos.X(), aArrowPos.Y(), rArrowColor, bArrowToRight );
+    Color aArrowColor = GetFadedColor( Color( COL_BLACK ), rStyleSettings.GetShadowColor() );
+    ImplDrawArrow ( aArrowPos.X(), aArrowPos.Y(), aArrowColor, bArrowToRight );
 
     // Blit comment control
     DrawOutDev( aControlRect.TopLeft(), aControlRect.GetSize(), Point(), aControlRect.GetSize(), maVirDev );
@@ -180,14 +183,12 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
     SvxRuler::MouseMove(rMEvt);
     if ( ! mpViewShell->GetPostItMgr() || ! mpViewShell->GetPostItMgr()->HasNotes() )
         return;
-    // TODO Delay 0.1s to highlight and 0.2s to "lowlight"
+
     Point aMousePos = rMEvt.GetPosPixel();
     bool  bWasHighlighted = mbIsHighlighted;
     mbIsHighlighted = GetCommentControlRegion().IsInside( aMousePos );
     if ( mbIsHighlighted != bWasHighlighted )
     {
-        // Repaint for highlight changes make effect
-        Invalidate();
         // Set proper help text
         if ( mbIsHighlighted )
         {
@@ -200,6 +201,8 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
             // FIXME Should remember previous tooltip text?
             SetQuickHelpText( OUString() );
         }
+        // Do start fading
+        maFadeTimer.Start();
     }
 }
 
@@ -266,6 +269,33 @@ Rectangle SwCommentRuler::GetCommentControlRegion()
 
     Rectangle aRect(nLeft, nTop, nRight, nBottom);
     return aRect;
+}
+
+Color SwCommentRuler::GetFadedColor(const Color &rHighColor, const Color &rLowColor)
+{
+    if ( ! maFadeTimer.IsActive() )
+        return mbIsHighlighted ? rHighColor : rLowColor;
+
+    Color aColor = rHighColor;
+    aColor.Merge( rLowColor, mnFadeRate * 255/100.f );
+    return aColor;
+}
+
+IMPL_LINK_NOARG(SwCommentRuler, FadeHandler)
+{
+    const int nStep = 25;
+    if ( mbIsHighlighted && mnFadeRate < 100 )
+        mnFadeRate += nStep;
+    else if ( !mbIsHighlighted && mnFadeRate > 0 )
+        mnFadeRate -= nStep;
+    else
+        return 0;
+
+    Invalidate();
+
+    if ( mnFadeRate != 0 && mnFadeRate != 100)
+        maFadeTimer.Start();
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
