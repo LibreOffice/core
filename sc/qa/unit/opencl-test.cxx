@@ -1788,7 +1788,8 @@ void ScOpenclTest::testStatisticalFormulaWeibull()
     {
         double fLibre = pDoc->GetValue(ScAddress(4,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(4,i,0));
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre,
+            fExcel == 0?1e-4:fabs(1e-4*fExcel));
     }
     xDocSh->DoClose();
     xDocShRes->DoClose();
