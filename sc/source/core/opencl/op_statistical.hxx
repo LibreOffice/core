@@ -56,6 +56,14 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "ZTest"; }
 };
+class OpStDevP: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "StDevP"; }
+};
+
 class OpStDev: public Normal
 {
 public:
