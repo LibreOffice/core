@@ -4110,7 +4110,9 @@ StackVar ScInterpreter::Interpret()
                 case ocHypGeomDist      : ScHypGeomDist();              break;
                 case ocLogNormDist      : ScLogNormDist();              break;
                 case ocTDist            : ScTDist();                    break;
-                case ocFDist            : ScFDist();                    break;
+                case ocFDist            :
+                case ocFDist_RT         : ScFDist();                    break;
+                case ocFDist_LT         : ScFDist_LT();                 break;
                 case ocChiDist          :
                 case ocChiDist_MS       : ScChiDist();                  break;
                 case ocChiSqDist        :
@@ -4133,7 +4135,8 @@ StackVar ScInterpreter::Interpret()
                 case ocBad              : ScBadName();                  break;
                 case ocZTest            : ScZTest();                    break;
                 case ocTTest            : ScTTest();                    break;
-                case ocFTest            : ScFTest();                    break;
+                case ocFTest            :
+                case ocFTest_MS         : ScFTest();                    break;
                 case ocRank             : ScRank();                     break;
                 case ocPercentile       : ScPercentile();               break;
                 case ocPercentrank      : ScPercentrank();              break;
@@ -4173,7 +4176,9 @@ StackVar ScInterpreter::Interpret()
                 case ocChiSqInv         :
                 case ocChiSqInv_MS      : ScChiSqInv();                 break;
                 case ocTInv             : ScTInv();                     break;
-                case ocFInv             : ScFInv();                     break;
+                case ocFInv             :
+                case ocFInv_RT          : ScFInv();                     break;
+                case ocFInv_LT          : ScFInv_LT();                  break;
                 case ocLogInv           : ScLogNormInv();               break;
                 case ocBetaDist         : ScBetaDist();                 break;
                 case ocBetaDist_MS      : ScBetaDist_MS();              break;

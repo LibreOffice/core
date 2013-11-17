@@ -1597,6 +1597,33 @@ void ScInterpreter::ScFDist()
     PushDouble(GetFDist(fF, fF1, fF2));
 }
 
+void ScInterpreter::ScFDist_LT()
+{
+    if ( !MustHaveParamCount( GetByte(), 4 ) )
+        return;
+    bool   bCum = GetBool();
+    double fF2 = ::rtl::math::approxFloor( GetDouble() );
+    double fF1 = ::rtl::math::approxFloor( GetDouble() );
+    double fF  = GetDouble();
+    if ( fF < 0.0 || fF1 < 1.0 || fF2 < 1.0 || fF1 >= 1.0E10 || fF2 >= 1.0E10 )
+    {
+        PushIllegalArgument();
+        return;
+    }
+    if ( bCum )
+    {
+        // left tail cumulative distribution
+        PushDouble( 1.0 - GetFDist( fF, fF1, fF2 ) );
+    }
+    else
+    {
+        // probability density function
+        PushDouble( pow( fF1 / fF2, fF1 / 2 ) * pow( fF, ( fF1 / 2 ) - 1 ) /
+                    ( pow( ( 1 + ( fF * fF1 / fF2 ) ), ( fF1 + fF2 ) / 2 ) *
+                      GetBeta( fF1 / 2, fF2 / 2 ) ) );
+    }
+}
+
 void ScInterpreter::ScChiDist()
 {
     double fResult;
@@ -2162,6 +2189,27 @@ void ScInterpreter::ScFInv()
 
     bool bConvError;
     ScFDistFunction aFunc( *this, fP, fF1, fF2 );
+    double fVal = lcl_IterateInverse( aFunc, fF1*0.5, fF1, bConvError );
+    if (bConvError)
+        SetError(errNoConvergence);
+    PushDouble(fVal);
+}
+
+void ScInterpreter::ScFInv_LT()
+{
+    if ( !MustHaveParamCount( GetByte(), 3 ) )
+        return;
+    double fF2 = ::rtl::math::approxFloor(GetDouble());
+    double fF1 = ::rtl::math::approxFloor(GetDouble());
+    double fP  = GetDouble();
+    if (fP <= 0.0 || fF1 < 1.0 || fF2 < 1.0 || fF1 >= 1.0E10 || fF2 >= 1.0E10 || fP > 1.0)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    bool bConvError;
+    ScFDistFunction aFunc( *this, ( 1.0 - fP ), fF1, fF2 );
     double fVal = lcl_IterateInverse( aFunc, fF1*0.5, fF1, bConvError );
     if (bConvError)
         SetError(errNoConvergence);
