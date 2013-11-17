@@ -389,7 +389,7 @@ void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException)
     SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
     OSL_ENSURE(pTxtFtn, "no TextNode?");
     SwTxtNode& rTxtNode = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
-    const xub_StrLen nPos = *pTxtFtn->GetStart();
+    const sal_Int32 nPos = *pTxtFtn->GetStart();
     SwPaM aPam(rTxtNode, nPos, rTxtNode, nPos+1);
     GetDoc()->DeleteAndJoin( aPam );
 }

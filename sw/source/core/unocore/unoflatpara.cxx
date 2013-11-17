@@ -220,7 +220,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 
     SwTxtNode* pOldTxtNode = mpTxtNode;
 
-    SwPaM aPaM( *mpTxtNode, static_cast<sal_uInt16>(nPos), *mpTxtNode, static_cast<sal_uInt16>(nPos + nLen) );
+    SwPaM aPaM( *mpTxtNode, nPos, *mpTxtNode, nPos+nLen );
 
     UnoActionContext aAction( mpTxtNode->GetDoc() );
 
@@ -250,7 +250,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
     if ( !mpTxtNode )
         return;
 
-    SwPaM aPaM( *mpTxtNode, static_cast<sal_uInt16>(nPos), *mpTxtNode, static_cast<sal_uInt16>(nPos + nLen) );
+    SwPaM aPaM( *mpTxtNode, nPos, *mpTxtNode, nPos+nLen );
 
     UnoActionContext aAction( mpTxtNode->GetDoc() );
 

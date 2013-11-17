@@ -370,8 +370,8 @@ SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
     m_Bound2.nContent.Assign( m_Bound2.nNode.GetNode().GetCntntNode(), 0 );
 }
 
-SwPaM::SwPaM( const SwNodeIndex& rMark , xub_StrLen nMarkCntnt,
-              const SwNodeIndex& rPoint, xub_StrLen nPointCntnt, SwPaM* pRing )
+SwPaM::SwPaM( const SwNodeIndex& rMark, sal_Int32 nMarkCntnt,
+              const SwNodeIndex& rPoint, sal_Int32 nPointCntnt, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rMark )
     , m_Bound2( rPoint )
@@ -383,8 +383,8 @@ SwPaM::SwPaM( const SwNodeIndex& rMark , xub_StrLen nMarkCntnt,
     m_pMark ->nContent.Assign( rMark .GetNode().GetCntntNode(), nMarkCntnt );
 }
 
-SwPaM::SwPaM( const SwNode& rMark , xub_StrLen nMarkCntnt,
-              const SwNode& rPoint, xub_StrLen nPointCntnt, SwPaM* pRing )
+SwPaM::SwPaM( const SwNode& rMark, sal_Int32 nMarkCntnt,
+              const SwNode& rPoint, sal_Int32 nPointCntnt, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rMark )
     , m_Bound2( rPoint )
@@ -398,7 +398,7 @@ SwPaM::SwPaM( const SwNode& rMark , xub_StrLen nMarkCntnt,
         nMarkCntnt );
 }
 
-SwPaM::SwPaM( const SwNode& rNode, xub_StrLen nCntnt, SwPaM* pRing )
+SwPaM::SwPaM( const SwNode& rNode, sal_Int32 nCntnt, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rNode )
     , m_Bound2( m_Bound1.nNode.GetNode().GetNodes() ) // default initialize
@@ -410,7 +410,7 @@ SwPaM::SwPaM( const SwNode& rNode, xub_StrLen nCntnt, SwPaM* pRing )
         nCntnt );
 }
 
-SwPaM::SwPaM( const SwNodeIndex& rNodeIdx, xub_StrLen nCntnt, SwPaM* pRing )
+SwPaM::SwPaM( const SwNodeIndex& rNodeIdx, sal_Int32 nCntnt, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rNodeIdx )
     , m_Bound2( rNodeIdx.GetNode().GetNodes() ) // default initialize

@@ -168,12 +168,12 @@ public:
            long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = 0 );
     SwPaM( const SwNode& rMk, const SwNode& rPt,
            long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = 0 );
-    SwPaM(  const SwNodeIndex& rMk, xub_StrLen nMkCntnt,
-            const SwNodeIndex& rPt, xub_StrLen nPtCntnt, SwPaM* pRing = 0 );
-    SwPaM(  const SwNode& rMk, xub_StrLen nMkCntnt,
-            const SwNode& rPt, xub_StrLen nPtCntnt, SwPaM* pRing = 0 );
-    SwPaM( const SwNode& rNd, xub_StrLen nCntnt = 0, SwPaM* pRing = 0 );
-    SwPaM( const SwNodeIndex& rNd, xub_StrLen nCntnt = 0, SwPaM* pRing = 0 );
+    SwPaM(  const SwNodeIndex& rMk, sal_Int32 nMkCntnt,
+            const SwNodeIndex& rPt, sal_Int32 nPtCntnt, SwPaM* pRing = 0 );
+    SwPaM(  const SwNode& rMk, sal_Int32 nMkCntnt,
+            const SwNode& rPt, sal_Int32 nPtCntnt, SwPaM* pRing = 0 );
+    SwPaM( const SwNode& rNd, sal_Int32 nCntnt = 0, SwPaM* pRing = 0 );
+    SwPaM( const SwNodeIndex& rNd, sal_Int32 nCntnt = 0, SwPaM* pRing = 0 );
     virtual ~SwPaM();
 
     /// @@@ semantic: no copy ctor.

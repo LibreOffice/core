@@ -1992,7 +1992,7 @@ CHECKTABLE(pTblNd->GetTable())
             for( sal_uInt16 i = pMoves->size(); i; )
             {
                 SwTxtNode* pTxtNd = 0;
-                sal_uInt16 nDelPos = 0;
+                sal_Int32 nDelPos = 0;
                 SwUndoMove* pUndo = &(*pMoves)[ --i ];
                 if( !pUndo->IsMoveRange() )
                 {
