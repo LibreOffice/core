@@ -50,13 +50,17 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 endif
 
-# Disabled because fails on too many machines in
-# the OpenCL compiler
-# CppunitTest_sc_opencl_test
+# The sc_opencl_test disabled for other OSes than OS X at the moment
+# because it fails on many Linux machines in the OpenCL compiler. OS X
+# has a different (?) OpenCL compiler implementation than the one
+# which fails.
+#
 $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_ucalc \
     CppunitTest_sc_filters_test \
     CppunitTest_sc_rangelst_test \
+    $(if $(filter $(OS),MACOSX), \
+        CppunitTest_sc_opencl_test) \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
