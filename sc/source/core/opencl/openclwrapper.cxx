@@ -698,6 +698,26 @@ int OpenclDevice::getOpenclState()
 
 namespace {
 
+// based on crashes and hanging during kernel compilation
+bool checkForKnownBadCompilers(const OpenclDeviceInfo& rInfo)
+{
+
+    struct {
+        const char* pVendorName; const char* pDriverVersion;
+    } aBadOpenCLCompilers[] = {
+        { "Intel(R) Corporation", "9.17.10.2884" }
+    };
+
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aBadOpenCLCompilers); ++i)
+    {
+        if(rInfo.maVendor == OUString::createFromAscii(aBadOpenCLCompilers[i].pVendorName) &&
+                rInfo.maDriver == OUString::createFromAscii(aBadOpenCLCompilers[i].pDriverVersion))
+            return true;
+    }
+
+    return false;
+}
+
 void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
 {
     OpenclDeviceInfo aDeviceInfo;
@@ -736,6 +756,14 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
     if(nState != CL_SUCCESS)
         return;
 
+    char pDriver[DEVICE_NAME_LENGTH];
+    nState = clGetDeviceInfo(aDeviceId, CL_DRIVER_VERSION, DEVICE_NAME_LENGTH, pDriver, NULL);
+
+    if(nState != CL_SUCCESS)
+        return;
+
+    aDeviceInfo.maDriver = OUString::createFromAscii(pDriver);
+
     bool bKhrFp64 = false;
     bool bAmdFp64 = false;
     checkDeviceForDoubleSupport(aDeviceId, bKhrFp64, bAmdFp64);
@@ -746,7 +774,8 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
 
     aDeviceInfo.mnComputeUnits = nComputeUnits;
 
-    rPlatformInfo.maDevices.push_back(aDeviceInfo);
+    if(!checkForKnownBadCompilers(aDeviceInfo))
+        rPlatformInfo.maDevices.push_back(aDeviceInfo);
 }
 
 bool createPlatformInfo(cl_platform_id nPlatformId, OpenclPlatformInfo& rPlatformInfo)

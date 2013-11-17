@@ -23,6 +23,7 @@ struct SC_DLLPUBLIC OpenclDeviceInfo
     void* device;
     OUString maName;
     OUString maVendor;
+    OUString maDriver;
     size_t mnMemory;
     size_t mnComputeUnits;
     size_t mnFrequency;
