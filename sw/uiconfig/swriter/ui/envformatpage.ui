@@ -199,7 +199,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">Position</property>
+                    <property name="label" translatable="yes">Position</property>
                   </object>
                 </child>
               </object>
@@ -210,7 +210,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label">Addressee</property>
+            <property name="label" translatable="yes">Addressee</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -418,7 +418,7 @@
                   <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">Position</property>
+                    <property name="label" translatable="yes">Position</property>
                   </object>
                 </child>
               </object>
@@ -429,7 +429,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label">Sender</property>
+            <property name="label" translatable="yes">Sender</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -599,7 +599,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label">Size</property>
+            <property name="label" translatable="yes">Size</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -17,7 +17,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label">_New Document</property>
+                <property name="label" translatable="yes">_New Document</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>

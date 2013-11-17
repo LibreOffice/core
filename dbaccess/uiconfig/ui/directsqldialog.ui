@@ -123,7 +123,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="execute">
-                            <property name="label">_Execute</property>
+                            <property name="label" translatable="yes">_Execute</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>

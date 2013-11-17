@@ -220,7 +220,7 @@
             </child>
             <child>
               <object class="GtkButton" id="preview">
-                <property name="label">Preview</property>
+                <property name="label" translatable="yes">Preview</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

@@ -109,7 +109,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">Update links when loading</property>
+                    <property name="label" translatable="yes">Update links when loading</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -183,7 +183,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">Automatically Update</property>
+                    <property name="label" translatable="yes">Automatically Update</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -328,7 +328,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">Settings</property>
+                <property name="label" translatable="yes">Settings</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -401,7 +401,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">Word Count</property>
+                <property name="label" translatable="yes">Word Count</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

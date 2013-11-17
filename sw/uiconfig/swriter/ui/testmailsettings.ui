@@ -179,7 +179,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">%PRODUCTNAME is testing the e-mail account settings...</property>
+                <property name="label" translatable="yes">%PRODUCTNAME is testing the e-mail account settings...</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -249,7 +249,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">Errors</property>
+                <property name="label" translatable="yes">Errors</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
