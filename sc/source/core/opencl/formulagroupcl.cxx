@@ -487,7 +487,8 @@ public:
             if (!bIsStartFixed && !bIsEndFixed)
             {
                 // set 100 as a threshold for invoking reduction kernel
-                if (nCurWindowSize > 100 )
+                // Ray: temporarily turn off parallel sum reduction
+                if (false /*nCurWindowSize > 100*/)
                 {
                     std::string temp = Base::GetName() + "[gid0]";
                     ss << "tmp = ";
@@ -502,7 +503,8 @@ public:
             if (bIsStartFixed && bIsEndFixed)
             {
                 // set 100 as a threshold for invoking reduction kernel
-                if (nCurWindowSize > 100 )
+                // Ray: temporarily turn off parallel sum reduction
+                if (false /* nCurWindowSize > 100 */)
                 {
                     std::string temp = Base::GetName() + "[0]";
                     ss << "tmp = ";
