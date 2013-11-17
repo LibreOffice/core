@@ -457,7 +457,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 if ( _rRH.m_bSigned )
                     m_aValue.m_nInt8    = _rRH.m_aValue.m_nInt8;
                 else
-                    m_aValue.m_nInt8    = _rRH.m_aValue.m_uInt8;
+                    m_aValue.m_uInt8    = _rRH.m_aValue.m_uInt8;
                 break;
             case DataType::SMALLINT:
                 if ( _rRH.m_bSigned )
