@@ -28,7 +28,9 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <postmac.h>
 #else
-#include <basegfx/range/b2ibox.hxx>
+#include <basegfx/range/b1drange.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 #endif
 
 #ifdef __cplusplus
@@ -86,28 +88,23 @@ typedef enum {
 
 #ifdef IOS
 typedef CGRect MLORect;
-#else
-typedef basegfx::B2IBox MLORect;
-#endif
-
-// MLODip - Device Independent Pixels
-
-typedef long long MLORip;
 typedef CGFloat MLODpx;
 typedef CGPoint MLODpxPoint;
 typedef CGSize MLODpxSize;
 
-CG_INLINE MLODpxPoint
-MLODpxPointByDpxes(MLODpx x, MLODpx y)
-{
-    return CGPointMake(x, y);
-}
+#else
 
-CG_INLINE MLODpxSize
-MLODpxSizeByDpxes(MLODpx width, MLODpx height)
-{
-    return CGSizeMake(width, height);
-}
+// Very much work in progress, just something to make this compile
+typedef basegfx::B2DRange MLORect;
+typedef float MLODpx;
+typedef basegfx::B2DTuple MLODpxPoint;
+typedef basegfx::B1DRange MLODpxSize;
+
+#endif
+
+// MLORip - tens of TWIPs, of questionable usefuless
+
+typedef long long MLORip;
 
 static const MLORip LO_TWIPS_TO_MLO_RIP_RATIO = 10L;
 
@@ -125,31 +122,49 @@ struct MLORipPoint
 };
 typedef struct MLORipPoint MLORipPoint;
 
-CG_INLINE MLODpx
+static inline MLODpx
 MLODpxByRip(MLORip rip)
 {
     return (MLODpx) (rip / LO_TWIPS_TO_MLO_RIP_RATIO);
 }
 
-CG_INLINE MLORip
+static inline MLORip
 MLORipByDpx(MLODpx dpx)
 {
     return (MLORip) (dpx * LO_TWIPS_TO_MLO_RIP_RATIO);
 }
 
-CG_INLINE MLORipSize
+static inline MLODpxPoint
+MLODpxPointByDpxes(MLODpx x, MLODpx y)
+{
+#ifdef IOS
+    return CGPointMake(x, y);
+#else
+    return basegfx::B2DTuple(x, y);
+#endif
+}
+
+#ifdef IOS
+
+static inline MLODpxSize
+MLODpxSizeByDpxes(MLODpx width, MLODpx height)
+{
+    return CGSizeMake(width, height);
+}
+
+static inline MLORipSize
 MLORipSizeByRips(MLORip width, MLORip height)
 {
     MLORipSize ripSize; ripSize.width = width; ripSize.height = height; return ripSize;
 }
 
-CG_INLINE MLORipPoint
+static inline MLORipPoint
 MLORipPointByRips(MLORip x, MLORip y)
 {
     MLORipPoint point; point.x = x; point.y = y; return point;
 }
 
-CG_INLINE MLORipSize
+static inline MLORipSize
 MLORipSizeByDpxSize(MLODpxSize dpxSize)
 {
     MLORipSize ripSize;
@@ -158,7 +173,7 @@ MLORipSizeByDpxSize(MLODpxSize dpxSize)
     return ripSize;
 }
 
-CG_INLINE MLODpxSize
+static inline MLODpxSize
 MLODpxSizeByRips(MLORip width, MLORip height)
 {
     CGFloat fWidth = MLODpxByRip(width);
@@ -166,7 +181,7 @@ MLODpxSizeByRips(MLORip width, MLORip height)
     return CGSizeMake(fWidth, fHeight);
 }
 
-CG_INLINE MLODpxSize
+static inline MLODpxSize
 MLODpxSizeByRipSize(MLORipSize ripSize)
 {
     return MLODpxSizeByRips(ripSize.width, ripSize.height);
@@ -176,6 +191,7 @@ MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint);
 
 MLODpxPoint MLODpxPointByMLORipPoint(MLORipPoint mloRipPoint);
 
+#endif
 
 // selection
 
