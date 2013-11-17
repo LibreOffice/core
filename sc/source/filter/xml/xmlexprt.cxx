@@ -4208,7 +4208,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
             {
                 OUString sRanges;
                 const ScRangeList& rRangeList = itr->GetRange();
-                ScRangeStringConverter::GetStringFromRangeList( sRanges, &rRangeList, pDoc, formula::FormulaGrammar::CONV_ODF );
+                ScRangeStringConverter::GetStringFromRangeList( sRanges, &rRangeList, pDoc, formula::FormulaGrammar::CONV_OOO );
                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, sRanges);
                 SvXMLElementExport aElementCondFormat(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, true, true);
                 size_t nEntries = itr->size();
