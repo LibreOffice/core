@@ -30,6 +30,13 @@ public:
     virtual std::string BinFuncName(void) const { return "SumX2PY2"; }
 };
 
+class OpSumXMY2: public CheckVariables
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "SumXMY2"; }
+};
 }}
 
 #endif
