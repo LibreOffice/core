@@ -675,10 +675,10 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
 
         CHECK_OPENCL(clStatus, "clCreateCommandQueue");
     }
-
+#if 0
     clStatus = clGetCommandQueueInfo( gpuInfo->mpCmdQueue, CL_QUEUE_THREAD_HANDLE_AMD, 0, NULL, NULL );
     CHECK_OPENCL(clStatus, "clGetCommandQueueInfo");
-
+#endif
     bool bKhrFp64 = false;
     bool bAmdFp64 = false;
 
