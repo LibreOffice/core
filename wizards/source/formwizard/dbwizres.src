@@ -2066,11 +2066,6 @@ String RID_LETTERWIZARDDIALOG_START + 40
     Text [ en-US] = "Height:";
 };
 
-String RID_LETTERWIZARDDIALOG_START + 41
-{
-    Text [ en-US] = "Use a typical letter format for this country:";
-};
-
 String RID_LETTERWIZARDDIALOG_START + 42
 {
     Text [ en-US] = "Sender's address";

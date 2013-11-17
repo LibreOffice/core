@@ -154,9 +154,6 @@ class LetterWizardDialogResources(Resource):
         self.reslblFooterHeight_value = \
             self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 40)
-        self.reslblLetterNorm_value = \
-            self.getResText(
-                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 41)
         self.reslblSenderAddress_value = \
             self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 42)
