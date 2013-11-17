@@ -731,7 +731,7 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
     aDeviceInfo.maName = OUString::createFromAscii(pName);
 
     char pVendor[DEVICE_NAME_LENGTH];
-    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_VENDOR, DEVICE_NAME_LENGTH, pName, NULL);
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_VENDOR, DEVICE_NAME_LENGTH, pVendor, NULL);
     if(nState != CL_SUCCESS)
         return;
 
