@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef IOS
-
 #include <touch/touch.h>
-
-#endif
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <sfx2/viewfrm.hxx>
@@ -1792,6 +1788,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 extern "C"
 void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLODpxPoint tileDpxPosition, MLODpxSize tileDpxSize)
 {
+#ifdef IOS
     SAL_INFO("sw", "touch_lo_draw_tile(" << contextWidth << ", " << contextHeight << ", (" << tileDpxPosition.x << "," << tileDpxPosition.y << "), " << tileDpxSize.width << "x" << tileDpxSize.height << ")");
     MLORipPoint tileRipPosition = MLORipPointByDpxPoint(tileDpxPosition);
     MLORipSize rileRipSize = MLORipSizeByDpxSize(tileDpxSize);
@@ -1838,10 +1835,18 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         aBitmap.ReleaseAccess(readAccess);
     }
     Application::ReleaseSolarMutex();
+#else
+    (void) context;
+    (void) contextWidth;
+    (void) contextHeight;
+    (void) tileDpxPosition;
+    (void) tileDpxSize;
+#endif
 }
 extern "C"
 MLODpxSize touch_lo_get_content_size()
 {
+#ifdef IOS
     SwWrtShell *pViewShell = GetActiveWrtShell();
     if (pViewShell)
     {
@@ -1852,15 +1857,23 @@ MLODpxSize touch_lo_get_content_size()
                                ((MLORip)documentSize.Height()) + HEIGHT_ADDITION);
     }
     return MLODpxSizeByDpxes(0,0);
+#else
+    return MLODpxSize();
+#endif
 }
 
 extern "C"
 MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint)
 {
+#ifdef IOS
     //MLODpxSize contentSize = touch_lo_get_content_size();
     MLORip x = MLORipByDpx(mloDpxPoint.x /*- (contentSize.width/2.0f)*/);
     MLORip y = MLORipByDpx(mloDpxPoint.y);
     return MLORipPointByRips(x,y);
+#else
+    (void) mloDpxPoint;
+    return MLORipPoint();
+#endif
 }
 
 extern "C"
