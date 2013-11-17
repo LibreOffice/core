@@ -21,7 +21,6 @@ $(eval $(call gb_Module_add_targets_for_build,l10ntools,\
     Executable_pocheck \
     Executable_propex \
     Executable_treex \
-    Executable_stringex \
     StaticLibrary_transex \
 ))
 

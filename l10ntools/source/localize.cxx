@@ -186,7 +186,6 @@ bool handleFile(
         { RTL_CONSTASCII_STRINGPARAM(".xcu"), "cfgex", false },
         { RTL_CONSTASCII_STRINGPARAM(".xrm"), "xrmex", false },
         { RTL_CONSTASCII_STRINGPARAM("description.xml"), "xrmex", true },
-        { RTL_CONSTASCII_STRINGPARAM("strings.xml"), "stringex", true },
         { RTL_CONSTASCII_STRINGPARAM(".xhp"), "helpex", false },
         { RTL_CONSTASCII_STRINGPARAM(".properties"), "propex", false },
         { RTL_CONSTASCII_STRINGPARAM(".ui"), "uiex", false },
@@ -270,7 +269,6 @@ void handleFilesOfDir(
 bool includeProject(const OString& rProject) {
     static const OString projects[] = {
         "accessibility",
-        "android",
         "avmedia",
         "basctl",
         "basic",

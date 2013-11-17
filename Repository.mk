@@ -54,7 +54,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	sp2bv \
 	svg2odf \
 	svidl \
-	stringex \
 	transex3 \
 	treex \
 	uiex \

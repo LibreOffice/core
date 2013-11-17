@@ -10,11 +10,7 @@ ifeq ($(BUILDDIR),)
 include ../../config_host.mk
 endif
 
-STRINGEX_EXECUTABLE := $(WORKDIR_FOR_BUILD)/LinkTarget/Executable/stringex
-STRINGEX_LDPATH := LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}$(INSTROOT_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER_FOR_BUILD):$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER_FOR_BUILD)
-STRINGEX_COMMAND := $(STRINGEX_LDPATH) $(STRINGEX_EXECUTABLE)
-
-all: properties translations.done
+all: properties
 	mkdir -p ../abs-lib/libs
 	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar ../abs-lib/libs
 	$(ANT) debug
@@ -23,44 +19,10 @@ properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../abs-lib/local.properties
 
-clean: properties translations.clean
+clean: properties
 	$(ANT) -quiet -keep-going clean
 
 install: all
 	$(ANDROID_SDK_HOME)/platform-tools/adb install -r ./bin/ImpressRemote-debug.apk
-
-define android_get_podir
-res/values-$(1)
-endef
-
-define android_get_po
-$(call android_get_podir,$(1))/strings.xml
-endef
-
-define android_translation_rules
-$(call android_get_po,$(1)):
-	mkdir -p res/values-$(1)
-	echo $(SRCDIR)/translations/source/$(1)/android/sdremote/res/values.po > translations-$(1).db &&\
-	$(STRINGEX_COMMAND) -i res/values/strings.xml -o res/values-$(1)/strings.xml -m translations-$(1).db -l $(1)
-
-endef
-
-define android_translations_rules
-$(foreach lang,$(1),$(call android_translation_rules,$(lang)))
-endef
-
-define android_get_langlist
-$(foreach lang,$(filter-out en-US sat sid mai ast mni brx dgo nso kok qtz,$(WITH_LANG_LIST)),$(subst -,-r,$(lang)))
-endef
-
-$(eval $(call android_translations_rules,$(call android_get_langlist)))
-
-translations.done: $(foreach lang,$(call android_get_langlist),$(call android_get_po,$(lang)))
-	touch translations.done
-
-translations.clean:
-	rm -rf $(foreach lang,$(call android_get_langlist),$(call android_get_podir,$(lang)))
-	rm -rf $(foreach lang,$(call android_get_langlist),translations-$(lang).db)
-	rm -f translations.done
 
 # vim: set noet sw=4 ts=4:

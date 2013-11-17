@@ -25,7 +25,6 @@ gb_BUILD_TOOLS = \
 		propex \
 		rsc \
 		saxparser \
-		stringex \
 		svidl \
 		transex3 \
 		treex \
