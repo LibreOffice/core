@@ -580,7 +580,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, HelpIds.getHelpIdString(HID + 22),
                 self.resources.reschkUseLogo_value,
-                "chkUseLogo", 97, 54, 0, 3, 22, 212), self)
+                "chkUseLogo", 97, 34, 0, 3, 22, 212), self)
         self.chkUseAddressReceiver = self.insertCheckBox(
             "chkUseAddressReceiver",
             LetterWizardDialogConst.CHKUSEADDRESSRECEIVER_ITEM_CHANGED,
@@ -596,7 +596,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, HelpIds.getHelpIdString(HID + 23),
                 self.resources.reschkUseAddressReceiver_value,
-                "chkUseAddressReceiver", 97, 69, 0, 3, 23, 212), self)
+                "chkUseAddressReceiver", 97, 49, 0, 3, 23, 212), self)
         self.chkUseSigns = self.insertCheckBox(
             "chkUseSigns",
             LetterWizardDialogConst.CHKUSESIGNS_ITEM_CHANGED,
@@ -612,7 +612,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, HelpIds.getHelpIdString(HID + 24),
                 self.resources.reschkUseSigns_value,
-                "chkUseSigns", 97, 82, 0, 3, 24, 212), self)
+                "chkUseSigns", 97, 62, 0, 3, 24, 212), self)
         self.chkUseSubject = self.insertCheckBox(
             "chkUseSubject",
             LetterWizardDialogConst.CHKUSESUBJECT_ITEM_CHANGED,
@@ -628,7 +628,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, HelpIds.getHelpIdString(HID + 25),
                 self.resources.reschkUseSubject_value,
-                "chkUseSubject", 97, 98, 0, 3, 25, 212), self)
+                "chkUseSubject", 97, 78, 0, 3, 25, 212), self)
         self.chkUseSalutation = self.insertCheckBox(
             "chkUseSalutation",
             LetterWizardDialogConst.CHKUSESALUTATION_ITEM_CHANGED,
@@ -644,7 +644,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, HelpIds.getHelpIdString(HID + 26),
                 self.resources.reschkUseSalutation_value,
-                "chkUseSalutation", 97, 113, 0, 3, 26, 66), self)
+                "chkUseSalutation", 97, 93, 0, 3, 26, 66), self)
         self.lstSalutation = self.insertComboBox(
             "lstSalutation",
             LetterWizardDialogConst.LSTSALUTATION_ACTION_PERFORMED,
@@ -660,7 +660,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, HelpIds.getHelpIdString(HID + 27),
-                "lstSalutation", 210, 110, 3, 27, 74), self)
+                "lstSalutation", 210, 90, 3, 27, 74), self)
         self.chkUseBendMarks = self.insertCheckBox(
             "chkUseBendMarks",
             LetterWizardDialogConst.CHKUSEBENDMARKS_ITEM_CHANGED,
@@ -676,7 +676,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, HelpIds.getHelpIdString(HID + 28),
                 self.resources.reschkUseBendMarks_value,
-                "chkUseBendMarks", 97, 127, 0, 3, 28, 212), self)
+                "chkUseBendMarks", 97, 107, 0, 3, 28, 212), self)
         self.chkUseGreeting = self.insertCheckBox(
             "chkUseGreeting",
             LetterWizardDialogConst.CHKUSEGREETING_ITEM_CHANGED,
@@ -692,7 +692,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, HelpIds.getHelpIdString(HID + 29),
                 self.resources.reschkUseGreeting_value,
-                "chkUseGreeting", 97, 142, 0, 3, 29, 66), self)
+                "chkUseGreeting", 97, 122, 0, 3, 29, 66), self)
         self.lstGreeting = self.insertComboBox(
             "lstGreeting",
             LetterWizardDialogConst.LSTGREETING_ACTION_PERFORMED,
@@ -708,7 +708,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, HelpIds.getHelpIdString(HID + 30),
-                "lstGreeting", 210, 141, 3, 30, 74), self)
+                "lstGreeting", 210, 121, 3, 30, 74), self)
         self.chkUseFooter = self.insertCheckBox(
             "chkUseFooter",
             LetterWizardDialogConst.CHKUSEFOOTER_ITEM_CHANGED,
@@ -724,19 +724,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, HelpIds.getHelpIdString(HID + 31),
                 self.resources.reschkUseFooter_value,
-                "chkUseFooter", 97, 158, 0, 3, 31, 212), self)
-        self.insertLabel("lblLetterNorm",
-            (PropertyNames.PROPERTY_HEIGHT,
-                PropertyNames.PROPERTY_LABEL,
-                PropertyNames.PROPERTY_MULTILINE,
-                PropertyNames.PROPERTY_NAME,
-                PropertyNames.PROPERTY_POSITION_X,
-                PropertyNames.PROPERTY_POSITION_Y,
-                PropertyNames.PROPERTY_STEP,
-                PropertyNames.PROPERTY_TABINDEX,
-                PropertyNames.PROPERTY_WIDTH),
-            (16, self.resources.reslblLetterNorm_value, True,
-                "lblLetterNorm", 97, 28, 3, 50, 109))
+                "chkUseFooter", 97, 138, 0, 3, 31, 212), self)
         self.insertLabel("lblTitle3",
             (
             "FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
