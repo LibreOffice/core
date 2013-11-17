@@ -27,6 +27,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -74,13 +75,14 @@ const sal_uInt16 PT_14  = 14 * 20;      // 14 pt
 const sal_uInt16 PT_16  = 16 * 20;      // 16 pt
 const sal_uInt16 PT_18  = 18 * 20;      // 18 pt
 const sal_uInt16 PT_24  = 24 * 20;      // 24 pt
+const sal_uInt16 PT_28  = 28 * 20;      // 28 pt
 
 #define HTML_PARSPACE   GetMetricVal( CM_05 )
 
 static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
     // we do everything procentual now:
-    130, 115, 100, 100, 85,
-    85,   75,  75, 75, 75,  // normal
+    130, 115, 100, 95, 85,
+    85,   80,  80, 75, 75,  // normal
     PT_24, PT_18, PT_14, PT_12, PT_10,
     PT_7, PT_7, PT_7, PT_7, PT_7            // HTML mode
 };
@@ -380,9 +382,13 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
         case RES_POOLCOLL_TEXT:                 // Text body
             {
-                SvxULSpaceItem aUL( 0, PT_6, RES_UL_SPACE );
+                SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT,
+                                        RES_PARATR_LINESPACING );
+                SvxULSpaceItem aUL( 0, PT_7, RES_UL_SPACE );
+                aLSpc.SetPropLineSpace( (const sal_uInt8) 120 );
                 if( get(IDocumentSettingAccess::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
                 aSet.Put( aUL );
+                aSet.Put( aLSpc );
             }
             break;
         case RES_POOLCOLL_TEXT_IDENT:           // Text body indentation
@@ -484,42 +490,78 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             break;
 
         case RES_POOLCOLL_HEADLINE1:        // Headinline 1
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, false );
+            {
+                SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
+                aSet.Put( aUL );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, false );
+            }
             break;
         case RES_POOLCOLL_HEADLINE2:        // Headinline 2
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, false );
+            {
+                SvxULSpaceItem aUL( PT_10, PT_6, RES_UL_SPACE );
+                aSet.Put( aUL );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, false );
+            }
             break;
         case RES_POOLCOLL_HEADLINE3:        // Headinline 3
             {
+                SvxULSpaceItem aUL( PT_7, PT_6, RES_UL_SPACE );
                 Color aCol( COL_GRAY );
+                aSet.Put( aUL );
                 aSet.Put( SvxColorItem ( aCol, RES_CHRATR_COLOR ) );
                 lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, false );
             }
             break;
         case RES_POOLCOLL_HEADLINE4:        // Headinline 4
             {
+                SvxULSpaceItem aUL( PT_6, PT_6, RES_UL_SPACE );
                 Color aCol( COL_GRAY );
+                aSet.Put( aUL );
                 aSet.Put( SvxColorItem ( aCol, RES_CHRATR_COLOR ) );
                 lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, true );
             }
             break;
         case RES_POOLCOLL_HEADLINE5:        // Headinline 5
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, false );
+            {
+                SvxULSpaceItem aUL( PT_6, PT_3, RES_UL_SPACE );
+                aSet.Put( aUL );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, false );
+            }
             break;
         case RES_POOLCOLL_HEADLINE6:        // Headinline 6
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, true );
+            {
+                SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
+                aSet.Put( aUL );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, true );
+            }
             break;
         case RES_POOLCOLL_HEADLINE7:        // Headinline 7
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, false );
+            {
+                SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
+                aSet.Put( aUL );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, false );
+            }
             break;
         case RES_POOLCOLL_HEADLINE8:        // Headinline 8
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, true );
+            {
+                SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
+                aSet.Put( aUL );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, true );
+            }
             break;
         case RES_POOLCOLL_HEADLINE9:        // Headinline 9
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, false );
+            {
+                SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
+                aSet.Put( aUL );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, false );
+            }
             break;
         case RES_POOLCOLL_HEADLINE10:       // Headinline 10
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, false );
+            {
+                SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
+                aSet.Put( aUL );
+                lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, false );
+            }
             break;
 
         // Special sections:
@@ -919,7 +961,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_DOC_TITEL:            // Document Title
             {
                 SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
-                SetAllScriptItem( aSet, SvxFontHeightItem( PT_18, 100, RES_CHRATR_FONTSIZE ) );
+                SetAllScriptItem( aSet, SvxFontHeightItem( PT_28, 100, RES_CHRATR_FONTSIZE ) );
 
                 aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
 
@@ -929,8 +971,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
         case RES_POOLCOLL_DOC_SUBTITEL:         // Document subtitle
             {
-                SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ));
-                SetAllScriptItem( aSet, SvxFontHeightItem( PT_14, 100, RES_CHRATR_FONTSIZE ));
+                SvxULSpaceItem aUL( PT_3, PT_6, RES_UL_SPACE );
+                aSet.Put( aUL );
+                SetAllScriptItem( aSet, SvxFontHeightItem( PT_18, 100, RES_CHRATR_FONTSIZE ));
 
                 aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ));
 
