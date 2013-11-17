@@ -141,7 +141,7 @@ namespace {
     {
         bool bRet( false );
 
-        if ( rTxtNode.AreListLevelIndentsApplicable() )
+        if ( rTxtNode.GetNumRule() && rTxtNode.AreListLevelIndentsApplicable() )
         {
             int nListLevel = rTxtNode.GetActualListLevel();
 
