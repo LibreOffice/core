@@ -139,7 +139,7 @@ namespace {
     {
         bool bRet( false );
 
-        if ( rTxtNode.AreListLevelIndentsApplicable() )
+        if ( rTxtNode.GetNumRule() && rTxtNode.AreListLevelIndentsApplicable() )
         {
             const SwNumFmt& rNumFmt =
                     rTxtNode.GetNumRule()->Get( static_cast<sal_uInt16>(rTxtNode.GetActualListLevel()) );
