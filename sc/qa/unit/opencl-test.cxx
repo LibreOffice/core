@@ -240,6 +240,7 @@ public:
     void testStatisticalFormulaStDevP();
     void testStatisticalFormulaCovar();
     void testLogicalFormulaAnd();
+    void testMathFormulaSumProduct();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -411,6 +412,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaStDevP);
     CPPUNIT_TEST(testStatisticalFormulaCovar);
     CPPUNIT_TEST(testLogicalFormulaAnd);
+    CPPUNIT_TEST(testMathFormulaSumProduct);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4711,6 +4713,42 @@ void ScOpenclTest:: testArrayFormulaSumXMY2()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-214]
+void ScOpenclTest::testMathFormulaSumProduct()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/math/sumproduct_mixSliding.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/sumproduct_mixSliding.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
+        if ( i == 1 )
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(82,  fLibre, fabs(0.0001*fExcel));
+        else if ( i == 2 )
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(113, fLibre, fabs(0.0001*fExcel));
+        else if ( i == 4 )
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(175, fLibre, fabs(0.0001*fExcel));
+        else if ( i == 5 )
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(206, fLibre, fabs(0.0001*fExcel));
+        else if ( i == 6 )
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(237, fLibre, fabs(0.0001*fExcel));
+        else if ( i == 7 )
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(268, fLibre, fabs(0.0001*fExcel));
+        else
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
