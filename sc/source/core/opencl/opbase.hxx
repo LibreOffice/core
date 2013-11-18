@@ -68,15 +68,54 @@ private:
     formula::FormulaToken *const mpCurrentFormula;
 };
 
+/// (Partially) abstract base class for an operand
+class DynamicKernelArgument : boost::noncopyable
+{
+public:
+    DynamicKernelArgument(const std::string &s, FormulaTreeNodeRef ft);
+
+    const std::string &GetNameAsString(void) const { return mSymName; }
+    /// Generate declaration
+    virtual void GenDecl(std::stringstream &ss) const = 0;
+
+    /// When declared as input to a sliding window function
+    virtual void GenSlidingWindowDecl(std::stringstream &ss) const = 0;
+
+    /// When referenced in a sliding window function
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const = 0;
+
+    /// Generate use/references to the argument
+    virtual void GenDeclRef(std::stringstream &ss) const;
+
+    /// Create buffer and pass the buffer to a given kernel
+    virtual size_t Marshal(cl_kernel, int, int, cl_program) = 0;
+
+    virtual ~DynamicKernelArgument() {}
+
+    virtual void GenSlidingWindowFunction(std::stringstream &) {}
+    const std::string &GetSymName(void) const { return mSymName; }
+    formula::FormulaToken *GetFormulaToken(void) const;
+    virtual size_t GetWindowSize(void) const = 0;
+    virtual std::string DumpOpName(void) const { return std::string(""); }
+    virtual void DumpInlineFun(std::set<std::string>& ,
+        std::set<std::string>& ) const {}
+    const std::string& GetName(void) const { return mSymName; }
+    virtual bool NeedParallelReduction(void) const { return false; }
+
+protected:
+    const std::string mSymName;
+    FormulaTreeNodeRef mFormulaTree;
+};
+
 /// Holds an input (read-only) argument reference to a SingleVectorRef.
 /// or a DoubleVectorRef for non-sliding-window argument of complex functions
 /// like SumOfProduct
 /// In most of the cases the argument is introduced
 /// by a Push operation in the given RPN.
-class DynamicKernelArgument : boost::noncopyable
+class VectorRef : public DynamicKernelArgument
 {
 public:
-    DynamicKernelArgument(const std::string &s, FormulaTreeNodeRef ft);
+    VectorRef(const std::string &s, FormulaTreeNodeRef ft);
 
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
@@ -88,13 +127,10 @@ public:
     /// When referenced in a sliding window function
     virtual std::string GenSlidingWindowDeclRef(bool=false) const;
 
-    /// Generate use/references to the argument
-    virtual void GenDeclRef(std::stringstream &ss) const;
-
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel, int, int, cl_program);
 
-    virtual ~DynamicKernelArgument();
+    virtual ~VectorRef();
 
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
     const std::string &GetSymName(void) const { return mSymName; }
@@ -104,16 +140,13 @@ public:
     virtual void DumpInlineFun(std::set<std::string>& ,
         std::set<std::string>& ) const {}
     const std::string& GetName(void) const { return mSymName; }
-    cl_mem GetCLBuffer(void) const {return mpClmem; }
+    virtual cl_mem GetCLBuffer(void) const { return mpClmem; }
     virtual bool NeedParallelReduction(void) const { return false; }
 
 protected:
-    const std::string mSymName;
-    FormulaTreeNodeRef mFormulaTree;
     // Used by marshaling
     cl_mem mpClmem;
 };
-
 /// Abstract class for code generation
 
 class OpBase

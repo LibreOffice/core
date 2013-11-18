@@ -17,27 +17,7 @@ namespace sc { namespace opencl {
 
 DynamicKernelArgument::DynamicKernelArgument(const std::string &s,
    FormulaTreeNodeRef ft):
-    mSymName(s), mFormulaTree(ft), mpClmem(NULL) {}
-
-/// Generate declaration
-void DynamicKernelArgument::GenDecl(std::stringstream &ss) const
-{
-    ss << "__global double *"<<mSymName;
-}
-
-/// When declared as input to a sliding window function
-void DynamicKernelArgument::GenSlidingWindowDecl(std::stringstream &ss) const
-{
-    DynamicKernelArgument::GenDecl(ss);
-}
-
-/// When referenced in a sliding window function
-std::string DynamicKernelArgument::GenSlidingWindowDeclRef(bool) const
-{
-    std::stringstream ss;
-    ss << mSymName << "[gid0]";
-    return ss.str();
-}
+    mSymName(s), mFormulaTree(ft) {}
 
 /// Generate use/references to the argument
 void DynamicKernelArgument::GenDeclRef(std::stringstream &ss) const
@@ -45,23 +25,44 @@ void DynamicKernelArgument::GenDeclRef(std::stringstream &ss) const
     ss << mSymName;
 }
 
-DynamicKernelArgument::~DynamicKernelArgument()
+FormulaToken* DynamicKernelArgument::GetFormulaToken(void) const
 {
-    //std::cerr << "~DynamicKernelArgument: " << mSymName <<"\n";
+    return mFormulaTree->GetFormulaToken();
+}
+
+VectorRef::VectorRef(const std::string &s, FormulaTreeNodeRef ft):
+    DynamicKernelArgument(s, ft), mpClmem(NULL) {}
+
+VectorRef::~VectorRef()
+{
     if (mpClmem) {
-        //std::cerr << "\tFreeing cl_mem of " << mSymName <<"\n";
         cl_int ret = clReleaseMemObject(mpClmem);
         if (ret != CL_SUCCESS)
             throw OpenCLError(ret);
     }
 }
 
-FormulaToken* DynamicKernelArgument::GetFormulaToken(void) const
+/// Generate declaration
+void VectorRef::GenDecl(std::stringstream &ss) const
 {
-    return mFormulaTree->GetFormulaToken();
+    ss << "__global double *"<<mSymName;
 }
 
-size_t DynamicKernelArgument::GetWindowSize(void) const
+/// When declared as input to a sliding window function
+void VectorRef::GenSlidingWindowDecl(std::stringstream &ss) const
+{
+    VectorRef::GenDecl(ss);
+}
+
+/// When referenced in a sliding window function
+std::string VectorRef::GenSlidingWindowDeclRef(bool) const
+{
+    std::stringstream ss;
+    ss << mSymName << "[gid0]";
+    return ss.str();
+}
+
+size_t VectorRef::GetWindowSize(void) const
 {
     FormulaToken *pCur = mFormulaTree->GetFormulaToken();
     assert(pCur);

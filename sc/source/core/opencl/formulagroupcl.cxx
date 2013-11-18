@@ -45,7 +45,7 @@ namespace sc { namespace opencl {
 
 
 /// Map the buffer used by an argument and do necessary argument setting
-size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int, cl_program)
+size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
 {
     FormulaToken *ref = mFormulaTree->GetFormulaToken();
     assert(mpClmem == NULL);
@@ -129,7 +129,6 @@ public:
     virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         FormulaToken *ref = mFormulaTree->GetFormulaToken();
-        assert(mpClmem == NULL);
         cl_uint hashCode = 0;
         if (ref->GetType() == formula::svString)
         {
@@ -277,12 +276,13 @@ public:
     }
 };
 
-class DynamicKernelStringArgument: public DynamicKernelArgument
+/// A vector of strings
+class DynamicKernelStringArgument: public VectorRef
 {
 public:
     DynamicKernelStringArgument(const std::string &s,
         FormulaTreeNodeRef ft):
-        DynamicKernelArgument(s, ft) {}
+        VectorRef(s, ft) {}
 
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
     /// Generate declaration
@@ -357,15 +357,15 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
 }
 
 /// A mixed string/numberic vector
-class DynamicKernelMixedArgument: public DynamicKernelArgument
+class DynamicKernelMixedArgument: public VectorRef
 {
 public:
     DynamicKernelMixedArgument(const std::string &s,
         FormulaTreeNodeRef ft):
-        DynamicKernelArgument(s, ft), mStringArgument(s+"s", ft) {}
+        VectorRef(s, ft), mStringArgument(s+"s", ft) {}
     virtual void GenSlidingWindowDecl(std::stringstream& ss) const
     {
-        DynamicKernelArgument::GenSlidingWindowDecl(ss);
+        VectorRef::GenSlidingWindowDecl(ss);
         ss << ", ";
         mStringArgument.GenSlidingWindowDecl(ss);
     }
@@ -373,28 +373,28 @@ public:
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss) const
     {
-        DynamicKernelArgument::GenDecl(ss);
+        VectorRef::GenDecl(ss);
         ss << ", ";
         mStringArgument.GenDecl(ss);
     }
     virtual void GenDeclRef(std::stringstream &ss) const
     {
-        DynamicKernelArgument::GenDeclRef(ss);
+        VectorRef::GenDeclRef(ss);
         ss << ",";
         mStringArgument.GenDeclRef(ss);
     }
     virtual std::string GenSlidingWindowDeclRef(bool) const
     {
         std::stringstream ss;
-        ss << "(!isNan(" << DynamicKernelArgument::GenSlidingWindowDeclRef();
-        ss << ")?" << DynamicKernelArgument::GenSlidingWindowDeclRef();
+        ss << "(!isNan(" << VectorRef::GenSlidingWindowDeclRef();
+        ss << ")?" << VectorRef::GenSlidingWindowDeclRef();
         ss << ":" << mStringArgument.GenSlidingWindowDeclRef();
         ss << ")";
         return ss.str();
     }
     virtual size_t Marshal(cl_kernel k, int argno, int vw, cl_program p)
     {
-        int i = DynamicKernelArgument::Marshal(k, argno, vw, p);
+        int i = VectorRef::Marshal(k, argno, vw, p);
         i += mStringArgument.Marshal(k, argno+i, vw, p);
         return i;
     }
@@ -482,7 +482,8 @@ public:
         return ss.str();
     }
     /// Controls how the elements in the DoubleVectorRef are traversed
-    virtual size_t GenLoop(std::stringstream &ss, bool &needBody)
+    virtual size_t GenReductionLoopHeader(
+        std::stringstream &ss, bool &needBody)
     {
         assert(mpDVR);
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
@@ -662,7 +663,7 @@ protected:
 class Reduction: public SlidingFunctionBase
 {
 public:
-    typedef DynamicKernelSlidingArgument<DynamicKernelArgument> NumericRange;
+    typedef DynamicKernelSlidingArgument<VectorRef> NumericRange;
     typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
 
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -688,13 +689,14 @@ public:
             if (NumericRange *NR = dynamic_cast<NumericRange *> (vSubArguments[i].get()))
             {
                 bool needBody;
-                nItems += NR->GenLoop(ss, needBody);
+                nItems += NR->GenReductionLoopHeader(ss, needBody);
                 if (needBody == false) continue;
             }
             else if (StringRange *SR = dynamic_cast<StringRange *> (vSubArguments[i].get()))
             {
+                //did not handle yet
                 bool needBody;
-                nItems += SR->GenLoop(ss, needBody);   //did not handle yet
+                nItems += SR->GenReductionLoopHeader(ss, needBody);
                 if (needBody == false) continue;
             }
             else
@@ -1068,7 +1070,6 @@ public:
         }
         if (OpSumIfs *OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
         {
-            assert(mpClmem == NULL);
             // Obtain cl context
             KernelEnv kEnv;
             OpenclDevice::setKernelEnv(&kEnv);
@@ -1085,10 +1086,13 @@ public:
                 size_t nCurWindowSize = slidingArgPtr -> GetWindowSize();
                 std::vector<cl_mem> vclmem;
 
-                for (SubArgumentsType::iterator it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
-                ++it)
+                for (SubArgumentsType::iterator it = mvSubArguments.begin(),
+                        e= mvSubArguments.end(); it!=e; ++it)
                 {
-                    vclmem.push_back((*it)->GetCLBuffer());
+                    if (VectorRef *VR = dynamic_cast<VectorRef *>(it->get()))
+                        vclmem.push_back(VR->GetCLBuffer());
+                    else
+                        vclmem.push_back(NULL);
                 }
                 mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
                         sizeof(double)*nVectorWidth, NULL, &err);
@@ -1262,7 +1266,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     if (pDVR->GetArrays()[0].mpNumericArray)
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelSlidingArgument
-                                    <DynamicKernelArgument>(ts, ft->Children[i], mpCodeGen)));
+                                    <VectorRef>(ts, ft->Children[i], mpCodeGen)));
                     else
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelSlidingArgument
@@ -1285,7 +1289,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                             pCodeGen->takeNumeric())
                     {
                         mvSubArguments.push_back(
-                                SubArgument(new DynamicKernelArgument(ts,
+                                SubArgument(new VectorRef(ts,
                                         ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpStringArray &&
