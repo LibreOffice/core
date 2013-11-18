@@ -25,11 +25,15 @@
 
 #include <algorithm>
 #include <cmath>
+
+#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/media/XManager.hpp>
 
 using namespace ::com::sun::star;
 
@@ -148,9 +152,9 @@ void MediaChildWindow::Command( const CommandEvent& rCEvt )
 
 MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bool bInternalMediaControl ) :
     Control( pParent ),
-    MediaWindowBaseImpl( pMediaWindow ),
     DropTargetHelper( this ),
     DragSourceHelper( this ),
+    mpMediaWindow( pMediaWindow ),
     mxEventsIf( static_cast< ::cppu::OWeakObject* >( mpEvents = new MediaEventListenersImpl( maChildWindow ) ) ),
     maChildWindow( this ),
     mpMediaWindowControl( bInternalMediaControl ? new MediaWindowControl( this ) : NULL ),
@@ -198,10 +202,301 @@ void MediaWindowImpl::cleanUp()
         setPlayerWindow( NULL );
     }
 
-    MediaWindowBaseImpl::cleanUp();
+    uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
+    if( xComponent.is() ) // this stops the player
+        xComponent->dispose();
+
+    mxPlayer.clear();
+
+    mpMediaWindow = NULL;
 }
 
-// ---------------------------------------------------------------------
+uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL )
+{
+    uno::Reference< media::XPlayer > xPlayer;
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+
+    static const char * aServiceManagers[] = {
+        AVMEDIA_MANAGER_SERVICE_PREFERRED,
+        AVMEDIA_MANAGER_SERVICE_NAME,
+// a fallback path just for gstreamer which has
+// two significant versions deployed at once ...
+#ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
+        AVMEDIA_MANAGER_SERVICE_NAME_OLD
+#endif
+    };
+
+    for( sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i )
+    {
+        const OUString aServiceName( aServiceManagers[ i ],
+                                          strlen( aServiceManagers[ i ] ),
+                                          RTL_TEXTENCODING_ASCII_US );
+
+        try {
+            uno::Reference< media::XManager > xManager (
+                    xContext->getServiceManager()->createInstanceWithContext(aServiceName, xContext),
+                    uno::UNO_QUERY );
+            if( xManager.is() )
+                xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ),
+                                                            uno::UNO_QUERY );
+            else
+                SAL_WARN( "avmedia",
+                          "failed to create media player service " << aServiceName );
+        } catch ( const uno::Exception &e ) {
+            SAL_WARN( "avmedia",
+                      "couldn't create media player " AVMEDIA_MANAGER_SERVICE_NAME
+                      ", exception '" << e.Message << '\'');
+        }
+    }
+
+    return xPlayer;
+}
+
+void MediaWindowImpl::setURL( const OUString& rURL,
+        OUString const& rTempURL)
+{
+    if( rURL != getURL() )
+    {
+        if( mxPlayer.is() )
+            mxPlayer->stop();
+
+        if( mxPlayerWindow.is() )
+        {
+            mxPlayerWindow->setVisible( false );
+            mxPlayerWindow.clear();
+        }
+
+        mxPlayer.clear();
+        mTempFileURL = OUString();
+
+        if (!rTempURL.isEmpty())
+        {
+            maFileURL = rURL;
+            mTempFileURL = rTempURL;
+        }
+        else
+        {
+            INetURLObject aURL( rURL );
+
+            if (aURL.GetProtocol() != INET_PROT_NOT_VALID)
+                maFileURL = aURL.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+            else
+                maFileURL = rURL;
+        }
+
+        mxPlayer = createPlayer(
+                (!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL );
+        onURLChanged();
+    }
+}
+
+const OUString& MediaWindowImpl::getURL() const
+{
+    return maFileURL;
+}
+
+bool MediaWindowImpl::isValid() const
+{
+    return( getPlayer().is() );
+}
+
+Size MediaWindowImpl::getPreferredSize() const
+{
+    Size aRet;
+
+    if( mxPlayer.is() )
+    {
+        awt::Size aPrefSize( mxPlayer->getPreferredPlayerWindowSize() );
+
+        aRet.Width() = aPrefSize.Width;
+        aRet.Height() = aPrefSize.Height;
+    }
+
+    return aRet;
+}
+
+bool MediaWindowImpl::start()
+{
+    return( mxPlayer.is() ? ( mxPlayer->start(), true ) : false );
+}
+
+void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
+{
+    if( isPlaying() )
+        rItem.setState( ( getRate() > 1.0 ) ? MEDIASTATE_PLAYFFW : MEDIASTATE_PLAY );
+    else
+        rItem.setState( ( 0.0 == getMediaTime() ) ? MEDIASTATE_STOP : MEDIASTATE_PAUSE );
+
+    rItem.setDuration( getDuration() );
+    rItem.setTime( getMediaTime() );
+    rItem.setLoop( isPlaybackLoop() );
+    rItem.setMute( isMute() );
+    rItem.setVolumeDB( getVolumeDB() );
+    rItem.setZoom( getZoom() );
+    rItem.setURL( getURL(), &mTempFileURL );
+}
+
+void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
+{
+    const sal_uInt32 nMaskSet = rItem.getMaskSet();
+
+    // set URL first
+    if( nMaskSet & AVMEDIA_SETMASK_URL )
+        setURL( rItem.getURL(), rItem.getTempURL() );
+
+    // set different states next
+    if( nMaskSet & AVMEDIA_SETMASK_TIME )
+        setMediaTime( ::std::min( rItem.getTime(), getDuration() ) );
+
+    if( nMaskSet & AVMEDIA_SETMASK_LOOP )
+        setPlaybackLoop( rItem.isLoop() );
+
+    if( nMaskSet & AVMEDIA_SETMASK_MUTE )
+        setMute( rItem.isMute() );
+
+    if( nMaskSet & AVMEDIA_SETMASK_VOLUMEDB )
+        setVolumeDB( rItem.getVolumeDB() );
+
+    if( nMaskSet & AVMEDIA_SETMASK_ZOOM )
+        setZoom( rItem.getZoom() );
+
+    // set play state at last
+    if( nMaskSet & AVMEDIA_SETMASK_STATE )
+    {
+        switch( rItem.getState() )
+        {
+            case( MEDIASTATE_PLAY ):
+            case( MEDIASTATE_PLAYFFW ):
+            {
+
+                if( !isPlaying() )
+                    start();
+            }
+            break;
+
+            case( MEDIASTATE_PAUSE ):
+            {
+                if( isPlaying() )
+                    stop();
+            }
+            break;
+
+            case( MEDIASTATE_STOP ):
+            {
+                if( isPlaying() )
+                {
+                    setMediaTime( 0.0 );
+                    stop();
+                    setMediaTime( 0.0 );
+                }
+            }
+            break;
+        }
+    }
+}
+
+bool MediaWindowImpl::setZoom( ::com::sun::star::media::ZoomLevel eLevel )
+{
+    return( mxPlayerWindow.is() ? mxPlayerWindow->setZoomLevel( eLevel ) : false );
+}
+
+::com::sun::star::media::ZoomLevel MediaWindowImpl::getZoom() const
+{
+    return( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : media::ZoomLevel_NOT_AVAILABLE );
+}
+
+void MediaWindowImpl::stop()
+{
+    if( mxPlayer.is() )
+        mxPlayer->stop();
+}
+
+bool MediaWindowImpl::isPlaying() const
+{
+    return( mxPlayer.is() && mxPlayer->isPlaying() );
+}
+
+double MediaWindowImpl::getDuration() const
+{
+    return( mxPlayer.is() ? mxPlayer->getDuration() : 0.0 );
+}
+
+void MediaWindowImpl::setMediaTime( double fTime )
+{
+    if( mxPlayer.is() )
+        mxPlayer->setMediaTime( fTime );
+}
+
+double MediaWindowImpl::getMediaTime() const
+{
+    return( mxPlayer.is() ? mxPlayer->getMediaTime() : 0.0 );
+}
+
+double MediaWindowImpl::getRate() const
+{
+    return( mxPlayer.is() ? mxPlayer->getRate() : 0.0 );
+}
+
+void MediaWindowImpl::setPlaybackLoop( bool bSet )
+{
+    if( mxPlayer.is() )
+        mxPlayer->setPlaybackLoop( bSet );
+}
+
+bool MediaWindowImpl::isPlaybackLoop() const
+{
+    return( mxPlayer.is() ? mxPlayer->isPlaybackLoop() : false );
+}
+
+void MediaWindowImpl::setMute( bool bSet )
+{
+    if( mxPlayer.is() )
+        mxPlayer->setMute( bSet );
+}
+
+bool MediaWindowImpl::isMute() const
+{
+    return( mxPlayer.is() ? mxPlayer->isMute() : false );
+}
+
+void MediaWindowImpl::setVolumeDB( sal_Int16 nVolumeDB )
+{
+    if( mxPlayer.is() )
+        mxPlayer->setVolumeDB( nVolumeDB );
+}
+
+sal_Int16 MediaWindowImpl::getVolumeDB() const
+{
+    return( mxPlayer.is() ? mxPlayer->getVolumeDB() : 0 );
+}
+
+void MediaWindowImpl::stopPlayingInternal( bool bStop )
+{
+    if( isPlaying() )
+    {
+        bStop ? mxPlayer->stop() : mxPlayer->start();
+    }
+}
+
+MediaWindow* MediaWindowImpl::getMediaWindow() const
+{
+    return mpMediaWindow;
+}
+
+uno::Reference< media::XPlayer > MediaWindowImpl::getPlayer() const
+{
+    return mxPlayer;
+}
+
+void MediaWindowImpl::setPlayerWindow( const uno::Reference< media::XPlayerWindow >& rxPlayerWindow )
+{
+    mxPlayerWindow = rxPlayerWindow;
+}
+
+uno::Reference< media::XPlayerWindow > MediaWindowImpl::getPlayerWindow() const
+{
+    return mxPlayerWindow;
+}
 
 void MediaWindowImpl::onURLChanged()
 {

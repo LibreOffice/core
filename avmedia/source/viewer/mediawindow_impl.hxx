@@ -23,13 +23,18 @@
 #include <svtools/transfer.hxx>
 #include <vcl/syschild.hxx>
 
-#include "mediawindowbase_impl.hxx"
 #include "mediacontrol.hxx"
 
+namespace com { namespace sun { namespace star { namespace media {
+    class XPlayer;
+    class XPlayerWindow;
+} } } }
 class BitmapEx;
 
 namespace avmedia
 {
+    class MediaWindow;
+
     namespace priv
     {
         // ----------------------
@@ -77,7 +82,6 @@ namespace avmedia
         class MediaEventListenersImpl;
 
         class MediaWindowImpl : public Control,
-                                public MediaWindowBaseImpl,
                                 public DropTargetHelper,
                                 public DragSourceHelper
 
@@ -87,16 +91,28 @@ namespace avmedia
                             MediaWindowImpl( Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl );
             virtual         ~MediaWindowImpl();
 
-            virtual void    cleanUp();
-            virtual void    onURLChanged();
+            void            cleanUp();
 
-        public:
+            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL );
+
+            void    setURL( const OUString& rURL, OUString const& rTempURL );
+
+            const   OUString&  getURL() const;
+
+            bool    isValid() const;
+
+            Size    getPreferredSize() const;
+
+            bool    start();
+
+            void    updateMediaItem( MediaItem& rItem ) const;
+            void    executeMediaItem( const MediaItem& rItem );
 
             void            setPosSize( const Rectangle& rRect );
 
             void            setPointer( const Pointer& rPointer );
 
-        protected:
+        private:
 
             // Window
             virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -117,7 +133,45 @@ namespace avmedia
             // DragSourceHelper
             virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-        private:
+            bool    setZoom( ::com::sun::star::media::ZoomLevel eLevel );
+            ::com::sun::star::media::ZoomLevel getZoom() const;
+
+            void    stop();
+
+            bool    isPlaying() const;
+
+            double  getDuration() const;
+
+            void    setMediaTime( double fTime );
+            double  getMediaTime() const;
+
+            double  getRate() const;
+
+            void    setPlaybackLoop( bool bSet );
+            bool    isPlaybackLoop() const;
+
+            void    setMute( bool bSet );
+            bool    isMute() const;
+
+            void    setVolumeDB( sal_Int16 nVolumeDB );
+            sal_Int16 getVolumeDB() const;
+
+            void    stopPlayingInternal( bool );
+
+            MediaWindow* getMediaWindow() const;
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > getPlayer() const;
+
+            void setPlayerWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >& rxPlayerWindow );
+            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > getPlayerWindow() const;
+
+            void            onURLChanged();
+
+            OUString                                                                    maFileURL;
+            OUString                                                                    mTempFileURL;
+            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
+            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
+            MediaWindow*                                                                mpMediaWindow;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxEventsIf;
             MediaEventListenersImpl*                                                mpEvents;

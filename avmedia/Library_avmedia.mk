@@ -49,7 +49,6 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/framework/mediatoolbox \
 	avmedia/source/framework/soundhandler \
 	avmedia/source/viewer/mediaevent_impl \
-	avmedia/source/viewer/mediawindowbase_impl \
 	avmedia/source/viewer/mediawindow \
 	avmedia/source/viewer/mediawindow_impl \
 ))
