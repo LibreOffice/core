@@ -765,8 +765,10 @@ void RtfExport::OutputLinkedOLE( const OUString& )
 
 void RtfExport::OutputTextNode( const SwTxtNode& rNode )
 {
+    m_nCurrentNodeIndex = rNode.GetIndex();
     if ( !m_bOutOutlineOnly || rNode.IsOutline( ) )
         MSWordExportBase::OutputTextNode( rNode );
+    m_nCurrentNodeIndex = 0;
 }
 
 void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
@@ -789,7 +791,8 @@ RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurren
               rtl_getTextEncodingFromWindowsCharset(
                   sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING))),
       eCurrentEncoding(eDefaultEncoding),
-      bRTFFlySyntax(false)
+      bRTFFlySyntax(false),
+      m_nCurrentNodeIndex(0)
 {
     mbExportModeRTF = true;
     // the attribute output for the document

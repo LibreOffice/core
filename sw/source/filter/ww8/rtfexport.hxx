@@ -148,6 +148,8 @@ public:
     rtl_TextEncoding eCurrentEncoding;
     /// This is used by OutputFlyFrame_Impl() to control the written syntax
     bool bRTFFlySyntax;
+    /// Index of the current SwTxtNode, if any.
+    sal_uLong m_nCurrentNodeIndex;
 
     SvStream& Strm();
     SvStream& OutULong( sal_uLong nVal );

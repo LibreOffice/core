@@ -341,10 +341,11 @@ DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
 DECLARE_RTFEXPORT_TEST(testFdo55939, "fdo55939.odt")
 {
     // The problem was that the exported RTF was invalid.
+    // Also, the 'Footnote text.' had an additional newline at its end.
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     getRun(xParagraph, 1, "Main text before footnote.");
     // Why the tab has to be removed here?
-    CPPUNIT_ASSERT_EQUAL(OUString("Footnote text.\n"),
+    CPPUNIT_ASSERT_EQUAL(OUString("Footnote text."),
             getProperty< uno::Reference<text::XTextRange> >(getRun(xParagraph, 2), "Footnote")->getText()->getString().replaceAll("\t", ""));
     getRun(xParagraph, 3, " Text after the footnote."); // However, this leading space is intentional and OK.
 }

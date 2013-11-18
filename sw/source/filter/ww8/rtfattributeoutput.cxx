@@ -297,6 +297,12 @@ void RtfAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextN
 void RtfAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
+    bool bLastPara = false;
+    if (m_rExport.nTxtTyp == TXT_FTN || m_rExport.nTxtTyp == TXT_EDN)
+    {
+        // We're ending a paragraph that is the last paragraph of a footnote or endnote.
+        bLastPara = m_rExport.m_nCurrentNodeIndex && m_rExport.m_nCurrentNodeIndex == m_rExport.pCurPam->End()->nNode.GetIndex();
+    }
 
     FinishTableRowCell( pTextNodeInfoInner );
 
@@ -309,8 +315,12 @@ void RtfAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
     else
     {
         aParagraph->append(SAL_NEWLINE_STRING);
-        aParagraph->append(OOO_STRING_SVTOOLS_RTF_PAR);
-        aParagraph->append(' ');
+        // RTF_PAR at the end of the footnote would cause an additional empty paragraph.
+        if (!bLastPara)
+        {
+            aParagraph->append(OOO_STRING_SVTOOLS_RTF_PAR);
+            aParagraph->append(' ');
+        }
     }
     if (m_nColBreakNeeded)
     {
