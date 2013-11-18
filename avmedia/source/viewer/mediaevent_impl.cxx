@@ -25,8 +25,6 @@
 
 using namespace ::com::sun::star;
 
-/* Definition of MediaWindowImpl class */
-
 namespace avmedia { namespace priv {
 // ---------------------------
 // - MediaEventListenersImpl -
