@@ -405,6 +405,7 @@ protected:
 /// Handling a Double Vector that is used as a sliding window input
 /// to either a sliding window average or sum-of-products
 class OpSum; // Forward Declaration
+class OpAverage; // Forward Declaration
 template<class Base>
 class DynamicKernelSlidingArgument: public Base
 {
@@ -423,9 +424,13 @@ public:
     }
     virtual bool NeedParallelReduction(void) const
     {
-        return GetWindowSize()> 100 &&
-            ( (GetStartFixed() && GetEndFixed()) ||
-              (!GetStartFixed() && !GetEndFixed())  ) ;
+        if (dynamic_cast<OpSum*>(mpCodeGen.get())
+            && !dynamic_cast<OpAverage*>(mpCodeGen.get()))
+            return GetWindowSize()> 100 &&
+                ( (GetStartFixed() && GetEndFixed()) ||
+                  (!GetStartFixed() && !GetEndFixed())  ) ;
+        else
+            return false;
     }
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
         if (dynamic_cast<OpSum*>(mpCodeGen.get()) && NeedParallelReduction())
@@ -496,7 +501,7 @@ public:
             {
                 // set 100 as a temporary threshold for invoking reduction
                 // kernel in NeedParalleLReduction function
-                if (/*NeedParallelReduction()*/false)
+                if (NeedParallelReduction())
                 {
                     std::string temp = Base::GetName() + "[gid0]";
                     ss << "tmp = ";
@@ -511,7 +516,7 @@ public:
             {
                 // set 100 as a temporary threshold for invoking reduction
                 // kernel in NeedParalleLReduction function
-                if (NeedParallelReduction()&&false)
+                if (NeedParallelReduction())
                 {
                     std::string temp = Base::GetName() + "[0]";
                     ss << "tmp = ";
@@ -563,7 +568,7 @@ public:
 
     virtual size_t Marshal(cl_kernel k, int argno, int w, cl_program mpProgram)
     {
-        if (!NeedParallelReduction() || true)
+        if (!NeedParallelReduction())
             return Base::Marshal(k, argno, w, mpProgram);
 
         assert(Base::mpClmem == NULL);
