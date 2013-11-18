@@ -115,11 +115,21 @@ void Test::testFormulaCreateStringFromTokens()
         "SUM(sheetx;x;y;z)", // sheet local and global named ranges mixed
         "MAX(Table1)+MIN(Table2)*SUM(Table3)", // database ranges
         "{1;TRUE;3|FALSE;5;\"Text\"|;;}", // inline matrix
+        "SUM('file:///path/to/fake.file'#$Sheet.A1:B10)",
     };
 
     boost::scoped_ptr<ScTokenArray> pArray;
 
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+
+    // Artificially add external refererence data after the context object is
+    // initialized.
+    aCxt.maExternalFileNames.push_back("file:///path/to/fake.file");
+    std::vector<OUString> aExtTabNames;
+    aExtTabNames.push_back("Sheet");
+    aCxt.maExternalCachedTabNames.insert(
+        sc::TokenStringContext::IndexNamesMapType::value_type(0, aExtTabNames));
+
     ScAddress aPos(0,0,0);
 
     for (size_t i = 0, n = SAL_N_ELEMENTS(aTests); i < n; ++i)

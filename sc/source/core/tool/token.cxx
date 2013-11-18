@@ -3221,7 +3221,40 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
 {
     if (rToken.IsExternalRef())
     {
-        // TODO : Implement this.
+        size_t nFileId = rToken.GetIndex();
+        OUString aTabName = rToken.GetString().getString();
+        if (nFileId >= rCxt.maExternalFileNames.size())
+            // out of bound
+            return;
+
+        OUString aFileName = rCxt.maExternalFileNames[nFileId];
+
+        switch (rToken.GetType())
+        {
+            case svExternalName:
+                rBuf.append(rCxt.mpRefConv->makeExternalNameStr(aFileName, aTabName));
+            break;
+            case svExternalSingleRef:
+                rCxt.mpRefConv->makeExternalRefStr(
+                       rBuf, rPos, aFileName, aTabName, static_cast<const ScToken&>(rToken).GetSingleRef());
+            break;
+            case svExternalDoubleRef:
+            {
+                sc::TokenStringContext::IndexNamesMapType::const_iterator it =
+                    rCxt.maExternalCachedTabNames.find(nFileId);
+
+                if (it == rCxt.maExternalCachedTabNames.end())
+                    return;
+
+                rCxt.mpRefConv->makeExternalRefStr(
+                    rBuf, rPos, aFileName, it->second, aTabName, static_cast<const ScToken&>(rToken).GetDoubleRef());
+            }
+            break;
+            default:
+                // warning, not error, otherwise we may end up with a never
+                // ending message box loop if this was the cursor cell to be redrawn.
+                OSL_FAIL("appendTokenByType: unknown type of ocExternalRef");
+        }
         return;
     }
 

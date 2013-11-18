@@ -11,6 +11,7 @@
 #include "compiler.hxx"
 #include "document.hxx"
 #include "dbdata.hxx"
+#include "externalrefmgr.hxx"
 
 using namespace com::sun::star;
 
@@ -84,6 +85,22 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
         {
             const ScDBData& rData = *it;
             maNamedDBs.insert(IndexNameMapType::value_type(rData.GetIndex(), rData.GetName()));
+        }
+    }
+
+    // Fetch all relevant bits for external references.
+    if (pDoc->HasExternalRefManager())
+    {
+        const ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        maExternalFileNames = pRefMgr->getAllCachedExternalFileNames();
+        for (size_t i = 0, n = maExternalFileNames.size(); i < n; ++i)
+        {
+            sal_uInt16 nFileId = static_cast<sal_uInt16>(i);
+            std::vector<OUString> aTabNames;
+            pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
+            if (!aTabNames.empty())
+                maExternalCachedTabNames.insert(
+                    IndexNamesMapType::value_type(nFileId, aTabNames));
         }
     }
 }

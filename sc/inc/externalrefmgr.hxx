@@ -586,6 +586,13 @@ public:
      * @return const OUString* external document URI.
      */
     const OUString* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
+
+    /**
+     * Get all cached external file names as an array. Array indices of the
+     * returned name array correspond with external file ID's.
+     */
+    std::vector<OUString> getAllCachedExternalFileNames() const;
+
     bool hasExternalFile(sal_uInt16 nFileId) const;
     bool hasExternalFile(const OUString& rFile) const;
     const SrcFileData* getExternalFileData(sal_uInt16 nFileId) const;

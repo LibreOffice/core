@@ -2480,6 +2480,20 @@ const OUString* ScExternalRefManager::getExternalFileName(sal_uInt16 nFileId, bo
     return &maSrcFiles[nFileId].maFileName;
 }
 
+std::vector<OUString> ScExternalRefManager::getAllCachedExternalFileNames() const
+{
+    std::vector<OUString> aNames;
+    aNames.reserve(maSrcFiles.size());
+    std::vector<SrcFileData>::const_iterator it = maSrcFiles.begin(), itEnd = maSrcFiles.end();
+    for (; it != itEnd; ++it)
+    {
+        const SrcFileData& rData = *it;
+        aNames.push_back(rData.maFileName);
+    }
+
+    return aNames;
+}
+
 bool ScExternalRefManager::hasExternalFile(sal_uInt16 nFileId) const
 {
     return nFileId < maSrcFiles.size();
