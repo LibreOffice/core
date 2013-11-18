@@ -7,7 +7,7 @@
  *
 -->
 
-<node oor:name="writer_Beagle_Works" oor:op="replace">
+<node oor:name="writer_Mac_Acta" oor:op="replace">
     <prop oor:name="DetectService">
         <value>com.sun.star.comp.Writer.MWAWImportFilter</value>
     </prop>
@@ -21,9 +21,9 @@
         <value>true</value>
     </prop>
     <prop oor:name="PreferredFilter">
-        <value>Beagle_Works</value>
+        <value>Mac_Acta</value>
     </prop>
     <prop oor:name="UIName">
-        <value>BeagleWorks/WordPerfect Works Document</value>
+        <value>Acta Mac v1-2 Document</value>
     </prop>
 </node>

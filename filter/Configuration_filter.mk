@@ -328,8 +328,11 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_eDoc_Document \
 	writer_FullWrite_Professional \
 	writer_Great_Works \
+	writer_HanMac_Word_J \
 	writer_HanMac_Word_K \
 	writer_LightWayText \
+	writer_Mac_Acta \
+	writer_Mac_More \
 	writer_Mac_Word \
 	writer_Mac_Works \
 	writer_MacDoc \
@@ -384,8 +387,11 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	eDoc_Document \
 	FullWrite_Professional \
 	Great_Works \
+	HanMac_Word_J \
 	HanMac_Word_K \
 	LightWayText \
+	Mac_Acta \
+	Mac_More \
 	Mac_Word \
 	Mac_Works \
 	MacDoc \

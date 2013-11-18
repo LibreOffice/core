@@ -152,6 +152,10 @@ throw( com::sun::star::uno::RuntimeException )
             switch (docType)
             {
             case MWAWDocument::MWAW_T_ACTA:
+                sTypeName = "writer_Mac_Acta";
+                break;
+            case MWAWDocument::MWAW_T_BEAGLEWORKS:
+                sTypeName = "writer_Beagle_Works";
                 break;
             case MWAWDocument::MWAW_T_CLARISWORKS:
                 sTypeName = "writer_ClarisWorks";
@@ -162,17 +166,23 @@ throw( com::sun::star::uno::RuntimeException )
             case MWAWDocument::MWAW_T_EDOC:
                 sTypeName = "writer_eDoc_Document";
                 break;
+            case MWAWDocument::MWAW_T_GREATWORKS:
+                sTypeName = "writer_Great_Works";
+                break;
             case MWAWDocument::MWAW_T_FULLWRITE:
                 sTypeName = "writer_FullWrite_Professional";
-                break;
-            case MWAWDocument::MWAW_T_HANMACWORDK:
-                sTypeName = "writer_HanMac_Word_K";
                 break;
             case MWAWDocument::MWAW_T_HANMACWORDJ:
                 sTypeName = "writer_HanMac_Word_J";
                 break;
+            case MWAWDocument::MWAW_T_HANMACWORDK:
+                sTypeName = "writer_HanMac_Word_K";
+                break;
             case MWAWDocument::MWAW_T_LIGHTWAYTEXT:
                 sTypeName = "writer_LightWayText";
+                break;
+            case MWAWDocument::MWAW_T_MACDOC:
+                sTypeName = "writer_MacDoc";
                 break;
             case MWAWDocument::MWAW_T_MARINERWRITE:
                 sTypeName = "writer_Mariner_Write";
@@ -192,6 +202,9 @@ throw( com::sun::star::uno::RuntimeException )
             case MWAWDocument::MWAW_T_MICROSOFTWORKS:
                 sTypeName = "writer_Mac_Works";
                 break;
+            case MWAWDocument::MWAW_T_MORE:
+                sTypeName = "writer_Mac_More";
+                break;
             case MWAWDocument::MWAW_T_NISUSWRITER:
                 sTypeName = "writer_Nisus_Writer";
                 break;
@@ -210,6 +223,24 @@ throw( com::sun::star::uno::RuntimeException )
             case MWAWDocument::MWAW_T_ZWRITE:
                 sTypeName = "writer_ZWrite";
                 break;
+
+            case MWAWDocument::MWAW_T_FRAMEMAKER:
+            case MWAWDocument::MWAW_T_MACDRAW:
+            case MWAWDocument::MWAW_T_MACPAINT:
+            case MWAWDocument::MWAW_T_PAGEMAKER:
+            case MWAWDocument::MWAW_T_READYSETGO:
+            case MWAWDocument::MWAW_T_RAGTIME:
+            case MWAWDocument::MWAW_T_XPRESS:
+            case MWAWDocument::MWAW_T_RESERVED1:
+            case MWAWDocument::MWAW_T_RESERVED2:
+            case MWAWDocument::MWAW_T_RESERVED3:
+            case MWAWDocument::MWAW_T_RESERVED4:
+            case MWAWDocument::MWAW_T_RESERVED5:
+            case MWAWDocument::MWAW_T_RESERVED6:
+            case MWAWDocument::MWAW_T_RESERVED7:
+            case MWAWDocument::MWAW_T_RESERVED8:
+            case MWAWDocument::MWAW_T_RESERVED9:
+            case MWAWDocument::MWAW_T_UNKNOWN:
             default:
                 break;
             }

@@ -12,7 +12,7 @@
         <value>com.sun.star.comp.Writer.MWAWImportFilter</value>
     </prop>
     <prop oor:name="Extensions">
-        <value>hqx zip</value>
+        <value>dummy</value>
     </prop>
     <prop oor:name="MediaType">
         <value></value>
@@ -21,9 +21,9 @@
         <value>true</value>
     </prop>
     <prop oor:name="PreferredFilter">
-        <value>Great Works</value>
+        <value>Great_Works</value>
     </prop>
     <prop oor:name="UIName">
-        <value>Great Works</value>
+        <value>GreatWorks Document</value>
     </prop>
 </node>

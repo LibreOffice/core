@@ -7,7 +7,7 @@
  *
 -->
 
-<node oor:name="Great_Works" oor:op="replace">
+<node oor:name="Mac_More" oor:op="replace">
     <prop oor:name="Flags">
         <value>IMPORT ALIEN USESOPTIONS 3RDPARTYFILTER PREFERRED</value>
     </prop>
@@ -15,13 +15,13 @@
         <value>com.sun.star.comp.Writer.MWAWImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="x-default">GreatWorks Document</value>
+        <value xml:lang="x-default">More Mac v2-3 Document</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>
     </prop>
     <prop oor:name="Type">
-        <value>writer_Great_Works</value>
+        <value>writer_Mac_More</value>
     </prop>
     <prop oor:name="DocumentService">
         <value>com.sun.star.text.TextDocument</value>
