@@ -1,0 +1,47 @@
+Windows Accessibility Bridge.
+
+This code provides a bridge between our internal Accessibility
+interfaces (implemented on all visible 'things' in the suite: eg.
+windows, buttons, entry boxes etc.) - and the Windows MSAA /
+IAccessible2 COM interfaces that are familiar to windows users and
+Accessible Technologies (ATs) such as the NVDA screen reader.
+
+The code breaks into three bits:
+
+source/service/
+	+ the UNO service providing the accessibility bridge.
+	  It essentially listens to events from the LibreOffice
+	  core and creates and synchronises COM peers for our
+	  internal accessibilty objects when events arrive.
+
+source/UAccCom/
+	+ implementations of the MSAA / IAccessible2 interfaces
+	  to provide native peers for the accessbility code.
+
+source/UAccCOMIDL/
+	+ COM Interface Definition Language (IDL) for UAccCom.
+
+Here is one way of visualising the code / control flow
+
+VCL <-> UNO toolkit <-> UNO a11y <-> win a11y <-> COM / IAccessible2
+vcl/ <-> toolkit/ <-> accessibility/ <-> winaccessibility/ <-> UAccCom/
+
+
+Debugging / playing with winaccessibility
+
+First you need to ensure that UAccCOM.dll is registered, if this did
+not happen at install time use:
+
+regsvr32 /absolute/path/to/program/UAccCOM.dll
+
+Next you need to enable 'experiemental mode' in Tools->Options. After
+that NVDA should work as expected. In order to use 'accprobe' to debug
+it is necessary to override the check for whether an AT (like NVDA) is
+running; to do that use:
+
+SAL_FORCE_IACCESSIBLE2=1 soffice.exe -writer
+
+Then you can use accprobe to introspect the accessibility hierarchy
+remotely, checkout:
+
+http://accessibility.linuxfoundation.org/a11yweb/util/accprobe/
