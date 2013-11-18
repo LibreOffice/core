@@ -71,6 +71,11 @@ If dictionary exists:
 * dictionaries/*/dictionaries.xcu       for example dictionaries/sr/dictionaries.xcu
 ** change the affected <node oor:name="..."> elements to something corresponding, for example <node oor:name="HunSpellDic_sh" ...> to <node oor:name="HunSpellDic_sr_Latn" ...>
 ** in the "Locales" properties change the <value> element, for example <value>sh-RS</value> to <value>sr-Latn-RS</value>
+* dictionaries/*/*                      for example dictionaries/ku_TR/*
+** if appropriate rename *.dic and *.aff files, for example ku_TR.dic to kmr_Latn.dic and ku_TR.aff to kmr_Latn.aff
+* dictionaries/Dictionary_*.mk          for example dictionaries/Dictionary_ku_TR.mk
+** rename file, for example to Dictionary_kmr_Latn.mk
+** change all locale dependent file names and target, for example *ku_TR* to *kmr_Latn*
 
 If extras exist, for example extras/source/autotext/*:
 
