@@ -81,6 +81,7 @@ public:
     void testFinacialRateFormula();
     void testFinancialAccrintmFormula();
     void testFinancialAccrintFormula();
+    void testCompilerHorizontal();
     void testCompilerNested();
     void testFinacialSLNFormula();
     void testStatisticalFormulaGammaLn();
@@ -251,6 +252,7 @@ public:
     CPPUNIT_TEST(testFinacialIRRFormula);
     CPPUNIT_TEST(testFinacialMIRRFormula);
     CPPUNIT_TEST(testFinacialRateFormula);
+    CPPUNIT_TEST(testCompilerHorizontal);
     CPPUNIT_TEST(testCompilerNested);
     CPPUNIT_TEST(testFinacialSLNFormula);
     CPPUNIT_TEST(testFinancialAccrintmFormula);
@@ -443,6 +445,36 @@ void ScOpenclTest::enableOpenCL()
     sc::FormulaGroupInterpreter::enableOpenCL(true);
 }
 
+void ScOpenclTest::testCompilerHorizontal()
+{
+    if (!detectOpenCLDevice())
+        return;
+
+    ScDocShellRef xDocSh = loadDoc("opencl/compiler/horizontal.", ODS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+
+    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/horizontal.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i < 5; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(12, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(12, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+        fLibre = pDoc->GetValue(ScAddress(13, i, 0));
+        fExcel = pDocRes->GetValue(ScAddress(13, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+        fLibre = pDoc->GetValue(ScAddress(14, i, 0));
+        fExcel = pDocRes->GetValue(ScAddress(14, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 void ScOpenclTest::testCompilerNested()
 {
     if (!detectOpenCLDevice())
