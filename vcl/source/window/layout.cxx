@@ -2021,6 +2021,7 @@ short MessageDialog::Execute()
         m_pGrid = new VclGrid(pContainer);
         m_pGrid->reorderWithinParent(0);
         m_pGrid->set_column_spacing(12);
+        m_pGrid->set_row_spacing(GetTextHeight());
 
         m_pImage = new FixedImage(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
         switch (m_eMessageType)
