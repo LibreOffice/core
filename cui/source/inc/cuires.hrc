@@ -86,7 +86,6 @@
 
 #define RID_SVXSTR_ASK_CHANGE_LINESTYLE     (RID_SVX_START + 177)
 #define RID_SVXSTR_DESC_HATCH               (RID_SVX_START + 232)
-#define RID_SVXSTR_ASK_DEL_HATCH            (RID_SVX_START + 234)
 #define RID_SVXSTR_ASK_CHANGE_HATCH         (RID_SVX_START + 235)
 #define RID_SVXSTR_CHANGE                   (RID_SVX_START + 181)
 #define RID_SVXSTR_ADD                      (RID_SVX_START + 182)

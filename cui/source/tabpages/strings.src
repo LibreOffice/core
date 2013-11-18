@@ -59,10 +59,6 @@ String RID_SVXSTR_DESC_HATCH
 {
     Text [ en-US ] = "Please enter a name for the hatching:" ;
 };
-String RID_SVXSTR_ASK_DEL_HATCH
-{
-    Text [ en-US ] = "Do you want to delete the hatching?" ;
-};
 String RID_SVXSTR_ASK_CHANGE_HATCH
 {
     Text [ en-US ] = "The hatching type was modified but not saved. \nModify the selected hatching type or add a new hatching type." ;
