@@ -1,0 +1,12 @@
+--- misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/language/Esperanto.java.orig	2013-11-18 10:18:49.111712785 +0000
++++ misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/language/Esperanto.java	2013-11-18 10:18:59.254813036 +0000
+@@ -71,8 +71,7 @@
+ 
+   @Override
+   public String[] getCountryVariants() {
+-    /* return "ANY" country code as a "country-less" placeholder for OOo: */
+-    return new String[] {"ANY"};
++    return new String[] {""};
+   }
+   
+   @Override

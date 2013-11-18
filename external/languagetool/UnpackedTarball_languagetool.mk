@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,languagetool,\
     external/languagetool/JLanguageTool-1.4.0-no-hc.patch \
     external/languagetool/MessageBox-apichange.patch \
     external/languagetool/english.ireland.patch \
+    external/languagetool/esperanto.territory.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
