@@ -1,5 +1,5 @@
---- curl-7.26.0/lib/Makefile.vc9
-+++ misc/build/curl-7.26.0/lib/Makefile.vc9
+--- curl-7.26.0/lib/Makefile.vc10
++++ misc/build/curl-7.26.0/lib/Makefile.vc10
 @@ -116,7 +116,7 @@ LFLAGS     = /nologo /machine:$(MACHINE)
  SSLLIBS      = libeay32.lib ssleay32.lib
  ZLIBLIBSDLL  = zdll.lib
