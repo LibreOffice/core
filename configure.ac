@@ -5665,6 +5665,10 @@ using namespace std;
     AC_SUBST(MINGW_GXXDLL)
 fi
 
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+    AC_DEFINE(HAVE_FMERGENEUTRALITEMS)
+fi
+
 if test "$WITH_MINGW" = "yes"; then
     AC_MSG_CHECKING([for fMergeNeutralItems in SCRIPT_CONTROL])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
