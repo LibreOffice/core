@@ -236,8 +236,8 @@ public:
                      const bool bMergeIndentValuesOfNumRule = false ) const;
     sal_Bool GetCurAttr( SfxItemSet& ,
                      const bool bMergeIndentValuesOfNumRule = false ) const;
-    void SetAttr( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
-    void SetAttr( const SfxItemSet&, sal_uInt16 nFlags = 0, SwPaM* pCrsr = NULL );
+    void SetAttrItem( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
+    void SetAttrSet( const SfxItemSet&, sal_uInt16 nFlags = 0, SwPaM* pCrsr = NULL );
 
     /**
      * Get the paragraph format attribute(s) of the current selection.
@@ -358,7 +358,6 @@ public:
         { return (SwCharFmt*)SwEditShell::GetFmtFromPool( nId ); }
 
     void Insert2(SwField&, const bool bForceExpandHints = false);
-    SwField* GetCurFld() const;
 
     void UpdateFlds( SwField & );   ///< One single field.
 

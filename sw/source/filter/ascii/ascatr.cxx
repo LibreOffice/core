@@ -51,16 +51,27 @@ class SwASC_AttrIter
 public:
     SwASC_AttrIter( SwASCWriter& rWrt, const SwTxtNode& rNd, xub_StrLen nStt );
 
-    void NextPos()      { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos()
+    {
+        nAktSwPos = SearchNext( nAktSwPos + 1 );
+    }
 
-    xub_StrLen WhereNext() const        { return nAktSwPos; }
+    xub_StrLen WhereNext() const
+    {
+        return nAktSwPos;
+    }
+
     bool OutAttr( xub_StrLen nSwPos );
 };
 
 
-SwASC_AttrIter::SwASC_AttrIter( SwASCWriter& rWr, const SwTxtNode& rTxtNd,
-                                xub_StrLen nStt )
-    : rWrt( rWr ), rNd( rTxtNd ), nAktSwPos( 0 )
+SwASC_AttrIter::SwASC_AttrIter(
+    SwASCWriter& rWr,
+    const SwTxtNode& rTxtNd,
+    xub_StrLen nStt )
+    : rWrt( rWr )
+    , rNd( rTxtNd )
+    , nAktSwPos( 0 )
 {
     nAktSwPos = SearchNext( nStt + 1 );
 }
@@ -72,12 +83,12 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-// TODO: This can be optimized, if we make use of the fact that the TxtAttrs
-// are sorted by starting position. We would need to remember two indices, however.
+        // TODO: This can be optimized, if we make use of the fact that the TxtAttrs
+        // are sorted by starting position. We would need to remember two indices, however.
         for ( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            if (pHt->HasDummyChar())
+            if ( pHt->HasDummyChar() )
             {
                 xub_StrLen nPos = *pHt->GetStart();
 
@@ -86,6 +97,20 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 
                 if( ( ++nPos ) >= nStartPos && nPos < nMinPos )
                     nMinPos = nPos;
+            }
+            else if ( pHt->HasContent() )
+            {
+                const xub_StrLen nHintStart = *pHt->GetStart();
+                if ( nHintStart >= nStartPos && nHintStart <= nMinPos )
+                {
+                    nMinPos = nHintStart;
+                }
+
+                const xub_StrLen nHintEnd = pHt->End() ? *pHt->End() : STRING_MAXLEN;
+                if ( nHintEnd >= nStartPos && nHintEnd < nMinPos )
+                {
+                    nMinPos = nHintEnd;
+                }
             }
         }
     }
@@ -103,15 +128,17 @@ bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
         for( i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            if ( pHt->HasDummyChar() && nSwPos == *pHt->GetStart() )
+            if ( ( pHt->HasDummyChar()
+                   || pHt->HasContent() )
+                 && nSwPos == *pHt->GetStart() )
             {
                 bRet = true;
                 OUString sOut;
                 switch( pHt->Which() )
                 {
                 case RES_TXTATR_FIELD:
-                    sOut =
-                        static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true);
+                case RES_TXTATR_INPUTFIELD:
+                    sOut = static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true);
                     break;
 
                 case RES_TXTATR_FTN:
@@ -121,10 +148,10 @@ bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                             sOut = rFtn.GetNumStr();
                         else if( rFtn.IsEndNote() )
                             sOut = rWrt.pDoc->GetEndNoteInfo().aFmt.
-                                            GetNumStr( rFtn.GetNumber() );
+                            GetNumStr( rFtn.GetNumber() );
                         else
                             sOut = rWrt.pDoc->GetFtnInfo().aFmt.
-                                            GetNumStr( rFtn.GetNumber() );
+                            GetNumStr( rFtn.GetNumber() );
                     }
                     break;
                 }

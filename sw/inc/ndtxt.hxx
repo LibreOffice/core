@@ -46,6 +46,8 @@ namespace utl {
 
 class SwTxtFmtColl;
 class SwCntntFrm;
+class SwTxtFld;
+class SwTxtInputFld;
 class SfxItemSet;
 class SwUndoTransliterate;
 struct SwSpellArgs;
@@ -179,6 +181,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 
     SW_DLLPRIVATE void impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet);
 
+    const SwTxtInputFld* GetOverlappingInputFld( const SwTxtAttr& rTxtAttr ) const;
+
 public:
     bool IsWordCountDirty() const;
     bool IsWrongDirty() const;
@@ -262,7 +266,7 @@ public:
             refmarks, toxmarks, and metas will be ignored unless this is true
         ATTENTION: setting bInclRefToxMark is only allowed from UNDO!
      */
-    void RstAttr(
+    void RstTxtAttr(
         const SwIndex &rIdx,
         const xub_StrLen nLen,
         const sal_uInt16 nWhich = 0,
@@ -350,8 +354,8 @@ public:
                         bool bFmtToTxtAttributes = true );
 
     enum GetTxtAttrMode {
-        DEFAULT,    /// DEFAULT: (Start <  nIndex <= End)
-        EXPAND,     /// EXPAND : (Start <= nIndex <  End)
+        DEFAULT,    /// DEFAULT: (Start <= nIndex <  End)
+        EXPAND,     /// EXPAND : (Start <  nIndex <= End)
         PARENT,     /// PARENT : (Start <  nIndex <  End)
     };
 
@@ -363,16 +367,19 @@ public:
         hints of which several may cover a single position, like
         RES_TXTATR_CHARFMT, RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK
      */
-    SwTxtAttr *GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
-                            enum GetTxtAttrMode const eMode = DEFAULT) const;
+    SwTxtAttr *GetTxtAttrAt(
+        xub_StrLen const nIndex,
+        RES_TXTATR const nWhich,
+        enum GetTxtAttrMode const eMode = DEFAULT ) const;
 
     /** get the innermost text attributes covering position nIndex.
         @param nWhich   only attributes with this id are returned.
         @param eMode    the predicate for matching (@see GetTxtAttrMode).
      */
-    ::std::vector<SwTxtAttr *> GetTxtAttrsAt(xub_StrLen const nIndex,
-                            RES_TXTATR const nWhich,
-                            enum GetTxtAttrMode const eMode = DEFAULT) const;
+    ::std::vector<SwTxtAttr *> GetTxtAttrsAt(
+        xub_StrLen const nIndex,
+        RES_TXTATR const nWhich,
+        enum GetTxtAttrMode const eMode = DEFAULT ) const;
 
     /** get the text attribute at position nIndex which owns
         the dummy character CH_TXTATR_* at that position, if one exists.
@@ -381,8 +388,13 @@ public:
                         attribute with given which id
         @return the text attribute at nIndex of type nWhich, if it exists
     */
-    SwTxtAttr *GetTxtAttrForCharAt( const xub_StrLen nIndex,
-                       const RES_TXTATR nWhich = RES_TXTATR_END ) const;
+    SwTxtAttr *GetTxtAttrForCharAt(
+        const xub_StrLen nIndex,
+        const RES_TXTATR nWhich = RES_TXTATR_END ) const;
+
+    SwTxtFld* GetFldTxtAttrAt(
+        const xub_StrLen nIndex,
+        const bool bIncludeInputFldAtStart = false ) const;
 
     OUString GetCurWord(xub_StrLen) const;
     sal_uInt16 Spell(SwSpellArgs*);
@@ -397,8 +409,6 @@ public:
         The latter might be in an other document!
        (Method in ndcopy.cxx!!). */
     void CopyCollFmt( SwTxtNode& rDestNd );
-
-    //const SwNodeNum* _GetNodeNum() const { return pNdNum; }
 
     //
     // BEGIN OF BULLET/NUMBERING/OUTLINE STUFF:
@@ -431,18 +441,6 @@ public:
     bool IsOutlineStateChanged() const;
 
     void UpdateOutlineState();
-
-    /** Returns if this text node may be numbered.
-
-        A text node may be numbered if
-          - it has no SwNodeNum
-          - it has a SwNodeNum and it has a numbering rule and the according
-            SwNumFmt defines a numbering type that is an enumeration.
-
-       @retval sal_True      this text node may be numbered
-       @retval sal_False     else
-     */
-    //sal_Bool MayBeNumbered() const;
 
     /**
        Notify this textnode that its numbering rule has changed.
@@ -735,8 +733,11 @@ public:
     TYPEINFO(); // fuer rtti
 
     /// override SwIndexReg
-    virtual void Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
-                 const bool bNegative = false, const bool bDelete = false );
+    virtual void Update(
+        SwIndex const & rPos,
+        const sal_Int32 nChangeLen,
+        const bool bNegative = false,
+        const bool bDelete = false );
 
     /// change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,

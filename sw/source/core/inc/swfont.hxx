@@ -123,9 +123,11 @@ public:
 #define SW_SCRIPTS 3
 
 class SwFont
-{                               // CJK == Chinese, Japanese, Korean
-                                // CTL == Complex text layout ( Hebrew, Arabic )
+{
+    // CJK == Chinese, Japanese, Korean
+    // CTL == Complex text layout ( Hebrew, Arabic )
     SwSubFont   aSub[SW_SCRIPTS]; // Latin-, CJK- and CTL-font
+
     Color*      pBackColor;     // background color (i.e. at character styles)
     Color       m_aHighlightColor;   // highlight color
     Color       aUnderColor;    // color of the underlining
@@ -147,10 +149,12 @@ class SwFont
     sal_uInt16          m_nShadowWidth;
     SvxShadowLocation   m_aShadowLocation;
 
-    sal_uInt8       nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
-    sal_uInt8       nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
-    sal_uInt8        m_nMetaCount;   // count META/METAFIELD
-    sal_uInt8       nActual;        // actual font (Latin, CJK or CTL)
+    sal_uInt8   nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
+    sal_uInt8   nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
+    sal_uInt8   m_nMetaCount;   // count META/METAFIELD
+    sal_uInt8   m_nInputFieldCount; // count INPUTFIELD
+
+    sal_uInt8   nActual;        // actual font (Latin, CJK or CTL)
 
     // Schalter fuer die Font-Extensions
     sal_Bool bNoHyph        :1;  // SwTxtNoHyphenHere:    keine Trennstelle
@@ -254,6 +258,9 @@ public:
     inline sal_uInt8 &GetMeta() { return m_nMetaCount; }
     inline sal_uInt8 GetMeta() const { return m_nMetaCount; }
     inline bool IsMeta() const { return (0 != m_nMetaCount); }
+    inline sal_uInt8 &GetInputField() { return m_nInputFieldCount; }
+    inline sal_uInt8 GetInputField() const { return m_nInputFieldCount; }
+    inline bool IsInputField() const { return (0 != m_nInputFieldCount); }
     inline void SetURL( const sal_Bool bURL );
     inline sal_Bool IsURL() const { return bURL; }
     inline void SetGreyWave( const sal_Bool bNew );

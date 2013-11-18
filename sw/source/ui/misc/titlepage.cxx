@@ -90,13 +90,13 @@ namespace
         {
             SwFmtPageDesc aPageFmtDesc(pPageFmtDesc ? *pPageFmtDesc : &rCurrentDesc);
             if (nPgNo) aPageFmtDesc.SetNumOffset(nPgNo);
-            pSh->SetAttr(aPageFmtDesc);
+            pSh->SetAttrItem(aPageFmtDesc);
         }
         else
         {
             SwFmtPageDesc aPageFmtDesc(pNewDesc);
             if (nPgNo) aPageFmtDesc.SetNumOffset(nPgNo);
-            pSh->SetAttr(aPageFmtDesc);
+            pSh->SetAttrItem(aPageFmtDesc);
         }
 
         delete pPageFmtDesc;
@@ -311,12 +311,12 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl)
     }
 
     mpSh->GotoPage(GetInsertPosition(), false);
-    mpSh->SetAttr(aTitleDesc);
+    mpSh->SetAttrItem(aTitleDesc);
 
     if (nNoPages > 1 && mpSh->GotoPage(GetInsertPosition() + nNoPages, false))
     {
         SwFmtPageDesc aPageFmtDesc(mpNormalDesc);
-        mpSh->SetAttr(aPageFmtDesc);
+        mpSh->SetAttrItem(aPageFmtDesc);
     }
 
     if (m_pRestartNumberingCB->IsChecked() || nNoPages > 1)

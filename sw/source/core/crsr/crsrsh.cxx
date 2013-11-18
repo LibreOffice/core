@@ -880,8 +880,10 @@ void SwCrsrShell::SwapPam()
     @param bTstOnly Should I only do a test run? If true so do not move cursor.
     @param bTstHit ???
 */
-sal_Bool SwCrsrShell::ChgCurrPam( const Point & rPt,
-                              sal_Bool bTstOnly, sal_Bool bTstHit )
+sal_Bool SwCrsrShell::ChgCurrPam(
+    const Point & rPt,
+    sal_Bool bTstOnly,
+    sal_Bool bTstHit )
 {
     SET_CURR_SHELL( this );
 
@@ -1317,7 +1319,6 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         return; // if not then no update
     }
 
-    // #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
 
     if ( m_bIgnoreReadonly )
@@ -2034,6 +2035,7 @@ void SwCrsrShell::ShowCrsr()
     if( !m_bBasicHideCrsr )
     {
         m_bSVCrsrVis = sal_True;
+        m_pCurCrsr->SetShowTxtInputFldOverlay( true );
 #if defined(ANDROID) || defined(IOS)
         touch_ui_show_keyboard();
 #endif
@@ -2048,6 +2050,7 @@ void SwCrsrShell::HideCrsr()
         m_bSVCrsrVis = sal_False;
         // possibly reverse selected areas!!
         SET_CURR_SHELL( this );
+        m_pCurCrsr->SetShowTxtInputFldOverlay( false );
         m_pVisCrsr->Hide();
 #if defined(ANDROID) || defined(IOS)
         touch_ui_hide_keyboard();
@@ -2852,24 +2855,28 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
 sal_Bool SwCrsrShell::IsCrsrReadonly() const
 {
     if ( GetViewOptions()->IsReadonly() ||
-         GetViewOptions()->IsFormView() /* Formular view */ )
+         GetViewOptions()->IsFormView() /* Formula view */ )
     {
         SwFrm *pFrm = GetCurrFrm( sal_False );
         const SwFlyFrm* pFly;
         const SwSection* pSection;
 
         if( pFrm && pFrm->IsInFly() &&
-             (pFly = pFrm->FindFlyFrm())->GetFmt()->GetEditInReadonly().GetValue() &&
-             pFly->Lower() &&
-             !pFly->Lower()->IsNoTxtFrm() &&
-             !GetDrawView()->GetMarkedObjectList().GetMarkCount() )
+            (pFly = pFrm->FindFlyFrm())->GetFmt()->GetEditInReadonly().GetValue() &&
+            pFly->Lower() &&
+            !pFly->Lower()->IsNoTxtFrm() &&
+            !GetDrawView()->GetMarkedObjectList().GetMarkCount() )
         {
             return sal_False;
         }
         // edit in readonly sections
         else if ( pFrm && pFrm->IsInSct() &&
-                  0 != ( pSection = pFrm->FindSctFrm()->GetSection() ) &&
-                  pSection->IsEditInReadonlyFlag() )
+            0 != ( pSection = pFrm->FindSctFrm()->GetSection() ) &&
+            pSection->IsEditInReadonlyFlag() )
+        {
+            return sal_False;
+        }
+        else if ( !IsMultiSelection() && CrsrInsideInputFld() )
         {
             return sal_False;
         }

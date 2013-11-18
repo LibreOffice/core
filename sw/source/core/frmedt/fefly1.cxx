@@ -105,8 +105,12 @@ static bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
     return bRet;
 }
 
-static sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
-                        SfxItemSet& rSet )
+static sal_Bool lcl_FindAnchorPos(
+    SwEditShell& rEditShell,
+    SwDoc& rDoc,
+    const Point& rPt,
+    const SwFrm& rFrm,
+    SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_True;
     SwFmtAnchor aNewAnch( (SwFmtAnchor&)rSet.Get( RES_ANCHOR ) );
@@ -146,6 +150,13 @@ static sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& r
                         pCNd->MakeStartIndex( &aPos.nContent );
                     else
                         pCNd->MakeEndIndex( &aPos.nContent );
+                }
+                else
+                {
+                    if ( rEditShell.PosInsideInputFld( aPos ) )
+                    {
+                        aPos.nContent = rEditShell.StartOfInputFldAtPos( aPos );
+                    }
                 }
             }
             aNewAnch.SetAnchor( &aPos );
@@ -192,7 +203,10 @@ static sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& r
 //
 //! also used in unoframe.cxx
 //
-sal_Bool sw_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
+sal_Bool sw_ChkAndSetNewAnchor(
+    SwEditShell& rEditShell,
+    const SwFlyFrm& rFly,
+    SfxItemSet& rSet )
 {
     const SwFrmFmt& rFmt = *rFly.GetFmt();
     const SwFmtAnchor &rOldAnch = rFmt.GetAnchor();
@@ -212,7 +226,7 @@ sal_Bool sw_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
             "forbidden anchor change in Head/Foot." );
 #endif
 
-    return ::lcl_FindAnchorPos( *pDoc, rFly.Frm().Pos(), rFly, rSet );
+    return ::lcl_FindAnchorPos( rEditShell, *pDoc, rFly.Frm().Pos(), rFly, rSet );
 }
 
 void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
@@ -401,7 +415,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
     // #i28701#
     SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
     SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
-    RndStdIds nAnchorId = rFmt.GetAnchor().GetAnchorId();
+    const RndStdIds nAnchorId = rFmt.GetAnchor().GetAnchorId();
 
     if ( FLY_AS_CHAR == nAnchorId )
         return aRet;
@@ -442,16 +456,20 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
 
     // Search nearest SwFlyFrm starting from the upper-left corner
     // of the fly
-    SwCntntFrm *pTxtFrm;
+    SwCntntFrm *pTxtFrm = NULL;
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
         GetLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),0,&aPos,sal_False );
+        if ( nAnchorId != FLY_AT_CHAR
+             || !PosInsideInputFld( aPos ) )
+        {
+            pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),0,&aPos,sal_False );
+        }
     }
-    const SwFrm *pNewAnch;
-    if( pTxtFrm )
+    const SwFrm *pNewAnch = NULL;
+    if( pTxtFrm != NULL )
     {
         if ( FLY_AT_PAGE == nAnchorId )
         {
@@ -467,8 +485,6 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             }
         }
     }
-    else
-        pNewAnch = 0;
 
     if( pNewAnch && !pNewAnch->IsProtected() )
     {
@@ -508,6 +524,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                                           GetPhyPageNum() );
                         break;
                     }
+
                     case FLY_AT_FLY:
                     {
                         SwPosition aPos( *((SwFlyFrm*)pNewAnch)->GetFmt()->
@@ -515,26 +532,29 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                         aAnch.SetAnchor( &aPos );
                         break;
                     }
+
                     case FLY_AT_CHAR:
-                    {
-                        SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
-                        Point aTmpPnt( rAbsPos );
-                        if( pTxtFrm->GetCrsrOfst( pPos, aTmpPnt, NULL ) )
                         {
-                            SwRect aTmpRect;
-                            pTxtFrm->GetCharRect( aTmpRect, *pPos );
-                            aRet = aTmpRect.Pos();
+                            SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
+                            Point aTmpPnt( rAbsPos );
+                            if( pTxtFrm->GetCrsrOfst( pPos, aTmpPnt, NULL ) )
+                            {
+                                SwRect aTmpRect;
+                                pTxtFrm->GetCharRect( aTmpRect, *pPos );
+                                aRet = aTmpRect.Pos();
+                            }
+                            else
+                            {
+                                pPos->nNode = *pTxtFrm->GetNode();
+                                pPos->nContent.Assign(0,0);
+                            }
+                            break;
                         }
-                        else
-                        {
-                            pPos->nNode = *pTxtFrm->GetNode();
-                            pPos->nContent.Assign(0,0);
-                        }
-                        break;
-                    }
                     default:
                         break;
+
                 }
+
                 if( bMoveIt )
                 {
                     StartAllAction();
@@ -898,7 +918,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         const Point aRelPos( rInsertPosition.X() - pFrm->Frm().Left(),
                              rInsertPosition.Y() - pFrm->Frm().Top() );
         rDrawObj.SetRelativePos( aRelPos );
-        ::lcl_FindAnchorPos( *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
+        ::lcl_FindAnchorPos( *this, *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
     }
     // insert drawing object into the document creating a new <SwDrawFrmFmt> instance
     SwDrawFrmFmt* pFmt = GetDoc()->Insert( aPam, rDrawObj, &rFlyAttrSet, 0 );
@@ -1083,7 +1103,7 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
             const Point aPt( pFly->Frm().Pos() );
 
             if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
-                sw_ChkAndSetNewAnchor( *pFly, rSet );
+                sw_ChkAndSetNewAnchor( *this, *pFly, rSet );
             SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)pFly->GetFmt();
 
             if( GetDoc()->SetFlyFrmAttr( *pFlyFmt, rSet ))
@@ -1241,7 +1261,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
         {
             pSet = new SfxItemSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
             pSet->Put( *pItem );
-            if( !sw_ChkAndSetNewAnchor( *pFly, *pSet ))
+            if( !sw_ChkAndSetNewAnchor( *this, *pFly, *pSet ))
                 delete pSet, pSet = 0;
         }
 

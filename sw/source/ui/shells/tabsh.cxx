@@ -1205,8 +1205,10 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 break;
 
             case FN_INSERT_TABLE:
-                // Put any value, so that the controller remains enabled.
-                // Instead "Insert:Table" appears "Format:Table".
+                if ( rSh.CrsrInsideInputFld() )
+                {
+                    rSet.DisableItem( nSlot );
+                }
                 break;
 
             case FN_TABLE_OPTIMAL_HEIGHT:

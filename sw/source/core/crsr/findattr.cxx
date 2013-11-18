@@ -165,7 +165,7 @@ static sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
         if( pTxtHt->Which() == rCmpItem.Which() &&
             ( !bValue || CmpAttr( pTxtHt->GetAttr(), rCmpItem )))
         {
-            lcl_SetAttrPam( rPam, *pTxtHt->GetStart(), pTxtHt->GetEnd(), bForward );
+            lcl_SetAttrPam( rPam, *pTxtHt->GetStart(), pTxtHt->End(), bForward );
             return sal_True;
         }
     return sal_False;
@@ -876,7 +876,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly )
 {
     // determine which attribute is searched:
-    sal_uInt16 nWhich = rAttr.Which();
+    const sal_uInt16 nWhich = rAttr.Which();
     int bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );

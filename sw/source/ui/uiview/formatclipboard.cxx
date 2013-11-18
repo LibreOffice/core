@@ -493,7 +493,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                     lcl_AppendSetItems( aItemVector, aFmt.GetCharFmt()->GetAttrSet());
 
                     // apply the named format
-                    rWrtShell.SetAttr( aFmt );
+                    rWrtShell.SetAttrItem( aFmt );
                 }
             }
 
@@ -529,7 +529,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             lcl_RemoveEqualItems( *pTemplateItemSet, aItemVector );
 
             // apply the paragraph automatic attributes to all the nodes in the selection
-            rWrtShell.SetAttr(*pTemplateItemSet);
+            rWrtShell.SetAttrSet(*pTemplateItemSet);
 
             // store the attributes in aItemVector in order not to apply them as
             // text automatic formating attributes later in the code
@@ -569,7 +569,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF) )
                     rWrtShell.SetFlyFrmAttr(*pTemplateItemSet);
                 else if ( !bNoCharacterFormats )
-                    rWrtShell.SetAttr(*pTemplateItemSet);
+                    rWrtShell.SetAttrSet(*pTemplateItemSet);
 
                 delete pTemplateItemSet;
             }

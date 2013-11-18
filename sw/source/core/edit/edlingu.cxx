@@ -1172,13 +1172,13 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                     mpDoc->DeleteAndJoin(*pCrsr);
                     // ... and apply language if necessary
                     if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
-                        SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
+                        SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
                     mpDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
                 }
                 else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                 {
                     // apply language
-                    SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
+                    SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
                 }
                 else if( aCurrentNewPortion->bIgnoreThisError )
                 {
@@ -1219,7 +1219,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 GetCurAttr( aSet );
                 const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
                 if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
-                    SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
+                    SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
                 // insert the new string
                 mpDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
 

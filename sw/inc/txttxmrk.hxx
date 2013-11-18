@@ -38,7 +38,6 @@ public:
     virtual ~SwTxtTOXMark();
 
     virtual sal_Int32 *GetEnd();     // SwTxtAttr
-    inline const sal_Int32* GetEnd() const { return m_pEnd; }
 
     void CopyTOXMark( SwDoc* pDestDoc );
 

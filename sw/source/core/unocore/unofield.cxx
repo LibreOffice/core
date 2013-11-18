@@ -1770,8 +1770,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                     SW_SERVICE_FIELDTYPE_INPUT_USER == m_pImpl->m_nServiceId
                         ? INP_USR : INP_TXT);
             SwInputField * pTxtField =
-                new SwInputField((SwInputFieldType*)pFldType,
-                     m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar2,
+                new SwInputField(static_cast<SwInputFieldType*>(pFldType),
+                                 m_pImpl->m_pProps->sPar1,
+                                 m_pImpl->m_pProps->sPar2,
                                  nInpSubType);
             pTxtField->SetHelp(m_pImpl->m_pProps->sPar3);
             pTxtField->SetToolTip(m_pImpl->m_pProps->sPar4);
@@ -1891,11 +1892,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             pDoc->DeleteAndJoin(aPam);
         }
 
-        SwXTextCursor const*const pTextCursor(
-                dynamic_cast<SwXTextCursor*>(pCursor));
-        const bool bForceExpandHints( (pTextCursor)
-                ? pTextCursor->IsAtEndOfMeta() : false );
-        const SetAttrMode nInsertFlags = (bForceExpandHints)
+        SwXTextCursor const*const pTextCursor(dynamic_cast<SwXTextCursor*>(pCursor));
+        const bool bForceExpandHints(
+            (pTextCursor)
+            ? pTextCursor->IsAtEndOfMeta()
+            : false );
+        const SetAttrMode nInsertFlags =
+            (bForceExpandHints)
             ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
             : nsSetAttrMode::SETATTR_DEFAULT;
 
@@ -1922,8 +1925,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         else
             pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
 
-        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FIELD);
+        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
 
         // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
         if (pTxtAttr)
@@ -2083,7 +2085,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         // fdo#42073 notify SwTxtFld about changes of the expanded string
         if (m_pImpl->m_pFmtFld->GetTxtFld())
         {
-            m_pImpl->m_pFmtFld->GetTxtFld()->Expand();
+            m_pImpl->m_pFmtFld->GetTxtFld()->ExpandTxtFld();
         }
 
         //#i100374# changing a document field should set the modify flag

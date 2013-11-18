@@ -329,8 +329,8 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                const ::std::auto_ptr<SwPaM> pPam( (pTxtMark->GetEnd())
-                    ?   new SwPaM( rTxtNode, *pTxtMark->GetEnd(),
+                const ::std::auto_ptr<SwPaM> pPam( (pTxtMark->End())
+                    ?   new SwPaM( rTxtNode, *pTxtMark->End(),
                                    rTxtNode, *pTxtMark->GetStart())
                     :   new SwPaM( rTxtNode, *pTxtMark->GetStart()) );
                 SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -359,9 +359,10 @@ void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException)
                     &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                xub_StrLen nStt = *pTxtMark->GetStart(),
-                           nEnd = pTxtMark->GetEnd() ? *pTxtMark->GetEnd()
-                                                     : nStt + 1;
+                const xub_StrLen nStt = *pTxtMark->GetStart();
+                const xub_StrLen nEnd = pTxtMark->End()
+                                  ? *pTxtMark->End()
+                                  : nStt + 1;
 
                 SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
                 m_pImpl->m_pDoc->DeleteAndJoin( aPam );
@@ -431,9 +432,10 @@ throw (uno::RuntimeException)
                      &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                xub_StrLen nStt = *pTxtMark->GetStart(),
-                           nEnd = pTxtMark->GetEnd() ? *pTxtMark->GetEnd()
-                                                     : nStt + 1;
+                const xub_StrLen nStt = *pTxtMark->GetStart();
+                const xub_StrLen nEnd = pTxtMark->End()
+                                        ? *pTxtMark->End()
+                                        : nStt + 1;
 
                 SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
                 // deletes the m_pImpl->m_pDoc member in the SwXReferenceMark!
@@ -809,7 +811,7 @@ bool SwXMeta::SetContentRange(
             {
                 // rStart points at the first position _within_ the meta!
                 rStart = *pTxtAttr->GetStart() + 1;
-                rEnd = *pTxtAttr->GetEnd();
+                rEnd = *pTxtAttr->End();
                 return true;
             }
         }

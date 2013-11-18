@@ -568,6 +568,7 @@ sal_Bool SwViewShell::IsAnyFieldInDoc() const
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    {
         if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
@@ -580,6 +581,22 @@ sal_Bool SwViewShell::IsAnyFieldInDoc() const
                 return sal_True;
             }
         }
+    }
+
+    nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    {
+        if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n )))
+        {
+            const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
+            const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+            {
+                return sal_True;
+            }
+        }
+    }
+
     return sal_False;
 }
 

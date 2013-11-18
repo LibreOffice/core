@@ -171,7 +171,7 @@ SwCallLink::~SwCallLink()
                 for( n = 0; n < rHts.Count(); n++ )
                 {
                     const SwTxtAttr* pHt = rHts[ n ];
-                    pEnd = pHt->GetEnd();
+                    pEnd = pHt->End();
                     nStart = *pHt->GetStart();
 
                     // If "only start" or "start and end equal" then call on

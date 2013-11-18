@@ -2221,8 +2221,8 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
                 static_cast<const SvxCharHiddenItem*>( CharFmt::GetItem( *pTxtAttr, RES_CHRATR_HIDDEN ) );
             if( pHiddenItem )
             {
-                xub_StrLen nSt = *pTxtAttr->GetStart();
-                xub_StrLen nEnd = *pTxtAttr->GetEnd();
+                const xub_StrLen nSt = *pTxtAttr->GetStart();
+                const xub_StrLen nEnd = *pTxtAttr->End();
                 if( nEnd > nSt )
                 {
                     Range aTmp( nSt, nEnd - 1 );

@@ -155,14 +155,14 @@ static bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
             // Save all attributes for the Undo.
             SwRegHistory aRHst( *pTxtNode, pPara->pHistory );
             pTxtNode->GetpSwpHints()->Register( &aRHst );
-            pTxtNode->RstAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
-                                pPara->pDelSet, pPara->bInclRefToxMark );
+            pTxtNode->RstTxtAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
+                                  pPara->pDelSet, pPara->bInclRefToxMark );
             if( pTxtNode->GetpSwpHints() )
                 pTxtNode->GetpSwpHints()->DeRegister();
         }
         else
-            pTxtNode->RstAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
-                                pPara->pDelSet, pPara->bInclRefToxMark );
+            pTxtNode->RstTxtAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
+                                  pPara->pDelSet, pPara->bInclRefToxMark );
     }
     return true;
 }
@@ -345,7 +345,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         if (pURLAttr && !pURLAttr->GetINetFmt().GetValue().isEmpty())
         {
             nMkPos = *pURLAttr->GetStart();
-            nPtPos = *pURLAttr->GetEnd();
+            nPtPos = *pURLAttr->End();
         }
         else
         {
@@ -491,9 +491,14 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
 /// Insert Hints according to content types;
 // Is used in SwDoc::Insert(..., SwFmtHint &rHt)
-static bool
-lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
-            const SetAttrMode nFlags, SwUndoAttr *const pUndo,bool bExpandCharToPara=false)
+
+static bool lcl_InsAttr(
+    SwDoc *const pDoc,
+    const SwPaM &rRg,
+    const SfxItemSet& rChgSet,
+    const SetAttrMode nFlags,
+    SwUndoAttr *const pUndo,
+    const bool bExpandCharToPara=false)
 {
     // Divide the Sets (for selections in Nodes)
     const SfxItemSet* pCharSet = 0;
@@ -576,7 +581,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             SwTxtNode * pTxtNd = pNode->GetTxtNode();
             SwNumRule * pNumRule = pTxtNd->GetNumRule();
 
-            // make code robust:
             if ( !pNumRule )
             {
                 OSL_FAIL( "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect, please inform OD." );
@@ -649,6 +653,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                                 RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
                                 RES_TXTATR_META, RES_TXTATR_METAFIELD,
                                 RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+                                RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD,
                                 0 );
 
             aTxtSet.Put( rChgSet );
@@ -796,7 +801,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             if (pURLAttr && !pURLAttr->GetINetFmt().GetValue().isEmpty())
             {
                 nMkPos = *pURLAttr->GetStart();
-                nPtPos = *pURLAttr->GetEnd();
+                nPtPos = *pURLAttr->End();
             }
             else
             {
@@ -830,12 +835,12 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     // Save all attributes for the Undo.
                     SwRegHistory aRHst( *pTxtNd, pHistory );
                     pTxtNd->GetpSwpHints()->Register( &aRHst );
-                    pTxtNd->RstAttr( aSt, nPtPos, 0, pCharSet );
+                    pTxtNd->RstTxtAttr( aSt, nPtPos, 0, pCharSet );
                     if( pTxtNd->GetpSwpHints() )
                         pTxtNd->GetpSwpHints()->DeRegister();
                 }
                 else
-                    pTxtNd->RstAttr( aSt, nPtPos, 0, pCharSet );
+                    pTxtNd->RstTxtAttr( aSt, nPtPos, 0, pCharSet );
             }
 
             // the SwRegHistory inserts the attribute into the TxtNode!
@@ -1053,8 +1058,11 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 }
 
 ///Add a para for the char attribute exp...
-bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
-                            const SetAttrMode nFlags, bool bExpandCharToPara)
+bool SwDoc::InsertPoolItem(
+    const SwPaM &rRg,
+    const SfxPoolItem &rHt,
+    const SetAttrMode nFlags,
+    const bool bExpandCharToPara)
 {
     SwDataChanged aTmp( rRg );
     SwUndoAttr* pUndoAttr = 0;
@@ -1066,7 +1074,7 @@ bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
 
     SfxItemSet aSet( GetAttrPool(), rHt.Which(), rHt.Which() );
     aSet.Put( rHt );
-    bool bRet = lcl_InsAttr( this, rRg, aSet, nFlags, pUndoAttr,bExpandCharToPara );
+    const bool bRet = lcl_InsAttr( this, rRg, aSet, nFlags, pUndoAttr, bExpandCharToPara );
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1074,7 +1082,9 @@ bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
     }
 
     if( bRet )
+    {
         SetModified();
+    }
     return bRet;
 }
 

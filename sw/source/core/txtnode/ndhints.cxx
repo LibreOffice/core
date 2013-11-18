@@ -270,9 +270,9 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                 &&  (RES_TXTATR_AUTOFMT != pHtLast->Which()))
             ||  (   (RES_TXTATR_CHARFMT != pHtThis->Which())
                 &&  (RES_TXTATR_AUTOFMT != pHtThis->Which()))
-            ||  (*pHtThis->GetStart() >= *pHtLast->GetEnd()) // no overlap
+            ||  (*pHtThis->GetStart() >= *pHtLast->End()) // no overlap
             ||  (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
-                    &&  (*pHtThis->GetEnd()   == *pHtLast->GetEnd())
+                    &&  (*pHtThis->End()   == *pHtLast->End())
                     ) // same range
                 &&  (   (pHtThis->Which() != RES_TXTATR_AUTOFMT)
                     ||  (pHtLast->Which() != RES_TXTATR_AUTOFMT)
@@ -285,7 +285,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                                 ->GetSortNumber())
                     ) // multiple CHARFMT on same range need distinct sortnr
                 )
-            ||  (*pHtThis->GetStart() == *pHtThis->GetEnd()), // this empty
+            ||  (*pHtThis->GetStart() == *pHtThis->End()), // this empty
                    "HintsCheck: Portion inconsistency. "
                    "This can be temporarily ok during undo operations" );
 
@@ -298,7 +298,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
             {
                 // mostly ignore the annoying no-length hints
                 // BuildPortions inserts these in the middle of an exsiting one
-                bool const bNoLength(*pHt->GetStart() == *pHt->GetEnd());
+                bool const bNoLength(*pHt->GetStart() == *pHt->End());
                 bool bNeedContinuation(!bNoLength && pHt->IsFormatIgnoreEnd());
                 bool bForbidContinuation(!bNoLength && !bNeedContinuation);
                 if (RES_TXTATR_AUTOFMT == pHt->Which())
@@ -316,7 +316,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                     for (sal_uInt16 j = i + 1; j < Count(); ++j)
                     {
                         SwTxtAttr *const pOther(m_HintStarts[j]);
-                        if (*pOther->GetStart() > *pHt->GetEnd())
+                        if (*pOther->GetStart() > *pHt->End())
                         {
                             break; // done
                         }
@@ -324,7 +324,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                         {
                             continue; // empty hint: ignore
                         }
-                        else if (*pOther->GetStart() == *pHt->GetEnd())
+                        else if (*pOther->GetStart() == *pHt->End())
                         {
                             if (RES_TXTATR_AUTOFMT == pOther->Which() ||
                                 RES_TXTATR_CHARFMT == pOther->Which())
@@ -365,8 +365,8 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                 if ( pOther->IsNesting() &&  (i != j) )
                 {
                     SwComparePosition cmp = ComparePosition(
-                        *pHtThis->GetStart(), *pHtThis->GetEnd(),
-                        *pOther->GetStart(), *pOther->GetEnd());
+                        *pHtThis->GetStart(), *pHtThis->End(),
+                        *pOther->GetStart(), *pOther->End());
                     CHECK_ERR( (POS_OVERLAP_BEFORE != cmp) &&
                                (POS_OVERLAP_BEHIND != cmp),
                         "HintsCheck: overlapping nesting hints!!!" );

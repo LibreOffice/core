@@ -213,8 +213,8 @@ bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
         {
             // Both pointers exist -> compare text
             // else -> compare AlternativeText
-            const sal_Int32 *pEnd  = pTxtMark->GetEnd();
-            const sal_Int32 *pEndCmp = rCmp.pTxtMark->GetEnd();
+            const sal_Int32 *pEnd  = pTxtMark->End();
+            const sal_Int32 *pEndCmp = rCmp.pTxtMark->End();
 
             bRet = ( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) ) &&
                     pTOXIntl->IsEqual( GetTxt(), GetLocale(),
@@ -248,8 +248,8 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
 
                     if( *pTxtMark->GetStart() == *rCmp.pTxtMark->GetStart() )
                     {
-                        const sal_Int32 *pEnd = pTxtMark->GetEnd();
-                        const sal_Int32 *pEndCmp = rCmp.pTxtMark->GetEnd();
+                        const sal_Int32 *pEnd = pTxtMark->End();
+                        const sal_Int32 *pEndCmp = rCmp.pTxtMark->End();
 
                         // Both pointers exist -> compare text
                         // else -> compare AlternativeText
@@ -381,7 +381,7 @@ TextAndReading SwTOXIndex::GetText_Impl() const
 
 void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
 {
-    const sal_Int32* pEnd = pTxtMark->GetEnd();
+    const sal_Int32* pEnd = pTxtMark->End();
 
     TextAndReading aRet;
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() &&
@@ -478,7 +478,7 @@ SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
 
 TextAndReading SwTOXContent::GetText_Impl() const
 {
-    const sal_Int32* pEnd = pTxtMark->GetEnd();
+    const sal_Int32* pEnd = pTxtMark->End();
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() )
     {
         return TextAndReading(
@@ -493,7 +493,7 @@ TextAndReading SwTOXContent::GetText_Impl() const
 
 void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
 {
-    const sal_Int32* pEnd = pTxtMark->GetEnd();
+    const sal_Int32* pEnd = pTxtMark->End();
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() )
         ((SwTxtNode*)aTOXSources[0].pNd)->GetExpandTxt( rNd, &rInsPos,
                                     *pTxtMark->GetStart(),

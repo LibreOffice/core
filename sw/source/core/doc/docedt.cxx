@@ -1417,7 +1417,7 @@ lcl_CalcBreaks( ::std::vector<sal_Int32> & rBreaks, SwPaM const & rPam )
         if ((CH_TXTATR_INWORD == c) || (CH_TXTATR_BREAKWORD == c))
         {
             SwTxtAttr const * const pAttr( pTxtNode->GetTxtAttrForCharAt(i) );
-            if (pAttr && pAttr->GetEnd() && (*pAttr->GetEnd() > nEnd))
+            if (pAttr && pAttr->End() && (*pAttr->End() > nEnd))
             {
                 OSL_ENSURE(pAttr->HasDummyChar(), "GetTxtAttrForCharAt broken?");
                 rBreaks.push_back(i);
@@ -1602,7 +1602,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
                     break;
 
                 if( nMkCntPos == *pAttr->GetStart() &&
-                    0 != (pEndIdx = pAttr->GetEnd()) &&
+                    0 != (pEndIdx = pAttr->End()) &&
                     *pEndIdx == *pAttr->GetStart() )
                     pTxtNd->DestroyAttr( pHts->Cut( n ) );
             }

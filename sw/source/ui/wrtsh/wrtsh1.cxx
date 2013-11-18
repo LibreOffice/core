@@ -847,10 +847,10 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, ::boost::optional<sa
         {
             SwFmtPageDesc aDesc( pDesc );
             aDesc.SetNumOffset( oPgNum );
-            SetAttr( aDesc );
+            SetAttrItem( aDesc );
         }
         else
-            SetAttr( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
+            SetAttrItem( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
         EndUndo(UNDO_UI_INSERT_PAGE_BREAK);
     }
 }
@@ -892,7 +892,7 @@ void SwWrtShell::InsertColumnBreak()
                 DelRight();
             SwFEShell::SplitNode( sal_False, sal_False );
         }
-        SetAttr(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
+        SetAttrItem(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
 
         EndUndo(UNDO_UI_INSERT_COLUMN_BREAK);
     }
@@ -918,7 +918,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, sal_Bool bEndNote, sal_Boo
         if(!rStr.isEmpty())
             aFootNote.SetNumStr( rStr );
 
-        SetAttr(aFootNote);
+        SetAttrItem(aFootNote);
 
         if( bEdit )
         {
@@ -1345,11 +1345,11 @@ SelectionType SwWrtShell::GetSelectionType() const
     SwView &_rView = ((SwView&)GetView());
     if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
         return nsSelectionType::SEL_POSTIT;
-     int nCnt;
 
     // Inserting a frame is not a DrawMode
+    int nCnt;
     if ( !_rView.GetEditWin().IsFrmAction() &&
-            (IsObjSelected() || (_rView.IsDrawMode() && !IsFrmSelected()) ))
+        (IsObjSelected() || (_rView.IsDrawMode() && !IsFrmSelected()) ))
     {
         if (GetDrawView()->IsTextEdit())
             nCnt = nsSelectionType::SEL_DRW_TXT;
@@ -1366,14 +1366,14 @@ SelectionType SwWrtShell::GetSelectionType() const
                 nCnt |= nsSelectionType::SEL_MEDIA;
 
             if (svx::checkForSelectedCustomShapes(
-                    const_cast<SdrView *>(GetDrawView()),
-                    true /* bOnlyExtruded */ ))
+                const_cast<SdrView *>(GetDrawView()),
+                true /* bOnlyExtruded */ ))
             {
                 nCnt |= nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE;
             }
             sal_uInt32 nCheckStatus = 0;
             if (svx::checkForSelectedFontWork(
-                    const_cast<SdrView *>(GetDrawView()), nCheckStatus ))
+                const_cast<SdrView *>(GetDrawView()), nCheckStatus ))
             {
                 nCnt |= nsSelectionType::SEL_FONTWORK;
             }
@@ -1398,9 +1398,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     if ( IsTableMode() )
         nCnt |= (nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS);
 
-    // #i39855#
-    // Do not pop up numbering toolbar, if the text node has a numbering
-    // of type SVX_NUM_NUMBER_NONE.
+    // Do not pop up numbering toolbar, if the text node has a numbering of type SVX_NUM_NUMBER_NONE.
     const SwNumRule* pNumRule = GetCurNumRule();
     if ( pNumRule )
     {
@@ -1546,7 +1544,7 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
     if(bReset)
     {
         ResetAttr( std::set<sal_uInt16>(), pCrsr );
-        SetAttr(aCoreSet, 0, pCrsr);
+        SetAttrSet(aCoreSet, 0, pCrsr);
     }
     mpDoc->ChgFmt(*pColl, rStyleSet );
     EndAction();

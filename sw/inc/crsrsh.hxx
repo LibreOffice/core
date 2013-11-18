@@ -64,9 +64,8 @@ class SwTOXMark;
 class SwRedline;
 class IBlockCursor;
 class SwCntntNode;
-
 class SwPostItField;
-
+class SwTxtFld;
 struct SwPosition;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -232,9 +231,9 @@ private:
 
     bool m_bMacroExecAllowed : 1;
 
-    SW_DLLPRIVATE void UpdateCrsr( sal_uInt16 eFlags
-                            =SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
-                     sal_Bool bIdleEnd = sal_False );
+    SW_DLLPRIVATE void UpdateCrsr(
+        sal_uInt16 eFlags = SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
+        sal_Bool bIdleEnd = sal_False );
 
     SW_DLLPRIVATE void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
 
@@ -699,10 +698,26 @@ public:
     inline void UnSetVisCrsr();
 
     // jump to the next or previous field of the corresponding type
-    sal_Bool MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
-                                            sal_uInt16 nSubType = USHRT_MAX,
-                                            sal_uInt16 nResType = USHRT_MAX );
+    sal_Bool MoveFldType(
+        const SwFieldType* pFldType,
+        const bool bNext,
+        const sal_uInt16 nResType = USHRT_MAX,
+        const bool bAddSetExpressionFldsToInputFlds = true );
+
     sal_Bool GotoFld( const SwFmtFld& rFld );
+
+    SwTxtFld* GetTxtFldAtPos(
+        const SwPosition* pPos,
+        const bool bIncludeInputFldAtStart ) const;
+    SwField* GetFieldAtCrsr(
+        const SwPaM* pCrsr,
+        const bool bIncludeInputFldAtStart ) const;
+    SwField* GetCurFld( const bool bIncludeInputFldAtStart = false ) const;
+    bool CrsrInsideInputFld() const;
+    bool PosInsideInputFld( const SwPosition& rPos ) const;
+    bool DocPtInsideInputFld( const Point& rDocPt ) const;
+    xub_StrLen StartOfInputFldAtPos( const SwPosition& rPos ) const;
+    xub_StrLen EndOfInputFldAtPos( const SwPosition& rPos ) const;
 
     // Return number of cursors in ring (The flag indicates whether
     // only cursors containing selections are requested).
@@ -783,6 +798,9 @@ public:
     bool GotoINetAttr( const SwTxtINetFmt& rAttr );
     const SwFmtINetFmt* FindINetAttr( const OUString& rName ) const;
 
+    sal_Bool SelectTxt( const xub_StrLen nStart,
+                        const xub_StrLen nEnd );
+
     sal_Bool CheckTblBoxCntnt( const SwPosition* pPos = 0 );
     void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
     void ClearTblBoxCntnt();
@@ -833,8 +851,6 @@ public:
        @return the textual description of the current selection
      */
     OUString GetCrsrDescr() const;
-
-    SwRect GetRectOfCurrentChar();
 };
 
 // Cursor Inlines:

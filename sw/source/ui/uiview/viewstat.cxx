@@ -72,31 +72,47 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
-            case FN_EDIT_LINK_DLG:
-                if( m_pWrtShell->GetLinkManager().GetLinks().empty() )
-                    rSet.DisableItem(nWhich);
-                else if( m_pWrtShell->IsSelFrmMode() &&
-                            m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
-                        rSet.DisableItem(nWhich);
-                break;
-
-            case FN_INSERT_CAPTION:
+        case FN_EDIT_LINK_DLG:
+            if( m_pWrtShell->GetLinkManager().GetLinks().empty() )
+                rSet.DisableItem(nWhich);
+            else if( m_pWrtShell->IsSelFrmMode() &&
+                m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
             {
-                // There are captions for graphics, OLE objects, frames and tables
-                if( !bGetFrmType )
-                    eFrmType = m_pWrtShell->GetFrmType(0,sal_True), bGetFrmType = sal_True;
-                if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
-                        m_nSelectionType & nsSelectionType::SEL_TBL ||
-                        m_nSelectionType & nsSelectionType::SEL_DRW) )
-                    rSet.DisableItem(nWhich);
-                else if((m_pWrtShell->IsObjSelected()||m_pWrtShell->IsFrmSelected()) &&
-                        (m_pWrtShell->IsSelObjProtected( FLYPROTECT_PARENT)||
-                            m_pWrtShell->IsSelObjProtected( FLYPROTECT_CONTENT )))
-                    rSet.DisableItem(nWhich);
-                else if( m_pWrtShell->IsTableMode() )
-                    rSet.DisableItem(nWhich);
+                rSet.DisableItem(nWhich);
             }
             break;
+
+        case SID_INSERT_GRAPHIC:
+            if( m_pWrtShell->CrsrInsideInputFld() )
+            {
+                rSet.DisableItem(nWhich);
+            }
+            break;
+
+            case FN_INSERT_CAPTION:
+                {
+                    // There are captions for graphics, OLE objects, frames and tables
+                    if( !bGetFrmType )
+                        eFrmType = m_pWrtShell->GetFrmType(0,sal_True), bGetFrmType = sal_True;
+                    if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
+                        m_nSelectionType & nsSelectionType::SEL_TBL ||
+                        m_nSelectionType & nsSelectionType::SEL_DRW) )
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
+                    else if((m_pWrtShell->IsObjSelected() || m_pWrtShell->IsFrmSelected()) &&
+                        (m_pWrtShell->IsSelObjProtected( FLYPROTECT_PARENT)||
+                        m_pWrtShell->IsSelObjProtected( FLYPROTECT_CONTENT )))
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
+                    else if( m_pWrtShell->IsTableMode()
+                        || m_pWrtShell->CrsrInsideInputFld() )
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
+                }
+                break;
 
             case FN_EDIT_FOOTNOTE:
             {
@@ -174,24 +190,29 @@ void SwView::GetState(SfxItemSet &rSet)
                 rSet.Put(aImgItem);
             }
             break;
+
             case FN_INSERT_OBJ_CTRL:
-            if(bWeb)
-                rSet.DisableItem(nWhich);
-            else
-            {
-                SfxImageItem aImgItem(nWhich, SwView::m_nInsertObjectCtrlState);
-                SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
-                const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
-                if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
+                if( bWeb
+                    || m_pWrtShell->CrsrInsideInputFld() )
                 {
-                    if(m_pWrtShell->IsInVerticalText())
-                        aImgItem.SetRotation(2700);
-                    if(m_pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(sal_True);
+                    rSet.DisableItem(nWhich);
                 }
-                rSet.Put(aImgItem);
-            }
-            break;
+                else
+                {
+                    SfxImageItem aImgItem(nWhich, SwView::m_nInsertObjectCtrlState);
+                    SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
+                    const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
+                    if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
+                    {
+                        if (m_pWrtShell->IsInVerticalText())
+                            aImgItem.SetRotation(2700);
+                        if (m_pWrtShell->IsInRightToLeftText())
+                            aImgItem.SetMirrored(sal_True);
+                    }
+                    rSet.Put(aImgItem);
+                }
+                break;
+
             case FN_UPDATE_TOX:
                 if(!m_pWrtShell->GetTOXCount())
                     rSet.DisableItem(nWhich);

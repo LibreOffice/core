@@ -17,33 +17,34 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTCONTENTOPERATIONS_HXX
- #define INCLUDED_SW_INC_IDOCUMENTCONTENTOPERATIONS_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTCONTENTOPERATIONS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTCONTENTOPERATIONS_HXX
 
- #include <sal/types.h>
+#include <sal/types.h>
 
- class SwPaM;
- struct SwPosition;
- class SwNode;
- class SwNodeRange;
- class Graphic;
- class SfxItemSet;
- class SfxPoolItem;
- class GraphicObject;
- class SdrObject;
- class SwFrmFmt;
- class SwDrawFrmFmt;
- class SwFlyFrmFmt;
- class SwNodeIndex;
+class SwPaM;
+struct SwPosition;
+class SwNode;
+class SwNodeRange;
+class Graphic;
+class SfxItemSet;
+class SfxPoolItem;
+class GraphicObject;
+class SdrObject;
+class SwFrmFmt;
+class SwDrawFrmFmt;
+class SwFlyFrmFmt;
+class SwNodeIndex;
+class SwFmtFld;
 
- namespace utl { class TransliterationWrapper; }
- namespace svt { class EmbeddedObjectRef; }
+namespace utl { class TransliterationWrapper; }
+namespace svt { class EmbeddedObjectRef; }
 
- /** Text operation/manipulation interface
- */
- class IDocumentContentOperations
- {
- public:
+/** Text operation/manipulation interface
+*/
+class IDocumentContentOperations
+{
+public:
     enum SwMoveFlags
     {
         DOC_MOVEDEFAULT = 0x00,
@@ -61,7 +62,7 @@
     ,   INS_FORCEHINTEXPAND = 0x04 // expand all hints at insert position
     };
 
- public:
+public:
     /** Copying of a range within or to another document.
         The position can also be within the range!
      */
@@ -86,7 +87,7 @@
         Needed for hiding of deletion redlines
     */
     virtual bool DeleteAndJoin( SwPaM&,
-                                const bool bForceJoinNext = false ) = 0;
+        const bool bForceJoinNext = false ) = 0;
 
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) = 0;
 
@@ -115,7 +116,7 @@
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     /** Transpose graphic (with undo)
      */
@@ -129,7 +130,7 @@
     /** Insert OLE-objects.
     */
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
                            const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
@@ -165,13 +166,13 @@
                                 const sal_uInt16 nFlags,bool bExpandCharToPara=false) = 0;
 
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
-                                const sal_uInt16 nFlags) = 0;
+        const sal_uInt16 nFlags) = 0;
 
     /** Removes any leading white space from the paragraph
     */
     virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos ) = 0;
 
- protected:
+protected:
     virtual ~IDocumentContentOperations() {};
 };
 

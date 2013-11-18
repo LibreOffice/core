@@ -879,14 +879,12 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                         "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
                 sListId = pNewList->GetListId();
             }
-            InsertPoolItem( rPam,
-                SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
+            InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
         }
         else if ( !sContinuedListId.isEmpty() )
         {
             // apply given list id
-            InsertPoolItem( rPam,
-                SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
+            InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
         }
     }
 
@@ -901,7 +899,6 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
             if (pRule && pRule->GetName() == pNew->GetName())
             {
                 bSetItem = false;
-
                 if ( !pTxtNd->IsInList() )
                 {
                     pTxtNd->AddToList();
@@ -952,8 +949,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     }
     else
     {
-        InsertPoolItem( rPam,
-            SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_False ), 0 );
+        InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_False ), 0 );
     }
 }
 

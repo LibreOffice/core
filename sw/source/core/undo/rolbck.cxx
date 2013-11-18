@@ -1210,8 +1210,12 @@ void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx )
     }
 }
 
-void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
-                          xub_StrLen nStart, xub_StrLen nEnd, bool bFields )
+void SwHistory::CopyAttr(
+    SwpHints* pHts,
+    const sal_uLong nNodeIdx,
+    const xub_StrLen nStart,
+    const xub_StrLen nEnd,
+    const bool bCopyFields )
 {
     if( !pHts  )
         return;
@@ -1232,9 +1236,9 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
         switch( pHt->Which() )
         {
         case RES_TXTATR_FIELD:
-            // no fields, ... copy ??
-            if( !bFields )
-                bNextAttr = true;
+        case RES_TXTATR_INPUTFIELD:
+            if( !bCopyFields )
+                bNextAttr = sal_True;
             break;
         case RES_TXTATR_FLYCNT:
         case RES_TXTATR_FTN:
@@ -1243,13 +1247,12 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
         }
 
         if( bNextAttr )
-           continue;
+            continue;
 
         // save all attributes that are somehow in this area
         if ( nStart <= nAttrStt )
         {
-            if ( nEnd > nAttrStt
-            )
+            if ( nEnd > nAttrStt )
             {
                 Add( pHt, nNodeIdx, false );
             }

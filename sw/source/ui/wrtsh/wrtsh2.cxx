@@ -98,15 +98,12 @@ void SwWrtShell::Insert(SwField &rFld, SwPaM *pCommentRange)
 
 // Start the field update
 
-void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
+void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
 {
     // Go through the list of fields and updating
     SwInputFieldList* pTmp = pLst;
     if( !pTmp )
         pTmp = new SwInputFieldList( this );
-
-    if (bOnlyInSel)
-        pTmp->RemoveUnselectedFlds();
 
     const sal_uInt16 nCnt = pTmp->Count();
     if(nCnt)
@@ -322,7 +319,13 @@ void SwWrtShell::ClickToField( const SwField& rFld )
         break;
 
     case RES_INPUTFLD:
-        StartInputFldDlg( (SwField*)&rFld, sal_False );
+        {
+            const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rFld);
+            if ( pInputField == NULL )
+            {
+                StartInputFldDlg( (SwField*)&rFld, sal_False );
+            }
+        }
         break;
 
     case RES_SETEXPFLD:

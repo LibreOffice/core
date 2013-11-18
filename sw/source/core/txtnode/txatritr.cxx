@@ -116,7 +116,7 @@ bool SwTxtAttrIterator::Next()
         {
             do {
                 const SwTxtAttr* pHt = aStack.front();
-                sal_uInt16 nEndPos = *pHt->GetEnd();
+                sal_uInt16 nEndPos = *pHt->End();
                 if( nChgPos >= nEndPos )
                     aStack.pop_front();
                 else
@@ -131,7 +131,7 @@ bool SwTxtAttrIterator::Next()
             if( !aStack.empty() )
             {
                 const SwTxtAttr* pHt = aStack.front();
-                sal_uInt16 nEndPos = *pHt->GetEnd();
+                const sal_uInt16 nEndPos = *pHt->End();
                 if( nChgPos >= nEndPos )
                 {
                     nChgPos = nEndPos;
@@ -159,9 +159,9 @@ bool SwTxtAttrIterator::Next()
 
 void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
 {
-    sal_uInt16 nIns = 0, nEndPos = *rAttr.GetEnd();
+    sal_uInt16 nIns = 0, nEndPos = *rAttr.End();
     for( ; nIns < aStack.size(); ++nIns )
-        if( *aStack[ nIns ]->GetEnd() > nEndPos )
+        if( *aStack[ nIns ]->End() > nEndPos )
             break;
 
     aStack.insert( aStack.begin() + nIns, &rAttr );
@@ -205,7 +205,7 @@ void SwTxtAttrIterator::SearchNextChg()
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
             const SwTxtAttr* pHt = (*pHts)[ nAttrPos ];
-            const sal_Int32* pEnd = pHt->GetEnd();
+            const sal_Int32* pEnd = pHt->End();
             const sal_Int32 nHtStt = *pHt->GetStart();
             if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
                 continue;

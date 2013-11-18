@@ -26,7 +26,6 @@
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <ndtxt.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <edimp.hxx>

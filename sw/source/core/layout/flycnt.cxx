@@ -29,6 +29,7 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
+#include <txatbase.hxx>
 
 #include "tabfrm.hxx"
 #include "flyfrms.hxx"
@@ -1388,6 +1389,15 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             if( pCnt->GetCrsrOfst( pPos, aPt, &eTmpState )
                 && pPos->nNode == *pCnt->GetNode() )
             {
+                if ( pCnt->GetNode()->GetTxtNode() != NULL )
+                {
+                    const SwTxtAttr* pTxtInputFld =
+                        pCnt->GetNode()->GetTxtNode()->GetTxtAttrAt( pPos->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
+                    if ( pTxtInputFld != NULL )
+                    {
+                        pPos->nContent = *(pTxtInputFld->GetStart());
+                    }
+                }
                 ResetLastCharRectHeight();
                 if( text::RelOrientation::CHAR == pFmt->GetVertOrient().GetRelationOrient() )
                     nY = LONG_MAX;
@@ -1415,7 +1425,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
         }
     }
-    // #i28701# - use new method <GetPageFrm()>
     else if ( pTmpPage && pTmpPage != GetPageFrm() )
         GetPageFrm()->MoveFly( this, pTmpPage );
 
@@ -1426,8 +1435,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     if ( pOldPage != FindPageFrm() )
-        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
-                             sal_False );
+        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE, sal_False );
 }
 
 /** method to assure that anchored object is registered at the correct

@@ -293,20 +293,40 @@ public:
 
 class SW_DLLPUBLIC SwInputField : public SwField
 {
-    OUString aContent;
+    mutable OUString aContent;
     OUString aPText;
     OUString aHelp;
     OUString aToolTip;
-    sal_uInt16  nSubType;
+    sal_uInt16 nSubType;
+    bool mbIsFormField;
+
+    SwFmtFld* mpFmtFld; // attribute to which the <SwInputField> belongs to
 
     virtual OUString        Expand() const;
     virtual SwField*        Copy() const;
 
+    // Accessing Input Field's content
+    const OUString& getContent() const;
+
 public:
     /// Direct input via dialog; delete old value.
-    SwInputField(SwInputFieldType*, const OUString& rContent,
-                 const OUString& rPrompt, sal_uInt16 nSubType = 0,
-                 sal_uLong nFmt = 0);
+    SwInputField(
+        SwInputFieldType* pFieldType,
+        const OUString& rContent,
+        const OUString& rPrompt,
+        sal_uInt16 nSubType = 0,
+        sal_uLong nFmt = 0,
+        bool bIsFormField = true );
+    virtual ~SwInputField();
+
+    void SetFmtFld( SwFmtFld& rFmtFld );
+    SwFmtFld* GetFmtFld();
+
+    // Providing new Input Field's content:
+    // Fill Input Field's content depending on <nSupType>.
+    void applyFieldContent( const OUString& rNewFieldContent );
+
+    bool isFormField() const;
 
     virtual OUString        GetFieldName() const;
 
@@ -324,9 +344,7 @@ public:
     virtual OUString        GetToolTip() const;
     virtual void            SetToolTip(const OUString & rStr);
 
-    virtual sal_Bool            isFormField() const;
-
-    virtual sal_uInt16          GetSubType() const;
+    virtual sal_uInt16      GetSubType() const;
     virtual void            SetSubType(sal_uInt16 nSub);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );

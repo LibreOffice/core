@@ -228,7 +228,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
             rWrtSh.AutoUpdatePara(pColl, aTmpSet);
         }
         else
-            rWrtSh.SetAttr( aTmpSet );
+            rWrtSh.SetAttrSet( aTmpSet );
         if (pReq)
             pReq->Done(aTmpSet);
         if(bInsert)
@@ -433,7 +433,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
-                rWrtSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
+                rWrtSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
                 rWrtSh.ResetSelect(0, sal_False);
                 rWrtSh.EndSelect();
                 rWrtSh.GotoFtnTxt();
@@ -1027,7 +1027,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
                             rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue(), pPaM);
                     }
-                    rWrtSh.SetAttr( *pSet, 0, pPaM );
+                    rWrtSh.SetAttrSet( *pSet, 0, pPaM );
                     rWrtSh.EndAction();
                     SwTxtFmtColl* pColl = rWrtSh.GetPaMTxtFmtColl( pPaM );
                     if(pColl && pColl->IsAutoUpdateFmt())
@@ -1125,7 +1125,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // otherwise, it'll be the color for the next text to be typed
                 if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
                 {
-                    rWrtSh.SetAttr(SvxColorItem (aSet, RES_CHRATR_COLOR));
+                    rWrtSh.SetAttrItem(SvxColorItem (aSet, RES_CHRATR_COLOR));
                 }
 
                 rReq.Done();
@@ -1152,7 +1152,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aBrushItem.SetColor(aSet); //set the selected color
                 else
                     aBrushItem.SetColor(Color(COL_TRANSPARENT));//set "no fill" color
-                rWrtSh.SetAttr( aBrushItem );
+                rWrtSh.SetAttrItem( aBrushItem );
             }
             else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
@@ -1175,12 +1175,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if(nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
                 {
-                    rWrtSh.SetAttr( SvxBrushItem(
-                        rEdtWin.GetTextBackColor(), RES_CHRATR_BACKGROUND) );
+                    rWrtSh.SetAttrItem(
+                        SvxBrushItem( rEdtWin.GetTextBackColor(), RES_CHRATR_BACKGROUND) );
                 }
                 else
-                    rWrtSh.SetAttr( SvxColorItem( rEdtWin.GetTextColor(),
-                                                                RES_CHRATR_COLOR) );
+                    rWrtSh.SetAttrItem(
+                        SvxColorItem( rEdtWin.GetTextColor(), RES_CHRATR_COLOR) );
             }
             else
             {
@@ -1406,6 +1406,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
                     rSh.IsNumRuleStart()));
         break;
+
         case FN_EDIT_FORMULA:
         case SID_CHARMAP:
             {
@@ -1413,7 +1414,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if (!(nType & nsSelectionType::SEL_TXT) &&
                     !(nType & nsSelectionType::SEL_TBL) &&
                     !(nType & nsSelectionType::SEL_NUM))
+                {
                     rSet.DisableItem(nWhich);
+                }
+                else if ( nWhich == FN_EDIT_FORMULA
+                          && rSh.CrsrInsideInputFld() )
+                {
+                    rSet.DisableItem( nWhich );
+                }
             }
             break;
 
@@ -1421,16 +1429,35 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_FOOTNOTE:
         case FN_INSERT_FOOTNOTE_DLG:
             {
-                const sal_uInt16 nNoType = FRMTYPE_FLY_ANY | FRMTYPE_HEADER |
-                                        FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE;
+                const sal_uInt16 nNoType =
+                    FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FOOTNOTE;
                 if ( (rSh.GetFrmType(0,sal_True) & nNoType) )
                     rSet.DisableItem(nWhich);
+
+                if ( rSh.CrsrInsideInputFld() )
+                {
+                    rSet.DisableItem( nWhich );
+                }
             }
             break;
-        case FN_INSERT_TABLE:
-            if ( rSh.GetTableFmt() ||
-                    (rSh.GetFrmType(0,sal_True) & FRMTYPE_FOOTNOTE) )
+
+        case FN_INSERT_HYPERLINK:
+        case SID_INSERTDOC:
+        case FN_INSERT_GLOSSARY:
+        case FN_EXPAND_GLOSSARY:
+            if ( rSh.CrsrInsideInputFld() )
+            {
                 rSet.DisableItem( nWhich );
+            }
+            break;
+
+        case FN_INSERT_TABLE:
+            if ( rSh.CrsrInsideInputFld()
+                 || rSh.GetTableFmt()
+                 || (rSh.GetFrmType(0,sal_True) & FRMTYPE_FOOTNOTE) )
+            {
+                rSet.DisableItem( nWhich );
+            }
             break;
 
         case FN_CALCULATE:
@@ -1494,9 +1521,22 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWhich, pApply && pApply->nColor == nWhich));
             }
             break;
+
         case FN_INSERT_BOOKMARK:
-            if( rSh.IsTableMode() )
+            if( rSh.IsTableMode()
+                || rSh.CrsrInsideInputFld() )
+            {
                 rSet.DisableItem( nWhich );
+            }
+            break;
+
+        case FN_INSERT_BREAK_DLG:
+        case FN_INSERT_COLUMN_BREAK:
+        case FN_INSERT_PAGEBREAK:
+            if( rSh.CrsrInsideInputFld() )
+            {
+                rSet.DisableItem( nWhich );
+            }
             break;
 
         case FN_INSERT_PAGEHEADER:
@@ -1511,40 +1551,47 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         (FN_TABLE_SORT_DIALOG == nWhich && !rSh.GetTableFmt()))
                     rSet.DisableItem( nWhich );
             break;
+
             case SID_RUBY_DIALOG:
-            {
-                SvtCJKOptions aCJKOptions;
-                if(!aCJKOptions.IsRubyEnabled())
                 {
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                    SvtCJKOptions aCJKOptions;
+                    if( !aCJKOptions.IsRubyEnabled()
+                        || rSh.CrsrInsideInputFld() )
+                    {
+                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                        rSet.DisableItem(nWhich);
+                    }
+                    else
+                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                }
+                break;
+
+            case SID_HYPERLINK_DIALOG:
+                if( GetView().GetDocShell()->IsReadOnly()
+                    || ( !GetView().GetViewFrame()->HasChildWindow(nWhich)
+                         && rSh.HasReadonlySel() )
+                    || rSh.CrsrInsideInputFld() )
+                {
                     rSet.DisableItem(nWhich);
                 }
                 else
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                {
+                    rSet.Put(SfxBoolItem( nWhich, 0 != GetView().GetViewFrame()->GetChildWindow( nWhich ) ));
+                }
                 break;
-            }
-            //no break!
-            case SID_HYPERLINK_DIALOG:
-                if( GetView().GetDocShell()->IsReadOnly() ||
-                    (!GetView().GetViewFrame()->HasChildWindow(nWhich) &&
-                     rSh.HasReadonlySel()) )
-                    rSet.DisableItem(nWhich);
-                else
-                    rSet.Put(SfxBoolItem( nWhich, 0 != GetView().
-                                GetViewFrame()->GetChildWindow( nWhich ) ));
-                break;
+
             case FN_EDIT_HYPERLINK:
             case FN_COPY_HYPERLINK_LOCATION:
-            {
-                SfxItemSet aSet(GetPool(),
-                                RES_TXTATR_INETFMT,
-                                RES_TXTATR_INETFMT);
-                rSh.GetCurAttr(aSet);
-                if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, sal_True ) || rSh.HasReadonlySel())
                 {
-                    rSet.DisableItem(nWhich);
+                    SfxItemSet aSet(GetPool(),
+                        RES_TXTATR_INETFMT,
+                        RES_TXTATR_INETFMT);
+                    rSh.GetCurAttr(aSet);
+                    if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, sal_True ) || rSh.HasReadonlySel())
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
                 }
-            }
             break;
             case FN_REMOVE_HYPERLINK:
             {
@@ -1553,7 +1600,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
 
-        // If a hyperlink is selected, either alone or along with other text...
+                // If a hyperlink is selected, either alone or along with other text...
                 if( ((SFX_ITEM_DONTCARE & aSet.GetItemState( RES_TXTATR_INETFMT, sal_True )) == 0) || rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(nWhich);

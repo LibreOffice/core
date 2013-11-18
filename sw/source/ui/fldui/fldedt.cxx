@@ -24,6 +24,7 @@
 #include <sfx2/app.hxx>
 #include <svx/optgenrl.hxx>
 #include <docufld.hxx>
+#include <expfld.hxx>
 #include <view.hxx>
 #include <dbfld.hxx>
 #include <wrtsh.hxx>
@@ -69,10 +70,21 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
 
     pSh->SetCareWin(this);
 
-    /* #108536# Only create selection if there is none
-        already. Normalize PaM instead of swapping. */
+    if ( pSh->CrsrInsideInputFld() )
+    {
+        // move cursor to start of Input Field
+        SwInputField* pInputFld = dynamic_cast<SwInputField*>(pCurFld);
+        if ( pInputFld != NULL
+             && pInputFld->GetFmtFld() != NULL )
+        {
+            pSh->GotoField( *(pInputFld->GetFmtFld()) );
+        }
+    }
+
     if ( ! pSh->HasSelection() )
+    {
         pSh->Right(CRSR_SKIP_CHARS, true, 1, false);
+    }
 
     pSh->NormalizePam();
 

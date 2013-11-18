@@ -1226,27 +1226,37 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         bool bDraw = false;
         switch( nWhich )
         {
-            case POR_FTN:
-            case POR_QUOVADIS:
-            case POR_NUMBER:
-            case POR_FLD:
-            case POR_URL:
-            case POR_HIDDEN:
-            case POR_TOX:
-            case POR_REF:
-            case POR_META:
-            case POR_CONTROLCHAR:
-                if ( !GetOpt().IsPagePreview() &&
-                     !GetOpt().IsReadonly() &&
-                     SwViewOption::IsFieldShadings() &&
-                     (POR_NUMBER != nWhich ||
-                      m_pFrm->GetTxtNode()->HasMarkedLabel())) // #i27615#
-                    bDraw = true;
+        case POR_FTN:
+        case POR_QUOVADIS:
+        case POR_NUMBER:
+        case POR_FLD:
+        case POR_URL:
+        case POR_HIDDEN:
+        case POR_TOX:
+        case POR_REF:
+        case POR_META:
+        case POR_CONTROLCHAR:
+            if ( !GetOpt().IsPagePreview()
+                 && !GetOpt().IsReadonly()
+                 && SwViewOption::IsFieldShadings()
+                 && ( POR_NUMBER != nWhich
+                      || m_pFrm->GetTxtNode()->HasMarkedLabel())) // #i27615#
+            {
+                bDraw = true;
+            }
             break;
-            case POR_TAB:       if ( GetOpt().IsTab() )     bDraw = true; break;
-            case POR_SOFTHYPH:  if ( GetOpt().IsSoftHyph() )bDraw = true; break;
-            case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = true; break;
-            default:
+        case POR_INPUTFLD:
+            // input field shading also in read-only mode
+            if ( !GetOpt().IsPagePreview()
+                 && SwViewOption::IsFieldShadings() )
+            {
+                bDraw = true;
+            }
+            break;
+        case POR_TAB:       if ( GetOpt().IsTab() )     bDraw = true; break;
+        case POR_SOFTHYPH:  if ( GetOpt().IsSoftHyph() )bDraw = true; break;
+        case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = true; break;
+        default:
             {
                 OSL_ENSURE( !this, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
                 break;
@@ -1650,8 +1660,12 @@ sal_Bool SwTxtFormatInfo::LastKernPortion()
     return sal_False;
 }
 
-SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
-                      bool bTxtLen, bool bExgLists, const sal_Char *pCh )
+SwTxtSlot::SwTxtSlot(
+    const SwTxtSizeInfo *pNew,
+    const SwLinePortion *pPor,
+    bool bTxtLen,
+    bool bExgLists,
+    const sal_Char *pCh )
     : pOldTxt( 0 ),
       pOldSmartTagList( 0 ),
       pOldGrammarCheckList( 0 ),

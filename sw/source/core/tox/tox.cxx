@@ -218,7 +218,7 @@ OUString SwTOXMark::GetText() const
 
     if( pTxtAttr && pTxtAttr->GetpTxtNd() )
     {
-        sal_Int32* pEndIdx = pTxtAttr->GetEnd();
+        const sal_Int32* pEndIdx = pTxtAttr->GetEnd();
         OSL_ENSURE( pEndIdx, "TOXMark without mark!");
         if( pEndIdx )
         {

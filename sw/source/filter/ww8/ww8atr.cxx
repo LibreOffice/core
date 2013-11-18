@@ -1785,7 +1785,6 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
     WW8_WrPlcFld* pFldP = CurrentFieldPlc();
 
     const bool bIncludeEmptyPicLocation = ( eFldType == ww::ePAGE );
-
     if (WRITEFIELD_START & nMode)
     {
         sal_uInt8 aFld13[2] = { 0x13, 0x00 };  // will change
@@ -2544,7 +2543,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 {
     const SwField* pFld = rField.GetField();
     bool bWriteExpand = false;
-    sal_uInt16 nSubType = pFld->GetSubType();
+    const sal_uInt16 nSubType = pFld->GetSubType();
 
     switch (pFld->GetTyp()->Which())
     {
@@ -2786,8 +2785,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         break;
     case RES_INPUTFLD:
         {
-            const SwInputField * pInputField =
-                dynamic_cast<const SwInputField *>(pFld);
+            const SwInputField * pInputField = dynamic_cast<const SwInputField *>(pFld);
 
             if (pInputField->isFormField())
                 GetExport().DoFormText(pInputField);
@@ -5176,6 +5174,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             TextCharFormat( static_cast< const SwFmtCharFmt& >( rHt ) );
             break;
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_INPUTFIELD:
             TextField( static_cast< const SwFmtFld& >( rHt ) );
             break;
         case RES_TXTATR_FLYCNT:

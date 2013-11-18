@@ -49,6 +49,7 @@
 #include <statstr.hrc>
 #include <redline.hxx>
 #include <xmloff/odffields.hxx>
+#include <txatbase.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -231,7 +232,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         const SwSectionNode* pSectNd = rPtIdx.GetNode().FindSectionNode();
         if( pSectNd &&
             ((bSkipOverHiddenSections && pSectNd->GetSection().IsHiddenFlag() ) ||
-             (bSkipOverProtectSections && pSectNd->GetSection().IsProtectFlag() )))
+            (bSkipOverProtectSections && pSectNd->GetSection().IsProtectFlag() )))
         {
             if( 0 == ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
             {
@@ -245,18 +246,18 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
             sal_Int32 nCntntPos = pSavePos->nCntnt;
             int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
             SwCntntNode* pCNd = bGoNxt
-                    ? rNds.GoNextSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections)
-                    : rNds.GoPrevSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections);
+                ? rNds.GoNextSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections)
+                : rNds.GoPrevSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections);
             if( !pCNd && ( nsSwCursorSelOverFlags::SELOVER_ENABLEREVDIREKTION & eFlags ))
             {
                 bGoNxt = !bGoNxt;
                 pCNd = bGoNxt ? rNds.GoNextSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections)
-                              : rNds.GoPrevSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections);
+                    : rNds.GoPrevSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections);
             }
 
             int bIsValidPos = 0 != pCNd;
             const bool bValidNodesRange = bIsValidPos &&
-                                    ::CheckNodesRange( rPtIdx, aIdx, true );
+                ::CheckNodesRange( rPtIdx, aIdx, true );
             if( !bValidNodesRange )
             {
                 rPtIdx = pSavePos->nNode;
@@ -286,7 +287,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         if( HasMark() && bSkipOverProtectSections)
         {
             sal_uLong nSttIdx = GetMark()->nNode.GetIndex(),
-                  nEndIdx = GetPoint()->nNode.GetIndex();
+                nEndIdx = GetPoint()->nNode.GetIndex();
             if( nEndIdx <= nSttIdx )
             {
                 sal_uLong nTmp = nSttIdx;
@@ -323,15 +324,15 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
     if( pNd->IsCntntNode() && !dynamic_cast<SwUnoCrsr*>(this) )
     {
         const SwCntntFrm* pFrm = ((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() );
-        if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() &&
-            0 != ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
+        if( pFrm && pFrm->IsValid()
+            && 0 == pFrm->Frm().Height()
+            && 0 != ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
         {
             // skip to the next/prev valid paragraph with a layout
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
             int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
-            while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
-                                          : pFrm->GetPrevCntntFrm() )) &&
-                    0 == pFrm->Frm().Height() )
+            while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm() : pFrm->GetPrevCntntFrm() ))
+                   && 0 == pFrm->Frm().Height() )
                 ;
 
             // #i72394# skip to prev/next valid paragraph with a layout in case
@@ -389,19 +390,68 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         return sal_True; // we need a frame
     }
 
-    const SwTableNode* pPtNd = pNd->FindTableNode();
-
-    if( (pNd = &GetMark()->nNode.GetNode())->IsCntntNode() &&
-        !((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() ) && !dynamic_cast<SwUnoCrsr*>(this) )
+    if( (pNd = &GetMark()->nNode.GetNode())->IsCntntNode()
+        && !((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() )
+        && !dynamic_cast<SwUnoCrsr*>(this) )
     {
         DeleteMark();
         RestoreSavePos();
         return sal_True; // we need a frame
     }
 
-    const SwTableNode* pMrkNd = pNd->FindTableNode();
+    // assure that selection is only inside an InputField or contains the InputField completely
+    {
+        const SwTxtAttr* pInputFldTxtAttrAtPoint = NULL;
+        SwTxtNode* pTxtNdAtPoint = GetPoint()->nNode.GetNode().GetTxtNode();
+        if ( pTxtNdAtPoint != NULL )
+        {
+            pInputFldTxtAttrAtPoint =
+                pTxtNdAtPoint->GetTxtAttrAt( GetPoint()->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
+        }
+
+        const SwTxtAttr* pInputFldTxtAttrAtMark = NULL;
+        SwTxtNode* pTxtNdAtMark = GetMark()->nNode.GetNode().GetTxtNode();
+        if ( pTxtNdAtMark != NULL )
+        {
+            pInputFldTxtAttrAtMark =
+                pTxtNdAtMark->GetTxtAttrAt( GetMark()->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
+        }
+
+        if ( pInputFldTxtAttrAtPoint != pInputFldTxtAttrAtMark )
+        {
+            const sal_uLong nRefNodeIdx =
+                ( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags )
+                ? pSavePos->nNode
+                : GetMark()->nNode.GetIndex();
+            const xub_StrLen nRefContentIdx =
+                ( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags )
+                ? pSavePos->nCntnt
+                : GetMark()->nContent.GetIndex();
+            const bool bIsForwardSelection =
+                nRefNodeIdx < GetPoint()->nNode.GetIndex()
+                || ( nRefNodeIdx == GetPoint()->nNode.GetIndex()
+                     && nRefContentIdx < GetPoint()->nContent.GetIndex() );
+
+            if ( pInputFldTxtAttrAtPoint != NULL )
+            {
+                const xub_StrLen nNewPointPos =
+                    bIsForwardSelection ? *(pInputFldTxtAttrAtPoint->End()) : *(pInputFldTxtAttrAtPoint->GetStart());
+                GetPoint()->nContent.Assign( pTxtNdAtPoint, nNewPointPos );
+            }
+
+            if ( pInputFldTxtAttrAtMark != NULL )
+            {
+                const xub_StrLen nNewMarkPos =
+                    bIsForwardSelection ? *(pInputFldTxtAttrAtMark->GetStart()) : *(pInputFldTxtAttrAtMark->End());
+                GetMark()->nContent.Assign( pTxtNdAtMark, nNewMarkPos );
+            }
+        }
+    }
 
     // both in no or in same table node
+    const SwTableNode* pPtNd = pNd->FindTableNode();
+    const SwTableNode* pMrkNd = pNd->FindTableNode();
+    // beide in keinem oder beide im gleichen TableNode
     if( ( !pMrkNd && !pPtNd ) || pPtNd == pMrkNd )
         return sal_False;
 
@@ -420,8 +470,8 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         if( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags )
         {
             sal_Bool bSelTop = GetPoint()->nNode.GetIndex() <
-                    (( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags ) ? pSavePos->nNode
-                                                 : GetMark()->nNode.GetIndex());
+                (( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags ) ? pSavePos->nNode
+                : GetMark()->nNode.GetIndex());
 
             do { // loop for table after table
                 sal_uLong nSEIdx = pPtNd->EndOfSectionIndex();
@@ -451,7 +501,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 // we permit these
                 if( pMyNd->IsCntntNode() &&
                     ::CheckNodesRange( GetMark()->nNode,
-                                       GetPoint()->nNode, true ))
+                    GetPoint()->nNode, true ))
                 {
                     // table in table
                     const SwTableNode* pOuterTableNd = pMyNd->FindTableNode();
@@ -475,6 +525,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         RestoreSavePos();
         return sal_True;
     }
+
     return sal_False;
 }
 
@@ -1782,7 +1833,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
                 }
                 pFrm->GetCrsrOfst( GetPoint(), aPt, &eTmpState );
             }
-            bRet = sal_True;
+            bRet = !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE | nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
         }
         else
             *GetPoint() = aOldPos;
@@ -1801,8 +1852,10 @@ sal_Bool SwCursor::LeftRightMargin( sal_Bool bLeft, sal_Bool bAPI )
     if ( pFrm )
         SetCrsrBidiLevel( pFrm->IsRightToLeft() ? 1 : 0 );
 
-    return pFrm && (bLeft ? pFrm->LeftMargin( this ) :
-                            pFrm->RightMargin( this, bAPI ) );
+    SwCrsrSaveState aSave( *this );
+    return pFrm
+           && (bLeft ? pFrm->LeftMargin( this ) : pFrm->RightMargin( this, bAPI ) )
+           && !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE | nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
 }
 
 sal_Bool SwCursor::IsAtLeftRightMargin( sal_Bool bLeft, sal_Bool bAPI ) const

@@ -36,6 +36,7 @@ SwTxtAttr::SwTxtAttr( SfxPoolItem& rAttr, sal_Int32 nStart )
     , m_bHasDummyChar( false )
     , m_bFormatIgnoreStart(false)
     , m_bFormatIgnoreEnd(false)
+    , m_bHasContent( false )
 {
 }
 

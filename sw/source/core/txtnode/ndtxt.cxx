@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
+#include <comphelper/string.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/escapementitem.hxx>
@@ -236,9 +237,11 @@ SwTxtNode::~SwTxtNode()
         m_pSwpHints = 0;
 
         for( sal_uInt16 j = pTmpHints->Count(); j; )
+        {
             // first remove the attribute from the array otherwise
             // if would delete itself
             DestroyAttr( pTmpHints->GetTextHint( --j ) );
+        }
 
         delete pTmpHints;
     }
@@ -829,8 +832,11 @@ void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
 
 
 // override SwIndexReg::Update => text hints do not need SwIndex for start/end!
-void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
-                        const bool bNegative, const bool bDelete )
+void SwTxtNode::Update(
+    SwIndex const & rPos,
+    const sal_Int32 nChangeLen,
+    const bool bNegative,
+    const bool bDelete )
 {
     SetAutoCompleteWordDirty( sal_True );
 
@@ -844,6 +850,8 @@ void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
             const sal_Int32 nChangeEnd = nChangePos + nChangeLen;
             for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
             {
+                bool bTxtAttrChanged = false;
+                bool bStartOfTxtAttrChanged = false;
                 SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(n);
                 sal_Int32 * const pStart = pHint->GetStart();
                 if ( *pStart > nChangePos )
@@ -856,6 +864,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
                     {
                          *pStart = nChangePos;
                     }
+                    bStartOfTxtAttrChanged = true;
                 }
 
                 sal_Int32 * const pEnd = pHint->GetEnd();
@@ -871,6 +880,17 @@ void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
                         {
                             *pEnd = nChangePos;
                         }
+                        bTxtAttrChanged = !bStartOfTxtAttrChanged;
+                    }
+                }
+
+                if ( bTxtAttrChanged
+                     && pHint->Which() == RES_TXTATR_INPUTFIELD )
+                {
+                    SwTxtInputFld* pTxtInputFld = dynamic_cast<SwTxtInputFld*>(pHint);
+                    if ( pTxtInputFld )
+                    {
+                        pTxtInputFld->UpdateFieldContent();
                     }
                 }
             }
@@ -882,14 +902,15 @@ void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
             bool bNoExp = false;
             bool bResort = false;
             bool bMergePortionsNeeded = false;
-            const sal_uInt16 coArrSz = static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
-                                   static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
+            const sal_uInt16 coArrSz =
+                static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
 
             sal_Bool aDontExp[ coArrSz ];
             memset( &aDontExp, 0, coArrSz * sizeof(sal_Bool) );
 
             for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
             {
+                bool bTxtAttrChanged = false;
                 SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(n);
                 sal_Int32 * const pStart = pHint->GetStart();
                 sal_Int32 * const pEnd = pHint->GetEnd();
@@ -906,6 +927,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
                     if ( (*pEnd > nChangePos) || IsIgnoreDontExpand() )
                     {
                         *pEnd = *pEnd + nChangeLen;
+                        bTxtAttrChanged = true;
                     }
                     else // *pEnd == nChangePos
                     {
@@ -946,30 +968,41 @@ void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
                         }
                         else if( bNoExp )
                         {
-                             if ( !pCollector.get() )
-                             {
-                                pCollector.reset( new SwpHts );
-                             }
-                             for(SwpHts::iterator it =  pCollector->begin(); it != pCollector->end(); ++it)
-                             {
-                                SwTxtAttr *pTmp = *it;
-                                if( nWhich == pTmp->Which() )
-                                {
-                                    pCollector->erase( it );
-                                    SwTxtAttr::Destroy( pTmp,
-                                        GetDoc()->GetAttrPool() );
-                                    break;
-                                }
-                             }
-                             SwTxtAttr * const pTmp = MakeTxtAttr( *GetDoc(),
-                                 pHint->GetAttr(),
-                                 nChangePos, nChangePos + nChangeLen);
-                             pCollector->push_back( pTmp );
+                            if ( !pCollector.get() )
+                            {
+                               pCollector.reset( new SwpHts );
+                            }
+                            for(SwpHts::iterator it =  pCollector->begin(); it != pCollector->end(); ++it)
+                            {
+                               SwTxtAttr *pTmp = *it;
+                               if( nWhich == pTmp->Which() )
+                               {
+                                   pCollector->erase( it );
+                                   SwTxtAttr::Destroy( pTmp,
+                                       GetDoc()->GetAttrPool() );
+                                   break;
+                               }
+                            }
+                            SwTxtAttr * const pTmp =
+                            MakeTxtAttr( *GetDoc(),
+                                pHint->GetAttr(), nChangePos, nChangePos + nChangeLen);
+                            pCollector->push_back( pTmp );
                         }
                         else
                         {
                             *pEnd = *pEnd + nChangeLen;
+                            bTxtAttrChanged = true;
                         }
+                    }
+                }
+
+                if ( bTxtAttrChanged
+                     && pHint->Which() == RES_TXTATR_INPUTFIELD )
+                {
+                    SwTxtInputFld* pTxtInputFld = dynamic_cast<SwTxtInputFld*>(pHint);
+                    if ( pTxtInputFld )
+                    {
+                        pTxtInputFld->UpdateFieldContent();
                     }
                 }
             }
@@ -1028,10 +1061,9 @@ void SwTxtNode::Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
         }
 
         const IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
-        for(IDocumentMarkAccess::const_iterator_t ppMark =
-                pMarkAccess->getMarksBegin();
-            ppMark != pMarkAccess->getMarksEnd();
-            ++ppMark)
+        for (IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+              ppMark != pMarkAccess->getMarksEnd();
+              ++ppMark)
         {
             // Bookmarks must never grow to either side, when
             // editing (directly) to the left or right (#i29942#)!
@@ -1155,9 +1187,10 @@ static bool lcl_GetTxtAttrParent(sal_Int32 nIndex, sal_Int32 nHintStart, sal_Int
 
 static void
 lcl_GetTxtAttrs(
-    ::std::vector<SwTxtAttr *> *const pVector, SwTxtAttr **const ppTxtAttr,
+    ::std::vector<SwTxtAttr *> *const pVector,
+    SwTxtAttr **const ppTxtAttr,
     SwpHints *const pSwpHints,
-    sal_Int32 nIndex, RES_TXTATR const nWhich,
+    sal_Int32 const nIndex, RES_TXTATR const nWhich,
     enum SwTxtNode::GetTxtAttrMode const eMode)
 {
     sal_uInt16 const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
@@ -1234,13 +1267,48 @@ SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
             || (nWhich == RES_TXTATR_AUTOFMT)
             || (nWhich == RES_TXTATR_INETFMT)
             || (nWhich == RES_TXTATR_CJK_RUBY)
-            || (nWhich == RES_TXTATR_UNKNOWN_CONTAINER));
+            || (nWhich == RES_TXTATR_UNKNOWN_CONTAINER)
+            || (nWhich == RES_TXTATR_INPUTFIELD ) );
             // "GetTxtAttrAt() will give wrong result for this hint!")
 
     SwTxtAttr * pRet(0);
     lcl_GetTxtAttrs(0, & pRet, m_pSwpHints, nIndex, nWhich, eMode);
     return pRet;
 }
+
+const SwTxtInputFld* SwTxtNode::GetOverlappingInputFld( const SwTxtAttr& rTxtAttr ) const
+{
+    const SwTxtInputFld* pTxtInputFld = NULL;
+
+    pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtAttrAt( *(rTxtAttr.GetStart()), RES_TXTATR_INPUTFIELD, PARENT ));
+
+    if ( pTxtInputFld == NULL && rTxtAttr.End() != NULL )
+    {
+        pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtAttrAt( *(rTxtAttr.End()), RES_TXTATR_INPUTFIELD, PARENT ));
+    }
+
+    return pTxtInputFld;
+}
+
+SwTxtFld* SwTxtNode::GetFldTxtAttrAt(
+    const xub_StrLen nIndex,
+    const bool bIncludeInputFldAtStart ) const
+{
+    SwTxtFld* pTxtFld = NULL;
+
+    pTxtFld = dynamic_cast<SwTxtFld*>(GetTxtAttrForCharAt( nIndex, RES_TXTATR_FIELD ));
+    if ( pTxtFld == NULL )
+    {
+        pTxtFld =
+            dynamic_cast<SwTxtFld*>( GetTxtAttrAt(
+                nIndex,
+                RES_TXTATR_INPUTFIELD,
+                bIncludeInputFldAtStart ? DEFAULT : PARENT ));
+    }
+
+    return pTxtFld;
+}
+
 
 /*************************************************************************
  *                          CopyHint()
@@ -1262,77 +1330,80 @@ static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const OUString& 
     return NULL;
 }
 
-static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
-    SwTxtAttr *const pNewHt, SwDoc *const pOtherDoc, SwTxtNode *const pDest )
+void lcl_CopyHint(
+    const sal_uInt16 nWhich,
+    const SwTxtAttr * const pHt,
+    SwTxtAttr *const pNewHt,
+    SwDoc *const pOtherDoc,
+    SwTxtNode *const pDest )
 {
     assert(nWhich == pHt->Which()); // wrong hint-id
     switch( nWhich )
     {
-        // copy nodesarray section with footnote content
-        case RES_TXTATR_FTN :
+    // copy nodesarray section with footnote content
+    case RES_TXTATR_FTN :
             assert(pDest); // "lcl_CopyHint: no destination text node?"
-            static_cast<const SwTxtFtn*>(pHt)->CopyFtn(
-                *static_cast<SwTxtFtn*>(pNewHt), *pDest);
+            static_cast<const SwTxtFtn*>(pHt)->CopyFtn( *static_cast<SwTxtFtn*>(pNewHt), *pDest);
             break;
 
-        // Beim Kopieren von Feldern in andere Dokumente
-        // muessen die Felder bei ihren neuen Feldtypen angemeldet werden.
+    // Beim Kopieren von Feldern in andere Dokumente
+    // muessen die Felder bei ihren neuen Feldtypen angemeldet werden.
 
-        // TabellenFormel muessen relativ kopiert werden.
-        case RES_TXTATR_FIELD :
+    // TabellenFormel muessen relativ kopiert werden.
+    case RES_TXTATR_FIELD :
+    case RES_TXTATR_INPUTFIELD :
+        {
+            if( pOtherDoc )
             {
-                const SwFmtFld& rFld = pHt->GetFmtFld();
-                if( pOtherDoc )
-                {
-                    static_cast<const SwTxtFld*>(pHt)->CopyFld(
-                        static_cast<SwTxtFld*>(pNewHt) );
-                }
+                static_cast<const SwTxtFld*>(pHt)->CopyTxtFld( static_cast<SwTxtFld*>(pNewHt) );
+            }
 
-                // Tabellenformel ??
-                if( RES_TABLEFLD == rFld.GetField()->GetTyp()->Which()
-                    && static_cast<const SwTblField*>(rFld.GetField())->IsIntrnlName())
+            // Tabellenformel ??
+            const SwFmtFld& rFld = pHt->GetFmtFld();
+            if( RES_TABLEFLD == rFld.GetField()->GetTyp()->Which()
+                && static_cast<const SwTblField*>(rFld.GetField())->IsIntrnlName())
+            {
+                // wandel die interne in eine externe Formel um
+                const SwTableNode* const pDstTblNd =
+                    static_cast<const SwTxtFld*>(pHt)->GetTxtNode().FindTableNode();
+                if( pDstTblNd )
                 {
-                    // wandel die interne in eine externe Formel um
-                    const SwTableNode* const pDstTblNd =
-                        static_cast<const SwTxtFld*>(pHt)->GetTxtNode().FindTableNode();
-                    if( pDstTblNd )
-                    {
-                        SwTblField* const pTblFld = const_cast<SwTblField*>(
-                            static_cast<const SwTblField*>(pNewHt->GetFmtFld().GetField()));
-                        pTblFld->PtrToBoxNm( &pDstTblNd->GetTable() );
-                    }
+                    SwTblField* const pTblFld = const_cast<SwTblField*>(
+                        static_cast<const SwTblField*>(pNewHt->GetFmtFld().GetField()));
+                    pTblFld->PtrToBoxNm( &pDstTblNd->GetTable() );
                 }
             }
-            break;
+        }
+        break;
 
-        case RES_TXTATR_TOXMARK :
-            if( pOtherDoc && pDest && pDest->GetpSwpHints()
-                && USHRT_MAX != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+    case RES_TXTATR_TOXMARK :
+        if( pOtherDoc && pDest && pDest->GetpSwpHints()
+            && USHRT_MAX != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+        {
+            // Beim Kopieren von TOXMarks(Client) in andere Dokumente
+            // muss der Verzeichnis (Modify) ausgetauscht werden
+            static_cast<SwTxtTOXMark*>(pNewHt)->CopyTOXMark( pOtherDoc );
+        }
+        break;
+
+    case RES_TXTATR_CHARFMT :
+        // Wenn wir es mit einer Zeichenvorlage zu tun haben,
+        // muessen wir natuerlich auch die Formate kopieren.
+        if( pDest && pDest->GetpSwpHints()
+            && USHRT_MAX != pDest->GetpSwpHints()->GetPos( pNewHt ) )
+        {
+            SwCharFmt* pFmt =
+                static_cast<SwCharFmt*>(pHt->GetCharFmt().GetCharFmt());
+
+            if( pFmt && pOtherDoc )
             {
-                // Beim Kopieren von TOXMarks(Client) in andere Dokumente
-                // muss der Verzeichnis (Modify) ausgetauscht werden
-                static_cast<SwTxtTOXMark*>(pNewHt)->CopyTOXMark( pOtherDoc );
+                pFmt = pOtherDoc->CopyCharFmt( *pFmt );
             }
-            break;
-
-        case RES_TXTATR_CHARFMT :
-            // Wenn wir es mit einer Zeichenvorlage zu tun haben,
-            // muessen wir natuerlich auch die Formate kopieren.
-            if( pDest && pDest->GetpSwpHints()
-                && USHRT_MAX != pDest->GetpSwpHints()->GetPos( pNewHt ) )
-            {
-                SwCharFmt* pFmt =
-                    static_cast<SwCharFmt*>(pHt->GetCharFmt().GetCharFmt());
-
-                if( pFmt && pOtherDoc )
-                {
-                    pFmt = pOtherDoc->CopyCharFmt( *pFmt );
-                }
-                const_cast<SwFmtCharFmt&>( static_cast<const SwFmtCharFmt&>(
-                    pNewHt->GetCharFmt() ) ).SetCharFmt( pFmt );
-            }
-            break;
-        case RES_TXTATR_INETFMT :
+            const_cast<SwFmtCharFmt&>( static_cast<const SwFmtCharFmt&>(
+                pNewHt->GetCharFmt() ) ).SetCharFmt( pFmt );
+        }
+        break;
+    case RES_TXTATR_INETFMT :
         {
             // Wenn wir es mit benutzerdefinierten INet-Zeichenvorlagen
             // zu tun haben, muessen wir natuerlich auch die Formate kopieren.
@@ -1340,7 +1411,7 @@ static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
                 && USHRT_MAX != pDest->GetpSwpHints()->GetPos( pNewHt ) )
             {
                 const SwDoc* const pDoc = static_cast<const SwTxtINetFmt*>(pHt)
-                                            ->GetTxtNode().GetDoc();
+                    ->GetTxtNode().GetDoc();
                 if ( pDoc )
                 {
                     const SwCharFmts* pCharFmts = pDoc->GetCharFmts();
@@ -1367,13 +1438,13 @@ static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
             pINetHt->GetCharFmt();
             break;
         }
-        case RES_TXTATR_META:
-        case RES_TXTATR_METAFIELD:
-            OSL_ENSURE(pNewHt, "copying Meta should not fail!");
-            OSL_ENSURE(pDest && (CH_TXTATR_BREAKWORD ==
-                                pDest->GetTxt()[*pNewHt->GetStart()]),
-                   "missing CH_TXTATR?");
-            break;
+    case RES_TXTATR_META:
+    case RES_TXTATR_METAFIELD:
+        OSL_ENSURE( pNewHt, "copying Meta should not fail!" );
+        OSL_ENSURE( pDest
+                    && (CH_TXTATR_INWORD == pDest->GetTxt()[*pNewHt->GetStart()]),
+            "missing CH_TXTATR?");
+        break;
     }
 }
 
@@ -1399,34 +1470,33 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
             SwTxtAttr *const pHt = m_pSwpHints->GetTextHint(i);
             sal_Int32 const nAttrStartIdx = *pHt->GetStart();
             if ( nTxtStartIdx < nAttrStartIdx )
-                break;      // ueber das Textende, da nLen == 0
+                break; // ueber das Textende, da nLen == 0
 
             const sal_Int32 *const pEndIdx = pHt->GetEnd();
             if ( pEndIdx && !pHt->HasDummyChar() )
             {
-                if( ( *pEndIdx > nTxtStartIdx ||
-                      ( *pEndIdx == nTxtStartIdx &&
-                        nAttrStartIdx == nTxtStartIdx ) ) )
+                if ( ( *pEndIdx > nTxtStartIdx
+                       || ( *pEndIdx == nTxtStartIdx
+                            && nAttrStartIdx == nTxtStartIdx ) ) )
                 {
                     sal_uInt16 const nWhich = pHt->Which();
                     if ( RES_TXTATR_REFMARK != nWhich )
                     {
                         // attribute in the area => copy
-                        SwTxtAttr *const pNewHt = pDest->InsertItem(
-                                pHt->GetAttr(), nOldPos, nOldPos,
-                                nsSetAttrMode::SETATTR_IS_COPY);
+                        SwTxtAttr *const pNewHt =
+                            pDest->InsertItem( pHt->GetAttr(), nOldPos, nOldPos, nsSetAttrMode::SETATTR_IS_COPY);
                         if ( pNewHt )
                         {
                             lcl_CopyHint( nWhich, pHt, pNewHt,
-                                    pOtherDoc, pDest );
+                                pOtherDoc, pDest );
                         }
                     }
-                    else if( !pOtherDoc ? GetDoc()->IsCopyIsMove()
-                                        : 0 == pOtherDoc->GetRefMark(
-                                        pHt->GetRefMark().GetRefName() ) )
+                    else if( !pOtherDoc
+                             ? GetDoc()->IsCopyIsMove()
+                             : 0 == pOtherDoc->GetRefMark( pHt->GetRefMark().GetRefName() ) )
                     {
-                        pDest->InsertItem( pHt->GetAttr(), nOldPos, nOldPos,
-                                nsSetAttrMode::SETATTR_IS_COPY);
+                        pDest->InsertItem(
+                            pHt->GetAttr(), nOldPos, nOldPos, nsSetAttrMode::SETATTR_IS_COPY);
                     }
                 }
             }
@@ -1447,7 +1517,6 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
 |*                      wird angehaengt
 *************************************************************************/
 
-// #i96213#
 // introduction of new optional parameter to control, if all attributes have to be copied.
 void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const SwIndex &rStart,
@@ -1458,7 +1527,6 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     CopyText( pDest, aIdx, rStart, nLen, bForceCopyOfAllAttrs );
 }
 
-// #i96213#
 // introduction of new optional parameter to control, if all attributes have to be copied.
 void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const SwIndex &rDestStart,
@@ -1526,8 +1594,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     if ( !nLen ) // string not longer?
         return;
 
-    SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ?
-            pDest->GetDoc() : 0;
+    SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ? pDest->GetDoc() : 0;
 
     // harte Absatz umspannende Attribute kopieren
     if( HasSwAttrSet() )
@@ -1540,11 +1607,11 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
                nLen != pDest->GetTxt().getLength()))
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
-                                RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-                                0 );
+                RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+                0 );
             aCharSet.Put( *GetpSwAttrSet() );
             if( aCharSet.Count() )
             {
@@ -1558,7 +1625,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     }
 
     bool const bUndoNodes = !pOtherDoc
-        && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
+                            && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
     // Ende erst jetzt holen, weil beim Kopieren in sich selbst der
     // Start-Index und alle Attribute vorher aktualisiert werden.
@@ -1579,7 +1646,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     SwpHts aRefMrkArr;
 
     sal_uInt16 nDeletedDummyChars(0);
-        //Achtung: kann ungueltig sein!!
+    //Achtung: kann ungueltig sein!!
     for (sal_uInt16 n = 0; ( n < nSize ); ++n)
     {
         const sal_Int32 nAttrStartIdx = *(*m_pSwpHints)[n]->GetStart();
@@ -1596,14 +1663,30 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         //              erkennen und sammeln, nach dem kopieren Loeschen.
         //              Nimmt sein Zeichen mit ins Grab !!
         // JP 14.08.95: Duerfen RefMarks gemovt werden?
-        int bCopyRefMark = RES_TXTATR_REFMARK == nWhich && ( bUndoNodes ||
-                           (!pOtherDoc ? GetDoc()->IsCopyIsMove()
-                                      : 0 == pOtherDoc->GetRefMark(
-                                        pHt->GetRefMark().GetRefName() )));
+        const bool bCopyRefMark = RES_TXTATR_REFMARK == nWhich
+                                  && ( bUndoNodes
+                                       || ( !pOtherDoc
+                                            ? GetDoc()->IsCopyIsMove()
+                                            : 0 == pOtherDoc->GetRefMark( pHt->GetRefMark().GetRefName() ) ) );
 
-        if( pEndIdx && RES_TXTATR_REFMARK == nWhich && !bCopyRefMark )
+        if ( pEndIdx
+             && RES_TXTATR_REFMARK == nWhich
+             && !bCopyRefMark )
         {
             continue;
+        }
+
+        // Input Fields are only copied, if completely covered by copied text
+        if ( nWhich == RES_TXTATR_INPUTFIELD )
+        {
+            OSL_ENSURE( pEndIdx != NULL,
+                    "<SwTxtNode::CopyText(..)> - RES_TXTATR_INPUTFIELD without EndIndex!" );
+            if ( nAttrStartIdx < nTxtStartIdx
+                 || ( pEndIdx != NULL
+                      && *(pEndIdx) > nEnd ) )
+            {
+                continue;
+            }
         }
 
         sal_Int32 nAttrStt = 0;
@@ -1618,8 +1701,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
                 // attribute with extent and the end is in the selection
                 nAttrStt = nDestStart;
                 nAttrEnd = (*pEndIdx > nEnd)
-                            ? rDestStart.GetIndex()
-                            : nDestStart + (*pEndIdx) - nTxtStartIdx;
+                    ? rDestStart.GetIndex()
+                    : nDestStart + (*pEndIdx) - nTxtStartIdx;
             }
             else
             {
@@ -1633,8 +1716,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
             if( pEndIdx )
             {
                 nAttrEnd = *pEndIdx > nEnd
-                            ? rDestStart.GetIndex()
-                            : nDestStart + ( *pEndIdx - nTxtStartIdx );
+                    ? rDestStart.GetIndex()
+                    : nDestStart + ( *pEndIdx - nTxtStartIdx );
             }
             else
             {
@@ -2259,7 +2342,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         // 1. The hint ends before the deletion end position or
         // 2. The hint ends at the deletion end position and
         //    we are not in empty expand mode and
-        //    the hint is a [toxmark|refmark|ruby] text attribute
+        //    the hint is a [toxmark|refmark|ruby|inputfield] text attribute
         // 3. deleting exactly the dummy char of an hint with end and dummy
         //    char deletes the hint
         if (   (*pHtEndIdx < nEndIdx)
@@ -2267,9 +2350,8 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
                  !(IDocumentContentOperations::INS_EMPTYEXPAND & nMode)  &&
                  (  (RES_TXTATR_TOXMARK == nWhich)  ||
                     (RES_TXTATR_REFMARK == nWhich)  ||
-                 // #i62668# Ruby text attribute must be
-                 // treated just like toxmark and refmarks
-                    (RES_TXTATR_CJK_RUBY == nWhich) ) )
+                    (RES_TXTATR_CJK_RUBY == nWhich) ||
+                    (RES_TXTATR_INPUTFIELD == nWhich) ) )
             || ( (nHintStart < nEndIdx)     &&
                  pHt->HasDummyChar()        )
            )
@@ -2322,7 +2404,7 @@ void SwTxtNode::GCAttr()
     bool   bChanged = false;
     sal_Int32 nMin = m_Text.getLength();
     sal_Int32 nMax = 0;
-    bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
+    const bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
                            // INet-Formate entfernt.
 
     for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
@@ -2615,7 +2697,8 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
  *                      SwTxtNode::GetTxtAttr
  *************************************************************************/
 
-SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt( const xub_StrLen nIndex,
+SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt(
+    const xub_StrLen nIndex,
     const RES_TXTATR nWhich ) const
 {
     if ( HasHints() )
@@ -2631,7 +2714,7 @@ SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt( const xub_StrLen nIndex,
             if ( (nIndex == nStartPos) && pHint->HasDummyChar() )
             {
                 return ( RES_TXTATR_END == nWhich || nWhich == pHint->Which() )
-                    ? pHint : 0;
+                       ? pHint : 0;
             }
         }
     }
@@ -3018,6 +3101,11 @@ OUString SwTxtNode::GetExpandTxt(  const sal_Int32 nIdx,
         (nLen == -1) ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
     sal_Int32 nTxtStt = nIdx;
     Replace0xFF(*this, aTxt, nTxtStt, aTxt.getLength(), true);
+
+    // remove dummy characters of Input Fields
+    comphelper::string::remove(aTxt, CH_TXT_ATR_INPUTFIELDSTART);
+    comphelper::string::remove(aTxt, CH_TXT_ATR_INPUTFIELDEND);
+
     if( bWithNum )
     {
         if ( !GetNumString().isEmpty() )
@@ -3070,6 +3158,11 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     {
         buf.truncate(nLen);
     }
+    // remove dummy characters of Input Fields
+    {
+        comphelper::string::remove(buf, CH_TXT_ATR_INPUTFIELDSTART);
+        comphelper::string::remove(buf, CH_TXT_ATR_INPUTFIELDEND);
+    }
     rDestNd.InsertText(buf.makeStringAndClear(), aDestIdx);
     nLen = aDestIdx.GetIndex() - nDestStt;
 
@@ -3085,7 +3178,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
             if (nIdx + nLen <= nAttrStartIdx)
                 break;      // ueber das Textende
 
-            const sal_Int32 *pEndIdx = pHt->GetEnd();
+            const sal_Int32 *pEndIdx = pHt->End();
             if( pEndIdx && *pEndIdx > nIdx &&
                 ( RES_CHRATR_FONT == nWhich ||
                   RES_TXTATR_CHARFMT == nWhich ||
@@ -3542,14 +3635,12 @@ namespace {
                 bParagraphStyleChanged = true;
                 if( rTxtNode.GetNodes().IsDocNodes() )
                 {
-                    // #i70748#
                     const SwNumRule* pFormerNumRuleAtTxtNode =
                         rTxtNode.GetNum() ? rTxtNode.GetNum()->GetNumRule() : 0;
                     if ( pFormerNumRuleAtTxtNode )
                     {
                         sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
                     }
-                    // #i70748#
                     if ( rTxtNode.IsEmptyListStyleDueToSetOutlineLevelAttr() )
                     {
                         const SwNumRuleItem& rNumRuleItem = rTxtNode.GetTxtColl()->GetNumRule();
@@ -3558,7 +3649,6 @@ namespace {
                             rTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                         }
                     }
-
                     const SwNumRule* pNumRuleAtTxtNode = rTxtNode.GetNumRule();
                     if ( pNumRuleAtTxtNode )
                     {
@@ -3571,7 +3661,6 @@ namespace {
             case RES_ATTRSET_CHG:
             {
                 const SfxPoolItem* pItem = 0;
-                // #i70748#
                 const SwNumRule* pFormerNumRuleAtTxtNode =
                     rTxtNode.GetNum() ? rTxtNode.GetNum()->GetNumRule() : 0;
                 if ( pFormerNumRuleAtTxtNode )
@@ -3645,7 +3734,7 @@ namespace {
                         // #i70748#
                         OSL_ENSURE( rTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle(),
                                 "<HandleModifyAtTxtNode()> - text node with outline style, but its paragraph style is not assigned to outline style." );
-                        int nNewListLevel =
+                        const int nNewListLevel =
                             rTxtNode.GetTxtColl()->GetAssignedOutlineStyleLevel();
                         if ( 0 <= nNewListLevel && nNewListLevel < MAXLEVEL )
                         {

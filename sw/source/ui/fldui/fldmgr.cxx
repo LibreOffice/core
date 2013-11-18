@@ -306,7 +306,7 @@ SwField* SwFldMgr::GetCurFld()
 {
     SwWrtShell *pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     if ( pSh )
-        pCurFld = pSh->GetCurFld();
+        pCurFld = pSh->GetCurFld( true );
     else
         pCurFld = NULL;
 
@@ -790,10 +790,12 @@ sal_Bool SwFldMgr::GoNextPrev( sal_Bool bNext, SwFieldType* pTyp )
     if (pTyp && pTyp->Which() == RES_DBFLD)
     {
         // for fieldcommand-edit (hop to all DB fields)
-        return pSh->MoveFldType( 0, bNext, USHRT_MAX, RES_DBFLD );
+        return pSh->MoveFldType( 0, (bNext ? true : false), RES_DBFLD );
     }
 
-    return pTyp && pSh ? pSh->MoveFldType( pTyp, bNext ) : sal_False;
+    return (pTyp && pSh)
+           ? pSh->MoveFldType( pTyp, (bNext ? true : false) )
+           : sal_False;
 }
 
 /*--------------------------------------------------------------------
@@ -980,7 +982,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         {
             if( !rData.sPar1.isEmpty() && CanInsertRefMark( rData.sPar1 ) )
             {
-                pCurShell->SetAttr( SwFmtRefMark( rData.sPar1 ) );
+                pCurShell->SetAttrItem( SwFmtRefMark( rData.sPar1 ) );
                 return sal_True;
             }
             return sal_False;
@@ -1222,7 +1224,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                     (SwInputFieldType*)pCurShell->GetFldType(0, RES_INPUTFLD);
 
                 SwInputField* pInpFld =
-                    new SwInputField(pTyp, rData.sPar1, rData.sPar2, nSubType|nsSwExtendedSubType::SUB_INVISIBLE, nFormatId);
+                    new SwInputField( pTyp, rData.sPar1, rData.sPar2, nSubType|nsSwExtendedSubType::SUB_INVISIBLE, nFormatId);
                 pFld = pInpFld;
             }
 

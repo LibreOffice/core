@@ -83,6 +83,7 @@
 #include <dselect.hxx>
 #include <textsh.hxx>
 #include <shdwcrsr.hxx>
+#include <txatbase.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
@@ -945,7 +946,7 @@ void SwEditWin::FlushInBuffer()
         if (nWhich != INVALID_HINT )
         {
             SvxLanguageItem aLangItem( m_eBufferLanguage, nWhich );
-            rSh.SetAttr( aLangItem );
+            rSh.SetAttrItem( aLangItem );
         }
 
         rSh.Insert( m_aInBuffer );
@@ -1440,8 +1441,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     // pressing this inside a note will switch to next/previous note
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((rKeyCode.GetCode() == KEY_PAGEUP) || (rKeyCode.GetCode() == KEY_PAGEDOWN)))
     {
-        bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN ? true : false;
-        SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
+        const bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN ? true : false;
+        const SwFieldType* pFldType = rSh.GetFldType( 0, RES_POSTITFLD );
         rSh.MoveFldType( pFldType, bNext );
         return;
     }
@@ -1555,9 +1556,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_GotoPrevFieldMark,
                        KS_End };
 
-    SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
-                                           : KS_CheckKey,
-                eNextKeyState = KS_End;
+    SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys : KS_CheckKey;
+    SW_KeyState eNextKeyState = KS_End;
     sal_uInt8 nDir = 0;
 
     if (m_nKS_NUMDOWN_Count > 0)
@@ -1846,7 +1846,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                 case KEY_RETURN:
                 {
-                    if( !rSh.HasReadonlySel() )
+                    if ( !rSh.HasReadonlySel()
+                         && !rSh.CrsrInsideInputFld() )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
                         if(nSelectionType & nsSelectionType::SEL_OLE)
@@ -1881,10 +1882,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                 }
                 break;
-                case KEY_RETURN | KEY_MOD2:     // ALT-Return
+                case KEY_RETURN | KEY_MOD2:
                 {
-                    if( !rSh.HasReadonlySel() && !rSh.IsSttPara() && rSh.GetCurNumRule() )
+                    if ( !rSh.HasReadonlySel()
+                         && !rSh.IsSttPara()
+                         && rSh.GetCurNumRule()
+                         && !rSh.CrsrInsideInputFld() )
+                    {
                         eKeyState = KS_NoNum;
+                    }
                     else if( rSh.CanSpecialInsert() )
                         eKeyState = KS_SpecialInsert;
                 }
@@ -1999,6 +2005,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         eKeyState=KS_GotoNextFieldMark;
                     }
+                    else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                    {
+                        GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_NEXT_INPUTFLD );
+                        eKeyState = KS_End;
+                    }
                     else
                     if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
@@ -2041,8 +2052,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
                 case KEY_TAB | KEY_SHIFT:
                 {
-                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT) {
+                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT)
+                    {
                         eKeyState=KS_GotoPrevFieldMark;
+                    }
+                    else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                    {
+                        GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_PREV_INPUTFLD );
+                        eKeyState = KS_End;
                     }
                     else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                          !rSh.HasReadonlySel() )
@@ -2159,9 +2176,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = rKeyCode.GetModifier() & KEY_SHIFT ?
                                                 KS_PrevObject : KS_NextObject;
                         }
+                        else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                        {
+                            GetView().GetViewFrame()->GetDispatcher()->Execute(
+                                KEY_SHIFT != rKeyCode.GetModifier() ? FN_GOTO_NEXT_INPUTFLD : FN_GOTO_PREV_INPUTFLD );
+                        }
                         else
-                            rSh.SelectNextPrevHyperlink(
-                                            KEY_SHIFT != rKeyCode.GetModifier() );
+                        {
+                            rSh.SelectNextPrevHyperlink( KEY_SHIFT != rKeyCode.GetModifier() );
+                        }
                     break;
                     case KEY_RETURN:
                     {
@@ -3001,11 +3024,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-    // One can be in a selection state when recently the keyboard was
-    // used to select but no CURSOR_KEY was moved yet after that. In
-    // that case the previous selction has to be finished first.
-    // MA 07. Oct. 95: Not only with left mouse button but always.
-    // also see Bug: 19263
     if ( rSh.IsInSelect() )
         rSh.EndSelect();
 
@@ -4477,7 +4495,19 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     bAddMode = true;
                                     rSh.EnterAddMode();
                                 }
-                                rSh.ClickToField( *aCntntAtPos.aFnd.pFld );
+                                if ( aCntntAtPos.pFndTxtAttr != NULL
+                                     && aCntntAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD )
+                                {
+                                    // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
+                                    // and CH_TXT_ATR_INPUTFIELDEND
+                                    rSh.SttSelect();
+                                    rSh.SelectTxt( *(aCntntAtPos.pFndTxtAttr->GetStart()) + 1,
+                                                   *(aCntntAtPos.pFndTxtAttr->End()) - 1 );
+                                }
+                                else
+                                {
+                                    rSh.ClickToField( *aCntntAtPos.aFnd.pFld );
+                                }
                                 // a bit of a mystery what this is good for?
                                 // in this case we assume it's valid since we
                                 // just selected a field
@@ -4646,10 +4676,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         Color aColor( COL_TRANSPARENT  );
                         if( !SwEditWin::m_bTransparentBackColor )
                             aColor = SwEditWin::m_aTextBackColor;
-                        rSh.SetAttr( SvxBrushItem( aColor, nId ) );
+                        rSh.SetAttrItem( SvxBrushItem( aColor, nId ) );
                     }
                     else
-                        rSh.SetAttr( SvxColorItem(SwEditWin::m_aTextColor, nId) );
+                        rSh.SetAttrItem( SvxColorItem(SwEditWin::m_aTextColor, nId) );
                     rSh.UnSetVisCrsr();
                     rSh.EnterStdMode();
                     rSh.SetVisCrsr(aDocPt);
@@ -4685,7 +4715,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     if( (( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL )
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
-                        rSh.SetAttr( SwFmtCharFmt(m_pApplyTempl->aColl.pCharFmt) );
+                        rSh.SetAttrItem( SwFmtCharFmt(m_pApplyTempl->aColl.pCharFmt) );
                         rSh.UnSetVisCrsr();
                         rSh.EnterStdMode();
                         rSh.SetVisCrsr(aDocPt);

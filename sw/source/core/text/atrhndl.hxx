@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_ATRHNDL_HXX
 
 #define INITIAL_NUM_ATTR 3
-#define NUM_ATTRIBUTE_STACKS 43
+#define NUM_ATTRIBUTE_STACKS 44
 
 #include <txatbase.hxx>
 #include <swfntcch.hxx>

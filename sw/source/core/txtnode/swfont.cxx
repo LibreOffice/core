@@ -732,6 +732,7 @@ SwFont::SwFont( const SwFont &rFont )
     nToxCnt = 0;
     nRefCnt = 0;
     m_nMetaCount = 0;
+    m_nInputFieldCount = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
     bPaintBlank = rFont.bPaintBlank;
@@ -750,6 +751,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     nToxCnt = 0;
     nRefCnt = 0;
     m_nMetaCount = 0;
+    m_nInputFieldCount = 0;
     bPaintBlank = sal_False;
     bPaintWrong = sal_False;
     bURL = sal_False;
@@ -948,6 +950,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     nToxCnt = 0;
     nRefCnt = 0;
     m_nMetaCount = 0;
+    m_nInputFieldCount = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
     bPaintBlank = rFont.bPaintBlank;

@@ -124,7 +124,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 aEscape.GetEsc() = DFLT_ESC_AUTO_SUPER;
             else if(eEscape == SVX_ESCAPEMENT_SUBSCRIPT)
                 aEscape.GetEsc() = DFLT_ESC_AUTO_SUB;
-            rSh.SetAttr( aEscape );
+            rSh.SetAttrItem( aEscape );
             rReq.AppendItem( aEscape );
             rReq.Done();
         }
@@ -153,7 +153,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 break;
             }
             SvxUnderlineItem aUnderline(eUnderline, RES_CHRATR_UNDERLINE );
-            rSh.SetAttr( aUnderline );
+            rSh.SetAttrItem( aUnderline );
             rReq.AppendItem( aUnderline );
             rReq.Done();
         }
@@ -209,7 +209,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 
             if ( pColl )
                 pColl->SetFmtAttr( aINetFmt );
-            else rWrtSh.SetAttr( aINetFmt );
+            else rWrtSh.SetAttrItem( aINetFmt );
             rReq.Done();
         }
         break;
@@ -256,7 +256,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                 if( pColl )
                     pColl->SetFmtAttr( aAttrSet );
                 else
-                    rWrtSh.SetAttr( aAttrSet );
+                    rWrtSh.SetAttrSet( aAttrSet );
             }
             rReq.Done();
         }
@@ -405,7 +405,7 @@ SET_LINESPACE:
         rWrtSh.AutoUpdatePara(pColl, aSet);
     }
     else
-        rWrtSh.SetAttr( aSet );
+        rWrtSh.SetAttrSet( aSet );
     rReq.Done();
 }
 
@@ -432,14 +432,14 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                     pFmt = rSh.FindCharFmtByName( sCharStyleName );
                 aDropItem.SetCharFmt( pFmt );
                 aSet.Put(aDropItem);
-                rSh.SetAttr(aSet);
+                rSh.SetAttrSet(aSet);
             }
         break;
         case FN_FORMAT_DROPCAPS:
         {
             if(pItem)
             {
-                rSh.SetAttr(*pItem);
+                rSh.SetAttrItem(*pItem);
                 rReq.Done();
             }
             else
@@ -462,7 +462,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                         if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
                             rSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
                     }
-                    rSh.SetAttr(*pDlg->GetOutputItemSet());
+                    rSh.SetAttrSet(*pDlg->GetOutputItemSet());
                     rSh.StartUndo( UNDO_END );
                     rSh.EndAction();
                     rReq.Done(*pDlg->GetOutputItemSet());
@@ -474,7 +474,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         case SID_ATTR_PARA_PAGEBREAK:
             if(pItem)
             {
-                rSh.SetAttr( *pItem );
+                rSh.SetAttrItem( *pItem );
                 rReq.Done();
             }
         break;
@@ -487,7 +487,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                     SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL, 0);
                 aCoreSet.Put(*pItem);
                 SfxToSwPageDescAttr( rSh, aCoreSet);
-                rSh.SetAttr(aCoreSet);
+                rSh.SetAttrSet(aCoreSet);
                 rReq.Done();
             }
         }

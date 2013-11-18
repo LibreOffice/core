@@ -673,7 +673,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr,
     else
         bInsTxt = false;
 
-    SetAttr( rFmt );
+    SetAttrItem( rFmt );
     if (bInsTxt && !IsCrsrPtAtEnd())
         SwapPam();
     if(!bKeepSelection)

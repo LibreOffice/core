@@ -836,13 +836,13 @@ public:
        @param rPos position to search at
        @return pointer to field at the given position or NULL in case no field is found
     */
-    static SwField* GetField(const SwPosition& rPos);
+    static SwField* GetFieldAtPos(const SwPosition& rPos);
 
     /** Returns the field at a certain position.
        @param rPos position to search at
        @return pointer to field at the given position or NULL in case no field is found
     */
-    static SwTxtFld* GetTxtFld(const SwPosition& rPos);
+    static SwTxtFld* GetTxtFldAtPos(const SwPosition& rPos);
     bool containsUpdatableFields();
 
     /** IDocumentContentOperations
@@ -855,7 +855,6 @@ public:
     // Needed for hiding of deletion redlines
     virtual bool DeleteAndJoin( SwPaM&,
                                 const bool bForceJoinNext = false );
-
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags);
     virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);
@@ -871,9 +870,14 @@ public:
     virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
+
     /// Add a para for the char attribute exp...
-    virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const SetAttrMode nFlags,bool bExpandCharToPara=false);
+    virtual bool InsertPoolItem(
+        const SwPaM &rRg,
+        const SfxPoolItem&,
+        const SetAttrMode nFlags,
+        const bool bExpandCharToPara=false);
+
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
                                 const SetAttrMode nFlags);
     virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);

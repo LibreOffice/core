@@ -937,7 +937,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     ESelection aSel(pOLV->GetSelection());
     const bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
-                           (aSel.nStartPos != aSel.nEndPos);
+        (aSel.nStartPos != aSel.nEndPos);
 
 
     SfxWhichIter aIter(rSet);
@@ -947,32 +947,31 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
-            case SID_CUT:
-            case SID_COPY:
-                if( !bCopy )
-                    rSet.DisableItem( nWhich );
-                break;
+        case SID_CUT:
+        case SID_COPY:
+            if( !bCopy )
+                rSet.DisableItem( nWhich );
+            break;
 
-            case SID_PASTE:
+        case SID_PASTE:
+            {
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard( &GetView().GetEditWin() ) );
+
+                if( !aDataHelper.GetXTransferable().is()
+                    || !SwTransferable::IsPaste( GetShell(), aDataHelper ) )
                 {
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard(
-                                &GetView().GetEditWin() ) );
-
-                    if( !aDataHelper.GetXTransferable().is() ||
-                        !SwTransferable::IsPaste( GetShell(), aDataHelper ))
-                        rSet.DisableItem( SID_PASTE );
+                    rSet.DisableItem( nWhich );
                 }
-                break;
+            }
+            break;
 
-            case SID_PASTE_SPECIAL:
-                rSet.DisableItem( SID_PASTE_SPECIAL );
-                break;
-            // #151110#
-            case SID_CLIPBOARD_FORMAT_ITEMS:
-                rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
-                break;
+        case SID_PASTE_SPECIAL:
+        case SID_CLIPBOARD_FORMAT_ITEMS:
+            rSet.DisableItem( nWhich );
+            break;
         }
+
         nWhich = aIter.NextWhich();
     }
 }

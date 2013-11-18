@@ -662,7 +662,7 @@ void SwView::Replace()
                 if( m_pReplList->Get( aReplSet ).Count() )
                 {
                     ::SfxToSwPageDescAttr( *m_pWrtShell, aReplSet );
-                    m_pWrtShell->SwEditShell::SetAttr( aReplSet );
+                    m_pWrtShell->SwEditShell::SetAttrSet( aReplSet );
                 }
             }
         }

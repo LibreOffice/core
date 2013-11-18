@@ -369,7 +369,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
  * @param bInclRefToxMark ???
  */
 
-void SwTxtNode::RstAttr(
+void SwTxtNode::RstTxtAttr(
     const SwIndex &rIdx,
     const xub_StrLen nLen,
     const sal_uInt16 nWhich,
@@ -379,8 +379,27 @@ void SwTxtNode::RstAttr(
     if ( !GetpSwpHints() )
         return;
 
-    const sal_Int32 nStt = rIdx.GetIndex();
-    const sal_Int32 nEnd = nStt + nLen;
+    sal_Int32 nStt = rIdx.GetIndex();
+    sal_Int32 nEnd = nStt + nLen;
+    {
+        // enlarge range for the reset of text attributes in case of an overlapping input field
+        const SwTxtInputFld* pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtAttrAt( nStt, RES_TXTATR_INPUTFIELD, PARENT ));
+        if ( pTxtInputFld == NULL )
+        {
+            pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtAttrAt(nEnd, RES_TXTATR_INPUTFIELD, PARENT ));
+        }
+        if ( pTxtInputFld != NULL )
+        {
+            if ( nStt > *(pTxtInputFld->GetStart()) )
+            {
+                nStt = *(pTxtInputFld->GetStart());
+            }
+            if ( nEnd < *(pTxtInputFld->End()) )
+            {
+                nEnd = *(pTxtInputFld->End());
+            }
+        }
+    }
 
     bool bChanged = false;
 
@@ -394,13 +413,13 @@ void SwTxtNode::RstAttr(
     // They may not be forgotten inside the "Forget" function
     //std::vector< const SwTxtAttr* > aNewAttributes;
 
-    // iterate over attribute array until start of attribute is behind
-    // deletion range
+    // iterate over attribute array until start of attribute is behind deletion range
     sal_uInt16 i = 0;
     sal_Int32 nAttrStart;
     SwTxtAttr *pHt = NULL;
-    while ((i < m_pSwpHints->Count()) &&
-        ((( nAttrStart = *(*m_pSwpHints)[i]->GetStart()) < nEnd ) || nLen==0) )
+    while ( (i < m_pSwpHints->Count())
+            && ( ( ( nAttrStart = *(*m_pSwpHints)[i]->GetStart()) < nEnd )
+                 || nLen==0 ) )
     {
         pHt = m_pSwpHints->GetTextHint(i);
 
@@ -418,6 +437,12 @@ void SwTxtNode::RstAttr(
         {
 
             i++;
+            continue;
+        }
+        // attributes with content stay in
+        if ( pHt->HasContent() )
+        {
+            ++i;
             continue;
         }
 

@@ -303,7 +303,7 @@ SfxItemInfo aSlotTab[] =
     { 0, 0 },                                           // RES_TXTATR_CHARFMT
     { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5
+    { 0, 0 },                                           // RES_TXTATR_INPUTFIELD
 
     { 0, 0 },                                           // RES_TXTATR_FIELD
     { 0, 0 },                                           // RES_TXTATR_FLYCNT
@@ -511,8 +511,9 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] =        new SwFmtCharFmt( 0 );
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] =      new SwFmtRuby( aEmptyOUStr );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
+    aAttrTab[ RES_TXTATR_INPUTFIELD - POOLATTR_BEGIN ] = new SwFmtFld( RES_TXTATR_INPUTFIELD );
 
-    aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] =          new SwFmtFld;
+    aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] =          new SwFmtFld( RES_TXTATR_FIELD );
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFmtFlyCnt( 0 );
     aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] =           new SwFmtFtn;
 
@@ -521,7 +522,6 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY2 );
     aAttrTab[ RES_TXTATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY3 );
     aAttrTab[ RES_TXTATR_DUMMY4 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY4 );
-    aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY5 );
 
     aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] =    new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
     aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] =         new SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST );

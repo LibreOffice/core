@@ -57,6 +57,7 @@ private:
     bool m_bHasDummyChar        : 1;    // without end + meta
     bool m_bFormatIgnoreStart   : 1;    ///< text formatting should ignore start
     bool m_bFormatIgnoreEnd     : 1;    ///< text formatting should ignore end
+    bool m_bHasContent          : 1;    // text attribute with content
 
 protected:
     SwTxtAttr( SfxPoolItem& rAttr, sal_Int32 nStart );
@@ -69,6 +70,7 @@ protected:
     void SetDontExpandStartAttr(bool bFlag) { m_bDontExpandStart = bFlag; }
     void SetNesting(const bool bFlag)       { m_bNesting = bFlag; }
     void SetHasDummyChar(const bool bFlag)  { m_bHasDummyChar = bFlag; }
+    void SetHasContent( const bool bFlag )  { m_bHasContent = bFlag; }
 
 public:
 
@@ -80,8 +82,8 @@ public:
             const sal_Int32* GetStart() const  { return & m_nStart; }
 
     /// end position
-    virtual      sal_Int32* GetEnd();
-    inline const sal_Int32* GetEnd() const;
+    virtual      sal_Int32* GetEnd(); // also used to change the end position
+    inline const sal_Int32* End() const;
     /// end (if available), else start
     inline const sal_Int32* GetAnyEnd() const;
 
@@ -100,6 +102,7 @@ public:
     bool IsFormatIgnoreEnd  () const        { return m_bFormatIgnoreEnd  ; }
     void SetFormatIgnoreStart(bool bFlag)   { m_bFormatIgnoreStart = bFlag; }
     void SetFormatIgnoreEnd  (bool bFlag)   { m_bFormatIgnoreEnd   = bFlag; }
+    bool HasContent() const                 { return m_bHasContent; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline       SfxPoolItem& GetAttr();
@@ -128,21 +131,20 @@ protected:
 public:
     SwTxtAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
 
-    using SwTxtAttr::GetEnd;
     virtual sal_Int32* GetEnd();
 };
 
 
 // --------------- Inline Implementations ------------------------
 
-inline const sal_Int32* SwTxtAttr::GetEnd() const
+inline const sal_Int32* SwTxtAttr::End() const
 {
     return const_cast<SwTxtAttr * >(this)->GetEnd();
 }
 
 inline const sal_Int32* SwTxtAttr::GetAnyEnd() const
 {
-    const sal_Int32* pEnd = GetEnd();
+    const sal_Int32* pEnd = End();
     return pEnd ? pEnd : GetStart();
 }
 
@@ -182,7 +184,9 @@ inline const SwFmtAutoFmt& SwTxtAttr::GetAutoFmt() const
 
 inline const SwFmtFld& SwTxtAttr::GetFmtFld() const
 {
-    assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FIELD );
+    assert( m_pAttr
+            && ( m_pAttr->Which() == RES_TXTATR_FIELD
+                 || m_pAttr->Which() == RES_TXTATR_INPUTFIELD ));
     return (const SwFmtFld&)(*m_pAttr);
 }
 

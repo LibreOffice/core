@@ -78,10 +78,7 @@ public:
 
     _SetGetExpFld( const SwFlyFrmFmt& rFlyFmt, const SwPosition* pPos = 0 );
 
-    bool operator==( const _SetGetExpFld& rFld ) const
-        {   return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
-                ( !CNTNT.pTxtFld || !rFld.CNTNT.pTxtFld ||
-                    CNTNT.pTxtFld == rFld.CNTNT.pTxtFld ); }
+    bool operator==( const _SetGetExpFld& rFld ) const;
     bool operator<( const _SetGetExpFld& rFld ) const;
 
     const SwTxtFld* GetTxtFld() const

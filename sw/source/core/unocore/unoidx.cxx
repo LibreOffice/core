@@ -1758,9 +1758,9 @@ throw (uno::RuntimeException)
             m_pImpl->m_pTOXMark->GetTxtTOXMark();
         SwPaM aPam(pTxtMark->GetTxtNode(), *pTxtMark->GetStart());
         aPam.SetMark();
-        if(pTxtMark->GetEnd())
+        if(pTxtMark->End())
         {
-            aPam.GetPoint()->nContent = *pTxtMark->GetEnd();
+            aPam.GetPoint()->nContent = *pTxtMark->End();
         }
         else
             aPam.GetPoint()->nContent++;
@@ -2003,9 +2003,9 @@ SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException)
     const SwTxtTOXMark* pTxtMark = m_pImpl->m_pTOXMark->GetTxtTOXMark();
     SwPaM aPam(pTxtMark->GetTxtNode(), *pTxtMark->GetStart());
     aPam.SetMark();
-    if(pTxtMark->GetEnd())
+    if(pTxtMark->End())
     {
-        aPam.GetPoint()->nContent = *pTxtMark->GetEnd();
+        aPam.GetPoint()->nContent = *pTxtMark->End();
     }
     else
     {
@@ -2141,9 +2141,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             m_pImpl->m_pTOXMark->GetTxtTOXMark();
         SwPaM aPam(pTxtMark->GetTxtNode(), *pTxtMark->GetStart());
         aPam.SetMark();
-        if(pTxtMark->GetEnd())
+        if(pTxtMark->End())
         {
-            aPam.GetPoint()->nContent = *pTxtMark->GetEnd();
+            aPam.GetPoint()->nContent = *pTxtMark->End();
         }
         else
         {

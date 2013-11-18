@@ -248,7 +248,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool    PageCrsr(SwTwips lOffset, sal_Bool bSelect);
 
     // update fields
-    void    UpdateInputFlds( SwInputFieldList* pLst = 0, sal_Bool bOnlyInSel = sal_False );
+    void    UpdateInputFlds( SwInputFieldList* pLst = 0 );
 
     void    NoEdit(bool bHideCrsr = true);
     void    Edit();

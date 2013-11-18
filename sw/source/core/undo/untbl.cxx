@@ -2019,8 +2019,7 @@ CHECKTABLE(pTblNd->GetTable())
                     // also delete not needed attributes
                     SwIndex aTmpIdx( pTxtNd, nDelPos );
                     if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )
-                        pTxtNd->RstAttr(aTmpIdx, pTxtNd->GetTxt().getLength() -
-                                                            nDelPos + 1 );
+                        pTxtNd->RstTxtAttr( aTmpIdx, pTxtNd->GetTxt().getLength() - nDelPos + 1 );
                     // delete separator
                     pTxtNd->EraseText( aTmpIdx, 1 );
                 }

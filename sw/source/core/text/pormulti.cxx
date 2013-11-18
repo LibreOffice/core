@@ -969,7 +969,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     if( pRuby )
     {   // The winner is ... a ruby attribute and so
         // the end of the multiportion is the end of the ruby attribute.
-        rPos = *pRuby->GetEnd();
+        rPos = *pRuby->End();
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = NULL;
         pRet->pAttr = pRuby;
@@ -995,7 +995,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         {
             pRet->pItem = NULL;
             pRet->pAttr = (*pHints)[n2Lines];
-            aEnd.push_front( *pRet->pAttr->GetEnd() );
+            aEnd.push_front( *pRet->pAttr->End() );
             if( pItem )
             {
                 aEnd.front() = GetTxt().getLength();
@@ -1071,8 +1071,8 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                 if( bTwo == bOn )
                 {   // .. with the same state, so the last attribute could
                     // be continued.
-                    if( aEnd.back() < *pTmp->GetEnd() )
-                        aEnd.back() = *pTmp->GetEnd();
+                    if( aEnd.back() < *pTmp->End() )
+                        aEnd.back() = *pTmp->End();
                 }
                 else
                 {   // .. with a different state.
@@ -1080,12 +1080,12 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                     // If this is smaller than the last on the stack, we put
                     // it on the stack. If it has the same endposition, the last
                     // could be removed.
-                    if( aEnd.back() > *pTmp->GetEnd() )
-                        aEnd.push_back( *pTmp->GetEnd() );
+                    if( aEnd.back() > *pTmp->End() )
+                        aEnd.push_back( *pTmp->End() );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->GetEnd();
+                        aEnd.back() = *pTmp->End();
                 }
             }
         }
@@ -1143,18 +1143,18 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd.back() < *pTmp->GetEnd() )
-                        aEnd.back() = *pTmp->GetEnd();
+                    if( aEnd.back() < *pTmp->End() )
+                        aEnd.back() = *pTmp->End();
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd.back() > *pTmp->GetEnd() )
-                        aEnd.push_back( *pTmp->GetEnd() );
+                    if( aEnd.back() > *pTmp->End() )
+                        aEnd.push_back( *pTmp->End() );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->GetEnd();
+                        aEnd.back() = *pTmp->End();
                 }
             }
         }
@@ -1169,7 +1169,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         {
             pRet->pItem = NULL;
             pRet->pAttr = (*pHints)[nRotate];
-            aEnd.push_front( *pRet->pAttr->GetEnd() );
+            aEnd.push_front( *pRet->pAttr->End() );
             if( pRotItem )
             {
                 aEnd.front() = GetTxt().getLength();
@@ -1214,18 +1214,18 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd.back() < *pTmp->GetEnd() )
-                        aEnd.back() = *pTmp->GetEnd();
+                    if( aEnd.back() < *pTmp->End() )
+                        aEnd.back() = *pTmp->End();
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd.back() > *pTmp->GetEnd() )
-                        aEnd.push_back( *pTmp->GetEnd() );
+                    if( aEnd.back() > *pTmp->End() )
+                        aEnd.push_back( *pTmp->End() );
                     else if( aEnd.size() > 1 )
                         aEnd.pop_back();
                     else
-                        aEnd.back() = *pTmp->GetEnd();
+                        aEnd.back() = *pTmp->End();
                 }
             }
         }

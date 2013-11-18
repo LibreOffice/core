@@ -1112,8 +1112,8 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, OUString& rStr )
 
     if ( pF->nId != 0x01 ) // 0x01 fields have no result
     {
-        SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
-                            aDef, aQ, INP_TXT, 0 ); // sichtbar ( geht z.Zt. nicht anders )
+        SwInputField aFld( static_cast<SwInputFieldType*>(rDoc.GetSysFldType( RES_INPUTFLD )),
+                            aDef, aQ, INP_TXT, 0, false );
         rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     }
 
@@ -2474,7 +2474,7 @@ eF_ResT SwWW8ImplReader::Read_F_Equation( WW8FieldDesc*, OUString& rStr )
 
         if (aResult.sType == "Input")
         {
-            SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
+            SwInputField aFld( static_cast<SwInputFieldType*>(rDoc.GetSysFldType( RES_INPUTFLD )),
                 aResult.sResult, aResult.sResult, INP_TXT, 0 );
             rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 ); // insert input field
         }

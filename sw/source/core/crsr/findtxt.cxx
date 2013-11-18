@@ -187,8 +187,8 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
         {
             aIndex++;
             const SwTxtAttr* pTxtAttr = (*pHts)[i];
-            if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                    (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+            if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
+                 && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
             {
                 aCount--;
                 if (!aCount)
@@ -200,8 +200,8 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     for( sal_Int32 i = aIndex; i < pHts->Count(); i++ )
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
-        if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+        if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
+             && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
             break;
         else
             aIndex++;
@@ -265,8 +265,8 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                 for( sal_Int32 i = 0; i < pHts->Count(); i++ )
                 {
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
-                    if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                                (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+                    if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
+                         && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
                     {
                         const sal_Int32 aPos = *pTxtAttr->GetStart();
                         if ( (aPos >= nStart) && (aPos <= nEnd) )

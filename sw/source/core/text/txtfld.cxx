@@ -336,37 +336,37 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
 
     switch( pHint->Which() )
     {
-        case RES_TXTATR_FLYCNT :
+    case RES_TXTATR_FLYCNT :
         {
             pRet = NewFlyCntPortion( rInf, pHint );
             break;
         }
-        case RES_TXTATR_FTN :
+    case RES_TXTATR_FTN :
         {
             pRet = NewFtnPortion( rInf, pHint );
             break;
         }
-        case RES_TXTATR_FIELD :
+    case RES_TXTATR_FIELD :
         {
             pRet = NewFldPortion( rInf, pHint );
             break;
         }
-        case RES_TXTATR_REFMARK :
+    case RES_TXTATR_REFMARK :
         {
             pRet = new SwIsoRefPortion;
             break;
         }
-        case RES_TXTATR_TOXMARK :
+    case RES_TXTATR_TOXMARK :
         {
             pRet = new SwIsoToxPortion;
             break;
         }
-        case RES_TXTATR_METAFIELD:
+    case RES_TXTATR_METAFIELD:
         {
             pRet = lcl_NewMetaPortion( *pHint, true );
             break;
         }
-        default: ;
+    default: ;
     }
     if( !pRet )
     {

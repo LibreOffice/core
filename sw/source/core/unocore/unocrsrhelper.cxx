@@ -81,6 +81,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <SwNodeNum.hxx>
 #include <fmtmeta.hxx>
+#include <txtfld.hxx>
 
 
 using namespace ::com::sun::star;
@@ -517,11 +518,10 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             const SwPosition *pPos = rPam.Start();
             const SwTxtNode *pTxtNd =
                 rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTxtNode();
-            SwTxtAttr *const pTxtAttr = (pTxtNd)
-                ? pTxtNd->GetTxtAttrForCharAt(
-                        pPos->nContent.GetIndex(), RES_TXTATR_FIELD)
+            const SwTxtAttr* pTxtAttr = (pTxtNd)
+                ? pTxtNd->GetFldTxtAttrAt( pPos->nContent.GetIndex(), true )
                 : 0;
-            if(pTxtAttr)
+            if ( pTxtAttr != NULL )
             {
                 if( pAny )
                 {

@@ -367,7 +367,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         // was deleted)
         m_rWrtShell.ResetAttr();
         // apply previously saved attributes to new text
-        m_rWrtShell.SetAttr( aItemSet );
+        m_rWrtShell.SetAttrSet( aItemSet );
     }
     else
     {
@@ -474,7 +474,7 @@ void SwHHCWrapper::ReplaceUnit(
         SwPaM *pPaM = m_rWrtShell.GetCrsr();
         (void)pPaM;
 #endif
-        m_rWrtShell.SetAttr(*pRuby);
+        m_rWrtShell.SetAttrItem(*pRuby);
         delete pRuby;
         m_rWrtShell.EndUndo( UNDO_SETRUBYATTR );
     }
@@ -524,7 +524,7 @@ void SwHHCWrapper::ReplaceUnit(
                 aSet.Put( aFontItem );
             }
 
-            m_rWrtShell.SetAttr( aSet );
+            m_rWrtShell.SetAttrSet( aSet );
 
             m_rWrtShell.ClearMark();
         }

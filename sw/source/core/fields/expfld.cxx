@@ -948,8 +948,164 @@ void SwSetExpField::SetPar2(const OUString& rStr)
     }
 }
 
+
+bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+{
+    sal_Int32 nTmp32 = 0;
+    sal_Int16 nTmp16 = 0;
+    switch( nWhichId )
+    {
+    case FIELD_PROP_BOOL2:
+        if(*(sal_Bool*)rAny.getValue())
+            nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+        else
+            nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+        break;
+    case FIELD_PROP_FORMAT:
+        rAny >>= nTmp32;
+        SetFormat(nTmp32);
+        break;
+    case FIELD_PROP_USHORT2:
+        {
+            rAny >>= nTmp16;
+            if(nTmp16 <= SVX_NUMBER_NONE )
+                SetFormat(nTmp16);
+            else {
+                //exception(wrong_value)
+                ;
+            }
+        }
+        break;
+    case FIELD_PROP_USHORT1:
+        rAny >>= nTmp16;
+        nSeqNo = nTmp16;
+        break;
+    case FIELD_PROP_PAR1:
+        {
+            OUString sTmp;
+            rAny >>= sTmp;
+            SetPar1( SwStyleNameMapper::GetUIName( sTmp, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
+        }
+        break;
+    case FIELD_PROP_PAR2:
+        {
+            OUString uTmp;
+            rAny >>= uTmp;
+            //I18N - if the formula contains only "TypeName+1"
+            //and it's one of the initially created sequence fields
+            //then the localized names has to be replaced by a programmatic name
+            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, sal_False);
+            SetFormula( sMyFormula );
+        }
+        break;
+    case FIELD_PROP_DOUBLE:
+        {
+            double fVal = 0.0;
+            rAny >>= fVal;
+            SetValue(fVal);
+        }
+        break;
+    case FIELD_PROP_SUBTYPE:
+        nTmp32 = lcl_APIToSubType(rAny);
+        if(nTmp32 >= 0)
+            SetSubType(static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
+        break;
+    case FIELD_PROP_PAR3:
+        rAny >>= aPText;
+        break;
+    case FIELD_PROP_BOOL3:
+        if(*(sal_Bool*) rAny.getValue())
+            nSubType |= nsSwExtendedSubType::SUB_CMD;
+        else
+            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
+        break;
+    case FIELD_PROP_BOOL1:
+        SetInputFlag(*(sal_Bool*) rAny.getValue());
+        break;
+    case FIELD_PROP_PAR4:
+        {
+            OUString sTmp;
+            rAny >>= sTmp;
+            ChgExpStr( sTmp );
+        }
+        break;
+    default:
+        return SwField::PutValue(rAny, nWhichId);
+    }
+    return true;
+}
+
+
+bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+{
+    switch( nWhichId )
+    {
+    case FIELD_PROP_BOOL2:
+        {
+            sal_Bool bVal = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
+            rAny.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_FORMAT:
+        rAny <<= (sal_Int32)GetFormat();
+        break;
+    case FIELD_PROP_USHORT2:
+        rAny <<= (sal_Int16)GetFormat();
+        break;
+    case FIELD_PROP_USHORT1:
+        rAny <<= (sal_Int16)nSeqNo;
+        break;
+    case FIELD_PROP_PAR1:
+        rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
+        break;
+    case FIELD_PROP_PAR2:
+        {
+            //I18N - if the formula contains only "TypeName+1"
+            //and it's one of the initially created sequence fields
+            //then the localized names has to be replaced by a programmatic name
+            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), sal_True);
+            rAny <<= OUString( sMyFormula );
+        }
+        break;
+    case FIELD_PROP_DOUBLE:
+        rAny <<= (double)GetValue();
+        break;
+    case FIELD_PROP_SUBTYPE:
+        {
+            sal_Int16 nRet = 0;
+                nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
+            rAny <<= nRet;
+        }
+        break;
+    case FIELD_PROP_PAR3:
+        rAny <<= OUString( aPText );
+        break;
+    case FIELD_PROP_BOOL3:
+        {
+            sal_Bool bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
+            rAny.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_BOOL1:
+        {
+            sal_Bool bTmp = GetInputFlag();
+            rAny.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_PAR4:
+        rAny <<= rtl::OUString(GetExpStr());
+        break;
+    default:
+        return SwField::QueryValue(rAny, nWhichId);
+    }
+    return true;
+}
+
+
+
 SwInputFieldType::SwInputFieldType( SwDoc* pD )
-    : SwFieldType( RES_INPUTFLD ), pDoc( pD )
+    : SwFieldType( RES_INPUTFLD )
+    , pDoc( pD )
 {
 }
 
@@ -959,10 +1115,57 @@ SwFieldType* SwInputFieldType::Copy() const
     return pType;
 }
 
-SwInputField::SwInputField(SwInputFieldType* pTyp, const OUString& rContent,
-                           const OUString& rPrompt, sal_uInt16 nSub, sal_uLong nFmt) :
-    SwField(pTyp, nFmt), aContent(rContent), aPText(rPrompt), nSubType(nSub)
+SwInputField::SwInputField( SwInputFieldType* pFieldType,
+                            const OUString& rContent,
+                            const OUString& rPrompt,
+                            sal_uInt16 nSub,
+                            sal_uLong nFmt,
+                            bool bIsFormField )
+    : SwField( pFieldType, nFmt, LANGUAGE_SYSTEM, false )
+    , aContent(rContent)
+    , aPText(rPrompt)
+    , nSubType(nSub)
+    , mbIsFormField( bIsFormField )
+    , mpFmtFld( NULL )
 {
+}
+
+SwInputField::~SwInputField()
+{
+}
+
+
+void SwInputField::SetFmtFld( SwFmtFld& rFmtFld )
+{
+    mpFmtFld = &rFmtFld;
+}
+
+SwFmtFld* SwInputField::GetFmtFld()
+{
+    return mpFmtFld;
+}
+
+
+const OUString& SwInputField::getContent() const
+{
+    return aContent;
+}
+
+void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
+{
+    if ( (nSubType & 0x00ff) == INP_TXT )
+    {
+        aContent = rNewFieldContent;
+    }
+    else if( (nSubType & 0x00ff) == INP_USR )
+    {
+        SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
+            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->GetFldType( RES_USERFLD, getContent(), false ) );
+        if( pUserTyp )
+        {
+            pUserTyp->SetContent( rNewFieldContent );
+        }
+    }
 }
 
 OUString SwInputField::GetFieldName() const
@@ -970,18 +1173,24 @@ OUString SwInputField::GetFieldName() const
     OUString aStr(SwField::GetFieldName());
     if ((nSubType & 0x00ff) == INP_USR)
     {
-        aStr += GetTyp()->GetName() + " " + aContent;
+        aStr += GetTyp()->GetName() + " " + getContent();
     }
     return aStr;
 }
 
 SwField* SwInputField::Copy() const
 {
-    SwInputField* pFld = new SwInputField((SwInputFieldType*)GetTyp(), aContent,
-                                          aPText, GetSubType(), GetFormat());
+    SwInputField* pFld =
+        new SwInputField(
+            static_cast<SwInputFieldType*>(GetTyp()),
+            getContent(),
+            aPText,
+            GetSubType(),
+            GetFormat(),
+            mbIsFormField );
 
-    pFld->SetHelp(aHelp);
-    pFld->SetToolTip(aToolTip);
+    pFld->SetHelp( aHelp );
+    pFld->SetToolTip( aToolTip );
 
     pFld->SetAutomaticLanguage(IsAutomaticLanguage());
     return pFld;
@@ -990,13 +1199,14 @@ SwField* SwInputField::Copy() const
 OUString SwInputField::Expand() const
 {
     if((nSubType & 0x00ff) == INP_TXT)
-        return aContent;
+    {
+        return getContent();
+    }
 
     if( (nSubType & 0x00ff) == INP_USR )
     {
-        SwUserFieldType* pUserTyp = (SwUserFieldType*)
-                            ((SwInputFieldType*)GetTyp())->GetDoc()->
-                            GetFldType( RES_USERFLD, aContent, false );
+        SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
+            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->GetFldType( RES_USERFLD, getContent(), false ) );
         if( pUserTyp )
             return pUserTyp->GetContent();
     }
@@ -1004,12 +1214,21 @@ OUString SwInputField::Expand() const
     return OUString();
 }
 
+
+bool SwInputField::isFormField() const
+{
+    return mbIsFormField
+           || !aHelp.isEmpty()
+           || !aToolTip.isEmpty();
+}
+
+
 bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-         rAny <<= aContent;
+        rAny <<= getContent();
         break;
     case FIELD_PROP_PAR2:
         rAny <<= aPText;
@@ -1048,6 +1267,7 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
+
 /// set condition
 void SwInputField::SetPar1(const OUString& rStr)
 {
@@ -1056,10 +1276,9 @@ void SwInputField::SetPar1(const OUString& rStr)
 
 OUString SwInputField::GetPar1() const
 {
-    return aContent;
+    return getContent();
 }
 
-/// True/False Text
 void SwInputField::SetPar2(const OUString& rStr)
 {
     aPText = rStr;
@@ -1090,11 +1309,6 @@ OUString SwInputField::GetToolTip() const
     return aToolTip;
 }
 
-sal_Bool SwInputField::isFormField() const
-{
-    return !aHelp.isEmpty() || !aToolTip.isEmpty();
-}
-
 sal_uInt16 SwInputField::GetSubType() const
 {
     return nSubType;
@@ -1103,151 +1317,6 @@ sal_uInt16 SwInputField::GetSubType() const
 void SwInputField::SetSubType(sal_uInt16 nSub)
 {
     nSubType = nSub;
-}
-
-bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
-{
-    switch( nWhichId )
-    {
-    case FIELD_PROP_BOOL2:
-        {
-            sal_Bool bVal = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
-            rAny.setValue(&bVal, ::getBooleanCppuType());
-        }
-        break;
-    case FIELD_PROP_FORMAT:
-        rAny <<= (sal_Int32)GetFormat();
-        break;
-    case FIELD_PROP_USHORT2:
-        rAny <<= (sal_Int16)GetFormat();
-        break;
-    case FIELD_PROP_USHORT1:
-        rAny <<= (sal_Int16)nSeqNo;
-        break;
-    case FIELD_PROP_PAR1:
-        rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
-        break;
-    case FIELD_PROP_PAR2:
-        //I18N - if the formula contains only "TypeName+1"
-        //and it's one of the initially created sequence fields
-        //then the localized names has to be replaced by a programmatic name
-        rAny <<= SwXFieldMaster::LocalizeFormula(*this, GetFormula(), sal_True);
-        break;
-    case FIELD_PROP_DOUBLE:
-        rAny <<= (double)GetValue();
-        break;
-    case FIELD_PROP_SUBTYPE:
-        {
-            sal_Int16 nRet = 0;
-                nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
-            rAny <<= nRet;
-        }
-        break;
-    case FIELD_PROP_PAR3:
-        rAny <<= aPText;
-        break;
-    case FIELD_PROP_BOOL3:
-        {
-            sal_Bool bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
-            rAny.setValue(&bTmp, ::getBooleanCppuType());
-        }
-        break;
-    case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bTmp = GetInputFlag();
-            rAny.setValue(&bTmp, ::getBooleanCppuType());
-        }
-        break;
-    case FIELD_PROP_PAR4:
-        rAny <<= GetExpStr();
-        break;
-    default:
-        return SwField::QueryValue(rAny, nWhichId);
-    }
-    return true;
-}
-
-bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
-{
-    sal_Int32 nTmp32 = 0;
-    sal_Int16 nTmp16 = 0;
-    switch( nWhichId )
-    {
-    case FIELD_PROP_BOOL2:
-        if(*(sal_Bool*)rAny.getValue())
-            nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
-        else
-            nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-        break;
-    case FIELD_PROP_FORMAT:
-        rAny >>= nTmp32;
-        SetFormat(nTmp32);
-        break;
-    case FIELD_PROP_USHORT2:
-        {
-            rAny >>= nTmp16;
-            if(nTmp16 <= SVX_NUMBER_NONE )
-                SetFormat(nTmp16);
-            else {
-            }
-        }
-        break;
-    case FIELD_PROP_USHORT1:
-        rAny >>= nTmp16;
-        nSeqNo = nTmp16;
-        break;
-    case FIELD_PROP_PAR1:
-        {
-            OUString sTmp;
-            rAny >>= sTmp;
-            SetPar1( SwStyleNameMapper::GetUIName( sTmp, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
-        }
-        break;
-    case FIELD_PROP_PAR2:
-        {
-            OUString uTmp;
-            rAny >>= uTmp;
-            //I18N - if the formula contains only "TypeName+1"
-            //and it's one of the initially created sequence fields
-            //then the localized names has to be replaced by a programmatic name
-            SetFormula( SwXFieldMaster::LocalizeFormula(*this, uTmp, sal_False) );
-        }
-        break;
-    case FIELD_PROP_DOUBLE:
-        {
-             double fVal = 0.0;
-             rAny >>= fVal;
-             SetValue(fVal);
-        }
-        break;
-    case FIELD_PROP_SUBTYPE:
-        nTmp32 = lcl_APIToSubType(rAny);
-        if(nTmp32 >= 0)
-            SetSubType(static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
-        break;
-    case FIELD_PROP_PAR3:
-        rAny >>= aPText;
-        break;
-    case FIELD_PROP_BOOL3:
-        if(*(sal_Bool*) rAny.getValue())
-            nSubType |= nsSwExtendedSubType::SUB_CMD;
-        else
-            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
-        break;
-    case FIELD_PROP_BOOL1:
-        SetInputFlag(*(sal_Bool*) rAny.getValue());
-        break;
-    case FIELD_PROP_PAR4:
-        {
-            OUString sTmp;
-            rAny >>= sTmp;
-            ChgExpStr( sTmp );
-        }
-        break;
-    default:
-        return SwField::PutValue(rAny, nWhichId);
-    }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

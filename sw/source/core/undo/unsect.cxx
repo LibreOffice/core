@@ -233,15 +233,16 @@ void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
     OSL_ENSURE( pTxtNd, "Where is my TextNode?" );
 
     {
-        RemoveIdxRel( nNode + 1, SwPosition( aIdx,
-                            SwIndex(pTxtNd, pTxtNd->GetTxt().getLength())));
+        RemoveIdxRel(
+            nNode + 1,
+            SwPosition( aIdx, SwIndex( pTxtNd, pTxtNd->GetTxt().getLength() ) ) );
     }
     pTxtNd->JoinNext();
 
     if (m_pHistory.get())
     {
         SwIndex aCntIdx( pTxtNd, 0 );
-        pTxtNd->RstAttr( aCntIdx, pTxtNd->Len(), 0, 0, true );
+        pTxtNd->RstTxtAttr( aCntIdx, pTxtNd->Len(), 0, 0, true );
     }
 }
 

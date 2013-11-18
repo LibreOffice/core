@@ -161,7 +161,7 @@ map<sal_uInt16,OUString,CompareUShort> & GetItemWhichMap()
         aItemWhichMap[RES_TXTATR_REFMARK] = "TXTATR_REFMARK";
         aItemWhichMap[RES_TXTATR_TOXMARK] = "TXTATR_TOXMARK";
         aItemWhichMap[RES_TXTATR_CHARFMT] = "TXTATR_CHARFMT";
-        aItemWhichMap[RES_TXTATR_DUMMY5] = "TXTATR_DUMMY5";
+        aItemWhichMap[RES_TXTATR_INPUTFIELD] = "RES_TXTATR_INPUTFIELD";
         aItemWhichMap[RES_TXTATR_CJK_RUBY] = "TXTATR_CJK_RUBY";
         aItemWhichMap[RES_TXTATR_UNKNOWN_CONTAINER] = "TXTATR_UNKNOWN_CONTAINER";
         aItemWhichMap[RES_TXTATR_META] = "TXTATR_META";
@@ -310,7 +310,7 @@ static const OUString lcl_dbg_out(const SwTxtAttr & rAttr)
 
     aStr += OUString::number(*rAttr.GetStart());
     aStr += "->";
-    aStr += OUString::number(*rAttr.GetEnd());
+    aStr += OUString::number(*rAttr.End());
     aStr += " ";
     aStr += lcl_dbg_out(rAttr.GetAttr());
 

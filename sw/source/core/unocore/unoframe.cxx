@@ -112,7 +112,7 @@
 #include <comphelper/servicehelper.hxx>
 
 // from fefly1.cxx
-extern sal_Bool sw_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
+extern sal_Bool sw_ChkAndSetNewAnchor( SwEditShell& rEditShell, const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 using namespace ::com::sun::star;
 
@@ -1091,21 +1091,6 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
             }
         }
-        // #i73249#
-        // Attribute AlternativeText was never published.
-        // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
-//        else if( FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID && eType != FLYCNTTYPE_FRM )
-//        {
-//            const :: SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-//            if(pIdx)
-//            {
-//                SwNodeIndex aIdx(*pIdx, 1);
-//                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-//                OUString uTemp;
-//                aValue >>= uTemp;
-//                pNoTxt->SetAlternateText(uTemp);
-//            }
-//        }
         // New attribute Title
         else if( FN_UNO_TITLE == pEntry->nWID )
         {
@@ -1157,7 +1142,8 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         {
                             pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrmFmtSetRange );
                             pSet->Put( *pItem );
-                            if ( !sw_ChkAndSetNewAnchor( *pFly, *pSet ) )
+                            if ( pFmt->GetDoc()->GetEditShell() != NULL
+                                 && !sw_ChkAndSetNewAnchor( *(pFmt->GetDoc()->GetEditShell()), *pFly, *pSet ) )
                                 delete pSet, pSet = 0;
                         }
                     }
@@ -1432,7 +1418,10 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, false, &pItem ))
                         {
                             aSet.Put( *pItem );
-                            sw_ChkAndSetNewAnchor( *pFly, aSet );
+                            if ( pFmt->GetDoc()->GetEditShell() != NULL )
+                            {
+                                sw_ChkAndSetNewAnchor( *(pFmt->GetDoc()->GetEditShell()), *pFly, aSet );
+                            }
                         }
                     }
                 }

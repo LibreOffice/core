@@ -2842,6 +2842,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                     }
                     break;
                 case RES_TXTATR_FIELD:
+                case RES_TXTATR_INPUTFIELD:
                     {
                         sal_uInt16 nFldWhich =
                             pPostIts

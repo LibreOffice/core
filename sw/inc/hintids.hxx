@@ -29,11 +29,15 @@
 #define CH_TXTATR_INWORD        ((sal_Unicode)0xFFF9)
 #define CH_TXTATR_TAB           ((sal_Unicode)'\t')
 #define CH_TXTATR_NEWLINE       ((sal_Unicode)'\n')
-#define CH_TXT_ATR_FIELDSTART ((sal_Unicode)0x04)
-#define CH_TXT_ATR_FIELDEND ((sal_Unicode)0x05)
+#define CH_TXT_ATR_INPUTFIELDSTART ((sal_Unicode)0x04)
+#define CH_TXT_ATR_INPUTFIELDEND ((sal_Unicode)0x05)
+
+#define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)0x06)
+
+#define CH_TXT_ATR_FIELDSTART ((sal_Unicode)0x07)
+#define CH_TXT_ATR_FIELDEND ((sal_Unicode)0x08)
 #define CH_TXT_ATR_SUBST_FIELDSTART ("[")
 #define CH_TXT_ATR_SUBST_FIELDEND ("]")
-#define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)0x06)
 
 /*
  * Enums for the hints
@@ -127,7 +131,7 @@ RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
     RES_TXTATR_CHARFMT,                             // 51
     RES_TXTATR_CJK_RUBY,                            // 52
     RES_TXTATR_UNKNOWN_CONTAINER,                   // 53
-    RES_TXTATR_DUMMY5,                              // 54
+    RES_TXTATR_INPUTFIELD,                          // 54
 RES_TXTATR_WITHEND_END,
 
 // all TextAttributes without an end

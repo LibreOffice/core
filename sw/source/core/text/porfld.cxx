@@ -388,14 +388,8 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 case CHAR_SOFTHYPHEN:
                 case CHAR_HARDBLANK:
-                // #i59759# Erase additional control
-                // characters from field string, otherwise we get stuck in
-                // a loop.
                 case CHAR_ZWSP :
                 case CHAR_ZWNBSP :
-                // #i111750#
-                // - Erasing further control characters from field string in
-                // to avoid loop.
                 case CH_TXTATR_BREAKWORD:
                 case CH_TXTATR_INWORD:
                 {

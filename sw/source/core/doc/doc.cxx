@@ -352,7 +352,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbSurroundTextWrapSmall = value;
             break;
 
-         // COMPATIBILITY FLAGS END
+        // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: //can be used temporary (load/save) when no SwViewShell is avaiable
             mbLastBrowseMode = value;
@@ -2625,20 +2625,19 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
     return aResult;
 }
 
-SwField * SwDoc::GetField(const SwPosition & rPos)
+SwField * SwDoc::GetFieldAtPos(const SwPosition & rPos)
 {
-    SwTxtFld * const pAttr = GetTxtFld(rPos);
+    SwTxtFld * const pAttr = GetTxtFldAtPos(rPos);
 
     return (pAttr) ? const_cast<SwField *>( pAttr->GetFmtFld().GetField() ) : 0;
 }
 
-SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)
+SwTxtFld * SwDoc::GetTxtFldAtPos(const SwPosition & rPos)
 {
     SwTxtNode * const pNode = rPos.nNode.GetNode().GetTxtNode();
 
-    return (pNode)
-        ? static_cast<SwTxtFld*>( pNode->GetTxtAttrForCharAt(
-                    rPos.nContent.GetIndex(), RES_TXTATR_FIELD) )
+    return (pNode != NULL)
+        ? pNode->GetFldTxtAttrAt( rPos.nContent.GetIndex(), true )
         : 0;
 }
 

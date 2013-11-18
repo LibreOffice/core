@@ -489,6 +489,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             }
         }
         break;
+
     default:
         OSL_FAIL("<SwGetRefField::UpdateField(..)> - unknown format type");
     }

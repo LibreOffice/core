@@ -1992,7 +1992,9 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
  *              inverted rectangles are available.
  *              In the end the Flys are cut out of the section.
  */
-void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
+void SwRootFrm::CalcFrmRects(
+    SwShellCrsr &rCrsr,
+    const sal_Bool bIsTblMode)
 {
     SwPosition *pStartPos = rCrsr.Start(),
                *pEndPos   = rCrsr.GetPoint() == pStartPos ? rCrsr.GetMark() : rCrsr.GetPoint();

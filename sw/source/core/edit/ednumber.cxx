@@ -723,13 +723,13 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
-          {
+        {
             aRangeArr.SetPam( n, aPam );
             GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
-                                  true, bResetIndentAttrs );
+                                  true , bResetIndentAttrs );
             GetDoc()->SetCounted( aPam, true );
-          }
+        }
     }
     else
     {

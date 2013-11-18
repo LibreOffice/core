@@ -1205,8 +1205,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                                     .SetFlyFmt();
 
                                 //The connection is removed now the attribute can be deleted.
-                                pTxtNode->DeleteAttributes(
-                                    RES_TXTATR_FLYCNT, nIdx );
+                                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
                                 //create a new one
                                 SwTxtNode *pNd = pInternalPam->GetNode()->GetTxtNode();
                                 SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TxtNode." );

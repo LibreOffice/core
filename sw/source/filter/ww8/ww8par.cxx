@@ -1194,6 +1194,8 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
 {
     OSL_ENSURE(RES_TXTATR_FIELD != rAttr.Which(), "probably don't want to put"
         "fields into the control stack");
+    OSL_ENSURE(RES_TXTATR_INPUTFIELD != rAttr.Which(), "probably don't want to put"
+        "input fields into the control stack");
     OSL_ENSURE(RES_FLTR_REDLINE != rAttr.Which(), "probably don't want to put"
         "redlines into the control stack");
     SwFltControlStack::NewAttr(rPos, rAttr);
@@ -1443,6 +1445,12 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             OSL_ENSURE(!this, "What is a field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
+
+        case RES_TXTATR_INPUTFIELD:
+            OSL_ENSURE(!this, "What is a input field doing in the control stack,"
+                "probably should have been in the endstack");
+            break;
+
         case RES_TXTATR_INETFMT:
             {
                 SwPaM aRegion(rTmpPos);
@@ -1582,6 +1590,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         do normal (?) strange stuff
         */
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_INPUTFIELD:
         {
             SwNodeIndex aIdx(rEntry.m_aMkPos.m_nNode, 1);
             SwPaM aPaM(aIdx, rEntry.m_aMkPos.m_nCntnt);

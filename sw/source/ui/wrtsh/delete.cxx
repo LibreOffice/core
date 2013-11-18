@@ -76,7 +76,7 @@ bool SwWrtShell::TryRemoveIndent()
     if (bResult)
     {
         aAttrSet.Put(aItem);
-        SetAttr(aAttrSet);
+        SetAttrSet(aAttrSet);
     }
 
     return bResult;

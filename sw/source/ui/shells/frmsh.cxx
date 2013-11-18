@@ -1172,9 +1172,15 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 void  SwFrameShell::StateInsert(SfxItemSet &rSet)
 {
     const int nSel = GetShell().GetSelectionType();
-
-    if ((nSel & nsSelectionType::SEL_GRF) || (nSel & nsSelectionType::SEL_OLE))
+    if ( (nSel & nsSelectionType::SEL_GRF)
+        || (nSel & nsSelectionType::SEL_OLE) )
+    {
         rSet.DisableItem(FN_INSERT_FRAME);
+    }
+    else if ( GetShell().CrsrInsideInputFld() )
+    {
+        rSet.DisableItem(FN_INSERT_FRAME);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

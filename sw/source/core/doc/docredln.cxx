@@ -2957,7 +2957,7 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     for( it = aWhichIds.begin(); it != aWhichIds.end(); ++it )
     {
         pDoc->InsertPoolItem( rPam, *GetDfltAttr( *it ),
-                nsSetAttrMode::SETATTR_DONTEXPAND );
+            nsSetAttrMode::SETATTR_DONTEXPAND );
     }
 
     pDoc->SetRedlineMode_intern( eOld );

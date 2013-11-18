@@ -121,48 +121,54 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
     */
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    const sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
-    if (!bUseEnhFields) {
-    aFormula.sDefault = GetFieldResult(pF);
+    if (!bUseEnhFields)
+    {
+        aFormula.sDefault = GetFieldResult(pF);
 
-    SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
-              aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
-    aFld.SetHelp(aFormula.sHelp);
-    aFld.SetToolTip(aFormula.sToolTip);
+        SwInputField aFld(
+            static_cast<SwInputFieldType*>(rDoc.GetSysFldType( RES_INPUTFLD )),
+            aFormula.sDefault,
+            aFormula.sTitle,
+            INP_TXT,
+            0 );
+        aFld.SetHelp(aFormula.sHelp);
+        aFld.SetToolTip(aFormula.sToolTip);
 
-    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
-    return FLD_OK;
-    } else {
-    WW8PLCFx_Book* pB = pPlcxMan->GetBook();
-    OUString aBookmarkName;
-    if (pB!=NULL) {
-        WW8_CP currentCP=pF->nSCode;
-        WW8_CP currentLen=pF->nLen;
+        rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+        return FLD_OK;
+    }
+    else
+    {
+        WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+        OUString aBookmarkName;
+        if (pB!=NULL) {
+            WW8_CP currentCP=pF->nSCode;
+            WW8_CP currentLen=pF->nLen;
 
-        sal_uInt16 bkmFindIdx;
-        OUString aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+            sal_uInt16 bkmFindIdx;
+            OUString aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
 
-        if (!aBookmarkFind.isEmpty()) {
-            pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
             if (!aBookmarkFind.isEmpty()) {
-                aBookmarkName=aBookmarkFind;
+                pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
+                if (!aBookmarkFind.isEmpty()) {
+                    aBookmarkName=aBookmarkFind;
+                }
             }
         }
-    }
 
-    if (pB!=NULL && aBookmarkName.isEmpty()) {
-        aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
-    }
+        if (pB!=NULL && aBookmarkName.isEmpty()) {
+            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+        }
 
-
-    if (!aBookmarkName.isEmpty()) {
-        maFieldStack.back().SetBookmarkName(aBookmarkName);
-        maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
-        maFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.sToolTip));
-        maFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.sTitle));
-    }
-    return FLD_TEXT;
+        if (!aBookmarkName.isEmpty()) {
+            maFieldStack.back().SetBookmarkName(aBookmarkName);
+            maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
+            maFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.sToolTip));
+            maFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.sTitle));
+        }
+        return FLD_TEXT;
     }
 }
 
@@ -176,7 +182,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
     if (rStr[pF->nLCode-1]==0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
+    const sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
     if (!bUseEnhFields)
     {

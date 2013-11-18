@@ -163,7 +163,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
                     rSh.ReRead(aEmptyOUStr, aEmptyOUStr, (const Graphic*) &aCompressedGraphic);
 
-                    rSh.SetAttr(aCrop);
+                    rSh.SetAttrItem(aCrop);
 
                     rSh.EndUndo(UNDO_END);
                     rSh.EndAllAction();
@@ -417,7 +417,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                                                        RES_GRFATR_END-1 );
                 aGrfSet.Put( *pSet );
                 if( aGrfSet.Count() )
-                    rSh.SetAttr( aGrfSet );
+                    rSh.SetAttrSet( aGrfSet );
 
                 rSh.EndUndo(UNDO_END);
                 rSh.EndAllAction();
@@ -432,7 +432,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             rSh.GetCurAttr( aSet );
             SwMirrorGrf aGrf((const SwMirrorGrf &)aSet.Get(RES_GRFATR_MIRRORGRF));
             aGrf.SetGrfToggle(!aGrf.IsGrfToggle());
-            rSh.SetAttr(aGrf);
+            rSh.SetAttrItem(aGrf);
         }
         break;
 
@@ -590,7 +590,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         }
 
         if( aGrfSet.Count() )
-            GetShell().SetAttr( aGrfSet );
+            GetShell().SetAttrSet( aGrfSet );
     }
     GetView().GetViewFrame()->GetBindings().Invalidate(rReq.GetSlot());
 }
@@ -617,6 +617,11 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_TWAIN_TRANSFER:
             if( bParentCntProt || !bIsGrfCntnt )
                 bDisable = true;
+            else if ( nWhich == SID_INSERT_GRAPHIC
+                      && rSh.CrsrInsideInputFld() )
+            {
+                bDisable = true;
+            }
             break;
 
         case SID_SAVE_GRAPHIC:
@@ -822,7 +827,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
         aCrop.SetBottom( aCropRectangle.Right()  );
     }
 
-    rShell.SetAttr(aCrop);
+    rShell.SetAttrItem(aCrop);
 
     rShell.EndUndo(UNDO_END);
     rShell.EndAllAction();

@@ -264,9 +264,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             switch ( pAttr->Which() )
                             {
                             case RES_TXTATR_FIELD:
+                            case RES_TXTATR_INPUTFIELD:
                                 {
-                                    SwTxtFld* pTxtFld =
-                                        static_cast<SwTxtFld*>(pAttr);
+                                    SwTxtFld* pTxtFld = static_cast<SwTxtFld*>(pAttr);
                                     rNds.GetDoc()->InsDelFldInFldLst( !bToUndo, *pTxtFld );
 
                                     const SwFieldType* pTyp = pTxtFld->GetFmtFld().GetField()->GetTyp();

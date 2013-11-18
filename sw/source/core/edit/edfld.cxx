@@ -20,7 +20,6 @@
 #include <unotools/charclass.hxx>
 #include <editsh.hxx>
 #include <fldbas.hxx>
-#include <ndtxt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <fmtfld.hxx>
@@ -200,7 +199,7 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
         : nsSetAttrMode::SETATTR_DEFAULT;
 
     FOREACHPAM_START(GetCrsr()) // for each PaM
-        bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
+        const bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
     FOREACHPAM_END()
@@ -208,62 +207,33 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
     EndAllAction();
 }
 
-/// Are the PaMs positioned on fields?
-inline SwTxtFld *GetDocTxtFld( const SwPosition* pPos )
-{
-    SwTxtNode * const pNode = pPos->nNode.GetNode().GetTxtNode();
-    return (pNode)
-        ? static_cast<SwTxtFld*>( pNode->GetTxtAttrForCharAt(
-                pPos->nContent.GetIndex(), RES_TXTATR_FIELD ))
-        : 0;
-}
-
-SwField* SwEditShell::GetCurFld() const
-{
-    // If there are no selections so take the value of the current cursor position.
-
-    SwPaM* pCrsr = GetCrsr();
-    SwTxtFld *pTxtFld = GetDocTxtFld( pCrsr->Start() );
-    SwField *pCurFld = NULL;
-
-    /* Field was only recognized if no selection was
-        present. Now it is recognized if either the cursor is in the
-        field or the selection spans exactly over the field. */
-    if( pTxtFld &&
-        pCrsr->GetNext() == pCrsr &&
-        pCrsr->Start()->nNode == pCrsr->End()->nNode &&
-        (pCrsr->End()->nContent.GetIndex() -
-         pCrsr->Start()->nContent.GetIndex()) <= 1)
-    {
-        pCurFld = (SwField*)pTxtFld->GetFmtFld().GetField();
-        // Table formula? Convert internal into external name:
-        if( RES_TABLEFLD == pCurFld->GetTyp()->Which() )
-        {
-            const SwTableNode* pTblNd = IsCrsrInTbl();
-            ((SwTblField*)pCurFld)->PtrToBoxNm( pTblNd ? &pTblNd->GetTable() : 0 );
-        }
-
-    }
-
-    /* removed handling of multi-selections */
-
-    return pCurFld;
-}
 
 /// Are the PaMs positioned on fields?
 static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
 {
     // Search field via its address. For input fields this needs to be done in protected fields.
     SwTxtFld* pTFld = 0;
-    if( RES_INPUTFLD == rFld.Which() || ( RES_SETEXPFLD == rFld.Which() &&
-        ((SwSetExpField&)rFld).GetInputFlag() ) )
+    if( RES_INPUTFLD == rFld.Which() )
     {
-        const SfxPoolItem* pItem;
-        sal_uInt32 n, nMaxItems =
+        const SfxPoolItem* pItem = NULL;
+        const sal_uInt32 nMaxItems =
+            pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
+        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+            if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n ) )
+                && ((SwFmtFld*)pItem)->GetField() == &rFld )
+            {
+                pTFld = ((SwFmtFld*)pItem)->GetTxtFld();
+                break;
+            }
+    }
+    else if( RES_SETEXPFLD == rFld.Which()
+        && ((SwSetExpField&)rFld).GetInputFlag() )
+    {
+        const SfxPoolItem* pItem = NULL;
+        const sal_uInt32 nMaxItems =
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-        for( n = 0; n < nMaxItems; ++n )
-            if( 0 != (pItem =
-                      pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
+        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+            if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
                 && ((SwFmtFld*)pItem)->GetField() == &rFld )
             {
                 pTFld = ((SwFmtFld*)pItem)->GetTxtFld();
@@ -291,7 +261,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
 
         if ( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark())
         {
-            pTxtFld = GetDocTxtFld(pCrsr->Start());
+            pTxtFld = GetTxtFldAtPos( pCrsr->Start(), true );
 
             if (!pTxtFld) // #i30221#
                 pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
@@ -306,7 +276,8 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         bool bOkay = true;
         sal_Bool bTblSelBreak = sal_False;
 
-        SwMsgPoolItem aHint( RES_TXTATR_FIELD );  // Search-Hint
+        SwMsgPoolItem aFldHint( RES_TXTATR_FIELD );  // Search-Hint
+        SwMsgPoolItem aInputFldHint( RES_TXTATR_INPUTFIELD );
         FOREACHPAM_START(GetCrsr())               // for each PaM
             if( PCURCRSR->HasMark() && bOkay )    // ... with selection
             {
@@ -325,13 +296,14 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 // Search for SwTxtFld ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
-                     && aPam.Find( aHint, sal_False, fnMoveForward, &aCurPam ) )
+                     && ( aPam.Find( aFldHint, sal_False, fnMoveForward, &aCurPam )
+                          || aPam.Find( aInputFldHint, sal_False, fnMoveForward, &aCurPam ) ) )
                 {
                     // if only one PaM has more than one field  ...
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = false;
 
-                    if( 0 != (pTxtFld = GetDocTxtFld( pCurStt )) )
+                    if( 0 != (pTxtFld = GetTxtFldAtPos( pCurStt, true )) )
                     {
                         pFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
                         SwField *pCurFld = pFmtFld->GetField();

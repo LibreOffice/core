@@ -138,7 +138,7 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
         if( ( nSttIdx = *pHt->GetStart() ) < nAktPos )
         {
             // also check the end
-            if( 0 == ( pEndIdx = pHt->GetEnd() ) ||
+            if( 0 == ( pEndIdx = pHt->End() ) ||
                 *pEndIdx <= nAktPos )
                 continue;       // keep searching
         }
@@ -2020,7 +2020,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         for(sal_uInt16 nHintIdx = 0; nHintIdx < pHints->GetStartCount(); nHintIdx++)
         {
             SwTxtAttr* pAttr = pHints->GetStart(nHintIdx);
-            xub_StrLen nTmpEnd = pAttr->GetEnd() ? *pAttr->GetEnd() : 0;
+            const xub_StrLen nTmpEnd = pAttr->End() ? *pAttr->End() : 0;
             if( nStartPos >= *pAttr->GetStart() &&
                 (nStartPos + 2) <= nTmpEnd &&
                 pAttr->Which() == RES_TXTATR_CHARFMT)
