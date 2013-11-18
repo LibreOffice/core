@@ -72,7 +72,6 @@ private:
     const SfxItemSet&   mrOutAttrs;
 
     std::vector< String >   maLayoutNames;
-    // List*               mpLayoutNames;
 
     String              maName;          // Layoutname oder Dateiname
     sal_uInt32          mnLayoutCount;  // Anzahl, der im Dokument vorhandenen MasterPages

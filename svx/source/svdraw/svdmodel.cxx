@@ -916,7 +916,8 @@ void SdrModel::ImpReformatAllEdgeObjects()
     }
 
     sal_uInt32 nAnz(GetMasterPageCount());
-    sal_uInt32 nNum;
+    sal_uInt32 nNum(0);
+    std::vector< SdrEdgeObj* > aSdrEdgeObjVector;
 
     for(nNum = 0; nNum < nAnz; nNum++)
     {
@@ -928,7 +929,7 @@ void SdrModel::ImpReformatAllEdgeObjects()
 
             if(pSdrEdgeObj)
             {
-                pSdrEdgeObj->ReformatEdge();
+                aSdrEdgeObjVector.push_back(pSdrEdgeObj);
             }
         }
     }
@@ -945,9 +946,38 @@ void SdrModel::ImpReformatAllEdgeObjects()
 
             if(pSdrEdgeObj)
             {
-                pSdrEdgeObj->ReformatEdge();
+                aSdrEdgeObjVector.push_back(pSdrEdgeObj);
             }
         }
+    }
+
+    nAnz = aSdrEdgeObjVector.size();
+
+    for(nNum = 0; nNum < nAnz; nNum++)
+    {
+        SdrEdgeObj* pSdrEdgeObj = aSdrEdgeObjVector[nNum];
+        SdrObject* pObjA = pSdrEdgeObj->GetSdrObjectConnection(true);
+        SdrObject* pObjB = pSdrEdgeObj->GetSdrObjectConnection(false);
+
+        // TTTT: check what happens; it might just be a ImpDirtyEdgeTrack()
+        // and ActionChanged() at SdrEdgeObj::Notify
+        if(pObjA || pObjB)
+        {
+            pSdrEdgeObj->SetEdgeTrackDirty();
+            pSdrEdgeObj->ActionChanged();
+        }
+
+        //if(pObjA)
+        //{
+        //    SfxSimpleHint aHint(SFX_HINT_DATACHANGED);
+        //    pSdrEdgeObj->Notify(*pObjA, aHint);
+        //}
+        //
+        //if(pObjB)
+        //{
+        //    SfxSimpleHint aHint(SFX_HINT_DATACHANGED);
+        //    pSdrEdgeObj->Notify(*pObjB, aHint);
+        //}
     }
 }
 

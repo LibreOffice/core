@@ -3495,7 +3495,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
         *ppTopLevelObj = xDrawObj.get();
 
     // #119010# connectors don't have to be area objects
-    if(xSdrObj->IsSdrEdgeObj())
+    if(dynamic_cast< SdrEdgeObj* >(xSdrObj.get()))
         xDrawObj->SetAreaObj( false );
 
     /*  Check for valid size for all objects. Needed to ignore lots of invisible

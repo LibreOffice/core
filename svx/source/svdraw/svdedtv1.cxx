@@ -266,51 +266,6 @@ void SdrEditView::ResizeMarkedObj(const basegfx::B2DPoint& rRefPoint, const base
     }
 }
 
-// TTTT: Needed?
-//void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
-//    const Fraction& xFact,
-//    const Fraction& yFact,
-//    const bool bCopy,
-//    const bool bWdh,
-//    const bool bHgt)
-//{
-//  const bool bUndo = IsUndoEnabled();
-//  if( bUndo )
-//  {
-//      XubString aStr;
-//      ImpTakeDescriptionStr(STR_EditResize,aStr);
-//      if (bCopy)
-//          aStr+=ImpGetResStr(STR_EditWithCopy);
-//      BegUndo(aStr);
-//  }
-//
-//  if (bCopy)
-//      CopyMarkedObj();
-//
-//  sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-//  for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
-//  {
-//      SdrMark* pM=GetSdrMarkByIndex(nm);
-//      SdrObject* pO=pM->GetMarkedSdrObj();
-//      if( bUndo )
-//      {
-//          std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-//          AddUndoActions( vConnectorUndoActions );
-//          AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
-//        }
-//
-//        Fraction aFrac(1,1);
-//        if (bWdh && bHgt)
-//            pO->Resize(rRef, xFact, yFact);
-//        else if (bWdh)
-//            pO->Resize(rRef, xFact, aFrac);
-//        else if (bHgt)
-//            pO->Resize(rRef, aFrac, yFact);
-//    }
-//  if( bUndo )
-//      EndUndo();
-//}
-
 double SdrEditView::GetMarkedObjRotate() const
 {
     if(!areSdrObjectsSelected())
@@ -1446,7 +1401,9 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 
             if(bUndo)
             {
-                if(pObj->IsSdrEdgeObj())
+                const SdrEdgeObj* pSdrEdgeObj = dynamic_cast< const SdrEdgeObj* >(pObj);
+
+                if(pSdrEdgeObj)
                 {
                     bPossibleGeomChange = true;
                 }

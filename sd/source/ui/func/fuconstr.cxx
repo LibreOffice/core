@@ -98,8 +98,7 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
     const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
     aMDPos = mpWindow->GetInverseViewTransformation() * aPixelPos;
-    // TTTT: evtl. unify fHitLog/fDrgLog/fHitTol at SdrView?
-    const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
+    const double fHitLog(mpView->getHitTolLog());
 
     if (rMEvt.IsLeft() && mpView->IsExtendedMouseEventDispatcherEnabled())
     {
@@ -109,8 +108,7 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
         if ( pHdl != NULL || mpView->IsMarkedObjHit(aMDPos, fHitLog) )
         {
-            const double fTolerance(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
-            mpView->BegDragObj(aMDPos, pHdl, fTolerance);
+            mpView->BegDragObj(aMDPos, pHdl, mpView->getMinMovLog());
             bReturn = true;
         }
         else if ( mpView->areSdrObjectsSelected() )
@@ -199,7 +197,6 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     if ( mpView &&  !mpView->IsAction() )
     {
         mpWindow->ReleaseMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
         if ( !mpView->areSdrObjectsSelected() )
         {
@@ -207,16 +204,15 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
             if (!mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj))
             {
-                const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-                mpView->MarkObj(aPnt, fHitLog);
+                mpView->MarkObj(aPnt, mpView->getHitTolLog());
             }
 
             mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
         }
         else if (rMEvt.IsLeft() && !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                  !bSelectionChanged                   &&
-                 fabs(aPnt.getX() - aMDPos.getX()) < nDrgLog &&
-                 fabs(aPnt.getY() - aMDPos.getY()) < nDrgLog)
+                 fabs(aPnt.getX() - aMDPos.getX()) < mpView->getMinMovLog() &&
+                 fabs(aPnt.getY() - aMDPos.getY()) < mpView->getMinMovLog())
         {
             /**************************************************************
             * Toggle zw. Selektion und Rotation

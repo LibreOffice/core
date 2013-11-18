@@ -221,12 +221,6 @@ void FuConstRectangle::Deactivate()
 // #98185# Create default drawing objects via keyboard
 SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange)
 {
-    // case SID_DRAW_LINE:
-    // case SID_DRAW_RECT:
-    // case SID_DRAW_ELLIPSE:
-    // case SID_DRAW_CAPTION:
-    // case SID_DRAW_CAPTION_VERTICAL:
-
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->getSdrModelFromSdrView(),
         pView->getSdrObjectCreationInfo());
@@ -242,14 +236,6 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const bas
                 if(pSdrPathObj)
                 {
                     initializeDefaultSdrPathObjByObjectType(*pSdrPathObj, DefaultSdrPathObjType_Line, rRange, false);
-                    //pSdrPathObj->initializeDefaultSdrPathObjBySlotID(nID, rRange);
-
-                    // TTTT
-                    //const double fYMiddle((rRange.getMinY() + rRange.getMaxY()) * 0.5);
-                    //basegfx::B2DPolygon aPoly;
-                    //aPoly.append(basegfx::B2DPoint(rRange.getMinX(), fYMiddle));
-                    //aPoly.append(basegfx::B2DPoint(rRange.getMaxX(), fYMiddle));
-                    //pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(basegfx::B2DPolyPolygon(aPoly));
                 }
                 else
                 {

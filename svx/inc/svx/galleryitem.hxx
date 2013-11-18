@@ -40,8 +40,6 @@
 #define SVXGALLERYITEM_PARAMS   6
 #define SVXGALLERYITEM_ARGNAME  "GalleryItem"
 
-//DBG_NAMEEX_VISIBILITY( SvxGalleryItem, SVX_DLLPUBLIC ) // TTTT
-
 class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
 {
     sal_Int8        m_nType;

@@ -186,10 +186,6 @@ void FuConstArc::Deactivate()
 // #98185# Create default drawing objects via keyboard
 SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange)
 {
-    // case SID_DRAW_ARC:
-    // case SID_DRAW_PIE:
-    // case SID_DRAW_CIRCLECUT:
-
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->getSdrModelFromSdrView(),
         pView->getSdrObjectCreationInfo());

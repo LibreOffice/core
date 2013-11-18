@@ -363,12 +363,8 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
     {
         const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
         const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
-
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-
         E3dCompoundObject* p3DObj = NULL;
-
         WaitObject aWait( (Window*)mpViewShell->GetActiveWindow() );
 
         // #97016#
@@ -377,7 +373,7 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 
         // #97016#
         ImpPrepareBasic3DShape(p3DObj, pScene);
-        bReturn = mpView->BegCreatePreparedObject(aLogicPos, nDrgLog, pScene);
+        bReturn = mpView->BegCreatePreparedObject(aLogicPos, mpView->getMinMovLog(), pScene);
 
         SdrObject* pObj = mpView->GetCreateObj();
 

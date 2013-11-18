@@ -987,10 +987,9 @@ void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 {
     const basegfx::B2DPoint aMPos(GetActiveWindow()->GetInverseViewTransformation() * maMousePos);
-    const double fHitLog(basegfx::B2DVector(GetActiveWindow()->GetInverseViewTransformation() * basegfx::B2DVector(FuPoor::HITPIX, 0.0)).getLength());
     sal_uInt32 nHelpLine;
 
-    if ( mpDrawView->PickHelpLine(aMPos, fHitLog, nHelpLine) )
+    if ( mpDrawView->PickHelpLine(aMPos, mpView->getHitTolLog(), nHelpLine) )
     {
         if(mpDrawView->GetSdrPageView())
         {

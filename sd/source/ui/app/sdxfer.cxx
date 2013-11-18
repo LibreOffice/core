@@ -277,7 +277,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         if( pInfo )
             mpImageMap = new ImageMap( pInfo->GetImageMap() );
 
-        mbIsUnoObj = pObj && pObj->IsSdrUnoObj();
+        mbIsUnoObj = dynamic_cast< SdrUnoObj* >(pObj);
     }
 }
 

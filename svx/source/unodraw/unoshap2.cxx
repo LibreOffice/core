@@ -496,7 +496,7 @@ void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XC
     {
         SdrEdgeObj* pEdge = dynamic_cast< SdrEdgeObj* >(mpObj.get());
         OSL_ENSURE(pEdge, "OOps, SvxShapeConnector without SdrEdgeObj (!)");
-        pEdge->ConnectToNode( sal_True, pShape->mpObj.get() );
+        pEdge->ConnectToSdrObject( true, pShape->mpObj.get() );
     }
 
     if( mpModel )
@@ -516,7 +516,7 @@ void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XCon
     {
         SdrEdgeObj* pEdge = dynamic_cast< SdrEdgeObj* >(mpObj.get());
         OSL_ENSURE(pEdge, "OOps, SvxShapeConnector without SdrEdgeObj (!)");
-        pEdge->ConnectToNode( sal_False, pShape->mpObj.get() );
+        pEdge->ConnectToSdrObject( false, pShape->mpObj.get() );
     }
 
     if( mpModel )
@@ -533,7 +533,7 @@ void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing:
     {
         SdrEdgeObj* pEdge = dynamic_cast< SdrEdgeObj* >(mpObj.get());
         OSL_ENSURE(pEdge, "OOps, SvxShapeConnector without SdrEdgeObj (!)");
-        pEdge->DisconnectFromNode( sal_True );
+        pEdge->ConnectToSdrObject(true);
     }
 
     if( mpModel )
@@ -550,7 +550,7 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
     {
         SdrEdgeObj* pEdge = dynamic_cast< SdrEdgeObj* >(mpObj.get());
         OSL_ENSURE(pEdge, "OOps, SvxShapeConnector without SdrEdgeObj (!)");
-        pEdge->DisconnectFromNode( sal_False );
+        pEdge->ConnectToSdrObject(false);
     }
 
     if( mpModel )

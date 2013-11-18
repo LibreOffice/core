@@ -1147,7 +1147,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
         if(pSdrEdgeObj)
         {
-            if(pSdrEdgeObj->GetConnectedNode(true) || pSdrEdgeObj->GetConnectedNode(false))
+            if(pSdrEdgeObj->GetSdrObjectConnection(true) || pSdrEdgeObj->GetSdrObjectConnection(false))
             {
                 return sal_False;
             }

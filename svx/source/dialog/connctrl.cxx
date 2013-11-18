@@ -79,35 +79,27 @@ void SvxXConnectionPreview::Construct()
 {
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    if(pView->areSdrObjectsSelected())
+    if(pView->areSdrObjectsSelected() && !pEdgeObj)
     {
-        bool bFound = false;
+        // get first edge from selection, clone it and it's connected objects
         const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-        for(sal_uInt32 i(0); i < aSelection.size() && !bFound; i++)
+        for(sal_uInt32 i(0); i < aSelection.size() && !pEdgeObj; i++)
         {
             const SdrEdgeObj* pTmpEdgeObj = dynamic_cast< const SdrEdgeObj* >(aSelection[i]);
 
             if(pTmpEdgeObj)
             {
-                bFound = true;
-                pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->CloneSdrObject();
-
-                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection(true);
-                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection(false);
-
-                rConn1 = pTmpEdgeObj->GetConnection(true);
-                rConn2 = pTmpEdgeObj->GetConnection(false);
-
-                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode(true);
-                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode(false);
+                pEdgeObj = static_cast< SdrEdgeObj* >(pTmpEdgeObj->CloneSdrObject());
+                SdrObject* pTmpObj1 = pTmpEdgeObj->GetSdrObjectConnection(true);
+                SdrObject* pTmpObj2 = pTmpEdgeObj->GetSdrObjectConnection(false);
 
                 if( pTmpObj1 )
                 {
                     SdrObject* pObj1 = pTmpObj1->CloneSdrObject();
 
                     maSdrObjectVector.push_back(pObj1);
-                    pEdgeObj->ConnectToNode(true, pObj1);
+                    pEdgeObj->ConnectToSdrObject(true, pObj1);
                 }
 
                 if( pTmpObj2 )
@@ -115,7 +107,7 @@ void SvxXConnectionPreview::Construct()
                     SdrObject* pObj2 = pTmpObj2->CloneSdrObject();
 
                     maSdrObjectVector.push_back(pObj2);
-                    pEdgeObj->ConnectToNode(false, pObj2);
+                    pEdgeObj->ConnectToSdrObject(false, pObj2);
                 }
 
                 maSdrObjectVector.push_back(pEdgeObj);
@@ -125,7 +117,9 @@ void SvxXConnectionPreview::Construct()
 
     if( !pEdgeObj )
     {
+        // no edge in selection, create default edge
         pEdgeObj = new SdrEdgeObj(pView->getSdrModelFromSdrView());
+        maSdrObjectVector.push_back(pEdgeObj);
     }
 
     // Groesse anpassen

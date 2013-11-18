@@ -88,6 +88,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/svdview.hxx>
 #include <switerator.hxx>
+#include <svx/obj3d.hxx>
 
 #define SCROLLVAL 75
 
@@ -2252,7 +2253,7 @@ sal_Bool SwFEShell::IsGroupSelected()
             // Thus, use corresponding method instead of checking type.
             if ( pObj->getChildrenOfSdrObject() &&
                  // --> FME 2004-12-08 #i38505# No ungroup allowed for 3d objects
-                 !pObj->IsE3dObject() &&
+                 !dynamic_cast< E3dObject* >(pObj) &&
                  // <--
                  FLY_AS_CHAR != ((SwDrawContact*)findConnectionToSdrObject(pObj))->
                                       GetFmt()->GetAnchor().GetAnchorId() )

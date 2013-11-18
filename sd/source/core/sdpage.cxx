@@ -1960,7 +1960,7 @@ void SdPage::ScaleObjects(const basegfx::B2DVector& rNewPageSize, double fLeft, 
             // #88084# remember aTopLeft as original TopLeft
             const basegfx::B2DPoint aTopLeft(pObj->getObjectRange(0).getMinimum());
 
-            if (!pObj->IsSdrEdgeObj())
+            if (!dynamic_cast< SdrEdgeObj* >(pObj))
             {
                 /**************************************************************
                 * Objekt skalieren
@@ -2128,7 +2128,7 @@ void SdPage::ScaleObjects(const basegfx::B2DVector& rNewPageSize, double fLeft, 
                 }
             }
 
-            if (mbScaleObjects && !pObj->IsSdrEdgeObj())
+            if (mbScaleObjects && !dynamic_cast< SdrEdgeObj* >(pObj))
             {
                 // scale object position
                 const basegfx::B2DPoint aNewPos(

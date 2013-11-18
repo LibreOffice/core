@@ -204,12 +204,10 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
             mpView->SetResizeAtCenter(bCenter);
         }
 
-        const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-
         // #76572# look only for HelpLines when they are visible (!)
         bool bHelpLine(false);
         if(mpView->IsHlplVisible())
-            bHelpLine = mpView->PickHelpLine(aMDPos, fHitLog, nHelpLine);
+            bHelpLine = mpView->PickHelpLine(aMDPos, mpView->getHitTolLog(), nHelpLine);
         bool bHitHdl = (mpView->PickHandle(aMDPos) != NULL);
 
         if ( bHelpLine
@@ -730,7 +728,7 @@ bool FuDraw::SetPointer(SdrObject* pObj, const basegfx::B2DPoint& rPos)
 
     if (bAnimationInfo || bImageMapInfo)
     {
-        const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
+        const double fHitLog(mpView->getHitTolLog());
         const double f2HitLog(fHitLog * 2.0);
         const basegfx::B2DPoint aHitPosR(rPos.getX() + f2HitLog, rPos.getY());
         const basegfx::B2DPoint aHitPosL(rPos.getX() - f2HitLog, rPos.getY());
@@ -846,8 +844,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             {
                 // hit group -> select subobject
                 mpView->UnmarkAllObj();
-                const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-                mpView->MarkObj(aMDPos, fHitLog, rMEvt.IsShift(), true);
+                mpView->MarkObj(aMDPos, mpView->getHitTolLog(), rMEvt.IsShift(), true);
             }
         }
     }

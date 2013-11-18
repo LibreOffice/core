@@ -195,9 +195,8 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // Zoom
         const basegfx::B2DVector aZoomSizePixel(mpWindow->GetInverseViewTransformation() * maZoomRange.getRange());
-        const double fTol(DRGPIX + DRGPIX);
 
-        if ( aZoomSizePixel.getX() < fTol && aZoomSizePixel.getY() < fTol )
+        if ( aZoomSizePixel.getX() < mpView->getMinMovLog() && aZoomSizePixel.getY() < mpView->getMinMovLog() )
         {
             // Klick auf der Stelle: Zoomfaktor verdoppeln
             const basegfx::B2DPoint aPos(mpWindow->GetInverseViewTransformation() * aPosPix);

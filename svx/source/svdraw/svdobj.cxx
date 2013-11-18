@@ -2277,25 +2277,20 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
     return pRet;
 }
 
-bool SdrObject::IsSdrEdgeObj() const
-{
-    return false;
-}
+//bool SdrObject::IsE3dObject() const
+//{
+//    return false;
+//}
 
-bool SdrObject::IsE3dObject() const
-{
-    return false;
-}
+//bool SdrObject::IsSdrUnoObj() const
+//{
+//    return false;
+//}
 
-bool SdrObject::IsSdrUnoObj() const
-{
-    return false;
-}
-
-bool SdrObject::IsSdrGrafObj() const
-{
-    return false;
-}
+//bool SdrObject::IsSdrGrafObj() const
+//{
+//    return false;
+//}
 
 bool SdrObject::DoesSupportTextIndentingOnLineWidthChange() const
 {
@@ -2510,18 +2505,6 @@ const basegfx::B2DHomMatrix& SdrObject::getSdrObjectTransformation() const
 
 void SdrObject::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    // TTTT: Need to handle GluePoints, too. Check GluePoint transformation
-    //SetGlueReallyAbsolute(true);
-    //NbcShearGluePoints(rRef,nWink,tn,bVShear);
-    //SetGlueReallyAbsolute(false);
-
-    //if (GetGluePointList()!=NULL) {
-    //  sdr::glue::List* pGPL=GetGluePointList(true);
-    //  pGPL->SetReallyAbsolute(true,*this);
-    //  NbcShearGluePoints(rRef,nWink,tn,bVShear);
-    //  pGPL->SetReallyAbsolute(false,*this);
-    //}
-
     if(rTransformation != getSdrObjectTransformation())
     {
         basegfx::B2DVector aOldAbsoluteScale;
@@ -2603,20 +2586,43 @@ bool SdrObject::HasText() const
 ::std::vector< SdrEdgeObj* > SdrObject::getAllConnectedSdrEdgeObj() const
 {
     // travel over broadcaster/listener to access connected edges
-    ::std::vector< SdrEdgeObj* > aRetval;
     const sal_uInt16 nListenerCount(GetListenerCount());
+    std::set< SdrEdgeObj* > aSet;
 
     for(sal_uInt16 nListener(0); nListener < nListenerCount; nListener++)
     {
-        SdrEdgeObj* pEdge = dynamic_cast< SdrEdgeObj* >(GetListener(nListener));
+        SfxListener* pCandidate = GetListener(nListener);
 
-        if(pEdge)
+        if(pCandidate)
         {
-            aRetval.push_back(pEdge);
+            SdrEdgeObj* pEdgeCandidate = SdrEdgeObj::checkIfUsesListener(*pCandidate);
+
+            if(pEdgeCandidate)
+            {
+                if(aSet.find(pEdgeCandidate) == aSet.end())
+                {
+                    aSet.insert(pEdgeCandidate);
+                }
+            }
         }
     }
 
-    return aRetval;
+    return ::std::vector< SdrEdgeObj* >(aSet.begin(), aSet.end());
+
+    //::std::vector< SdrEdgeObj* > aRetval;
+    //const sal_uInt16 nListenerCount(GetListenerCount());
+    //
+    //for(sal_uInt16 nListener(0); nListener < nListenerCount; nListener++)
+    //{
+    //    SdrEdgeObj* pEdge = dynamic_cast< SdrEdgeObj* >(GetListener(nListener));
+    //
+    //    if(pEdge)
+    //    {
+    //        aRetval.push_back(pEdge);
+    //    }
+    //}
+    //
+    //return aRetval;
 }
 
 //////////////////////////////////////////////////////////////////////////////

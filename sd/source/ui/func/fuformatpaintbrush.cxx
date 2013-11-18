@@ -105,13 +105,12 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
     {
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-        const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
 
         if( (eHit == SDRHIT_TEXTEDIT) || (eHit == SDRHIT_TEXTEDITOBJ && ( mpViewShell->GetFrameView()->IsQuickEdit() || dynamic_cast< sdr::table::SdrTableObj* >( aVEvt.mpObj ) != NULL ) ))
         {
             SdrObject* pPickObj=0;
             const basegfx::B2DPoint aPnt(mpWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
-            mpView->PickObj( aPnt, fHitLog, pPickObj, SDRSEARCH_PICKMARKABLE);
+            mpView->PickObj( aPnt, mpView->getHitTolLog(), pPickObj, SDRSEARCH_PICKMARKABLE);
 
             if( pPickObj && !pPickObj->IsEmptyPresObj() )
             {
@@ -150,7 +149,7 @@ bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
             const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
             const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
 
-            mpView->MarkObj(aLogicPos, fHitLog, bToggle, false);
+            mpView->MarkObj(aLogicPos, mpView->getHitTolLog(), bToggle, false);
 
             return true;
         }
@@ -170,10 +169,9 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
         }
         else
         {
-            const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
             SdrObject* pObj=0;
             const basegfx::B2DPoint aPnt(mpWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
-            bool bOverMarkableObject = mpView->PickObj( aPnt, fHitLog, pObj, SDRSEARCH_PICKMARKABLE);
+            bool bOverMarkableObject = mpView->PickObj( aPnt, mpView->getHitTolLog(), pObj, SDRSEARCH_PICKMARKABLE);
 
             if(bOverMarkableObject && pObj && HasContentForThisType(*pObj) )
                 mpWindow->SetPointer(Pointer(POINTER_FILL));

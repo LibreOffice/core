@@ -117,8 +117,6 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
     if (rMEvt.IsLeft())
     {
         bReturn = true;
-        const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-        const double fDrgLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
         mpWindow->CaptureMouse();
 
         SdrViewEvent aVEvt;
@@ -140,7 +138,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             if (pHdl)
             {
                 // Handle draggen
-                mpView->BegDragObj(aMDPos, aVEvt.mpHdl, fDrgLog);
+                mpView->BegDragObj(aMDPos, aVEvt.mpHdl, mpView->getMinMovLog());
             }
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && mpView->IsInsGluePointMode())
@@ -165,7 +163,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             /******************************************************************
             * Objekt verschieben
             ******************************************************************/
-            mpView->BegDragObj(aMDPos, NULL, fDrgLog);
+            mpView->BegDragObj(aMDPos, NULL, mpView->getMinMovLog());
         }
         else if (eHit == SDRHIT_GLUEPOINT)
         {
@@ -180,7 +178,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
             if (pHdl)
             {
-                mpView->BegDragObj(aMDPos, pHdl, fDrgLog);
+                mpView->BegDragObj(aMDPos, pHdl, mpView->getMinMovLog());
             }
         }
         else
@@ -199,11 +197,11 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 if (rMEvt.IsMod2())
                 {
-                    bMarked = mpView->MarkNextObj(aMDPos, fHitLog, rMEvt.IsShift());
+                    bMarked = mpView->MarkNextObj(aMDPos, mpView->getHitTolLog(), rMEvt.IsShift());
                 }
                 else
                 {
-                    bMarked = mpView->MarkObj(aMDPos, fHitLog, rMEvt.IsShift());
+                    bMarked = mpView->MarkObj(aMDPos, mpView->getHitTolLog(), rMEvt.IsShift());
                 }
             }
 
@@ -211,7 +209,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                 (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
             {
                 // Objekt verschieben
-                mpView->BegDragObj(aMDPos, aVEvt.mpHdl, fDrgLog);
+                mpView->BegDragObj(aMDPos, aVEvt.mpHdl, mpView->getMinMovLog());
             }
             else if (mpView->areSdrObjectsSelected())
             {
@@ -283,12 +281,10 @@ bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
     }
 
     FuDraw::MouseButtonUp(rMEvt);
-
-    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-    if (fabs(aMDPos.getX() - aPos.getX()) < nDrgLog &&
-        fabs(aMDPos.getY() - aPos.getY()) < nDrgLog &&
+    if (fabs(aMDPos.getX() - aPos.getX()) < mpView->getMinMovLog() &&
+        fabs(aMDPos.getY() - aPos.getY()) < mpView->getMinMovLog() &&
         !rMEvt.IsShift() && !rMEvt.IsMod2())
     {
         SdrViewEvent aVEvt;

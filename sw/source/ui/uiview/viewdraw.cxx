@@ -77,6 +77,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/extrusionbar.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/obj3d.hxx>
 
 using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
@@ -745,7 +746,7 @@ sal_Bool SwView::HasDrwObj(SdrObject *pSdrObj) const
             if ((bRet = HasDrwObj(pList->GetObj(i))) == sal_True)
                 break;
     }
-    else if (SdrInventor == pSdrObj->GetObjInventor() || pSdrObj->IsE3dObject())
+    else if (SdrInventor == pSdrObj->GetObjInventor() || dynamic_cast< E3dObject* >(pSdrObj))
         return sal_True;
 
     return bRet;

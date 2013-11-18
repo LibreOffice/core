@@ -120,7 +120,7 @@ public:
         const Graphic& rGrf,
         const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix());
 
-    virtual bool IsSdrGrafObj() const;
+//  virtual bool IsSdrGrafObj() const;
     virtual bool DoesSupportTextIndentingOnLineWidthChange() const;
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );

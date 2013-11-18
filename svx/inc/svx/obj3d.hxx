@@ -111,7 +111,7 @@ public:
     virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
     virtual bool IsClosedObj() const;
-    virtual bool IsE3dObject() const;
+//  virtual bool IsE3dObject() const;
     virtual void SetBoundVolInvalid();
     virtual void SetTransformChanged();
     virtual void StructureChanged();

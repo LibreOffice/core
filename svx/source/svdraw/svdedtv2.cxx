@@ -50,6 +50,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svx/svdlegacy.hxx>
 #include <svx/svdview.hxx>
+#include <svx/obj3d.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -705,7 +706,7 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
     {
         SdrObjList* pOL = pSource->getChildrenOfSdrObject();
 
-        if(pOL && !pSource->IsE3dObject())
+        if(pOL && !dynamic_cast< const E3dObject* >(pSource))
         {
             // erstes Nichtgruppenobjekt aus der Gruppe holen
             SdrObjListIter aIter(*pOL,IM_DEEPNOGROUPS);
@@ -752,7 +753,7 @@ bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
 {
     SdrObjList* pOL = pObj->getChildrenOfSdrObject();
 
-    if(pOL && !pObj->IsE3dObject())
+    if(pOL && !dynamic_cast< const E3dObject* >(pObj))
     {
         SdrObjListIter aIter(*pOL, IM_DEEPNOGROUPS);
 
@@ -831,7 +832,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, bo
 {
     SdrObjList* pOL = pObj->getChildrenOfSdrObject();
 
-    if(pOL && !pObj->IsE3dObject())
+    if(pOL && !dynamic_cast< const E3dObject* >(pObj))
     {
         basegfx::B2DPolyPolygon aRetval;
         SdrObjListIter aIter(*pOL, IM_DEEPNOGROUPS);
@@ -1888,7 +1889,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
                 sal_uInt32 nPos(nPos0 + 1);
                 SdrObjList* pSubList = pObj->getChildrenOfSdrObject();
 
-                if(pSubList && !pObj->IsE3dObject())
+                if(pSubList && !dynamic_cast< const E3dObject* >(pObj))
                 {
                     SdrObjListIter aIter(*pSubList,IM_DEEPNOGROUPS);
 
@@ -2298,7 +2299,7 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
             nm--;
             SdrObject* pObj = aSelection[nm];
 
-            if(pObj->getChildrenOfSdrObject() && !pObj->IsE3dObject())
+            if(pObj->getChildrenOfSdrObject() && !dynamic_cast< const E3dObject* >(pObj))
             {
                 SdrObject* pGrp=pObj;
                 SdrObjListIter aIter(*pGrp,IM_DEEPNOGROUPS);

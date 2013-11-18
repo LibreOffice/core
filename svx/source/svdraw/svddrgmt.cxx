@@ -721,7 +721,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
             for(a = 0; a < aEdges.size(); a++)
             {
                 SdrEdgeObj* pSdrEdgeObj = aEdges[a];
-                SdrObject* pConnectedTo = pSdrEdgeObj->GetConnectedNode(true);
+                SdrObject* pConnectedTo = pSdrEdgeObj->GetSdrObjectConnection(true);
 
                 if(pConnectedTo)
                 {
@@ -729,11 +729,11 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
                     if(aEntry != aOriginalAndClones.end())
                     {
-                        pSdrEdgeObj->ConnectToNode(true, aEntry->second);
+                        pSdrEdgeObj->ConnectToSdrObject(true, aEntry->second);
                     }
                 }
 
-                pConnectedTo = pSdrEdgeObj->GetConnectedNode(false);
+                pConnectedTo = pSdrEdgeObj->GetSdrObjectConnection(false);
 
                 if(pConnectedTo)
                 {
@@ -741,7 +741,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
                     if(aEntry != aOriginalAndClones.end())
                     {
-                        pSdrEdgeObj->ConnectToNode(false, aEntry->second);
+                        pSdrEdgeObj->ConnectToSdrObject(false, aEntry->second);
                     }
                 }
             }
@@ -873,11 +873,16 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
         for(sal_uInt32 a(0); a < aConnectedSdrEdgeObjs.size(); a++)
         {
             const SdrEdgeObj* pEdge = aConnectedSdrEdgeObjs[a];
-            const SdrObject* pCon1(pEdge->GetConnectedNode(true));
-            const SdrObject* pCon2(pEdge->GetConnectedNode(false));
+            const SdrObject* pCon1(pEdge->GetSdrObjectConnection(true));
+            const SdrObject* pCon2(pEdge->GetSdrObjectConnection(false));
             const bool bCon1(pCon1 && getSdrView().isSdrObjectSelected(*pCon1));
             const bool bCon2(pCon2 && getSdrView().isSdrObjectSelected(*pCon2));
-            const basegfx::B2DPolygon aEdgePolygon(pEdge->ImplAddConnectorOverlay(*this, bCon1, bCon2, bDetail));
+            const basegfx::B2DPolygon aEdgePolygon(
+                pEdge->CreateConnectorOverlay(
+                    getCurrentTransformation(),
+                    bCon1,
+                    bCon2,
+                    bDetail));
 
             if(aEdgePolygon.count())
             {

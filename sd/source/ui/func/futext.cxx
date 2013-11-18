@@ -319,13 +319,10 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 if (bMacro && mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, SDRSEARCH_PICKMACRO))
                 {
                     // Makro
-                    const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-                    mpView->BegMacroObj(aMDPos, fHitLog, pObj, mpWindow);
+                    mpView->BegMacroObj(aMDPos, mpView->getHitTolLog(), pObj, mpWindow);
                 }
                 else
                 {
-                    const double fTolerance(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
-
                     if (eHit != SDRHIT_HANDLE)
                     {
                         // Selektion aufheben
@@ -444,7 +441,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                                 eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
                                 if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
                                 {
-                                    mpView->BegDragObj(aMDPos, aVEvt.mpHdl, fTolerance);
+                                    mpView->BegDragObj(aMDPos, aVEvt.mpHdl, mpView->getMinMovLog());
                                 }
                             }
                             bReturn = true;
@@ -458,7 +455,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         **********************************************************/
                         mpView->setSdrObjectCreationInfo(SdrObjectCreationInfo(static_cast< sal_uInt16 >(OBJ_TEXT)));
                         mpView->SetViewEditMode(SDREDITMODE_CREATE);
-                        mpView->BegCreateObj(aMDPos, fTolerance);
+                        mpView->BegCreateObj(aMDPos, mpView->getMinMovLog());
                     }
                     else
                     {
@@ -670,7 +667,6 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         return (true); // Event von der SdrView ausgewertet
 
     bool bEmptyTextObj = false;
-    const double fTolerance(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
 
     if (mxTextObj.is())
     {
@@ -706,8 +702,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
         if ( mpView->IsRotateAllowed() && mpViewShell->GetFrameView()->IsClickChangeRotation() && (rMEvt.GetClicks() != 2) &&
             !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsRight() &&
-            fabs(aLogicPos.getX() - aMDPos.getX()) < fTolerance &&
-            fabs(aLogicPos.getY() - aMDPos.getY()) < fTolerance)
+            fabs(aLogicPos.getX() - aMDPos.getX()) < mpView->getMinMovLog() &&
+            fabs(aLogicPos.getY() - aMDPos.getY()) < mpView->getMinMovLog())
         {
             // toggle to rotation mode
             mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_ROTATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
@@ -794,8 +790,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     mpWindow->ReleaseMouse();
 
     if ( mpView && !mpView->areSdrObjectsSelected() &&
-         fabs(aMDPos.getX() - aLogicPos.getX()) < fTolerance &&
-         fabs(aMDPos.getY() - aLogicPos.getY()) < fTolerance &&
+         fabs(aMDPos.getX() - aLogicPos.getX()) < mpView->getMinMovLog() &&
+         fabs(aMDPos.getY() - aLogicPos.getY()) < mpView->getMinMovLog() &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
     {
         SdrViewEvent aVEvt;
@@ -819,15 +815,15 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             **********************************************************************/
             mpView->setSdrObjectCreationInfo(SdrObjectCreationInfo(static_cast< sal_uInt16 >(OBJ_TEXT)));
             mpView->SetViewEditMode(SDREDITMODE_CREATE);
-            mpView->BegCreateObj(aMDPos, fTolerance);
+            mpView->BegCreateObj(aMDPos, mpView->getMinMovLog());
 
             bool bSnapEnabled = mpView->IsSnapEnabled();
 
             if (bSnapEnabled)
                 mpView->SetSnapEnabled(false);
 
-            aLogicPos.setX(aLogicPos.getX() + fTolerance + fTolerance);
-            aLogicPos.setY(aLogicPos.getY() + fTolerance + fTolerance);
+            aLogicPos.setX(aLogicPos.getX() + (mpView->getMinMovLog() * 2.0));
+            aLogicPos.setY(aLogicPos.getY() + (mpView->getMinMovLog() * 2.0));
             mpView->MovAction(aLogicPos);
 
             mxTextObj.reset( dynamic_cast< SdrTextObj* >( mpView->GetCreateObj() ) );

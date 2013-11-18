@@ -99,8 +99,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
                 if(basegfx::fTools::moreOrEqual(aLinePos.getX(), 0.0))
                 {
                     aLinePos = mpWindow->GetInverseViewTransformation() * aLinePos;
-                    const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-                    bLineExist = mpView->PickHelpLine(aLinePos, fHitLog, nHelpLine);
+                    bLineExist = mpView->PickHelpLine(aLinePos, mpView->getHitTolLog(), nHelpLine);
 
                     if(bLineExist)
                     {

@@ -88,7 +88,7 @@ public:
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
         bool bOwnsModel = true);
 
-    virtual bool IsSdrUnoObj() const;
+//    virtual bool IsSdrUnoObj() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void SetLayer(SdrLayerID nLayer);

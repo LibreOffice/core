@@ -475,10 +475,10 @@ SdrObject* SdrGrafObj::CloneSdrObject(SdrModel* pTargetModel) const
 
 // -----------------------------------------------------------------------------
 
-bool SdrGrafObj::IsSdrGrafObj() const
-{
-    return true;
-}
+//bool SdrGrafObj::IsSdrGrafObj() const
+//{
+//    return true;
+//}
 
 bool SdrGrafObj::DoesSupportTextIndentingOnLineWidthChange() const
 {

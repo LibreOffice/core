@@ -367,10 +367,10 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
 
             if(pEdge)
             {
-                SdrObject* pObj1 = pEdge->GetConnectedNode(false);
-                SdrObject* pObj2 = pEdge->GetConnectedNode(true);
+                SdrObject* pObj1 = pEdge->GetSdrObjectConnection(false);
+                SdrObject* pObj2 = pEdge->GetSdrObjectConnection(true);
 
-                if(pObj1 && !pEdge->CheckNodeConnection(false))
+                if(pObj1 && !pEdge->CheckSdrObjectConnection(false))
                 {
                     bool bContains(false);
 
@@ -390,11 +390,11 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
                             AddUndo( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
                         }
 
-                        pEdge->DisconnectFromNode(false);
+                        pEdge->ConnectToSdrObject(false);
                     }
                 }
 
-                if(pObj2 && !pEdge->CheckNodeConnection(true))
+                if(pObj2 && !pEdge->CheckSdrObjectConnection(true))
                 {
                     bool bContains(false);
 
@@ -414,23 +414,23 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
                             AddUndo( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
                         }
 
-                        pEdge->DisconnectFromNode(true);
+                        pEdge->ConnectToSdrObject(true);
                     }
                 }
             }
         }
 
-        /// get all SdrEdgeObj which are connected to a selected SdrObject and are selected themselves
-        const ::std::vector< SdrEdgeObj* > aConnectedSdrEdgeObjs(getAllSdrEdgeObjConnectedToSdrObjectVector(aSelection, true));
-
-        for(sal_uInt32 i(0); i < aConnectedSdrEdgeObjs.size(); i++)
-        {
-            SdrEdgeObj* pEdge = aConnectedSdrEdgeObjs[i];
-
-            /// TTTT: is this needed or will this happen automatically...?
-            pEdge->SetEdgeTrackDirty();
-        }
-    }
+        ///// get all SdrEdgeObj which are connected to a selected SdrObject and are selected themselves
+        //const ::std::vector< SdrEdgeObj* > aConnectedSdrEdgeObjs(getAllSdrEdgeObjConnectedToSdrObjectVector(aSelection, true));
+        //
+        //for(sal_uInt32 i(0); i < aConnectedSdrEdgeObjs.size(); i++)
+        //{
+        //  SdrEdgeObj* pEdge = aConnectedSdrEdgeObjs[i];
+        //
+        //  /// TTTT: is this needed or will this happen automatically...?
+        //  pEdge->SetEdgeTrackDirty();
+        //}
+    }   //
 }
 
 void SdrEditView::handleSelectionChange()
@@ -864,8 +864,8 @@ void SdrEditView::CheckPossibilities()
 
                 if(pEdge)
                 {
-                    SdrObject* pNode1 = pEdge->GetConnectedNode(true);
-                    SdrObject* pNode2 = pEdge->GetConnectedNode(false);
+                    SdrObject* pNode1 = pEdge->GetSdrObjectConnection(true);
+                    SdrObject* pNode2 = pEdge->GetSdrObjectConnection(false);
 
                     if(pNode1 || pNode2)
                     {
@@ -1169,11 +1169,11 @@ bool SdrEditView::InsertObjectAtView(SdrObject& rObj, sal_uInt32 nOptions)
         return false;
     }
 
-    if(!rObj.IsE3dObject())
+    if(!dynamic_cast< E3dObject* >(&rObj))
     {
         SdrObject* pParent = GetSdrPageView()->GetCurrentObjectList()->getSdrObjectFromSdrObjList();
 
-        if(pParent && pParent->IsE3dObject())
+        if(pParent && dynamic_cast< E3dObject* >(pParent))
         {
             OSL_ENSURE(false, "InsertObjectAtView non-3D to 3D parent (!)");
             deleteSdrObjectSafe( &rObj );

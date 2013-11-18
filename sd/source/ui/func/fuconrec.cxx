@@ -202,22 +202,20 @@ bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     {
         const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
         const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
-
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
         if(OBJ_CAPTION == mpView->getSdrObjectCreationInfo().getIdent())
         {
             bReturn = mpView->BegCreateCaptionObj(
                 aLogicPos,
                 basegfx::B2DVector(846.0, 846.0), // (4x2)cm
-                nDrgLog);
+                mpView->getMinMovLog());
         }
         else
         {
             mpView->BegCreateObj(
                 aLogicPos,
-                nDrgLog);
+                mpView->getMinMovLog());
         }
 
         SdrObject* pObj = mpView->GetCreateObj();
@@ -850,15 +848,6 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 if(pSdrPathObj)
                 {
                     initializeDefaultSdrPathObjByObjectType(*pSdrPathObj, DefaultSdrPathObjType_Line, rRange, false);
-                    //pSdrPathObj->initializeDefaultSdrPathObjBySlotID(nID, aRange);
-
-                    // TTTT
-                    //const double fYMiddle((aRange.getMinY() + aRange.getMaxY()) * 0.5);
-                    //
-                    //::basegfx::B2DPolygon aB2DPolygon;
-                    //aB2DPolygon.append(::basegfx::B2DPoint(aStart.getX(), fYMiddle));
-                    //aB2DPolygon.append(::basegfx::B2DPoint(aEnd.getX(), fYMiddle));
-                    //pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(::basegfx::B2DPolyPolygon(aB2DPolygon));
                 }
                 else
                 {

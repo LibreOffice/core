@@ -279,28 +279,15 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             break;
         }
 
-        // TTTT: Moved to below (at transformation)
-        // rObj.SetAngle( rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("RotateAngle") ));
-
         if( ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("IsFontwork") ) &&
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
             rObj.GetType().EqualsAscii( "drawing.Measure" ) || rObj.GetType().EqualsAscii( "drawing.Caption" ) )
         {
-/*
-            if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("BoundRect") ) )
-            {
-                ::com::sun::star::awt::Rectangle aRect( *(::com::sun::star::awt::Rectangle*)rObj.GetUsrAny().getValue() );
-                rObj.SetRange( ImplMapB2DPoint( Point( aRect.X, aRect.Y ) ),
-                                ImplMapB2DVector( Size( aRect.Width, aRect.Height ) ) );
-            }
-*/
             rObj.SetType( String( RTL_CONSTASCII_STRINGPARAM(
                                 "drawing.dontknow" ),
                                 RTL_TEXTENCODING_MS_1252 ));
         }
 
-        // TTTT: adapted to transformation
-        // TTTT: Check mirroring exports for ALL shape types
         basegfx::B2DRange aObjectRange(0.0, 0.0, 1.0, 1.0);
         sal_uInt32 nMirrorFlags(0);
 
@@ -358,15 +345,13 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if ( rObj.GetType().EqualsAscii( "drawing.Custom" ) )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            // TTTT: remove when checked sal_uInt32 nMirrorFlags;
-
             rtl::OUString sCustomShapeType;
-            MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), /*nMirrorFlags, */sCustomShapeType );
+            MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), sCustomShapeType );
             if ( sCustomShapeType.equalsAscii( "col-502ad400" ) || sCustomShapeType.equalsAscii( "col-60da8460" ) )
             {
                 ADD_SHAPE(
                     ESCHER_ShpInst_PictureFrame,
-                    0xa00 ); // TTTT: no mirroring, metafile export version
+                    0xa00 ); // no mirroring, metafile export version
                 if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), false ) )
                 {
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
@@ -603,13 +588,6 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             //i27942: Poly/Lines/Bezier do not support text.
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-
-            // TTTT: Mirroring alraedy done above
-            //sal_uInt32 nFlags = 0xa00;            // Flags: Connector | HasSpt
-            //if( aNewRect.Height < 0 )
-            //  nFlags |= 0x80;             // Flags: VertMirror
-            //if( aNewRect.Width < 0 )
-            //  nFlags |= 0x40;             // Flags: HorzMirror
 
             ADD_SHAPE(
                 ESCHER_ShpInst_Line,
@@ -874,7 +852,6 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
-        // TTTT: adapted to transformation
         basegfx::B2DRange aObjectRange(0.0, 0.0, 1.0, 1.0);
         sal_uInt32 nMirrorFlags(0);
 
@@ -918,9 +895,6 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
             mpPicStrm = mpEscherEx->QueryPictureStream();
 
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aObjectRange );
-
-        // TTTT: Done above, see transformation
-        // rObj.SetAngle( rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("RotateAngle")));
 
         sal_Int32 nAngle = rObj.GetAngle();
         if( rObj.GetType().EqualsAscii( "drawing.Line" ))

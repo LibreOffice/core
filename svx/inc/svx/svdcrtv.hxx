@@ -31,7 +31,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // predefines
 
-class SdrObjConnection;
 class ImplConnectMarkerOverlay;
 class ImpSdrCreateViewExtraData;
 
@@ -154,7 +153,7 @@ public:
     sal_uInt16 GetFreeHandMinDistPix() const { return mnFreeHandMinDistPix; }
     void SetFreeHandMinDistPix(sal_uInt16 nVal) { if(mnFreeHandMinDistPix != nVal) mnFreeHandMinDistPix = nVal; }
 
-    void SetConnectMarker(const SdrObjConnection& rCon);
+    void SetConnectMarker(const SdrObject* pTargetObject);
     void HideConnectMarker();
 
     // Attribute des ggf. gerade in der Erzeugung befindlichen Objekts

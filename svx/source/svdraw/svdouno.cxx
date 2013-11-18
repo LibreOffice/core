@@ -322,10 +322,10 @@ SdrObject* SdrUnoObj::CloneSdrObject(SdrModel* pTargetModel) const
     return pClone;
 }
 
-bool SdrUnoObj::IsSdrUnoObj() const
-{
-    return true;
-}
+//bool SdrUnoObj::IsSdrUnoObj() const
+//{
+//    return true;
+//}
 
 void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {

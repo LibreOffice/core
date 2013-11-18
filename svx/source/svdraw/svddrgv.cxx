@@ -525,10 +525,9 @@ bool SdrDragView::BegDragObj(const basegfx::B2DPoint& rPnt, const SdrHdl* pHdl, 
                         }
                         else if(HDL_POLY == GetDragHdlKind())
                         {
-                            const SdrObject* pMarkedObject = getSelectedIfSingle();
-                            const bool bConnectorSelected(pMarkedObject && pMarkedObject->IsSdrEdgeObj());
+                            const SdrEdgeObj* pMarkedObject = dynamic_cast< const SdrEdgeObj* >(getSelectedIfSingle());
 
-                            if(bConnectorSelected)
+                            if(pMarkedObject)
                             {
                                 // #i97784#
                                 // fallback to old behaviour for connectors (see
@@ -816,16 +815,9 @@ bool SdrDragView::IsInsGluePointPossible() const
 
     if(IsInsGluePointMode() && areSdrObjectsSelected())
     {
-        const SdrObject* pMarkedObject = getSelectedIfSingle();
+        const SdrEdgeObj* pMarkedObject = dynamic_cast< const SdrEdgeObj* >(getSelectedIfSingle());
 
-        if(pMarkedObject)
-        {
-            if(!pMarkedObject->IsSdrEdgeObj())
-            {
-               bRetval = true;
-            }
-        }
-        else
+        if(!pMarkedObject)
         {
             bRetval = true;
         }

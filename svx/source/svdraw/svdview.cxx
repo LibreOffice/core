@@ -58,6 +58,7 @@
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
+#include <svx/svdogrp.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2240,6 +2241,120 @@ void SdrView::MoveHandleByVector(const SdrHdl& rHdl, const basegfx::B2DVector& r
             MakeVisibleAtView(aVisRange, *pMakeVisibleWindow);
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrObject* SdrView::FindConnector(
+    const basegfx::B2DPoint& rPosition,
+    sal_uInt32& o_rnID,
+    bool& o_rbBest,
+    bool& o_rbAuto,
+    const SdrEdgeObj* pAvoidConnectioWith)
+{
+    SdrObject* pRetval = 0;
+    SdrPageView* pSdrPageView = GetSdrPageView();
+
+    if(pSdrPageView)
+    {
+        SdrObjList* pOL = pSdrPageView->GetCurrentObjectList();
+
+        if(pOL)
+        {
+            const SetOfByte& rVisLayer = pSdrPageView->GetVisibleLayers();
+            sal_uInt32 no(pOL->GetObjCount());
+
+            while(no && !pRetval)
+            {
+                SdrObject* pSdrObjectCandidate = pOL->GetObj(--no);
+                SdrObjGroup* pSdrObjGroup = dynamic_cast< SdrObjGroup* >(pSdrObjectCandidate);
+
+                if(pSdrObjectCandidate &&
+                    (pSdrObjGroup || rVisLayer.IsSet(pSdrObjectCandidate->GetLayer())) && // GetLayer at groups is zero
+                    (!pAvoidConnectioWith || pAvoidConnectioWith != pSdrObjectCandidate)) // no connections to pAvoidConnectioWith
+                {
+                    basegfx::B2DRange aCandidateRange(pSdrObjectCandidate->getObjectRange(this));
+                    const double fHitToleranceDoubled(getHitTolLog() * 2.0);
+
+                    aCandidateRange.grow(fHitToleranceDoubled);
+
+                    if(aCandidateRange.isInside(rPosition))
+                    {
+                        const sdr::glue::GluePointProvider& rProvider = pSdrObjectCandidate->GetGluePointProvider();
+                        const sdr::glue::GluePointVector aUserGluePointVector(rProvider.getUserGluePointVector());
+                        const sal_uInt32 nUserGluePointCount(aUserGluePointVector.size());
+                        sal_uInt32 a(0);
+                        double fShortest(0.0);
+
+                        // check for UserGluePoint hit
+                        for(a = 0; a < nUserGluePointCount; a++)
+                        {
+                            const sdr::glue::GluePoint* pGluePointCandidate = aUserGluePointVector[a];
+
+                            if(pGluePointCandidate)
+                            {
+                                const basegfx::B2DPoint aPoint(pSdrObjectCandidate->getSdrObjectTransformation() * pGluePointCandidate->getUnitPosition());
+                                const double fDistance(basegfx::B2DVector(aPoint - rPosition).getLength());
+
+                                if(fDistance < fHitToleranceDoubled && (basegfx::fTools::equalZero(fShortest) || fDistance < fShortest))
+                                {
+                                    fShortest = fDistance;
+                                    pRetval = pSdrObjectCandidate;
+                                    o_rnID = pGluePointCandidate->getID();
+                                    o_rbBest = false;
+                                    o_rbAuto = false;
+                                }
+                            }
+                            else
+                            {
+                                OSL_ENSURE(false, "Got sdr::glue::PointVector with empty entries (!)");
+                            }
+                        }
+
+                        // check for AutoGluePoint hit
+                        if(!pRetval)
+                        {
+                            const sal_uInt32 nAutoGluePointCount(rProvider.getAutoGluePointCount());
+
+                            for(a = 0; a < nAutoGluePointCount; a++)
+                            {
+                                const sdr::glue::GluePoint aLocalPt(rProvider.getAutoGluePointByIndex(a));
+                                const basegfx::B2DPoint aPoint(pSdrObjectCandidate->getSdrObjectTransformation() * aLocalPt.getUnitPosition());
+                                const double fDistance(basegfx::B2DVector(aPoint - rPosition).getLength());
+
+                                if(fDistance < fHitToleranceDoubled && (basegfx::fTools::equalZero(fShortest) || fDistance < fShortest))
+                                {
+                                    fShortest = fDistance;
+                                    pRetval = pSdrObjectCandidate;
+                                    o_rnID = a;
+                                    o_rbBest = false;
+                                    o_rbAuto = true;
+                                }
+                            }
+                        }
+
+                        // check if object is hit and setBestConnection
+                        if(!pRetval
+                            && !dynamic_cast< const SdrEdgeObj* >(pSdrObjectCandidate)
+                            && SdrObjectPrimitiveHit(*pSdrObjectCandidate, rPosition, fHitToleranceDoubled, *this, false, 0)
+                            && (!pAvoidConnectioWith || !pAvoidConnectioWith->GetSuppressDefaultConnect()))
+                        {
+                            pRetval = pSdrObjectCandidate;
+                            o_rnID = 0;
+                            o_rbBest = true;
+                            o_rbAuto = false;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            OSL_ENSURE(false, "Empty current object list from PageView (!)");
+        }
+    }
+
+    return pRetval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

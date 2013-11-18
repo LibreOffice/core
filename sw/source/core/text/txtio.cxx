@@ -178,7 +178,7 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
                 }
                 else
                 {
-                    aTmp = pAnchoredObj->GetDrawObj()->IsSdrUnoObj() ? "UNO" : "Drw";
+                    aTmp = dynamic_cast< SdrUnoObj* >(pAnchoredObj->GetDrawObj()) ? "UNO" : "Drw";
                     rStr << aTmp;
                 }
                 // <--
@@ -205,7 +205,7 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
                 }
                 else
                 {
-                    aTmp = pAnchoredObj->GetDrawObj()->IsSdrUnoObj() ? "UNO" : "Drw";
+                    aTmp = dynamic_cast< SdrUnoObj* >(pAnchoredObj->GetDrawObj()) ? "UNO" : "Drw";
                     rStr << aTmp;
                 }
                 if( i < nCnt - 1 )

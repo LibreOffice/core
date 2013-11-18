@@ -945,7 +945,7 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
             {
                 // hier nichts
             }
-            else if (pObject->IsSdrEdgeObj())           // Verbinder?
+            else if (dynamic_cast< SdrEdgeObj* >(pObject))          // Verbinder?
             {
                 //  hier auch nichts
                 //! nicht verbundene Enden wie bei Linien (s.u.) behandeln?

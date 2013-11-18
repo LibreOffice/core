@@ -53,6 +53,7 @@
 #include <svx/svdlegacy.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdouno.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // selection visualisation of Objects, Points and GluePoints
@@ -1514,7 +1515,7 @@ void SdrMarkView::SetViewEditMode(SdrViewEditMode eMode)
 
 bool SdrMarkView::IsObjMarkable(const SdrObject& rObj) const
 {
-    if(rObj.IsMarkProtect() || (!IsDesignMode() && rObj.IsSdrUnoObj()))
+    if(rObj.IsMarkProtect() || (!IsDesignMode() && dynamic_cast< const SdrUnoObj* >(&rObj)))
     {
         // Objekt nicht selektierbar oder
         // SdrUnoObj nicht im DesignMode

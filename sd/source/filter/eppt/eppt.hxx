@@ -710,10 +710,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         // the object range, split in pos and scale to keep the evtl. negative size (mirroring)
         basegfx::B2DRange               maObjectRange;
         basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose   maObjTrans;
-//        basegfx::B2DRange               maObjectRange; // TTTT mirrored needed here ?!?
         sal_uInt32                      mnMirrorFlags;
-//        bool                            mbMirroredX;
-//        bool                            mbMirroredY;
         double                          mfObjectRotation;
 
         ByteString                      mType;

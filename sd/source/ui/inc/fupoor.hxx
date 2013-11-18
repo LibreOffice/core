@@ -58,7 +58,6 @@ class FuPoor : public SimpleReferenceComponent
 {
 public:
     static const int HITPIX = 2;                   // Hit-Toleranz in Pixel
-    static const int DRGPIX = 2;                   // Drag MinMove in Pixel
 
     virtual void DoExecute( SfxRequest& rReq );
 

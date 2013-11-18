@@ -898,9 +898,6 @@ const basegfx::B2DHomMatrix& E3dScene::getSdrObjectTransformation() const
 
 void E3dScene::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    // TTTT: SetGlueReallyAbsolute(TRUE);
-    // NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotiert die Klebepunkte (die haben noch Koordinaten relativ
-    // SetGlueReallyAbsolute(FALSE);  // ab jetzt sind sie wieder relativ zum SnapRect definiert
     const E3dScene* pScene = GetScene();
 
     if(pScene == this)

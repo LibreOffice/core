@@ -517,8 +517,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                     pRem->pClone = pObj;
                                     aConnectorContainer.Insert(pRem, CONTAINER_APPEND);
 
-                                    if(pObj->IsSdrEdgeObj())
+                                    if(dynamic_cast< SdrEdgeObj* >(pObj))
+                                    {
                                         nConnectorCount++;
+                                    }
                                 }
 
                                 // #83525# try to re-establish connections at clones
@@ -533,16 +535,16 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                         if(pOrigEdge && pCloneEdge)
                                         {
                                             // test first connection
-                                            SdrObjConnection& rConn0 = pOrigEdge->GetConnection(false);
-                                            SdrObject* pConnObj = rConn0.GetObject();
+                                            SdrObject* pConnObj = pOrigEdge->GetSdrObjectConnection(false);
+
                                             if(pConnObj)
                                             {
                                                 SdrObject* pConnClone = ImpGetClone(aConnectorContainer, pConnObj);
                                                 if(pConnClone)
                                                 {
                                                     // if dest obj was cloned, too, re-establish connection
-                                                    pCloneEdge->ConnectToNode(false, pConnClone);
-                                                    pCloneEdge->GetConnection(false).SetConnectorId(rConn0.GetConnectorId());
+                                                    pCloneEdge->ConnectToSdrObject(false, pConnClone);
+                                                    pCloneEdge->SetConnectorId(false, pOrigEdge->GetConnectorId(false));
                                                 }
                                                 else
                                                 {
@@ -551,7 +553,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                                     if(rProvider.hasUserGluePoints())
                                                     {
-                                                        const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(rConn0.GetConnectorId());
+                                                        const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(pOrigEdge->GetConnectorId(false));
 
                                                         if(pCandidate)
                                                         {
@@ -564,16 +566,16 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                             }
 
                                             // test second connection
-                                            SdrObjConnection& rConn1 = pOrigEdge->GetConnection(true);
-                                            pConnObj = rConn1.GetObject();
+                                            pConnObj = pOrigEdge->GetSdrObjectConnection(true);
+
                                             if(pConnObj)
                                             {
                                                 SdrObject* pConnClone = ImpGetClone(aConnectorContainer, pConnObj);
                                                 if(pConnClone)
                                                 {
                                                     // if dest obj was cloned, too, re-establish connection
-                                                    pCloneEdge->ConnectToNode(true, pConnClone);
-                                                    pCloneEdge->GetConnection(true).SetConnectorId(rConn1.GetConnectorId());
+                                                    pCloneEdge->ConnectToSdrObject(true, pConnClone);
+                                                    pCloneEdge->SetConnectorId(true, pOrigEdge->GetConnectorId(true));
                                                 }
                                                 else
                                                 {
@@ -582,7 +584,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                                     if(rProvider.hasUserGluePoints())
                                                     {
-                                                        const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(rConn1.GetConnectorId());
+                                                        const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(pOrigEdge->GetConnectorId(true));
 
                                                         if(pCandidate)
                                                         {
@@ -1350,9 +1352,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 String                  aName( rColItem.GetName() );
                 SfxItemSet              aSet( mpDoc->GetItemPool() );
                 const bool bClosed(pPickObj->IsClosedObj());
-                ::sd::Window* pWin = mpViewSh->GetActiveWindow();
-                const double fHitLog(basegfx::B2DVector(pWin->GetInverseViewTransformation() * basegfx::B2DVector(FuPoor::HITPIX, 0.0)).getLength());
-                double f2HitLog(fHitLog * 2);
+                double f2HitLog(getHitTolLog() * 2);
 
                 const basegfx::B2DPoint aHitPosR(rPos.getX() + f2HitLog, rPos.getY());
                 const basegfx::B2DPoint aHitPosL(rPos.getX() - f2HitLog, rPos.getY());
@@ -1360,10 +1360,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 const basegfx::B2DPoint aHitPosB(rPos.getX(), rPos.getY() - f2HitLog);
 
                 if( bClosed &&
-                    SdrObjectPrimitiveHit(*pPickObj, aHitPosR, fHitLog, *this, false, 0) &&
-                    SdrObjectPrimitiveHit(*pPickObj, aHitPosL, fHitLog, *this, false, 0) &&
-                    SdrObjectPrimitiveHit(*pPickObj, aHitPosT, fHitLog, *this, false, 0) &&
-                    SdrObjectPrimitiveHit(*pPickObj, aHitPosB, fHitLog, *this, false, 0) )
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosR, getHitTolLog(), *this, false, 0) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosL, getHitTolLog(), *this, false, 0) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosT, getHitTolLog(), *this, false, 0) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosB, getHitTolLog(), *this, false, 0) )
                 {
                     // area fill
                     if(eFill == XFILL_SOLID )

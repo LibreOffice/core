@@ -750,10 +750,9 @@ public:
 
     // true=Obj kann warsch. gefuellt werden; false=Obj kann warsch. Linienenden haben.
     // ungueltig, wenn es sich um ein GroupObj handelt.
-    virtual bool IsSdrEdgeObj() const;
-    virtual bool IsE3dObject() const;
-    virtual bool IsSdrUnoObj() const;
-    virtual bool IsSdrGrafObj() const;
+//  virtual bool IsE3dObject() const;
+//  virtual bool IsSdrUnoObj() const;
+//  virtual bool IsSdrGrafObj() const;
     virtual bool DoesSupportTextIndentingOnLineWidthChange() const;
 
     // void SetObjectInserted(bool bNew);

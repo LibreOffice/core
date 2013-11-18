@@ -163,8 +163,8 @@ void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSource)
 
             if(pSrcEdge)
             {
-                SdrObject* pSrcNode1 = pSrcEdge->GetConnectedNode(true);
-                SdrObject* pSrcNode2 = pSrcEdge->GetConnectedNode(false);
+                SdrObject* pSrcNode1 = pSrcEdge->GetSdrObjectConnection(true);
+                SdrObject* pSrcNode2 = pSrcEdge->GetSdrObjectConnection(false);
 
                 if(pSrcNode1 && pSrcNode1->getParentOfSdrObject() != pSrcEdge->getParentOfSdrObject())
                 {
@@ -190,7 +190,7 @@ void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSource)
                             if(pDstNode1)
                             {
                                 // Sonst grober Fehler!
-                                pDstEdge->ConnectToNode(true, pDstNode1);
+                                pDstEdge->ConnectToSdrObject(true, pDstNode1);
                             }
                             else
                             {
@@ -206,7 +206,7 @@ void SdrObjList::copyDataFromSdrObjList(const SdrObjList& rSource)
                             if(pDstNode2)
                             {
                                 // Node war sonst wohl nicht markiert
-                                pDstEdge->ConnectToNode(false, pDstNode2);
+                                pDstEdge->ConnectToSdrObject(false, pDstNode2);
                             }
                             else
                             {

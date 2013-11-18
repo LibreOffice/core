@@ -73,8 +73,6 @@ SdPresLayoutDlg::SdPresLayoutDlg(
 {
     FreeResource();
 
-    //mpLayoutNames = new List;
-
     maVS.SetDoubleClickHdl(LINK(this, SdPresLayoutDlg, ClickLayoutHdl));
     maBtnLoad.SetClickHdl(LINK(this, SdPresLayoutDlg, ClickLoadHdl));
 
@@ -89,14 +87,6 @@ SdPresLayoutDlg::SdPresLayoutDlg(
 
 SdPresLayoutDlg::~SdPresLayoutDlg()
 {
-    //String* pName = (String*)mpLayoutNames->First();
-    //while (pName)
-    //{
-    //  delete pName;
-    //  pName = (String*)mpLayoutNames->Next();
-    //}
-    //
-    //delete mpLayoutNames;
 }
 
 /*************************************************************************
@@ -132,8 +122,9 @@ void SdPresLayoutDlg::Reset()
     for( nName = 0; nName < mnLayoutCount; nName++ )
     {
         if(maLayoutNames[nName] == maName)
-        //if (*((String*)mpLayoutNames->GetObject(nName)) == maName)
+        {
             break;
+        }
     }
     DBG_ASSERT(nName < mnLayoutCount, "Layout nicht gefunden");
 
@@ -159,12 +150,10 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     {
         aLayoutName = maName;
         aLayoutName.Append( DOCUMENT_TOKEN );
-        //aLayoutName.Append( *(String*)mpLayoutNames->GetObject( nId - 1 ) );
         aLayoutName.Append(maLayoutNames[nId - 1]);
     }
     else
     {
-        //aLayoutName = *(String*)mpLayoutNames->GetObject( nId - 1 );
         aLayoutName = maLayoutNames[nId - 1];
         if( aLayoutName == maStrNone )
             aLayoutName.Erase(); //  so wird "- keine -" codiert (s.u.)
@@ -203,10 +192,8 @@ void SdPresLayoutDlg::FillValueSet()
             String aLayoutName(pMaster->GetLayoutName());
             aLayoutName.Erase( aLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
             maLayoutNames.push_back(aLayoutName);
-            //mpLayoutNames->Insert(new String(aLayoutName), LIST_APPEND);
 
             Bitmap aBitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90));
-            //maVS.InsertItem(mpLayoutNames->Count(), aBitmap, aLayoutName);
             maVS.InsertItem(maLayoutNames.size(), aBitmap, aLayoutName);
         }
     }
@@ -278,10 +265,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
     if( !bCancel )
     {
         // Pruefen, ob Vorlage schon vorhanden
-        // TTTT: check if this works and if yes, cleanup mpLayoutNames
-
         bool bExists = false;
-        //String* pName = (String*)mpLayoutNames->First();
         String aCompareStr( maName );
         if( maName.Len() == 0 )
             aCompareStr = maStrNone;
@@ -298,18 +282,6 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
             }
         }
 
-        //while( pName && !bExists )
-        //{
-        //  if( aCompareStr == *pName )
-        //  {
-        //      bExists = true;
-        //      // Vorlage selektieren
-        //      sal_uInt16 nId = (sal_uInt16) mpLayoutNames->GetCurPos() + 1;
-        //      maVS.SelectItem( nId );
-        //  }
-        //  pName = (String*)mpLayoutNames->Next();
-        //}
-
         if( !bExists )
         {
             // Dokument laden um Preview-Bitmap zu ermitteln (wenn Vorlage ausgewaehlt)
@@ -322,13 +294,6 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                 if (pTemplDoc)
                 {
                     ::sd::DrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
-
-/*                  SdPage* pMaster = pTemplDoc->GetMasterSdPage( 0, PK_STANDARD );
-                    mpLayoutNames->Insert( new String( maName ), LIST_APPEND );
-
-                    Bitmap aBitmap( pTemplDocSh->GetPagePreviewBitmap( pMaster, 90 ) );
-                    maVS.InsertItem( (sal_uInt16) mpLayoutNames->Count(), aBitmap, maName);
-*/
                     sal_uInt32 nCount = pTemplDoc->GetMasterPageCount();
 
                     for (sal_uInt32 nLayout = 0; nLayout < nCount; nLayout++)
@@ -338,11 +303,9 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                         {
                             String aLayoutName(pMaster->GetLayoutName());
                             aLayoutName.Erase( aLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
-                            //mpLayoutNames->Insert(new String(aLayoutName), LIST_APPEND);
                             maLayoutNames.push_back(aLayoutName);
 
                             Bitmap aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90));
-                            //maVS.InsertItem(mpLayoutNames->Count(), aBitmap, aLayoutName);
                             maVS.InsertItem(maLayoutNames.size(), aBitmap, aLayoutName);
                         }
                     }
@@ -357,17 +320,13 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
             else
             {
                 // leeres Layout
-                //mpLayoutNames->Insert( new String( maStrNone ), LIST_APPEND );
                 maLayoutNames.push_back(maStrNone);
-                //maVS.InsertItem( (sal_uInt16) mpLayoutNames->Count(),
-                //      Bitmap( SdResId( BMP_FOIL_NONE ) ), maStrNone );
                 maVS.InsertItem(maLayoutNames.size(), Bitmap( SdResId( BMP_FOIL_NONE ) ), maStrNone );
             }
 
             if (!bCancel)
             {
                 // Vorlage selektieren
-                //maVS.SelectItem( (sal_uInt16) mpLayoutNames->Count() );
                 maVS.SelectItem(static_cast< sal_uInt16 >(maLayoutNames.size()));
             }
         }

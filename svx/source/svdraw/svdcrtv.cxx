@@ -62,13 +62,13 @@ class ImplConnectMarkerOverlay
     const SdrObject&                                mrObject;
 
 public:
-    ImplConnectMarkerOverlay(const SdrCreateView& rView, SdrObject& rObject);
+    ImplConnectMarkerOverlay(const SdrCreateView& rView, const SdrObject& rObject);
     ~ImplConnectMarkerOverlay();
 
     const SdrObject& GetTargetObject() const { return mrObject; }
 };
 
-ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, SdrObject& rObject)
+ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, const SdrObject& rObject)
 :   mrObject(rObject)
 {
     basegfx::B2DPolyPolygon aB2DPolyPolygon(rObject.TakeXorPoly());
@@ -295,10 +295,8 @@ bool SdrCreateView::CheckEdgeMode()
     }
 }
 
-void SdrCreateView::SetConnectMarker(const SdrObjConnection& rCon)
+void SdrCreateView::SetConnectMarker(const SdrObject* pTargetObject)
 {
-    SdrObject* pTargetObject = rCon.GetObject();
-
     if(pTargetObject)
     {
         // if target object changes, throw away overlay object to make room for changes
@@ -331,14 +329,18 @@ bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
         {
             const basegfx::B2DPoint aLogic(pWin->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
             bool bMarkHit(PickHandle(aLogic) || IsMarkedObjHit(aLogic));
-            SdrObjConnection aCon;
+            SdrObject* pConnectObjectCandidate = 0;
 
             if(!bMarkHit)
             {
-                SdrEdgeObj::FindConnector(aLogic, *getAsSdrView(), aCon, 0, pWin);
+                sal_uInt32 nID(0);
+                bool bBest(false);
+                bool bAuto(false);
+
+                pConnectObjectCandidate = getAsSdrView()->FindConnector(aLogic, nID, bBest, bAuto, 0);
             }
 
-            SetConnectMarker(aCon);
+            SetConnectMarker(pConnectObjectCandidate);
         }
     }
 

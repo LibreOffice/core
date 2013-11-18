@@ -4499,7 +4499,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             if ( mType == "drawing.Custom" )
             {
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                // TTTT: not needed here sal_uInt32 nMirrorFlags;
                 rtl::OUString sCustomShapeType;
                 MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( mXShape, /*nMirrorFlags, */sCustomShapeType );
                 if ( sCustomShapeType.equalsAscii( "col-502ad400" ) || sCustomShapeType.equalsAscii( "col-60da8460" ) )

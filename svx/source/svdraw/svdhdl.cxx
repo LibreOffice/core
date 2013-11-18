@@ -1959,7 +1959,7 @@ void ImpEdgeHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManag
         BitmapColorIndex eColIndex = LightCyan;
         BitmapMarkerKind eKindOfMarker = Rect_7x7;
 
-        if(pEdge->GetConnectedNode(mnObjHdlNum == 0))
+        if(pEdge->GetSdrObjectConnection(mnObjHdlNum == 0))
         {
             eColIndex = LightRed;
         }
@@ -2000,7 +2000,14 @@ void ImpEdgeHdl::SetLineCode(SdrEdgeLineCode eCode)
 
 Pointer ImpEdgeHdl::GetPointer() const
 {
-    if(!mpSdrHdlObject || !mpSdrHdlObject->IsSdrEdgeObj())
+    if(!mpSdrHdlObject)
+    {
+        return SdrHdl::GetPointer();
+    }
+
+    const SdrEdgeObj* pSdrEdgeObj = dynamic_cast< const SdrEdgeObj* >(mpSdrHdlObject);
+
+    if(!pSdrEdgeObj)
     {
         return SdrHdl::GetPointer();
     }
@@ -2031,22 +2038,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
             return false;
         }
 
-        SdrEdgeKind eEdgeKind = ((SdrEdgeKindItem&)(pEdge->GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
-        const SdrEdgeInfoRec& rInfo = pEdge->maEdgeInfo;
-
-        if(SDREDGE_ORTHOLINES == eEdgeKind || SDREDGE_BEZIER == eEdgeKind)
-        {
-            return !rInfo.ImpIsHorzLine(eLineCode, pEdge->maEdgeTrack.count());
-        }
-        else if(SDREDGE_THREELINES == eEdgeKind)
-        {
-            const sal_Int32 nWink((2 == mnObjHdlNum) ? rInfo.nAngle1 : rInfo.nAngle2);
-
-            if(!nWink || 18000 == nWink)
-            {
-                return true;
-            }
-        }
+        return pEdge->checkHorizontalDrag(eLineCode, 2 == mnObjHdlNum);
     }
 
     return false;

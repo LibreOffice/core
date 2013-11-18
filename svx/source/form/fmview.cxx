@@ -298,7 +298,7 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
                 while( aIter.IsMore() )
                 {
                     SdrObject* pObj = aIter.Next();
-                    if (pObj && pObj->IsSdrUnoObj())
+                    if(dynamic_cast< SdrUnoObj* >(pObj))
                     {
                         // For redraw just use ActionChanged()
                         pObj->ActionChanged();

@@ -75,7 +75,6 @@ namespace sd
 {
 
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
-static const int DRGPIX     = 2;                               // Drag MinMove in Pixel
 
 // --------------------------------------------------------------------
 
@@ -458,7 +457,6 @@ void MotionPathTag::MovePath( double fDX, double fDY )
     if(mpPathObj)
     {
         mpPathObj->setSdrObjectTransformation(basegfx::tools::createTranslateB2DHomMatrix(fDX, fDY) * mpPathObj->getSdrObjectTransformation());
-        // sdr::legacy::MoveSdrObject(*mpPathObj, Size( nDX, nDY ) );
         mrView.RecreateAllMarkHandles(); // TTTT: Neded?
     }
 }
@@ -581,8 +579,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                         pDragMethod = new PathDragResize( mrView, xTag, aDragPoly );
                     }
 
-                    const double fTolerance(basegfx::B2DVector(pOut->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
-                    mrView.BegDragObj(aMDPos, pHdl, fTolerance, pDragMethod );
+                    mrView.BegDragObj(aMDPos, pHdl, mrView.getMinMovLog(), pDragMethod );
                 }
                 return true;
             }

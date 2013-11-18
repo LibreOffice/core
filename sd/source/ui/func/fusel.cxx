@@ -170,9 +170,6 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         return true;
     }
 
-    const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-    const double fDrgLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
-
     // The following code is executed for right clicks as well as for left
     // clicks in order to modify the selection for the right button as a
     // preparation for the context menu.  The functions BegMarkObject() and
@@ -223,7 +220,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
         if(!bTextEdit
             && !mpDocSh->IsReadOnly()
-            && ((mpView->IsMarkedObjHit(aMDPos, fHitLog) && !rMEvt.IsShift() && !rMEvt.IsMod2()) || pHdl != NULL)
+            && ((mpView->IsMarkedObjHit(aMDPos, mpView->getHitTolLog()) && !rMEvt.IsShift() && !rMEvt.IsMod2()) || pHdl != NULL)
             && (rMEvt.GetClicks() != 2)
             )
         {
@@ -246,14 +243,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
 
             if ( ! rMEvt.IsRight())
-                mpView->BegDragObj(aMDPos, pHdl, fDrgLog);
+                mpView->BegDragObj(aMDPos, pHdl, mpView->getMinMovLog());
             bReturn = true;
         }
         else
         {
             if (!rMEvt.IsMod2() && mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, SDRSEARCH_PICKMACRO))
             {
-                mpView->BegMacroObj(aMDPos, fHitLog, pObj, mpWindow);
+                mpView->BegMacroObj(aMDPos, mpView->getHitTolLog(), pObj, mpWindow);
                 bReturn = true;
             }
             else if ( bTextEdit )
@@ -387,7 +384,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if ( rMEvt.IsMod2() )
                         {
-                            bMarked = mpView->MarkNextObj(aMDPos, fHitLog, rMEvt.IsShift() );
+                            bMarked = mpView->MarkNextObj(aMDPos, mpView->getHitTolLog(), rMEvt.IsShift() );
                         }
                         else
                         {
@@ -399,7 +396,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                 bToggle = true;
                             }
 
-                            bMarked = mpView->MarkObj(aMDPos, fHitLog, bToggle, false);
+                            bMarked = mpView->MarkObj(aMDPos, mpView->getHitTolLog(), bToggle, false);
                         }
                     }
 
@@ -407,7 +404,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if ( !bReadOnly &&
                              bMarked                                                   &&
-                             (!rMEvt.IsShift() || mpView->IsMarkedObjHit(aMDPos, fHitLog)))
+                             (!rMEvt.IsShift() || mpView->IsMarkedObjHit(aMDPos, mpView->getHitTolLog())))
                         {
                             /**********************************************************
                              * Objekt verschieben
@@ -416,7 +413,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                             pHdl=mpView->PickHandle(aMDPos);
                             if ( ! rMEvt.IsRight())
-                                mpView->BegDragObj(aMDPos, pHdl, fDrgLog);
+                                mpView->BegDragObj(aMDPos, pHdl, mpView->getMinMovLog());
                         }
                         else
                         {
@@ -454,7 +451,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * Handle draggen
             ******************************************************************/
             if ( ! rMEvt.IsRight())
-                mpView->BegDragObj(aMDPos, aVEvt.mpHdl, fDrgLog);
+                mpView->BegDragObj(aMDPos, aVEvt.mpHdl, mpView->getMinMovLog());
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
         {
@@ -484,7 +481,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * Objekt verschieben
             ******************************************************************/
             if ( ! rMEvt.IsRight())
-                mpView->BegDragObj(aMDPos, NULL, fDrgLog);
+                mpView->BegDragObj(aMDPos, NULL, mpView->getMinMovLog());
         }
         else if (eHit == SDRHIT_HANDLE)
         {
@@ -536,7 +533,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                         if(pHdl)
                         {
-                            mpView->BegDragObj(aMDPos, pHdl, fDrgLog);
+                            mpView->BegDragObj(aMDPos, pHdl, mpView->getMinMovLog());
                         }
                         else
                         {
@@ -552,7 +549,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 pHdl = mpView->PickHandle(aMDPos);
                 if(pHdl)
                     if ( ! rMEvt.IsRight())
-                        mpView->BegDragObj(aMDPos, pHdl, fDrgLog);
+                        mpView->BegDragObj(aMDPos, pHdl, mpView->getMinMovLog());
             }
         }
         else
@@ -571,11 +568,11 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 if (rMEvt.IsMod2())
                 {
-                    bMarked = mpView->MarkNextObj(aMDPos, fHitLog, rMEvt.IsShift());
+                    bMarked = mpView->MarkNextObj(aMDPos, mpView->getHitTolLog(), rMEvt.IsShift());
                 }
                 else
                 {
-                    bMarked = mpView->MarkObj(aMDPos, fHitLog, rMEvt.IsShift(), false);
+                    bMarked = mpView->MarkObj(aMDPos, mpView->getHitTolLog(), rMEvt.IsShift(), false);
                 }
             }
 
@@ -584,7 +581,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 // Objekt verschieben
                 if ( ! rMEvt.IsRight())
-                    mpView->BegDragObj(aMDPos, aVEvt.mpHdl, fDrgLog);
+                    mpView->BegDragObj(aMDPos, aVEvt.mpHdl, mpView->getMinMovLog());
             }
             else if (mpView->areSdrObjectsSelected())
             {
@@ -703,9 +700,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     // force trigger selection change to get bSelectionChanged
     // set in FuSelection::SelectionHasChanged() call eventually
     // mpView->forceSelectionChange(); TTTT: Should be done in HasMarkablePoints
-
-    const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-    const double fDrgLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
     const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
     const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
 
@@ -732,8 +726,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
             if (!rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                 !bSelectionChanged                   &&
-                fabs(aLogicPos.getX() - aMDPos.getX()) < fDrgLog &&
-                fabs(aLogicPos.getY() - aMDPos.getY()) < fDrgLog)
+                fabs(aLogicPos.getX() - aMDPos.getX()) < mpView->getMinMovLog() &&
+                fabs(aLogicPos.getY() - aMDPos.getY()) < mpView->getMinMovLog())
             {
                 /**************************************************************
                 * Toggle zw. Selektion und Rotation
@@ -799,11 +793,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else if (rMEvt.IsMod1()
             && !rMEvt.IsMod2()
-            && fabs(aLogicPos.getX() - aMDPos.getX()) < fDrgLog
-            && fabs(aLogicPos.getY() - aMDPos.getY()) < fDrgLog)
+            && fabs(aLogicPos.getX() - aMDPos.getX()) < mpView->getMinMovLog()
+            && fabs(aLogicPos.getY() - aMDPos.getY()) < mpView->getMinMovLog())
         {
             // Gruppe betreten
-            mpView->MarkObj(aLogicPos, fHitLog, rMEvt.IsShift(), rMEvt.IsMod1());
+            mpView->MarkObj(aLogicPos, mpView->getHitTolLog(), rMEvt.IsShift(), rMEvt.IsMod1());
         }
 
         if (mpView->IsAction() )
@@ -916,8 +910,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 mpView->EndAction();
                 const basegfx::B2DVector aDelta(aMDPos - aLogicPos);
 
-                if(fabs(aDelta.getX()) < fDrgLog
-                    && fabs(aDelta.getY()) < fDrgLog
+                if(fabs(aDelta.getX()) < mpView->getMinMovLog()
+                    && fabs(aDelta.getY()) < mpView->getMinMovLog()
                     && !rMEvt.IsShift()
                     && !rMEvt.IsMod2())
                 {
@@ -933,11 +927,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
         }
         else if (!rMEvt.IsShift() && rMEvt.IsMod1() && !rMEvt.IsMod2() &&
-                 fabs(aLogicPos.getX() - aMDPos.getX()) < fDrgLog &&
-                 fabs(aLogicPos.getY() - aMDPos.getY()) < fDrgLog)
+                 fabs(aLogicPos.getX() - aMDPos.getX()) < mpView->getMinMovLog() &&
+                 fabs(aLogicPos.getY() - aMDPos.getY()) < mpView->getMinMovLog())
         {
             // Gruppe betreten
-            mpView->MarkObj(aLogicPos, fHitLog, false, rMEvt.IsMod1());
+            mpView->MarkObj(aLogicPos, mpView->getHitTolLog(), false, rMEvt.IsMod1());
         }
 
 
@@ -1212,8 +1206,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const basegfx::B2DPoint& rPos)
     bool bAnimated(false);
     const bool bClosed(pObj->IsClosedObj());
     const bool bFilled(bClosed? pObj->HasFillStyle() : false);
-    const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
-    double f2HitLog(fHitLog * 2);
+    double f2HitLog(mpView->getHitTolLog() * 2);
 
     const basegfx::B2DPoint aHitPosR(rPos.getX() + f2HitLog, rPos.getY());
     const basegfx::B2DPoint aHitPosL(rPos.getX() - f2HitLog, rPos.getY());
@@ -1222,10 +1215,10 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const basegfx::B2DPoint& rPos)
 
     if ( !bClosed                                      ||
          !bFilled                                      ||
-         (SdrObjectPrimitiveHit(*pObj, aHitPosR, fHitLog, *mpView, false, 0) &&
-          SdrObjectPrimitiveHit(*pObj, aHitPosL, fHitLog, *mpView, false, 0) &&
-          SdrObjectPrimitiveHit(*pObj, aHitPosT, fHitLog, *mpView, false, 0) &&
-          SdrObjectPrimitiveHit(*pObj, aHitPosB, fHitLog, *mpView, false, 0) ) )
+         (SdrObjectPrimitiveHit(*pObj, aHitPosR, mpView->getHitTolLog(), *mpView, false, 0) &&
+          SdrObjectPrimitiveHit(*pObj, aHitPosL, mpView->getHitTolLog(), *mpView, false, 0) &&
+          SdrObjectPrimitiveHit(*pObj, aHitPosT, mpView->getHitTolLog(), *mpView, false, 0) &&
+          SdrObjectPrimitiveHit(*pObj, aHitPosB, mpView->getHitTolLog(), *mpView, false, 0) ) )
     {
         if ( mpDoc->GetIMapInfo( pObj ) )
         {
@@ -1502,9 +1495,8 @@ bool FuSelection::cancel()
 SdrObject* FuSelection::pickObject (const basegfx::B2DPoint& rTestPoint)
 {
     SdrObject* pObject = 0;
-    const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
 
-    mpView->PickObj(rTestPoint, fHitLog, pObject, SDRSEARCH_PICKMARKABLE);
+    mpView->PickObj(rTestPoint, mpView->getHitTolLog(), pObject, SDRSEARCH_PICKMARKABLE);
 
     return pObject;
 }

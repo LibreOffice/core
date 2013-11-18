@@ -4660,8 +4660,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // before clearing the GeometryItem we have to store the current Coordinates
                         const uno::Any* pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
                         basegfx::B2DRange aPolyBoundRect;
-
                         basegfx::B2DPoint aStartPt(0.0, 0.0);
+
                         if ( pAny && ( *pAny >>= seqCoordinates ) && ( seqCoordinates.getLength() >= 4 ) )
                         {
                             sal_Int32 nPtNum, nNumElemVert = seqCoordinates.getLength();
@@ -4923,8 +4923,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // Konnektoren
                         MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
 
-                        pSdrEdgeObj->ConnectToNode(sal_True, NULL);
-                        pSdrEdgeObj->ConnectToNode(sal_False, NULL);
+                        pSdrEdgeObj->ConnectToSdrObject(true, NULL);
+                        pSdrEdgeObj->ConnectToSdrObject(false, NULL);
 
                         Point aPoint1( basegfx::fround(aObjData.aBoundRect.getMinX()), basegfx::fround(aObjData.aBoundRect.getMinY()) );
                         Point aPoint2( basegfx::fround(aObjData.aBoundRect.getMaxX()), basegfx::fround(aObjData.aBoundRect.getMaxY()) );

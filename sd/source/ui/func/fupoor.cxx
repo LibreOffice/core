@@ -707,7 +707,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     {
                         if(0 == pHdl->GetPointNum())
                         {
-                            if(pEdgeObj->GetConnection(true).GetObject())
+                            if(pEdgeObj->GetSdrObjectConnection(true))
                             {
                                 bIsMoveOfConnectedHandle = true;
                             }
@@ -715,7 +715,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         if(1 == pHdl->GetPointNum())
                         {
-                            if(pEdgeObj->GetConnection(false).GetObject())
+                            if(pEdgeObj->GetSdrObjectConnection(false))
                             {
                                 bIsMoveOfConnectedHandle = true;
                             }
@@ -933,9 +933,6 @@ bool FuPoor::MouseMove(const MouseEvent& )
 
 void FuPoor::SelectionHasChanged()
 {
-    // Not needed TTTT
-    // const SdrHdlList& rHdlList = mpView->GetHdlList();
-    // ((SdrHdlList&)rHdlList).ResetFocusHdl();
 }
 
 /*************************************************************************
@@ -990,10 +987,9 @@ IMPL_LINK( FuPoor, DragHdl, Timer *, EMPTYARG )
 {
     if( mpView )
     {
-        sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
         SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
-        if ( pHdl==NULL && mpView->IsMarkedObjHit(aMDPos, nHitLog)
+        if ( pHdl==NULL && mpView->IsMarkedObjHit(aMDPos, mpView->getHitTolLog())
              && !mpView->IsPresObjSelected(false, true) )
         {
             mpWindow->ReleaseMouse();

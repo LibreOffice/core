@@ -133,8 +133,7 @@ bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
         const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
 
         mpWindow->CaptureMouse();
-        const double fTolerance(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
-        mpView->BegCreateObj(aLogicPos, fTolerance);
+        mpView->BegCreateObj(aLogicPos, mpView->getMinMovLog());
 
         SdrObject* pObj = mpView->GetCreateObj();
 

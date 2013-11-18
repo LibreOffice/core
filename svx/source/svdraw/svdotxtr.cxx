@@ -66,21 +66,6 @@ void SdrTextObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
         // call parent
         SdrAttrObj::setSdrObjectTransformation(rTransformation);
 
-        // TTTT: check if the rebuild works
-        //
-        //sal_Int32 nHDist=GetTextLeftDistance()+GetTextRightDistance();
-        //sal_Int32 nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-        //sal_Int32 nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
-        //sal_Int32 nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
-        //sal_Int32 nTWdt1=rRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
-        //sal_Int32 nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
-        //  if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) SetMinTextFrameWidth(nTWdt1);
-        //  if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) SetMinTextFrameHeight(nTHgt1);
-        //  if (GetFitToSize()==SDRTEXTFIT_RESIZEATTR) {
-        //      ResizeTextAttributes(Fraction(nTWdt1,nTWdt0),Fraction(nTHgt1,nTHgt0));
-        //  }
-        //  AdjustTextFrameWidthAndHeight();
-
         // #115391#
         AdaptTextMinSize();
 

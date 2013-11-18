@@ -169,10 +169,10 @@ SdrObject* E3dObject::CloneSdrObject(SdrModel* pTargetModel) const
 |*
 \************************************************************************/
 
-bool E3dObject::IsE3dObject() const
-{
-    return true;
-}
+//bool E3dObject::IsE3dObject() const
+//{
+//    return true;
+//}
 
 void E3dObject::SetSelected(bool bNew)
 {

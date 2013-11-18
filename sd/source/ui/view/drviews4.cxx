@@ -529,7 +529,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
             // Ist ein Fangobjekt unter dem Mauszeiger?
             basegfx::B2DPoint aMPos(pWin->GetInverseViewTransformation() * maMousePos);
-            const double fHitLog(basegfx::B2DVector(GetActiveWindow()->GetInverseViewTransformation() * basegfx::B2DVector(FuPoor::HITPIX, 0.0)).getLength());
             sal_uInt32 nHelpLine;
             // fuer Klebepunkt
             SdrObject*  pObj = NULL;
@@ -542,7 +541,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 //pFldItem = pOLV->GetFieldUnderMousePointer();
 
             // Hilfslinie
-            if ( mpDrawView->PickHelpLine( aMPos, fHitLog, nHelpLine) )
+            if ( mpDrawView->PickHelpLine( aMPos, mpView->getHitTolLog(), nHelpLine) )
             {
                 if(mpDrawView->GetSdrPageView())
                 {

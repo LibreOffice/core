@@ -64,7 +64,6 @@ namespace sd
 {
 
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
-static const int DRGPIX     = 2;                               // Drag MinMove in Pixel
 
 // --------------------------------------------------------------------
 
@@ -727,8 +726,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
                             rtl::Reference< AnnotationTag > xTag( this );
 
                             SdrDragMethod* pDragMethod = new AnnotationDragMove( mrView, xTag );
-                            const double fTolerance(basegfx::B2DVector(pWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
-                            mrView.BegDragObj(maMouseDownPos, pHdl, fTolerance, pDragMethod );
+                            mrView.BegDragObj(maMouseDownPos, pHdl, mrView.getMinMovLog(), pDragMethod );
                         }
                     }
                     break;
