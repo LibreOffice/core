@@ -493,7 +493,7 @@ public:
             {
                 // set 100 as a temporary threshold for invoking reduction
                 // kernel in NeedParalleLReduction function
-                if (NeedParallelReduction())
+                if (/*NeedParallelReduction()*/false)
                 {
                     std::string temp = Base::GetName() + "[gid0]";
                     ss << "tmp = ";
@@ -508,7 +508,7 @@ public:
             {
                 // set 100 as a temporary threshold for invoking reduction
                 // kernel in NeedParalleLReduction function
-                if (NeedParallelReduction())
+                if (NeedParallelReduction()&&false)
                 {
                     std::string temp = Base::GetName() + "[0]";
                     ss << "tmp = ";
@@ -550,11 +550,9 @@ public:
         }
         else
         {
-#ifdef  ISNAN
-            ss << "0; i < "<< nCurWindowSize << "; i++){\n\t\t";
-#else
-            ss << "0; i < "<< nCurWindowSize << "; i++)\n\t\t";
-#endif
+            unsigned limit =
+                std::min(mpDVR->GetArrayLength(), nCurWindowSize);
+            ss << "0; i < "<< limit << "; i++){\n\t\t";
         }
 
         return nCurWindowSize;
@@ -1074,8 +1072,8 @@ public:
             KernelEnv kEnv;
             OpenclDevice::setKernelEnv(&kEnv);
             cl_int err;
-            DynamicKernelSlidingArgument<DynamicKernelArgument> *slidingArgPtr =
-                dynamic_cast< DynamicKernelSlidingArgument<DynamicKernelArgument> *>
+            DynamicKernelSlidingArgument<VectorRef> *slidingArgPtr =
+                dynamic_cast< DynamicKernelSlidingArgument<VectorRef> *>
                 (mvSubArguments[0].get());
             cl_mem mpClmem2;
 
