@@ -424,6 +424,8 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
         if (!pDest)
             return false;
 
+        ScCompiler aComp(&rDoc, aTmpPos, aCode2);
+        aComp.CompileTokenArray();
         ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
         aInterpreter.Interpret();
         aResults.push_back(aInterpreter.GetResultToken());
