@@ -767,7 +767,7 @@ public:
     RulerSelection  GetHoverSelection() const { return maHoverSelection; }
 
     using Window::GetType;
-    RulerType       GetType( const Point& rPos, sal_uInt16* pAryPos = NULL ) const;
+    RulerType       GetType( const Point& rPos, sal_uInt16* pAryPos = NULL );
 
     void            SetNullOffset( long nPos );
     long            GetNullOffset() const;

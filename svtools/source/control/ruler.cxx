@@ -1868,7 +1868,7 @@ void Ruler::ImplDrag( const Point& rPos )
             Drag();
 
             // and redraw
-            ImplDraw();
+            Paint(Rectangle());
 
             // reset the data as before cancel
             *mpDragData = aTempData;
@@ -1889,7 +1889,7 @@ void Ruler::ImplDrag( const Point& rPos )
 
         // redraw
         if ( mbFormat )
-            ImplDraw();
+            Paint(Rectangle());
     }
 
     mnDragScroll = 0;
@@ -1921,7 +1921,7 @@ void Ruler::ImplEndDrag()
     mnStartDragPos  = 0;
 
     // redraw
-    ImplDraw();
+    Paint(Rectangle());
 }
 
 IMPL_LINK_NOARG(Ruler, ImplUpdateHdl)
@@ -1932,7 +1932,7 @@ IMPL_LINK_NOARG(Ruler, ImplUpdateHdl)
     if ( mnUpdateFlags & RULER_UPDATE_DRAW )
     {
         mnUpdateFlags = 0;
-        ImplDraw();
+        Paint(Rectangle());
     }
     else if ( mnUpdateFlags & RULER_UPDATE_LINES )
     {
@@ -1954,7 +1954,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
         // update ruler
         if ( mbFormat )
         {
-            ImplDraw();
+            Paint(Rectangle());
             mnUpdateFlags &= ~RULER_UPDATE_DRAW;
         }
 
@@ -2062,7 +2062,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 
     if ( mbFormat )
     {
-        ImplDraw();
+        Paint(Rectangle());
         mnUpdateFlags &= ~RULER_UPDATE_DRAW;
     }
     mpPreviousHitTest.swap(mpCurrentHitTest);
@@ -2189,7 +2189,7 @@ void Ruler::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_UPDATEMODE )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
-            ImplDraw();
+            Paint(Rectangle());
     }
     else if ( (nType == STATE_CHANGE_ZOOM) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
@@ -2291,7 +2291,7 @@ sal_Bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
         // update ruler
         if ( mbFormat )
         {
-            ImplDraw();
+            Paint(Rectangle());
             mnUpdateFlags &= ~RULER_UPDATE_DRAW;
         }
 
@@ -2350,15 +2350,15 @@ void Ruler::CancelDrag()
     }
 }
 
-RulerType Ruler::GetType( const Point& rPos, sal_uInt16* pAryPos ) const
+RulerType Ruler::GetType( const Point& rPos, sal_uInt16* pAryPos )
 {
     RulerSelection aHitTest;
 
     // update ruler
     if ( IsReallyVisible() && mbFormat )
     {
-        ((Ruler*)this)->ImplDraw();
-        ((Ruler*)this)->mnUpdateFlags &= ~RULER_UPDATE_DRAW;
+        Paint(Rectangle());
+        mnUpdateFlags &= ~RULER_UPDATE_DRAW;
     }
 
     ImplHitTest( rPos, &aHitTest );
@@ -2790,7 +2790,7 @@ RulerUnitData Ruler::GetCurrentRulerUnit() const
 void Ruler::DrawTicks()
 {
     mbFormat = sal_True;
-    ImplDraw();
+    Paint(Rectangle());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
