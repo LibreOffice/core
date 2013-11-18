@@ -86,21 +86,9 @@ End
 
 File gid_File_Lib_Curl
     LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT2(libcurl.4,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT3(libcurl,UNXSUFFIX,.4));
-    #endif
-  #else
-   #ifdef _gcc3
-    Name = "libcurl-4.dll";
-   #else
-    Name = "libcurl.dll";
-   #endif
-  #endif
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "curl.filelist";
 End
 
 #endif
