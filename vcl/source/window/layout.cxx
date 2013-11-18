@@ -2001,11 +2001,11 @@ void MessageDialog::SetMessagesWidths(Window *pParent,
         aFont.SetSize(Size(0, aFont.GetSize().Height() * 1.2));
         aFont.SetWeight(WEIGHT_BOLD);
         pPrimaryMessage->SetControlFont(aFont);
-        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 60);
-        pSecondaryMessage->SetMaxTextWidth(pSecondaryMessage->approximate_char_width() * 80);
+        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 44);
+        pSecondaryMessage->SetMaxTextWidth(pSecondaryMessage->approximate_char_width() * 60);
     }
     else
-        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 80);
+        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 60);
 }
 
 
