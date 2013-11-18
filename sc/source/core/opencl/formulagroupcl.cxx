@@ -560,7 +560,7 @@ public:
 
     virtual size_t Marshal(cl_kernel k, int argno, int w, cl_program mpProgram)
     {
-        if (!NeedParallelReduction())
+        if (!NeedParallelReduction() || true)
             return Base::Marshal(k, argno, w, mpProgram);
 
         assert(Base::mpClmem == NULL);
