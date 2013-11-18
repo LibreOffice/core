@@ -47,7 +47,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maBtBrowse              ( this, CUI_RES (BTN_BROWSE) ),
     maFtLogin               ( this, CUI_RES (FT_LOGIN) ),
     maEdLogin               ( this, CUI_RES (ED_LOGIN) ),
-    maBtTarget              ( this, CUI_RES (BTN_TARGET) ),
     maFtPassword            ( this, CUI_RES (FT_PASSWD) ),
     maEdPassword            ( this, CUI_RES (ED_PASSWD) ),
     maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
@@ -55,7 +54,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 {
     // Disable display of bitmap names.
     maBtBrowse.EnableTextDisplay (sal_False);
-    maBtTarget.EnableTextDisplay (sal_False);
 
     InitStdControls();
     FreeResource();
@@ -76,7 +74,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maEdLogin.Show( sal_False );
     maEdPassword.Show( sal_False );
     maCbAnonymous.Show( sal_False );
-    maBtTarget.Enable( sal_False );
     maBtBrowse.Enable( sal_True );
 
     ///////////////////////////////////////
@@ -86,7 +83,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maRbtLinktypFTP.SetClickHdl     ( aLink );
     maCbAnonymous.SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
     maBtBrowse.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
-    maBtTarget.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickTargetHdl_Impl ) );
     maEdLogin.SetModifyHdl          ( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
     maCbbTarget.SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
     maCbbTarget.SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
@@ -94,8 +90,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 
     maFtTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
     maCbbTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maBtTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maBtTarget.SetAccessibleRelationLabeledBy( &maFtTarget );
     maBtBrowse.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
     maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
 }
@@ -298,14 +292,12 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
     //update 'link target in document'-window and opening-button
     if (rScheme.startsWith(sHTTPScheme) || rScheme.isEmpty())
     {
-        maBtTarget.Enable();
         if ( mbMarkWndOpen )
             ShowMarkWnd ();
     }
     else
     {
         //disable for https and ftp
-        maBtTarget.Disable();
         if ( mbMarkWndOpen )
             HideMarkWnd ();
     }
@@ -423,21 +415,6 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
 
     const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
     (((SvxHpLinkDlg*)mpDialog)->GetBindings())->Execute( SID_OPENDOC, ppItems, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-
-    return( 0L );
-}
-
-/*************************************************************************
-|*
-|* Click on imagebutton : Target
-|*
-|************************************************************************/
-
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickTargetHdl_Impl)
-{
-    RefreshMarkWindow();
-    ShowMarkWnd ();
-    mbMarkWndOpen = IsMarkWndVisible ();
 
     return( 0L );
 }

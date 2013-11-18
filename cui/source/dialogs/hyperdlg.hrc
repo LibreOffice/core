@@ -29,7 +29,6 @@
 #define ED_PASSWD                   10
 #define CBX_ANONYMOUS               11
 #define BTN_BROWSE                  12
-#define BTN_TARGET                  13
 
 /* Tabpage : Hyperlink - Mail & News */
 
