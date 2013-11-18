@@ -555,27 +555,27 @@ bool SwAutoFormat::DoUnderline()
         editeng::SvxBorderLine aLine;
         switch( eState )
         {
-        case 1:         // single, 0,05 pt
+        case 1:         // single, 0.05 pt
             aLine.SetBorderLineStyle(table::BorderLineStyle::SOLID);
             aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
-        case 2:         // single, 1,0 pt
+        case 2:         // single, 1.0 pt
             aLine.SetBorderLineStyle(table::BorderLineStyle::SOLID);
             aLine.SetWidth( DEF_LINE_WIDTH_1 );
             break;
-        case 3:         // double, 1,1 pt
+        case 3:         // double, 1.0 pt
             aLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
-            aLine.SetWidth( DEF_LINE_WIDTH_0 );
+            aLine.SetWidth( DEF_LINE_WIDTH_1 );
             break;
-        case 4:         // double, 4,5 pt
+        case 4:         // double (thick/thin), 4.0 pt
             aLine.SetBorderLineStyle(table::BorderLineStyle::THICKTHIN_SMALLGAP);
-            aLine.SetWidth( DEF_LINE_WIDTH_1  );
+            aLine.SetWidth( DEF_LINE_WIDTH_3  );
             break;
-        case 5:         // double, 6,0 pt
+        case 5:         // double (thin/thick), 4.0 pt
             aLine.SetBorderLineStyle(table::BorderLineStyle::THINTHICK_SMALLGAP);
-            aLine.SetWidth( DEF_LINE_WIDTH_2 );
+            aLine.SetWidth( DEF_LINE_WIDTH_3 );
             break;
-        case 6:         // double, 9,0 pt
+        case 6:         // double, 2.5 pt
             aLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
             aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
