@@ -1063,6 +1063,9 @@ void SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                     {
                         // let the stream be opened to check the system file locking
                         GetMedium_Impl();
+                        if (GetError() != ERRCODE_NONE) {
+                            return;
+                        }
                     }
 
                     sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
