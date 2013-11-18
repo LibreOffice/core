@@ -77,6 +77,12 @@ using ::std::max;
 
 #include <com/sun/star/uno/Exception.hpp>
 
+#include <oleacc.h>
+#include <com/sun/star/accessibility/XMSAAService.hpp>
+#ifndef WM_GETOBJECT // TESTME does this ever happen ?
+#  define WM_GETOBJECT  0x003D
+#endif
+
 #include <time.h>
 
 #if defined ( __MINGW32__ )
@@ -5178,7 +5184,7 @@ static sal_Bool ImplHandleIMEStartComposition( HWND hWnd )
 // -----------------------------------------------------------------------
 
 static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
-                                           HIMC hIMC, LPARAM lParam )
+                                               HIMC hIMC, LPARAM lParam )
 {
     sal_Bool bDef = TRUE;
 
@@ -5474,6 +5480,46 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
             pFrame->mbCandidateMode = FALSE;
         ImplSalYieldMutexRelease();
     }
+}
+
+// -----------------------------------------------------------------------
+
+static bool ImplHandleGetObject( HWND hWnd, LPARAM lParam, WPARAM wParam, long &nRet )
+{
+    // IA2 should be enabled automatically
+    AllSettings aSettings = Application::GetSettings();
+    MiscSettings aMisc = aSettings.GetMiscSettings();
+    aMisc.SetEnableATToolSupport( sal_True );
+    aSettings.SetMiscSettings( aMisc );
+    Application::SetSettings( aSettings );
+
+    if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
+        return false; // locked down somehow ?
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // Make sure to launch Accessibiliity only the following criterias are satisfied
+    // to avoid RFT interrupts regular accessibility processing
+    if ( !pSVData->mxAccessBridge.is() )
+    {
+        bool bCancelled = false;
+        InitAccessBridge( false, bCancelled );
+        if( bCancelled )
+            return false;
+    }
+
+    uno::Reference< accessibility::XMSAAService > xMSAA( pSVData->mxAccessBridge, uno::UNO_QUERY );
+    if ( xMSAA.is() )
+    {
+        // mhOnSetTitleWnd not set to reasonable value anywhere...
+        if ( lParam == OBJID_CLIENT )
+        {
+            nRet = xMSAA->getAccObjectPtr( (long)hWnd, lParam, wParam );
+            if( nRet != 0 )
+                return true;
+        }
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -6005,6 +6051,16 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_IME_NOTIFY:
             ImplHandleIMENotify( hWnd, wParam );
             break;
+
+        case WM_GETOBJECT:
+            long nRet;
+            if ( ImplHandleGetObject( hWnd, lParam, wParam, nRet ) )
+            {
+                rDef = false;
+                return (HRESULT) nRet;
+            }
+            break;
+
         case WM_APPCOMMAND:
             if( ImplHandleAppCommand( hWnd, lParam ) )
             {

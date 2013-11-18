@@ -32,20 +32,7 @@ using namespace com::sun::star::accessibility;
 
 #include <vcl/window.hxx>
 #include <toolkit/awt/Vclxwindow.hxx>
-
-//#ifndef _SV_SYSDATA_HXX
-#if 0
-#if defined( WIN ) || defined( WNT ) || defined( OS2 )
-typedef sal_Int32 HWND;
-typedef sal_Int32 HMENU;
-typedef sal_Int32 HDC;
-typedef void *PVOID;
-typedef PVOID HANDLE;
-typedef HANDLE HFONT;
-#endif
-#endif
 #include <vcl/sysdata.hxx>
-//#endif
 
 AccFrameEventListener::AccFrameEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
         :AccEventListener(pAcc, Agent)

@@ -8818,10 +8818,10 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WINDOW_CANCELBUTTON:
         case WINDOW_HELPBUTTON:
         case WINDOW_IMAGEBUTTON:
-        case WINDOW_MENUBUTTON:
         case WINDOW_MOREBUTTON:
         case WINDOW_SPINBUTTON:
         case WINDOW_BUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
+        case WINDOW_MENUBUTTON: nRole = accessibility::AccessibleRole::BUTTON_MENU; break;
 
         case WINDOW_PATHDIALOG: nRole = accessibility::AccessibleRole::DIRECTORY_PANE; break;
         case WINDOW_FILEDIALOG: nRole = accessibility::AccessibleRole::FILE_CHOOSER; break;
@@ -8835,10 +8835,6 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WINDOW_MULTILINEEDIT: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
 
         case WINDOW_PATTERNFIELD:
-        case WINDOW_NUMERICFIELD:
-        case WINDOW_METRICFIELD:
-        case WINDOW_CURRENCYFIELD:
-        case WINDOW_LONGCURRENCYFIELD:
         case WINDOW_CALCINPUTLINE:
         case WINDOW_EDIT: nRole = ( GetStyle() & WB_PASSWORD ) ? (accessibility::AccessibleRole::PASSWORD_TEXT) : (accessibility::AccessibleRole::TEXT); break;
 
@@ -8855,7 +8851,13 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WINDOW_TREELISTBOX: nRole = accessibility::AccessibleRole::TREE; break;
 
         case WINDOW_FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
-        case WINDOW_FIXEDLINE: nRole = accessibility::AccessibleRole::SEPARATOR; break;
+        case WINDOW_FIXEDLINE:
+            if( !GetText().isEmpty() )
+                nRole = accessibility::AccessibleRole::LABEL;
+            else
+                nRole = accessibility::AccessibleRole::SEPARATOR;
+            break;
+
         case WINDOW_FIXEDBITMAP:
         case WINDOW_FIXEDIMAGE: nRole = accessibility::AccessibleRole::ICON; break;
         case WINDOW_GROUPBOX: nRole = accessibility::AccessibleRole::GROUP_BOX; break;
@@ -8870,6 +8872,10 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WINDOW_DATEFIELD:
         case WINDOW_TIMEFIELD: nRole = accessibility::AccessibleRole::DATE_EDITOR; break;
 
+        case WINDOW_NUMERICFIELD:
+        case WINDOW_METRICFIELD:
+        case WINDOW_CURRENCYFIELD:
+        case WINDOW_LONGCURRENCYFIELD:
         case WINDOW_SPINFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
 
         case WINDOW_TOOLBOX: nRole = accessibility::AccessibleRole::TOOL_BAR; break;
@@ -8933,8 +8939,12 @@ void Window::SetAccessibleName( const OUString& rName )
    if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
+    OUString oldName = GetAccessibleName();
+
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
     mpWindowImpl->mpAccessibleInfos->pAccessibleName = new OUString( rName );
+
+    ImplCallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldName );
 }
 
 OUString Window::GetAccessibleName() const
@@ -8975,6 +8985,8 @@ OUString Window::getDefaultAccessibleName() const
             Window *pLabel = GetAccessibleRelationLabeledBy();
             if ( pLabel && pLabel != this )
                 aAccessibleName = pLabel->GetText();
+            if (aAccessibleName.isEmpty())
+                aAccessibleName = GetQuickHelpText();
         }
         break;
 
@@ -8988,6 +9000,16 @@ OUString Window::getDefaultAccessibleName() const
                     aAccessibleName = GetHelpText();
             }
         break;
+
+        case WINDOW_TOOLBOX:
+            aAccessibleName = GetText();
+            if( aAccessibleName.isEmpty() )
+                aAccessibleName = "Tool Bar";
+            break;
+
+        case WINDOW_MOREBUTTON:
+            aAccessibleName = mpWindowImpl->maText;
+            break;
 
         default:
             aAccessibleName = GetText();
