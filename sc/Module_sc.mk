@@ -50,11 +50,6 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 endif
 
-# The sc_opencl_test disabled for other OSes than OS X at the moment
-# because it fails on many Linux machines in the OpenCL compiler. OS X
-# has a different (?) OpenCL compiler implementation than the one
-# which fails.
-#
 $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_ucalc \
     CppunitTest_sc_filters_test \
