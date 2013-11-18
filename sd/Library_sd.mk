@@ -180,8 +180,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/annotations/annotationwindow \
 	sd/source/ui/app/optsitem \
 	sd/source/ui/app/sddll \
-	sd/source/ui/app/sddll1 \
-	sd/source/ui/app/sddll2 \
 	sd/source/ui/app/sdmod \
 	sd/source/ui/app/sdmod1 \
 	sd/source/ui/app/sdmod2 \
