@@ -411,7 +411,7 @@ class DynamicKernelSlidingArgument: public Base
 public:
     DynamicKernelSlidingArgument(const std::string &s,
         FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase> &CodeGen):
-        Base(s, ft), mpCodeGen(CodeGen), needReductionKernel(true), mpClmem2(NULL)
+        Base(s, ft), mpCodeGen(CodeGen), mpClmem2(NULL)
     {
         FormulaToken *t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -428,7 +428,7 @@ public:
               (!GetStartFixed() && !GetEndFixed())  ) ;
     }
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
-        if (dynamic_cast<OpSum*>(mpCodeGen.get()))
+        if (dynamic_cast<OpSum*>(mpCodeGen.get()) && NeedParallelReduction())
         {
             std::string name = Base::GetName();
             ss << "__kernel void "<<name;
@@ -436,20 +436,23 @@ public:
                 "__global double *result,int arrayLength,int windowSize){\n";
             ss << "    double tmp, current_result = 0.0;\n";
             ss << "    int writePos = get_group_id(1);\n";
-            ss << "    int offset = get_group_id(1);\n";
             ss << "    int lidx = get_local_id(0);\n";
             ss << "    __local double shm_buf[256];\n";
-            ss << "    if (arrayLength == windowSize)\n";
-            ss << "        offset = 0;\n";
+            if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+                ss << "    int offset = 0;\n";
+            else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+                ss << "    int offset = get_group_id(1);\n";
+            else
+                throw Unhandled();
             ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    int loop = arrayLength/512 + 1;\n";
             ss << "    for (int l=0; l<loop; l++){\n";
             ss << "    tmp = 0.0;\n";
             ss << "    int loopOffset = l*512;\n";
-            ss << "    if((loopOffset + lidx + offset + 256) < ( offset + windowSize))\n";
+            ss << "    if((loopOffset + lidx + offset + 256) < min( offset + windowSize, arrayLength))\n";
             ss << "        tmp = A[loopOffset + lidx + offset] + "
                 "A[loopOffset + lidx + offset + 256];\n";
-            ss << "    else if ((loopOffset + lidx + offset) < ( offset + windowSize))\n";
+            ss << "    else if ((loopOffset + lidx + offset) < min(offset + windowSize, arrayLength))\n";
             ss << "        tmp = A[loopOffset + lidx + offset];\n";
             ss << "    shm_buf[lidx] = tmp;\n";
             ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
@@ -487,38 +490,35 @@ public:
         {
             if (!bIsStartFixed && !bIsEndFixed)
             {
-                // set 100 as a threshold for invoking reduction kernel
-                // Ray: temporarily turn off parallel sum reduction
-                if (false /*nCurWindowSize > 100*/)
+                // set 100 as a temporary threshold for invoking reduction
+                // kernel in NeedParalleLReduction function
+                if (NeedParallelReduction())
                 {
                     std::string temp = Base::GetName() + "[gid0]";
                     ss << "tmp = ";
                     ss << mpCodeGen->Gen2(temp, "tmp");
                     ss << ";\n\t";
                     needBody = false;
-                    needReductionKernel = false;
                     return nCurWindowSize;
                 }
             }
 
             if (bIsStartFixed && bIsEndFixed)
             {
-                // set 100 as a threshold for invoking reduction kernel
-                // Ray: temporarily turn off parallel sum reduction
-                if (false /* nCurWindowSize > 100 */)
+                // set 100 as a temporary threshold for invoking reduction
+                // kernel in NeedParalleLReduction function
+                if (NeedParallelReduction())
                 {
                     std::string temp = Base::GetName() + "[0]";
                     ss << "tmp = ";
                     ss << mpCodeGen->Gen2(temp, "tmp");
                     ss << ";\n\t";
                     needBody = false;
-                    needReductionKernel = false;
                     return nCurWindowSize;
                 }
             }
         }
         needBody = true;
-        needReductionKernel = true;
         ss << "for (int i = ";
         if (!bIsStartFixed && bIsEndFixed)
         {
@@ -561,7 +561,7 @@ public:
 
     virtual size_t Marshal(cl_kernel k, int argno, int w, cl_program mpProgram)
     {
-        if (needReductionKernel)
+        if (!NeedParallelReduction())
             return Base::Marshal(k, argno, w, mpProgram);
 
         assert(Base::mpClmem == NULL);
@@ -654,7 +654,6 @@ protected:
     // from parent nodes
     boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
     // controls whether to invoke the reduction kernel during marshaling or not
-    bool needReductionKernel;
     cl_mem mpClmem2;
 };
 
@@ -1096,7 +1095,7 @@ public:
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err);
 
-                std::string kernelName = "SumIfs_reduction";
+                std::string kernelName = mvSubArguments[0]->GetName() + "_SumIfs_reduction";
                 cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
                 if (err != CL_SUCCESS)
                     throw OpenCLError(err);

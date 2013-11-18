@@ -453,8 +453,10 @@ void OpSumIfs::GenSlidingWindowFunction(std::stringstream &ss,
     if (mNeedReductionKernel)
     {
         // generate reduction functions
+
         ss << "__kernel void ";
-        ss << "SumIfs_reduction(  ";
+        ss << vSubArguments[0]->GetName();
+        ss << "_SumIfs_reduction(  ";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
         {
             if (i)
