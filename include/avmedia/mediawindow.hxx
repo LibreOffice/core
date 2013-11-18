@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 #include <tools/gen.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -118,7 +119,7 @@ namespace avmedia
         AVMEDIA_DLLPRIVATE MediaWindow& operator =( const MediaWindow& );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxIFace;
-        priv::MediaWindowImpl*                                                  mpImpl;
+        boost::scoped_ptr<priv::MediaWindowImpl> mpImpl;
     };
 }
 

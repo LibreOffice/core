@@ -52,19 +52,13 @@ MediaWindow::MediaWindow( Window* parent, bool bInternalMediaControl ) :
 
 // -------------------------------------------------------------------------
 
-MediaWindow::~MediaWindow()
-{
-    mpImpl->cleanUp();
-    delete mpImpl;
-    mpImpl = NULL;
-}
+MediaWindow::~MediaWindow() {}
 
 // -------------------------------------------------------------------------
 
 void MediaWindow::setURL( const OUString& rURL )
 {
-    if( mpImpl )
-        mpImpl->setURL( rURL, OUString() );
+    mpImpl->setURL( rURL, OUString() );
 }
 
 // -------------------------------------------------------------------------
@@ -78,7 +72,7 @@ const OUString& MediaWindow::getURL() const
 
 bool MediaWindow::isValid() const
 {
-    return( mpImpl != NULL && mpImpl->isValid() );
+    return mpImpl->isValid();
 }
 
 // -------------------------------------------------------------------------
@@ -148,64 +142,56 @@ Size MediaWindow::getPreferredSize() const
 
 void MediaWindow::setPosSize( const Rectangle& rNewRect )
 {
-    if( mpImpl )
-    {
-        mpImpl->setPosSize( rNewRect );
-    }
+    mpImpl->setPosSize( rNewRect );
 }
 
 // -------------------------------------------------------------------------
 
 void MediaWindow::setPointer( const Pointer& rPointer )
 {
-    if( mpImpl )
-        mpImpl->setPointer( rPointer );
+    mpImpl->setPointer( rPointer );
 }
 
 // -------------------------------------------------------------------------
 
 bool MediaWindow::start()
 {
-    return( mpImpl != NULL && mpImpl->start() );
+    return mpImpl->start();
 }
 
 // -------------------------------------------------------------------------
 
 void MediaWindow::updateMediaItem( MediaItem& rItem ) const
 {
-    if( mpImpl )
-        mpImpl->updateMediaItem( rItem );
+    mpImpl->updateMediaItem( rItem );
 }
 
 // -------------------------------------------------------------------------
 
 void MediaWindow::executeMediaItem( const MediaItem& rItem )
 {
-    if( mpImpl )
-        mpImpl->executeMediaItem( rItem );
+    mpImpl->executeMediaItem( rItem );
 }
 
 // -------------------------------------------------------------------------
 
 void MediaWindow::show()
 {
-    if( mpImpl )
-        mpImpl->Show();
+    mpImpl->Show();
 }
 
 // -------------------------------------------------------------------------
 
 void MediaWindow::hide()
 {
-    if( mpImpl )
-        mpImpl->Hide();
+    mpImpl->Hide();
 }
 
 // -------------------------------------------------------------------------
 
 Window* MediaWindow::getWindow() const
 {
-    return mpImpl;
+    return mpImpl.get();
 }
 
 // -------------------------------------------------------------------------

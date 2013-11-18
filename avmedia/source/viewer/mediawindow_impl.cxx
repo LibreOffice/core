@@ -176,15 +176,6 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
 
 MediaWindowImpl::~MediaWindowImpl()
 {
-    delete mpEmptyBmpEx;
-    delete mpAudioBmpEx;
-    delete mpMediaWindowControl;
-}
-
-// ---------------------------------------------------------------------
-
-void MediaWindowImpl::cleanUp()
-{
     uno::Reference< media::XPlayerWindow > xPlayerWindow( getPlayerWindow() );
 
     mpEvents->cleanUp();
@@ -209,6 +200,10 @@ void MediaWindowImpl::cleanUp()
     mxPlayer.clear();
 
     mpMediaWindow = NULL;
+
+    delete mpEmptyBmpEx;
+    delete mpAudioBmpEx;
+    delete mpMediaWindowControl;
 }
 
 uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL )
