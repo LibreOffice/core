@@ -261,11 +261,6 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
             getSupportedServiceNames_MSAAServiceImpl, ::cppu::createSingleComponentFactory,
             0, 0
         },
-        {
-            create_MSAAServiceImpl, getImplementationName_MSAAServiceImpl,
-            getSupportedServiceNames_MSAAServiceImpl, ::cppu::createSingleComponentFactory,
-            0, 0
-        },
         { 0, 0, 0, 0, 0, 0 }
     };
 }
