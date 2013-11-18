@@ -105,7 +105,7 @@ class OfficeDocument(object):
         xComponent = None
         try:
             xComponent = frame.loadComponentFromURL(
-                systemPathToFileUrl(sURL), "_self", 0, tuple(loadValues))
+                sURL, "_self", 0, tuple(loadValues))
 
         except Exception:
             traceback.print_exc()
