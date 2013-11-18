@@ -1044,26 +1044,6 @@ void SfxObjectShell::PrepareReload( )
 {
 }
 
-// Can be moved to frame.cxx, when 358+36x-State have been merged
-
-sal_Bool SfxFrame::IsAutoLoadLocked_Impl() const
-{
-    // Its own Docucument is locked?
-    const SfxObjectShell* pObjSh = GetCurrentDocument();
-    if ( !pObjSh || !pObjSh->IsAutoLoadLocked() )
-        return sal_False;
-
-    // Its children are locked?
-    for ( sal_uInt16 n = GetChildFrameCount(); n--; )
-        if ( !GetChildFrame(n)->IsAutoLoadLocked_Impl() )
-            return sal_False;
-
-    // otherwise allow AutoLoad
-    return sal_True;
-}
-
-//-------------------------------------------------------------------------
-
 sal_Bool SfxObjectShell::IsAutoLoadLocked() const
 
 /* Returns whether an Autoload is allowed to be executed. Before the
