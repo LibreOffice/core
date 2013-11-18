@@ -19,8 +19,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,localedata_others,\
 	CustomTarget/i18npool/localedata/localedata_af_ZA \
 	CustomTarget/i18npool/localedata/localedata_ak_GH \
 	CustomTarget/i18npool/localedata/localedata_am_ET \
+	CustomTarget/i18npool/localedata/localedata_ar_AE \
 	CustomTarget/i18npool/localedata/localedata_ar_DZ \
 	CustomTarget/i18npool/localedata/localedata_ar_EG \
+	CustomTarget/i18npool/localedata/localedata_ar_KW \
 	CustomTarget/i18npool/localedata/localedata_ar_LB \
 	CustomTarget/i18npool/localedata/localedata_ar_OM \
 	CustomTarget/i18npool/localedata/localedata_ar_SA \

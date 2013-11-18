@@ -285,6 +285,8 @@ static const struct {
     { "sid_ET", lcl_DATA_OTHERS },
     { "bo_CN",  lcl_DATA_OTHERS },
     { "bo_IN",  lcl_DATA_OTHERS },
+    { "ar_AE",  lcl_DATA_OTHERS },
+    { "ar_KW",  lcl_DATA_OTHERS },
     { "bm_ML",  lcl_DATA_OTHERS }
 };
 
