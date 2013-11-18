@@ -156,13 +156,6 @@ namespace avmedia
 
             void    stopPlayingInternal( bool );
 
-            MediaWindow* getMediaWindow() const;
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > getPlayer() const;
-
-            void setPlayerWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >& rxPlayerWindow );
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > getPlayerWindow() const;
-
             void            onURLChanged();
 
             OUString                                                                    maFileURL;
