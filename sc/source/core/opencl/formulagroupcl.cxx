@@ -57,7 +57,6 @@ namespace sc { namespace opencl {
 size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
 {
     FormulaToken *ref = mFormulaTree->GetFormulaToken();
-    assert(mpClmem == NULL);
     double *pHostBuffer = NULL;
     size_t szHostBuffer = 0;
     if (ref->GetType() == formula::svSingleVectorRef) {
@@ -311,7 +310,6 @@ public:
 size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_program)
 {
     FormulaToken *ref = mFormulaTree->GetFormulaToken();
-    assert(mpClmem == NULL);
     // Obtain cl context
     KernelEnv kEnv;
     OpenclDevice::setKernelEnv(&kEnv);
@@ -2501,6 +2499,8 @@ DynamicKernel::~DynamicKernel()
         std::cerr<<"Freeing kernel "<< GetMD5() << " program\n";
         clReleaseProgram(mpProgram);
     }
+    if (mpCode)
+        delete mpCode;
 }
 /// Build code
 void DynamicKernel::CreateKernel(void)
@@ -2656,14 +2656,16 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument
                                                                       ScFormulaCellGroupRef& xGroup,
                                                                       ScTokenArray& rCode)
 {
-    ScTokenArray aCode;
-    ScGroupTokenConverter aConverter(aCode, rDoc, *xGroup->mpTopCell, rTopPos);
+    ScTokenArray *pCode = new ScTokenArray();
+    ScGroupTokenConverter aConverter(*pCode, rDoc, *xGroup->mpTopCell, rTopPos);
     if (!aConverter.convert(rCode))
     {
         return NULL;
     }
 
-    return DynamicKernel::create(rDoc, rTopPos, aCode);
+    DynamicKernel *result = DynamicKernel::create(rDoc, rTopPos, *pCode);
+    result->SetPCode(pCode);
+    return result;
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
@@ -2691,6 +2693,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     }
     else
     {
+        assert(xGroup->meCalcState == sc::GroupCalcRunning);
         aGuard.clear();
         pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, xGroup, rCode));
     }
@@ -2718,7 +2721,8 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
         if (err != CL_SUCCESS)
             throw OpenCLError(err);
-        delete pKernel;
+        if (xGroup->meCalcState == sc::GroupCalcRunning)
+            delete pKernel;
     }
     catch (const UnhandledToken &ut) {
         std::cerr << "\nDynamic formual compiler: unhandled token: ";

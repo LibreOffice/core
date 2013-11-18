@@ -63,7 +63,7 @@ class DynamicKernel : public CompiledFormula
 {
 public:
     DynamicKernel(FormulaTreeNodeRef r):mpRoot(r),
-        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL) {}
+        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL), mpCode(NULL) {}
     static DynamicKernel *create(ScDocument& rDoc,
                                  const ScAddress& rTopPos,
                                  ScTokenArray& rCode);
@@ -80,6 +80,8 @@ public:
     void Launch(size_t nr);
     ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
+    void SetPCode(ScTokenArray *pCode) { mpCode = pCode; }
+
 private:
     void TraverseAST(FormulaTreeNodeRef);
     FormulaTreeNodeRef mpRoot;
@@ -91,6 +93,7 @@ private:
     cl_mem mpResClmem; // Results
     std::set<std::string> inlineDecl;
     std::set<std::string> inlineFun;
+    ScTokenArray *mpCode;
 };
 
 }

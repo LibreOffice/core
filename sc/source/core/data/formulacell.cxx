@@ -1769,7 +1769,7 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
 void ScFormulaCell::SetDirtyVar()
 {
     bDirty = true;
-    if (mxGroup)
+    if (mxGroup && mxGroup->meCalcState == sc::GroupCalcRunning)
         mxGroup->meCalcState = sc::GroupCalcEnabled;
 
     // mark the sheet of this cell to be calculated
