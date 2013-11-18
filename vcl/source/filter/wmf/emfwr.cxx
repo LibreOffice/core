@@ -287,21 +287,18 @@ sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilter
 {
     const sal_uLong nHeaderPos = m_rStm.Tell();
 
-    mpHandlesUsed = new sal_Bool[ MAXHANDLES ];
-    memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( sal_Bool ) );
-    mnHorTextAlign = mnHandleCount = mnLastPercent = mnRecordPos = mnRecordCount = 0;
-    mnRecordPlusPos = 0;
-    mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
-    mbRecordOpen = sal_False;
-    mbRecordPlusOpen = false;
-
-
     maVDev.EnableOutput( sal_False );
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
-    mpFilterConfigItem = pFilterConfigItem;
-
     // don't work with pixel as destination map mode -> higher resolution preferrable
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
+    mpFilterConfigItem = pFilterConfigItem;
+    mpHandlesUsed = new sal_Bool[ MAXHANDLES ];
+    memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( sal_Bool ) );
+    mnHandleCount = mnLastPercent = mnRecordCount = mnRecordPos = mnRecordPlusPos = 0;
+    mbRecordOpen = mbRecordPlusOpen = false;
+    mbLineChanged = mbFillChanged = mbTextChanged = false;
+    mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
+    mnHorTextAlign = 0;
 
     const Size aMtfSizePix( maVDev.LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
     const Size aMtfSizeLog( maVDev.LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
