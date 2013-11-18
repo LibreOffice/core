@@ -239,8 +239,8 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& 
                           "failed to create media player service " << aServiceName );
         } catch ( const uno::Exception &e ) {
             SAL_WARN( "avmedia",
-                      "couldn't create media player " AVMEDIA_MANAGER_SERVICE_NAME
-                      ", exception '" << e.Message << '\'');
+                      "couldn't create media player " << aServiceName
+                          << ", exception '" << e.Message << '\'');
         }
     }
 
