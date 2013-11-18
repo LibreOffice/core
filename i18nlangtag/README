@@ -75,7 +75,7 @@ If dictionary exists:
 ** if appropriate rename *.dic and *.aff files, for example ku_TR.dic to kmr_Latn.dic and ku_TR.aff to kmr_Latn.aff
 * dictionaries/Dictionary_*.mk          for example dictionaries/Dictionary_ku_TR.mk
 ** rename file, for example to Dictionary_kmr_Latn.mk
-** change all locale dependent file names and target, for example *ku_TR* to *kmr_Latn*
+** change all locale dependent file names and target, for example *ku_TR* to *kmr_Latn* AND ku-TR to kmr-Latn; note '-' and '_' separators, both are used!
 
 If extras exist, for example extras/source/autotext/*:
 
