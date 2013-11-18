@@ -627,10 +627,21 @@ PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
     return *this;
 }
 
-ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                PPTExBulletProvider& rProv ) :
-    maMapModeSrc        ( MAP_100TH_MM ),
-    maMapModeDest       ( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) )
+ParagraphObj::ParagraphObj(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+    PPTExBulletProvider& rProv)
+    : maMapModeSrc(MAP_100TH_MM)
+    , maMapModeDest(MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ))
+    , mnTextSize(0)
+    , mbFirstParagraph(false)
+    , mbLastParagraph(false)
+    , mnTextAdjust(0)
+    , mnLineSpacing(0)
+    , mbFixedLineSpacing(false)
+    , mnLineSpacingTop(0)
+    , mnLineSpacingBottom(0)
+    , mbForbiddenRules(false)
+    , mbParagraphPunctation(false)
+    , mnBiDi(0)
 {
     mXPropSet = rXPropSet;
 
@@ -643,12 +654,22 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplGetParagraphValues( rProv, sal_False );
 }
 
-    ParagraphObj::ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
-                    ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv ) :
-    maMapModeSrc        ( MAP_100TH_MM ),
-    maMapModeDest       ( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) ),
-    mbFirstParagraph    ( aParaFlags.bFirstParagraph ),
-    mbLastParagraph     ( aParaFlags.bLastParagraph )
+ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
+    ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv )
+    : maMapModeSrc(MAP_100TH_MM)
+    , maMapModeDest(MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ))
+    , mnTextSize(0)
+    , mbIsBullet(false)
+    , mbFirstParagraph( aParaFlags.bFirstParagraph )
+    , mbLastParagraph( aParaFlags.bLastParagraph )
+    , mnTextAdjust(0)
+    , mnLineSpacing(0)
+    , mbFixedLineSpacing(false)
+    , mnLineSpacingTop(0)
+    , mnLineSpacingBottom(0)
+    , mbForbiddenRules(false)
+    , mbParagraphPunctation(false)
+    , mnBiDi(0)
 {
     bExtendedParameters = sal_False;
 

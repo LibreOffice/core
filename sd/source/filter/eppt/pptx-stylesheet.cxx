@@ -286,8 +286,8 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
 
     if ( !nLevel )
     {
-        if ( ( aParagraphObj.meBullet ==  ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-                    && aParagraphObj.bExtendedParameters )
+        if (aParagraphObj.bExtendedParameters &&
+             aParagraphObj.meBullet == ::com::sun::star::beans::PropertyState_DIRECT_VALUE)
         {
             for ( sal_Int16 i = 0; i < 5; i++ )
             {
