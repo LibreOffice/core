@@ -20,25 +20,16 @@
 #define INCLUDED_SFX2_SOURCE_INC_ALIENWARN_HXX
 
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 
-#include <sfx2/basedlgs.hxx>
-
-class SfxAlienWarningDialog : public SfxModalDialog
+class SfxAlienWarningDialog : public MessageDialog
 {
 private:
-    OKButton                m_aKeepCurrentBtn;
-    CancelButton            m_aSaveODFBtn;
-    HelpButton              m_aMoreInfoBtn;
-    FixedLine               m_aOptionLine;
-    CheckBox                m_aWarningOnBox;
-    FixedImage              m_aQueryImage;
-    FixedText               m_aInfoText;
-
-    void                    InitSize();
+    PushButton*             m_pKeepCurrentBtn;
+    CheckBox*               m_pWarningOnBox;
 
 public:
-             SfxAlienWarningDialog( Window* pParent, const OUString& _rFormatName );
+    SfxAlienWarningDialog(Window* pParent, const OUString& _rFormatName);
     virtual ~SfxAlienWarningDialog();
 };
 

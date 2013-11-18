@@ -42,7 +42,6 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/bastyp/bastyp.src \
     sfx2/source/bastyp/fltfnc.src \
     sfx2/source/control/templateview.src \
-    sfx2/source/dialog/alienwarn.src \
     sfx2/source/dialog/dialog.src \
     sfx2/source/dialog/dinfdlg.src \
     sfx2/source/dialog/filedlghelper.src \
