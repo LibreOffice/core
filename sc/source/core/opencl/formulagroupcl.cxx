@@ -426,9 +426,10 @@ public:
     }
     virtual bool NeedParallelReduction(void) const
     {
-        if (dynamic_cast<OpSum*>(mpCodeGen.get())
-            && !dynamic_cast<OpAverage*>(mpCodeGen.get()))
-            return GetWindowSize()> 100 &&
+        if ((dynamic_cast<OpSum*>(mpCodeGen.get())
+            && !dynamic_cast<OpAverage*>(mpCodeGen.get())) ||
+            dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
+            return GetWindowSize()> 4 &&
                 ( (GetStartFixed() && GetEndFixed()) ||
                   (!GetStartFixed() && !GetEndFixed())  ) ;
         else
@@ -457,10 +458,10 @@ public:
             ss << "    tmp = 0.0;\n";
             ss << "    int loopOffset = l*512;\n";
             ss << "    if((loopOffset + lidx + offset + 256) < min( offset + windowSize, arrayLength))\n";
-            ss << "        tmp = A[loopOffset + lidx + offset] + "
-                "A[loopOffset + lidx + offset + 256];\n";
+            ss << "        tmp = fsum(A[loopOffset + lidx + offset], 0) + "
+                "fsum(A[loopOffset + lidx + offset + 256], 0);\n";
             ss << "    else if ((loopOffset + lidx + offset) < min(offset + windowSize, arrayLength))\n";
-            ss << "        tmp = A[loopOffset + lidx + offset];\n";
+            ss << "        tmp = fsum(A[loopOffset + lidx + offset], 0);\n";
             ss << "    shm_buf[lidx] = tmp;\n";
             ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    for (int i = 128; i >0; i/=2) {\n";
@@ -496,28 +497,14 @@ public:
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         if (dynamic_cast<OpSum*>(mpCodeGen.get()))
         {
-            if (!bIsStartFixed && !bIsEndFixed)
+            if ((!bIsStartFixed && !bIsEndFixed) ||
+                (bIsStartFixed && bIsEndFixed))
             {
                 // set 100 as a temporary threshold for invoking reduction
                 // kernel in NeedParalleLReduction function
                 if (NeedParallelReduction())
                 {
                     std::string temp = Base::GetName() + "[gid0]";
-                    ss << "tmp = ";
-                    ss << mpCodeGen->Gen2(temp, "tmp");
-                    ss << ";\n\t";
-                    needBody = false;
-                    return nCurWindowSize;
-                }
-            }
-
-            if (bIsStartFixed && bIsEndFixed)
-            {
-                // set 100 as a temporary threshold for invoking reduction
-                // kernel in NeedParalleLReduction function
-                if (NeedParallelReduction())
-                {
-                    std::string temp = Base::GetName() + "[0]";
                     ss << "tmp = ";
                     ss << mpCodeGen->Gen2(temp, "tmp");
                     ss << ";\n\t";
@@ -576,7 +563,8 @@ public:
 
     virtual size_t Marshal(cl_kernel k, int argno, int w, cl_program mpProgram)
     {
-        if (!NeedParallelReduction())
+        if (!NeedParallelReduction() ||
+            dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
             return Base::Marshal(k, argno, w, mpProgram);
 
         assert(Base::mpClmem == NULL);
