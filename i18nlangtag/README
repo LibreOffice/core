@@ -33,7 +33,7 @@ When changing a (translation's) language tag (for example, 'ca-XV' to 'ca-valenc
 * i18nlangtag/source/isolang/isolang.cxx
 ** maintain the old tag's mapping entry in aImplIsoLangEntries to be able to read existing documents using that code
 ** add the new tag's mapping to aImplBcp47CountryEntries or aImplIsoLangScriptEntries
-** change mbOverrideExists from false to true in aImplIsoLangScriptEntries
+** change mnOverride from 0 to kSAME in aImplIsoLangScriptEntries or aImplIsoLangEntries
 
 * i18nlangtag/source/languagetag/languagetag.cxx
 ** add the new tag's fallback strings to the fallback of the old tag in LanguageTag::getFallbackStrings()
