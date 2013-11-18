@@ -639,7 +639,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->Put( *pURLItem );
 
                     // Filter Detection
-                    SfxMedium aMedium( pURLItem->GetValue(), SFX_STREAM_READWRITE );
+                    OUString referer;
+                    SFX_REQUEST_ARG(
+                        rReq, refererItem, SfxStringItem, SID_REFERER, false);
+                    if (refererItem != 0) {
+                        referer = refererItem->GetValue();
+                    }
+                    SfxMedium aMedium( pURLItem->GetValue(), referer, SFX_STREAM_READWRITE );
                     SfxFilterMatcher().GuessFilter( aMedium, &pFilter );
                     if ( pFilter )
                         pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );

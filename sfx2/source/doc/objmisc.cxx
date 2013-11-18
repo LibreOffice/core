@@ -1445,6 +1445,10 @@ void AutoReloadTimer_Impl::Timeout()
         aSet.Put( SfxBoolItem( SID_AUTOLOAD, sal_True ) );
         if ( !aUrl.isEmpty() )
             aSet.Put(  SfxStringItem( SID_FILE_NAME, aUrl ) );
+        if (pObjSh->HasName()) {
+            aSet.Put(
+                SfxStringItem(SID_REFERER, pObjSh->GetMedium()->GetName()));
+        }
         SfxRequest aReq( SID_RELOAD, 0, aSet );
         pObjSh->Get_Impl()->pReloadTimer = 0;
         delete this;
