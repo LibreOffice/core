@@ -1,0 +1,11 @@
+--- misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/language/English.java.orig	2013-11-18 09:41:10.625421948 +0000
++++ misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/language/English.java	2013-11-18 09:41:25.736570684 +0000
+@@ -67,7 +67,7 @@
+ 
+   @Override
+   public final String[] getCountryVariants() {
+-    return new String[]{"GB", "US", "AU", "CA", "NZ", "ZA"};
++    return new String[]{"GB", "US", "AU", "CA", "IE", "NZ", "ZA"};
+   }
+   
+   @Override
