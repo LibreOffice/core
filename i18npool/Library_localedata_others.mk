@@ -61,10 +61,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,localedata_others,\
 	CustomTarget/i18npool/localedata/localedata_kk_KZ \
 	CustomTarget/i18npool/localedata/localedata_kkw_CG \
 	CustomTarget/i18npool/localedata/localedata_km_KH \
+	CustomTarget/i18npool/localedata/localedata_kmr_Latn_TR \
 	CustomTarget/i18npool/localedata/localedata_kn_IN \
 	CustomTarget/i18npool/localedata/localedata_kng_CG \
 	CustomTarget/i18npool/localedata/localedata_ko_KR \
-	CustomTarget/i18npool/localedata/localedata_ku_TR \
 	CustomTarget/i18npool/localedata/localedata_ky_KG \
 	CustomTarget/i18npool/localedata/localedata_ldi_CG \
 	CustomTarget/i18npool/localedata/localedata_lg_UG \

@@ -20,13 +20,14 @@
 <Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
   <LC_INFO>
     <Language>
-      <LangID>ku</LangID>
+      <LangID>qlt</LangID>
       <DefaultName>Kurdish</DefaultName>
     </Language>
     <Country>
       <CountryID>TR</CountryID>
       <DefaultName>Turkey</DefaultName>
     </Country>
+    <Variant>kmr-Latn-TR</Variant>
   </LC_INFO>
   <LC_CTYPE>
     <Separators>

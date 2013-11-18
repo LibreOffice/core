@@ -79,12 +79,12 @@ ka       0  1079   # Georgian
 kab      0  1625
 kk       0  1087
 km       0  1107   # Khmer
+kmr-Latn 0  1574
 kn       0  1099   # Kannada
 kn-IN    0  1099   # Kannada
 ko       0  1042
 kok      0  1111   # Konkani
 ks       0  1120   # Kashmiri
-ku       0  1574
 ky       0  1088   # Kyrgyz
 ky-CN    0  1640   # Kyrgyz (China)
 lb       0  1134

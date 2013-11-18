@@ -496,10 +496,10 @@ en-US = "Tajik"
 [STR_DESC_MODULE_LANGPACK_TG]
 en-US = "Installs the Tajik user interface"
 
-[STR_NAME_MODULE_LANGPACK_KU]
+[STR_NAME_MODULE_LANGPACK_KMR_LATN]
 en-US = "Kurdish"
 
-[STR_DESC_MODULE_LANGPACK_KU]
+[STR_DESC_MODULE_LANGPACK_KMR_LATN]
 en-US = "Installs the Kurdish user interface"
 
 [STR_NAME_MODULE_LANGPACK_DZ]

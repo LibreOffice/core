@@ -64,11 +64,11 @@ ja \
 ka \
 kk \
 km \
+kmr-Latn \
 kn \
 ko \
 kok \
 ks \
-ku \
 lb \
 lo \
 lt \
