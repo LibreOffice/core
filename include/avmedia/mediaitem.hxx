@@ -106,7 +106,7 @@ public:
     ::com::sun::star::media::ZoomLevel  getZoom() const;
 
     void                    setURL( const OUString& rURL,
-                                    OUString const*const pTempURL);
+                                    const OUString& rTempURL);
     const OUString&  getURL() const;
 
     const OUString&  getTempURL() const;

@@ -818,7 +818,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             if( rValue >>= aURL )
             {
                 bOk = true;
-                aItem.setURL( aURL, 0 );
+                aItem.setURL( aURL, "" );
             }
         }
         break;

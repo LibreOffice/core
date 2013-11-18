@@ -328,7 +328,7 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
     rItem.setMute( isMute() );
     rItem.setVolumeDB( getVolumeDB() );
     rItem.setZoom( getZoom() );
-    rItem.setURL( getURL(), &mTempFileURL );
+    rItem.setURL( getURL(), mTempFileURL );
 }
 
 void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )

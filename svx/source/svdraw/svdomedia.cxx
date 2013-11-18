@@ -246,7 +246,7 @@ void SdrMediaObj::setURL( const OUString& rURL)
 {
     ::avmedia::MediaItem aURLItem;
 
-    aURLItem.setURL( rURL, 0 );
+    aURLItem.setURL( rURL, "" );
     setMediaProperties( aURLItem );
 }
 
@@ -378,24 +378,24 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 if (bSuccess)
                 {
                     m_pImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
-                    m_pImpl->m_MediaProperties.setURL(url, & tempFileURL);
+                    m_pImpl->m_MediaProperties.setURL(url, tempFileURL);
                 }
                 else // this case is for Clone via operator=
                 {
                     m_pImpl->m_pTempFile.reset();
-                    m_pImpl->m_MediaProperties.setURL(OUString(), 0);
+                    m_pImpl->m_MediaProperties.setURL("", "");
                 }
             }
             else
             {
                 m_pImpl->m_MediaProperties.setURL(url,
-                        &rNewProperties.getTempURL());
+                        rNewProperties.getTempURL());
             }
         }
         else
         {
             m_pImpl->m_pTempFile.reset();
-            m_pImpl->m_MediaProperties.setURL(url, 0);
+            m_pImpl->m_MediaProperties.setURL(url, "");
         }
         bBroadcastChanged = true;
     }

@@ -202,7 +202,7 @@ void MediaItem::merge( const MediaItem& rMediaItem )
     const sal_uInt32 nMaskSet = rMediaItem.getMaskSet();
 
     if( AVMEDIA_SETMASK_URL & nMaskSet )
-        setURL( rMediaItem.getURL(), &rMediaItem.getTempURL() );
+        setURL( rMediaItem.getURL(), rMediaItem.getTempURL() );
 
     if( AVMEDIA_SETMASK_STATE & nMaskSet )
         setState( rMediaItem.getState() );
@@ -235,12 +235,11 @@ sal_uInt32 MediaItem::getMaskSet() const
 
 //------------------------------------------------------------------------
 
-void MediaItem::setURL( const OUString& rURL,
-        OUString const*const pTempURL)
+void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL )
 {
-    m_pImpl->m_URL = rURL;
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_URL;
-    m_pImpl->m_TempFileURL = (pTempURL) ? *pTempURL : OUString();
+    m_pImpl->m_URL = rURL;
+    m_pImpl->m_TempFileURL = rTempURL;
 }
 
 //------------------------------------------------------------------------
