@@ -48,7 +48,7 @@ When changing a (translation's) language tag (for example, 'ca-XV' to 'ca-valenc
 ** replace the tag and sort alphabetically
 
 * setup_native/source/packinfo/spellchecker_selection.txt
-** replace the tag
+** replace the tag and sort alphabetically
 
 If locale data exists:
 
