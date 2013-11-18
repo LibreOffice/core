@@ -605,8 +605,6 @@ void Bootstrap_Impl::expandValue(
 namespace {
 
 struct bootstrap_map {
-    // map<> may be preferred here, but hash_map<> is implemented fully inline,
-    // thus there is no need to link against the stlport:
     typedef std::hash_map<
         rtl::OUString, Bootstrap_Impl *,
         rtl::OUStringHash, std::equal_to< rtl::OUString >,

@@ -5,8 +5,8 @@
  	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
  else
 -	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
-+        #We remove stl from the paths to avoid that rc.exe finds the stlport of
-+        #OOo. stlport includes the system stl which will fail. By removing it,
++        #We remove stl from the paths to avoid that rc.exe finds the stl wrapper
++        #of AOO. stlport includes the system stl which will fail. By removing it,
 +        #rc will use the stl from the system if the path is in the INCLUDE
 +        #variable.
 +	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<

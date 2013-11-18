@@ -30,17 +30,9 @@ $(eval $(call gb_Executable_set_include,mkunroll,\
     -I$(SRCDIR)/tools/bootstrp/ \
 ))
 
-STLPORT_DEBUGFLAG =
-ifneq ($(USE_SYSTEM_STL),YES)
-ifeq ($(PRODUCT),)
-STLPORT_DEBUGFLAG = -D_DEBUG
-endif
-endif
-
 $(eval $(call gb_Executable_set_cxxflags,mkunroll,\
     $$(CXXFLAGS) \
     -D_TOOLS_STRINGLIST \
-    $(STLPORT_DEBUGFLAG) \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,mkunroll,\

@@ -43,7 +43,6 @@ static const Path UPD;
 static const String CVER;
 static const String LIBXML_CFLAGS;
 static const String OS;
-static const String STLPORT_VER;
 static const Bool DEBUG;
 static const Bool PRODUCT;
 

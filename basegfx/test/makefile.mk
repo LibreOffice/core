@@ -37,14 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 @all:
     @echo "cppunit disabled. nothing do do."
 
-.ELSE # "$(WITH_CPPUNIT)" != "YES"
-
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
+.ELSE
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 

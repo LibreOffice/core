@@ -84,11 +84,10 @@ clean:
 
 out.pln/cppmain.uno.so: out.pln/cppmain.o version.map | out.pln \
             out.pln/lib/libuno_cppu.so out.pln/lib/libuno_cppuhelpergcc3.so \
-            out.pln/lib/libuno_sal.so out.pln/lib/libuno_salhelpergcc3.so \
-            out.pln/lib/libstlport_gcc.so
+            out.pln/lib/libuno_sal.so out.pln/lib/libuno_salhelpergcc3.so
 	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
             -Wl,--version-script=version.map $< -Lout.pln/lib -luno_cppu \
-            -luno_cppuhelpergcc3 -luno_sal -luno_salhelpergcc3 -lstlport_gcc
+            -luno_cppuhelpergcc3 -luno_sal -luno_salhelpergcc3
 
 out.pln/cppmain.o: cppmain.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
@@ -294,9 +293,6 @@ out.pln/lib/libuno_sal.so: | out.pln/lib
 
 out.pln/lib/libuno_salhelpergcc3.so: | out.pln/lib
 	ln -fs $(URE_HOME)/lib/libuno_salhelpergcc3.so.3 $@
-
-out.pln/lib/libstlport_gcc.so: | out.pln/lib
-	ln -fs $(URE_HOME)/lib/libstlport_gcc.so $@
 
 
 out.pln:

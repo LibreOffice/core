@@ -34,10 +34,8 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.so,$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 endif
 
@@ -49,10 +47,12 @@ gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
+ifneq ($(MACOSX_DEPLOYMENT_TARGET),10.4) # default to use libc++
+gb_Library_FILENAMES := $(patsubst stl:%,stl:libc++.dylib,$(gb_Library_FILENAMES))
+else # use libstdc++ instead on ancient MacOSX targets
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.dylib,$(gb_Library_FILENAMES))
-gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
 endif
+gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
 
 endif
 
@@ -75,15 +75,7 @@ gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt.dll$(gb_Library_IARC
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES))
-else
-ifeq ($(gb_PRODUCT),$(true))
-gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71%,$(gb_Library_FILENAMES))
-else
-gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71_stldebug%,$(gb_Library_FILENAMES))
-endif
-endif
 
 gb_Library_NOILIBFILENAMES:=\
     icule \
@@ -108,10 +100,8 @@ gb_Library_DLLFILENAMES := $(patsubst jvmaccess:jvmaccess%,jvmaccess:jvmaccess$(
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:%,stl:$(gb_Library_IARCSYSPRE)stdc++_s$(gb_Library_IARCSYSPRE),$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 else
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
@@ -131,15 +121,7 @@ gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf%,$(gb_Library_FILENAMES)
 gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
 gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES))
-else
-ifeq ($(gb_PRODUCT),$(true))
-gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71%,$(gb_Library_FILENAMES))
-else
-gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71_stldebug%,$(gb_Library_FILENAMES))
-endif
-endif
 
 gb_Library_NOILIBFILENAMES:=\
     advapi32 \
@@ -248,18 +230,14 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.so,$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 endif
 
 # we do not require a known rule for these, when using system libs
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 ifeq ($(SYSTEM_LIBXML),YES)
 gb_Library_TARGETS := $(filter-out xml2,$(gb_Library_TARGETS))

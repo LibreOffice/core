@@ -19,8 +19,6 @@
 #  
 #**************************************************************
 
-
-
 PRJ=..$/..
 
 PRJNAME=cosv
@@ -37,40 +35,21 @@ PRJINC=$(PRJ)$/source
 
 .INCLUDE : $(PRJ)$/source$/fullcpp.mk
 
-
-
-
 # --- Files --------------------------------------------------------
 
 OBJFILES= \
     $(OBJ)$/file_ut.obj             \
     $(OBJ)$/simplestring_ut.obj
 
-
-
-
 APP1TARGET=	$(TARGET)
 APP1STACK=	1000000
 APP1OBJS=   $(OBJ)$/ut_main.obj
 
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS= $(LIBSTLPORT)
-.ELSE
-.IF "$(OS)"=="MACOSX"
-APP1STDLIBS= $(LIBSTLPORT)
-.ENDIF
-.ENDIF
-
-
 APP1LIBS=	$(LB)$/$(TARGET).lib $(LB)$/cosv.lib
 
-
 APP1DEPN=   $(LB)$/$(TARGET).lib $(LB)$/cosv.lib
-
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
 

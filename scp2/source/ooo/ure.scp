@@ -823,46 +823,6 @@ File gid_File_Dl_Libxml2
 End
 #endif
 
-#if !defined USE_SYSTEM_STL || \
-    (defined USE_SYSTEM_STL && defined _C52 && defined IS_LP64)
-File gid_File_Dl_Stlport
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-#if defined _gcc3 && defined WNT
-#if defined _STLP_DEBUG
-    Name = SCP2_URE_DL_NORMAL("libstlport_gcc_stldebug");
-#else
-    Name = SCP2_URE_DL_NORMAL("libstlport_gcc");
-#endif
-#elif defined _gcc3
-#if defined _STLP_DEBUG
-    Name = SCP2_URE_DL_NORMAL("stlport_gcc_stldebug");
-#else
-    Name = SCP2_URE_DL_NORMAL("stlport_gcc");
-#endif
-#elif defined SOLARIS
-#if defined IS_LP64
-    Name = SCP2_URE_DL_VER("stlport", "1");
-#else
-#if defined _STLP_DEBUG
-    Name = SCP2_URE_DL_NORMAL("stlport_sunpro_debug");
-#else
-    Name = SCP2_URE_DL_NORMAL("stlport_sunpro");
-#endif
-#endif
-#elif defined WNT && (defined(M1310) || defined(M1400) || defined(M1500) )
-#if defined _STLP_DEBUG
-    Name = SCP2_URE_DL_NORMAL("stlport_vc71_stldebug45");
-#else
-    Name = SCP2_URE_DL_NORMAL("stlport_vc7145");
-#endif
-#else
-#error "stlport dynamic library: unsupported platform"
-#endif
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-End
-#endif
-
 #if defined _gcc3 && !(defined NETBSD \
 	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT) || defined(OS2))
 File gid_File_Dl_GccS
@@ -1072,7 +1032,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Textoutstream,
             gid_File_Dl_Uuresolver,
             gid_File_Dl_Libxml2,
-            gid_File_Dl_Stlport,
             gid_File_Dl_GccS,
             gid_File_Dl_Stdcpp,
             gid_File_Lib_Mingw_GccS_Ure,
