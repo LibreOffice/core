@@ -18,6 +18,7 @@
  */
 
 #include "formulacell.hxx"
+#include "grouptokenconverter.hxx"
 
 #include "compiler.hxx"
 #include "document.hxx"
@@ -414,14 +415,18 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mbSubTotal(false),
     meCalcState(sc::GroupCalcEnabled)
 {
-    if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+    static bool bBackgroundCompilation = getenv("SC_BACKGROUND_COMPILATION") != NULL;
+    if (bBackgroundCompilation)
     {
-        osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
-        if (mnCount++ == 0)
+        if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
         {
-            assert(!mxCLKernelThread.is());
-            mxCLKernelThread.set(new sc::CLBuildKernelThread);
-            mxCLKernelThread->launch();
+            osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
+            if (mnCount++ == 0)
+            {
+                assert(!mxCLKernelThread.is());
+                mxCLKernelThread.set(new sc::CLBuildKernelThread);
+                mxCLKernelThread->launch();
+            }
         }
     }
 }
@@ -431,7 +436,7 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
     if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
     {
         osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
-        if (--mnCount == 0)
+        if (--mnCount == 0 && mxCLKernelThread.is())
             {
                 assert(mxCLKernelThread.is());
                 mxCLKernelThread->finish();
@@ -3477,17 +3482,35 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (mxGroup->mbInvariant && false)
         return InterpretInvariantFormulaGroup();
 
-    ScTokenArray aDummy;
     if (mxGroup->meCalcState == sc::GroupCalcEnabled)
-        mxGroup->meCalcState = sc::GroupCalcRunning;
-    if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aDummy))
     {
-        mxGroup->meCalcState = sc::GroupCalcDisabled;
-        return false;
+        ScTokenArray aCode;
+        ScAddress aTopPos = aPos;
+        aTopPos.SetRow(mxGroup->mpTopCell->aPos.Row());
+        ScGroupTokenConverter aConverter(aCode, *pDocument, *this, mxGroup->mpTopCell->aPos);
+        if (!aConverter.convert(*pCode))
+            {
+                mxGroup->meCalcState = sc::GroupCalcDisabled;
+                return false;
+            }
+        mxGroup->meCalcState = sc::GroupCalcRunning;
+        if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aCode))
+        {
+            mxGroup->meCalcState = sc::GroupCalcDisabled;
+            return false;
+        }
+        mxGroup->meCalcState = sc::GroupCalcEnabled;
+    }
+    else
+    {
+        ScTokenArray aDummy;
+        if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aDummy))
+            {
+                mxGroup->meCalcState = sc::GroupCalcDisabled;
+                return false;
+            }
     }
 
-    if (mxGroup->meCalcState == sc::GroupCalcRunning)
-        mxGroup->meCalcState = sc::GroupCalcEnabled;
     return true;
 }
 
