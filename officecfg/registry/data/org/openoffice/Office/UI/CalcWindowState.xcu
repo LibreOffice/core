@@ -56,13 +56,13 @@
       </node>
       <node oor:name="private:resource/toolbar/datastreams" oor:op="replace">
         <prop oor:name="Docked" oor:type="xs:boolean">
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Data Streams</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/drawobjectbar" oor:op="replace">

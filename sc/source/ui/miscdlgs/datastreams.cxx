@@ -9,14 +9,18 @@
 
 #include <datastreams.hxx>
 
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 #include <osl/conditn.hxx>
 #include <rtl/strbuf.hxx>
 #include <salhelper/thread.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <asciiopt.hxx>
+#include <dbfunc.hxx>
 #include <docsh.hxx>
 #include <impex.hxx>
+#include <tabvwsh.hxx>
 #include <viewdata.hxx>
-#include <dbfunc.hxx>
 
 namespace datastreams {
 
@@ -80,6 +84,27 @@ void DataStreams::Start()
     mpScDocument->EnableUndo(false);
     mbRunning = true;
     mxThread->maStart.set();
+    css::uno::Reference< css::frame::XFrame > xFrame =
+        mpScDocShell->GetViewData()->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+    if (!xFrame.is())
+        return;
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return;
+
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    if (!xLayoutManager.is())
+        return;
+
+    const OUString sResourceURL( "private:resource/toolbar/datastreams" );
+    css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
+    if (!xUIElement.is())
+    {
+        xLayoutManager->createElement( sResourceURL );
+        xLayoutManager->showElement( sResourceURL );
+    }
 }
 
 void DataStreams::Stop()
