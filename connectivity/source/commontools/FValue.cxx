@@ -1561,9 +1561,9 @@ sal_uInt32 ORowSetValue::getUInt32()  const
                 break;
             case DataType::BIGINT:
                 if ( m_bSigned )
-                    nRet = static_cast<sal_Int32>(m_aValue.m_nInt64);
+                    nRet = static_cast<sal_uInt32>(m_aValue.m_nInt64);
                 else
-                    nRet = static_cast<sal_Int32>(m_aValue.m_uInt64);
+                    nRet = static_cast<sal_uInt32>(m_aValue.m_uInt64);
                 break;
             default:
                 {
@@ -1692,7 +1692,7 @@ sal_uInt64 ORowSetValue::getULong()   const
                 if ( m_bSigned )
                     nRet = m_aValue.m_nInt8;
                 else
-                    nRet = m_aValue.m_uInt16;
+                    nRet = m_aValue.m_uInt8;
                 break;
             case DataType::SMALLINT:
                 if ( m_bSigned )
