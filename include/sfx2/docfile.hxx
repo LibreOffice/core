@@ -161,7 +161,7 @@ public:
     sal_Bool            IsStorage();
 
     sal_Int8            ShowLockedDocumentDialog( const css::uno::Sequence< OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
-    bool                LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
+    void                LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
     void                UnlockFile( sal_Bool bReleaseLockStream );
 
     css::uno::Reference< css::embed::XStorage > GetStorage( sal_Bool bCreateTempIfNo = sal_True );

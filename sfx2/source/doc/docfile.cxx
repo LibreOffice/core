@@ -979,23 +979,17 @@ namespace
 
 #endif // HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
-// returns true if the document can be opened for editing ( even if it should be a copy )
-// otherwise the document should be opened readonly
+// sets SID_DOC_READONLY if the document cannot be opened for editing
 // if user cancel the loading the ERROR_ABORT is set
-bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
+void SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 {
 #if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     (void) bLoading;
     (void) bNoUI;
-    return true;
 #else
-    if (!IsLockingUsed())
-        return true;
+    if (!IsLockingUsed() || GetURLObject().HasError())
+        return;
 
-    if ( GetURLObject().HasError() )
-        return false;
-
-    bool bResult = false;
     try
     {
         if ( pImp->m_bLocked && bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
@@ -1005,7 +999,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             GetLockingStream_Impl();
         }
 
-        bResult = pImp->m_bLocked;
+        bool bResult = pImp->m_bLocked;
 
         if ( !bResult )
         {
@@ -1224,7 +1218,6 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
     {
         SAL_WARN( "sfx.doc", "Locking exception: high probability, that the content has not been created" );
     }
-    return bResult;
 #endif
 }
 
