@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAan////M\u003d",
+        "filename": "sw/source/ui/misc/swruler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-11-18T13:31:25Z",
+      "side": 1,
+      "message": "Maybe we should use Paint() directly? Faster (as it is an animation after all).",
+      "revId": "8cb397c118bccfd6a11b72d103d011ab0bccc1ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
