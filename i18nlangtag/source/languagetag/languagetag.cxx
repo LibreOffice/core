@@ -2073,6 +2073,11 @@ LanguageTag & LanguageTag::makeFallback()
 }
 
 
+/* TODO: maybe this now could take advantage of the mnOverride field in
+ * isolang.cxx entries and search for kSAME instead of harcoded special
+ * fallbacks. Though iterating through those tables would be slower and even
+ * then there would be some special cases, but we wouldn't lack entries that
+ * were missed out. */
 ::std::vector< OUString > LanguageTag::getFallbackStrings( bool bIncludeFullBcp47 ) const
 {
     ::std::vector< OUString > aVec;
@@ -2110,6 +2115,36 @@ LanguageTag & LanguageTag::makeFallback()
                 ::std::vector< OUString > aRep( LanguageTag( "ca-ES-valencia").getFallbackStrings( true));
                 aVec.insert( aVec.end(), aRep.begin(), aRep.end());
                 // Already includes 'ca' language fallback.
+            }
+            else if (aLanguage == "ku")
+            {
+                if (aCountry == "TR" || aCountry == "SY")
+                {
+                    aVec.push_back( "kmr-Latn-" + aCountry);
+                    aVec.push_back( "kmr-" + aCountry);
+                    aVec.push_back( "kmr-Latn");
+                    aVec.push_back( "kmr");
+                    aVec.push_back( aLanguage);
+                }
+                else if (aCountry == "IQ" || aCountry == "IR")
+                {
+                    aVec.push_back( "ckb-" + aCountry);
+                    aVec.push_back( "ckb");
+                }
+            }
+            else if (aLanguage == "kmr" && (aCountry == "TR" || aCountry == "SY"))
+            {
+                aVec.push_back( "ku-Latn-" + aCountry);
+                aVec.push_back( "ku-" + aCountry);
+                aVec.push_back( aLanguage);
+                aVec.push_back( "ku");
+            }
+            else if (aLanguage == "ckb" && (aCountry == "IQ" || aCountry == "IR"))
+            {
+                aVec.push_back( "ku-Arab-" + aCountry);
+                aVec.push_back( "ku-" + aCountry);
+                aVec.push_back( aLanguage);
+                // not 'ku' only, that was used for Latin script
             }
             else
                 aVec.push_back( aLanguage);
@@ -2174,6 +2209,8 @@ LanguageTag & LanguageTag::makeFallback()
             }
             else if (aLanguage == "pi" && aScript == "Latn")
                 aVec.push_back( "pli");     // a special case for Pali dictionary, see fdo#41599
+            else if (aLanguage == "krm" && aScript == "Latn" && (aCountry == "TR" || aCountry == "SY"))
+                aVec.push_back( "ku-" + aCountry);
         }
         if (!aVariants.isEmpty() && !bHaveLanguageScriptVariant)
         {
@@ -2184,10 +2221,16 @@ LanguageTag & LanguageTag::makeFallback()
         aTmp = aLanguage + "-" + aScript;
         if (aTmp != maBcp47)
             aVec.push_back( aTmp);
+
         // 'sh' actually denoted a script, so have it here instead of appended
         // at the end as language-only.
         if (aLanguage == "sr" && aScript == "Latn")
             aVec.push_back( "sh");
+        else if (aLanguage == "ku" && aScript == "Arab")
+            aVec.push_back( "ckb");
+        // 'ku' only denoted Latin script
+        else if (aLanguage == "krm" && aScript == "Latn" && aCountry.isEmpty())
+            aVec.push_back( "ku");
     }
     bool bHaveLanguageVariant = false;
     if (!aCountry.isEmpty())

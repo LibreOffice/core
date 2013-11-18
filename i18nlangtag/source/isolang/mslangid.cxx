@@ -216,6 +216,18 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
         default:
             break;
     }
+    switch (nLang)
+    {
+        case LANGUAGE_USER_KURDISH_IRAN:
+        case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
+        case LANGUAGE_KURDISH_ARABIC_IRAQ:
+        case LANGUAGE_KURDISH_ARABIC_LSO:
+        case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
+            return true;
+
+        default:
+            break;
+    }
     return false;
 }
 
@@ -323,7 +335,10 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA:
         case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO:
         case LANGUAGE_USER_KURDISH_IRAN:
-        case LANGUAGE_USER_KURDISH_IRAQ:
+        case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
+        case LANGUAGE_KURDISH_ARABIC_IRAQ:
+        case LANGUAGE_KURDISH_ARABIC_LSO:
+        case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
         case LANGUAGE_USER_KYRGYZ_CHINA:
             nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
             break;
@@ -506,6 +521,9 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
             break;
         case LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO:
             nLang = LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO;
+            break;
+        case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
+            nLang = LANGUAGE_KURDISH_ARABIC_IRAQ;
             break;
 
         // The following are not strictly obsolete but should be mapped to a

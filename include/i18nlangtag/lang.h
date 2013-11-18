@@ -277,7 +277,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_KONKANI                    0x0457
 #define LANGUAGE_KOREAN                     0x0412
 #define LANGUAGE_KOREAN_JOHAB               0x0812  /* not mentioned in MS-LCID.pdf, oh joy */
-#define LANGUAGE_KURDISH_ARABIC_IRAQ        0x0492  /* TODO: obsoletes LANGUAGE_USER_KURDISH_IRAQ 0x0E26 */
+#define LANGUAGE_KURDISH_ARABIC_IRAQ        0x0492  /* obsoletes LANGUAGE_USER_KURDISH_IRAQ 0x0E26 */
 #define LANGUAGE_KURDISH_ARABIC_LSO         0x7C92
 #define LANGUAGE_LAO                        0x0454
 #define LANGUAGE_LATIN_LSO                  0x0476  /* obsoletes LANGUAGE_USER_LATIN 0x0610 */
@@ -531,8 +531,10 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KOREAN_NORTH          0x8012  /* North Korean as opposed to South Korean, makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KOREAN)) */
 #define LANGUAGE_USER_KURDISH_TURKEY        0x0626  /* sublang 0x01, Latin script */
 #define LANGUAGE_USER_KURDISH_SYRIA         0x0A26  /* sublang 0x02, Latin script */
-#define LANGUAGE_USER_KURDISH_IRAQ          0x0E26  /* sublang 0x03, Arabic script */
+#define LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ 0x0E26  /* sublang 0x03, Arabic script */
+#define LANGUAGE_USER_KURDISH_IRAQ          LANGUAGE_KURDISH_ARABIC_IRAQ
 #define LANGUAGE_USER_KURDISH_IRAN          0x1226  /* sublang 0x04, Arabic script */
+#define LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ 0x8092  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KURDISH_ARABIC_LSO)) */
 #define LANGUAGE_USER_SARDINIAN             0x0627
 /* was reserved for Dzongkha but turned down with #i53497#: 0x0628 */  /* obsoleted by LANGUAGE_DZONGKHA */
 #define LANGUAGE_USER_DZONGKHA_MAP_LONLY    0xF851  /* to map "dz" only, because of the MS error, and preserve CTL information, sub 0x3e */

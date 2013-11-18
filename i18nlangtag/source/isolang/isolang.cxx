@@ -506,10 +506,17 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN,"dsb", "DE", 0     },
     { LANGUAGE_OCCITAN_FRANCE,              "oc", "FR", 0     },
     { LANGUAGE_OBSOLETE_USER_OCCITAN,       "oc", "FR", 0     },
-    { LANGUAGE_USER_KURDISH_TURKEY,         "ku", "TR", 0     },
-    { LANGUAGE_USER_KURDISH_SYRIA,          "ku", "SY", 0     },
-    { LANGUAGE_USER_KURDISH_IRAQ,           "ku", "IQ", 0     },
-    { LANGUAGE_USER_KURDISH_IRAN,           "ku", "IR", 0     },
+    { LANGUAGE_USER_KURDISH_TURKEY,        "kmr", "TR", kSAME },
+    { LANGUAGE_USER_KURDISH_TURKEY,         "ku", "TR", kSAME },
+    { LANGUAGE_USER_KURDISH_SYRIA,         "kmr", "SY", kSAME },
+    { LANGUAGE_USER_KURDISH_SYRIA,          "ku", "SY", kSAME },
+    { LANGUAGE_KURDISH_ARABIC_IRAQ,        "ckb", "IQ", 0     },
+    { LANGUAGE_KURDISH_ARABIC_IRAQ,         "ku", "IQ", kSAME },
+    { LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ,  "ku", "IQ", LANGUAGE_KURDISH_ARABIC_IRAQ },
+    { LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ, "sdh", "IQ", 0     },
+    { LANGUAGE_USER_KURDISH_IRAN,          "ckb", "IR", 0     },
+    { LANGUAGE_USER_KURDISH_IRAN,           "ku", "IR", kSAME },
+    { LANGUAGE_KURDISH_ARABIC_LSO,         "ckb", ""  , 0     },
     { LANGUAGE_USER_SARDINIAN,              "sc", "IT", 0     },    // macrolanguage code
     { LANGUAGE_USER_SARDINIAN_CAMPIDANESE, "sro", "IT", 0     },
     { LANGUAGE_USER_SARDINIAN_GALLURESE,   "sdn", "IT", 0     },
@@ -697,8 +704,10 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_LATIN_LSO,                           "la-Latn", ""  , kSAME },   // MS, though Latn is suppress-script
     { LANGUAGE_TAI_NUA_CHINA,                      "tdd-Tale", "CN", 0     },   // MS reserved
     { LANGUAGE_LU_CHINA,                           "khb-Talu", "CN", 0     },   // MS reserved
-    { LANGUAGE_KURDISH_ARABIC_IRAQ,                 "ku-Arab", "IQ", 0     },   // macrolanguage code, MS
-    { LANGUAGE_KURDISH_ARABIC_LSO,                  "ku-Arab", ""  , 0     },   // macrolanguage code
+    { LANGUAGE_KURDISH_ARABIC_IRAQ,                 "ku-Arab", "IQ", kSAME },   // macrolanguage code, MS
+    { LANGUAGE_KURDISH_ARABIC_LSO,                  "ku-Arab", ""  , kSAME },   // macrolanguage code, MS
+    { LANGUAGE_USER_KURDISH_TURKEY,                "kmr-Latn", "TR", 0     },
+    { LANGUAGE_USER_KURDISH_SYRIA,                 "kmr-Latn", "SY", 0     },
     { LANGUAGE_PUNJABI_PAKISTAN,                   "pnb-Arab", "PK", 0     },
     { LANGUAGE_PUNJABI_ARABIC_LSO,                 "pnb-Arab", ""  , 0     },
     { LANGUAGE_PUNJABI_PAKISTAN,                    "pa-Arab", "PK", 0     },   // MS, incorrect
