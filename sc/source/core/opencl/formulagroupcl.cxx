@@ -486,6 +486,9 @@ public:
         std::stringstream &ss, bool &needBody)
     {
         assert(mpDVR);
+        // Do not handle horizontal double vectors yet
+        if (mpDVR->GetArrays().size() > 1)
+            throw Unhandled();
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         if (dynamic_cast<OpSum*>(mpCodeGen.get()))
         {
