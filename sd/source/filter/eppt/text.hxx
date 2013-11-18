@@ -26,6 +26,7 @@
 #include <rtl/textenc.h>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <editeng/svxenum.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -62,17 +63,24 @@ struct SOParagraph
     sal_Bool                bNumberingIsNumber;
 
     SOParagraph()
+        : bExtendedParameters(false)
+        , nParaFlags(0)
+        , nBulletFlags(0)
+        , nNumberingType(SVX_NUM_NUMBER_NONE)
+        , nHorzAdjust(0)
+        , nBulletColor(0)
+        , nBulletOfs(0)
+        , nStartWith(0)
+        , nTextOfs(0)
+        , nBulletRealSize(0)
+        , nDepth(0)
+        , cBulletId(0)
+        , bExtendedBulletsUsed(false)
+        , nBulletId(0xffff)
+        , nMappedNumType(0)
+        , bNumberingIsNumber(true)
     {
-        nDepth = 0;
-        bExtendedParameters = sal_False;
-        nParaFlags = 0;
-        nBulletFlags = 0;
-        nBulletOfs = 0;
-        nTextOfs = 0;
-        bExtendedBulletsUsed = sal_False;
-        nBulletId = 0xffff;
-        bNumberingIsNumber = sal_True;
-    };
+    }
 };
 
 class PropStateValue : public PropValue
