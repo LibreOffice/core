@@ -106,6 +106,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/querychangelineenddialog \
 	cui/uiconfig/ui/querydeletechartcolordialog \
 	cui/uiconfig/ui/querydeletedictionarydialog \
+	cui/uiconfig/ui/querydeletehatchdialog \
 	cui/uiconfig/ui/querydeletelineenddialog \
 	cui/uiconfig/ui/querydeletelinestyledialog \
 	cui/uiconfig/ui/queryduplicatedialog \
