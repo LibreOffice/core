@@ -2753,7 +2753,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     {
         //  keine typographische Anfuehrungszeichen in Formeln
 
-        if (aString[0] == '=')
+        if (!aString.isEmpty() && aString[0] == '=')
         {
             SvxAutoCorrect* pAuto = SvxAutoCorrCfg::Get().GetAutoCorrect();
             if ( pAuto )
