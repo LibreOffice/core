@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
@@ -25,9 +25,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/accessibility/XMSAAService.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
+
+#include <windows.h>
 
 using namespace ::rtl; // for OUString
 using namespace ::com::sun::star; // for odk interfaces
@@ -36,96 +40,53 @@ using namespace ::com::sun::star::accessibility;
 
 using namespace ::com::sun::star::awt;
 
-typedef sal_Int32 HWND;
-
 #include "AccTopWindowListener.hxx"
 #include "g_msacc.hxx"
-
-extern void FreeTopWindowListener();
-extern long GetMSComPtr(long hWnd, long lParam, long wParam);
-extern void handleWindowOpened_impl( long pAcc);
-
 
 namespace my_sc_impl
 {
 
-  //extern Sequence< OUString > SAL_CALL  getSupportedServiceNames_MSAAServiceImpl();
-  //static OUString SAL_CALL getImplementationName_MSAAServiceImpl();
-  //static Reference< XInterface > SAL_CALL create_MSAAServiceImpl(
-  //      Reference< XComponentContext > const & xContext )
-  //  SAL_THROW( () );
-/**
-   * Method that returns the service name.
-   * @param
-   * @return Name sequence.
-   */
 static Sequence< OUString > getSupportedServiceNames_MSAAServiceImpl()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        //      MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.MSAAService"));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = "com.sun.star.accessibility.MSAAService";
+    return seqNames;
 }
 
-/**
-   * Method that returns the service name.
-   * @param
-   * @return Name sequence.
-   */
 static OUString getImplementationName_MSAAServiceImpl()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        //      MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.my_sc_implementation.MSAAService") );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString( "com.sun.star.accessibility.my_sc_implementation.MSAAService" );
 }
 
-class MSAAServiceImpl : public ::cppu::WeakImplHelper3<
-            XMSAAService, lang::XServiceInfo, lang::XInitialization >
+class MSAAServiceImpl : public ::cppu::WeakImplHelper4<
+            XMSAAService, lang::XServiceInfo,
+            lang::XInitialization, lang::XComponent >
 {
     OUString m_arg;
 public:
-    // focus on three given interfaces,
-    // no need to implement XInterface, XTypeProvider, XWeak
+    // focus on four interfaces,
+    // no need to implement XInterface, XTypeProvider, XWeak etc.
     MSAAServiceImpl ();
     virtual ~MSAAServiceImpl( void );
+
     // XInitialization will be called upon createInstanceWithArguments[AndContext]()
-    virtual void SAL_CALL initialize( Sequence< Any > const & args )
-    throw (Exception);
+    virtual void SAL_CALL initialize( Sequence< Any > const & args ) throw (Exception);
+
+    // XComponent - as used by VCL to lifecycle manage this bridge.
+    virtual void SAL_CALL dispose();
+    virtual void SAL_CALL addEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& )    { /* dummy */ }
+    virtual void SAL_CALL removeEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& ) { /* dummy */ }
+
     // XMSAAService
-    virtual sal_Int32 SAL_CALL getAccObjectPtr (long hWnd, long lParam, long wParam)
-    throw (RuntimeException);
-    virtual void SAL_CALL handleWindowOpened(sal_Int32)
-    throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccObjectPtr (long hWnd, long lParam, long wParam);
+    virtual void SAL_CALL handleWindowOpened(sal_Int32);
+
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-    throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-    throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName();
+    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames();
 };
 
-/**
-   * Implemention of XInitialization.
-   * @param
-   * @return.
-   */
 void MSAAServiceImpl::initialize( Sequence< Any > const & args ) throw (Exception)
 {
     if (1 != args.getLength())
@@ -151,29 +112,24 @@ void MSAAServiceImpl::initialize( Sequence< Any > const & args ) throw (Exceptio
    */
 sal_Int32 MSAAServiceImpl::getAccObjectPtr ( long hWnd, long lParam, long wParam) throw (RuntimeException)
 {
-    return GetMSComPtr(hWnd, lParam, wParam);
+    return GetMSComPtr( hWnd, lParam, wParam );
 }
 
 /**
-   * Implemention of handleWindowOpened,the method will be invoked when a top window
-   * opened and AT starts up.
+   * Implemention of handleWindowOpened, the method will be invoked when a
+   * top window is opened and AT starts up.
    * @param
    * @return
    */
-void MSAAServiceImpl::handleWindowOpened( sal_Int32 pAcc)
+void MSAAServiceImpl::handleWindowOpened( sal_Int32 nAcc)
 {
-    handleWindowOpened_impl(pAcc);
+    SAL_INFO( "iacc2", "Window opened " << nAcc );
+    handleWindowOpened_impl( nAcc );
 }
 
-/**
-   * Implemention of XServiceInfo.
-   * @param
-   * @return Implementataion name.
-   */
 OUString MSAAServiceImpl::getImplementationName() throw (RuntimeException)
 {
-    // unique implementation name
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.my_sc_impl.MSAAService") );
+    return OUString( "com.sun.star.accessibility.my_sc_impl.MSAAService" );
 }
 
 /**
@@ -184,7 +140,7 @@ OUString MSAAServiceImpl::getImplementationName() throw (RuntimeException)
 sal_Bool MSAAServiceImpl::supportsService( OUString const & serviceName ) throw (RuntimeException)
 {
     // this object only supports one service, so the test is simple
-    return serviceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.accessibility.MSAAService") );
+    return serviceName == "com.sun.star.accessibility.MSAAService";
 }
 
 /**
@@ -197,47 +153,159 @@ Sequence< OUString > MSAAServiceImpl::getSupportedServiceNames() throw (RuntimeE
     return getSupportedServiceNames_MSAAServiceImpl();
 }
 
-/**
-   * Static method that can create an entity of our MSAA Service
-   * @param xContext No use here.
-   * @return The object interface.
-   */
-Reference< XInterface > SAL_CALL create_MSAAServiceImpl( Reference< XComponentContext > const & /*xContext*/ ) SAL_THROW( () )
+static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xAccMgr,
+                                             Window *pWindow, bool bShow)
 {
-    MSAAServiceImpl* xxx = new MSAAServiceImpl();
-    //return static_cast< lang::XTypeProvider * >(  xxx );
-    Reference< XMSAAService > p( xxx );
-    return p;
+    if ( pWindow )
+    {
+        css::uno::Reference< css::accessibility::XAccessible > xAccessible;
+
+        SAL_INFO( "iacc2", "Decide whether to register existing window with IAccessible2" );
+
+        // Test for combo box - drop down floating windows first
+        Window * pParentWindow = pWindow->GetParent();
+
+        if ( pParentWindow )
+        {
+            try
+            {
+                // The parent window of a combo box floating window should have the role COMBO_BOX
+                css::uno::Reference< css::accessibility::XAccessible > xParentAccessible(pParentWindow->GetAccessible());
+                if ( xParentAccessible.is() )
+                {
+                    css::uno::Reference< css::accessibility::XAccessibleContext > xParentAC( xParentAccessible->getAccessibleContext() );
+                    if ( xParentAC.is() && (css::accessibility::AccessibleRole::COMBO_BOX == xParentAC->getAccessibleRole()) )
+                    {
+                        // O.k. - this is a combo box floating window corresponding to the child of role LIST of the parent.
+                        // Let's not rely on a specific child order, just search for the child with the role LIST
+                        sal_Int32 nCount = xParentAC->getAccessibleChildCount();
+                        for ( sal_Int32 n = 0; (n < nCount) && !xAccessible.is(); n++)
+                        {
+                            css::uno::Reference< css::accessibility::XAccessible > xChild = xParentAC->getAccessibleChild(n);
+                            if ( xChild.is() )
+                            {
+                                css::uno::Reference< css::accessibility::XAccessibleContext > xChildAC = xChild->getAccessibleContext();
+                                if ( xChildAC.is() && (css::accessibility::AccessibleRole::LIST == xChildAC->getAccessibleRole()) )
+                                {
+                                    xAccessible = xChild;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (::com::sun::star::uno::RuntimeException e)
+            {
+                // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
+                // but keep revoking these windows in hide(s).
+                if (bShow)
+                    return;
+            }
+        }
+
+        // We have to rely on the fact that Window::GetAccessible()->getAccessibleContext() returns a valid XAccessibleContext
+        // also for other menus than menubar or toplevel popup window. Otherwise we had to traverse the hierarchy to find the
+        // context object to this menu floater. This makes the call to Window->IsMenuFloatingWindow() obsolete.
+        if ( ! xAccessible.is() )
+            xAccessible = pWindow->GetAccessible();
+
+        assert( xAccMgr.is() );
+        if ( xAccessible.is() )
+        {
+            xAccMgr->handleWindowOpened( (long)xAccessible.get() );
+            SAL_INFO( "iacc2", "Decide whether to register existing window with IAccessible2" );
+        }
+    }
+}
+
+/*
+ * Setup and notify the OS of Accessible peers for all existing windows.
+ */
+static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xAccMgr )
+{
+    sal_uInt16 nTopWindowCount = (sal_uInt16)Application::GetTopWindowCount();
+
+    for ( sal_uInt16 i = 0; i < nTopWindowCount; i++ )
+    {
+        Window* pTopWindow = Application::GetTopWindow( i );
+        css::uno::Reference< css::accessibility::XAccessible > xAccessible = pTopWindow->GetAccessible();
+        if ( xAccessible.is() )
+        {
+            css::uno::Reference< css::accessibility::XAccessibleContext > xAC( xAccessible->getAccessibleContext() );
+            if ( xAC.is())
+            {
+                short role = xAC->getAccessibleRole();
+                if ( !xAC->getAccessibleName().isEmpty() )
+                    AccessBridgeHandleExistingWindow( xAccMgr, pTopWindow, true );
+            }
+        }
+    }
+}
+
+static bool HasAtHook()
+{
+    sal_Int32 bIsRuning=0;
+    // BOOL WINAPI SystemParametersInfo(
+    //    __in     UINT uiAction,
+    //    __in     UINT uiParam,
+    //    __inout  PVOID pvParam,
+    //    __in     UINT fWinIni
+    //  );
+    // pvParam must be BOOL (defined in MFC as int)
+    // End
+    return SystemParametersInfo( SPI_GETSCREENREADER, 0,
+                                 &bIsRuning, 0) && bIsRuning;
 }
 
 /**
-   * Constructor.
-   * @param
-   * @return
-   */
+ * Static method that can create an entity of our MSAA Service
+ * @param xContext No use here.
+ * @return The object interface.
+ */
+Reference< XInterface > SAL_CALL create_MSAAServiceImpl( Reference< XComponentContext > const & /*xContext*/ ) SAL_THROW( () )
+{
+    bool bRunWithoutAt = getenv("SAL_FORCE_IACCESSIBLE2");
+
+    if ( !HasAtHook() )
+    {
+        if ( !bRunWithoutAt )
+        {
+            SAL_INFO("iacc2", "Apparently no running AT -> not enabling IAccessible2 integration");
+            return Reference< XMSAAService >();
+        }
+    }
+
+    Reference< XMSAAService > xAccMgr( new MSAAServiceImpl() );
+
+    AccessBridgeUpdateOldTopWindows( xAccMgr );
+
+    SAL_INFO("iacc2", "Created new IAccessible2 service impl.");
+
+    return xAccMgr;
+}
+
 MSAAServiceImpl::MSAAServiceImpl()
 {
     Reference< XExtendedToolkit > xToolkit =
         Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
 
-    if(xToolkit.is())
+    if( xToolkit.is() )
     {
-        AccTopWindowListener *accListener;
-        accListener = new AccTopWindowListener();
-        g_pTop = accListener;
-        Reference< XTopWindowListener> x(accListener);
-        xToolkit->addTopWindowListener(x);
+        g_pTop = new AccTopWindowListener();
+        Reference< XTopWindowListener> xRef( g_pTop );
+        xToolkit->addTopWindowListener( xRef );
+        SAL_INFO( "iacc2", "successfully connected to the toolkit event hose" );
     }
+    else
+        SAL_WARN( "iacc2", "No VCL toolkit interface to listen to for events");
 }
 
-/**
-   * Static method that can create an entity of our MSAA Service
-   * @param Destructor
-   * @return
-   */
 MSAAServiceImpl::~MSAAServiceImpl()
 {
+}
 
+void MSAAServiceImpl::dispose()
+{
     // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
     // the hash_map of the root folder is cleared, releasing all subfolders
@@ -245,8 +313,6 @@ MSAAServiceImpl::~MSAAServiceImpl()
     // released when this destructor completes, the folder tree should be
     // deleted fully (and automagically).
     FreeTopWindowListener();
-
-
 }
 
 }
@@ -258,7 +324,8 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
         {
             create_MSAAServiceImpl, getImplementationName_MSAAServiceImpl,
-            getSupportedServiceNames_MSAAServiceImpl, ::cppu::createSingleComponentFactory,
+            getSupportedServiceNames_MSAAServiceImpl,
+            ::cppu::createSingleComponentFactory,
             0, 0
         },
         { 0, 0, 0, 0, 0, 0 }
@@ -267,12 +334,12 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL iacc2_component_getImplementationEnvironment(
         sal_Char const ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL iacc2_component_getFactory(
         sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
         registry::XRegistryKey * xRegistry )
     {

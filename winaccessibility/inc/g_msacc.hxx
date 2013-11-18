@@ -20,6 +20,10 @@
 #ifndef __G_MSACC_HXX
 #define __G_MSACC_HXX
 
+extern void FreeTopWindowListener();
+extern void handleWindowOpened_impl( long pAcc );
+extern long GetMSComPtr( long hWnd, long lParam, long wParam );
+
 extern AccTopWindowListener* g_pTop;
 
 #endif

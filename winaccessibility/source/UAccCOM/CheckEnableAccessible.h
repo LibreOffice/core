@@ -20,7 +20,7 @@
 #ifndef _CHECKENABLEACCESSIBLE_HXX
 #define _CHECKENABLEACCESSIBLE_HXX
 
-bool IsEnableAccessibleInterface();
+inline bool IsEnableAccessibleInterface() { return true; }
 
 #define CHECK_ENABLE_INF if(!IsEnableAccessibleInterface()){ return S_FALSE; }
 #define CHECK_ENABLE_INF_ZERO if(!IsEnableAccessibleInterface()){ return 0; }

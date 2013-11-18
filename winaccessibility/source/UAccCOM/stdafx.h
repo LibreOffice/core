@@ -28,10 +28,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-//#define STRICT
-//#ifndef _WIN32_WINNT
-//#define _WIN32_WINNT 0x0400
-//#endif
 //#define _ATL_APARTMENT_THREADED
 
 #include <atlbase.h>
@@ -56,6 +52,7 @@ extern CComModule _Module;
 #include <windows.h>
 #undef OPAQUE
 #include "CheckEnableAccessible.h"
+
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
