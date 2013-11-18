@@ -821,22 +821,17 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     bool makeExternalSingleRefStr(
-        OUStringBuffer& rBuffer, sal_uInt16 nFileId,
-        const OUString& rTabName, const ScSingleRefData& rRef, const ScAddress& rPos,
-        ScExternalRefManager* pRefMgr, bool bDisplayTabName, bool bEncodeUrl ) const
+        OUStringBuffer& rBuffer, const OUString& rFileName, const OUString& rTabName,
+        const ScSingleRefData& rRef, const ScAddress& rPos, bool bDisplayTabName, bool bEncodeUrl ) const
     {
         ScAddress aAbsRef = rRef.toAbs(rPos);
         if (bDisplayTabName)
         {
             OUString aFile;
-            const OUString* p = pRefMgr->getExternalFileName(nFileId);
-            if (p)
-            {
-                if (bEncodeUrl)
-                    aFile = *p;
-                else
-                    aFile = INetURLObject::decode(*p, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
-            }
+            if (bEncodeUrl)
+                aFile = rFileName;
+            else
+                aFile = INetURLObject::decode(rFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
 
             rBuffer.append("'" + aFile.replaceAll("'", "''") + "'#");
 
@@ -857,29 +852,30 @@ struct ConventionOOO_A1 : public Convention_A1
         return true;
     }
 
-    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
-                                     ScExternalRefManager* pRefMgr, bool bODF ) const
+    void makeExternalRefStrImpl(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const OUString& rTabName, const ScSingleRefData& rRef, bool bODF ) const
     {
         if (bODF)
             rBuffer.append( '[');
 
         bool bEncodeUrl = bODF;
-        makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef, rPos, pRefMgr, true, bEncodeUrl);
+        makeExternalSingleRefStr(rBuffer, rFileName, rTabName, rRef, rPos, true, bEncodeUrl);
         if (bODF)
             rBuffer.append( ']');
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
-                                     ScExternalRefManager* pRefMgr ) const
+    virtual void makeExternalRefStr(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const OUString& rTabName, const ScSingleRefData& rRef ) const
     {
-        makeExternalRefStrImpl(rBuffer, rPos, nFileId, rTabName, rRef, pRefMgr, false);
+        makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabName, rRef, false);
     }
 
-    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
-                                     ScExternalRefManager* pRefMgr, bool bODF ) const
+    void makeExternalRefStrImpl(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const std::vector<OUString>& rTabNames, const OUString& rTabName,
+        const ScComplexRefData& rRef, bool bODF ) const
     {
         ScRange aAbsRange = rRef.toAbs(rPos);
 
@@ -890,7 +886,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
         do
         {
-            if (!makeExternalSingleRefStr(rBuffer, nFileId, rTabName, rRef.Ref1, rPos, pRefMgr, true, bEncodeUrl))
+            if (!makeExternalSingleRefStr(rBuffer, rFileName, rTabName, rRef.Ref1, rPos, true, bEncodeUrl))
                 break;
 
             rBuffer.append(':');
@@ -900,14 +896,7 @@ struct ConventionOOO_A1 : public Convention_A1
             if (bDisplayTabName)
             {
                 // Get the name of the last table.
-                vector<OUString> aTabNames;
-                pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-                if (aTabNames.empty())
-                {
-                    OSL_TRACE( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %d", nFileId);
-                }
-
-                if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aAbsRange))
+                if (!lcl_getLastTabName(aLastTabName, rTabName, rTabNames, aAbsRange))
                 {
                     OSL_FAIL( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
                     // aLastTabName contains #REF!, proceed.
@@ -915,18 +904,20 @@ struct ConventionOOO_A1 : public Convention_A1
             }
             else if (bODF)
                 rBuffer.append( '.');      // need at least the sheet separator in ODF
-            makeExternalSingleRefStr( rBuffer, nFileId, aLastTabName,
-                    rRef.Ref2, rPos, pRefMgr, bDisplayTabName, bEncodeUrl);
+            makeExternalSingleRefStr(
+                rBuffer, rFileName, aLastTabName, rRef.Ref2, rPos, bDisplayTabName, bEncodeUrl);
         } while (0);
+
         if (bODF)
             rBuffer.append( ']');
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
-                                     ScExternalRefManager* pRefMgr ) const
+    virtual void makeExternalRefStr(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const std::vector<OUString>& rTabNames, const OUString& rTabName,
+        const ScComplexRefData& rRef ) const
     {
-        makeExternalRefStrImpl(rBuffer, rPos, nFileId, rTabName, rRef, pRefMgr, false);
+        makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabNames, rTabName, rRef, false);
     }
 };
 
@@ -975,18 +966,19 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         return lcl_makeExternalNameStr( rFile, rName, '#', true);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
-                                     ScExternalRefManager* pRefMgr ) const
+    virtual void makeExternalRefStr(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const OUString& rTabName, const ScSingleRefData& rRef ) const
     {
-        makeExternalRefStrImpl(rBuffer, rPos, nFileId, rTabName, rRef, pRefMgr, true);
+        makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabName, rRef, true);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
-                                     ScExternalRefManager* pRefMgr ) const
+    virtual void makeExternalRefStr(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const std::vector<OUString>& rTabNames,
+        const OUString& rTabName, const ScComplexRefData& rRef ) const
     {
-        makeExternalRefStrImpl(rBuffer, rPos, nFileId, rTabName, rRef, pRefMgr, true);
+        makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabNames, rTabName, rRef, true);
     }
 };
 
@@ -1277,9 +1269,9 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
-                                     ScExternalRefManager* pRefMgr ) const
+    virtual void makeExternalRefStr(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const OUString& rTabName, const ScSingleRefData& rRef ) const
     {
         // ['file:///path/to/file/filename.xls']'Sheet Name'!$A$1
         // This is a little different from the format Excel uses, as Excel
@@ -1287,34 +1279,22 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         // whole file path with [] because the file name can contain any
         // characters.
 
-        const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
-        if (!pFullName)
-            return;
-
-        ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
+        ConventionXL::makeExternalDocStr(rBuffer, rFileName, false);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
 
         makeSingleCellStr(rBuffer, rRef, rRef.toAbs(rPos));
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
-                                     ScExternalRefManager* pRefMgr ) const
+    virtual void makeExternalRefStr(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const std::vector<OUString>& rTabNames, const OUString& rTabName,
+        const ScComplexRefData& rRef ) const
     {
-        const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
-        if (!pFullName)
-            return;
-
-        vector<OUString> aTabNames;
-        pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-        if (aTabNames.empty())
-            return;
-
         ScRange aAbsRef = rRef.toAbs(rPos);
 
-        ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
-        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
+        ConventionXL::makeExternalDocStr(rBuffer, rFileName, false);
+        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, rTabNames, aAbsRef);
         rBuffer.append('!');
 
         makeSingleCellStr(rBuffer, rRef.Ref1, aAbsRef.aStart);
@@ -1470,9 +1450,9 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
-                                     ScExternalRefManager* pRefMgr ) const
+    virtual void makeExternalRefStr(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const OUString& rTabName, const ScSingleRefData& rRef ) const
     {
         // ['file:///path/to/file/filename.xls']'Sheet Name'!$A$1
         // This is a little different from the format Excel uses, as Excel
@@ -1480,13 +1460,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         // whole file path with [] because the file name can contain any
         // characters.
 
-        const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
-        if (!pFullName)
-            return;
-
         ScAddress aAbsRef = rRef.toAbs(rPos);
-
-        ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
+        ConventionXL::makeExternalDocStr(rBuffer, rFileName, false);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
 
@@ -1494,23 +1469,15 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         r1c1_add_col(rBuffer, rRef, aAbsRef);
     }
 
-    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
-                                     ScExternalRefManager* pRefMgr ) const
+    virtual void makeExternalRefStr(
+        OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+        const std::vector<OUString>& rTabNames, const OUString& rTabName,
+        const ScComplexRefData& rRef ) const
     {
-        const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
-        if (!pFullName)
-            return;
-
-        vector<OUString> aTabNames;
-        pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-        if (aTabNames.empty())
-            return;
-
         ScRange aAbsRef = rRef.toAbs(rPos);
 
-        ConventionXL::makeExternalDocStr(rBuffer, *pFullName, false);
-        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aAbsRef);
+        ConventionXL::makeExternalDocStr(rBuffer, rFileName, false);
+        ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, rTabNames, aAbsRef);
         rBuffer.append('!');
 
         if (!ValidCol(aAbsRef.aEnd.Col()) || !ValidRow(aAbsRef.aEnd.Row()))
@@ -4083,23 +4050,32 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
 {
     FormulaToken* t = pTokenP;
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+    const OUString* pFileName = pRefMgr->getExternalFileName(t->GetIndex());
+    if (!pFileName)
+        return;
+
     switch (t->GetType())
     {
         case svExternalName:
-        {
-            const OUString *pStr = pRefMgr->getExternalFileName(t->GetIndex());
-            OUString aFileName = pStr ? *pStr : ScGlobal::GetRscString(STR_NO_NAME_REF);
-            rBuffer.append(pConv->makeExternalNameStr( aFileName, t->GetString().getString()));
-        }
+            rBuffer.append(pConv->makeExternalNameStr(*pFileName, t->GetString().getString()));
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(
-                   rBuffer, GetPos(), t->GetIndex(), t->GetString().getString(), static_cast<ScToken*>(t)->GetSingleRef(), pRefMgr);
+                   rBuffer, GetPos(), *pFileName, t->GetString().getString(),
+                   static_cast<ScToken*>(t)->GetSingleRef());
         break;
         case svExternalDoubleRef:
+        {
+            vector<OUString> aTabNames;
+            pRefMgr->getAllCachedTableNames(t->GetIndex(), aTabNames);
+            if (aTabNames.empty())
+                return;
+
             pConv->makeExternalRefStr(
-                        rBuffer, GetPos(), t->GetIndex(), t->GetString().getString(), static_cast<ScToken*>(t)->GetDoubleRef(), pRefMgr);
-           break;
+                rBuffer, GetPos(), *pFileName, aTabNames, t->GetString().getString(),
+                static_cast<ScToken*>(t)->GetDoubleRef());
+        }
+        break;
         default:
             // warning, not error, otherwise we may end up with a never
             // ending message box loop if this was the cursor cell to be redrawn.

@@ -252,13 +252,14 @@ public:
 
         virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const = 0;
 
-        virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                         sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
-                                         ScExternalRefManager* pRefMgr ) const = 0;
+        virtual void makeExternalRefStr(
+            OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
+            const OUString& rTabName, const ScSingleRefData& rRef ) const = 0;
 
-        virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScAddress& rPos,
-                                         sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
-                                         ScExternalRefManager* pRefMgr ) const = 0;
+        virtual void makeExternalRefStr(
+            OUStringBuffer& rBuffer, const ScAddress& rPos,
+            const OUString& rFileName, const std::vector<OUString>& rTabNames,
+            const OUString& rTabName, const ScComplexRefData& rRef ) const = 0;
 
         enum SpecialSymbolType
         {
