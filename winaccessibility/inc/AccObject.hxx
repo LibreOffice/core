@@ -58,7 +58,7 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleAction > m_xAccActionRef;
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext > m_xAccContextRef;
 
-    sal_Bool ImplInitilizeCreateObj();//create COM object
+    sal_Bool ImplInitializeCreateObj();//create COM object
 
     void UpdateActionDesc();
     void UpdateRole();

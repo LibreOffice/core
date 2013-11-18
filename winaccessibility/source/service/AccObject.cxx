@@ -53,7 +53,8 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
    * @param listener listener that registers in UNO system.
    * @return.
    */
-AccObject::AccObject(XAccessible* pAcc,AccObjectManagerAgent* pAgent ,AccEventListener* listener) :
+AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
+                     AccEventListener* listener) :
         m_pIMAcc    (NULL),
         m_resID     (NULL),
         m_pParantID (NULL),
@@ -62,7 +63,7 @@ AccObject::AccObject(XAccessible* pAcc,AccObjectManagerAgent* pAgent ,AccEventLi
         m_bShouldDestroy(sal_False),
         m_xAccRef( pAcc )
 {
-    sal_Bool bRet = ImplInitilizeCreateObj();
+    sal_Bool bRet = ImplInitializeCreateObj();
 
     m_xAccContextRef = m_xAccRef->getAccessibleContext();
     m_xAccActionRef = Reference< XAccessibleAction > (m_xAccContextRef,UNO_QUERY);
@@ -150,12 +151,14 @@ void AccObject::UpdateValidWindow()
    * @param
    * @return If the method is correctly processed.
    */
-sal_Bool AccObject::ImplInitilizeCreateObj()
+sal_Bool AccObject::ImplInitializeCreateObj()
 {
     ActivateActContext();
-    HRESULT hr = CoCreateInstance( CLSID_MAccessible, NULL, CLSCTX_ALL ,
+    HRESULT hr = CoCreateInstance( CLSID_MAccessible, NULL, CLSCTX_ALL,
                                    IID_IMAccessible,
                                    (void **)&m_pIMAcc);
+    if( !m_pIMAcc )
+        SAL_WARN( "iacc2", "Failed to create IAccessible2 instance" );
     DeactivateActContext();
 
     if ( S_OK != hr )
@@ -312,7 +315,6 @@ void  AccObject::SetValue( Any pAny )
         m_pIMAcc->Put_XAccValue( val.getStr() );
         break;
     case TREE_ITEM:
-    //IAccessibility2 Implementation 2009-----
     //case CHECK_BOX:   //Commented by Li Xing to disable the value for general checkbox
     case COMBO_BOX:
     case TABLE_CELL:
@@ -324,7 +326,6 @@ void  AccObject::SetValue( Any pAny )
     case CHECK_BOX:
         if( ( m_pParentObj !=NULL ) && (TREE == m_pParentObj->m_accRole || TREE_ITEM == m_pParentObj->m_accRole ))
             m_pIMAcc->Put_XAccValue( GetMAccessibleValueFromAny(pAny).getStr() );
-    //-----IAccessibility2 Implementation 2009
         break;
     default:
         break;

@@ -346,6 +346,10 @@ certain functionality.
 @li @c vcl.virdev
 @li @c vcl.window
 
+@section winaccessiblity
+
+@li @c iacc2 - IAccessible2 bridge debug
+
 @section Writer
 
 @li @c sw

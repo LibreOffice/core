@@ -41,7 +41,6 @@ $(eval $(call gb_Library_add_exception_objects,UAccCOM,\
 	winaccessibility/source/UAccCOM/AccText \
 	winaccessibility/source/UAccCOM/AccTextBase \
 	winaccessibility/source/UAccCOM/AccValue \
-	winaccessibility/source/UAccCOM/CheckEnableAccessible \
 	winaccessibility/source/UAccCOM/EnumVariant \
 	winaccessibility/source/UAccCOM/MAccessible \
 	winaccessibility/source/UAccCOM/StdAfx \
@@ -58,7 +57,6 @@ $(eval $(call gb_Library_add_ldflags,UAccCOM,\
 
 $(eval $(call gb_Library_use_libraries,UAccCOM,\
 	cppu \
-    vcl \
 	sal \
 ))
 

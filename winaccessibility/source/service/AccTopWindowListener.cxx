@@ -23,17 +23,6 @@
 #include <vcl/window.hxx>
 #include <toolkit/awt/Vclxwindow.hxx>
 
-//#ifndef _SV_SYSDATA_HXX
-#if 0
-#if defined( WIN ) || defined( WNT ) || defined( OS2 )
-typedef sal_Int32 HWND;
-typedef sal_Int32 HMENU;
-typedef sal_Int32 HDC;
-typedef void *PVOID;
-typedef PVOID HANDLE;
-typedef HANDLE HFONT;
-#endif
-#endif
 #include <vcl/sysdata.hxx>
 
 #include "AccTopWindowListener.hxx"
@@ -53,11 +42,9 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::awt;
 using namespace rtl;
 using namespace cppu;
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 AccTopWindowListener* g_pTop = NULL;
+
 //when proccess exit, call FreeTopWindowListener() in svmain
 void FreeTopWindowListener()
 {
@@ -73,7 +60,7 @@ void FreeTopWindowListener()
  */
 void handleWindowOpened_impl(long pAcc)
 {
-    if( g_pTop && pAcc != NULL )
+    if( g_pTop && pAcc != 0 )
         g_pTop->handleWindowOpened( (com::sun::star::accessibility::XAccessible*)((void*)pAcc) );
 }
 
@@ -99,14 +86,13 @@ void AccTopWindowListener::handleWindowOpened( com::sun::star::accessibility::XA
     }
     Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
     if(!xContext.is())
-    {
         return;
-    }
+
     com::sun::star::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
     //Only AccessibleContext exist, add all listeners
     if(pAccessibleContext != NULL && systemdata != NULL)
     {
-      accManagerAgent.SaveTopWindowHandle((long)(HWND)systemdata->hWnd,  pAccessible);
+        accManagerAgent.SaveTopWindowHandle((long)(HWND)systemdata->hWnd, pAccessible);
 
         AddAllListeners(pAccessible,NULL,(HWND)systemdata->hWnd);
 
@@ -114,7 +100,6 @@ void AccTopWindowListener::handleWindowOpened( com::sun::star::accessibility::XA
             accManagerAgent.IncreaseState( pAccessible, -1 /* U_MOVEBLE */ );
 
         short role = pAccessibleContext->getAccessibleRole();
-
 
         if (role == com::sun::star::accessibility::AccessibleRole::POPUP_MENU ||
                 role == com::sun::star::accessibility::AccessibleRole::MENU )
@@ -147,20 +132,17 @@ AccTopWindowListener::~AccTopWindowListener()
  */
 void AccTopWindowListener::windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException)
 {
+    SAL_INFO( "iacc2", "windowOpened triggered" );
+
     if ( !e.Source.is())
-    {
         return;
-    }
 
     Reference< com::sun::star::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
     com::sun::star::accessibility::XAccessible* pAccessible = xAccessible.get();
-    if ( pAccessible == NULL)
-    {
+    if ( !pAccessible )
         return;
-    }
 
-    handleWindowOpened(pAccessible);
-
+    handleWindowOpened( pAccessible );
 }
 
 /**
@@ -213,16 +195,14 @@ void AccTopWindowListener::AddAllListeners(com::sun::star::accessibility::XAcces
             = mpAccessible->getAccessibleContext();
             com::sun::star::accessibility::XAccessibleContext* mpContext = mxAccessibleContext.get();
             if(mpContext != NULL)
-            {
-                //fprintf(output, "go on add child's children event listener\n");
-                AddAllListeners(mpAccessible,pAccessible,pWND);
-            }
+                AddAllListeners( mpAccessible, pAccessible, pWND);
         }
     }
 }
 
 void AccTopWindowListener::windowClosing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
 {
+    SAL_INFO( "iacc2", "windowClosing triggered" );
 }
 
 /**
@@ -232,17 +212,15 @@ void AccTopWindowListener::windowClosing( const ::com::sun::star::lang::EventObj
  */
 void AccTopWindowListener::windowClosed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException)
 {
+    SAL_INFO( "iacc2", "windowClosed triggered" );
+
     if ( !e.Source.is())
-    {
         return;
-    }
+
     Reference< com::sun::star::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
     com::sun::star::accessibility::XAccessible* pAccessible = xAccessible.get();
     if ( pAccessible == NULL)
-    {
         return;
-    }
-
 
     VCLXWindow* pvclwindow = (VCLXWindow*)pAccessible;
     Window* window = pvclwindow->GetWindow();

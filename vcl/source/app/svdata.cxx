@@ -52,6 +52,8 @@
 #include "com/sun/star/java/MissingJavaRuntimeException.hpp"
 #include "com/sun/star/java/JavaDisabledException.hpp"
 
+#include "officecfg/Office/Common.hxx"
+
 #include <stdio.h>
 
 using namespace com::sun::star::uno;
@@ -320,6 +322,20 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         if( ! pSVData->mxAccessBridge.is() )
         {
             css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
+
+            bool bTryIAcc2 = ( officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) &&
+                               !getenv ("SAL_DISABLE_IACCESSIBLE2") );
+
+            if ( bTryIAcc2 ) // Windows only really
+            {
+                // FIXME: convert to service ... pSVData->mxAccessBridge = css::accessibility::MSAAService::create( xContext );
+                pSVData->mxAccessBridge = Reference< XComponent >( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.accessibility.MSAAService", xContext ), UNO_QUERY );
+
+                SAL_INFO( "vcl", "IAccessible2 bridge is: " << (int)(pSVData->mxAccessBridge.is()) );
+                return pSVData->mxAccessBridge.is();
+            }
+            else
+                SAL_INFO( "vcl", "IAccessible2 disabled, falling back to java" );
 
             css::uno::Reference< XExtendedToolkit > xToolkit =
                 css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
