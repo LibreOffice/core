@@ -1508,8 +1508,12 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69548, "fdo69548.docx")
 DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
 {
     // Document has wp:anchor, not wp:inline, so handle it accordingly.
-    text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(xShape, "AnchorType");
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eValue);
+
+    // Check position, it was 0. This is a shape, so use getPosition(), not a property.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(671830)), xShape->getPosition().X);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")

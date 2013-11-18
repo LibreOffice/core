@@ -999,7 +999,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
 
-                        // TODO handle more properties here like HoriOrientPosition, etc.
+                        m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
                     }
                 }
             }
