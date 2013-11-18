@@ -2336,6 +2336,18 @@ void Window::set_secondary(bool bSecondary)
     pWindowImpl->mbSecondary = bSecondary;
 }
 
+bool Window::get_non_homogeneous() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mbNonHomogeneous;
+}
+
+void Window::set_non_homogeneous(bool bNonHomogeneous)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mbNonHomogeneous = bNonHomogeneous;
+}
+
 void Window::add_to_size_group(boost::shared_ptr< VclSizeGroup > xGroup)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;

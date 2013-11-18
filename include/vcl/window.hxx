@@ -1208,6 +1208,13 @@ public:
     void set_secondary(bool bSecondary);
 
     /*
+     * If true this child is exempted from homogenous sizing
+     * e.g. special button in a buttonbox
+     */
+    bool get_non_homogeneous() const;
+    void set_non_homogeneous(bool bNonHomogeneous);
+
+    /*
      * Sets a widget property
      *
      * @return false if property is unknown

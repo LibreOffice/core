@@ -377,16 +377,19 @@ static long getMaxNonOutlier(const std::vector<long> &rG, long nAvgDimension)
 }
 
 static std::vector<long> setButtonSizes(const std::vector<long> &rG,
+    const std::vector<bool> &rNonHomogeneous,
     long nAvgDimension, long nMaxNonOutlier, long nMinWidth)
 {
     std::vector<long> aVec;
     //set everything < 1.5 times the average to the same width, leave the
     //outliers un-touched
+    std::vector<bool>::const_iterator aJ = rNonHomogeneous.begin();
     for (std::vector<long>::const_iterator aI = rG.begin(), aEnd = rG.end();
-        aI != aEnd; ++aI)
+        aI != aEnd; ++aI, ++aJ)
     {
         long nPrimaryChildDimension = *aI;
-        if (nPrimaryChildDimension < nAvgDimension * 1.5)
+        bool bNonHomogeneous = *aJ;
+        if (!bNonHomogeneous && nPrimaryChildDimension < nAvgDimension * 1.5)
         {
             aVec.push_back(std::max(nMaxNonOutlier, nMinWidth));
         }
@@ -413,7 +416,9 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
     bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VCL_BUTTONBOX_SPREAD || m_eLayoutStyle == VCL_BUTTONBOX_CENTER);
 
     std::vector<long> aMainGroupSizes;
+    std::vector<bool> aMainGroupNonHomogeneous;
     std::vector<long> aSubGroupSizes;
+    std::vector<bool> aSubGroupNonHomogeneous;
 
     for (const Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
@@ -426,11 +431,13 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
             nMainGroupSecondary = std::max(nMainGroupSecondary, getSecondaryDimension(aChildSize));
             //collect the primary dimensions
             aMainGroupSizes.push_back(getPrimaryDimension(aChildSize));
+            aMainGroupNonHomogeneous.push_back(pChild->get_non_homogeneous());
         }
         else
         {
             nSubGroupSecondary = std::max(nSubGroupSecondary, getSecondaryDimension(aChildSize));
             aSubGroupSizes.push_back(getPrimaryDimension(aChildSize));
+            aSubGroupNonHomogeneous.push_back(pChild->get_non_homogeneous());
         }
     }
 
@@ -468,8 +475,10 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
         long nMaxNonOutlier = std::max(nMaxMainNonOutlier, nMaxSubNonOutlier);
 
         aReq.m_aMainGroupDimensions = setButtonSizes(aMainGroupSizes,
+            aMainGroupNonHomogeneous,
             nAvgDimension, nMaxNonOutlier, nMinMainGroupPrimary);
         aReq.m_aSubGroupDimensions = setButtonSizes(aSubGroupSizes,
+            aSubGroupNonHomogeneous,
             nAvgDimension, nMaxNonOutlier, nMinSubGroupPrimary);
     }
 

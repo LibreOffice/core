@@ -295,6 +295,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbExpand = false;
     mbFill = true;
     mbSecondary = false;
+    mbNonHomogeneous = false;
 }
 
 WindowImpl::~WindowImpl()
