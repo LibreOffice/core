@@ -1706,14 +1706,14 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
         sal_uLong nDrawFlags = 0;
         Size textSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                                      PushButton::GetText(), ImplGetTextStyle( nDrawFlags ) ).GetSize();
-       aSize.Width() += int( textSize.Width () * 1.15 );
-       aSize.Height() = std::max( aSize.Height(), long( textSize.Height() * 1.15 ) );
+        aSize.Width() += textSize.Width();
+        aSize.Height() = std::max( aSize.Height(), long( textSize.Height() * 1.15 ) );
     }
 
     // cf. ImplDrawPushButton ...
     if( (GetStyle() & WB_SMALLSTYLE) == 0 )
     {
-        aSize.Width() += 12;
+        aSize.Width() += 24;
         aSize.Height() += 12;
     }
 
