@@ -68,7 +68,6 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, Window
     SetPosSizePixel( Point( 0, 0 ), aSize );
     SetMinOutputSizePixel( aSize );
     SetText( OUString( AVMEDIA_RESID( AVMEDIA_STR_MEDIAPLAYER ) ) );
-    implInit();
     mpMediaWindow->show();
 }
 
@@ -78,12 +77,6 @@ MediaFloater::~MediaFloater()
 {
     delete mpMediaWindow;
     mpMediaWindow = NULL;
-}
-
-// -----------------------------------------------------------------------------
-
-void MediaFloater::implInit()
-{
 }
 
 // -------------------------------------------------------------------------
@@ -136,21 +129,17 @@ void MediaFloater::setURL( const OUString& rURL, bool bPlayImmediately )
 
 // -----------------------------------------------------------------------------
 
-const OUString& MediaFloater::getURL() const
-{
-    static const OUString aEmptyStr;
-    return( mpMediaWindow ? mpMediaWindow->getURL() : aEmptyStr );
-}
-
-// -----------------------------------------------------------------------------
-
 void MediaFloater::dispatchCurrentURL()
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
 
     if( pDispatcher )
     {
-        const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, getURL() );
+        OUString url;
+        if (mpMediaWindow != 0) {
+            url = mpMediaWindow->getURL();
+        }
+        const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, url );
         pDispatcher->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_RECORD, &aMediaURLItem, 0L );
     }
 }

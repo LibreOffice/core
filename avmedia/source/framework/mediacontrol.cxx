@@ -507,7 +507,7 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
 
             case( AVMEDIA_TOOLBOXITEM_INSERT ):
             {
-                MediaFloater* pFloater = AVMEDIA_MEDIAWINDOW();
+                MediaFloater* pFloater = avmedia::getMediaFloater();
 
                 if( pFloater )
                     pFloater->dispatchCurrentURL();

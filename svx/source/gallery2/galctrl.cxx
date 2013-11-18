@@ -245,12 +245,12 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 {
     if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
     {
-        ::avmedia::MediaFloater* pFloater = AVMEDIA_MEDIAWINDOW();
+        ::avmedia::MediaFloater* pFloater = avmedia::getMediaFloater();
 
         if( !pFloater )
         {
             SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_AVMEDIA_PLAYER, SFX_CALLMODE_SYNCHRON );
-            pFloater = AVMEDIA_MEDIAWINDOW();
+            pFloater = avmedia::getMediaFloater();
         }
 
         if( pFloater )

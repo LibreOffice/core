@@ -22,13 +22,8 @@
 
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <avmedia/avmediadllapi.h>
-
-#define AVMEDIA_MEDIAWINDOW()                                                                                           \
-(static_cast< ::avmedia::MediaFloater* >( (                                                                             \
-SfxViewFrame::Current() && SfxViewFrame::Current()->GetChildWindow(::avmedia::MediaPlayer::GetChildWindowId())) ?   \
-SfxViewFrame::Current()->GetChildWindow(::avmedia::MediaPlayer::GetChildWindowId())->GetWindow() :              \
-NULL))
 
 namespace avmedia
 {
@@ -52,22 +47,29 @@ public:
                             ~MediaFloater();
 
     void                    setURL( const OUString& rURL, bool bPlayImmediately );
-    const OUString&         getURL() const;
 
     void                    dispatchCurrentURL();
 
-protected:
+private:
 
     virtual void            Resize();
     virtual void            ToggleFloatingMode();
 
-private:
-
     MediaWindow*            mpMediaWindow;
     Size                    maLastSize;
-
-    AVMEDIA_DLLPRIVATE void implInit();
 };
+
+inline MediaFloater * getMediaFloater() {
+    SfxViewFrame * cur = SfxViewFrame::Current();
+    if (cur != 0) {
+        SfxChildWindow * win = cur->GetChildWindow(
+            MediaPlayer::GetChildWindowId());
+        if (win != 0) {
+            return static_cast<MediaFloater *>(win->GetWindow());
+        }
+    }
+    return 0;
+}
 
 }
 
