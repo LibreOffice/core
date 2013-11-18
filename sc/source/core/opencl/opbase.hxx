@@ -103,7 +103,7 @@ public:
     virtual bool NeedParallelReduction(void) const { return false; }
 
 protected:
-    const std::string mSymName;
+    std::string mSymName;
     FormulaTreeNodeRef mFormulaTree;
 };
 
@@ -115,12 +115,11 @@ protected:
 class VectorRef : public DynamicKernelArgument
 {
 public:
-    VectorRef(const std::string &s, FormulaTreeNodeRef ft);
+    VectorRef(const std::string &s, FormulaTreeNodeRef ft, int index = 0);
 
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss) const;
-
     /// When declared as input to a sliding window function
     virtual void GenSlidingWindowDecl(std::stringstream &ss) const;
 
@@ -146,6 +145,8 @@ public:
 protected:
     // Used by marshaling
     cl_mem mpClmem;
+    // index in multiple double vector refs that have multiple ranges
+    const int mnIndex;
 };
 /// Abstract class for code generation
 

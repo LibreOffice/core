@@ -30,8 +30,16 @@ FormulaToken* DynamicKernelArgument::GetFormulaToken(void) const
     return mFormulaTree->GetFormulaToken();
 }
 
-VectorRef::VectorRef(const std::string &s, FormulaTreeNodeRef ft):
-    DynamicKernelArgument(s, ft), mpClmem(NULL) {}
+VectorRef::VectorRef(const std::string &s, FormulaTreeNodeRef ft, int idx):
+    DynamicKernelArgument(s, ft), mpClmem(NULL), mnIndex(idx)
+{
+    if (mnIndex)
+    {
+        std::stringstream ss;
+        ss << mSymName << "s" << mnIndex;
+        mSymName = ss.str();
+    }
+}
 
 VectorRef::~VectorRef()
 {

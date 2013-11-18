@@ -65,9 +65,10 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
-        if (pDVR->GetArrays()[0].mpNumericArray == NULL)
+        if (pDVR->GetArrays()[mnIndex].mpNumericArray == NULL)
             throw Unhandled();
-        pHostBuffer = const_cast<double*>(pDVR->GetArrays()[0].mpNumericArray);
+        pHostBuffer = const_cast<double*>(
+                pDVR->GetArrays()[mnIndex].mpNumericArray);
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
     } else {
         throw Unhandled();
@@ -281,8 +282,8 @@ class DynamicKernelStringArgument: public VectorRef
 {
 public:
     DynamicKernelStringArgument(const std::string &s,
-        FormulaTreeNodeRef ft):
-        VectorRef(s, ft) {}
+        FormulaTreeNodeRef ft, int index = 0):
+        VectorRef(s, ft, index) {}
 
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
     /// Generate declaration
@@ -319,7 +320,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
         nStrings = pDVR->GetArrayLength();
-        vRef = pDVR->GetArrays()[0];
+        vRef = pDVR->GetArrays()[mnIndex];
     }
     size_t szHostBuffer = nStrings * sizeof(cl_int);
     // Marshal strings. Right now we pass hashes of these string
@@ -411,8 +412,9 @@ class DynamicKernelSlidingArgument: public Base
 {
 public:
     DynamicKernelSlidingArgument(const std::string &s,
-        FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase> &CodeGen):
-        Base(s, ft), mpCodeGen(CodeGen), mpClmem2(NULL)
+        FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase> &CodeGen,
+        int index=0):
+        Base(s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
     {
         FormulaToken *t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -491,9 +493,6 @@ public:
         std::stringstream &ss, bool &needBody)
     {
         assert(mpDVR);
-        // Do not handle horizontal double vectors yet
-        if (mpDVR->GetArrays().size() > 1)
-            throw Unhandled();
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         if (dynamic_cast<OpSum*>(mpCodeGen.get()))
         {
@@ -528,6 +527,15 @@ public:
             }
         }
         needBody = true;
+
+        // No need to generate a for-loop for degenerated cases
+        if (nCurWindowSize == 1)
+        {
+            ss << "if (gid0 <" << mpDVR->GetArrayLength();
+            ss << ")\n\t{\tint i = 0;\n\t\t";
+            return nCurWindowSize;
+        }
+
         ss << "for (int i = ";
         if (!bIsStartFixed && bIsEndFixed)
         {
@@ -579,10 +587,10 @@ public:
         size_t nInput = mpDVR->GetArrayLength();
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         // create clmem buffer
-        if (mpDVR->GetArrays()[0].mpNumericArray == NULL)
+        if (mpDVR->GetArrays()[Base::mnIndex].mpNumericArray == NULL)
             throw Unhandled();
         double *pHostBuffer = const_cast<double*>(
-                mpDVR->GetArrays()[0].mpNumericArray);
+                mpDVR->GetArrays()[Base::mnIndex].mpNumericArray);
         size_t szHostBuffer = nInput * sizeof(double);
         Base::mpClmem = clCreateBuffer(kEnv.mpkContext,
                 (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
@@ -1269,15 +1277,19 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     const formula::DoubleVectorRefToken* pDVR =
                         dynamic_cast< const formula::DoubleVectorRefToken* >(pChild);
                     assert(pDVR);
-                    if (pDVR->GetArrays()[0].mpNumericArray)
-                        mvSubArguments.push_back(
-                                SubArgument(new DynamicKernelSlidingArgument
-                                    <VectorRef>(ts, ft->Children[i], mpCodeGen)));
-                    else
-                        mvSubArguments.push_back(
-                                SubArgument(new DynamicKernelSlidingArgument
-                                    <DynamicKernelStringArgument>(
-                                        ts, ft->Children[i], mpCodeGen)));
+                    for (size_t j = 0; j < pDVR->GetArrays().size(); ++j)
+                    {
+                        if (pDVR->GetArrays()[j].mpNumericArray)
+                            mvSubArguments.push_back(
+                                    SubArgument(new DynamicKernelSlidingArgument
+                                        <VectorRef>(
+                                            ts, ft->Children[i], mpCodeGen, j)));
+                        else
+                            mvSubArguments.push_back(
+                                    SubArgument(new DynamicKernelSlidingArgument
+                                        <DynamicKernelStringArgument>(
+                                            ts, ft->Children[i], mpCodeGen, j)));
+                    }
                 } else if (pChild->GetType() == formula::svSingleVectorRef) {
                     const formula::SingleVectorRefToken* pSVR =
                         dynamic_cast< const formula::SingleVectorRefToken* >(pChild);
