@@ -55,7 +55,7 @@ $(eval $(call gb_Library_use_externals,winaccessibility,\
 $(eval $(call gb_Library_use_libraries,winaccessibility,\
 	cppu \
 	cppuhelper \
-    vcl \
+	vcl \
 	sal \
 	tk \
 	uwinapi \
