@@ -248,7 +248,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                 pTxtNode->JoinNext();
             }
             // reset all text attributes in the paragraph!
-            pTxtNode->RstAttr( SwIndex(pTxtNode, 0), pTxtNode->Len(), 0, 0, true );
+            pTxtNode->RstTxtAttr( SwIndex(pTxtNode, 0), pTxtNode->Len(), 0, 0, true );
 
             // setze alle Attribute im Node zurueck
             pTxtNode->ResetAllAttr();

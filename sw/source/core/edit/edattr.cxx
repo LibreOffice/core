@@ -242,9 +242,8 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 
     SwPaM* pCrsr = GetCrsr(), *pFirst = pCrsr;
     do {
-        bChgd |=  pDoc->SetCurFtn( *pCrsr, rFillFtn.GetNumStr(),
-                                            rFillFtn.GetNumber(),
-                                            rFillFtn.IsEndNote() );
+        bChgd |=
+            pDoc->SetCurFtn( *pCrsr, rFillFtn.GetNumStr(), rFillFtn.GetNumber(), rFillFtn.IsEndNote() );
 
     } while( pFirst != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
 
@@ -423,7 +422,6 @@ sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     {
         bRet = sal_False;
 
-        // --> OD 2008-03-19 #refactorlists#
         if ( rTNd.IsInList() )
         {
             ASSERT( rTNd.GetNumRule(),
@@ -435,19 +433,19 @@ sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
             //other place in dev env...
             if ( pNumRule )
             {
-            //End
-            const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(rTNd.GetActualListLevel()) );
-            if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
-            {
-                if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
-                    sExp = rNumFmt.GetBulletChar();
-                else
-                    sExp = rTNd.GetNumString();
+                //End
+                const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(rTNd.GetActualListLevel()) );
+                if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
+                {
+                    if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
+                        sExp = rNumFmt.GetBulletChar();
+                    else
+                        sExp = rTNd.GetNumString();
                 }
-            //Modified for i119959,2012.6.12
-            //Under this scenario,this pointer is null,but on win,it doesn't crash immediately
-            //it exits with exception,and associated memory will have problem which leads to crash problem in
-            //other place in dev env...
+                //Modified for i119959,2012.6.12
+                //Under this scenario,this pointer is null,but on win,it doesn't crash immediately
+                //it exits with exception,and associated memory will have problem which leads to crash problem in
+                //other place in dev env...
             }
             //End
         }

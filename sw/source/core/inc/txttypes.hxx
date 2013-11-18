@@ -51,6 +51,7 @@
 #define POR_PARA        0x8002
 #define POR_URL         0x8003
 #define POR_HNG         0x8004
+#define POR_INPUTFLD    0x8005
 
 #define POR_DROP        0x8080
 #define POR_TOX         0x8089

@@ -133,55 +133,62 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     */
 
     const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+    const sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
 
-    if (!bUseEnhFields) {
-    aFormula.sDefault = GetFieldResult(pF);
+    if (!bUseEnhFields)
+    {
+        aFormula.sDefault = GetFieldResult(pF);
 
 #if 0 // why not? (flr)
-    //substituting Unicode spacing 0x2002 with double space for layout
-    aFormula.sDefault.SearchAndReplaceAll(
-        String(static_cast< sal_Unicode >(0x2002)),
-        CREATE_CONST_ASC("  "));
+        //substituting Unicode spacing 0x2002 with double space for layout
+        aFormula.sDefault.SearchAndReplaceAll(
+            String(static_cast< sal_Unicode >(0x2002)),
+            CREATE_CONST_ASC("  "));
 #endif
 
-    SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
-              aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
-    aFld.SetHelp(aFormula.sHelp);
-    aFld.SetToolTip(aFormula.sToolTip);
+        SwInputField aFld(
+            static_cast<SwInputFieldType*>(rDoc.GetSysFldType( RES_INPUTFLD )),
+            aFormula.sDefault,
+            aFormula.sTitle,
+            INP_TXT,
+            0 );
+        aFld.SetHelp(aFormula.sHelp);
+        aFld.SetToolTip(aFormula.sToolTip);
 
-    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
-    return FLD_OK;
-    } else {
-    WW8PLCFx_Book* pB = pPlcxMan->GetBook();
-    String aBookmarkName;
-    if (pB!=NULL) {
-        WW8_CP currentCP=pF->nSCode;
-        WW8_CP currentLen=pF->nLen;
+        rDoc.InsertPoolItem( *pPaM, SwFmtFld(aFld), 0 );
+        return FLD_OK;
+    }
+    else
+    {
+        WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+        String aBookmarkName;
+        if (pB!=NULL) {
+            WW8_CP currentCP=pF->nSCode;
+            WW8_CP currentLen=pF->nLen;
 
-        sal_uInt16 bkmFindIdx;
-        String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+            sal_uInt16 bkmFindIdx;
+            String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
 
-        if (aBookmarkFind.Len()>0) {
-            pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
             if (aBookmarkFind.Len()>0) {
-                aBookmarkName=aBookmarkFind;
+                pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
+                if (aBookmarkFind.Len()>0) {
+                    aBookmarkName=aBookmarkFind;
+                }
             }
         }
-    }
 
-    if (pB!=NULL && aBookmarkName.Len()==0) {
-        aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
-    }
+        if (pB!=NULL && aBookmarkName.Len()==0) {
+            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+        }
 
 
-    if (aBookmarkName.Len()>0) {
-        maFieldStack.back().SetBookmarkName(aBookmarkName);
-        maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_FORMTEXT));
-        maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Description")] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
-        maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Name")] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
-    }
-    return FLD_TEXT;
+        if (aBookmarkName.Len()>0) {
+            maFieldStack.back().SetBookmarkName(aBookmarkName);
+            maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_FORMTEXT));
+            maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Description")] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Name")] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+        }
+        return FLD_TEXT;
     }
 }
 
@@ -197,49 +204,52 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
     const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
     sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
 
-    if (!bUseEnhFields) {
-    pFormImpl->InsertFormula(aFormula);
-    return FLD_OK;
-    } else {
-    String aBookmarkName;
-    WW8PLCFx_Book* pB = pPlcxMan->GetBook();
-    if (pB!=NULL) {
-        WW8_CP currentCP=pF->nSCode;
-        WW8_CP currentLen=pF->nLen;
+    if (!bUseEnhFields)
+    {
+        pFormImpl->InsertFormula(aFormula);
+        return FLD_OK;
+    }
+    else
+    {
+        String aBookmarkName;
+        WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+        if (pB!=NULL) {
+            WW8_CP currentCP=pF->nSCode;
+            WW8_CP currentLen=pF->nLen;
 
-        sal_uInt16 bkmFindIdx;
-        String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+            sal_uInt16 bkmFindIdx;
+            String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
 
-        if (aBookmarkFind.Len()>0) {
-            pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark as consumed by field
             if (aBookmarkFind.Len()>0) {
-                aBookmarkName=aBookmarkFind;
+                pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark as consumed by field
+                if (aBookmarkFind.Len()>0) {
+                    aBookmarkName=aBookmarkFind;
+                }
             }
         }
-    }
 
-    if (pB!=NULL && aBookmarkName.Len()==0) {
-        aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
-    }
+        if (pB!=NULL && aBookmarkName.Len()==0) {
+            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+        }
 
-    if (aBookmarkName.Len()>0)
-    {
-        IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
-        IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
+        if (aBookmarkName.Len()>0)
+        {
+            IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+            IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
                 *pPaM, aBookmarkName,
                 rtl::OUString::createFromAscii( ODF_FORMCHECKBOX ) ) );
-        ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
-        if (pFieldmark!=NULL) {
-            IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
-            ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_NAME)] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
-            (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_HELPTEXT)] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
-            if(pCheckboxFm)
-                pCheckboxFm->SetChecked(aFormula.nChecked);
-            // set field data here...
+            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+            if (pFieldmark!=NULL) {
+                IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+                ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
+                (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_NAME)] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+                (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_HELPTEXT)] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+                if(pCheckboxFm)
+                    pCheckboxFm->SetChecked(aFormula.nChecked);
+                // set field data here...
+            }
         }
-    }
-    return FLD_OK;
+        return FLD_OK;
     }
 }
 

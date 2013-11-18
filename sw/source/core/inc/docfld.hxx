@@ -80,10 +80,7 @@ public:
 
     _SetGetExpFld( const SwFlyFrmFmt& rFlyFmt, const SwPosition* pPos = 0 );
 
-    sal_Bool operator==( const _SetGetExpFld& rFld ) const
-    {   return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
-                ( !CNTNT.pTxtFld || !rFld.CNTNT.pTxtFld ||
-                    CNTNT.pTxtFld == rFld.CNTNT.pTxtFld ); }
+    sal_Bool operator==( const _SetGetExpFld& rFld ) const;
     sal_Bool operator<( const _SetGetExpFld& rFld ) const;
 
     const SwTxtFld* GetTxtFld() const

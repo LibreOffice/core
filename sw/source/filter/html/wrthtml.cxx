@@ -891,7 +891,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
     for( sal_uInt16 i=0; i<nCntAttr; i++ )
     {
         const SwTxtAttr *pHt = pTxtNd->GetSwpHints()[i];
-        if( !pHt->GetEnd() )
+        if( !pHt->End() )
         {
             xub_StrLen nPos = *pHt->GetStart();
             if( nPos-nOldPos > 1 || RES_TXTATR_FIELD != pHt->Which() )

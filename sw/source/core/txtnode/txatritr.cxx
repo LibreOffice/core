@@ -123,7 +123,7 @@ sal_Bool SwTxtAttrIterator::Next()
         {
             do {
                 const SwTxtAttr* pHt = (SwTxtAttr*)aStack[ 0 ];
-                sal_uInt16 nEndPos = *pHt->GetEnd();
+                const sal_uInt16 nEndPos = *pHt->End();
                 if( nChgPos >= nEndPos )
                     aStack.Remove( 0 );
                 else
@@ -138,7 +138,7 @@ sal_Bool SwTxtAttrIterator::Next()
             if( aStack.Count() )
             {
                 const SwTxtAttr* pHt = (SwTxtAttr*)aStack[ 0 ];
-                sal_uInt16 nEndPos = *pHt->GetEnd();
+                const sal_uInt16 nEndPos = *pHt->End();
                 if( nChgPos >= nEndPos )
                 {
                     nChgPos = nEndPos;
@@ -167,7 +167,7 @@ sal_Bool SwTxtAttrIterator::Next()
 void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
 {
     void* pAdd = (void*)&rAttr;
-    sal_uInt16 nIns = 0, nEndPos = *rAttr.GetEnd();
+    sal_uInt16 nIns = 0, nEndPos = *rAttr.End();
     for( ; nIns < aStack.Count(); ++nIns )
         if( *((SwTxtAttr*)aStack[ nIns ] )->GetEnd() > nEndPos )
             break;
@@ -213,7 +213,7 @@ void SwTxtAttrIterator::SearchNextChg()
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
             const SwTxtAttr* pHt = (*pHts)[ nAttrPos ];
-            const sal_uInt16* pEnd = pHt->GetEnd();
+            const sal_uInt16* pEnd = pHt->End();
             const sal_uInt16 nHtStt = *pHt->GetStart();
             if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
                 continue;

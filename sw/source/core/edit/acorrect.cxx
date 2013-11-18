@@ -518,7 +518,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                 if( nAttrStart > nStart )       // ueber den Bereich hinaus
                     break;
 
-                if( 0 != ( pAttrEnd = pHt->GetEnd() ) &&
+                if( 0 != ( pAttrEnd = pHt->End() ) &&
                     ( ( nAttrStart < nStart &&
                         ( pHt->DontExpand() ? nStart < *pAttrEnd
                                             : nStart <= *pAttrEnd )) ||

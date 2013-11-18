@@ -396,9 +396,9 @@ xub_StrLen WW8SwAttrIter::SearchNext( xub_StrLen nStartPos )
             if( nPos >= nStartPos && nPos <= nMinPos )
                 nMinPos = nPos;
 
-            if( pHt->GetEnd() )         // Attr mit Ende
+            if( pHt->End() )         // Attr mit Ende
             {
-                nPos = *pHt->GetEnd();      // gibt letztes Attr-Zeichen + 1
+                nPos = *pHt->End();      // gibt letztes Attr-Zeichen + 1
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
             }
@@ -491,7 +491,7 @@ void WW8SwAttrIter::OutAttr( xub_StrLen nSwPos )
         for (xub_StrLen i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            const xub_StrLen* pEnd = pHt->GetEnd();
+            const xub_StrLen* pEnd = pHt->End();
 
             if (pEnd ? ( nSwPos >= *pHt->GetStart() && nSwPos < *pEnd)
                         : nSwPos == *pHt->GetStart() )
@@ -601,14 +601,17 @@ void WW8SwAttrIter::OutFlys(xub_StrLen nSwPos)
 
 bool WW8SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
 {
-    // search for attrs with CH_TXTATR
+    // search for attrs with dummy character or content
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
         for (sal_uInt16 i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            if ( pHt->HasDummyChar() && (*pHt->GetStart() == nSwPos) )
+            if ( ( pHt->HasDummyChar() || pHt->HasContent() )
+                 && (*pHt->GetStart() == nSwPos) )
+            {
                 return true;
+            }
         }
     }
 
@@ -666,7 +669,7 @@ const SfxPoolItem* WW8SwAttrIter::HasTextItem( sal_uInt16 nWhich ) const
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const SfxPoolItem* pItem = &pHt->GetAttr();
             const xub_StrLen* pAtrEnd = 0;
-            if( 0 != ( pAtrEnd = pHt->GetEnd() ) &&     // nur Attr mit Ende
+            if( 0 != ( pAtrEnd = pHt->End() ) &&     // nur Attr mit Ende
                 nWhich == pItem->Which() &&             //
                 nTmpSwPos >= *pHt->GetStart() && nTmpSwPos < *pAtrEnd )
             {
@@ -1115,7 +1118,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
     ww::eField eType = ww::eNONE;
 
     const SwTxtTOXMark& rTxtTOXMark = *rAttr.GetTxtTOXMark();
-    const xub_StrLen* pTxtEnd = rTxtTOXMark.GetEnd();
+    const xub_StrLen* pTxtEnd = rTxtTOXMark.End();
     if ( pTxtEnd ) // has range?
     {
         sTxt = rNode.GetExpandTxt( *rTxtTOXMark.GetStart(),
@@ -1188,7 +1191,7 @@ int WW8SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
                         if ( m_rExport.AttrOutput().StartURL( rINet->GetValue(), rINet->GetTargetFrame() ) )
                             ++nRet;
                     }
-                    if ( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
+                    if ( 0 != ( pEnd = pHt->End() ) && nPos == *pEnd )
                     {
                         if ( m_rExport.AttrOutput().EndURL() )
                             --nRet;
@@ -1200,7 +1203,7 @@ int WW8SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
                         OutSwFmtRefMark( *static_cast< const SwFmtRefMark* >( pItem ), true );
                         ++nRet;
                     }
-                    if ( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
+                    if ( 0 != ( pEnd = pHt->End() ) && nPos == *pEnd )
                     {
                         OutSwFmtRefMark( *static_cast< const SwFmtRefMark* >( pItem ), false );
                         --nRet;
@@ -1216,7 +1219,7 @@ int WW8SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
                         m_rExport.AttrOutput().StartRuby( rNd, *static_cast< const SwFmtRuby* >( pItem ) );
                         ++nRet;
                     }
-                    if ( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
+                    if ( 0 != ( pEnd = pHt->End() ) && nPos == *pEnd )
                     {
                         m_rExport.AttrOutput().EndRuby();
                         --nRet;

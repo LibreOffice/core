@@ -127,7 +127,7 @@ const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFmtHint ) const
 }
 
 
-void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
+void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, sal_uInt16 nFlags )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -157,7 +157,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
 }
 
 
-void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags )
+void SwEditShell::SetAttrSet( const SfxItemSet& rSet, sal_uInt16 nFlags )
 {
     SET_CURR_SHELL( this );
     StartAllAction();

@@ -326,6 +326,7 @@ sal_Bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
         case POR_NUMBER:
         case POR_FLD:
         case POR_URL:
+        case POR_INPUTFLD:
         case POR_ISOTOX:
         case POR_TOX:
         case POR_HIDDEN:

@@ -310,7 +310,7 @@ static sal_uInt16 nBCTitleNo = 0;
             if ( nMin > 0 )
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                pSh->SetAttr( aLR );
+                pSh->SetAttrItem( aLR );
                 SwFmt *pStandard = pSh->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
                 aLR.SetLeft ( sal_uInt16(nMin) );
                 aLR.SetRight( sal_uInt16(nMin) );

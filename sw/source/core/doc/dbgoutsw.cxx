@@ -170,7 +170,7 @@ map<sal_uInt16,String,CompareUShort> & GetItemWhichMap()
         aItemWhichMap[RES_TXTATR_REFMARK] = String("TXTATR_REFMARK", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_TOXMARK] = String("TXTATR_TOXMARK", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_CHARFMT] = String("TXTATR_CHARFMT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_DUMMY5] = String("TXTATR_DUMMY5", RTL_TEXTENCODING_ASCII_US);
+        aItemWhichMap[RES_TXTATR_INPUTFIELD] = String("TXTATR_INPUTFIELD", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_CJK_RUBY] = String("TXTATR_CJK_RUBY", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_UNKNOWN_CONTAINER] = String("TXTATR_UNKNOWN_CONTAINER", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_META] = String("TXTATR_META", RTL_TEXTENCODING_ASCII_US);
@@ -320,7 +320,7 @@ const String lcl_dbg_out(const SwTxtAttr & rAttr)
 
     aStr += String::CreateFromInt32(*rAttr.GetStart());
     aStr += String("->", RTL_TEXTENCODING_ASCII_US);
-    aStr += String::CreateFromInt32(*rAttr.GetEnd());
+    aStr += String::CreateFromInt32(*rAttr.End());
     aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
     aStr += lcl_dbg_out(rAttr.GetAttr());
 

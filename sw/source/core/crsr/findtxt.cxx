@@ -57,9 +57,10 @@ using namespace util;
 
 String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
+
 String& lcl_CleanStr(
     const SwTxtNode& rNd,
-    xub_StrLen nStart,
+    const xub_StrLen nStart,
     xub_StrLen& rEnde,
     SvULongs& rArr,
     String& rRet,
@@ -125,7 +126,6 @@ String& lcl_CleanStr(
             const SwTxtAttr* pHt = (*pHts)[n];
             if ( pHt->HasDummyChar() && (nStt >= nStart) )
             {
-                //JP 17.05.00: Task 75806 ask for ">=" and not for ">"
                 switch( pHt->Which() )
                 {
                 case RES_TXTATR_FLYCNT:
@@ -136,14 +136,6 @@ String& lcl_CleanStr(
                 case RES_TXTATR_META:
                 case RES_TXTATR_METAFIELD:
                     {
-                        // JP 06.05.98: mit Bug 50100 werden sie als Trenner erwuenscht und nicht
-                        //              mehr zum Wort dazu gehoerend.
-                        // MA 23.06.98: mit Bug 51215 sollen sie konsequenterweise auch am
-                        //              Satzanfang und -ende ignoriert werden wenn sie Leer sind.
-                        //              Dazu werden sie schlicht entfernt. Fuer den Anfang entfernen
-                        //              wir sie einfach.
-                        //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
-                        //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
                         sal_Bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
                             !(static_cast<SwTxtFld const*>(pHt)
                                 ->GetFmtFld().GetField()->ExpandField(true).Len());
@@ -171,9 +163,9 @@ String& lcl_CleanStr(
 
         if ( bNewSoftHyphen )
         {
-              rArr.Insert( nAkt, rArr.Count() );
+            rArr.Insert( nAkt, rArr.Count() );
             --rEnde;
-               rRet.Erase( nAkt, 1 );
+            rRet.Erase( nAkt, 1 );
             ++nSoftHyphen;
         }
     }
@@ -203,8 +195,8 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
         {
             aIndex++;
             const SwTxtAttr* pTxtAttr = (*pHts)[i];
-            if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                    (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+            if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
+                 && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
             {
                 aCount--;
                 if (!aCount)
@@ -216,8 +208,8 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     for (xub_StrLen i = aIndex; i <pHts->Count();i++)
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
-        if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+        if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
+             && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
             break;
         else
             aIndex++;
@@ -309,10 +301,10 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
 
                 for (xub_StrLen i = 0; i <pHts->Count();i++)
                 {
-                    xub_StrLen aPos = *(*pHts)[i]->GetStart();
+                    const xub_StrLen aPos = *(*pHts)[i]->GetStart();
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
-                    if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                                (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+                    if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
+                         && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
                     {
                         if ( (aPos >= nStart) && (aPos <= nEnde) )
                             aNumberPostits++;

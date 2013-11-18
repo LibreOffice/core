@@ -132,7 +132,7 @@ const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
      0, // RES_TXTATR_CHARFMT,                   // 49
     39, // RES_TXTATR_CJK_RUBY,                  // 50
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 51
-     0, // RES_TXTATR_DUMMY5                     // 52
+    40, // RES_TXTATR_INPUTFIELD                 // 52
 };
 
 /*************************************************************************
@@ -525,20 +525,21 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
     if ( RES_TXTATR_WITHEND_END <= rItem.Which() )
         return sal_False;
 
-    sal_uInt16 nStack = StackPos[ rItem.Which() ];
+    const sal_uInt16 nStack = StackPos[ rItem.Which() ];
 
     // attributes originating from redlining have highest priority
     // second priority are hyperlink attributes, which have a color replacement
     const SwTxtAttr* pTopAttr = aAttrStack[ nStack ].Top();
-    if ( !pTopAttr || rAttr.IsPriorityAttr() ||
-            ( !pTopAttr->IsPriorityAttr() &&
-              !lcl_ChgHyperLinkColor( *pTopAttr, rItem, mpShell, 0 ) ) )
+    if ( !pTopAttr
+         || rAttr.IsPriorityAttr()
+         || ( !pTopAttr->IsPriorityAttr()
+              && !lcl_ChgHyperLinkColor( *pTopAttr, rItem, mpShell, 0 ) ) )
     {
         aAttrStack[ nStack ].Push( rAttr );
         return sal_True;
     }
 
-    sal_uInt16 nPos = aAttrStack[ nStack ].Count();
+    const sal_uInt16 nPos = aAttrStack[ nStack ].Count();
     ASSERT( nPos, "empty stack?" );
     aAttrStack[ nStack ].Insert( rAttr, nPos - 1 );
     return sal_False;
@@ -688,6 +689,8 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
                  bVertLayout
             );
     }
+    else if ( RES_TXTATR_INPUTFIELD == nAttr )
+        rFnt.GetInputField()--;
 }
 
 /*************************************************************************
@@ -934,6 +937,12 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                 rFnt.GetMeta()++;
             else
                 rFnt.GetMeta()--;
+            break;
+        case RES_TXTATR_INPUTFIELD :
+            if ( bPush )
+                rFnt.GetInputField()++;
+            else
+                rFnt.GetInputField()--;
             break;
     }
 }

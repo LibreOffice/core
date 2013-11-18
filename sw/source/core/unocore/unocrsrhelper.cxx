@@ -49,6 +49,7 @@
 #include <ndtxt.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtfld.hxx>
+#include <txtfld.hxx>
 #include <docsh.hxx>
 #include <section.hxx>
 #include <shellio.hxx>
@@ -135,19 +136,19 @@ GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
 /* -----------------16.09.98 12:27-------------------
 *   Lesen spezieller Properties am Cursor
  * --------------------------------------------------*/
-sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
-                                        , SwPaM& rPam
-                                        , Any *pAny
-                                        , PropertyState& eState
-                                        , const SwTxtNode* pNode  )
+sal_Bool getCrsrPropertyValue(
+    const SfxItemPropertySimpleEntry& rEntry,
+    SwPaM& rPam,
+    Any *pAny,
+    PropertyState& eState,
+    const SwTxtNode* pNode )
 {
     PropertyState eNewState = PropertyState_DIRECT_VALUE;
-//    PropertyState_DEFAULT_VALUE
-//    PropertyState_AMBIGUOUS_VALUE
+    //    PropertyState_DEFAULT_VALUE
+    //    PropertyState_AMBIGUOUS_VALUE
     sal_Bool bDone = sal_True;
     switch(rEntry.nWID)
     {
-        // --> OD 2008-11-26 #158694#
         case FN_UNO_PARA_CONT_PREV_SUBTREE:
             if (pAny)
             {
@@ -168,6 +169,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 *pAny <<= bRet;
             }
         break;
+
         case FN_UNO_PARA_NUM_STRING:
             if (pAny)
             {
@@ -185,23 +187,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 *pAny <<= OUString(sRet);
             }
         break;
-        // <--
-        // --> OD 2008-05-20 #outlinelevel# - no longer needed
-//        case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
-//            if (pAny)
-//            {
-//                const SwTxtNode * pTmpNode = pNode;
 
-//                if (!pTmpNode)
-//                    pTmpNode = rPam.GetNode()->GetTxtNode();
-
-//                sal_Int8 nRet = -1;
-//                if (pTmpNode && pTmpNode->GetOutlineLevel() != NO_NUMBERING)
-//                nRet = sal::static_int_cast< sal_Int8 >(pTmpNode->GetOutlineLevel());
-//                *pAny <<= nRet;
-//            }
-//        break;
-        // <--
         case RES_PARATR_OUTLINELEVEL: //#outlinelevel added by zhaojianwei
             if (pAny)
             {
@@ -217,9 +203,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 *pAny <<= nRet;
             }
         break; //<-end,zhaojianwei
+
         case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         case FN_UNO_PARA_STYLE :
-        {
+            {
             SwFmtColl* pFmt = 0;
             if(pNode)
                 pFmt = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID
@@ -259,66 +246,62 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 *pAny <<= nValue;
             }
         break;
+
         case FN_UNO_NUM_LEVEL  :
         case FN_UNO_IS_NUMBER  :
-        // --> OD 2008-07-14 #i91601#
         case FN_UNO_LIST_ID:
-        // <--
         case FN_NUMBER_NEWSTART:
-        {
-            // a multi selection is not considered
-            const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-            // --> OD 2010-01-13 #b6912256#
-            if ( pTxtNd && pTxtNd->IsInList() )
-            // <--
             {
-                if( pAny )
+                // a multi selection is not considered
+                const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
+                if ( pTxtNd && pTxtNd->IsInList() )
                 {
-                    if(rEntry.nWID == FN_UNO_NUM_LEVEL)
-                        *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
-                    else if(rEntry.nWID == FN_UNO_IS_NUMBER)
+                    if( pAny )
                     {
-                        sal_Bool bIsNumber = pTxtNd->IsCountedInList();
-                        pAny->setValue(&bIsNumber, ::getBooleanCppuType());
-                    }
-                    // --> OD 2008-07-14 #i91601#
-                    else if ( rEntry.nWID == FN_UNO_LIST_ID )
-                    {
-                        const String sListId = pTxtNd->GetListId();
-                        *pAny <<= OUString(sListId);
-                    }
-                    // <--
-                    else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
-                    {
-                        sal_Bool bIsRestart = pTxtNd->IsListRestart();
-                        pAny->setValue(&bIsRestart, ::getBooleanCppuType());
+                        if(rEntry.nWID == FN_UNO_NUM_LEVEL)
+                            *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
+                        else if(rEntry.nWID == FN_UNO_IS_NUMBER)
+                        {
+                            sal_Bool bIsNumber = pTxtNd->IsCountedInList();
+                            pAny->setValue(&bIsNumber, ::getBooleanCppuType());
+                        }
+                        else if ( rEntry.nWID == FN_UNO_LIST_ID )
+                        {
+                            const String sListId = pTxtNd->GetListId();
+                            *pAny <<= OUString(sListId);
+                        }
+                        else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                        {
+                            sal_Bool bIsRestart = pTxtNd->IsListRestart();
+                            pAny->setValue(&bIsRestart, ::getBooleanCppuType());
+                        }
                     }
                 }
-            }
-            else
-            {
-                eNewState = PropertyState_DEFAULT_VALUE;
+                else
+                {
+                    eNewState = PropertyState_DEFAULT_VALUE;
 
-                if( pAny )
-                {
-                    // #i30838# set default values for default properties
-                    if(rEntry.nWID == FN_UNO_NUM_LEVEL)
-                        *pAny <<= static_cast<sal_Int16>( 0 );
-                    else if(rEntry.nWID == FN_UNO_IS_NUMBER)
-                        *pAny <<= false;
-                    // --> OD 2008-07-14 #i91601#
-                    else if ( rEntry.nWID == FN_UNO_LIST_ID )
+                    if( pAny )
                     {
-                        *pAny <<= OUString();
+                        // #i30838# set default values for default properties
+                        if(rEntry.nWID == FN_UNO_NUM_LEVEL)
+                            *pAny <<= static_cast<sal_Int16>( 0 );
+                        else if(rEntry.nWID == FN_UNO_IS_NUMBER)
+                            *pAny <<= false;
+                        // --> OD 2008-07-14 #i91601#
+                        else if ( rEntry.nWID == FN_UNO_LIST_ID )
+                        {
+                            *pAny <<= OUString();
+                        }
+                        // <--
+                        else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                            *pAny <<= false;
                     }
-                    // <--
-                    else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
-                        *pAny <<= false;
                 }
+                //PROPERTY_MAYBEVOID!
             }
-            //PROPERTY_MAYBEVOID!
-        }
-        break;
+            break;
+
         case FN_UNO_NUM_RULES  :
             if( pAny )
                 getNumberingProperty(rPam, eNewState, pAny);
@@ -328,184 +311,182 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     eNewState = PropertyState_DEFAULT_VALUE;
             }
             break;
+
         case FN_UNO_DOCUMENT_INDEX_MARK:
-        {
-            ::std::vector<SwTxtAttr *> const marks(
-                rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
-            if (marks.size())
             {
-                if( pAny )
-                {   // hmm... can only return 1 here
-                    SwTOXMark & rMark =
-                        static_cast<SwTOXMark &>((*marks.begin())->GetAttr());
-                    const uno::Reference< text::XDocumentIndexMark > xRef =
-                        SwXDocumentIndexMark::CreateXDocumentIndexMark(
+                ::std::vector<SwTxtAttr *> const marks(
+                    rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
+                if (marks.size())
+                {
+                    if( pAny )
+                    {   // hmm... can only return 1 here
+                        SwTOXMark & rMark =
+                            static_cast<SwTOXMark &>((*marks.begin())->GetAttr());
+                        const uno::Reference< text::XDocumentIndexMark > xRef =
+                            SwXDocumentIndexMark::CreateXDocumentIndexMark(
                             *rPam.GetDoc(),
                             *const_cast<SwTOXType*>(rMark.GetTOXType()), rMark);
-                    (*pAny) <<= xRef;
-                }
-            }
-            else
-                //auch hier - nicht zu unterscheiden
-                eNewState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case FN_UNO_DOCUMENT_INDEX:
-        {
-            const SwTOXBase* pBase = rPam.GetDoc()->GetCurTOX(
-                                                    *rPam.Start() );
-            if( pBase )
-            {
-                if( pAny )
-                {
-                    const uno::Reference< text::XDocumentIndex > xRef =
-                        SwXDocumentIndex::CreateXDocumentIndex(*rPam.GetDoc(),
-                            *static_cast<SwTOXBaseSection const*>(pBase));
-                    (*pAny) <<= xRef;
-                }
-            }
-            else
-                eNewState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case FN_UNO_TEXT_FIELD:
-        {
-            const SwPosition *pPos = rPam.Start();
-            const SwTxtNode *pTxtNd =
-                rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTxtNode();
-            SwTxtAttr *const pTxtAttr = (pTxtNd)
-                ? pTxtNd->GetTxtAttrForCharAt(
-                        pPos->nContent.GetIndex(), RES_TXTATR_FIELD)
-                : 0;
-            if(pTxtAttr)
-            {
-                if( pAny )
-                {
-                    SwXTextField* pField =
-                        SwXTextField::CreateSwXTextField( *rPam.GetDoc(),pTxtAttr->GetFmtFld() );
-                    *pAny <<= uno::Reference< XTextField >( pField );
-                }
-            }
-            else
-                eNewState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-/*              laesst sich nicht feststellen
-*               case FN_UNO_BOOKMARK:
-        {
-            if()
-            {
-                uno::Reference< XBookmark >  xBkm = SwXBookmarks::GetObject(rBkm);
-                rAny.set(&xBkm, ::getCppuType((const XBookmark*)0)());
-            }
-        }
-        break;*/
-        case FN_UNO_TEXT_TABLE:
-        case FN_UNO_CELL:
-        {
-            SwStartNode* pSttNode = rPam.GetNode()->StartOfSectionNode();
-            SwStartNodeType eType = pSttNode->GetStartNodeType();
-            if(SwTableBoxStartNode == eType)
-            {
-                if( pAny )
-                {
-                    const SwTableNode* pTblNode = pSttNode->FindTableNode();
-                    SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
-                    //SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
-                    if(FN_UNO_TEXT_TABLE == rEntry.nWID)
-                    {
-                        uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
-                        pAny->setValue(&xTable, ::getCppuType((uno::Reference<XTextTable>*)0));
-                    }
-                    else
-                    {
-                        SwTableBox* pBox = pSttNode->GetTblBox();
-                        uno::Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFmt, pBox);
-                        pAny->setValue(&xCell, ::getCppuType((uno::Reference<XCell>*)0));
+                        (*pAny) <<= xRef;
                     }
                 }
+                else
+                    //auch hier - nicht zu unterscheiden
+                    eNewState = PropertyState_DEFAULT_VALUE;
             }
-            else
-                eNewState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case FN_UNO_TEXT_FRAME:
-        {
-            SwStartNode* pSttNode = rPam.GetNode()->StartOfSectionNode();
-            SwStartNodeType eType = pSttNode->GetStartNodeType();
+            break;
 
-            SwFrmFmt* pFmt;
-            if(eType == SwFlyStartNode && 0 != (pFmt = pSttNode->GetFlyFmt()))
+        case FN_UNO_DOCUMENT_INDEX:
             {
-                if( pAny )
-                {
-                    uno::Reference< XTextFrame >  xFrm = (SwXTextFrame*) SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM);
-                    pAny->setValue(&xFrm, ::getCppuType((uno::Reference<XTextFrame>*)0));
-                }
-            }
-            else
-                eNewState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case FN_UNO_TEXT_SECTION:
-        {
-            SwSection* pSect = rPam.GetDoc()->GetCurrSection(*rPam.GetPoint());
-            if(pSect)
-            {
-                if( pAny )
-                {
-                    uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFmt() );
-                    pAny->setValue(&xSect, ::getCppuType((uno::Reference<XTextSection>*)0) );
-                }
-            }
-            else
-                eNewState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case FN_UNO_ENDNOTE:
-        case FN_UNO_FOOTNOTE:
-        {
-            SwTxtAttr *const pTxtAttr =
-                rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
-            if(pTxtAttr)
-            {
-                const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
-                if(rFtn.IsEndNote() == (FN_UNO_ENDNOTE == rEntry.nWID))
+                const SwTOXBase* pBase = rPam.GetDoc()->GetCurTOX(
+                    *rPam.Start() );
+                if( pBase )
                 {
                     if( pAny )
                     {
-                        const uno::Reference< text::XFootnote > xFootnote =
-                            SwXFootnote::CreateXFootnote(*rPam.GetDoc(), rFtn);
-                        *pAny <<= xFootnote;
+                        const uno::Reference< text::XDocumentIndex > xRef =
+                            SwXDocumentIndex::CreateXDocumentIndex(*rPam.GetDoc(),
+                            *static_cast<SwTOXBaseSection const*>(pBase));
+                        (*pAny) <<= xRef;
                     }
                 }
                 else
                     eNewState = PropertyState_DEFAULT_VALUE;
             }
-            else
-                eNewState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case FN_UNO_REFERENCE_MARK:
-        {
-            ::std::vector<SwTxtAttr *> const marks(
-                rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
-            if (marks.size())
+            break;
+
+        case FN_UNO_TEXT_FIELD:
             {
-                if( pAny )
-                {   // hmm... can only return 1 here
-                    const SwFmtRefMark& rRef = (*marks.begin())->GetRefMark();
-                    uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
-                    pAny->setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+                const SwPosition *pPos = rPam.Start();
+                const SwTxtNode *pTxtNd =
+                    rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTxtNode();
+                const SwTxtAttr* pTxtAttr = (pTxtNd)
+                    ? pTxtNd->GetFldTxtAttrAt( pPos->nContent.GetIndex(), true )
+                    : 0;
+                if ( pTxtAttr != NULL )
+                {
+                    if( pAny )
+                    {
+                        SwXTextField* pField =
+                            SwXTextField::CreateSwXTextField( *rPam.GetDoc(),pTxtAttr->GetFmtFld() );
+                        *pAny <<= uno::Reference< XTextField >( pField );
+                    }
                 }
+                else
+                    eNewState = PropertyState_DEFAULT_VALUE;
             }
-            else
-                eNewState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
+            break;
+
+        case FN_UNO_TEXT_TABLE:
+        case FN_UNO_CELL:
+            {
+                SwStartNode* pSttNode = rPam.GetNode()->StartOfSectionNode();
+                SwStartNodeType eType = pSttNode->GetStartNodeType();
+                if(SwTableBoxStartNode == eType)
+                {
+                    if( pAny )
+                    {
+                        const SwTableNode* pTblNode = pSttNode->FindTableNode();
+                        SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
+                        //SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
+                        if(FN_UNO_TEXT_TABLE == rEntry.nWID)
+                        {
+                            uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
+                            pAny->setValue(&xTable, ::getCppuType((uno::Reference<XTextTable>*)0));
+                        }
+                        else
+                        {
+                            SwTableBox* pBox = pSttNode->GetTblBox();
+                            uno::Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFmt, pBox);
+                            pAny->setValue(&xCell, ::getCppuType((uno::Reference<XCell>*)0));
+                        }
+                    }
+                }
+                else
+                    eNewState = PropertyState_DEFAULT_VALUE;
+            }
+            break;
+
+        case FN_UNO_TEXT_FRAME:
+            {
+                SwStartNode* pSttNode = rPam.GetNode()->StartOfSectionNode();
+                SwStartNodeType eType = pSttNode->GetStartNodeType();
+
+                SwFrmFmt* pFmt;
+                if(eType == SwFlyStartNode && 0 != (pFmt = pSttNode->GetFlyFmt()))
+                {
+                    if( pAny )
+                    {
+                        uno::Reference< XTextFrame >  xFrm = (SwXTextFrame*) SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM);
+                        pAny->setValue(&xFrm, ::getCppuType((uno::Reference<XTextFrame>*)0));
+                    }
+                }
+                else
+                    eNewState = PropertyState_DEFAULT_VALUE;
+            }
+            break;
+
+        case FN_UNO_TEXT_SECTION:
+            {
+                SwSection* pSect = rPam.GetDoc()->GetCurrSection(*rPam.GetPoint());
+                if(pSect)
+                {
+                    if( pAny )
+                    {
+                        uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFmt() );
+                        pAny->setValue(&xSect, ::getCppuType((uno::Reference<XTextSection>*)0) );
+                    }
+                }
+                else
+                    eNewState = PropertyState_DEFAULT_VALUE;
+            }
+            break;
+
+        case FN_UNO_ENDNOTE:
+        case FN_UNO_FOOTNOTE:
+            {
+                SwTxtAttr *const pTxtAttr =
+                    rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+                if(pTxtAttr)
+                {
+                    const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
+                    if(rFtn.IsEndNote() == (FN_UNO_ENDNOTE == rEntry.nWID))
+                    {
+                        if( pAny )
+                        {
+                            const uno::Reference< text::XFootnote > xFootnote =
+                                SwXFootnote::CreateXFootnote(*rPam.GetDoc(), rFtn);
+                            *pAny <<= xFootnote;
+                        }
+                    }
+                    else
+                        eNewState = PropertyState_DEFAULT_VALUE;
+                }
+                else
+                    eNewState = PropertyState_DEFAULT_VALUE;
+            }
+            break;
+
+        case FN_UNO_REFERENCE_MARK:
+            {
+                ::std::vector<SwTxtAttr *> const marks(
+                    rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
+                if (marks.size())
+                {
+                    if( pAny )
+                    {   // hmm... can only return 1 here
+                        const SwFmtRefMark& rRef = (*marks.begin())->GetRefMark();
+                        uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
+                        pAny->setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+                    }
+                }
+                else
+                    eNewState = PropertyState_DEFAULT_VALUE;
+            }
+            break;
+
         case FN_UNO_NESTED_TEXT_CONTENT:
         {
             uno::Reference<XTextContent> const xRet(
@@ -524,6 +505,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             }
         }
         break;
+
         case FN_UNO_CHARFMT_SEQUENCE:
         {
 
@@ -586,8 +568,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
+
         case RES_TXTATR_CHARFMT:
-        // kein break hier!
+            // kein break hier!
         default: bDone = sal_False;
     }
     if( bDone )

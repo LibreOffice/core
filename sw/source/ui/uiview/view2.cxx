@@ -766,7 +766,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         case SID_ATTR_BORDER_OUTER:
         case SID_ATTR_BORDER_SHADOW:
             if(pArgs)
-                pWrtShell->SetAttr(*pArgs);
+                pWrtShell->SetAttrSet(*pArgs);
             break;
 
         case SID_ATTR_PAGE:

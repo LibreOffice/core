@@ -339,7 +339,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                                                        RES_GRFATR_END-1 );
                 aGrfSet.Put( *pSet );
                 if( aGrfSet.Count() )
-                    rSh.SetAttr( aGrfSet );
+                    rSh.SetAttrSet( aGrfSet );
 
                 rSh.EndUndo(UNDO_END);
                 rSh.EndAllAction();
@@ -354,7 +354,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             rSh.GetCurAttr( aSet );
             SwMirrorGrf aGrf((const SwMirrorGrf &)aSet.Get(RES_GRFATR_MIRRORGRF));
             aGrf.SetGrfToggle(!aGrf.IsGrfToggle());
-            rSh.SetAttr(aGrf);
+            rSh.SetAttrItem(aGrf);
         }
         break;
 
@@ -505,7 +505,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             ASSERT(!this, falscher Dispatcher);
         }
         if( aGrfSet.Count() )
-            GetShell().SetAttr( aGrfSet );
+            GetShell().SetAttrSet( aGrfSet );
     }
     GetView().GetViewFrame()->GetBindings().Invalidate(rReq.GetSlot());
 }
@@ -532,11 +532,18 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_TWAIN_TRANSFER:
             if( bParentCntProt || !bIsGrfCntnt )
                 bDisable = sal_True;
+            else if ( nWhich == SID_INSERT_GRAPHIC
+                      && rSh.CrsrInsideInputFld() )
+            {
+                bDisable = sal_True;
+            }
             break;
+
         case FN_SAVE_GRAPHIC:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
-        break;
+            break;
+
         case SID_COLOR_SETTINGS:
         {
             if ( bParentCntProt || !bIsGrfCntnt )
@@ -646,16 +653,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             {
                 if( bParentCntProt || !bIsGrfCntnt )
                     bDisable = sal_True;
-                // --> OD 2006-11-03 #i59688#
-                // load graphic only if type is unknown
-//                else if( bSwappedOut )
-//                {
-//                    rSet.DisableItem( nWhich );
-//                    if( AddGrfUpdateSlot( nWhich ))
-//                        rSh.GetGraphic(sal_False);  // start the loading
-//                }
-//                else
-//                    bDisable = !bBitmapType;
                 else
                 {
                     const sal_uInt16 eGraphicType( rSh.GetGraphicType() );

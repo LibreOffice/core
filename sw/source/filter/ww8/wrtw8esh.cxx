@@ -561,11 +561,10 @@ void WW8Export::DoFormText(const SwInputField * pFld)
 
     OutputField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CMD_END);
 
-    String const fieldStr( pFld->ExpandField(true) );
+    const String fieldStr( pFld->ExpandField(true) );
     SwWW8Writer::WriteString16(Strm(), fieldStr, false);
 
     static sal_uInt8 aArr2[] = {
-        0x03, 0x6a, 0x00, 0x00, 0x00, 0x00, // sprmCPicLocation
         0x55, 0x08, 0x01,  // sprmCFSpec
         0x75, 0x08, 0x01       // ???
     };

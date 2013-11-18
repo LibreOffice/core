@@ -2981,8 +2981,8 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     // eigentlich muesste hier das Attribut zurueck gesetzt werden!!!
     for( sal_uInt16 n = 0, nEnd = aWhichIds.Count(); n < nEnd; ++n )
     {
-        pDoc->InsertPoolItem( rPam, *GetDfltAttr( aWhichIds[ n ] ),
-                nsSetAttrMode::SETATTR_DONTEXPAND );
+        pDoc->InsertPoolItem(
+            rPam, *GetDfltAttr( aWhichIds[ n ] ), nsSetAttrMode::SETATTR_DONTEXPAND );
     }
 
     pDoc->SetRedlineMode_intern( eOld );

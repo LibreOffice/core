@@ -28,7 +28,6 @@
 #include <unotools/charclass.hxx>
 #include <editsh.hxx>
 #include <fldbas.hxx>
-#include <ndtxt.hxx>        // GetCurFld
 #include <doc.hxx>
 #include <docary.hxx>
 #include <fmtfld.hxx>
@@ -228,65 +227,15 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
         ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
         : nsSetAttrMode::SETATTR_DEFAULT;
 
-    FOREACHPAM_START(this)                      // fuer jeden PaM
-        bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
+    FOREACHPAM_START(this)
+        const bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
         ASSERT( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
-    FOREACHPAM_END()                      // fuer jeden PaM
+    FOREACHPAM_END()
 
     EndAllAction();
 }
 
-/*************************************************************************
-|*
-|*                  SwEditShell::GetCurFld()
-|*
-|*    Beschreibung  Stehen die PaMs auf Feldern ?
-|*    Quelle:       edtfrm.cxx:
-|*
-*************************************************************************/
-
-inline SwTxtFld *GetDocTxtFld( const SwPosition* pPos )
-{
-    SwTxtNode * const pNode = pPos->nNode.GetNode().GetTxtNode();
-    return (pNode)
-        ? static_cast<SwTxtFld*>( pNode->GetTxtAttrForCharAt(
-                pPos->nContent.GetIndex(), RES_TXTATR_FIELD ))
-        : 0;
-}
-
-SwField* SwEditShell::GetCurFld() const
-{
-    // Wenn es keine Selektionen gibt, gilt der Wert der aktuellen
-    // Cursor-Position.
-
-    SwPaM* pCrsr = GetCrsr();
-    SwTxtFld *pTxtFld = GetDocTxtFld( pCrsr->Start() );
-    SwField *pCurFld = NULL;
-
-    /* #108536# Field was only recognized if no selection was
-        present. Now it is recognized if either the cursor is in the
-        field or the selection spans exactly over the field. */
-    if( pTxtFld &&
-        pCrsr->GetNext() == pCrsr &&
-        pCrsr->Start()->nNode == pCrsr->End()->nNode &&
-        (pCrsr->End()->nContent.GetIndex() -
-         pCrsr->Start()->nContent.GetIndex()) <= 1)
-    {
-        pCurFld = (SwField*)pTxtFld->GetFmtFld().GetField();
-        // TabellenFormel ? wandel internen in externen Namen um
-        if( RES_TABLEFLD == pCurFld->GetTyp()->Which() )
-        {
-            const SwTableNode* pTblNd = IsCrsrInTbl();
-            ((SwTblField*)pCurFld)->PtrToBoxNm( pTblNd ? &pTblNd->GetTable() : 0 );
-        }
-
-    }
-
-    /* #108536# removed handling of multi-selections */
-
-    return pCurFld;
-}
 
 
 /*************************************************************************
@@ -299,18 +248,28 @@ SwField* SwEditShell::GetCurFld() const
 *************************************************************************/
 SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
 {
-    // suche das Feld ueber seine Addresse. Muss fuer InputFelder in
-    // geschuetzten Feldern erfolgen
     SwTxtFld* pTFld = 0;
-    if( RES_INPUTFLD == rFld.Which() || ( RES_SETEXPFLD == rFld.Which() &&
-        ((SwSetExpField&)rFld).GetInputFlag() ) )
+    if( RES_INPUTFLD == rFld.Which() )
     {
-        const SfxPoolItem* pItem;
-        sal_uInt32 n, nMaxItems =
+        const SfxPoolItem* pItem = NULL;
+        const sal_uInt32 nMaxItems =
+            pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
+        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+            if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n ) )
+                && ((SwFmtFld*)pItem)->GetField() == &rFld )
+            {
+                pTFld = ((SwFmtFld*)pItem)->GetTxtFld();
+                break;
+            }
+    }
+    else if( RES_SETEXPFLD == rFld.Which()
+        && ((SwSetExpField&)rFld).GetInputFlag() )
+    {
+        const SfxPoolItem* pItem = NULL;
+        const sal_uInt32 nMaxItems =
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-        for( n = 0; n < nMaxItems; ++n )
-            if( 0 != (pItem =
-                      pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
+        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+            if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
                 && ((SwFmtFld*)pItem)->GetField() == &rFld )
             {
                 pTFld = ((SwFmtFld*)pItem)->GetTxtFld();
@@ -339,14 +298,9 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         SwTxtFld *pTxtFld;
         SwFmtFld *pFmtFld;
 
-//      if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-//          ( 0 != ( pTxtFld = GetDocTxtFld( pCrsr->Start() ) ) ||
-//            0 != ( pTxtFld = lcl_FindInputFld( GetDoc(), rFld ) ) ) &&
-//          ( pFmtFld = (SwFmtFld*)&pTxtFld->GetFld())->GetFld()
-//              ->GetTyp()->Which() == rFld.GetTyp()->Which() )
         if ( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark())
         {
-            pTxtFld = GetDocTxtFld(pCrsr->Start());
+            pTxtFld = GetTxtFldAtPos( pCrsr->Start(), true );
 
             if (!pTxtFld) // #i30221#
                 pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
@@ -361,7 +315,8 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         sal_Bool bOkay = sal_True;
         sal_Bool bTblSelBreak = sal_False;
 
-        SwMsgPoolItem aHint( RES_TXTATR_FIELD );  // Such-Hint
+        SwMsgPoolItem aFldHint( RES_TXTATR_FIELD );
+        SwMsgPoolItem aInputFldHint( RES_TXTATR_INPUTFIELD );
         FOREACHPAM_START(this)                      // fuer jeden PaM
             if( PCURCRSR->HasMark() && bOkay )      // ... mit Selektion
             {
@@ -382,13 +337,14 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 // Suche nach SwTxtFld ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
-                     && aPam.Find( aHint, sal_False, fnMoveForward, &aCurPam ) )
+                     && ( aPam.Find( aFldHint, sal_False, fnMoveForward, &aCurPam )
+                          || aPam.Find( aInputFldHint, sal_False, fnMoveForward, &aCurPam ) ) )
                 {
                     //  wenn nur ein Pam mehr als ein Feld enthaelt ...
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = sal_False;
 
-                    if( 0 != (pTxtFld = GetDocTxtFld( pCurStt )) )
+                    if( 0 != (pTxtFld = GetTxtFldAtPos( pCurStt, true )) )
                     {
                         pFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
                         pCurFld = pFmtFld->GetField();

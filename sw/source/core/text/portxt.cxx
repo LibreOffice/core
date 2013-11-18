@@ -715,6 +715,124 @@ void SwTxtPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
+
+SwTxtInputFldPortion::SwTxtInputFldPortion()
+    : SwTxtPortion()
+    , mbContainsInputFieldStart( false )
+    , mbContainsInputFieldEnd( false )
+{
+    SetWhichPor( POR_INPUTFLD );
+}
+
+
+sal_Bool SwTxtInputFldPortion::Format( SwTxtFormatInfo &rInf )
+{
+    mbContainsInputFieldStart =
+        rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART;
+    mbContainsInputFieldEnd =
+        rInf.GetChar( rInf.GetIdx() + rInf.GetLen() - 1 ) == CH_TXT_ATR_INPUTFIELDEND;
+
+    sal_Bool bRet = sal_False;
+    if ( rInf.GetLen() == 1
+         && ( mbContainsInputFieldStart || mbContainsInputFieldEnd ) )
+    {
+        Width( 0 );
+    }
+    else
+    {
+        SwTxtSlot aFormatTxt( &rInf, this, true, true, 0 );
+        if ( rInf.GetLen() == 0 )
+        {
+            Width( 0 );
+        }
+        else
+        {
+            bRet = SwTxtPortion::Format( rInf );
+
+            if ( mbContainsInputFieldEnd )
+            {
+                // adjust portion length accordingly, if complete text fits into the portion
+                if ( GetLen() == rInf.GetLen() )
+                {
+                    SetLen( GetLen() + 1 );
+                }
+            }
+
+            if ( mbContainsInputFieldStart )
+            {
+                // adjust portion length accordingly
+                SetLen( GetLen() + 1 );
+            }
+        }
+    }
+
+    return bRet;
+}
+
+void SwTxtInputFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
+{
+    if ( Width() )
+    {
+        rInf.DrawViewOpt( *this, POR_INPUTFLD );
+        static sal_Char sSpace = ' ';
+        SwTxtSlot aPaintTxt( &rInf, this, true, true,
+                            ContainsOnlyDummyChars() ? &sSpace : 0 );
+        SwTxtPortion::Paint( rInf );
+    }
+}
+
+sal_Bool SwTxtInputFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+{
+    xub_StrLen nIdx = rInf.GetIdx();
+    xub_StrLen nLen = rInf.GetLen();
+    if ( rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART )
+    {
+        ++nIdx;
+        --nLen;
+    }
+    if ( rInf.GetChar( rInf.GetIdx() + rInf.GetLen() - 1 ) == CH_TXT_ATR_INPUTFIELDEND )
+    {
+        --nLen;
+    }
+    rTxt = rInf.GetTxt().Copy( nIdx, nLen );
+
+    return sal_True;
+}
+
+
+SwPosSize SwTxtInputFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
+{
+    SwTxtSlot aFormatTxt( &rInf, this, true, false, 0 );
+    if ( rInf.GetLen() == 0 )
+    {
+        return SwPosSize( 0, 0 );
+    }
+
+    return rInf.GetTxtSize();
+}
+
+
+KSHORT SwTxtInputFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+{
+    if( !Width()
+        && ContainsOnlyDummyChars()
+        && !rInf.GetOpt().IsPagePreview()
+        && !rInf.GetOpt().IsReadonly()
+        && SwViewOption::IsFieldShadings() )
+    {
+        return rInf.GetTxtSize( ' ' ).Width();
+    }
+
+    return SwTxtPortion::GetViewWidth( rInf );
+}
+
+bool SwTxtInputFldPortion::ContainsOnlyDummyChars() const
+{
+    return GetLen() <= 2
+           && mbContainsInputFieldStart
+           && mbContainsInputFieldEnd;
+}
+
 /*************************************************************************
  *                      class SwHolePortion
  *************************************************************************/

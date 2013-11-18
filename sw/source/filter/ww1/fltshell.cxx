@@ -142,12 +142,17 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
 //because it is beyond the length of para...need special consideration here.
 bool SwFltStackEntry::IsAbleMakeRegion()
 {
-     SwCntntNode *const pCntntNode(
-        SwNodeIndex(nMkNode, +1).GetNode().GetCntntNode());
-        if ((nMkNode.GetIndex() == nPtNode.GetIndex()) && (nMkCntnt == nPtCntnt)
-        && ((0 != nPtCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
-        && ((RES_TXTATR_FIELD != pAttr->Which())
-        && !(bIsParaEnd && pCntntNode && pCntntNode->IsTxtNode() && 0 != pCntntNode->Len() )))
+    SwCntntNode *const pCntntNode( SwNodeIndex(nMkNode, +1).GetNode().GetCntntNode() );
+    if ( (nMkNode.GetIndex() == nPtNode.GetIndex())
+         && (nMkCntnt == nPtCntnt)
+         && ( (0 != nPtCntnt)
+              || ( pCntntNode
+                   && ( 0 != pCntntNode->Len() ) ) )
+        && ( RES_TXTATR_FIELD != pAttr->Which() && RES_TXTATR_INPUTFIELD != pAttr->Which() )
+        && !( bIsParaEnd
+              && pCntntNode
+              && pCntntNode->IsTxtNode()
+              && 0 != pCntntNode->Len() ) )
     {
         return false;
     }
@@ -505,9 +510,11 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
     case RES_FLTR_STYLESHEET:
         break;
     case RES_TXTATR_FIELD:
+    case RES_TXTATR_INPUTFIELD:
         break;
     case RES_TXTATR_TOXMARK:
         break;
+
     case RES_FLTR_NUMRULE:          // Numrule 'reinsetzen
         {
             const String& rNumNm = ((SfxStringItem*)pEntry->pAttr)->GetValue();

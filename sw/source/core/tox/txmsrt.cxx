@@ -232,8 +232,8 @@ sal_Bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
         {
             // beide Pointer vorhanden -> vergleiche Text
             // beide Pointer nicht vorhanden -> vergleiche AlternativText
-            const xub_StrLen *pEnd  = pTxtMark->GetEnd(),
-                                *pEndCmp = rCmp.pTxtMark->GetEnd();
+            const xub_StrLen* pEnd = pTxtMark->End();
+            const xub_StrLen* pEndCmp = rCmp.pTxtMark->End();
 
             String sMyTxt;
             String sMyTxtReading;
@@ -275,8 +275,8 @@ sal_Bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
 
                     if( *pTxtMark->GetStart() == *rCmp.pTxtMark->GetStart() )
                     {
-                        const xub_StrLen *pEnd = pTxtMark->GetEnd(),
-                                            *pEndCmp = rCmp.pTxtMark->GetEnd();
+                        const xub_StrLen* pEnd = pTxtMark->End();
+                        const xub_StrLen* pEndCmp = rCmp.pTxtMark->End();
 
                         String sMyTxt;
                         String sMyTxtReading;
@@ -432,7 +432,7 @@ void SwTOXIndex::GetText_Impl( String& rTxt, String& rTxtReading ) const
 
 void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
 {
-    const xub_StrLen* pEnd = pTxtMark->GetEnd();
+    const xub_StrLen* pEnd = pTxtMark->End();
     String sTmp;
     String sTmpReading;
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() &&
@@ -549,7 +549,7 @@ SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
 
 void SwTOXContent::GetText_Impl( String& rTxt, String& rTxtReading ) const
 {
-    const xub_StrLen* pEnd = pTxtMark->GetEnd();
+    const xub_StrLen* pEnd = pTxtMark->End();
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() )
     {
         rTxt = ((SwTxtNode*)aTOXSources[0].pNd)->GetExpandTxt(
@@ -564,7 +564,7 @@ void SwTOXContent::GetText_Impl( String& rTxt, String& rTxtReading ) const
 
 void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
 {
-    const xub_StrLen* pEnd = pTxtMark->GetEnd();
+    const xub_StrLen* pEnd = pTxtMark->End();
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() )
         ((SwTxtNode*)aTOXSources[0].pNd)->GetExpandTxt( rNd, &rInsPos,
                                     *pTxtMark->GetStart(),

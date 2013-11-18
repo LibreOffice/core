@@ -62,6 +62,24 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtPortion)
 };
 
+
+class SwTxtInputFldPortion : public SwTxtPortion
+{
+public:
+    SwTxtInputFldPortion();
+
+    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
+
+private:
+    bool mbContainsInputFieldStart;
+    bool mbContainsInputFieldEnd;
+    bool ContainsOnlyDummyChars() const;
+};
+
 /*************************************************************************
  *                      class SwHolePortion
  *************************************************************************/

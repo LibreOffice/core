@@ -84,8 +84,8 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
         }
         else if( *pEnd != *pStt )
         {
-            GetDoc()->InsertPoolItem( *PCURCRSR, rMark,
-                    nsSetAttrMode::SETATTR_DONTEXPAND );
+            GetDoc()->InsertPoolItem(
+                *PCURCRSR, rMark, nsSetAttrMode::SETATTR_DONTEXPAND );
         }
 
     FOREACHPAM_END()

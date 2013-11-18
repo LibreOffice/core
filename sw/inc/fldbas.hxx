@@ -308,6 +308,8 @@ class SW_DLLPUBLIC SwField
 {
 private:
     mutable String      m_Cache; /// #i85766# cached expansion (for clipboard)
+    bool m_bUseFieldValueCache; /// control the usage of the cached field value
+
     sal_uInt16              nLang;  // Immer ueber SetLanguage aendern!
     sal_Bool                bIsAutomaticLanguage;
     sal_uInt32          nFormat;
@@ -320,7 +322,10 @@ private:
 protected:
     void                SetFormat(sal_uInt32 nSet) {nFormat = nSet;}
 
-    SwField(SwFieldType* pTyp, sal_uInt32 nFmt = 0, sal_uInt16 nLang = LANGUAGE_SYSTEM);
+    SwField( SwFieldType* pTyp,
+             sal_uInt32 nFmt = 0,
+             sal_uInt16 nLang = LANGUAGE_SYSTEM,
+             bool m_bUseFieldValueCache = true );
 
 public:
     virtual             ~SwField();

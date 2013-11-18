@@ -42,7 +42,6 @@ public:
     virtual ~SwTxtTOXMark();
 
     virtual xub_StrLen *GetEnd();     // SwTxtAttr
-    inline const xub_StrLen* GetEnd() const { return m_pEnd; }
 
     void CopyTOXMark( SwDoc* pDestDoc );
 

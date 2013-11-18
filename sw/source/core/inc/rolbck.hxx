@@ -403,11 +403,14 @@ public:
 
     // helper methods for recording attribute in History
     // used by Undo classes (Delete/Overwrite/Inserts)
-    void CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx, xub_StrLen nStart,
-                    xub_StrLen nEnd, bool bFields );
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
+    void CopyAttr(
+        SwpHints* pHts,
+        const sal_uLong nNodeIdx,
+        const xub_StrLen nStart,
+        const xub_StrLen nEnd,
+        const bool bCopyFields );
+
     void CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx );
-    // <--
 };
 
 #ifndef ROLBCK_HISTORY_ONLY

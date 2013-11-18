@@ -177,7 +177,6 @@ public:
 class SwBulletPortion : public SwNumberPortion
 {
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwBulletPortion( const xub_Unicode cCh,
                      const XubString& rBulletFollowedBy,
                      SwFont *pFnt,
@@ -185,7 +184,6 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     OUTPUT_OPERATOR
 };
 
@@ -201,7 +199,6 @@ class SwGrfNumPortion : public SwNumberPortion
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwGrfNumPortion( SwFrm *pFrm,
                      const XubString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
@@ -211,7 +208,6 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );

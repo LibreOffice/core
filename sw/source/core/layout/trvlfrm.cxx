@@ -2005,7 +2005,9 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
         rRegion -= rRect;
 }
 
-void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
+void SwRootFrm::CalcFrmRects(
+    SwShellCrsr &rCrsr,
+    const sal_Bool bIsTblMode )
 {
     SwPosition *pStartPos = rCrsr.Start(),
                *pEndPos   = rCrsr.GetPoint() == pStartPos ? rCrsr.GetMark() : rCrsr.GetPoint();

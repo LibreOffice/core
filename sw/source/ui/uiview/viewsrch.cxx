@@ -648,7 +648,7 @@ void SwView::Replace()
             if( pReplList->Get( aReplSet ).Count() )
             {
                 ::SfxToSwPageDescAttr( *pWrtShell, aReplSet );
-                pWrtShell->SwEditShell::SetAttr( aReplSet );
+                pWrtShell->SwEditShell::SetAttrSet( aReplSet );
             }
         }
     }

@@ -71,10 +71,9 @@ class SwCellFrms;
 class SwTOXMark;
 class SwRedline;
 class IBlockCursor;
-class SwCntntNode; //  #i23726#
-// --> OD 2008-06-19 #i90516#
+class SwCntntNode;
 class SwPostItField;
-// <--
+class SwTxtFld;
 struct SwPosition;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -220,10 +219,8 @@ private:
     sal_uInt16 nBasicActionCnt;     // Actions, die vom Basic geklammert wurden
     CrsrMoveState eMvState;     // Status fuers Crsr-Travelling - GetCrsrOfst
 
-    // --> OD 2008-04-02 #refactorlists#
     String sMarkedListId;
     int nMarkedListLevel;
-    // <--
 
     sal_Bool bHasFocus : 1;         // Shell ist in einem Window "aktiv"
     sal_Bool bSVCrsrVis : 1;        // SV-Cursor Un-/Sichtbar
@@ -251,9 +248,9 @@ private:
     // OD 11.02.2003 #100556# - flag to allow/avoid execution of marcos (default: true)
     bool mbMacroExecAllowed : 1;
 
-    SW_DLLPRIVATE void UpdateCrsr( sal_uInt16 eFlags
-                            =SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
-                     sal_Bool bIdleEnd = sal_False );
+    SW_DLLPRIVATE void UpdateCrsr(
+        sal_uInt16 eFlags = SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
+        sal_Bool bIdleEnd = sal_False );
 
     SW_DLLPRIVATE void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
 
@@ -734,11 +731,26 @@ public:
     inline void UnSetVisCrsr();
 
     // springe zum nachsten/vorherigen Feld des entsprechenden Types
-    sal_Bool MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
-                                            sal_uInt16 nSubType = USHRT_MAX,
-                                            sal_uInt16 nResType = USHRT_MAX );
+    sal_Bool MoveFldType(
+        const SwFieldType* pFldType,
+        const bool bNext,
+        const sal_uInt16 nResType = USHRT_MAX,
+        const bool bAddSetExpressionFldsToInputFlds = true );
     // springe genau zu diesem Feld
     sal_Bool GotoFld( const SwFmtFld& rFld );
+
+    SwTxtFld* GetTxtFldAtPos(
+        const SwPosition* pPos,
+        const bool bIncludeInputFldAtStart ) const;
+    SwField* GetFieldAtCrsr(
+        const SwPaM* pCrsr,
+        const bool bIncludeInputFldAtStart ) const;
+    SwField* GetCurFld( const bool bIncludeInputFldAtStart = false ) const;
+    bool CrsrInsideInputFld() const;
+    bool PosInsideInputFld( const SwPosition& rPos ) const;
+    bool DocPtInsideInputFld( const Point& rDocPt ) const;
+    xub_StrLen StartOfInputFldAtPos( const SwPosition& rPos ) const;
+    xub_StrLen EndOfInputFldAtPos( const SwPosition& rPos ) const;
 
     // returne die Anzahl der Cursor im Ring (Flag besagt ob man nur
     // aufgepspannte haben will - sprich etwas selektiert ist (Basic))
@@ -829,14 +841,13 @@ public:
     sal_Bool GotoINetAttr( const SwTxtINetFmt& rAttr );
     const SwFmtINetFmt* FindINetAttr( const String& rName ) const;
 
+    sal_Bool SelectTxt( const xub_StrLen nStart,
+                        const xub_StrLen nEnd );
+
     sal_Bool CheckTblBoxCntnt( const SwPosition* pPos = 0 );
     void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
     void ClearTblBoxCntnt();
     sal_Bool EndAllTblBoxEdit();
-
-    // wird gerufen, wenn eine Tabellenselektion im UpdateCrsr erzeugt wird,
-    // ohne das die UI davon etaws weiss
-    virtual void NewCoreSelection();
 
     void SetSelTblCells( sal_Bool bFlag )           { bSelTblCells = bFlag; }
     sal_Bool IsSelTblCells() const                  { return bSelTblCells; }
@@ -892,8 +903,6 @@ public:
        @return the textual description of the current selection
      */
     String GetCrsrDescr() const;
-
-    SwRect GetRectOfCurrentChar();
 };
 
 

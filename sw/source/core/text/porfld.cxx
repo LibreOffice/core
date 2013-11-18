@@ -68,10 +68,7 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
     {
         pNewFnt = new SwFont( *pFnt );
     }
-    // --> OD 2009-11-25 #i107143#
-    // pass placeholder property to created <SwFldPortion> instance.
     SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt, bPlaceHolder );
-    // <--
     pClone->SetNextOffset( nNextOffset );
     pClone->m_bNoLength = this->m_bNoLength;
     return pClone;
@@ -397,20 +394,10 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 case CHAR_SOFTHYPHEN:
                 case CHAR_HARDBLANK:
-                // --> FME 2006-01-11 #i59759# Erase additional control
-                // characters from field string, otherwise we get stuck in
-                // a loop.
                 case CHAR_ZWSP :
                 case CHAR_ZWNBSP :
-        //        case CHAR_RLM :
-        //        case CHAR_LRM :
-                // <--
-                // --> OD 2010-06-03 #i111750#
-                // - Erasing further control characters from field string in
-                // to avoid loop.
                 case CH_TXTATR_BREAKWORD:
                 case CH_TXTATR_INWORD:
-                // <--
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;

@@ -1036,10 +1036,8 @@ SwHistory::~SwHistory()
 |*
 *************************************************************************/
 
-// --> OD 2008-02-27 #refactorlists# - removed <rDoc>
 void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
                      sal_uLong nNodeIdx )
-// <--
 {
     ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
 
@@ -1289,8 +1287,12 @@ void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx )
     }
 }
 
-void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
-                          xub_StrLen nStart, xub_StrLen nEnd, bool bFields )
+void SwHistory::CopyAttr(
+    SwpHints* pHts,
+    const sal_uLong nNodeIdx,
+    const xub_StrLen nStart,
+    const xub_StrLen nEnd,
+    const bool bCopyFields )
 {
     if( !pHts  )
         return;
@@ -1301,11 +1303,8 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
     const xub_StrLen * pEndIdx;
     for( sal_uInt16 n = 0; n < pHts->Count(); n++ )
     {
-        // BP: nAttrStt muss auch bei !pEndIdx gesetzt werden
         pHt = pHts->GetTextHint(n);
         nAttrStt = *pHt->GetStart();
-// JP: ???? wieso nAttrStt >= nEnd
-//      if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt >= nEnd )
         if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
             break;
 
@@ -1314,8 +1313,8 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
         switch( pHt->Which() )
         {
         case RES_TXTATR_FIELD:
-            // keine Felder, .. kopieren ??
-            if( !bFields )
+        case RES_TXTATR_INPUTFIELD:
+            if( !bCopyFields )
                 bNextAttr = sal_True;
             break;
         case RES_TXTATR_FLYCNT:
@@ -1325,15 +1324,12 @@ void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
         }
 
         if( bNextAttr )
-           continue;
+            continue;
 
         // save all attributes that are somehow in this area
         if ( nStart <= nAttrStt )
         {
-            if ( nEnd > nAttrStt
-// JP: ???? wieso nAttrStt >= nEnd
-//              || (nEnd == nAttrStt && (!pEndIdx || nEnd == pEndIdx->GetIndex()))
-            )
+            if ( nEnd > nAttrStt )
             {
                 Add( pHt, nNodeIdx, false );
             }

@@ -1011,7 +1011,6 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         }
     }
 
-    // --> OD 2008-03-17 #refactorlists#
     if ( bSetItem )
     {
         if ( bCreateNewList )
@@ -1030,22 +1029,18 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                         "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
                 sListId = pNewList->GetListId();
             }
-            InsertPoolItem( rPam,
-                SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
+            InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
         }
         else if ( sContinuedListId.Len() > 0 )
         {
             // apply given list id
-            InsertPoolItem( rPam,
-                SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
+            InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
         }
     }
-    // <--
 
     if ( ! rPam.HasMark())
     {
         SwTxtNode * pTxtNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
-        // --> OD 2006-10-19 #134160#
         // consider case that the PaM doesn't denote a text node - e.g. it denotes a graphic node
         if ( pTxtNd )
         {
@@ -1054,15 +1049,13 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
             if (pRule && pRule->GetName() == pNew->GetName())
             {
                 bSetItem = sal_False;
-                // --> OD 2008-06-02 #refactorlists#
                 if ( !pTxtNd->IsInList() )
                 {
                     pTxtNd->AddToList();
                 }
-                // <--
             }
-            // --> OD 2005-10-26 #b6340308# - only clear numbering attribute at
-            // text node, if at paragraph style the new numbering rule is found.
+            // only clear numbering attribute at text node,
+            // if at paragraph style the new numbering rule is found.
             else if ( !pRule )
             {
                 SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
@@ -1076,25 +1069,19 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                     }
                 }
             }
-            // <--
         }
-        // <--
     }
 
-    // --> OD 2009-08-18 #i103817#
     if ( bSetItem )
-    // <--
     {
         InsertPoolItem( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
     }
 
-    // --> OD 2008-02-08 #newlistlevelattrs#
     if ( bResetIndentAttrs &&
          pNew && pNew->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_LR_SPACE );
-        // --> OD 2010-10-05 #i114929#
         // On a selection setup a corresponding Point-and-Mark in order to get
         // the indentation attribute reset on all paragraphs touched by the selection
         if ( rPam.HasMark() &&
@@ -1110,9 +1097,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         {
             ResetAttrs( rPam, sal_False, &aResetAttrsArray );
         }
-        // <--
     }
-    // <--
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1128,7 +1113,6 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-        // --> OD 2010-10-05 #i114929#
         // On a selection setup a corresponding Point-and-Mark in order to get
         // the list-is-counted attribute reset on all paragraphs touched by the selection
         if ( rPam.HasMark() &&
@@ -1144,12 +1128,10 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
         {
             ResetAttrs( rPam, sal_False, &aResetAttrsArray );
         }
-        // <--
     }
     else
     {
-        InsertPoolItem( rPam,
-            SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_False ), 0 );
+        InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_False ), 0 );
     }
 }
 

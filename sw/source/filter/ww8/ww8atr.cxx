@@ -1843,9 +1843,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
     bool bUnicode = IsUnicode();
     WW8_WrPlcFld* pFldP = CurrentFieldPlc();
 
-    // --> OD 2008-08-14 #158418#
     const bool bIncludeEmptyPicLocation = ( eFldType == ww::ePAGE );
-    // <--
     if (WRITEFIELD_START & nMode)
     {
         sal_uInt8 aFld13[2] = { 0x13, 0x00 };  // will change
@@ -1854,9 +1852,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             aFld13[0] |= 0x80;
         aFld13[1] = static_cast< sal_uInt8 >(eFldType);  // Typ nachtragen
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld13 );
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x13, 0, bIncludeEmptyPicLocation );
-        // <--
     }
     if (WRITEFIELD_CMD_START & nMode)
     {
@@ -1867,8 +1863,8 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             SwWW8Writer::WriteString8(Strm(), rFldCmd, false,
                 RTL_TEXTENCODING_MS_1252);
         }
-        // --> OD 2005-06-08 #i43956# - write hyperlink character including
-        // attributes and corresponding binary data for certain reference fields.
+        // write hyperlink character including attributes and
+        // corresponding binary data for certain reference fields.
         bool bHandleBookmark = false;
 
         if (pFld)
@@ -1877,12 +1873,6 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
                 ( eFldType == ww::ePAGEREF || eFldType == ww::eREF ||
                   eFldType == ww::eNOTEREF || eFldType == ww::eFOOTREF ))
                 bHandleBookmark = true;
-
-#if 0
-            if (pFld->GetTyp()->Which() == RES_INPUTFLD &&
-                eFldType == ww::eFORMTEXT)
-                bHandleBookmark = true;
-#endif
         }
 
         if ( bHandleBookmark )
@@ -1908,16 +1898,13 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             // insert hyperlink character including attributes and data.
             InsertSpecialChar( *this, 0x01, &aLinkStr );
         }
-        // <--
     }
     if (WRITEFIELD_CMD_END & nMode)
     {
         static const sal_uInt8 aFld14[2] = { 0x14, 0xff };
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
         pFldP->ResultAdded();
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x14, 0, bIncludeEmptyPicLocation );
-        // <--
     }
     if (WRITEFIELD_END & nMode)
     {
@@ -1985,9 +1972,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
         }
 
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld15 );
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x15, 0, bIncludeEmptyPicLocation );
-        // <--
     }
 }
 
@@ -2619,7 +2604,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     const SwField* pFld = rField.GetField();
     String sStr;        // fuer optionale Parameter
     bool bWriteExpand = false;
-    sal_uInt16 nSubType = pFld->GetSubType();
+    const sal_uInt16 nSubType = pFld->GetSubType();
 
     switch (pFld->GetTyp()->Which())
     {
@@ -2866,8 +2851,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         break;
     case RES_INPUTFLD:
         {
-            const SwInputField * pInputField =
-                dynamic_cast<const SwInputField *>(pFld);
+            const SwInputField * pInputField = dynamic_cast<const SwInputField *>(pFld);
 
             if (pInputField->isFormField())
                 GetExport().DoFormText(pInputField);
@@ -5182,6 +5166,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             TextCharFormat( static_cast< const SwFmtCharFmt& >( rHt ) );
             break;
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_INPUTFIELD:
             TextField( static_cast< const SwFmtFld& >( rHt ) );
             break;
         case RES_TXTATR_FLYCNT:

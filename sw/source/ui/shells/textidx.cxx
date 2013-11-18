@@ -211,7 +211,16 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
             rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, sal_True));
 
     }
-    else //if( SFX_ITEM_UNKNOWN != rSet.GetItemState( FN_EDIT_IDX_ENTRY_DLG ))
+    else if ( rSh.CrsrInsideInputFld() )
+    {
+        rSet.DisableItem( FN_INSERT_IDX_ENTRY_DLG );
+        rSet.DisableItem( FN_INSERT_AUTH_ENTRY_DLG );
+        rSet.DisableItem( FN_EDIT_AUTH_ENTRY_DLG );
+        rSet.DisableItem( FN_EDIT_IDX_ENTRY_DLG );
+        rSet.DisableItem( FN_INSERT_MULTI_TOX );
+        rSet.DisableItem( FN_REMOVE_CUR_TOX );
+    }
+    else
     {
 
         sal_Bool bEnableEdit = sal_True;

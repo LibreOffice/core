@@ -865,7 +865,13 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
 {
     SwTxtPortion *pPor = 0;
     if( GetFnt()->IsTox() )
+    {
         pPor = new SwToxPortion;
+    }
+    else if ( GetFnt()->IsInputField() )
+    {
+        pPor = new SwTxtInputFldPortion();
+    }
     else
     {
         if( GetFnt()->IsRef() )
@@ -895,8 +901,10 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
                 else
                 {
                     pPor = new SwTxtPortion;
-                    if( GetFnt()->IsURL() )
+                    if ( GetFnt()->IsURL() )
+                    {
                         pPor->SetWhichPor( POR_URL );
+                    }
                 }
             }
         }
@@ -1321,20 +1329,18 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
             case CHAR_ZWSP:                     // zero width space
             case CHAR_ZWNBSP :                  // word joiner
-//            case CHAR_RLM :                     // right to left mark
-//            case CHAR_LRM :                     // left to right mark
                 pPor = new SwControlCharPortion( cChar ); break;
 
             case CH_TXTATR_BREAKWORD:
             case CH_TXTATR_INWORD:
-                            if( rInf.HasHint( rInf.GetIdx() ) )
-                            {
-                                pPor = NewExtraPortion( rInf );
-                                break;
-                            }
-                            // No break
+                if( rInf.HasHint( rInf.GetIdx() ) )
+                {
+                    pPor = NewExtraPortion( rInf );
+                    break;
+                }
+                // No break
             default        :
-            {
+                {
                 SwTabPortion* pLastTabPortion = rInf.GetLastTab();
                 if ( pLastTabPortion && cChar == rInf.GetTabDecimal() )
                 {
