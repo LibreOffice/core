@@ -21,9 +21,6 @@
 
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
-#include <statreg.cpp>
 #endif
-
-#include <atlimpl.cpp>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
