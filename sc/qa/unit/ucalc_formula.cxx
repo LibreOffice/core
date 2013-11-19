@@ -134,7 +134,9 @@ void Test::testFormulaCreateStringFromTokens()
 
     for (size_t i = 0, n = SAL_N_ELEMENTS(aTests); i < n; ++i)
     {
+#if 0
         OUString aFormula = OUString::createFromAscii(aTests[i]);
+#endif
         ScCompiler aComp(m_pDoc, aPos);
         aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
 #if 0 // TODO: This call to CompileString() causes the cppunittester to somehow fail on Windows.
