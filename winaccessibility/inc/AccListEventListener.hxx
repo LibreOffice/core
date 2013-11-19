@@ -40,14 +40,15 @@ public:
     AccListEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccListEventListener();
 
-    //AccessibleEventListener
+    // XAccessibleEventListener
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+
     //for active descendant changed event
-    virtual void SAL_CALL handleActiveDescendantChangedEvent(
+    virtual void HandleActiveDescendantChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
     //for value changed event
-    virtual void SAL_CALL handleValueChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleValueChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue) SAL_OVERRIDE;
 };
 
 #endif

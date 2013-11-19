@@ -38,7 +38,7 @@ public:
     AccTextComponentEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccTextComponentEventListener();
 
-    virtual void SAL_CALL setComponentState(short state, bool enable);
+    virtual void SetComponentState(short state, bool enable) SAL_OVERRIDE;
 
 };
 

@@ -42,7 +42,7 @@ AccTextComponentEventListener::~AccTextComponentEventListener()
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset
  */
-void AccTextComponentEventListener::setComponentState(short state, bool enable )
+void AccTextComponentEventListener::SetComponentState(short state, bool enable )
 {
     // only the following state can be fired state event.
     switch (state)
@@ -57,7 +57,7 @@ void AccTextComponentEventListener::setComponentState(short state, bool enable )
         // no msaa state mapping
         break;
     default:
-        AccComponentEventListener::setComponentState(state, enable);
+        AccComponentEventListener::SetComponentState(state, enable);
         break;
     }
 }

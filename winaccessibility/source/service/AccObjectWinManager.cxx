@@ -628,7 +628,7 @@ void AccObjectWinManager::DeleteAccListener( AccObject*  pAccObj )
     AccEventListener* listener = pAccObj->getListener();
     if( listener==NULL )
         return;
-    listener->removeMeFromBroadcaster();
+    listener->RemoveMeFromBroadcaster();
     pAccObj->SetListener(NULL);
 }
 

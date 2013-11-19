@@ -46,7 +46,7 @@ void  AccTreeEventListener::notifyEvent( const ::com::sun::star::accessibility::
     switch (aEvent.EventId)
     {
     case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
-        handleActiveDescendantChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleActiveDescendantChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     default:
         AccDescendantManagerEventListener::notifyEvent(aEvent);
@@ -59,7 +59,7 @@ void  AccTreeEventListener::notifyEvent( const ::com::sun::star::accessibility::
  *  @param  oldValue    the child to lose active
  *  @param  newValue    the child to get active
  */
-void AccTreeEventListener::handleActiveDescendantChangedEvent(Any oldValue, Any newValue)
+void AccTreeEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any newValue)
 {
     Reference< XAccessible > xChild;
     if(newValue >>= xChild )

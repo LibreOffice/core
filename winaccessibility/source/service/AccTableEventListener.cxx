@@ -48,7 +48,7 @@ throw (::com::sun::star::uno::RuntimeException)
     switch (aEvent.EventId)
     {
     case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
-        handleActiveDescendantChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleActiveDescendantChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
 
     case AccessibleEventId::TABLE_CAPTION_CHANGED:
@@ -78,7 +78,7 @@ throw (::com::sun::star::uno::RuntimeException)
     case AccessibleEventId::TABLE_MODEL_CHANGED:
         {
 
-            handleTableModelChangeEvent(aEvent.NewValue);
+            HandleTableModelChangeEvent(aEvent.NewValue);
             break;
         }
     case AccessibleEventId::TABLE_SUMMARY_CHANGED:
@@ -104,7 +104,7 @@ throw (::com::sun::star::uno::RuntimeException)
  *  @param  oldValue    the child to lose active
  *  @param  newValue    the child to get active
  */
-void AccTableEventListener::handleActiveDescendantChangedEvent(Any oldValue, Any newValue)
+void AccTableEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any newValue)
 {
     Reference< XAccessible > xChild;
     if(newValue >>= xChild )
@@ -127,7 +127,7 @@ void AccTableEventListener::handleActiveDescendantChangedEvent(Any oldValue, Any
     }
 
 }
-void AccTableEventListener::handleTableModelChangeEvent(Any newValue)
+void AccTableEventListener::HandleTableModelChangeEvent(Any newValue)
 {
     AccessibleTableModelChange aModelChange;
     if (newValue >>= aModelChange)

@@ -47,7 +47,7 @@ throw (::com::sun::star::uno::RuntimeException)
     switch (aEvent.EventId)
     {
     case AccessibleEventId::CHILD:
-        handleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::SELECTION_CHANGED:
         //don't need to process anything,just same as word behavior
@@ -64,7 +64,7 @@ throw (::com::sun::star::uno::RuntimeException)
  *  @param  oldValue    the child to be deleted
  *  @param  newValue    the child to be added
  */
-void AccMenuEventListener::handleChildChangedEvent(Any oldValue, Any newValue)
+void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
 {
 
     Reference< XAccessible > xChild;
@@ -104,7 +104,7 @@ void AccMenuEventListener::handleChildChangedEvent(Any oldValue, Any newValue)
 /**
  *  handle the SELECTION_CHANGED event
  */
-void AccMenuEventListener::handleSelectionChangedEvent()
+void AccMenuEventListener::HandleSelectionChangedEventNoArgs()
 {
     pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, pAccessible);
 }
@@ -112,7 +112,7 @@ void AccMenuEventListener::handleSelectionChangedEvent()
 /**
  *  handle the Menu_popup event
  */
-void AccMenuEventListener::fireStatePropertyChange(short state, bool set)
+void AccMenuEventListener::FireStatePropertyChange(short state, bool set)
 {
     if( set )
     {
@@ -126,8 +126,7 @@ void AccMenuEventListener::fireStatePropertyChange(short state, bool set)
             pAgent->UpdateChildState(pAccessible);
             break;
         default:
-            AccComponentEventListener::fireStatePropertyChange(state, set
-                                                                  );
+            AccComponentEventListener::FireStatePropertyChange(state, set);
             break;
         }
     }
@@ -141,8 +140,7 @@ void AccMenuEventListener::fireStatePropertyChange(short state, bool set)
 
             break;
         default:
-            AccComponentEventListener::fireStatePropertyChange(state, set
-                                                                  );
+            AccComponentEventListener::FireStatePropertyChange(state, set);
             break;
         }
     }

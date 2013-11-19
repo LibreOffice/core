@@ -38,11 +38,11 @@ public:
     AccObjectContainerEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccObjectContainerEventListener();
 
-    //overwrite handleStateChangedEvent()
-    virtual void SAL_CALL handleStateChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleStateChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue) SAL_OVERRIDE;
+
     //for visible data changed event, for shapes, the visiabledatachanged should be mapped to LOCATION_CHANGED
-    virtual void SAL_CALL handleVisibleDataChangedEvent();
+    virtual void HandleVisibleDataChangedEvent() SAL_OVERRIDE;
 };
 
 #endif

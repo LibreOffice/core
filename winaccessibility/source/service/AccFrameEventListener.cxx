@@ -53,13 +53,13 @@ throw (::com::sun::star::uno::RuntimeException)
     switch (aEvent.EventId)
     {
     case AccessibleEventId::CHILD:
-        handleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::VISIBLE_DATA_CHANGED:
-        handleVisibleDataChangedEvent();
+        HandleVisibleDataChangedEvent();
         break;
     case AccessibleEventId::BOUNDRECT_CHANGED:
-        handleBoundrectChangedEvent();
+        HandleBoundrectChangedEvent();
         break;
     default:
         AccEventListener::notifyEvent(aEvent);
@@ -70,17 +70,17 @@ throw (::com::sun::star::uno::RuntimeException)
 /**
  *  handle the VISIBLE_DATA_CHANGED event
  */
-void AccFrameEventListener::handleVisibleDataChangedEvent()
+void AccFrameEventListener::HandleVisibleDataChangedEvent()
 {
-    AccEventListener::handleVisibleDataChangedEvent();
+    AccEventListener::HandleVisibleDataChangedEvent();
 }
 
 /**
  *  handle the BOUNDRECT_CHANGED event
  */
-void AccFrameEventListener::handleBoundrectChangedEvent()
+void AccFrameEventListener::HandleBoundrectChangedEvent()
 {
-    AccEventListener::handleBoundrectChangedEvent();
+    AccEventListener::HandleBoundrectChangedEvent();
 }
 
 /**
@@ -88,7 +88,7 @@ void AccFrameEventListener::handleBoundrectChangedEvent()
  *  @param  oldValue    the child to be deleted
  *  @param  newValue    the child to be added
  */
-void AccFrameEventListener::handleChildChangedEvent(Any oldValue, Any newValue)
+void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
 {
     Reference< XAccessible > xChild;
     if( newValue >>= xChild)
@@ -135,7 +135,7 @@ void AccFrameEventListener::handleChildChangedEvent(Any oldValue, Any newValue)
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset
  */
-void AccFrameEventListener::setComponentState(short state, bool enable )
+void AccFrameEventListener::SetComponentState(short state, bool enable )
 {
     // only the following state can be fired state event.
     switch (state)

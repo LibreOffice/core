@@ -41,39 +41,38 @@ public:
     AccComponentEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccComponentEventListener();
 
-    //AccessibleEventListener
+    // XAccessibleEventListener
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for value changed event
-    virtual void SAL_CALL handleValueChangedEvent(
+    virtual void HandleValueChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //for action changed event
-    virtual void SAL_CALL handleActionChangedEvent();
+    virtual void HandleActionChangedEvent();
 
     //for text changed event
-    virtual void SAL_CALL handleTextChangedEvent(
+    virtual void HandleTextChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //for caret changed event
-    virtual void SAL_CALL handleCaretChangedEvent(
+    virtual void HandleCaretChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //for visible data changed event
-    virtual void SAL_CALL handleVisibleDataChangedEvent();
+    virtual void HandleVisibleDataChangedEvent() SAL_OVERRIDE;
 
     //for bound rect changed event
-    virtual void SAL_CALL handleBoundrectChangedEvent();
+    virtual void HandleBoundrectChangedEvent() SAL_OVERRIDE;
 
-    virtual void SAL_CALL setComponentState(short state, bool enable);
-    virtual void SAL_CALL fireStatePropertyChange(short state, bool set
-                                                     );
-    virtual void SAL_CALL fireStateFocusdChange(bool enable);
+    virtual void SetComponentState(short state, bool enable) SAL_OVERRIDE;
+    virtual void FireStatePropertyChange(short state, bool set) SAL_OVERRIDE;
+    virtual void FireStateFocusedChange(bool enable) SAL_OVERRIDE;
 
-    void handleSelectionChangedEvent();
+    void HandleSelectionChangedEventNoArgs();
 
     //add TEXT_SELECTION_CHANGED event
-    void handleTextSelectionChangedEvent();
+    void HandleTextSelectionChangedEvent();
 };
 
 #endif

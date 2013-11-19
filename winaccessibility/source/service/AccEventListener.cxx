@@ -67,13 +67,13 @@ throw (::com::sun::star::uno::RuntimeException)
     switch (aEvent.EventId)
     {
     case AccessibleEventId::NAME_CHANGED:
-        handleNameChangedEvent(aEvent.NewValue);
+        HandleNameChangedEvent(aEvent.NewValue);
         break;
     case AccessibleEventId::DESCRIPTION_CHANGED:
-        handleDescriptionChangedEvent(aEvent.NewValue);
+        HandleDescriptionChangedEvent(aEvent.NewValue);
         break;
     case AccessibleEventId::STATE_CHANGED:
-        handleStateChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleStateChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     default:
         break;
@@ -84,7 +84,7 @@ throw (::com::sun::star::uno::RuntimeException)
  *  handle the NAME_CHANGED event
  *  @param  name        the new name with changed.
  */
-void AccEventListener::handleNameChangedEvent(Any name)
+void AccEventListener::HandleNameChangedEvent(Any name)
 {
     if ( pAgent->IsTopWinAcc( pAccessible ) )
     {
@@ -104,7 +104,7 @@ void AccEventListener::handleNameChangedEvent(Any name)
  *  handle the DESCRIPTION_CHANGED event
  *  @param  desc        the new description
  */
-void AccEventListener::handleDescriptionChangedEvent(Any desc)
+void AccEventListener::HandleDescriptionChangedEvent(Any desc)
 {
     pAgent->UpdateDescription(pAccessible, desc);
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_DESCRIPTIONCHANGE, pAccessible);
@@ -113,7 +113,7 @@ void AccEventListener::handleDescriptionChangedEvent(Any desc)
 /**
  *  handle the BOUNDRECT_CHANGED event
  */
-void AccEventListener::handleBoundrectChangedEvent()
+void AccEventListener::HandleBoundrectChangedEvent()
 {
     pAgent->UpdateLocation(pAccessible);
     pAgent->NotifyAccEvent(UM_EVENT_BOUNDRECT_CHANGED, pAccessible);
@@ -122,7 +122,7 @@ void AccEventListener::handleBoundrectChangedEvent()
 /**
  *  handle the VISIBLE_DATA_CHANGED event
  */
-void AccEventListener::handleVisibleDataChangedEvent()
+void AccEventListener::HandleVisibleDataChangedEvent()
 {
     pAgent->UpdateValue(pAccessible);
     pAgent->NotifyAccEvent(UM_EVENT_VISIBLE_DATA_CHANGED, pAccessible);
@@ -133,16 +133,16 @@ void AccEventListener::handleVisibleDataChangedEvent()
  *  @param  oldValue    the old state of the source of event
  *  @param  newValue    the new state of the source of event
  */
-void AccEventListener::handleStateChangedEvent(Any oldValue, Any newValue)
+void AccEventListener::HandleStateChangedEvent(Any oldValue, Any newValue)
 {
     short newV, oldV;
     if( newValue >>= newV)
     {
-        setComponentState(newV, true);
+        SetComponentState(newV, true);
     }
     else if (oldValue >>= oldV)
     {
-        setComponentState(oldV, false);
+        SetComponentState(oldV, false);
     }
 }
 
@@ -151,15 +151,15 @@ void AccEventListener::handleStateChangedEvent(Any oldValue, Any newValue)
  *  @param  state       new state id
  *  @param  enable      true if state is set, false if state is unset
  */
-void AccEventListener::setComponentState(short state, bool enable )
+void AccEventListener::SetComponentState(short state, bool enable )
 {
     switch (state)
     {
     case AccessibleStateType::FOCUSED:
-        fireStateFocusdChange(enable);
+        FireStateFocusedChange(enable);
         break;
     default:
-        fireStatePropertyChange(state, enable);
+        FireStatePropertyChange(state, enable);
         break;
     }
 }
@@ -168,7 +168,7 @@ void AccEventListener::setComponentState(short state, bool enable )
  *  handle the focused event
  *  @param enable   true if get focus, false if lose focus
  */
-void AccEventListener::fireStateFocusdChange(bool enable)
+void AccEventListener::FireStateFocusedChange(bool enable)
 {
     if(enable)
     {
@@ -187,7 +187,7 @@ void AccEventListener::fireStateFocusdChange(bool enable)
  *  @param state    the state id
  *  @param set      true if state is set, false if state is unset
  */
-void AccEventListener::fireStatePropertyChange(short /*state*/, bool set )
+void AccEventListener::FireStatePropertyChange(short /*state*/, bool set )
 {
     if( set )
     {
@@ -202,7 +202,7 @@ void AccEventListener::fireStatePropertyChange(short /*state*/, bool set )
 /**
  *  get the role of accessible object which is observed
  */
-short AccEventListener::getRole()
+short AccEventListener::GetRole()
 {
     Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
     if(xContext.is())
@@ -215,7 +215,7 @@ short AccEventListener::getRole()
 /**
  *  get the role of accessible parent object which is observed
  */
-short AccEventListener::getParentRole()
+short AccEventListener::GetParentRole()
 {
     if(pAccessible)
     {
@@ -226,7 +226,7 @@ short AccEventListener::getParentRole()
 /**
  *  remove the listener from accessible object
  */
-void AccEventListener::removeMeFromBroadcaster()
+void AccEventListener::RemoveMeFromBroadcaster()
 {
     try
     {
@@ -276,7 +276,7 @@ void AccEventListener::removeMeFromBroadcaster()
 void AccEventListener::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    removeMeFromBroadcaster();
+    RemoveMeFromBroadcaster();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

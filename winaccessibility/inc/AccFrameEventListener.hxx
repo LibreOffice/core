@@ -38,23 +38,21 @@ public:
     AccFrameEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccFrameEventListener();
 
-    //AccessibleEventListener
+    // XAccessibleEventListener
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for child changed event
-    virtual void SAL_CALL handleChildChangedEvent(
+    virtual void HandleChildChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //for visible data changed event
-    virtual void SAL_CALL handleVisibleDataChangedEvent();
+    virtual void HandleVisibleDataChangedEvent() SAL_OVERRIDE;
 
     //for bound rect changed event
-    virtual void SAL_CALL handleBoundrectChangedEvent();
+    virtual void HandleBoundrectChangedEvent() SAL_OVERRIDE;
 
     //state changed
-    virtual void SAL_CALL setComponentState(short state, bool enable);
-    //virtual void SAL_CALL fireStatePropertyChange(short state, bool set);
-    //virtual void SAL_CALL fireStateFocusdChange(bool enable);
+    virtual void SetComponentState(short state, bool enable) SAL_OVERRIDE;
 
 };
 

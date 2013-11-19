@@ -47,13 +47,13 @@ throw (::com::sun::star::uno::RuntimeException)
     switch (aEvent.EventId)
     {
     case AccessibleEventId::CARET_CHANGED:
-        handleCaretChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleCaretChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::VISIBLE_DATA_CHANGED:
-        handleVisibleDataChangedEvent();
+        HandleVisibleDataChangedEvent();
         break;
     case AccessibleEventId::BOUNDRECT_CHANGED:
-        handleBoundrectChangedEvent();
+        HandleBoundrectChangedEvent();
         break;
         //Added for paragraph selected state.
     case AccessibleEventId::STATE_CHANGED:
@@ -75,7 +75,7 @@ throw (::com::sun::star::uno::RuntimeException)
         }
 
     case AccessibleEventId::TEXT_SELECTION_CHANGED:
-        handleTextSelectionChangedEvent();
+        HandleTextSelectionChangedEvent();
         break;
 
     default:
@@ -89,7 +89,7 @@ throw (::com::sun::star::uno::RuntimeException)
  *  @param oldValue     in UNO, this parameter is always NULL
  *  @param newValue     in UNO, this parameter is always NULL
  */
-void AccParagraphEventListener::handleCaretChangedEvent(Any oldValue, Any newValue)
+void AccParagraphEventListener::HandleCaretChangedEvent(Any oldValue, Any newValue)
 {
     pAgent->UpdateLocation(pAccessible);
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_CARETCHANGE, pAccessible);
@@ -98,17 +98,17 @@ void AccParagraphEventListener::handleCaretChangedEvent(Any oldValue, Any newVal
 /**
  *  handle the VISIBLE_DATA_CHANGED event
  */
-void AccParagraphEventListener::handleVisibleDataChangedEvent()
+void AccParagraphEventListener::HandleVisibleDataChangedEvent()
 {
-    AccEventListener::handleVisibleDataChangedEvent();
+    AccEventListener::HandleVisibleDataChangedEvent();
 }
 
 /**
  *  handle the BOUNDRECT_CHANGED event
  */
-void AccParagraphEventListener::handleBoundrectChangedEvent()
+void AccParagraphEventListener::HandleBoundrectChangedEvent()
 {
-    AccEventListener::handleBoundrectChangedEvent();
+    AccEventListener::HandleBoundrectChangedEvent();
 }
 
 /**
@@ -116,7 +116,7 @@ void AccParagraphEventListener::handleBoundrectChangedEvent()
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset
  */
-void AccParagraphEventListener::setComponentState(short state, bool enable )
+void AccParagraphEventListener::SetComponentState(short state, bool enable )
 {
     // only the following state can be fired state event.
     switch (state)
@@ -131,12 +131,12 @@ void AccParagraphEventListener::setComponentState(short state, bool enable )
         // no msaa state mapping
         break;
     default:
-        AccContainerEventListener::setComponentState(state, enable);
+        AccContainerEventListener::SetComponentState(state, enable);
         break;
     }
 }
 
-void AccParagraphEventListener::handleTextSelectionChangedEvent()
+void AccParagraphEventListener::HandleTextSelectionChangedEvent()
 {
     pAgent->NotifyAccEvent(UM_EVENT_TEXT_SELECTION_CHANGED, pAccessible);
 }

@@ -44,7 +44,7 @@ AccObjectContainerEventListener::~AccObjectContainerEventListener()
 /**
  *  handle the STATE_CHANGED event
  */
-void AccObjectContainerEventListener::handleStateChangedEvent(Any oldValue, Any newValue)
+void AccObjectContainerEventListener::HandleStateChangedEvent(Any oldValue, Any newValue)
 {
     //set the accessible name before process for there is no NAME_CHANGED event when change
     //the text in drawing objects.
@@ -58,15 +58,15 @@ void AccObjectContainerEventListener::handleStateChangedEvent(Any oldValue, Any 
             pAgent->UpdateDescription(pAccessible);
         }
     }
-    AccContainerEventListener::handleStateChangedEvent(oldValue, newValue);
+    AccContainerEventListener::HandleStateChangedEvent(oldValue, newValue);
 }
 /**
  *  handle the VISIBLE_DATA_CHANGED event
  *  For SHAPES, the visiable_data_changed event should be mapped to LOCATION_CHANGED event
   */
-void AccObjectContainerEventListener::handleVisibleDataChangedEvent()
+void AccObjectContainerEventListener::HandleVisibleDataChangedEvent()
 {
-    AccContainerEventListener::handleBoundrectChangedEvent();
+    AccContainerEventListener::HandleBoundrectChangedEvent();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,14 +42,14 @@ public:
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for child changed event
-    virtual void SAL_CALL handleChildChangedEvent(
+    virtual void HandleChildChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //for selection changed event
-    virtual void SAL_CALL handleSelectionChangedEvent();
+    virtual void HandleSelectionChangedEventNoArgs();
 
     //for state changed event
-    virtual void SAL_CALL fireStatePropertyChange(short state, bool set );
+    virtual void FireStatePropertyChange(short state, bool set) SAL_OVERRIDE;
 };
 
 #endif

@@ -39,27 +39,27 @@ public:
     AccDescendantManagerEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccDescendantManagerEventListener();
 
-    //AccessibleEventListener
+    // XAccessibleEventListener
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for selection changed event
-    virtual void SAL_CALL handleSelectionChangedEvent(
+    virtual void HandleSelectionChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //for child changed event
-    virtual void SAL_CALL handleChildChangedEvent(
+    virtual void HandleChildChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
-    virtual void SAL_CALL handleChildChangedNoFocusEvent(
+    virtual void HandleChildChangedNoFocusEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     bool NotifyChildEvent(short nWinEvent,const css::uno::Any &Value);
 
-    virtual void handleSelectionChangedAddEvent(
+    virtual void HandleSelectionChangedAddEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
-    virtual void handleSelectionChangedRemoveEvent(
+    virtual void HandleSelectionChangedRemoveEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
-    virtual void handleSelectionChangedWithinEvent(
+    virtual void HandleSelectionChangedWithinEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
 };
 

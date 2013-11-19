@@ -50,29 +50,29 @@ throw (::com::sun::star::uno::RuntimeException)
     switch (aEvent.EventId)
     {
     case AccessibleEventId::VALUE_CHANGED:
-        handleValueChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleValueChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::ACTION_CHANGED:
-        handleActionChangedEvent();
+        HandleActionChangedEvent();
         break;
     case AccessibleEventId::TEXT_CHANGED:
-        handleTextChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleTextChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::CARET_CHANGED:
-        handleCaretChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleCaretChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::VISIBLE_DATA_CHANGED:
-        handleVisibleDataChangedEvent();
+        HandleVisibleDataChangedEvent();
         break;
     case AccessibleEventId::BOUNDRECT_CHANGED:
-        handleBoundrectChangedEvent();
+        HandleBoundrectChangedEvent();
         break;
     case AccessibleEventId::SELECTION_CHANGED:
-        handleSelectionChangedEvent();
+        HandleSelectionChangedEventNoArgs();
         break;
         //to add TEXT_SELECTION_CHANGED event
     case AccessibleEventId::TEXT_SELECTION_CHANGED:
-        handleTextSelectionChangedEvent();
+        HandleTextSelectionChangedEvent();
         break;
         //End
     default:
@@ -87,7 +87,7 @@ throw (::com::sun::star::uno::RuntimeException)
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccComponentEventListener::handleValueChangedEvent(Any oldValue, Any newValue)
+void AccComponentEventListener::HandleValueChangedEvent(Any oldValue, Any newValue)
 {
     pAgent->UpdateValue(pAccessible);
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_VALUECHANGE, pAccessible);
@@ -96,7 +96,7 @@ void AccComponentEventListener::handleValueChangedEvent(Any oldValue, Any newVal
 /**
  * handle the NAME_CHANGED event
  */
-void AccComponentEventListener::handleActionChangedEvent()
+void AccComponentEventListener::HandleActionChangedEvent()
 {
     pAgent->UpdateAction(pAccessible);
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_DEFACTIONCHANGE, pAccessible);
@@ -108,7 +108,7 @@ void AccComponentEventListener::handleActionChangedEvent()
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccComponentEventListener::handleTextChangedEvent(Any oldValue, Any newValue)
+void AccComponentEventListener::HandleTextChangedEvent(Any oldValue, Any newValue)
 {
     pAgent->UpdateValue(pAccessible, newValue);
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_VALUECHANGE, pAccessible);
@@ -120,7 +120,7 @@ void AccComponentEventListener::handleTextChangedEvent(Any oldValue, Any newValu
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccComponentEventListener::handleCaretChangedEvent(Any oldValue, Any newValue)
+void AccComponentEventListener::HandleCaretChangedEvent(Any oldValue, Any newValue)
 {
     pAgent->NotifyAccEvent(UM_EVENT_OBJECT_CARETCHANGE, pAccessible);
 }
@@ -128,17 +128,17 @@ void AccComponentEventListener::handleCaretChangedEvent(Any oldValue, Any newVal
 /**
  *  handle the VISIBLE_DATA_CHANGED event
  */
-void AccComponentEventListener::handleVisibleDataChangedEvent()
+void AccComponentEventListener::HandleVisibleDataChangedEvent()
 {
-    AccEventListener::handleVisibleDataChangedEvent();
+    AccEventListener::HandleVisibleDataChangedEvent();
 }
 
 /**
  *  handle the BOUNDRECT_CHANGED event
  */
-void AccComponentEventListener::handleBoundrectChangedEvent()
+void AccComponentEventListener::HandleBoundrectChangedEvent()
 {
-    AccEventListener::handleBoundrectChangedEvent();
+    AccEventListener::HandleBoundrectChangedEvent();
 }
 
 /**
@@ -147,7 +147,7 @@ void AccComponentEventListener::handleBoundrectChangedEvent()
  * @param   state   new state id
  * @param   enable  true if state is set, false if state is unset
  */
-void AccComponentEventListener::setComponentState(short state, bool enable )
+void AccComponentEventListener::SetComponentState(short state, bool enable)
 {
     // only the following state can be fired state event.
     switch (state)
@@ -158,10 +158,10 @@ void AccComponentEventListener::setComponentState(short state, bool enable )
     case AccessibleStateType::ARMED:
     case AccessibleStateType::INDETERMINATE:
     case AccessibleStateType::SHOWING:
-        fireStatePropertyChange(state, enable);
+        FireStatePropertyChange(state, enable);
         break;
     case AccessibleStateType::VISIBLE:
-        if (getRole() == AccessibleRole::MENU_ITEM)
+        if (GetRole() == AccessibleRole::MENU_ITEM)
         {
             if(enable)
             {
@@ -176,12 +176,12 @@ void AccComponentEventListener::setComponentState(short state, bool enable )
         }
         else
         {
-            fireStatePropertyChange(state, enable);
+            FireStatePropertyChange(state, enable);
         }
         break;
         break;
     case AccessibleStateType::FOCUSED:
-        fireStateFocusdChange(enable);
+        FireStateFocusedChange(enable);
         break;
     case AccessibleStateType::ENABLED:
         if(enable)
@@ -189,9 +189,11 @@ void AccComponentEventListener::setComponentState(short state, bool enable )
             pAgent->UpdateState(pAccessible);
             pAgent->DecreaseState( pAccessible, AccessibleStateType::DEFUNC);
             // 8. label should have no FOCUSABLE state state, Firefox has READONLY state, we can also have.
-            if( getRole() != AccessibleRole::LABEL
-                && getRole() != AccessibleRole::SCROLL_BAR) //IAccessibility2 Implementation 2009
+            if (    GetRole() != AccessibleRole::LABEL
+                &&  GetRole() != AccessibleRole::SCROLL_BAR)
+            {
                 pAgent->IncreaseState( pAccessible, AccessibleStateType::FOCUSABLE);
+            }
         }
         else
         {
@@ -215,7 +217,7 @@ void AccComponentEventListener::setComponentState(short state, bool enable )
  * @param   state   the state id
  * @param   set     true if state is set, false if state is unset
  */
-void AccComponentEventListener::fireStatePropertyChange(short state, bool set)
+void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
 {
     if( set)
         {
@@ -308,11 +310,11 @@ void AccComponentEventListener::fireStatePropertyChange(short state, bool set)
  *
  * @param   enable  true if get focus, false if lose focus
  */
-void AccComponentEventListener::fireStateFocusdChange(bool enable)
+void AccComponentEventListener::FireStateFocusedChange(bool enable)
 {
     if(enable)
     {
-        if(getParentRole() != AccessibleRole::COMBO_BOX )
+        if (GetParentRole() != AccessibleRole::COMBO_BOX)
             pAgent->NotifyAccEvent(UM_EVENT_STATE_FOCUSED, pAccessible);
     }
     else
@@ -322,13 +324,13 @@ void AccComponentEventListener::fireStateFocusdChange(bool enable)
     }
 }
 
-void AccComponentEventListener::handleSelectionChangedEvent()
+void AccComponentEventListener::HandleSelectionChangedEventNoArgs()
 {
     pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, pAccessible);
 }
 
 //add TEXT_SELECTION_CHANGED event
-void AccComponentEventListener::handleTextSelectionChangedEvent()
+void AccComponentEventListener::HandleTextSelectionChangedEvent()
 {
     pAgent->NotifyAccEvent(UM_EVENT_TEXT_SELECTION_CHANGED, pAccessible);
 }

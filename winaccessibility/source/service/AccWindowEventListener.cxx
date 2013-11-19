@@ -46,13 +46,13 @@ void  AccWindowEventListener::notifyEvent( const ::com::sun::star::accessibility
     switch (aEvent.EventId)
     {
     case AccessibleEventId::CHILD:
-        handleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::VISIBLE_DATA_CHANGED:
-        handleVisibleDataChangedEvent();
+        HandleVisibleDataChangedEvent();
         break;
     case AccessibleEventId::BOUNDRECT_CHANGED:
-        handleBoundrectChangedEvent();
+        HandleBoundrectChangedEvent();
         break;
     default:
         AccEventListener::notifyEvent(aEvent);
@@ -63,17 +63,17 @@ void  AccWindowEventListener::notifyEvent( const ::com::sun::star::accessibility
 /**
  *  handle the VISIBLE_DATA_CHANGED event
  */
-void AccWindowEventListener::handleVisibleDataChangedEvent()
+void AccWindowEventListener::HandleVisibleDataChangedEvent()
 {
-    AccEventListener::handleVisibleDataChangedEvent();
+    AccEventListener::HandleVisibleDataChangedEvent();
 }
 
 /**
  *  handle the BOUNDRECT_CHANGED event
  */
-void AccWindowEventListener::handleBoundrectChangedEvent()
+void AccWindowEventListener::HandleBoundrectChangedEvent()
 {
-    AccEventListener::handleBoundrectChangedEvent();
+    AccEventListener::HandleBoundrectChangedEvent();
 }
 
 /**
@@ -81,7 +81,7 @@ void AccWindowEventListener::handleBoundrectChangedEvent()
  *  @param  oldValue    the child to be deleted
  *  @param  newValue    the child to be added
  */
-void AccWindowEventListener::handleChildChangedEvent(Any oldValue, Any newValue)
+void AccWindowEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
 {
     Reference< XAccessible > xChild;
     if( newValue >>= xChild)
@@ -120,7 +120,7 @@ void AccWindowEventListener::handleChildChangedEvent(Any oldValue, Any newValue)
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset
  */
-void AccWindowEventListener::setComponentState(short state, bool enable )
+void AccWindowEventListener::SetComponentState(short state, bool enable )
 {
     // only the following state can be fired state event.
     switch (state)

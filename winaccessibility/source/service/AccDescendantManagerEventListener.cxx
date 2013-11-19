@@ -50,22 +50,22 @@ throw (::com::sun::star::uno::RuntimeException)
     switch (aEvent.EventId)
     {
     case AccessibleEventId::SELECTION_CHANGED:
-        handleSelectionChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleSelectionChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::CHILD:
-        handleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS:
-        handleChildChangedNoFocusEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleChildChangedNoFocusEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::SELECTION_CHANGED_ADD:
-        handleSelectionChangedAddEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleSelectionChangedAddEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::SELECTION_CHANGED_REMOVE:
-        handleSelectionChangedRemoveEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleSelectionChangedRemoveEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::SELECTION_CHANGED_WITHIN:
-        handleSelectionChangedWithinEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleSelectionChangedWithinEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     default:
         AccComponentEventListener::notifyEvent(aEvent);
@@ -78,7 +78,7 @@ throw (::com::sun::star::uno::RuntimeException)
  *  @param  oldValue    the child to be deleted
  *  @param  newValue    the child to be added
  */
-void AccDescendantManagerEventListener::handleChildChangedEvent(Any oldValue, Any newValue)
+void AccDescendantManagerEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
 {
 
     Reference< XAccessible > xChild;
@@ -117,7 +117,7 @@ void AccDescendantManagerEventListener::handleChildChangedEvent(Any oldValue, An
 /**
  *  handle the SELECTION_CHANGED event
  */
-void AccDescendantManagerEventListener::handleSelectionChangedEvent(Any oldValue, Any newValue)
+void AccDescendantManagerEventListener::HandleSelectionChangedEvent(Any oldValue, Any newValue)
 {
     bool bSend =false;
     Reference< XAccessible > xChild;
@@ -151,7 +151,7 @@ void AccDescendantManagerEventListener::handleSelectionChangedEvent(Any oldValue
 }
 
 
-void AccDescendantManagerEventListener::handleChildChangedNoFocusEvent(Any oldValue, Any newValue)
+void AccDescendantManagerEventListener::HandleChildChangedNoFocusEvent(Any oldValue, Any newValue)
 {
     Reference< XAccessible > xChild;
     if(newValue >>= xChild )
@@ -196,7 +196,7 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(short nWinEvent,const A
     }
     return false;
 }
-void AccDescendantManagerEventListener::handleSelectionChangedAddEvent(const Any& /*oldValue*/, const Any &newValue)
+void AccDescendantManagerEventListener::HandleSelectionChangedAddEvent(const Any& /*oldValue*/, const Any &newValue)
 {
     if(NotifyChildEvent(UM_EVENT_SELECTION_CHANGED_ADD,newValue))
     {
@@ -204,7 +204,8 @@ void AccDescendantManagerEventListener::handleSelectionChangedAddEvent(const Any
     }
     pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_ADD,pAccessible);
 }
-void AccDescendantManagerEventListener::handleSelectionChangedRemoveEvent(const Any& /*oldValue*/, const Any &newValue)
+
+void AccDescendantManagerEventListener::HandleSelectionChangedRemoveEvent(const Any& /*oldValue*/, const Any &newValue)
 {
     if(NotifyChildEvent(UM_EVENT_SELECTION_CHANGED_REMOVE,newValue))
     {
@@ -213,7 +214,7 @@ void AccDescendantManagerEventListener::handleSelectionChangedRemoveEvent(const 
     pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_REMOVE,pAccessible);
 }
 
-void AccDescendantManagerEventListener::handleSelectionChangedWithinEvent(const Any& /*oldValue*/, const Any &newValue)
+void AccDescendantManagerEventListener::HandleSelectionChangedWithinEvent(const Any& /*oldValue*/, const Any &newValue)
 {
     if(NotifyChildEvent(UM_EVENT_SELECTION_CHANGED_WITHIN,newValue))
     {

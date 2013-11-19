@@ -49,7 +49,7 @@ void  AccListEventListener::notifyEvent( const ::com::sun::star::accessibility::
     switch (aEvent.EventId)
     {
     case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
-        handleActiveDescendantChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleActiveDescendantChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
         // Since List items a transient a child events are mostly used
@@ -57,7 +57,7 @@ void  AccListEventListener::notifyEvent( const ::com::sun::star::accessibility::
         //TODO: investigate again
         break;
     case AccessibleEventId::VALUE_CHANGED:
-        handleValueChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        HandleValueChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     default:
         AccDescendantManagerEventListener::notifyEvent(aEvent);
@@ -70,7 +70,7 @@ void  AccListEventListener::notifyEvent( const ::com::sun::star::accessibility::
  *  @param  oldValue    the child to lose active
  *  @param  newValue    the child to get active
  */
-void AccListEventListener::handleActiveDescendantChangedEvent(Any oldValue, Any newValue)
+void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any newValue)
 {
     Reference< XAccessible > xChild;
 
@@ -109,10 +109,10 @@ void AccListEventListener::handleActiveDescendantChangedEvent(Any oldValue, Any 
  * @param   oldValue    the old value of the source of event
  * @param   newValue    the new value of the source of event
  */
-void AccListEventListener::handleValueChangedEvent(Any oldValue, Any newValue)
+void AccListEventListener::HandleValueChangedEvent(Any oldValue, Any newValue)
 {
     //to enable value changed event
-    if(getParentRole() == AccessibleRole::COMBO_BOX)
+    if (GetParentRole() == AccessibleRole::COMBO_BOX)
     {
         XAccessible* pParentAcc = pAgent->GetParentXAccessible(pAccessible);
         pAgent->UpdateValue(pParentAcc);

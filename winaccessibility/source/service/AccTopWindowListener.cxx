@@ -61,7 +61,7 @@ void FreeTopWindowListener()
 void handleWindowOpened_impl(long pAcc)
 {
     if( g_pTop && pAcc != 0 )
-        g_pTop->handleWindowOpened( (com::sun::star::accessibility::XAccessible*)((void*)pAcc) );
+        g_pTop->HandleWindowOpened( (com::sun::star::accessibility::XAccessible*)((void*)pAcc) );
 }
 
 /**
@@ -69,7 +69,7 @@ void handleWindowOpened_impl(long pAcc)
  *  accessible listener to monitor all these objects.
  *  @param pAccessible      the accessible of the new opened window
  */
-void AccTopWindowListener::handleWindowOpened( com::sun::star::accessibility::XAccessible* pAccessible )
+void AccTopWindowListener::HandleWindowOpened( com::sun::star::accessibility::XAccessible* pAccessible )
 {
     //get SystemData from window
     VCLXWindow* pvclwindow = (VCLXWindow*)pAccessible;
@@ -141,7 +141,7 @@ void AccTopWindowListener::windowOpened( const ::com::sun::star::lang::EventObje
     if ( !pAccessible )
         return;
 
-    handleWindowOpened( pAccessible );
+    HandleWindowOpened( pAccessible );
 }
 
 /**

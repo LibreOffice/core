@@ -50,37 +50,37 @@ public:
     AccEventListener( com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccEventListener();
 
-    //AccessibleEventListener
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleEventListener
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for name changed event
-    virtual void SAL_CALL handleNameChangedEvent(css::uno::Any name);
+    virtual void HandleNameChangedEvent(css::uno::Any name);
 
     //for description changed event
-    virtual void SAL_CALL handleDescriptionChangedEvent(css::uno::Any desc);
+    virtual void HandleDescriptionChangedEvent(css::uno::Any desc);
 
     //for state changed event
-    virtual void SAL_CALL handleStateChangedEvent(
+    virtual void HandleStateChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
-    virtual void SAL_CALL setComponentState(short state, bool enable);
-    virtual void SAL_CALL fireStatePropertyChange(short state, bool set
-                                                     );
-    virtual void SAL_CALL fireStateFocusdChange(bool enable);
+    virtual void SetComponentState(short state, bool enable);
+    virtual void FireStatePropertyChange(short state, bool set);
+    virtual void FireStateFocusedChange(bool enable);
 
     //for bound rect changed event
-    virtual void SAL_CALL handleBoundrectChangedEvent();
+    virtual void HandleBoundrectChangedEvent();
 
     //for visible data changed event
-    virtual void SAL_CALL handleVisibleDataChangedEvent();
+    virtual void HandleVisibleDataChangedEvent();
 
-    //for interface
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
     //get the accessible role of pAccessible
-    virtual short SAL_CALL getRole();
+    virtual short GetRole();
     //get the accessible parent's role
-    virtual short SAL_CALL getParentRole();
-public:
-    void removeMeFromBroadcaster();
+    virtual short GetParentRole();
+
+    void RemoveMeFromBroadcaster();
 };
 
 #endif

@@ -45,63 +45,62 @@ public:
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for child changed event
-    virtual void SAL_CALL handleChildChangedEvent(
+    virtual void HandleChildChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //for selection changed event
-    virtual void SAL_CALL handleSelectionChangedEvent(
+    virtual void HandleSelectionChangedEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
 
     //for all children changed event
-    virtual void SAL_CALL handleAllChildrenChangedEvent();
+    virtual void HandleAllChildrenChangedEvent();
 
     //for text changed event
-    virtual void SAL_CALL handleTextChangedEvent(
+    virtual void HandleTextChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
-    virtual void SAL_CALL handleStateChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void HandleStateChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue) SAL_OVERRIDE;
 
     //for visible data changed event
-    virtual void SAL_CALL handleVisibleDataChangedEvent();
+    virtual void HandleVisibleDataChangedEvent() SAL_OVERRIDE;
 
     //for bound rect changed event
-    virtual void SAL_CALL handleBoundrectChangedEvent();
+    virtual void HandleBoundrectChangedEvent() SAL_OVERRIDE;
 
     //for value changed event
-    virtual void SAL_CALL handleValueChangedEvent(
+    virtual void HandleValueChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //state changed
-    virtual void SAL_CALL setComponentState(short state, bool enable);
-    virtual void SAL_CALL fireStatePropertyChange(short state, bool set
-                                                     );
-    virtual void SAL_CALL fireStateFocusdChange(bool enable);
-    virtual bool SAL_CALL IsEditable(
+    virtual void SetComponentState(short state, bool enable) SAL_OVERRIDE;
+    virtual void FireStatePropertyChange(short state, bool set) SAL_OVERRIDE;
+    virtual void FireStateFocusedChange(bool enable) SAL_OVERRIDE;
+    virtual bool IsEditable(
         css::uno::Reference<css::accessibility::XAccessibleContext> xContext);
 
     // update all children's state
-    void SAL_CALL UpdateAllChildrenState( com::sun::star::accessibility::XAccessible* pXAccessible );
+    void UpdateAllChildrenState(
+            com::sun::star::accessibility::XAccessible* pXAccessible);
 
     bool NotifyChildEvent(short nWinEvent, const css::uno::Any &Value);
 
-    virtual void handleSelectionChangedAddEvent(
+    virtual void HandleSelectionChangedAddEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
-    virtual void handleSelectionChangedRemoveEvent(
+    virtual void HandleSelectionChangedRemoveEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
-    virtual void handleSelectionChangedWithinEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
-
-    virtual void handlePageChangedEvent(
+    virtual void HandleSelectionChangedWithinEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
 
-    virtual void handleSectionChangedEvent(
+    virtual void HandlePageChangedEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
-    virtual void handleColumnChangedEvent(
+
+    virtual void HandleSectionChangedEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);
-    //IAccessibility2 Implementation 2009-----
+    virtual void HandleColumnChangedEvent(
+            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+
     //for name changed event
-    virtual void SAL_CALL handleNameChangedEvent(css::uno::Any name);
-    //-----IAccessibility2 Implementation 2009
+    virtual void HandleNameChangedEvent(css::uno::Any name) SAL_OVERRIDE;
 };
 
 #endif
