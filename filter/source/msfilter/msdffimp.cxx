@@ -2521,6 +2521,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const
 void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const
 {
     sal_Bool bHasShadow = sal_False;
+    bool bNonZeroShadowOffset = false;
 
     if ( IsProperty( DFF_Prop_gtextSize ) )
         rSet.Put( SvxFontHeightItem( rManager.ScalePt( GetPropertyValue( DFF_Prop_gtextSize ) ), 100, EE_CHAR_FONTHEIGHT ) );
@@ -2553,12 +2554,14 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX ) );
         rManager.ScaleEmu( nVal );
         rSet.Put( SdrShadowXDistItem( nVal ) );
+        bNonZeroShadowOffset = ( nVal > 0 );
     }
     if ( IsProperty( DFF_Prop_shadowOffsetY ) )
     {
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetY ) );
         rManager.ScaleEmu( nVal );
         rSet.Put( SdrShadowYDistItem( nVal ) );
+        bNonZeroShadowOffset = ( nVal > 0 );
     }
     if ( IsProperty( DFF_Prop_fshadowObscured ) )
     {
@@ -2574,7 +2577,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     if ( IsProperty( DFF_Prop_shadowType ) )
     {
         MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType ) );
-        if( eShadowType != mso_shadowOffset )
+        if( eShadowType != mso_shadowOffset && !bNonZeroShadowOffset )
         {
             //0.12" == 173 twip == 302 100mm
             sal_uInt32 nDist = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP ? 173: 302;
