@@ -407,6 +407,8 @@ protected:
 /// to either a sliding window average or sum-of-products
 class OpSum; // Forward Declaration
 class OpAverage; // Forward Declaration
+class OpMin; // Forward Declaration
+class OpMax; // Forward Declaration
 template<class Base>
 class DynamicKernelSlidingArgument: public Base
 {
@@ -428,6 +430,8 @@ public:
     {
         if ((dynamic_cast<OpSum*>(mpCodeGen.get())
             && !dynamic_cast<OpAverage*>(mpCodeGen.get())) ||
+            dynamic_cast<OpMin*>(mpCodeGen.get()) ||
+            dynamic_cast<OpMax*>(mpCodeGen.get()) ||
             dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
             return GetWindowSize()> 4 &&
                 ( (GetStartFixed() && GetEndFixed()) ||
@@ -436,13 +440,16 @@ public:
             return false;
     }
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
-        if (dynamic_cast<OpSum*>(mpCodeGen.get()) && NeedParallelReduction())
+        if (!dynamic_cast<OpSumIfs*>(mpCodeGen.get())
+            && NeedParallelReduction())
         {
             std::string name = Base::GetName();
             ss << "__kernel void "<<name;
             ss << "_reduction(__global double* A, "
                 "__global double *result,int arrayLength,int windowSize){\n";
-            ss << "    double tmp, current_result = 0.0;\n";
+            ss << "    double tmp, current_result =" <<
+                mpCodeGen->GetBottom();
+            ss << ";\n";
             ss << "    int writePos = get_group_id(1);\n";
             ss << "    int lidx = get_local_id(0);\n";
             ss << "    __local double shm_buf[256];\n";
@@ -455,22 +462,28 @@ public:
             ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    int loop = arrayLength/512 + 1;\n";
             ss << "    for (int l=0; l<loop; l++){\n";
-            ss << "    tmp = 0.0;\n";
+            ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
             ss << "    int loopOffset = l*512;\n";
             ss << "    if((loopOffset + lidx + offset + 256) < min( offset + windowSize, arrayLength))\n";
-            ss << "        tmp = fsum(A[loopOffset + lidx + offset], 0) + "
-                "fsum(A[loopOffset + lidx + offset + 256], 0);\n";
+            ss << "        tmp = ";
+            ss << mpCodeGen->Gen2("fsum(A[loopOffset + lidx + offset], 0)",
+                "fsum(A[loopOffset + lidx + offset + 256], 0)");
+            ss << ";";
             ss << "    else if ((loopOffset + lidx + offset) < min(offset + windowSize, arrayLength))\n";
             ss << "        tmp = fsum(A[loopOffset + lidx + offset], 0);\n";
             ss << "    shm_buf[lidx] = tmp;\n";
             ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    for (int i = 128; i >0; i/=2) {\n";
             ss << "        if (lidx < i)\n";
-            ss << "            shm_buf[lidx] += shm_buf[lidx + i];\n";
+            ss << "            shm_buf[lidx] = ";
+            ss << mpCodeGen->Gen2("shm_buf[lidx]", "shm_buf[lidx + i]");
+            ss << ";";
             ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    }\n";
             ss << "    if (lidx == 0)\n";
-            ss << "        current_result += shm_buf[0];\n";
+            ss << "        current_result =";
+            ss << mpCodeGen->Gen2("current_result", "shm_buf[0]");
+            ss << ";\n";
             ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    }\n";
             ss << "    if (lidx == 0)\n";
@@ -495,7 +508,8 @@ public:
     {
         assert(mpDVR);
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
-        if (dynamic_cast<OpSum*>(mpCodeGen.get()))
+        if (!dynamic_cast<OpSumIfs*>(mpCodeGen.get())
+                && NeedParallelReduction())
         {
             if ((!bIsStartFixed && !bIsEndFixed) ||
                 (bIsStartFixed && bIsEndFixed))
@@ -589,10 +603,7 @@ public:
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
         // reproduce the reduction function name
-        std::string kernelName;
-        if (dynamic_cast<OpSum*>(mpCodeGen.get()))
-            kernelName = Base::GetName() + "_reduction";
-        else throw Unhandled();
+        std::string kernelName = Base::GetName() + "_reduction";
 
         cl_kernel redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
         if (err != CL_SUCCESS)
