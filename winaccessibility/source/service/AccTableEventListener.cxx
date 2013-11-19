@@ -24,6 +24,8 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 
+#include <vcl/svapp.hxx>
+
 #include "AccTableEventListener.hxx"
 #include "AccObjectManagerAgent.hxx"
 #include "unomsaaevent.hxx"
@@ -45,6 +47,8 @@ AccTableEventListener::~AccTableEventListener()
 void  AccTableEventListener::notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     switch (aEvent.EventId)
     {
     case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:

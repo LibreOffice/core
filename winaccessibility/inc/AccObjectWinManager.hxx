@@ -72,9 +72,6 @@ private:
     AccObjectManagerAgent*   pAgent;
     static AccObjectWinManager* me;
     ResIDGenerator ResIdGen;
-    mutable ::osl::Mutex aDeleteMutex;
-    mutable ::osl::Mutex aNotifyMutex;
-    mutable ::osl::Mutex maATInterfaceMutex;
 
     AccObjectWinManager(AccObjectManagerAgent* Agent=NULL);
 

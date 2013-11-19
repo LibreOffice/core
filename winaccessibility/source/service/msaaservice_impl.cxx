@@ -114,6 +114,8 @@ void MSAAServiceImpl::initialize( Sequence< Any > const & args ) throw (Exceptio
    */
 sal_Int32 MSAAServiceImpl::getAccObjectPtr ( long hWnd, long lParam, long wParam) throw (RuntimeException)
 {
+    SolarMutexGuard g;
+
     return GetMSComPtr( hWnd, lParam, wParam );
 }
 
@@ -125,6 +127,8 @@ sal_Int32 MSAAServiceImpl::getAccObjectPtr ( long hWnd, long lParam, long wParam
    */
 void MSAAServiceImpl::handleWindowOpened( sal_Int32 nAcc)
 {
+    SolarMutexGuard g;
+
     SAL_INFO( "iacc2", "Window opened " << nAcc );
     handleWindowOpened_impl( nAcc );
 }
@@ -308,6 +312,8 @@ MSAAServiceImpl::~MSAAServiceImpl()
 
 void MSAAServiceImpl::dispose()
 {
+    SolarMutexGuard g;
+
     // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
     // the hash_map of the root folder is cleared, releasing all subfolders

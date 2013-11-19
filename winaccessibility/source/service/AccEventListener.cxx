@@ -20,6 +20,9 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <vcl/svapp.hxx>
+
 #include <toolkit/awt/Vclxwindow.hxx>
 
 #ifndef _SV_SYSDATA_HXX
@@ -63,6 +66,7 @@ AccEventListener::~AccEventListener()
 void  AccEventListener::notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
 
     switch (aEvent.EventId)
     {
@@ -230,7 +234,6 @@ void AccEventListener::RemoveMeFromBroadcaster()
 {
     try
     {
-        osl::MutexGuard aGuard(aRemoveMutex);
         if(m_isDisposed)
             return;
         //get accessible context
@@ -276,6 +279,8 @@ void AccEventListener::RemoveMeFromBroadcaster()
 void AccEventListener::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     RemoveMeFromBroadcaster();
 }
 

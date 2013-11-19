@@ -23,6 +23,8 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
+#include <vcl/svapp.hxx>
+
 #include "AccTreeEventListener.hxx"
 #include "AccObjectManagerAgent.hxx"
 #include "unomsaaevent.hxx"
@@ -43,6 +45,8 @@ AccTreeEventListener::~AccTreeEventListener()
  */
 void  AccTreeEventListener::notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     switch (aEvent.EventId)
     {
     case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:

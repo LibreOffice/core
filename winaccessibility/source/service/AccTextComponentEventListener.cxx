@@ -23,6 +23,8 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
+#include <vcl/svapp.hxx>
+
 #include "AccTextComponentEventListener.hxx"
 #include "AccObjectManagerAgent.hxx"
 #include "unomsaaevent.hxx"

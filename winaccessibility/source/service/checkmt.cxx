@@ -28,9 +28,4 @@ bool IsInMainThread()
         return false;
 }
 
-comphelper::SolarMutex& GetSolarMutex()
-{
-    return Application::GetSolarMutex();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

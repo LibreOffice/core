@@ -45,7 +45,6 @@ protected:
     AccObjectManagerAgent* pAgent;
     //disposed state indicator
     bool  m_isDisposed;
-    mutable ::osl::Mutex aRemoveMutex;
 public:
     AccEventListener( com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccEventListener();

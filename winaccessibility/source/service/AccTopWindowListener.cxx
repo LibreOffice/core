@@ -24,6 +24,7 @@
 #include <toolkit/awt/Vclxwindow.hxx>
 
 #include <vcl/sysdata.hxx>
+#include <vcl/svapp.hxx>
 
 #include "AccTopWindowListener.hxx"
 #include "unomsaaevent.hxx"
@@ -140,6 +141,8 @@ void AccTopWindowListener::windowOpened( const ::com::sun::star::lang::EventObje
     com::sun::star::accessibility::XAccessible* pAccessible = xAccessible.get();
     if ( !pAccessible )
         return;
+
+    SolarMutexGuard g;
 
     HandleWindowOpened( pAccessible );
 }

@@ -134,8 +134,6 @@ AccObjectWinManager::~AccObjectWinManager()
 
 long AccObjectWinManager::Get_ToATInterface( HWND hWnd, long lParam, long wParam)
 {
-    osl::MutexGuard localGuard(maATInterfaceMutex);//
-
     IMAccessible* pRetIMAcc = NULL;
 
     if(lParam == OBJID_CLIENT )
@@ -216,7 +214,8 @@ AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
    */
 sal_Bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
 {
-    osl::MutexGuard aGuard(aNotifyMutex);
+    // no idea why this checks for main thread but with this check no mutex
+    // is needed here (the test only accesses Application const member)
 
     if (!IsInMainThread())
     {
@@ -564,7 +563,6 @@ void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible* pXAcc )
    */
 void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
 {
-    osl::MutexGuard aGuard( aDeleteMutex );
     AccObject* currentObj=NULL;
     AccObject* childObj=NULL;
     XAccessible* pTmpXAcc=NULL;
@@ -593,7 +591,6 @@ void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
    */
 void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
 {
-    osl::MutexGuard aGuard( aDeleteMutex );
     if( pXAcc == NULL )
         return;
     XIdToAccObjHash::iterator temp = XIdAccList.find(pXAcc);
