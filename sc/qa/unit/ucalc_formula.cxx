@@ -33,7 +33,6 @@ using namespace formula;
 
 void Test::testFormulaCreateStringFromTokens()
 {
-#if 0
     // Insert sheets.
     OUString aTabName1("Test");
     OUString aTabName2("Kevin's Data");
@@ -138,18 +137,19 @@ void Test::testFormulaCreateStringFromTokens()
         OUString aFormula = OUString::createFromAscii(aTests[i]);
         ScCompiler aComp(m_pDoc, aPos);
         aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
+#if 0 // TODO: This call to CompileString() causes the cppunittester to somehow fail on Windows.
         pArray.reset(aComp.CompileString(aFormula));
         CPPUNIT_ASSERT_MESSAGE("Failed to compile formula string.", pArray.get());
 
         OUString aCheck = pArray->CreateString(aCxt, aPos);
         CPPUNIT_ASSERT_EQUAL(aFormula, aCheck);
+#endif
     }
 
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
-#endif
 }
 
 namespace {
