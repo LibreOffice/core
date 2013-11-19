@@ -111,7 +111,6 @@ class CommandLineArgs: private boost::noncopyable
         bool IsEmpty() const;
 
     private:
-        bool                InterpretCommandLineParameter( const OUString&, OUString& );
         void                    ParseCommandLine_Impl( Supplier& supplier );
         void                    InitParamValues();
 

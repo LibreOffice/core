@@ -163,434 +163,419 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         {
             m_bEmpty = false;
             OUString oArg;
-            if ( !InterpretCommandLineParameter( aArg, oArg ))
+            bool bDeprecated = false;
+            if (aArg.startsWith("--"))
             {
-                if ( aArg.startsWith("-") )
-                {
-                    // handle this argument as an option
-                    if ( aArg.equalsIgnoreAsciiCase("-n"))
-                    {
-                        // force new documents based on the following documents
-                        bForceNewEvent  = true;
-                        bOpenEvent      = false;
-                        bForceOpenEvent = false;
-                        bPrintToEvent   = false;
-                        bPrintEvent     = false;
-                        bViewEvent      = false;
-                        bStartEvent     = false;
-                        bDisplaySpec    = false;
-                    }
-                    else if ( aArg.equalsIgnoreAsciiCase("-o"))
-                    {
-                        // force open documents regardless if they are templates or not
-                        bForceOpenEvent = true;
-                        bOpenEvent      = false;
-                        bForceNewEvent  = false;
-                        bPrintToEvent   = false;
-                        bPrintEvent     = false;
-                        bViewEvent      = false;
-                        bStartEvent     = false;
-                        bDisplaySpec    = false;
-                    }
-                    else if ( oArg.equalsIgnoreAsciiCase("pt"))
-                    {
-                        // Print to special printer
-                        bPrintToEvent   = true;
-                        bPrinterName    = true;
-                        bPrintEvent     = false;
-                        bOpenEvent      = false;
-                        bForceNewEvent  = false;
-                        bViewEvent      = false;
-                        bStartEvent     = false;
-                        bDisplaySpec    = false;
-                        bForceOpenEvent = false;
-                   }
-                   else if ( aArg.equalsIgnoreAsciiCase("-p"))
-                   {
-                        // Print to default printer
-                        bPrintEvent     = true;
-                        bPrintToEvent   = false;
-                        bOpenEvent      = false;
-                        bForceNewEvent  = false;
-                        bForceOpenEvent = false;
-                        bViewEvent      = false;
-                        bStartEvent     = false;
-                        bDisplaySpec    = false;
-                   }
-                   else if ( oArg.equalsIgnoreAsciiCase("view"))
-                   {
-                        // open in viewmode
-                        bOpenEvent      = false;
-                        bPrintEvent     = false;
-                        bPrintToEvent   = false;
-                        bForceNewEvent  = false;
-                        bForceOpenEvent = false;
-                        bViewEvent      = true;
-                        bStartEvent     = false;
-                        bDisplaySpec    = false;
-                   }
-                   else if ( oArg.equalsIgnoreAsciiCase("show"))
-                   {
-                        // open in viewmode
-                        bOpenEvent      = false;
-                        bViewEvent      = false;
-                        bStartEvent     = true;
-                        bPrintEvent     = false;
-                        bPrintToEvent   = false;
-                        bForceNewEvent  = false;
-                        bForceOpenEvent = false;
-                        bDisplaySpec    = false;
-                    }
-                    else if ( oArg.equalsIgnoreAsciiCase("display"))
-                    {
-                        // set display
-                        bOpenEvent      = false;
-                        bPrintEvent     = false;
-                        bForceOpenEvent = false;
-                        bPrintToEvent   = false;
-                        bForceNewEvent  = false;
-                        bViewEvent      = false;
-                        bStartEvent     = false;
-                        bDisplaySpec    = true;
-                    }
-                    else if ( oArg.equalsIgnoreAsciiCase("language"))
-                    {
-                        bOpenEvent      = false;
-                        bPrintEvent     = false;
-                        bForceOpenEvent = false;
-                        bPrintToEvent   = false;
-                        bForceNewEvent  = false;
-                        bViewEvent      = false;
-                        bStartEvent     = false;
-                        bDisplaySpec    = false;
-                    }
-                    else if ( oArg.equalsIgnoreAsciiCase("convert-to"))
-                    {
-                        bOpenEvent = false;
-                        bConversionEvent = true;
-                        bConversionParamsEvent = true;
-                    }
-                    else if ( oArg.equalsIgnoreAsciiCase("print-to-file"))
-                    {
-                        bOpenEvent = false;
-                        bBatchPrintEvent = true;
-                    }
-                    else if ( oArg.equalsIgnoreAsciiCase("printer-name") &&
-                              bBatchPrintEvent )
-                    {
-                        bBatchPrinterNameEvent = true;
-                    }
-                    else if ( oArg.equalsIgnoreAsciiCase("outdir") &&
-                              (bConversionEvent || bBatchPrintEvent) )
-                    {
-                        bConversionOutEvent = true;
-                    }
-                    else
-                    // because it's impossible to filter these options that
-                    // are handled in the soffice shell script with the
-                    // primitive tools that /bin/sh offers, ignore them here
-                    if (
+                oArg = OUString(aArg.getStr()+2, aArg.getLength()-2);
+            }
+            else if (aArg.startsWith("-"))
+            {
+                if ( aArg.getLength() > 2 ) // -h, -o, -n, -? are still valid
+                    bDeprecated = true;
+                oArg = OUString(aArg.getStr()+1, aArg.getLength()-1);
+            }
+
+            if ( oArg == "minimized" )
+            {
+                m_minimized = true;
+            }
+            else if ( oArg == "invisible" )
+            {
+                m_invisible = true;
+            }
+            else if ( oArg == "norestore" )
+            {
+                m_norestore = true;
+            }
+            else if ( oArg == "nodefault" )
+            {
+                m_nodefault = true;
+            }
+            else if ( oArg == "headless" )
+            {
+                // Headless means also invisibile, so set this parameter to true!
+                m_headless = true;
+                m_invisible = true;
+            }
+            else if ( oArg == "quickstart" )
+            {
+#if defined(ENABLE_QUICKSTART_APPLET)
+                m_quickstart = true;
+#endif
+                m_noquickstart = false;
+            }
+            else if ( oArg == "quickstart=no" )
+            {
+                m_noquickstart = true;
+                m_quickstart = false;
+            }
+            else if ( oArg == "terminate_after_init" )
+            {
+                m_terminateafterinit = true;
+            }
+            else if ( oArg == "nofirststartwizard" )
+            {
+                m_nofirststartwizard = true;
+            }
+            else if ( oArg == "nologo" )
+            {
+                m_nologo = true;
+            }
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+            else if ( oArg == "nolockcheck" )
+            {
+                m_nolockcheck = true;
+            }
+#endif
+            else if ( oArg == "help" || aArg == "-h" || aArg == "-?" )
+            {
+                m_help = true;
+            }
+            else if ( oArg == "helpwriter" )
+            {
+                m_helpwriter = true;
+            }
+            else if ( oArg == "helpcalc" )
+            {
+                m_helpcalc = true;
+            }
+            else if ( oArg == "helpdraw" )
+            {
+                m_helpdraw = true;
+            }
+            else if ( oArg == "helpimpress" )
+            {
+                m_helpimpress = true;
+            }
+            else if ( oArg == "helpbase" )
+            {
+                m_helpbase = true;
+            }
+            else if ( oArg == "helpbasic" )
+            {
+                m_helpbasic = true;
+            }
+            else if ( oArg == "helpmath" )
+            {
+                m_helpmath = true;
+            }
+            else if ( oArg == "version" )
+            {
+                m_version = true;
+            }
+            else if ( oArg.startsWithIgnoreAsciiCase("splash-pipe=") )
+            {
+                m_splashpipe = true;
+            }
+#ifdef MACOSX
+            /* #i84053# ignore -psn on Mac
+               Platform dependent #ifdef here is ugly, however this is currently
+               the only platform dependent parameter. Should more appear
+               we should find a better solution
+            */
+            else if ( aArg.startsWith("-psn") )
+            {
+                bDeprecated = false;
+            }
+#endif
+#if HAVE_FEATURE_MACOSX_SANDBOX
+            else if ( oArg == "nstemporarydirectory" )
+            {
+                printf("%s\n", [NSTemporaryDirectory() UTF8String]);
+                exit(0);
+            }
+#endif
+#ifdef WIN32
+            /* fdo#57203 ignore -Embedding on Windows
+               when LibreOffice is launched by COM+
+            */
+            else if ( oArg == "Embedding" )
+            {
+                bDeprecated = false;
+            }
+#endif
+            else if ( oArg.startsWithIgnoreAsciiCase("infilter="))
+            {
+                m_infilter.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")));
+            }
+            else if ( oArg.startsWithIgnoreAsciiCase("accept="))
+            {
+                m_accept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("accept=")));
+            }
+            else if ( oArg.startsWithIgnoreAsciiCase("unaccept="))
+            {
+                m_unaccept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")));
+            }
+            else if ( oArg.startsWithIgnoreAsciiCase("language="))
+            {
+                m_language = oArg.copy(RTL_CONSTASCII_LENGTH("language="));
+            }
+            else if ( oArg.startsWithIgnoreAsciiCase("pidfile="))
+            {
+                m_pidfile = oArg.copy(RTL_CONSTASCII_LENGTH("pidfile="));
+            }
+            else if ( oArg == "writer" )
+            {
+                m_writer = true;
+                m_bDocumentArgs = true;
+            }
+            else if ( oArg == "calc" )
+            {
+                m_calc = true;
+                m_bDocumentArgs = true;
+            }
+            else if ( oArg == "draw" )
+            {
+                m_draw = true;
+                m_bDocumentArgs = true;
+            }
+            else if ( oArg == "impress" )
+            {
+                m_impress = true;
+                m_bDocumentArgs = true;
+            }
+            else if ( oArg == "base" )
+            {
+                m_base = true;
+                m_bDocumentArgs = true;
+            }
+            else if ( oArg == "global" )
+            {
+                m_global = true;
+                m_bDocumentArgs = true;
+            }
+            else if ( oArg == "math" )
+            {
+                m_math = true;
+                m_bDocumentArgs = true;
+            }
+            else if ( oArg == "web" )
+            {
+                m_web = true;
+                m_bDocumentArgs = true;
+            }
+            else if ( aArg.equalsIgnoreAsciiCase("-n"))
+            {
+                // force new documents based on the following documents
+                bForceNewEvent  = true;
+                bOpenEvent      = false;
+                bForceOpenEvent = false;
+                bPrintToEvent   = false;
+                bPrintEvent     = false;
+                bViewEvent      = false;
+                bStartEvent     = false;
+                bDisplaySpec    = false;
+            }
+            else if ( aArg.equalsIgnoreAsciiCase("-o"))
+            {
+                // force open documents regardless if they are templates or not
+                bForceOpenEvent = true;
+                bOpenEvent      = false;
+                bForceNewEvent  = false;
+                bPrintToEvent   = false;
+                bPrintEvent     = false;
+                bViewEvent      = false;
+                bStartEvent     = false;
+                bDisplaySpec    = false;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("pt"))
+            {
+                // Print to special printer
+                bPrintToEvent   = true;
+                bPrinterName    = true;
+                bPrintEvent     = false;
+                bOpenEvent      = false;
+                bForceNewEvent  = false;
+                bViewEvent      = false;
+                bStartEvent     = false;
+                bDisplaySpec    = false;
+                bForceOpenEvent = false;
+            }
+            else if ( aArg.equalsIgnoreAsciiCase("-p"))
+            {
+                // Print to default printer
+                bPrintEvent     = true;
+                bPrintToEvent   = false;
+                bOpenEvent      = false;
+                bForceNewEvent  = false;
+                bForceOpenEvent = false;
+                bViewEvent      = false;
+                bStartEvent     = false;
+                bDisplaySpec    = false;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("view"))
+            {
+                // open in viewmode
+                bOpenEvent      = false;
+                bPrintEvent     = false;
+                bPrintToEvent   = false;
+                bForceNewEvent  = false;
+                bForceOpenEvent = false;
+                bViewEvent      = true;
+                bStartEvent     = false;
+                bDisplaySpec    = false;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("show"))
+            {
+                // open in viewmode
+                bOpenEvent      = false;
+                bViewEvent      = false;
+                bStartEvent     = true;
+                bPrintEvent     = false;
+                bPrintToEvent   = false;
+                bForceNewEvent  = false;
+                bForceOpenEvent = false;
+                bDisplaySpec    = false;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("display"))
+            {
+                // set display
+                bOpenEvent      = false;
+                bPrintEvent     = false;
+                bForceOpenEvent = false;
+                bPrintToEvent   = false;
+                bForceNewEvent  = false;
+                bViewEvent      = false;
+                bStartEvent     = false;
+                bDisplaySpec    = true;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("language"))
+            {
+                bOpenEvent      = false;
+                bPrintEvent     = false;
+                bForceOpenEvent = false;
+                bPrintToEvent   = false;
+                bForceNewEvent  = false;
+                bViewEvent      = false;
+                bStartEvent     = false;
+                bDisplaySpec    = false;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("convert-to"))
+            {
+                bOpenEvent = false;
+                bConversionEvent = true;
+                bConversionParamsEvent = true;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("print-to-file"))
+            {
+                bOpenEvent = false;
+                bBatchPrintEvent = true;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("printer-name") &&
+                      bBatchPrintEvent )
+            {
+                bBatchPrinterNameEvent = true;
+            }
+            else if ( oArg.equalsIgnoreAsciiCase("outdir") &&
+                      (bConversionEvent || bBatchPrintEvent) )
+            {
+                bConversionOutEvent = true;
+            }
+            else if ( aArg.startsWith("-") )
+            {
+                // because it's impossible to filter these options that
+                // are handled in the soffice shell script with the
+                // primitive tools that /bin/sh offers, ignore them here
+                if (
 #if defined UNX
-                        !oArg.equalsIgnoreAsciiCase("backtrace") &&
-                        !oArg.equalsIgnoreAsciiCase("strace") &&
-                        !oArg.equalsIgnoreAsciiCase("valgrind") &&
+                    !oArg.equalsIgnoreAsciiCase("backtrace") &&
+                    !oArg.equalsIgnoreAsciiCase("strace") &&
+                    !oArg.equalsIgnoreAsciiCase("valgrind") &&
                     // for X Session Management, handled in
                     // vcl/unx/generic/app/sm.cxx:
-                        !oArg.startsWith("session=") &&
+                    !oArg.startsWith("session=") &&
 #endif
                     //ignore additional legacy options that don't do anything anymore
-                        !oArg.equalsIgnoreAsciiCase("nocrashreport") &&
-                        m_unknown.isEmpty())
-                    {
-                        m_unknown = aArg;
-                    }
+                    !oArg.equalsIgnoreAsciiCase("nocrashreport") &&
+                    m_unknown.isEmpty())
+                {
+                    m_unknown = aArg;
+                }
+                bDeprecated = false;
+            }
+            else
+            {
+                if ( bPrinterName && bPrintToEvent )
+                {
+                    // first argument after "-pt" this must be the printer name
+                    m_printername = aArg;
+                    bPrinterName = false;
+                }
+                else if ( bConversionParamsEvent && bConversionEvent )
+                {
+                    // first argument must be the params
+                    m_conversionparams = aArg;
+                    bConversionParamsEvent = false;
+                }
+                else if ( bBatchPrinterNameEvent && bBatchPrintEvent )
+                {
+                    // first argument is the printer name
+                    m_printername = aArg;
+                    bBatchPrinterNameEvent = false;
+                }
+                else if ( (bConversionEvent || bBatchPrintEvent) && bConversionOutEvent )
+                {
+                    m_conversionout = aArg;
+                    bConversionOutEvent = false;
                 }
                 else
                 {
-                    if ( bPrinterName && bPrintToEvent )
+                    // handle this argument as a filename
+                    if ( bOpenEvent )
                     {
-                        // first argument after "-pt" this must be the printer name
-                        m_printername = aArg;
-                        bPrinterName = false;
+                        m_openlist.push_back(aArg);
+                        bOpenDoc = true;
                     }
-                    else if ( bConversionParamsEvent && bConversionEvent )
+                    else if ( bViewEvent )
                     {
-                        // first argument must be the params
-                        m_conversionparams = aArg;
-                        bConversionParamsEvent = false;
+                        m_viewlist.push_back(aArg);
+                        bOpenDoc = true;
                     }
-                    else if ( bBatchPrinterNameEvent && bBatchPrintEvent )
+                    else if ( bStartEvent )
                     {
-                        // first argument is the printer name
-                        m_printername = aArg;
-                        bBatchPrinterNameEvent = false;
+                        m_startlist.push_back(aArg);
+                        bOpenDoc = true;
                     }
-                    else if ( (bConversionEvent || bBatchPrintEvent) && bConversionOutEvent )
+                    else if ( bPrintEvent )
                     {
-                        m_conversionout = aArg;
-                        bConversionOutEvent = false;
+                        m_printlist.push_back(aArg);
+                        bOpenDoc = true;
                     }
-                    else
+                    else if ( bPrintToEvent )
                     {
-                        // handle this argument as a filename
-                        if ( bOpenEvent )
-                        {
-                            m_openlist.push_back(aArg);
-                            bOpenDoc = true;
-                        }
-                        else if ( bViewEvent )
-                        {
-                            m_viewlist.push_back(aArg);
-                            bOpenDoc = true;
-                        }
-                        else if ( bStartEvent )
-                        {
-                            m_startlist.push_back(aArg);
-                            bOpenDoc = true;
-                        }
-                        else if ( bPrintEvent )
-                        {
-                            m_printlist.push_back(aArg);
-                            bOpenDoc = true;
-                        }
-                        else if ( bPrintToEvent )
-                        {
-                            m_printtolist.push_back(aArg);
-                            bOpenDoc = true;
-                        }
-                        else if ( bForceNewEvent )
-                        {
-                            m_forcenewlist.push_back(aArg);
-                            bOpenDoc = true;
-                        }
-                        else if ( bForceOpenEvent )
-                        {
-                            m_forceopenlist.push_back(aArg);
-                            bOpenDoc = true;
-                        }
-                        else if ( bDisplaySpec )
-                        {
-                            bDisplaySpec = false; // only one display, not a lsit
-                            bOpenEvent = true;    // set back to standard
-                        }
-                        else if ( bConversionEvent || bBatchPrintEvent )
-                            m_conversionlist.push_back(aArg);
+                        m_printtolist.push_back(aArg);
+                        bOpenDoc = true;
                     }
+                    else if ( bForceNewEvent )
+                    {
+                        m_forcenewlist.push_back(aArg);
+                        bOpenDoc = true;
+                    }
+                    else if ( bForceOpenEvent )
+                    {
+                        m_forceopenlist.push_back(aArg);
+                        bOpenDoc = true;
+                    }
+                    else if ( bDisplaySpec )
+                    {
+                        bDisplaySpec = false; // only one display, not a lsit
+                        bOpenEvent = true;    // set back to standard
+                    }
+                    else if ( bConversionEvent || bBatchPrintEvent )
+                        m_conversionlist.push_back(aArg);
                 }
+            }
+
+            if (bDeprecated)
+            {
+                OString sArg(OUStringToOString(aArg, osl_getThreadTextEncoding()));
+                fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", sArg.getStr(), sArg.getStr());
             }
         }
     }
 
     if ( bOpenDoc )
         m_bDocumentArgs = true;
-}
-
-bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUString& oArg )
-{
-    bool bDeprecated = false;
-    if (aArg.startsWith("--"))
-    {
-        oArg = OUString(aArg.getStr()+2, aArg.getLength()-2);
-    }
-    else if (aArg.startsWith("-"))
-    {
-        if ( aArg.getLength() > 2 ) // -h, -o, -n, -? are still valid
-            bDeprecated = true;
-        oArg = OUString(aArg.getStr()+1, aArg.getLength()-1);
-    }
-    else
-    {
-        return false;
-    }
-
-    if ( oArg == "minimized" )
-    {
-        m_minimized = true;
-    }
-    else if ( oArg == "invisible" )
-    {
-        m_invisible = true;
-    }
-    else if ( oArg == "norestore" )
-    {
-        m_norestore = true;
-    }
-    else if ( oArg == "nodefault" )
-    {
-        m_nodefault = true;
-    }
-    else if ( oArg == "headless" )
-    {
-        // Headless means also invisibile, so set this parameter to true!
-        m_headless = true;
-        m_invisible = true;
-    }
-    else if ( oArg == "quickstart" )
-    {
-#if defined(ENABLE_QUICKSTART_APPLET)
-        m_quickstart = true;
-#endif
-        m_noquickstart = false;
-    }
-    else if ( oArg == "quickstart=no" )
-    {
-        m_noquickstart = true;
-        m_quickstart = false;
-    }
-    else if ( oArg == "terminate_after_init" )
-    {
-        m_terminateafterinit = true;
-    }
-    else if ( oArg == "nofirststartwizard" )
-    {
-        m_nofirststartwizard = true;
-    }
-    else if ( oArg == "nologo" )
-    {
-        m_nologo = true;
-    }
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-    else if ( oArg == "nolockcheck" )
-    {
-        m_nolockcheck = true;
-    }
-#endif
-    else if ( oArg == "help" || aArg == "-h" || aArg == "-?" )
-    {
-        m_help = true;
-    }
-    else if ( oArg == "helpwriter" )
-    {
-        m_helpwriter = true;
-    }
-    else if ( oArg == "helpcalc" )
-    {
-        m_helpcalc = true;
-    }
-    else if ( oArg == "helpdraw" )
-    {
-        m_helpdraw = true;
-    }
-    else if ( oArg == "helpimpress" )
-    {
-        m_helpimpress = true;
-    }
-    else if ( oArg == "helpbase" )
-    {
-        m_helpbase = true;
-    }
-    else if ( oArg == "helpbasic" )
-    {
-        m_helpbasic = true;
-    }
-    else if ( oArg == "helpmath" )
-    {
-        m_helpmath = true;
-    }
-    else if ( oArg == "version" )
-    {
-        m_version = true;
-    }
-    else if ( oArg.startsWithIgnoreAsciiCase("splash-pipe=") )
-    {
-        m_splashpipe = true;
-    }
-#ifdef MACOSX
-    /* #i84053# ignore -psn on Mac
-       Platform dependent #ifdef here is ugly, however this is currently
-       the only platform dependent parameter. Should more appear
-       we should find a better solution
-    */
-    else if ( aArg.startsWith("-psn") )
-    {
-        return true;
-    }
-#endif
-#if HAVE_FEATURE_MACOSX_SANDBOX
-    else if ( oArg == "nstemporarydirectory" )
-    {
-        printf("%s\n", [NSTemporaryDirectory() UTF8String]);
-        exit(0);
-    }
-#endif
-#ifdef WIN32
-    /* fdo#57203 ignore -Embedding on Windows
-       when LibreOffice is launched by COM+
-     */
-    else if ( oArg == "Embedding" )
-    {
-        return true;
-    }
-#endif
-    else if ( oArg.startsWithIgnoreAsciiCase("infilter="))
-    {
-        m_infilter.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")));
-    }
-    else if ( oArg.startsWithIgnoreAsciiCase("accept="))
-    {
-        m_accept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("accept=")));
-    }
-    else if ( oArg.startsWithIgnoreAsciiCase("unaccept="))
-    {
-        m_unaccept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")));
-    }
-    else if ( oArg.startsWithIgnoreAsciiCase("language="))
-    {
-        m_language = oArg.copy(RTL_CONSTASCII_LENGTH("language="));
-    }
-    else if ( oArg.startsWithIgnoreAsciiCase("pidfile="))
-    {
-        m_pidfile = oArg.copy(RTL_CONSTASCII_LENGTH("pidfile="));
-    }
-    else if ( oArg == "writer" )
-    {
-        m_writer = true;
-        m_bDocumentArgs = true;
-    }
-    else if ( oArg == "calc" )
-    {
-        m_calc = true;
-        m_bDocumentArgs = true;
-    }
-    else if ( oArg == "draw" )
-    {
-        m_draw = true;
-        m_bDocumentArgs = true;
-    }
-    else if ( oArg == "impress" )
-    {
-        m_impress = true;
-        m_bDocumentArgs = true;
-    }
-    else if ( oArg == "base" )
-    {
-        m_base = true;
-        m_bDocumentArgs = true;
-    }
-    else if ( oArg == "global" )
-    {
-        m_global = true;
-        m_bDocumentArgs = true;
-    }
-    else if ( oArg == "math" )
-    {
-        m_math = true;
-        m_bDocumentArgs = true;
-    }
-    else if ( oArg == "web" )
-    {
-        m_web = true;
-        m_bDocumentArgs = true;
-    }
-    else
-        return false;
-
-    if (bDeprecated)
-    {
-        OString sArg(OUStringToOString(aArg, osl_getThreadTextEncoding()));
-        fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", sArg.getStr(), sArg.getStr());
-    }
-    return true;
 }
 
 void CommandLineArgs::InitParamValues()
