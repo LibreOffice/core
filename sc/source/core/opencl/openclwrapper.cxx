@@ -19,6 +19,7 @@
 
 #include "sal/config.h"
 #include <osl/file.hxx>
+#include "opencl_device.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -898,23 +899,14 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
 
     if(!pDeviceId || bAutoSelect)
     {
-        size_t nComputeUnits = 0;
-        // clever algorithm
-        const std::vector<OpenclPlatformInfo>& rPlatform = fillOpenCLInfo();
-        for(std::vector<OpenclPlatformInfo>::const_iterator it =
-                rPlatform.begin(), itEnd = rPlatform.end(); it != itEnd; ++it)
-        {
-            for(std::vector<OpenclDeviceInfo>::const_iterator itr =
-                    it->maDevices.begin(), itrEnd = it->maDevices.end();
-                    itr != itrEnd; ++itr)
-            {
-                if(itr->mnComputeUnits > nComputeUnits)
-                {
-                    pDeviceId = reinterpret_cast<cl_device_id>(itr->device);
-                    nComputeUnits = itr->mnComputeUnits;
-                }
-            }
-        }
+        OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+        rtl::Bootstrap::expandMacros(url);
+        OUString path;
+        osl::FileBase::getSystemPathFromFileURL(url,path);
+        OString dsFileName = rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8);
+        ds_device pSelectedDevice = sc::OpenCLDevice::getDeviceSelection(dsFileName.getStr());
+        pDeviceId = pSelectedDevice.oclDeviceID;
+
     }
 
     if(OpenclDevice::gpuEnv.mpDevID == pDeviceId)

@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,scopencl,\
 $(eval $(call gb_Library_add_exception_objects,scopencl,\
         sc/source/core/opencl/formulagroupcl \
         sc/source/core/opencl/openclwrapper \
+        sc/source/core/opencl/opencl_device \
         sc/source/core/opencl/opbase \
         sc/source/core/opencl/op_financial \
         sc/source/core/opencl/op_database \
