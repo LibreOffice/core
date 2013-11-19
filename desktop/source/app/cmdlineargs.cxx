@@ -263,7 +263,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 m_version = true;
             }
-            else if ( oArg.startsWithIgnoreAsciiCase("splash-pipe=") )
+            else if ( oArg.startsWith("splash-pipe=") )
             {
                 m_splashpipe = true;
             }
@@ -294,23 +294,23 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bDeprecated = false;
             }
 #endif
-            else if ( oArg.startsWithIgnoreAsciiCase("infilter="))
+            else if ( oArg.startsWith("infilter="))
             {
                 m_infilter.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")));
             }
-            else if ( oArg.startsWithIgnoreAsciiCase("accept="))
+            else if ( oArg.startsWith("accept="))
             {
                 m_accept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("accept=")));
             }
-            else if ( oArg.startsWithIgnoreAsciiCase("unaccept="))
+            else if ( oArg.startsWith("unaccept="))
             {
                 m_unaccept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")));
             }
-            else if ( oArg.startsWithIgnoreAsciiCase("language="))
+            else if ( oArg.startsWith("language="))
             {
                 m_language = oArg.copy(RTL_CONSTASCII_LENGTH("language="));
             }
-            else if ( oArg.startsWithIgnoreAsciiCase("pidfile="))
+            else if ( oArg.startsWith("pidfile="))
             {
                 m_pidfile = oArg.copy(RTL_CONSTASCII_LENGTH("pidfile="));
             }
@@ -354,7 +354,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 m_web = true;
                 m_bDocumentArgs = true;
             }
-            else if ( aArg.equalsIgnoreAsciiCase("-n"))
+            else if ( aArg == "-n" )
             {
                 // force new documents based on the following documents
                 bForceNewEvent  = true;
@@ -366,7 +366,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bStartEvent     = false;
                 bDisplaySpec    = false;
             }
-            else if ( aArg.equalsIgnoreAsciiCase("-o"))
+            else if ( aArg == "-o" )
             {
                 // force open documents regardless if they are templates or not
                 bForceOpenEvent = true;
@@ -378,7 +378,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bStartEvent     = false;
                 bDisplaySpec    = false;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("pt"))
+            else if ( oArg == "pt" )
             {
                 // Print to special printer
                 bPrintToEvent   = true;
@@ -391,7 +391,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bDisplaySpec    = false;
                 bForceOpenEvent = false;
             }
-            else if ( aArg.equalsIgnoreAsciiCase("-p"))
+            else if ( aArg == "-p" )
             {
                 // Print to default printer
                 bPrintEvent     = true;
@@ -403,7 +403,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bStartEvent     = false;
                 bDisplaySpec    = false;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("view"))
+            else if ( oArg == "view")
             {
                 // open in viewmode
                 bOpenEvent      = false;
@@ -415,7 +415,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bStartEvent     = false;
                 bDisplaySpec    = false;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("show"))
+            else if ( oArg == "show" )
             {
                 // open in viewmode
                 bOpenEvent      = false;
@@ -427,7 +427,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bForceOpenEvent = false;
                 bDisplaySpec    = false;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("display"))
+            else if ( oArg == "display" )
             {
                 // set display
                 bOpenEvent      = false;
@@ -439,7 +439,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bStartEvent     = false;
                 bDisplaySpec    = true;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("language"))
+            else if ( oArg == "language" )
             {
                 bOpenEvent      = false;
                 bPrintEvent     = false;
@@ -450,23 +450,22 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bStartEvent     = false;
                 bDisplaySpec    = false;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("convert-to"))
+            else if ( oArg == "convert-to" )
             {
                 bOpenEvent = false;
                 bConversionEvent = true;
                 bConversionParamsEvent = true;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("print-to-file"))
+            else if ( oArg == "print-to-file" )
             {
                 bOpenEvent = false;
                 bBatchPrintEvent = true;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("printer-name") &&
-                      bBatchPrintEvent )
+            else if ( oArg == "printer-name" && bBatchPrintEvent )
             {
                 bBatchPrinterNameEvent = true;
             }
-            else if ( oArg.equalsIgnoreAsciiCase("outdir") &&
+            else if ( oArg == "outdir" &&
                       (bConversionEvent || bBatchPrintEvent) )
             {
                 bConversionOutEvent = true;
@@ -478,15 +477,15 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 // primitive tools that /bin/sh offers, ignore them here
                 if (
 #if defined UNX
-                    !oArg.equalsIgnoreAsciiCase("backtrace") &&
-                    !oArg.equalsIgnoreAsciiCase("strace") &&
-                    !oArg.equalsIgnoreAsciiCase("valgrind") &&
+                    oArg != "backtrace" &&
+                    oArg != "strace" &&
+                    oArg != "valgrind" &&
                     // for X Session Management, handled in
                     // vcl/unx/generic/app/sm.cxx:
-                    !oArg.startsWith("session=") &&
+                    oArg != "session=" &&
 #endif
                     //ignore additional legacy options that don't do anything anymore
-                    !oArg.equalsIgnoreAsciiCase("nocrashreport") &&
+                    oArg != "nocrashreport" &&
                     m_unknown.isEmpty())
                 {
                     m_unknown = aArg;
