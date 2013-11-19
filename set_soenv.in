@@ -1444,8 +1444,7 @@ elsif ($platform =~ m/cygwin/)
 }
 elsif ($platform =~ m/darwin/)
 {
-   my $STLINC .= $I."/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/c++/v1/";
-   $SOLARINC .= $STLINC . $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
+   $SOLARINC .= " " . $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
 }
 else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
@@ -1678,7 +1677,7 @@ if ( $platform =~ m/darwin/ )
 # unless you want to do runtime checks for 10.5 api, you also want to use the 10.7 sdk
 # (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
 # http://developer.apple.com/technotes/tn2002/tn2064.html
-    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "10.7",       "e" );
+    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "10.4",       "e" );
 }
 
 #

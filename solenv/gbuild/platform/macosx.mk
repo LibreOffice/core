@@ -300,7 +300,7 @@ gb_Library_TARGETTYPEFLAGS := -dynamiclib -single_module
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .dylib
-gb_Library_RTEXT := $(COMID)$(gb_Library_PLAINEXT)
+gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)

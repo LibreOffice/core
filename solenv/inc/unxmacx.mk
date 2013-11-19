@@ -44,7 +44,6 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFI
 #.EXPORT: MACOSX_DEPLOYMENT_TARGET
 CDEFS+=-DQUARTZ 
 EXTRA_CDEFS*=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
-.ENDIF
 
 # Name of library where static data members are initialized
 # STATICLIBNAME=static$(DLLPOSTFIX)
