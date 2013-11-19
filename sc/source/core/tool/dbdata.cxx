@@ -231,14 +231,14 @@ OUString ScDBData::GetOperations() const
     if (mpSortParam->maKeyState[0].bDoSort)
     {
         if (!aBuf.isEmpty())
-            aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+            aBuf.append(", ");
         aBuf.append(ScGlobal::GetRscString(STR_OPERATION_SORT));
     }
 
     if (mpSubTotal->bGroupActive[0] && !mpSubTotal->bRemoveOnly)
     {
         if (!aBuf.isEmpty())
-            aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+            aBuf.append(", ");
         aBuf.append(ScGlobal::GetRscString(STR_OPERATION_SUBTOTAL));
     }
 

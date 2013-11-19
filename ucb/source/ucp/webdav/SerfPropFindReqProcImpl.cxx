@@ -96,7 +96,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
         // TODO is it really needed a Unicode string buffer?
         // All properties and property names aren't supposed to be ASCII?
         rtl::OUStringBuffer aBuffer;
-        aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPFIND_HEADER ));
+        aBuffer.append( PROPFIND_HEADER );
 
         // create and fill body bucket with requested properties
         const int nPropCount = ( !mbOnlyPropertyNames && mpPropNames )
@@ -104,7 +104,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                : 0;
         if ( nPropCount > 0 )
         {
-            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<prop>" ) );
+            aBuffer.append( "<prop>" );
             SerfPropName thePropName;
             for ( int theIndex = 0; theIndex < nPropCount; theIndex ++ )
             {
@@ -128,15 +128,15 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
         {
             if ( mbOnlyPropertyNames )
             {
-                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<propname/>" ));
+                aBuffer.append( "<propname/>" );
             }
             else
             {
-                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<allprop/>" ));
+                aBuffer.append( "<allprop/>" );
             }
         }
 
-        aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPFIND_TRAILER ));
+        aBuffer.append( PROPFIND_TRAILER );
         aBodyText = rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
         body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
                                                    aBodyText.getLength(),

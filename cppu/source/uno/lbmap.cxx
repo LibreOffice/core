@@ -290,7 +290,7 @@ static inline OUString getMappingName(
     aKey.append( rFrom.getTypeName() );
     aKey.append( (sal_Unicode)'[' );
     aKey.append( reinterpret_cast< sal_IntPtr >(rFrom.get()), 16 );
-    aKey.appendAscii( RTL_CONSTASCII_STRINGPARAM("];") );
+    aKey.append( "];" );
     aKey.append( rTo.getTypeName() );
     aKey.append( (sal_Unicode)'[' );
     aKey.append( reinterpret_cast< sal_IntPtr >(rTo.get()), 16 );

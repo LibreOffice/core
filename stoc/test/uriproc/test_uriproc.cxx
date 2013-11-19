@@ -89,13 +89,13 @@ OString createTestAssertEqualMessage(
     append(buf, token2);
     buf.append(static_cast< sal_Unicode >('|'));
     append(buf, token3);
-    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(": TEST_ASSERT_EQUAL("));
+    buf.append(": TEST_ASSERT_EQUAL(");
     buf.appendAscii(expectedExpr);
-    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    buf.append(", ");
     buf.appendAscii(actualExpr);
-    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("): <"));
+    buf.append("): <");
     append(buf, expected);
-    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("> != <"));
+    buf.append("> != <");
     append(buf, actual);
     buf.append(static_cast< sal_Unicode >('>'));
     return OUStringToOString(

@@ -207,9 +207,9 @@ void PolicyReader::assureToken( sal_Unicode token )
     if (c == token)
         return;
     OUStringBuffer buf( 16 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("expected >") );
+    buf.append( "expected >" );
     buf.append( c );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("<!") );
+    buf.append( "<!" );
     error( buf.makeStringAndClear() );
 }
 //__________________________________________________________________________________________________
@@ -368,13 +368,13 @@ void PolicyReader::error( OUString const & msg )
     SAL_THROW( (RuntimeException) )
 {
     OUStringBuffer buf( 32 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("error processing file \"") );
+    buf.append( "error processing file \"" );
     buf.append( m_fileName );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" [line ") );
+    buf.append( "\" [line " );
     buf.append( m_linepos );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", column ") );
+    buf.append( ", column " );
     buf.append( m_pos );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
+    buf.append( "] " );
     buf.append( msg );
     throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
 }
@@ -390,9 +390,9 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
     if (osl_File_E_None != ::osl_openFile( m_fileName.pData, &m_file, osl_File_OpenFlag_Read ))
     {
         OUStringBuffer buf( 32 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot open file \"") );
+        buf.append( "cannot open file \"" );
         buf.append( m_fileName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+        buf.append( "\"!" );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 }

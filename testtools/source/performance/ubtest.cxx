@@ -162,12 +162,12 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
 
     OUStringBuffer aLibNameBuf( 32 );
 #ifdef SAL_UNX
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
+    aLibNameBuf.append( "lib" );
     aLibNameBuf.append( rLibName );
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
+    aLibNameBuf.append( ".so" );
 #else
     aLibNameBuf.append( rLibName );
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dll") );
+    aLibNameBuf.append( ".dll" );
 #endif
     OUString aLibName( aLibNameBuf.makeStringAndClear() );
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
@@ -371,9 +371,9 @@ static void createInstance( Reference< T > & rxOut,
     if (! x.is())
     {
         OUStringBuffer buf( 64 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot get service instance \"") );
+        buf.append( "cannot get service instance \"" );
         buf.append( rServiceName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+        buf.append( "\"!" );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 
@@ -381,12 +381,12 @@ static void createInstance( Reference< T > & rxOut,
     if (! rxOut.is())
     {
         OUStringBuffer buf( 64 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("service instance \"") );
+        buf.append( "service instance \"" );
         buf.append( rServiceName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" does not support demanded interface \"") );
+        buf.append( "\" does not support demanded interface \"" );
         const Type & rType = ::getCppuType( (const Reference< T > *)0 );
         buf.append( rType.getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+        buf.append( "\"!" );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 }
@@ -492,9 +492,9 @@ Reference< XInterface > TestImpl::resolveObject( const OUString & rUnoUrl )
     if (! xResolvedObject.is())
     {
         OUStringBuffer buf( 32 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot resolve object \"") );
+        buf.append( "cannot resolve object \"" );
         buf.append( rUnoUrl );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+        buf.append( "\"!" );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 
@@ -993,9 +993,9 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                 if (! stream)
                 {
                     OUStringBuffer buf( 32 );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot open file for writing: \"") );
+                    buf.append( "cannot open file for writing: \"" );
                     buf.append( aLogStr );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+                    buf.append( "\"!" );
                     throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
                 }
             }

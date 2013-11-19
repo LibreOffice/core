@@ -68,14 +68,14 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
         {
             rtl::OUStringBuffer aBuffer;
             // add PropPatch xml header in front
-            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPPATCH_HEADER ));
+            aBuffer.append( PROPPATCH_HEADER );
 
             // <*operation code*><prop>
 
             ProppatchOperation lastOp = (*mpProperties)[ 0 ].operation;
-            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<" ));
+            aBuffer.append( "<" );
             aBuffer.appendAscii( OpCode[lastOp].str, OpCode[lastOp].len );
-            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "><prop>" ));
+            aBuffer.append( "><prop>" );
 
             SerfPropName thePropName;
             for ( int n = 0; n < nPropCount; ++n )
@@ -88,24 +88,24 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
                 if ( rProperty.operation != lastOp )
                 {
                     // </prop></*last operation code*><*operation code><prop>
-                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</prop></" ));
+                    aBuffer.append( "</prop></" );
                     aBuffer.appendAscii( OpCode[lastOp].str, OpCode[lastOp].len );
-                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "><" ));
+                    aBuffer.append( "><" );
                     aBuffer.appendAscii( OpCode[rProperty.operation].str, OpCode[rProperty.operation].len );
-                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "><prop>" ));
+                    aBuffer.append( "><prop>" );
                 }
 
                 // <*propname* xmlns="*propns*"
-                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<" ));
+                aBuffer.append( "<" );
                 aBuffer.appendAscii( thePropName.name );
-                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " xmlns=\"" ));
+                aBuffer.append( " xmlns=\"" );
                 aBuffer.appendAscii( thePropName.nspace );
-                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\"" ));
+                aBuffer.append( "\"" );
 
                 if ( rProperty.operation == PROPSET )
                 {
                     // >*property value*</*propname*>
-                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( ">" ));
+                    aBuffer.append( ">" );
 
                     OUString aStringValue;
                     if ( DAVProperties::isUCBDeadProperty( thePropName ) )
@@ -118,26 +118,26 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
                         rProperty.value >>= aStringValue;
                     }
                     aBuffer.append( aStringValue );
-                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</" ));
+                    aBuffer.append( "</" );
                     aBuffer.appendAscii( thePropName.name );
-                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( ">" ));
+                    aBuffer.append( ">" );
                 }
                 else
                 {
                     // />
-                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/>" ));
+                    aBuffer.append( "/>" );
                 }
 
                 lastOp = rProperty.operation;
             }
 
             // </prop></*last operation code*>
-            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</prop></" ));
+            aBuffer.append( "</prop></" );
             aBuffer.appendAscii( OpCode[lastOp].str, OpCode[lastOp].len );
-            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( ">" ));
+            aBuffer.append( ">" );
 
             // add PropPatch xml trailer at end
-            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPPATCH_TRAILER ));
+            aBuffer.append( PROPPATCH_TRAILER );
 
             aBodyText = rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
             body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),

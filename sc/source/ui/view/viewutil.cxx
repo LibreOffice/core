@@ -162,7 +162,7 @@ sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     if ( rSettings.HasComment() )
     {
         OUStringBuffer aBuf(rAction.GetComment());
-        aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
+        aBuf.append(" (");
         OUString aTmp;
         rAction.GetDescription(aTmp, &rDocument);
         aBuf.append(aTmp);

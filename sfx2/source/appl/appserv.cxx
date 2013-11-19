@@ -1052,7 +1052,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( xSystemShell.is() && !sTemplRepoURL.isEmpty() )
                 {
                     OUStringBuffer aURLBuf( sTemplRepoURL );
-                    aURLBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM("?lang="));
+                    aURLBuf.append("?lang=");
 
                     // read locale from configuration
                     OUString sLocale(officecfg::Setup::L10N::ooLocale::get());

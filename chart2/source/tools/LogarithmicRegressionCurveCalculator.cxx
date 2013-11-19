@@ -148,7 +148,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
             aBuf.append( UC_SPACE );
         }
-        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ln(x)" ));
+        aBuf.append( "ln(x)" );
         bHaveSlope = true;
     }
 
@@ -163,7 +163,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
         }
         else if( m_fIntercept > 0.0 )
         {
-            aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " + " ));
+            aBuf.append( " + " );
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
         }
     }

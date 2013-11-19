@@ -816,7 +816,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                             aBuffer.append( RetrieveLabelFromCommand(
                                 OUString( ".uno:PrintDefault" ),
                                 xFrame ));
-                            aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
+                            aBuffer.append( " (" );
                             aBuffer.append( aPrinterName );
                             aBuffer.append(')');
 

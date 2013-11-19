@@ -193,43 +193,43 @@ throw (::com::sun::star::uno::RuntimeException)
 
         if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
         {
-            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( (".uno:LanguageStatus?Language:string=Current_") ));
+            aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
             aBuff.append( aSelectedLang );
         }
         else if (nId == MID_LANG_SEL_NONE)
         {
             //set None as current language for selection
-            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( (".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE") ));
+            aBuff.append( ".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE" );
         }
         else if (nId == MID_LANG_SEL_RESET)
         {
             // reset language attributes for selection
-            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( (".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES") ));
+            aBuff.append( ".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES" );
         }
         else if (nId == MID_LANG_SEL_MORE)
         {
             //open the dialog "format/character" for current selection
-            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( (".uno:FontDialog?Language:string=*") ));
+            aBuff.append( ".uno:FontDialog?Language:string=*" );
         }
         else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
         {
-            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( (".uno:LanguageStatus?Language:string=Paragraph_") ));
+            aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_" );
             aBuff.append( aSelectedLang );
         }
         else if (nId == MID_LANG_PARA_NONE)
         {
             //set None as language for current paragraph
-            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( (".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE") ));
+            aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE" );
         }
         else if (nId == MID_LANG_PARA_RESET)
         {
             // reset language attributes for paragraph
-            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( (".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES") ));
+            aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES" );
         }
         else if (nId == MID_LANG_PARA_MORE)
         {
             //open the dialog "format/character" for current paragraph
-            aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( (".uno:FontDialogForParagraph") ));
+            aBuff.append( ".uno:FontDialogForParagraph" );
         }
 
         const Sequence< beans::PropertyValue > aDummyArgs;

@@ -804,7 +804,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     if( pNote && !pNote->IsCaptionShown() )
     {
         if( !aBuffer.isEmpty() )
-            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\n--------\n" ) ).append( pNote->GetText() );
+            aBuffer.append( "\n--------\n" ).append( pNote->GetText() );
         pNoteCaption = pNote->GetOrCreateCaption( rPos );
     }
 

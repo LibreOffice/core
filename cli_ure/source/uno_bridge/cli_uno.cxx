@@ -230,9 +230,8 @@ void Bridge::call_cli(
     catch (System::Exception^ e)
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                             "Unexspected exception during invocation of cli object. "
-                             "Original message is: \n") );
+        buf.append( "Unexpected exception during invocation of cli object. "
+                    "Original message is: \n" );
         buf.append(mapCliString(e->Message));
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }

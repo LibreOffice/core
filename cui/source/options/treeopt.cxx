@@ -1154,9 +1154,9 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
     {
         OUStringBuffer sTitleBuf(sTitle);
-        sTitleBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+        sTitleBuf.append(" - ");
         sTitleBuf.append(aTreeLB.GetEntryText(pParent));
-        sTitleBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+        sTitleBuf.append(" - ");
         sTitleBuf.append(aTreeLB.GetEntryText(pEntry));
         SetText(sTitleBuf.makeStringAndClear());
     }

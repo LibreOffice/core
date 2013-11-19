@@ -444,9 +444,7 @@ typelib_TypeDescriptionReference* mapCliType(System::Type^ cliType)
     if (retVal == NULL)
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("[cli_uno bridge] mapCliType():"
-                                       "could not map type: ") );
+        buf.append( "[cli_uno bridge] mapCliType():could not map type: " );
         buf.append(mapCliString(cliType->FullName));
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
@@ -978,9 +976,9 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 default:
                 {
                     OUStringBuffer buf( 128 );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                    buf.append( "[map_to_uno():" );
                     buf.append(value_td.getTypeName());
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported value type of any!") );
+                    buf.append( "] unsupported value type of any!" );
                     throw BridgeRuntimeError( buf.makeStringAndClear() );
                 }
                 }
@@ -991,12 +989,11 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 if (assign)
                     uno_any_construct( pAny, 0, 0, 0 ); // restore some valid any
                 OUStringBuffer buf( 256 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():Any") );
+                buf.append( "[map_to_uno():Any" );
                 buf.append(value_td.getTypeName());
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("]The Any type "));
+                buf.append( "]The Any type ");
                 buf.append(value_td.getTypeName());
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" does not correspont  "
-                                                            "to its value type: ") );
+                buf.append( " does not correspond to its value type: " );
                 if(aAny.Value != nullptr)
                 {
                     css::uno::Type td(mapCliType(aAny.Value->GetType()), SAL_NO_ACQUIRE);
@@ -1093,7 +1090,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                             else
                             {
                                 OUStringBuffer buf(512);
-                                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("[map_to_uno(): Member: "));
+                                buf.append("[map_to_uno(): Member: ");
                                 buf.append(comp_td->ppMemberNames[nPos]);
                                 throw BridgeRuntimeError(buf.makeStringAndClear());
                             }
@@ -1191,13 +1188,13 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             {
                 bException= true;
                 OUStringBuffer buf(512);
-                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("[map_to_uno():"));
+                buf.append("[map_to_uno():");
                 if (cliType)
                 {
                     buf.append(mapCliString(cliType->FullName));
-                    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("."));
+                    buf.append(".");
                     buf.append(comp_td->ppMemberNames[nPos]);
-                    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" "));
+                    buf.append(" ");
                 }
                 buf.append(e.m_message);
                 throw BridgeRuntimeError(buf.makeStringAndClear());
@@ -1206,14 +1203,14 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             {
                 bException= true;
                 OUStringBuffer buf( 256 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                buf.append( "[map_to_uno():" );
                 if (cliType)
                 {
                     buf.append(mapCliString(cliType->FullName));
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("."));
+                    buf.append( "." );
                     buf.append(comp_td->ppMemberNames[nPos]);
                 }
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] Value has not the required type."));
+                buf.append( "] Value has not the required type." );
                 throw BridgeRuntimeError(buf.makeStringAndClear());
             }
             catch (...)
@@ -1379,9 +1376,9 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     default:
                     {
                         OUStringBuffer buf( 128 );
-                        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                        buf.append( "[map_to_uno():" );
                         buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-                        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported sequence element type: ") );
+                        buf.append( "] unsupported sequence element type: " );
                         buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
                         throw BridgeRuntimeError( buf.makeStringAndClear() );
                     }
@@ -1390,9 +1387,9 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 catch (BridgeRuntimeError& e)
                 {
                     OUStringBuffer buf( 128 );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                    buf.append( "[map_to_uno():" );
                     buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ));
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] conversion failed\n "));
+                    buf.append( "] conversion failed\n ");
                     buf.append(e.m_message);
                     throw BridgeRuntimeError(buf.makeStringAndClear());
                 }
@@ -1400,9 +1397,9 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 {
                     // Ok, checked
                     OUStringBuffer buf( 128 );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                    buf.append( "[map_to_uno():" );
                     buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName) );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] could not convert sequence element type: ") );
+                    buf.append( "] could not convert sequence element type: " );
                     buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
                     throw BridgeRuntimeError( buf.makeStringAndClear() );
                 }
@@ -1448,9 +1445,9 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
         {
             //ToDo check
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
+            buf.append( "] unsupported type!" );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         }
@@ -1460,16 +1457,15 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
     {
         //ToDo check
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+        buf.append( "[map_to_uno():" );
         buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] could not convert type!") );
+        buf.append( "] could not convert type!" );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
     catch (System::NullReferenceException ^ e)
     {
         OUStringBuffer buf(512);
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                             "[map_to_uno()] Illegal null reference passed!\n"));
+        buf.append( "[map_to_uno()] Illegal null reference passed!\n" );
         buf.append(mapCliString(e->StackTrace));
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
@@ -1955,9 +1951,9 @@ void Bridge::map_to_cli(
         default:
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_cli():") );
+            buf.append( "[map_to_cli():" );
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported element type: ") );
+            buf.append( "] unsupported element type: " );
             buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -1981,9 +1977,9 @@ void Bridge::map_to_cli(
     {
         //ToDo check this exception. The String is probably crippled
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_cli():") );
+        buf.append( "[map_to_cli():" );
         buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
+        buf.append( "] unsupported type!" );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
     } //switch

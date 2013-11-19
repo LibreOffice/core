@@ -1250,7 +1250,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
 
         OUStringBuffer sIDBuf;
-        sIDBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(RECOVERY_ITEM_BASE_IDENTIFIER));
+        sIDBuf.append(RECOVERY_ITEM_BASE_IDENTIFIER);
         sIDBuf.append((sal_Int32)rInfo.ID);
         OUString sID = sIDBuf.makeStringAndClear();
 
@@ -2813,7 +2813,7 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
 {
     // describe the current running operation
     OUStringBuffer sFeature(256);
-    sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL));
+    sFeature.append(CMD_PROTOCOL);
 
     // Attention: Because "eJob" is used as a flag field the order of checking these
     // flags is important. We must preferr job with higher priorities!
@@ -2822,23 +2822,23 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
     // e.g. PrepareEmergencySave must be done before EmergencySave is started of course.
 
     if ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_PREPARE_EMERGENCY_SAVE));
+        sFeature.append(CMD_DO_PREPARE_EMERGENCY_SAVE);
     else if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_EMERGENCY_SAVE));
+        sFeature.append(CMD_DO_EMERGENCY_SAVE);
     else if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_RECOVERY));
+        sFeature.append(CMD_DO_RECOVERY);
     else if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_SAVE));
+        sFeature.append(CMD_DO_SESSION_SAVE);
     else if ((eJob & AutoRecovery::E_SESSION_QUIET_QUIT) == AutoRecovery::E_SESSION_QUIET_QUIT)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_QUIET_QUIT));
+        sFeature.append(CMD_DO_SESSION_QUIET_QUIT);
     else if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_RESTORE));
+        sFeature.append(CMD_DO_SESSION_RESTORE);
     else if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_BACKUP));
+        sFeature.append(CMD_DO_ENTRY_BACKUP);
     else if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_CLEANUP));
+        sFeature.append(CMD_DO_ENTRY_CLEANUP);
     else if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
-        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_AUTO_SAVE));
+        sFeature.append(CMD_DO_AUTO_SAVE);
     else if ( eJob != AutoRecovery::E_NO_JOB )
         SAL_INFO("fwk", "AutoRecovery::implst_getJobDescription(): Invalid job identifier detected.");
 

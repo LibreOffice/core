@@ -114,7 +114,7 @@ OUString Translator::translateToInternal(
     // authority part; treat them as having an empty authority part:
     if (!externalUriReference.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("//"), i))
     {
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+        buf.append("//");
     }
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     for (bool path = true;;) {

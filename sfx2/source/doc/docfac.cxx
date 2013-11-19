@@ -371,8 +371,8 @@ const SvGlobalName& SfxObjectFactory::GetClassId() const
 OUString SfxObjectFactory::GetFactoryURL() const
 {
     OUStringBuffer aURLComposer;
-    aURLComposer.appendAscii(RTL_CONSTASCII_STRINGPARAM("private:factory/"));
-    aURLComposer.appendAscii(GetShortName());
+    aURLComposer.append("private:factory/");
+    aURLComposer.append(GetShortName());
     return aURLComposer.makeStringAndClear();
 }
 

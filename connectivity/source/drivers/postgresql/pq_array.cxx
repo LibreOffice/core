@@ -116,11 +116,11 @@ void Array::checkRange( sal_Int32 index, sal_Int32 count )
     if( index >= 1 && index -1 + count <= m_data.getLength() )
         return;
     OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Array::getArrayAtIndex(): allowed range for index + count " ) );
+    buf.append( "Array::getArrayAtIndex(): allowed range for index + count " );
     buf.append( m_data.getLength() );
-    buf.appendAscii( ", got " );
+    buf.append( ", got " );
     buf.append( index );
-    buf.appendAscii( " + " );
+    buf.append( " + " );
     buf.append( count );
 
     throw SQLException( buf.makeStringAndClear() , *this, OUString(), 1, Any());

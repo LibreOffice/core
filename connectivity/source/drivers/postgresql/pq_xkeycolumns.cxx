@@ -183,11 +183,11 @@ void KeyColumns::refresh()
 // //         past->getPropertyValue( st.SCHEMA_NAME ) != future->getPropertyValue( st.SCHEMA_NAME ))
 // //     {
 // //         OUStringBuffer buf(128);
-// //         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Can't move column " ) );
+// //         buf.append( "Can't move column " );
 // //         buf.append( extractStringProperty( past, st.COLUMN_NAME ) );
-// //         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " from table " ) );
+// //         buf.append( " from table " );
 // //         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
-// //         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " to table " ) );
+// //         buf.append( " to table " );
 // //         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
 // //         throw SQLException( buf.makeStringAndClear(), Reference< XInterface > () );
 // //     }
@@ -205,9 +205,9 @@ void KeyColumns::refresh()
 //     if( ! pastColumnName.getLength())
 //     {
 //         // create a new column
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+//         buf.append( "ALTER TABLE" );
 //         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ADD COLUMN" ) );
+//         buf.append( "ADD COLUMN" );
 //         bufferQuoteIdentifier( buf, futureColumnName );
 //         buf.append( futureTypeName );
 //         transaction.executeUpdate( buf.makeStringAndClear() );
@@ -223,11 +223,11 @@ void KeyColumns::refresh()
 
 //         if( pastColumnName != futureColumnName )
 //         {
-//             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+//             buf.append( "ALTER TABLE" );
 //             bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
-//             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "RENAME COLUMN" ) );
+//             buf.append( "RENAME COLUMN" );
 //             bufferQuoteIdentifier( buf, pastColumnName );
-//             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "TO" ) );
+//             buf.append( "TO" );
 //             bufferQuoteIdentifier( buf, futureColumnName );
 //             transaction.executeUpdate( buf.makeStringAndClear() );
 //         }
@@ -238,11 +238,11 @@ void KeyColumns::refresh()
 //     if( futureDefaultValue != pastDefaultValue )
 //     {
 //         buf = OUStringBuffer( 128 );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+//         buf.append( "ALTER TABLE" );
 //         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER COLUMN" ) );
+//         buf.append( "ALTER COLUMN" );
 //         bufferQuoteIdentifier( buf, futureColumnName );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET DEFAULT " ) );
+//         buf.append( "SET DEFAULT " );
 //         // default value is not quoted, caller needs to quote himself (otherwise
 //         // how to pass e.g. nextval('something' ) ????
 //         buf.append( futureDefaultValue );
@@ -255,19 +255,19 @@ void KeyColumns::refresh()
 //     if( futureNullable != pastNullable )
 //     {
 //         buf = OUStringBuffer( 128 );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+//         buf.append( "ALTER TABLE" );
 //         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER COLUMN" ) );
+//         buf.append( "ALTER COLUMN" );
 //         bufferQuoteIdentifier( buf, futureColumnName );
 //         if( futureNullable == com::sun::star::sdbc::ColumnValue::NO_NULLS )
 //         {
-//             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET" ) );
+//             buf.append( "SET" );
 //         }
 //         else
 //         {
-//             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "DROP" ) );
+//             buf.append( "DROP" );
 //         }
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " NOT NULL" ) );
+//         buf.append( " NOT NULL" );
 //         transaction.executeUpdate( buf.makeStringAndClear() );
 //     }
 
@@ -276,9 +276,9 @@ void KeyColumns::refresh()
 //     if( futureComment != pastComment )
 //     {
 //         buf = OUStringBuffer( 128 );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON COLUMN" ) );
+//         buf.append( "COMMENT ON COLUMN" );
 //         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName , futureColumnName );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
+//         buf.append( "IS " );
 //         bufferQuoteConstant( buf, futureComment,encoding);
 //         transaction.executeUpdate( buf.makeStringAndClear() );
 //     }

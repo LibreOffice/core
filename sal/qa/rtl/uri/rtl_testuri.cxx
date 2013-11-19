@@ -226,10 +226,10 @@ void Test::test_Uri() {
 
     aText1 = rtl::OUString(
             "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A");
-    aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("%ED%A0%80"));
+    aBuffer.append("%ED%A0%80");
     aBuffer.append(static_cast< sal_Unicode >(0xD800));
     aBuffer.append(static_cast< sal_Unicode >(0xDFFF));
-    aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("%ED%BF%BF"));
+    aBuffer.append("%ED%BF%BF");
     aBuffer.append(static_cast< sal_Unicode >('A'));
     aText2 = aBuffer.makeStringAndClear();
     CPPUNIT_ASSERT_MESSAGE(
@@ -267,7 +267,7 @@ void Test::test_Uri() {
     // Check IURI handling:
 
     aText1 = rtl::OUString("%30%C3%BF");
-    aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("%30"));
+    aBuffer.append("%30");
     aBuffer.append(static_cast< sal_Unicode >(0x00FF));
     aText2 = aBuffer.makeStringAndClear();
     CPPUNIT_ASSERT_MESSAGE(

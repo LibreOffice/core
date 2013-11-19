@@ -635,10 +635,10 @@ static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& r
         aBuf.append( '[');
     aBuf.append( "'" + aFile + "'" + OUString(cSep));
     if (bODF)
-        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "$$'"));
+        aBuf.append( "$$'" );
     aBuf.append( aName);
     if (bODF)
-        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "']"));
+        aBuf.append( "']" );
     return aBuf.makeStringAndClear();
 }
 

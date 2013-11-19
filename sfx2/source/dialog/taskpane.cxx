@@ -107,10 +107,9 @@ namespace sfx2
 
                 const OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", OUString() ) );
 
-                aPathComposer.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                    "org.openoffice.Office.UI."));
+                aPathComposer.append( "org.openoffice.Office.UI." );
                 aPathComposer.append( sWindowStateRef );
-                aPathComposer.appendAscii(RTL_CONSTASCII_STRINGPARAM("/UIElements/States"));
+                aPathComposer.append( "/UIElements/States" );
                 if ( !i_rResourceURL.isEmpty() )
                 {
                     aPathComposer.append('/').append( i_rResourceURL );
@@ -173,7 +172,7 @@ namespace sfx2
                     if ( sImageURL.startsWith( pCommandImagePrefix ) )
                     {
                         OUStringBuffer aCommandName;
-                        aCommandName.appendAscii(RTL_CONSTASCII_STRINGPARAM(".uno:"));
+                        aCommandName.append( ".uno:" );
                         aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
                         const OUString sCommandName( aCommandName.makeStringAndClear() );
 

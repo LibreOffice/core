@@ -378,12 +378,9 @@ SAL_IMPLEMENT_MAIN()
                         if (option_info == 0)
                         {
                             OUStringBuffer buf;
-                            buf.appendAscii(
-                                RTL_CONSTASCII_STRINGPARAM("unknown option ") );
+                            buf.append("unknown option ");
                             buf.append( cmd_arg );
-                            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                                 "!  Use climaker --help "
-                                                 "to print all options.") );
+                            buf.append( "!  Use climaker --help to print all options." );
                             throw RuntimeException(
                                 buf.makeStringAndClear(),
                                 css::uno::Reference< XInterface >() );

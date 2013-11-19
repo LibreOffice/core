@@ -209,15 +209,15 @@ void Indexes::appendByDescriptor(
 
     OUStringBuffer buf( 128 );
 
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "CREATE " ) );
+    buf.append( "CREATE " );
     if( isUnique )
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "UNIQUE " ) );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "INDEX " ) );
+        buf.append( "UNIQUE " );
+    buf.append( "INDEX " );
     bufferQuoteIdentifier( buf, name, m_pSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ON " ) );
+    buf.append( " ON " );
     bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName, m_pSettings );
 
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ) );
+    buf.append( " ( " );
 
     Reference< XColumnsSupplier > columns( descriptor, UNO_QUERY );
     if( columns.is() )
@@ -236,13 +236,13 @@ void Indexes::appendByDescriptor(
                 }
                 else
                 {
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                    buf.append( ", " );
                 }
                 buf.append( extractStringProperty( column, st.NAME ) );
             }
         }
     }
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ) " ) );
+    buf.append( " ) " );
 
     m_origin->createStatement()->executeUpdate( buf.makeStringAndClear() );
     refresh();
@@ -273,7 +273,7 @@ void Indexes::dropByIndex( sal_Int32 index )
     Statics &st = getStatics();
 
     OUStringBuffer buf( 128 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "DROP INDEX " ) );
+    buf.append( "DROP INDEX " );
     bufferQuoteIdentifier( buf, extractStringProperty( set, st.NAME ), m_pSettings );
     m_origin->createStatement()->executeUpdate( buf.makeStringAndClear() );
 

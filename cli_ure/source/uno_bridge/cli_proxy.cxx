@@ -80,8 +80,7 @@ UnoInterfaceInfo::UnoInterfaceInfo(Bridge const * bridge, uno_Interface* unoI,
         if( ! bComplete)
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                                 "cannot make type complete: ") );
+            buf.append( "cannot make type complete: " );
             buf.append( *reinterpret_cast< OUString const * >(
                             & m_typeDesc->aBase.pTypeName));
             throw BridgeRuntimeError(buf.makeStringAndClear());
@@ -198,11 +197,11 @@ void UnoInterfaceProxy::addUnoInterface(uno_Interface* pUnoI,
         // add to the string that contains all interface names
          _numInterfaces ++;
          OUStringBuffer buf(512);
-        buf.appendAscii("\t");
+        buf.append("\t");
         buf.append( OUString::valueOf((sal_Int32)_numInterfaces));
-        buf.appendAscii(". ");
+        buf.append(". ");
         buf.append(mapCliString(sInterfaceName));
-        buf.appendAscii("\n");
+        buf.append("\n");
         OUString _sNewInterface = buf.makeStringAndClear();
         rtl_uString * __pin * pp_sInterfaces = & _sInterfaces;
         rtl_uString_newConcat( pp_sInterfaces, * pp_sInterfaces,
@@ -551,12 +550,10 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
         // ToDo check if the message of the exception is not crippled
         // the thing that should not be... no method info found!
         OUStringBuffer buf( 64 );
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                        "[cli_uno bridge]calling undeclared function on "
-                        "interface ") );
+        buf.append( "[cli_uno bridge]calling undeclared function on interface " );
         buf.append( *reinterpret_cast< OUString const * >(
                   & ((typelib_TypeDescription *)info->m_typeDesc)->pTypeName));
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": ") );
+        buf.append( ": " );
         buf.append( usMethodName );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
@@ -762,11 +759,9 @@ void CliProxy::makeMethodInfos()
     catch (System::InvalidCastException^ )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                            "[cli_uno bridge] preparing proxy for "
-                            "cli interface: ") );
+        buf.append( "[cli_uno bridge] preparing proxy for cli interface: " );
         buf.append(mapCliString(m_type->ToString() ));
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" \nfailed!"));
+        buf.append( " \nfailed!" );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
 }
@@ -840,9 +835,8 @@ sr::MethodInfo^ CliProxy::getMethodInfo(int nUnoFunctionPos,
         if (indexCliMethod == -1)
         {
             OUStringBuffer buf(256);
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                                "[cli_uno bridge] CliProxy::getMethodInfo():"
-                                "cli object does not implement interface method: "));
+            buf.append( "[cli_uno bridge] CliProxy::getMethodInfo():"
+                        "cli object does not implement interface method: " );
             buf.append(usMethodName);
             throw BridgeRuntimeError(buf.makeStringAndClear());
         }

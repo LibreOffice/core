@@ -1543,7 +1543,7 @@ OUString lcl_GetDataFieldName( const OUString& rSourceName, sheet::GeneralFuncti
         return OUString();
 
     OUStringBuffer aRet( ScGlobal::GetRscString( nStrId ) );
-    aRet.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+    aRet.append(" - ");
     aRet.append(rSourceName);
     return aRet.makeStringAndClear();
 }

@@ -87,7 +87,7 @@ OUString concatQualified( const OUString & a, const OUString &b)
 {
     OUStringBuffer buf( a.getLength() + 2 + b.getLength() );
     buf.append( a );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    buf.append( "." );
     buf.append( b );
     return buf.makeStringAndClear();
 }
@@ -130,9 +130,9 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
 
 static inline void ibufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
 {
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
+    buf.append( "'" );
     bufferEscapeConstant( buf, value, settings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
+    buf.append( "'" );
 }
 
 void bufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
@@ -149,7 +149,7 @@ void bufferQuoteAnyConstant( OUStringBuffer & buf, const Any &val, ConnectionSet
         bufferQuoteConstant( buf, str, settings );
     }
     else
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "NULL" ) );
+        buf.append( "NULL" );
 }
 
 static inline void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings )
@@ -182,7 +182,7 @@ void bufferQuoteQualifiedIdentifier(
     OUStringBuffer & buf, const OUString &schema, const OUString &table, ConnectionSettings *settings )
 {
     ibufferQuoteIdentifier(buf, schema, settings);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    buf.append( "." );
     ibufferQuoteIdentifier(buf, table, settings);
 }
 
@@ -194,9 +194,9 @@ void bufferQuoteQualifiedIdentifier(
     ConnectionSettings *settings)
 {
     ibufferQuoteIdentifier(buf, schema, settings);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    buf.append( "." );
     ibufferQuoteIdentifier(buf, table, settings);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    buf.append( "." );
     ibufferQuoteIdentifier(buf, col, settings);
 }
 
@@ -575,28 +575,28 @@ OUString array2String( const com::sun::star::uno::Sequence< Any > &seq )
 {
     OUStringBuffer buf(128);
     int len = seq.getLength();
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "{" ) );
+    buf.append( "{" );
     for( int i = 0 ; i < len ; i ++ )
     {
         OUString element;
         seq[i] >>= element;
 
         if( i > 0 )
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(",") );
+            buf.append( "," );
         int strLength = element.getLength();
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\"") );
+        buf.append( "\"" );
         for( int j = 0 ; j < strLength ; j ++ )
         {
             sal_Unicode c = element[j];
             if( c == '\\' || c == '"' || c == '{' || c == '}' )
             {
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\\" ) );
+                buf.append( "\\" );
             }
             buf.append( c );
         }
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\"" ) );
+        buf.append( "\"" );
     }
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "}" ) );
+    buf.append( "}" );
     return buf.makeStringAndClear();
 }
 
@@ -932,19 +932,19 @@ OUString sqltype2string( const Reference< XPropertySet > & desc )
         case com::sun::star::sdbc::DataType::VARCHAR:
         case com::sun::star::sdbc::DataType::CHAR:
         {
-            typeName.appendAscii( RTL_CONSTASCII_STRINGPARAM( "(" ) );
+            typeName.append( "(" );
             typeName.append( precision );
-            typeName.appendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+            typeName.append( ")" );
             break;
         }
         case com::sun::star::sdbc::DataType::DECIMAL:
         case com::sun::star::sdbc::DataType::NUMERIC:
         {
-            typeName.appendAscii( RTL_CONSTASCII_STRINGPARAM( "(" ) );
+            typeName.append( "(" );
             typeName.append( precision );
-            typeName.appendAscii( RTL_CONSTASCII_STRINGPARAM( "," ) );
+            typeName.append( "," );
             typeName.append( extractIntProperty( desc, getStatics().SCALE ) );
-            typeName.appendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+            typeName.append( ")" );
             break;
         }
         default:
@@ -961,23 +961,23 @@ static void keyType2String( OUStringBuffer & buf, sal_Int32 keyType )
 {
     if( com::sun::star::sdbc::KeyRule::CASCADE == keyType )
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "CASCADE " ) );
+        buf.append( "CASCADE " );
     }
     else if( com::sun::star::sdbc::KeyRule::RESTRICT  == keyType )
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "RESTRICT " ) );
+        buf.append( "RESTRICT " );
     }
     else if( com::sun::star::sdbc::KeyRule::SET_DEFAULT  == keyType )
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET DEFAULT " ) );
+        buf.append( "SET DEFAULT " );
     }
     else if( com::sun::star::sdbc::KeyRule::SET_NULL  == keyType )
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET NULL " ) );
+        buf.append( "SET NULL " );
     }
     else //if( com::sun::star::sdbc::KeyRule::NO_ACTION == keyType )
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "NO ACTION " ) );
+        buf.append( "NO ACTION " );
     }
 }
 
@@ -992,16 +992,16 @@ void bufferKey2TableConstraint(
     bool foreign = false;
     if( type == com::sun::star::sdbcx::KeyType::UNIQUE )
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "UNIQUE( " ) );
+        buf.append( "UNIQUE( " );
     }
     else if( type == com::sun::star::sdbcx::KeyType::PRIMARY )
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "PRIMARY KEY( " ) );
+        buf.append( "PRIMARY KEY( " );
     }
     else if( type == com::sun::star::sdbcx::KeyType::FOREIGN )
     {
         foreign = true;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "FOREIGN KEY( " ) );
+        buf.append( "FOREIGN KEY( " );
     }
 
     Reference< XColumnsSupplier > columns( key, UNO_QUERY );
@@ -1020,18 +1020,18 @@ void bufferKey2TableConstraint(
                 }
                 else
                 {
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                    buf.append( ", " );
                 }
                 Reference< XPropertySet > keyColumn( colEnum->nextElement(), UNO_QUERY_THROW );
                 bufferQuoteIdentifier(buf, extractStringProperty( keyColumn, st.NAME ), settings );
             }
         }
     }
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ") " ));
+    buf.append( ") " );
 
     if( foreign )
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "REFERENCES " ) );
+        buf.append( "REFERENCES " );
         OUString schema;
         OUString tableName;
         splitConcatenatedIdentifier( referencedTable, &schema, &tableName );
@@ -1041,7 +1041,7 @@ void bufferKey2TableConstraint(
             Reference< XEnumerationAccess > colEnumAccess( columns->getColumns(), UNO_QUERY);
             if( colEnumAccess.is() )
             {
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) );
+                buf.append( " (" );
                 Reference< XEnumeration > colEnum(colEnumAccess->createEnumeration());
                 bool first = true;
                 while(colEnum.is() && colEnum->hasMoreElements() )
@@ -1052,19 +1052,19 @@ void bufferKey2TableConstraint(
                     }
                     else
                     {
-                        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                        buf.append( ", " );
                     }
                     Reference< XPropertySet > keyColumn( colEnum->nextElement(), UNO_QUERY_THROW );
                     bufferQuoteIdentifier(
                                           buf, extractStringProperty( keyColumn, st.RELATED_COLUMN ), settings );
                 }
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ") " ) );
+                buf.append( ") " );
             }
         }
 
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ON DELETE " ) );
+        buf.append( "ON DELETE " );
         keyType2String( buf, deleteRule );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ON UPDATE " ) );
+        buf.append( " ON UPDATE " );
         keyType2String( buf, updateRule );
     }
 

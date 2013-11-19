@@ -26,9 +26,9 @@ HelpIndexer::HelpIndexer(OUString const &lang, OUString const &module,
     : d_lang(lang), d_module(module)
 {
     d_indexDir = OUStringBuffer(outDir).append('/').
-        append(module).appendAscii(RTL_CONSTASCII_STRINGPARAM(".idxl")).toString();
-    d_captionDir = srcDir + OUString("/caption");
-    d_contentDir = srcDir + OUString("/content");
+        append(module).append(".idxl").makeStringAndClear();
+    d_captionDir = srcDir + "/caption";
+    d_contentDir = srcDir + "/content";
 }
 
 bool HelpIndexer::indexDocuments()

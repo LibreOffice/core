@@ -70,7 +70,7 @@ static inline sal_Int32 makeMask(
         if (! strings[ nPos ])
         {
             OUStringBuffer buf( 48 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("### ignoring unknown socket action: ") );
+            buf.append( "### ignoring unknown socket action: " );
             buf.append( item );
             OString str( OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
@@ -243,8 +243,7 @@ OUString SocketPermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
     // host
-    buf.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM("com.sun.star.connection.SocketPermission (host=\"") );
+    buf.append( "com.sun.star.connection.SocketPermission (host=\"" );
     buf.append( m_host );
     if (m_resolvedHost)
     {
@@ -266,9 +265,9 @@ OUString SocketPermission::toString() const SAL_THROW(())
         }
     }
     // actions
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\", actions=\"") );
+    buf.append( "\", actions=\"" );
     buf.append( makeStrings( m_actions, s_actions ) );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\")") );
+    buf.append( "\")" );
     return buf.makeStringAndClear();
 }
 
@@ -327,14 +326,14 @@ FilePermission::FilePermission(
         {
             OUStringBuffer buf( 64 );
             buf.append( getWorkingDir() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/*") );
+            buf.append( "/*" );
             m_url = buf.makeStringAndClear();
         }
         else if ( m_url == "-" )
         {
             OUStringBuffer buf( 64 );
             buf.append( getWorkingDir() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/-") );
+            buf.append( "/-" );
             m_url = buf.makeStringAndClear();
         }
         else if (!m_url.startsWith("file:///"))
@@ -420,12 +419,12 @@ OUString FilePermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
     // url
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("com.sun.star.io.FilePermission (url=\"") );
+    buf.append( "com.sun.star.io.FilePermission (url=\"" );
     buf.append( m_url );
     // actions
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\", actions=\"") );
+    buf.append( "\", actions=\"" );
     buf.append( makeStrings( m_actions, s_actions ) );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\")") );
+    buf.append( "\")" );
     return buf.makeStringAndClear();
 }
 
@@ -462,10 +461,9 @@ bool RuntimePermission::implies( Permission const & perm ) const SAL_THROW(())
 OUString RuntimePermission::toString() const SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
-    buf.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM("com.sun.star.security.RuntimePermission (name=\"") );
+    buf.append( "com.sun.star.security.RuntimePermission (name=\"" );
     buf.append( m_name );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\")") );
+    buf.append( "\")" );
     return buf.makeStringAndClear();
 }
 
@@ -519,8 +517,7 @@ PermissionCollection::PermissionCollection(
         else
         {
             OUStringBuffer buf( 48 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                "checking for unsupported permission type: ") );
+            buf.append( "checking for unsupported permission type: " );
             buf.append( perm_type.getTypeName() );
             throw RuntimeException(
                 buf.makeStringAndClear(), Reference< XInterface >() );
@@ -560,9 +557,9 @@ static void demanded_diag(
     SAL_THROW(())
 {
     OUStringBuffer buf( 48 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("demanding ") );
+    buf.append( "demanding " );
     buf.append( perm.toString() );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" => ok.") );
+    buf.append( " => ok." );
     OString str(
         OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "%s", str.getStr() );
@@ -574,7 +571,7 @@ static void throwAccessControlException(
     SAL_THROW( (security::AccessControlException) )
 {
     OUStringBuffer buf( 48 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("access denied: ") );
+    buf.append( "access denied: " );
     buf.append( perm.toString() );
     throw security::AccessControlException(
         buf.makeStringAndClear(), Reference< XInterface >(), demanded_perm );
@@ -642,7 +639,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     else
     {
         OUStringBuffer buf( 48 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("checking for unsupported permission type: ") );
+        buf.append( "checking for unsupported permission type: " );
         buf.append( demanded_type.getTypeName() );
         throw RuntimeException(
             buf.makeStringAndClear(), Reference< XInterface >() );

@@ -82,10 +82,10 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
         aPickEntry.append(OUString::number(nNo + 1));
     }
     else if ( nNo == 9 )
-        aPickEntry.appendAscii(RTL_CONSTASCII_STRINGPARAM("1~0"));
+        aPickEntry.append("1~0");
     else
         aPickEntry.append(OUString::number(nNo + 1));
-    aPickEntry.appendAscii(RTL_CONSTASCII_STRINGPARAM(": "));
+    aPickEntry.append(": ");
 
     INetURLObject   aURL( aURLString );
     OUString   aTipHelpText;
@@ -111,7 +111,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
         if ( aPickEntry.getLength() > 50 )
         {
             aPickEntry.setLength( 47 );
-            aPickEntry.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+            aPickEntry.append("...");
         }
     }
     else

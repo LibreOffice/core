@@ -694,7 +694,7 @@ namespace rtl_Bootstrap
 
         void testSection() {
             rtl::OUStringBuffer b;
-            b.appendAscii(RTL_CONSTASCII_STRINGPARAM("${"));
+            b.append("${");
             rtl::OUString p(t_getSourcePath(TESTSHL2_INI));
             for (sal_Int32 i = 0; i < p.getLength(); ++i) {
                 if (p[i] != 'u') {
@@ -702,7 +702,7 @@ namespace rtl_Bootstrap
                 }
                 b.append(p[i]);
             }
-            b.appendAscii(RTL_CONSTASCII_STRINGPARAM(":Other_Section:EXPAND}"));
+            b.append(":Other_Section:EXPAND}");
             rtl::OUString t(b.makeStringAndClear());
             Bootstrap(t_getSourcePath(TESTSHL2_INI)).expandMacrosFrom(t);
             CPPUNIT_ASSERT_MESSAGE( "section expansion", t == "$FILE" );

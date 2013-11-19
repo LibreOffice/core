@@ -154,7 +154,7 @@ void ODocumentInfoPreview::insertDateTime(
     if (aToolsDT.IsValidAndGregorian()) {
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
         OUStringBuffer buf(rLocaleWrapper.getDate(aToolsDT));
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+        buf.append(", ");
         buf.append(rLocaleWrapper.getTime(aToolsDT));
         insertEntry(m_pInfoTable->GetString(id), buf.makeStringAndClear());
     }

@@ -1538,7 +1538,7 @@ Sequence<OUString> ORegistryServiceManager::getFromServiceName(
     const OUString& serviceName )
 {
     OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/SERVICES/" ) );
+    buf.append( "/SERVICES/" );
     buf.append( serviceName );
     return retrieveAsciiValueList( m_xRegistry, buf.makeStringAndClear() );
 }

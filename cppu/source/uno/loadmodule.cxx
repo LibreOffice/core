@@ -34,10 +34,10 @@ namespace cppu { namespace detail {
 ::oslModule loadModule(rtl::OUString const & name) {
     rtl::OUStringBuffer b;
 #if defined SAL_DLLPREFIX
-    b.appendAscii(RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX));
+    b.append(SAL_DLLPREFIX);
 #endif
     b.append(name);
-    b.appendAscii(RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION));
+    b.append(SAL_DLLEXTENSION);
     return ::osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >(&loadModule),
         b.makeStringAndClear().pData,

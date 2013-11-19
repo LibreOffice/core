@@ -1762,12 +1762,12 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
 
     // create the list of filters
     OUStringBuffer sQuery(256);
-    sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM("getSortedFilterList()"));
-    sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":module="));
+    sQuery.append("getSortedFilterList()");
+    sQuery.append(":module=");
     sQuery.append(rFactory); // use long name here !
-    sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":iflags="));
+    sQuery.append(":iflags=");
     sQuery.append(OUString::number(m_nMustFlags));
-    sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":eflags="));
+    sQuery.append(":eflags=");
     sQuery.append(OUString::number(m_nDontFlags));
 
     uno::Reference< XEnumeration > xResult;

@@ -116,43 +116,43 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     OUString sAccName = SC_RESSTR(RID_FILTER_OPERATOR);
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aBuf.append(" 1");
     pLbConnect1->SetAccessibleName(aBuf.makeStringAndClear());
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aBuf.append(" 2");
     pLbConnect2->SetAccessibleName(aBuf.makeStringAndClear());
 
     sAccName = SC_RESSTR(RID_FILTER_FIELDNAME);
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aBuf.append(" 1");
     pLbField1->SetAccessibleName(aBuf.makeStringAndClear());
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aBuf.append(" 2");
     pLbField2->SetAccessibleName(aBuf.makeStringAndClear());
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aBuf.append(" 3");
     pLbField3->SetAccessibleName(aBuf.makeStringAndClear());
 
     sAccName = SC_RESSTR(RID_FILTER_CONDITION);
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aBuf.append(" 1");
     pLbCond1->SetAccessibleName(aBuf.makeStringAndClear());
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aBuf.append(" 2");
     pLbCond2->SetAccessibleName(aBuf.makeStringAndClear());
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aBuf.append(" 3");
     pLbCond3->SetAccessibleName(aBuf.makeStringAndClear());
 
     sAccName = SC_RESSTR(RID_FILTER_VALUE);
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aBuf.append(" 1");
     pEdVal1->SetAccessibleName(aBuf.makeStringAndClear());
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aBuf.append(" 2");
     pEdVal2->SetAccessibleName(aBuf.makeStringAndClear());
     aBuf.append(sAccName);
-    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aBuf.append(" 3");
     pEdVal3->SetAccessibleName(aBuf.makeStringAndClear());
 
     pLbCopyArea->SetAccessibleName(ScResId(STR_COPY_AREA_TO));

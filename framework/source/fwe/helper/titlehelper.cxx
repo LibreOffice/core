@@ -373,7 +373,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         if (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
             sNewTitle.append ((::sal_Int32)nLeasedNumber);
         else
-            sNewTitle.appendAscii ("?");
+            sNewTitle.appendAscii("?");
 
         sTitle = sNewTitle.makeStringAndClear ();
     }
@@ -522,7 +522,7 @@ void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
     if (!name.isEmpty())
     {
         if (!sTitle.isEmpty())
-            sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+            sTitle.append(" - ");
         sTitle.append(name);
     }
 }
@@ -569,9 +569,9 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
     sTitle.append(version);
     OUString sDefault("development");
     OUString sVersion = ::utl::Bootstrap::getBuildIdData(sDefault);
-    sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
+    sTitle.append(" [");
     sTitle.append(sVersion);
-    sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM("]"));
+    sTitle.append("]");
 }
 #else
 void TitleHelper::impl_appendDebugVersion (OUStringBuffer&)

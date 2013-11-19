@@ -366,7 +366,7 @@ OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc
     if (nId)
     {
         aRet.append(ScGlobal::GetRscString(nId));        // function name
-        aRet.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+        aRet.append(" - ");
     }
     aRet.append(rName);                   // field name
 

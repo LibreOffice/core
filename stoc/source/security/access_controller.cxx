@@ -562,14 +562,13 @@ static void dumpPermissions(
     OUStringBuffer buf( 48 );
     if (!userId.isEmpty())
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> dumping permissions of user \"") );
+        buf.append( "> dumping permissions of user \"" );
         buf.append( userId );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\":") );
+        buf.append( "\":" );
     }
     else
     {
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("> dumping default permissions:") );
+        buf.append( "> dumping default permissions:" );
     }
     OString str( OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "%s", str.getStr() );
@@ -715,9 +714,9 @@ PermissionCollection AccessController::getEffectivePermissions(
         }
 #ifdef __DIAGNOSE
         OUStringBuffer buf( 48 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> info: recurring call of user \"") );
+        buf.append( "> info: recurring call of user \"" );
         buf.append( userId );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"") );
+        buf.append( "\"" );
         OString str(
             OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "%s", str.getStr() );
@@ -807,8 +806,7 @@ PermissionCollection AccessController::getEffectivePermissions(
     {
         clearPostPoned(); // safety: exception could have happened before checking postponed?
         OUStringBuffer buf( 64 );
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occurred): ") );
+        buf.append( "deployment error (AccessControlException occurred): " );
         buf.append( exc.Message );
         throw DeploymentException( buf.makeStringAndClear(), exc.Context );
     }

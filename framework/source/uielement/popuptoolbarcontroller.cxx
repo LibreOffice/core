@@ -386,7 +386,7 @@ static sal_Bool Impl_ExistURLInMenu(
     if ( !bValidFallback )
     {
         OUStringBuffer aBuffer;
-        aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "private:factory/" ) );
+        aBuffer.append( "private:factory/" );
         aBuffer.append( SvtModuleOptions().GetDefaultModuleName() );
         sFallback = aBuffer.makeStringAndClear();
     }

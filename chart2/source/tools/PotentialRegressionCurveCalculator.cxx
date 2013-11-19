@@ -153,7 +153,7 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
         }
         if( m_fSlope != 0.0 )
         {
-            aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "x^" ));
+            aBuf.append( "x^" );
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
         }
     }

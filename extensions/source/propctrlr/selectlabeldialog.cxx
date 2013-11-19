@@ -224,7 +224,7 @@ namespace pcr
 
             OUString sDisplayName = OUStringBuffer(
                 ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_LABEL))).
-                appendAscii(RTL_CONSTASCII_STRINGPARAM(" (")).append(sName).append(')').
+                append(" (").append(sName).append(')').
                 makeStringAndClear();
 
             // all requirements met -> insert

@@ -999,13 +999,11 @@ static void insert_singletons(
                             if (! is_supported_service( service_name, xExistingService_td ))
                             {
                                 OUStringBuffer buf( 64 );
-                                buf.appendAscii(
-                                    RTL_CONSTASCII_STRINGPARAM("existing singleton service (") );
+                                buf.append( "existing singleton service (" );
                                 buf.append( singleton_name );
                                 buf.append( (sal_Unicode)'=' );
                                 buf.append( existing_name );
-                                buf.appendAscii(
-                                    RTL_CONSTASCII_STRINGPARAM(") does not support given one: ") );
+                                buf.append( ") does not support given one: " );
                                 buf.append( service_name );
                                 throw registry::CannotRegisterImplementationException(
                                     buf.makeStringAndClear(), Reference< XInterface >() );
@@ -1378,8 +1376,7 @@ void ImplementationRegistration::initialize(
 
     if( aArgs.getLength() != 4 ) {
         OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-            "ImplementationRegistration::initialize() expects 4 parameters, got "));
+        buf.append( "ImplementationRegistration::initialize() expects 4 parameters, got " );
         buf.append( (sal_Int32) aArgs.getLength() );
         throw IllegalArgumentException( buf.makeStringAndClear(),
                                         Reference<XInterface > (),
@@ -1397,11 +1394,10 @@ void ImplementationRegistration::initialize(
     }
     if( !rLoader.is()) {
         OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-            "ImplementationRegistration::initialize() invalid first parameter,"
-            "expected " ) );
+        buf.append( "ImplementationRegistration::initialize() invalid first parameter,"
+                    "expected " );
         buf.append( getCppuType( &rLoader ).getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", got " ) );
+        buf.append( ", got " );
         buf.append( aArgs.getConstArray()[0].getValueTypeName() );
         throw IllegalArgumentException( buf.makeStringAndClear(),
                                         Reference< XInterface > (),
@@ -1414,9 +1410,8 @@ void ImplementationRegistration::initialize(
     }
     if( loaderServiceName.isEmpty() ) {
         OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-            "ImplementationRegistration::initialize() invalid second parameter,"
-            "expected string, got " ) );
+        buf.append( "ImplementationRegistration::initialize() invalid second parameter,"
+                    "expected string, got " );
         buf.append( aArgs.getConstArray()[1].getValueTypeName() );
         throw IllegalArgumentException( buf.makeStringAndClear(),
                                         Reference< XInterface > (),
@@ -1429,9 +1424,8 @@ void ImplementationRegistration::initialize(
     }
     if( locationUrl.isEmpty() ) {
         OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-            "ImplementationRegistration::initialize() invalid third parameter,"
-            "expected string, got " ) );
+        buf.append( "ImplementationRegistration::initialize() invalid third parameter,"
+                    "expected string, got " );
         buf.append( aArgs.getConstArray()[2].getValueTypeName() );
         throw IllegalArgumentException( buf.makeStringAndClear(),
                                         Reference< XInterface > (),
@@ -1447,11 +1441,10 @@ void ImplementationRegistration::initialize(
         rReg = getRegistryFromServiceManager();
         if( !rReg.is() ) {
             OUStringBuffer buf;
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                "ImplementationRegistration::initialize() invalid fourth parameter,"
-                "expected " ));
+            buf.append( "ImplementationRegistration::initialize() invalid fourth parameter,"
+                        "expected " );
             buf.append( getCppuType( &rReg ).getTypeName() );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", got " ) );
+            buf.append( ", got " );
             buf.append( aArgs.getConstArray()[3].getValueTypeName() );
             throw IllegalArgumentException( buf.makeStringAndClear(),
                                             Reference< XInterface > (),
@@ -1542,22 +1535,20 @@ void ImplementationRegistration::prepareRegister(
         catch( const InvalidRegistryException & e )
         {
             OUStringBuffer buf;
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                "ImplementationRegistration::registerImplementation() "
-                "InvalidRegistryException during registration (" ));
+            buf.append( "ImplementationRegistration::registerImplementation() "
+                        "InvalidRegistryException during registration (" );
             buf.append( e.Message );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+            buf.append( ")" );
             throw CannotRegisterImplementationException(
                 buf.makeStringAndClear(), Reference< XInterface > () );
         }
         catch( const MergeConflictException & e )
         {
             OUStringBuffer buf;
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                "ImplementationRegistration::registerImplementation() "
-                "MergeConflictException during registration (" ));
+            buf.append( "ImplementationRegistration::registerImplementation() "
+                        "MergeConflictException during registration (" );
             buf.append( e.Message );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+            buf.append( ")" );
             throw CannotRegisterImplementationException(
                 buf.makeStringAndClear(), Reference< XInterface > () );
         }

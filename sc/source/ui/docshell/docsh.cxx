@@ -1688,7 +1688,7 @@ void lcl_ScDocShell_GetFixedWidthString( OUString& rStr, const ScDocument& rDoc,
     {
         OUStringBuffer aReplacement;
         if (bValue)
-            aReplacement.appendAscii(RTL_CONSTASCII_STRINGPARAM("###"));
+            aReplacement.append("###");
         else
             aReplacement.append(aString);
         //truncate to the number of characters that should fit, even in the

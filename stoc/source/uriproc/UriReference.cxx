@@ -184,7 +184,7 @@ void UriReference::clearFragment() throw (css::uno::RuntimeException) {
 void UriReference::appendSchemeSpecificPart(OUStringBuffer & buffer) const
 {
     if (m_hasAuthority) {
-        buffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+        buffer.append("//");
         buffer.append(m_authority);
     }
     buffer.append(m_path);

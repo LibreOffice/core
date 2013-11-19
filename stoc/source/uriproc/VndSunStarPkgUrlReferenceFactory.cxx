@@ -106,7 +106,7 @@ Factory::createVndSunStarPkgUrlReference(
     OSL_ASSERT(authority.is());
     if (authority->isAbsolute() && !authority->hasFragment()) {
         OUStringBuffer buf;
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg://"));
+        buf.append("vnd.sun.star.pkg://");
         buf.append(
             rtl::Uri::encode(
                 authority->getUriReference(), rtl_UriCharClassRegName,

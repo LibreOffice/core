@@ -271,9 +271,9 @@ OUString columnMetaData2SDBCX(
 //         OUStringBuffer buf( 128 );
 //         OUString comment;
 //         evt.NewValue >>= comment;
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON COLUMN" ) );
+//         buf.append( "COMMENT ON COLUMN" );
 //         bufferQuoteQualifiedIdentifier( buf, m_schema, m_table , m_column );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
+//         buf.append( "IS " );
 //         bufferQuoteConstant( buf, comment,m_pSettings->encoding);
 
 //         printf( "changing comment of column %s to %s\n",
@@ -362,11 +362,11 @@ void alterColumnByDescriptor(
 //         past->getPropertyValue( st.SCHEMA_NAME ) != future->getPropertyValue( st.SCHEMA_NAME ))
 //     {
 //         OUStringBuffer buf(128);
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Can't move column " ) );
+//         buf.append( "Can't move column " );
 //         buf.append( extractStringProperty( past, st.COLUMN_NAME ) );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " from table " ) );
+//         buf.append( " from table " );
 //         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " to table " ) );
+//         buf.append( " to table " );
 //         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
 //         throw SQLException( buf.makeStringAndClear(), Reference< XInterface > () );
 //     }
@@ -384,9 +384,9 @@ void alterColumnByDescriptor(
     if( ! pastColumnName.getLength())
     {
         // create a new column
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+        buf.append( "ALTER TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ADD COLUMN" ) );
+        buf.append( "ADD COLUMN" );
         bufferQuoteIdentifier( buf, futureColumnName, settings );
         buf.append( futureTypeName );
         transaction.executeUpdate( buf.makeStringAndClear() );
@@ -402,11 +402,11 @@ void alterColumnByDescriptor(
 
         if( pastColumnName != futureColumnName )
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+            buf.append( "ALTER TABLE" );
             bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "RENAME COLUMN" ) );
+            buf.append( "RENAME COLUMN" );
             bufferQuoteIdentifier( buf, pastColumnName, settings );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "TO" ) );
+            buf.append( "TO" );
             bufferQuoteIdentifier( buf, futureColumnName, settings );
             transaction.executeUpdate( buf.makeStringAndClear() );
         }
@@ -417,11 +417,11 @@ void alterColumnByDescriptor(
     if( futureDefaultValue != pastDefaultValue )
     {
         buf = OUStringBuffer( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+        buf.append( "ALTER TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER COLUMN" ) );
+        buf.append( "ALTER COLUMN" );
         bufferQuoteIdentifier( buf, futureColumnName, settings );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET DEFAULT " ) );
+        buf.append( "SET DEFAULT " );
         // LEM TODO: check out
         // default value is not quoted, caller needs to quote himself (otherwise
         // how to pass e.g. nextval('something' ) ????
@@ -435,19 +435,19 @@ void alterColumnByDescriptor(
     if( futureNullable != pastNullable )
     {
         buf = OUStringBuffer( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
+        buf.append( "ALTER TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER COLUMN" ) );
+        buf.append( "ALTER COLUMN" );
         bufferQuoteIdentifier( buf, futureColumnName, settings );
         if( futureNullable == com::sun::star::sdbc::ColumnValue::NO_NULLS )
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET" ) );
+            buf.append( "SET" );
         }
         else
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "DROP" ) );
+            buf.append( "DROP" );
         }
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " NOT NULL" ) );
+        buf.append( " NOT NULL" );
         transaction.executeUpdate( buf.makeStringAndClear() );
     }
 
@@ -462,9 +462,9 @@ void alterColumnByDescriptor(
     if( futureComment != pastComment )
     {
         buf = OUStringBuffer( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON COLUMN" ) );
+        buf.append( "COMMENT ON COLUMN" );
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName , futureColumnName, settings );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
+        buf.append( "IS " );
         bufferQuoteConstant( buf, futureComment, settings );
         transaction.executeUpdate( buf.makeStringAndClear() );
     }

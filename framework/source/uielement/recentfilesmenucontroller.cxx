@@ -145,7 +145,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 }
 
                 OUStringBuffer aStrBuffer;
-                aStrBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( CMD_PREFIX ) );
+                aStrBuffer.append( CMD_PREFIX );
                 aStrBuffer.append( sal_Int32( i ) );
                 OUString  aURLString( aStrBuffer.makeStringAndClear() );
 

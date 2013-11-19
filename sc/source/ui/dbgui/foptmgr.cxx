@@ -161,7 +161,7 @@ void ScFilterOptionsMgr::Init()
 
         if ( !theDbName.startsWith(STR_DB_LOCAL_NONAME) )
         {
-            theDbArea.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
+            theDbArea.append(" (");
             theDbArea.append(theDbName).append(')');
             pFtDbArea->SetText( theDbArea.makeStringAndClear() );
         }

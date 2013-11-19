@@ -749,12 +749,12 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
     if( nLastOid && lastTableInserted.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT * FROM " ) );
+        buf.append( "SELECT * FROM " );
         if( schemaName.getLength() )
             bufferQuoteQualifiedIdentifier(buf, schemaName, tableName, pConnectionSettings );
         else
             bufferQuoteIdentifier( buf, lastTableInserted, pConnectionSettings );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " WHERE oid = " ) );
+        buf.append( " WHERE oid = " );
         buf.append( nLastOid , 10 );
         query = buf.makeStringAndClear();
     }
@@ -786,9 +786,9 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
         if( keyColumnNames.getLength() )
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT * FROM " ) );
+            buf.append( "SELECT * FROM " );
             bufferQuoteQualifiedIdentifier(buf, schemaName, tableName, pConnectionSettings );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " WHERE " ) );
+            buf.append( " WHERE " );
             bool additionalCondition = false;
             String2StringMap autoValues;
             for( int i = 0 ; i < keyColumnNames.getLength() ; i ++ )
@@ -829,7 +829,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                             {
                                 // retrieve current sequence value:
                                 OUStringBuffer myBuf(128 );
-                                myBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT currval(" ) );
+                                myBuf.append( "SELECT currval(" );
                                 myBuf.appendAscii( &(j->second.getStr()[8]));
                                 value = querySingleValue( connection, myBuf.makeStringAndClear() );
                             }
@@ -846,9 +846,9 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                 }
 
                 if( additionalCondition )
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " AND " ) );
+                    buf.append( " AND " );
                 bufferQuoteIdentifier( buf, keyColumnNames[i], pConnectionSettings );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
+                buf.append( " = " );
                 buf.append( value );
                 additionalCondition = true;
             }

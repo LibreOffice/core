@@ -35,18 +35,18 @@ using namespace http_dav_ucp;
 OUString &WebDAVUserAgent::operator()() const
 {
     OUStringBuffer aBuffer;
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "$ooName/$ooSetupVersion" ));
+    aBuffer.append( "$ooName/$ooSetupVersion" );
 #if OSL_DEBUG_LEVEL > 0
 #ifdef APR_VERSION
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " apr/" APR_VERSION ));
+    aBuffer.append( " apr/" APR_VERSION );
 #endif
 
 #ifdef APR_UTIL_VERSION
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " apr-util/" APR_UTIL_VERSION ));
+    aBuffer.append( " apr-util/" APR_UTIL_VERSION );
 #endif
 
 #ifdef SERF_VERSION
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " serf/" SERF_VERSION ));
+    aBuffer.append( " serf/" SERF_VERSION );
 #endif
 #endif
     static OUString aUserAgent( aBuffer.makeStringAndClear() );

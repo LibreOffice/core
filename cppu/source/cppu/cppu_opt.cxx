@@ -31,7 +31,7 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     SAL_THROW_EXTERN_C()
 {
     OUStringBuffer buf( 64 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("unsatisfied query for interface of type ") );
+    buf.append( "unsatisfied query for interface of type " );
     buf.append( OUString::unacquired( &pType->pTypeName ) );
     buf.append( (sal_Unicode) '!' );
     OUString ret( buf.makeStringAndClear() );
@@ -45,7 +45,7 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     SAL_THROW_EXTERN_C()
 {
     OUStringBuffer buf( 64 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("invalid attempt to assign an empty interface of type ") );
+    buf.append( "invalid attempt to assign an empty interface of type " );
     buf.append( OUString::unacquired( &pType->pTypeName ) );
     buf.append( (sal_Unicode) '!' );
     OUString ret( buf.makeStringAndClear() );
@@ -59,10 +59,9 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg
     SAL_THROW_EXTERN_C()
 {
     OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                         "Cannot extract an Any(") );
+    buf.append( "Cannot extract an Any(" );
     buf.append( OUString::unacquired(&pAny->pType->pTypeName) );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(") to ") );
+    buf.append( ") to " );
     buf.append( OUString::unacquired(&pType->pTypeName) );
     buf.append( static_cast<sal_Unicode>('!') );
     const OUString ret( buf.makeStringAndClear() );

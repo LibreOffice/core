@@ -43,7 +43,7 @@ static inline ::System::String ^ to_cts_name(
     OUString const & uno_name )
 {
     OUStringBuffer buf( 7 + uno_name.getLength() );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("unoidl.") );
+    buf.append( "unoidl." );
     buf.append( uno_name );
     return ustring_to_String( buf.makeStringAndClear() );
 }

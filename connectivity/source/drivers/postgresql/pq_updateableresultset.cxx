@@ -189,14 +189,14 @@ OUString UpdateableResultSet::buildWhereClause()
     if( m_primaryKey.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " WHERE " ) );
+        buf.append( " WHERE " );
         for( int i = 0 ; i < m_primaryKey.getLength() ; i ++ )
         {
             if( i > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " AND " ) );
+                buf.append( " AND " );
             sal_Int32 index = findColumn( m_primaryKey[i] );
             bufferQuoteIdentifier( buf, m_primaryKey[i], *m_ppSettings );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
+            buf.append( " = " );
             bufferQuoteConstant( buf, getString( index ), *m_ppSettings );
         }
         ret = buf.makeStringAndClear();
@@ -218,9 +218,9 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
             *this, OUString(), 1, Any() );
 
     OUStringBuffer buf( 128 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "INSERT INTO " ) );
+    buf.append( "INSERT INTO " );
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ) );
+    buf.append( " ( " );
 
     int columns = 0;
     for( UpdateableFieldVector::size_type i = 0 ; i < m_updateableField.size() ; i++ )
@@ -228,12 +228,12 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
         if( m_updateableField[i].isTouched )
         {
             if( columns > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                buf.append( ", " );
             columns ++;
             bufferQuoteIdentifier( buf, m_columnNames[i], *m_ppSettings);
         }
     }
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ) VALUES ( " ) );
+    buf.append( " ) VALUES ( " );
 
     columns = 0;
     for( UpdateableFieldVector::size_type i = 0 ; i < m_updateableField.size() ; i ++ )
@@ -241,7 +241,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
         if( m_updateableField[i].isTouched )
         {
             if( columns > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " , " ) );
+                buf.append( " , " );
             columns ++;
             bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
 
@@ -252,7 +252,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
         }
     }
 
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ) );
+    buf.append( " )" );
 
     Reference< XStatement > stmt =
         extractConnectionFromStatement(m_owner)->createStatement();
@@ -312,9 +312,9 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
             *this, OUString(), 1, Any() );
 
     OUStringBuffer buf( 128 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "UPDATE " ) );
+    buf.append( "UPDATE " );
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET " ) );
+    buf.append( "SET " );
 
     int columns = 0;
     for( UpdateableFieldVector::size_type i = 0; i < m_updateableField.size() ; i ++ )
@@ -322,11 +322,11 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
         if( m_updateableField[i].isTouched )
         {
             if( columns > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                buf.append( ", " );
             columns ++;
 
             buf.append( m_columnNames[i] );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = " ) );
+            buf.append( " = " );
             bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
 //             OUString val;
 //             m_updateableField[i].value >>= val;

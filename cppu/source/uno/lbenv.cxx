@@ -718,7 +718,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
     {
         writeLine( stream, "###################################"
                    "###########################################", pFilter );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("environment: ") );
+        buf.append( "environment: " );
         buf.append( pEnv->pTypeName );
         writeLine( stream, buf.makeStringAndClear(), pFilter );
         writeLine( stream, "NO INTERFACE INFORMATION AVAILABLE!", pFilter );
@@ -727,7 +727,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
 
     writeLine( stream, "########################################"
                "######################################", pFilter );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("environment dump: ") );
+    buf.append( "environment dump: " );
     buf.append( pEnv->pTypeName );
     writeLine( stream, buf.makeStringAndClear(), pFilter );
 
@@ -741,12 +741,12 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
     {
         ObjectEntry * pOEntry = iPos->second;
 
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("+ ") );
+        buf.append( "+ " );
         if (pOEntry->mixedObject)
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("mixed ") );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("object entry: nRef=") );
+            buf.append( "mixed " );
+        buf.append( "object entry: nRef=" );
         buf.append( pOEntry->nRef, 10 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("; oid=\"") );
+        buf.append( "; oid=\"" );
         buf.append( pOEntry->oid );
         buf.append( (sal_Unicode) '\"' );
         writeLine( stream, buf.makeStringAndClear(), pFilter );
@@ -756,21 +756,20 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
         {
             const InterfaceEntry & rIEntry = pOEntry->aInterfaces[nPos];
 
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("  - ") );
+            buf.append( "  - " );
             buf.append(
                 ((typelib_TypeDescription *) rIEntry.pTypeDescr)->pTypeName );
             if (rIEntry.fpFreeProxy)
             {
-                buf.appendAscii(
-                    RTL_CONSTASCII_STRINGPARAM("; proxy free=0x") );
+                buf.append( "; proxy free=0x" );
                 buf.append(
                     reinterpret_cast< sal_IntPtr >(rIEntry.fpFreeProxy), 16 );
             }
             else
             {
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("; original") );
+                buf.append( "; original" );
             }
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("; ptr=0x") );
+            buf.append( "; ptr=0x" );
             buf.append(
                 reinterpret_cast< sal_IntPtr >(rIEntry.pInterface), 16 );
 
@@ -779,8 +778,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
                 ::std::size_t erased = ptr2obj.erase( rIEntry.pInterface );
                 if (erased != 1)
                 {
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                         " (ptr not found in map!)") );
+                    buf.append( " (ptr not found in map!)" );
                 }
             }
             writeLine( stream, buf.makeStringAndClear(), pFilter );
@@ -808,9 +806,9 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(
     else
     {
         ::rtl::OUStringBuffer buf( 32 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("environment \"") );
+        buf.append( "environment \"" );
         buf.append( pEnvDcp );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" does not exist!") );
+        buf.append( "\" does not exist!" );
         writeLine( stream, buf.makeStringAndClear(), pFilter );
     }
 }
@@ -825,7 +823,7 @@ namespace
         makeOIdPart()
         {
             ::rtl::OUStringBuffer aRet( 64 );
-            aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM("];") );
+            aRet.append( "];" );
             // pid
             oslProcessInfo info;
             info.Size = sizeof(oslProcessInfo);
@@ -836,8 +834,7 @@ namespace
             }
             else
             {
-                aRet.appendAscii(
-                    RTL_CONSTASCII_STRINGPARAM("unknown process id") );
+                aRet.append( "unknown process id" );
             }
             // good guid
             sal_uInt8 ar[16];
@@ -1130,7 +1127,7 @@ static uno_Environment * initDefaultEnvironment(
         // late init with some code from matching uno language binding
         ::rtl::OUStringBuffer aLibName( 16 );
         aLibName.append( envTypeName );
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno" ) );
+        aLibName.append( "_uno" );
         OUString aStr( aLibName.makeStringAndClear() );
 
         if (!loadEnv(aStr, pEnv))

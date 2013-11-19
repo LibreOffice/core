@@ -1199,7 +1199,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
                 typelib_TypeDescriptionReference const * pDirectBaseMember
                     = pDirectBase->ppAllMembers[i->directBaseMemberOffset + j];
                 rtl::OUStringBuffer aBuf(pDirectBaseMember->pTypeName);
-                aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(":@"));
+                aBuf.append(":@");
                 aBuf.append(i->directBaseIndex);
                 aBuf.append(static_cast< sal_Unicode >(','));
                 aBuf.append(i->memberOffset + j);

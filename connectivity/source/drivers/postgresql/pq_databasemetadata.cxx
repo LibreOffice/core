@@ -1431,7 +1431,7 @@ static void columnMetaData2DatabaseTypeDescription(
     Reference< XRow > row( rs, UNO_QUERY_THROW );
     int domains = 0;
     OUStringBuffer queryBuf(128);
-    queryBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT oid,typtype,typname FROM pg_TYPE WHERE " ) );
+    queryBuf.append( "SELECT oid,typtype,typname FROM pg_TYPE WHERE " );
     while( rs->next() )
     {
         if( row->getString( 9 ) == "d" && oidMap.find( row->getInt( 12 ) ) == oidMap.end() )
