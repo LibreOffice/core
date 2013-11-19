@@ -180,7 +180,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
             m_aStates.insert(TCommandState::value_type(OUString(".uno:CharFontName"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxFontNameToolBoxControl/*SvxStyleToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_FONT,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:FontColor")) || m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Color")) )
+        else if ( m_aCommandURL.startsWith(".uno:FontColor") || m_aCommandURL.startsWith(".uno:Color") )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:FontColor"),sal_True));
             m_aStates.insert(TCommandState::value_type(OUString(".uno:Color"),sal_True));

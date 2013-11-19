@@ -159,7 +159,7 @@ void ScFilterOptionsMgr::Init()
             }
         }
 
-        if ( !theDbName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)) )
+        if ( !theDbName.startsWith(STR_DB_LOCAL_NONAME) )
         {
             theDbArea.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
             theDbArea.append(theDbName).append(')');

@@ -114,17 +114,17 @@ NumSettings_ImplPtr lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>
     NumSettings_ImplPtr pNew = new NumSettings_Impl;
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
-        if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sNumberingType)))
+        if(pValues[j].Name.startsWith(sNumberingType))
             pValues[j].Value >>= pNew->nNumberType;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sPrefix)))
+        else if(pValues[j].Name.startsWith(sPrefix))
             pValues[j].Value >>= pNew->sPrefix;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuffix)))
+        else if(pValues[j].Name.startsWith(sSuffix))
             pValues[j].Value >>= pNew->sSuffix;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sParentNumbering)))
+        else if(pValues[j].Name.startsWith(sParentNumbering))
             pValues[j].Value >>= pNew->nParentNumbering;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBulletChar)))
+        else if(pValues[j].Name.startsWith(sBulletChar))
             pValues[j].Value >>= pNew->sBulletChar;
-        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBulletFontName)))
+        else if(pValues[j].Name.startsWith(sBulletFontName))
             pValues[j].Value >>= pNew->sBulletFont;
     }
     const sal_Unicode cLocalPrefix = pNew->sPrefix.getLength() ? pNew->sPrefix[0] : 0;

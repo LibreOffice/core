@@ -850,7 +850,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                     }
                 }
             }
-            else if( sTargetFrameName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_self")) || sTargetFrameName.isEmpty() )
+            else if( sTargetFrameName.startsWith("_self") || sTargetFrameName.isEmpty() )
             {
                 // check for already loaded URL ... but with additional jumpmark!
                 Reference< frame::XModel > xModel = getModel();

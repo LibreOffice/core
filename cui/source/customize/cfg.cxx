@@ -411,8 +411,8 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
 
 OUString GetModuleName( const OUString& aModuleId )
 {
-    if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) ||
-         aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) )
+    if ( aModuleId.startsWith( "com.sun.star.text.TextDocument" ) ||
+         aModuleId.startsWith( "com.sun.star.text.GlobalDocument" ) )
         return OUString("Writer");
     else if ( aModuleId == "com.sun.star.text.WebDocument" )
         return OUString("Writer/Web");

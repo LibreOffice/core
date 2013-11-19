@@ -1842,7 +1842,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
     SolarMutexGuard aGuard;
     uno::Any aAny;
 
-    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_DISPNAME ) ) )      // read-only
+    if ( aPropertyName.startsWith( SC_UNONAME_DISPNAME ) )      // read-only
     {
         //  core always has the display name
         SfxStyleSheetBase* pStyle = GetStyle_Impl();
@@ -1987,9 +1987,8 @@ sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
-    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SCSTYLE_SERVICE ) )||
-           rServiceName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM ( bPage ? SCPAGESTYLE_SERVICE : SCCELLSTYLE_SERVICE ));
+    return rServiceName.startsWith( SCSTYLE_SERVICE ) ||
+           ( bPage ? rServiceName.startsWith( SCPAGESTYLE_SERVICE ) : rServiceName.startsWith( SCCELLSTYLE_SERVICE ) );
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()

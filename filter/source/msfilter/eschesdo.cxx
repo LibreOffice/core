@@ -1051,7 +1051,7 @@ basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape
     {
         if(rxShape.is())
         {
-            if(rxShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
+            if(rxShape->getShapeType().startsWith("com.sun.star.drawing.GroupShape"))
             {
                 // it's a group shape, iterate over children
                 const Reference< XIndexAccess > xXIndexAccess(rxShape, UNO_QUERY);

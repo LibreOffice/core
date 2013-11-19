@@ -97,7 +97,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
     for ( std::vector< rtl::OUString >::const_iterator it = aHeaderNames.begin();
             it != aHeaderNames.end(); ++it )
     {
-        if ( it->equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+        if ( it->startsWith( "Content-Length" ) )
         {
             bIsRequestSize = true;
             break;
@@ -129,11 +129,11 @@ static void lcl_sendPartialGETRequest( bool &bError,
             for ( std::vector< DAVPropertyValue >::const_iterator it = aResponseProps.begin();
                     it != aResponseProps.end(); ++it )
             {
-                if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Accept-Ranges" ) ) )
+                if ( it->Name.startsWith( "Accept-Ranges" ) )
                     it->Value >>= aAcceptRanges;
-                else if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Range" ) ) )
+                else if ( it->Name.startsWith( "Content-Range" ) )
                     it->Value >>= aContentRange;
-                else if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+                else if ( it->Name.startsWith( "Content-Length" ) )
                     it->Value >>= aContentLength;
             }
 
@@ -148,7 +148,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
             // MAY ignore ranges specified using other units.
             if ( nSize == 1 &&
                     aContentRange.getLength() &&
-                    aAcceptRanges.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bytes" ) ) )
+                    aAcceptRanges.startsWith( "bytes" ) )
             {
                 // Parse the Content-Range to get the size
                 // vid. http://tools.ietf.org/html/rfc2616#section-14.16
@@ -158,12 +158,12 @@ static void lcl_sendPartialGETRequest( bool &bError,
                 {
                     rtl::OUString aSize = aContentRange.copy( nSlash + 1 );
                     // "*" means that the instance-length is unknown at the time when the response was generated
-                    if ( !aSize.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "*" )))
+                    if ( !aSize.startsWith( "*" ))
                     {
                         for ( std::vector< DAVPropertyValue >::iterator it = aResponseProps.begin();
                                 it != aResponseProps.end(); ++it )
                         {
-                            if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+                            if ( it->Name.startsWith( "Content-Length" ) )
                             {
                                 it->Value <<= aSize;
                                 break;
@@ -743,7 +743,7 @@ uno::Any SAL_CALL Content::execute(
 
         aRet = uno::makeAny( createNewContent( aArg ) );
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "addProperty" )))
+    else if ( aCommand.Name.startsWith( "addProperty" ))
     {
         ucb::PropertyCommandArgument aPropArg;
         if ( !( aCommand.Argument >>= aPropArg ))
@@ -775,7 +775,7 @@ uno::Any SAL_CALL Content::execute(
             ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
         }
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "removeProperty" )))
+    else if ( aCommand.Name.startsWith( "removeProperty" ))
     {
         rtl::OUString sPropName;
         if ( !( aCommand.Argument >>= sPropName ) )
@@ -1893,8 +1893,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            if ( rName.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            if ( rName.startsWith( "CreatableContentsInfo" ) )
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(

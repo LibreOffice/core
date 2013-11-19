@@ -61,19 +61,19 @@ static void lcl_ConvertSequenceToValues(
     for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
     {
         aPropVal = rSequence[i];
-        if ( aPropVal.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGE_STATUSBAR_URL ) ) )
+        if ( aPropVal.Name.startsWith( MERGE_STATUSBAR_URL ) )
             aPropVal.Value >>= rItem.aCommandURL;
-        else if ( aPropVal.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGE_STATUSBAR_TITLE ) ) )
+        else if ( aPropVal.Name.startsWith( MERGE_STATUSBAR_TITLE ) )
             aPropVal.Value >>= rItem.aLabel;
-        else if ( aPropVal.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGE_STATUSBAR_CONTEXT ) ) )
+        else if ( aPropVal.Name.startsWith( MERGE_STATUSBAR_CONTEXT ) )
             aPropVal.Value >>= rItem.aContext;
-        else if ( aPropVal.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGE_STATUSBAR_ALIGN ) ) )
+        else if ( aPropVal.Name.startsWith( MERGE_STATUSBAR_ALIGN ) )
             aPropVal.Value >>= sAlignment;
-        else if ( aPropVal.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGE_STATUSBAR_AUTOSIZE ) ) )
+        else if ( aPropVal.Name.startsWith( MERGE_STATUSBAR_AUTOSIZE ) )
             aPropVal.Value >>= bAutoSize;
-        else if ( aPropVal.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGE_STATUSBAR_OWNERDRAW ) ) )
+        else if ( aPropVal.Name.startsWith( MERGE_STATUSBAR_OWNERDRAW ) )
             aPropVal.Value >>= bOwnerDraw;
-        else if ( aPropVal.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGE_STATUSBAR_WIDTH ) ) )
+        else if ( aPropVal.Name.startsWith( MERGE_STATUSBAR_WIDTH ) )
         {
             sal_Int32 aWidth = 0;
             aPropVal.Value >>= aWidth;
@@ -86,9 +86,9 @@ static void lcl_ConvertSequenceToValues(
         nItemBits |= SIB_AUTOSIZE;
     if ( bOwnerDraw )
         nItemBits |= SIB_USERDRAW;
-    if ( sAlignment.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( STATUSBAR_ALIGN_CENTER )))
+    if ( sAlignment.startsWith( STATUSBAR_ALIGN_CENTER ))
         nItemBits |= SIB_CENTER;
-    else if ( sAlignment.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( STATUSBAR_ALIGN_RIGHT )))
+    else if ( sAlignment.startsWith( STATUSBAR_ALIGN_RIGHT ))
         nItemBits |= SIB_RIGHT;
     else
         // if unset, defaults to left alignment
@@ -214,13 +214,13 @@ bool StatusbarMerger::ProcessMergeOperation(
     const ::rtl::OUString& rMergeCommandParameter,
     const AddonStatusbarItemContainer& rItems )
 {
-    if ( rMergeCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGECOMMAND_ADDAFTER ) ) )
+    if ( rMergeCommand.startsWith( MERGECOMMAND_ADDAFTER ) )
         return lcl_MergeItems( pStatusbar, nPos, 1, rItemId, rModuleIdentifier, rItems );
-    else if ( rMergeCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGECOMMAND_ADDBEFORE ) ) )
+    else if ( rMergeCommand.startsWith( MERGECOMMAND_ADDBEFORE ) )
         return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, rModuleIdentifier, rItems );
-    else if ( rMergeCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGECOMMAND_REPLACE ) ) )
+    else if ( rMergeCommand.startsWith( MERGECOMMAND_REPLACE ) )
         return lcl_ReplaceItem( pStatusbar, nPos, rItemId, rModuleIdentifier, rItems );
-    else if ( rMergeCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGECOMMAND_REMOVE ) ) )
+    else if ( rMergeCommand.startsWith( MERGECOMMAND_REMOVE ) )
         return lcl_RemoveItems( pStatusbar, nPos, rMergeCommandParameter );
 
     return false;
@@ -236,18 +236,18 @@ bool StatusbarMerger::ProcessMergeFallback(
     const AddonStatusbarItemContainer& rItems )
 {
     // fallback IGNORE or REPLACE/REMOVE item not found
-    if (( rMergeFallback.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGEFALLBACK_IGNORE ))) ||
-            ( rMergeCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(  MERGECOMMAND_REPLACE ))) ||
-            ( rMergeCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(  MERGECOMMAND_REMOVE  ))) )
+    if (( rMergeFallback.startsWith( MERGEFALLBACK_IGNORE )) ||
+            ( rMergeCommand.startsWith( MERGECOMMAND_REPLACE )) ||
+            ( rMergeCommand.startsWith( MERGECOMMAND_REMOVE  )) )
     {
         return true;
     }
-    else if (( rMergeCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGECOMMAND_ADDBEFORE ))) ||
-             ( rMergeCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGECOMMAND_ADDAFTER ))) )
+    else if (( rMergeCommand.startsWith( MERGECOMMAND_ADDBEFORE )) ||
+             ( rMergeCommand.startsWith( MERGECOMMAND_ADDAFTER )) )
     {
-        if ( rMergeFallback.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGEFALLBACK_ADDFIRST )))
+        if ( rMergeFallback.startsWith( MERGEFALLBACK_ADDFIRST ))
             return lcl_MergeItems( pStatusbar, 0, 0, rItemId, rModuleIdentifier, rItems );
-        else if ( rMergeFallback.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MERGEFALLBACK_ADDLAST )))
+        else if ( rMergeFallback.startsWith( MERGEFALLBACK_ADDLAST ))
             return lcl_MergeItems( pStatusbar, STATUSBAR_APPEND, 0, rItemId, rModuleIdentifier, rItems );
     }
 

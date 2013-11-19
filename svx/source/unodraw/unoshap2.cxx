@@ -1901,7 +1901,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     ::SolarMutexGuard aGuard;
     SdrObject* pObject = mpObj.get();
 
-    bool bCustomShapeGeometry = pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
+    bool bCustomShapeGeometry = pObject && aPropertyName.startsWith( "CustomShapeGeometry" );
 
     sal_Bool bMirroredX = sal_False;
     sal_Bool bMirroredY = sal_False;

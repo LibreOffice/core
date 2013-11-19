@@ -3139,7 +3139,7 @@ void Test::testCopyPaste()
     fValue = m_pDoc->GetValue(ScAddress(1,1,1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", fValue, 2);
     aString = m_pDoc->GetString(2, 1, 1);
-    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
+    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.startsWith("test"));
     m_pDoc->GetFormula(1,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("Formula should be correct again", aString == aFormulaString);
 
@@ -3201,13 +3201,13 @@ void Test::testCopyPasteTranspose()
 
     //check cell content after transposed copy/paste
     OUString aString = m_pDoc->GetString(3, 3, 1);
-    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.D4 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
+    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.D4 should contain: test", aString.startsWith("test"));
     double fValue = m_pDoc->GetValue(ScAddress(3,1,1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied cell should return 1", fValue, 1);
     fValue = m_pDoc->GetValue(ScAddress(3,2,1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("transposed copied formula should return 2", fValue, 2);
     m_pDoc->GetFormula(3, 2, 1, aString);
-    CPPUNIT_ASSERT_MESSAGE("transposed formula should point on Sheet2.D2", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=D2+1")));
+    CPPUNIT_ASSERT_MESSAGE("transposed formula should point on Sheet2.D2", aString.startsWith("=D2+1"));
 
     // check notes after transposed copy/paste
     CPPUNIT_ASSERT_MESSAGE("There should be a note on Sheet2.D2", m_pDoc->HasNote(ScAddress(3, 1, 1)));
@@ -3266,9 +3266,9 @@ void Test::testMoveBlock()
 
     //check cell content
     OUString aString = m_pDoc->GetString(3, 0, 0);
-    CPPUNIT_ASSERT_MESSAGE("Cell D1 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
+    CPPUNIT_ASSERT_MESSAGE("Cell D1 should contain: test", aString.startsWith("test"));
     m_pDoc->GetFormula(2, 0, 0, aString);
-    CPPUNIT_ASSERT_MESSAGE("Cell C1 should contain an updated formula", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("=B1+1")));
+    CPPUNIT_ASSERT_MESSAGE("Cell C1 should contain an updated formula", aString.startsWith("=B1+1"));
     double fValue = m_pDoc->GetValue(aAddrB1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Cell B1 should contain 1", fValue, 1);
 

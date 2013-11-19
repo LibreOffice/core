@@ -875,9 +875,9 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
                     const PropertyValue* pContextEnd  = pContextIter + aDocumentContext.getLength();
                     for(;pContextIter != pContextEnd;++pContextIter)
                     {
-                        if (  pContextIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ActiveConnection" ) )
-                        && ( pContextIter->Value >>= _rxActualConnection )
-                        )
+                        if (   pContextIter->Name.startsWith( "ActiveConnection" )
+                            && ( pContextIter->Value >>= _rxActualConnection )
+                           )
                         {
                             bIsEmbedded = true;
                             break;

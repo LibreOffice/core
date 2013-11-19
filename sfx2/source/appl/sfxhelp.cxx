@@ -328,22 +328,22 @@ OUString SfxHelp::GetHelpModuleName_Impl()
             aFactoryShortName = "schart" ;
         else if ( aFactoryShortName == "BasicIDE" )
             aFactoryShortName = "sbasic";
-        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sweb"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sglobal"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swxform")) )
+        else if ( aFactoryShortName.startsWith("sweb")
+                || aFactoryShortName.startsWith("sglobal")
+                || aFactoryShortName.startsWith("swxform") )
             aFactoryShortName = "swriter" ;
-        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbquery"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbrelation"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbtable"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbapp"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbreport"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swreport"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swform")) )
+        else if ( aFactoryShortName.startsWith("dbquery")
+                || aFactoryShortName.startsWith("dbbrowser")
+                || aFactoryShortName.startsWith("dbrelation")
+                || aFactoryShortName.startsWith("dbtable")
+                || aFactoryShortName.startsWith("dbapp")
+                || aFactoryShortName.startsWith("dbreport")
+                || aFactoryShortName.startsWith("swreport")
+                || aFactoryShortName.startsWith("dbbrowser")
+                || aFactoryShortName.startsWith("swform") )
             aFactoryShortName = "sdatabase";
-        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbibliography"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StartModule")) )
+        else if ( aFactoryShortName.startsWith("sbibliography")
+                || aFactoryShortName.startsWith("StartModule") )
             aFactoryShortName = sDefaultModule;
     }
     else

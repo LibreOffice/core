@@ -140,9 +140,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 } else {
                     if ( rLocale.Language == "ja" ) {
                         // replace algorithm name to implementation name.
-                        if (rAlgorithm.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("phonetic (alphanumeric first)")) )
+                        if (rAlgorithm.startsWith("phonetic (alphanumeric first)") )
                             aBuf.appendAscii("phonetic_alphanumeric_first");
-                        else if (rAlgorithm.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("phonetic (alphanumeric last)")))
+                        else if (rAlgorithm.startsWith("phonetic (alphanumeric last)"))
                             aBuf.appendAscii("phonetic_alphanumeric_last");
                         else
                             aBuf.append(rAlgorithm);

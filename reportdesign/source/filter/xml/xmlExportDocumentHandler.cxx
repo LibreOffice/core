@@ -195,7 +195,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     {
         m_bCountColumnHeader = true;
     }
-    else if ( m_bCountColumnHeader && _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-cell")) )
+    else if ( m_bCountColumnHeader && _sName.startsWith("table:table-cell") )
     {
         ++m_nColumnCount;
     }
@@ -207,7 +207,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         m_bTableRowsStarted = true;
         m_bFirstRowExported = true;
     }
-    else if ( m_bTableRowsStarted && m_bFirstRowExported && (_sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-row")) || _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-cell"))) )
+    else if ( m_bTableRowsStarted && m_bFirstRowExported && (_sName.startsWith("table:table-row") || _sName.startsWith("table:table-cell")) )
         bExport = false;
     else if ( _sName == "chart:plot-area" )
     {
@@ -224,13 +224,13 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         static OUString s_sCellAddress(lcl_createAttribute(XML_NP_CHART,XML_VALUES_CELL_RANGE_ADDRESS));
         lcl_correctCellAddress(s_sCellAddress,xAttribs);
     }
-    else if ( m_bTableRowsStarted && !m_bFirstRowExported && _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-cell")) )
+    else if ( m_bTableRowsStarted && !m_bFirstRowExported && _sName.startsWith("table:table-cell") )
     {
         SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
         static OUString s_sValue(lcl_createAttribute(XML_NP_OFFICE,XML_VALUE));
         pList->RemoveAttribute(s_sValue);
     }
-    else if ( m_bTableRowsStarted && _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("text:p")) )
+    else if ( m_bTableRowsStarted && _sName.startsWith("text:p") )
     {
         bExport = false;
     }
@@ -258,11 +258,11 @@ void SAL_CALL ExportDocumentHandler::endElement(const OUString & _sName) throw (
     }
     else if ( _sName == "table:table-rows" )
         m_bTableRowsStarted = false;
-    else if ( m_bTableRowsStarted && m_bFirstRowExported && (_sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-row")) || _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-cell"))) )
+    else if ( m_bTableRowsStarted && m_bFirstRowExported && (_sName.startsWith("table:table-row") || _sName.startsWith("table:table-cell")) )
         bExport = false;
-    else if ( m_bTableRowsStarted && _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("table:table-row")) )
+    else if ( m_bTableRowsStarted && _sName.startsWith("table:table-row") )
         m_bFirstRowExported = true;
-    else if ( m_bTableRowsStarted && _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("text:p")) )
+    else if ( m_bTableRowsStarted && _sName.startsWith("text:p") )
     {
         bExport = !m_bFirstRowExported;
     }

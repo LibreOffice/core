@@ -249,11 +249,11 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
         }
         bExport = false;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:detail"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:formatted-text"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:master-detail-fields"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-component"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-element")))
+    else if ( _sName.startsWith("rpt:detail")
+        ||    _sName.startsWith("rpt:formatted-text")
+        ||    _sName.startsWith("rpt:master-detail-fields")
+        ||    _sName.startsWith("rpt:report-component")
+        ||    _sName.startsWith("rpt:report-element"))
         bExport = false;
     else if ( _sName == "chart:plot-area" )
     {
@@ -274,7 +274,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
             if ( sLocalName == "data-source-has-labels" )
             {
                 const OUString sValue = _xAttrList->getValueByIndex( i );
-                bHasCategories = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("both"));
+                bHasCategories = sValue.startsWith("both");
                 break;
             }
         }
@@ -316,11 +316,11 @@ void SAL_CALL ImportDocumentHandler::endElement(const OUString & _sName) throw (
             m_xDatabaseDataProvider->setDetailFields(uno::Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
         bExport = false;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:detail"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:formatted-text"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:master-detail-field"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-component"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-element")))
+    else if ( _sName.startsWith("rpt:detail")
+        ||    _sName.startsWith("rpt:formatted-text")
+        ||    _sName.startsWith("rpt:master-detail-field")
+        ||    _sName.startsWith("rpt:report-component")
+        ||    _sName.startsWith("rpt:report-element"))
         bExport = false;
 
     if ( bExport )

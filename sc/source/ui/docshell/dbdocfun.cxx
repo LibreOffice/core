@@ -199,7 +199,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     bool bUndo = pDoc->IsUndoEnabled();
 
     ScDBData* pData = NULL;
-    if (rNewData.GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
+    if (rNewData.GetName().startsWith(STR_DB_LOCAL_NONAME))
     {
         ScRange aRange;
         rNewData.GetArea(aRange);

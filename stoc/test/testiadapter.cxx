@@ -633,36 +633,36 @@ Any XLB_Invocation::getValue( const OUString & rName )
 sal_Bool XLB_Invocation::hasMethod( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("raiseException") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("getValues") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("setValues2") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("setValues") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("acquire") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("release") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("queryInterface") ));
+    return (rName.startsWith( "raiseException" ) ||
+            rName.startsWith( "getValues" ) ||
+            rName.startsWith( "setValues2" ) ||
+            rName.startsWith( "setValues" ) ||
+            rName.startsWith( "acquire" ) ||
+            rName.startsWith( "release" ) ||
+            rName.startsWith( "queryInterface" ));
 }
 //__________________________________________________________________________________________________
 sal_Bool XLB_Invocation::hasProperty( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Bool") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Byte") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Char") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Short") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UShort") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Long") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ULong") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Hyper") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UHyper") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Float") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Double") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Enum") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("String") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Interface") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Any") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Sequence") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Struct") ) ||
-            rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("RuntimeException") ) );
+    return (rName.startsWith( "Bool" ) ||
+            rName.startsWith( "Byte" ) ||
+            rName.startsWith( "Char" ) ||
+            rName.startsWith( "Short" ) ||
+            rName.startsWith( "UShort" ) ||
+            rName.startsWith( "Long" ) ||
+            rName.startsWith( "ULong" ) ||
+            rName.startsWith( "Hyper" ) ||
+            rName.startsWith( "UHyper" ) ||
+            rName.startsWith( "Float" ) ||
+            rName.startsWith( "Double" ) ||
+            rName.startsWith( "Enum" ) ||
+            rName.startsWith( "String" ) ||
+            rName.startsWith( "Interface" ) ||
+            rName.startsWith( "Any" ) ||
+            rName.startsWith( "Sequence" ) ||
+            rName.startsWith( "Struct" ) ||
+            rName.startsWith( "RuntimeException" ) );
 }
 
 //##################################################################################################
@@ -895,7 +895,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
             catch (const IllegalArgumentException &aExc)
             {
                 OSL_ENSURE( aExc.ArgumentPosition == 5 &&
-                             aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
+                             aExc.Message.startsWith("dum dum dum ich tanz im kreis herum..."),
                              "### unexpected exception content!" );
 
                 Reference<XLanguageBindingTest > xLBT2(
@@ -910,8 +910,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
         }
         catch (const RuntimeException & rExc)
         {
-            OSL_ENSURE(
-                        rExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
+            OSL_ENSURE( rExc.Message.startsWith("dum dum dum ich tanz im kreis herum..."),
                         "### unexpected exception content!" );
 
             Reference<XLanguageBindingTest > xLBT2(
@@ -926,11 +925,9 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
     }
     catch (const Exception & aExc)
     {
-        OSL_ENSURE(
-                     aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
+        OSL_ENSURE( aExc.Message.startsWith("dum dum dum ich tanz im kreis herum..."),
                      "### unexpected exception content!" );
-        return (
-                aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")));
+        return aExc.Message.startsWith("dum dum dum ich tanz im kreis herum...");
     }
     return sal_False;
 }

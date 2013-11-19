@@ -430,8 +430,8 @@ OUString SAL_CALL ScNamedRangeObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SCNAMEDRANGEOBJ_SERVICE ) ) ||
-           rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SCLINKTARGET_SERVICE ) );
+    return rServiceName.startsWith( SCNAMEDRANGEOBJ_SERVICE ) ||
+           rServiceName.startsWith( SCLINKTARGET_SERVICE );
 }
 
 uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()

@@ -242,7 +242,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
         {
             for ( sal_Int32 nInd = 0; nInd < aTypes.getLength(); nInd++ )
             {
-                if ( aTypes[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferredFilter" ) ) && ( aTypes[nInd].Value >>= aFilterName ) )
+                if ( aTypes[nInd].Name.startsWith( "PreferredFilter" ) && ( aTypes[nInd].Value >>= aFilterName ) )
                 {
                     aTypes[nInd].Value >>= aFilterName;
                     break;
@@ -589,7 +589,7 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
 
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if ( aEvent.Source == m_xModel && aEvent.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAsDone" ) ) )
+        if ( aEvent.Source == m_xModel && aEvent.EventName.startsWith( "OnSaveAsDone" ) )
         {
             // SaveAs operation took place, so just forget the model and deregister listeners
             xModel = m_xModel;

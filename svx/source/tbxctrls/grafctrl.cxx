@@ -128,7 +128,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const OUString& rCmd,
     }
     else
     {
-        const long nMinVal = ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) )) ? 0 : -100;
+        const long nMinVal = maCommand.startsWith( ".uno:GrafTransparence" ) ? 0 : -100;
 
         SetUnit( FUNIT_CUSTOM );
         SetCustomUnitText( OUString(" %") );
@@ -160,14 +160,14 @@ IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)
 
     // Convert value to an any to be usable with dispatch API
     Any a;
-    if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafRed" ) ) ||
-         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGreen" ) ) ||
-         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafBlue" ) ) ||
-         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafLuminance" ) ) ||
-         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafContrast" ) ))
+    if ( maCommand.startsWith( ".uno:GrafRed" ) ||
+         maCommand.startsWith( ".uno:GrafGreen" ) ||
+         maCommand.startsWith( ".uno:GrafBlue" ) ||
+         maCommand.startsWith( ".uno:GrafLuminance" ) ||
+         maCommand.startsWith( ".uno:GrafContrast" ))
         a = makeAny( sal_Int16( nVal ));
-    else if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ) ||
-              maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) ))
+    else if ( maCommand.startsWith( ".uno:GrafGamma" ) ||
+              maCommand.startsWith( ".uno:GrafTransparence" ))
         a = makeAny( sal_Int32( nVal ));
 
     if ( a.hasValue() )

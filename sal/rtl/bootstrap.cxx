@@ -484,7 +484,7 @@ bool Bootstrap_Impl::getValue(
     const
 {
     if (mode == LOOKUP_MODE_NORMAL &&
-        key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URE_BOOTSTRAP")))
+        key.startsWith("URE_BOOTSTRAP"))
     {
         mode = LOOKUP_MODE_URE_BOOTSTRAP;
     }

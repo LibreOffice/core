@@ -200,8 +200,8 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
     // Special feature: If the events "OnNew" or "OnLoad" occurs - we generate our own event "onDocumentOpened".
     if (
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_NEW))) ||
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_LOAD)))
+        (aEvent.EventName.startsWith(EVENT_ON_NEW)) ||
+        (aEvent.EventName.startsWith(EVENT_ON_LOAD))
        )
     {
         if (m_lEvents.find(EVENT_ON_DOCUMENT_OPENED) != m_lEvents.end())
@@ -210,8 +210,8 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
     // Special feature: If the events "OnCreate" or "OnLoadFinished" occurs - we generate our own event "onDocumentAdded".
     if (
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_CREATE))) ||
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_LOAD_FINISHED)))
+        (aEvent.EventName.startsWith(EVENT_ON_CREATE)) ||
+        (aEvent.EventName.startsWith(EVENT_ON_LOAD_FINISHED))
        )
     {
         if (m_lEvents.find(EVENT_ON_DOCUMENT_ADDED) != m_lEvents.end())

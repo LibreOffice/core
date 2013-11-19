@@ -2311,7 +2311,7 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
           && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"")) )
+    else if ( aFlavor.MimeType.startsWith("application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"") )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;

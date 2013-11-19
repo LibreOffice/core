@@ -490,7 +490,7 @@ sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUS
     {
         nResult = BMP_128X128_MATH_DOC;
     }
-    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "swriter" ) ) || aFactoryShortName.startsWith("swriter/") )
+    else if ( aFactoryShortName.startsWith( "swriter" ) )
     {
         nResult = BMP_128X128_WRITER_DOC;
     }

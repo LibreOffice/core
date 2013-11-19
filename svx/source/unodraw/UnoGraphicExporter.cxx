@@ -521,15 +521,15 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
         {
             pValues->Value >>= rSettings.mxInteractionHandler;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
+        else if( pValues->Name.startsWith( "Width" ) )  // for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mnWidth;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
+        else if( pValues->Name.startsWith( "Height" ) ) // for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mnHeight;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )   // for compatibility reasons, deprecated
+        else if( pValues->Name.startsWith( "ExportOnlyBackground" ) )   // for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mbExportOnlyBackground;
         }
@@ -558,12 +558,12 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
+                else if( pDataValues->Name.startsWith( "Width" ) )  // for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnWidth;
                     pDataValues->Name = "PixelWidth";
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
+                else if( pDataValues->Name.startsWith( "Height" ) ) // for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
                     pDataValues->Name = "PixelHeight";

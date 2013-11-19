@@ -1183,11 +1183,11 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
     if( m_pEmbedObj && Event.Source == m_xComponent )
     {
         // for now the ignored events are not forwarded, but sent by the object itself
-        if ( !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSave" ) )
-          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveDone" ) )
-          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAs" ) )
-          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAsDone" ) )
-          && !( Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnVisAreaChanged" ) ) && m_nNoResizeReact ) )
+        if ( !Event.EventName.startsWith( "OnSave" )
+          && !Event.EventName.startsWith( "OnSaveDone" )
+          && !Event.EventName.startsWith( "OnSaveAs" )
+          && !Event.EventName.startsWith( "OnSaveAsDone" )
+          && !( Event.EventName.startsWith( "OnVisAreaChanged" ) && m_nNoResizeReact ) )
             m_pEmbedObj->PostEvent_Impl( Event.EventName );
     }
 }

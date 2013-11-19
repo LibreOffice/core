@@ -178,14 +178,14 @@ void SAL_CALL GalleryThemePopup::statusChanged(
 throw ( css::uno::RuntimeException )
 {
     const OUString &rURL = rEvent.FeatureURL.Complete;
-    if ( rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( CMD_SID_GALLERY_ENABLE_ADDCOPY ) ) )
+    if ( rURL.startsWith( CMD_SID_GALLERY_ENABLE_ADDCOPY ) )
     {
         if ( !rEvent.IsEnabled )
         {
             maPopupMenu.EnableItem( MN_ADD, sal_False );
         }
     }
-    else if ( rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( CMD_SID_GALLERY_BG_BRUSH ) ) )
+    else if ( rURL.startsWith( CMD_SID_GALLERY_BG_BRUSH ) )
     {
         maBackgroundPopup.Clear();
         if ( rEvent.IsEnabled )

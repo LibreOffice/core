@@ -301,13 +301,13 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             osl_removeFile( aURL.pData );
         if( !aEmbedMimetype.isEmpty() )
         {
-            if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text" ) )
-                || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text-master" ) ) )
+            if( aEmbedMimetype.startsWith( "application/vnd.oasis.opendocument.text" )
+                || aEmbedMimetype.startsWith( "application/vnd.oasis.opendocument.text-master" ) )
                 aOutFilterName = "writer_pdf_addstream_import";
             else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.presentation" )
                 aOutFilterName = "impress_pdf_addstream_import";
-            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.graphics" ) )
-                     || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.drawing" ) ) )
+            else if( aEmbedMimetype.startsWith( "application/vnd.oasis.opendocument.graphics" )
+                     || aEmbedMimetype.startsWith( "application/vnd.oasis.opendocument.drawing" ) )
                 aOutFilterName = "draw_pdf_addstream_import";
             else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.spreadsheet" )
                 aOutFilterName = "calc_pdf_addstream_import";

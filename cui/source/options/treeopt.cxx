@@ -1615,9 +1615,9 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     {
         // text document
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
-        if (   aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) )
-            || aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) )
-            || aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) )
+        if (   aFactory.startsWith( "com.sun.star.text.TextDocument" )
+            || aFactory.startsWith( "com.sun.star.text.WebDocument" )
+            || aFactory.startsWith( "com.sun.star.text.GlobalDocument" ) )
         {
             SfxModule* pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )

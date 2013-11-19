@@ -151,7 +151,7 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
            aArgs[1].Value >>= aFilterName;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text - txt - csv (StarCalc)"))) {
+        if (aFilterName.startsWith("Text - txt - csv (StarCalc)")) {
             aFileFormat = excel::XlFileFormat::xlCSV; //xlFileFormat.
         }
 
@@ -179,7 +179,7 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
             aFileFormat = excel::XlFileFormat::xlExcel9795;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HTML (StarCalc)"))) {
+        if (aFilterName.startsWith("HTML (StarCalc)")) {
             aFileFormat = excel::XlFileFormat::xlHtml;
         }
 
@@ -187,7 +187,7 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
             aFileFormat = excel::XlFileFormat::xlTemplate;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarOffice XML (Calc)"))) {
+        if (aFilterName.startsWith("StarOffice XML (Calc)")) {
             aFileFormat = excel::XlFileFormat::xlWorkbookNormal;
         }
         if ( aFilterName == "calc8" ) {

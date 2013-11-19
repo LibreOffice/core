@@ -88,15 +88,15 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
     Reference < XStatusIndicator > xStatusIndicator;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "OutputStream" ) ) )
+        if ( pValue[i].Name.startsWith( "OutputStream" ) )
         {
             pValue[i].Value >>= xOutputStream;
         }
-        else if( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
+        else if( pValue[i].Name.startsWith( "URL" ) )
         {
             pValue[i].Value >>= sURL;
         }
-        else if( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InteractionHandler" ) ) )
+        else if( pValue[i].Name.startsWith( "InteractionHandler" ) )
         {
             pValue[i].Value >>= xInteractionHandler;
         }

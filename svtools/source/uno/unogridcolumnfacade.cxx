@@ -146,12 +146,12 @@ namespace svt { namespace table
         if ( i_event.AttributeName == "HorizontalAlign" )
             nChangedAttributes |= COL_ATTRS_APPEARANCE;
 
-        if  (   i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ColumnWidth"))
-            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MaxWidth"))
-            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MinWidth"))
-            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PreferredWidth"))
-            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Resizeable"))
-            ||  i_event.AttributeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Flexibility"))
+        if  (   i_event.AttributeName.startsWith("ColumnWidth")
+            ||  i_event.AttributeName.startsWith("MaxWidth")
+            ||  i_event.AttributeName.startsWith("MinWidth")
+            ||  i_event.AttributeName.startsWith("PreferredWidth")
+            ||  i_event.AttributeName.startsWith("Resizeable")
+            ||  i_event.AttributeName.startsWith("Flexibility")
             )
             nChangedAttributes |= COL_ATTRS_WIDTH;
 
