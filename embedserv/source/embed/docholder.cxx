@@ -354,7 +354,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
             m_xFrame->registerDispatchProviderInterceptor( CreateNewInterceptor() );
 
-            m_xLayoutManager.set( m_xFrame->getLayoutManager(), uno::UNO_QUERY_THROW );
+            m_xLayoutManager.set( m_xFrame->getLayoutManager(), uno::UNO_QUERY );
 
             if(m_xLayoutManager.is())
                 m_xLayoutManager->setDockingAreaAcceptor(this);
