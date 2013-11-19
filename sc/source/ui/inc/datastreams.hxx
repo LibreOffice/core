@@ -30,8 +30,8 @@ public:
     ~DataStreams();
     bool ImportData();
     void MoveData();
-    void Set(const OUString& rUrl, bool bIsScript, const OUString& rRange,
-            sal_Int32 nLimit, MoveEnum eMove);
+    void Set(const OUString& rUrl, bool bIsScript, bool bValuesInLine,
+            const OUString& rRange, sal_Int32 nLimit, MoveEnum eMove);
     void ShowDialog(Window *pParent);
     void Start();
     void Stop();
@@ -42,6 +42,7 @@ private:
     MoveEnum meMove;
     bool mbRunning;
     bool mbIsUndoEnabled;
+    bool mbValuesInLine;
     boost::scoped_ptr<ScRange> mpRange;
     boost::scoped_ptr<ScRange> mpStartRange;
     boost::scoped_ptr<ScRange> mpEndRange;
