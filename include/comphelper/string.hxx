@@ -85,6 +85,29 @@ inline OUString remove(const OUString &rIn,
     sal_Unicode c)
 { return rIn.replaceAll(OUString(c), OUString()); }
 
+/** Removes all occurrences of a character from within the source string
+
+    @param rIn      The input OUStringBuffer
+    @param c        The character to be removed
+
+    @return         The resulting OUStringBuffer
+ */
+inline OUStringBuffer& remove(OUStringBuffer &rIn,
+    sal_Unicode c)
+{
+    sal_Int32 index = 0;
+    while (1)
+    {
+        if (index >= rIn.getLength())
+            break;
+        index = rIn.indexOf(c, index);
+        if (index == -1)
+            break;
+        rIn.remove(index, 1);
+    }
+    return rIn;
+}
+
 /** Strips occurrences of a character from the start of the source string
 
     @param rIn      The input OString
