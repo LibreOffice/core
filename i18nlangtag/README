@@ -71,13 +71,56 @@ If dictionary exists:
 * dictionaries/*/dictionaries.xcu       for example dictionaries/sr/dictionaries.xcu
 ** change the affected <node oor:name="..."> elements to something corresponding, for example <node oor:name="HunSpellDic_sh" ...> to <node oor:name="HunSpellDic_sr_Latn" ...>
 ** in the "Locales" properties change the <value> element, for example <value>sh-RS</value> to <value>sr-Latn-RS</value>
+
+If dictionary is to be renamed, for example ku-TR to kmr-Latn:
+
 * dictionaries/*/*                      for example dictionaries/ku_TR/*
 ** if appropriate rename *.dic and *.aff files, for example ku_TR.dic to kmr_Latn.dic and ku_TR.aff to kmr_Latn.aff
 * dictionaries/Dictionary_*.mk          for example dictionaries/Dictionary_ku_TR.mk
 ** rename file, for example to Dictionary_kmr_Latn.mk
 ** change all locale dependent file names and target, for example *ku_TR* to *kmr_Latn* AND ku-TR to kmr-Latn; note '-' and '_' separators, both are used!
 * dictionaries/Module_dictionaries.mk
-** if a Dictionary_*.mk was renamed that has to be changed here as well
+** change Dictionary_* (Dictionary_ku-TR to Dictionary_kmr-Latn) and sort alphabetically
+* scp2/source/ooo/common_brand.scp
+** DosName = "dict-ku-TR";
+*** change to "dict-kmr-Latn"
+* scp2/source/ooo/file_ooo.scp
+** File gid_File_Extension_Dictionary_Ku_Tr
+*** change to gid_File_Extension_Dictionary_Kmr_Latn
+** Name = "Dictionary/dict-ku-TR.filelist";
+*** change to "Dictionary/dict-kmr-Latn.filelist"
+* scp2/source/ooo/module_ooo.scp
+** Module gid_Module_Root_Extension_Dictionary_Ku_Tr
+*** change to gid_Module_Root_Extension_Dictionary_Kmr_Latn
+** MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_KU_TR );
+*** change to MODULE_EXTENSION_DICTIONARY_KMR_LATN
+** Files = (gid_File_Extension_Dictionary_Ku_Tr);
+*** change to gid_File_Extension_Dictionary_Kmr_Latn
+** Spellcheckerlanguage = "ku-TR";
+*** change to "kmr-Latn"
+* scp2/source/ooo/module_ooo.ulf
+** [STR_NAME_MODULE_EXTENSION_DICTIONARY_KU_TR]
+*** change to STR_NAME_MODULE_EXTENSION_DICTIONARY_KMR_LATN
+** en-US = "Kurdish (Turkey)"
+*** change to "Kurdish, Northern, Latin script"
+** [STR_DESC_MODULE_EXTENSION_DICTIONARY_KU_TR]
+*** change to STR_DESC_MODULE_EXTENSION_DICTIONARY_KMR_LATN
+** en-US = "Kurdish (Turkey) spelling dictionary"
+*** change to "Kurdish, Northern, Latin script spelling dictionary"
+* scp2/source/ooo/common_brand.scp
+** Directory gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr
+*** change to gid_Brand_Dir_Share_Extensions_Dict_Kmr_Latn
+** DosName = "dict-ku-TR";
+*** change to "dict-kmr-Latn"
+* setup_native/source/packinfo/packinfo_office.txt
+** module = "gid_Module_Root_Extension_Dictionary_Ku_Tr"
+*** change to "gid_Module_Root_Extension_Dictionary_Kmr_Latn"
+** solarispackagename = "%PACKAGEPREFIX%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-dict-ku-TR"
+*** change to "...-dict-kmr-Latn"
+** packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION-dict-ku-TR"
+*** change to "...-dict-kmr-Latn"
+** description = "Ku-TR dictionary for %PRODUCTNAME %PRODUCTVERSION"
+*** change to "Kmr-Latn dictionary ..."
 
 If extras exist, for example extras/source/autotext/*:
 
