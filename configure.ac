@@ -2032,17 +2032,31 @@ AC_ARG_WITH(all-tarballs,
         [Download all external tarballs unconditionally]))
 
 AC_ARG_WITH(gdrive-client-id,
-    AS_HELP_STRING([--with-drive-client-id],
+    AS_HELP_STRING([--with-gdrive-client-id],
         [Provides the client id of the application for OAuth2 authentication
         on Google Drive. If either this or --with-gdrive-client-secret is
         empty, the feature will be disabled]),
 )
 
 AC_ARG_WITH(gdrive-client-secret,
-    AS_HELP_STRING([--with-drive-client-secret],
+    AS_HELP_STRING([--with-gdrive-client-secret],
         [Provides the client secret of the application for OAuth2
         authentication on Google Drive. If either this or
         --with-gdrive-client-id is empty, the feature will be disabled]),
+)
+
+AC_ARG_WITH(alfresco-cloud-client-id,
+    AS_HELP_STRING([--with-alfresco-cloud-client-id],
+        [Provides the client id of the application for OAuth2 authentication
+        on Alfresco Cloud. If either this or --with-alfresco-cloud-client-secret is
+        empty, the feature will be disabled]),
+)
+
+AC_ARG_WITH(alfresco-cloud-client-secret,
+    AS_HELP_STRING([--with-alfresco-cloud-client-secret],
+        [Provides the client secret of the application for OAuth2
+        authentication on Alfresco Cloud. If either this or
+        --with-alfresco-cloud-client-id is empty, the feature will be disabled]),
 )
 
 dnl ===================================================================
@@ -12314,15 +12328,41 @@ AC_SUBST(TESTINSTALLDIR)
 AC_MSG_CHECKING([for Google Drive client id and secret])
 GDRIVE_CLIENT_ID="\"$with_gdrive_client_id\""
 GDRIVE_CLIENT_SECRET="\"$with_gdrive_client_secret\""
-if test "$with_gdrive_client_id" = "no" -o -n "$with_driver_client_id"; then
+if test "$with_gdrive_client_id" = "no" -o -z "$with_gdrive_client_id"; then
     GDRIVE_CLIENT_ID="\"\""
 fi
 
-if test "$with_gdrive_client_secret" = "no" -o -n "$with_driver_client_secret"; then
+if test "$with_gdrive_client_secret" = "no" -o -z "$with_gdrive_client_secret"; then
     GDRIVE_CLIENT_SECRET="\"\""
 fi
+
+if test -z "$GDRIVE_CLIENT_ID" -o -z "$GDRIVE_CLIENT_SECRET"; then
+    AC_MSG_RESULT([not set])
+else
+    AC_MSG_RESULT([set])
+fi
+
 AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_ID, $GDRIVE_CLIENT_ID)
 AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_SECRET, $GDRIVE_CLIENT_SECRET)
+
+AC_MSG_CHECKING([for Alfresco Cloud client id and secret])
+ALFRESCO_CLOUD_CLIENT_ID="\"$with_alfresco_cloud_client_id\""
+ALFRESCO_CLOUD_CLIENT_SECRET="\"$with_alfresco_cloud_client_secret\""
+if test "$with_alfresco_cloud_client_id" = "no" -o -z "$with_alfresco_cloud_client_id"; then
+    ALFRESCO_CLOUD_CLIENT_ID="\"\""
+fi
+
+if test "$with_alfresco_cloud_client_secret" = "no" -o -z "$with_alfresco_cloud_client_secret"; then
+    ALFRESCO_CLOUD_CLIENT_SECRET="\"\""
+fi
+
+if test -z "$ALFRESCO_CLOUD_CLIENT_ID" -o -z "$ALFRESCO_CLOUD_CLIENT_SECRET"; then
+    AC_MSG_RESULT([not set])
+else
+    AC_MSG_RESULT([set])
+fi
+AC_DEFINE_UNQUOTED(ALFRESCO_CLOUD_CLIENT_ID, $ALFRESCO_CLOUD_CLIENT_ID)
+AC_DEFINE_UNQUOTED(ALFRESCO_CLOUD_CLIENT_SECRET, $ALFRESCO_CLOUD_CLIENT_SECRET)
 
 # ===================================================================
 # De- or increase default verbosity of build process

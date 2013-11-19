@@ -17,6 +17,7 @@
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <config_oauth2.h>
 #include <rtl/uri.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -147,6 +148,16 @@ namespace cmis
                 {
                     // Create a session to get repositories
                     libcmis::OAuth2DataPtr oauth2Data;
+                    if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
+                        oauth2Data.reset( new libcmis::OAuth2Data(
+                            GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
+                            GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
+                            GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
+                    if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
+                        oauth2Data.reset( new libcmis::OAuth2Data(
+                            ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
+                            ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
+                            ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
 
                     libcmis::Session* session = libcmis::SessionFactory::createSession(
                             OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),

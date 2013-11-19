@@ -23,6 +23,16 @@
 #define GDRIVE_REDIRECT_URI "urn:ietf:wg:oauth:2.0:oob"
 #define GDRIVE_SCOPE "https://www.googleapis.com/auth/drive"
 
+
+/* Alfresco Cloud */
+#define ALFRESCO_CLOUD_BASE_URL "https://api.alfresco.com/"
+#define ALFRESCO_CLOUD_CLIENT_ID ""
+#define ALFRESCO_CLOUD_CLIENT_SECRET ""
+#define ALFRESCO_CLOUD_AUTH_URL "https://api.alfresco.com/auth/oauth/versions/2/authorize"
+#define ALFRESCO_CLOUD_TOKEN_URL "https://api.alfresco.com/auth/oauth/versions/2/token"
+#define ALFRESCO_CLOUD_REDIRECT_URI "http://127.0.0.1/Callback"
+#define ALFRESCO_CLOUD_SCOPE "public_api"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

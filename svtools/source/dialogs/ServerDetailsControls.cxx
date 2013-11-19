@@ -281,13 +281,16 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
     // Load the ServerType entries
     bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
                        OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
+    bool bSkipAlfresco = OUString( ALFRESCO_CLOUD_CLIENT_ID ).isEmpty() ||
+                       OUString( ALFRESCO_CLOUD_CLIENT_SECRET ).isEmpty();
 
     Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
     Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
     for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
     {
         OUString sUrl = aTypesUrlsList[i];
-        if ( !( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) )
+        if ( !( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) &&
+             !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) )
         {
             m_pLBServerType->InsertEntry( aTypesNamesList[i] );
             m_aServerTypesURLs.push_back( sUrl );

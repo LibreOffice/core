@@ -291,6 +291,11 @@ namespace cmis
                         GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
                         GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
                         GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
+                if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
+                    oauth2Data.reset( new libcmis::OAuth2Data(
+                        ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
+                        ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
+                        ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
 
                 m_pSession = libcmis::SessionFactory::createSession(
                         OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),

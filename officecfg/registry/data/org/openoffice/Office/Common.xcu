@@ -576,6 +576,7 @@
     <prop oor:name="CmisServersUrls">
       <value>
         <it>http://&lt;host&gt;/alfresco/cmisws/RepositoryService?wsdl</it>
+        <it>https://api.alfresco.com/cmis/versions/1.0/atom/</it>
         <it>http://&lt;host&gt;/p8cmis/wsdl</it>
         <it>https://apps.lotuslive.com/files/basic/cmis/my/servicedoc</it>
         <it>http://&lt;host&gt;/servlet/cmis/repository/_P&lt;Quickr place name&gt;_RMain.nsf/servicedoc</it>
@@ -589,6 +590,7 @@
     <prop oor:name="CmisServersNames">
       <value>
         <it>Alfresco 4</it>
+        <it>Alfresco Cloud</it>
         <it>IBM FileNet P8</it>
         <it>Lotus Live Files</it>
         <it>Lotus Quickr Domino</it>
