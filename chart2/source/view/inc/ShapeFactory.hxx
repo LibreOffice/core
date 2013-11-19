@@ -26,7 +26,7 @@ namespace chart
 
 class ShapeFactory : public AbstractShapeFactory
 {
-    friend AbstractShapeFactory;
+    friend class AbstractShapeFactory;
 
     ShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory)
         {m_xShapeFactory = xFactory;}
