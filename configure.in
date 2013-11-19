@@ -2694,8 +2694,8 @@ dnl ===================================================================
 dnl Checks for what the default STL should be
 dnl ===================================================================
    AC_MSG_CHECKING([what the default STL should be])
-   DEFAULT_TO_STLPORT="no"
-if test "$WITH_STLPORT" != "no"; then
+   DEFAULT_TO_STLPORT="NO"
+if test "$WITH_STLPORT" != "NO"; then
    AC_MSG_ERROR([Option --with-stlport is no longer available.])
 else
    USE_SYSTEM_STL="YES"
