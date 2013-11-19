@@ -995,9 +995,9 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_Ku_Tr
+File gid_File_Extension_Dictionary_Kmr_Latn
 	Dir = FILELIST_DIR;
-	Name = "Dictionary/dict-ku-TR.filelist";
+	Name = "Dictionary/dict-kmr-Latn.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End

@@ -196,11 +196,11 @@ en-US = "Italian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_IT]
 en-US = "Italian spelling dictionary, hyphenation rules, and thesaurus"
 
-[STR_NAME_MODULE_EXTENSION_DICTIONARY_KU_TR]
-en-US = "Kurdish (Turkey)"
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_KMR_LATN]
+en-US = "Kurdish, Northern, Latin script"
 
-[STR_DESC_MODULE_EXTENSION_DICTIONARY_KU_TR]
-en-US = "Kurdish (Turkey) spelling dictionary"
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_KMR_LATN]
+en-US = "Kurdish, Northern, Latin script spelling dictionary"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_LT]
 en-US = "Lithuanian"

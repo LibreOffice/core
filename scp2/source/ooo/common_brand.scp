@@ -294,9 +294,9 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_It
     DosName = "dict-it";
 End
 
-Directory gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr
+Directory gid_Brand_Dir_Share_Extensions_Dict_Kmr_Latn
     ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-ku-TR";
+    DosName = "dict-kmr-Latn";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Lt

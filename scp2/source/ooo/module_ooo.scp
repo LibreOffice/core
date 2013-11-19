@@ -332,12 +332,12 @@ Module gid_Module_Root_Extension_Dictionary_It
     Styles = ();
 End
 
-Module gid_Module_Root_Extension_Dictionary_Ku_Tr
-    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_KU_TR );
-    Files = (gid_File_Extension_Dictionary_Ku_Tr);
+Module gid_Module_Root_Extension_Dictionary_Kmr_Latn
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_KMR_LATN );
+    Files = (gid_File_Extension_Dictionary_Kmr_Latn);
     InstallOrder = "2000";
     Sortkey = "620";
-    Spellcheckerlanguage = "ku-TR";
+    Spellcheckerlanguage = "kmr-Latn";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Dictionaries;
     Styles = ();
