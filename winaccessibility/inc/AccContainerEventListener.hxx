@@ -61,12 +61,6 @@ public:
     virtual void HandleStateChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue) SAL_OVERRIDE;
 
-    //for visible data changed event
-    virtual void HandleVisibleDataChangedEvent() SAL_OVERRIDE;
-
-    //for bound rect changed event
-    virtual void HandleBoundrectChangedEvent() SAL_OVERRIDE;
-
     //for value changed event
     virtual void HandleValueChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);

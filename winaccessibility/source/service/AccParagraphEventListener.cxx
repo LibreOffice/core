@@ -96,22 +96,6 @@ void AccParagraphEventListener::HandleCaretChangedEvent(Any oldValue, Any newVal
 }
 
 /**
- *  handle the VISIBLE_DATA_CHANGED event
- */
-void AccParagraphEventListener::HandleVisibleDataChangedEvent()
-{
-    AccEventListener::HandleVisibleDataChangedEvent();
-}
-
-/**
- *  handle the BOUNDRECT_CHANGED event
- */
-void AccParagraphEventListener::HandleBoundrectChangedEvent()
-{
-    AccEventListener::HandleBoundrectChangedEvent();
-}
-
-/**
  *  set the new state and fire the MSAA event
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset

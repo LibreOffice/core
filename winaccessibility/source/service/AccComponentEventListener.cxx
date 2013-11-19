@@ -126,22 +126,6 @@ void AccComponentEventListener::HandleCaretChangedEvent(Any oldValue, Any newVal
 }
 
 /**
- *  handle the VISIBLE_DATA_CHANGED event
- */
-void AccComponentEventListener::HandleVisibleDataChangedEvent()
-{
-    AccEventListener::HandleVisibleDataChangedEvent();
-}
-
-/**
- *  handle the BOUNDRECT_CHANGED event
- */
-void AccComponentEventListener::HandleBoundrectChangedEvent()
-{
-    AccEventListener::HandleBoundrectChangedEvent();
-}
-
-/**
  * set the new state and fire the MSAA event
  *
  * @param   state   new state id

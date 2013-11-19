@@ -62,22 +62,6 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 /**
- *  handle the VISIBLE_DATA_CHANGED event
- */
-void AccDialogEventListener::HandleVisibleDataChangedEvent()
-{
-    AccEventListener::HandleVisibleDataChangedEvent();
-}
-
-/**
- *  handle the BOUNDRECT_CHANGED event
- */
-void AccDialogEventListener::HandleBoundrectChangedEvent()
-{
-    AccEventListener::HandleBoundrectChangedEvent();
-}
-
-/**
  *  handle the CHILD event
  * @param   oldValue    the child to be deleted
  * @param   newValue    the child to be added

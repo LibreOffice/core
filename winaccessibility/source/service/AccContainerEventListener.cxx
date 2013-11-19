@@ -97,22 +97,6 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 }
 
-/**
- *  handle the VISIBLE_DATA_CHANGED event
- */
-void AccContainerEventListener::HandleVisibleDataChangedEvent()
-{
-    AccEventListener::HandleVisibleDataChangedEvent();
-}
-
-/**
- *  handle the BOUNDRECT_CHANGED event
- */
-void AccContainerEventListener::HandleBoundrectChangedEvent()
-{
-    AccEventListener::HandleBoundrectChangedEvent();
-}
-
 void AccContainerEventListener::HandleStateChangedEvent(Any oldValue, Any newValue)
 {
     short State;

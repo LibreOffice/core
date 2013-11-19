@@ -45,12 +45,6 @@ public:
     virtual void HandleCaretChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
-    //for visible data changed event
-    virtual void HandleVisibleDataChangedEvent() SAL_OVERRIDE;
-
-    //for bound rect changed event
-    virtual void HandleBoundrectChangedEvent() SAL_OVERRIDE;
-
     virtual void SetComponentState(short state, bool enable) SAL_OVERRIDE;
 
     //add TEXT_SELECTION_CHANGED event

@@ -61,22 +61,6 @@ void  AccWindowEventListener::notifyEvent( const ::com::sun::star::accessibility
 }
 
 /**
- *  handle the VISIBLE_DATA_CHANGED event
- */
-void AccWindowEventListener::HandleVisibleDataChangedEvent()
-{
-    AccEventListener::HandleVisibleDataChangedEvent();
-}
-
-/**
- *  handle the BOUNDRECT_CHANGED event
- */
-void AccWindowEventListener::HandleBoundrectChangedEvent()
-{
-    AccEventListener::HandleBoundrectChangedEvent();
-}
-
-/**
  *  handle the CHILD event
  *  @param  oldValue    the child to be deleted
  *  @param  newValue    the child to be added
