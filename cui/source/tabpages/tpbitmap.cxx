@@ -729,8 +729,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
-            OUString( CUI_RES( RID_SVXSTR_ASK_DEL_BITMAP ) ) );
+        MessageDialog aQueryBox( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui");
 
         if( aQueryBox.Execute() == RET_YES )
         {
