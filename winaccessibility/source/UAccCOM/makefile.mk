@@ -24,13 +24,13 @@ PRJNAME=winaccessibility
 TARGET=UAccCOM
 
 # --- Settings -----------------------------------------------------
-.IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
+.IF "$(GUI)"!="WNT" || "$(DISABLE_ATL)"!=""
+all:
+    @echo "$TARGET will not be built because GUI='$(GUI)' and DISABLE_ATL='$(DISABLE_ATL)'"
+.ELSE
+
 PROF_EDITION=TRUE
-.ENDIF
-
 .INCLUDE :	settings.mk
-
-.IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
 VERSIONOBJ=
 LIBTARGET=NO
@@ -121,8 +121,6 @@ SHL1RES=$(RES)/$(TARGET).res
 DEF1NAME= $(TARGET)
 #DEF1EXPORTFILE=	exports.dxp
 
-.ENDIF
-
 # --- Targets ----------------------------------
 .INCLUDE : target.mk
 
@@ -133,3 +131,6 @@ $(MISC)/$(TARGET).manifest: $(BIN)$/$(TARGET)$(DLLPOST)
     cat *.rgs > $(MISC)$/$(TARGET).rgs
     mt.exe -rgs:$(MISC)$/$(TARGET).rgs -tlb:$(MISC)$/$(TARGET).tlb -dll:$(TARGET).dll -out:$(MISC)$/$(TARGET).manifest
     mt.exe -manifest $(MISC)$/$(TARGET).manifest -outputresource:$(BIN)$/$(TARGET)$(DLLPOST)\;\#97
+
+.ENDIF # "$(GUI)"!="WNT" || "$(DISABLE_ATL)"!=""
+
