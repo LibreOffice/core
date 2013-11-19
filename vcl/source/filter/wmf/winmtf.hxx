@@ -20,10 +20,6 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 
-#ifdef DBG_UTIL
-#define WIN_MTF_ASSERT
-#endif
-
 #include <sot/object.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vcl/graph.hxx>
@@ -286,16 +282,6 @@ struct WMF_EXTERNALHEADER;
 #define MILLIINCH_PER_TWIPS   1.44
 
 //============================ WMFReader ==================================
-
-#ifdef WIN_MTF_ASSERT
-#define WIN_MTF_ASSERT_INIT     0x80000000
-#define WIN_MTF_ASSERT_ONCE     0x40000000
-#define WIN_MTF_ASSERT_MIFE     0x20000000
-
-void WinMtfAssertHandler( const sal_Char*, sal_uInt32 nFlags = WIN_MTF_ASSERT_MIFE );
-#else
-inline void WinMtfAssertHandler( const sal_Char*, sal_uInt32 = 0 ) {}
-#endif
 
 class WinMtfClipPath
 {

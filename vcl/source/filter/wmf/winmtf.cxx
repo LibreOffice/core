@@ -265,45 +265,11 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 };
 
 
-#ifdef WIN_MTF_ASSERT
-void WinMtfAssertHandler( const sal_Char* pAction, sal_uInt32 nFlags )
-{
-    static bool     bOnlyOnce;
-    static sal_Int32    nAssertCount;
-
-    if ( nFlags & WIN_MTF_ASSERT_INIT )
-        nAssertCount = 0;
-    if ( nFlags & WIN_MTF_ASSERT_ONCE )
-       bOnlyOnce = true;
-    if ( nFlags & WIN_MTF_ASSERT_MIFE )
-    {
-        if ( ( nAssertCount == 0 ) || !bOnlyOnce )
-        {
-            OStringBuffer aText("WMF/EMF Import: ");
-            if (pAction)
-                aText.append(pAction);
-            aText.append(" needs to be implemented");
-            DBG_ASSERT( 0, aText.getStr() );
-        }
-        nAssertCount++;
-    }
-}
-#endif
-
-
 WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigItem* pConfigItem ) :
     pOut                ( pWinMtfOutput ),
     pWMF                ( &rStreamWMF ),
     pFilterConfigItem   ( pConfigItem )
 {
-#ifdef WIN_MTF_ASSERT
-    // we want to assert not implemented features, but we do this
-    // only once, so that nobody is handicapped by getting too many assertions
-    // I hope this will bring more testdocuments, without support of these
-    // testdocuments the implementation of missing features won't be possible. (SJ)
-    WinMtfAssertHandler( NULL, WIN_MTF_ASSERT_INIT | WIN_MTF_ASSERT_ONCE );
-#endif
-
     SvLockBytes *pLB = pWMF->GetLockBytes();
     if ( pLB )
         pLB->SetSynchronMode( sal_True );
