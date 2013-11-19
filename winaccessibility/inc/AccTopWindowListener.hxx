@@ -23,7 +23,8 @@
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <cppuhelper/weak.hxx>
+
+#include <cppuhelper/implbase1.hxx>
 
 #include  "AccObjectManagerAgent.hxx"
 
@@ -34,14 +35,11 @@
  * In this method, all the accessible objects (including COM object and Uno objects) are created and
  * cached into bridge managers, and they are monitored by listeners for later accessible evnet handling.
  */
-class AccTopWindowListener:
-            public com::sun::star::awt::XTopWindowListener,
-            public ::cppu::OWeakObject
-
+class AccTopWindowListener
+    : public ::cppu::WeakImplHelper1<com::sun::star::awt::XTopWindowListener>
 {
 private:
     AccObjectManagerAgent accManagerAgent;
-    oslInterlockedCount m_refcount;
 public:
     AccTopWindowListener();
     virtual ~AccTopWindowListener();
@@ -53,9 +51,6 @@ public:
     virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw ();
-    virtual void SAL_CALL release(  ) throw ();
     virtual void AddAllListeners(com::sun::star::accessibility::XAccessible* pAccessible,com::sun::star::accessibility::XAccessible* pParentXAcc,HWND pWND );
     //for On-Demand load.
     virtual void handleWindowOpened( com::sun::star::accessibility::XAccessible* pAccessible );

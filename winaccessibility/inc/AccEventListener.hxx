@@ -22,7 +22,9 @@
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <cppuhelper/weak.hxx>
+
+#include <cppuhelper/implbase1.hxx>
+
 #include <osl/mutex.hxx>
 
 class AccObjectManagerAgent;
@@ -32,12 +34,10 @@ using namespace ::com::sun::star::uno;
  * procedure of all the event handling and provides the basic support for some simple
  * methods.
  */
-class AccEventListener:
-            public com::sun::star::accessibility::XAccessibleEventListener,
-            public ::cppu::OWeakObject
+class AccEventListener
+    : public ::cppu::WeakImplHelper1<
+        com::sun::star::accessibility::XAccessibleEventListener>
 {
-private:
-    oslInterlockedCount m_refcount;
 protected:
     //accessible owner's pointer
     com::sun::star::accessibility::XAccessible* pAccessible;
@@ -74,9 +74,6 @@ public:
 
     //for interface
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
     //get the accessible role of pAccessible
     virtual short SAL_CALL getRole();
     //get the accessible parent's role

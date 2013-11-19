@@ -117,9 +117,8 @@ void AccTopWindowListener::handleWindowOpened( com::sun::star::accessibility::XA
     }
 }
 
-AccTopWindowListener::AccTopWindowListener():
-        accManagerAgent(),
-        m_refcount(1)
+AccTopWindowListener::AccTopWindowListener()
+    : accManagerAgent()
 {
 }
 
@@ -270,31 +269,6 @@ void AccTopWindowListener::windowDeactivated( const ::com::sun::star::lang::Even
 
 void AccTopWindowListener::disposing( const ::com::sun::star::lang::EventObject&  ) throw (::com::sun::star::uno::RuntimeException)
 {
-}
-
-//need to investigate further
-::com::sun::star::uno::Any SAL_CALL AccTopWindowListener::queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException)
-{
-    if (aType.equals( ::getCppuType( (Reference< com::sun::star::awt::XTopWindowListener> const *)0 ) ))
-    {
-        Reference< com::sun::star::awt::XTopWindowListener> xTopListener( static_cast< com::sun::star::awt::XTopWindowListener* >(this));
-        return makeAny(xTopListener);
-    }
-    return Any();
-}
-
-void AccTopWindowListener::acquire( ) throw ()
-{
-    ::osl_incrementInterlockedCount( &m_refcount );
-}
-
-void AccTopWindowListener::release() throw ()
-{
-    // thread-safe decrementation of reference count
-    if (0 == ::osl_decrementInterlockedCount( &m_refcount ))
-    {
-        delete this; // shutdown this object
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

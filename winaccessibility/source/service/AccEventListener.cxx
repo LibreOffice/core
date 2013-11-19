@@ -47,10 +47,9 @@ using namespace cppu;
 
 AccEventListener::AccEventListener(com::sun::star::accessibility::XAccessible* pAcc,
                                    AccObjectManagerAgent* Agent)
-        :pAccessible(pAcc),
-        pAgent(Agent),
-        m_isDisposed(false),
-        m_refcount(0)
+    : pAccessible(pAcc)
+    , pAgent(Agent)
+    , m_isDisposed(false)
 {}
 
 AccEventListener::~AccEventListener()
@@ -278,32 +277,6 @@ void AccEventListener::disposing( const ::com::sun::star::lang::EventObject& /*S
 throw (::com::sun::star::uno::RuntimeException)
 {
     removeMeFromBroadcaster();
-}
-
-//need to investigate further
-::com::sun::star::uno::Any SAL_CALL AccEventListener::queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException)
-{
-    if(aType.equals(::getCppuType( (Reference< com::sun::star::accessibility::XAccessibleEventListener> const *)0 ) ))
-    {
-        Reference< com::sun::star::accessibility::XAccessibleEventListener> xEventListener( static_cast< com::sun::star::accessibility::XAccessibleEventListener* >(this));
-        return makeAny(xEventListener);
-    }
-
-    return Any();
-}
-
-void AccEventListener::acquire(  ) throw ()
-{
-    ::osl_incrementInterlockedCount( &m_refcount );
-}
-
-void AccEventListener::release() throw ()
-{
-    // thread-safe decrementation of reference count
-    if (0 == ::osl_decrementInterlockedCount( &m_refcount ))
-    {
-        delete this; // shutdown this object
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
