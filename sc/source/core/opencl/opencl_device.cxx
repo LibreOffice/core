@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#pragma warning (disable : 4996)
-
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -16,6 +14,7 @@
 #endif
 #include <time.h>
 #include <math.h>
+#include <float.h>
 #include <iostream>
 #include <sstream>
 #include "opencl_device.hxx"
