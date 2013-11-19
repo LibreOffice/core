@@ -41,6 +41,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#define UNROLLING
+
 using namespace formula;
 
 namespace sc { namespace opencl {
@@ -435,7 +437,7 @@ public:
             dynamic_cast<OpMin*>(mpCodeGen.get()) ||
             dynamic_cast<OpMax*>(mpCodeGen.get()) ||
             dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
-            return GetWindowSize()> 4 &&
+            return GetWindowSize()> 100 &&
                 ( (GetStartFixed() && GetEndFixed()) ||
                   (!GetStartFixed() && !GetEndFixed())  ) ;
         else
@@ -529,8 +531,9 @@ public:
                 }
             }
         }
+// original for loop
+#ifndef UNROLLING
         needBody = true;
-
         // No need to generate a for-loop for degenerated cases
         if (nCurWindowSize == 1)
         {
@@ -573,9 +576,132 @@ public:
                 std::min(mpDVR->GetArrayLength(), nCurWindowSize);
             ss << "0; i < "<< limit << "; i++){\n\t\t";
         }
+return nCurWindowSize;
+#endif
 
-        return nCurWindowSize;
-    }
+
+
+#ifdef UNROLLING
+        {
+            if (!mpDVR->IsStartFixed() && mpDVR->IsEndFixed()) {
+                ss << "for (int i = ";
+                ss << "gid0; i < " << mpDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n\t\t";
+                needBody = true;
+                return nCurWindowSize;
+            } else if (mpDVR->IsStartFixed() && !mpDVR->IsEndFixed()) {
+                ss << "for (int i = ";
+                ss << "0; i < " << mpDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n\t\t";
+                needBody = true;
+                return nCurWindowSize;
+            } else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed()){
+                ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
+                ss << "{int i;\n\t";
+                std::stringstream temp1,temp2;
+                int outLoopSize = 16;
+                if ( nCurWindowSize/outLoopSize != 0){
+                    ss << "for(int outLoop=0; outLoop<" << nCurWindowSize/outLoopSize<< "; outLoop++){\n\t";
+                    for(int count=0; count < outLoopSize; count++){
+                        ss << "i = outLoop*"<<outLoopSize<<"+"<<count<<";\n\t";
+                        if(count==0){
+                            temp1 << "if(i + gid0 < " <<mpDVR->GetArrayLength();
+                            temp1 << "){\n\t\t";
+                            temp1 << "if (isNan(";
+                            temp1 <<  GenSlidingWindowDeclRef();
+                            temp1 << ")){\n\t\t\t";
+                            temp1 << "tmp = ";
+                            temp1 <<  mpCodeGen->Gen2("tmpBottom", "tmp") << ";\n\t\t";
+                            temp1 << "}else{\n\t\t\t";
+                            temp1 << "tmp = ";
+                            temp1 <<  mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
+                            temp1 << ";\n\t\t\t";
+                            temp1 << "nCount += 1;\n\t\t";
+                            temp1 << "}\n\t";
+                            temp1 << "}\n\t";
+                        }
+                        ss << temp1.str();
+                    }
+                    ss << "}\n\t";
+                }
+                // The residual of mod outLoopSize
+                for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize; count < nCurWindowSize; count++){
+                    ss << "i = "<<count<<";\n\t";
+                    if(count==nCurWindowSize/outLoopSize*outLoopSize){
+                        temp2 << "if(i + gid0 < " << mpDVR->GetArrayLength();
+                        temp2 << "){\n\t\t";
+                        temp2 << "if (isNan(";
+                        temp2 << GenSlidingWindowDeclRef();
+                        temp2 << ")){\n\t\t\t";
+                        temp2 << "tmp = ";
+                        temp2 << mpCodeGen->Gen2("tmpBottom", "tmp") << ";\n\t\t";
+                        temp2 << "}else{\n\t\t\t";
+                        temp2 << "tmp = ";
+                        temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
+                        temp2 << ";\n\t\t\t";
+                        temp2 << "nCount += 1;\n\t\t";
+                        temp2 << "}\n\t";
+                        temp2 << "}\n\t";
+                    }
+                    ss << temp2.str();
+                }
+                ss << "} // to scope the int i declaration\n";
+                needBody = false;
+                return nCurWindowSize;
+            }
+            // (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            else {
+                ss << "//else situation \n\t";
+                ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
+                ss << "{int i;\n\t";
+                std::stringstream temp1,temp2;
+                int outLoopSize = 16;
+                if (nCurWindowSize/outLoopSize != 0){
+                    ss << "for(int outLoop=0; outLoop<" << nCurWindowSize/outLoopSize<< "; outLoop++){\n\t";
+                    for(int count=0; count < outLoopSize; count++){
+                        ss << "i = outLoop*"<<outLoopSize<<"+"<<count<<";\n\t";
+                        if(count==0){
+                            temp1 << "if (isNan(";
+                            temp1 << GenSlidingWindowDeclRef();
+                            temp1 << ")){\n\t\t\t";
+                            temp1 << "tmp = ";
+                            temp1 << mpCodeGen->Gen2("tmpBottom", "tmp") << ";\n\t\t";
+                            temp1 << "}else{\n\t\t\t";
+                            temp1 << "tmp = ";
+                            temp1 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
+                            temp1 << ";\n\t\t\t";
+                            temp1 << "nCount += 1;\n\t\t";
+                            temp1 << "}\n\t";
+                        }
+                        ss << temp1.str();
+                    }
+                    ss << "}\n\t";
+                }
+                // The residual of mod outLoopSize
+                for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize; count < nCurWindowSize; count++){
+                    ss << "i = "<<count<<";\n\t";
+                    if(count==nCurWindowSize/outLoopSize*outLoopSize){
+                        temp2 << "if (isNan(";
+                        temp2 << GenSlidingWindowDeclRef();
+                        temp2 << ")){\n\t\t\t";
+                        temp2 << "tmp = ";
+                        temp2 << mpCodeGen->Gen2("tmpBottom", "tmp") << ";\n\t\t";
+                        temp2 << "}else{\n\t\t\t";
+                        temp2 << "tmp = ";
+                        temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
+                        temp2 << ";\n\t\t\t";
+                        temp2 << "nCount += 1;\n\t\t";
+                        temp2 << "}\n\t";
+                    }
+                    ss << temp2.str();
+                }
+                ss << "} // to scope the int i declaration\n";
+                needBody = false;
+                return nCurWindowSize;
+            }
+        }
+#endif
+}
 
     virtual size_t Marshal(cl_kernel k, int argno, int w, cl_program mpProgram)
     {
@@ -848,13 +974,13 @@ public:
                     )
                     throw Unhandled();
             }
-
         }
         ss << ") {\n";
         ss << "    double tmp = 0.0;\n";
         ss << "    int gid0 = get_global_id(0);\n";
+#ifndef UNROLLING
         ss << "    int i ;\n";
-        ss  << "    for (i = 0; i < "<< nCurWindowSize <<"; i++)\n";
+        ss << "    for (i = 0; i < "<< nCurWindowSize <<"; i++)\n";
         ss << "    {\n";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
         {
@@ -920,6 +1046,114 @@ public:
         ss << ";\n\t}\n\t";
         ss << "return tmp;\n";
         ss << "}";
+#endif
+
+#ifdef UNROLLING
+        ss << "\tint i;\n\t";
+        ss << "int currentCount0, currentCount1;\n\t";
+        std::stringstream temp3,temp4;
+        int outLoopSize = 16;
+        if (nCurWindowSize/outLoopSize != 0){
+            ss << "for(int outLoop=0; outLoop<" <<
+            nCurWindowSize/outLoopSize<< "; outLoop++){\n\t";
+            for(int count=0; count < outLoopSize; count++){
+                ss << "i = outLoop*"<<outLoopSize<<"+"<<count<<";\n\t";
+                if(count==0){
+                    temp3 << "currentCount0 = i+gid0+1;\n\t";
+                    temp3 << "currentCount1 = i+1;\n\t";
+                    temp3 << "tmp += ";
+                    for (unsigned i = 0; i < vSubArguments.size(); i++){
+                        if (i)
+                            temp3 << "*";
+                        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode()){
+                            temp3 <<"(";
+                            temp3 <<"(currentCount";
+                            temp3 << i;
+                            temp3 << ">";
+                            if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+                                    formula::svSingleVectorRef){
+                                const formula::SingleVectorRefToken* pSVR =
+                                    dynamic_cast< const formula::SingleVectorRefToken*>
+                                    (vSubArguments[i]->GetFormulaToken());
+                                temp3<<pSVR->GetArrayLength();
+                            }
+                            else if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+                                    formula::svDoubleVectorRef){
+                                const formula::DoubleVectorRefToken* pSVR =
+                                    dynamic_cast< const formula::DoubleVectorRefToken*>
+                                    (vSubArguments[i]->GetFormulaToken());
+                                temp3<<pSVR->GetArrayLength();
+                            }
+                            temp3 << ")||isNan("<<vSubArguments[i]
+                                ->GenSlidingWindowDeclRef(true);
+                            temp3 << ")?0:";
+                            temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+                            temp3  << ")";
+                        }
+                        else
+                            temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+                    }
+                    temp3 << ";\n\t";
+                }
+                ss << temp3.str();
+            }
+            ss << "}\n\t";
+        }
+        //The residual of mod outLoopSize
+        for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize;
+        count < nCurWindowSize; count++)
+        {
+            ss << "i =" <<count<<";\n\t";
+            if(count==nCurWindowSize/outLoopSize*outLoopSize){
+                temp4 << "currentCount0 = i+gid0+1;\n\t";
+                temp4 << "currentCount1 = i+1;\n\t";
+                temp4 << "tmp += ";
+                for (unsigned i = 0; i < vSubArguments.size(); i++)
+                {
+                    if (i)
+                        temp4 << "*";
+                    if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+                    {
+                        temp4 <<"(";
+                        temp4 <<"(currentCount";
+                        temp4 << i;
+                        temp4 << ">";
+                       if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+                                formula::svSingleVectorRef)
+                        {
+                            const formula::SingleVectorRefToken* pSVR =
+                                dynamic_cast< const formula::SingleVectorRefToken*>
+                                (vSubArguments[i]->GetFormulaToken());
+                            temp4<<pSVR->GetArrayLength();
+                        }
+                        else if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+                                formula::svDoubleVectorRef)
+                        {
+                            const formula::DoubleVectorRefToken* pSVR =
+                                dynamic_cast< const formula::DoubleVectorRefToken*>
+                                (vSubArguments[i]->GetFormulaToken());
+                            temp4<<pSVR->GetArrayLength();
+                        }
+                        temp4 << ")||isNan("<<vSubArguments[i]
+                            ->GenSlidingWindowDeclRef(true);
+                        temp4 << ")?0:";
+                        temp4 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+                        temp4  << ")";
+                    }
+                    else
+                    {
+                        temp4 << vSubArguments[i]
+                            ->GenSlidingWindowDeclRef(true);
+                    }
+                }
+                temp4 << ";\n\t";
+            }
+            ss << temp4.str();
+        }
+        ss << "return tmp;\n";
+        ss << "}";
+#endif
+
     }
     virtual bool takeString() const { return false; }
     virtual bool takeNumeric() const { return true; }
