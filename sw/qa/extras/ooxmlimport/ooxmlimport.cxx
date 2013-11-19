@@ -1510,7 +1510,7 @@ DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
     // Document has wp:anchor, not wp:inline, so handle it accordingly.
     uno::Reference<drawing::XShape> xShape = getShape(1);
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(xShape, "AnchorType");
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eValue);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_PARAGRAPH, eValue);
 
     // Check position, it was 0. This is a shape, so use getPosition(), not a property.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(671830)), xShape->getPosition().X);
@@ -1519,6 +1519,11 @@ DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, "LeftMargin"));
     // Wrap type was PARALLEL.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xShape, "Surround"));
+
+    // This should be in front of text.
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xShape, "Opaque")));
+    // And this should be behind the document.
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "Opaque")));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")

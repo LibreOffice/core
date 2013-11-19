@@ -997,10 +997,14 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         // If we are here, this is a drawingML shape. For those, only dmapper (and not oox) knows the anchoring infos (just like for Writer pictures).
                         // But they aren't Writer pictures, either (which are already handled above).
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
-                        xShapeProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+                        // This needs to be AT_PARAGRAPH and not AT_CHARACTER, otherwise shape will move when the user inserts a new paragraph.
+                        xShapeProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
 
                         m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
                         m_pImpl->applyMargins(xShapeProps);
+                        bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
+                        if (!bOpaque)
+                            xShapeProps->setPropertyValue("Opaque", uno::makeAny(bOpaque));
                         xShapeProps->setPropertyValue("Surround", uno::makeAny(m_pImpl->nWrap));
                     }
                 }
