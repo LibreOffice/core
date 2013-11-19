@@ -1909,8 +1909,13 @@ DECLARE_OOXMLEXPORT_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "beforeAutospacing").match("1"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "afterAutospacing").match("1"));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "beforeAutospacing","1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "afterAutospacing","1");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "beforeAutospacing","");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "afterAutospacing","");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "before","400");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "after","400");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
