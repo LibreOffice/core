@@ -451,7 +451,7 @@ void aqua_init_systray()
             // insert entry for startcenter
             if( aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SSTARTMODULE ) )
             {
-                appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, OUString( "n" ) ) );
+                appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, OUString( "n" ) );
                 if( [NSApp respondsToSelector: @selector(setDockIconClickHandler:)] )
                     [NSApp performSelector:@selector(setDockIconClickHandler:) withObject: pExecute];
                 else
