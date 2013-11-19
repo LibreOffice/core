@@ -106,12 +106,11 @@ protected:
 
 xmlDocPtr Test::parseExport(const OUString& rStreamName)
 {
-    // Create the zip file.
-    utl::TempFile aTempFile;
-    save("Office Open XML Text", aTempFile);
+    if (!m_bExported)
+        return 0;
 
     // Read the XML stream we're interested in.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
     pStream->Seek(STREAM_SEEK_TO_END);
@@ -610,6 +609,8 @@ DECLARE_OOXMLEXPORT_TEST(testCellBtlr, "cell-btlr.docx")
      */
 
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection", "val", "btLr");
 }
 
@@ -928,6 +929,8 @@ DECLARE_OOXMLEXPORT_TEST(testPageBorderSpacingExportCase2, "page-borders-export-
      // for Word to handle (larger than 31 points)
 
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
 
     // Assert the XPath expression - page borders
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders", "offsetFrom", "page");
@@ -950,6 +953,8 @@ DECLARE_OOXMLEXPORT_TEST(testGrabBag, "grabbag.docx")
 {
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
 }
 
@@ -1090,6 +1095,8 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx"
 
     // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
 }
 
@@ -1135,14 +1142,13 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testBnc834035, "bnc834035.odt")
 {
-    // This is tricky, when saving manually, there are 2 hyperlinks, here only
-    // one, no idea why. That one still shows that we're not using bookmarks, though.
-
     // Illustration index had wrong hyperlinks: anchor was using Writer's
     // <seqname>!<index>|sequence syntax, not a bookmark name.
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     // This was Figure!1|sequence.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink", "anchor", "_Toc363553908");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:hyperlink", "anchor", "_Toc363553908");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
@@ -1232,6 +1238,8 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
 {
     // Check that now styleId's are more like what MSO produces
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
     // the 1st style always must be Normal
     assertXPath(pXmlStyles, "/w:styles/w:style[1]", "styleId", "Normal");
     // some random style later
@@ -1327,6 +1335,8 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar1, "calendar1.docx")
 {
     // Document has a non-trivial table style, test the roundtrip of it.
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:basedOn", "val", "TableNormal");
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:rsid", "val", "00903003");
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblPr/w:tblStyleColBandSize", "val", "1");
@@ -1349,6 +1359,8 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
 {
     // This paragraph property was missing in table style.
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:pPr/w:jc", "val", "center");
 
     // These run properties were missing
@@ -1366,6 +1378,8 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
 DECLARE_OOXMLEXPORT_TEST(testQuicktables, "quicktables.docx")
 {
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
 
     // These were missing in the Calendar3 table style.
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:rPr/w:rFonts", "cstheme", "majorBidi");
@@ -1394,6 +1408,8 @@ DECLARE_OOXMLEXPORT_TEST(testQuicktables, "quicktables.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo71302, "fdo71302.docx")
 {
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
 
     // This got renamed to "Strong Emphasis" without a good reason.
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']", 1);
@@ -1486,6 +1502,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
      * mso-layout-flow-alt property was completely missing in the output.
      */
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox", "style").match("mso-layout-flow-alt:bottom-to-top"));
 }
 
@@ -1542,6 +1560,8 @@ DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
     // This test does not fail, if the document contains a font with empty name.
 
     xmlDocPtr pXmlFontTable = parseExport("word/fontTable.xml");
+    if (!pXmlFontTable)
+        return;
     xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlFontTable, "/w:fonts/w:font");
     sal_Int32 length = xmlXPathNodeSetGetLength(pXmlNodes);
     for(sal_Int32 index = 0; index < length; index++){
@@ -1557,6 +1577,8 @@ DECLARE_OOXMLEXPORT_TEST(testMultiColumnLineSeparator, "multi-column-line-separa
 {
     // Check for the Column Separator value.It should be FALSE as the document doesnt contains separator line.
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep","false");
 }
 
@@ -1651,6 +1673,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69644, "fdo69644.docx")
     // with only 3 columns, instead of 5 columns.
     // Check that the table grid is exported with 5 columns
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
@@ -1670,6 +1694,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
 DECLARE_OOXMLEXPORT_TEST(testPgMargin, "testPgMargin.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
 }
 
@@ -1678,6 +1704,8 @@ DECLARE_OOXMLEXPORT_TEST(testVMLData, "TestVMLData.docx")
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data shoud not come under w:rPr element.
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+        return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:rect", "stroked").match("f"));
 }
 
@@ -1686,6 +1714,8 @@ DECLARE_OOXMLEXPORT_TEST(testImageData, "image_data.docx")
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+        return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:rect/v:imagedata", "detectmouseclick").match("t"));
 }
 
@@ -1711,6 +1741,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
     // and ImplEESdrWriter::ImplFlipBoundingBox made a mistake calculating the position
 
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
 
     // get styles of the four shapes
     OUString aStyles[4];
@@ -1773,6 +1805,8 @@ DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
     style::LineSpacing alineSpacing = getProperty<style::LineSpacing>(xParaEnum->nextElement(), "ParaLineSpacing");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(13200), static_cast<sal_Int16>(alineSpacing.Height));
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "line", "31680");
 }
 
@@ -1780,6 +1814,8 @@ DECLARE_OOXMLEXPORT_TEST(testHyperlineIsEnd, "hyperlink.docx")
 {
     // Check  that the document.xml contents all the tag properly closed.
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
     // If  document.xml miss any ending tag then parseExport() returns NULL which fail the test case.
     CPPUNIT_ASSERT(pXmlDoc) ;
     // Check hyperlink is properly open.
@@ -1847,6 +1883,8 @@ DECLARE_OOXMLEXPORT_TEST(testCellGridSpan, "cell-grid-span.docx")
     // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
     // Varifying gridSpan element is not present in RoundTriped Document (As it's Default value is 1).
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan",0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
 }
@@ -1866,6 +1904,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
 DECLARE_OOXMLEXPORT_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "beforeAutospacing").match("1"));
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:spacing", "afterAutospacing").match("1"));
 }
@@ -1918,6 +1958,8 @@ DECLARE_OOXMLEXPORT_TEST(testFootnoteParagraphTag, "testFootnote.docx")
      * Check for, paragraph tag is correctly written into footnotes.xml.
      */
     xmlDocPtr pXmlFootnotes = parseExport("word/footnotes.xml");
+    if (!pXmlFootnotes)
+        return;
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]","id","2");
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:rPr/w:rStyle","val","Footnotereference");
 }
@@ -1925,12 +1967,16 @@ DECLARE_OOXMLEXPORT_TEST(testFootnoteParagraphTag, "testFootnote.docx")
 DECLARE_OOXMLEXPORT_TEST(testSpacingLineRule,"table_lineRule.docx")
 {
      xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
      assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableLineSpacing, "table_atleast.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
 }
 

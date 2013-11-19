@@ -89,7 +89,11 @@ class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTes
 {
 public:
     SwModelTestBase(const char* pTestDocumentPath = "", const char* pFilter = "")
-        : mpXmlBuffer(0), mpTestDocumentPath(pTestDocumentPath), mpFilter(pFilter)
+        : mpXmlBuffer(0),
+        mpTestDocumentPath(pTestDocumentPath),
+        mpFilter(pFilter),
+        m_nStartTime(0),
+        m_bExported(false)
     {
     }
 
@@ -419,12 +423,12 @@ protected:
         uno::Sequence<beans::PropertyValue> aArgs(1);
         aArgs[0].Name = "FilterName";
         aArgs[0].Value <<= OUString::createFromAscii(pFilter);
-        utl::TempFile aTempFile;
-        aTempFile.EnableKillingFile();
-        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+        m_aTempFile.EnableKillingFile();
+        xStorable->storeToURL(m_aTempFile.GetURL(), aArgs);
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
         xComponent->dispose();
-        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        m_bExported = true;
+        mxComponent = loadFromDesktop(m_aTempFile.GetURL(), "com.sun.star.text.TextDocument");
         if (mpXmlBuffer)
         {
             xmlBufferFree(mpXmlBuffer);
@@ -478,6 +482,8 @@ protected:
         void (T::*pMethod)();
     };
     sal_uInt32 m_nStartTime;
+    utl::TempFile m_aTempFile;
+    bool m_bExported; ///< Does m_aTempFile already contain something useful?
 };
 
 /**

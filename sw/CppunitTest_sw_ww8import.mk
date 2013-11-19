@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8import, \
     test \
     unotest \
     sw \
+	utl \
 	$(gb_UWINAPI) \
 ))
 

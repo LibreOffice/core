@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uiwriter, \
     unotest \
     vcl \
     tl \
+	utl \
     $(gb_UWINAPI) \
 ))
 
