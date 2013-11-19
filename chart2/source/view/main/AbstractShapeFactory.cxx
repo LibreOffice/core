@@ -48,6 +48,7 @@ using ::com::sun::star::uno::Reference;
 
 namespace chart {
 
+/*
 namespace {
 
 typedef opengl::OpenglShapeFactory* (*__getOpenglShapeFactory)(void);
@@ -70,6 +71,7 @@ osl::Module* getOpenGLModule()
 }
 
 }
+*/
 
 AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Reference< lang::XMultiServiceFactory> xFactory)
 {
