@@ -706,7 +706,6 @@ STDMETHODIMP CAccTable::selectRow(long row)
 
         return S_OK;
     }
-    return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -752,7 +751,6 @@ STDMETHODIMP CAccTable::selectColumn(long column)
 
         return S_OK;
     }
-    return S_OK;
     // End of added.
 
     LEAVE_PROTECTED_BLOCK
@@ -801,7 +799,6 @@ STDMETHODIMP CAccTable::unselectRow(long row)
 
         return S_OK;
     }
-    return S_OK;
     // End of added.
 
     LEAVE_PROTECTED_BLOCK
@@ -850,8 +847,6 @@ STDMETHODIMP CAccTable::unselectColumn(long column)
         }
         return S_OK;
     }
-
-    return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }

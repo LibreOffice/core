@@ -81,8 +81,6 @@ STDMETHODIMP CAccTextBase::get_addSelection(long startOffset, long endOffset)
         return S_OK;
     }
 
-    return E_FAIL;
-
     LEAVE_PROTECTED_BLOCK
 }
 
@@ -810,8 +808,6 @@ STDMETHODIMP CAccTextBase::removeSelection(long selectionIndex)
         GetXInterface()->setSelection(0, 0);
         return S_OK;
     }
-
-    return E_FAIL;
 
     LEAVE_PROTECTED_BLOCK
 }
