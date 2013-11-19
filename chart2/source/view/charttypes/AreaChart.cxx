@@ -688,7 +688,7 @@ void AreaChart::createShapes()
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
 
-    std::vector<std::map< sal_Int32, double >> aLogicYSumMapByX(nEndIndex);//one for each different nAttachedAxisIndex
+    std::vector<std::map< sal_Int32, double > > aLogicYSumMapByX(nEndIndex);//one for each different nAttachedAxisIndex
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
         ::std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
