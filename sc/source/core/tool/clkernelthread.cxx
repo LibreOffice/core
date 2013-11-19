@@ -9,7 +9,7 @@
 
 #include <sal/log.hxx>
 
-#include "formulagroupinterpreter.hxx"
+#include "formulagroup.hxx"
 #include "grouptokenconverter.hxx"
 
 #include "clkernelthread.hxx"
