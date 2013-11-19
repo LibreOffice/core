@@ -165,7 +165,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             OUString oArg;
             if ( !InterpretCommandLineParameter( aArg, oArg ))
             {
-                if ( aArg.toChar() == '-' )
+                if ( aArg.startsWith("-") )
                 {
                     // handle this argument as an option
                     if ( aArg.equalsIgnoreAsciiCase("-n"))
@@ -296,7 +296,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         !oArg.equalsIgnoreAsciiCase("valgrind") &&
                     // for X Session Management, handled in
                     // vcl/unx/generic/app/sm.cxx:
-                        !oArg.match("session=") &&
+                        !oArg.startsWith("session=") &&
 #endif
                     //ignore additional legacy options that don't do anything anymore
                         !oArg.equalsIgnoreAsciiCase("nocrashreport") &&
@@ -388,11 +388,11 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUString& oArg )
 {
     bool bDeprecated = false;
-    if (aArg.matchIgnoreAsciiCase("--"))
+    if (aArg.startsWith("--"))
     {
         oArg = OUString(aArg.getStr()+2, aArg.getLength()-2);
     }
-    else if (aArg.toChar() == '-')
+    else if (aArg.startsWith("-"))
     {
         if ( aArg.getLength() > 2 ) // -h, -o, -n, -? are still valid
             bDeprecated = true;
@@ -491,7 +491,7 @@ bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUStr
     {
         m_version = true;
     }
-    else if ( oArg.matchIgnoreAsciiCase("splash-pipe=") )
+    else if ( oArg.startsWithIgnoreAsciiCase("splash-pipe=") )
     {
         m_splashpipe = true;
     }
@@ -501,7 +501,7 @@ bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUStr
        the only platform dependent parameter. Should more appear
        we should find a better solution
     */
-    else if ( aArg.match("-psn") )
+    else if ( aArg.startsWith("-psn") )
     {
         return true;
     }
@@ -522,23 +522,23 @@ bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUStr
         return true;
     }
 #endif
-    else if ( oArg.matchIgnoreAsciiCase("infilter="))
+    else if ( oArg.startsWithIgnoreAsciiCase("infilter="))
     {
         m_infilter.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")));
     }
-    else if ( oArg.matchIgnoreAsciiCase("accept="))
+    else if ( oArg.startsWithIgnoreAsciiCase("accept="))
     {
         m_accept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("accept=")));
     }
-    else if ( oArg.matchIgnoreAsciiCase("unaccept="))
+    else if ( oArg.startsWithIgnoreAsciiCase("unaccept="))
     {
         m_unaccept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")));
     }
-    else if ( oArg.matchIgnoreAsciiCase("language="))
+    else if ( oArg.startsWithIgnoreAsciiCase("language="))
     {
         m_language = oArg.copy(RTL_CONSTASCII_LENGTH("language="));
     }
-    else if ( oArg.matchIgnoreAsciiCase("pidfile="))
+    else if ( oArg.startsWithIgnoreAsciiCase("pidfile="))
     {
         m_pidfile = oArg.copy(RTL_CONSTASCII_LENGTH("pidfile="));
     }
