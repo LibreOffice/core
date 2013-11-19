@@ -142,11 +142,11 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
     if (( m_eStyle == STYLE_DROPDOWNBUTTON ) ||
         ( m_eStyle == STYLE_TOGGLE_DROPDOWNBUTTON ))
     {
-        if ( rControlCommand.Command.equalsAsciiL( "SetList", 7 ))
+        if ( rControlCommand.Command.startsWith( "SetList" ))
         {
             for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
             {
-                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
+                if ( rControlCommand.Arguments[i].Name.startsWith( "List" ))
                 {
                     Sequence< OUString > aList;
                     m_aDropdownMenuList.clear();
@@ -167,11 +167,11 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                 }
             }
         }
-        else if ( rControlCommand.Command.equalsAsciiL( "CheckItemPos", 12 ))
+        else if ( rControlCommand.Command.startsWith( "CheckItemPos" ))
         {
             for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
             {
-                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+                if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
                 {
                     sal_Int32 nPos( -1 );
 
@@ -194,12 +194,12 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                 }
             }
         }
-        else if ( rControlCommand.Command.equalsAsciiL( "AddEntry", 8 ))
+        else if ( rControlCommand.Command.startsWith( "AddEntry" ))
         {
             OUString   aText;
             for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
             {
-                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+                if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
                 {
                     if ( rControlCommand.Arguments[i].Value >>= aText )
                         m_aDropdownMenuList.push_back( aText );
@@ -207,14 +207,14 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                 }
             }
         }
-        else if ( rControlCommand.Command.equalsAsciiL( "InsertEntry", 11 ))
+        else if ( rControlCommand.Command.startsWith( "InsertEntry"))
         {
             sal_Int32      nPos( COMBOBOX_APPEND );
             sal_Int32      nSize = sal_Int32( m_aDropdownMenuList.size() );
             OUString  aText;
             for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
             {
-                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+                if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
                 {
                     sal_Int32 nTmpPos = 0;
                     if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
@@ -223,7 +223,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                             nPos = nTmpPos;
                     }
                 }
-                else if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+                else if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
                     rControlCommand.Arguments[i].Value >>= aText;
             }
 
@@ -231,11 +231,11 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
             aIter += nPos;
             m_aDropdownMenuList.insert( aIter, aText );
         }
-        else if ( rControlCommand.Command.equalsAsciiL( "RemoveEntryPos", 14 ))
+        else if ( rControlCommand.Command.startsWith( "RemoveEntryPos" ))
         {
             for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
             {
-                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+                if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
                 {
                     sal_Int32 nPos( -1 );
                     if ( rControlCommand.Arguments[i].Value >>= nPos )
@@ -249,11 +249,11 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                 }
             }
         }
-        else if ( rControlCommand.Command.equalsAsciiL( "RemoveEntryText", 15 ))
+        else if ( rControlCommand.Command.startsWith( "RemoveEntryText" ))
         {
             for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
             {
-                if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+                if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
                 {
                     OUString aText;
                     if ( rControlCommand.Arguments[i].Value >>= aText )

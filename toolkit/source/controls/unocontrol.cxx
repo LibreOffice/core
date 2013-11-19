@@ -269,12 +269,12 @@ void UnoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal
         {
             // We now support a mapping for language dependent properties. This is the
             // central method to implement it.
-            if (( rPropName.equalsAsciiL( "Text",            4 )) ||
-                ( rPropName.equalsAsciiL( "Label",           5 )) ||
-                ( rPropName.equalsAsciiL( "Title",           5 )) ||
-                ( rPropName.equalsAsciiL( "HelpText",        8 )) ||
-                ( rPropName.equalsAsciiL( "CurrencySymbol", 14 )) ||
-                ( rPropName.equalsAsciiL( "StringItemList", 14 )) )
+            if (( rPropName.startsWith( "Text"           )) ||
+                ( rPropName.startsWith( "Label"          )) ||
+                ( rPropName.startsWith( "Title"          )) ||
+                ( rPropName.startsWith( "HelpText"       )) ||
+                ( rPropName.startsWith( "CurrencySymbol" )) ||
+                ( rPropName.startsWith( "StringItemList" )) )
             {
                 OUString aValue;
                 uno::Sequence< OUString > aSeqValue;
@@ -505,7 +505,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 
             // Detect changes on our resource resolver which invalidates
             // automatically some language dependent properties.
-            if ( pEvents->PropertyName.equalsAsciiL( "ResourceResolver", 16 ))
+            if ( pEvents->PropertyName.startsWith( "ResourceResolver" ))
             {
                 Reference< resource::XStringResourceResolver > xStrResolver;
                 if ( pEvents->NewValue >>= xStrResolver )

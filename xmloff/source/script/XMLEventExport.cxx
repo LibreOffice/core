@@ -242,7 +242,7 @@ void XMLEventExport::ExportEvent(
             }
             else
             {
-                if (! sType.equalsAsciiL("None", sizeof("None")-1))
+                if (! sType.startsWith("None"))
                 {
                     OSL_FAIL("unknown event type returned by API");
                     // unknown type -> error (ignore)

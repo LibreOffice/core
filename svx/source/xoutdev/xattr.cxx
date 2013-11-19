@@ -889,9 +889,9 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
             {
                 for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
                 {
-                    if ( aPropSeq[n].Name.equalsAsciiL( "Name", 4  ))
+                    if ( aPropSeq[n].Name.startsWith( "Name"  ))
                         aPropSeq[n].Value >>= aName;
-                    else if ( aPropSeq[n].Name.equalsAsciiL( "LineDash", 8 ))
+                    else if ( aPropSeq[n].Name.startsWith( "LineDash" ))
                     {
                         if ( aPropSeq[n].Value >>= aLineDash )
                             bLineDash = true;

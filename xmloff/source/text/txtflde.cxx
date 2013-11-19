@@ -2716,8 +2716,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
     sal_Int32 nLength = aValues.getLength();
     for (sal_Int32 i = 0; i < nLength; i++)
     {
-        if (aValues[i].Name.equalsAsciiL("BibiliographicType",
-                                         sizeof("BibiliographicType")-1))
+        if (aValues[i].Name.startsWith("BibiliographicType"))
         {
             sal_Int16 nTypeId = 0;
             aValues[i].Value >>= nTypeId;
@@ -3328,128 +3327,127 @@ enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
 {
     enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 
-    if (sName.equalsAsciiL("Identifier", sizeof("Identifier")-1))
+    if (sName.startsWith("Identifier"))
     {
         eName = XML_IDENTIFIER;
     }
-    else if (sName.equalsAsciiL("BibiliographicType",
-                                sizeof("BibiliographicType")-1))
+    else if (sName.startsWith("BibiliographicType"))
     {
         eName = XML_BIBLIOGRAPHY_TYPE;
     }
-    else if (sName.equalsAsciiL("Address", sizeof("Address")-1))
+    else if (sName.startsWith("Address"))
     {
         eName = XML_ADDRESS;
     }
-    else if (sName.equalsAsciiL("Annote", sizeof("Annote")-1))
+    else if (sName.startsWith("Annote"))
     {
         eName = XML_ANNOTE;
     }
-    else if (sName.equalsAsciiL("Author", sizeof("Author")-1))
+    else if (sName.startsWith("Author"))
     {
         eName = XML_AUTHOR;
     }
-    else if (sName.equalsAsciiL("Booktitle", sizeof("Booktitle")-1))
+    else if (sName.startsWith("Booktitle"))
     {
         eName = XML_BOOKTITLE;
     }
-    else if (sName.equalsAsciiL("Chapter", sizeof("Chapter")-1))
+    else if (sName.startsWith("Chapter"))
     {
         eName = XML_CHAPTER;
     }
-    else if (sName.equalsAsciiL("Edition", sizeof("Edition")-1))
+    else if (sName.startsWith("Edition"))
     {
         eName = XML_EDITION;
     }
-    else if (sName.equalsAsciiL("Editor", sizeof("Editor")-1))
+    else if (sName.startsWith("Editor"))
     {
         eName = XML_EDITOR;
     }
-    else if (sName.equalsAsciiL("Howpublished", sizeof("Howpublished")-1))
+    else if (sName.startsWith("Howpublished"))
     {
         eName = XML_HOWPUBLISHED;
     }
-    else if (sName.equalsAsciiL("Institution", sizeof("Institution")-1))
+    else if (sName.startsWith("Institution"))
     {
         eName = XML_INSTITUTION;
     }
-    else if (sName.equalsAsciiL("Journal", sizeof("Journal")-1))
+    else if (sName.startsWith("Journal"))
     {
         eName = XML_JOURNAL;
     }
-    else if (sName.equalsAsciiL("Month", sizeof("Month")-1))
+    else if (sName.startsWith("Month"))
     {
         eName = XML_MONTH;
     }
-    else if (sName.equalsAsciiL("Note", sizeof("Note")-1))
+    else if (sName.startsWith("Note"))
     {
         eName = XML_NOTE;
     }
-    else if (sName.equalsAsciiL("Number", sizeof("Number")-1))
+    else if (sName.startsWith("Number"))
     {
         eName = XML_NUMBER;
     }
-    else if (sName.equalsAsciiL("Organizations", sizeof("Organizations")-1))
+    else if (sName.startsWith("Organizations"))
     {
         eName = XML_ORGANIZATIONS;
     }
-    else if (sName.equalsAsciiL("Pages", sizeof("Pages")-1))
+    else if (sName.startsWith("Pages"))
     {
         eName = XML_PAGES;
     }
-    else if (sName.equalsAsciiL("Publisher", sizeof("Publisher")-1))
+    else if (sName.startsWith("Publisher"))
     {
         eName = XML_PUBLISHER;
     }
-    else if (sName.equalsAsciiL("School", sizeof("School")-1))
+    else if (sName.startsWith("School"))
     {
         eName = XML_SCHOOL;
     }
-    else if (sName.equalsAsciiL("Series", sizeof("Series")-1))
+    else if (sName.startsWith("Series"))
     {
         eName = XML_SERIES;
     }
-    else if (sName.equalsAsciiL("Title", sizeof("Title")-1))
+    else if (sName.startsWith("Title"))
     {
         eName = XML_TITLE;
     }
-    else if (sName.equalsAsciiL("Report_Type", sizeof("Report_Type")-1))
+    else if (sName.startsWith("Report_Type"))
     {
         eName = XML_REPORT_TYPE;
     }
-    else if (sName.equalsAsciiL("Volume", sizeof("Volume")-1))
+    else if (sName.startsWith("Volume"))
     {
         eName = XML_VOLUME;
     }
-    else if (sName.equalsAsciiL("Year", sizeof("Year")-1))
+    else if (sName.startsWith("Year"))
     {
         eName = XML_YEAR;
     }
-    else if (sName.equalsAsciiL("URL", sizeof("URL")-1))
+    else if (sName.startsWith("URL"))
     {
         eName = XML_URL;
     }
-    else if (sName.equalsAsciiL("Custom1", sizeof("Custom1")-1))
+    else if (sName.startsWith("Custom1"))
     {
         eName = XML_CUSTOM1;
     }
-    else if (sName.equalsAsciiL("Custom2", sizeof("Custom2")-1))
+    else if (sName.startsWith("Custom2"))
     {
         eName = XML_CUSTOM2;
     }
-    else if (sName.equalsAsciiL("Custom3", sizeof("Custom3")-1))
+    else if (sName.startsWith("Custom3"))
     {
         eName = XML_CUSTOM3;
     }
-    else if (sName.equalsAsciiL("Custom4", sizeof("Custom4")-1))
+    else if (sName.startsWith("Custom4"))
     {
         eName = XML_CUSTOM4;
     }
-    else if (sName.equalsAsciiL("Custom5", sizeof("Custom5")-1))
+    else if (sName.startsWith("Custom5"))
     {
         eName = XML_CUSTOM5;
     }
-    else if (sName.equalsAsciiL("ISBN", sizeof("ISBN")-1))
+    else if (sName.startsWith("ISBN"))
     {
         eName = XML_ISBN;
     }

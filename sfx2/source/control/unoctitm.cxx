@@ -602,8 +602,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
     if (
         pDispatch &&
         (
-         (aURL.Protocol.equalsAsciiL( ".uno:", 5 ) && aURL.Path == aDispatchURL.Path) ||
-         (aURL.Protocol.equalsAsciiL( "slot:", 5 ) && aURL.Path.toInt32() == GetId())
+         (aURL.Protocol.startsWith( ".uno:" ) && aURL.Path == aDispatchURL.Path) ||
+         (aURL.Protocol.startsWith( "slot:" ) && aURL.Path.toInt32() == GetId())
         )
        )
     {
@@ -629,17 +629,17 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         for( sal_Int32 n=0; n<nCount; n++ )
         {
             const ::com::sun::star::beans::PropertyValue& rProp = aArgs[n];
-            if( rProp.Name.equalsAsciiL("SynchronMode",12))
+            if( rProp.Name.startsWith("SynchronMode"))
             {
                 if( rProp.Value >>=bTemp )
                     nCall = bTemp ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON;
             }
-            else if( rProp.Name.equalsAsciiL("Bookmark",8))
+            else if( rProp.Name.startsWith("Bookmark"))
             {
                 nMarkArg = n;
                 aAddArgs.push_back( aArgs[n] );
             }
-            else if( rProp.Name.equalsAsciiL("KeyModifier",11))
+            else if( rProp.Name.startsWith("KeyModifier"))
                 rProp.Value >>= nModifier;
             else
                 aAddArgs.push_back( aArgs[n] );

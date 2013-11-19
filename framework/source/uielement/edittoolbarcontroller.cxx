@@ -218,11 +218,11 @@ long EditToolbarController::PreNotify( NotifyEvent& rNEvt )
 
 void EditToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    if ( rControlCommand.Command.equalsAsciiL( "SetText", 7 ))
+    if ( rControlCommand.Command.startsWith( "SetText" ))
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
             {
                 OUString aText;
                 rControlCommand.Arguments[i].Value >>= aText;

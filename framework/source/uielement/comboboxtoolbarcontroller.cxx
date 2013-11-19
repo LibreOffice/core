@@ -263,11 +263,11 @@ long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
 
 void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    if ( rControlCommand.Command.equalsAsciiL( "SetText", 7 ))
+    if ( rControlCommand.Command.startsWith( "SetText" ))
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Text"))
             {
                 OUString aText;
                 rControlCommand.Arguments[i].Value >>= aText;
@@ -279,11 +279,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.equalsAsciiL( "SetList", 7 ))
+    else if ( rControlCommand.Command.startsWith( "SetList" ))
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "List" ))
             {
                 Sequence< OUString > aList;
                 m_pComboBox->Clear();
@@ -304,13 +304,13 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.equalsAsciiL( "AddEntry", 8 ))
+    else if ( rControlCommand.Command.startsWith( "AddEntry" ))
     {
         sal_uInt16      nPos( COMBOBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
             {
                 if ( rControlCommand.Arguments[i].Value >>= aText )
                     m_pComboBox->InsertEntry( aText, nPos );
@@ -318,13 +318,13 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.equalsAsciiL( "InsertEntry", 11 ))
+    else if ( rControlCommand.Command.startsWith( "InsertEntry" ))
     {
         sal_uInt16      nPos( COMBOBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
             {
                 sal_Int32 nTmpPos = 0;
                 if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
@@ -334,17 +334,17 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                         nPos = sal_uInt16( nTmpPos );
                 }
             }
-            else if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            else if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
                 rControlCommand.Arguments[i].Value >>= aText;
         }
 
         m_pComboBox->InsertEntry( aText, nPos );
     }
-    else if ( rControlCommand.Command.equalsAsciiL( "RemoveEntryPos", 14 ))
+    else if ( rControlCommand.Command.startsWith( "RemoveEntryPos" ))
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
             {
                 sal_Int32 nPos( -1 );
                 if ( rControlCommand.Arguments[i].Value >>= nPos )
@@ -356,11 +356,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.equalsAsciiL( "RemoveEntryText", 15 ))
+    else if ( rControlCommand.Command.startsWith( "RemoveEntryText" ))
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Text"))
             {
                 OUString aText;
                 if ( rControlCommand.Arguments[i].Value >>= aText )
@@ -369,11 +369,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.equalsAsciiL( "SetDropDownLines", 16 ))
+    else if ( rControlCommand.Command.startsWith( "SetDropDownLines" ))
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Lines", 5 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Lines" ))
             {
                 sal_Int32 nValue( 5 );
                 rControlCommand.Arguments[i].Value >>= nValue;
@@ -382,11 +382,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.equalsAsciiL( "SetBackgroundColor", 18 ))
+    else if ( rControlCommand.Command.startsWith( "SetBackgroundColor" ))
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Color", 5 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Color" ))
             {
                 com::sun::star::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )
@@ -398,11 +398,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.equalsAsciiL( "SetTextColor", 12 ))
+    else if ( rControlCommand.Command.startsWith( "SetTextColor" ))
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Color", 5 ))
+            if ( rControlCommand.Arguments[i].Name.startsWith( "Color" ))
             {
                 com::sun::star::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )

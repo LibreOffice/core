@@ -193,8 +193,7 @@ void XMLImageMapExport::ExportMapEntry(
 
             mrExport.AddAttribute(
                 XML_NAMESPACE_XLINK, XML_SHOW,
-                sTargt.equalsAsciiL( "_blank", sizeof("_blank")-1 )
-                                        ? XML_NEW : XML_REPLACE );
+                sTargt.startsWith( "_blank" ) ? XML_NEW : XML_REPLACE );
         }
 
         // name

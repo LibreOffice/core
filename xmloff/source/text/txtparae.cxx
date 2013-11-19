@@ -3305,8 +3305,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
             GetExport().AddAttribute( XML_NAMESPACE_OFFICE,
                                       XML_TARGET_FRAME_NAME, sTargetFrame );
             enum XMLTokenEnum eTok =
-                sTargetFrame.equalsAsciiL( "_blank", sizeof("_blank")-1 )
-                    ? XML_NEW : XML_REPLACE;
+                sTargetFrame.startsWith( "_blank" ) ? XML_NEW : XML_REPLACE;
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, eTok );
         }
 

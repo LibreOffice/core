@@ -2761,7 +2761,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 OUString aReplace(pAuto->GetStartDoubleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkStart();
-                if (!aReplace.equalsAsciiL("\"", 1))
+                if (!aReplace.startsWith("\""))
                     aString = aString.replaceAll(
                         aReplace,
                         OUString("\""));
@@ -2769,7 +2769,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 aReplace = OUString(pAuto->GetEndDoubleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkEnd();
-                if (!aReplace.equalsAsciiL("\"", 1))
+                if (!aReplace.startsWith("\""))
                     aString = aString.replaceAll(
                         aReplace,
                         OUString("\""));
@@ -2777,7 +2777,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 aReplace = OUString(pAuto->GetStartSingleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getQuotationMarkStart();
-                if (!aReplace.equalsAsciiL("'", 1))
+                if (!aReplace.startsWith("'"))
                     aString = aString.replaceAll(
                         aReplace,
                         OUString("'"));
@@ -2785,7 +2785,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 aReplace = OUString(pAuto->GetEndSingleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getQuotationMarkEnd();
-                if (!aReplace.equalsAsciiL("'", 1))
+                if (!aReplace.startsWith("'"))
                     aString = aString.replaceAll(
                         aReplace,
                         OUString("'"));

@@ -566,7 +566,7 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
 
             if( xElement.is() )
             {
-                if( xElement->getNodeName().equalsAsciiL("feed", 4) )
+                if( xElement->getNodeName().startsWith("feed") )
                 {
                     OUString aXPathExpression;
 
