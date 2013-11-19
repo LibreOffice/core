@@ -228,7 +228,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
 
         bool bKhrFp64Flag = false;
         bool bAmdFp64Flag = false;
-        const char* buildOption;
+        const char* buildOption = NULL;
         std::string tmpStr("-Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16 -DINPUTSIZE=");
         tmpStr.append(dynamic_cast<std::ostringstream&>(std::ostringstream() << std::dec << INPUTSIZE).str());
 
@@ -495,7 +495,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
         char* overrideDeviceStr = getenv("SC_OPENCL_DEVICE_OVERRIDE");
         if (NULL != overrideDeviceStr)
         {
-            unsigned int overrideDeviceIdx = matchDevice(profile, overrideDeviceStr);
+            int overrideDeviceIdx = matchDevice(profile, overrideDeviceStr);
             if (-1 != overrideDeviceIdx)
             {
                 LOG_PRINTF("[DS] Overriding Device Selection (SC_OPENCL_DEVICE_OVERRIDE=" << overrideDeviceStr << ").");

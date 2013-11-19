@@ -59,7 +59,7 @@ typedef struct {
 
 // deallocate memory used by score
 typedef ds_status(* ds_score_release)(void* score);
-static ds_status releaseDSProfile(ds_profile* profile, ds_score_release sr)
+inline ds_status releaseDSProfile(ds_profile* profile, ds_score_release sr)
 {
     ds_status status = DS_SUCCESS;
     if (profile != NULL)
@@ -82,7 +82,7 @@ static ds_status releaseDSProfile(ds_profile* profile, ds_score_release sr)
 }
 
 
-static ds_status initDSProfile(ds_profile** p, const char* version)
+inline ds_status initDSProfile(ds_profile** p, const char* version)
 {
     int numDevices;
     cl_uint numPlatforms;
@@ -197,8 +197,8 @@ typedef enum {
     , DS_EVALUATE_NEW_ONLY
 } ds_evaluation_type;
 
-static ds_status profileDevices(ds_profile* profile, const ds_evaluation_type type
-                                , ds_perf_evaluator evaluator, void* evaluatorData, unsigned int* numUpdates)
+inline ds_status profileDevices(ds_profile* profile, const ds_evaluation_type type,
+                                ds_perf_evaluator evaluator, void* evaluatorData, unsigned int* numUpdates)
 {
     ds_status status = DS_SUCCESS;
     unsigned int i;
@@ -259,7 +259,7 @@ static ds_status profileDevices(ds_profile* profile, const ds_evaluation_type ty
 
 
 typedef ds_status(* ds_score_serializer)(ds_device* device, void** serializedScore, unsigned int* serializedScoreSize);
-static ds_status writeProfileToFile(ds_profile* profile, ds_score_serializer serializer, const char* file)
+inline ds_status writeProfileToFile(ds_profile* profile, ds_score_serializer serializer, const char* file)
 {
     ds_status status = DS_SUCCESS;
     FILE* profileFile = NULL;
@@ -338,7 +338,7 @@ static ds_status writeProfileToFile(ds_profile* profile, ds_score_serializer ser
 }
 
 
-static ds_status readProFile(const char* fileName, char** content, size_t* contentSize)
+inline ds_status readProFile(const char* fileName, char** content, size_t* contentSize)
 {
     FILE* input = NULL;
     size_t size = 0;
@@ -370,7 +370,7 @@ static ds_status readProFile(const char* fileName, char** content, size_t* conte
 }
 
 
-static const char* findString(const char* contentStart, const char* contentEnd, const char* string)
+inline const char* findString(const char* contentStart, const char* contentEnd, const char* string)
 {
     size_t stringLength;
     const char* currentPosition;
@@ -397,7 +397,7 @@ static const char* findString(const char* contentStart, const char* contentEnd, 
 
 
 typedef ds_status(* ds_score_deserializer)(ds_device* device, const unsigned char* serializedScore, unsigned int serializedScoreSize);
-static ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer deserializer, const char* file)
+inline ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer deserializer, const char* file)
 {
 
     ds_status status = DS_SUCCESS;
@@ -436,7 +436,7 @@ static ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer 
         }
 
         versionStringLength = strlen(profile->version);
-        if (versionStringLength != (dataEnd - dataStart)
+        if (versionStringLength != static_cast<size_t>(dataEnd - dataStart)
             || strncmp(profile->version, dataStart, versionStringLength) != 0)
         {
             // version mismatch
@@ -538,8 +538,8 @@ static ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer 
 
                         actualDeviceNameLength = strlen(profile->devices[i].oclDeviceName);
                         driverVersionLength = strlen(profile->devices[i].oclDriverVersion);
-                        if (actualDeviceNameLength == (deviceNameEnd - deviceNameStart)
-                            && driverVersionLength == (deviceDriverEnd - deviceDriverStart)
+                        if (actualDeviceNameLength == static_cast<size_t>(deviceNameEnd - deviceNameStart)
+                            && driverVersionLength == static_cast<size_t>(deviceDriverEnd - deviceDriverStart)
                             && strncmp(profile->devices[i].oclDeviceName, deviceNameStart, actualDeviceNameLength) == 0
                             && strncmp(profile->devices[i].oclDriverVersion, deviceDriverStart, driverVersionLength) == 0)
                         {
@@ -594,7 +594,7 @@ cleanup:
     return status;
 }
 
-static ds_status getNumDeviceWithEmptyScore(ds_profile* profile, unsigned int* num)
+inline ds_status getNumDeviceWithEmptyScore(ds_profile* profile, unsigned int* num)
 {
     unsigned int i;
     if (profile == NULL || num == NULL) return DS_MEMORY_ERROR;
@@ -603,7 +603,7 @@ static ds_status getNumDeviceWithEmptyScore(ds_profile* profile, unsigned int* n
     {
         if (profile->devices[i].score == NULL)
         {
-            *num++;
+            (*num)++;
         }
     }
     return DS_SUCCESS;
