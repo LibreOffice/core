@@ -3615,21 +3615,27 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 // Are we clicking on a field?
                 if (rSh.GetContentAtPos(aDocPos, aFieldAtPos))
                 {
-                    rSh.SetCursor(&aDocPos, bOnlyText);
-                    // Unfortunately the cursor may be on field
-                    // position or on position after field depending on which
-                    // half of the field was clicked on.
-                    SwTxtAttr const*const pTxtFld(aFieldAtPos.pFndTxtAttr);
-                    if (rSh.GetCurrentShellCursor().GetPoint()->nContent
-                            .GetIndex() != *pTxtFld->GetStart())
+                    bool bEditableField = (aFieldAtPos.pFndTxtAttr != NULL
+                        && aFieldAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD);
+
+                    if (!bEditableField)
                     {
-                        assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                .GetIndex() == (*pTxtFld->GetStart() + 1));
-                        rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
+                        rSh.SetCursor(&aDocPos, bOnlyText);
+                        // Unfortunately the cursor may be on field
+                        // position or on position after field depending on which
+                        // half of the field was clicked on.
+                        SwTxtAttr const*const pTxtFld(aFieldAtPos.pFndTxtAttr);
+                        if (rSh.GetCurrentShellCursor().GetPoint()->nContent
+                                .GetIndex() != *pTxtFld->GetStart())
+                        {
+                            assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
+                                    .GetIndex() == (*pTxtFld->GetStart() + 1));
+                            rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
+                        }
+                        // don't go into the !bOverSelect block below - it moves
+                        // the cursor
+                        break;
                     }
-                    // don't go into the !bOverSelect block below - it moves
-                    // the cursor
-                    break;
                 }
 
                 sal_Bool bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = sal_False;
