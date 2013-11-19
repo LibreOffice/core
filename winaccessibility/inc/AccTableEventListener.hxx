@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-using namespace ::com::sun::star::uno;
 
 /**
  * AccTableEventListener is inherited from AccDescendantManagerEventListener. It handles
@@ -42,9 +41,10 @@ public:
     //AccessibleEventListener
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
     //for active descendant changed event
-    virtual void SAL_CALL handleActiveDescendantChangedEvent(Any oldValue, Any newValue);
+    virtual void SAL_CALL handleActiveDescendantChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue);
 
-    void SAL_CALL handleTableModelChangeEvent(Any newValue);
+    void SAL_CALL handleTableModelChangeEvent(css::uno::Any newValue);
 
 };
 

@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-using namespace ::com::sun::star::uno;
 
 /**
  * AccTextComponentEventListener is inherited from AccComponentEventListener. It handles the evnets

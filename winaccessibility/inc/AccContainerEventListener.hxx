@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-using namespace ::com::sun::star::uno;
 
 /**
  * AccContainerEventListener is inherited from AccEventListener. It handles the evnets
@@ -46,17 +45,21 @@ public:
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for child changed event
-    virtual void SAL_CALL handleChildChangedEvent(Any oldValue, Any newValue);
+    virtual void SAL_CALL handleChildChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue);
 
     //for selection changed event
-    virtual void SAL_CALL handleSelectionChangedEvent(const Any &oldValue, const Any &newValue);
+    virtual void SAL_CALL handleSelectionChangedEvent(
+            const css::uno::Any &oldValue, const css::uno::Any &newValue);
 
     //for all children changed event
     virtual void SAL_CALL handleAllChildrenChangedEvent();
 
     //for text changed event
-    virtual void SAL_CALL handleTextChangedEvent(Any oldValue, Any newValue);
-    virtual void SAL_CALL handleStateChangedEvent(Any oldValue, Any newValue);
+    virtual void SAL_CALL handleTextChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue);
+    virtual void SAL_CALL handleStateChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue);
 
     //for visible data changed event
     virtual void SAL_CALL handleVisibleDataChangedEvent();
@@ -65,31 +68,39 @@ public:
     virtual void SAL_CALL handleBoundrectChangedEvent();
 
     //for value changed event
-    virtual void SAL_CALL handleValueChangedEvent(Any oldValue, Any newValue);
+    virtual void SAL_CALL handleValueChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue);
 
     //state changed
     virtual void SAL_CALL setComponentState(short state, bool enable);
     virtual void SAL_CALL fireStatePropertyChange(short state, bool set
                                                      );
     virtual void SAL_CALL fireStateFocusdChange(bool enable);
-    virtual bool SAL_CALL IsEditable(Reference<com::sun::star::accessibility::XAccessibleContext> xContext);
+    virtual bool SAL_CALL IsEditable(
+        css::uno::Reference<css::accessibility::XAccessibleContext> xContext);
 
     // update all children's state
     void SAL_CALL UpdateAllChildrenState( com::sun::star::accessibility::XAccessible* pXAccessible );
 
-    bool NotifyChildEvent(short nWinEvent,const Any &Value);
+    bool NotifyChildEvent(short nWinEvent, const css::uno::Any &Value);
 
-    virtual void handleSelectionChangedAddEvent(const Any &oldValue, const Any &newValue);
-    virtual void handleSelectionChangedRemoveEvent(const Any &oldValue, const Any &newValue);
-    virtual void handleSelectionChangedWithinEvent(const Any &oldValue, const Any &newValue);
+    virtual void handleSelectionChangedAddEvent(
+            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+    virtual void handleSelectionChangedRemoveEvent(
+            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+    virtual void handleSelectionChangedWithinEvent(
+            const css::uno::Any &oldValue, const css::uno::Any &newValue);
 
-    virtual void handlePageChangedEvent (const Any &oldValue, const Any &newValue);
+    virtual void handlePageChangedEvent(
+            const css::uno::Any &oldValue, const css::uno::Any &newValue);
 
-    virtual void handleSectionChangedEvent (const Any &oldValue, const Any &newValue);
-    virtual void handleColumnChangedEvent (const Any &oldValue, const Any &newValue);
+    virtual void handleSectionChangedEvent(
+            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+    virtual void handleColumnChangedEvent(
+            const css::uno::Any &oldValue, const css::uno::Any &newValue);
     //IAccessibility2 Implementation 2009-----
     //for name changed event
-    virtual void SAL_CALL handleNameChangedEvent(Any name);
+    virtual void SAL_CALL handleNameChangedEvent(css::uno::Any name);
     //-----IAccessibility2 Implementation 2009
 };
 

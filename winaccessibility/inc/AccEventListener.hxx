@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 
 class AccObjectManagerAgent;
-using namespace ::com::sun::star::uno;
+
 /**
  * AccEventListener is the general event listener for all controls. It defines the
  * procedure of all the event handling and provides the basic support for some simple
@@ -54,13 +54,14 @@ public:
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for name changed event
-    virtual void SAL_CALL handleNameChangedEvent(Any name);
+    virtual void SAL_CALL handleNameChangedEvent(css::uno::Any name);
 
     //for description changed event
-    virtual void SAL_CALL handleDescriptionChangedEvent(Any desc);
+    virtual void SAL_CALL handleDescriptionChangedEvent(css::uno::Any desc);
 
     //for state changed event
-    virtual void SAL_CALL handleStateChangedEvent (Any oldValue, Any newValue);
+    virtual void SAL_CALL handleStateChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue);
     virtual void SAL_CALL setComponentState(short state, bool enable);
     virtual void SAL_CALL fireStatePropertyChange(short state, bool set
                                                      );

@@ -26,12 +26,6 @@
 #include "UAccCOM2.h"
 #include <AccObjectManagerAgent.hxx>
 
-using namespace com::sun::star::accessibility;
-using namespace com::sun::star::uno;
-
-#include <vector>
-#include <algorithm>
-using namespace std;
 
 /**
  * CEnumVariant implements IEnumVARIANT interface.
@@ -95,8 +89,9 @@ private:
 
     long m_lCurrent;
     long m_lLBound;
-    XAccessible* pUNOInterface;                     // XAccessible.
-    Reference<XAccessibleSelection> m_pXAccessibleSelection;    // Selection.
+    css::accessibility::XAccessible* pUNOInterface;
+    css::uno::Reference<css::accessibility::XAccessibleSelection>
+        m_pXAccessibleSelection;
 };
 
 #endif //__ENUMVARIANT_H_

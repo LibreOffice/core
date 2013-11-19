@@ -45,6 +45,8 @@
 
 #include "act.hxx"
 
+using namespace com::sun::star::uno;
+using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
 // IA2 states mapping, and name

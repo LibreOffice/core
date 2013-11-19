@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-using namespace ::com::sun::star::uno;
 
 /**
  * AccFrameEventListener is inherited from AccEventListener. It handles the evnets
@@ -43,7 +42,8 @@ public:
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     //for child changed event
-    virtual void SAL_CALL handleChildChangedEvent(Any oldValue, Any newValue);
+    virtual void SAL_CALL handleChildChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue);
 
     //for visible data changed event
     virtual void SAL_CALL handleVisibleDataChangedEvent();

@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-using namespace ::com::sun::star::uno;
 
 /**
  * AccObjectContainerEventListener is inherited from AccContainerEventListener. It handles the evnets
@@ -40,7 +39,8 @@ public:
     virtual ~AccObjectContainerEventListener();
 
     //overwrite handleStateChangedEvent()
-    virtual void SAL_CALL handleStateChangedEvent (Any oldValue, Any newValue);
+    virtual void SAL_CALL handleStateChangedEvent(
+            css::uno::Any oldValue, css::uno::Any newValue);
     //for visible data changed event, for shapes, the visiabledatachanged should be mapped to LOCATION_CHANGED
     virtual void SAL_CALL handleVisibleDataChangedEvent();
 };

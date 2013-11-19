@@ -20,11 +20,6 @@
 #ifndef __ACCCOMMON_H_
 #define __ACCCOMMON_H_
 
-
-//using namespace com::sun::star::accessibility;
-//using namespace com::sun::star::uno;
-
-
 //for MAccessible.cxx
 struct ltComp
 {

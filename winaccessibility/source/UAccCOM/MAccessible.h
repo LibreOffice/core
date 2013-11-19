@@ -22,7 +22,6 @@
 
 #include <Windows.h>
 #include "resource.h"       // main symbols
-#include <vector>
 #include <map>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -52,7 +51,6 @@
 #define     OBJID_QUERYCLASSNAMEIDX ((LONG)0xFFFFFFF4)
 #define     OBJID_NATIVEOM      ((LONG)0xFFFFFFF0)
 
-using namespace rtl;
 /**
  *This class implements IMAccessible interface, which inherits from IAccessible2, and
  *in turn inherits from IAccessible. So its methods include the methods defined only in
@@ -66,7 +64,7 @@ class ATL_NO_VTABLE CMAccessible :
             public IServiceProvider,
             public IAccessibleApplication
 {
-    typedef map< const GUID, CComPtr<IUnknown> ,ltComp > XGUIDToComObjHash;
+    typedef ::std::map<const GUID, CComPtr<IUnknown>, ltComp> XGUIDToComObjHash;
 
     typedef HRESULT (WINAPI _UNO_AGGCREATORFUNC)(void*, REFIID, LPVOID*);
 
@@ -231,12 +229,12 @@ private:
     // specify if the XAccessible is invalid
     BOOL m_isDestroy;
 
-    XAccessible*  pUNOInterface;
-    Reference< XAccessible > pRef;
-    XAccessible*  pAchorUNOInterface;
-    XAccessibleAction*    m_pXAction;
-    XAccessibleContext*  pRContextInterface;
-    Reference<XAccessibleContext> pRContext;
+    css::accessibility::XAccessible * pUNOInterface;
+    css::uno::Reference<css::accessibility::XAccessible> pRef;
+    css::accessibility::XAccessible * pAchorUNOInterface;
+    css::accessibility::XAccessibleAction *  m_pXAction;
+    css::accessibility::XAccessibleContext * pRContextInterface;
+    css::uno::Reference<css::accessibility::XAccessibleContext> pRContext;
 
 private:
 
@@ -250,14 +248,18 @@ private:
     BOOL IsDecendantManage();//identify whether the current COM belongs to manage_decendant roles
 
     // the following private methods are used to implement accSelect method
-    HRESULT SelectChild(XAccessible* pItem);
-    HRESULT DeSelectChild(XAccessible* pItem);
-    HRESULT SelectMutipleChidren( XAccessible** pItem,int size );
-    HRESULT DeSelectMutipleChildren( XAccessible** pItem,int size );
-    XAccessibleContext* GetContextByXAcc( XAccessible* pXAcc );
-    Reference< XAccessibleSelection > GetSelection();
+    HRESULT SelectChild(css::accessibility::XAccessible* pItem);
+    HRESULT DeSelectChild(css::accessibility::XAccessible* pItem);
+    HRESULT SelectMutipleChidren(css::accessibility::XAccessible** pItem,
+                int size);
+    HRESULT DeSelectMutipleChildren(css::accessibility::XAccessible** pItem,
+                int size);
+    css::accessibility::XAccessibleContext* GetContextByXAcc(
+            css::accessibility::XAccessible* pXAcc);
+    css::uno::Reference<css::accessibility::XAccessibleSelection> GetSelection();
     // end accSelect implementation methods
-    BOOL GetXInterfaceFromXAccessible(XAccessible*, XInterface**, int);
+    BOOL GetXInterfaceFromXAccessible(css::accessibility::XAccessible*,
+            css::uno::XInterface**, int);
     HRESULT WINAPI SmartQI(void* pv, REFIID iid, void** ppvObject);
 
 public:
@@ -279,12 +281,15 @@ public:
         return ((CMAccessible*)pv)->SmartQI(pv,iid,ppvObject);
     }
 
-    static void get_OLECHARFromAny(Any& pAny, OLECHAR* pChar);
+    static void get_OLECHARFromAny(css::uno::Any& pAny, OLECHAR* pChar);
 
-    static void get_OLECHAR4Numbering(const Any& pAny, short numberingLevel, const OUString& numberingPrefix,OLECHAR* pChar);
+    static void get_OLECHAR4Numbering(const css::uno::Any& pAny,
+            short numberingLevel, const OUString& numberingPrefix,
+            OLECHAR* pChar);
 
     // Helper function for data conversion.
-    static void ConvertAnyToVariant(const ::com::sun::star::uno::Any &rAnyVal, VARIANT *pvData);
+    static void ConvertAnyToVariant(const css::uno::Any &rAnyVal,
+            VARIANT *pvData);
 };
 
 

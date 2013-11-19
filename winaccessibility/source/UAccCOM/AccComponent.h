@@ -32,8 +32,6 @@
 #include "UNOXWrapper.h"
 #include "AccComponentBase.h"
 
-using namespace com::sun::star::accessibility;
-using namespace com::sun::star::uno;
 
 /**
  * CAccComponent implements IAccessibleComponent interface.
