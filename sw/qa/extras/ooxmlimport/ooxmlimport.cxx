@@ -1517,6 +1517,8 @@ DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
 
     // Left margin was 0, instead of 114300 EMU's.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, "LeftMargin"));
+    // Wrap type was PARALLEL.
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xShape, "Surround"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")

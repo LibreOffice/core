@@ -1001,6 +1001,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
 
                         m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
                         m_pImpl->applyMargins(xShapeProps);
+                        xShapeProps->setPropertyValue("Surround", uno::makeAny(m_pImpl->nWrap));
                     }
                 }
             }
