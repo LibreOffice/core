@@ -675,7 +675,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             {
                 ScCaptionInitData& rInitData = *maNoteData.mxInitData;
 
-                maNoteData.mpCaption->bShuntSetText=true;
+                maNoteData.mpCaption->SetFreezeSetText(true);
 
                 // copy all items or set default items; reset shadow items
                 ScCaptionUtil::SetDefaultItems( *maNoteData.mpCaption, mrDoc );
@@ -702,7 +702,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                     aCreator.FitCaptionToRect();
                 }
 
-                maNoteData.mpCaption->bShuntSetText=false;
+                maNoteData.mpCaption->SetFreezeSetText(false);
                 if( rInitData.mxOutlinerObj.get() )
                     maNoteData.mpCaption->SetOutlinerParaObject( rInitData.mxOutlinerObj.release() );
                 else

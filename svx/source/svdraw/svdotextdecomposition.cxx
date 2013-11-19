@@ -911,7 +911,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
 
         rOutliner.SetPaperSize(aAnchorTextSize);
-        rOutliner.SetUpdateMode(!bShuntSetText);
+        rOutliner.SetUpdateMode(!IsFreezeSetText());
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
     }
     else
@@ -955,7 +955,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
 
         rOutliner.SetPaperSize(aNullSize);
-        rOutliner.SetUpdateMode(true);
+        rOutliner.SetUpdateMode(!IsFreezeSetText());
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
     }
 

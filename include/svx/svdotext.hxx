@@ -271,6 +271,9 @@ private:
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
 //  void ImpCheckItemSetChanges(const SfxItemSet& rAttr);
 
+    // Annotation : do not process SetText until process fully achieved (hack)
+    bool  bFreezeSetText=false;
+
 protected:
     bool ImpCanConvTextToCurve() const;
     SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr = sal_False) const;
@@ -414,9 +417,6 @@ public:
     SdrTextAniKind GetTextAniKind() const;
     SdrTextAniDirection GetTextAniDirection() const;
 
-    // Annotation : do not process SetText until process fully achieved (hack)
-    bool  bShuntSetText=false;
-
     virtual void SetPage(SdrPage* pNewPage);
     virtual void SetModel(SdrModel* pNewModel);
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
@@ -556,6 +556,10 @@ public:
     // Set single item at the local ItemSet. *Does not use* AllowItemChange(),
     // ItemChange(), PostItemChange() and ItemSetChanged() calls.
     void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
+
+    // Annotation : do not process SetText until process fully achieved (hack)
+    bool IsFreezeSetText() const;
+    void SetFreezeSetText(bool bFreeze);
 
 public:
     //////////////////////////////////////////////////////////////////////////////
