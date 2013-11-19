@@ -36,6 +36,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     {
         case XML_wsp:
             break;
+        case XML_cNvCnPr:
+            break;
         case XML_cNvSpPr:
             break;
         case XML_spPr:
