@@ -31,7 +31,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
+#include <prewin.h>
 #include <windows.h>
+#include <postwin.h>
 
 using namespace ::rtl; // for OUString
 using namespace ::com::sun::star; // for odk interfaces
