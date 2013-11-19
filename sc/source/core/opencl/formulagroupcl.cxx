@@ -470,11 +470,18 @@ public:
             ss << "    int loopOffset = l*512;\n";
             ss << "    if((loopOffset + lidx + offset + 256) < min( offset + windowSize, arrayLength))\n";
             ss << "        tmp = ";
-            ss << mpCodeGen->Gen2("fsum(A[loopOffset + lidx + offset], 0)",
-                "fsum(A[loopOffset + lidx + offset + 256], 0)");
+            ss << mpCodeGen->Gen2(
+                    std::string(
+                        "legalize(A[loopOffset + lidx + offset], ")+
+                    mpCodeGen->GetBottom() +")",
+                    std::string(
+                        "legalize(A[loopOffset + lidx + offset + 256], ")+
+                    mpCodeGen->GetBottom() +")"
+                    );
             ss << ";";
             ss << "    else if ((loopOffset + lidx + offset) < min(offset + windowSize, arrayLength))\n";
-            ss << "        tmp = fsum(A[loopOffset + lidx + offset], 0);\n";
+            ss << "        tmp = legalize(A[loopOffset + lidx + offset],";
+            ss << mpCodeGen->GetBottom() << ");\n";
             ss << "    shm_buf[lidx] = tmp;\n";
             ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
             ss << "    for (int i = 128; i >0; i/=2) {\n";
