@@ -167,7 +167,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 }
                 else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
                 {
-                    SAL_WARN("chart", "the given parameter is not allowed to contain an automatic symbol style");
+                    SAL_WARN("chart2", "the given parameter is not allowed to contain an automatic symbol style");
                 }
             }
         }
