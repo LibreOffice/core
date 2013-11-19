@@ -21,7 +21,7 @@
  * AccEditableText.cpp : Implementation of CUAccCOMApp and DLL registration.
  */
 #include "stdafx.h"
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 #include "AccEditableText.h"
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>

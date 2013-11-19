@@ -20,7 +20,7 @@
 #include "AccObjectManagerAgent.hxx"
 #include "AccObjectWinManager.hxx"
 
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;

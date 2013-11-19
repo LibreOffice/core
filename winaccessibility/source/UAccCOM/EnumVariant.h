@@ -23,7 +23,7 @@
 #include "resource.h"       // main symbols
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 #include <AccObjectManagerAgent.hxx>
 
 

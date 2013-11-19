@@ -18,7 +18,7 @@
  */
 
 #include "stdafx.h"
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 #include "AccRelation.h"
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>

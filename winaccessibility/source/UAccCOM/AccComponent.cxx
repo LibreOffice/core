@@ -21,7 +21,7 @@
  * AccComponent.cpp : Implementation of CUAccCOMApp and DLL registration.
  */
 #include "stdafx.h"
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 #include "AccComponent.h"
 
 /**

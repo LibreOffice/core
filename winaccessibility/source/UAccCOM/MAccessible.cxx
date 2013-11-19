@@ -18,7 +18,7 @@
  */
 
 #include "stdafx.h"
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 #include "MAccessible.h"
 
 #include <algorithm>

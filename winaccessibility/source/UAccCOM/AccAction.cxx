@@ -21,7 +21,7 @@
  * AccAction.cpp : Implementation of CAccAction
  */
 #include "stdafx.h"
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 #include "AccAction.h"
 
 using namespace com::sun::star::accessibility;

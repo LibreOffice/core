@@ -18,7 +18,7 @@
  */
 
 #include "stdafx.h"
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 #include "AccText.h"
 
 using namespace com::sun::star::accessibility;

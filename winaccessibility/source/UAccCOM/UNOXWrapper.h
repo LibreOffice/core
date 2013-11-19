@@ -24,7 +24,7 @@
 
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 
 /**
  * CUNOXWrapper implements IUNOXWrapper interface.

@@ -20,7 +20,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include <initguid.h>
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 
 #include "UAccCOM_i.c"
 #include "ia2_api_all_i.c"

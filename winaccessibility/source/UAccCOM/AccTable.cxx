@@ -21,7 +21,7 @@
  * AccTable.cpp : Implementation of CAccTable.
  */
 #include "stdafx.h"
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 #include "AccTable.h"
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "MAccessible.h"

@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/dllapi.h>
 #include "ResIDGenerator.hxx"
-#include "UAccCOM2.h"
+#include "UAccCOM.h"
 
 class ResIDGenerator;
 class AccObjectManagerAgent;

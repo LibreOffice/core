@@ -20,8 +20,6 @@
 #ifndef __ACCHELPER_HXX
 #define __ACCHELPER_HXX
 
-#include "UAccCOM2.h"
-
 enum DIRECTION
 {
     FIRST_CHILD=0,
