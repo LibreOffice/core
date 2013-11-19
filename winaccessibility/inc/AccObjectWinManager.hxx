@@ -48,33 +48,12 @@ class AccObjectWinManager
     friend class AccObjectManagerAgent;
 
 private:
-    struct ltstr1
-    {
-        bool operator()(const void*  s1, const void*  s2) const
-        {
-            return long(s1)<long(s2);
-        }
-    };
-    struct ltstr2
-    {
-        bool operator()(const HWND  s1, const HWND  s2) const
-        {
-            return long(s1)<long(s2);
-        }
-    };
-    struct ltstr3
-    {
-        bool operator()(const long  s1, const long  s2) const
-        {
-            return long(s1)<long(s2);
-        }
-    };
-    typedef std::map< void*, AccObject,ltstr1 > XIdToAccObjHash;
-    typedef std::map< HWND,void*,ltstr2 > XHWNDToXAccHash;
-    typedef std::map< const long, AccObject*,ltstr3 > XResIdToAccObjHash;
+    typedef std::map<void*, AccObject> XIdToAccObjHash;
+    typedef std::map<HWND, void*> XHWNDToXAccHash;
+    typedef std::map<const long, AccObject*> XResIdToAccObjHash;
 
-    typedef std::map< const long, com::sun::star::accessibility::XAccessible*,ltstr3 > XHWNDToDocumentHash;
-
+    typedef std::map<const long, com::sun::star::accessibility::XAccessible* >
+        XHWNDToDocumentHash;
 
     //XAccessible to AccObject
     XIdToAccObjHash  XIdAccList;
