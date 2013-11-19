@@ -24,6 +24,8 @@
 #include "op_logical.hxx"
 #include "op_statistical.hxx"
 #include "op_array.hxx"
+// Comment out this to turn off FMIN and FMAX intrinsics
+#define USE_FMIN_FMAX 1
 #include "formulagroupcl_public.hxx"
 
 #include <list>
@@ -1038,7 +1040,7 @@ public:
     virtual std::string GetBottom(void) { return "MAXFLOAT"; }
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
-        return "fmin("+lhs + "," + rhs +")";
+        return "mcw_fmin("+lhs + "," + rhs +")";
     }
     virtual std::string BinFuncName(void) const { return "min"; }
 };
@@ -1048,7 +1050,7 @@ public:
     virtual std::string GetBottom(void) { return "-MAXFLOAT"; }
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
-        return "fmax("+lhs + "," + rhs +")";
+        return "mcw_fmax("+lhs + "," + rhs +")";
     }
     virtual std::string BinFuncName(void) const { return "max"; }
 };

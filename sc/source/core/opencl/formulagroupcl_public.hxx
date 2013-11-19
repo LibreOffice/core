@@ -16,6 +16,14 @@ const char* publicFunc =
  "double fsub(double a, double b) { return a-b; }\n"
  "double fdiv(double a, double b) { return a/b; }\n"
  "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
+#ifdef USE_FMIN_FMAX
+ "double mcw_fmin(double a, double b) { return fmin(a, b); }\n"
+ "double mcw_fmax(double a, double b) { return fmax(a, b); }\n"
+#else
+ "double mcw_fmin(double a, double b) { return a>b?b:a; }\n"
+ "double mcw_fmax(double a, double b) { return a>b?a:b; }\n"
+#endif
+
  ;
 
 #endif
