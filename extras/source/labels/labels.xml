@@ -32,6 +32,9 @@ used standard paper formats
 A4     210.0 x 297.0 mm
 A5     148.0 x 210.0 mm
 Letter 215.9 x 279.4 mm
+
+Labels that cannot be added:
+Avery J8950, L7950 - the labels are not aligned in a rectangular grid
 -->
 
 <manufacturers>
@@ -1325,6 +1328,30 @@ Letter 215.9 x 279.4 mm
     <label id="L293">
         <name>LPT111 Laser/Copier Transparency - 100micron</name>
         <measure>S;21000;29700;21000;29700;0;0;1;1;21000;29700</measure>
+    </label>
+    <label id="L294">
+        <name>J8551 I.D. labels</name>
+        <measure>S;4064;2117;3810;2117;467;1090;5;13;21000;29700</measure>
+    </label>
+    <label id="L295">
+        <name>L6032 Coloured Labels, blue</name>
+        <measure>S;6605;3390;6350;3390;720;1310;3;8;21000;29700</measure>
+    </label>
+    <label id="L296">
+        <name>L6033 Coloured Labels, green</name>
+        <measure>S;255;0;6350;3390;720;1310;3;8;21000;29700</measure>
+    </label>
+    <label id="L297">
+        <name>L6034 Coloured Labels, red</name>
+        <measure>S;6605;3390;6350;3390;720;1310;3;8;21000;29700</measure>
+    </label>
+    <label id="L298">
+        <name>L6035 Coloured Labels, yellow</name>
+        <measure>S;6605;3390;6350;3390;720;1310;3;8;21000;29700</measure>
+    </label>
+    <label id="L299">
+        <name>E3230 Removable Assorted Coloured Labels</name>
+        <measure>S;6605;3390;6350;3390;720;1310;3;8;21000;29700</measure>
     </label>
 </manufacturer>
 <manufacturer name="Avery A4/Asia">
