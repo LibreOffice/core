@@ -24,27 +24,11 @@
 #include <tchar.h>
 
 
-static bool IsXPOrLater()
-{
-    OSVERSIONINFO osvi;
-
-    ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
-
-    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-
-    GetVersionEx(&osvi);
-    return ((osvi.dwMajorVersion > 5) ||
-        ((osvi.dwMajorVersion == 5) && (osvi.dwMinorVersion >= 1)));
-}
-
 static HANDLE pActCtx = INVALID_HANDLE_VALUE;
 static ULONG_PTR lpCookie;
 
 static bool ActivateActContext()
 {
-    if(!IsXPOrLater())
-        return false;
-
     ACTCTX actctx;
 
     ZeroMemory(&actctx, sizeof(actctx));
@@ -76,9 +60,6 @@ static bool ActivateActContext()
 
 static void DeactivateActContext()
 {
-    if(!IsXPOrLater())
-        return;
-
     if(lpCookie)
         DeactivateActCtx(0, lpCookie);
 
