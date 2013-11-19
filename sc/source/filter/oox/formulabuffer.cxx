@@ -58,7 +58,7 @@ public:
     };
 
     CachedTokenArray( ScDocument& rDoc ) :
-        mrDoc(rDoc), maCxt(&rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
+        maCxt(&rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
 
     ~CachedTokenArray()
     {
@@ -106,7 +106,6 @@ public:
 private:
     typedef boost::unordered_map<SCCOL, Item*> ColCacheType;
     ColCacheType maCache;
-    ScDocument& mrDoc;
     sc::TokenStringContext maCxt;
 };
 
