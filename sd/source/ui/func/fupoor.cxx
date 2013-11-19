@@ -737,8 +737,8 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             mpWindow->GetInverseViewTransformation() *
                             basegfx::B2DVector(mpView->GetMarkHdlSizePixel(), mpView->GetMarkHdlSizePixel()));
 
-                        aDist.setX(std::min(100.0, aDist.getX()));
-                        aDist.setY(std::min(100.0, aDist.getY()));
+                        aDist.setX(std::max(100.0, aDist.getX()));
+                        aDist.setY(std::max(100.0, aDist.getY()));
 
                         aMove *= aDist;
                     }

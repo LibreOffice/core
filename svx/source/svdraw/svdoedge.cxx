@@ -70,9 +70,11 @@ private:
     sal_uInt32                  mnConnectorId;          // Connector ID
 
     /// bitfield
+    /// when set, connector will find best connection itself
     bool                        mbBestConnection : 1;
-    bool                        mbBestVertex : 1;
-    bool                        mbAutoVertex : 1;       // connected to automatic gluepoint
+
+    // connected to automatic gluepoint (AutoGluePoint)
+    bool                        mbAutoVertex : 1;
 
 protected:
     // object notifies; e.g. connected SDrObjects changed
@@ -97,16 +99,23 @@ public:
     /// assignment operator; will not copy mpOwner
     SdrObjConnection& operator=(const SdrObjConnection&);
 
+    /// called when page access of owner changes (owner gets removed/
+    /// inserted, e.g deleted but put to undo stack)
+    void ownerPageChange();
+
     // get a copy of the GluePoint referenced; returns true if
     // a GluePoint is referenced and when it got copied to rGP
     bool TakeGluePoint(sdr::glue::GluePoint& rGP) const;
+
+    // allow SdrEdgeObj to adapt position in two cases: user defined
+    // EdgeTrack or result of BestConnection being available
+    void adaptBestConnectionPosition(const basegfx::B2DPoint& rPosition);
 
     // data write access
     void SetPosition(const basegfx::B2DPoint& rPosition);
     void SetConnectedSdrObject(SdrObject* pConnectedSdrObject);
     void SetConnectorID(sal_uInt32 nNew);
     void setBestConnection(bool bNew) { mbBestConnection = bNew; }
-    void setBestVertex(bool bNew) { mbBestVertex = bNew; }
     void setAutoVertex(bool bNew) { mbAutoVertex = bNew; }
 
     // data read access
@@ -115,7 +124,6 @@ public:
     SdrObject* GetConnectedSdrObject() const { return mpConnectedSdrObject; }
     sal_uInt32 GetConnectorId() const { return mnConnectorId; };
     bool IsBestConnection() const { return mbBestConnection; };
-    bool IsBestVertex() const { return mbBestVertex; };
     bool IsAutoVertex() const { return mbAutoVertex; };
 };
 
@@ -132,7 +140,7 @@ void SdrObjConnection::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             {
                 const SdrHintKind eSdrHintKind(pBase->GetSdrHintKind());
 
-                // on object delete and/or object removed from page, break linkage
+                // object listening to is delete and/or removed from page, break linkage
                 if(HINT_SDROBJECTDYING == eSdrHintKind || HINT_OBJREMOVED == eSdrHintKind)
                 {
                     EndListening(*mpConnectedSdrObject);
@@ -144,14 +152,6 @@ void SdrObjConnection::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             {
                 checkPositionFromObject();
             }
-        }
-
-        const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
-
-        if(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId())
-        {
-            // StyleSheet change on listened object, get the evtl. changed parameters for connectors
-            mpOwner->StyleSheetChanged();
         }
     }
 }
@@ -217,7 +217,6 @@ SdrObjConnection::SdrObjConnection(SdrEdgeObj* pOwner)
     mpConnectedSdrObject(0),
     mnConnectorId(0),
     mbBestConnection(true),
-    mbBestVertex(true),
     mbAutoVertex(false)
 {
     SetConnectedSdrObject(mpConnectedSdrObject);
@@ -230,7 +229,6 @@ SdrObjConnection::SdrObjConnection(const SdrObjConnection& rSource)
     mpConnectedSdrObject(rSource.mpConnectedSdrObject),
     mnConnectorId(rSource.mnConnectorId),
     mbBestConnection(rSource.mbBestConnection),
-    mbBestVertex(rSource.mbBestVertex),
     mbAutoVertex(rSource.mbAutoVertex)
 {
 }
@@ -254,16 +252,27 @@ SdrObjConnection& SdrObjConnection::operator=(const SdrObjConnection& rSource)
     mpConnectedSdrObject = rSource.mpConnectedSdrObject;
     mnConnectorId = rSource.mnConnectorId;
     mbBestConnection = rSource.mbBestConnection;
-    mbBestVertex = rSource.mbBestVertex;
     mbAutoVertex = rSource.mbAutoVertex;
 
-    if(mpOwner && mpConnectedSdrObject)
+    if(mpOwner && mpConnectedSdrObject && mpOwner->getSdrPageFromSdrObject())
     {
         StartListening(*mpConnectedSdrObject);
     }
 
     checkPositionFromObject();
     return *this;
+}
+
+void SdrObjConnection::adaptBestConnectionPosition(const basegfx::B2DPoint& rPosition)
+{
+    if(IsBestConnection() || (mpOwner && mpOwner->mbEdgeTrackUserDefined))
+    {
+        maPosition = rPosition;
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrObjConnection::adaptBestConnectionPosition only allowed for BestConnection or UserDefined (!)");
+    }
 }
 
 void SdrObjConnection::SetPosition(const basegfx::B2DPoint& rPosition)
@@ -297,7 +306,7 @@ void SdrObjConnection::SetConnectedSdrObject(SdrObject* pConnectedSdrObject)
 
         mpConnectedSdrObject = pConnectedSdrObject;
 
-        if(mpOwner && mpConnectedSdrObject)
+        if(mpOwner && mpConnectedSdrObject && mpOwner->getSdrPageFromSdrObject())
         {
             StartListening(*mpConnectedSdrObject);
         }
@@ -312,6 +321,21 @@ void SdrObjConnection::SetConnectorID(sal_uInt32 nNew)
     {
         mnConnectorId = nNew;
         checkPositionFromObject();
+    }
+}
+
+void SdrObjConnection::ownerPageChange()
+{
+    if(mpOwner && mpConnectedSdrObject)
+    {
+        if(mpOwner->getSdrPageFromSdrObject())
+        {
+            StartListening(*mpConnectedSdrObject);
+        }
+        else
+        {
+            EndListening(*mpConnectedSdrObject);
+        }
     }
 }
 
@@ -388,6 +412,9 @@ public:
     long ImpGetLineVersatz(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount) const;
     void ImpResetUserDistances() { aObj1Line2 = aObj1Line3 = aObj2Line2 = aObj2Line3 = aMiddleLine = basegfx::B2DPoint(); }
     bool ImpUsesUserDistances() const;
+
+    bool operator==(const SdrEdgeInfoRec& rCompare) const;
+    bool operator!=(const SdrEdgeInfoRec& rCompare) const { return !operator==(rCompare); }
 };
 
 basegfx::B2DPoint& SdrEdgeInfoRec::ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode)
@@ -473,16 +500,45 @@ bool SdrEdgeInfoRec::ImpUsesUserDistances() const
     return false;
 }
 
+bool SdrEdgeInfoRec::operator==(const SdrEdgeInfoRec& rCompare) const
+{
+    return aObj1Line2.equal(rCompare.aObj1Line2)
+        && aObj1Line3.equal(rCompare.aObj1Line3)
+        && aObj2Line2.equal(rCompare.aObj2Line2)
+        && aObj2Line3.equal(rCompare.aObj2Line3)
+        && aMiddleLine.equal(rCompare.aMiddleLine)
+        && nAngle1 == rCompare.nAngle1
+        && nAngle2 == rCompare.nAngle2
+        && nObj1Lines == rCompare.nObj1Lines
+        && nObj2Lines == rCompare.nObj2Lines
+        && nMiddleLine == rCompare.nMiddleLine
+        && cOrthoForm == rCompare.cOrthoForm;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrEdgeObjGeoData::SdrEdgeObjGeoData()
-:   mpCon1(new SdrObjConnection(0)),
-    mpCon2(new SdrObjConnection(0)),
-    maEdgeTrack(),
-    mpEdgeInfo(new SdrEdgeInfoRec()),
-    mbEdgeTrackUserDefined(false)
+class SdrEdgeObjGeoData : public SdrObjGeoData
 {
-}
+public:
+    SdrObjConnection*           mpCon1;  // Verbindungszustand des Linienanfangs
+    SdrObjConnection*           mpCon2;  // Verbindungszustand des Linienendes
+    basegfx::B2DPolygon         maEdgeTrack;
+    SdrEdgeInfoRec*             mpEdgeInfo;
+
+    /// bitfield
+    bool                        mbEdgeTrackUserDefined : 1;
+
+    SdrEdgeObjGeoData()
+    :   mpCon1(new SdrObjConnection(0)),
+        mpCon2(new SdrObjConnection(0)),
+        maEdgeTrack(),
+        mpEdgeInfo(new SdrEdgeInfoRec()),
+        mbEdgeTrackUserDefined(false)
+    {
+    }
+
+    virtual ~SdrEdgeObjGeoData();
+};
 
 SdrEdgeObjGeoData::~SdrEdgeObjGeoData()
 {
@@ -778,11 +834,11 @@ namespace
                 }
             }
         }
-    #ifdef DBG_UTIL
+#ifdef DBG_UTIL
         if (aXP.GetPointCount()>4) {
             DBG_ERROR("SdrEdgeObj::impOldCalcObjToCenter(): Polygon hat mehr als 4 Punkte!");
         }
-    #endif
+#endif
         return aXP;
     }
 
@@ -1597,6 +1653,19 @@ SdrObject* SdrEdgeObj::CloneSdrObject(SdrModel* pTargetModel) const
     return pClone;
 }
 
+void SdrEdgeObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
+{
+    if(pOldPage != pNewPage)
+    {
+        // call parent
+        SdrTextObj::handlePageChange(pOldPage, pNewPage);
+
+        // check broadcasters; when we are not inserted we do not need broadcasters
+        mpCon1->ownerPageChange();
+        mpCon2->ownerPageChange();
+    }
+}
+
 bool SdrEdgeObj::IsClosedObj() const
 {
     return false;
@@ -1842,50 +1911,59 @@ bool SdrEdgeObj::CheckSdrObjectConnection(bool bTail) const
 
     if(!pConnectedNode)
     {
+        // not connected to any object -> no valid connection
         return false;
     }
 
+    const SdrObjConnection& rCon(bTail ? *mpCon1 : *mpCon2);
     const sdr::glue::GluePointProvider& rProvider = pConnectedNode->GetGluePointProvider();
 
-    if(rProvider.hasUserGluePoints())
+    if(rCon.IsBestConnection() && (rProvider.hasUserGluePoints() || rProvider.getAutoGluePointCount()))
     {
+        // best connection is always valid when there are any GluePoints
+        return true;
+    }
+
+    const basegfx::B2DPoint aCurrentPosition(rCon.GetPosition());
+
+    if(rCon.IsAutoVertex())
+    {
+        // AutoGluePoints
+        const sal_uInt32 nConAnz(rProvider.getAutoGluePointCount());
+
+        for(sal_uInt32 i(0); i < nConAnz; i++)
+        {
+            const sdr::glue::GluePoint aPt(rProvider.getAutoGluePointByIndex(i));
+            const basegfx::B2DPoint aGluePos(pConnectedNode->getSdrObjectTransformation() * aPt.getUnitPosition());
+
+            if(aCurrentPosition.equal(aGluePos))
+            {
+                return true;
+            }
+        }
+    }
+    else
+    {
+        // User-Defined (or CustomShape) GluePoints
         const sdr::glue::GluePointVector aGluePointVector(rProvider.getUserGluePointVector());
         const sal_uInt32 nConAnz(aGluePointVector.size());
-        const sal_uInt32 nGesAnz(nConAnz + rProvider.getAutoGluePointCount());
-        const SdrObjConnection& rCon(bTail ? *mpCon1 : *mpCon2);
-        const basegfx::B2DPoint aCurrentPosition(rCon.GetPosition());
 
-        for(sal_uInt32 i(0); i < nGesAnz; i++)
+        for(sal_uInt32 i(0); i < nConAnz; i++)
         {
-            if(i < nConAnz)
-            {
-                // UserDefined or CustomShape
-                const sdr::glue::GluePoint* pCandidate = aGluePointVector[i];
+            const sdr::glue::GluePoint* pCandidate = aGluePointVector[i];
 
-                if(pCandidate)
-                {
-                    const basegfx::B2DPoint aGluePos(pConnectedNode->getSdrObjectTransformation() * pCandidate->getUnitPosition());
-
-                    if(aCurrentPosition.equal(aGluePos))
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    OSL_ENSURE(false, "Got sdr::glue::PointVector with emty entries (!)");
-                }
-            }
-            else //if (i<nConAnz+4)
+            if(pCandidate)
             {
-                // Vertex
-                const sdr::glue::GluePoint aPt(rProvider.getAutoGluePointByIndex(i - nConAnz));
-                const basegfx::B2DPoint aGluePos(pConnectedNode->getSdrObjectTransformation() * aPt.getUnitPosition());
+                const basegfx::B2DPoint aGluePos(pConnectedNode->getSdrObjectTransformation() * pCandidate->getUnitPosition());
 
                 if(aCurrentPosition.equal(aGluePos))
                 {
                     return true;
                 }
+            }
+            else
+            {
+                OSL_ENSURE(false, "Got sdr::glue::PointVector with emty entries (!)");
             }
         }
     }
@@ -1953,12 +2031,47 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         // SdrEdgeObj BoundRect calculations
         mbBoundRectCalculationRunning = true;
 
+        // remember current SdrEdgeInfoRec and new polygon
+        const SdrEdgeInfoRec aPreserved(*mpEdgeInfo);
+        const basegfx::B2DPolygon aNew(ImpCalcEdgeTrack(*mpCon1, *mpCon2, mpEdgeInfo, 0, 0));
+        bool bBroadcastChange(false);
+
+        if(aNew != maEdgeTrack)
+        {
+            maEdgeTrack = aNew;
+
+            // if connections are in 'BestConnection' mode, update their oposition to the
+            // computed one, just to make sure when that data is fetched from the connection
+            // itself that it is correct
+            if(maEdgeTrack.count())
+            {
+                const basegfx::B2DPoint aStart(maEdgeTrack.getB2DPoint(0));
+                const basegfx::B2DPoint aEnd(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
+
+                if(mpCon1->IsBestConnection())
+                {
+                    mpCon1->adaptBestConnectionPosition(aStart);
+                }
+
+                if(mpCon2->IsBestConnection())
+                {
+                    mpCon2->adaptBestConnectionPosition(aEnd);
+                }
+            }
+
+            bBroadcastChange = true;
+        }
+
+        if(aPreserved != *mpEdgeInfo)
+        {
+            ImpSetEdgeInfoToAttr();
+            bBroadcastChange = true;
+        }
+
+        if(bBroadcastChange)
         {
             // use local scope to trigger locally
             const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
-
-            maEdgeTrack = ImpCalcEdgeTrack(*mpCon1, *mpCon2, mpEdgeInfo, 0, 0);
-            ImpSetEdgeInfoToAttr(); // Die Werte aus mpEdgeInfo in den Pool kopieren
         }
 
         // #110649#
@@ -1984,7 +2097,7 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
     basegfx::B2DRange aBoundRange2;
     basegfx::B2DRange aBewareRange1;
     basegfx::B2DRange aBewareRange2;
-    const const SdrPage* pOwningPage = getSdrPageFromSdrObject();
+    const SdrPage* pOwningPage = getSdrPageFromSdrObject();
     const bool bCon1(rCon1.GetConnectedSdrObject() && (!pOwningPage || rCon1.GetConnectedSdrObject()->getSdrPageFromSdrObject() == pOwningPage));
     const bool bCon2(rCon2.GetConnectedSdrObject() && (!pOwningPage || rCon2.GetConnectedSdrObject()->getSdrPageFromSdrObject() == pOwningPage));
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -2051,8 +2164,8 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
 
     sal_uInt32 nBestQual=0xFFFFFFFF;
     SdrEdgeInfoRec aBestInfo;
-    const bool bAuto1(bCon1 && rCon1.IsBestVertex());
-    const bool bAuto2(bCon2 && rCon2.IsBestVertex());
+    const bool bAuto1(bCon1 && rCon1.IsBestConnection());
+    const bool bAuto2(bCon2 && rCon2.IsBestConnection());
 
     if(bAuto1)
     {
@@ -2203,16 +2316,6 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
     return aRetval;
 }
 
-void SdrEdgeObj::StyleSheetChanged()
-{
-    if(mpCon1->GetConnectedSdrObject() || mpCon2->GetConnectedSdrObject())
-    {
-        ImpSetAttrToEdgeInfo();
-        SetEdgeTrackDirty();
-        SetChanged();
-    }
-}
-
 void SdrEdgeObj::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulEDGE);
@@ -2245,10 +2348,10 @@ void SdrEdgeObj::SetEdgeTrackPath(const basegfx::B2DPolygon& rPoly)
         mbEdgeTrackUserDefined = true;
 
         mpCon1->SetConnectedSdrObject(0);
-        mpCon1->SetPosition(maEdgeTrack.getB2DPoint(0));
+        mpCon1->adaptBestConnectionPosition(maEdgeTrack.getB2DPoint(0));
 
         mpCon2->SetConnectedSdrObject(0);
-        mpCon2->SetPosition(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
+        mpCon2->adaptBestConnectionPosition(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
     }
     else
     {
@@ -2345,7 +2448,7 @@ SdrHdl* SdrEdgeObj::impOldGetHdl(SdrHdlList& rHdlList, sal_uInt32 nHdlNum) const
         {
             pHdl = new ImpEdgeHdl(rHdlList, *this, HDL_POLY, mpCon1->GetPosition());
 
-            if(mpCon1->GetConnectedSdrObject() && mpCon1->IsBestVertex())
+            if(mpCon1->GetConnectedSdrObject() && mpCon1->IsBestConnection())
             {
                 pHdl->Set1PixMore(true);
             }
@@ -2354,7 +2457,7 @@ SdrHdl* SdrEdgeObj::impOldGetHdl(SdrHdlList& rHdlList, sal_uInt32 nHdlNum) const
         {
             pHdl = new ImpEdgeHdl(rHdlList, *this, HDL_POLY, mpCon2->GetPosition());
 
-            if(mpCon2->GetConnectedSdrObject() && mpCon2->IsBestVertex())
+            if(mpCon2->GetConnectedSdrObject() && mpCon2->IsBestConnection())
             {
                 pHdl->Set1PixMore(true);
             }
@@ -2527,7 +2630,6 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
             rDraggedOne.SetPosition(rDragStat.GetNow());
             rDraggedOne.SetConnectorID(nID);
             rDraggedOne.setBestConnection(bBest);
-            rDraggedOne.setBestVertex(bBest);
             rDraggedOne.setAutoVertex(bAuto);
             rDraggedOne.SetConnectedSdrObject(pNewContact);
 
@@ -2573,6 +2675,10 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
         // hide connect marker helper again when original gets changed.
         // This happens at the end of the interaction
         rDragStat.GetSdrViewFromSdrDragStat().HideConnectMarker();
+
+        // modified is needed at the end of interaction, too
+        SetEdgeTrackDirty();
+        SetChanged();
     }
 
     return true;
@@ -2639,12 +2745,12 @@ basegfx::B2DPolygon SdrEdgeObj::CreateConnectorOverlay(
         basegfx::B2DPoint aPt1(mpCon1->GetPosition());
         basegfx::B2DPoint aPt2(mpCon2->GetPosition());
 
-        if(mpCon1->GetConnectedSdrObject() && (mpCon1->IsBestConnection() || mpCon1->IsBestVertex()))
+        if(mpCon1->GetConnectedSdrObject() && mpCon1->IsBestConnection())
         {
             aPt1 = mpCon1->GetConnectedSdrObject()->getSdrObjectTransformation() * basegfx::B2DPoint(0.5, 0.5);
         }
 
-        if(mpCon2->GetConnectedSdrObject() && (mpCon2->IsBestConnection() || mpCon2->IsBestVertex()))
+        if(mpCon2->GetConnectedSdrObject() && mpCon2->IsBestConnection())
         {
             aPt2 = mpCon2->GetConnectedSdrObject()->getSdrObjectTransformation() * basegfx::B2DPoint(0.5, 0.5);
         }
@@ -2686,7 +2792,13 @@ bool SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)
         bool bBest(false);
         bool bAuto(false);
 
-        mpCon1->SetConnectedSdrObject(rSdrView.FindConnector(rDragStat.GetStart(), nID, bBest, bAuto, this));
+        // look for new connection
+        SdrObject* pNewContact = rSdrView.FindConnector(rDragStat.GetStart(), nID, bBest, bAuto, this);
+
+        mpCon1->SetConnectorID(nID);
+        mpCon1->setBestConnection(bBest);
+        mpCon1->setAutoVertex(bAuto);
+        mpCon1->SetConnectedSdrObject(pNewContact);
     }
 
     return true;
@@ -2707,8 +2819,15 @@ bool SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
         bool bBest(false);
         bool bAuto(false);
 
-        mpCon2->SetConnectedSdrObject(rSdrView.FindConnector(rDragStat.GetNow(), nID, bBest, bAuto, this));
-        rDragStat.GetSdrViewFromSdrDragStat().SetConnectMarker(mpCon2->GetConnectedSdrObject());
+        // look for new connection
+        SdrObject* pNewContact = rSdrView.FindConnector(rDragStat.GetNow(), nID, bBest, bAuto, this);
+
+        mpCon2->SetConnectorID(nID);
+        mpCon2->setBestConnection(bBest);
+        mpCon2->setAutoVertex(bAuto);
+        mpCon2->SetConnectedSdrObject(pNewContact);
+
+        rDragStat.GetSdrViewFromSdrDragStat().SetConnectMarker(pNewContact);
     }
 
     return true;
@@ -2788,10 +2907,10 @@ void SdrEdgeObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
                 maEdgeTrack.transform(aCompleteTransform);
 
                 mpCon1->SetConnectedSdrObject(0);
-                mpCon1->SetPosition(maEdgeTrack.getB2DPoint(0));
+                mpCon1->adaptBestConnectionPosition(maEdgeTrack.getB2DPoint(0));
 
                 mpCon2->SetConnectedSdrObject(0);
-                mpCon2->SetPosition(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
+                mpCon2->adaptBestConnectionPosition(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
             }
             else
             {
@@ -2967,7 +3086,6 @@ void SdrEdgeObj::setGluePointIndex(bool bTail, sal_Int32 nIndex /* = -1 */ )
 
     rConn1.SetConnectorID(nIndex);
     rConn1.setBestConnection(nIndex < 0);
-    rConn1.setBestVertex(nIndex < 0);
     rConn1.setAutoVertex(nIndex >= 0 && nIndex <= 3);
 }
 

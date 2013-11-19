@@ -56,6 +56,9 @@ namespace sdr
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+
+            // This is the notifyer from SfxListener
+            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
         };
     } // end of namespace properties
 } // end of namespace sdr

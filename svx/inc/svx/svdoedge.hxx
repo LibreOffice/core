@@ -32,6 +32,7 @@
 namespace sdr { namespace properties { class ConnectorProperties; }}
 class SdrObjConnection;
 class SdrEdgeInfoRec;
+
 enum SdrEdgeLineCode
 {
     OBJ1LINE2,
@@ -39,24 +40,6 @@ enum SdrEdgeLineCode
     OBJ2LINE2,
     OBJ2LINE3,
     MIDDLELINE
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// SdrEdgeObjGeoData
-
-class SdrEdgeObjGeoData : public SdrObjGeoData
-{
-public:
-    SdrObjConnection*           mpCon1;  // Verbindungszustand des Linienanfangs
-    SdrObjConnection*           mpCon2;  // Verbindungszustand des Linienendes
-    basegfx::B2DPolygon         maEdgeTrack;
-    SdrEdgeInfoRec*             mpEdgeInfo;
-
-    /// bitfield
-    bool                        mbEdgeTrackUserDefined : 1;
-
-    SdrEdgeObjGeoData();
-    virtual ~SdrEdgeObjGeoData();
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,21 +66,23 @@ private:
     SdrEdgeInfoRec*             mpEdgeInfo;
 
     /// bitfield
+    /// defines if this edge was set from external and thus is defined by
+    /// user; this mode is used for compatibility with other file formats.
+    /// This state is not editable; any change on geometry data will reset
+    /// this flag
     bool                        mbEdgeTrackUserDefined : 1;
 
-    // #109007#
     // Bool to allow supporession of default connects at object
     // inside test (HitTest) and object center test (see FindConnector())
     bool                        mbSuppressDefaultConnect : 1;
 
-    // #110649#
     // Flag value for avoiding death loops when calculating BoundRects
     // from circularly connected connectors. A coloring algorythm is used
     // here. When the GetCurrentBoundRect() calculation of a SdrEdgeObj
     // is running, the flag is set, else it is always sal_False.
     unsigned                    mbBoundRectCalculationRunning : 1;
 
-    // #123048# need to remember if layouting was suppressed before to get
+    // need to remember if layouting was suppressed before to get
     // to a correct state for first real layouting
     unsigned                    mbSuppressed : 1;
 
@@ -134,13 +119,10 @@ protected:
     virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
 public:
-    // check if rCandidate is a listener (one of the SdrObjConnections) and
-    // if yes, return the owner of the SdrObjConnection
+    // check if rCandidate is a listener (in one of the SdrObjConnections) and
+    // if yes, return the owner of the SdrObjConnection and thus the SdrEdgeObj
+    // which is connected to the given listener (which probably is a SdrObject)
     static SdrEdgeObj* checkIfUsesListener(SfxListener& rCandidate);
-
-    // called from SdrObjConnection child when a SFX_HINT_DATACHANGED is detected
-    // from a connected SdrObject
-    void StyleSheetChanged();
 
     // #109007# Interface to default connect suppression
     void SetSuppressDefaultConnect(sal_Bool bNew) { mbSuppressDefaultConnect = bNew; }
@@ -152,6 +134,9 @@ public:
     /// create a copy, evtl. with a different target model (if given)
     virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
+
     virtual bool IsClosedObj() const;
 
     SdrEdgeObj(SdrModel& rSdrModel);
@@ -159,15 +144,15 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
 
-    void SetEdgeTrackDirty(); // { mbEdgeTrackDirty = true; }
+    void SetEdgeTrackDirty();
 
-    // bTail=true: Linienanfang, sonst LinienEnde
-    // pObj=NULL -> Disconnect
+    // bTail = true: connector start, else connector end
+    // no SdrObject given: disconnect
     void ConnectToSdrObject(bool bTail, SdrObject* pObj = 0);
     SdrObject* GetSdrObjectConnection(bool bTail) const;
     bool CheckSdrObjectConnection(bool bTail) const;
 
-    /// interface to hold a user-defined EdgeTrack
+    /// interface to hold a user-defined EdgeTrack (see mbEdgeTrackUserDefined)
     void SetEdgeTrackPath( const basegfx::B2DPolygon& rPoly );
     basegfx::B2DPolygon GetEdgeTrackPath() const;
 
@@ -193,19 +178,24 @@ public:
     // FullDrag support
     virtual SdrObject* getFullDragClone() const;
 
+    // creation support
     virtual bool BegCreate(SdrDragStat& rStat);
     virtual bool MovCreate(SdrDragStat& rStat);
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
     virtual bool BckCreate(SdrDragStat& rStat);
-
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
+
+    // convert to polygon support
     virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 
+    // snap point support
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual basegfx::B2DPoint GetSnapPoint(sal_uInt32 i) const;
+
     virtual bool IsPolygonObject() const;
 
+    // GeoData (Undo/Redo) support
     virtual SdrObjGeoData* NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);

@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/sdr/properties/connectorproperties.hxx>
@@ -29,6 +27,7 @@
 #include <svx/svddef.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svdoedge.hxx>
+#include <svl/smplhint.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -95,6 +94,23 @@ namespace sdr
 
             // local changes
             rObj.ImpSetAttrToEdgeInfo();
+        }
+
+        void ConnectorProperties::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+        {
+            // call parent
+            TextProperties::Notify(rBC, rHint);
+
+            // local changes (could need more checks, but is not expensive)
+            const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+            if(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId())
+            {
+                // style sheet change, copy evtl. changed style items to EdgeInfo
+                SdrEdgeObj& rObj = (SdrEdgeObj&)GetSdrObject();
+
+                rObj.ImpSetAttrToEdgeInfo();
+            }
         }
     } // end of namespace properties
 } // end of namespace sdr
