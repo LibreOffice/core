@@ -36,6 +36,14 @@ class AccEventListener;
 class AccObjectManagerAgent;
 class AccObject;
 
+struct ltstr4
+{
+    bool operator()(const long  s1, const long  s2) const
+    {
+        return long(s1)<long(s2);
+    }
+};
+
 typedef std::map< const long, AccObject*,ltstr4 > IAccSelectionList;
 typedef std::vector<AccObject *> IAccChildList;
 

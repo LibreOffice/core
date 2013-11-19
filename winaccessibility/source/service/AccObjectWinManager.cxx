@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 #include <oleacc.h>
@@ -50,6 +51,8 @@
 
 using namespace std;
 using namespace com::sun::star::accessibility;
+using namespace com::sun::star::accessibility::AccessibleRole;
+using namespace com::sun::star::accessibility::AccessibleStateType;
 using namespace com::sun::star::uno;
 
 AccObjectWinManager* g_acc_manager = NULL;
