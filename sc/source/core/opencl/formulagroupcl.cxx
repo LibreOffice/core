@@ -409,6 +409,7 @@ protected:
 
 /// Handling a Double Vector that is used as a sliding window input
 /// to either a sliding window average or sum-of-products
+/// Generate a sequential loop for reductions
 class OpSum; // Forward Declaration
 class OpAverage; // Forward Declaration
 class OpMin; // Forward Declaration
@@ -430,79 +431,8 @@ public:
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
     }
-    virtual bool NeedParallelReduction(void) const
-    {
-        if ((dynamic_cast<OpSum*>(mpCodeGen.get())
-            && !dynamic_cast<OpAverage*>(mpCodeGen.get())) ||
-            dynamic_cast<OpMin*>(mpCodeGen.get()) ||
-            dynamic_cast<OpMax*>(mpCodeGen.get()) ||
-            dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
-            return GetWindowSize()> 100 &&
-                ( (GetStartFixed() && GetEndFixed()) ||
-                  (!GetStartFixed() && !GetEndFixed())  ) ;
-        else
-            return false;
-    }
-    virtual void GenSlidingWindowFunction(std::stringstream &ss) {
-        if (!dynamic_cast<OpSumIfs*>(mpCodeGen.get())
-            && NeedParallelReduction())
-        {
-            std::string name = Base::GetName();
-            ss << "__kernel void "<<name;
-            ss << "_reduction(__global double* A, "
-                "__global double *result,int arrayLength,int windowSize){\n";
-            ss << "    double tmp, current_result =" <<
-                mpCodeGen->GetBottom();
-            ss << ";\n";
-            ss << "    int writePos = get_group_id(1);\n";
-            ss << "    int lidx = get_local_id(0);\n";
-            ss << "    __local double shm_buf[256];\n";
-            if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
-                ss << "    int offset = 0;\n";
-            else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
-                ss << "    int offset = get_group_id(1);\n";
-            else
-                throw Unhandled();
-            ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
-            ss << "    int loop = arrayLength/512 + 1;\n";
-            ss << "    for (int l=0; l<loop; l++){\n";
-            ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
-            ss << "    int loopOffset = l*512;\n";
-            ss << "    if((loopOffset + lidx + offset + 256) < min( offset + windowSize, arrayLength))\n";
-            ss << "        tmp = ";
-            ss << mpCodeGen->Gen2(
-                    std::string(
-                        "legalize(A[loopOffset + lidx + offset], ")+
-                    mpCodeGen->GetBottom() +")",
-                    std::string(
-                        "legalize(A[loopOffset + lidx + offset + 256], ")+
-                    mpCodeGen->GetBottom() +")"
-                    );
-            ss << ";";
-            ss << "    else if ((loopOffset + lidx + offset) < min(offset + windowSize, arrayLength))\n";
-            ss << "        tmp = legalize(A[loopOffset + lidx + offset],";
-            ss << mpCodeGen->GetBottom() << ");\n";
-            ss << "    shm_buf[lidx] = tmp;\n";
-            ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
-            ss << "    for (int i = 128; i >0; i/=2) {\n";
-            ss << "        if (lidx < i)\n";
-            ss << "            shm_buf[lidx] = ";
-            ss << mpCodeGen->Gen2("shm_buf[lidx]", "shm_buf[lidx + i]");
-            ss << ";";
-            ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
-            ss << "    }\n";
-            ss << "    if (lidx == 0)\n";
-            ss << "        current_result =";
-            ss << mpCodeGen->Gen2("current_result", "shm_buf[0]");
-            ss << ";\n";
-            ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
-            ss << "    }\n";
-            ss << "    if (lidx == 0)\n";
-            ss << "        result[writePos] = current_result;\n";
-            ss << "}\n";
-        }
-     }
 
+    virtual void GenSlidingWindowFunction(std::stringstream &) {}
 
     virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
@@ -519,26 +449,7 @@ public:
     {
         assert(mpDVR);
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
-        if (!dynamic_cast<OpSumIfs*>(mpCodeGen.get())
-                && NeedParallelReduction())
-        {
-            if ((!bIsStartFixed && !bIsEndFixed) ||
-                (bIsStartFixed && bIsEndFixed))
-            {
-                // set 100 as a temporary threshold for invoking reduction
-                // kernel in NeedParalleLReduction function
-                if (NeedParallelReduction())
-                {
-                    std::string temp = Base::GetName() + "[gid0]";
-                    ss << "tmp = ";
-                    ss << mpCodeGen->Gen2(temp, "tmp");
-                    ss << ";\n\t";
-                    needBody = false;
-                    return nCurWindowSize;
-                }
-            }
-        }
-// original for loop
+        // original for loop
 #ifndef UNROLLING
         needBody = true;
         // No need to generate a for-loop for degenerated cases
@@ -585,8 +496,6 @@ public:
         }
 return nCurWindowSize;
 #endif
-
-
 
 #ifdef UNROLLING
         {
@@ -709,13 +618,134 @@ return nCurWindowSize;
         }
 #endif
 }
+    ~DynamicKernelSlidingArgument()
+    {
+        if (mpClmem2)
+        {
+            clReleaseMemObject(mpClmem2);
+            mpClmem2 = NULL;
+        }
+    }
+
+    size_t GetArrayLength(void) const {return mpDVR->GetArrayLength(); }
+
+    size_t GetWindowSize(void) const {return mpDVR->GetRefRowSize(); }
+
+    size_t GetStartFixed(void) const {return bIsStartFixed; }
+
+    size_t GetEndFixed(void) const {return bIsEndFixed; }
+
+protected:
+    bool bIsStartFixed, bIsEndFixed;
+    const formula::DoubleVectorRefToken *mpDVR;
+    // from parent nodes
+    boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
+    // controls whether to invoke the reduction kernel during marshaling or not
+    cl_mem mpClmem2;
+};
+
+/// Handling a Double Vector that is used as a sliding window input
+/// Performs parallel reduction based on given operator
+template<class Base>
+class ParallelReductionVectorRef: public Base
+{
+public:
+    ParallelReductionVectorRef(const std::string &s,
+        FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase> &CodeGen,
+        int index=0):
+        Base(s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
+    {
+        FormulaToken *t = ft->GetFormulaToken();
+        if (t->GetType() != formula::svDoubleVectorRef)
+            throw Unhandled();
+        mpDVR = dynamic_cast<const formula::DoubleVectorRefToken *>(t);
+        assert(mpDVR);
+        bIsStartFixed = mpDVR->IsStartFixed();
+        bIsEndFixed = mpDVR->IsEndFixed();
+    }
+    /// Emit the definition for the auxiliary reduction kernel
+    virtual void GenSlidingWindowFunction(std::stringstream &ss) {
+        std::string name = Base::GetName();
+        ss << "__kernel void "<<name;
+        ss << "_reduction(__global double* A, "
+            "__global double *result,int arrayLength,int windowSize){\n";
+        ss << "    double tmp, current_result =" <<
+            mpCodeGen->GetBottom();
+        ss << ";\n";
+        ss << "    int writePos = get_group_id(1);\n";
+        ss << "    int lidx = get_local_id(0);\n";
+        ss << "    __local double shm_buf[256];\n";
+        if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            ss << "    int offset = 0;\n";
+        else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+            ss << "    int offset = get_group_id(1);\n";
+        else
+            throw Unhandled();
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    int loop = arrayLength/512 + 1;\n";
+        ss << "    for (int l=0; l<loop; l++){\n";
+        ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
+        ss << "    int loopOffset = l*512;\n";
+        ss << "    if((loopOffset + lidx + offset + 256) < min( offset + windowSize, arrayLength))\n";
+        ss << "        tmp = ";
+        ss << mpCodeGen->Gen2(
+                std::string(
+                    "legalize(A[loopOffset + lidx + offset], ")+
+                mpCodeGen->GetBottom() +")",
+                std::string(
+                    "legalize(A[loopOffset + lidx + offset + 256], ")+
+                mpCodeGen->GetBottom() +")"
+                );
+        ss << ";\n";
+        ss << "    else if ((loopOffset + lidx + offset) < min(offset + windowSize, arrayLength))\n";
+        ss << "        tmp = legalize(A[loopOffset + lidx + offset],";
+        ss << mpCodeGen->GetBottom() << ");\n";
+        ss << "    shm_buf[lidx] = tmp;\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    for (int i = 128; i >0; i/=2) {\n";
+        ss << "        if (lidx < i)\n";
+        ss << "            shm_buf[lidx] = ";
+        ss << mpCodeGen->Gen2("shm_buf[lidx]", "shm_buf[lidx + i]");
+        ss << ";";
+        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "    if (lidx == 0)\n";
+        ss << "        current_result =";
+        ss << mpCodeGen->Gen2("current_result", "shm_buf[0]");
+        ss << ";\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "    if (lidx == 0)\n";
+        ss << "        result[writePos] = current_result;\n";
+        ss << "}\n";
+     }
+
+
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const
+    {
+        std::stringstream ss;
+        if (!bIsStartFixed && !bIsEndFixed)
+            ss << Base::GetName() << "[i + gid0]";
+        else
+            ss << Base::GetName() << "[i]";
+        return ss.str();
+    }
+    /// Controls how the elements in the DoubleVectorRef are traversed
+    virtual size_t GenReductionLoopHeader(
+        std::stringstream &ss, bool &needBody)
+    {
+        assert(mpDVR);
+        size_t nCurWindowSize = mpDVR->GetRefRowSize();
+        std::string temp = Base::GetName() + "[gid0]";
+        ss << "tmp = ";
+        ss << mpCodeGen->Gen2(temp, "tmp");
+        ss << ";\n\t";
+        needBody = false;
+        return nCurWindowSize;
+    }
 
     virtual size_t Marshal(cl_kernel k, int argno, int w, cl_program mpProgram)
     {
-        if (!NeedParallelReduction() ||
-            dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
-            return Base::Marshal(k, argno, w, mpProgram);
-
         assert(Base::mpClmem == NULL);
         // Obtain cl context
         KernelEnv kEnv;
@@ -780,7 +810,7 @@ return nCurWindowSize;
             throw OpenCLError(err);
         return 1;
     }
-    ~DynamicKernelSlidingArgument()
+    ~ParallelReductionVectorRef()
     {
         if (mpClmem2)
         {
@@ -806,6 +836,8 @@ protected:
     cl_mem mpClmem2;
 };
 
+
+
 /// Abstract class for code generation
 
 class Reduction: public SlidingFunctionBase
@@ -813,6 +845,7 @@ class Reduction: public SlidingFunctionBase
 public:
     typedef DynamicKernelSlidingArgument<VectorRef> NumericRange;
     typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
+    typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
 
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
@@ -834,13 +867,23 @@ public:
         size_t nItems = 0;
         while (i--)
         {
-            if (NumericRange *NR = dynamic_cast<NumericRange *> (vSubArguments[i].get()))
+            if (NumericRange *NR =
+                    dynamic_cast<NumericRange *> (vSubArguments[i].get()))
             {
                 bool needBody;
                 nItems += NR->GenReductionLoopHeader(ss, needBody);
                 if (needBody == false) continue;
             }
-            else if (StringRange *SR = dynamic_cast<StringRange *> (vSubArguments[i].get()))
+            else if (ParallelNumericRange *PNR =
+                    dynamic_cast<ParallelNumericRange *> (vSubArguments[i].get()))
+            {
+                //did not handle yet
+                bool needBody;
+                nItems += PNR->GenReductionLoopHeader(ss, needBody);
+                if (needBody == false) continue;
+            }
+            else if (StringRange *SR =
+                    dynamic_cast<StringRange *> (vSubArguments[i].get()))
             {
                 //did not handle yet
                 bool needBody;
@@ -1497,6 +1540,46 @@ boost::shared_ptr<DynamicKernelArgument> SoPHelper(
     return boost::shared_ptr<DynamicKernelArgument>(new DynamicKernelSoPArguments(ts, ft, pCodeGen));
 }
 
+template<class Base>
+DynamicKernelArgument *VectorRefFactory(const std::string &s,
+        const FormulaTreeNodeRef& ft,
+        boost::shared_ptr<SlidingFunctionBase> &pCodeGen,
+        int index)
+{
+    //Black lists ineligible classes here ..
+    // SUMIFS does not perform parallel reduction at DoubleVectorRef level
+    if (dynamic_cast<OpSumIfs*>(pCodeGen.get())) {
+        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+    }
+    // AVERAGE is not supported yet
+    else if (dynamic_cast<OpAverage*>(pCodeGen.get()))
+    {
+        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+    }
+    // COUNT is not supported yet
+    else if (dynamic_cast<OpCount*>(pCodeGen.get()))
+    {
+        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+    }
+    // Only child class of Reduction is supported
+    else if (!dynamic_cast<Reduction*>(pCodeGen.get()))
+    {
+        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+    }
+
+    const formula::DoubleVectorRefToken* pDVR =
+        dynamic_cast< const formula::DoubleVectorRefToken* >(
+                ft->GetFormulaToken());
+    // Window being too small to justify a parallel reduction
+    if (pDVR->GetRefRowSize() < 100)
+        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+    if ((pDVR->IsStartFixed() && pDVR->IsEndFixed()) ||
+            (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()))
+        return new ParallelReductionVectorRef<Base>(s, ft, pCodeGen, index);
+    else // Other cases are not supported as well
+        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+}
+
 DynamicKernelSoPArguments::DynamicKernelSoPArguments(
     const std::string &s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen) :
     DynamicKernelArgument(s, ft), mpCodeGen(pCodeGen)
@@ -1523,12 +1606,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     {
                         if (pDVR->GetArrays()[j].mpNumericArray)
                             mvSubArguments.push_back(
-                                    SubArgument(new DynamicKernelSlidingArgument
-                                        <VectorRef>(
+                                    SubArgument(VectorRefFactory<VectorRef>(
                                             ts, ft->Children[i], mpCodeGen, j)));
                         else
                             mvSubArguments.push_back(
-                                    SubArgument(new DynamicKernelSlidingArgument
+                                    SubArgument(VectorRefFactory
                                         <DynamicKernelStringArgument>(
                                             ts, ft->Children[i], mpCodeGen, j)));
                     }
