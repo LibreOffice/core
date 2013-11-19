@@ -12446,17 +12446,6 @@ fi
 AC_MSG_RESULT([$PARALLELISM])
 AC_SUBST(PARALLELISM)
 
-# ===================================================================
-# Number of parallel jobs to be executed during subsequenttest
-# ===================================================================
-AC_MSG_CHECKING([for maximum no. of jobs during subsequenttest])
-CHECK_PARALLELISM=$PARALLELISM
-if test "$with_check_jobs" != ""; then
-    CHECK_PARALLELISM="$with_check_jobs"
-fi
-AC_MSG_RESULT([$CHECK_PARALLELISM])
-AC_SUBST(CHECK_PARALLELISM)
-
 #
 # Set up ILIB for MSVC build
 #
