@@ -482,7 +482,7 @@ void SwTxtInputFld::UpdateFieldContent()
         // skip CH_TXT_ATR_INPUTFIELDSTART character
         const xub_StrLen nIdx = (*GetStart()) + 1;
         // skip CH_TXT_ATR_INPUTFIELDEND character
-        const xub_StrLen nLen = static_cast<xub_StrLen>(std::max( 0, ( (*End()) - 1 - nIdx ) ));
+        const xub_StrLen nLen = static_cast<xub_StrLen>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
         const OUString aNewFieldContent = GetTxtNode().GetExpandTxt( nIdx, nLen );
 
         const SwInputField* pInputFld = dynamic_cast<const SwInputField*>(GetFmtFld().GetField());
