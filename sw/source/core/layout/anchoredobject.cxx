@@ -237,8 +237,9 @@ void SwAnchoredObject::ResetLastCharRectHeight()
 // =============================================================================
 void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFrm )
 {
-    mpVertPosOrientFrm = &_rVertPosOrientFrm;
+    ClearVertPosOrientFrm();
 
+    mpVertPosOrientFrm = &_rVertPosOrientFrm;
     const_cast<SwLayoutFrm*>(mpVertPosOrientFrm)->SetVertPosOrientFrmFor(this);
 
     // #i28701# - take over functionality of deleted method
