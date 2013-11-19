@@ -222,9 +222,7 @@ private:
 
     ParserData maData;                      /// Cached parser configuration for next call of parseStream().
     ::std::stack< Entity > maEntities;      /// Entity stack for each call of parseStream().
-
-    static const int mnUtf8BufferSize = 128;
-    ::css::uno::Sequence< sal_Int8 > maUtf8Buffer; /// avoid constantly re-allocating this
+    FastTokenLookup maTokenLookup;
 };
 
 }

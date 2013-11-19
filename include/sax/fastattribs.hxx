@@ -49,6 +49,18 @@ struct UnknownAttribute
 
 typedef std::vector< UnknownAttribute > UnknownAttributeList;
 
+/// avoid constantly allocating and freeing sequences.
+class SAX_DLLPUBLIC FastTokenLookup
+{
+    static const int mnUtf8BufferSize = 128;
+    ::css::uno::Sequence< sal_Int8 > maUtf8Buffer;
+public:
+    FastTokenLookup();
+    sal_Int32 getTokenFromChars(
+        const ::css::uno::Reference< ::css::xml::sax::XFastTokenHandler > &mxTokenHandler,
+        const char *pStr, size_t nLength = 0 );
+};
+
 class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastAttributeList >
 {
 public:
@@ -83,6 +95,7 @@ private:
     std::vector< sal_Int32 > maAttributeTokens;
     UnknownAttributeList maUnknownAttributes;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxTokenHandler;
+    FastTokenLookup maTokenLookup;
 };
 
 }

@@ -114,10 +114,9 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXExcept
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-        {
-            Sequence< sal_Int8 > aSeq( (sal_Int8*) mpChunk + maAttributeValues[i], AttributeValueLength(i) );
-            return mxTokenHandler->getTokenFromUTF8( aSeq );
-        }
+            return maTokenLookup.getTokenFromChars( mxTokenHandler,
+                                                    mpChunk + maAttributeValues[ i ],
+                                                    AttributeValueLength( i ) );
 
     throw SAXException();
 }
@@ -126,10 +125,9 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-        {
-            Sequence< sal_Int8 > aSeq( (sal_Int8*) mpChunk + maAttributeValues[i], AttributeValueLength(i) );
-            return mxTokenHandler->getTokenFromUTF8( aSeq );
-        }
+            return maTokenLookup.getTokenFromChars( mxTokenHandler,
+                                                    mpChunk + maAttributeValues[ i ],
+                                                    AttributeValueLength( i ) );
 
     return Default;
 }
@@ -176,6 +174,47 @@ sal_Int32 FastAttributeList::AttributeValueLength(sal_Int32 i)
 {
     // Pointers to null terminated strings
     return maAttributeValues[i + 1] - maAttributeValues[i] - 1;
+}
+
+FastTokenLookup::FastTokenLookup()
+{
+    maUtf8Buffer.realloc( mnUtf8BufferSize );
+}
+
+/**
+ * Avoid doing any memory allocation if we can, instead keep a
+ * pet sequence around and do some heavy petting on it.
+ */
+sal_Int32 FastTokenLookup::getTokenFromChars(
+        const ::css::uno::Reference< ::css::xml::sax::XFastTokenHandler > &xTokenHandler,
+        const char *pToken, size_t nLen /* = 0 */ )
+{
+    sal_Int32 nRet;
+
+    if( !nLen )
+        nLen = strlen( pToken );
+
+    if ( nLen < mnUtf8BufferSize )
+    {
+        // Get intimiate with the underlying sequence cf. sal/types.h
+        sal_Sequence *pSeq = maUtf8Buffer.get();
+
+        sal_Int32 nPreRefCount = pSeq->nRefCount;
+
+        pSeq->nElements = nLen;
+        memcpy( pSeq->elements, pToken, nLen );
+        nRet = xTokenHandler->getTokenFromUTF8( maUtf8Buffer );
+
+        (void)nPreRefCount; // for non-debug mode.
+        assert( pSeq->nRefCount == nPreRefCount ); // callee must not take ref
+    }
+    else
+    {
+        Sequence< sal_Int8 > aSeq( (sal_Int8*)pToken, nLen ); // heap allocate & free
+        nRet = xTokenHandler->getTokenFromUTF8( aSeq );
+    }
+
+    return nRet;
 }
 
 }
