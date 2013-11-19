@@ -35,7 +35,6 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#define     CHILDID_SELF        0
 #define     OBJID_WINDOW        ((LONG)0x00000000)
 #define     OBJID_SYSMENU       ((LONG)0xFFFFFFFF)
 #define     OBJID_TITLEBAR      ((LONG)0xFFFFFFFE)

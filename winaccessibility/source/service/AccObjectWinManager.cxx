@@ -46,8 +46,6 @@
 #include "unomsaaevent.hxx"
 #include "checkmt.hxx"
 
-#define CHILDID_SELF             0
-
 
 using namespace std;
 using namespace com::sun::star::accessibility;

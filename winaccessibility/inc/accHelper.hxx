@@ -28,7 +28,6 @@ enum DIRECTION
     AFTER_CHILD=2
 };
 
-#define CHILDID_SELF             0
 #define UNO_MSAA_UNMAPPING       0x00000000
 
 
