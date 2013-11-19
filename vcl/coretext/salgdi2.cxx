@@ -304,7 +304,7 @@ AquaSalGraphics::AquaSalGraphics()
 
 AquaSalGraphics::~AquaSalGraphics()
 {
-#ifdef MAXOSX
+#ifdef MACOSX
     CGPathRelease( mxClipPath );
     delete mpMacTextStyle;
 
