@@ -561,6 +561,9 @@ void SwLayoutFrm::Destroy()
     {
         SwAnchoredObject *pObj = *aVertPosOrientFrmsFor.begin();
         pObj->ClearVertPosOrientFrm();
+        aVertPosOrientFrmsFor.erase(
+            std::remove(aVertPosOrientFrmsFor.begin(),
+                aVertPosOrientFrmsFor.end(), pObj), aVertPosOrientFrmsFor.end());
     }
 
     assert(aVertPosOrientFrmsFor.empty());
