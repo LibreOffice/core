@@ -186,7 +186,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                     }
-                    else if ( aArg.equalsIgnoreAsciiCase("-pt"))
+                    else if ( oArg.equalsIgnoreAsciiCase("pt"))
                     {
                         // Print to special printer
                         bPrintToEvent   = true;
