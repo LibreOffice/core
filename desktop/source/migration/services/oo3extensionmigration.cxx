@@ -439,8 +439,7 @@ void TmpRepositoryCommandEnv::handle(
     uno::Reference< task::XInteractionRequest> const & xRequest )
     throw ( uno::RuntimeException )
 {
-    uno::Any request( xRequest->getRequest() );
-    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    OSL_ASSERT( xRequest->getRequest().getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     bool approve = true;
     bool abort   = false;
