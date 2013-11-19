@@ -1330,6 +1330,11 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
             sal_Bool bChgWord = rDoc.ChgAutoCorrWord( nCapLttrPos, nInsPos,
                                                     *this, ppPara );
+            // since LibO 4.1, '-' is a word separator
+            // fdo#67742 avoid "--" to be replaced by "–" if next is "-"
+            if( rTxt.Len() >= 3 &&
+                rTxt.Equals( String("---"), rTxt.Len()-3, 3 ) )
+                    break;
             if( !bChgWord )
             {
                 xub_StrLen nCapLttrPos1 = nCapLttrPos, nInsPos1 = nInsPos;
