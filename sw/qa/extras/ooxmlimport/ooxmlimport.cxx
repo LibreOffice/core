@@ -1514,6 +1514,9 @@ DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
 
     // Check position, it was 0. This is a shape, so use getPosition(), not a property.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(671830)), xShape->getPosition().X);
+
+    // Left margin was 0, instead of 114300 EMU's.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, "LeftMargin"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")

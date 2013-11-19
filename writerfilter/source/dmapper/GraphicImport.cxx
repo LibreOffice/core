@@ -1000,6 +1000,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
 
                         m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
+                        m_pImpl->applyMargins(xShapeProps);
                     }
                 }
             }
