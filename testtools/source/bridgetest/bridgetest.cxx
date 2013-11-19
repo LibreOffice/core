@@ -270,14 +270,12 @@ static sal_Bool performAnyTest( const Reference< XBridgeTest > &xLBT, const Test
     Any a;
     {
         a.setValue( &(data.Bool) , getCppuBooleanType() );
-        Any a2 = xLBT->transportAny( a );
-        OSL_ASSERT( a2 == a );
+        OSL_ASSERT( xLBT->transportAny( a ) == a );
     }
 
     {
         a.setValue( &(data.Char) , getCppuCharType() );
-        Any a2 = xLBT->transportAny( a );
-        OSL_ASSERT( a2 == a );
+        OSL_ASSERT( xLBT->transportAny( a ) == a );
     }
 
     return bReturn;
