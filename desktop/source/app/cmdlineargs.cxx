@@ -163,18 +163,11 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         {
             m_bEmpty = false;
             OUString oArg;
-            bool bDeprecated = false;
-            if (aArg.startsWith("--"))
-            {
-                oArg = OUString(aArg.getStr()+2, aArg.getLength()-2);
-            }
-            else if (aArg.startsWith("-"))
-            {
-                if ( aArg.getLength() > 2 ) // -h, -o, -n, -? are still valid
-                    bDeprecated = true;
-                oArg = OUString(aArg.getStr()+1, aArg.getLength()-1);
-            }
+            bool bDeprecated = !aArg.startsWith("--", &oArg)
+                && aArg.startsWith("-", &oArg) && aArg.getLength() > 2;
+                // -h, -?, -n, -o, -p are still valid
 
+            OUString rest;
             if ( oArg == "minimized" )
             {
                 m_minimized = true;
@@ -294,25 +287,25 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bDeprecated = false;
             }
 #endif
-            else if ( oArg.startsWith("infilter="))
+            else if ( oArg.startsWith("infilter=", &rest))
             {
-                m_infilter.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")));
+                m_infilter.push_back(rest);
             }
-            else if ( oArg.startsWith("accept="))
+            else if ( oArg.startsWith("accept=", &rest))
             {
-                m_accept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("accept=")));
+                m_accept.push_back(rest);
             }
-            else if ( oArg.startsWith("unaccept="))
+            else if ( oArg.startsWith("unaccept=", &rest))
             {
-                m_unaccept.push_back(oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")));
+                m_unaccept.push_back(rest);
             }
-            else if ( oArg.startsWith("language="))
+            else if ( oArg.startsWith("language=", &rest))
             {
-                m_language = oArg.copy(RTL_CONSTASCII_LENGTH("language="));
+                m_language = rest;
             }
-            else if ( oArg.startsWith("pidfile="))
+            else if ( oArg.startsWith("pidfile=", &rest))
             {
-                m_pidfile = oArg.copy(RTL_CONSTASCII_LENGTH("pidfile="));
+                m_pidfile = rest;
             }
             else if ( oArg == "writer" )
             {
