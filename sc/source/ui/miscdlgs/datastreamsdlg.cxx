@@ -10,6 +10,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/inettbc.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 #include <datastreams.hxx>
 
 namespace {
@@ -20,16 +21,18 @@ class DataStreamsDlg : public ModalDialog
 
     SvtURLBox*      m_pCbUrl;
     PushButton*     m_pBtnBrowse;
-    RadioButton*    m_pRBDirectData;
     RadioButton*    m_pRBScriptData;
-    RadioButton*    m_pRBDataDown;
+    RadioButton*    m_pRBValuesInLine;
+    RadioButton*    m_pRBAddressValue;
     RadioButton*    m_pRBRangeDown;
     RadioButton*    m_pRBNoMove;
     RadioButton*    m_pRBMaxLimit;
-    RadioButton*    m_pRBUnlimited;
     Edit*           m_pEdRange;
     Edit*           m_pEdLimit;
     OKButton*       m_pBtnOk;
+    VclFrame*       m_pVclFrameLimit;
+    VclFrame*       m_pVclFrameMove;
+    VclFrame*       m_pVclFrameRange;
 
     DECL_LINK(UpdateHdl, void *);
     DECL_LINK(BrowseHdl, void *);
@@ -48,18 +51,22 @@ DataStreamsDlg::DataStreamsDlg(DataStreams *pDataStreams, Window* pParent)
 {
     get(m_pCbUrl, "url");
     get(m_pBtnBrowse, "browse");
-    get(m_pRBDirectData, "directdata");
     get(m_pRBScriptData, "scriptdata");
-    get(m_pRBDataDown, "datadown");
+    get(m_pRBValuesInLine, "valuesinline");
+    get(m_pRBAddressValue, "addressvalue");
     get(m_pRBRangeDown, "rangedown");
     get(m_pRBNoMove, "nomove");
     get(m_pRBMaxLimit, "maxlimit");
-    get(m_pRBUnlimited, "unlimited");
     get(m_pEdRange, "range");
     get(m_pEdLimit, "limit");
     get(m_pBtnOk, "ok");
+    get(m_pVclFrameLimit, "framelimit");
+    get(m_pVclFrameMove, "framemove");
+    get(m_pVclFrameRange, "framerange");
 
     m_pCbUrl->SetSelectHdl( LINK( this, DataStreamsDlg, UpdateHdl ) );
+    m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamsDlg, UpdateHdl ) );
+    m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamsDlg, UpdateHdl ) );
     m_pEdRange->SetModifyHdl( LINK( this, DataStreamsDlg, UpdateHdl ) );
     m_pBtnBrowse->SetClickHdl( LINK( this, DataStreamsDlg, BrowseHdl ) );
     UpdateEnable();
@@ -71,9 +78,9 @@ void DataStreamsDlg::Start()
     sal_Int32 nLimit = 0;
     if (m_pRBMaxLimit->IsChecked())
         nLimit = m_pEdLimit->GetText().toInt32();
-    mpDataStreams->Set(m_pCbUrl->GetText(), bIsScript, m_pEdRange->GetText(),
-            nLimit, m_pRBNoMove->IsChecked() ? DataStreams::NO_MOVE :
-                    m_pRBRangeDown->IsChecked() ? DataStreams::RANGE_DOWN : DataStreams::MOVE_DOWN);
+    mpDataStreams->Set( m_pCbUrl->GetText(), bIsScript, m_pRBValuesInLine->IsChecked(),
+            m_pEdRange->GetText(), nLimit, (m_pRBNoMove->IsChecked() ? DataStreams::NO_MOVE :
+            m_pRBRangeDown->IsChecked() ? DataStreams::RANGE_DOWN : DataStreams::MOVE_DOWN) );
     mpDataStreams->Start();
 }
 
@@ -96,8 +103,20 @@ IMPL_LINK_NOARG(DataStreamsDlg, UpdateHdl)
 
 void DataStreamsDlg::UpdateEnable()
 {
-    bool bOk = !m_pEdRange->GetText().isEmpty();
-    bOk = bOk && !m_pCbUrl->GetURL().isEmpty();
+    bool bOk = !m_pCbUrl->GetURL().isEmpty();
+    if (m_pRBAddressValue->IsChecked())
+    {
+        m_pVclFrameLimit->Hide();
+        m_pVclFrameMove->Hide();
+        m_pVclFrameRange->Hide();
+    }
+    else
+    {
+        m_pVclFrameLimit->Show(true);
+        m_pVclFrameMove->Show();
+        m_pVclFrameRange->Show();
+        bOk = bOk && !m_pEdRange->GetText().isEmpty();
+    }
     m_pBtnOk->Enable(bOk);
 }
 

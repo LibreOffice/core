@@ -18,7 +18,9 @@
 #include <asciiopt.hxx>
 #include <dbfunc.hxx>
 #include <docsh.hxx>
+#include <documentimport.hxx>
 #include <impex.hxx>
+#include <rangelst.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 
@@ -115,18 +117,25 @@ void DataStreams::Stop()
     mpScDocument->EnableUndo(mbIsUndoEnabled);
 }
 
-void DataStreams::Set(const OUString& rUrl, bool bIsScript,
+void DataStreams::Set(const OUString& rUrl, bool bIsScript, bool bValuesInLine,
         const OUString& rRange, sal_Int32 nLimit, MoveEnum eMove)
 {
-    mpRange.reset ( new ScRange() );
-    mpRange->Parse(rRange, mpScDocument);
-    mpStartRange.reset( new ScRange(*mpRange.get()) );
     if (bIsScript)
         mpStream.reset( new SvScriptStream(rUrl) );
     else
         mpStream.reset( new SvFileStream(rUrl, STREAM_READ) );
 
     mpEndRange.reset( NULL );
+    mpRange.reset ( new ScRange() );
+    mbValuesInLine = bValuesInLine;
+    if (!mbValuesInLine)
+    {
+        meMove = NO_MOVE;
+        return;
+    }
+
+    mpRange->Parse(rRange, mpScDocument);
+    mpStartRange.reset( new ScRange(*mpRange.get()) );
     meMove = eMove;
     sal_Int32 nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
     nLimit = nHeight * (nLimit / nHeight);
@@ -168,21 +177,52 @@ bool DataStreams::ImportData()
         return mbRunning;
     }
 
-    SCROW nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
-    OStringBuffer aBuf;
     OString sTmp;
-    while (nHeight--)
-    {
-        mpStream->ReadLine(sTmp);
-        aBuf.append(sTmp);
-        aBuf.append('\n');
-    }
     SolarMutexGuard aGuard;
     MoveData();
-    SvMemoryStream aMemoryStream((void *)aBuf.getStr(), aBuf.getLength(), STREAM_READ);
-    ScImportExport aImport(mpScDocument, *mpRange);
-    aImport.SetSeparator(',');
-    aImport.ImportStream(aMemoryStream, OUString(), FORMAT_STRING);
+    if (mbValuesInLine)
+    {
+        SCROW nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
+        OStringBuffer aBuf;
+        while (nHeight--)
+        {
+            mpStream->ReadLine(sTmp);
+            aBuf.append(sTmp);
+            aBuf.append('\n');
+        }
+        SvMemoryStream aMemoryStream((void *)aBuf.getStr(), aBuf.getLength(), STREAM_READ);
+        ScImportExport aImport(mpScDocument, *mpRange);
+        aImport.SetSeparator(',');
+        aImport.ImportStream(aMemoryStream, OUString(), FORMAT_STRING);
+    }
+    else
+    {
+        ScRangeList aRangeList;
+        ScDocumentImport aDocImport(*mpScDocument);
+        // read more lines at once but not too much
+        for (int i = 0; i < 10; ++i)
+        {
+            mpStream->ReadLine(sTmp);
+            OUString sLine(OStringToOUString(sTmp, RTL_TEXTENCODING_UTF8));
+            if (sLine.indexOf(',') <= 0)
+                continue;
+
+            OUString sAddress( sLine.copy(0, sLine.indexOf(',')) );
+            OUString sValue( sLine.copy(sLine.indexOf(',') + 1) );
+            ScAddress aAddress;
+            aAddress.Parse(sAddress, mpScDocument);
+            if (!aAddress.IsValid())
+                continue;
+
+            if (sValue == "0" || ( sValue.indexOf(':') == -1 && sValue.toDouble() ))
+                aDocImport.setNumericCell(aAddress, sValue.toDouble());
+            else
+                aDocImport.setStringCell(aAddress, sValue);
+            aRangeList.Join(aAddress);
+        }
+        aDocImport.finalize();
+        mpScDocShell->PostPaint( aRangeList, PAINT_GRID );
+    }
     // ImportStream calls PostPaint for relevant area,
     // we need to call it explicitly only when moving rows.
     if (meMove == NO_MOVE)
