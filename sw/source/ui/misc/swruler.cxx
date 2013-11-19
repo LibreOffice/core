@@ -241,8 +241,6 @@ void SwCommentRuler::UpdateCommentHelpText()
     SetQuickHelpText( OUString( SW_RESSTR( nTooltipResId ) ) );
 }
 
-// NOTE: If sometime ahead SwSidebar moves from page right side due RTL layout,
-//   change how this rectangle is used by callers
 // TODO Make Ruler return its central rectangle instead of margins.
 Rectangle SwCommentRuler::GetCommentControlRegion()
 {
@@ -255,14 +253,15 @@ Rectangle SwCommentRuler::GetCommentControlRegion()
     if (!pPostItMgr)
         return Rectangle();
 
+    unsigned long nSidebarWidth = pPostItMgr->GetSidebarWidth(true);
     //FIXME When the page width is larger then screen, the ruler is misplaced by one pixel
     if (GetTextRTL())
-       nLeft = GetPageOffset() - pPostItMgr->GetSidebarWidth(true) + GetBorderOffset();
+       nLeft = GetPageOffset() - nSidebarWidth + GetBorderOffset();
     else
        nLeft = GetWinOffset() + GetPageOffset() + mpSwWin->LogicToPixel(Size(GetPageWidth(), 0)).Width();
     long nTop    = 0 + 4; // Ruler::ImplDraw uses RULER_OFF (value: 3px) as offset, and Ruler::ImplFormat adds one extra pixel
     // Somehow pPostItMgr->GetSidebarBorderWidth() returns border width already doubled
-    long nRight  = nLeft+ pPostItMgr->GetSidebarWidth(true) + pPostItMgr->GetSidebarBorderWidth(true);
+    long nRight  = nLeft + nSidebarWidth + pPostItMgr->GetSidebarBorderWidth(true);
     long nBottom = nTop + GetRulerVirHeight() - 3;
 
     Rectangle aRect(nLeft, nTop, nRight, nBottom);
