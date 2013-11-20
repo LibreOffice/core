@@ -687,19 +687,13 @@ public:
         ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
         ss << "    int loopOffset = l*512;\n";
         ss << "    if((loopOffset + lidx + offset + 256) < min( offset + windowSize, arrayLength))\n";
-        ss << "        tmp = ";
-        ss << mpCodeGen->Gen2(
-                std::string(
-                    "legalize(A[loopOffset + lidx + offset], ")+
-                mpCodeGen->GetBottom() +")",
-                std::string(
-                    "legalize(A[loopOffset + lidx + offset + 256], ")+
-                mpCodeGen->GetBottom() +")"
-                );
-        ss << ";\n";
+        ss << "        tmp = " << mpCodeGen->Gen2(
+                "A[loopOffset + lidx + offset]", "tmp") <<";\n";
+        ss << "        tmp = " << mpCodeGen->Gen2(
+                "A[loopOffset + lidx + offset + 256]", "tmp") << ";\n";
         ss << "    else if ((loopOffset + lidx + offset) < min(offset + windowSize, arrayLength))\n";
-        ss << "        tmp = legalize(A[loopOffset + lidx + offset],";
-        ss << mpCodeGen->GetBottom() << ");\n";
+        ss << "        tmp = " << mpCodeGen->Gen2(
+                "A[loopOffset + lidx + offset]", "tmp") <<";\n";
         ss << "    shm_buf[lidx] = tmp;\n";
         ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
         ss << "    for (int i = 128; i >0; i/=2) {\n";
@@ -1226,11 +1220,7 @@ public:
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         std::stringstream ss;
-#ifdef  ISNAN
-        ss << "(0 =="<< lhs << ")? tmp : (" << rhs<<"+1.0)";
-#else
         ss << "(isNan(" << lhs << ")?"<<rhs<<":"<<rhs<<"+1.0)";
-#endif
         return ss.str();
     }
     virtual std::string BinFuncName(void) const { return "fcount"; }
@@ -1556,8 +1546,8 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }
-    // COUNT is not supported yet
-    else if (dynamic_cast<OpCount*>(pCodeGen.get()))
+    // Sub is not a reduction per se
+    else if (dynamic_cast<OpSub*>(pCodeGen.get()))
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }
