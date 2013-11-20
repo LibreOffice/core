@@ -554,13 +554,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		dtrans \
 		fps \
 		ftransl \
-		$(if $(ENABLE_JAVA),java_uno_accessbridge) \
 		$(if $(DISABLE_ATL),,\
 			inprocserv \
 		) \
 		$(if $(ENABLE_IA2), \
-			UAccCOM \
-			winaccessibility \
+				UAccCOM \
+				winaccessibility \
+			, \
+				$(if $(ENABLE_JAVA),java_uno_accessbridge) \
 		) \
 	) \
 ))
