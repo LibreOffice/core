@@ -160,6 +160,7 @@ namespace avmedia
 
             OUString                                                                    maFileURL;
             OUString                                                                    mTempFileURL;
+            OUString                                                                    maReferer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             MediaWindow*                                                                mpMediaWindow;

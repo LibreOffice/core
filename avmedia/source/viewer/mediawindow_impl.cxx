@@ -253,6 +253,7 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& 
 void MediaWindowImpl::setURL( const OUString& rURL,
         OUString const& rTempURL, OUString const& rReferer)
 {
+    maReferer = rReferer;
     if( rURL != getURL() )
     {
         if( mxPlayer.is() )
@@ -331,7 +332,7 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
     rItem.setMute( isMute() );
     rItem.setVolumeDB( getVolumeDB() );
     rItem.setZoom( getZoom() );
-    rItem.setURL( getURL(), mTempFileURL, ""/*TODO?*/ );
+    rItem.setURL( getURL(), mTempFileURL, maReferer );
 }
 
 void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
