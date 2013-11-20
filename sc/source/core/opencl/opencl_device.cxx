@@ -9,6 +9,8 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#elif defined __MACH__
+#include <mach/mach_time.h>
 #else
 #include <sys/time.h>
 #endif
@@ -62,9 +64,9 @@ struct LibreOfficeDeviceEvaluationIO
 struct timer
 {
 #ifdef _WIN32
-    LARGE_INTEGER start, stop, frequency;
+    LARGE_INTEGER start;
 #else
-    long long start, stop, frequency;
+    long long start;
 #endif
 };
 
@@ -133,6 +135,8 @@ void timerStart(timer* mytimer)
 {
 #ifdef _WIN32
     QueryPerformanceCounter(&mytimer->start);
+#elif defined __MACH__
+    mytimer->start = mach_absolute_time();
 #else
     struct timespec s;
     clock_gettime(CLOCK_MONOTONIC, &s);
@@ -144,15 +148,22 @@ void timerStart(timer* mytimer)
 double timerStop(timer* mytimer)
 {
 #ifdef _WIN32
-    QueryPerformanceCounter(&mytimer->stop);
-    QueryPerformanceFrequency(&mytimer->frequency);
-    double time = ((double)(mytimer->stop.QuadPart - mytimer->start.QuadPart) / mytimer->frequency.QuadPart);
+    LARGE_INTEGER stop, frequency;
+    QueryPerformanceCounter(&stop);
+    QueryPerformanceFrequency(&frequency);
+    double time = ((double)(stop.QuadPart - mytimer->start.QuadPart) / frequency.QuadPart);
+#elif defined __MACH__
+    static mach_timebase_info_data_t info = { 0, 0 };
+    if (info.numer == 0)
+        mach_timebase_info(&info);
+    long long stop = mach_absolute_time();
+    double time = ((stop - mytimer->start) * (double) info.numer / info.denom) / 1000.0;
 #else
     struct timespec s;
+    long long stop;
     clock_gettime(CLOCK_MONOTONIC, &s);
-    mytimer->stop = (long long)s.tv_sec * (long long)1.0E6 + (long long)s.tv_nsec / (long long)1.0E3;
-    mytimer->frequency = (long long)1.0E6;
-    double time = ((double)(mytimer->stop - mytimer->start) / mytimer->frequency);
+    stop = (long long)s.tv_sec * (long long)1.0E6 + (long long)s.tv_nsec / (long long)1.0E3;
+    double time = ((double)(stop - mytimer->start) / 1.0E6);
 #endif
     return time;
 }
