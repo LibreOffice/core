@@ -53,38 +53,30 @@ private: //methods:
     DECL_LINK( PlaceLabelsSelectHdl, void* );
 
 private: //member:
-    FixedLine           m_aFL_AxisLine;
-    FixedText           m_aFT_CrossesAt;
-    ListBox             m_aLB_CrossesAt;
-    FormattedField      m_aED_CrossesAt;
-    ComboBox            m_aED_CrossesAtCategory;
-    CheckBox            m_aCB_AxisBetweenCategories;
+    VclFrame*       m_pFL_AxisLine;
+    ListBox*        m_pLB_CrossesAt;
+    FormattedField* m_pED_CrossesAt;
+    ComboBox*       m_pED_CrossesAtCategory;
+    CheckBox*       m_pCB_AxisBetweenCategories;
 
-    FixedLine       m_aFL_Labels;
-    FixedText       m_aFT_PlaceLabels;
-    ListBox         m_aLB_PlaceLabels;
-    FixedText       m_aFT_LabelDistance;
-    FormattedField  m_aED_LabelDistance;
+    VclFrame*       m_pFL_Labels;
+    ListBox*        m_pLB_PlaceLabels;
+    FormattedField* m_pED_LabelDistance;
 
-    FixedLine   m_aFL_Ticks;
+    CheckBox*       m_pCB_TicksInner;
+    CheckBox*       m_pCB_TicksOuter;
 
-    FixedText   m_aFT_Major;
-    CheckBox    m_aCB_TicksInner;
-    CheckBox    m_aCB_TicksOuter;
+    CheckBox*       m_pCB_MinorInner;
+    CheckBox*       m_pCB_MinorOuter;
 
-    FixedText   m_aFT_Minor;
-    CheckBox    m_aCB_MinorInner;
-    CheckBox    m_aCB_MinorOuter;
+    VclBox*         m_pBxPlaceTicks;
+    ListBox*        m_pLB_PlaceTicks;
 
-    FixedLine   m_aFL_Vertical;
-    FixedText   m_aFT_PlaceTicks;
-    ListBox     m_aLB_PlaceTicks;
-
-    FixedLine   m_aFL_Grids;
-    CheckBox    m_aCB_MajorGrid;
-    PushButton  m_aPB_MajorGrid;
-    CheckBox    m_aCB_MinorGrid;
-    PushButton  m_aPB_MinorGrid;
+//     Not implemented
+//     CheckBox*       m_pCB_MajorGrid;
+//     PushButton*     m_pPB_MajorGrid;
+//     CheckBox*       m_pCB_MinorGrid;
+//     PushButton*     m_pPB_MinorGrid;
 
     SvNumberFormatter*  m_pNumFormatter;
 
