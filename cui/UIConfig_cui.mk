@@ -105,7 +105,9 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/possizetabpage \
 	cui/uiconfig/ui/querychangelineenddialog \
 	cui/uiconfig/ui/querydeletechartcolordialog \
+    cui/uiconfig/ui/querydeletecolordialog \
 	cui/uiconfig/ui/querydeletedictionarydialog \
+    cui/uiconfig/ui/querydeletegradientdialog \
 	cui/uiconfig/ui/querydeletelineenddialog \
 	cui/uiconfig/ui/querydeletelinestyledialog \
 	cui/uiconfig/ui/queryduplicatedialog \
