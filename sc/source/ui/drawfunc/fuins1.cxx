@@ -192,7 +192,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
 
     pObj->SetModel(pData->GetDocument()->GetDrawLayer()); // set before setURL
-    pObj->setURL( realURL );
+    pObj->setURL( realURL, ""/*TODO?*/ );
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }
 
@@ -338,7 +338,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
         if( pWin )
             pWin->EnterWait();
 
-        if( !::avmedia::MediaWindow::isMediaURL( aURL, true, &aPrefSize ) )
+        if( !::avmedia::MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true, &aPrefSize ) )
         {
             if( pWin )
                 pWin->LeaveWait();

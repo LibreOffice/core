@@ -2478,7 +2478,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
             aMediaURL.SetSmartURL( sFile );
             const OUString aMediaURLStr( aMediaURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-            if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr ) )
+            if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr, ""/*TODO?*/ ) )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aMediaURLStr );
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(

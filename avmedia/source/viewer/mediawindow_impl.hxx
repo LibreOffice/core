@@ -91,9 +91,9 @@ namespace avmedia
                             MediaWindowImpl( Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl );
             virtual         ~MediaWindowImpl();
 
-            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL );
+            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer );
 
-            void    setURL( const OUString& rURL, OUString const& rTempURL );
+            void    setURL( const OUString& rURL, OUString const& rTempURL, OUString const& rReferer );
 
             const   OUString&  getURL() const;
 

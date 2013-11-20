@@ -189,7 +189,7 @@ uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot()
         OUString aRealURL = m_pImpl->m_MediaProperties.getTempURL();
         if( aRealURL.isEmpty() )
             aRealURL = m_pImpl->m_MediaProperties.getURL();
-        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, true );
+        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, m_pImpl->m_MediaProperties.getReferer(), true );
     }
     return m_pImpl->m_xCachedSnapshot;
 }
@@ -242,11 +242,11 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::setURL( const OUString& rURL)
+void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer )
 {
     ::avmedia::MediaItem aURLItem;
 
-    aURLItem.setURL( rURL, "" );
+    aURLItem.setURL( rURL, "", rReferer );
     setMediaProperties( aURLItem );
 }
 
@@ -374,24 +374,24 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 if (bSuccess)
                 {
                     m_pImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
-                    m_pImpl->m_MediaProperties.setURL(url, tempFileURL);
+                    m_pImpl->m_MediaProperties.setURL(url, tempFileURL, rNewProperties.getReferer());
                 }
                 else // this case is for Clone via operator=
                 {
                     m_pImpl->m_pTempFile.reset();
-                    m_pImpl->m_MediaProperties.setURL("", "");
+                    m_pImpl->m_MediaProperties.setURL("", "", "");
                 }
             }
             else
             {
                 m_pImpl->m_MediaProperties.setURL(url,
-                        rNewProperties.getTempURL());
+                        rNewProperties.getTempURL(), rNewProperties.getReferer());
             }
         }
         else
         {
             m_pImpl->m_pTempFile.reset();
-            m_pImpl->m_MediaProperties.setURL(url, "");
+            m_pImpl->m_MediaProperties.setURL(url, "", rNewProperties.getReferer());
         }
         bBroadcastChanged = true;
     }

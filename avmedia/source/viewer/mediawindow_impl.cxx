@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/securityoptions.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
@@ -204,9 +205,13 @@ MediaWindowImpl::~MediaWindowImpl()
     delete mpMediaWindowControl;
 }
 
-uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL, const OUString& rReferer )
 {
     uno::Reference< media::XPlayer > xPlayer;
+    if (SvtSecurityOptions().isUntrustedReferer(rReferer)) {
+        return xPlayer;
+    }
+
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
     static const char * aServiceManagers[] = {
@@ -246,7 +251,7 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& 
 }
 
 void MediaWindowImpl::setURL( const OUString& rURL,
-        OUString const& rTempURL)
+        OUString const& rTempURL, OUString const& rReferer)
 {
     if( rURL != getURL() )
     {
@@ -278,7 +283,7 @@ void MediaWindowImpl::setURL( const OUString& rURL,
         }
 
         mxPlayer = createPlayer(
-                (!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL );
+                (!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL, rReferer );
         onURLChanged();
     }
 }
@@ -326,7 +331,7 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
     rItem.setMute( isMute() );
     rItem.setVolumeDB( getVolumeDB() );
     rItem.setZoom( getZoom() );
-    rItem.setURL( getURL(), mTempFileURL );
+    rItem.setURL( getURL(), mTempFileURL, ""/*TODO?*/ );
 }
 
 void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
@@ -335,7 +340,7 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
 
     // set URL first
     if( nMaskSet & AVMEDIA_SETMASK_URL )
-        setURL( rItem.getURL(), rItem.getTempURL() );
+        setURL( rItem.getURL(), rItem.getTempURL(), rItem.getReferer() );
 
     // set different states next
     if( nMaskSet & AVMEDIA_SETMASK_TIME )

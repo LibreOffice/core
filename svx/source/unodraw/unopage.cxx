@@ -735,7 +735,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxCustomShape( pObj );
                     break;
                 case OBJ_MEDIA:
-                    pRet = new SvxMediaShape( pObj );
+                    pRet = new SvxMediaShape( pObj, referer );
                     break;
                 case OBJ_TABLE:
                     pRet = new SvxTableShape( pObj );
@@ -826,9 +826,9 @@ uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames() throw
     return aSeq;
 }
 
-SvxShape* CreateSvxShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor ) throw()
+SvxShape* CreateSvxShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, OUString const & referer ) throw()
 {
-    return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor );
+    return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor, 0, 0, referer );
 }
 
 void SvxDrawPage::ChangeModel( SdrModel* pNewModel )

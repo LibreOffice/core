@@ -1631,8 +1631,9 @@ void    SwXTextDocument::InitNewDoc()
 }
 
 #define COM_SUN_STAR__DRAWING_LENGTH 13
-Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
-                                        throw( Exception, RuntimeException )
+css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
+    OUString const & rServiceName,
+    css::uno::Sequence<css::uno::Any> const * arguments)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -1715,7 +1716,10 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                     aTmpServiceName = "com.sun.star.drawing.OLE2Shape";
                 }
                 //here search for the draw service
-                Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(aTmpServiceName);
+                Reference< XInterface >  xTmp = arguments == 0
+                    ? SvxFmMSFactory::createInstance(aTmpServiceName)
+                    : SvxFmMSFactory::createInstanceWithArguments(
+                        aTmpServiceName, *arguments);
                 if(bShape)
                 {
                     nIndex = COM_SUN_STAR__DRAWING_LENGTH;
@@ -1735,15 +1739,18 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
     return xRet;
 }
 
+Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
+                                        throw( Exception, RuntimeException )
+{
+    return create(rServiceName, 0);
+}
+
 Reference< XInterface >  SwXTextDocument::createInstanceWithArguments(
         const OUString& ServiceSpecifier,
-        const Sequence< Any >& /*Arguments*/)
+        const Sequence< Any >& Arguments)
         throw( Exception, RuntimeException )
 {
-    Reference< XInterface >  xInt = createInstance(ServiceSpecifier);
-    // The Any-Sequence is for initializing objects that are dependent
-    // on parameters necessarily - so far we have not.
-    return xInt;
+    return create(ServiceSpecifier, &Arguments);
 }
 
 Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)

@@ -692,7 +692,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
         if( mpWindow )
             mpWindow->EnterWait();
 
-        if( !::avmedia::MediaWindow::isMediaURL( aURL, true, &aPrefSize ) )
+        if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
         {
             if( mpWindow )
                 mpWindow->LeaveWait();

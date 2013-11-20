@@ -116,11 +116,11 @@ void MediaFloater::ToggleFloatingMode()
 
 // -----------------------------------------------------------------------------
 
-void MediaFloater::setURL( const OUString& rURL, bool bPlayImmediately )
+void MediaFloater::setURL( const OUString& rURL, const OUString& rReferer, bool bPlayImmediately )
 {
     if( mpMediaWindow )
     {
-        mpMediaWindow->setURL( rURL );
+        mpMediaWindow->setURL( rURL, rReferer );
 
         if( mpMediaWindow->isValid() && bPlayImmediately )
             mpMediaWindow->start();

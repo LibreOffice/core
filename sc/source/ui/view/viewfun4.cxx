@@ -588,7 +588,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bo
     OUString aStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
     // is it a media URL?
-    if( ::avmedia::MediaWindow::isMediaURL( aStrURL ) )
+    if( ::avmedia::MediaWindow::isMediaURL( aStrURL, ""/*TODO?*/ ) )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
         return sal_Bool( 0 != GetViewData()->GetDispatcher().Execute(

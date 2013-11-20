@@ -301,7 +301,7 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
-        pNewMediaObj->setURL( realURL );
+        pNewMediaObj->setURL( realURL, ""/*TODO?*/ );
 
         BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
@@ -332,7 +332,12 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
         else
             InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER );
 
-        pNewMediaObj->setURL( realURL );
+        OUString referer;
+        DrawDocShell * sh = GetDocSh();
+        if (sh != 0 && sh->HasName()) {
+            referer = sh->GetMedium()->GetName();
+        }
+        pNewMediaObj->setURL( realURL, referer );
 
         if( pPickObj )
         {
@@ -379,7 +384,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-        if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile ) )
+        if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/ ) )
         {
             if( !rGraphicFilter.ImportGraphic( aGraphic, aURL ) )
             {
@@ -440,8 +445,8 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
         {
             Size aPrefSize;
 
-            if( ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile ) &&
-                ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, true, &aPrefSize ) )
+            if( ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/ ) &&
+                ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/, true, &aPrefSize ) )
             {
                 if( aPrefSize.Width() && aPrefSize.Height() )
                 {

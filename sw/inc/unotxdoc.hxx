@@ -216,6 +216,10 @@ private:
     void                    GetBodyText();
     void                    GetNumberFormatter();
 
+    css::uno::Reference<css::uno::XInterface> create(
+        OUString const & rServiceName,
+        css::uno::Sequence<css::uno::Any> const * arguments);
+
     // used for XRenderable implementation
     SfxViewShell *  GuessViewShell( /* out */ bool &rbIsSwSrcView, const css::uno::Reference< css::frame::XController > xController = css::uno::Reference< css::frame::XController >() );
     SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const css::uno::Any& rSelection, bool bIsPDFExport );

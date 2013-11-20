@@ -407,7 +407,7 @@ namespace slideshow
                 {
                     if( !rMediaURL.isEmpty() )
                     {
-                        mxPlayer.set( avmedia::MediaWindow::createPlayer( rMediaURL ),
+                        mxPlayer.set( avmedia::MediaWindow::createPlayer( rMediaURL, ""/*TODO!*/ ),
                             uno::UNO_QUERY );
                     }
                 }

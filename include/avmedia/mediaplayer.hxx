@@ -46,7 +46,7 @@ public:
                             MediaFloater( SfxBindings* pBindings, SfxChildWindow* pCW, Window* pParent );
                             ~MediaFloater();
 
-    void                    setURL( const OUString& rURL, bool bPlayImmediately );
+    void                    setURL( const OUString& rURL, const OUString& rReferer, bool bPlayImmediately );
 
     void                    dispatchCurrentURL();
 

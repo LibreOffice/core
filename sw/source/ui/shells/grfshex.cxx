@@ -86,7 +86,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
         if( pWindow )
             pWindow->EnterWait();
 
-        if( !::avmedia::MediaWindow::isMediaURL( aURL, true, &aPrefSize ) )
+        if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
         {
             if( pWindow )
                 pWindow->LeaveWait();
@@ -138,7 +138,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
             SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aPos, aSize ) );
 
             pObj->SetModel(rSh.GetDoc()->GetDrawModel()); // set before setURL
-            pObj->setURL( realURL );
+            pObj->setURL( realURL, "" );
             rSh.EnterStdMode();
             rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
             bRet = true;

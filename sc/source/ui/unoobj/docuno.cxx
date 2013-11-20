@@ -1908,11 +1908,10 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScModelObj )
 
 // XMultiServiceFactory
 
-uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
-                                const OUString& aServiceSpecifier )
-                                throw(uno::Exception, uno::RuntimeException)
+css::uno::Reference<css::uno::XInterface> ScModelObj::create(
+    OUString const & aServiceSpecifier,
+    css::uno::Sequence<css::uno::Any> const * arguments)
 {
-    SolarMutexGuard aGuard;
     uno::Reference<uno::XInterface> xRet;
     OUString aNameStr(aServiceSpecifier);
     sal_uInt16 nType = ScServiceProvider::GetProviderType(aNameStr);
@@ -1966,7 +1965,10 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
 
         try
         {
-            xRet.set(SvxFmMSFactory::createInstance(aServiceSpecifier));
+            xRet = arguments == 0
+                ? SvxFmMSFactory::createInstance(aServiceSpecifier)
+                : SvxFmMSFactory::createInstanceWithArguments(
+                    aServiceSpecifier, *arguments);
             // extra block to force deletion of the temporary before ScShapeObj ctor (setDelegator)
         }
         catch ( lang::ServiceNotRegisteredException & )
@@ -1987,6 +1989,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
     return xRet;
 }
 
+uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
+                                const OUString& aServiceSpecifier )
+                                throw(uno::Exception, uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    return create(aServiceSpecifier, 0);
+}
+
 uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments(
                                 const OUString& ServiceSpecifier,
                                 const uno::Sequence<uno::Any>& aArgs )
@@ -1995,7 +2005,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments
     //! unterscheiden zwischen eigenen Services und denen vom Drawing-Layer?
 
     SolarMutexGuard aGuard;
-    uno::Reference<uno::XInterface> xInt(createInstance(ServiceSpecifier));
+    uno::Reference<uno::XInterface> xInt(create(ServiceSpecifier, &aArgs));
 
     if ( aArgs.getLength() )
     {

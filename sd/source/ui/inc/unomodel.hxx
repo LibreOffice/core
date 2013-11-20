@@ -87,6 +87,9 @@ private:
     SdDrawDocument* mpDoc;
     bool mbDisposed;
 
+    css::uno::Reference<css::uno::XInterface> create(
+        OUString const & aServiceSpecifier, OUString const & referer);
+
     SdPage* InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate = sal_False ) throw();
 
     const sal_Bool mbImpressDoc;
@@ -179,6 +182,11 @@ public:
 
     // XMultiServiceFactory ( SvxFmMSFactory )
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
+    createInstanceWithArguments(
+        OUString const & ServiceSpecifier,
+        css::uno::Sequence<css::uno::Any> const & Arguments)
+        throw (css::uno::Exception, css::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo

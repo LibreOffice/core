@@ -1562,7 +1562,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
     {
         try
         {
-            mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark), uno::UNO_QUERY_THROW );
+            mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark, ""/*TODO?*/), uno::UNO_QUERY_THROW );
             mxPlayer->start();
         }
         catch( uno::Exception& )

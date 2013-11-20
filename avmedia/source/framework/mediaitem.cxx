@@ -53,6 +53,7 @@ struct MediaItem::Impl
 {
     OUString                m_URL;
     OUString                m_TempFileURL;
+    OUString                m_Referer;
     sal_uInt32              m_nMaskSet;
     MediaState              m_eState;
     double                  m_fTime;
@@ -76,6 +77,7 @@ struct MediaItem::Impl
     Impl(Impl const& rOther)
         : m_URL( rOther.m_URL )
         , m_TempFileURL( rOther.m_TempFileURL )
+        , m_Referer( rOther.m_Referer )
         , m_nMaskSet( rOther.m_nMaskSet )
         , m_eState( rOther.m_eState )
         , m_fTime( rOther.m_fTime )
@@ -118,6 +120,7 @@ int MediaItem::operator==( const SfxPoolItem& rItem ) const
     MediaItem const& rOther(static_cast< const MediaItem& >(rItem));
     return m_pImpl->m_nMaskSet == rOther.m_pImpl->m_nMaskSet
         && m_pImpl->m_URL == rOther.m_pImpl->m_URL
+        && m_pImpl->m_Referer == rOther.m_pImpl->m_Referer
         && m_pImpl->m_eState == rOther.m_pImpl->m_eState
         && m_pImpl->m_fDuration == rOther.m_pImpl->m_fDuration
         && m_pImpl->m_fTime == rOther.m_pImpl->m_fTime
@@ -202,7 +205,7 @@ void MediaItem::merge( const MediaItem& rMediaItem )
     const sal_uInt32 nMaskSet = rMediaItem.getMaskSet();
 
     if( AVMEDIA_SETMASK_URL & nMaskSet )
-        setURL( rMediaItem.getURL(), rMediaItem.getTempURL() );
+        setURL( rMediaItem.getURL(), rMediaItem.getTempURL(), rMediaItem.getReferer() );
 
     if( AVMEDIA_SETMASK_STATE & nMaskSet )
         setState( rMediaItem.getState() );
@@ -235,11 +238,12 @@ sal_uInt32 MediaItem::getMaskSet() const
 
 //------------------------------------------------------------------------
 
-void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL )
+void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL, const OUString& rReferer )
 {
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_URL;
     m_pImpl->m_URL = rURL;
     m_pImpl->m_TempFileURL = rTempURL;
+    m_pImpl->m_Referer = rReferer;
 }
 
 //------------------------------------------------------------------------
@@ -252,6 +256,11 @@ const OUString& MediaItem::getURL() const
 const OUString& MediaItem::getTempURL() const
 {
     return m_pImpl->m_TempFileURL;
+}
+
+const OUString& MediaItem::getReferer() const
+{
+    return m_pImpl->m_Referer;
 }
 
 //------------------------------------------------------------------------

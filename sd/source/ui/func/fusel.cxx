@@ -1266,7 +1266,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                         try
                         {
-                            mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->GetBookmark()), uno::UNO_QUERY_THROW );
+                            mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->GetBookmark(), ""/*TODO?*/), uno::UNO_QUERY_THROW );
                             mxPlayer->start();
                         }
                         catch( uno::Exception& )

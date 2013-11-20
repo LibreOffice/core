@@ -104,7 +104,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
             aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
             xPropSet->setPropertyValue( "ButtonType", aTmp );
 
-            if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
+            if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
             {
                 // #105638# OJ
                 aTmp <<= sal_True;

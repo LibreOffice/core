@@ -1109,9 +1109,9 @@ void TPGalleryThemeProperties::DoPreview()
             ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
             GetParent()->EnterWait();
         }
-        else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
+        else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), "" ) )
         {
-            xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::NO_DECODE ), "" );
             if( xMediaPlayer.is() )
                 xMediaPlayer->start();
         }

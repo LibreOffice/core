@@ -57,7 +57,7 @@ namespace avmedia
                             MediaWindow( Window* parent, bool bInternalMediaControl );
         virtual             ~MediaWindow();
 
-        void                setURL( const OUString& rURL );
+        void                setURL( const OUString& rURL, const OUString& rReferer );
         const OUString&     getURL() const;
 
         bool                isValid() const;
@@ -101,11 +101,11 @@ namespace avmedia
         static bool         executeMediaURLDialog( Window* pParent,
                 OUString& rURL, bool *const o_pbLink );
         static void         executeFormatErrorBox( Window* pParent );
-        static bool         isMediaURL( const OUString& rURL, bool bDeep = false, Size* pPreferredSizePixel = NULL );
+        static bool         isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep = false, Size* pPreferredSizePixel = NULL );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL );
+        static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > grabFrame( const OUString& rURL,
+        static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > grabFrame( const OUString& rURL, const OUString& rReferer,
                                                                                                   bool bAllowToCreateReplacementGraphic = false,
                                                                                                   double fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME );
 

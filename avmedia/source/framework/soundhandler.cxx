@@ -264,11 +264,11 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
     // SAFE {
     const ::osl::MutexGuard aLock( m_aLock );
 
+    utl::MediaDescriptor aDescriptor(lDescriptor);
+
     {
     //close streams otherwise on windows we can't reopen the file in the
     //media player when we pass the url to directx as it'll already be open
-        utl::MediaDescriptor aDescriptor(lDescriptor);
-
     css::uno::Reference< css::io::XInputStream > xInputStream =
         aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INPUTSTREAM(),
         css::uno::Reference< css::io::XInputStream >());
@@ -290,7 +290,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
     try
     {
         m_bError = false;
-        m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete ), css::uno::UNO_QUERY_THROW );
+        m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete, aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString()) ), css::uno::UNO_QUERY_THROW );
         // OK- we can start async playing ...
         // Count this request and initialize self-holder against dieing by uno ref count ...
         m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
@@ -346,10 +346,11 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
     // Analyze given descriptor to find filename or input stream or ...
     utl::MediaDescriptor aDescriptor(lDescriptor);
     OUString                      sURL       = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
+    OUString                      sReferer   = aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString());
 
     if (
         (sURL.getLength()           ) &&
-        (avmedia::MediaWindow::isMediaURL(sURL))
+        (avmedia::MediaWindow::isMediaURL(sURL, sReferer))
        )
     {
         // If the file type is supported depends on the OS, so...

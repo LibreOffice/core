@@ -1111,7 +1111,7 @@ sal_Bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsert
         else
             pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, rURL, aFormat );
     }
-    else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
+    else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), ""/*TODO?*/ ) )
         pNewObj = (SgaObject*) new SgaObjectSound( rURL );
 
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )

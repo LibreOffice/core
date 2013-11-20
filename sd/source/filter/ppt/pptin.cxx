@@ -2667,7 +2667,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                             }
 
                                             SdrObject::Free( pObj ), pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list
-                                            pMediaObj->setURL( aMediaURL );
+                                            pMediaObj->setURL( aMediaURL, ""/*TODO?*/ );
                                         }
                                     }
                                 }

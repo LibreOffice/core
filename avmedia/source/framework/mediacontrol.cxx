@@ -494,11 +494,11 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
                  if (::avmedia::MediaWindow::executeMediaURLDialog(
                              GetParent(), aURL, 0))
                  {
-                     if( !::avmedia::MediaWindow::isMediaURL( aURL, true ) )
+                     if( !::avmedia::MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
                         ::avmedia::MediaWindow::executeFormatErrorBox( this );
                     else
                     {
-                        aExecItem.setURL( aURL, "" );
+                        aExecItem.setURL( aURL, "", ""/*TODO?*/ );
                         aExecItem.setState( MEDIASTATE_PLAY );
                     }
                 }

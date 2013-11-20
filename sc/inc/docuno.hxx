@@ -106,6 +106,10 @@ private:
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
     void                    HandleCalculateEvents();
 
+    css::uno::Reference<css::uno::XInterface> create(
+        OUString const & aServiceSpecifier,
+        css::uno::Sequence<css::uno::Any> const * arguments);
+
     OUString           maBuildId;
 protected:
     const SfxItemPropertySet&   GetPropertySet() const { return aPropSet; }

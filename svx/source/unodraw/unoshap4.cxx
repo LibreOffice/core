@@ -789,8 +789,9 @@ bool SvxFrameShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
 *                                                                      *
 ***********************************************************************/
 
-SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxMediaShape::SvxMediaShape( SdrObject* pObj, OUString const & referer ) throw()
+:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) ),
+    referer_(referer)
 {
     SetShapeType( OUString(  "com.sun.star.drawing.MediaShape"  ) );
 }
@@ -818,7 +819,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
             if( rValue >>= aURL )
             {
                 bOk = true;
-                aItem.setURL( aURL, "" );
+                aItem.setURL( aURL, "", referer_ );
             }
         }
         break;

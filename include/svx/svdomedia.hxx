@@ -60,7 +60,7 @@ public:
 
 public:
 
-        void                        setURL( const OUString& rURL );
+        void                        setURL( const OUString& rURL, const OUString& rReferer );
         const OUString&      getURL() const;
 
         void                        setMediaProperties( const ::avmedia::MediaItem& rState );

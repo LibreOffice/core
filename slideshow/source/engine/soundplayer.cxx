@@ -99,7 +99,7 @@ namespace slideshow
             {
                 const INetURLObject aURL( rSoundURL );
                 mxPlayer.set( avmedia::MediaWindow::createPlayer(
-                                aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ),
+                                aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), ""/*TODO!*/ ),
                                 uno::UNO_QUERY);
             }
             catch( uno::RuntimeException& )

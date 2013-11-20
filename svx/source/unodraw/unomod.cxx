@@ -216,7 +216,8 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWi
     throw( uno::Exception, uno::RuntimeException )
 {
     OUString arg;
-    if (ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
+    if ((ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
+         || ServiceSpecifier == "com.sun.star.drawing.MediaShape")
         && Arguments.getLength() == 1 && (Arguments[0] >>= arg))
     {
         return create(ServiceSpecifier, arg);
@@ -508,7 +509,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         }
 
         // create the API wrapper
-        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor );
+        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor, "" );
 
         // set shape type
         if( pShape )

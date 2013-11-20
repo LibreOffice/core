@@ -56,9 +56,9 @@ MediaWindow::~MediaWindow() {}
 
 // -------------------------------------------------------------------------
 
-void MediaWindow::setURL( const OUString& rURL )
+void MediaWindow::setURL( const OUString& rURL, const OUString& rReferer )
 {
-    mpImpl->setURL( rURL, OUString() );
+    mpImpl->setURL( rURL, OUString(), rReferer );
 }
 
 // -------------------------------------------------------------------------
@@ -328,7 +328,7 @@ void MediaWindow::executeFormatErrorBox( Window* pParent )
 
 // -------------------------------------------------------------------------
 
-bool MediaWindow::isMediaURL( const OUString& rURL, bool bDeep, Size* pPreferredSizePixel )
+bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep, Size* pPreferredSizePixel )
 {
     const INetURLObject aURL( rURL );
     bool                bRet = false;
@@ -340,7 +340,8 @@ bool MediaWindow::isMediaURL( const OUString& rURL, bool bDeep, Size* pPreferred
             try
             {
                 uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
-                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) );
+                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ),
+                                                            rReferer ) );
 
                 if( xPlayer.is() )
                 {
@@ -383,18 +384,19 @@ bool MediaWindow::isMediaURL( const OUString& rURL, bool bDeep, Size* pPreferred
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL, const OUString& rReferer )
 {
-    return priv::MediaWindowImpl::createPlayer( rURL );
+    return priv::MediaWindowImpl::createPlayer( rURL, rReferer );
 }
 
 // -------------------------------------------------------------------------
 
 uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
+                                                            const OUString& rReferer,
                                                             bool bAllowToCreateReplacementGraphic,
                                                             double fMediaTime )
 {
-    uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL ) );
+    uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL, rReferer ) );
     uno::Reference< graphic::XGraphic > xRet;
     ::std::auto_ptr< Graphic >          apGraphic;
 

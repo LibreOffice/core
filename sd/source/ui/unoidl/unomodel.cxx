@@ -815,8 +815,9 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
 }
 
 // XMultiServiceFactory ( SvxFmMSFactory )
-uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( const OUString& aServiceSpecifier )
-    throw(uno::Exception, uno::RuntimeException)
+
+css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
+    OUString const & aServiceSpecifier, OUString const & referer)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1049,7 +1050,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         }
 
         // create the API wrapper
-        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor );
+        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor, referer );
 
         // set shape type
         if( pShape && !mbClipBoard )
@@ -1059,7 +1060,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     }
     else if ( aServiceSpecifier == "com.sun.star.drawing.TableShape" )
     {
-        SvxShape* pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor );
+        SvxShape* pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor, referer );
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
@@ -1080,6 +1081,28 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     }
 
     return xRet;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( const OUString& aServiceSpecifier )
+    throw(uno::Exception, uno::RuntimeException)
+{
+    return create(aServiceSpecifier, "");
+}
+
+css::uno::Reference<css::uno::XInterface>
+SdXImpressDocument::createInstanceWithArguments(
+    OUString const & ServiceSpecifier,
+    css::uno::Sequence<css::uno::Any> const & Arguments)
+    throw (css::uno::Exception, css::uno::RuntimeException)
+{
+    OUString arg;
+    if (ServiceSpecifier == "com.sun.star.presentation.MediaShape"
+        && Arguments.getLength() == 1 && (Arguments[0] >>= arg))
+    {
+        return create(ServiceSpecifier, arg);
+    }
+    return SvxFmMSFactory::createInstanceWithArguments(
+        ServiceSpecifier, Arguments);
 }
 
 uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames()
