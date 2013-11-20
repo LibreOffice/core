@@ -24,8 +24,11 @@
 #include "op_logical.hxx"
 #include "op_statistical.hxx"
 #include "op_array.hxx"
+/// CONFIGURATIONS
 // Comment out this to turn off FMIN and FMAX intrinsics
 #define USE_FMIN_FMAX 1
+#define REDUCE_THRESHOLD 4  // set to 4 for correctness testing. priority 1
+#define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
 #include "formulagroupcl_public.hxx"
 
 #include <list>
@@ -41,7 +44,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#define UNROLLING
 
 using namespace formula;
 
@@ -414,6 +416,7 @@ class OpSum; // Forward Declaration
 class OpAverage; // Forward Declaration
 class OpMin; // Forward Declaration
 class OpMax; // Forward Declaration
+class OpCount; // Forward Declaration
 template<class Base>
 class DynamicKernelSlidingArgument: public Base
 {
@@ -450,7 +453,7 @@ public:
         assert(mpDVR);
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         // original for loop
-#ifndef UNROLLING
+#ifndef UNROLLING_FACTOR
         needBody = true;
         // No need to generate a for-loop for degenerated cases
         if (nCurWindowSize == 1)
@@ -497,7 +500,7 @@ public:
 return nCurWindowSize;
 #endif
 
-#ifdef UNROLLING
+#ifdef UNROLLING_FACTOR
         {
             if (!mpDVR->IsStartFixed() && mpDVR->IsEndFixed()) {
                 ss << "for (int i = ";
@@ -515,7 +518,7 @@ return nCurWindowSize;
                 ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
                 ss << "{int i;\n\t";
                 std::stringstream temp1,temp2;
-                int outLoopSize = 16;
+                int outLoopSize = UNROLLING_FACTOR;
                 if ( nCurWindowSize/outLoopSize != 0){
                     ss << "for(int outLoop=0; outLoop<" << nCurWindowSize/outLoopSize<< "; outLoop++){\n\t";
                     for(int count=0; count < outLoopSize; count++){
@@ -523,17 +526,9 @@ return nCurWindowSize;
                         if(count==0){
                             temp1 << "if(i + gid0 < " <<mpDVR->GetArrayLength();
                             temp1 << "){\n\t\t";
-                            temp1 << "if (isNan(";
-                            temp1 <<  GenSlidingWindowDeclRef();
-                            temp1 << ")){\n\t\t\t";
-                            temp1 << "tmp = ";
-                            temp1 <<  mpCodeGen->Gen2("tmpBottom", "tmp") << ";\n\t\t";
-                            temp1 << "}else{\n\t\t\t";
-                            temp1 << "tmp = ";
                             temp1 <<  mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                             temp1 << ";\n\t\t\t";
                             temp1 << "nCount += 1;\n\t\t";
-                            temp1 << "}\n\t";
                             temp1 << "}\n\t";
                         }
                         ss << temp1.str();
@@ -546,17 +541,10 @@ return nCurWindowSize;
                     if(count==nCurWindowSize/outLoopSize*outLoopSize){
                         temp2 << "if(i + gid0 < " << mpDVR->GetArrayLength();
                         temp2 << "){\n\t\t";
-                        temp2 << "if (isNan(";
-                        temp2 << GenSlidingWindowDeclRef();
-                        temp2 << ")){\n\t\t\t";
-                        temp2 << "tmp = ";
-                        temp2 << mpCodeGen->Gen2("tmpBottom", "tmp") << ";\n\t\t";
-                        temp2 << "}else{\n\t\t\t";
                         temp2 << "tmp = ";
                         temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                         temp2 << ";\n\t\t\t";
                         temp2 << "nCount += 1;\n\t\t";
-                        temp2 << "}\n\t";
                         temp2 << "}\n\t";
                     }
                     ss << temp2.str();
@@ -571,23 +559,16 @@ return nCurWindowSize;
                 ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
                 ss << "{int i;\n\t";
                 std::stringstream temp1,temp2;
-                int outLoopSize = 16;
+                int outLoopSize = UNROLLING_FACTOR;
                 if (nCurWindowSize/outLoopSize != 0){
                     ss << "for(int outLoop=0; outLoop<" << nCurWindowSize/outLoopSize<< "; outLoop++){\n\t";
                     for(int count=0; count < outLoopSize; count++){
                         ss << "i = outLoop*"<<outLoopSize<<"+"<<count<<";\n\t";
                         if(count==0){
-                            temp1 << "if (isNan(";
-                            temp1 << GenSlidingWindowDeclRef();
-                            temp1 << ")){\n\t\t\t";
-                            temp1 << "tmp = ";
-                            temp1 << mpCodeGen->Gen2("tmpBottom", "tmp") << ";\n\t\t";
-                            temp1 << "}else{\n\t\t\t";
                             temp1 << "tmp = ";
                             temp1 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                             temp1 << ";\n\t\t\t";
                             temp1 << "nCount += 1;\n\t\t";
-                            temp1 << "}\n\t";
                         }
                         ss << temp1.str();
                     }
@@ -597,17 +578,10 @@ return nCurWindowSize;
                 for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize; count < nCurWindowSize; count++){
                     ss << "i = "<<count<<";\n\t";
                     if(count==nCurWindowSize/outLoopSize*outLoopSize){
-                        temp2 << "if (isNan(";
-                        temp2 << GenSlidingWindowDeclRef();
-                        temp2 << ")){\n\t\t\t";
-                        temp2 << "tmp = ";
-                        temp2 << mpCodeGen->Gen2("tmpBottom", "tmp") << ";\n\t\t";
-                        temp2 << "}else{\n\t\t\t";
                         temp2 << "tmp = ";
                         temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                         temp2 << ";\n\t\t\t";
                         temp2 << "nCount += 1;\n\t\t";
-                        temp2 << "}\n\t";
                     }
                     ss << temp2.str();
                 }
@@ -694,12 +668,12 @@ public:
         ss << "    for (int l=0; l<loop; l++){\n";
         ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
         ss << "    int loopOffset = l*512;\n";
-        ss << "    if((loopOffset + lidx + offset + 256) < end)\n";
+        ss << "    if((loopOffset + lidx + offset + 256) < end) {\n";
         ss << "        tmp = " << mpCodeGen->Gen2(
                 "A[loopOffset + lidx + offset]", "tmp") <<";\n";
         ss << "        tmp = " << mpCodeGen->Gen2(
                 "A[loopOffset + lidx + offset + 256]", "tmp") << ";\n";
-        ss << "    else if ((loopOffset + lidx + offset) < end)\n";
+        ss << "    } else if ((loopOffset + lidx + offset) < end)\n";
         ss << "        tmp = " << mpCodeGen->Gen2(
                 "A[loopOffset + lidx + offset]", "tmp") <<";\n";
         ss << "    shm_buf[lidx] = tmp;\n";
@@ -707,15 +681,21 @@ public:
         ss << "    for (int i = 128; i >0; i/=2) {\n";
         ss << "        if (lidx < i)\n";
         ss << "            shm_buf[lidx] = ";
-        ss << mpCodeGen->Gen2("shm_buf[lidx]", "shm_buf[lidx + i]");
-        ss << ";";
+        // Special case count
+        if (dynamic_cast<OpCount*>(mpCodeGen.get()))
+            ss << "shm_buf[lidx] + shm_buf[lidx + i];\n";
+        else
+            ss << mpCodeGen->Gen2("shm_buf[lidx]", "shm_buf[lidx + i]")<<";\n";
         ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
         ss << "    }\n";
-        ss << "    if (lidx == 0)\n";
-        ss << "        current_result =";
-        ss << mpCodeGen->Gen2("current_result", "shm_buf[0]");
+        ss << "        if (lidx == 0)\n";
+        ss << "            current_result =";
+        if (dynamic_cast<OpCount*>(mpCodeGen.get()))
+            ss << "shm_buf[0]";
+        else
+            ss << mpCodeGen->Gen2("current_result", "shm_buf[0]");
         ss << ";\n";
-        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
         ss << "    }\n";
         ss << "    if (lidx == 0)\n";
         ss << "        result[writePos] = current_result;\n";
@@ -740,7 +720,11 @@ public:
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         std::string temp = Base::GetName() + "[gid0]";
         ss << "tmp = ";
-        ss << mpCodeGen->Gen2(temp, "tmp");
+        // Special case count
+        if (dynamic_cast<OpCount*>(mpCodeGen.get()))
+            ss << temp << "+ tmp";
+        else
+            ss << mpCodeGen->Gen2(temp, "tmp");
         ss << ";\n\t";
         needBody = false;
         return nCurWindowSize;
@@ -1030,7 +1014,7 @@ public:
         ss << ") {\n";
         ss << "    double tmp = 0.0;\n";
         ss << "    int gid0 = get_global_id(0);\n";
-#ifndef UNROLLING
+#ifndef UNROLLING_FACTOR
         ss << "    int i ;\n";
         ss << "    for (i = 0; i < "<< nCurWindowSize <<"; i++)\n";
         ss << "    {\n";
@@ -1100,11 +1084,11 @@ public:
         ss << "}";
 #endif
 
-#ifdef UNROLLING
+#ifdef UNROLLING_FACTOR
         ss << "\tint i;\n\t";
         ss << "int currentCount0, currentCount1;\n\t";
         std::stringstream temp3,temp4;
-        int outLoopSize = 16;
+        int outLoopSize = UNROLLING_FACTOR;
         if (nCurWindowSize/outLoopSize != 0){
             ss << "for(int outLoop=0; outLoop<" <<
             nCurWindowSize/outLoopSize<< "; outLoop++){\n\t";
@@ -1554,6 +1538,11 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }
+    // MUL is not supported yet
+    else if (dynamic_cast<OpMul*>(pCodeGen.get()))
+    {
+        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+    }
     // Sub is not a reduction per se
     else if (dynamic_cast<OpSub*>(pCodeGen.get()))
     {
@@ -1569,12 +1558,9 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
         dynamic_cast< const formula::DoubleVectorRefToken* >(
                 ft->GetFormulaToken());
     // Window being too small to justify a parallel reduction
-    if (pDVR->GetRefRowSize() < 4)
+    if (pDVR->GetRefRowSize() < REDUCE_THRESHOLD)
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     if ((pDVR->IsStartFixed() && pDVR->IsEndFixed()) ||
-            (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()))
-        return new ParallelReductionVectorRef<Base>(s, ft, pCodeGen, index);
-    if ((pDVR->IsStartFixed() && !pDVR->IsEndFixed()) ||
             (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()))
         return new ParallelReductionVectorRef<Base>(s, ft, pCodeGen, index);
     else // Other cases are not supported as well
