@@ -2061,6 +2061,9 @@ static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
 // Calculate how the pages have to be positioned
 void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
+    if ( getRootFrm()->IsLayoutFreezed() )
+        return;
+
     // #i91432#
     // No calculation of page positions, if only an empty page is present.
     // This situation occurs when <SwRootFrm> instance is in construction

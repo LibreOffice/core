@@ -659,7 +659,8 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 
 void SwRootFrm::AllCheckPageDescs() const
 {
-    CheckPageDescs( (SwPageFrm*)this->Lower() );
+    if ( !IsLayoutFreezed() )
+        CheckPageDescs( (SwPageFrm*)this->Lower() );
 }
 
 void SwRootFrm::AllInvalidateAutoCompleteWords() const
