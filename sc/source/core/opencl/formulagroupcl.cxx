@@ -819,8 +819,6 @@ protected:
     cl_mem mpClmem2;
 };
 
-/// Abstract class for OpenCL source code generation
-
 class Reduction: public SlidingFunctionBase
 {
 public:
