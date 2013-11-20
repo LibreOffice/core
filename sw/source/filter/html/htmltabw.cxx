@@ -734,7 +734,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     if( pCaption && !pCaption->isEmpty() )
     {
         rWrt.OutNewLine(); // <CAPTION> in neue Zeile
-        OStringBuffer sOutStr(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_caption));
+        OStringBuffer sOutStr(OOO_STRING_SVTOOLS_HTML_caption);
         sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
                .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
                .append("\"");
@@ -1101,7 +1101,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_center, sal_True );
         else
         {
-            OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_division));
+            OStringBuffer sOut(OOO_STRING_SVTOOLS_HTML_division);
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
                 .append(OOO_STRING_SVTOOLS_HTML_AL_right).append("\"");
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.getStr(),

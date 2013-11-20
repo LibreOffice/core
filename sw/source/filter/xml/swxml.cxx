@@ -188,8 +188,7 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "SAX parse exception caught while importing:\n"));
+        OStringBuffer aError("SAX parse exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -224,8 +223,7 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "SAX exception caught while importing:\n"));
+        OStringBuffer aError("SAX exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -237,8 +235,7 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "Zip exception caught while importing:\n"));
+        OStringBuffer aError("Zip exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -249,8 +246,7 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "IO exception caught while importing:\n"));
+        OStringBuffer aError("IO exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -261,8 +257,7 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "uno exception caught while importing:\n"));
+        OStringBuffer aError("uno exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());

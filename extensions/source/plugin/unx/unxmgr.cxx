@@ -251,7 +251,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         static const char* pNPXPluginPath = getenv( "NPX_PLUGIN_PATH" );
 
         // netscape!, quick, beam me back to the 90's when Motif roamed the earth
-        OStringBuffer aSearchBuffer(RTL_CONSTASCII_STRINGPARAM("/usr/lib/netscape/plugins"));
+        OStringBuffer aSearchBuffer("/usr/lib/netscape/plugins");
         if( pHome )
             aSearchBuffer.append(':').append(pHome).append("/.netscape/plugins");
         if( pNPXPluginPath )

@@ -204,8 +204,7 @@ SfxRequest::SfxRequest
 #ifdef DBG_UTIL
     else
     {
-        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-            "Recording unsupported slot: "));
+        OStringBuffer aStr("Recording unsupported slot: ");
         aStr.append(static_cast<sal_Int32>(pImp->pPool->GetSlotId(nSlotId)));
         OSL_FAIL(aStr.getStr());
     }
@@ -692,8 +691,7 @@ void SfxRequest::Done_Impl
     // new Recording uses UnoName!
     if ( !pImp->pSlot->pUnoName )
     {
-        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-            "Recording not exported slot: "));
+        OStringBuffer aStr("Recording not exported slot: ");
         aStr.append(static_cast<sal_Int32>(pImp->pSlot->GetSlotId()));
         OSL_FAIL(aStr.getStr());
     }
@@ -714,8 +712,7 @@ void SfxRequest::Done_Impl
 #ifdef DBG_UTIL
         if ( SFX_ITEM_SET != eState )
         {
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "Recording property not available: "));
+            OStringBuffer aStr("Recording property not available: ");
             aStr.append(static_cast<sal_Int32>(pImp->pSlot->GetSlotId()));
             OSL_FAIL(aStr.getStr());
         }

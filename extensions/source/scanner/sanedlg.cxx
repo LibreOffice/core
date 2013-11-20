@@ -1275,8 +1275,7 @@ void SaneDlg::SaveState()
                     sal_Bool bValue;
                     if( mrSane.GetOptionValue( nOption, bValue ) )
                     {
-                        OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM(
-                            "BOOL="));
+                        OStringBuffer aString("BOOL=");
                         aString.append(static_cast<sal_Int32>(bValue));
                         aConfig.WriteKey(aOption, aString.makeStringAndClear());
                     }
@@ -1287,7 +1286,7 @@ void SaneDlg::SaveState()
                     OString aValue;
                     if( mrSane.GetOptionValue( nOption, aValue ) )
                     {
-                        OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("STRING="));
+                        OStringBuffer aString("STRING=");
                         aString.append(aValue);
                         aConfig.WriteKey( aOption, aString.makeStringAndClear() );
                     }
@@ -1296,7 +1295,7 @@ void SaneDlg::SaveState()
                 case SANE_TYPE_FIXED:
                 case SANE_TYPE_INT:
                 {
-                    OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("NUMERIC="));
+                    OStringBuffer aString("NUMERIC=");
                     double fValue;
                     char buf[256];
                     int n;

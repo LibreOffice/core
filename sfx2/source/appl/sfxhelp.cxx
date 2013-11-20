@@ -636,7 +636,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
         return sal_False;
 
 #ifdef DBG_UTIL
-    OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("SfxHelp: HelpId = "));
+    OStringBuffer aTmp("SfxHelp: HelpId = ");
     aTmp.append(OUStringToOString(aHelpURL, RTL_TEXTENCODING_UTF8));
     OSL_TRACE( aTmp.getStr() );
 #endif

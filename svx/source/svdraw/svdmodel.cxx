@@ -276,8 +276,7 @@ SdrModel::~SdrModel()
 #ifdef DBG_UTIL
     if(pAktUndoGroup)
     {
-        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-            "In the Dtor of the SdrModel there is an open Undo left: \""));
+        OStringBuffer aStr("In the Dtor of the SdrModel there is an open Undo left: \"");
         aStr.append(OUStringToOString(pAktUndoGroup->GetComment(), osl_getThreadTextEncoding()))
             .append('\"');
         OSL_FAIL(aStr.getStr());

@@ -134,7 +134,7 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         sal_uInt32 nTokPos = rInStm.Tell();
         if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile.getString(), RTL_TEXTENCODING_ASCII_US)) )
         {
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot read file: "));
+            OStringBuffer aStr("cannot read file: ");
             aStr.append(aSlotIdFile.getString());
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
@@ -256,14 +256,14 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                 }
                 else
                 {
-                    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot open file: "));
+                    OStringBuffer aStr("cannot open file: ");
                     aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
                     rBase.SetError(aStr.makeStringAndClear(), pTok);
                 }
             }
             else
             {
-                OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot find file:"));
+                OStringBuffer aStr("cannot find file:");
                 aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
                 rBase.SetError(aStr.makeStringAndClear(), pTok);
             }

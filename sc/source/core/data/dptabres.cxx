@@ -3029,8 +3029,7 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
     if ( NULL != pMember )
         return pMember->IsValidEntry( aMembers );
 #if OSL_DEBUG_LEVEL > 1
-    OStringBuffer strTemp(RTL_CONSTASCII_STRINGPARAM(
-        "IsValidEntry: Member not found, DimName = "));
+    OStringBuffer strTemp("IsValidEntry: Member not found, DimName = ");
     strTemp.append(OUStringToOString(GetName(), RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", strTemp.getStr());
 #endif

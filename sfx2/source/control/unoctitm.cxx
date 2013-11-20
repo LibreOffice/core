@@ -444,7 +444,7 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
 {
     if ( aDispatchURL.Protocol == "slot:" && pUnoName )
     {
-        OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(".uno:"));
+        OStringBuffer aTmp(".uno:");
         aTmp.append(pUnoName);
         aDispatchURL.Complete = OStringToOUString(aTmp.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );

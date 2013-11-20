@@ -1111,8 +1111,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     bDebugPaint = !bDebugPaint;
-                    OStringBuffer aInfo(RTL_CONSTASCII_STRINGPARAM(
-                        "DebugPaint: "));
+                    OStringBuffer aInfo("DebugPaint: ");
                     aInfo.append(bDebugPaint ? "On" : "Off");
                     InfoBox(NULL, OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US)).Execute();
                 }

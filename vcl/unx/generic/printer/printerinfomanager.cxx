@@ -793,14 +793,14 @@ bool PrinterInfoManager::writePrinterConfig()
                 for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )
                 {
                     const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
-                    OStringBuffer aKey(RTL_CONSTASCII_STRINGPARAM("PPD_"));
+                    OStringBuffer aKey("PPD_");
                     aKey.append(OUStringToOString(pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1));
 
                     const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
                     if (pValue)
                         aValue.append(OUStringToOString(pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1));
                     else
-                        aValue.append(RTL_CONSTASCII_STRINGPARAM("*nil"));
+                        aValue.append("*nil");
                     pConfig->WriteKey(aKey.makeStringAndClear(), aValue.makeStringAndClear());
                 }
             }
@@ -810,7 +810,7 @@ bool PrinterInfoManager::writePrinterConfig()
             for( ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
             subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
             {
-                OStringBuffer aKey(RTL_CONSTASCII_STRINGPARAM("SubstFont_"));
+                OStringBuffer aKey("SubstFont_");
                 aKey.append(OUStringToOString(subst->first, RTL_TEXTENCODING_ISO_8859_1));
                 pConfig->WriteKey( aKey.makeStringAndClear(), OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
             }

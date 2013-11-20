@@ -320,7 +320,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
                         else
                         {
-                            OStringBuffer aDbgStr(RTL_CONSTASCII_STRINGPARAM("Property not convertible: "));
+                            OStringBuffer aDbgStr("Property not convertible: ");
                             aDbgStr.append(pSlot->pUnoName);
                             OSL_FAIL( aDbgStr.getStr() );
                         }
@@ -333,7 +333,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if ( nSub >= nSubCount )
                 {
                     // there was a parameter with a name that didn't match to any of the members
-                    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property name does not match: "));
+                    OStringBuffer aStr("Property name does not match: ");
                     aStr.append(OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8));
                     OSL_FAIL( aStr.getStr() );
                 }
@@ -364,7 +364,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         if ( !pItem )
         {
 #ifdef DBG_UTIL
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("No creator method for argument: "));
+            OStringBuffer aStr("No creator method for argument: ");
             aStr.append(rArg.pName);
             OSL_FAIL( aStr.getStr() );
 #endif
@@ -460,7 +460,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                                 // ... but it was not convertible
                                 bRet = sal_False;
 #ifdef DBG_UTIL
-                                OStringBuffer aDbgStr(RTL_CONSTASCII_STRINGPARAM("Property not convertible: "));
+                                OStringBuffer aDbgStr("Property not convertible: ");
                                 aDbgStr.append(rArg.pName);
                                 OSL_FAIL( aDbgStr.getStr() );
 #endif
@@ -1003,8 +1003,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         else
         {
             // we will not rely on the "toggle" ability of some property slots
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "Processing property slot without argument: "));
+            OStringBuffer aStr("Processing property slot without argument: ");
             aStr.append(static_cast<sal_Int32>(nSlotId));
             OSL_FAIL(aStr.getStr());
         }
@@ -1306,8 +1305,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         continue;
                }
 
-                OStringBuffer aDbg(RTL_CONSTASCII_STRINGPARAM(
-                    "Unknown item detected: "));
+                OStringBuffer aDbg("Unknown item detected: ");
                 aDbg.append(static_cast<sal_Int32>(nId));
                 DBG_ASSERT(nArg<nFormalArgs, aDbg.getStr());
             }
@@ -1337,8 +1335,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 pValue[nActProp].Name = OUString::createFromAscii(pSlot->pUnoName) ;
                 if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
-                    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                        "Item not convertible: "));
+                    OStringBuffer aStr("Item not convertible: ");
                     aStr.append(static_cast<sal_Int32>(nSlotId));
                     OSL_FAIL(aStr.getStr());
                 }
@@ -1390,8 +1387,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 pValue[nActProp].Name = OUString::createFromAscii( rArg.pName ) ;
                 if ( !pItem->QueryValue( pValue[nActProp++].Value ) )
                 {
-                    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                        "Item not convertible: "));
+                    OStringBuffer aStr("Item not convertible: ");
                     aStr.append(static_cast<sal_Int32>(rArg.nSlotId));
                     OSL_FAIL(aStr.getStr());
                 }

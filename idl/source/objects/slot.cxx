@@ -1076,7 +1076,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
 
 static OString MakeSlotName( SvStringHashEntry * pEntry )
 {
-    OStringBuffer aName(RTL_CONSTASCII_STRINGPARAM("SFX_SLOT_"));
+    OStringBuffer aName("SFX_SLOT_");
     aName.append(pEntry->GetName());
     return aName.makeStringAndClear().toAsciiUpperCase();
 };
