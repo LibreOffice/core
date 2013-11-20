@@ -17,6 +17,7 @@
 #include <float.h>
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include "opencl_device.hxx"
 
 
@@ -45,16 +46,16 @@ typedef struct LibreOfficeDeviceScore
     bool bNoCLErrors; // were there any opencl errors
 } LibreOfficeDeviceScore;
 
-typedef struct LibreOfficeDeviceEvaluationIO
+struct LibreOfficeDeviceEvaluationIO
 {
-    double* input0;
-    double* input1;
-    double* input2;
-    double* input3;
-    double* output;
+    std::vector<double> input0;
+    std::vector<double> input1;
+    std::vector<double> input2;
+    std::vector<double> input3;
+    std::vector<double> output;
     unsigned long inputSize;
     unsigned long outputSize;
-} LibreOfficeDeviceEvaluationIO;
+};
 
 typedef struct timer
 {
@@ -164,10 +165,10 @@ double random(double min, double max)
 void populateInput(LibreOfficeDeviceEvaluationIO* testData)
 {
     srand((unsigned int)time(NULL));
-    double* input0 = testData->input0;
-    double* input1 = testData->input1;
-    double* input2 = testData->input2;
-    double* input3 = testData->input3;
+    double* input0 = &testData->input0[0];
+    double* input1 = &testData->input1[0];
+    double* input2 = &testData->input2[0];
+    double* input3 = &testData->input3[0];
     for (unsigned long i = 0; i < testData->inputSize; i++)
     {
         input0[i] = random(0, i);
@@ -295,15 +296,15 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
                 LibreOfficeDeviceEvaluationIO* testData = (LibreOfficeDeviceEvaluationIO*)evalData;
                 clKernel = clCreateKernel(clProgram, "DynamicKernel", &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateKernel");
-                cl_mem clResult = clCreateBuffer(clContext, CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->outputSize, testData->output, &clStatus);
+                cl_mem clResult = clCreateBuffer(clContext, CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->outputSize, &testData->output[0], &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateBuffer::clResult");
-                cl_mem clInput0 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  testData->input0, &clStatus);
+                cl_mem clInput0 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  &testData->input0[0], &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateBuffer::clInput0");
-                cl_mem clInput1 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  testData->input1, &clStatus);
+                cl_mem clInput1 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  &testData->input1[0], &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateBuffer::clInput1");
-                cl_mem clInput2 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  testData->input2, &clStatus);
+                cl_mem clInput2 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  &testData->input2[0], &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateBuffer::clInput2");
-                cl_mem clInput3 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  testData->input3, &clStatus);
+                cl_mem clInput3 = clCreateBuffer(clContext, CL_MEM_READ_ONLY  | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->inputSize,  &testData->input3[0], &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateBuffer::clInput3");
                 clStatus = clSetKernelArg(clKernel, 0, sizeof(cl_mem), (void*)&clResult);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clSetKernelArg::clResult");
@@ -448,21 +449,16 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
             LibreOfficeDeviceEvaluationIO* testData = new LibreOfficeDeviceEvaluationIO;
             testData->inputSize  = INPUTSIZE;
             testData->outputSize = OUTPUTSIZE;
-            testData->input0 = new double[testData->inputSize];
-            testData->input1 = new double[testData->inputSize];
-            testData->input2 = new double[testData->inputSize];
-            testData->input3 = new double[testData->inputSize];
-            testData->output = new double[testData->outputSize];
+            testData->input0.resize(testData->inputSize);
+            testData->input1.resize(testData->inputSize);
+            testData->input2.resize(testData->inputSize);
+            testData->input3.resize(testData->inputSize);
+            testData->output.resize(testData->outputSize);
             populateInput(testData);
 
             /* Perform evaluations */
             unsigned int numUpdates;
             status = profileDevices(profile, DS_EVALUATE_ALL, evaluateScoreForDevice, (void*)testData, &numUpdates);
-            delete testData->output;
-            delete testData->input3;
-            delete testData->input2;
-            delete testData->input1;
-            delete testData->input0;
             delete testData;
             if (DS_SUCCESS == status)
             {
