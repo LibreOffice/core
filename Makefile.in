@@ -73,7 +73,7 @@ endif
 #
 # Partial Build
 #
-define gbuild_module_rules
+define gb_Top_GbuildModuleRules
 .PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck
 
 $(1): bootstrap fetch
@@ -87,13 +87,13 @@ $(1).all: bootstrap fetch
 
 endef
 
-define gbuild_modules_rules
-$(foreach m,$(1),$(call gbuild_module_rules,$(notdir $(m)),$(m)))
+define gb_Top_GbuildModulesRules
+$(foreach m,$(1),$(call gb_Top_GbuildModuleRules,$(notdir $(m)),$(m)))
 endef
 
 gbuild_modules := $(patsubst $(SRCDIR)/%/,%,$(dir $(wildcard $(SRCDIR)/*/Module_*.mk $(SRCDIR)/external/*/Module_*.mk)))
 
-$(eval $(call gbuild_modules_rules,$(gbuild_modules)))
+$(eval $(call gb_Top_GbuildModulesRules,$(gbuild_modules)))
 
 gbuild_TARGETS := AllLangHelp \
 	AllLangPackage \
@@ -388,7 +388,7 @@ dump-deps:
 dump-deps-png:
 	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
 
-define GbuildToIdeIntegration
+define gb_Top_GbuildToIdeIntegration
 $(1)-ide-integration:
 	cd $(SRCDIR) && (make cmd -npf Makefile.gbuild all || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
 
@@ -396,7 +396,7 @@ endef
 
 $(foreach ide,\
 	kdevelop, \
-$(eval $(call GbuildToIdeIntegration,$(ide))))
+$(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
 endif # MAKE_RESTARTS
 
