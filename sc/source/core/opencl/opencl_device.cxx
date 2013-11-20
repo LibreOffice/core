@@ -244,7 +244,9 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         bool bAmdFp64Flag = false;
         const char* buildOption = NULL;
         std::string tmpStr("-Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16 -DINPUTSIZE=");
-        tmpStr.append(dynamic_cast<std::ostringstream&>(std::ostringstream() << std::dec << INPUTSIZE).str());
+        std::ostringstream tmpOStrStr;
+        tmpOStrStr << std::dec << INPUTSIZE;
+        tmpStr.append(tmpOStrStr.str());
 
         if ((std::string(aExtInfo)).find("cl_khr_fp64") != std::string::npos)
         {
