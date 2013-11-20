@@ -768,8 +768,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def finishWizard(self):
-        self.finishWizard1(True)
-        return True
+        return self.finishWizard1(True)
 
     '''
     finish the wizard
@@ -792,10 +791,10 @@ class WWD_Events(WWD_Startup):
             if self.showFTPDialog(p):
                 self.updatePublishUI(2)
                 #now continue...
-                self.finishWizard2()
+                return self.finishWizard2()
 
         else:
-            self.finishWizard2()
+            return self.finishWizard2()
 
     '''
     this method is only called
@@ -829,7 +828,7 @@ class WWD_Events(WWD_Startup):
         (or rather:clicked)
         '''
         if not self.publishTargetApproved():
-            return
+            return False
             '''
             In order to save the session correctly,
             I return the value of the ftp publisher cp_Publish
@@ -842,7 +841,7 @@ class WWD_Events(WWD_Startup):
         if self.isSaveSession():
             # if canceled by user
             if not self.saveSession():
-                return
+                return False
         else:
             self.settings.cp_LastSavedSession = ""
 
@@ -880,6 +879,7 @@ class WWD_Events(WWD_Startup):
             self.process.runProcess()
             self.finishWizardFinished()
             self.process.myTask.removeTaskListener(pd)
+            return True
         except Exception:
             traceback.print_exc()
 
