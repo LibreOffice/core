@@ -105,13 +105,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValueSet(Window *pParent, V
 {
     WinBits nWinBits = WB_TABSTOP;
 
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString("border"));
-    if (aFind != rMap.end())
-    {
-        if (toBool(aFind->second))
-            nWinBits |= WB_BORDER;
-        rMap.erase(aFind);
-    }
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
 
     return new ValueSet(pParent, nWinBits);
 }
