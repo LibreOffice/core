@@ -76,7 +76,6 @@
 #define RID_SVXSTR_EDIT_GRAPHIC             (RID_SVX_START + 509)
 
 #define RID_SVXSTR_DESC_GRADIENT            (RID_SVX_START + 163)
-#define RID_SVXSTR_ASK_DEL_GRADIENT         (RID_SVX_START + 165)
 #define RID_SVXSTR_ASK_CHANGE_GRADIENT      (RID_SVX_START + 166)
 #define RID_SVXSTR_ASK_CHANGE_BITMAP        (RID_SVX_START + 172)
 #define RID_SVXSTR_DESC_NEW_BITMAP          (RID_SVX_START + 168)
@@ -89,7 +88,6 @@
 #define RID_SVXSTR_CHANGE                   (RID_SVX_START + 181)
 #define RID_SVXSTR_ADD                      (RID_SVX_START + 182)
 #define RID_SVXSTR_DESC_COLOR               (RID_SVX_START + 215)
-#define RID_SVXSTR_ASK_DEL_COLOR            (RID_SVX_START + 217)
 #define RID_SVXSTR_ASK_CHANGE_COLOR         (RID_SVX_START + 218)
 #define RID_SVXSTR_TABLE                    (RID_SVX_START + 220)
 #define RID_SVXSTR_CONNECTOR                (RID_SVX_START + 221)
