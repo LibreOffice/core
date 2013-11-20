@@ -194,7 +194,7 @@ sal_Int32 FastTokenLookup::getTokenFromChars(
     if( !nLen )
         nLen = strlen( pToken );
 
-    if ( nLen < mnUtf8BufferSize )
+    if ( static_cast<sal_Int32>(nLen) < mnUtf8BufferSize )
     {
         // Get intimiate with the underlying sequence cf. sal/types.h
         sal_Sequence *pSeq = maUtf8Buffer.get();
