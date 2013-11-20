@@ -148,6 +148,9 @@ class AsyncRequests : private ::cppu::BaseMutex
             m_rHandler = rHandler;
         }
 
+        /// ensure the execution thread gets going.
+        void triggerJobExecution();
+
         //---------------------------------------------------------------------
         /** does nothing special / excepting to make sure our class wont be inline .-)
          */
@@ -194,6 +197,7 @@ class AsyncRequests : private ::cppu::BaseMutex
         ::sal_Bool m_bFinish;
         RequestHandlerRef m_rHandler;
         RequestQueue m_lRequests;
+        osl::Condition maWait;
 };
 
 } // namespace vista
