@@ -249,31 +249,47 @@ build-nocheck check debugrun help slowcheck translations unitcheck subsequentche
 cross-toolset: bootstrap fetch
 	$(GNUMAKE) gb_Side=build -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
 
-ifneq ($(OS),MACOSX)
 
 #
 # Install
 #
 
+define gb_Top_DoInstall
+echo "$(1) in $(INSTALLDIR) ..." && \
+ooinstall $(2) "$(INSTALLDIR)"
+
+endef
+
+ifneq ($(OS),MACOSX)
+define gb_Top_InstallFinished
+echo && echo "If you want to edit the .ui files with glade first execute:" && \
+echo && echo "export GLADE_CATALOG_SEARCH_PATH=$(2)/share/glade" && \
+echo && echo "$(1) finished, you can now execute:" && \
+echo "$(2)/program/soffice"
+
+endef
+else
+define gb_Top_InstallFinished
+echo && echo "$(1) finished, you can now run: " && \
+echo "open $(2)/$(PRODUCTNAME).app" && \
+echo "" && \
+echo "To debug: gdb $(2)/$(PRODUCTNAME).app/Contents/MacOS/soffice"
+
+endef
+endif
+
+ifneq ($(OS),MACOSX)
 install:
-	echo "Installing in $(INSTALLDIR)..." && \
-	ooinstall "$(INSTALLDIR)" && \
-	echo "" && \
-	echo "Installation finished, you can now execute:" && \
-	echo "$(INSTALLDIR)/program/soffice"
+	@$(call gb_Top_DoInstall,Installing,)
+	@$(call gb_Top_InstallFinished,Installation,$(INSTALLDIR))
 
 install-strip:
-	echo "Installing and stripping binaries in $(INSTALLDIR)..." && \
-	ooinstall --strip "$(INSTALLDIR)" && \
-	echo "" && \
-	echo "Installation finished, you can now execute:" && \
-	echo "$(INSTALLDIR)/program/soffice"
-
+	@$(call gb_Top_DoInstall,Installing and stripping binaries,--strip)
+	@$(call gb_Top_InstallFinished,Installation,$(INSTALLDIR))
 endif # !MACOSX
 
 dev-install:
-	@echo
-	@echo "dev-install is obsolete! Just build with \"make check\" and run"
+	@echo && echo "dev-install is obsolete! Just build with \"make check\" and run"
 ifeq ($(OS),MACOSX)
 	@echo "  open instdir/$(PRODUCTNAME).app"
 	@echo
@@ -300,23 +316,7 @@ ifneq ($(OS),MACOSX)
 	@install-gdb-printers -L
 endif
 endif
-	@echo
-	@echo "If you want to edit the .ui files with glade first execute:"
-	@echo
-	@echo "export GLADE_CATALOG_SEARCH_PATH=$(TESTINSTALLDIR)/share/glade"
-ifneq ($(OS),MACOSX)
-	@echo
-	@echo "Test installation finished, you can now execute:"
-	@echo
-	@echo "  $(TESTINSTALLDIR)/program/soffice"
-else
-	@echo
-	@echo "Test installation finished, you can now run:"
-	@echo
-	@echo "  open $(TESTINSTALLDIR)/LibreOffice.app"
-	@echo
-	@echo "To debug: gdb $(TESTINSTALLDIR)/LibreOffice.app/Contents/MacOS/soffice"
-endif
+	@$(call gb_Top_InstallFinished,Test Installation,$(TESTINSTALLDIR))
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up
