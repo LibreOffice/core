@@ -144,8 +144,8 @@ void timerStart(timer* mytimer)
 #endif
 }
 
-/* Timer functions - stop timer and return difference */
-double timerStop(timer* mytimer)
+/* Timer functions - get current value */
+double timerCurrent(timer* mytimer)
 {
 #ifdef _WIN32
     LARGE_INTEGER stop, frequency;
@@ -342,7 +342,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
                 clReleaseKernel(clKernel);
 
                 device->score = (void*)new LibreOfficeDeviceScore;
-                ((LibreOfficeDeviceScore*)device->score)->fTime = timerStop(&kernelTime);
+                ((LibreOfficeDeviceScore*)device->score)->fTime = timerCurrent(&kernelTime);
                 ((LibreOfficeDeviceScore*)device->score)->bNoCLErrors = true;
             }
 
@@ -375,7 +375,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         }
 
         device->score = (void*)new LibreOfficeDeviceScore;
-        ((LibreOfficeDeviceScore*)device->score)->fTime = timerStop(&kernelTime);
+        ((LibreOfficeDeviceScore*)device->score)->fTime = timerCurrent(&kernelTime);
         ((LibreOfficeDeviceScore*)device->score)->bNoCLErrors = true;
     }
     return DS_SUCCESS;
