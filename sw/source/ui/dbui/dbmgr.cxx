@@ -125,6 +125,7 @@
 #include <vector>
 #include <unomid.h>
 #include <section.hxx>
+#include <rootfrm.hxx>
 
 using namespace ::osl;
 using namespace ::svx;
@@ -969,6 +970,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             sal_uLong nDocNo = 1;
 
             long nStartRow, nEndRow;
+            bool bFreezedLayouts = false;
             // collect temporary files
             ::std::vector< String> aFilesToRemove;
             do
@@ -1236,8 +1238,27 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
                 nDocNo++;
                 nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
+
+                // Freeze the layouts of the target document after the first inserted
+                // sub-document, to get the correct PageDesc.
+                if(!bFreezedLayouts && (rMergeDescriptor.bCreateSingleFile || bAsSingleFile))
+                {
+                    std::set<SwRootFrm*> aAllLayouts = pTargetShell->GetDoc()->GetAllLayouts();
+                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),
+                        ::std::bind2nd(::std::mem_fun(&SwRootFrm::FreezeLayout), true));
+                    bFreezedLayouts = true;
+                }
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+
+            // Unfreeze target document layouts and correct all PageDescs.
+            if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
+            {
+                std::set<SwRootFrm*> aAllLayouts = pTargetShell->GetDoc()->GetAllLayouts();
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),
+                    ::std::bind2nd(::std::mem_fun(&SwRootFrm::FreezeLayout), false));
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
+            }
 
             aPrtMonDlg.Show( sal_False );
 

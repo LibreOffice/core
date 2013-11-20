@@ -472,6 +472,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     mbBookMode( false ),
     mbSidebarChanged( false ),
     mbNeedGrammarCheck( false ),
+    bLayoutFreezed ( false ),
     nBrowseWidth( MM50*4 ), //2cm minimum
     pTurbo( 0 ),
     pLastPage( 0 ),
@@ -649,7 +650,8 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 
 void SwRootFrm::AllCheckPageDescs() const
 {
-    CheckPageDescs( (SwPageFrm*)this->Lower() );
+    if ( !IsLayoutFreezed() )
+        CheckPageDescs( (SwPageFrm*)this->Lower() );
 }
 //swmod 080226
 void SwRootFrm::AllInvalidateAutoCompleteWords() const
