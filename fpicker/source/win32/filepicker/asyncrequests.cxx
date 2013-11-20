@@ -25,9 +25,8 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-//-----------------------------------------------------------------------------
-void lcl_sleep(::osl::Condition& aCondition   ,
-               ::sal_Int32       nMilliSeconds)
+static void lcl_sleep( ::osl::Condition& aCondition,
+                       ::sal_Int32       nMilliSeconds )
 {
     sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
 
@@ -44,26 +43,23 @@ void lcl_sleep(::osl::Condition& aCondition   ,
     Application::AcquireSolarMutex( nAcquireCount );
 }
 
-//-----------------------------------------------------------------------------
-void Request::wait(::sal_Int32 nMilliSeconds)
+void Request::wait( ::sal_Int32 nMilliSeconds )
 {
-    lcl_sleep(m_aJoiner, nMilliSeconds);
+    lcl_sleep( m_aJoiner, nMilliSeconds );
 }
 
 void Request::waitProcessMessages()
 {
     SolarMutexGuard aGuard;
-    while (!m_aJoiner.check())
+    while ( !m_aJoiner.check() )
         Application::Yield();
 }
 
-//-----------------------------------------------------------------------------
 void Request::notify()
 {
     m_aJoiner.set();
 }
 
-//-----------------------------------------------------------------------------
 AsyncRequests::AsyncRequests(const RequestHandlerRef& rHandler)
     : ::cppu::BaseMutex(         )
     , ::osl::Thread    (         )
@@ -73,7 +69,6 @@ AsyncRequests::AsyncRequests(const RequestHandlerRef& rHandler)
 {
 }
 
-//-----------------------------------------------------------------------------
 AsyncRequests::~AsyncRequests()
 {
     // SYNCHRONIZED ->
@@ -85,6 +80,14 @@ AsyncRequests::~AsyncRequests()
     join();
 }
 
+void AsyncRequests::triggerJobExecution()
+{
+    if ( ! isRunning())
+        create();
+    else
+        maWait.set();
+}
+
 void AsyncRequests::triggerRequestProcessMessages (const RequestRef& rRequest)
 {
     // SYNCHRONIZED ->
@@ -93,13 +96,9 @@ void AsyncRequests::triggerRequestProcessMessages (const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    if ( ! isRunning())
-        create();
-
     rRequest->waitProcessMessages();
 }
 
-//-----------------------------------------------------------------------------
 void AsyncRequests::triggerRequestBlocked(const RequestRef& rRequest)
 {
     // SYNCHRONIZED ->
@@ -108,13 +107,11 @@ void AsyncRequests::triggerRequestBlocked(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    if ( ! isRunning())
-        create();
+    triggerJobExecution();
 
     rRequest->wait(Request::WAIT_INFINITE);
 }
 
-//-----------------------------------------------------------------------------
 void AsyncRequests::triggerRequestNonBlocked(const RequestRef& rRequest)
 {
     // SYNCHRONIZED ->
@@ -123,11 +120,9 @@ void AsyncRequests::triggerRequestNonBlocked(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    if ( ! isRunning())
-        create();
+    triggerJobExecution();
 }
 
-//-----------------------------------------------------------------------------
 void AsyncRequests::triggerRequestDirectly(const RequestRef& rRequest)
 {
     // SYNCHRONIZED ->
@@ -140,7 +135,6 @@ void AsyncRequests::triggerRequestDirectly(const RequestRef& rRequest)
         rHandler->doRequest(rRequest);
 }
 
-//-----------------------------------------------------------------------------
 void AsyncRequests::triggerRequestThreadAware(const RequestRef& rRequest,
                                                     ::sal_Int16  nWait   )
 {
@@ -156,10 +150,6 @@ void AsyncRequests::triggerRequestThreadAware(const RequestRef& rRequest,
         triggerRequestNonBlocked(rRequest);
 }
 
-//-----------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------
 void SAL_CALL AsyncRequests::run()
 {
     static const ::sal_Int32 TIME_TO_WAIT_FOR_NEW_REQUESTS = 250;
@@ -173,8 +163,6 @@ void SAL_CALL AsyncRequests::run()
 
     if (rHandler != NULL)
         rHandler->before();
-
-    ::osl::Condition aWait;
 
     while ( ! bFinished)
     {
@@ -194,7 +182,8 @@ void SAL_CALL AsyncRequests::run()
 
         if (rRequest == NULL)
         {
-            lcl_sleep(aWait, TIME_TO_WAIT_FOR_NEW_REQUESTS);
+            lcl_sleep(maWait, TIME_TO_WAIT_FOR_NEW_REQUESTS);
+            maWait.reset();
             continue;
         }
 
