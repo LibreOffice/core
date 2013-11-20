@@ -15,7 +15,7 @@
         <value>fb2 zip</value>
     </prop>
     <prop oor:name="MediaType">
-        <value>text/xml</value>
+        <value>application/x-fictionbook+xml</value>
     </prop>
     <prop oor:name="Preferred">
         <value>true</value>
