@@ -29,7 +29,7 @@
 #include "iipaobj.hxx"
 
 #include "common.h"
-#include <Windows.h>
+#include <windows.h>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XView.hpp>
