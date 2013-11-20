@@ -16,7 +16,6 @@
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include "scmatrix.hxx"
-#include "dynamickernel.hxx"
 
 #include "formula/vectortoken.hxx"
 #include "rtl/bootstrap.hxx"

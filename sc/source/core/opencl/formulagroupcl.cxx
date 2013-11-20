@@ -17,7 +17,6 @@
 #include "formula/vectortoken.hxx"
 #include "scmatrix.hxx"
 
-#include "dynamickernel.hxx"
 #include "openclwrapper.hxx"
 
 #include "op_financial.hxx"
@@ -2375,15 +2374,33 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
     }
 }
 
-/// Used to generate sliding window helpers
-void SymbolTable::DumpSlidingWindowFunctions(std::stringstream &ss)
-{
+/// Holds the symbol table for a given dynamic kernel
+class SymbolTable {
+public:
+    typedef std::map<const formula::FormulaToken *,
+        boost::shared_ptr<DynamicKernelArgument> > ArgumentMap;
+    // This avoids instability caused by using pointer as the key type
+    typedef std::list< boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
+    SymbolTable(void):mCurId(0) {}
+    template <class T>
+    const DynamicKernelArgument *DeclRefArg(FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen);
+    /// Used to generate sliding window helpers
+    void DumpSlidingWindowFunctions(std::stringstream &ss)
+    {
         for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
             ++it) {
             (*it)->GenSlidingWindowFunction(ss);
             ss << "\n";
         }
-}
+    }
+    /// Memory mapping from host to device and pass buffers to the given kernel as
+    /// arguments
+    void Marshal(cl_kernel, int, cl_program);
+private:
+    unsigned int mCurId;
+    ArgumentMap mSymbols;
+    ArgumentList mParams;
+};
 
 void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
 {
@@ -2394,9 +2411,16 @@ void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
     }
 }
 
-/// OpenCL code generation
-void DynamicKernel::CodeGen()
+class DynamicKernel : public CompiledFormula
 {
+public:
+    DynamicKernel(FormulaTreeNodeRef r):mpRoot(r),
+        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL), mpCode(NULL) {}
+    static DynamicKernel *create(ScDocument& rDoc,
+                                 const ScAddress& rTopPos,
+                                 ScTokenArray& rCode);
+    /// OpenCL code generation
+    void CodeGen() {
         // Travese the tree of expression and declare symbols used
         const DynamicKernelArgument *DK= mSyms.DeclRefArg<
             DynamicKernelSoPArguments>(mpRoot, new OpNop);
@@ -2432,11 +2456,10 @@ void DynamicKernel::CodeGen()
 #if 1
         std::cerr<< "Program to be compiled = \n" << mFullProgramSrc << "\n";
 #endif
-}
-
-/// Produce kernel hash
-std::string DynamicKernel::GetMD5(void)
-{
+    }
+    /// Produce kernel hash
+    std::string GetMD5(void)
+    {
 #ifdef MD5_KERNEL
         if (mKernelHash.empty()) {
             std::stringstream md5s;
@@ -2455,12 +2478,15 @@ std::string DynamicKernel::GetMD5(void)
 #else
         return "";
 #endif
-}
-
-/// Prepare buffers, marshal them to GPU, and launch the kernel
-/// TODO: abstract OpenCL part out into OpenCL wrapper.
-void DynamicKernel::Launch(size_t nr)
-{
+    }
+    /// Create program, build, and create kerenl
+    /// TODO cache results based on kernel body hash
+    /// TODO: abstract OpenCL part out into OpenCL wrapper.
+    void CreateKernel(void);
+    /// Prepare buffers, marshal them to GPU, and launch the kernel
+    /// TODO: abstract OpenCL part out into OpenCL wrapper.
+    void Launch(size_t nr)
+    {
         // Obtain cl context
         KernelEnv kEnv;
         OpenclDevice::setKernelEnv(&kEnv);
@@ -2481,7 +2507,24 @@ void DynamicKernel::Launch(size_t nr)
             global_work_size, NULL, 0, NULL, NULL);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
-}
+    }
+    ~DynamicKernel();
+    cl_mem GetResultBuffer(void) const { return mpResClmem; }
+    void SetPCode(ScTokenArray *pCode) { mpCode = pCode; }
+
+private:
+    void TraverseAST(FormulaTreeNodeRef);
+    FormulaTreeNodeRef mpRoot;
+    SymbolTable mSyms;
+    std::string mKernelSignature, mKernelHash;
+    std::string mFullProgramSrc;
+    cl_program mpProgram;
+    cl_kernel mpKernel;
+    cl_mem mpResClmem; // Results
+    std::set<std::string> inlineDecl;
+    std::set<std::string> inlineFun;
+    ScTokenArray *mpCode;
+};
 
 DynamicKernel::~DynamicKernel()
 {
