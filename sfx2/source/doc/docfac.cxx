@@ -371,7 +371,7 @@ OUString SfxObjectFactory::GetFactoryURL() const
 {
     OUStringBuffer aURLComposer;
     aURLComposer.append("private:factory/");
-    aURLComposer.append(GetShortName());
+    aURLComposer.appendAscii(GetShortName());
     return aURLComposer.makeStringAndClear();
 }
 
