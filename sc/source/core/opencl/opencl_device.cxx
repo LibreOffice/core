@@ -157,7 +157,7 @@ double timerCurrent(timer* mytimer)
     if (info.numer == 0)
         mach_timebase_info(&info);
     long long stop = mach_absolute_time();
-    double time = ((stop - mytimer->start) * (double) info.numer / info.denom) / 1000.0;
+    double time = ((stop - mytimer->start) * (double) info.numer / info.denom) / 1.0E9;
 #else
     struct timespec s;
     long long stop;
