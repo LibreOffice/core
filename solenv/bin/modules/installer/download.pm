@@ -542,6 +542,12 @@ sub create_tar_gz_file_from_directory
     $installer::globals::downloadfilename = $downloadfilename . $installer::globals::downloadfileextension;
     my $targzname = $downloaddir . $installer::globals::separator . $installer::globals::downloadfilename;
 
+    # fdo#67060 - install script is for RPM only
+    if ( -e "$installdir/install" && !$installer::globals::isrpmbuild )
+    {
+        unlink("$installdir/install");
+    }
+
     my $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | gzip > $targzname";
 
     my $returnvalue = system($systemcall);
