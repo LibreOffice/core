@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_exception_objects,scopencl,\
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,scopencl,\
         -ldl \
+	-lrt \
 ))
 endif
 
