@@ -53,14 +53,10 @@ public:
 
 private:
     ::sd::DrawDocShell* mpDocSh;
-    FixedText           maFtLayout;
-    ValueSet            maVS;
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
-    CheckBox            maCbxMasterPage;
-    CheckBox            maCbxCheckMasters;
-    PushButton          maBtnLoad;
+    ValueSet*           m_pVS;
+    CheckBox*           m_pCbxMasterPage;
+    CheckBox*           m_pCbxCheckMasters;
+    PushButton*         m_pBtnLoad;
 
     const SfxItemSet&   mrOutAttrs;
 

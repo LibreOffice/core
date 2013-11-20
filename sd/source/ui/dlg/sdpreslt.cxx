@@ -24,7 +24,6 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "sdpreslt.hxx"
-#include "sdpreslt.hrc"
 #include "sdattr.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
@@ -32,27 +31,24 @@
 #include "DrawDocShell.hxx"
 
 
-SdPresLayoutDlg::SdPresLayoutDlg(
-    ::sd::DrawDocShell* pDocShell,
-    ::Window* pWindow,
-    const SfxItemSet& rInAttrs ):
-                ModalDialog         (pWindow, SdResId(DLG_PRESLT)),
-                mpDocSh              ( pDocShell ),
-                maFtLayout           (this, SdResId(FT_LAYOUT)),
-                maVS                 (this, SdResId(VS_LAYOUT)),
-                maBtnOK              (this, SdResId(BTN_OK)),
-                maBtnCancel          (this, SdResId(BTN_CANCEL)),
-                maBtnHelp            (this, SdResId(BTN_HELP)),
-                maCbxMasterPage     (this, SdResId(CBX_MASTER_PAGE)),
-                maCbxCheckMasters   (this, SdResId(CBX_CHECK_MASTERS)),
-                maBtnLoad            (this, SdResId(BTN_LOAD)),
-                mrOutAttrs           (rInAttrs),
-                maStrNone           (SD_RESSTR(STR_NULL))
+SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
+    ::Window* pWindow, const SfxItemSet& rInAttrs)
+    : ModalDialog(pWindow, "SlideDesignDialog",
+        "modules/simpress/ui/slidedesigndialog.ui")
+    , mpDocSh(pDocShell)
+    , mrOutAttrs(rInAttrs)
+    , maStrNone(SD_RESSTR(STR_NULL))
 {
-    FreeResource();
+    get(m_pVS, "select");
+    Size aPref(LogicToPixel(Size(144 , 141), MAP_APPFONT));
+    m_pVS->set_width_request(aPref.Width());
+    m_pVS->set_height_request(aPref.Height());
+    get(m_pCbxMasterPage, "masterpage");
+    get(m_pCbxCheckMasters, "checkmasters");
+    get(m_pBtnLoad, "load");
 
-    maVS.SetDoubleClickHdl(LINK(this, SdPresLayoutDlg, ClickLayoutHdl));
-    maBtnLoad.SetClickHdl(LINK(this, SdPresLayoutDlg, ClickLoadHdl));
+    m_pVS->SetDoubleClickHdl(LINK(this, SdPresLayoutDlg, ClickLayoutHdl));
+    m_pBtnLoad->SetClickHdl(LINK(this, SdPresLayoutDlg, ClickLoadHdl));
 
     Reset();
 }
@@ -73,12 +69,12 @@ void SdPresLayoutDlg::Reset()
     if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, sal_False, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_Bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
-        maCbxMasterPage.Enable( !bMasterPage );
-        maCbxMasterPage.Check( bMasterPage );
+        m_pCbxMasterPage->Enable( !bMasterPage );
+        m_pCbxMasterPage->Check( bMasterPage );
     }
 
     // remove not used master pages
-    maCbxCheckMasters.Check(sal_False);
+    m_pCbxCheckMasters->Check(sal_False);
 
     if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, sal_True, &pPoolItem) == SFX_ITEM_SET)
         maName = ((const SfxStringItem*)pPoolItem)->GetValue();
@@ -95,7 +91,7 @@ void SdPresLayoutDlg::Reset()
     }
     DBG_ASSERT(nName < mnLayoutCount, "Layout not found");
 
-    maVS.SelectItem((sal_uInt16)nName + 1);  // Indices of the ValueSets start at 1
+    m_pVS->SelectItem((sal_uInt16)nName + 1);  // Indices of the ValueSets start at 1
 
 }
 
@@ -104,7 +100,7 @@ void SdPresLayoutDlg::Reset()
  */
 void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
-    short nId = maVS.GetSelectItemId();
+    short nId = m_pVS->GetSelectItemId();
     sal_Bool bLoad = nId > mnLayoutCount;
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad ) );
 
@@ -122,8 +118,8 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     }
 
     rOutAttrs.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aLayoutName ) );
-    rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_MASTER_PAGE, maCbxMasterPage.IsChecked() ) );
-    rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, maCbxCheckMasters.IsChecked() ) );
+    rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_MASTER_PAGE, m_pCbxMasterPage->IsChecked() ) );
+    rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, m_pCbxCheckMasters->IsChecked() ) );
 }
 
 
@@ -132,12 +128,12 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
  */
 void SdPresLayoutDlg::FillValueSet()
 {
-    maVS.SetStyle(maVS.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER
+    m_pVS->SetStyle(m_pVS->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER
                                       | WB_VSCROLL | WB_NAMEFIELD);
 
-    maVS.SetColCount(2);
-    maVS.SetLineCount(2);
-    maVS.SetExtraSpacing(2);
+    m_pVS->SetColCount(2);
+    m_pVS->SetLineCount(2);
+    m_pVS->SetExtraSpacing(2);
 
     SdDrawDocument* pDoc = mpDocSh->GetDoc();
 
@@ -153,11 +149,11 @@ void SdPresLayoutDlg::FillValueSet()
             maLayoutNames.push_back(aLayoutName);
 
             Image aBitmap(Bitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90)));
-            maVS.InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
+            m_pVS->InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
         }
     }
 
-    maVS.Show();
+    m_pVS->Show();
 }
 
 
@@ -227,7 +223,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             {
                 bExists = sal_True;
                 // select template
-                maVS.SelectItem( aPos + 1 );
+                m_pVS->SelectItem( aPos + 1 );
             }
         }
 
@@ -256,7 +252,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
                             maLayoutNames.push_back(aLayoutName);
 
                             Image aBitmap(Bitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90)));
-                            maVS.InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
+                            m_pVS->InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
                         }
                     }
                 }
@@ -271,14 +267,14 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             {
                 // empty layout
                 maLayoutNames.push_back(maStrNone);
-                maVS.InsertItem( (sal_uInt16) maLayoutNames.size(),
+                m_pVS->InsertItem( (sal_uInt16) maLayoutNames.size(),
                         Image(Bitmap(SdResId(BMP_FOIL_NONE))), maStrNone );
             }
 
             if (!bCancel)
             {
                 // select template
-                maVS.SelectItem( (sal_uInt16) maLayoutNames.size() );
+                m_pVS->SelectItem( (sal_uInt16) maLayoutNames.size() );
             }
         }
     }

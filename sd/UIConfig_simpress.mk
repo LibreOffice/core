@@ -91,6 +91,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/prntopts \
 	sd/uiconfig/simpress/ui/remotedialog \
 	sd/uiconfig/simpress/ui/sdviewpage \
+	sd/uiconfig/simpress/ui/slidedesigndialog \
 	sd/uiconfig/simpress/ui/slidetransitionspanel \
 	sd/uiconfig/simpress/ui/tabledesignpanel \
 	sd/uiconfig/simpress/ui/templatedialog \
