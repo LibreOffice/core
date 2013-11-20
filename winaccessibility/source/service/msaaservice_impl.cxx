@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -35,7 +36,6 @@
 #include <windows.h>
 #include <postwin.h>
 
-using namespace ::rtl; // for OUString
 using namespace ::com::sun::star; // for odk interfaces
 using namespace ::com::sun::star::uno; // for basic types
 using namespace ::com::sun::star::accessibility;
@@ -64,12 +64,13 @@ class MSAAServiceImpl : public ::cppu::WeakImplHelper4<
             XMSAAService, lang::XServiceInfo,
             lang::XInitialization, lang::XComponent >
 {
+private:
+    rtl::Reference<AccTopWindowListener> m_pTopWindowListener;
     OUString m_arg;
+
 public:
-    // focus on four interfaces,
-    // no need to implement XInterface, XTypeProvider, XWeak etc.
     MSAAServiceImpl ();
-    virtual ~MSAAServiceImpl( void );
+    virtual ~MSAAServiceImpl();
 
     // XInitialization will be called upon createInstanceWithArguments[AndContext]()
     virtual void SAL_CALL initialize( Sequence< Any > const & args ) throw (Exception);
@@ -133,7 +134,13 @@ void MSAAServiceImpl::handleWindowOpened(sal_Int64 nAcc)
     SolarMutexGuard g;
 
     SAL_INFO( "iacc2", "Window opened " << nAcc );
-    handleWindowOpened_impl( nAcc );
+
+    if (m_pTopWindowListener.is() && nAcc)
+    {
+        m_pTopWindowListener->HandleWindowOpened(
+            static_cast<com::sun::star::accessibility::XAccessible*>(
+                reinterpret_cast<void*>(nAcc)));
+    }
 }
 
 OUString MSAAServiceImpl::getImplementationName() throw (RuntimeException)
@@ -221,7 +228,8 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
         assert( xAccMgr.is() );
         if ( xAccessible.is() )
         {
-            xAccMgr->handleWindowOpened( (long)xAccessible.get() );
+            xAccMgr->handleWindowOpened(
+                    reinterpret_cast<sal_Int64>(xAccessible.get()));
             SAL_INFO( "iacc2", "Decide whether to register existing window with IAccessible2" );
         }
     }
@@ -300,8 +308,8 @@ MSAAServiceImpl::MSAAServiceImpl()
 
     if( xToolkit.is() )
     {
-        g_pTop = new AccTopWindowListener();
-        Reference< XTopWindowListener> xRef( g_pTop );
+        m_pTopWindowListener.set(new AccTopWindowListener());
+        Reference<XTopWindowListener> const xRef(m_pTopWindowListener.get());
         xToolkit->addTopWindowListener( xRef );
         SAL_INFO( "iacc2", "successfully connected to the toolkit event hose" );
     }
@@ -323,7 +331,7 @@ void MSAAServiceImpl::dispose()
     // and substreams which in turn release theirs, etc. When xRootFolder is
     // released when this destructor completes, the folder tree should be
     // deleted fully (and automagically).
-    FreeTopWindowListener();
+    m_pTopWindowListener.clear();
 }
 
 }

@@ -44,29 +44,6 @@ using namespace com::sun::star::awt;
 using namespace rtl;
 using namespace cppu;
 
-AccTopWindowListener* g_pTop = NULL;
-
-//when proccess exit, call FreeTopWindowListener() in svmain
-void FreeTopWindowListener()
-{
-    if( g_pTop )
-    {
-        g_pTop->release();
-        g_pTop = NULL;
-    }
-}
-
-/**
- *  As a global method to invoke the handleWindowOpened() method
- */
-void handleWindowOpened_impl(sal_Int64 pAcc)
-{
-    if( g_pTop && pAcc != 0 )
-        g_pTop->HandleWindowOpened(
-            static_cast<com::sun::star::accessibility::XAccessible*>(
-                reinterpret_cast<void*>(pAcc)));
-}
-
 /**
  *  For the new opened window, generate all the UNO accessible's object, COM object and add
  *  accessible listener to monitor all these objects.
