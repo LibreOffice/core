@@ -66,7 +66,7 @@ static bool CheckPlugin( const OString& rPath, list< PluginDescription* >& rDesc
     }
 
     OString aBaseName = rPath.copy(nPos+1);
-    if (aBaseName.equalsL(RTL_CONSTASCII_STRINGPARAM("libnullplugin.so")))
+    if (aBaseName.startsWith("libnullplugin.so"))
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "don't like %s\n", aBaseName.getStr() );

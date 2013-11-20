@@ -980,17 +980,17 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             parseOpenUI( aCurrentLine );
             continue;
         }
-        else if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OrderDependency")))
+        else if (aKey.startsWith("OrderDependency"))
         {
             parseOrderDependency( aCurrentLine );
             continue;
         }
-        else if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIConstraints")) ||
-                 aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("NonUIConstraints")))
+        else if (aKey.startsWith("UIConstraints") ||
+                 aKey.startsWith("NonUIConstraints"))
         {
             continue; // parsed in pass 2
         }
-        else if( aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CustomPageSize")) ) // currently not handled
+        else if( aKey.startsWith("CustomPageSize") ) // currently not handled
             continue;
 
         // default values are parsed in pass 2
@@ -1278,15 +1278,15 @@ void PPDParser::parseOrderDependency(const OString& rLine)
         pKey = keyit->second;
 
     pKey->m_nOrderDependency = nOrder;
-    if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("ExitServer")) )
+    if( aSetup.startsWith("ExitServer") )
         pKey->m_eSetupType = PPDKey::ExitServer;
-    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("Prolog")) )
+    else if( aSetup.startsWith("Prolog") )
         pKey->m_eSetupType = PPDKey::Prolog;
-    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("DocumentSetup")) )
+    else if( aSetup.startsWith("DocumentSetup") )
         pKey->m_eSetupType = PPDKey::DocumentSetup;
-    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("PageSetup")) )
+    else if( aSetup.startsWith("PageSetup") )
         pKey->m_eSetupType = PPDKey::PageSetup;
-    else if( aSetup.equalsL(RTL_CONSTASCII_STRINGPARAM("JCLSetup")) )
+    else if( aSetup.startsWith("JCLSetup") )
         pKey->m_eSetupType = PPDKey::JCLSetup;
     else
         pKey->m_eSetupType = PPDKey::AnySetup;

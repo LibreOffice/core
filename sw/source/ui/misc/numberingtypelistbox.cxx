@@ -48,7 +48,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, WinBits nStyle ) :
 
 bool SwNumberingTypeListBox::set_property(const OString &rKey, const OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("type")))
+    if (rKey.startsWith("type"))
         Reload(rValue.toInt32());
     else
         return ListBox::set_property(rKey, rValue);

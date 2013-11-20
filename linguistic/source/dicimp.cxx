@@ -117,7 +117,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
             // lang: field
             if (getTag(aLine, "lang: ", aTagValue))
             {
-                if (aTagValue.equalsL(RTL_CONSTASCII_STRINGPARAM("<none>")))
+                if (aTagValue.startsWith("<none>"))
                     nLng = LANGUAGE_NONE;
                 else
                     nLng = LanguageTag::convertToLanguageTypeWithFallback(
@@ -127,7 +127,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
             // type: negative / positive
             if (getTag(aLine, "type: ", aTagValue))
             {
-                if (aTagValue.equalsL(RTL_CONSTASCII_STRINGPARAM("negative")))
+                if (aTagValue.startsWith("negative"))
                     bNeg = sal_True;
                 else
                     bNeg = sal_False;

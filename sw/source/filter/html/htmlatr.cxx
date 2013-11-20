@@ -543,13 +543,13 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // der erste Buchstabe reicht meistens
         switch( rInfo.aToken[0] )
         {
-        case 'A': OSL_ENSURE( rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_address)),
+        case 'A': OSL_ENSURE( rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_address),
                             "Doch kein ADDRESS?" );
                     rInfo.bParaPossible = sal_True;
                     rHWrt.bNoAlign = sal_True;
                     break;
 
-        case 'B': OSL_ENSURE( rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_blockquote)),
+        case 'B': OSL_ENSURE( rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_blockquote),
                             "Doch kein BLOCKQUOTE?" );
                     rInfo.bParaPossible = sal_True;
                     rHWrt.bNoAlign = sal_True;
@@ -561,7 +561,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                     }
                     else
                     {
-                        OSL_ENSURE( rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_preformtxt)),
+                        OSL_ENSURE( rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_preformtxt),
                                 "Doch kein PRE?" );
                         if( HTML_PREFORMTXT_ON == rHWrt.nLastParaToken )
                         {
@@ -576,10 +576,10 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                     }
                     break;
 
-        case 'D': OSL_ENSURE( rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dt)) ||
-                            rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dd)),
+        case 'D': OSL_ENSURE( rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_dt) ||
+                            rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_dd),
                             "Doch kein DD/DT?" );
-                    bDT = rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dt));
+                    bDT = rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_dt);
                     rInfo.bParaPossible = !bDT;
                     rHWrt.bNoAlign = sal_True;
                     bForceDL = sal_True;
@@ -1031,9 +1031,9 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.getStr(),
                                     sal_False );
         rHWrt.bLFPossible =
-            !rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dt)) &&
-            !rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_dd)) &&
-            !rInfo.aToken.equalsL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_li));
+            !rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_dt) &&
+            !rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_dd) &&
+            !rInfo.aToken.startsWith(OOO_STRING_SVTOOLS_HTML_li);
     }
     if( rInfo.bOutDiv )
     {

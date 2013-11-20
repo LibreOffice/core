@@ -1653,7 +1653,7 @@ namespace cppcanvas
                         // XPATHSTROKE_SEQ_BEGIN comment
 
                         // Handle drawing layer fills
-                        else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) )
+                        else if( pAct->GetComment().startsWith("XPATHFILL_SEQ_BEGIN") )
                         {
                             const sal_uInt8* pData = pAct->GetData();
                             if ( pData )
@@ -1769,7 +1769,7 @@ namespace cppcanvas
                             }
                         }
                         // Handle drawing layer fills
-                        else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("EMF_PLUS")) ) {
+                        else if( pAct->GetComment().startsWith("EMF_PLUS") ) {
                             static int count = -1, limit = 0x7fffffff;
                             if (count == -1) {
                                 count = 0;
@@ -1782,7 +1782,7 @@ namespace cppcanvas
                             if (count < limit)
                                 processEMFPlus( pAct, rFactoryParms, rStates.getState(), rCanvas );
                             count ++;
-                        } else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("EMF_PLUS_HEADER_INFO")) ) {
+                        } else if( pAct->GetComment().startsWith("EMF_PLUS_HEADER_INFO") ) {
                             SAL_INFO ("cppcanvas.emf", "EMF+ passed to canvas mtf renderer - header info, size: " << pAct->GetDataSize ());
 
                             SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);

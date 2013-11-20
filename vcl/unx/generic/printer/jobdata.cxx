@@ -246,7 +246,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
             bPDFDevice = true;
             rJobData.m_nPDFDevice = aLine.copy(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)).toInt32();
         }
-        else if (aLine.equalsL(RTL_CONSTASCII_STRINGPARAM("PPDContexData")))
+        else if (aLine.startsWith("PPDContexData"))
         {
             if( bPrinter )
             {
