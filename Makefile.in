@@ -312,49 +312,7 @@ docs:
 	@mkdocs.sh $(SRCDIR)/docs $(SRCDIR)/solenv/inc/doxygen.cfg
 
 findunusedcode:
-	@which callcatcher > /dev/null 2>&1 || \
-	    (echo "callcatcher not installed" && false)
-	@mkdir -p $(SRCDIR)/callcatcher/config_host
-	@cp config_host/* callcatcher/config_host
-	@cp config_host.mk* callcatcher
-	@cat config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/callcatcher/config_host.mk
-	@sed -i -e s,g++,"callcatcher g++",g $(SRCDIR)/callcatcher/config_host.mk
-	@sed -i -e s,gcc,"callcatcher gcc",g $(SRCDIR)/callcatcher/config_host.mk
-	@echo unexport ARCH_FLAGS >> $(SRCDIR)/callcatcher/config_host.mk
-	@echo unexport CFLAGS >> $(SRCDIR)/callcatcher/config_host.mk
-	@echo unexport CXXFLAGS >> $(SRCDIR)/callcatcher/config_host.mk
-	$(GNUMAKE) -f $(SRCDIR)/solenv/bin/callcatcher.Makefile findunusedcode
-	@grep ::.*\( unusedcode.all \
-              | grep -v ^Atom \
-              | grep -v ^atom:: \
-              | grep -v ^boost:: \
-              | grep -v ^CIcc \
-              | grep -v ^CLuceneError:: \
-              | grep -v ^cppu:: \
-              | grep -v ^CppUnit:: \
-              | grep -v ^Dde \
-              | grep -v ^graphite2:: \
-              | grep -v ^jvmaccess:: \
-              | grep -v ^libcdr:: \
-              | grep -v ^libcmis:: \
-              | grep -v ^libmspub:: \
-              | grep -v ^libvisio:: \
-              | grep -v ^libwpg:: \
-              | grep -v ^libwps_tools_win:: \
-              | grep -v ^lucene:: \
-              | grep -v ^Matrix3d:: \
-              | grep -v ^RelatedMultipart:: \
-              | grep -v ^salhelper:: \
-              | grep -v ^VSDInternalStream:: \
-              | grep -v ^WP1 \
-              | grep -v ^WP3 \
-              | grep -v ^WP42 \
-              | grep -v ^WP6 \
-              | grep -v ^WPG \
-              | grep -v ^WPS \
-              | grep -v WPX \
-              | grep -v ^WSObject \
-              > unusedcode.easy
+	@$(SRCDIR)/bin/findunusedcode $(SRCDIR) $(GNUMAKE)
 
 findunusedheaders:
 	$(SRCDIR)/bin/find-unusedheaders.pl
