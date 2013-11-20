@@ -1630,113 +1630,102 @@ void    SwXTextDocument::InitNewDoc()
     }
 }
 
-#define COM_SUN_STAR__DRAWING_LENGTH 13
 css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     OUString const & rServiceName,
     css::uno::Sequence<css::uno::Any> const * arguments)
 {
     SolarMutexGuard aGuard;
-    if(!IsValid())
+    if (!IsValid())
+    {
         throw RuntimeException();
-    Reference< XInterface >  xRet;
+    }
     sal_uInt16 nType = SwXServiceProvider::GetProviderType(rServiceName);
-    if(nType != SW_SERVICE_INVALID)
+    if (nType != SW_SERVICE_INVALID)
     {
-        xRet = SwXServiceProvider::MakeInstance(nType, pDocShell->GetDoc());
+        return SwXServiceProvider::MakeInstance(nType, pDocShell->GetDoc());
     }
-    else
+    if (rServiceName == "com.sun.star.drawing.DashTable")
     {
-        if( rServiceName.startsWith("com.sun.star.") )
-        {
-            sal_Int32 nIndex = COM_SUN_STAR__DRAWING_LENGTH;
-            OUString sCategory = rServiceName.getToken( 0, '.', nIndex );
-            bool bShape = sCategory == "drawing";
-            if( bShape || sCategory == "form")
-            {
-                if(bShape)
-                {
-                    short nTable = 0;
-                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
-                        nTable = SW_CREATE_DASH_TABLE;
-                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
-                        nTable = SW_CREATE_GRADIENT_TABLE;
-                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
-                        nTable = SW_CREATE_HATCH_TABLE;
-                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
-                        nTable = SW_CREATE_BITMAP_TABLE;
-                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
-                        nTable = SW_CREATE_TRANSGRADIENT_TABLE;
-                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
-                        nTable = SW_CREATE_MARKER_TABLE;
-                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) )
-                        nTable = SW_CREATE_DRAW_DEFAULTS;
-                    if(nTable)
-                    {
-                        xRet = GetPropertyHelper()->GetDrawTable(nTable);
-                    }
-                }
-            }
-            else if (sCategory == "document" )
-            {
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) )
-                    xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver") ) )
-                {
-                    xRet = (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ );
-                }
-            }
-            else if (sCategory == "text" )
-            {
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
-                    xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
-            }
-            else if (sCategory == "chart2" )
-            {
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.data.DataProvider") ) )
-                    xRet = Reference < XInterface > ( dynamic_cast< chart2::data::XDataProvider * >(pDocShell->getIDocumentChartDataProviderAccess()->GetChartDataProvider()) );
-            }
-
-            if(!xRet.is())
-            {
-                //! we don't want to insert OLE2 Shapes (e.g. "com.sun.star.drawing.OLE2Shape", ...)
-                //! like this (by creating them with the documents factory and
-                //! adding the shapes to the draw page).
-                //! For inserting OLE objects the proper way is to use
-                //! "com.sun.star.text.TextEmbeddedObject"!
-                if (rServiceName.endsWith( ".OLE2Shape" ))
-                    throw ServiceNotRegisteredException();  // declare service to be not registered with this factory
-
-                //
-                // the XML import is allowed to create instances of com.sun.star.drawing.OLE2Shape.
-                // Thus, a temporary service name is introduced to make this possible.
-                OUString aTmpServiceName( rServiceName );
-                if ( bShape &&
-                     rServiceName.equalsAscii( "com.sun.star.drawing.temporaryForXMLImportOLE2Shape" ) )
-                {
-                    aTmpServiceName = "com.sun.star.drawing.OLE2Shape";
-                }
-                //here search for the draw service
-                Reference< XInterface >  xTmp = arguments == 0
-                    ? SvxFmMSFactory::createInstance(aTmpServiceName)
-                    : SvxFmMSFactory::createInstanceWithArguments(
-                        aTmpServiceName, *arguments);
-                if(bShape)
-                {
-                    nIndex = COM_SUN_STAR__DRAWING_LENGTH;
-                    if( 0 == rServiceName.reverseCompareToAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.drawing.GroupShape" ) ) ||
-                        0 == rServiceName.reverseCompareToAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.drawing.Shape3DSceneObject" ) ) )
-                        xRet = *new SwXGroupShape( xTmp );
-                    else
-                        xRet = *new SwXShape( xTmp );
-                }
-                else
-                    xRet = xTmp;
-            }
-        }
-        else
-            throw ServiceNotRegisteredException();
+        return GetPropertyHelper()->GetDrawTable(SW_CREATE_DASH_TABLE);
     }
-    return xRet;
+    if (rServiceName == "com.sun.star.drawing.GradientTable")
+    {
+        return GetPropertyHelper()->GetDrawTable(SW_CREATE_GRADIENT_TABLE);
+    }
+    if (rServiceName == "com.sun.star.drawing.HatchTable")
+    {
+        return GetPropertyHelper()->GetDrawTable(SW_CREATE_HATCH_TABLE);
+    }
+    if (rServiceName == "com.sun.star.drawing.BitmapTable")
+    {
+        return GetPropertyHelper()->GetDrawTable(SW_CREATE_BITMAP_TABLE);
+    }
+    if (rServiceName == "com.sun.star.drawing.TransparencyGradientTable")
+    {
+        return GetPropertyHelper()->GetDrawTable(SW_CREATE_TRANSGRADIENT_TABLE);
+    }
+    if (rServiceName == "com.sun.star.drawing.MarkerTable")
+    {
+        return GetPropertyHelper()->GetDrawTable(SW_CREATE_MARKER_TABLE);
+    }
+    if (rServiceName == "com.sun.star.drawing.Defaults")
+    {
+        return GetPropertyHelper()->GetDrawTable(SW_CREATE_DRAW_DEFAULTS);
+    }
+    if (rServiceName == "com.sun.star.document.Settings")
+    {
+        return Reference<XInterface>(*new SwXDocumentSettings(this));
+    }
+    if (rServiceName == "com.sun.star.document.ImportEmbeddedObjectResolver")
+    {
+        return static_cast<cppu::OWeakObject *>(
+            new SvXMLEmbeddedObjectHelper(
+                *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ));
+    }
+    if (rServiceName == "com.sun.star.text.DocumentSettings")
+    {
+        return Reference<XInterface>(*new SwXDocumentSettings(this));
+    }
+    if (rServiceName == "com.sun.star.chart2.data.DataProvider")
+    {
+        return Reference<XInterface>(
+            dynamic_cast<chart2::data::XDataProvider *>(
+                pDocShell->getIDocumentChartDataProviderAccess()->
+                GetChartDataProvider()));
+    }
+    if (!rServiceName.startsWith("com.sun.star.")
+        || rServiceName.endsWith(".OLE2Shape"))
+    {
+        // We do not want to insert OLE2 Shapes (e.g.,
+        // "com.sun.star.drawing.OLE2Shape", ...) like this (by creating them
+        // with the documents factory and adding the shapes to the draw page);
+        // for inserting OLE objects the proper way is to use
+        // "com.sun.star.text.TextEmbeddedObject":
+        throw ServiceNotRegisteredException();
+    }
+    // The XML import is allowed to create instances of
+    // "com.sun.star.drawing.OLE2Shape"; thus, a temporary service name is
+    // introduced to make this possible:
+    OUString aTmpServiceName(rServiceName);
+    if (rServiceName == "com.sun.star.drawing.temporaryForXMLImportOLE2Shape")
+    {
+        aTmpServiceName = "com.sun.star.drawing.OLE2Shape";
+    }
+    Reference<XInterface> xTmp(
+        arguments == 0
+        ? SvxFmMSFactory::createInstance(aTmpServiceName)
+        : SvxFmMSFactory::createInstanceWithArguments(
+            aTmpServiceName, *arguments));
+    if (rServiceName == "com.sun.star.drawing.GroupShape"
+        || rServiceName == "com.sun.star.drawing.Shape3DSceneObject")
+    {
+        return *new SwXGroupShape(xTmp);
+    }
+    if (rServiceName.startsWith("com.sun.star.drawing."))
+    {
+        return *new SwXShape(xTmp);
+    }
+    return xTmp;
 }
 
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
