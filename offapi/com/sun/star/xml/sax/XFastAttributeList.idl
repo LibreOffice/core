@@ -56,7 +56,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     */
     boolean hasAttribute( [in] long Token );
 
-    /** retrieves the token of an attributes value.<br>
+    /** retrieves the token of an attribute value.<br>
 
         @param Token
             contains the integer token from the XFastTokenHandler
@@ -78,7 +78,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     long getValueToken( [in] long Token )
         raises( SAXException );
 
-    /**retrieves the token of an attributes value.<br>
+    /**retrieves the token of an attribute value.<br>
 
         @param Token
             contains the integer token from the XFastTokenHandler
@@ -101,7 +101,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     */
     long getOptionalValueToken( [in] long Token, [in] long Default );
 
-    /** retrieves the value of an attributes.<br>
+    /** retrieves the value of an attribute.<br>
 
         @param Token
             contains the integer token from the XFastTokenHandler
@@ -123,7 +123,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     string getValue( [in] long Token )
         raises( SAXException );
 
-    /** retrieves the value of an attributes.<br>
+    /** retrieves the value of an attribute.<br>
 
         @param Token
             contains the integer token from the XFastTokenHandler

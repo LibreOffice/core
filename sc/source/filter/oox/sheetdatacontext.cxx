@@ -310,7 +310,7 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
 
 bool SheetDataContext::importCell( const AttributeList& rAttribs )
 {
-    OUString aCellAddrStr =  rAttribs.getString( XML_r, OUString() );
+    OUString aCellAddrStr = rAttribs.getString( XML_r, OUString() );
     bool bValid = true;
     if(aCellAddrStr.isEmpty())
     {

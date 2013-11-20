@@ -27,6 +27,10 @@
 #include <oox/token/tokens.hxx>
 #include <oox/dllapi.h>
 
+namespace sax_fastparser {
+    class FastAttributeList;
+};
+
 namespace oox {
 
 // ============================================================================
@@ -159,6 +163,8 @@ public:
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >
                         mxAttribs;
+    mutable sax_fastparser::FastAttributeList *mpAttribList;
+    sax_fastparser::FastAttributeList *getAttribList() const;
 };
 
 // ============================================================================

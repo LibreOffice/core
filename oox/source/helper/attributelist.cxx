@@ -19,8 +19,10 @@
 
 #include "oox/helper/attributelist.hxx"
 
+#include <cassert>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <sax/fastattribs.hxx>
 #include "oox/token/tokenmap.hxx"
 
 namespace oox {
@@ -117,9 +119,20 @@ sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )
 // ============================================================================
 
 AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs ) :
-    mxAttribs( rxAttribs )
+    mxAttribs( rxAttribs ),
+    mpAttribList( NULL )
 {
     OSL_ENSURE( mxAttribs.is(), "AttributeList::AttributeList - missing attribute list interface" );
+}
+
+sax_fastparser::FastAttributeList *AttributeList::getAttribList() const
+{
+    if( mpAttribList == NULL )
+    {
+        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( mxAttribs.get() ) != NULL );
+        mpAttribList = static_cast< sax_fastparser::FastAttributeList *>( mxAttribs.get() );
+    }
+    return mpAttribList;
 }
 
 bool AttributeList::hasAttribute( sal_Int32 nAttrToken ) const
@@ -153,16 +166,16 @@ OptValue< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
 
 OptValue< double > AttributeList::getDouble( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
-    return OptValue< double >( bValid, bValid ? AttributeConversion::decodeDouble( aValue ) : 0.0 );
+    double nValue;
+    bool bValid = getAttribList()->getAsDouble( nAttrToken, nValue );
+    return OptValue< double >( bValid, nValue );
 }
 
 OptValue< sal_Int32 > AttributeList::getInteger( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
-    return OptValue< sal_Int32 >( bValid, bValid ? AttributeConversion::decodeInteger( aValue ) : 0 );
+    sal_Int32 nValue;
+    bool bValid = getAttribList()->getAsInteger( nAttrToken, nValue );
+    return OptValue< sal_Int32 >( bValid, nValue );
 }
 
 OptValue< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) const

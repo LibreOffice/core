@@ -132,6 +132,31 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
     return Default;
 }
 
+// performance sensitive shortcuts to avoid allocation ...
+bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt)
+{
+    rInt = 0;
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+        if (maAttributeTokens[i] == nToken)
+        {
+            rInt = rtl_str_toInt32( mpChunk + maAttributeValues[i], 10 );
+            return true;
+        }
+    return false;
+}
+
+bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble)
+{
+    rDouble = 0.0;
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+        if (maAttributeTokens[i] == nToken)
+        {
+            rDouble = rtl_str_toDouble( mpChunk + maAttributeValues[i] );
+            return true;
+        }
+    return false;
+}
+
 OUString FastAttributeList::getValue( ::sal_Int32 Token ) throw (SAXException, RuntimeException)
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)

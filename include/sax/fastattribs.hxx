@@ -73,6 +73,10 @@ public:
     void addUnknown( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue );
     void addUnknown( const OString& rName, const sal_Char* pValue );
 
+    // performance sensitive shortcuts to avoid allocation ...
+    bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt);
+    bool getAsDouble( sal_Int32 nToken, double &rDouble);
+
     // XFastAttributeList
     virtual ::sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getValueToken( ::sal_Int32 Token ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
