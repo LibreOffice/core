@@ -10131,7 +10131,7 @@ if echo "$host_os" | grep -q linux-android || test "$enable_sdremote_android" = 
     ENABLE_SDREMOTE_ANDROID=TRUE
     AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
 else
-    ENABLE_SDREMOTE=
+    ENABLE_SDREMOTE_ANDROID=
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SDREMOTE_ANDROID)
