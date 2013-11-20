@@ -589,7 +589,6 @@ struct GDIObj
 
 class WinMtfOutput
 {
-
     WinMtfPathObj       aPathObj;
     WinMtfClipPath      aClipPath;
 
@@ -626,7 +625,6 @@ class WinMtfOutput
 
     sal_uInt32          mnGfxMode;
     sal_uInt32          mnMapMode;
-    sal_uInt16          mnUnitsPerInch;
 
     XForm               maXForm;
     sal_Int32           mnDevOrgX, mnDevOrgY;
@@ -680,7 +678,6 @@ public:
 
     sal_uInt32          GetMapMode() const { return mnMapMode; };
     void                SetMapMode( sal_uInt32 mnMapMode );
-    void                SetUnitsPerInch( sal_uInt16 nUnitsPerInch );
     void                SetWorldTransform( const XForm& rXForm );
     const XForm&        GetWorldTransform() const { return maXForm; }
     void                ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode );
