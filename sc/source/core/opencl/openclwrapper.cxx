@@ -899,6 +899,10 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
 
     if(!pDeviceId || bAutoSelect)
     {
+        int status = clewInit(OPENCL_DLL_NAME);
+        if (status < 0)
+            return false;
+
         OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
         rtl::Bootstrap::expandMacros(url);
         OUString path;
