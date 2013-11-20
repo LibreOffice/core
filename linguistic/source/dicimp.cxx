@@ -377,7 +377,7 @@ static OString formatForSave(const uno::Reference< XDictionaryEntry > &xEntry,
 
    if (xEntry->isNegative())
    {
-       aStr.append(RTL_CONSTASCII_STRINGPARAM("=="));
+       aStr.append("==");
        aStr.append(OUStringToOString(xEntry->getReplacementText(), eEnc));
    }
    return aStr.makeStringAndClear();
@@ -467,22 +467,22 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
      * undetermined or multiple? Earlier versions did not know about 'und' and
      * 'mul' and 'zxx' codes. Sync with ReadDicVersion() */
     if (LinguIsUnspecified(nLanguage))
-        pStream->WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("lang: <none>")));
+        pStream->WriteLine(OString("lang: <none>"));
     else
     {
-        OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("lang: "));
+        OStringBuffer aLine("lang: ");
         aLine.append(OUStringToOString(LanguageTag::convertToBcp47(nLanguage), eEnc));
         pStream->WriteLine(aLine.makeStringAndClear());
     }
     if (0 != (nErr = pStream->GetError()))
         return nErr;
     if (eDicType == DictionaryType_POSITIVE)
-        pStream->WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("type: positive")));
+        pStream->WriteLine(OString("type: positive"));
     else
-        pStream->WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("type: negative")));
+        pStream->WriteLine(OString("type: negative"));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
-    pStream->WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("---")));
+    pStream->WriteLine(OString("---"));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
     const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();

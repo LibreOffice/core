@@ -2667,16 +2667,16 @@ void lclAppendDigit( OStringBuffer& rText, sal_Int32 nDigit )
 {
     switch( nDigit )
     {
-        case 0: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_0) ); break;
-        case 1: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1) ); break;
-        case 2: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_2) ); break;
-        case 3: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_3) ); break;
-        case 4: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_4) ); break;
-        case 5: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_5) ); break;
-        case 6: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_6) ); break;
-        case 7: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_7) ); break;
-        case 8: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_8) ); break;
-        case 9: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_9) ); break;
+        case 0: rText.append( UTF8_TH_0 ); break;
+        case 1: rText.append( UTF8_TH_1 ); break;
+        case 2: rText.append( UTF8_TH_2 ); break;
+        case 3: rText.append( UTF8_TH_3 ); break;
+        case 4: rText.append( UTF8_TH_4 ); break;
+        case 5: rText.append( UTF8_TH_5 ); break;
+        case 6: rText.append( UTF8_TH_6 ); break;
+        case 7: rText.append( UTF8_TH_7 ); break;
+        case 8: rText.append( UTF8_TH_8 ); break;
+        case 9: rText.append( UTF8_TH_9 ); break;
         default:    OSL_FAIL( "lclAppendDigit - illegal digit" );
     }
 }
@@ -2691,10 +2691,10 @@ void lclAppendPow10( OStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
     lclAppendDigit( rText, nDigit );
     switch( nPow10 )
     {
-        case 2: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E2) );   break;
-        case 3: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E3) );   break;
-        case 4: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E4) );   break;
-        case 5: rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E5) );   break;
+        case 2: rText.append( UTF8_TH_1E2 );   break;
+        case 3: rText.append( UTF8_TH_1E3 );   break;
+        case 4: rText.append( UTF8_TH_1E4 );   break;
+        case 5: rText.append( UTF8_TH_1E5 );   break;
         default:    OSL_FAIL( "lclAppendPow10 - illegal power" );
     }
 }
@@ -2732,11 +2732,11 @@ void lclAppendBlock( OStringBuffer& rText, sal_Int32 nValue )
             if( nTen >= 3 )
                 lclAppendDigit( rText, nTen );
             else if( nTen == 2 )
-                rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_20) );
-            rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_10) );
+                rText.append( UTF8_TH_20 );
+            rText.append( UTF8_TH_10 );
         }
         if( (nTen > 0) && (nOne == 1) )
-            rText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_11) );
+            rText.append( UTF8_TH_11 );
         else if( nOne > 0 )
             lclAppendDigit( rText, nOne );
     }
@@ -2774,7 +2774,7 @@ void ScInterpreter::ScBahtText()
         if( fBaht == 0.0 )
         {
             if( nSatang == 0 )
-                aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_0) );
+                aText.append( UTF8_TH_0 );
         }
         else while( fBaht > 0.0 )
         {
@@ -2785,29 +2785,27 @@ void ScInterpreter::ScBahtText()
                 lclAppendBlock( aBlock, nBlock );
             // add leading "million", if there will come more blocks
             if( fBaht > 0.0 )
-                aBlock.insert(
-                    0, OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E6)));
+                aBlock.insert( 0, OString(UTF8_TH_1E6 ) );
 
             aText.insert(0, aBlock.makeStringAndClear());
         }
         if (!aText.isEmpty())
-            aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_BAHT) );
+            aText.append( UTF8_TH_BAHT );
 
         // generate text for Satang value
         if( nSatang == 0 )
         {
-            aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_DOT0) );
+            aText.append( UTF8_TH_DOT0 );
         }
         else
         {
             lclAppendBlock( aText, nSatang );
-            aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_SATANG) );
+            aText.append( UTF8_TH_SATANG );
         }
 
         // add the minus sign
         if( bMinus )
-            aText.insert(
-                0, OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_MINUS)));
+            aText.insert( 0, OString( UTF8_TH_MINUS ) );
 
         PushString( OStringToOUString(aText.makeStringAndClear(), RTL_TEXTENCODING_UTF8) );
     }

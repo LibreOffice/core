@@ -47,7 +47,7 @@ void IMapObject::AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100) c
     rBuf.append(static_cast<sal_Int32>(aPixPt.X()));
     rBuf.append(',');
     rBuf.append(static_cast<sal_Int32>(aPixPt.Y()));
-    rBuf.append(RTL_CONSTASCII_STRINGPARAM(") "));
+    rBuf.append(") ");
 }
 
 void IMapObject::AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100) const
@@ -73,7 +73,7 @@ void IMapObject::AppendNCSAURL(OStringBuffer& rBuf, const OUString& rBaseURL) co
 
 void IMapRectangleObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
 {
-    OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("rectangle "));
+    OStringBuffer aStrBuf("rectangle ");
 
     AppendCERNCoords(aStrBuf, aRect.TopLeft());
     AppendCERNCoords(aStrBuf, aRect.BottomRight());
@@ -84,7 +84,7 @@ void IMapRectangleObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL )
 
 void IMapRectangleObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const
 {
-    OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("rect "));
+    OStringBuffer aStrBuf("rect ");
 
     AppendNCSAURL(aStrBuf, rBaseURL);
     AppendNCSACoords(aStrBuf, aRect.TopLeft());
@@ -95,7 +95,7 @@ void IMapRectangleObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL )
 
 void IMapCircleObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
 {
-    OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("circle "));
+    OStringBuffer aStrBuf("circle ");
 
     AppendCERNCoords(aStrBuf, aCenter);
     aStrBuf.append(nRadius);
@@ -107,7 +107,7 @@ void IMapCircleObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL ) co
 
 void IMapCircleObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const
 {
-    OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("circle "));
+    OStringBuffer aStrBuf("circle ");
 
     AppendNCSAURL(aStrBuf, rBaseURL);
     AppendNCSACoords(aStrBuf, aCenter);
@@ -118,7 +118,7 @@ void IMapCircleObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) co
 
 void IMapPolygonObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const
 {
-    OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("polygon "));
+    OStringBuffer aStrBuf("polygon ");
     const sal_uInt16 nCount = aPoly.GetSize();
 
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -131,7 +131,7 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) 
 
 void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
 {
-    OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("poly "));
+    OStringBuffer aStrBuf("poly ");
     const sal_uInt16 nCount = std::min( aPoly.GetSize(), (sal_uInt16) 100 );
 
     AppendNCSAURL(aStrBuf, rBaseURL);

@@ -120,9 +120,9 @@ bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
     bool const bRet = (nSize == nExpected);
     if (! bRet) {
         rtl::OStringBuffer buf;
-        buf.append( RTL_CONSTASCII_STRINGPARAM("unexpected number of ") );
+        buf.append( "unexpected number of " );
         buf.append( rData.m_pName );
-        buf.append( RTL_CONSTASCII_STRINGPARAM(": ") );
+        buf.append( ": " );
         buf.append( static_cast<sal_Int64>(nSize) );
         buf.append("; Expected: ");
         buf.append( static_cast<sal_Int64>(nExpected) );

@@ -231,8 +231,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                         aDefName = pTok->GetString();
                     else
                     {
-                        OString aStr(RTL_CONSTASCII_STRINGPARAM(
-                            "unexpected token after define"));
+                        OString aStr("unexpected token after define");
                         // set error
                         SetError( aStr, pTok );
                         WriteError( aTokStm );
@@ -288,7 +287,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                     {
                         if( !InsertId( aDefName, nVal ) )
                         {
-                            OString aStr(RTL_CONSTASCII_STRINGPARAM("hash table overflow: "));
+                            OString aStr("hash table overflow: ");
                             SetError( aStr, pTok );
                             WriteError( aTokStm );
                             return sal_False;
@@ -312,8 +311,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                         }
                         if( pTok->IsEof() )
                         {
-                            OString aStr(RTL_CONSTASCII_STRINGPARAM(
-                                "unexpected eof in #include"));
+                            OString aStr("unexpected eof in #include");
                             // set error
                             SetError(aStr, pTok);
                             WriteError( aTokStm );
@@ -323,8 +321,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                     if (!ReadIdFile(OStringToOUString(aName.toString(),
                         RTL_TEXTENCODING_ASCII_US)))
                     {
-                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                            "cannot read file: "));
+                        OStringBuffer aStr("cannot read file: ");
                         aStr.append(aName.makeStringAndClear());
                         SetError(aStr.makeStringAndClear(), pTok);
                         WriteError( aTokStm );
@@ -569,7 +566,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         // error text
         if( !aError.GetText().isEmpty() )
         {
-            aErrorText.append(RTL_CONSTASCII_STRINGPARAM("may be <"));
+            aErrorText.append("may be <");
             aErrorText.append(aError.GetText());
         }
         SvToken * pPrevTok = NULL;
@@ -583,11 +580,11 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         }
 
         // error position
-        aErrorText.append(RTL_CONSTASCII_STRINGPARAM("> at ( "));
+        aErrorText.append("> at ( ");
         aErrorText.append(static_cast<sal_Int64>(aError.nLine));
-        aErrorText.append(RTL_CONSTASCII_STRINGPARAM(", "));
+        aErrorText.append(", ");
         aErrorText.append(static_cast<sal_Int64>(aError.nColumn));
-        aErrorText.append(RTL_CONSTASCII_STRINGPARAM(" )"));
+        aErrorText.append(" )");
 
         // reset error
         aError = SvIdlError();

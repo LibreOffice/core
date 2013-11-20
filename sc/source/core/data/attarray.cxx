@@ -100,8 +100,7 @@ void ScAttrArray::TestData() const
     {
         OStringBuffer aMsg;
         aMsg.append(static_cast<sal_Int32>(nErr));
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM(
-            " errors in attribute array, column "));
+        aMsg.append(" errors in attribute array, column ");
         aMsg.append(static_cast<sal_Int32>(nCol));
         OSL_FAIL(aMsg.getStr());
     }

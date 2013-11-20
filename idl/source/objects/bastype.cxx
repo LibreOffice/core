@@ -172,7 +172,7 @@ OString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
         return pName->GetName();
 
     return OStringBuffer(pName->GetName()).
-        append(RTL_CONSTASCII_STRINGPARAM("(FALSE)")).
+        append("(FALSE)").
         makeStringAndClear();
 }
 
@@ -239,9 +239,8 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "no value for identifier <"));
-            aStr.append(getString()).append(RTL_CONSTASCII_STRINGPARAM("> "));
+            OStringBuffer aStr("no value for identifier <");
+            aStr.append(getString()).append("> ");
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
@@ -266,9 +265,8 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "no value for identifier <"));
-            aStr.append(getString()).append(RTL_CONSTASCII_STRINGPARAM("> "));
+            OStringBuffer aStr("no value for identifier <");
+            aStr.append(getString()).append("> ");
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }

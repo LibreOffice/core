@@ -133,7 +133,7 @@ sal_Bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
 
         if ( bChild && bChildWithText )
         {
-            OString sError(RTL_CONSTASCII_STRINGPARAM("ResId after child definition"));
+            OString sError("ResId after child definition");
             yyerror(sError.getStr());
             SetError();
         }
@@ -664,9 +664,9 @@ int Export::Execute( int nToken, const char * pToken )
                         {
                             if (!pResData->sText[ sLangIndex ].isEmpty())
                             {
-                                OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                OStringBuffer sError("Language ");
                                 sError.append(sLangIndex);
-                                sError.append(RTL_CONSTASCII_STRINGPARAM("defined twice"));
+                                sError.append("defined twice");
                                 yyerror(sError.getStr());
                             }
                             pResData->sText[ sLangIndex ] = sText;
@@ -679,7 +679,7 @@ int Export::Execute( int nToken, const char * pToken )
                         {
                             if (!pResData->sHelpText[ sLangIndex ].isEmpty())
                             {
-                                OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                OStringBuffer sError("Language ");
                                 sError.append(sLangIndex);
                                 sError.append(" defined twice");
                                 YYWarning(sError.getStr());
@@ -694,9 +694,9 @@ int Export::Execute( int nToken, const char * pToken )
                         {
                             if (!pResData->sQuickHelpText[ sLangIndex ].isEmpty())
                             {
-                                OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                OStringBuffer sError("Language ");
                                 sError.append(sLangIndex);
-                                sError.append(RTL_CONSTASCII_STRINGPARAM(" defined twice"));
+                                sError.append(" defined twice");
                                 YYWarning(sError.getStr());
                             }
                             pResData->sQuickHelpText[ sLangIndex ] = sText;
@@ -709,9 +709,9 @@ int Export::Execute( int nToken, const char * pToken )
                         {
                             if ( !pResData->sTitle[ sLangIndex ].isEmpty())
                             {
-                                OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                OStringBuffer sError("Language ");
                                 sError.append(sLangIndex);
-                                sError.append(RTL_CONSTASCII_STRINGPARAM(" defined twice"));
+                                sError.append(" defined twice");
                                 YYWarning(sError.getStr());
                             }
                             pResData->sTitle[ sLangIndex ] = sText;
@@ -987,7 +987,7 @@ OString Export::FullId()
     }
     if (sFull.getLength() > 255)
     {
-        OString sError(RTL_CONSTASCII_STRINGPARAM("GroupId > 255 chars"));
+        OString sError("GroupId > 255 chars");
         printf("GroupID = %s\n", sFull.getStr());
         yyerror(sError.getStr());
     }

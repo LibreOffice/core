@@ -114,26 +114,26 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     SvMemoryStream aStream;
 
     // write header job data
-    aStream.WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("JobData 1")));
+    aStream.WriteLine(OString("JobData 1"));
 
     OStringBuffer aLine;
 
-    aLine.append(RTL_CONSTASCII_STRINGPARAM("printer="));
+    aLine.append("printer=");
     aLine.append(OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append(RTL_CONSTASCII_STRINGPARAM("orientation="));
+    aLine.append("orientation=");
     if (m_eOrientation == orientation::Landscape)
-        aLine.append(RTL_CONSTASCII_STRINGPARAM("Landscape"));
+        aLine.append("Landscape");
     else
-        aLine.append(RTL_CONSTASCII_STRINGPARAM("Portrait"));
+        aLine.append("Portrait");
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append(RTL_CONSTASCII_STRINGPARAM("copies="));
+    aLine.append("copies=");
     aLine.append(static_cast<sal_Int32>(m_nCopies));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append(RTL_CONSTASCII_STRINGPARAM("margindajustment="));
+    aLine.append("margindajustment=");
     aLine.append(static_cast<sal_Int32>(m_nLeftMarginAdjust));
     aLine.append(',');
     aLine.append(static_cast<sal_Int32>(m_nRightMarginAdjust));
@@ -143,19 +143,19 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     aLine.append(static_cast<sal_Int32>(m_nBottomMarginAdjust));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append(RTL_CONSTASCII_STRINGPARAM("colordepth="));
+    aLine.append("colordepth=");
     aLine.append(static_cast<sal_Int32>(m_nColorDepth));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append(RTL_CONSTASCII_STRINGPARAM("pslevel="));
+    aLine.append("pslevel=");
     aLine.append(static_cast<sal_Int32>(m_nPSLevel));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append(RTL_CONSTASCII_STRINGPARAM("pdfdevice="));
+    aLine.append("pdfdevice=");
     aLine.append(static_cast<sal_Int32>(m_nPDFDevice));
     aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine.append(RTL_CONSTASCII_STRINGPARAM("colordevice="));
+    aLine.append("colordevice=");
     aLine.append(static_cast<sal_Int32>(m_nColorDevice));
     aStream.WriteLine(aLine.makeStringAndClear());
 

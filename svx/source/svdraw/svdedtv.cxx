@@ -931,21 +931,19 @@ void SdrEditView::CopyMarkedObj()
     if(0L != nCloneErrCnt)
     {
 #ifdef DBG_UTIL
-        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-            "SdrEditView::CopyMarkedObj(): Error when cloning "));
+        OStringBuffer aStr("SdrEditView::CopyMarkedObj(): Error when cloning ");
 
         if(nCloneErrCnt == 1)
         {
-            aStr.append(RTL_CONSTASCII_STRINGPARAM("a drawing object."));
+            aStr.append("a drawing object.");
         }
         else
         {
             aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-            aStr.append(RTL_CONSTASCII_STRINGPARAM(" drawing objects."));
+            aStr.append(" drawing objects.");
         }
 
-        aStr.append(RTL_CONSTASCII_STRINGPARAM(
-            " This object's/These objects's connections will not be copied."));
+        aStr.append(" This object's/These objects's connections will not be copied.");
         OSL_FAIL(aStr.getStr());
 #endif
     }

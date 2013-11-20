@@ -979,7 +979,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
-            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            append("=\"");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( rWrt.Strm(), *(OUString*)aTmp.getValue(),
                                   rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
@@ -996,7 +996,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     if( !sValue.isEmpty() || bEmptyValue )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).append(
-            RTL_CONSTASCII_STRINGPARAM("=\""));
+            "=\"");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
@@ -1012,7 +1012,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             !((OUString*)aTmp.getValue())->isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src).
-                append(RTL_CONSTASCII_STRINGPARAM("=\""));
+                append("=\"");
             rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
             HTMLOutFuncs::Out_String( rWrt.Strm(),
@@ -1263,7 +1263,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( !sVal.isEmpty() || bEmptyVal )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
-                        append(RTL_CONSTASCII_STRINGPARAM("=\""));
+                        append("=\"");
                     rWrt.Strm() << sOut.makeStringAndClear().getStr();
                     HTMLOutFuncs::Out_String( rWrt.Strm(), sVal,
                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );

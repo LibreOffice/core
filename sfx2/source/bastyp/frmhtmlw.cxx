@@ -255,7 +255,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                 aURL = URIHelper::simpleNormalizedMakeRelative(
                     rBaseURL, aURL );
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
-                    .append(RTL_CONSTASCII_STRINGPARAM("=\""));
+                    .append("=\"");
                 rOut << sOut.makeStringAndClear().getStr();
                 HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
                 sOut.append('\"');
@@ -266,7 +266,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
-                .append(RTL_CONSTASCII_STRINGPARAM("=\""));
+                .append("=\"");
             rOut << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rOut, aStr, eDestEnc, pNonConvertableChars );
             sOut.append('\"');

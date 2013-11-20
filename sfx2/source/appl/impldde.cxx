@@ -248,7 +248,7 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         if( !bInWinExec )
         {
             OStringBuffer aCmdLine(OUStringToOString(sServer, RTL_TEXTENCODING_ASCII_US));
-            aCmdLine.append(RTL_CONSTASCII_STRINGPARAM(".exe "));
+            aCmdLine.append(".exe ");
             aCmdLine.append(OUStringToOString(sTopic, RTL_TEXTENCODING_ASCII_US));
 
             if( WinExec( aCmdLine.getStr(), SW_SHOWMINIMIZED ) < 32 )

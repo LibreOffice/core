@@ -2063,11 +2063,10 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                 else
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
-                        "broken Matrix, no MatFormula at origin, Pos: "));
+                    OStringBuffer aMsg("broken Matrix, no MatFormula at origin, Pos: ");
                     OUString aTmp(aPos.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument));
                     aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
-                    aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatOrg: "));
+                    aMsg.append(", MatOrg: ");
                     aTmp = aOrg.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument);
                     aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
                     OSL_FAIL(aMsg.getStr());
@@ -2098,16 +2097,16 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                 OStringBuffer aMsg( "broken Matrix, Pos: " );
                 OUString aTmp(aPos.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument));
                 aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
-                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatOrg: "));
+                aMsg.append(", MatOrg: ");
                 aTmp = aOrg.Format(SCA_VALID_COL | SCA_VALID_ROW, pDocument);
                 aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
-                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatCols: "));
+                aMsg.append(", MatCols: ");
                 aMsg.append(static_cast<sal_Int32>( nC ));
-                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatRows: "));
+                aMsg.append(", MatRows: ");
                 aMsg.append(static_cast<sal_Int32>( nR ));
-                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", DiffCols: "));
+                aMsg.append(", DiffCols: ");
                 aMsg.append(static_cast<sal_Int32>( dC ));
-                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", DiffRows: "));
+                aMsg.append(", DiffRows: ");
                 aMsg.append(static_cast<sal_Int32>( dR ));
                 OSL_FAIL( aMsg.makeStringAndClear().getStr());
             }

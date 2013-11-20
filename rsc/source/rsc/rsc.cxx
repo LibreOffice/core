@@ -848,8 +848,8 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                 if( GetImageFilePath( rOutputFile, rContext, aBaseFileName, aFilePath, pSysListFile ) )
                 {
-                    aLine = OStringBuffer(RTL_CONSTASCII_STRINGPARAM("File = \"")).
-                        append(aFilePath).append(RTL_CONSTASCII_STRINGPARAM("\";")).
+                    aLine = OStringBuffer("File = \"").
+                        append(aFilePath).append("\";").
                         makeStringAndClear();
                 }
                 else
@@ -926,22 +926,21 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                             aOStm.WriteLine(aLine);
                     }
 
-                    aOStm.WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("FileList = {")));
+                    aOStm.WriteLine(OString("FileList = {"));
 
                     for( sal_uInt32 i = 0; i < aEntryVector.size(); ++i )
                     {
-                        OStringBuffer aEntryString(
-                            RTL_CONSTASCII_STRINGPARAM("< \""));
+                        OStringBuffer aEntryString("< \"");
 
                         aEntryString.append(aEntryVector[i].first);
-                        aEntryString.append(RTL_CONSTASCII_STRINGPARAM("\"; "));
+                        aEntryString.append("\"; ");
                         aEntryString.append(static_cast<sal_Int32>(aEntryVector[ i ].second));
-                        aEntryString.append(RTL_CONSTASCII_STRINGPARAM("; >;"));
+                        aEntryString.append("; >;");
 
                         aOStm.WriteLine(aEntryString.makeStringAndClear());
                     }
 
-                    aOStm.WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("};")));
+                    aOStm.WriteLine(OString("};"));
                 }
                 else
                     aOStm.WriteLine(aLine);

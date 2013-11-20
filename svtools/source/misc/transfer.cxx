@@ -933,8 +933,8 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
                 if( strchr( "\\/:*?\"<>|", aStr[nChar] ) )
                     aStr.remove(nChar--, 1);
 
-            aStr.insert(0, RTL_CONSTASCII_STRINGPARAM("Shortcut to "));
-            aStr.append(RTL_CONSTASCII_STRINGPARAM(".URL"));
+            aStr.insert(0, "Shortcut to ");
+            aStr.append(".URL");
             strcpy( rFDesc1.cFileName, aStr.getStr() );
 
             maAny <<= aSeq;

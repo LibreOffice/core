@@ -2250,9 +2250,9 @@ throw (RuntimeException)
 
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::lock lockCount=" << nLockCount );
 #ifdef DBG_UTIL
-    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("LayoutManager::lock "));
+    OStringBuffer aStr("LayoutManager::lock ");
     aStr.append(reinterpret_cast<sal_Int64>(this));
-    aStr.append(RTL_CONSTASCII_STRINGPARAM(" - "));
+    aStr.append(" - ");
     aStr.append(nLockCount);
     SAL_INFO( "fwk", "" << aStr.getStr());
 #endif
@@ -2272,9 +2272,9 @@ throw (RuntimeException)
 
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::unlock lockCount=" << nLockCount );
 #ifdef DBG_UTIL
-    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("LayoutManager::unlock "));
+    OStringBuffer aStr("LayoutManager::unlock ");
     aStr.append(reinterpret_cast<sal_Int64>(this));
-    aStr.append(RTL_CONSTASCII_STRINGPARAM(" - "));
+    aStr.append(" - ");
     aStr.append(nLockCount);
     SAL_INFO( "fwk", "" << aStr.getStr());
 #endif

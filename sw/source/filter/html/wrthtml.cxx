@@ -525,7 +525,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     if( !rName.isEmpty() && !bContinued )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id).
-            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            append("=\"");
         rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
@@ -538,7 +538,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     if( FILE_LINK_SECTION == rSection.GetType() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_href).
-            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            append("=\"");
         rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
 
         const OUString& aFName = rSection.GetLinkFileName();

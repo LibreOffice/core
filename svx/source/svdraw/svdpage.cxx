@@ -195,21 +195,19 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         }
     } else {
 #ifdef DBG_UTIL
-        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-            "SdrObjList::operator=(): Error when cloning "));
+        OStringBuffer aStr("SdrObjList::operator=(): Error when cloning ");
 
         if(nCloneErrCnt == 1)
         {
-            aStr.append(RTL_CONSTASCII_STRINGPARAM("a drawing object."));
+            aStr.append("a drawing object.");
         }
         else
         {
             aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-            aStr.append(RTL_CONSTASCII_STRINGPARAM(" drawing objects."));
+            aStr.append(" drawing objects.");
         }
 
-        aStr.append(RTL_CONSTASCII_STRINGPARAM(
-            " Not copying connectors."));
+        aStr.append(" Not copying connectors.");
 
         OSL_FAIL(aStr.getStr());
 #endif

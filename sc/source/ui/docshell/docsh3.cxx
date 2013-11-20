@@ -943,7 +943,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue, &aDocument );
                 OStringBuffer aError(OUStringToOString(aValue,
                     osl_getThreadTextEncoding()));
-                aError.append(RTL_CONSTASCII_STRINGPARAM(" weggelassen"));
+                aError.append(" weggelassen");
                 OSL_FAIL( aError.getStr() );
 #endif
             }

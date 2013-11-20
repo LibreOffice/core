@@ -719,10 +719,9 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                OStringBuffer sMessage(
-                    RTL_CONSTASCII_STRINGPARAM("graphic object with ID '"));
+                OStringBuffer sMessage("graphic object with ID '");
                 sMessage.append(aAsciiObjectID).
-                    append(RTL_CONSTASCII_STRINGPARAM("' has an unknown type"));
+                    append("' has an unknown type");
                 OSL_ENSURE( false, sMessage.getStr() );
             }
 #endif

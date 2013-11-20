@@ -369,7 +369,7 @@ SfxDispatcher::~SfxDispatcher()
 
 {
 #ifdef DBG_UTIL
-    OStringBuffer sTemp(RTL_CONSTASCII_STRINGPARAM("Delete Dispatcher "));
+    OStringBuffer sTemp("Delete Dispatcher ");
     sTemp.append(reinterpret_cast<sal_Int64>(this));
     OSL_TRACE("%s", sTemp.getStr());
     DBG_ASSERT( !pImp->bActive, "deleting active Dispatcher" );
@@ -680,8 +680,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
     if ( bMDI )
     {
 #ifdef DBG_UTIL
-        OStringBuffer sTemp(
-            RTL_CONSTASCII_STRINGPARAM("Activate Dispatcher "));
+        OStringBuffer sTemp("Activate Dispatcher ");
         sTemp.append(reinterpret_cast<sal_Int64>(this));
         OSL_TRACE("%s", sTemp.getStr());
         DBG_ASSERT( !pImp->bActive, "Activation error" );
@@ -698,8 +697,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
     else
     {
 #ifdef DBG_UTIL
-        OStringBuffer sTemp(
-            RTL_CONSTASCII_STRINGPARAM("Non-MDI-Activate Dispatcher"));
+        OStringBuffer sTemp("Non-MDI-Activate Dispatcher");
         sTemp.append(reinterpret_cast<sal_Int64>(this));
         OSL_TRACE("%s", sTemp.getStr());
 #endif
@@ -762,7 +760,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
     if ( bMDI )
     {
-        OSL_TRACE(OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Deactivate Dispatcher")).append(reinterpret_cast<sal_Int64>(this)).getStr());
+        OSL_TRACE(OStringBuffer("Deactivate Dispatcher").append(reinterpret_cast<sal_Int64>(this)).getStr());
         DBG_ASSERT( pImp->bActive, "Deactivate error" );
         pImp->bActive = sal_False;
 
@@ -783,7 +781,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
         }
     }
     else {
-        OSL_TRACE(OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Non-MDI-DeActivate Dispatcher")).append(reinterpret_cast<sal_Int64>(this)).getStr());
+        OSL_TRACE(OStringBuffer("Non-MDI-DeActivate Dispatcher").append(reinterpret_cast<sal_Int64>(this)).getStr());
     }
 
     if ( IsAppDispatcher() && !pSfxApp->IsDowning() )
@@ -2035,11 +2033,10 @@ sal_Bool SfxDispatcher::_FillState
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
                     if ( !pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()) )
                     {
-                        OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
-                            "item-type unequal to IDL (=> no BASIC)"));
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nwith SID: "));
+                        OStringBuffer aMsg("item-type unequal to IDL (=> no BASIC)");
+                        aMsg.append("\nwith SID: ");
                         aMsg.append(static_cast<sal_Int32>(nSlotId));
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nin "));
+                        aMsg.append("\nin ");
                         aMsg.append(pIF->GetClassName());
                         DbgOut(aMsg.getStr(), DBG_OUT_ERROR, __FILE__, __LINE__);
                     }

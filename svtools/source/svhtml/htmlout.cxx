@@ -613,10 +613,10 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 
     OStringBuffer sOut;
     sOut.append('<')
-        .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_map))
+        .append(OOO_STRING_SVTOOLS_HTML_map)
         .append(' ')
-        .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_name))
-        .append(RTL_CONSTASCII_STRINGPARAM("=\""));
+        .append(OOO_STRING_SVTOOLS_HTML_O_name)
+        .append("=\"");
     rStream << sOut.makeStringAndClear().getStr();
     Out_String( rStream, rOutName, eDestEnc, pNonConvertableChars );
     rStream << "\">";
@@ -791,13 +791,13 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     // Script wird komplett nicht eingerueckt!
     OStringBuffer sOut;
     sOut.append('<')
-        .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_script));
+        .append(OOO_STRING_SVTOOLS_HTML_script);
 
     if( !rLanguage.isEmpty() )
     {
         sOut.append(' ')
-            .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_language))
-            .append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            .append(OOO_STRING_SVTOOLS_HTML_O_language)
+            .append("=\"");
         rStrm << sOut.makeStringAndClear().getStr();
         Out_String( rStrm, rLanguage, eDestEnc, pNonConvertableChars );
         sOut.append('\"');
@@ -847,8 +847,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         {
             if( pSBLibrary )
             {
-                sOut.append(RTL_CONSTASCII_STRINGPARAM("' "))
-                    .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_SB_library))
+                sOut.append("' ")
+                    .append(OOO_STRING_SVTOOLS_HTML_SB_library)
                     .append(' ')
                     .append(OUStringToOString(*pSBLibrary, eDestEnc));
                 rStrm << sOut.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
@@ -856,8 +856,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
             if( pSBModule )
             {
-                sOut.append(RTL_CONSTASCII_STRINGPARAM("' "))
-                    .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_SB_module))
+                sOut.append("' ")
+                    .append(OOO_STRING_SVTOOLS_HTML_SB_module)
                     .append(' ')
                     .append(OUStringToOString(*pSBModule, eDestEnc));
                 rStrm << sOut.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
@@ -939,14 +939,14 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
         OString sTmp(OUStringToOString(aValStr, eDestEnc));
         aStrTD.append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_SDval).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append("=\"").
             append(sTmp).append('\"');
     }
     if ( bValue || nFormat )
     {
         aStrTD.append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_SDnum).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append("=\"").
             append(static_cast<sal_Int32>(
                 Application::GetSettings().GetLanguageTag().getLanguageType())).
             append(';'); // Language fuer Format 0

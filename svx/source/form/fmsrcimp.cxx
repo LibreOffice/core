@@ -239,10 +239,9 @@ sal_Bool FmSearchEngine::MoveCursor()
     catch(::com::sun::star::sdbc::SQLException const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer sDebugMessage(RTL_CONSTASCII_STRINGPARAM(
-            "FmSearchEngine::MoveCursor : catched a DatabaseException ("));
+        OStringBuffer sDebugMessage("FmSearchEngine::MoveCursor : catched a DatabaseException (");
         sDebugMessage.append(OUStringToOString(e.SQLState, RTL_TEXTENCODING_ASCII_US));
-        sDebugMessage.append(RTL_CONSTASCII_STRINGPARAM(") !"));
+        sDebugMessage.append(") !");
         OSL_FAIL(sDebugMessage.getStr());
 #else
         (void)e;
@@ -252,10 +251,9 @@ sal_Bool FmSearchEngine::MoveCursor()
     catch(Exception const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer sDebugMessage(RTL_CONSTASCII_STRINGPARAM(
-            "FmSearchEngine::MoveCursor : catched an Exception ("));
+        OStringBuffer sDebugMessage("FmSearchEngine::MoveCursor : catched an Exception (");
         sDebugMessage.append(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
-        sDebugMessage.append(RTL_CONSTASCII_STRINGPARAM(") !"));
+        sDebugMessage.append(") !");
         OSL_FAIL(sDebugMessage.getStr());
 #else
         (void)e;

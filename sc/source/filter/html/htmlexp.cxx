@@ -150,12 +150,12 @@ static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
     if( nSpan > 1 )
     {
         aByteStr.append(OOO_STRING_SVTOOLS_HTML_O_span);
-        aByteStr.append(RTL_CONSTASCII_STRINGPARAM("=\""));
+        aByteStr.append("=\"");
         aByteStr.append(nSpan);
-        aByteStr.append(RTL_CONSTASCII_STRINGPARAM("\" "));
+        aByteStr.append("\" ");
     }
     aByteStr.append(OOO_STRING_SVTOOLS_HTML_O_width);
-    aByteStr.append(RTL_CONSTASCII_STRINGPARAM("=\""));
+    aByteStr.append("=\"");
     aByteStr.append(nWidth);
     aByteStr.append('"');
     return aByteStr.makeStringAndClear();
@@ -492,28 +492,27 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
     if ( pLine )
     {
         if ( bInsertSemicolon )
-            aOut.append(RTL_CONSTASCII_STRINGPARAM("; "));
+            aOut.append("; ");
 
         // which border
-        aOut.append(RTL_CONSTASCII_STRINGPARAM("border-")).
-            append(pBorderName).append(RTL_CONSTASCII_STRINGPARAM(": "));
+        aOut.append("border-").append(pBorderName).append(": ");
 
         // thickness
         int nWidth = pLine->GetWidth();
         int nPxWidth = (nWidth > 0) ?
             std::max(int(nWidth / TWIPS_PER_PIXEL), 1) : 0;
         aOut.append(static_cast<sal_Int32>(nPxWidth)).
-            append(RTL_CONSTASCII_STRINGPARAM("px "));
+            append("px ");
         switch (pLine->GetBorderLineStyle())
         {
             case table::BorderLineStyle::SOLID:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("solid"));
+                aOut.append("solid");
                 break;
             case table::BorderLineStyle::DOTTED:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("dotted"));
+                aOut.append("dotted");
                 break;
             case table::BorderLineStyle::DASHED:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("dashed"));
+                aOut.append("dashed");
                 break;
             case table::BorderLineStyle::DOUBLE:
             case table::BorderLineStyle::THINTHICK_SMALLGAP:
@@ -522,24 +521,24 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
             case table::BorderLineStyle::THICKTHIN_SMALLGAP:
             case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
             case table::BorderLineStyle::THICKTHIN_LARGEGAP:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("double"));
+                aOut.append("double");
                 break;
             case table::BorderLineStyle::EMBOSSED:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("ridge"));
+                aOut.append("ridge");
                 break;
             case table::BorderLineStyle::ENGRAVED:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("groove"));
+                aOut.append("groove");
                 break;
             case table::BorderLineStyle::OUTSET:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("outset"));
+                aOut.append("outset");
                 break;
             case table::BorderLineStyle::INSET:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("inset"));
+                aOut.append("inset");
                 break;
             default:
-                aOut.append(RTL_CONSTASCII_STRINGPARAM("hidden"));
+                aOut.append("hidden");
         }
-        aOut.append(RTL_CONSTASCII_STRINGPARAM(" #"));
+        aOut.append(" #");
 
         // color
         char hex[7];
@@ -717,18 +716,18 @@ void ScHTMLExport::WriteTables()
         if ( bTabAlignedLeft )
         {
             aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-                append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+                append("=\"").
                 append(OOO_STRING_SVTOOLS_HTML_AL_left).append('"');
         }
             // ALIGN=LEFT allow text and graphics to flow around
         // CELLSPACING
         aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append("=\"").
             append(static_cast<sal_Int32>(nCellSpacing)).append('"');
 
         // BORDER=0, we do the styling of the cells in <TD>
         aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_border).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"0\""));
+            append("=\"0\"");
         IncIndent(1); TAG_ON_LF( aByteStrOut.makeStringAndClear().getStr() );
 
         // --- <COLGROUP> ----
@@ -882,7 +881,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( pBorder && (pBorder->GetTop() || pBorder->GetBottom() || pBorder->GetLeft() || pBorder->GetRight()) )
     {
         aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_style).
-            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            append("=\"");
 
         bool bInsertSemicolon = false;
         aStrTD.append(BorderToStyle("top", pBorder->GetTop(),
@@ -942,7 +941,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( bTableDataHeight )
     {
         aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append("=\"").
             append(static_cast<sal_Int32>(nHeightPixel)).append('"');
     }
 
@@ -1017,7 +1016,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     }
 
     aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-        append(RTL_CONSTASCII_STRINGPARAM("=\"")).append(pChar).append('"');
+        append("=\"").append(pChar).append('"');
 
     switch( rVerJustifyItem.GetValue() )
     {
@@ -1074,7 +1073,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         if ( bSetFontName )
         {
             aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_face).
-                append(RTL_CONSTASCII_STRINGPARAM("=\""));
+                append("=\"");
             sal_Int32 nFonts = comphelper::string::getTokenCount(rFontItem.GetFamilyName(), ';');
             if ( nFonts == 1 )
             {

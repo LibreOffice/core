@@ -369,22 +369,19 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
         if(0L != nCloneErrCnt)
         {
 #ifdef DBG_UTIL
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "SdrExchangeView::Paste(): Error when cloning "));
+            OStringBuffer aStr("SdrExchangeView::Paste(): Error when cloning ");
 
             if(nCloneErrCnt == 1)
             {
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                    "a drawing object."));
+                aStr.append("a drawing object.");
             }
             else
             {
                 aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(" drawing objects."));
+                aStr.append(" drawing objects.");
             }
 
-            aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                " Not copying object connectors."));
+            aStr.append(" Not copying object connectors.");
 
             OSL_FAIL(aStr.getStr());
 #endif
@@ -787,22 +784,19 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         if(0L != nCloneErrCnt)
         {
 #ifdef DBG_UTIL
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "SdrExchangeView::GetMarkedObjModel(): Error when cloning "));
+            OStringBuffer aStr("SdrExchangeView::GetMarkedObjModel(): Error when cloning ");
 
             if(nCloneErrCnt == 1)
             {
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                    "a drawing object."));
+                aStr.append("a drawing object.");
             }
             else
             {
                 aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(" drawing objects."));
+                aStr.append(" drawing objects.");
             }
 
-            aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                " Not copying object connectors."));
+            aStr.append(" Not copying object connectors.");
 
             OSL_FAIL(aStr.getStr());
 #endif

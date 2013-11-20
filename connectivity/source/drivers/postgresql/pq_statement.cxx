@@ -564,50 +564,42 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 else if( ! table.getLength() )
                 {
                     OStringBuffer buf( 128 );
-                    buf.append(
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "can't support updateable resultset, because a single table in the "
-                            "WHERE part of the statement could not be identified (" ) );
+                    buf.append( "can't support updateable resultset, because a single table in the "
+                                "WHERE part of the statement could not be identified (" );
                     buf.append( cmd );
-                    buf.append( RTL_CONSTASCII_STRINGPARAM( "." ) );
+                    buf.append( "." );
                     aReason = buf.makeStringAndClear();
                 }
                 else if( sourceTableKeys.getLength() )
                 {
                     OStringBuffer buf( 128 );
-                    buf.append(
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "can't support updateable resultset for table " ) );
+                    buf.append( "can't support updateable resultset for table " );
                     buf.append( OUStringToOString( schema, pSettings->encoding ) );
-                    buf.append( RTL_CONSTASCII_STRINGPARAM( "." ) );
+                    buf.append( "." );
                     buf.append( OUStringToOString( table, pSettings->encoding ) );
-                    buf.append( RTL_CONSTASCII_STRINGPARAM( ", because resultset does not contain a part of the primary key ( column " ) );
+                    buf.append( ", because resultset does not contain a part of the primary key ( column " );
                     buf.append( OUStringToOString( sourceTableKeys[i], pSettings->encoding ) );
-                    buf.append( RTL_CONSTASCII_STRINGPARAM( " is missing )") );
+                    buf.append( " is missing )" );
                     aReason = buf.makeStringAndClear();
                 }
                 else
                 {
 
                     OStringBuffer buf( 128 );
-                    buf.append(
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "can't support updateable resultset for table " ) );
+                    buf.append( "can't support updateable resultset for table " );
                     buf.append( OUStringToOString( schema, pSettings->encoding ) );
-                    buf.append( RTL_CONSTASCII_STRINGPARAM( "." ) );
+                    buf.append( "." );
                     buf.append( OUStringToOString( table, pSettings->encoding ) );
-                    buf.append( RTL_CONSTASCII_STRINGPARAM( ", because resultset table does not have a primary key " ) );
+                    buf.append( ", because resultset table does not have a primary key " );
                     aReason = buf.makeStringAndClear();
                 }
             }
             else
             {
                 OStringBuffer buf( 128 );
-                buf.append(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "can't support updateable result for selects with multiple tables (" ) );
+                buf.append( "can't support updateable result for selects with multiple tables (" );
                 buf.append( cmd );
-                buf.append( RTL_CONSTASCII_STRINGPARAM( ")" ) );
+                buf.append( ")" );
                 log( pSettings, LogLevel::SQL, buf.makeStringAndClear().getStr() );
             }
             if( ! (*(data->pLastResultset)).is() )
@@ -644,14 +636,14 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         if( isLog( pSettings, LogLevel::SQL ) )
         {
             OStringBuffer buf( 128 );
-            buf.append( RTL_CONSTASCII_STRINGPARAM("executed query '") );
+            buf.append( "executed query '" );
             buf.append( cmd );
-            buf.append( RTL_CONSTASCII_STRINGPARAM("' successfully") );
-            buf.append( RTL_CONSTASCII_STRINGPARAM(", duration=") );
+            buf.append( "' successfully" );
+            buf.append( ", duration=" );
             buf.append( duration );
-            buf.append( RTL_CONSTASCII_STRINGPARAM("ms, returnedRows=") );
+            buf.append( "ms, returnedRows=" );
             buf.append( returnedRows );
-            buf.append( RTL_CONSTASCII_STRINGPARAM("." ) );
+            buf.append( "." );
             log( pSettings, LogLevel::SQL, buf.makeStringAndClear().getStr() );
         }
         break;

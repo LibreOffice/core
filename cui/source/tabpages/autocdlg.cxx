@@ -2279,7 +2279,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
         {
             sData.append(OUStringToOString(aLBEntries.GetSelectEntry(n),
                 nEncode));
-            sData.append(RTL_CONSTASCII_STRINGPARAM(aLineEnd));
+            sData.append(aLineEnd);
         }
         pCntnr->CopyByteString( SOT_FORMAT_STRING, sData.makeStringAndClear() );
         pCntnr->CopyToClipboard( (Window*)this );

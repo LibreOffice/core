@@ -871,7 +871,7 @@ void SvMetaType::SetType( int nT )
     else if( nType == TYPE_CLASS )
     {
         OStringBuffer aTmp(C_PREF);
-        aTmp.append(RTL_CONSTASCII_STRINGPARAM("Object *"));
+        aTmp.append("Object *");
         aCName.setString(aTmp.makeStringAndClear());
     }
 }
@@ -901,7 +901,7 @@ const OString& SvMetaType::GetBasicName() const
 OString SvMetaType::GetBasicPostfix() const
 {
     // MBN and Co always want "As xxx"
-    return OStringBuffer(RTL_CONSTASCII_STRINGPARAM(" As ")).
+    return OStringBuffer(" As ").
         append(GetBasicName()).
         makeStringAndClear();
 }
@@ -1401,10 +1401,10 @@ void SvMetaType::WriteSfxItem(
     const OString& rItemName, SvIdlDataBase &, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
-    OStringBuffer aVarName(RTL_CONSTASCII_STRINGPARAM(" a"));
-    aVarName.append(rItemName).append(RTL_CONSTASCII_STRINGPARAM("_Impl"));
+    OStringBuffer aVarName(" a");
+    aVarName.append(rItemName).append("_Impl");
 
-    OStringBuffer aTypeName(RTL_CONSTASCII_STRINGPARAM("SfxType"));
+    OStringBuffer aTypeName("SfxType");
     OStringBuffer aAttrArray;
     sal_uLong   nAttrCount = MakeSfx( aAttrArray );
     OString aAttrCount(
