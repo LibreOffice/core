@@ -800,6 +800,17 @@ void Test::testBnc837302()
     getRun(xParagraph, 3, "AAA");
     // interestingly the 'Insert' is set on the _previous_ run
     CPPUNIT_ASSERT_EQUAL(OUString("Insert"), getProperty<OUString>(getRun(xParagraph, 2), "RedlineType"));
+
+    // make sure we don't introduce a redlined delete in the 2nd paragraph
+    xParagraph = getParagraph(2);
+    OUString aProperty;
+    try
+    {
+        // throws when not present
+        aProperty = getProperty<OUString>(getRun(xParagraph, 1), "RedlineType");
+    }
+    catch (const beans::UnknownPropertyException&) {}
+    CPPUNIT_ASSERT_EQUAL(OUString(), aProperty);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
