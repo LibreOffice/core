@@ -61,9 +61,6 @@ SettingsConfigItem::~SettingsConfigItem()
 
 void SettingsConfigItem::Commit()
 {
-    if( ! IsValidConfigMgr() )
-        return;
-
     boost::unordered_map< OUString, SmallOUStrMap, OUStringHash >::const_iterator group;
 
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
@@ -96,9 +93,6 @@ void SettingsConfigItem::Notify( const Sequence< OUString >& )
 
 void SettingsConfigItem::getValues()
 {
-    if( ! IsValidConfigMgr() )
-        return;
-
     m_aSettings.clear();
 
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );

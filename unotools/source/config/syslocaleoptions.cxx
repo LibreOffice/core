@@ -152,103 +152,100 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     , m_bROIgnoreLanguageChange(false)
 
 {
-    if ( IsValidConfigMgr() )
+    const Sequence< OUString > aNames = GetPropertyNames();
+    Sequence< Any > aValues = GetProperties( aNames );
+    Sequence< sal_Bool > aROStates = GetReadOnlyStates( aNames );
+    const Any* pValues = aValues.getConstArray();
+    const sal_Bool* pROStates = aROStates.getConstArray();
+    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
+    DBG_ASSERT( aROStates.getLength() == aNames.getLength(), "GetReadOnlyStates failed" );
+    if ( aValues.getLength() == aNames.getLength() && aROStates.getLength() == aNames.getLength() )
     {
-        const Sequence< OUString > aNames = GetPropertyNames();
-        Sequence< Any > aValues = GetProperties( aNames );
-        Sequence< sal_Bool > aROStates = GetReadOnlyStates( aNames );
-        const Any* pValues = aValues.getConstArray();
-        const sal_Bool* pROStates = aROStates.getConstArray();
-        DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-        DBG_ASSERT( aROStates.getLength() == aNames.getLength(), "GetReadOnlyStates failed" );
-        if ( aValues.getLength() == aNames.getLength() && aROStates.getLength() == aNames.getLength() )
+        for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
-            for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
+            if ( pValues[nProp].hasValue() )
             {
-                if ( pValues[nProp].hasValue() )
+                switch ( nProp )
                 {
-                    switch ( nProp )
+                case PROPERTYHANDLE_LOCALE :
                     {
-                        case PROPERTYHANDLE_LOCALE :
-                            {
-                                OUString aStr;
-                                if ( pValues[nProp] >>= aStr )
-                                    m_aLocaleString = aStr;
-                                else
-                                {
-                                    SAL_WARN( "unotools.config", "Wrong property type!" );
-                                }
-                                m_bROLocale = pROStates[nProp];
-                            }
-                            break;
-                        case PROPERTYHANDLE_UILOCALE :
-                            {
-                                OUString aStr;
-                                if ( pValues[nProp] >>= aStr )
-                                    m_aUILocaleString = aStr;
-                                else
-                                {
-                                    SAL_WARN( "unotools.config", "Wrong property type!" );
-                                }
-                                m_bROUILocale = pROStates[nProp];
-                            }
-                            break;
-                        case PROPERTYHANDLE_CURRENCY :
-                            {
-                                OUString aStr;
-                                if ( pValues[nProp] >>= aStr )
-                                    m_aCurrencyString = aStr;
-                                else
-                                {
-                                    SAL_WARN( "unotools.config", "Wrong property type!" );
-                                }
-                                m_bROCurrency = pROStates[nProp];
-                            }
-                        break;
-                        case  PROPERTYHANDLE_DECIMALSEPARATOR:
+                        OUString aStr;
+                        if ( pValues[nProp] >>= aStr )
+                            m_aLocaleString = aStr;
+                        else
                         {
-                            bool bValue = false;
-                            if ( pValues[nProp] >>= bValue )
-                                m_bDecimalSeparator = bValue;
-                            else
-                            {
-                                SAL_WARN( "unotools.config", "Wrong property type!" );
-                            }
-                            m_bRODecimalSeparator = pROStates[nProp];
-                        }
-                        break;
-                        case PROPERTYHANDLE_DATEPATTERNS :
-                            {
-                                OUString aStr;
-                                if ( pValues[nProp] >>= aStr )
-                                    m_aDatePatternsString = aStr;
-                                else
-                                {
-                                    SAL_WARN( "unotools.config", "Wrong property type!" );
-                                }
-                                m_bRODatePatterns = pROStates[nProp];
-                            }
-                        break;
-                        case PROPERTYHANDLE_IGNORELANGCHANGE :
-                            {
-                                bool bValue = false;
-                                if ( pValues[nProp] >>= bValue )
-                                    m_bIgnoreLanguageChange = bValue;
-                                else
-                                {
-                                    SAL_WARN( "unotools.config", "Wrong property type!" );
-                                }
-                                m_bROIgnoreLanguageChange = pROStates[nProp];
-                            }
-                        break;
-                        default:
                             SAL_WARN( "unotools.config", "Wrong property type!" );
+                        }
+                        m_bROLocale = pROStates[nProp];
                     }
+                    break;
+                case PROPERTYHANDLE_UILOCALE :
+                    {
+                        OUString aStr;
+                        if ( pValues[nProp] >>= aStr )
+                            m_aUILocaleString = aStr;
+                        else
+                        {
+                            SAL_WARN( "unotools.config", "Wrong property type!" );
+                        }
+                        m_bROUILocale = pROStates[nProp];
+                    }
+                    break;
+                case PROPERTYHANDLE_CURRENCY :
+                    {
+                        OUString aStr;
+                        if ( pValues[nProp] >>= aStr )
+                            m_aCurrencyString = aStr;
+                        else
+                        {
+                            SAL_WARN( "unotools.config", "Wrong property type!" );
+                        }
+                        m_bROCurrency = pROStates[nProp];
+                    }
+                    break;
+                case  PROPERTYHANDLE_DECIMALSEPARATOR:
+                    {
+                        bool bValue = false;
+                        if ( pValues[nProp] >>= bValue )
+                            m_bDecimalSeparator = bValue;
+                        else
+                        {
+                            SAL_WARN( "unotools.config", "Wrong property type!" );
+                        }
+                        m_bRODecimalSeparator = pROStates[nProp];
+                        }
+                    break;
+                case PROPERTYHANDLE_DATEPATTERNS :
+                    {
+                        OUString aStr;
+                        if ( pValues[nProp] >>= aStr )
+                            m_aDatePatternsString = aStr;
+                        else
+                        {
+                            SAL_WARN( "unotools.config", "Wrong property type!" );
+                        }
+                        m_bRODatePatterns = pROStates[nProp];
+                    }
+                    break;
+                case PROPERTYHANDLE_IGNORELANGCHANGE :
+                    {
+                        bool bValue = false;
+                        if ( pValues[nProp] >>= bValue )
+                            m_bIgnoreLanguageChange = bValue;
+                        else
+                        {
+                            SAL_WARN( "unotools.config", "Wrong property type!" );
+                        }
+                        m_bROIgnoreLanguageChange = pROStates[nProp];
+                    }
+                    break;
+                default:
+                    SAL_WARN( "unotools.config", "Wrong property type!" );
                 }
             }
         }
-        EnableNotification( aNames );
     }
+    EnableNotification( aNames );
 
     MakeRealLocale();
     MakeRealUILocale();

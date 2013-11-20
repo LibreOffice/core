@@ -62,7 +62,6 @@ namespace utl
 
     class ConfigChangeListener_Impl;
     class ConfigManager;
-    struct ConfigItem_Impl;
 
     class UNOTOOLS_DLLPUBLIC ConfigItem : public ConfigurationBroadcaster
     {
@@ -74,9 +73,11 @@ namespace utl
                                         m_xHierarchyAccess;
             com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
                                         xChangeLstnr;
-            ConfigItem_Impl*            pImpl;
+            sal_Int16 m_nMode;
+            bool m_bIsModified;
+            bool m_bEnableInternalNotification;
+            sal_Int16 m_nInValueChange;
 
-            ConfigItem();//
             void                    RemoveChangesListener();
             void                    CallNotify(
                                 const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
@@ -165,18 +166,14 @@ namespace utl
 
             const OUString&         GetSubTreeName() const {return sSubTree;}
 
-            sal_Bool                IsModified() const;
+            bool IsModified() const;
 
             /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
             virtual void            Commit()=0;
 
-            sal_Bool                IsInValueChange() const;
+            bool IsInValueChange() const;
 
             sal_Int16               GetMode() const;
-
-            /** checks if the configuration manager used by this item is valid.
-            */
-            sal_Bool                IsValidConfigMgr() const;
     };
 }//namespace utl
 #endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX

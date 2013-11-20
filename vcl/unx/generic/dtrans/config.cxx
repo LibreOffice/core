@@ -71,42 +71,35 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
                 CONFIG_MODE_DELAYED_UPDATE ),
     m_nSelectionTimeout( 3 )
 {
-    if( IsValidConfigMgr() )
+    Sequence< OUString > aKeys( 1 );
+    aKeys.getArray()[0] = OUString( SELECTION_PROPERTY );
+    Sequence< Any > aValues = GetProperties( aKeys );
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
+#endif
+    Any* pValue = aValues.getArray();
+    for( int i = 0; i < aValues.getLength(); i++, pValue++ )
     {
-        Sequence< OUString > aKeys( 1 );
-        aKeys.getArray()[0] = OUString( SELECTION_PROPERTY );
-        Sequence< Any > aValues = GetProperties( aKeys );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
-#endif
-        Any* pValue = aValues.getArray();
-        for( int i = 0; i < aValues.getLength(); i++, pValue++ )
+        if( pValue->getValueTypeClass() == TypeClass_STRING )
         {
-            if( pValue->getValueTypeClass() == TypeClass_STRING )
+            const OUString* pLine = (const OUString*)pValue->getValue();
+            if( !pLine->isEmpty() )
             {
-                const OUString* pLine = (const OUString*)pValue->getValue();
-                if( !pLine->isEmpty() )
-                {
-                    m_nSelectionTimeout = pLine->toInt32();
-                    if( m_nSelectionTimeout < 1 )
-                        m_nSelectionTimeout = 1;
-                }
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "found SelectionTimeout \"%s\"\n",
-                OUStringToOString( *pLine, osl_getThreadTextEncoding() ).getStr() );
-#endif
+                m_nSelectionTimeout = pLine->toInt32();
+                if( m_nSelectionTimeout < 1 )
+                    m_nSelectionTimeout = 1;
             }
 #if OSL_DEBUG_LEVEL > 1
-            else
-                fprintf( stderr, "found SelectionTimeout of type \"%s\"\n",
-                OUStringToOString( pValue->getValueType().getTypeName(), osl_getThreadTextEncoding() ).getStr() );
+            fprintf( stderr, "found SelectionTimeout \"%s\"\n",
+                     OUStringToOString( *pLine, osl_getThreadTextEncoding() ).getStr() );
 #endif
         }
-    }
 #if OSL_DEBUG_LEVEL > 1
-    else
-        fprintf( stderr, "no valid configmanager, could not read timeout setting\n" );
+        else
+            fprintf( stderr, "found SelectionTimeout of type \"%s\"\n",
+                     OUStringToOString( pValue->getValueType().getTypeName(), osl_getThreadTextEncoding() ).getStr() );
 #endif
+    }
 }
 
 /*

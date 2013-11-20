@@ -91,23 +91,6 @@ namespace utl{
         //XEventListener
         virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
     };
-
-struct ConfigItem_Impl
-{
-    utl::ConfigManager*         pManager;
-       sal_Int16                    nMode;
-    sal_Bool                    bIsModified;
-    sal_Bool                    bEnableInternalNotification;
-
-    sal_Int16                   nInValueChange;
-    ConfigItem_Impl() :
-        pManager(0),
-        nMode(0),
-        bIsModified(sal_False),
-        bEnableInternalNotification(sal_False),
-        nInValueChange(0)
-    {}
-};
 }
 
 class ValueCounter_Impl
@@ -123,28 +106,6 @@ public:
                 rCnt--;
             }
 };
-
-namespace
-{
-    // helper to achieve exception - safe handling of an Item under construction
-    template <class TYP>
-    class AutoDeleter // : Noncopyable
-    {
-        TYP* m_pItem;
-    public:
-        AutoDeleter(TYP * pItem)
-        : m_pItem(pItem)
-        {
-        }
-
-        ~AutoDeleter()
-        {
-            delete m_pItem;
-        }
-
-        void keep() { m_pItem = 0; }
-    };
-}
 
 ConfigChangeListener_Impl::ConfigChangeListener_Impl(
              ConfigItem& rItem, const Sequence< OUString >& rNames) :
@@ -206,33 +167,21 @@ void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) thro
 
 ConfigItem::ConfigItem(const OUString &rSubTree, sal_Int16 nSetMode ) :
     sSubTree(rSubTree),
-    pImpl(new ConfigItem_Impl)
+    m_nMode(nSetMode),
+    m_bIsModified(false),
+    m_bEnableInternalNotification(false),
+    m_nInValueChange(0)
 {
-    AutoDeleter<ConfigItem_Impl> aNewImpl(pImpl);
-
-    pImpl->pManager = &ConfigManager::getConfigManager();
-    pImpl->nMode = nSetMode;
     if(0 != (nSetMode&CONFIG_MODE_RELEASE_TREE))
-        pImpl->pManager->addConfigItem(*this);
+        ConfigManager::getConfigManager().addConfigItem(*this);
     else
-        m_xHierarchyAccess = pImpl->pManager->addConfigItem(*this);
-
-    aNewImpl.keep();
-}
-
-sal_Bool ConfigItem::IsValidConfigMgr() const
-{
-    return pImpl->pManager != 0;
+        m_xHierarchyAccess = ConfigManager::getConfigManager().addConfigItem(*this);
 }
 
 ConfigItem::~ConfigItem()
 {
-    if(pImpl->pManager)
-    {
-        RemoveChangesListener();
-        pImpl->pManager->removeConfigItem(*this);
-    }
-    delete pImpl;
+    RemoveChangesListener();
+    ConfigManager::getConfigManager().removeConfigItem(*this);
 }
 
 void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
@@ -240,7 +189,7 @@ void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPro
     // the call is forwarded to the virtual Notify() method
     // it is pure virtual, so all classes deriving from ConfigItem have to decide how they
     // want to notify listeners
-    if(!IsInValueChange() || pImpl->bEnableInternalNotification)
+    if(!IsInValueChange() || m_bEnableInternalNotification)
         Notify(rPropertyNames);
 }
 
@@ -250,7 +199,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( ((pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
+    OSL_ENSURE( ((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
 
     sal_Int32                   nSourceCounter      ;   // used to step during input lists
     sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
@@ -323,7 +272,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( ((pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
+    OSL_ENSURE( ((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
 
     sal_Int32                   nSourceCounter      ;   // used to step during input lists
     sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
@@ -496,7 +445,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
         }
 
         // In special mode "ALL_LOCALES" we must convert localized values to Sequence< PropertyValue >.
-        if((pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES)
+        if((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES)
         {
             Sequence< Any > lValues;
             impl_packLocalizedProperties( rNames, aRet, lValues );
@@ -509,7 +458,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
 sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                                                 const Sequence< Any>& rValues)
 {
-    ValueCounter_Impl aCounter(pImpl->nInValueChange);
+    ValueCounter_Impl aCounter(m_nInValueChange);
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     Reference<XNameReplace> xTopNodeReplace(xHierarchyAccess, UNO_QUERY);
     sal_Bool bRet = xHierarchyAccess.is() && xTopNodeReplace.is();
@@ -520,7 +469,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         const OUString*         pNames  = NULL  ;
         const Any*              pValues = NULL  ;
         sal_Int32               nNameCount      ;
-        if(( pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES )
+        if(( m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES )
         {
             // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
             // as value of an localized configuration entry!
@@ -590,8 +539,8 @@ sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
                 sal_Bool bEnableInternalNotification )
 
 {
-    OSL_ENSURE(0 == (pImpl->nMode&CONFIG_MODE_RELEASE_TREE), "notification in CONFIG_MODE_RELEASE_TREE mode not possible");
-    pImpl->bEnableInternalNotification = bEnableInternalNotification;
+    OSL_ENSURE(0 == (m_nMode&CONFIG_MODE_RELEASE_TREE), "notification in CONFIG_MODE_RELEASE_TREE mode not possible");
+    m_bEnableInternalNotification = bEnableInternalNotification;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
     if(!xChgNot.is())
@@ -743,7 +692,7 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameF
 
 sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 {
-    ValueCounter_Impl aCounter(pImpl->nInValueChange);
+    ValueCounter_Impl aCounter(m_nInValueChange);
     sal_Bool bRet = sal_False;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
@@ -781,7 +730,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 
 sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
 {
-    ValueCounter_Impl aCounter(pImpl->nInValueChange);
+    ValueCounter_Impl aCounter(m_nInValueChange);
     sal_Bool bRet = sal_False;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
@@ -855,7 +804,7 @@ Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue 
 sal_Bool ConfigItem::SetSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
-    ValueCounter_Impl aCounter(pImpl->nInValueChange);
+    ValueCounter_Impl aCounter(m_nInValueChange);
     sal_Bool bRet = sal_True;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
@@ -954,7 +903,7 @@ sal_Bool ConfigItem::SetSetProperties(
 sal_Bool ConfigItem::ReplaceSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
-    ValueCounter_Impl aCounter(pImpl->nInValueChange);
+    ValueCounter_Impl aCounter(m_nInValueChange);
     sal_Bool bRet = sal_True;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
@@ -1091,7 +1040,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
 
 sal_Bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
 {
-    ValueCounter_Impl aCounter(pImpl->nInValueChange);
+    ValueCounter_Impl aCounter(m_nInValueChange);
     sal_Bool bRet = sal_True;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
@@ -1154,27 +1103,27 @@ sal_Bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
 
 sal_Int16   ConfigItem::GetMode() const
 {
-    return pImpl->nMode;
+    return m_nMode;
 }
 
 void    ConfigItem::SetModified()
 {
-    pImpl->bIsModified = sal_True;
+    m_bIsModified = true;
 }
 
 void    ConfigItem::ClearModified()
 {
-    pImpl->bIsModified = sal_False;
+    m_bIsModified = false;
 }
 
-sal_Bool ConfigItem::IsModified() const
+bool ConfigItem::IsModified() const
 {
-    return pImpl->bIsModified;
+    return m_bIsModified;
 }
 
-sal_Bool ConfigItem::IsInValueChange() const
+bool ConfigItem::IsInValueChange() const
 {
-    return pImpl->nInValueChange > 0;
+    return m_nInValueChange > 0;
 }
 
 Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
