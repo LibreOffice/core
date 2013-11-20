@@ -675,23 +675,31 @@ public:
         ss << "    int writePos = get_group_id(1);\n";
         ss << "    int lidx = get_local_id(0);\n";
         ss << "    __local double shm_buf[256];\n";
-        if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+        if (mpDVR->IsStartFixed())
             ss << "    int offset = 0;\n";
-        else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+        else // if (!mpDVR->IsStartFixed())
             ss << "    int offset = get_group_id(1);\n";
-        else
-            throw Unhandled();
+        if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            ss << "    int end = windowSize;\n";
+        else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+            ss << "    int end = offset + windowSize;\n";
+        else if (mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+            ss << "    int end = windowSize + get_group_id(1);\n";
+        else if (!mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            ss << "    int end = windowSize;\n";
+        ss << "    end = min(end, arrayLength);\n";
+
         ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
         ss << "    int loop = arrayLength/512 + 1;\n";
         ss << "    for (int l=0; l<loop; l++){\n";
         ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
         ss << "    int loopOffset = l*512;\n";
-        ss << "    if((loopOffset + lidx + offset + 256) < min( offset + windowSize, arrayLength))\n";
+        ss << "    if((loopOffset + lidx + offset + 256) < end)\n";
         ss << "        tmp = " << mpCodeGen->Gen2(
                 "A[loopOffset + lidx + offset]", "tmp") <<";\n";
         ss << "        tmp = " << mpCodeGen->Gen2(
                 "A[loopOffset + lidx + offset + 256]", "tmp") << ";\n";
-        ss << "    else if ((loopOffset + lidx + offset) < min(offset + windowSize, arrayLength))\n";
+        ss << "    else if ((loopOffset + lidx + offset) < end)\n";
         ss << "        tmp = " << mpCodeGen->Gen2(
                 "A[loopOffset + lidx + offset]", "tmp") <<";\n";
         ss << "    shm_buf[lidx] = tmp;\n";
@@ -1561,9 +1569,12 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
         dynamic_cast< const formula::DoubleVectorRefToken* >(
                 ft->GetFormulaToken());
     // Window being too small to justify a parallel reduction
-    if (pDVR->GetRefRowSize() < 100)
+    if (pDVR->GetRefRowSize() < 4)
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     if ((pDVR->IsStartFixed() && pDVR->IsEndFixed()) ||
+            (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()))
+        return new ParallelReductionVectorRef<Base>(s, ft, pCodeGen, index);
+    if ((pDVR->IsStartFixed() && !pDVR->IsEndFixed()) ||
             (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()))
         return new ParallelReductionVectorRef<Base>(s, ft, pCodeGen, index);
     else // Other cases are not supported as well
