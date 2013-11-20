@@ -25,11 +25,6 @@
 
 #include <toolkit/awt/Vclxwindow.hxx>
 
-#ifndef _SV_SYSDATA_HXX
-#if defined( WIN ) || defined( WNT ) || defined( OS2 )
-typedef sal_Int32 HWND;
-#endif
-#endif
 #include "AccEventListener.hxx"
 #include "AccObjectManagerAgent.hxx"
 #include "unomsaaevent.hxx"
