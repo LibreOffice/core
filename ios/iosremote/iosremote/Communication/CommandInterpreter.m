@@ -52,9 +52,17 @@ dispatch_queue_t backgroundQueue;
     else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
                                                             object:nil];
-        [[[[CommunicationManager sharedComManager] client] server] setServerVersion:[command objectAtIndex:3]];
+        // if LibO sends its remote server version, than this command should contain more than 3 items, we retrieve the version code and save it as a property of the server
+        if ([command count] > 3 && ![[command objectAtIndex:3] isEqualToString:@""]){
+            [[[[CommunicationManager sharedComManager] client] server] setServerVersion:[command objectAtIndex:3]];
+            marker = 4;
+        } else {
+            // Otherwise, we mark 3 as the end of this command (i.e. there is no version code sent to the client.
+            [[[[CommunicationManager sharedComManager] client] server] setServerVersion:@"Unspecified"];
+            marker = 3;
+        }
+        // print out server info with server version / or unspecified if didn't receive it from the server
         NSLog(@"Connected to %@", [[[CommunicationManager sharedComManager] client] server].description);
-        marker = 4;
     }
     else if([instruction isEqualToString:@"slideshow_started"]){
         uint slideLength = [[command objectAtIndex:1] integerValue];
@@ -115,7 +123,7 @@ dispatch_queue_t backgroundQueue;
         }
 
     }
-    if ([command objectAtIndex:marker] && ![[command objectAtIndex:marker] isEqualToString:@""])
+    if ([command count] > marker && ![[command objectAtIndex:marker] isEqualToString:@""])
     {
         NSRange range;
         range.location = marker;

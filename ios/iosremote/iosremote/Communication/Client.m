@@ -207,7 +207,7 @@ int count = 0;
             backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", DISPATCH_QUEUE_CONCURRENT);
             dispatch_async(backgroundQueue, ^(void) {
                 NSArray *commands = [str componentsSeparatedByString:@"\n"];
-                NSLog(@"Commands: %@", commands);
+//                NSLog(@"Commands: %@", commands);
                 [self.receiver parse:commands];
             });
             data = nil;
