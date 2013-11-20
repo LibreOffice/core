@@ -311,12 +311,6 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
         m_pLB_AxisType->SelectEntryPos( nPos );
     }
 
-    if( m_bAllowDateAxis )
-        m_pCbxReverse->SetHelpId("chart2:CheckBox:TP_SCALE:CBX_REVERSE:MayBeDateAxis");
-    else if( m_nAxisType==chart2::AxisType::CATEGORY || m_nAxisType==chart2::AxisType::SERIES )
-        m_pCbxReverse->SetHelpId("chart2:CheckBox:TP_SCALE:CBX_REVERSE:Category");
-
-
     m_pCbxAutoMin->Check( true );
     m_pCbxAutoMax->Check( true );
     m_pCbxAutoStepMain->Check( true );
