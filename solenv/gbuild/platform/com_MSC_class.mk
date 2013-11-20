@@ -376,7 +376,6 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE := $(call gb_LinkTarget_get_pdbfile_in,$(2))
-$(call gb_LinkTarget_get_target,$(2)) : TARGETGUI :=
 
 endef
 

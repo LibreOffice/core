@@ -589,6 +589,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJNOEX :=
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
+$(call gb_LinkTarget_get_target,$(1)) : TARGETGUI :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY :=

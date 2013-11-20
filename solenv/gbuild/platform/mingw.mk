@@ -272,7 +272,7 @@ gb_Executable_TARGETTYPEFLAGS :=
 gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
-$(call gb_LinkTarget_get_target,$(2)) : TARGETGUI :=
+
 endef
 
 # CppunitTest class
