@@ -197,9 +197,11 @@ void applyCellFormulas(
                 ScFormulaCell& rPrev = *p->mpCell;
                 ScFormulaCellGroupRef xGroup = rPrev.GetCellGroup();
                 if (!xGroup)
+                {
                     // Last cell is not grouped yet. Start a new group.
-                    xGroup = rPrev.CreateCellGroup(p->mnRow, false);
-
+                    assert(rPrev.aPos.Row() == p->mnRow);
+                    xGroup = rPrev.CreateCellGroup(1, false);
+                }
                 ++xGroup->mnLength;
 
                 pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, xGroup);

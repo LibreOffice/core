@@ -151,6 +151,7 @@ void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPo
         else
         {
             // neither cells are shared.
+            assert(rCell1.aPos.Row() == (SCROW)(rPos.first->position + rPos.second));
             xGroup1 = rCell1.CreateCellGroup(2, eState == ScFormulaCell::EqualInvariant);
             rCell2.SetCellGroup(xGroup1);
         }

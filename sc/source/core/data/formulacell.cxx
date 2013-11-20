@@ -3329,8 +3329,12 @@ void            ScFormulaCell::SetNextTrack( ScFormulaCell* pF )       { pNextTr
 ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvariant )
 {
     if (mxGroup)
+    {
         // You can't create a new group if the cell is already a part of a group.
+        // Is this a sign of some inconsistent or incorrect data structures? Or normal?
+        SAL_INFO("sc.opencl", "You can't create a new group if the cell is already a part of a group");
         return ScFormulaCellGroupRef();
+    }
 
     mxGroup.reset(new ScFormulaCellGroup);
     mxGroup->mpTopCell = this;
