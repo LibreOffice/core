@@ -1011,7 +1011,7 @@ AC_ARG_ENABLE(sdremote-bluetooth,
 AC_ARG_ENABLE(sdremote-android,
     AS_HELP_STRING([--enable-sdremote-android],
         [Determines whether to build the Impress Remote Android app -- requires
-        a correctly configured android sdk. Automatically enabled if ]),
+        a correctly configured android sdk.]),
 ,enable_sdremote_android=no)
 
 AC_ARG_ENABLE(gconf,
@@ -10129,10 +10129,9 @@ AC_MSG_CHECKING([whether to enable Impress remote control android app])
 if echo "$host_os" | grep -q linux-android || test "$enable_sdremote_android" = "yes"; then
     AC_MSG_RESULT([yes])
     ENABLE_SDREMOTE_ANDROID=TRUE
-    AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
 else
-    ENABLE_SDREMOTE_ANDROID=
     AC_MSG_RESULT([no])
+    ENABLE_SDREMOTE_ANDROID=
 fi
 AC_SUBST(ENABLE_SDREMOTE_ANDROID)
 
