@@ -318,7 +318,21 @@ void DomainMapper_Impl::RemoveLastParagraph( )
 #else
             if (xCursor->getString() == "\r\n")
 #endif
+            {
+                uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY);
+                const OUString aRecordChanges("RecordChanges");
+                uno::Any aPreviousValue(xDocProps->getPropertyValue(aRecordChanges));
+
+                // disable redlining for this operation, otherwise we might
+                // end up with an unwanted recorded deletion
+                xDocProps->setPropertyValue(aRecordChanges, uno::Any(sal_False));
+
+                // delete
                 xCursor->setString(OUString());
+
+                // restore again
+                xDocProps->setPropertyValue(aRecordChanges, aPreviousValue);
+            }
         }
     }
     catch( const uno::Exception& )
