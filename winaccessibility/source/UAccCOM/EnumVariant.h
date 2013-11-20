@@ -77,7 +77,7 @@ public:
     // IEnumVariant
 
     //
-    HRESULT STDMETHODCALLTYPE PutSelection(long pXSelection);
+    HRESULT STDMETHODCALLTYPE PutSelection(hyper pXSelection);
 
     //
     static HRESULT STDMETHODCALLTYPE Create(CEnumVariant __RPC_FAR *__RPC_FAR *ppenum);

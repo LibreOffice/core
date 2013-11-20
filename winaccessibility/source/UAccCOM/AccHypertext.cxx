@@ -336,7 +336,7 @@ STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hype
         plink->QueryInterface(IID_IUNOXWrapper, (void**)&wrapper);
         if(wrapper)
         {
-            wrapper->put_XSubInterface((long)pRLink.get()/*pXI*/);
+            wrapper->put_XSubInterface(reinterpret_cast<hyper>(pRLink.get()));
             wrapper->Release();
         }
         *hyperlink = plink;
@@ -381,7 +381,7 @@ STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charIndex, long *hyperlinkIn
    * @param pXInterface UNO interface.
    * @return Result.
 */
-STDMETHODIMP CAccHypertext::put_XInterface(long pXInterface)
+STDMETHODIMP CAccHypertext::put_XInterface(hyper pXInterface)
 {
 
 

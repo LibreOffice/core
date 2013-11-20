@@ -161,9 +161,9 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
     m_accRole = m_xAccContextRef -> getAccessibleRole();
     if( m_pIMAcc )
     {
-        m_pIMAcc->SetXAccessible((long) m_xAccRef.get());
-        m_pIMAcc->Put_XAccAgent((long)pAgent);
-        m_pIMAcc->SetDefaultAction((long)m_xAccActionRef.get());
+        m_pIMAcc->SetXAccessible(reinterpret_cast<hyper>(m_xAccRef.get()));
+        m_pIMAcc->Put_XAccAgent(reinterpret_cast<hyper>(pAgent));
+        m_pIMAcc->SetDefaultAction(reinterpret_cast<hyper>(m_xAccActionRef.get()));
     }
 }
 /**
@@ -317,7 +317,8 @@ void  AccObject::UpdateAction()
         if( m_xAccActionRef->getAccessibleActionCount() > 0 )
         {
             UpdateDefaultAction( );
-            m_pIMAcc->SetDefaultAction((long)m_xAccActionRef.get());
+            m_pIMAcc->SetDefaultAction(
+                    reinterpret_cast<hyper>(m_xAccActionRef.get()));
         }
     }
 }

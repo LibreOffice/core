@@ -73,7 +73,7 @@ public:
     STDMETHOD(get_targets)(long maxTargets, IUnknown * * target, long * nTargets);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XSubInterface)(long pXSubInterface);
+    STDMETHOD(put_XSubInterface)(hyper pXSubInterface);
 
     //static OLECHAR* getRelationTypeOLECHAR(int type);
     static BSTR getRelationTypeBSTR(int type);

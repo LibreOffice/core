@@ -59,7 +59,7 @@ public:
     STDMETHOD(get_background)(IA2Color * background);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(long pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface);
 
 protected:
 

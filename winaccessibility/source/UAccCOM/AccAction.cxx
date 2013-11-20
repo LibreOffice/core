@@ -98,7 +98,7 @@ STDMETHODIMP CAccAction::get_keyBinding(
  *
  * @param    pXInterface    the pointer of UNO interface.
  */
-STDMETHODIMP CAccAction::put_XInterface(long pXInterface)
+STDMETHODIMP CAccAction::put_XInterface(hyper pXInterface)
 {
 
     return CAccActionBase::put_XInterface(pXInterface);
@@ -108,11 +108,11 @@ STDMETHODIMP CAccAction::put_XInterface(long pXInterface)
    * @param pXSubInterface XAccessibleHyperlink interface.
    * @return Result.
 */
-STDMETHODIMP CAccAction::put_XSubInterface(long pXSubInterface)
+STDMETHODIMP CAccAction::put_XSubInterface(hyper pXSubInterface)
 {
 
 
-    pRXAct = (XAccessibleAction*)pXSubInterface;
+    pRXAct = reinterpret_cast<XAccessibleAction*>(pXSubInterface);
 
     return S_OK;
 }

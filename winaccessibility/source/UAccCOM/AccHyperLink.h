@@ -119,10 +119,10 @@ public:
     STDMETHOD(get_valid)(/* [retval][out] */ boolean __RPC_FAR *valid);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(long pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XSubInterface)(long pXSubInterface);
+    STDMETHOD(put_XSubInterface)(hyper pXSubInterface);
 
 private:
 

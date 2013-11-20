@@ -93,10 +93,10 @@ public:
         /* [retval][out] */ long __RPC_FAR *nBinding);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(long pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XSubInterface)(long pXSubInterface);
+    STDMETHOD(put_XSubInterface)(hyper pXSubInterface);
 
 };
 

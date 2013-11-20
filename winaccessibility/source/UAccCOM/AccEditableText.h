@@ -96,7 +96,7 @@ public:
     STDMETHOD(setAttributes)(long startOffset, long endOffset, BSTR * attributes);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(long pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface);
 
 private:
 

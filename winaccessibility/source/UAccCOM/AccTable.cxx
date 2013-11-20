@@ -66,7 +66,7 @@ STDMETHODIMP CAccTable::get_accessibleAt(long row, long column, IUnknown * * acc
 
     IAccessible* pRet = NULL;
 
-    BOOL isTRUE = CMAccessible::get_IAccessibleFromXAccessible((long)pRAcc.get(),&pRet);
+    BOOL isTRUE = CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
     if(isTRUE)
     {
         *accessible = (IAccessible2 *)pRet;
@@ -78,7 +78,7 @@ STDMETHODIMP CAccTable::get_accessibleAt(long row, long column, IUnknown * * acc
         Reference<XAccessible> pxTable(GetXInterface(),UNO_QUERY);
 
         CMAccessible::g_pAgent->InsertAccObj(pRAcc.get(),pxTable.get());
-        isTRUE = CMAccessible::get_IAccessibleFromXAccessible((long)pRAcc.get(),&pRet);
+        isTRUE = CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
 
         if(isTRUE)
         {
@@ -220,7 +220,8 @@ STDMETHODIMP CAccTable::get_columnHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *
                                     (void **)&m_pIMacc
                                   );
     DeactivateActContext();
-    ((CMAccessible*)m_pIMacc)->SetXAccessible((long)pRXColumnHeader.get());
+    ((CMAccessible*)m_pIMacc)->SetXAccessible(
+        reinterpret_cast<hyper>(pRXColumnHeader.get()));
     m_pIMacc->QueryInterface(IID_IAccessibleTable,(void **)accessibleTable);
     if( SUCCEEDED(hr) )
     {
@@ -452,7 +453,8 @@ STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *acc
                                     (void **)&m_pIMacc
                                   );
     DeactivateActContext();
-    ((CMAccessible*)m_pIMacc)->SetXAccessible((long)pRXRowHeader.get());
+    ((CMAccessible*)m_pIMacc)->SetXAccessible(
+        reinterpret_cast<hyper>(pRXRowHeader.get()));
     m_pIMacc->QueryInterface(IID_IAccessibleTable,(void **)accessibleTable);
     if( SUCCEEDED(hr) )
     {
@@ -568,7 +570,7 @@ STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible)
     Reference<XAccessible> pRAcc = GetXInterface()->getAccessibleSummary();
 
     IAccessible* pRet = NULL;
-    BOOL isTRUE = CMAccessible::get_IAccessibleFromXAccessible((long)pRAcc.get(),&pRet);
+    BOOL isTRUE = CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
 
     if(pRet)
     {
@@ -856,7 +858,7 @@ STDMETHODIMP CAccTable::unselectColumn(long column)
  *
  * @param    pXInterface    the pointer of UNO interface.
  */
-STDMETHODIMP CAccTable::put_XInterface(long pXInterface)
+STDMETHODIMP CAccTable::put_XInterface(hyper pXInterface)
 {
 
     CHECK_ENABLE_INF

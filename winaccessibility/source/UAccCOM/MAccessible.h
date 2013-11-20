@@ -195,12 +195,12 @@ public:
     STDMETHOD(Put_XAccParent)(IMAccessible __RPC_FAR *pIParent);
     STDMETHOD(Put_XAccWindowHandle)(HWND hwnd);
     STDMETHOD(Put_XAccChildID)(long dChildID);
-    STDMETHOD(Put_XAccAgent)(long pAgent);
+    STDMETHOD(Put_XAccAgent)(hyper pAgent);
     STDMETHOD(NotifyDestroy)(BOOL isDestroy);
     STDMETHOD(Put_ActionDescription)( const OLECHAR* szAction);
-    STDMETHOD(SetDefaultAction)(long pAction);
-    STDMETHOD(GetUNOInterface)(long*);
-    STDMETHOD(SetXAccessible)(long);
+    STDMETHOD(SetDefaultAction)(hyper pAction);
+    STDMETHOD(GetUNOInterface)(hyper*);
+    STDMETHOD(SetXAccessible)(hyper);
 
 private:
     OLECHAR* m_pszName;
@@ -270,7 +270,8 @@ public:
     // implement some specific MSAA methods,such as accSelection,accNavigate
     static AccObjectManagerAgent* g_pAgent;
 
-    static BOOL get_IAccessibleFromXAccessible(long pXAcc,IAccessible** ppIA);
+    static BOOL get_IAccessibleFromXAccessible(
+            css::accessibility::XAccessible * pXAcc, IAccessible** ppIA);
     BOOL m_bRequiresSave;
     XGUIDToComObjHash m_containedObjects;
 

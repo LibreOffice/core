@@ -1335,9 +1335,9 @@ STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 * @param    pAgent, the AccObjectManagerAgent point.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-STDMETHODIMP CMAccessible::Put_XAccAgent(long pAgent)
+STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 {
-    g_pAgent = (AccObjectManagerAgent*)pAgent;
+    g_pAgent = reinterpret_cast<AccObjectManagerAgent*>(pAgent);
     return S_OK;
 }
 
@@ -1390,12 +1390,13 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 
         IAccessible* pChild = NULL;
         Reference< XAccessible > pXChild = pRContext->getAccessibleChild(dChildID-1);
-        BOOL isGet = get_IAccessibleFromXAccessible((long)pXChild.get(),&pChild);
+        BOOL isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
 
         if(!isGet)
         {
-            g_pAgent->InsertAccObj(pXChild.get(),pUNOInterface,(long)m_hwnd);
-            isGet = get_IAccessibleFromXAccessible((long)pXChild.get(),&pChild);
+            g_pAgent->InsertAccObj(pXChild.get(), pUNOInterface,
+                    reinterpret_cast<sal_Int64>(m_hwnd));
+            isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
         }
 
         if(isGet)
@@ -1460,7 +1461,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         {
             return NULL;
         }
-        pCurChild->GetUNOInterface((long*)&pChildXAcc);
+        pCurChild->GetUNOInterface(reinterpret_cast<hyper*>(&pChildXAcc));
         if(pChildXAcc==NULL)
         {
             return NULL;
@@ -1728,7 +1729,8 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
                 if(SUCCEEDED(hr))
                 {
                     AccessibleRelation accRelation = pRrelationSet->getRelation(relationIndex);
-                    wrapper->put_XSubInterface((long)&accRelation);
+                    wrapper->put_XSubInterface(
+                            reinterpret_cast<hyper>(&accRelation));
                     wrapper->Release();
                     *relation = pRelation;
                     return S_OK;
@@ -1790,7 +1792,8 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
                 if(SUCCEEDED(hr))
                 {
                     AccessibleRelation accRelation = pRrelationSet->getRelation(i);
-                    wrapper->put_XSubInterface((long)&accRelation);
+                    wrapper->put_XSubInterface(
+                            reinterpret_cast<hyper>(&accRelation));
                     wrapper->Release();
                 }
                 (relation)[i] = pRelation;
@@ -2268,11 +2271,12 @@ HRESULT CMAccessible::DeSelectMutipleChildren( XAccessible** pItem,int size )
 * @param    pXAcc, the XAccessible object of current object.
 * @return  S_OK if successful.
 */
-STDMETHODIMP CMAccessible::SetXAccessible(long pXAcc)
+STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 {
-    pUNOInterface = (XAccessible*)pXAcc;
+    pUNOInterface = reinterpret_cast<XAccessible*>(pXAcc);
     pRef = pUNOInterface;
-    m_pEnumVar->PutSelection(/*XAccessibleSelection*/(long)pUNOInterface);
+    m_pEnumVar->PutSelection(/*XAccessibleSelection*/
+            reinterpret_cast<hyper>(pUNOInterface));
 
     pRContext = pUNOInterface->getAccessibleContext();
     pRContextInterface = (XAccessibleContext*)pRContext.is();
@@ -2327,13 +2331,13 @@ STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 
     if( flagsSelect&SELFLAG_TAKEFOCUS )
     {
-        long pTempUNO = 0;
-        pSelectAcc->GetUNOInterface( &pTempUNO);
+        XAccessible * pTempUNO = 0;
+        pSelectAcc->GetUNOInterface(reinterpret_cast<hyper*>(&pTempUNO));
 
         if( pTempUNO == NULL )
             return NULL;
 
-        Reference< XAccessibleContext > pRContext = ( (XAccessible*)pTempUNO)->getAccessibleContext();
+        Reference<XAccessibleContext> pRContext = pTempUNO->getAccessibleContext();
         Reference< XAccessibleComponent > pRComponent(pRContext,UNO_QUERY);
         Reference< XAccessible > pRParentXAcc = pRContext->getAccessibleParent();
         Reference< XAccessibleContext > pRParentContext = pRParentXAcc->getAccessibleContext();
@@ -2383,13 +2387,13 @@ STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 * @param pXAcc, [in, out] the Uno interface of the current object.
 * @return S_OK if successful.
 */
-STDMETHODIMP CMAccessible::GetUNOInterface(long* pXAcc)
+STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 {
     // #CHECK#
     if(pXAcc == NULL)
         return E_INVALIDARG;
 
-    *pXAcc = (long)pUNOInterface;
+    *pXAcc = reinterpret_cast<hyper>(pUNOInterface);
     return S_OK;
 }
 
@@ -2398,9 +2402,9 @@ STDMETHODIMP CMAccessible::GetUNOInterface(long* pXAcc)
 * @param pAction, the default action point of the current object.
 * @return S_OK if successful.
 */
-STDMETHODIMP CMAccessible::SetDefaultAction(long pAction)
+STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
 {
-    m_pXAction = (XAccessibleAction*)pAction;
+    m_pXAction = reinterpret_cast<XAccessibleAction*>(pAction);
     return S_OK;
 }
 
@@ -2590,7 +2594,8 @@ HRESULT WINAPI CMAccessible::SmartQI(void* pv, REFIID iid, void** ppvObject)
                     ((IUnknown*)*ppvObject)->QueryInterface(IID_IUNOXWrapper, (void**)&wrapper);
                     if(wrapper)
                     {
-                        wrapper->put_XInterface((long)pUNOInterface);
+                        wrapper->put_XInterface(
+                                reinterpret_cast<hyper>(pUNOInterface));
                         wrapper->Release();
                     }
                     return S_OK;
@@ -2605,7 +2610,8 @@ HRESULT WINAPI CMAccessible::SmartQI(void* pv, REFIID iid, void** ppvObject)
     LEAVE_PROTECTED_BLOCK
 }
 
-BOOL CMAccessible::get_IAccessibleFromXAccessible(long pXAcc, IAccessible **ppIA)
+BOOL
+CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **ppIA)
 {
 
     ENTER_PROTECTED_BLOCK
@@ -2617,7 +2623,7 @@ BOOL CMAccessible::get_IAccessibleFromXAccessible(long pXAcc, IAccessible **ppIA
         }
         BOOL isGet = FALSE;
         if(g_pAgent)
-            isGet = g_pAgent->GetIAccessibleFromXAccessible((XAccessible*)pXAcc,ppIA);
+            isGet = g_pAgent->GetIAccessibleFromXAccessible(pXAcc, ppIA);
 
         if(isGet)
             return TRUE;
@@ -2958,12 +2964,12 @@ void CMAccessible::ConvertAnyToVariant(const ::com::sun::star::uno::Any &rAnyVal
                     if(pXAcc.is())
                     {
                         IAccessible* pIAcc = NULL;
-                        get_IAccessibleFromXAccessible((long)pXAcc.get(), &pIAcc);
+                        get_IAccessibleFromXAccessible(pXAcc.get(), &pIAcc);
                         if(pIAcc == NULL)
                         {
                             Reference< XAccessibleContext > pXAccContext = pXAcc->getAccessibleContext();
                             g_pAgent->InsertAccObj(pXAcc.get(),pXAccContext->getAccessibleParent().get());
-                            get_IAccessibleFromXAccessible((long)pXAcc.get(), &pIAcc);
+                            get_IAccessibleFromXAccessible(pXAcc.get(), &pIAcc);
                         }
                         if(pIAcc)
                         {

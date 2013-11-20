@@ -43,11 +43,11 @@ import "defines.idl";
         [id(10), helpstring("method Put_XAccParent")] HRESULT Put_XAccParent(IMAccessible* pIParent);
         [id(13), helpstring("method Put_XAccWindowHandle")] HRESULT Put_XAccWindowHandle(HWND hwnd);
         [id(14), helpstring("method Put_XAccChildID")] HRESULT Put_XAccChildID(long dChildID);
-        [id(19), helpstring("method SetXAccessible")] HRESULT SetXAccessible( long XAccessible);
-        [id(20), helpstring("method GetUNOInterface")] HRESULT GetUNOInterface(long* UNOInterface);
-        [id(23), helpstring("method SetDefaultAction")] HRESULT SetDefaultAction(long pAction);
+        [id(19), helpstring("method SetXAccessible")] HRESULT SetXAccessible(hyper XAccessible);
+        [id(20), helpstring("method GetUNOInterface")] HRESULT GetUNOInterface(hyper* UNOInterface);
+        [id(23), helpstring("method SetDefaultAction")] HRESULT SetDefaultAction(hyper pAction);
         [id(24), helpstring("method Put_ActionDescription")] HRESULT Put_ActionDescription( const OLECHAR* szAction);
-        [id(25), helpstring("method Put_XAccAgent")] HRESULT Put_XAccAgent(long pAgent);
+        [id(25), helpstring("method Put_XAccAgent")] HRESULT Put_XAccAgent(hyper pAgent);
         [id(26), helpstring("method NotifyDestroy")] HRESULT NotifyDestroy(BOOL isDestroy);
         [id(30), helpstring("method Get_XAccChildID")] HRESULT Get_XAccChildID([out,retval] long* childID);
     };
@@ -61,7 +61,7 @@ import "defines.idl";
     interface IEnumVariant : IEnumVARIANT
     {
         [id(1), helpstring("method ClearEnumeration")] HRESULT ClearEnumeration();
-        [id(2), helpstring("method PutSelection")] HRESULT PutSelection(long pXSeletion);
+        [id(2), helpstring("method PutSelection")] HRESULT PutSelection(hyper pXSeletion);
     };
     [
         object,
@@ -72,10 +72,10 @@ import "defines.idl";
     ]
     interface IUNOXWrapper : IUnknown
     {
-        [id(1), helpstring("method put_XInterface")] HRESULT put_XInterface(long pXInterface);
-        [id(2), helpstring("method put_XSubInterface")] HRESULT put_XSubInterface(long pXSubInterface);
-        [id(3), helpstring("method get_XInterface")] HRESULT get_XInterface([out,retval]long* pXInterface);
-        [id(4), helpstring("method get_XSubInterface")] HRESULT get_XSubInterface([out,retval]long* pXSubInterface);
+        [id(1), helpstring("method put_XInterface")] HRESULT put_XInterface(hyper pXInterface);
+        [id(2), helpstring("method put_XSubInterface")] HRESULT put_XSubInterface(hyper pXSubInterface);
+        [id(3), helpstring("method get_XInterface")] HRESULT get_XInterface([out,retval]hyper* pXInterface);
+        [id(4), helpstring("method get_XSubInterface")] HRESULT get_XSubInterface([out,retval]hyper * pXSubInterface);
     };
 
 [

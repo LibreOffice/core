@@ -86,7 +86,7 @@ public:
     STDMETHOD(get_minimumValue)(VARIANT *mininumValue);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(long pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface);
 
 private:
 

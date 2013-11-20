@@ -73,7 +73,7 @@ STDMETHODIMP CAccImage::get_imageSize(
    * @param pXInterface UNO interface.
    * @return Result.
 */
-STDMETHODIMP CAccImage::put_XInterface(long pXInterface)
+STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
 {
 
 

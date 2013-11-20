@@ -131,7 +131,7 @@ public:
     STDMETHOD(get_oldText)( IA2TextSegment *oldText);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(long pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface);
 
 };
 

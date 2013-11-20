@@ -480,7 +480,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
  *
  * @param    pXInterface    the pointer of UNO interface.
  */
-STDMETHODIMP CAccEditableText::put_XInterface(long pXInterface)
+STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInterface)
 {
 
 

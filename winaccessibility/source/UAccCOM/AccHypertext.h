@@ -148,7 +148,7 @@ public:
     STDMETHOD(get_hyperlinkIndex)(long charIndex, long *hyperlinkIndex);
 
     // Overide of IUNOXWrapper.
-    STDMETHOD(put_XInterface)(long pXInterface);
+    STDMETHOD(put_XInterface)(hyper pXInterface);
 
 private:
 

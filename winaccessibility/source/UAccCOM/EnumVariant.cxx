@@ -58,7 +58,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
     {
         Reference< XAccessible > pRXAcc = m_pXAccessibleSelection->getSelectedAccessibleChild(l1);
         IAccessible* pChild = NULL;
-        BOOL isGet = CMAccessible::get_IAccessibleFromXAccessible((long)pRXAcc.get(),&pChild);
+        BOOL isGet = CMAccessible::get_IAccessibleFromXAccessible(pRXAcc.get(),
+                        &pChild);
         if(isGet)
         {
             pvar[l2].vt = VT_I4;
@@ -68,7 +69,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
         {
             if(CMAccessible::g_pAgent)
                 CMAccessible::g_pAgent->InsertAccObj(pRXAcc.get(),pUNOInterface,NULL);
-            BOOL isGet = CMAccessible::get_IAccessibleFromXAccessible((long)pRXAcc.get(),&pChild);
+            BOOL isGet = CMAccessible::get_IAccessibleFromXAccessible(
+                            pRXAcc.get(), &pChild);
             if(isGet)
             {
                 pvar[l2].vt = VT_I4;
@@ -135,7 +137,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Clone(IEnumVARIANT __RPC_FAR *__RPC_FAR 
     hr = Create(&penum);
     if( hr == S_OK )
     {
-        penum->PutSelection((long)pUNOInterface);
+        penum->PutSelection(reinterpret_cast<hyper>(pUNOInterface));
         *ppenum = penum;
     }
     else
@@ -221,9 +223,9 @@ static Reference<XAccessibleSelection> GetXAccessibleSelection(XAccessible* pXAc
    * @param pXSelection XAccessible interface.
    * @return Result..
    */
-STDMETHODIMP CEnumVariant::PutSelection(long pXSelection)
+STDMETHODIMP CEnumVariant::PutSelection(hyper pXSelection)
 {
-    pUNOInterface = (XAccessible*)pXSelection;
+    pUNOInterface = reinterpret_cast<XAccessible*>(pXSelection);
     m_pXAccessibleSelection = GetXAccessibleSelection(pUNOInterface);
     return S_OK;
 }
