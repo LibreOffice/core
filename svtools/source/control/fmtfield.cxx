@@ -23,6 +23,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builder.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/fmtfield.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -342,6 +343,11 @@ FormattedField::FormattedField(Window* pParent, const ResId& rResId, SvNumberFor
         m_pFormatter = pInitialFormatter;
         m_nFormatKey = nFormatKey;
     }
+}
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFormattedField(Window *pParent, VclBuilder::stringmap &)
+{
+    WinBits nWinBits = WB_BORDER;
+    return new FormattedField(pParent, nWinBits);
 }
 
 FormattedField::~FormattedField()

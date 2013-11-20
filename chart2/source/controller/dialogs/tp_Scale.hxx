@@ -54,42 +54,39 @@ public:
     virtual void StateChanged( StateChangedType nType );
 
 private:
-    FixedLine           aFlScale;
+    CheckBox*            m_pCbxReverse;
+    CheckBox*            m_pCbxLogarithm;
 
-    CheckBox            aCbxReverse;
+    VclBox*              m_pBxType;
+    ListBox*             m_pLB_AxisType;
 
-    CheckBox            aCbxLogarithm;
+    VclGrid*              m_pBxMinMax;
+    FormattedField*      m_pFmtFldMin;
+    CheckBox*            m_pCbxAutoMin;
 
-    FixedText           m_aTxt_AxisType;
-    ListBox             m_aLB_AxisType;
+    FormattedField*      m_pFmtFldMax;
+    CheckBox*            m_pCbxAutoMax;
 
-    FixedText           aTxtMin;
-    FormattedField      aFmtFldMin;
-    CheckBox            aCbxAutoMin;
+    VclBox*              m_pBxResolution;
+    ListBox*             m_pLB_TimeResolution;
+    CheckBox*            m_pCbx_AutoTimeResolution;
 
-    FixedText           aTxtMax;
-    FormattedField      aFmtFldMax;
-    CheckBox            aCbxAutoMax;
+    VclBox*              m_pBxMain;
+    FormattedField*      m_pFmtFldStepMain;
+    MetricField*         m_pMt_MainDateStep;
+    ListBox*             m_pLB_MainTimeUnit;
+    CheckBox*            m_pCbxAutoStepMain;
 
-    FixedText           m_aTxt_TimeResolution;
-    ListBox             m_aLB_TimeResolution;
-    CheckBox            m_aCbx_AutoTimeResolution;
+    VclBox*              m_pBxMinor;
+    FixedText*           m_pTxtHelpCount;
+    FixedText*           m_pTxtHelp;
+    MetricField*         m_pMtStepHelp;
+    ListBox*             m_pLB_HelpTimeUnit;
+    CheckBox*            m_pCbxAutoStepHelp;
 
-    FixedText           aTxtMain;
-    FormattedField      aFmtFldStepMain;
-    MetricField         m_aMt_MainDateStep;
-    ListBox             m_aLB_MainTimeUnit;
-    CheckBox            aCbxAutoStepMain;
-
-    FixedText           aTxtHelpCount;
-    FixedText           aTxtHelp;
-    MetricField         aMtStepHelp;
-    ListBox             m_aLB_HelpTimeUnit;
-    CheckBox            aCbxAutoStepHelp;
-
-    FixedText           aTxtOrigin;
-    FormattedField      aFmtFldOrigin;
-    CheckBox            aCbxAutoOrigin;
+    FormattedField*      m_pFmtFldOrigin;
+    CheckBox*            m_pCbxAutoOrigin;
+    VclBox*              m_pBxOrigin;
 
     double              fMin;
     double              fMax;
@@ -105,9 +102,7 @@ private:
 
     bool                m_bShowAxisOrigin;
 
-    void AdjustControlPositions();
     void EnableControls();
-    void PlaceIntervalControlsAccordingToAxisType();
 
     DECL_LINK( SelectAxisTypeHdl, void* );
     DECL_LINK( EnableValueHdl, CheckBox* );
