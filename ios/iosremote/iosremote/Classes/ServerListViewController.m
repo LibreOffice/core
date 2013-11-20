@@ -484,7 +484,7 @@
     
     if (indexPath.section == 0){
         if ([self.comManager.autoDiscoveryServers count] == 0){
-            cell.textLabel.text = NSLocalizedString(self.searchStateText, nil);
+            cell.textLabel.text = self.searchStateText;
             cell.textLabel.lineBreakMode = UILineBreakModeClip;
             cell.selectionStyle = self.style;
             

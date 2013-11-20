@@ -31,16 +31,16 @@
     switch (self.index) {
         case 0:
             [self.image setImage:[UIImage imageNamed:@"WTconnection"]];
-            self.instructionText.text = @"Connect your devices to the same WiFi network.";
-            self.instructionHint.text = @"Create a personal hotspot on your iPhone if needed.";
-            self.instructionTitle.text = @"Connection";
+            self.instructionText.text = NSLocalizedString(@"Connect your devices to the same WiFi network.", @"connect instructions");
+            self.instructionHint.text = NSLocalizedString(@"Create a personal hotspot on your iPhone if needed.", @"connect instructions");
+            self.instructionTitle.text = NSLocalizedString(@"Connection", @"instruction page title");
             [self.hintImage setImage:[UIImage imageNamed:@"WTConnectionHotspot"]];
             break;
         case 1:
             [self.image setImage:[UIImage imageNamed:@"WTconnecting"]];
-            self.instructionText.text = @"Launch Impress & select your computer.";
-            self.instructionHint.text = @"Enter the PIN code in SlideShow - Impress Remote";
-            self.instructionTitle.text = @"Pairing";
+            self.instructionText.text = NSLocalizedString(@"Launch Impress & select your computer.", @"Pairing instruction text");
+            self.instructionHint.text = NSLocalizedString(@"Enter the PIN code in SlideShow - Impress Remote", @"Pairing instruction text");
+            self.instructionTitle.text = NSLocalizedString(@"Pairing", @"Pairing instruction title");
             [self.hintImage setImage:[UIImage imageNamed:@"WTPairing"]];
             break;
         case 2:{
@@ -49,7 +49,7 @@
             else
                 [self.image setImage:[UIImage imageNamed:@"WTcontrol~ipad"]];
 //            self.instructionText.text = @"Control your presentation at your fingertips!";
-            self.instructionTitle.text = @"Control";
+            self.instructionTitle.text = NSLocalizedString(@"Control", @"Control instruction title");
             UIImage *backgroundImage = [UIImage imageNamed:@"buttonBackground"];
             UIEdgeInsets insets = UIEdgeInsetsMake(20, 7, 20, 7);
             UIImage *stretchableBackgroundImage = [backgroundImage resizableImageWithCapInsets:insets];
