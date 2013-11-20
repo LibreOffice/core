@@ -92,7 +92,7 @@ public:
         }
     }
 
-    void terminate()
+    void endThread()
     {
         mbTerminateReading = true;
         maProduceResume.set();
@@ -157,7 +157,7 @@ DataStreams::~DataStreams()
     mxThread->maStart.set();
     mxThread->join();
     if (mxReaderThread.is())
-        mxReaderThread->terminate();
+        mxReaderThread->endThread();
 }
 
 OString DataStreams::ConsumeLine()
@@ -226,7 +226,7 @@ void DataStreams::Set(SvStream *pStream, bool bValuesInLine,
         const OUString& rRange, sal_Int32 nLimit, MoveEnum eMove)
 {
     if (mxReaderThread.is())
-        mxReaderThread->terminate();
+        mxReaderThread->endThread();
     mxReaderThread = new datastreams::ReaderThread( pStream );
     mxReaderThread->launch();
 
