@@ -50,7 +50,6 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/tp_3D_SceneGeometry.src \
     chart2/source/controller/dialogs/tp_3D_SceneIllumination.src \
     chart2/source/controller/dialogs/tp_AxisLabel.src \
-    chart2/source/controller/dialogs/tp_AxisPositions.src \
     chart2/source/controller/dialogs/tp_ChartType.src \
     chart2/source/controller/dialogs/tp_DataLabel.src \
     chart2/source/controller/dialogs/tp_DataSource.src \
