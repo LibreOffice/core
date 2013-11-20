@@ -42,11 +42,11 @@ bool bIsInited = false;
 bool bIsDeviceSelected = false;
 ds_device selectedDevice;
 
-typedef struct LibreOfficeDeviceScore
+struct LibreOfficeDeviceScore
 {
     double fTime;     // small time means faster device
     bool bNoCLErrors; // were there any opencl errors
-} LibreOfficeDeviceScore;
+};
 
 struct LibreOfficeDeviceEvaluationIO
 {
@@ -59,14 +59,14 @@ struct LibreOfficeDeviceEvaluationIO
     unsigned long outputSize;
 };
 
-typedef struct timer
+struct timer
 {
 #ifdef _WIN32
     LARGE_INTEGER start, stop, frequency;
 #else
     long long start, stop, frequency;
 #endif
-} timer;
+};
 
 const char* source = STRINGIFY(
 \n#if defined(KHR_DP_EXTENSION)

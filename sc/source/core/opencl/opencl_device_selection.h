@@ -22,7 +22,8 @@
 
 #define DS_DEVICE_NAME_LENGTH 256
 
-typedef enum {
+enum ds_status
+{
     DS_SUCCESS = 0
     ,DS_INVALID_PROFILE = 1000
     ,DS_MEMORY_ERROR
@@ -34,28 +35,31 @@ typedef enum {
     , DS_PROFILE_FILE_ERROR
     , DS_SCORE_SERIALIZER_ERROR
     , DS_SCORE_DESERIALIZER_ERROR
-} ds_status;
+};
 
 // device type
-typedef enum {
+enum ds_device_type
+{
     DS_DEVICE_NATIVE_CPU = 0
     ,DS_DEVICE_OPENCL_DEVICE
-} ds_device_type;
+};
 
 
-typedef struct {
+struct ds_device
+{
     ds_device_type  type;
     cl_device_id    oclDeviceID;
     char*           oclDeviceName;
     char*           oclDriverVersion;
     void*           score;            // a pointer to the score data, the content/format is application defined
-} ds_device;
+};
 
-typedef struct {
+struct ds_profile
+{
     unsigned int  numDevices;
     ds_device*    devices;
     const char*   version;
-} ds_profile;
+};
 
 // deallocate memory used by score
 typedef ds_status(* ds_score_release)(void* score);
