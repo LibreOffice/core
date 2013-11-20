@@ -532,7 +532,7 @@ void tokenizeSQL( const OString & sql, OStringVector &vec  )
                 {
                     if( i - start )
                         vec.push_back( OString( &sql.getStr()[start], i - start ) );
-                    vec.push_back( OString( RTL_CONSTASCII_STRINGPARAM( "." ) ) );
+                    vec.push_back( OString( "." ) );
                     start = i + 1;
                 }
             }

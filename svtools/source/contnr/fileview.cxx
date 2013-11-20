@@ -364,7 +364,7 @@ void NameTranslationList::Init()
             OUString        aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
             Config          aConfig( aFsysName );
 
-            aConfig.SetGroup( OString(RTL_CONSTASCII_STRINGPARAM("TRANSLATIONNAMES")) );
+            aConfig.SetGroup( OString("TRANSLATIONNAMES") );
 
             sal_uInt16          nKeyCnt = aConfig.GetKeyCount();
 

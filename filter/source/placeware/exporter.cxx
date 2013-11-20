@@ -278,7 +278,7 @@ static void createSlideFile( Reference< XComponent > xDoc, PlacewareZipFile& rZi
         }
     }
 
-    if( (osl::File::E_None != nRC) || !rZipFile.addFile( aInfoFile, OString( RTL_CONSTASCII_STRINGPARAM("slides.txt") ) ))
+    if( (osl::File::E_None != nRC) || !rZipFile.addFile( aInfoFile, OString( "slides.txt" ) ))
         throw IOException();
 }
 

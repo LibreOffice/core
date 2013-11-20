@@ -358,7 +358,7 @@ void CfgExport::WorkOnResourceEnd()
     if ( bLocalize ) {
     if ( !pStackData->sText["en-US"].isEmpty() )
         {
-            OString sXComment = pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("x-comment"))];
+            OString sXComment = pStackData->sText[OString("x-comment")];
             OString sLocalId = pStackData->sIdentifier;
             OString sGroupId;
             if ( aStack.size() == 1 ) {

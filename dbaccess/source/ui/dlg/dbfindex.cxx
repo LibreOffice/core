@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::svt;
 
-const OString aGroupIdent(RTL_CONSTASCII_STRINGPARAM("dBase III"));
+const OString aGroupIdent("dBase III");
 
 DBG_NAME(ODbaseIndexDialog)
 
@@ -472,7 +472,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
             ++aIndex, ++nPos
         )
     {
-        OStringBuffer aKeyName(RTL_CONSTASCII_STRINGPARAM("NDX"));
+        OStringBuffer aKeyName("NDX");
         if( nPos > 0 )  // first index contains no number
             aKeyName.append(static_cast<sal_Int32>(nPos));
         aInfFile.WriteKey(

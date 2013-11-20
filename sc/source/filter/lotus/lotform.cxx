@@ -54,7 +54,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         OString t;
         if( pExtString )
         {
-            const OString s(RTL_CONSTASCII_STRINGPARAM("@<<@123>>"));
+            const OString s("@<<@123>>");
 
             t = pExtString;
 
@@ -67,7 +67,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             eOc = lcl_KnownAddIn( t );
 
             if( eOc == ocNoName )
-                t = OString(RTL_CONSTASCII_STRINGPARAM("L123_")) + t;
+                t = OString("L123_") + t;
         }
         else
             t = "#UNKNOWN FUNC NAME#";

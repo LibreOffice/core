@@ -299,7 +299,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
         // Only report errors when not stopped
         else
         {
-            OString aMessage(RTL_CONSTASCII_STRINGPARAM("Unknown error"));
+            OString aMessage("Unknown error");
 
             const char * error_message = curl_easy_strerror(cc);
             if( NULL != error_message )
@@ -311,9 +311,9 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
                 curl_easy_getinfo( pCURL, CURLINFO_RESPONSE_CODE, &nError );
 
                 if ( 403 == nError )
-                    aMessage += OString( RTL_CONSTASCII_STRINGPARAM( " 403: Access denied!" ) );
+                    aMessage += OString( " 403: Access denied!" );
                 else if ( 404 == nError )
-                    aMessage += OString( RTL_CONSTASCII_STRINGPARAM( " 404: File not found!" ) );
+                    aMessage += OString( " 404: File not found!" );
                 else if ( 416 == nError )
                 {
                     // we got this error probably, because we already downloaded the file
@@ -322,9 +322,9 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
                 }
                 else
                 {
-                    aMessage += OString( RTL_CONSTASCII_STRINGPARAM( ":error code = " ) );
+                    aMessage += OString( ":error code = " );
                     aMessage += OString::number( nError );
-                    aMessage += OString( RTL_CONSTASCII_STRINGPARAM( " !" ) );
+                    aMessage += OString( " !" );
                 }
             }
             if ( !ret )

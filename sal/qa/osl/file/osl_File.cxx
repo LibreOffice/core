@@ -444,7 +444,7 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
 
     nError = ::osl::Directory::remove( aPathURL );
 
-    rtl::OString strError (RTL_CONSTASCII_STRINGPARAM("In deleteTestDirectory function: remove Directory "));
+    rtl::OString strError ("In deleteTestDirectory function: remove Directory ");
     strError += ::rtl::OUStringToOString( aPathURL, RTL_TEXTENCODING_ASCII_US );
     CPPUNIT_ASSERT_MESSAGE( strError.getStr(), ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ) );
 }
