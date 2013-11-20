@@ -315,7 +315,21 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             // If this is a text on a shape, possibly the text has the trailing
             // newline removed already.
             if (xCursor->getString() == "\n")
+            {
+                uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY);
+                const OUString aRecordChanges("RecordChanges");
+                uno::Any aPreviousValue(xDocProps->getPropertyValue(aRecordChanges));
+
+                // disable redlining for this operation, otherwise we might
+                // end up with an unwanted recorded deletion
+                xDocProps->setPropertyValue(aRecordChanges, uno::Any(sal_False));
+
+                // delete
                 xCursor->setString(OUString());
+
+                // restore again
+                xDocProps->setPropertyValue(aRecordChanges, aPreviousValue);
+            }
         }
     }
     catch( const uno::Exception& )
