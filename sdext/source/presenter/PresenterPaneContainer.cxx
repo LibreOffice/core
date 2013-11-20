@@ -192,7 +192,8 @@ PresenterPaneContainer::SharedPaneDescriptor
         {
             pDescriptor->mxView = rxView;
             pDescriptor->mpViewBackground = rpViewBackground;
-            pDescriptor->mxPane->SetBackground(rpViewBackground);
+            if (pDescriptor->mxPane.is())
+                pDescriptor->mxPane->SetBackground(rpViewBackground);
             try
             {
                 if ( ! pDescriptor->maViewInitialization.empty())
