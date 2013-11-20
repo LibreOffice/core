@@ -66,6 +66,7 @@ public:
     void testTableBorders();
     void testFdo51550();
     void testN789482();
+    void testBnc837302();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -104,6 +105,7 @@ void Test::run()
         {"table-borders.docx", &Test::testTableBorders},
         {"fdo51550.odt", &Test::testFdo51550},
         {"n789482.docx", &Test::testN789482},
+        {"bnc837302.docx", &Test::testBnc837302},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -499,6 +501,17 @@ void Test::testN789482()
     CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(getRun(xParagraph, 4), "IsStart"));
 
     getRun(xParagraph, 5, " After.");
+}
+
+void Test::testBnc837302()
+{
+    // The problem was that text with empty author was not inserted as a redline
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+
+    // previously 'AAA' was not an own run
+    getRun(xParagraph, 3, "AAA");
+    // interestingly the 'Insert' is set on the _previous_ run
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"), getProperty<OUString>(getRun(xParagraph, 2), "RedlineType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
