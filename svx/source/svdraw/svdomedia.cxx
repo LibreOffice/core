@@ -351,8 +351,6 @@ static bool lcl_HandlePackageURL(
     return true;
 }
 
-static char const s_PkgScheme[] = "vnd.sun.star.Package:";
-
 void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProperties )
 {
     bool bBroadcastChanged = false;
@@ -364,9 +362,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     {
         m_pImpl->m_xCachedSnapshot.clear();
         OUString const url(rNewProperties.getURL());
-        if ((0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-                url.getStr(), url.getLength(),
-                s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1)))
+        if (url.startsWithIgnoreAsciiCase("vnd.sun.star.Package:"))
         {
             if (   !m_pImpl->m_pTempFile
                 || (m_pImpl->m_pTempFile->m_TempFileURL !=
