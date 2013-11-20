@@ -77,6 +77,7 @@ public:
     void testBnc834035();
     void testCp1000015();
     void testFdo70812();
+    void testBnc837302();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -138,6 +139,7 @@ void Test::run()
         {"bnc834035.odt", &Test::testBnc834035},
         {"cp1000015.odt", &Test::testCp1000015},
         {"fdo70812.docx", &Test::testFdo70812},
+        {"bnc837302.docx", &Test::testBnc837302},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -787,6 +789,17 @@ void Test::testFdo70812()
 {
     // Import just crashed.
     getParagraph(1, "Sample pages document.");
+}
+
+void Test::testBnc837302()
+{
+    // The problem was that text with empty author was not inserted as a redline
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+
+    // previously 'AAA' was not an own run
+    getRun(xParagraph, 3, "AAA");
+    // interestingly the 'Insert' is set on the _previous_ run
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"), getProperty<OUString>(getRun(xParagraph, 2), "RedlineType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
