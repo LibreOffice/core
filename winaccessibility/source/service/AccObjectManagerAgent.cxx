@@ -140,12 +140,14 @@ void  AccObjectManagerAgent::UpdateDescription( XAccessible* pXAcc, Any newDesc 
    * @param pWnd The top window handle containing control.
    * @return If the method is correctly processed.
    */
-unsigned char AccObjectManagerAgent::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentXAcc,long pWnd)
+bool AccObjectManagerAgent::InsertAccObj(
+        XAccessible* pXAcc, XAccessible* pParentXAcc, sal_Int64 nWnd)
 {
     if( pWinManager )
-        return (unsigned char)pWinManager->InsertAccObj( pXAcc, pParentXAcc,HWND((void*)pWnd) );
+        return pWinManager->InsertAccObj(pXAcc, pParentXAcc,
+                static_cast<HWND>(reinterpret_cast<void*>(nWnd)));
 
-    return sal_False;
+    return false;
 }
 
 /**
@@ -154,10 +156,12 @@ unsigned char AccObjectManagerAgent::InsertAccObj( XAccessible* pXAcc,XAccessibl
    * @param pXAcc XAccessible interface for top window
    * @return void
    */
-void AccObjectManagerAgent::SaveTopWindowHandle(long hWnd, com::sun::star::accessibility::XAccessible* pXAcc)
+void
+AccObjectManagerAgent::SaveTopWindowHandle(sal_Int64 hWnd, XAccessible* pXAcc)
 {
     if( pWinManager )
-        pWinManager->SaveTopWindowHandle( HWND((void*)hWnd), pXAcc );
+        pWinManager->SaveTopWindowHandle(
+                static_cast<HWND>(reinterpret_cast<void*>(hWnd)), pXAcc);
 }
 
 
@@ -168,13 +172,13 @@ void AccObjectManagerAgent::SaveTopWindowHandle(long hWnd, com::sun::star::acces
    * @param pWnd The top window handle containing control.
    * @return If the method is correctly processed.
    */
-unsigned char AccObjectManagerAgent::InsertChildrenAccObj( XAccessible* pXAcc,
-        long pWnd)
+bool
+AccObjectManagerAgent::InsertChildrenAccObj(XAccessible* pXAcc, sal_Int64 pWnd)
 {
     if( pWinManager )
-        return (unsigned char)pWinManager->InsertChildrenAccObj( pXAcc, HWND((void*)pWnd) );
+        return pWinManager->InsertChildrenAccObj( pXAcc, HWND((void*)pWnd) );
 
-    return sal_False;
+    return false;
 }
 
 /**
@@ -241,12 +245,12 @@ void  AccObjectManagerAgent::UpdateState( com::sun::star::accessibility::XAccess
    * @param pEvent UNO event ID.
    * @return If the method is correctly processed.
    */
-unsigned char AccObjectManagerAgent::NotifyAccEvent( short pEvent,XAccessible* pXAcc )
+bool AccObjectManagerAgent::NotifyAccEvent(short pEvent, XAccessible* pXAcc)
 {
     if(pWinManager)
-        return (unsigned char)pWinManager->NotifyAccEvent(pXAcc,pEvent);
+        return pWinManager->NotifyAccEvent(pXAcc,pEvent);
 
-    return sal_False;
+    return false;
 }
 
 /**
@@ -254,12 +258,12 @@ unsigned char AccObjectManagerAgent::NotifyAccEvent( short pEvent,XAccessible* p
    * @param pXAcc Uno XAccessible interface of control.
    * @return If the method is correctly processed.
    */
-unsigned short AccObjectManagerAgent::IsContainer( XAccessible* pXAcc )
+bool AccObjectManagerAgent::IsContainer( XAccessible* pXAcc )
 {
     if(pWinManager)
-        return (unsigned char)pWinManager->IsContainer(pXAcc);
+        return pWinManager->IsContainer(pXAcc);
 
-    return sal_False;
+    return false;
 }
 
 /**
@@ -302,15 +306,16 @@ void AccObjectManagerAgent::GetIAccessibleFromResID(long childID,IMAccessible** 
    * @param pXAcc Uno XAccessible interface of control.
    * @return Com interface.
    */
-unsigned char AccObjectManagerAgent::GetIAccessibleFromXAccessible(XAccessible* pXAcc, IAccessible** ppXI)
+bool AccObjectManagerAgent::GetIAccessibleFromXAccessible(
+        XAccessible* pXAcc, IAccessible** ppXI)
 {
     if(pWinManager)
     {
         *ppXI = (IAccessible*)pWinManager->GetIMAccByXAcc(pXAcc);
         if(*ppXI)
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 XAccessible* AccObjectManagerAgent::GetParentXAccessible( XAccessible* pXAcc )
@@ -335,14 +340,14 @@ void AccObjectManagerAgent::UpdateDescription( XAccessible* pXAcc )
         pWinManager->UpdateDescription( pXAcc );
 }
 
-void AccObjectManagerAgent::UpdateChildState(com::sun::star::accessibility::XAccessible* pXAcc)
+void AccObjectManagerAgent::UpdateChildState(XAccessible* pXAcc)
 {
     if(pWinManager)
         pWinManager->UpdateChildState( pXAcc );
 }
 
 
-bool AccObjectManagerAgent::IsSpecialToolboItem(com::sun::star::accessibility::XAccessible* pXAcc)
+bool AccObjectManagerAgent::IsSpecialToolboItem(XAccessible* pXAcc)
 {
     if(pWinManager)
         return pWinManager->IsSpecialToolboItem( pXAcc );
@@ -350,7 +355,7 @@ bool AccObjectManagerAgent::IsSpecialToolboItem(com::sun::star::accessibility::X
     return false;
 }
 
-short AccObjectManagerAgent::GetRole(com::sun::star::accessibility::XAccessible* pXAcc)
+short AccObjectManagerAgent::GetRole(XAccessible* pXAcc)
 {
     if(pWinManager)
         return pWinManager->GetRole( pXAcc );
@@ -366,7 +371,7 @@ XAccessible* AccObjectManagerAgent::GetAccDocByAccTopWin( XAccessible* pXAcc )
     }
     return NULL;
 }
-bool AccObjectManagerAgent::IsTopWinAcc( com::sun::star::accessibility::XAccessible* pXAcc )
+bool AccObjectManagerAgent::IsTopWinAcc(XAccessible* pXAcc)
 {
     if (pWinManager)
     {
@@ -375,12 +380,12 @@ bool AccObjectManagerAgent::IsTopWinAcc( com::sun::star::accessibility::XAccessi
     return NULL;
 }
 
-bool AccObjectManagerAgent::IsStateManageDescendant(com::sun::star::accessibility::XAccessible* pXAcc)
+bool AccObjectManagerAgent::IsStateManageDescendant(XAccessible* pXAcc)
 {
     if(pWinManager)
         return pWinManager->IsStateManageDescendant( pXAcc );
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

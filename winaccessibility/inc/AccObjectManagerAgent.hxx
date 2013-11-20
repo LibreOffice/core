@@ -44,19 +44,19 @@ public:
     AccObjectManagerAgent();
     virtual ~AccObjectManagerAgent();
 
-    virtual unsigned char InsertAccObj( com::sun::star::accessibility::XAccessible* pXAcc,
-                                        com::sun::star::accessibility::XAccessible* pParentXAcc,
-                                        long pWnd=0);
+    virtual bool InsertAccObj(com::sun::star::accessibility::XAccessible* pXAcc,
+                              com::sun::star::accessibility::XAccessible* pParentXAcc,
+                              sal_Int64 pWnd=0);
     virtual void GetIAccessibleFromResID(long childID,IMAccessible**);
-    virtual unsigned char GetIAccessibleFromXAccessible(com::sun::star::accessibility::XAccessible* pXAcc, IAccessible** ppIA);
+    virtual bool GetIAccessibleFromXAccessible(com::sun::star::accessibility::XAccessible* pXAcc, IAccessible** ppIA);
 
     virtual void DeleteAccObj( com::sun::star::accessibility::XAccessible* pXAcc );
     virtual IMAccessible*  GetIMAccByXAcc(com::sun::star::accessibility::XAccessible* pXAcc);
 
-    unsigned char NotifyAccEvent( short pEvent = 0, com::sun::star::accessibility::XAccessible* pXAcc = 0 );
+    bool NotifyAccEvent(short pEvent = 0, com::sun::star::accessibility::XAccessible* pXAcc = 0);
 
-    unsigned char InsertChildrenAccObj( com::sun::star::accessibility::XAccessible* pXAcc,
-                                        long pWnd=0);
+    bool InsertChildrenAccObj(com::sun::star::accessibility::XAccessible* pXAcc,
+                              sal_Int64 pWnd=0);
     void DeleteChildrenAccObj( com::sun::star::accessibility::XAccessible* pXAcc );
 
     void  DecreaseState( com::sun::star::accessibility::XAccessible* pXAcc,unsigned short pState );
@@ -81,9 +81,10 @@ public:
     com::sun::star::accessibility::XAccessible* GetParentXAccessible(
         com::sun::star::accessibility::XAccessible* pXAcc );
     short GetParentRole(com::sun::star::accessibility::XAccessible* pXAcc );
-    unsigned short IsContainer(com::sun::star::accessibility::XAccessible* pXAcc);
+    bool IsContainer(com::sun::star::accessibility::XAccessible* pXAcc);
 
-    void SaveTopWindowHandle(long hWnd, com::sun::star::accessibility::XAccessible* pXAcc);
+    void SaveTopWindowHandle(sal_Int64 hWnd,
+            com::sun::star::accessibility::XAccessible* pXAcc);
 
     void UpdateChildState(com::sun::star::accessibility::XAccessible* pXAcc);
 
