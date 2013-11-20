@@ -434,7 +434,14 @@ public:
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
     }
-
+    // Should only be called by SumIfs. Yikes!
+    virtual bool NeedParallelReduction(void) const
+    {
+        assert(dynamic_cast<OpSumIfs*>(mpCodeGen.get()));
+        return GetWindowSize()> 100 &&
+            ( (GetStartFixed() && GetEndFixed()) ||
+              (!GetStartFixed() && !GetEndFixed())  ) ;
+    }
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
 
     virtual std::string GenSlidingWindowDeclRef(bool=false) const
