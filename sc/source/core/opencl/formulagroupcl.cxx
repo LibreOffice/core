@@ -533,6 +533,7 @@ return nCurWindowSize;
                         if(count==0){
                             temp1 << "if(i + gid0 < " <<mpDVR->GetArrayLength();
                             temp1 << "){\n\t\t";
+                            temp1 << "tmp = ";
                             temp1 <<  mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                             temp1 << ";\n\t\t\t";
                             temp1 << "}\n\t";
