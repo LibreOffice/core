@@ -507,18 +507,18 @@ int Export::Execute( int nToken, const char * pToken )
             OString sValue = sToken.getToken(0, '=', n);
             CleanValue( sValue );
             sKey = sKey.toAsciiUpperCase();
-            if (sKey.startsWith("IDENTIFIER"))
+            if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("IDENTIFIER")))
             {
                 OString sId(
                     sValue.replaceAll("\t", OString()).
                     replaceAll(" ", OString()));
                 pResData->SetId(sId, ID_LEVEL_IDENTIFIER);
             }
-            else if (sKey.startsWith("HELPID"))
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HELPID")))
             {
                 pResData->sHelpId = sValue;
             }
-            else if (sKey.startsWith("STRINGLIST"))
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
             {
                 pResData->bList = sal_True;
                 nList = LIST_STRING;
@@ -526,7 +526,7 @@ int Export::Execute( int nToken, const char * pToken )
                 nListIndex = 0;
                 nListLevel = 0;
             }
-            else if (sKey.startsWith("FILTERLIST"))
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("FILTERLIST")))
             {
                 pResData->bList = sal_True;
                 nList = LIST_FILTER;
@@ -534,7 +534,7 @@ int Export::Execute( int nToken, const char * pToken )
                 nListIndex = 0;
                 nListLevel = 0;
             }
-            else if (sKey.startsWith("UIENTRIES"))
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIENTRIES")))
             {
                 pResData->bList = sal_True;
                 nList = LIST_UIENTRIES;
@@ -564,7 +564,7 @@ int Export::Execute( int nToken, const char * pToken )
                 OString sValue = sToken.getToken(1, '=');
                 CleanValue( sValue );
                 sKey = sKey.toAsciiUpperCase();
-                if (sKey.startsWith("STRINGLIST"))
+                if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
                 {
                     pResData->bList = sal_True;
                     nList = LIST_STRING;
@@ -572,7 +572,7 @@ int Export::Execute( int nToken, const char * pToken )
                     nListIndex = 0;
                     nListLevel = 0;
                 }
-                else if (sKey.startsWith("FILTERLIST"))
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("FILTERLIST")))
                 {
                     pResData->bList = sal_True;
                     nList = LIST_FILTER;
@@ -580,7 +580,7 @@ int Export::Execute( int nToken, const char * pToken )
                     nListIndex = 0;
                     nListLevel = 0;
                 }
-                else if (sKey.startsWith("PAIREDLIST"))
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("PAIREDLIST")))
                 {
                     pResData->bList = sal_True;
                     nList = LIST_PAIRED;
@@ -588,7 +588,7 @@ int Export::Execute( int nToken, const char * pToken )
                     nListIndex = 0;
                     nListLevel = 0;
                 }
-                else if (sKey.startsWith("ITEMLIST"))
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("ITEMLIST")))
                 {
                     pResData->bList = sal_True;
                     nList = LIST_ITEM;
@@ -596,7 +596,7 @@ int Export::Execute( int nToken, const char * pToken )
                     nListIndex = 0;
                     nListLevel = 0;
                 }
-                else if (sKey.startsWith("UIENTRIES"))
+                else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIENTRIES")))
                 {
                     pResData->bList = sal_True;
                     nList = LIST_UIENTRIES;
@@ -648,11 +648,11 @@ int Export::Execute( int nToken, const char * pToken )
                 if ( !sText.isEmpty() && !sLang.isEmpty() )
                 {
                     sKey = sKey.toAsciiUpperCase();
-                    if (sKey.startsWith("TEXT") ||
-                        sKey.startsWith("MESSAGE")  ||
-                        sKey.startsWith("CUSTOMUNITTEXT")  ||
-                        sKey.startsWith("SLOTNAME")  ||
-                        sKey.startsWith("UINAME"))
+                    if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("TEXT")) ||
+                        sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("MESSAGE"))  ||
+                        sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CUSTOMUNITTEXT"))  ||
+                        sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SLOTNAME"))  ||
+                        sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UINAME")))
                     {
                         SetChildWithText();
                         if ( sLangIndex.equalsIgnoreAsciiCase("en-US") )

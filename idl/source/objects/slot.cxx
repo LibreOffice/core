@@ -1090,7 +1090,7 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
 
     OString aMethodName( GetExecMethod() );
     if ( !aMethodName.isEmpty() &&
-         !aMethodName.startsWith("NoExec") )
+         !aMethodName.equalsL(RTL_CONSTASCII_STRINGPARAM("NoExec")) )
     {
         sal_Bool bIn = sal_False;
         for( size_t n = 0; n < rList.size(); n++ )
@@ -1115,7 +1115,7 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
 
     aMethodName = GetStateMethod();
     if (!aMethodName.isEmpty() &&
-        !aMethodName.startsWith("NoState"))
+        !aMethodName.equalsL(RTL_CONSTASCII_STRINGPARAM("NoState")))
     {
         sal_Bool bIn = sal_False;
         for ( size_t n=0; n < rList.size(); n++ )
@@ -1252,7 +1252,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
         // write ExecMethod, with standard name if not specified
         if( !GetExecMethod().isEmpty() &&
-            !GetExecMethod().startsWith("NoExec"))
+            !GetExecMethod().equalsL(RTL_CONSTASCII_STRINGPARAM("NoExec")))
         {
             rOutStm << "SFX_STUB_PTR(" << rShellName.getStr() << ','
                     << GetExecMethod().getStr() << ')';
@@ -1263,7 +1263,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
         // write StateMethod, with standard name if not specified
         if( !GetStateMethod().isEmpty() &&
-            !GetStateMethod().startsWith("NoState"))
+            !GetStateMethod().equalsL(RTL_CONSTASCII_STRINGPARAM("NoState")))
         {
             rOutStm << "SFX_STUB_PTR(" << rShellName.getStr() << ','
                     << GetStateMethod().getStr() << ')';

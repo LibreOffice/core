@@ -368,7 +368,7 @@ sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*
                 {
                     reType = TT_KEYWORDS;
 
-                    if (aByteStr.startsWith("rem"))
+                    if (aByteStr.equalsL(RTL_CONSTASCII_STRINGPARAM("rem")))
                     {
                         // Remove all characters until end of line or EOF
                         sal_Unicode cPeek = *pos;

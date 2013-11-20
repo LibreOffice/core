@@ -51,15 +51,15 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         {
             nIndex = 0;
             OString sTmp(sLine.getToken(0, ':', nIndex));
-            if (sTmp.startsWith("StartHTML"))
+            if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("StartHTML")))
                 nStt = sLine.copy(nIndex).toInt32();
-            else if (sTmp.startsWith("EndHTML"))
+            else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("EndHTML")))
                 nEnd = sLine.copy(nIndex).toInt32();
-            else if (sTmp.startsWith("StartFragment"))
+            else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("StartFragment")))
                 nFragStart = sLine.copy(nIndex).toInt32();
-            else if (sTmp.startsWith("EndFragment"))
+            else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("EndFragment")))
                 nFragEnd = sLine.copy(nIndex).toInt32();
-            else if (sTmp.startsWith("SourceURL"))
+            else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("SourceURL")))
                 sBaseURL = OStringToOUString( sLine.copy(nIndex), RTL_TEXTENCODING_UTF8 );
 
             if (nEnd >= 0 && nStt >= 0 &&

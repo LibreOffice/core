@@ -57,23 +57,23 @@ void lcl_getRegKeyInfo( const OString& sKeyInfo, HKEY& hBaseKey, OString& sSubKe
     {
         OString sBaseKey = sKeyInfo.copy( 0, nBaseKeyIndex );
         sSubKey = sKeyInfo.copy( nBaseKeyIndex + 1 );
-        if( sBaseKey.startsWith("HKEY_CURRENT_USER") )
+        if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_CURRENT_USER")) )
         {
             hBaseKey = HKEY_CURRENT_USER;
         }
-        else if( sBaseKey.startsWith("HKEY_LOCAL_MACHINE") )
+        else if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_LOCAL_MACHINE")) )
         {
             hBaseKey = HKEY_LOCAL_MACHINE;
         }
-        else if( sBaseKey.startsWith("HKEY_CLASSES_ROOT") )
+        else if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_CLASSES_ROOT")) )
         {
             hBaseKey = HKEY_CLASSES_ROOT;
         }
-        else if( sBaseKey.startsWith("HKEY_USERS") )
+        else if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_USERS")) )
         {
             hBaseKey = HKEY_USERS;
         }
-        else if( sBaseKey.startsWith("HKEY_CURRENT_CONFIG") )
+        else if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_CURRENT_CONFIG")) )
         {
             hBaseKey = HKEY_CURRENT_CONFIG;
         }
