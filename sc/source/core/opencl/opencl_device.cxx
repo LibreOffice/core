@@ -428,8 +428,15 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
     {
         /* Setup */
         ds_status status;
-        ds_profile* profile;
+        ds_profile* profile = NULL;
         status = initDSProfile(&profile, "LibreOffice v0.1");
+
+        if (!profile)
+        {
+            // failed to initialize profile.
+            selectedDevice.oclDeviceID = NULL;
+            return selectedDevice;
+        }
 
         /* Try reading scores from file */
         std::string tmpStr(sProfilePath);
