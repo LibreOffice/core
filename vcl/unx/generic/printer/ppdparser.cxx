@@ -994,7 +994,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             continue;
 
         // default values are parsed in pass 2
-        if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("Default")))
+        if (aKey.startsWith("Default"))
             continue;
 
         bool bQuery     = false;
@@ -1174,7 +1174,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
     for( line = rLines.begin(); line != rLines.end(); ++line )
     {
         OString aLine(*line);
-        if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM("*Default")))
+        if (aLine.startsWith("*Default"))
         {
             OUString aKey(OStringToOUString(aLine.copy(8), RTL_TEXTENCODING_MS_1252));
             sal_Int32 nPos = aKey.indexOf( ':' );
@@ -1204,8 +1204,8 @@ void PPDParser::parse( ::std::list< OString >& rLines )
                 }
             }
         }
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM("*UIConstraints")) ||
-                 aLine.matchL(RTL_CONSTASCII_STRINGPARAM("*NonUIConstraints")))
+        else if (aLine.startsWith("*UIConstraints") ||
+                 aLine.startsWith("*NonUIConstraints"))
         {
             parseConstraint( aLine );
         }

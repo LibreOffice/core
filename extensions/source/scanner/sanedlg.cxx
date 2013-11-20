@@ -1200,18 +1200,18 @@ sal_Bool SaneDlg::LoadState()
             if( nOption == -1 )
                 continue;
 
-            if (aValue.matchL(RTL_CONSTASCII_STRINGPARAM("BOOL=")))
+            if (aValue.startsWith("BOOL="))
             {
                 aValue = aValue.copy(RTL_CONSTASCII_LENGTH("BOOL="));
                 sal_Bool aBOOL = (sal_Bool)aValue.toInt32();
                 mrSane.SetOptionValue( nOption, aBOOL );
             }
-            else if (aValue.matchL(RTL_CONSTASCII_STRINGPARAM("STRING=")))
+            else if (aValue.startsWith("STRING="))
             {
                 aValue = aValue.copy(RTL_CONSTASCII_LENGTH("STRING="));
                 mrSane.SetOptionValue(nOption,OStringToOUString(aValue, osl_getThreadTextEncoding()) );
             }
-            else if (aValue.matchL(RTL_CONSTASCII_STRINGPARAM("NUMERIC=")))
+            else if (aValue.startsWith("NUMERIC="))
             {
                 aValue = aValue.copy(RTL_CONSTASCII_LENGTH("NUMERIC="));
 

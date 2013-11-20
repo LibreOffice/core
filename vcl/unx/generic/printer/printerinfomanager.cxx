@@ -315,7 +315,7 @@ void PrinterInfoManager::initialize()
             for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
             {
                 OString aKey( aConfig.GetKeyName( nKey ) );
-                if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")))
+                if (aKey.startsWith("PPD_"))
                 {
                     aValue = aConfig.ReadKey( aKey );
                     const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey(OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
@@ -327,7 +327,7 @@ void PrinterInfoManager::initialize()
                         sal_True );
                     }
                 }
-                else if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("SubstFont_")))
+                else if (aKey.startsWith("SubstFont_"))
                 {
                     aValue = aConfig.ReadKey( aKey );
                     m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
@@ -523,7 +523,7 @@ void PrinterInfoManager::initialize()
                 for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
                 {
                     OString aKey( aConfig.GetKeyName( nKey ) );
-                    if( aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")) && aPrinter.m_aInfo.m_pParser )
+                    if( aKey.startsWith("PPD_") && aPrinter.m_aInfo.m_pParser )
                     {
                         aValue = aConfig.ReadKey( aKey );
                         const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey(OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
@@ -535,7 +535,7 @@ void PrinterInfoManager::initialize()
                             sal_True );
                         }
                     }
-                    else if( aKey.matchL(RTL_CONSTASCII_STRINGPARAM("SubstFont_")) )
+                    else if( aKey.startsWith("SubstFont_") )
                     {
                         aValue = aConfig.ReadKey( aKey );
                         aPrinter.m_aInfo.m_aFontSubstitutes[ OStringToOUString( aKey.copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );

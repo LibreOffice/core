@@ -200,24 +200,24 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
     while( ! aStream.IsEof() )
     {
         aStream.ReadLine( aLine );
-        if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM("JobData")))
+        if (aLine.startsWith("JobData"))
             bVersion = true;
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(printerEquals)))
+        else if (aLine.startsWith(printerEquals))
         {
             bPrinter = true;
             rJobData.m_aPrinterName = OStringToOUString(aLine.copy(RTL_CONSTASCII_LENGTH(printerEquals)), RTL_TEXTENCODING_UTF8);
         }
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(orientatationEquals)))
+        else if (aLine.startsWith(orientatationEquals))
         {
             bOrientation = true;
             rJobData.m_eOrientation = aLine.copy(RTL_CONSTASCII_LENGTH(orientatationEquals)).equalsIgnoreAsciiCase("landscape") ? orientation::Landscape : orientation::Portrait;
         }
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(copiesEquals)))
+        else if (aLine.startsWith(copiesEquals))
         {
             bCopies = true;
             rJobData.m_nCopies = aLine.copy(RTL_CONSTASCII_LENGTH(copiesEquals)).toInt32();
         }
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(margindajustmentEquals)))
+        else if (aLine.startsWith(margindajustmentEquals))
         {
             bMargin = true;
             OString aValues(aLine.copy(RTL_CONSTASCII_LENGTH(margindajustmentEquals)));
@@ -226,22 +226,22 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
             rJobData.m_nTopMarginAdjust = aValues.getToken(2, ',').toInt32();
             rJobData.m_nBottomMarginAdjust = aValues.getToken(3, ',').toInt32();
         }
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(colordepthEquals)))
+        else if (aLine.startsWith(colordepthEquals))
         {
             bColorDepth = true;
             rJobData.m_nColorDepth = aLine.copy(RTL_CONSTASCII_LENGTH(colordepthEquals)).toInt32();
         }
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(colordeviceEquals)))
+        else if (aLine.startsWith(colordeviceEquals))
         {
             bColorDevice = true;
             rJobData.m_nColorDevice = aLine.copy(RTL_CONSTASCII_LENGTH(colordeviceEquals)).toInt32();
         }
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(pslevelEquals)))
+        else if (aLine.startsWith(pslevelEquals))
         {
             bPSLevel = true;
             rJobData.m_nPSLevel = aLine.copy(RTL_CONSTASCII_LENGTH(pslevelEquals)).toInt32();
         }
-        else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(pdfdeviceEquals)))
+        else if (aLine.startsWith(pdfdeviceEquals))
         {
             bPDFDevice = true;
             rJobData.m_nPDFDevice = aLine.copy(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)).toInt32();
