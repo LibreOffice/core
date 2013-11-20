@@ -1161,6 +1161,17 @@ DECLARE_OOXMLEXPORT_TEST(testBnc834035, "bnc834035.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:hyperlink", "anchor", "_Toc363553908");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")
+{
+    // The problem was that text with empty author was not inserted as a redline
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+
+    // previously 'AAA' was not an own run
+    getRun(xParagraph, 3, "AAA");
+    // interestingly the 'Insert' is set on the _previous_ run
+    CPPUNIT_ASSERT_EQUAL(OUString("Insert"), getProperty<OUString>(getRun(xParagraph, 2), "RedlineType"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
 {
     // The problem was that in 'MSWordExportBase::SectionProperties' function in 'wrt8sty.cxx'

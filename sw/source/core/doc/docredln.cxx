@@ -290,8 +290,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
     bool bMerged = false;
     _CHECK_REDLINE( this )
 
-    if( IsRedlineOn() && !IsShowOriginal( meRedlineMode ) &&
-        !pNewRedl->GetAuthorString().isEmpty() )
+    if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
     {
         pNewRedl->InvalidateRange();
 
