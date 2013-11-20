@@ -103,7 +103,7 @@ public:
 
     sal_Bool NotifyAccEvent( com::sun::star::accessibility::XAccessible* pXAcc,short state = 0 );
 
-    long Get_ToATInterface( HWND hWnd, long lParam, long wParam);
+    LPARAM Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam);
 
     void  DecreaseState( com::sun::star::accessibility::XAccessible* pXAcc,unsigned short pState );
     void  IncreaseState( com::sun::star::accessibility::XAccessible* pXAcc,unsigned short pState );

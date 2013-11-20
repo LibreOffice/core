@@ -80,8 +80,9 @@ public:
     virtual void SAL_CALL removeEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& ) { /* dummy */ }
 
     // XMSAAService
-    virtual sal_Int32 SAL_CALL getAccObjectPtr (long hWnd, long lParam, long wParam);
-    virtual void SAL_CALL handleWindowOpened(sal_Int32);
+    virtual sal_Int64 SAL_CALL getAccObjectPtr(
+            sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
+    virtual void SAL_CALL handleWindowOpened(sal_Int64);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName();
@@ -112,7 +113,9 @@ void MSAAServiceImpl::initialize( Sequence< Any > const & args ) throw (Exceptio
    * @param
    * @return Com interface.
    */
-sal_Int32 MSAAServiceImpl::getAccObjectPtr ( long hWnd, long lParam, long wParam) throw (RuntimeException)
+sal_Int64 MSAAServiceImpl::getAccObjectPtr(
+        sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
+throw (RuntimeException)
 {
     SolarMutexGuard g;
 
@@ -125,7 +128,7 @@ sal_Int32 MSAAServiceImpl::getAccObjectPtr ( long hWnd, long lParam, long wParam
    * @param
    * @return
    */
-void MSAAServiceImpl::handleWindowOpened( sal_Int32 nAcc)
+void MSAAServiceImpl::handleWindowOpened(sal_Int64 nAcc)
 {
     SolarMutexGuard g;
 

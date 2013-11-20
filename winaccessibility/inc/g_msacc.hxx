@@ -21,8 +21,8 @@
 #define __G_MSACC_HXX
 
 extern void FreeTopWindowListener();
-extern void handleWindowOpened_impl( long pAcc );
-extern long GetMSComPtr( long hWnd, long lParam, long wParam );
+extern void handleWindowOpened_impl(sal_Int64 pAcc);
+extern sal_Int64 GetMSComPtr(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
 
 extern AccTopWindowListener* g_pTop;
 

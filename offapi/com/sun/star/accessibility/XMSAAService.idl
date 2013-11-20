@@ -39,9 +39,9 @@ interface XMSAAService : ::com::sun::star::uno::XInterface
 
         @see AccessibleContext
     */
-    long getAccObjectPtr ([in] long hWnd, [in] long lParam, [in] long wParam);
+    hyper getAccObjectPtr([in] hyper hWnd, [in] hyper lParam, [in] hyper wParam);
 
-    void handleWindowOpened ([in] long i);
+    void handleWindowOpened([in] hyper i);
 };
 
 }; }; }; };

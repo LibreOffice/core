@@ -59,10 +59,12 @@ void FreeTopWindowListener()
 /**
  *  As a global method to invoke the handleWindowOpened() method
  */
-void handleWindowOpened_impl(long pAcc)
+void handleWindowOpened_impl(sal_Int64 pAcc)
 {
     if( g_pTop && pAcc != 0 )
-        g_pTop->HandleWindowOpened( (com::sun::star::accessibility::XAccessible*)((void*)pAcc) );
+        g_pTop->HandleWindowOpened(
+            static_cast<com::sun::star::accessibility::XAccessible*>(
+                reinterpret_cast<void*>(pAcc)));
 }
 
 /**

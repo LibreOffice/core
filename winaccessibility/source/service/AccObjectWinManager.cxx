@@ -63,11 +63,12 @@ AccObjectWinManager* AccObjectWinManager::me = NULL;
    * @param
    * @return  Com interface.
    */
-long GetMSComPtr(long hWnd, long lParam, long wParam)
+sal_Int64 GetMSComPtr(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
 {
-    if( g_acc_manager )
-        return (long)g_acc_manager->Get_ToATInterface(HWND((void*)hWnd),lParam,wParam );
-    return NULL;
+    if (!g_acc_manager)
+        return 0;
+    return static_cast<sal_Int64>(g_acc_manager->Get_ToATInterface(
+            static_cast<HWND>(reinterpret_cast<void*>(hWnd)), lParam, wParam));
 }
 
 /**
@@ -132,7 +133,8 @@ AccObjectWinManager::~AccObjectWinManager()
    * @return Com interface with event.
    */
 
-long AccObjectWinManager::Get_ToATInterface( HWND hWnd, long lParam, long wParam)
+LRESULT
+AccObjectWinManager::Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam)
 {
     IMAccessible* pRetIMAcc = NULL;
 
@@ -150,7 +152,7 @@ long AccObjectWinManager::Get_ToATInterface( HWND hWnd, long lParam, long wParam
     if ( pRetIMAcc && lParam == OBJID_CLIENT )
     {
         IAccessible* pTemp = dynamic_cast<IAccessible*>( pRetIMAcc );
-        HRESULT result = LresultFromObject(IID_IAccessible, wParam, pTemp);
+        LRESULT result = LresultFromObject(IID_IAccessible, wParam, pTemp);
         pTemp->Release();
         return result;
     }
