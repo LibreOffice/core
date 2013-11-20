@@ -15,7 +15,7 @@
         <value>pdb</value>
     </prop>
     <prop oor:name="MediaType">
-        <value>application/vnd.palm</value>
+        <value>application/x-aportisdoc</value>
     </prop>
     <prop oor:name="Preferred">
         <value>true</value>
