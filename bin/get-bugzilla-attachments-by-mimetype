@@ -321,6 +321,7 @@ mimetypes = {
     'application/x-sony-bbeb' : 'lrf',
     'application/x-pocket-word': 'psw',
     'application/x-t602': '602',
+    'application/x-fictionbook+xml': 'fb2',
 # binfilter
     'application/x-starcalc': 'sdc',
     'application/vnd.stardivision.calc': 'sdc5',
