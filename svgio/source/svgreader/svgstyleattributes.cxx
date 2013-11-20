@@ -1299,10 +1299,9 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static rtl::OUString aStrNone(rtl::OUString::createFromAscii("none"));
                         SvgNumberVector aVector;
 
-                        if(aContent.match(aStrNone))
+                        if(aContent.startsWith("none"))
                         {
                             // #121221# The special value 'none' needs to be handled
                             // in the sense that *when* it is set, the parent shall not
@@ -1334,19 +1333,15 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrButt(OUString::createFromAscii("butt"));
-                        static OUString aStrRound(OUString::createFromAscii("round"));
-                        static OUString aStrSquare(OUString::createFromAscii("square"));
-
-                        if(aContent.match(aStrButt))
+                        if(aContent.startsWith("butt"))
                         {
                             setStrokeLinecap(StrokeLinecap_butt);
                         }
-                        else if(aContent.match(aStrRound))
+                        else if(aContent.startsWith("round"))
                         {
                             setStrokeLinecap(StrokeLinecap_round);
                         }
-                        else if(aContent.match(aStrSquare))
+                        else if(aContent.startsWith("square"))
                         {
                             setStrokeLinecap(StrokeLinecap_square);
                         }
@@ -1357,19 +1352,15 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrMiter(OUString::createFromAscii("miter"));
-                        static OUString aStrRound(OUString::createFromAscii("round"));
-                        static OUString aStrBevel(OUString::createFromAscii("bevel"));
-
-                        if(aContent.match(aStrMiter))
+                        if(aContent.startsWith("miter"))
                         {
                             setStrokeLinejoin(StrokeLinejoin_miter);
                         }
-                        else if(aContent.match(aStrRound))
+                        else if(aContent.startsWith("round"))
                         {
                             setStrokeLinejoin(StrokeLinejoin_round);
                         }
-                        else if(aContent.match(aStrBevel))
+                        else if(aContent.startsWith("bevel"))
                         {
                             setStrokeLinejoin(StrokeLinejoin_bevel);
                         }
@@ -1471,59 +1462,47 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrNormal(OUString::createFromAscii("normal"));
-                        static OUString aStrWider(OUString::createFromAscii("wider"));
-                        static OUString aStrNarrower(OUString::createFromAscii("narrower"));
-                        static OUString aStrUltra_condensed(OUString::createFromAscii("ultra-condensed"));
-                        static OUString aStrExtra_condensed(OUString::createFromAscii("extra-condensed"));
-                        static OUString aStrCondensed(OUString::createFromAscii("condensed"));
-                        static OUString aStrSemi_condensed(OUString::createFromAscii("semi-condensed"));
-                        static OUString aStrSemi_expanded(OUString::createFromAscii("semi-expanded"));
-                        static OUString aStrExpanded(OUString::createFromAscii("expanded"));
-                        static OUString aStrExtra_expanded(OUString::createFromAscii("extra-expanded"));
-                        static OUString aStrUltra_expanded(OUString::createFromAscii("ultra-expanded"));
-
-                        if(aContent.match(aStrNormal))
+                        if(aContent.startsWith("normal"))
                         {
                             setFontStretch(FontStretch_normal);
                         }
-                        else if(aContent.match(aStrWider))
+                        else if(aContent.startsWith("wider"))
                         {
                             setFontStretch(FontStretch_wider);
                         }
-                        else if(aContent.match(aStrNarrower))
+                        else if(aContent.startsWith("narrower"))
                         {
                             setFontStretch(FontStretch_narrower);
                         }
-                        else if(aContent.match(aStrUltra_condensed))
+                        else if(aContent.startsWith("ultra-condensed"))
                         {
                             setFontStretch(FontStretch_ultra_condensed);
                         }
-                        else if(aContent.match(aStrExtra_condensed))
+                        else if(aContent.startsWith("extra-condensed"))
                         {
                             setFontStretch(FontStretch_extra_condensed);
                         }
-                        else if(aContent.match(aStrCondensed))
+                        else if(aContent.startsWith("condensed"))
                         {
                             setFontStretch(FontStretch_condensed);
                         }
-                        else if(aContent.match(aStrSemi_condensed))
+                        else if(aContent.startsWith("semi-condensed"))
                         {
                             setFontStretch(FontStretch_semi_condensed);
                         }
-                        else if(aContent.match(aStrSemi_expanded))
+                        else if(aContent.startsWith("semi-expanded"))
                         {
                             setFontStretch(FontStretch_semi_expanded);
                         }
-                        else if(aContent.match(aStrExpanded))
+                        else if(aContent.startsWith("expanded"))
                         {
                             setFontStretch(FontStretch_expanded);
                         }
-                        else if(aContent.match(aStrExtra_expanded))
+                        else if(aContent.startsWith("extra-expanded"))
                         {
                             setFontStretch(FontStretch_extra_expanded);
                         }
-                        else if(aContent.match(aStrUltra_expanded))
+                        else if(aContent.startsWith("ultra-expanded"))
                         {
                             setFontStretch(FontStretch_ultra_expanded);
                         }
@@ -1534,19 +1513,15 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrNormal(OUString::createFromAscii("normal"));
-                        static OUString aStrItalic(OUString::createFromAscii("italic"));
-                        static OUString aStrOblique(OUString::createFromAscii("oblique"));
-
-                        if(aContent.match(aStrNormal))
+                        if(aContent.startsWith("normal"))
                         {
                             setFontStyle(FontStyle_normal);
                         }
-                        else if(aContent.match(aStrItalic))
+                        else if(aContent.startsWith("italic"))
                         {
                             setFontStyle(FontStyle_italic);
                         }
-                        else if(aContent.match(aStrOblique))
+                        else if(aContent.startsWith("oblique"))
                         {
                             setFontStyle(FontStyle_oblique);
                         }
@@ -1557,14 +1532,11 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrNormal(OUString::createFromAscii("normal"));
-                        static OUString aStrSmallCaps(OUString::createFromAscii("small-caps"));
-
-                        if(aContent.match(aStrNormal))
+                        if(aContent.startsWith("normal"))
                         {
                             setFontVariant(FontVariant_normal);
                         }
-                        else if(aContent.match(aStrSmallCaps))
+                        else if(aContent.startsWith("small-caps"))
                         {
                             setFontVariant(FontVariant_small_caps);
                         }
@@ -1575,61 +1547,47 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrNormal(OUString::createFromAscii("normal"));
-                        static OUString aStrBold(OUString::createFromAscii("bold"));
-                        static OUString aStrBolder(OUString::createFromAscii("bolder"));
-                        static OUString aStrLighter(OUString::createFromAscii("lighter"));
-                        static OUString aStr100(OUString::createFromAscii("100"));
-                        static OUString aStr200(OUString::createFromAscii("200"));
-                        static OUString aStr300(OUString::createFromAscii("300"));
-                        static OUString aStr400(OUString::createFromAscii("400"));
-                        static OUString aStr500(OUString::createFromAscii("500"));
-                        static OUString aStr600(OUString::createFromAscii("600"));
-                        static OUString aStr700(OUString::createFromAscii("700"));
-                        static OUString aStr800(OUString::createFromAscii("800"));
-                        static OUString aStr900(OUString::createFromAscii("900"));
-
-                        if(aContent.match(aStr100))
+                        if(aContent.startsWith("100"))
                         {
                             setFontWeight(FontWeight_100);
                         }
-                        else if(aContent.match(aStr200))
+                        else if(aContent.startsWith("200"))
                         {
                             setFontWeight(FontWeight_200);
                         }
-                        else if(aContent.match(aStr300))
+                        else if(aContent.startsWith("300"))
                         {
                             setFontWeight(FontWeight_300);
                         }
-                        else if(aContent.match(aStr400) || aContent.match(aStrNormal))
+                        else if(aContent.startsWith("400") || aContent.startsWith("normal"))
                         {
                             setFontWeight(FontWeight_400);
                         }
-                        else if(aContent.match(aStr500))
+                        else if(aContent.startsWith("500"))
                         {
                             setFontWeight(FontWeight_500);
                         }
-                        else if(aContent.match(aStr600))
+                        else if(aContent.startsWith("600"))
                         {
                             setFontWeight(FontWeight_600);
                         }
-                        else if(aContent.match(aStr700) || aContent.match(aStrBold))
+                        else if(aContent.startsWith("700") || aContent.startsWith("bold"))
                         {
                             setFontWeight(FontWeight_700);
                         }
-                        else if(aContent.match(aStr800))
+                        else if(aContent.startsWith("800"))
                         {
                             setFontWeight(FontWeight_800);
                         }
-                        else if(aContent.match(aStr900))
+                        else if(aContent.startsWith("900"))
                         {
                             setFontWeight(FontWeight_900);
                         }
-                        else if(aContent.match(aStrBolder))
+                        else if(aContent.startsWith("bolder"))
                         {
                             setFontWeight(FontWeight_bolder);
                         }
-                        else if(aContent.match(aStrLighter))
+                        else if(aContent.startsWith("lighter"))
                         {
                             setFontWeight(FontWeight_lighter);
                         }
@@ -1648,29 +1606,23 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrNone(OUString::createFromAscii("none"));
-                        static OUString aStrUnderline(OUString::createFromAscii("underline"));
-                        static OUString aStrOverline(OUString::createFromAscii("overline"));
-                        static OUString aStrLineThrough(OUString::createFromAscii("line-through"));
-                        static OUString aStrBlink(OUString::createFromAscii("blink"));
-
-                        if(aContent.match(aStrNone))
+                        if(aContent.startsWith("none"))
                         {
                             setTextDecoration(TextDecoration_none);
                         }
-                        else if(aContent.match(aStrUnderline))
+                        else if(aContent.startsWith("underline"))
                         {
                             setTextDecoration(TextDecoration_underline);
                         }
-                        else if(aContent.match(aStrOverline))
+                        else if(aContent.startsWith("overline"))
                         {
                             setTextDecoration(TextDecoration_overline);
                         }
-                        else if(aContent.match(aStrLineThrough))
+                        else if(aContent.startsWith("line-through"))
                         {
                             setTextDecoration(TextDecoration_line_through);
                         }
-                        else if(aContent.match(aStrBlink))
+                        else if(aContent.startsWith("blink"))
                         {
                             setTextDecoration(TextDecoration_blink);
                         }
@@ -1689,19 +1641,15 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrStart(OUString::createFromAscii("start"));
-                        static OUString aStrMiddle(OUString::createFromAscii("middle"));
-                        static OUString aStrEnd(OUString::createFromAscii("end"));
-
-                        if(aContent.match(aStrStart))
+                        if(aContent.startsWith("start"))
                         {
                             setTextAnchor(TextAnchor_start);
                         }
-                        else if(aContent.match(aStrMiddle))
+                        else if(aContent.startsWith("middle"))
                         {
                             setTextAnchor(TextAnchor_middle);
                         }
-                        else if(aContent.match(aStrEnd))
+                        else if(aContent.startsWith("end"))
                         {
                             setTextAnchor(TextAnchor_end);
                         }
@@ -1712,24 +1660,19 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrLeft(OUString::createFromAscii("left"));
-                        static OUString aStrRight(OUString::createFromAscii("right"));
-                        static OUString aStrCenter(OUString::createFromAscii("center"));
-                        static OUString aStrJustify(OUString::createFromAscii("justify"));
-
-                        if(aContent.match(aStrLeft))
+                        if(aContent.startsWith("left"))
                         {
                             setTextAlign(TextAlign_left);
                         }
-                        else if(aContent.match(aStrRight))
+                        else if(aContent.startsWith("right"))
                         {
                             setTextAlign(TextAlign_right);
                         }
-                        else if(aContent.match(aStrCenter))
+                        else if(aContent.startsWith("center"))
                         {
                             setTextAlign(TextAlign_center);
                         }
-                        else if(aContent.match(aStrJustify))
+                        else if(aContent.startsWith("justify"))
                         {
                             setTextAlign(TextAlign_justify);
                         }
@@ -1829,15 +1772,13 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static rtl::OUString aStrSub(rtl::OUString::createFromAscii("sub"));
-                        static rtl::OUString aStrSuper(rtl::OUString::createFromAscii("super"));
                         SvgNumber aNum;
 
-                        if(aContent.match(aStrSub))
+                        if(aContent.startsWith("sub"))
                         {
                             setBaselineShift(BaselineShift_Sub);
                         }
-                        else if(aContent.match(aStrSuper))
+                        else if(aContent.startsWith("super"))
                         {
                             setBaselineShift(BaselineShift_Super);
                         }

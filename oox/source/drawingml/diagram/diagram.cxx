@@ -460,9 +460,9 @@ void loadDiagram( ShapePtr& pShape,
     } else {
         // We still want to add the XDocuments to the DiagramDomMap
         DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
-        rMainDomMap[OUString::createFromAscii("OOXLayout")] = loadFragment(rFilter,rLayoutPath);
-        rMainDomMap[OUString::createFromAscii("OOXStyle")] = loadFragment(rFilter,rQStylePath);
-        rMainDomMap[OUString::createFromAscii("OOXColor")] = loadFragment(rFilter,rColorStylePath);
+        rMainDomMap[OUString("OOXLayout")] = loadFragment(rFilter,rLayoutPath);
+        rMainDomMap[OUString("OOXStyle")] = loadFragment(rFilter,rQStylePath);
+        rMainDomMap[OUString("OOXColor")] = loadFragment(rFilter,rColorStylePath);
     }
 
     // diagram loaded. now lump together & attach to shape

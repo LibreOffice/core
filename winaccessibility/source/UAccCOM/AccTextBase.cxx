@@ -127,7 +127,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
     {
 
         ::com::sun::star::beans::PropertyValue &pValue = pValues[i];
-        if(pValue.Name.compareTo(OUString::createFromAscii("NumberingLevel"))==0)
+        if(pValue.Name == "NumberingLevel")
         {
             if (pValue.Value != Any())
                 pValue.Value >>= numberingLevel;
@@ -136,13 +136,13 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
             bHaveNumberingLevel = true;
             continue;
         }
-        if(pValue.Name.compareTo(OUString::createFromAscii("NumberingPrefix"))==0)
+        if(pValue.Name == "NumberingPrefix")
         {
             pValue.Value >>=numberingPrefix;
             bHaveNumberingPrefixAttr = true;
             continue;
         }
-        if(pValue.Name.compareTo(OUString::createFromAscii("NumberingRules"))==0)
+        if(pValue.Name == "NumberingRules")
         {
             bHaveNumberingRules = true;
             anyNumRule = pValue.Value;
@@ -168,9 +168,9 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
 
         OLECHAR pTemp[2048] = {0};
 
-        if (pValue.Name.compareTo(OUString::createFromAscii("CharBackColor"))==0 ||
-                pValue.Name.compareTo(OUString::createFromAscii("CharColor"))==0 ||
-                pValue.Name.compareTo(OUString::createFromAscii("CharUnderlineColor"))==0 )
+        if (pValue.Name == "CharBackColor" ||
+                pValue.Name == "CharColor" ||
+                pValue.Name == "CharUnderlineColor" )
         {
             unsigned long nColor;
             pValue.Value >>= nColor;
@@ -979,11 +979,11 @@ OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString re
 }
 OUString ReplaceFourChar(OUString oldOUString)
 {
-    oldOUString = ReplaceOneChar(oldOUString,OUString::createFromAscii("\\"),OUString::createFromAscii("\\\\"));
-    oldOUString = ReplaceOneChar(oldOUString,OUString::createFromAscii(";"),OUString::createFromAscii("\\;"));
-    oldOUString = ReplaceOneChar(oldOUString,OUString::createFromAscii("="),OUString::createFromAscii("\\="));
-    oldOUString = ReplaceOneChar(oldOUString,OUString::createFromAscii(","),OUString::createFromAscii("\\,"));
-    oldOUString = ReplaceOneChar(oldOUString,OUString::createFromAscii(":"),OUString::createFromAscii("\\:"));
+    oldOUString = ReplaceOneChar(oldOUString, OUString("\\"), OUString("\\\\"));
+    oldOUString = ReplaceOneChar(oldOUString, OUString(";"), OUString("\\;"));
+    oldOUString = ReplaceOneChar(oldOUString, OUString("="), OUString("\\="));
+    oldOUString = ReplaceOneChar(oldOUString, OUString(","), OUString("\\,"));
+    oldOUString = ReplaceOneChar(oldOUString, OUString(":"), OUString("\\:"));
     return oldOUString;
 }
 

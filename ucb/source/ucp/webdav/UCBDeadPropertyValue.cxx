@@ -38,31 +38,31 @@ struct UCBDeadPropertyValueParseContext
 
 // static
 const OUString UCBDeadPropertyValue::aTypeString
-    = OUString::createFromAscii( "string" );
+    = OUString( "string" );
 const OUString UCBDeadPropertyValue::aTypeLong
-    = OUString::createFromAscii( "long" );
+    = OUString( "long" );
 const OUString UCBDeadPropertyValue::aTypeShort
-    = OUString::createFromAscii( "short" );
+    = OUString( "short" );
 const OUString UCBDeadPropertyValue::aTypeBoolean
-    = OUString::createFromAscii( "boolean" );
+    = OUString( "boolean" );
 const OUString UCBDeadPropertyValue::aTypeChar
-    = OUString::createFromAscii( "char" );
+    = OUString( "char" );
 const OUString UCBDeadPropertyValue::aTypeByte
-    = OUString::createFromAscii( "byte" );
+    = OUString( "byte" );
 const OUString UCBDeadPropertyValue::aTypeHyper
-    = OUString::createFromAscii( "hyper" );
+    = OUString( "hyper" );
 const OUString UCBDeadPropertyValue::aTypeFloat
-    = OUString::createFromAscii( "float" );
+    = OUString( "float" );
 const OUString UCBDeadPropertyValue::aTypeDouble
-    = OUString::createFromAscii( "double" );
+    = OUString( "double" );
 
 // static
 const OUString UCBDeadPropertyValue::aXMLPre
-    = OUString::createFromAscii( "<ucbprop><type>" );
+    = OUString( "<ucbprop><type>" );
 const OUString UCBDeadPropertyValue::aXMLMid
-    = OUString::createFromAscii( "</type><value>" );
+    = OUString( "</type><value>" );
 const OUString UCBDeadPropertyValue::aXMLEnd
-    = OUString::createFromAscii( "</value></ucbprop>" );
+    = OUString( "</value></ucbprop>" );
 
 #define STATE_TOP (1)
 
@@ -391,7 +391,7 @@ bool UCBDeadPropertyValue::createFromXML( const OString & /*rInData*/,
                 else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeBoolean ) )
                 {
                     if ( aStringValue.equalsIgnoreAsciiCase(
-                            OUString::createFromAscii( "true" ) ) )
+                            OUString( "true" ) ) )
                         rOutData <<= sal_Bool( sal_True );
                     else
                         rOutData <<= sal_Bool( sal_False );

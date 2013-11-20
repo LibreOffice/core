@@ -277,7 +277,7 @@ void  AccObject::UpdateName( )
     //IAccessibility2 Implementation 2009-----
     if ( PARAGRAPH == m_accRole)
     {
-        ::rtl::OUString emptyStr = ::rtl::OUString::createFromAscii("");
+        ::rtl::OUString emptyStr("");
         m_pIMAcc->Put_XAccName(emptyStr.getStr());
     }
     //-----IAccessibility2 Implementation 2009

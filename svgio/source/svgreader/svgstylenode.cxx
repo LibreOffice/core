@@ -56,9 +56,7 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrTextCss(OUString::createFromAscii("text/css"));
-
-                        if(aContent.match(aStrTextCss))
+                        if(aContent.startsWith("text/css"))
                         {
                             setTextCss(true);
                         }

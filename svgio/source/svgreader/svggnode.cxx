@@ -45,8 +45,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgGNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("g"));
-            return checkForCssStyle(aClassStr, maSvgStyleAttributes);
+            return checkForCssStyle(OUString("g"), maSvgStyleAttributes);
         }
 
         void SvgGNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

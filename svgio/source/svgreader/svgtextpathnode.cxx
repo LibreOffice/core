@@ -302,14 +302,11 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrAlign(OUString::createFromAscii("align"));
-                        static OUString aStrStretch(OUString::createFromAscii("stretch"));
-
-                        if(aContent.match(aStrAlign))
+                        if(aContent.startsWith("align"))
                         {
                             setMethod(true);
                         }
-                        else if(aContent.match(aStrStretch))
+                        else if(aContent.startsWith("stretch"))
                         {
                             setMethod(false);
                         }
@@ -320,14 +317,11 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrAuto(OUString::createFromAscii("auto"));
-                        static OUString aStrExact(OUString::createFromAscii("exact"));
-
-                        if(aContent.match(aStrAuto))
+                        if(aContent.startsWith("auto"))
                         {
                             setSpacing(true);
                         }
-                        else if(aContent.match(aStrExact))
+                        else if(aContent.startsWith("exact"))
                         {
                             setSpacing(false);
                         }

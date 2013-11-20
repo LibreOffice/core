@@ -148,12 +148,12 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
                             = *( m_pImpl->m_aResults[ nIndex ]->pData );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += OUString::createFromAscii( "/" );
+            aId += "/";
 
         aId += props.getEscapedTitle();
 
         if ( props.isTrailingSlash() )
-            aId += OUString::createFromAscii( "/" );
+            aId += "/";
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;

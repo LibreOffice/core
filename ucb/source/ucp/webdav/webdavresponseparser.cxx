@@ -50,14 +50,11 @@ namespace
 
     WebDAVNamespace StrToWebDAVNamespace(const OUString& rStr)
     {
-        static OUString aStrDAV(OUString::createFromAscii("DAV:"));
-        static OUString aStrUcbOpenofficeOrgDAVProps(OUString::createFromAscii("http://ucb.openoffice.org/dav/props/"));
-
-        if(rStr.equals(aStrDAV))
+        if(rStr == "DAV:")
         {
             return WebDAVNamespace_DAV;
         }
-        else if(rStr.equals(aStrUcbOpenofficeOrgDAVProps))
+        else if(rStr == "http://ucb.openoffice.org/dav/props/")
         {
             return WebDAVNamespace_ucb_openoffice_org_dav_props;
         }
@@ -105,25 +102,25 @@ namespace
 
         if(aWebDAVNameMapperList.empty())
         {
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("multistatus"), WebDAVName_multistatus));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("response"), WebDAVName_response));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("href"), WebDAVName_href));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("propstat"), WebDAVName_propstat));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("prop"), WebDAVName_prop));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("resourcetype"), WebDAVName_resourcetype));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("collection"), WebDAVName_collection));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("getcontenttype"), WebDAVName_getcontenttype));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("supportedlock"), WebDAVName_supportedlock));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("lockentry"), WebDAVName_lockentry));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("lockscope"), WebDAVName_lockscope));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("exclusive"), WebDAVName_exclusive));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("locktype"), WebDAVName_locktype));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("write"), WebDAVName_write));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("shared"), WebDAVName_shared));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("status"), WebDAVName_status));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("getlastmodified"), WebDAVName_getlastmodified));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("creationdate"), WebDAVName_creationdate));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("getcontentlength"), WebDAVName_getcontentlength));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("multistatus"), WebDAVName_multistatus));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("response"), WebDAVName_response));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("href"), WebDAVName_href));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("propstat"), WebDAVName_propstat));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("prop"), WebDAVName_prop));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("resourcetype"), WebDAVName_resourcetype));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("collection"), WebDAVName_collection));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("getcontenttype"), WebDAVName_getcontenttype));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("supportedlock"), WebDAVName_supportedlock));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("lockentry"), WebDAVName_lockentry));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("lockscope"), WebDAVName_lockscope));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("exclusive"), WebDAVName_exclusive));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("locktype"), WebDAVName_locktype));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("write"), WebDAVName_write));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("shared"), WebDAVName_shared));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("status"), WebDAVName_status));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("getlastmodified"), WebDAVName_getlastmodified));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("creationdate"), WebDAVName_creationdate));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("getcontentlength"), WebDAVName_getcontentlength));
         }
 
         const WebDAVNameMapper::const_iterator aResult(aWebDAVNameMapperList.find(rStr));
@@ -182,7 +179,6 @@ namespace
     void WebDAVContext::parseForNamespaceTokens(const uno::Reference< xml::sax::XAttributeList >& xAttribs)
     {
         const sal_Int16 nAttributes(xAttribs->getLength());
-        static OUString aStrXmlns(OUString::createFromAscii("xmlns"));
 
         for(sal_Int16 a(0); a < nAttributes; a++)
         {
@@ -191,7 +187,7 @@ namespace
 
             if(nLen)
             {
-                if(aName.match(aStrXmlns, 0))
+                if(aName.startsWith("xmlns"))
                 {
                     const sal_Int32 nIndex(aName.indexOf(':', 0));
 
@@ -550,10 +546,9 @@ namespace
                                 // getlastmodified end, safe if content is correct
                                 if(propertyIsReady())
                                 {
-                                    static OUString aStr(OUString::createFromAscii("DAV:getlastmodified"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = aStr;
+                                    aDAVPropertyValue.Name = "DAV:getlastmodified";
                                     aDAVPropertyValue.Value <<= mpContext->getWhiteSpace();
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -564,10 +559,9 @@ namespace
                                 // creationdate end, safe if content is correct
                                 if(propertyIsReady())
                                 {
-                                    static OUString aStr(OUString::createFromAscii("DAV:creationdate"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = aStr;
+                                    aDAVPropertyValue.Name = "DAV:creationdate";
                                     aDAVPropertyValue.Value <<= mpContext->getWhiteSpace();
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -587,12 +581,10 @@ namespace
                                 // resourcetype end, check for collection
                                 if(hasParent(WebDAVName_prop))
                                 {
-                                    static OUString aStrA(OUString::createFromAscii("DAV:resourcetype"));
-                                    static OUString aStrB(OUString::createFromAscii("collection"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = aStrA;
-                                    aDAVPropertyValue.Value <<= (mbResourceTypeCollection ? aStrB : OUString());
+                                    aDAVPropertyValue.Name = "DAV:resourcetype";
+                                    aDAVPropertyValue.Value <<= (mbResourceTypeCollection ? OUString("collection") : OUString());
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
                                 break;
@@ -602,10 +594,9 @@ namespace
                                 // getcontentlength end, safe if content is correct
                                 if(propertyIsReady())
                                 {
-                                    static OUString aStr(OUString::createFromAscii("DAV:getcontentlength"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = aStr;
+                                    aDAVPropertyValue.Name = "DAV:getcontentlength";
                                     aDAVPropertyValue.Value <<= mpContext->getWhiteSpace();
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -616,10 +607,9 @@ namespace
                                 // getcontenttype end, safe if content is correct
                                 if(propertyIsReady())
                                 {
-                                    static OUString aStr(OUString::createFromAscii("DAV:getcontenttype"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = aStr;
+                                    aDAVPropertyValue.Name = "DAV:getcontenttype";
                                     aDAVPropertyValue.Value <<= mpContext->getWhiteSpace();
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -630,10 +620,9 @@ namespace
                                 // supportedlock end
                                 if(hasParent(WebDAVName_prop) && maLockEntries.hasElements())
                                 {
-                                    static OUString aStr(OUString::createFromAscii("DAV:supportedlock"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
-                                    aDAVPropertyValue.Name = aStr;
+                                    aDAVPropertyValue.Name = "DAV:supportedlock";
                                     aDAVPropertyValue.Value <<= maLockEntries;
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
@@ -689,9 +678,7 @@ namespace
                                 // propstat end, check status
                                 if(maStatus.getLength())
                                 {
-                                    static OUString aStrStatusOkay(OUString::createFromAscii("HTTP/1.1 200 OK"));
-
-                                    if(maStatus.equals(aStrStatusOkay))
+                                    if(maStatus == "HTTP/1.1 200 OK")
                                     {
                                         if(isCollectingProperties())
                                         {

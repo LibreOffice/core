@@ -59,11 +59,11 @@ namespace svgio
                             copyToLimiter(*pClassList, ' ', nPos, aTokenValue, nLen);
                             skip_char(*pClassList, ' ', nPos, nLen);
 
-                            rtl::OUString aId(rtl::OUString::createFromAscii("."));
+                            rtl::OUString aId(".");
                             const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
 
                             // look for CSS style common to token
-                            aId = aId + aOUTokenValue;
+                            aId += aOUTokenValue;
                             pNew = rDocument.findSvgStyleAttributesById(aId);
 
                             if(!pNew && !rClassStr.isEmpty())
@@ -221,94 +221,75 @@ namespace svgio
         {
             if(aContent.getLength())
             {
-                static rtl::OUString aStrInline(rtl::OUString::createFromAscii("inline"));
-                static rtl::OUString aStrBlock(rtl::OUString::createFromAscii("block"));
-                static rtl::OUString aStrList_item(rtl::OUString::createFromAscii("list-item"));
-                static rtl::OUString aStrRun_in(rtl::OUString::createFromAscii("run-in"));
-                static rtl::OUString aStrCompact(rtl::OUString::createFromAscii("compact"));
-                static rtl::OUString aStrMarker(rtl::OUString::createFromAscii("marker"));
-                static rtl::OUString aStrTable(rtl::OUString::createFromAscii("table"));
-                static rtl::OUString aStrInline_table(rtl::OUString::createFromAscii("inline-table"));
-                static rtl::OUString aStrTable_row_group(rtl::OUString::createFromAscii("table-row-group"));
-                static rtl::OUString aStrTable_header_group(rtl::OUString::createFromAscii("table-header-group"));
-                static rtl::OUString aStrTable_footer_group(rtl::OUString::createFromAscii("table-footer-group"));
-                static rtl::OUString aStrTable_row(rtl::OUString::createFromAscii("table-row"));
-                static rtl::OUString aStrTable_column_group(rtl::OUString::createFromAscii("table-column-group"));
-                static rtl::OUString aStrTable_column(rtl::OUString::createFromAscii("table-column"));
-                static rtl::OUString aStrTable_cell(rtl::OUString::createFromAscii("table-cell"));
-                static rtl::OUString aStrTable_caption(rtl::OUString::createFromAscii("table-caption"));
-                static rtl::OUString aStrNone(rtl::OUString::createFromAscii("none"));
-                static rtl::OUString aStrInherit(rtl::OUString::createFromAscii("inherit"));
-
-                if(aContent.match(aStrInline))
+                if(aContent.startsWith("inline"))
                 {
                     return Display_inline;
                 }
-                else if(aContent.match(aStrNone))
+                else if(aContent.startsWith("none"))
                 {
                     return Display_none;
                 }
-                else if(aContent.match(aStrInherit))
+                else if(aContent.startsWith("inherit"))
                 {
                     return Display_inherit;
                 }
-                else if(aContent.match(aStrBlock))
+                else if(aContent.startsWith("block"))
                 {
                     return Display_block;
                 }
-                else if(aContent.match(aStrList_item))
+                else if(aContent.startsWith("list-item"))
                 {
                     return Display_list_item;
                 }
-                else if(aContent.match(aStrRun_in))
+                else if(aContent.startsWith("run-in"))
                 {
                     return Display_run_in;
                 }
-                else if(aContent.match(aStrCompact))
+                else if(aContent.startsWith("compact"))
                 {
                     return Display_compact;
                 }
-                else if(aContent.match(aStrMarker))
+                else if(aContent.startsWith("marker"))
                 {
                     return Display_marker;
                 }
-                else if(aContent.match(aStrTable))
+                else if(aContent.startsWith("table"))
                 {
                     return Display_table;
                 }
-                else if(aContent.match(aStrInline_table))
+                else if(aContent.startsWith("inline-table"))
                 {
                     return Display_inline_table;
                 }
-                else if(aContent.match(aStrTable_row_group))
+                else if(aContent.startsWith("table-row-group"))
                 {
                     return Display_table_row_group;
                 }
-                else if(aContent.match(aStrTable_header_group))
+                else if(aContent.startsWith("table-header-group"))
                 {
                     return Display_table_header_group;
                 }
-                else if(aContent.match(aStrTable_footer_group))
+                else if(aContent.startsWith("table-footer-group"))
                 {
                     return Display_table_footer_group;
                 }
-                else if(aContent.match(aStrTable_row))
+                else if(aContent.startsWith("table-row"))
                 {
                     return Display_table_row;
                 }
-                else if(aContent.match(aStrTable_column_group))
+                else if(aContent.startsWith("table-column-group"))
                 {
                     return Display_table_column_group;
                 }
-                else if(aContent.match(aStrTable_column))
+                else if(aContent.startsWith("table-column"))
                 {
                     return Display_table_column;
                 }
-                else if(aContent.match(aStrTable_cell))
+                else if(aContent.startsWith("table-cell"))
                 {
                     return Display_table_cell;
                 }
-                else if(aContent.match(aStrTable_caption))
+                else if(aContent.startsWith("table-caption"))
                 {
                     return Display_table_caption;
                 }
@@ -342,14 +323,11 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrDefault(OUString::createFromAscii("default"));
-                        static OUString aStrPreserve(OUString::createFromAscii("preserve"));
-
-                        if(aContent.match(aStrDefault))
+                        if(aContent.startsWith("default"))
                         {
                             setXmlSpace(XmlSpace_default);
                         }
-                        else if(aContent.match(aStrPreserve))
+                        else if(aContent.startsWith("preserve"))
                         {
                             setXmlSpace(XmlSpace_preserve);
                         }

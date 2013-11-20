@@ -46,8 +46,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgCircleNode::getSvgStyleAttributes() const
         {
-            static OUString aClassStr(OUString::createFromAscii("circle"));
-            return checkForCssStyle(aClassStr, maSvgStyleAttributes);
+            return checkForCssStyle(OUString("circle"), maSvgStyleAttributes);
         }
 
         void SvgCircleNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

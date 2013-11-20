@@ -24,29 +24,28 @@
 using namespace http_dav_ucp;
 
 const OUString DAVProperties::CREATIONDATE =
-                OUString::createFromAscii( "DAV:creationdate" );
+                OUString( "DAV:creationdate" );
 const OUString DAVProperties::DISPLAYNAME =
-                OUString::createFromAscii( "DAV:displayname" );
+                OUString( "DAV:displayname" );
 const OUString DAVProperties::GETCONTENTLANGUAGE =
-                OUString::createFromAscii( "DAV:getcontentlanguage" );
+                OUString( "DAV:getcontentlanguage" );
 const OUString DAVProperties::GETCONTENTLENGTH =
-                OUString::createFromAscii( "DAV:getcontentlength" );
+                OUString( "DAV:getcontentlength" );
 const OUString DAVProperties::GETCONTENTTYPE =
-                OUString::createFromAscii( "DAV:getcontenttype" );
+                OUString( "DAV:getcontenttype" );
 const OUString DAVProperties::GETETAG =
-                OUString::createFromAscii( "DAV:getetag" );
+                OUString( "DAV:getetag" );
 const OUString DAVProperties::GETLASTMODIFIED =
-                OUString::createFromAscii( "DAV:getlastmodified" );
+                OUString( "DAV:getlastmodified" );
 const OUString DAVProperties::LOCKDISCOVERY =
-                OUString::createFromAscii( "DAV:lockdiscovery" );
+                OUString( "DAV:lockdiscovery" );
 const OUString DAVProperties::RESOURCETYPE =
-                OUString::createFromAscii( "DAV:resourcetype" );
+                OUString( "DAV:resourcetype" );
 const OUString DAVProperties::SUPPORTEDLOCK =
-                OUString::createFromAscii( "DAV:supportedlock" );
+                OUString( "DAV:supportedlock" );
 
 const OUString DAVProperties::EXECUTABLE =
-                OUString::createFromAscii(
-                                "http://apache.org/dav/props/executable" );
+                OUString( "http://apache.org/dav/props/executable" );
 
 // -------------------------------------------------------------------
 // static
@@ -163,11 +162,11 @@ void DAVProperties::createUCBPropName( const char * nspace,
     else
     {
         // Create property name that encodes, namespace and name ( XML ).
-        rFullName  = OUString::createFromAscii( "<prop:" );
+        rFullName  = "<prop:";
         rFullName += aName;
-        rFullName += OUString::createFromAscii( " xmlns:prop=\"" );
+        rFullName += " xmlns:prop=\"";
         rFullName += aNameSpace;
-        rFullName += OUString::createFromAscii( "\">" );
+        rFullName += "\">";
     }
 }
 

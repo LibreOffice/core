@@ -373,9 +373,9 @@ namespace svgio
                         /// invalid token, ignore
 #ifdef DBG_UTIL
                         myAssert(
-                            OUString::createFromAscii("Unknown Base SvgToken <") +
+                            OUString("Unknown Base SvgToken <") +
                             aName +
-                            OUString::createFromAscii("> (!)"));
+                            OUString("> (!)") );
 #endif
                         break;
                     }

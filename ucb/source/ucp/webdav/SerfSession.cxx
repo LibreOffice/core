@@ -347,7 +347,7 @@ namespace {
     OUString GetHostnamePart( const OUString& _rRawString )
     {
         OUString sPart;
-        OUString sPartId = OUString::createFromAscii( "CN=" );
+        OUString sPartId = "CN=";
         sal_Int32 nContStart = _rRawString.indexOf( sPartId );
         if ( nContStart != -1 )
         {
@@ -386,7 +386,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
 
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
             getMSF()->createInstance(
-                OUString::createFromAscii( "com.sun.star.xml.crypto.SEInitializer" ) ),
+                OUString( "com.sun.star.xml.crypto.SEInitializer" ) ),
             uno::UNO_QUERY_THROW);
 
         xSecurityContext = xSEInitializer->createSecurityContext( OUString() );

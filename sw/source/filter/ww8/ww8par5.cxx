@@ -100,9 +100,7 @@ namespace
     // #120879# - helper method to identify a bookmark name to match the internal TOC bookmark naming convention
     bool IsTOCBookmarkName( const ::rtl::OUString& rName )
     {
-        static const ::rtl::OUString cTOCBookmarkNamePrefix = ::rtl::OUString::createFromAscii("_Toc");
-
-        return rName.match(cTOCBookmarkNamePrefix);
+        return rName.startsWith("_Toc");
     }
 }
 

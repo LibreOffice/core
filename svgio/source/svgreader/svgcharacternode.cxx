@@ -130,14 +130,11 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrSpacing(OUString::createFromAscii("spacing"));
-                        static OUString aStrSpacingAndGlyphs(OUString::createFromAscii("spacingAndGlyphs"));
-
-                        if(aContent.match(aStrSpacing))
+                        if(aContent.startsWith("spacing"))
                         {
                             setLengthAdjust(true);
                         }
-                        else if(aContent.match(aStrSpacingAndGlyphs))
+                        else if(aContent.startsWith("spacingAndGlyphs"))
                         {
                             setLengthAdjust(false);
                         }

@@ -387,7 +387,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
                     sal_Int32 length = aValue.getLength();
                     aValue.realloc(length+1);
                     beans::PropertyValue* pValue = aValue.getArray();
-                    pValue[length].Name = OUString::createFromAscii("OOXDrawing");
+                    pValue[length].Name = "OOXDrawing";
                     pValue[length].Value = uno::makeAny( mxFilterBase->importFragment( aFragmentPath ) );
                     pShapePtr->setDiagramDoms( aValue );
 

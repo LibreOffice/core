@@ -88,13 +88,13 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
         SerfUri aURI( rResource.uri );
         m_aEscapedTitle = aURI.GetPathBaseName();
 
-        (*m_xProps)[ OUString::createFromAscii( "Title" ) ]
+        (*m_xProps)[ OUString( "Title" ) ]
             = PropertyValue(
                 uno::makeAny( aURI.GetPathBaseNameUnescaped() ), true );
     }
     catch ( DAVException const & )
     {
-        (*m_xProps)[ OUString::createFromAscii( "Title" ) ]
+        (*m_xProps)[ OUString( "Title" ) ]
             = PropertyValue(
                 uno::makeAny(
                     OUString( "*** unknown ***" ) ),
@@ -122,11 +122,11 @@ ContentProperties::ContentProperties(
 : m_xProps( new PropertyValueMap ),
   m_bTrailingSlash( sal_False )
 {
-    (*m_xProps)[ OUString::createFromAscii( "Title" ) ]
+    (*m_xProps)[ OUString( "Title" ) ]
         = PropertyValue( uno::makeAny( rTitle ), true );
-    (*m_xProps)[ OUString::createFromAscii( "IsFolder" ) ]
+    (*m_xProps)[ OUString( "IsFolder" ) ]
         = PropertyValue( uno::makeAny( bFolder ), true );
-    (*m_xProps)[ OUString::createFromAscii( "IsDocument" ) ]
+    (*m_xProps)[ OUString( "IsDocument" ) ]
         = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
 }
 
@@ -135,7 +135,7 @@ ContentProperties::ContentProperties( const OUString & rTitle )
 : m_xProps( new PropertyValueMap ),
   m_bTrailingSlash( sal_False )
 {
-    (*m_xProps)[ OUString::createFromAscii( "Title" ) ]
+    (*m_xProps)[ OUString( "Title" ) ]
         = PropertyValue( uno::makeAny( rTitle ), true );
 }
 
@@ -317,18 +317,15 @@ void ContentProperties::UCBNamesToHTTPNames(
 
         if ( rProp.Name == "DateModified" )
         {
-            propertyNames.push_back(
-                OUString::createFromAscii( "Last-Modified" ) );
+            propertyNames.push_back( OUString( "Last-Modified" ) );
         }
         else if ( rProp.Name == "MediaType" )
         {
-            propertyNames.push_back(
-                OUString::createFromAscii( "Content-Type" ) );
+            propertyNames.push_back( OUString( "Content-Type" ) );
         }
         else if ( rProp.Name == "Size" )
         {
-            propertyNames.push_back(
-                OUString::createFromAscii( "Content-Length" ) );
+            propertyNames.push_back( OUString( "Content-Length" ) );
         }
         else
         {
@@ -435,7 +432,7 @@ void ContentProperties::addProperty( const OUString & rName,
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
 
-        (*m_xProps)[ OUString::createFromAscii( "DateCreated" ) ]
+        (*m_xProps)[ OUString( "DateCreated" ) ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
     //  else if ( rName.equals( DAVProperties::DISPLAYNAME ) )
@@ -450,7 +447,7 @@ void ContentProperties::addProperty( const OUString & rName,
         OUString aValue;
         rValue >>= aValue;
 
-        (*m_xProps)[ OUString::createFromAscii( "Size" ) ]
+        (*m_xProps)[ OUString( "Size" ) ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
     else if ( rName == "Content-Length" )
@@ -462,13 +459,13 @@ void ContentProperties::addProperty( const OUString & rName,
         OUString aValue;
         rValue >>= aValue;
 
-        (*m_xProps)[ OUString::createFromAscii( "Size" ) ]
+        (*m_xProps)[ OUString( "Size" ) ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
     else if ( rName == DAVProperties::GETCONTENTTYPE ) )
     {
         // Map DAV:getcontenttype to UCP:MediaType (1:1)
-        (*m_xProps)[ OUString::createFromAscii( "MediaType" ) ]
+        (*m_xProps)[ OUString( "MediaType" ) ]
             = PropertyValue( rValue, true );
     }
     else if ( rName == "Content-Type" )
@@ -477,7 +474,7 @@ void ContentProperties::addProperty( const OUString & rName,
         // Only DAV resources have this property.
 
         // Map DAV:getcontenttype to UCP:MediaType (1:1)
-        (*m_xProps)[ OUString::createFromAscii( "MediaType" ) ]
+        (*m_xProps)[ OUString( "MediaType" ) ]
             = PropertyValue( rValue, true );
     }
     //  else if ( rName.equals( DAVProperties::GETETAG ) )
@@ -491,7 +488,7 @@ void ContentProperties::addProperty( const OUString & rName,
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
 
-        (*m_xProps)[ OUString::createFromAscii( "DateModified" ) ]
+        (*m_xProps)[ OUString( "DateModified" ) ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
     else if ( rName == "Last-Modified" )
@@ -505,7 +502,7 @@ void ContentProperties::addProperty( const OUString & rName,
         util::DateTime aDate;
         DateTimeHelper::convert( aValue, aDate );
 
-        (*m_xProps)[ OUString::createFromAscii( "DateModified" ) ]
+        (*m_xProps)[ OUString( "DateModified" ) ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
     //  else if ( rName.equals( DAVProperties::LOCKDISCOVERY ) )
@@ -520,14 +517,14 @@ void ContentProperties::addProperty( const OUString & rName,
         sal_Bool bFolder =
             aValue.equalsIgnoreAsciiCase( "collection" );
 
-        (*m_xProps)[ OUString::createFromAscii( "IsFolder" ) ]
+        (*m_xProps)[ OUString( "IsFolder" ) ]
             = PropertyValue( uno::makeAny( bFolder ), true );
-        (*m_xProps)[ OUString::createFromAscii( "IsDocument" ) ]
+        (*m_xProps)[ OUString( "IsDocument" ) ]
             = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
-        (*m_xProps)[ OUString::createFromAscii( "ContentType" ) ]
+        (*m_xProps)[ OUString( "ContentType" ) ]
             = PropertyValue( uno::makeAny( bFolder
-                ? OUString::createFromAscii( WEBDAV_COLLECTION_TYPE )
-                : OUString::createFromAscii( WEBDAV_CONTENT_TYPE ) ), true );
+                ? OUString( WEBDAV_COLLECTION_TYPE )
+                : OUString( WEBDAV_CONTENT_TYPE ) ), true );
     }
     //  else if ( rName.equals( DAVProperties::SUPPORTEDLOCK ) )
     //  {

@@ -1165,7 +1165,7 @@ const
                 ? OUString("true")
                 : OUString("false"))
         ;
-    // pItem->setValue(aPrintDialog, OUString::createFromAscii("ToFile"), );
+    // pItem->setValue(aPrintDialog, OUString("ToFile"), );
     g_object_unref(G_OBJECT(pSettings));
     pItem->Commit();
 }

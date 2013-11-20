@@ -2834,15 +2834,15 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
         for( sal_Int32 i=0; i<nCount; i++ )
         {
             ::com::sun::star::beans::PropertyValue rProp = pPropArray[i];
-            if( (rProp.Name.compareTo(OUString::createFromAscii("BulletChar"))==0)||
-                (rProp.Name.compareTo(OUString::createFromAscii("GraphicURL"))==0)||
-                (rProp.Name.compareTo(OUString::createFromAscii("NumberingType"))==0))
+            if( (rProp.Name == "BulletChar" ) ||
+                (rProp.Name == "GraphicURL" ) ||
+                (rProp.Name == "NumberingType" ))
             {
                 OLECHAR propStr[512] = {NULL};
                 swprintf(propStr,L"%s=",rProp.Name.getStr());
                 OLECHAR pTemp[256] = {NULL};
                 CMAccessible::get_OLECHARFromAny(rProp.Value,pTemp);
-                if(rProp.Name.compareTo(OUString::createFromAscii("GraphicURL"))==0)
+                if(rProp.Name == "GraphicURL")
                 {
                     OLECHAR* pOccur = wcschr(pTemp,':');
                     if(pOccur)
@@ -2852,7 +2852,7 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
                 wcscat(pChar,propStr);
                 wcscat(pChar,L",");
 
-                if(rProp.Name.compareTo(OUString::createFromAscii("NumberingType"))==0)
+                if(rProp.Name == "NumberingType")
                 {
                     if(numberingPrefix.getLength()!=0)
                     {

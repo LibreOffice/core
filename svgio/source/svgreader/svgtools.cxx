@@ -42,10 +42,10 @@ namespace svgio
 #endif
 
         // common non-token strings
-        const OUString commonStrings::aStrUserSpaceOnUse(OUString::createFromAscii("userSpaceOnUse"));
-        const OUString commonStrings::aStrObjectBoundingBox(OUString::createFromAscii("objectBoundingBox"));
-        const OUString commonStrings::aStrNonzero(OUString::createFromAscii("nonzero"));
-        const OUString commonStrings::aStrEvenOdd(OUString::createFromAscii("evenodd"));
+        const OUString commonStrings::aStrUserSpaceOnUse("userSpaceOnUse");
+        const OUString commonStrings::aStrObjectBoundingBox("objectBoundingBox");
+        const OUString commonStrings::aStrNonzero("nonzero");
+        const OUString commonStrings::aStrEvenOdd("evenodd");
 
         basegfx::B2DHomMatrix SvgAspectRatio::createLinearMapping(const basegfx::B2DRange& rTarget, const basegfx::B2DRange& rSource)
         {
@@ -231,7 +231,7 @@ namespace svgio
                         if ( aViewPort.isEmpty() )
                         {
 #ifdef DBG_UTIL
-                            myAssert(rtl::OUString::createFromAscii("Design error, this case should have been handled in the caller"));
+                            myAssert(OUString("Design error, this case should have been handled in the caller"));
 #endif
                             // no viewPort, assume a normal page size (A4)
                             aViewPort = basegfx::B2DRange(
@@ -568,8 +568,8 @@ namespace svgio
                 if(nPos < nLen)
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
-                    static OUString aStrGrad(OUString::createFromAscii("grad"));
-                    static OUString aStrRad(OUString::createFromAscii("rad"));
+                    static OUString aStrGrad("grad");
+                    static OUString aStrRad("rad");
 
                     switch(aChar)
                     {
@@ -647,153 +647,153 @@ namespace svgio
 
             if(aColorTokenMapperList.empty())
             {
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("aliceblue"), Color(240, 248, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("antiquewhite"), Color(250, 235, 215)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("aqua"), Color( 0, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("aquamarine"), Color(127, 255, 212)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("azure"), Color(240, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("beige"), Color(245, 245, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("bisque"), Color(255, 228, 196)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("black"), Color( 0, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("blanchedalmond"), Color(255, 235, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("blue"), Color( 0, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("blueviolet"), Color(138, 43, 226)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("brown"), Color(165, 42, 42)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("burlywood"), Color(222, 184, 135)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("cadetblue"), Color( 95, 158, 160)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("chartreuse"), Color(127, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("chocolate"), Color(210, 105, 30)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("coral"), Color(255, 127, 80)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("cornflowerblue"), Color(100, 149, 237)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("cornsilk"), Color(255, 248, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("crimson"), Color(220, 20, 60)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("cyan"), Color( 0, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkblue"), Color( 0, 0, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkcyan"), Color( 0, 139, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkgoldenrod"), Color(184, 134, 11)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkgray"), Color(169, 169, 169)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkgreen"), Color( 0, 100, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkgrey"), Color(169, 169, 169)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkkhaki"), Color(189, 183, 107)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkmagenta"), Color(139, 0, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkolivegreen"), Color( 85, 107, 47)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkorange"), Color(255, 140, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkorchid"), Color(153, 50, 204)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkred"), Color(139, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darksalmon"), Color(233, 150, 122)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkseagreen"), Color(143, 188, 143)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkslateblue"), Color( 72, 61, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkslategray"), Color( 47, 79, 79)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkslategrey"), Color( 47, 79, 79)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkturquoise"), Color( 0, 206, 209)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkviolet"), Color(148, 0, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("deeppink"), Color(255, 20, 147)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("deepskyblue"), Color( 0, 191, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("dimgray"), Color(105, 105, 105)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("dimgrey"), Color(105, 105, 105)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("dodgerblue"), Color( 30, 144, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("firebrick"), Color(178, 34, 34)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("floralwhite"), Color(255, 250, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("forestgreen"), Color( 34, 139, 34)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("fuchsia"), Color(255, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("gainsboro"), Color(220, 220, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("ghostwhite"), Color(248, 248, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("gold"), Color(255, 215, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("goldenrod"), Color(218, 165, 32)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("gray"), Color(128, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("grey"), Color(128, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("green"), Color(0, 128, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("greenyellow"), Color(173, 255, 47)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("honeydew"), Color(240, 255, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("hotpink"), Color(255, 105, 180)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("indianred"), Color(205, 92, 92)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("indigo"), Color( 75, 0, 130)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("ivory"), Color(255, 255, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("khaki"), Color(240, 230, 140)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lavender"), Color(230, 230, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lavenderblush"), Color(255, 240, 245)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lawngreen"), Color(124, 252, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lemonchiffon"), Color(255, 250, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightblue"), Color(173, 216, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightcoral"), Color(240, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightcyan"), Color(224, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightgoldenrodyellow"), Color(250, 250, 210)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightgray"), Color(211, 211, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightgreen"), Color(144, 238, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightgrey"), Color(211, 211, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightpink"), Color(255, 182, 193)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightsalmon"), Color(255, 160, 122)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightseagreen"), Color( 32, 178, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightskyblue"), Color(135, 206, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightslategray"), Color(119, 136, 153)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightslategrey"), Color(119, 136, 153)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightsteelblue"), Color(176, 196, 222)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightyellow"), Color(255, 255, 224)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lime"), Color( 0, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("limegreen"), Color( 50, 205, 50)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("linen"), Color(250, 240, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("magenta"), Color(255, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("maroon"), Color(128, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumaquamarine"), Color(102, 205, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumblue"), Color( 0, 0, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumorchid"), Color(186, 85, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumpurple"), Color(147, 112, 219)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumseagreen"), Color( 60, 179, 113)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumslateblue"), Color(123, 104, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumspringgreen"), Color( 0, 250, 154)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumturquoise"), Color( 72, 209, 204)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumvioletred"), Color(199, 21, 133)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("midnightblue"), Color( 25, 25, 112)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mintcream"), Color(245, 255, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mistyrose"), Color(255, 228, 225)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("moccasin"), Color(255, 228, 181)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("navajowhite"), Color(255, 222, 173)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("navy"), Color( 0, 0, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("oldlace"), Color(253, 245, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("olive"), Color(128, 128, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("olivedrab"), Color(107, 142, 35)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("orange"), Color(255, 165, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("orangered"), Color(255, 69, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("orchid"), Color(218, 112, 214)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("palegoldenrod"), Color(238, 232, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("palegreen"), Color(152, 251, 152)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("paleturquoise"), Color(175, 238, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("palevioletred"), Color(219, 112, 147)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("papayawhip"), Color(255, 239, 213)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("peachpuff"), Color(255, 218, 185)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("peru"), Color(205, 133, 63)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("pink"), Color(255, 192, 203)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("plum"), Color(221, 160, 221)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("powderblue"), Color(176, 224, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("purple"), Color(128, 0, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("red"), Color(255, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("rosybrown"), Color(188, 143, 143)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("royalblue"), Color( 65, 105, 225)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("saddlebrown"), Color(139, 69, 19)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("salmon"), Color(250, 128, 114)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("sandybrown"), Color(244, 164, 96)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("seagreen"), Color( 46, 139, 87)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("seashell"), Color(255, 245, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("sienna"), Color(160, 82, 45)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("silver"), Color(192, 192, 192)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("skyblue"), Color(135, 206, 235)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("slateblue"), Color(106, 90, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("slategray"), Color(112, 128, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("slategrey"), Color(112, 128, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("snow"), Color(255, 250, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("springgreen"), Color( 0, 255, 127)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("steelblue"), Color( 70, 130, 180)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("tan"), Color(210, 180, 140)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("teal"), Color( 0, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("thistle"), Color(216, 191, 216)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("tomato"), Color(255, 99, 71)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("turquoise"), Color( 64, 224, 208)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("violet"), Color(238, 130, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("wheat"), Color(245, 222, 179)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("white"), Color(255, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("whitesmoke"), Color(245, 245, 245)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("yellow"), Color(255, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("yellowgreen"), Color(154, 205, 50)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("aliceblue"), Color(240, 248, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("antiquewhite"), Color(250, 235, 215)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("aqua"), Color( 0, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("aquamarine"), Color(127, 255, 212)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("azure"), Color(240, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("beige"), Color(245, 245, 220)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("bisque"), Color(255, 228, 196)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("black"), Color( 0, 0, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("blanchedalmond"), Color(255, 235, 205)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("blue"), Color( 0, 0, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("blueviolet"), Color(138, 43, 226)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("brown"), Color(165, 42, 42)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("burlywood"), Color(222, 184, 135)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("cadetblue"), Color( 95, 158, 160)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("chartreuse"), Color(127, 255, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("chocolate"), Color(210, 105, 30)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("coral"), Color(255, 127, 80)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("cornflowerblue"), Color(100, 149, 237)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("cornsilk"), Color(255, 248, 220)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("crimson"), Color(220, 20, 60)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("cyan"), Color( 0, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkblue"), Color( 0, 0, 139)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkcyan"), Color( 0, 139, 139)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkgoldenrod"), Color(184, 134, 11)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkgray"), Color(169, 169, 169)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkgreen"), Color( 0, 100, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkgrey"), Color(169, 169, 169)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkkhaki"), Color(189, 183, 107)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkmagenta"), Color(139, 0, 139)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkolivegreen"), Color( 85, 107, 47)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkorange"), Color(255, 140, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkorchid"), Color(153, 50, 204)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkred"), Color(139, 0, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darksalmon"), Color(233, 150, 122)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkseagreen"), Color(143, 188, 143)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkslateblue"), Color( 72, 61, 139)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkslategray"), Color( 47, 79, 79)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkslategrey"), Color( 47, 79, 79)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkturquoise"), Color( 0, 206, 209)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("darkviolet"), Color(148, 0, 211)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("deeppink"), Color(255, 20, 147)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("deepskyblue"), Color( 0, 191, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("dimgray"), Color(105, 105, 105)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("dimgrey"), Color(105, 105, 105)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("dodgerblue"), Color( 30, 144, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("firebrick"), Color(178, 34, 34)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("floralwhite"), Color(255, 250, 240)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("forestgreen"), Color( 34, 139, 34)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("fuchsia"), Color(255, 0, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("gainsboro"), Color(220, 220, 220)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("ghostwhite"), Color(248, 248, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("gold"), Color(255, 215, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("goldenrod"), Color(218, 165, 32)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("gray"), Color(128, 128, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("grey"), Color(128, 128, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("green"), Color(0, 128, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("greenyellow"), Color(173, 255, 47)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("honeydew"), Color(240, 255, 240)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("hotpink"), Color(255, 105, 180)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("indianred"), Color(205, 92, 92)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("indigo"), Color( 75, 0, 130)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("ivory"), Color(255, 255, 240)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("khaki"), Color(240, 230, 140)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lavender"), Color(230, 230, 250)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lavenderblush"), Color(255, 240, 245)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lawngreen"), Color(124, 252, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lemonchiffon"), Color(255, 250, 205)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightblue"), Color(173, 216, 230)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightcoral"), Color(240, 128, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightcyan"), Color(224, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightgoldenrodyellow"), Color(250, 250, 210)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightgray"), Color(211, 211, 211)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightgreen"), Color(144, 238, 144)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightgrey"), Color(211, 211, 211)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightpink"), Color(255, 182, 193)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightsalmon"), Color(255, 160, 122)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightseagreen"), Color( 32, 178, 170)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightskyblue"), Color(135, 206, 250)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightslategray"), Color(119, 136, 153)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightslategrey"), Color(119, 136, 153)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightsteelblue"), Color(176, 196, 222)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lightyellow"), Color(255, 255, 224)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("lime"), Color( 0, 255, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("limegreen"), Color( 50, 205, 50)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("linen"), Color(250, 240, 230)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("magenta"), Color(255, 0, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("maroon"), Color(128, 0, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumaquamarine"), Color(102, 205, 170)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumblue"), Color( 0, 0, 205)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumorchid"), Color(186, 85, 211)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumpurple"), Color(147, 112, 219)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumseagreen"), Color( 60, 179, 113)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumslateblue"), Color(123, 104, 238)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumspringgreen"), Color( 0, 250, 154)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumturquoise"), Color( 72, 209, 204)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mediumvioletred"), Color(199, 21, 133)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("midnightblue"), Color( 25, 25, 112)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mintcream"), Color(245, 255, 250)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("mistyrose"), Color(255, 228, 225)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("moccasin"), Color(255, 228, 181)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("navajowhite"), Color(255, 222, 173)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("navy"), Color( 0, 0, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("oldlace"), Color(253, 245, 230)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("olive"), Color(128, 128, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("olivedrab"), Color(107, 142, 35)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("orange"), Color(255, 165, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("orangered"), Color(255, 69, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("orchid"), Color(218, 112, 214)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("palegoldenrod"), Color(238, 232, 170)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("palegreen"), Color(152, 251, 152)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("paleturquoise"), Color(175, 238, 238)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("palevioletred"), Color(219, 112, 147)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("papayawhip"), Color(255, 239, 213)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("peachpuff"), Color(255, 218, 185)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("peru"), Color(205, 133, 63)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("pink"), Color(255, 192, 203)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("plum"), Color(221, 160, 221)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("powderblue"), Color(176, 224, 230)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("purple"), Color(128, 0, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("red"), Color(255, 0, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("rosybrown"), Color(188, 143, 143)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("royalblue"), Color( 65, 105, 225)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("saddlebrown"), Color(139, 69, 19)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("salmon"), Color(250, 128, 114)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("sandybrown"), Color(244, 164, 96)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("seagreen"), Color( 46, 139, 87)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("seashell"), Color(255, 245, 238)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("sienna"), Color(160, 82, 45)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("silver"), Color(192, 192, 192)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("skyblue"), Color(135, 206, 235)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("slateblue"), Color(106, 90, 205)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("slategray"), Color(112, 128, 144)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("slategrey"), Color(112, 128, 144)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("snow"), Color(255, 250, 250)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("springgreen"), Color( 0, 255, 127)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("steelblue"), Color( 70, 130, 180)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("tan"), Color(210, 180, 140)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("teal"), Color( 0, 128, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("thistle"), Color(216, 191, 216)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("tomato"), Color(255, 99, 71)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("turquoise"), Color( 64, 224, 208)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("violet"), Color(238, 130, 238)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("wheat"), Color(245, 222, 179)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("white"), Color(255, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("whitesmoke"), Color(245, 245, 245)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("yellow"), Color(255, 255, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString("yellowgreen"), Color(154, 205, 50)));
             }
 
             const ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName));
@@ -857,7 +857,7 @@ namespace svgio
                 }
                 else
                 {
-                    static OUString aStrRgb(OUString::createFromAscii("rgb"));
+                    static OUString aStrRgb("rgb");
 
                     if(rCandidate.matchIgnoreAsciiCase(aStrRgb, 0))
                     {
@@ -983,12 +983,12 @@ namespace svgio
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
                     const sal_Int32 nInitPos(nPos);
-                    static OUString aStrMatrix(OUString::createFromAscii("matrix"));
-                    static OUString aStrTranslate(OUString::createFromAscii("translate"));
-                    static OUString aStrScale(OUString::createFromAscii("scale"));
-                    static OUString aStrRotate(OUString::createFromAscii("rotate"));
-                    static OUString aStrSkewX(OUString::createFromAscii("skewX"));
-                    static OUString aStrSkewY(OUString::createFromAscii("skewY"));
+                    static OUString aStrMatrix("matrix");
+                    static OUString aStrTranslate("translate");
+                    static OUString aStrScale("scale");
+                    static OUString aStrRotate("rotate");
+                    static OUString aStrSkewX("skewX");
+                    static OUString aStrSkewY("skewY");
 
                     switch(aChar)
                     {
@@ -1184,9 +1184,9 @@ namespace svgio
 
         bool readLocalUrl(const OUString& rCandidate, OUString& rURL)
         {
-            static OUString aStrUrl(OUString::createFromAscii("url"));
+            static OUString aStrUrl("url");
 
-            if(rCandidate.match(aStrUrl, 0))
+            if(rCandidate.startsWith(aStrUrl))
             {
                 const sal_Int32 nLen(rCandidate.getLength());
                 sal_Int32 nPos(aStrUrl.getLength());
@@ -1215,10 +1215,7 @@ namespace svgio
                 }
                 else
                 {
-                    static OUString aStrNone(OUString::createFromAscii("none"));
-                    static OUString aStrCurrentColor(OUString::createFromAscii("currentColor"));
-
-                    if(rCandidate.match(aStrNone, 0))
+                    if(rCandidate.startsWith("none"))
                     {
                         rSvgPaint = SvgPaint(aColor, true, false, false);
                         return true;
@@ -1228,7 +1225,7 @@ namespace svgio
                         /// Url is copied to rURL, but needs to be solved outside this helper
                         return false;
                     }
-                    else if(rCandidate.match(aStrCurrentColor, 0))
+                    else if(rCandidate.startsWith("currentColor"))
                     {
                         rSvgPaint = SvgPaint(aColor, true, true, true);
                         return true;
@@ -1424,7 +1421,7 @@ namespace svgio
             }
             else
             {
-                static OUString aStrData(OUString::createFromAscii("data:"));
+                static OUString aStrData("data:");
 
                 if(rCandidate.match(aStrData, 0))
                 {
@@ -1441,13 +1438,13 @@ namespace svgio
 
                     if(!rMimeType.isEmpty() && nPos < nLen)
                     {
-                        static OUString aStrImage(OUString::createFromAscii("image"));
+                        static OUString aStrImage("image");
 
                         if(rMimeType.match(aStrImage, 0))
                         {
                             // image data
                             OUString aData(rCandidate.copy(nPos));
-                            static OUString aStrBase64(OUString::createFromAscii("base64"));
+                            static OUString aStrBase64("base64");
 
                             if(aData.match(aStrBase64, 0))
                             {

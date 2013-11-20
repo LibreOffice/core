@@ -152,10 +152,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     OUString::createFromAscii(
-                        "com.sun.star.comp.WebDAVContentProvider" ),
-                     OUString::createFromAscii(
-                        WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     OUString( "com.sun.star.comp.WebDAVContentProvider" ),
+                     OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -205,24 +203,21 @@ ContentProvider::queryContent(
     {
         aURL = aURL.replaceAt( 0,
                                WEBDAV_URL_SCHEME_LENGTH,
-                               OUString::createFromAscii(
-                                                    HTTP_URL_SCHEME ) );
+                               OUString( HTTP_URL_SCHEME ) );
         bNewId = true;
     }
     else if ( aScheme == DAV_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAV_URL_SCHEME_LENGTH,
-                               OUString::createFromAscii(
-                                                    HTTP_URL_SCHEME ) );
+                               OUString( HTTP_URL_SCHEME ) );
         bNewId = true;
     }
     else if ( aScheme == DAVS_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAVS_URL_SCHEME_LENGTH,
-                               OUString::createFromAscii(
-                                                    HTTPS_URL_SCHEME ) );
+                               OUString( HTTPS_URL_SCHEME ) );
         bNewId = true;
     }
 
@@ -237,7 +232,7 @@ ContentProvider::queryContent(
         nPos = aURL.indexOf( '/', nPos + 1 );
         if ( nPos == -1 )
         {
-            aURL += OUString::createFromAscii( "/" );
+            aURL += "/";
             bNewId = true;
         }
     }

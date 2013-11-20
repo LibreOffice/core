@@ -3578,8 +3578,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
         sal_uInt16 nOutlineCount = rOutlineNodes.size();
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
-        OUString sSuffix("|");
-        sSuffix += OUString::createFromAscii("outline");
+        OUString sSuffix("|outline");
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
         for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
         {

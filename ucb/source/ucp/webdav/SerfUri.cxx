@@ -122,13 +122,13 @@ void SerfUri::init( const apr_uri_t * pUri )
 
     if ( pUri->query )
     {
-        mPath += OUString::createFromAscii( "?" );
+        mPath += "?";
         mPath += OStringToOUString( pUri->query,  RTL_TEXTENCODING_UTF8 );
     }
 
     if ( pUri->fragment )
     {
-        mPath += OUString::createFromAscii( "#" );
+        mPath += "#";
         mPath += OStringToOUString( pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }
 }
@@ -207,7 +207,7 @@ OUString SerfUri::GetPathBaseName () const
         return aTemp;
     }
     else
-        return OUString::createFromAscii ("/");
+        return OUString("/");
 }
 
 bool SerfUri::operator== ( const SerfUri & rOther ) const
@@ -223,7 +223,7 @@ OUString SerfUri::GetPathBaseNameUnescaped () const
 void SerfUri::AppendPath (const OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
-        mPath += OUString::createFromAscii ("/");
+        mPath += OUString("/");
 
     mPath += rPath;
     calculateURI ();

@@ -197,19 +197,15 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        static OUString aStrPad(OUString::createFromAscii("pad"));
-                        static OUString aStrReflect(OUString::createFromAscii("reflect"));
-                        static OUString aStrRepeat(OUString::createFromAscii("repeat"));
-
-                        if(aContent.match(aStrPad, 0))
+                        if(aContent.startsWith("pad"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::Spread_pad);
                         }
-                        else if(aContent.match(aStrReflect, 0))
+                        else if(aContent.startsWith("reflect"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::Spread_reflect);
                         }
-                        else if(aContent.match(aStrRepeat, 0))
+                        else if(aContent.startsWith("repeat"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::Spread_repeat);
                         }
