@@ -11,6 +11,10 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,boostthread))
 
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,boostthread))
 
+$(eval $(call gb_StaticLibrary_add_defs,boostthread,\
+       -D_WIN32_WINNT=0x0502 \
+))
+
 # disable "auto link" "feature" on MSVC
 $(eval $(call gb_StaticLibrary_add_defs,boostthread,\
 	-DBOOST_ALL_NO_LIB \
