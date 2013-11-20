@@ -86,6 +86,7 @@ class SwRootFrm: public SwLayoutFrm
     sal_Bool    bIsNewLayout        :1; //Layout geladen oder neu erzeugt.
     sal_Bool    bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
                                     //siehe dcontact.cxx, ::Changed()
+    bool        bLayoutFreezed;
 
     //Fuer den BrowseMode. nBrowseWidth ist die Aeussere Kante des am weitesten
     //rechts stehenden Objectes. Die rechte Kante der Seiten soll im BrowseMode
@@ -351,6 +352,9 @@ public:
     bool IsLeftToRightViewLayout() const;
     const SwRect& GetPagesArea() const { return maPagesArea; }
     void SetSidebarChanged() { mbSidebarChanged = true; }
+
+    bool IsLayoutFreezed() const { return bLayoutFreezed; }
+    void FreezeLayout( bool freeze ) { bLayoutFreezed = freeze; }
 };
 
 inline long SwRootFrm::GetBrowseWidth() const
