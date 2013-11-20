@@ -541,7 +541,7 @@ void SwFldRefPage::UpdateSubType()
             for ( nOutlIdx = 0; nOutlIdx < maOutlineNodes.size(); ++nOutlIdx )
             {
                 pEntry = m_pSelectionToolTipLB->InsertEntry(
-                                pIDoc->getOutlineText( nOutlIdx, true, true ) );
+                                pIDoc->getOutlineText( nOutlIdx, true, true, false ) );
                 pEntry->SetUserData( reinterpret_cast<void*>(nOutlIdx) );
                 if ( ( IsFldEdit() &&
                        pRefFld->GetReferencedTxtNode() == maOutlineNodes[nOutlIdx] ) ||

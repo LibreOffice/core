@@ -2422,11 +2422,12 @@ int SwDoc::getOutlineLevel( const sal_Int32 nIdx ) const
 
 OUString SwDoc::getOutlineText( const sal_Int32 nIdx,
                               const bool bWithNumber,
-                              const bool bWithSpacesForLevel ) const
+                              const bool bWithSpacesForLevel,
+                              const bool bWithFtn ) const
 {
     return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
                 GetTxtNode()->GetExpandTxt( 0, -1, bWithNumber,
-                                            bWithNumber, bWithSpacesForLevel );
+                                            bWithNumber, bWithSpacesForLevel, bWithFtn );
 }
 
 SwTxtNode* SwDoc::getOutlineNode( const sal_Int32 nIdx ) const

@@ -993,7 +993,8 @@ public:
     virtual int getOutlineLevel( const sal_Int32 nIdx ) const;
     virtual OUString getOutlineText( const sal_Int32 nIdx,
                                    const bool bWithNumber,
-                                   const bool bWithSpacesForLevel ) const;
+                                   const bool bWithSpacesForLevel,
+                                   const bool bWithFtn ) const;
     virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const;
     virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const;
 

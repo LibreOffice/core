@@ -2024,7 +2024,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
                     // Outline entry text
-                    const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText( i );
+                    const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText( i, true, false, false );
 
                     // Create a new outline item:
                     const sal_Int32 nOutlineId =

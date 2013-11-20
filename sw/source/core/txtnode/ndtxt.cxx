@@ -3022,7 +3022,7 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
 
 static void
 Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
-            sal_Int32 nEndPos, sal_Bool const bExpandFlds)
+            sal_Int32 nEndPos, sal_Bool const bExpandFlds, sal_Bool const bExpandFtn = sal_True )
 {
     if (rNode.GetpSwpHints())
     {
@@ -3054,7 +3054,7 @@ Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
                         break;
                     case RES_TXTATR_FTN:
                         rTxt.remove(nPos, 1);
-                        if( bExpandFlds )
+                        if( bExpandFlds && bExpandFtn )
                         {
                             const SwFmtFtn& rFtn = pAttr->GetFtn();
                             OUString sExpand;
@@ -3095,12 +3095,14 @@ OUString SwTxtNode::GetExpandTxt(  const sal_Int32 nIdx,
                                    const sal_Int32 nLen,
                                    const bool bWithNum,
                                    const bool bAddSpaceAfterListLabelStr,
-                                   const bool bWithSpacesForLevel ) const
+                                   const bool bWithSpacesForLevel,
+                                   const bool bWithFtn ) const
+
 {
     OUStringBuffer aTxt(
         (nLen == -1) ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
     sal_Int32 nTxtStt = nIdx;
-    Replace0xFF(*this, aTxt, nTxtStt, aTxt.getLength(), true);
+    Replace0xFF(*this, aTxt, nTxtStt, aTxt.getLength(), true, bWithFtn );
 
     // remove dummy characters of Input Fields
     comphelper::string::remove(aTxt, CH_TXT_ATR_INPUTFIELDSTART);

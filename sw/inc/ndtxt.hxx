@@ -682,7 +682,8 @@ public:
                             const sal_Int32 nLen = -1,
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
-                            const bool bWithSpacesForLevel = false ) const;
+                            const bool bWithSpacesForLevel = false,
+                            const bool bWithFtn = true ) const;
     bool GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx = 0,
                            sal_Int32 nIdx = 0, sal_Int32 nLen = -1,
                            bool bWithNum = false, bool bWithFtn = true,

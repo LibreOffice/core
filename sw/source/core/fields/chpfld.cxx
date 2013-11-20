@@ -213,7 +213,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             sNumber = "??";
         }
 
-        sTitle = removeControlChars(pTxtNd->GetExpandTxt());
+        sTitle = removeControlChars(pTxtNd->GetExpandTxt(0, -1, false, false, false, false));
 
     }
     }

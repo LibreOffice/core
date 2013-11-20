@@ -37,7 +37,8 @@ public:
     virtual int getOutlineLevel( const sal_Int32 nIdx ) const = 0;
     virtual OUString getOutlineText( const sal_Int32 nIdx,
                                    const bool bWithNumber = true,
-                                   const bool bWithSpacesForLevel = false ) const = 0;
+                                   const bool bWithSpacesForLevel = false,
+                                   const bool bWithFtn = true ) const = 0;
     virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const = 0;
 
     virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const = 0;
