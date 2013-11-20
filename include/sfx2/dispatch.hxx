@@ -27,6 +27,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <deque>
 #include <map>
 #include <vector>
 
@@ -76,10 +77,38 @@ public:
     }
 };
 
+struct SfxToDo_Impl
+{
+    SfxShell*  pCluster;
+    bool       bPush;
+    bool       bDelete;
+    bool       bDeleted;
+    bool       bUntil;
+
+    SfxToDo_Impl()
+        : pCluster(0)
+        , bPush(false)
+        , bDelete(false)
+        , bDeleted(false)
+        , bUntil(false)
+                {}
+    SfxToDo_Impl( bool bOpPush, bool bOpDelete, bool bOpUntil, SfxShell& rCluster )
+        : pCluster(&rCluster)
+        , bPush(bOpPush)
+        , bDelete(bOpDelete)
+        , bDeleted(false)
+        , bUntil(bOpUntil)
+                {}
+
+    bool operator==( const SfxToDo_Impl& rWith ) const
+    { return pCluster==rWith.pCluster && bPush==rWith.bPush; }
+};
+
 class SFX2_DLLPUBLIC SfxDispatcher
 {
-    SfxDispatcher_Impl*             pImp;
-    sal_Bool                            bFlushed;
+    SfxDispatcher_Impl*      pImp;
+    sal_Bool                 bFlushed;
+    std::deque< std::deque<SfxToDo_Impl> > aToDoCopyStack;
 
 private:
     // Search for temporary evaluated Todos
