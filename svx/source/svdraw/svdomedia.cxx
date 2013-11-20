@@ -374,7 +374,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 if (bSuccess)
                 {
                     m_pImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
-                    m_pImpl->m_MediaProperties.setURL(url, tempFileURL, rNewProperties.getReferer());
+                    m_pImpl->m_MediaProperties.setURL(url, tempFileURL, "");
                 }
                 else // this case is for Clone via operator=
                 {
@@ -385,7 +385,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
             else
             {
                 m_pImpl->m_MediaProperties.setURL(url,
-                        rNewProperties.getTempURL(), rNewProperties.getReferer());
+                        rNewProperties.getTempURL(), "");
             }
         }
         else
