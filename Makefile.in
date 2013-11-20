@@ -238,7 +238,8 @@ endif
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild \
 		$(if $(filter build,$(MAKECMDGOALS)),all) \
 		$(if $(filter build-nocheck,$(MAKECMDGOALS)),build) \
-		$(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck,$(MAKECMDGOALS))
+		$(if $(filter check,$(MAKECMDGOALS)),subsequentcheck) \
+		$(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck check,$(MAKECMDGOALS))
 ifeq ($(OS),IOS)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
 endif
