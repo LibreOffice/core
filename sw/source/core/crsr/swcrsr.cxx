@@ -2195,19 +2195,11 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             if( !pNd->IsCntntNode() )
                 pNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
 
-            SwPaM* pNew;
-            if( pAktCrsr->GetNext() == pAktCrsr && !pAktCrsr->HasMark() )
-            {
-                pNew = pAktCrsr;
-                pNew->GetPoint()->nNode = *pNd;
-                pNew->GetPoint()->nContent.Assign( (SwCntntNode*)pNd, 0 );
-            }
-            else
-            {
-                pNew = pAktCrsr->Create( pAktCrsr );
-                pNew->GetPoint()->nNode = *pNd;
-                pNew->GetPoint()->nContent.Assign( (SwCntntNode*)pNd, 0 );
-            }
+            SwPaM *const pNew = (pAktCrsr->GetNext() == pAktCrsr && !pAktCrsr->HasMark())
+                ? pAktCrsr
+                : pAktCrsr->Create( pAktCrsr );
+            pNew->GetPoint()->nNode = *pNd;
+            pNew->GetPoint()->nContent.Assign( (SwCntntNode*)pNd, 0 );
             pNew->SetMark();
 
             SwPosition* pPos = pNew->GetPoint();
