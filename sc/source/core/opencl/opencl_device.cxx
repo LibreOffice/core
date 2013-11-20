@@ -18,6 +18,8 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
+
 #include "opencl_device.hxx"
 
 
@@ -446,7 +448,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
             if (!bForceSelection) LOG_PRINTF("[DS] Profile file not available (" << fileName << "); performing profiling.");
 
             /* Populate input data for micro-benchmark */
-            LibreOfficeDeviceEvaluationIO* testData = new LibreOfficeDeviceEvaluationIO;
+            boost::scoped_ptr<LibreOfficeDeviceEvaluationIO> testData(new LibreOfficeDeviceEvaluationIO);
             testData->inputSize  = INPUTSIZE;
             testData->outputSize = OUTPUTSIZE;
             testData->input0.resize(testData->inputSize);
@@ -454,12 +456,12 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
             testData->input2.resize(testData->inputSize);
             testData->input3.resize(testData->inputSize);
             testData->output.resize(testData->outputSize);
-            populateInput(testData);
+            populateInput(testData.get());
 
             /* Perform evaluations */
             unsigned int numUpdates;
-            status = profileDevices(profile, DS_EVALUATE_ALL, evaluateScoreForDevice, (void*)testData, &numUpdates);
-            delete testData;
+            status = profileDevices(profile, DS_EVALUATE_ALL, evaluateScoreForDevice, (void*)testData.get(), &numUpdates);
+
             if (DS_SUCCESS == status)
             {
                 /* Write scores to file */
