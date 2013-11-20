@@ -470,7 +470,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
         SfxItemSet* pSet = pSrcMed->GetItemSet();
         pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
     }
-    printf("about to load %s\n", OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO( "sc.qa", "about to load " << rURL );
     if (!xDocShRef->DoLoad(pSrcMed))
     {
         xDocShRef->DoClose();
@@ -573,7 +573,7 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned in
     for ( unsigned int index=0; index<numElems; ++index )
     {
         OUString sFileName = OUString::createFromAscii( aTestValues[ index ].sTestDoc );
-        printf("aTestValues[%u] %s\n", index, OUStringToOString( sFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO( "sc.qa", "aTestValues[" << index << "] " << sFileName );
         int nImportType =  aTestValues[ index ].nImportType;
         int nExportType =  aTestValues[ index ].nExportType;
         ScDocShellRef xShell = loadDoc( sFileName, nImportType );
@@ -597,7 +597,7 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned in
             bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
             for ( ; nRow <= nEndRow; ++nRow )
             {
-                printf("\t checking row %" SAL_PRIdINT32 " for height %d\n", nRow, nExpectedHeight );
+                SAL_INFO( "sc.qa", " checking row " << nRow << " for height " << nExpectedHeight );
                 int nHeight = sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
                 if ( bCheckOpt )
                 {
