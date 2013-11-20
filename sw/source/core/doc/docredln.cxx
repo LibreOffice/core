@@ -293,8 +293,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
     bool bError = true;
     _CHECK_REDLINE( this )
 
-    if( IsRedlineOn() && !IsShowOriginal( meRedlineMode ) &&
-         pNewRedl->GetAuthorString().Len() )
+    if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
     {
         pNewRedl->InvalidateRange();
 
