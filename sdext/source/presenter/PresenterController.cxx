@@ -394,7 +394,6 @@ void PresenterController::UpdatePaneTitles (void)
                 sResult.append(sTemplate.copy(nIndex, nStartIndex-nIndex));
 
                 // Get the placeholder
-                ++nIndex;
                 ++nStartIndex;
                 const sal_Int32 nEndIndex (sTemplate.indexOf('%', nStartIndex+1));
                 const OUString sPlaceholder (sTemplate.copy(nStartIndex, nEndIndex-nStartIndex));
