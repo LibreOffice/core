@@ -167,6 +167,16 @@ OUString Test::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString&
 
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
+// For testing during development of a tast, you want to use
+// DECLARE_OOXMLEXPORT_TEST_ONLY, and change the below to #if 1
+// Of course, don't forget to set back to #if 0 when you are done :-)
+#if 0
+#define DECLARE_OOXMLEXPORT_TEST_ONLY(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+
+#undef DECLARE_OOXMLEXPORT_TEST
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
+#endif
+
 DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
