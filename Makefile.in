@@ -312,9 +312,6 @@ else
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice.app
 endif
-ifneq ($(OS),MACOSX)
-	@install-gdb-printers -L
-endif
 endif
 	@$(call gb_Top_InstallFinished,Test Installation,$(TESTINSTALLDIR))
 
