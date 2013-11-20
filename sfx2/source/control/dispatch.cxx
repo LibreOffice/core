@@ -67,31 +67,6 @@ DBG_NAME(SfxDispatcherFillState)
 
 typedef std::vector<SfxRequest*> SfxRequestPtrArray;
 
-struct SfxToDo_Impl
-{
-    SfxShell*  pCluster;
-    bool       bPush;
-    bool       bDelete;
-    bool       bUntil;
-
-    SfxToDo_Impl()
-        : pCluster(0)
-        , bPush(false)
-        , bDelete(false)
-        , bUntil(false)
-                {}
-    SfxToDo_Impl( bool bOpPush, bool bOpDelete, bool bOpUntil, SfxShell& rCluster )
-        : pCluster(&rCluster)
-        , bPush(bOpPush)
-        , bDelete(bOpDelete)
-        , bUntil(bOpUntil)
-                {}
-    ~SfxToDo_Impl(){}
-
-    bool operator==( const SfxToDo_Impl& rWith ) const
-    { return pCluster==rWith.pCluster && bPush==rWith.bPush; }
-};
-
 struct SfxObjectBars_Impl
 {
     sal_uInt32     nResId;  // Resource - and ConfigId of the Toolbox
@@ -1625,22 +1600,49 @@ void SfxDispatcher::FlushImpl()
     bFlushed = sal_True;
     OSL_TRACE("Successfully flushed dispatcher!");
 
+    //fdo#70703 FlushImpl may call back into itself so use aToDoCopyStack to talk
+    //to outer levels of ourself. If DoActivate_Impl/DoDeactivate_Impl deletes
+    //an entry, then they will walk back up aToDoCopyStack and set outer
+    //levels's entries to bDeleted
+    aToDoCopyStack.push_back(aToDoCopy);
+    std::deque<SfxToDo_Impl>& rToDoCopy = aToDoCopyStack.back();
     // Activate the Shells and possible delete them in the 2nd round
-    for(std::deque<SfxToDo_Impl>::reverse_iterator i = aToDoCopy.rbegin(); i != aToDoCopy.rend(); ++i)
+    for(std::deque<SfxToDo_Impl>::reverse_iterator i = rToDoCopy.rbegin(); i != rToDoCopy.rend(); ++i)
     {
-        if(i->bPush)
-        {
-            if ( pImp->bActive )
-                i->pCluster->DoActivate_Impl(pImp->pFrame, sal_True);
-        }
-        else if ( pImp->bActive )
-                i->pCluster->DoDeactivate_Impl(pImp->pFrame, sal_True);
+        if (i->bDeleted)
+            continue;
+        if (!pImp->bActive)
+            continue;
+        if (i->bPush)
+            i->pCluster->DoActivate_Impl(pImp->pFrame, sal_True);
+        else
+            i->pCluster->DoDeactivate_Impl(pImp->pFrame, sal_True);
     }
+
+    aToDoCopy = aToDoCopyStack.back();
+    aToDoCopyStack.pop_back();
 
     for(std::deque<SfxToDo_Impl>::reverse_iterator i = aToDoCopy.rbegin(); i != aToDoCopy.rend(); ++i)
     {
-        if(i->bDelete)
+        if (i->bDelete && !i->bDeleted)
+        {
+            if (!aToDoCopyStack.empty())
+            {
+                //fdo#70703 if there is an outer FlushImpl then inform it that
+                //we have deleted this cluster
+                for (std::deque< std::deque<SfxToDo_Impl> >::iterator aI = aToDoCopyStack.begin();
+                    aI != aToDoCopyStack.end(); ++aI)
+                {
+                    std::deque<SfxToDo_Impl> &v = *aI;
+                    for(std::deque<SfxToDo_Impl>::iterator aJ = v.begin(); aJ != v.end(); ++aJ)
+                    {
+                        if (aJ->pCluster == i->pCluster)
+                            aJ->bDeleted = true;
+                    }
+                }
+            }
             delete i->pCluster;
+        }
     }
     sal_Bool bAwakeBindings = !aToDoCopy.empty();
     if( bAwakeBindings )
