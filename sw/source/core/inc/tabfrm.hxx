@@ -29,8 +29,6 @@ class SwAttrSetChg;
 
 class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 {
-    // OD 14.03.2003 #i11760# - adjustment, because of method signature change
-    //darf mit den Flags spielen.
     friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
 
     //Fuert Spezialbehandlung fuer _Get[Next|Prev]Leaf() durch.
@@ -40,22 +38,22 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     SwTable* pTable;
 
     sal_Bool bComplete          :1; //Eintrage als Repaint ohne das CompletePaint
-                                //der Basisklasse gesetzt werden muss. Damit
-                                //sollen unertraegliche Tabellen-Repaints
-                                //vermieden werden.
+                                    //der Basisklasse gesetzt werden muss. Damit
+                                    //sollen unertraegliche Tabellen-Repaints
+                                    //vermieden werden.
     sal_Bool bCalcLowers        :1; //Im MakeAll auf jedenfall auch fuer Stabilitaet
-                                //des Inhaltes sorgen.
+    //des Inhaltes sorgen.
     sal_Bool bLowersFormatted   :1;//Kommunikation zwischen MakeAll und Layact
     sal_Bool bLockBackMove      :1; //BackMove-Test hat der Master erledigt.
     sal_Bool bResizeHTMLTable   :1; //Resize des HTMLTableLayout rufen im MakeAll
-                                //Zur Optimierung, damit dies nicht im
-                                //CntntFrm::Grow gerufen werden muss, denn dann
-                                //wird es ggf. fuer jede Zelle gerufen #47483#
+    //Zur Optimierung, damit dies nicht im
+    //CntntFrm::Grow gerufen werden muss, denn dann
+    //wird es ggf. fuer jede Zelle gerufen #47483#
     sal_Bool bONECalcLowers     :1; //Primaer fuer die StarONE-SS. Beim MakeAll werden
-                                //die Cntnts auf jedenfall per Calc() formatiert.
-                                //es finden keine zusaetzlichen Invalidierungen
-                                //statt und dieser Weg kann auch kaum garantien
-                                //geben.
+    //die Cntnts auf jedenfall per Calc() formatiert.
+    //es finden keine zusaetzlichen Invalidierungen
+    //statt und dieser Weg kann auch kaum garantien
+    //geben.
 
     sal_Bool bHasFollowFlowLine :1; // Means that the first line in the follow
                                 // is indented to contain content from a broken
@@ -85,14 +83,19 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     sal_Bool bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
                           // indicates, if the floating screen objects fits
 
+    bool mbInRecalcLowerRow : 1;
+
     //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
     //Follow erzeugt und aufgebaut und direkt hinter this gepastet.
     //Join() Holt sich den Inhalt aus dem Follow und vernichtet diesen.
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
     bool Join();
 
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
-                      SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
+    void _UpdateAttr(
+        const SfxPoolItem*,
+        const SfxPoolItem*, sal_uInt8 &,
+        SwAttrSetChg *pa = 0,
+        SwAttrSetChg *pb = 0 );
 
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat );
 
@@ -163,6 +166,15 @@ public:
     sal_Bool IsRemoveFollowFlowLinePending() const { return bRemoveFollowFlowLinePending; }
     void SetRemoveFollowFlowLinePending( sal_Bool bNew ) { bRemoveFollowFlowLinePending = bNew; }
 
+    bool IsInRecalcLowerRow() const
+    {
+        return mbInRecalcLowerRow;
+    }
+    void SetInRecalcLowerRow( bool bNew )
+    {
+        mbInRecalcLowerRow = bNew;
+    }
+
     // #i26945#
     sal_Bool IsConsiderObjsForMinCellHeight() const
     {
@@ -172,6 +184,7 @@ public:
     {
         bConsiderObjsForMinCellHeight = _bNewConsiderObjsForMinCellHeight;
     }
+
     // #i26945#
     sal_Bool DoesObjsFit() const
     {
@@ -187,8 +200,10 @@ public:
     // End: New stuff for breaking table rows
     //
 
-    sal_Bool CalcFlyOffsets( SwTwips& rUpper, long& rLeftOffset,
-                         long& rRightOffset ) const;
+    sal_Bool CalcFlyOffsets(
+        SwTwips& rUpper,
+        long& rLeftOffset,
+        long& rRightOffset ) const;
 
     SwTwips CalcHeightOfFirstContentLine() const;
 
@@ -200,9 +215,7 @@ public:
     // #i29550#
     bool IsCollapsingBorders() const;
 
-    // used for collapsing border lines:
     sal_uInt16 GetBottomLineSize() const;
-    // <-- collapsing
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
 
