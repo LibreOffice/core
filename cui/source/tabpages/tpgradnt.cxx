@@ -583,8 +583,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
-            OUString( CUI_RES( RID_SVXSTR_ASK_DEL_GRADIENT ) ) );
+        MessageDialog aQueryBox( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui");
 
         if ( aQueryBox.Execute() == RET_YES )
         {
