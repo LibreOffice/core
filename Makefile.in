@@ -32,25 +32,16 @@ Makefile: $(BUILDDIR)/config_host.mk force-restart
 	@touch $@
 
 # run configure in an environment not polluted by config_host.mk
-$(BUILDDIR)/config_host.mk : \
+$(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/config_host.mk.in \
 		$(SRCDIR)/Makefile.in \
 		$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
 		$(SRCDIR)/configure.ac \
-		$(wildcard $(SRCDIR)/config_host/*.h.in) \
-		$(if $(wildcard $(BUILDDIR)/autogen.input),$(BUILDDIR)/autogen.input,$(if $(wildcard $(BUILDDIR)/autogen.lastrun),$(BUILDDIR)/autogen.lastrun))
+		$(SRCDIR)/config_host/*.h.in \
+		$(BUILDDIR)/autogen.input \
+		$(BUILDDIR)/autogen.lastrun \
+		)
 	$(SRCDIR)/autogen.sh
-
-# dummy rule in case any of the above prerequisites are removed, so
-# that a stale Makefile still triggers autogen.sh, or in case
-# autogen.input does not exist, or autogen.lastrun does not yet exist
-$(SRCDIR)/config_host.mk.in \
-$(SRCDIR)/Makefile.in \
-$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
-$(SRCDIR)/configure.ac \
-$(BUILDDIR)/autogen.input \
-$(BUILDDIR)/autogen.lastrun:
-	@true
 
 else # MAKE_RESTARTS
 
