@@ -572,7 +572,7 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     bool ModuleTaskPane_Impl::impl_isToolPanelResource( const OUString& i_rResourceURL )
     {
-        return i_rResourceURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/toolpanel/" ) );
+        return i_rResourceURL.startsWith( "private:resource/toolpanel/" );
     }
 
     //------------------------------------------------------------------------------------------------------------------

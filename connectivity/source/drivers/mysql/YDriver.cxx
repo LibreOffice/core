@@ -319,9 +319,9 @@ namespace connectivity
     {
         Sequence< PropertyValue > info;
 
-        sal_Bool bOK =  url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:odbc:" ) )
-                    ||  url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:jdbc:" ) )
-                    ||  (   url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:mysqlc:" ) )
+        sal_Bool bOK =  url.startsWith( "sdbc:mysql:odbc:" )
+                    ||  url.startsWith( "sdbc:mysql:jdbc:" )
+                    ||  (   url.startsWith( "sdbc:mysql:mysqlc:" )
                         &&  loadDriver( url, info ).is()
                         );
         return bOK;

@@ -119,7 +119,7 @@ Reference< XConnection > Driver::connect(
 sal_Bool Driver::acceptsURL( const OUString& url )
     throw (SQLException, RuntimeException)
 {
-    return url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:postgresql:" ) );
+    return url.startsWith( "sdbc:postgresql:" );
 }
 
 Sequence< DriverPropertyInfo > Driver::getPropertyInfo(

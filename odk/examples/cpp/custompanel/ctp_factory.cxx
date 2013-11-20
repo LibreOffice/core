@@ -67,7 +67,7 @@ namespace sd { namespace colortoolpanel
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !i_rResourceURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/toolpanel/org.openoffice.example.colorpanel/" ) ) )
+        if ( !i_rResourceURL.startsWith( "private:resource/toolpanel/org.openoffice.example.colorpanel/" ) )
             throw NoSuchElementException( i_rResourceURL, *this );
 
         const OUString sColor( i_rResourceURL.copy( i_rResourceURL.lastIndexOf( '/' ) + 1 ) );

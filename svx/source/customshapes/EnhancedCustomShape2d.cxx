@@ -1615,7 +1615,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         if ( pAny )
                             *pAny >>= sShpType;
                         if( sShpType.getLength() > 3 &&
-                            sShpType.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso" ))){
+                            sShpType.startsWith( "mso" )){
                                 bIsMSEllipse = true;
                         }
                         if( (! bIsDefaultPath   && ! bIsDefaultViewBox) || (bIsDefaultViewBox && bIsMSEllipse) /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )

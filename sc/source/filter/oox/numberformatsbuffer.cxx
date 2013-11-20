@@ -1850,9 +1850,9 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
         else
         {
             // do not assert fractional number formats with fixed denominator
-            OSL_ENSURE( rFmtCode.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "#\\ ?/" ) ) ||
-                        rFmtCode.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "#\\ ?\?/" ) ) ||
-                        rFmtCode.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "#\\ ?\?\?/" ) ),
+            OSL_ENSURE( rFmtCode.startsWith( "#\\ ?/" ) ||
+                        rFmtCode.startsWith( "#\\ ?\?/" ) ||
+                        rFmtCode.startsWith( "#\\ ?\?\?/" ),
                 OStringBuffer( "lclCreateFormat - cannot create number format '" ).
                 append( OUStringToOString( rFmtCode, osl_getThreadTextEncoding() ) ).
                 append( '\'' ).getStr() );

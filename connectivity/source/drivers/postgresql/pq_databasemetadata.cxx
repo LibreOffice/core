@@ -1235,16 +1235,16 @@ struct SortInternalSchemasLastAndPublicFirst
         {
             ret = false;
         }
-        else if( valueA.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "pg_" ) ) &&
-            valueB.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "pg_" ) ) )
+        else if( valueA.startsWith( "pg_" ) &&
+            valueB.startsWith( "pg_" ) )
         {
             ret = valueA.compareTo( valueB ) < 0; // sorts equal !
         }
-        else if( valueA.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "pg_" ) ))
+        else if( valueA.startsWith( "pg_" ))
         {
             ret = false; // sorts last !
         }
-        else if( valueB.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "pg_" ) ) )
+        else if( valueB.startsWith( "pg_" ) )
         {
             ret = true; // sorts first !
         }
