@@ -12,7 +12,11 @@
 
 const char* publicFunc =
  "int isNan(double a) { return a != a; }\n"
- "double legalize(double a, double b) { return isNan(a)?b:a; }\n"
+ "double fsum_count(double a, double b, __private int *p) {\n"
+ "    bool t = isNan(a);\n"
+ "    (*p) += t?0:1;\n"
+ "    return t?b:a+b;\n"
+ "}\n"
  "double fsum(double a, double b) { return isNan(a)?b:a+b; }\n"
  "double fsub(double a, double b) { return a-b; }\n"
  "double fdiv(double a, double b) { return a/b; }\n"

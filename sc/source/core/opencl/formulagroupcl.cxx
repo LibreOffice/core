@@ -528,7 +528,6 @@ return nCurWindowSize;
                             temp1 << "){\n\t\t";
                             temp1 <<  mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                             temp1 << ";\n\t\t\t";
-                            temp1 << "nCount += 1;\n\t\t";
                             temp1 << "}\n\t";
                         }
                         ss << temp1.str();
@@ -544,7 +543,6 @@ return nCurWindowSize;
                         temp2 << "tmp = ";
                         temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                         temp2 << ";\n\t\t\t";
-                        temp2 << "nCount += 1;\n\t\t";
                         temp2 << "}\n\t";
                     }
                     ss << temp2.str();
@@ -568,7 +566,6 @@ return nCurWindowSize;
                             temp1 << "tmp = ";
                             temp1 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                             temp1 << ";\n\t\t\t";
-                            temp1 << "nCount += 1;\n\t\t";
                         }
                         ss << temp1.str();
                     }
@@ -581,7 +578,6 @@ return nCurWindowSize;
                         temp2 << "tmp = ";
                         temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                         temp2 << ";\n\t\t\t";
-                        temp2 << "nCount += 1;\n\t\t";
                     }
                     ss << temp2.str();
                 }
@@ -847,7 +843,8 @@ public:
         ss << ") {\n\t";
         ss << "double tmp = " << GetBottom() <<";\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
-        ss << "int nCount = 0;\n\t";
+        if (isAverage())
+            ss << "int nCount = 0;\n\t";
         ss << "double tmpBottom;\n\t";
         unsigned i = vSubArguments.size();
         size_t nItems = 0;
@@ -901,9 +898,6 @@ public:
                 }
                 else
                 {
-#ifdef  ISNAN
-                    ss << "nCount += 1;\n\t\t";
-#endif
                     nItems += 1;
                 }
             }
@@ -920,7 +914,6 @@ public:
                 ss << "tmp = ";
                 ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
                 ss << ";\n\t\t\t";
-                ss << "nCount += 1;\n\t\t";
                 ss << "}\n\t";
                 ss << "}\n\t";
             }
@@ -1266,7 +1259,16 @@ public:
     virtual std::string BinFuncName(void) const { return "fsum"; }
 };
 
-class OpAverage: public OpSum {
+class OpAverage: public Reduction {
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
+    {
+        std::stringstream ss;
+        ss << "fsum_count(" << lhs <<","<< rhs<<", &nCount)";
+        return ss.str();
+    }
+    virtual std::string BinFuncName(void) const { return "fsum"; }
     virtual bool isAverage() const { return true; }
 };
 
