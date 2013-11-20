@@ -24,6 +24,8 @@
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 
+#include <queue>
+
 namespace datastreams {
 
 class CallerThread : public salhelper::Thread
@@ -57,6 +59,82 @@ private:
     }
 };
 
+class ReaderThread : public salhelper::Thread
+{
+    SvStream *mpStream;
+public:
+    bool mbTerminateReading;
+    osl::Condition maProduceResume;
+    osl::Condition maConsumeResume;
+    osl::Mutex maLinesProtector;
+    std::queue<LinesList* > maPendingLines;
+    std::queue<LinesList* > maUsedLines;
+
+    ReaderThread(SvStream *pData):
+        Thread("ReaderThread")
+        ,mpStream(pData)
+        ,mbTerminateReading(false)
+    {
+    }
+
+    virtual ~ReaderThread()
+    {
+        delete mpStream;
+        while (!maPendingLines.empty())
+        {
+            delete maPendingLines.front();
+            maPendingLines.pop();
+        }
+        while (!maUsedLines.empty())
+        {
+            delete maUsedLines.front();
+            maUsedLines.pop();
+        }
+    }
+
+    void terminate()
+    {
+        mbTerminateReading = true;
+        maProduceResume.set();
+        join();
+    }
+
+private:
+    virtual void execute() SAL_OVERRIDE
+    {
+        while (!mbTerminateReading)
+        {
+            LinesList *pLines = 0;
+            osl::ResettableMutexGuard aGuard(maLinesProtector);
+            if (!maUsedLines.empty())
+            {
+                pLines = maUsedLines.front();
+                maUsedLines.pop();
+                aGuard.clear(); // unlock
+            }
+            else
+            {
+                aGuard.clear(); // unlock
+                pLines = new LinesList(10);
+            }
+            for (size_t i = 0; i < pLines->size(); ++i)
+                mpStream->ReadLine( pLines->at(i) );
+            aGuard.reset(); // lock
+            while (!mbTerminateReading && maPendingLines.size() >= 8)
+            { // pause reading for a bit
+                aGuard.clear(); // unlock
+                maProduceResume.wait();
+                maProduceResume.reset();
+                aGuard.reset(); // lock
+            }
+            maPendingLines.push(pLines);
+            maConsumeResume.set();
+            if (!mpStream->good())
+                mbTerminateReading = true;
+        }
+    }
+};
+
 }
 
 DataStreams::DataStreams(ScDocShell *pScDocShell):
@@ -64,6 +142,8 @@ DataStreams::DataStreams(ScDocShell *pScDocShell):
     , mpScDocument(mpScDocShell->GetDocument())
     , meMove(NO_MOVE)
     , mbRunning(false)
+    , mpLines(0)
+    , mnLinesCount(0)
 {
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
@@ -76,6 +156,31 @@ DataStreams::~DataStreams()
     mxThread->mbTerminate = true;
     mxThread->maStart.set();
     mxThread->join();
+    if (mxReaderThread.is())
+        mxReaderThread->terminate();
+}
+
+OString DataStreams::ConsumeLine()
+{
+    if (!mpLines || mnLinesCount >= mpLines->size())
+    {
+        mnLinesCount = 0;
+        osl::ResettableMutexGuard aGuard(mxReaderThread->maLinesProtector);
+        if (mpLines)
+            mxReaderThread->maUsedLines.push(mpLines);
+        while (mxReaderThread->maPendingLines.empty())
+        {
+            aGuard.clear(); // unlock
+            mxReaderThread->maConsumeResume.wait();
+            mxReaderThread->maConsumeResume.reset();
+            aGuard.reset(); // lock
+        }
+        mpLines = mxReaderThread->maPendingLines.front();
+        mxReaderThread->maPendingLines.pop();
+        if (mxReaderThread->maPendingLines.size() <= 4)
+            mxReaderThread->maProduceResume.set(); // start producer again
+    }
+    return mpLines->at(mnLinesCount++);
 }
 
 void DataStreams::Start()
@@ -117,13 +222,13 @@ void DataStreams::Stop()
     mpScDocument->EnableUndo(mbIsUndoEnabled);
 }
 
-void DataStreams::Set(const OUString& rUrl, bool bIsScript, bool bValuesInLine,
+void DataStreams::Set(SvStream *pStream, bool bValuesInLine,
         const OUString& rRange, sal_Int32 nLimit, MoveEnum eMove)
 {
-    if (bIsScript)
-        mpStream.reset( new SvScriptStream(rUrl) );
-    else
-        mpStream.reset( new SvFileStream(rUrl, STREAM_READ) );
+    if (mxReaderThread.is())
+        mxReaderThread->terminate();
+    mxReaderThread = new datastreams::ReaderThread( pStream );
+    mxReaderThread->launch();
 
     mpEndRange.reset( NULL );
     mpRange.reset ( new ScRange() );
@@ -170,14 +275,6 @@ void DataStreams::MoveData()
 
 bool DataStreams::ImportData()
 {
-    if (!mpStream->good())
-    {
-        // if there is a problem with SvStream, stop running
-        mbRunning = false;
-        return mbRunning;
-    }
-
-    OString sTmp;
     SolarMutexGuard aGuard;
     MoveData();
     if (mbValuesInLine)
@@ -186,8 +283,7 @@ bool DataStreams::ImportData()
         OStringBuffer aBuf;
         while (nHeight--)
         {
-            mpStream->ReadLine(sTmp);
-            aBuf.append(sTmp);
+            aBuf.append(ConsumeLine());
             aBuf.append('\n');
         }
         SvMemoryStream aMemoryStream((void *)aBuf.getStr(), aBuf.getLength(), STREAM_READ);
@@ -202,8 +298,7 @@ bool DataStreams::ImportData()
         // read more lines at once but not too much
         for (int i = 0; i < 10; ++i)
         {
-            mpStream->ReadLine(sTmp);
-            OUString sLine(OStringToOUString(sTmp, RTL_TEXTENCODING_UTF8));
+            OUString sLine( OStringToOUString(ConsumeLine(), RTL_TEXTENCODING_UTF8) );
             if (sLine.indexOf(',') <= 0)
                 continue;
 

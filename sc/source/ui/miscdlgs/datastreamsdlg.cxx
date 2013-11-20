@@ -74,11 +74,14 @@ DataStreamsDlg::DataStreamsDlg(DataStreams *pDataStreams, Window* pParent)
 
 void DataStreamsDlg::Start()
 {
-    bool bIsScript = m_pRBScriptData->IsChecked();
     sal_Int32 nLimit = 0;
     if (m_pRBMaxLimit->IsChecked())
         nLimit = m_pEdLimit->GetText().toInt32();
-    mpDataStreams->Set( m_pCbUrl->GetText(), bIsScript, m_pRBValuesInLine->IsChecked(),
+    mpDataStreams->Set(
+            (m_pRBScriptData->IsChecked() ?
+                dynamic_cast<SvStream*>( new SvScriptStream(m_pCbUrl->GetText()) ) :
+                dynamic_cast<SvStream*>( new SvFileStream(m_pCbUrl->GetText(), STREAM_READ) )),
+            m_pRBValuesInLine->IsChecked(),
             m_pEdRange->GetText(), nLimit, (m_pRBNoMove->IsChecked() ? DataStreams::NO_MOVE :
             m_pRBRangeDown->IsChecked() ? DataStreams::RANGE_DOWN : DataStreams::MOVE_DOWN) );
     mpDataStreams->Start();
