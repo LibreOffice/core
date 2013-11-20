@@ -26,6 +26,10 @@ ifneq (,$(ENABLE_OPENCL))
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_scopencl \
 ))
+
+$(eval $(call gb_Module_add_check_targets,sc,\
+	CppunitTest_sc_opencl_test \
+))
 endif
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
@@ -54,7 +58,6 @@ $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_ucalc \
     CppunitTest_sc_filters_test \
     CppunitTest_sc_rangelst_test \
-	CppunitTest_sc_opencl_test \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
