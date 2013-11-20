@@ -4374,7 +4374,9 @@ Color ImpEditEngine::GetAutoColor() const
 }
 
 
-sal_Bool ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_uInt16 nStartPos, sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax, sal_Bool bManipulateDXArray )
+bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
+        TextPortion* pTextPortion, sal_uInt16 nStartPos, sal_Int32* pDXArray,
+        sal_uInt16 n100thPercentFromMax, sal_Bool bManipulateDXArray)
 {
     DBG_ASSERT( GetAsianCompressionMode(), "ImplCalcAsianCompression - Why?" );
     DBG_ASSERT( pTextPortion->GetLen(), "ImplCalcAsianCompression - Empty Portion?" );
@@ -4383,7 +4385,7 @@ sal_Bool ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortio
     if ( n100thPercentFromMax == 10000 )
         pTextPortion->SetExtraInfos( NULL );
 
-    sal_Bool bCompressed = sal_False;
+    bool bCompressed = false;
 
     if ( GetI18NScriptType( EditPaM( pNode, nStartPos+1 ) ) == i18n::ScriptType::ASIAN )
     {
@@ -4442,7 +4444,7 @@ sal_Bool ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortio
 
                 if ( nCompress )
                 {
-                    bCompressed = sal_True;
+                    bCompressed = true;
                     nNewPortionWidth -= nCompress;
                     pTextPortion->GetExtraInfos()->bCompressed = sal_True;
 
