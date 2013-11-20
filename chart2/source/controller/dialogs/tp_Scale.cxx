@@ -18,7 +18,6 @@
  */
 
 #include "tp_Scale.hxx"
-#include "tp_Scale.hrc"
 
 #include "ResId.hxx"
 #include "Strings.hrc"
@@ -52,37 +51,6 @@ namespace chart
 namespace
 {
 
-void lcl_placeControlAtX( Control& rControl, long nNewXPos )
-{
-    Point aPos( rControl.GetPosPixel() );
-    aPos.X() = nNewXPos;
-    rControl.SetPosPixel(aPos);
-}
-
-void lcl_placeControlAtY( Control& rControl, long nNewYPos )
-{
-    Point aPos( rControl.GetPosPixel() );
-    aPos.Y() = nNewYPos;
-    rControl.SetPosPixel(aPos);
-}
-
-void lcl_shiftControls( Control& rEdit, Control& rAuto, long nNewXPos )
-{
-    Point aPos( rEdit.GetPosPixel() );
-    long nShift = nNewXPos - aPos.X();
-    aPos.X() = nNewXPos;
-    rEdit.SetPosPixel(aPos);
-
-    aPos = rAuto.GetPosPixel();
-    aPos.X() += nShift;
-    rAuto.SetPosPixel(aPos);
-}
-
-long lcl_getLabelDistance( Control& rControl )
-{
-    return rControl.LogicToPixel( Size(RSC_SP_CTRL_DESC_X, 0), MapMode(MAP_APPFONT) ).Width();
-}
-
 void lcl_setValue( FormattedField& rFmtField, double fValue )
 {
     rFmtField.SetValue( fValue );
@@ -92,44 +60,10 @@ void lcl_setValue( FormattedField& rFmtField, double fValue )
 }
 
 ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
-    SfxTabPage(pWindow, SchResId(TP_SCALE), rInAttrs),
-
-    aFlScale(this, SchResId(FL_SCALE)),
-
-    aCbxReverse(this, SchResId(CBX_REVERSE)),
-    aCbxLogarithm(this, SchResId(CBX_LOGARITHM)),
-
-    m_aTxt_AxisType(this, SchResId (TXT_AXIS_TYPE)),
-    m_aLB_AxisType(this, SchResId(LB_AXIS_TYPE)),
-
-    aTxtMin (this, SchResId (TXT_MIN)),
-    aFmtFldMin(this, SchResId(EDT_MIN)),
-    aCbxAutoMin(this, SchResId(CBX_AUTO_MIN)),
-
-    aTxtMax(this, SchResId (TXT_MAX)),
-    aFmtFldMax(this, SchResId(EDT_MAX)),
-    aCbxAutoMax(this, SchResId(CBX_AUTO_MAX)),
-
-    m_aTxt_TimeResolution(this, SchResId (TXT_TIME_RESOLUTION)),
-    m_aLB_TimeResolution(this, SchResId(LB_TIME_RESOLUTION)),
-    m_aCbx_AutoTimeResolution(this, SchResId(CBX_AUTO_TIME_RESOLUTION)),
-
-    aTxtMain (this, SchResId (TXT_STEP_MAIN)),
-    aFmtFldStepMain(this, SchResId(EDT_STEP_MAIN)),
-    m_aMt_MainDateStep(this, SchResId(MT_MAIN_DATE_STEP)),
-    m_aLB_MainTimeUnit(this, SchResId(LB_MAIN_TIME_UNIT)),
-    aCbxAutoStepMain(this, SchResId(CBX_AUTO_STEP_MAIN)),
-
-    aTxtHelpCount (this, SchResId (TXT_STEP_HELP_COUNT)),
-    aTxtHelp (this, SchResId (TXT_STEP_HELP)),
-    aMtStepHelp (this, SchResId (MT_STEPHELP)),
-    m_aLB_HelpTimeUnit(this, SchResId(LB_HELP_TIME_UNIT)),
-    aCbxAutoStepHelp(this, SchResId(CBX_AUTO_STEP_HELP)),
-
-    aTxtOrigin (this, SchResId (TXT_ORIGIN)),
-    aFmtFldOrigin(this, SchResId(EDT_ORIGIN)),
-    aCbxAutoOrigin(this, SchResId(CBX_AUTO_ORIGIN)),
-
+    SfxTabPage(pWindow
+               , "tp_Scale"
+               , "modules/schart/ui/tp_Scale.ui"
+               , rInAttrs),
     fMin(0.0),
     fMax(0.0),
     fStepMain(0.0),
@@ -143,27 +77,56 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     pNumFormatter(NULL),
     m_bShowAxisOrigin(false)
 {
-    FreeResource();
-    SetExchangeSupport();
+    get(m_pCbxReverse, "CBX_REVERSE");
+    get(m_pCbxLogarithm, "CBX_LOGARITHM");
+    get(m_pLB_AxisType, "LB_AXIS_TYPE");
+    get(m_pBxType,"boxTYPE");
 
-    aCbxAutoMin.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
-    aCbxAutoMax.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
-    aCbxAutoStepMain.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
-    aCbxAutoStepHelp.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
-    aCbxAutoOrigin.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
-    m_aCbx_AutoTimeResolution.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    get(m_pBxMinMax, "gridMINMAX");
+    get(m_pFmtFldMin, "EDT_MIN");
+    get(m_pCbxAutoMin, "CBX_AUTO_MIN");
+    get(m_pFmtFldMax, "EDT_MAX");
+    get(m_pCbxAutoMax, "CBX_AUTO_MAX");
 
-    m_aLB_AxisType.SetDropDownLineCount(3);
-    m_aLB_AxisType.SetSelectHdl(LINK(this, ScaleTabPage, SelectAxisTypeHdl));
+    get(m_pBxResolution, "boxRESOLUTION");
+    get(m_pLB_TimeResolution, "LB_TIME_RESOLUTION");
+    get(m_pCbx_AutoTimeResolution, "CBX_AUTO_TIME_RESOLUTION");
 
-    m_aLB_TimeResolution.SetDropDownLineCount(3);
-    m_aLB_MainTimeUnit.SetDropDownLineCount(3);
-    m_aLB_HelpTimeUnit.SetDropDownLineCount(3);
+    get(m_pBxMain, "boxMAIN");
+    get(m_pFmtFldStepMain, "EDT_STEP_MAIN");
+    get(m_pMt_MainDateStep, "MT_MAIN_DATE_STEP");
+    get(m_pLB_MainTimeUnit, "LB_MAIN_TIME_UNIT");
+    get(m_pCbxAutoStepMain, "CBX_AUTO_STEP_MAIN");
 
-    aFmtFldMin.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
-    aFmtFldMax.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
-    aFmtFldStepMain.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
-    aFmtFldOrigin.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+    get(m_pBxMinor, "boxMINOR");
+    get(m_pMtStepHelp, "MT_STEPHELP");
+    get(m_pLB_HelpTimeUnit, "LB_HELP_TIME_UNIT");
+    get(m_pCbxAutoStepHelp, "CBX_AUTO_STEP_HELP");
+    get(m_pTxtHelpCount,"TXT_STEP_HELP_COUNT");
+    get(m_pTxtHelp,"TXT_STEP_HELP");
+
+    get(m_pBxOrigin,"boxORIGIN");
+    get(m_pFmtFldOrigin, "EDT_ORIGIN");
+    get(m_pCbxAutoOrigin, "CBX_AUTO_ORIGIN");
+
+    m_pCbxAutoMin->SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    m_pCbxAutoMax->SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    m_pCbxAutoStepMain->SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    m_pCbxAutoStepHelp->SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    m_pCbxAutoOrigin->SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    m_pCbx_AutoTimeResolution->SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+
+    m_pLB_AxisType->SetDropDownLineCount(3);
+    m_pLB_AxisType->SetSelectHdl(LINK(this, ScaleTabPage, SelectAxisTypeHdl));
+
+    m_pLB_TimeResolution->SetDropDownLineCount(3);
+    m_pLB_MainTimeUnit->SetDropDownLineCount(3);
+    m_pLB_HelpTimeUnit->SetDropDownLineCount(3);
+
+    m_pFmtFldMin->SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+    m_pFmtFldMax->SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+    m_pFmtFldStepMain->SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+    m_pFmtFldOrigin->SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
 
     HideAllControls();
 }
@@ -178,195 +141,81 @@ IMPL_LINK( ScaleTabPage, FmtFieldModifiedHdl, FormattedField*, pFmtFied )
 void ScaleTabPage::StateChanged( StateChangedType nType )
 {
     TabPage::StateChanged( nType );
-
-    if( nType == STATE_CHANGE_INITSHOW )
-        AdjustControlPositions();
-}
-
-void ScaleTabPage::AdjustControlPositions()
-{
-    //optimize position of the controls
-    long nLabelWidth = ::std::max( aTxtMin.CalcMinimumSize().Width(), aTxtMax.CalcMinimumSize().Width() );
-    nLabelWidth = ::std::max( aTxtMain.CalcMinimumSize().Width(), nLabelWidth );
-    nLabelWidth = ::std::max( aTxtHelp.CalcMinimumSize().Width(), nLabelWidth );
-    nLabelWidth = ::std::max( aTxtHelpCount.CalcMinimumSize().Width(), nLabelWidth );
-    nLabelWidth = ::std::max( aTxtOrigin.CalcMinimumSize().Width(), nLabelWidth );
-    nLabelWidth = ::std::max( m_aTxt_TimeResolution.CalcMinimumSize().Width(), nLabelWidth );
-    nLabelWidth = ::std::max( m_aTxt_AxisType.CalcMinimumSize().Width(), nLabelWidth );
-    nLabelWidth+=1;
-
-    long nLabelDistance = lcl_getLabelDistance(aTxtMin);
-    long nNewXPos = aTxtMin.GetPosPixel().X() + nLabelWidth + nLabelDistance;
-
-    //ensure that the auto checkboxes are wide enough and have correct size for calculation
-    aCbxAutoMin.SetSizePixel( aCbxAutoMin.CalcMinimumSize() );
-    aCbxAutoMax.SetSizePixel( aCbxAutoMax.CalcMinimumSize() );
-    aCbxAutoStepMain.SetSizePixel( aCbxAutoStepMain.CalcMinimumSize() );
-    aCbxAutoStepHelp.SetSizePixel( aCbxAutoStepHelp.CalcMinimumSize() );
-    aCbxAutoOrigin.SetSizePixel( aCbxAutoOrigin.CalcMinimumSize() );
-    m_aCbx_AutoTimeResolution.SetSizePixel( m_aCbx_AutoTimeResolution.CalcMinimumSize() );
-
-    //ensure new pos is ok
-    long nWidthOfOtherControls = m_aLB_MainTimeUnit.GetPosPixel().X() + m_aLB_MainTimeUnit.GetSizePixel().Width() - aFmtFldMin.GetPosPixel().X();
-    long nDialogWidth = GetSizePixel().Width();
-
-    long nLeftSpace = nDialogWidth - nNewXPos - nWidthOfOtherControls;
-    if(nLeftSpace>=0)
-    {
-        Size aSize( aTxtMin.GetSizePixel() );
-        aSize.Width() = nLabelWidth;
-        aTxtMin.SetSizePixel(aSize);
-        aTxtMax.SetSizePixel(aSize);
-        aTxtMain.SetSizePixel(aSize);
-        aTxtHelp.SetSizePixel(aSize);
-        aTxtHelpCount.SetSizePixel(aSize);
-        aTxtOrigin.SetSizePixel(aSize);
-        m_aTxt_TimeResolution.SetSizePixel(aSize);
-        m_aTxt_AxisType.SetSizePixel(aSize);
-
-        long nOrgAutoCheckX = aCbxAutoMin.GetPosPixel().X();
-        lcl_placeControlAtX( aCbxAutoStepMain, nOrgAutoCheckX );
-        lcl_placeControlAtX( aCbxAutoStepHelp, nOrgAutoCheckX );
-
-        lcl_shiftControls( aFmtFldMin, aCbxAutoMin, nNewXPos );
-        lcl_shiftControls( aFmtFldMax, aCbxAutoMax, nNewXPos );
-        lcl_shiftControls( aFmtFldStepMain, aCbxAutoStepMain, nNewXPos );
-        lcl_placeControlAtX( m_aMt_MainDateStep, aFmtFldStepMain.GetPosPixel().X() );
-        lcl_shiftControls( aMtStepHelp, aCbxAutoStepHelp, nNewXPos );
-        lcl_shiftControls( aFmtFldOrigin, aCbxAutoOrigin, nNewXPos );
-        lcl_shiftControls( m_aLB_TimeResolution, m_aCbx_AutoTimeResolution, nNewXPos );
-        lcl_placeControlAtX( m_aLB_AxisType, nNewXPos );
-
-        nNewXPos = aCbxAutoStepMain.GetPosPixel().X() + aCbxAutoStepMain.GetSizePixel().Width() + nLabelDistance;
-        lcl_placeControlAtX( m_aLB_MainTimeUnit, nNewXPos );
-        lcl_placeControlAtX( m_aLB_HelpTimeUnit, nNewXPos );
-    }
-    PlaceIntervalControlsAccordingToAxisType();
-}
-
-void ScaleTabPage::PlaceIntervalControlsAccordingToAxisType()
-{
-    long nMinX = std::min( aCbxAutoStepMain.GetPosPixel().X(), m_aLB_MainTimeUnit.GetPosPixel().X() );
-    long nLabelDistance = lcl_getLabelDistance(aTxtMin);
-    long nListWidth = m_aLB_MainTimeUnit.GetSizePixel().Width();
-
-    if( chart2::AxisType::DATE == m_nAxisType )
-    {
-        lcl_placeControlAtX( m_aLB_MainTimeUnit, nMinX );
-        lcl_placeControlAtX( m_aLB_HelpTimeUnit, nMinX );
-        long nSecondX = nMinX + nListWidth + nLabelDistance;
-        lcl_placeControlAtX( aCbxAutoStepMain, nSecondX );
-        lcl_placeControlAtX( aCbxAutoStepHelp, nSecondX );
-
-        long nOne = m_aMt_MainDateStep.LogicToPixel( Size(0, 1), MapMode(MAP_APPFONT) ).Height();
-
-        long nYMajor = m_aMt_MainDateStep.GetPosPixel().Y();
-        lcl_placeControlAtY( aCbxAutoStepMain , nYMajor+(3*nOne));
-        lcl_placeControlAtY( aTxtMain , nYMajor+nOne+nOne);
-
-        long nYMinor = m_aLB_HelpTimeUnit.GetPosPixel().Y();
-        lcl_placeControlAtY( aMtStepHelp , nYMinor );
-        lcl_placeControlAtY( aCbxAutoStepHelp , nYMinor+(3*nOne));
-    }
-    else
-    {
-        lcl_placeControlAtX( aCbxAutoStepMain, nMinX );
-        lcl_placeControlAtX( aCbxAutoStepHelp, nMinX );
-        long nSecondX = nMinX + aCbxAutoStepMain.GetSizePixel().Width() + nLabelDistance;
-        long nSecondXMax = GetSizePixel().Width() - nListWidth;
-        if( nSecondX > nSecondXMax )
-            nSecondX = nSecondXMax;
-        lcl_placeControlAtX( m_aLB_MainTimeUnit, nSecondX );
-        lcl_placeControlAtX( m_aLB_HelpTimeUnit, nSecondX );
-    }
 }
 
 void ScaleTabPage::EnableControls()
 {
-    bool bValueAxis = chart2::AxisType::REALNUMBER == m_nAxisType || chart2::AxisType::PERCENT == m_nAxisType || chart2::AxisType::DATE == m_nAxisType;
+    bool bValueAxis = chart2::AxisType::REALNUMBER == m_nAxisType
+                   || chart2::AxisType::PERCENT == m_nAxisType
+                   || chart2::AxisType::DATE == m_nAxisType;
     bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
 
-    m_aTxt_AxisType.Show(m_bAllowDateAxis);
-    m_aLB_AxisType.Show(m_bAllowDateAxis);
+    m_pBxType->Show(m_bAllowDateAxis);
 
-    aCbxLogarithm.Show( bValueAxis && !bDateAxis );
-    aTxtMin.Show( bValueAxis );
-    aFmtFldMin.Show( bValueAxis );
-    aCbxAutoMin.Show( bValueAxis );
-    aTxtMax.Show( bValueAxis );
-    aFmtFldMax.Show( bValueAxis );
-    aCbxAutoMax.Show( bValueAxis );
-    aTxtMain.Show( bValueAxis );
-    aFmtFldStepMain.Show( bValueAxis );
-    aCbxAutoStepMain.Show( bValueAxis );
-    aTxtHelp.Show( bValueAxis );
-    aTxtHelpCount.Show( bValueAxis );
-    aMtStepHelp.Show( bValueAxis );
-    aCbxAutoStepHelp.Show( bValueAxis );
+    m_pCbxLogarithm->Show( bValueAxis && !bDateAxis );
 
-    aTxtOrigin.Show( m_bShowAxisOrigin && bValueAxis );
-    aFmtFldOrigin.Show( m_bShowAxisOrigin && bValueAxis );
-    aCbxAutoOrigin.Show( m_bShowAxisOrigin && bValueAxis );
+    m_pBxMinMax->Show(bValueAxis);
+    m_pBxMain->Show( bValueAxis );
+    m_pBxMinor->Show( bValueAxis );
+    m_pBxOrigin->Show( m_bShowAxisOrigin && bValueAxis );
 
-    aTxtHelpCount.Show( bValueAxis && !bDateAxis );
-    aTxtHelp.Show( bDateAxis );
+    m_pTxtHelpCount->Show( bValueAxis && !bDateAxis );
+    m_pTxtHelp->Show( bDateAxis );
 
-    m_aTxt_TimeResolution.Show( bDateAxis );
-    m_aLB_TimeResolution.Show( bDateAxis );
-    m_aCbx_AutoTimeResolution.Show( bDateAxis );
+    m_pBxResolution->Show( bDateAxis );
 
-    bool bWasDateAxis = m_aMt_MainDateStep.IsVisible();
+    bool bWasDateAxis = m_pMt_MainDateStep->IsVisible();
     if( bWasDateAxis != bDateAxis )
     {
         //transport value from one to other control
         if( bWasDateAxis )
-            lcl_setValue( aFmtFldStepMain, m_aMt_MainDateStep.GetValue() );
+            lcl_setValue( *m_pFmtFldStepMain, m_pMt_MainDateStep->GetValue() );
         else
-            m_aMt_MainDateStep.SetValue( static_cast<sal_Int32>(aFmtFldStepMain.GetValue()) );
+            m_pMt_MainDateStep->SetValue( static_cast<sal_Int32>(m_pFmtFldStepMain->GetValue()) );
     }
-    aFmtFldStepMain.Show( bValueAxis && !bDateAxis );
-    m_aMt_MainDateStep.Show( bDateAxis );
+    m_pFmtFldStepMain->Show( bValueAxis && !bDateAxis );
+    m_pMt_MainDateStep->Show( bDateAxis );
 
-    m_aLB_MainTimeUnit.Show( bDateAxis );
-    m_aLB_HelpTimeUnit.Show( bDateAxis );
+    m_pLB_MainTimeUnit->Show( bDateAxis );
+    m_pLB_HelpTimeUnit->Show( bDateAxis );
 
-    EnableValueHdl(&aCbxAutoMin);
-    EnableValueHdl(&aCbxAutoMax);
-    EnableValueHdl(&aCbxAutoStepMain);
-    EnableValueHdl(&aCbxAutoStepHelp);
-    EnableValueHdl(&aCbxAutoOrigin);
-    EnableValueHdl(&m_aCbx_AutoTimeResolution);
+    EnableValueHdl(m_pCbxAutoMin);
+    EnableValueHdl(m_pCbxAutoMax);
+    EnableValueHdl(m_pCbxAutoStepMain);
+    EnableValueHdl(m_pCbxAutoStepHelp);
+    EnableValueHdl(m_pCbxAutoOrigin);
+    EnableValueHdl(m_pCbx_AutoTimeResolution);
 }
 
 IMPL_LINK( ScaleTabPage, EnableValueHdl, CheckBox *, pCbx )
 {
     bool bEnable = pCbx && !pCbx->IsChecked() && pCbx->IsEnabled();
-    if (pCbx == &aCbxAutoMin)
+    if (pCbx == m_pCbxAutoMin)
     {
-        aFmtFldMin.Enable( bEnable );
+        m_pFmtFldMin->Enable( bEnable );
     }
-    else if (pCbx == &aCbxAutoMax)
+    else if (pCbx == m_pCbxAutoMax)
     {
-        aFmtFldMax.Enable( bEnable );
+        m_pFmtFldMax->Enable( bEnable );
     }
-    else if (pCbx == &aCbxAutoStepMain)
+    else if (pCbx == m_pCbxAutoStepMain)
     {
-        aFmtFldStepMain.Enable( bEnable );
-        m_aMt_MainDateStep.Enable( bEnable );
-        m_aLB_MainTimeUnit.Enable( bEnable );
+        m_pFmtFldStepMain->Enable( bEnable );
+        m_pMt_MainDateStep->Enable( bEnable );
+        m_pLB_MainTimeUnit->Enable( bEnable );
     }
-    else if (pCbx == &aCbxAutoStepHelp)
+    else if (pCbx == m_pCbxAutoStepHelp)
     {
-        aMtStepHelp.Enable( bEnable );
-        m_aLB_HelpTimeUnit.Enable( bEnable );
+        m_pMtStepHelp->Enable( bEnable );
+        m_pLB_HelpTimeUnit->Enable( bEnable );
     }
-    else if (pCbx == &m_aCbx_AutoTimeResolution)
+    else if (pCbx == m_pCbx_AutoTimeResolution)
     {
-        m_aLB_TimeResolution.Enable( bEnable );
+        m_pLB_TimeResolution->Enable( bEnable );
     }
-    else if (pCbx == &aCbxAutoOrigin)
+    else if (pCbx == m_pCbxAutoOrigin)
     {
-        aFmtFldOrigin.Enable( bEnable );
+        m_pFmtFldOrigin->Enable( bEnable );
     }
     return 0;
 }
@@ -380,15 +229,14 @@ enum AxisTypeListBoxEntry
 
 IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
 {
-    sal_uInt16 nPos = m_aLB_AxisType.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLB_AxisType->GetSelectEntryPos();
     if( nPos==TYPE_DATE )
         m_nAxisType = chart2::AxisType::DATE;
     else
         m_nAxisType = chart2::AxisType::CATEGORY;
     if( chart2::AxisType::DATE == m_nAxisType )
-        aCbxLogarithm.Check(false);
+        m_pCbxLogarithm->Check(false);
     EnableControls();
-    PlaceIntervalControlsAccordingToAxisType();
     SetNumFormat();
     return 0;
 }
@@ -404,27 +252,27 @@ sal_Bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXISTYPE, m_nAxisType));
     if(m_bAllowDateAxis)
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS, TYPE_AUTO==m_aLB_AxisType.GetSelectEntryPos()));
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS, TYPE_AUTO==m_pLB_AxisType->GetSelectEntryPos()));
 
     bool bAutoScale = false;
     if( m_nAxisType==chart2::AxisType::CATEGORY )
         bAutoScale = true;//reset scaling for category charts
 
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MIN      ,bAutoScale || aCbxAutoMin.IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MAX      ,bAutoScale || aCbxAutoMax.IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP,bAutoScale || aCbxAutoStepHelp.IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_ORIGIN   ,bAutoScale || aCbxAutoOrigin.IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_LOGARITHM     ,aCbxLogarithm.IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_REVERSE       ,aCbxReverse.IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MIN      ,bAutoScale || m_pCbxAutoMin->IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MAX      ,bAutoScale || m_pCbxAutoMax->IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP,bAutoScale || m_pCbxAutoStepHelp->IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_ORIGIN   ,bAutoScale || m_pCbxAutoOrigin->IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_LOGARITHM     ,m_pCbxLogarithm->IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_REVERSE       ,m_pCbxReverse->IsChecked()));
     rOutAttrs.Put(SvxDoubleItem(fMax     , SCHATTR_AXIS_MAX));
     rOutAttrs.Put(SvxDoubleItem(fMin     , SCHATTR_AXIS_MIN));
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_STEP_HELP, nStepHelp));
     rOutAttrs.Put(SvxDoubleItem(fOrigin  , SCHATTR_AXIS_ORIGIN));
 
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN,bAutoScale || aCbxAutoStepMain.IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN,bAutoScale || m_pCbxAutoStepMain->IsChecked()));
     rOutAttrs.Put(SvxDoubleItem(fStepMain,SCHATTR_AXIS_STEP_MAIN));
 
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,bAutoScale || m_aCbx_AutoTimeResolution.IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,bAutoScale || m_pCbx_AutoTimeResolution->IsChecked()));
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_TIME_RESOLUTION,m_nTimeResolution));
 
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_MAIN_TIME_UNIT,m_nMainTimeUnit));
@@ -460,86 +308,85 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
             nPos=TYPE_AUTO;
         else
             nPos=TYPE_TEXT;
-        m_aLB_AxisType.SelectEntryPos( nPos );
+        m_pLB_AxisType->SelectEntryPos( nPos );
     }
 
     if( m_bAllowDateAxis )
-        aCbxReverse.SetHelpId("chart2:CheckBox:TP_SCALE:CBX_REVERSE:MayBeDateAxis");
+        m_pCbxReverse->SetHelpId("chart2:CheckBox:TP_SCALE:CBX_REVERSE:MayBeDateAxis");
     else if( m_nAxisType==chart2::AxisType::CATEGORY || m_nAxisType==chart2::AxisType::SERIES )
-        aCbxReverse.SetHelpId("chart2:CheckBox:TP_SCALE:CBX_REVERSE:Category");
+        m_pCbxReverse->SetHelpId("chart2:CheckBox:TP_SCALE:CBX_REVERSE:Category");
 
-    PlaceIntervalControlsAccordingToAxisType();
 
-    aCbxAutoMin.Check( true );
-    aCbxAutoMax.Check( true );
-    aCbxAutoStepMain.Check( true );
-    aCbxAutoStepHelp.Check( true );
-    aCbxAutoOrigin.Check( true );
-    m_aCbx_AutoTimeResolution.Check( true );
+    m_pCbxAutoMin->Check( true );
+    m_pCbxAutoMax->Check( true );
+    m_pCbxAutoStepMain->Check( true );
+    m_pCbxAutoStepHelp->Check( true );
+    m_pCbxAutoOrigin->Check( true );
+    m_pCbx_AutoTimeResolution->Check( true );
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MIN,sal_True,&pPoolItem) == SFX_ITEM_SET)
-        aCbxAutoMin.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+        m_pCbxAutoMin->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_MIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         fMin = ((const SvxDoubleItem*)pPoolItem)->GetValue();
-        lcl_setValue( aFmtFldMin, fMin );
+        lcl_setValue( *m_pFmtFldMin, fMin );
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MAX,sal_True, &pPoolItem) == SFX_ITEM_SET)
-        aCbxAutoMax.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+        m_pCbxAutoMax->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_MAX,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         fMax = ((const SvxDoubleItem*)pPoolItem)->GetValue();
-        lcl_setValue( aFmtFldMax, fMax );
+        lcl_setValue( *m_pFmtFldMax, fMax );
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_STEP_MAIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
-        aCbxAutoStepMain.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+        m_pCbxAutoStepMain->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_STEP_MAIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         fStepMain = ((const SvxDoubleItem*)pPoolItem)->GetValue();
-        lcl_setValue( aFmtFldStepMain, fStepMain );
-        m_aMt_MainDateStep.SetValue( static_cast<sal_Int32>(fStepMain) );
+        lcl_setValue( *m_pFmtFldStepMain, fStepMain );
+        m_pMt_MainDateStep->SetValue( static_cast<sal_Int32>(fStepMain) );
     }
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_STEP_HELP,sal_True, &pPoolItem) == SFX_ITEM_SET)
-        aCbxAutoStepHelp.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+        m_pCbxAutoStepHelp->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
     if (rInAttrs.GetItemState(SCHATTR_AXIS_LOGARITHM,sal_True, &pPoolItem) == SFX_ITEM_SET)
-        aCbxLogarithm.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+        m_pCbxLogarithm->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
     if (rInAttrs.GetItemState(SCHATTR_AXIS_REVERSE,sal_True, &pPoolItem) == SFX_ITEM_SET)
-        aCbxReverse.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+        m_pCbxReverse->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
     if (rInAttrs.GetItemState(SCHATTR_AXIS_STEP_HELP,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         nStepHelp = ((const SfxInt32Item*)pPoolItem)->GetValue();
-        aMtStepHelp.SetValue( nStepHelp );
+        m_pMtStepHelp->SetValue( nStepHelp );
     }
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_ORIGIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
-        aCbxAutoOrigin.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+        m_pCbxAutoOrigin->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
     if (rInAttrs.GetItemState(SCHATTR_AXIS_ORIGIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         fOrigin = ((const SvxDoubleItem*)pPoolItem)->GetValue();
-        lcl_setValue( aFmtFldOrigin, fOrigin );
+        lcl_setValue( *m_pFmtFldOrigin, fOrigin );
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,sal_True, &pPoolItem) == SFX_ITEM_SET)
-        m_aCbx_AutoTimeResolution.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+        m_pCbx_AutoTimeResolution->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
     if (rInAttrs.GetItemState(SCHATTR_AXIS_TIME_RESOLUTION,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nTimeResolution = ((const SfxInt32Item*)pPoolItem)->GetValue();
-        m_aLB_TimeResolution.SelectEntryPos( m_nTimeResolution );
+        m_pLB_TimeResolution->SelectEntryPos( m_nTimeResolution );
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_MAIN_TIME_UNIT,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nMainTimeUnit = ((const SfxInt32Item*)pPoolItem)->GetValue();
-        m_aLB_MainTimeUnit.SelectEntryPos( m_nMainTimeUnit );
+        m_pLB_MainTimeUnit->SelectEntryPos( m_nMainTimeUnit );
     }
     if (rInAttrs.GetItemState(SCHATTR_AXIS_HELP_TIME_UNIT,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nHelpTimeUnit = ((const SfxInt32Item*)pPoolItem)->GetValue();
-        m_aLB_HelpTimeUnit.SelectEntryPos( m_nHelpTimeUnit );
+        m_pLB_HelpTimeUnit->SelectEntryPos( m_nHelpTimeUnit );
     }
 
     EnableControls();
@@ -556,11 +403,11 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 
     bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
 
-    sal_uInt32 nMinMaxOriginFmt = aFmtFldMax.GetFormatKey();
+    sal_uInt32 nMinMaxOriginFmt = m_pFmtFldMax->GetFormatKey();
     if ((pNumFormatter->GetType(nMinMaxOriginFmt) &~ NUMBERFORMAT_DEFINED) == NUMBERFORMAT_TEXT)
         nMinMaxOriginFmt = 0;
     // numberformat_text cause numbers to fail being numbers...  Shouldn't happen, but can.
-    sal_uInt32 nStepFmt = aFmtFldStepMain.GetFormatKey();
+    sal_uInt32 nStepFmt = m_pFmtFldStepMain->GetFormatKey();
     if ((pNumFormatter->GetType(nStepFmt) &~NUMBERFORMAT_DEFINED) == NUMBERFORMAT_TEXT)
         nStepFmt = 0;
 
@@ -568,89 +415,89 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     sal_uInt16 nErrStrId = 0;
     double fDummy;
 
-    fMax = aFmtFldMax.GetValue();
-    fMin = aFmtFldMin.GetValue();
-    fOrigin = aFmtFldOrigin.GetValue();
-    fStepMain = bDateAxis ? m_aMt_MainDateStep.GetValue() : aFmtFldStepMain.GetValue();
-    nStepHelp = static_cast< sal_Int32 >( aMtStepHelp.GetValue());
-    m_nTimeResolution = m_aLB_TimeResolution.GetSelectEntryPos();
-    m_nMainTimeUnit = m_aLB_MainTimeUnit.GetSelectEntryPos();
-    m_nHelpTimeUnit = m_aLB_HelpTimeUnit.GetSelectEntryPos();
+    fMax = m_pFmtFldMax->GetValue();
+    fMin = m_pFmtFldMin->GetValue();
+    fOrigin = m_pFmtFldOrigin->GetValue();
+    fStepMain = bDateAxis ? m_pMt_MainDateStep->GetValue() : m_pFmtFldStepMain->GetValue();
+    nStepHelp = static_cast< sal_Int32 >( m_pMtStepHelp->GetValue());
+    m_nTimeResolution = m_pLB_TimeResolution->GetSelectEntryPos();
+    m_nMainTimeUnit = m_pLB_MainTimeUnit->GetSelectEntryPos();
+    m_nHelpTimeUnit = m_pLB_HelpTimeUnit->GetSelectEntryPos();
 
     if( chart2::AxisType::REALNUMBER != m_nAxisType )
-        aCbxLogarithm.Show( false );
+        m_pCbxLogarithm->Show( false );
 
     //check which entries need user action
 
-    if ( aCbxLogarithm.IsChecked() &&
-            ( ( !aCbxAutoMin.IsChecked() && fMin <= 0.0 )
-             || ( !aCbxAutoMax.IsChecked() && fMax <= 0.0 ) ) )
+    if ( m_pCbxLogarithm->IsChecked() &&
+            ( ( !m_pCbxAutoMin->IsChecked() && fMin <= 0.0 )
+             || ( !m_pCbxAutoMax->IsChecked() && fMax <= 0.0 ) ) )
     {
-        pControl = &aFmtFldMin;
+        pControl = m_pFmtFldMin;
         nErrStrId = STR_BAD_LOGARITHM;
     }
     // check for entries that cannot be parsed for the current number format
-    else if ( aFmtFldMin.IsModified()
-              && !aCbxAutoMin.IsChecked()
-              && !pNumFormatter->IsNumberFormat( aFmtFldMin.GetText(), nMinMaxOriginFmt, fDummy))
+    else if ( m_pFmtFldMin->IsModified()
+              && !m_pCbxAutoMin->IsChecked()
+              && !pNumFormatter->IsNumberFormat( m_pFmtFldMin->GetText(), nMinMaxOriginFmt, fDummy))
     {
-        pControl = &aFmtFldMin;
+        pControl = m_pFmtFldMin;
         nErrStrId = STR_INVALID_NUMBER;
     }
-    else if ( aFmtFldMax.IsModified()
-              && !aCbxAutoMax.IsChecked()
-              && !pNumFormatter->IsNumberFormat( aFmtFldMax.GetText(), nMinMaxOriginFmt, fDummy))
+    else if ( m_pFmtFldMax->IsModified()
+              && !m_pCbxAutoMax->IsChecked()
+              && !pNumFormatter->IsNumberFormat( m_pFmtFldMax->GetText(), nMinMaxOriginFmt, fDummy))
     {
-        pControl = &aFmtFldMax;
+        pControl = m_pFmtFldMax;
         nErrStrId = STR_INVALID_NUMBER;
     }
-    else if ( !bDateAxis && aFmtFldStepMain.IsModified()
-              && !aCbxAutoStepMain.IsChecked()
-              && !pNumFormatter->IsNumberFormat( aFmtFldStepMain.GetText(), nStepFmt, fDummy))
+    else if ( !bDateAxis && m_pFmtFldStepMain->IsModified()
+              && !m_pCbxAutoStepMain->IsChecked()
+              && !pNumFormatter->IsNumberFormat( m_pFmtFldStepMain->GetText(), nStepFmt, fDummy))
     {
-        pControl = &aFmtFldStepMain;
+        pControl = m_pFmtFldStepMain;
         nErrStrId = STR_INVALID_NUMBER;
     }
-    else if (aFmtFldOrigin.IsModified() && !aCbxAutoOrigin.IsChecked() &&
-             !pNumFormatter->IsNumberFormat( aFmtFldOrigin.GetText(), nMinMaxOriginFmt, fDummy))
+    else if (m_pFmtFldOrigin->IsModified() && !m_pCbxAutoOrigin->IsChecked() &&
+             !pNumFormatter->IsNumberFormat( m_pFmtFldOrigin->GetText(), nMinMaxOriginFmt, fDummy))
     {
-        pControl = &aFmtFldOrigin;
+        pControl = m_pFmtFldOrigin;
         nErrStrId = STR_INVALID_NUMBER;
     }
-    else if (!aCbxAutoStepMain.IsChecked() && fStepMain <= 0.0)
+    else if (!m_pCbxAutoStepMain->IsChecked() && fStepMain <= 0.0)
     {
-        pControl = &aFmtFldStepMain;
+        pControl = m_pFmtFldStepMain;
         nErrStrId = STR_STEP_GT_ZERO;
     }
-    else if (!aCbxAutoMax.IsChecked() && !aCbxAutoMin.IsChecked() &&
+    else if (!m_pCbxAutoMax->IsChecked() && !m_pCbxAutoMin->IsChecked() &&
              fMin >= fMax)
     {
-        pControl = &aFmtFldMin;
+        pControl = m_pFmtFldMin;
         nErrStrId = STR_MIN_GREATER_MAX;
     }
     else if( bDateAxis )
     {
-        if( !aCbxAutoStepMain.IsChecked() && !aCbxAutoStepHelp.IsChecked() )
+        if( !m_pCbxAutoStepMain->IsChecked() && !m_pCbxAutoStepHelp->IsChecked() )
         {
             if( m_nHelpTimeUnit > m_nMainTimeUnit )
             {
-                pControl = &m_aLB_MainTimeUnit;
+                pControl = m_pLB_MainTimeUnit;
                 nErrStrId = STR_INVALID_INTERVALS;
             }
             else if( m_nHelpTimeUnit == m_nMainTimeUnit && nStepHelp > fStepMain )
             {
-                pControl = &m_aLB_MainTimeUnit;
+                pControl = m_pLB_MainTimeUnit;
                 nErrStrId = STR_INVALID_INTERVALS;
             }
         }
-        if( !nErrStrId && !m_aCbx_AutoTimeResolution.IsChecked() )
+        if( !nErrStrId && !m_pCbx_AutoTimeResolution->IsChecked() )
         {
-            if( (!aCbxAutoStepMain.IsChecked() && m_nTimeResolution > m_nMainTimeUnit )
+            if( (!m_pCbxAutoStepMain->IsChecked() && m_nTimeResolution > m_nMainTimeUnit )
                 ||
-                (!aCbxAutoStepHelp.IsChecked() && m_nTimeResolution > m_nHelpTimeUnit )
+                (!m_pCbxAutoStepHelp->IsChecked() && m_nTimeResolution > m_nHelpTimeUnit )
                 )
             {
-                pControl = &m_aLB_TimeResolution;
+                pControl = m_pLB_TimeResolution;
                 nErrStrId = STR_INVALID_TIME_UNIT;
             }
         }
@@ -668,19 +515,19 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
 {
     pNumFormatter = pFormatter;
-    aFmtFldMax.SetFormatter( pNumFormatter );
-    aFmtFldMin.SetFormatter( pNumFormatter );
-    aFmtFldStepMain.SetFormatter( pNumFormatter );
-    aFmtFldOrigin.SetFormatter( pNumFormatter );
+    m_pFmtFldMax->SetFormatter( pNumFormatter );
+    m_pFmtFldMin->SetFormatter( pNumFormatter );
+    m_pFmtFldStepMain->SetFormatter( pNumFormatter );
+    m_pFmtFldOrigin->SetFormatter( pNumFormatter );
 
     // #i6278# allow more decimal places than the output format.  As
     // the numbers shown in the edit fields are used for input, it makes more
     // sense to display the values in the input format rather than the output
     // format.
-    aFmtFldMax.UseInputStringForFormatting();
-    aFmtFldMin.UseInputStringForFormatting();
-    aFmtFldStepMain.UseInputStringForFormatting();
-    aFmtFldOrigin.UseInputStringForFormatting();
+    m_pFmtFldMax->UseInputStringForFormatting();
+    m_pFmtFldMin->UseInputStringForFormatting();
+    m_pFmtFldStepMain->UseInputStringForFormatting();
+    m_pFmtFldOrigin->UseInputStringForFormatting();
 
     SetNumFormat();
 }
@@ -693,9 +540,9 @@ void ScaleTabPage::SetNumFormat()
     {
         sal_uLong nFmt = (sal_uLong)((const SfxInt32Item*)pPoolItem)->GetValue();
 
-        aFmtFldMax.SetFormatKey( nFmt );
-        aFmtFldMin.SetFormatKey( nFmt );
-        aFmtFldOrigin.SetFormatKey( nFmt );
+        m_pFmtFldMax->SetFormatKey( nFmt );
+        m_pFmtFldMin->SetFormatKey( nFmt );
+        m_pFmtFldOrigin->SetFormatKey( nFmt );
 
         if( pNumFormatter )
         {
@@ -727,13 +574,13 @@ void ScaleTabPage::SetNumFormat()
                 else
                     nFmt = pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATE );
 
-                aFmtFldMax.SetFormatKey( nFmt );
-                aFmtFldMin.SetFormatKey( nFmt );
-                aFmtFldOrigin.SetFormatKey( nFmt );
+                m_pFmtFldMax->SetFormatKey( nFmt );
+                m_pFmtFldMin->SetFormatKey( nFmt );
+                m_pFmtFldOrigin->SetFormatKey( nFmt );
             }
         }
 
-        aFmtFldStepMain.SetFormatKey( nFmt );
+        m_pFmtFldStepMain->SetFormatKey( nFmt );
     }
 }
 
@@ -767,40 +614,13 @@ void ScaleTabPage::HideAllControls()
     // visibility of these controls depend on axis data type, and are
     // set in EnableControls().
 
-    m_aTxt_AxisType.Hide();
-    m_aLB_AxisType.Hide();
-
-    aCbxLogarithm.Hide();
-    aTxtMin.Hide();
-    aFmtFldMin.Hide();
-    aCbxAutoMin.Hide();
-    aTxtMax.Hide();
-    aFmtFldMax.Hide();
-    aCbxAutoMax.Hide();
-    aTxtMain.Hide();
-    aFmtFldStepMain.Hide();
-    aCbxAutoStepMain.Hide();
-    aTxtHelp.Hide();
-    aTxtHelpCount.Hide();
-    aMtStepHelp.Hide();
-    aCbxAutoStepHelp.Hide();
-
-    aTxtOrigin.Hide();
-    aFmtFldOrigin.Hide();
-    aCbxAutoOrigin.Hide();
-
-    aTxtHelpCount.Hide();
-    aTxtHelp.Hide();
-
-    m_aTxt_TimeResolution.Hide();
-    m_aLB_TimeResolution.Hide();
-    m_aCbx_AutoTimeResolution.Hide();
-
-    aFmtFldStepMain.Hide();
-    m_aMt_MainDateStep.Hide();
-
-    m_aLB_MainTimeUnit.Hide();
-    m_aLB_HelpTimeUnit.Hide();
+    m_pBxType->Hide();
+    m_pCbxLogarithm->Hide();
+    m_pBxMinMax->Hide();
+    m_pBxMain->Hide();
+    m_pBxMinor->Hide();
+    m_pBxOrigin->Hide();
+    m_pBxResolution->Hide();
 }
 
 } //namespace chart
