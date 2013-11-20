@@ -52,7 +52,7 @@ private:
     typedef std::map<HWND, void*> XHWNDToXAccHash;
     typedef std::map<const long, AccObject*> XResIdToAccObjHash;
 
-    typedef std::map<const long, com::sun::star::accessibility::XAccessible* >
+    typedef std::map<const HWND, com::sun::star::accessibility::XAccessible* >
         XHWNDToDocumentHash;
 
     //XAccessible to AccObject
@@ -83,7 +83,7 @@ private:
 
     AccObject* GetTopWindowAccObj(HWND hWnd);
 
-    com::sun::star::accessibility::XAccessible* GetAccDocByHWND( long pWnd );
+    com::sun::star::accessibility::XAccessible* GetAccDocByHWND(HWND hWnd);
 
     void       DeleteAccListener( AccObject* pAccObj );
     void       InsertAccChildNode(AccObject* pCurObj,AccObject* pParentObj,HWND pWnd);

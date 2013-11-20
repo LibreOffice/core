@@ -91,8 +91,8 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
             const SystemEnvData* systemdata=window->GetSystemData();
 
             //add this child
-            //TODO(davido): FixMe
-            pAgent->InsertAccObj( pAcc,pAccessible,(long)(HWND)systemdata->hWnd);
+            pAgent->InsertAccObj(pAcc, pAccessible,
+                    reinterpret_cast<sal_Int64>(systemdata->hWnd));
             //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(pAcc);
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);

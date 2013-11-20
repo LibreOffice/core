@@ -72,7 +72,8 @@ void AccTopWindowListener::HandleWindowOpened( com::sun::star::accessibility::XA
     //Only AccessibleContext exist, add all listeners
     if(pAccessibleContext != NULL && systemdata != NULL)
     {
-        accManagerAgent.SaveTopWindowHandle((long)(HWND)systemdata->hWnd, pAccessible);
+        accManagerAgent.SaveTopWindowHandle(
+                reinterpret_cast<sal_Int64>(systemdata->hWnd), pAccessible);
 
         AddAllListeners(pAccessible,NULL,(HWND)systemdata->hWnd);
 
@@ -145,7 +146,8 @@ void AccTopWindowListener::AddAllListeners(com::sun::star::accessibility::XAcces
         return;
     }
 
-    accManagerAgent.InsertAccObj( pAccessible, pParentXAcc,(long)(HWND)pWND );
+    accManagerAgent.InsertAccObj(pAccessible, pParentXAcc,
+            reinterpret_cast<sal_Int64>(pWND));
 
     if (!accManagerAgent.IsContainer(pAccessible))
     {

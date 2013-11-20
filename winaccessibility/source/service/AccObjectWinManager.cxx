@@ -771,13 +771,12 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
     //for file name support
     if ( pObj.GetRole() == DOCUMENT )
     {
-        XHWNDToDocumentHash::iterator aIter = XHWNDDocList.find( (long)pWnd );
+        XHWNDToDocumentHash::iterator aIter = XHWNDDocList.find(pWnd);
         if ( aIter != XHWNDDocList.end() )
         {
             XHWNDDocList.erase( aIter );
         }
-        XHWNDDocList.insert( XHWNDToDocumentHash::value_type( (long)pWnd, pXAcc ) );
-
+        XHWNDDocList.insert( XHWNDToDocumentHash::value_type(pWnd, pXAcc) );
     }
     //end of file name
 
@@ -1288,7 +1287,7 @@ short AccObjectWinManager::GetRole(com::sun::star::accessibility::XAccessible* p
     return -1;
 }
 
-XAccessible* AccObjectWinManager::GetAccDocByHWND( long pWnd )
+XAccessible* AccObjectWinManager::GetAccDocByHWND(HWND pWnd)
 {
     XHWNDToDocumentHash::iterator aIter;
     aIter = XHWNDDocList.find( pWnd );
@@ -1303,8 +1302,8 @@ XAccessible* AccObjectWinManager::GetAccDocByHWND( long pWnd )
 XAccessible* AccObjectWinManager::GetAccDocByAccTopWin( XAccessible* pXAcc )
 {
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
-    long pWnd = (long)( pAccObj->GetParentHWND() );
-    return GetAccDocByHWND( pWnd );
+    HWND hWnd = pAccObj->GetParentHWND();
+    return GetAccDocByHWND(hWnd);
 }
 
 bool AccObjectWinManager::IsTopWinAcc( com::sun::star::accessibility::XAccessible* pXAcc )
