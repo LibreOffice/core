@@ -16,7 +16,6 @@ $(eval $(call gb_Library_use_custom_headers,sellangmsi,\
 $(eval $(call gb_Library_add_defs,sellangmsi,\
 	-U_DLL \
 	-D_WIN32_WINNT=0x0502 \
-	-DWIN32_LEAN_AND_MEAN \
 ))
 
 $(eval $(call gb_Library_add_cxxflags,sellangmsi,\
