@@ -62,6 +62,9 @@
 				<integer>20</integer>
 				<integer>30</integer>
 				<integer>40</integer>
+				<integer>45</integer>
+				<integer>50</integer>
+				<integer>60</integer>
 			</array>
 			<key>Titles</key>
 			<array>
@@ -72,6 +75,9 @@
 				<string>20</string>
 				<string>30</string>
 				<string>40</string>
+				<string>45</string>
+				<string>50</string>
+				<string>60</string>
 			</array>
 			<key>Type</key>
 			<string>PSMultiValueSpecifier</string>
