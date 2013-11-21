@@ -2128,6 +2128,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
     // crashtest
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
+{
+        xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
+    if (!pXmlDoc)
+        return;
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

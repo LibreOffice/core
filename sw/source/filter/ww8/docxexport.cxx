@@ -201,6 +201,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 /*nBreakCode*/ )
 {
+    m_nHeadersFootersInSection = 1;
     // Turn ON flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( true );
 
@@ -229,7 +230,7 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     // Turn OFF flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( false );
-
+    m_pAttrOutput->switchHeaderFooter(false, -1);
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
 #endif
@@ -628,7 +629,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     // switch the serializer to redirect the output to word/styles.xml
     m_pAttrOutput->SetSerializer( pFS );
     m_pVMLExport->SetFS( pFS );
-
+    m_pAttrOutput->switchHeaderFooter(true, m_nHeadersFootersInSection++);
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
 
@@ -1199,6 +1200,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_pSections( NULL ),
       m_nHeaders( 0 ),
       m_nFooters( 0 ),
+      m_nHeadersFootersInSection(0),
       m_pVMLExport( NULL )
 {
     // Write the document properies

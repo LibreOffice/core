@@ -100,6 +100,24 @@ struct PageMargins
     PageMargins() : nPageMarginLeft(0), nPageMarginRight(0), nPageMarginTop(0), nPageMarginBottom(0) {}
 };
 
+/**
+ * A structure that holds flags for the table export.
+ */
+struct TableReference
+{
+    /// Remember if we are in an open cell, or not.
+    bool m_bTableCellOpen;
+
+    /// Remember the current table depth.
+    sal_uInt32 m_nTableDepth;
+
+    TableReference()
+        : m_bTableCellOpen(false),
+        m_nTableDepth(0)
+    {
+    }
+};
+
 /// The class that has handlers for various resource types when exporting as DOCX.
 class DocxAttributeOutput : public AttributeOutputBase, public oox::vml::VMLTextExport, public oox::drawingml::DMLTextExport
 {
@@ -721,12 +739,6 @@ private:
     /// The current table helper
     SwWriteTable *m_pTableWrt;
 
-    /// Remember if we are in an open cell, or not.
-    bool m_bTableCellOpen;
-
-    /// Remember the current table depth.
-    sal_uInt32 m_nTableDepth;
-
     bool m_bParagraphOpened;
 
     // Remember that a column break has to be opened at the
@@ -781,6 +793,11 @@ private:
         OString relId;
         OString fontKey;
     };
+
+
+    TableReference *m_tableReference;
+    TableReference *m_oldTableReference;
+
     std::map< OUString, EmbeddedFontRef > fontFilesMap; // font file url to data
 
     // Remember first cell (used for for default borders/margins) of each table
@@ -836,6 +853,7 @@ public:
     /// VMLTextExport
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj);
     virtual oox::drawingml::DrawingML& GetDrawingML();
+    virtual void switchHeaderFooter(bool isHeaderFooter, sal_Int32 index);
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;
 
