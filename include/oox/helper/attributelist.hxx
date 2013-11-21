@@ -75,6 +75,12 @@ public:
 class OOX_DLLPUBLIC AttributeList
 {
 public:
+    struct Char
+    {
+        const char* mpPos;
+        size_t mnSize;
+    };
+
     explicit            AttributeList(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs );
 
@@ -131,6 +137,9 @@ public:
     /** Returns the decoded string value of the specified attribute, or the
         passed default string if the attribute is missing. */
     OUString     getXString( sal_Int32 nAttrToken, const OUString& rDefault ) const;
+
+    Char getChar( sal_Int32 nAttrToken ) const;
+
 
     /** Returns the double value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to a double. */

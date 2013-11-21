@@ -261,6 +261,18 @@ OUString AttributeList::getXString( sal_Int32 nAttrToken, const OUString& rDefau
     return getXString( nAttrToken ).get( rDefault );
 }
 
+AttributeList::Char AttributeList::getChar( sal_Int32 nAttrToken ) const
+{
+    Char aRet;
+    bool bValid = getAttribList()->getAsChar(nAttrToken, aRet.mpPos, aRet.mnSize);
+    if (!bValid)
+    {
+        aRet.mpPos = NULL;
+        aRet.mnSize = 0;
+    }
+    return aRet;
+}
+
 double AttributeList::getDouble( sal_Int32 nAttrToken, double fDefault ) const
 {
     return getDouble( nAttrToken ).get( fDefault );

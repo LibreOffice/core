@@ -213,6 +213,9 @@ public:
                             sal_Int32 nStart = 0,
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
+    static bool parseOoxAddress2d(
+        sal_Int32& ornColumn, sal_Int32& ornRow, const char* pStr, sal_Int32 nStrLen );
+
     /** Tries to parse the passed string for a 2d cell range in A1 notation.
 
         This function accepts all strings that match the regular expression
@@ -316,6 +319,10 @@ public:
                             const OUString& rString,
                             sal_Int16 nSheet );
 
+    bool convertToCellAddressUnchecked(
+        com::sun::star::table::CellAddress& orAddress,
+        const char* pStr, size_t nStrLen, sal_Int16 nSheet ) const;
+
     /** Tries to convert the passed string to a single cell address.
 
         @param orAddress  (out-parameter) Returns the converted cell address.
@@ -330,6 +337,10 @@ public:
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
+
+    bool convertToCellAddress(
+        com::sun::star::table::CellAddress& rAddress,
+        const char* pStr, size_t nStrLen, sal_Int16 nSheet, bool bTrackOverflow );
 
     /** Returns a valid cell address by moving it into allowed dimensions.
 

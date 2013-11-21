@@ -226,6 +226,64 @@ bool AddressConverter::parseOoxAddress2d(
     return (ornColumn >= 0) && (ornRow >= 0);
 }
 
+bool AddressConverter::parseOoxAddress2d(
+    sal_Int32& ornColumn, sal_Int32& ornRow, const char* pStr, sal_Int32 nStrLen )
+{
+    ornColumn = ornRow = 0;
+
+    const char* pStrEnd = pStr + nStrLen;
+
+    enum { STATE_COL, STATE_ROW } eState = STATE_COL;
+
+    while (pStr < pStrEnd)
+    {
+        char cChar = *pStr;
+        switch( eState )
+        {
+            case STATE_COL:
+            {
+                if( ('a' <= cChar) && (cChar <= 'z') )
+                    (cChar -= 'a') += 'A';
+                if( ('A' <= cChar) && (cChar <= 'Z') )
+                {
+                    /*  Return, if 1-based column index is already 6 characters
+                        long (12356631 is column index for column AAAAAA). */
+                    if( ornColumn >= 12356631 )
+                        return false;
+                    (ornColumn *= 26) += (cChar - 'A' + 1);
+                }
+                else if( ornColumn > 0 )
+                {
+                    --pStr;
+                    eState = STATE_ROW;
+                }
+                else
+                    return false;
+            }
+            break;
+
+            case STATE_ROW:
+            {
+                if( ('0' <= cChar) && (cChar <= '9') )
+                {
+                    // return, if 1-based row is already 9 digits long
+                    if( ornRow >= 100000000 )
+                        return false;
+                    (ornRow *= 10) += (cChar - '0');
+                }
+                else
+                    return false;
+            }
+            break;
+        }
+        ++pStr;
+    }
+
+    --ornColumn;
+    --ornRow;
+    return (ornColumn >= 0) && (ornRow >= 0);
+}
+
 bool AddressConverter::parseOoxRange2d(
         sal_Int32& ornStartColumn, sal_Int32& ornStartRow,
         sal_Int32& ornEndColumn, sal_Int32& ornEndRow,
@@ -297,12 +355,30 @@ bool AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
     return parseOoxAddress2d( orAddress.Column, orAddress.Row, rString );
 }
 
+bool AddressConverter::convertToCellAddressUnchecked(
+        com::sun::star::table::CellAddress& orAddress,
+        const char* pStr, size_t nStrLen, sal_Int16 nSheet ) const
+{
+    orAddress.Sheet = nSheet;
+    return parseOoxAddress2d(orAddress.Column, orAddress.Row, pStr, nStrLen);
+}
+
 bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
         const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
 {
     return
         convertToCellAddressUnchecked( orAddress, rString, nSheet ) &&
         checkCellAddress( orAddress, bTrackOverflow );
+}
+
+bool AddressConverter::convertToCellAddress(
+    com::sun::star::table::CellAddress& rAddress,
+    const char* pStr, size_t nStrLen, sal_Int16 nSheet, bool bTrackOverflow )
+{
+    if (!convertToCellAddressUnchecked(rAddress, pStr, nStrLen, nSheet))
+        return false;
+
+    return checkCellAddress(rAddress, bTrackOverflow);
 }
 
 CellAddress AddressConverter::createValidCellAddress(

@@ -157,6 +157,27 @@ bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble)
     return false;
 }
 
+bool FastAttributeList::getAsChar( sal_Int32 nToken, const char*& rPos, size_t& rLen ) const
+{
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
+    {
+        if (maAttributeTokens[i] != nToken)
+            continue;
+
+        sal_Int32 nOffset = maAttributeValues[i];
+        rPos = mpChunk + nOffset;
+
+        if (i + 1 < maAttributeValues.size())
+            rLen = maAttributeValues[i+1] - nOffset - 1;
+        else
+            rLen = mnChunkLength - nOffset - 1;
+
+        return true;
+    }
+
+    return false;
+}
+
 OUString FastAttributeList::getValue( ::sal_Int32 Token ) throw (SAXException, RuntimeException)
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
