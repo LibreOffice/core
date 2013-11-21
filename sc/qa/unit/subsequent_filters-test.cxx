@@ -388,9 +388,9 @@ void ScFiltersTest::testFunctionsExcel2010()
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,5,0)));
     // Skip B7.
 
-#if 0 //F.DIST.RT not yet supported in the core.
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,7,0)));
-#endif
+    #if 0 //F.DIST.RT not yet supported in the core.
+        CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,7,0)));
+    #endif
 
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,8,0)));
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,9,0)));

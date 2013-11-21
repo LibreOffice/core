@@ -725,6 +725,7 @@ double GetLogGamma(double x);
 double GetBeta(double fAlpha, double fBeta);
 double GetLogBeta(double fAlpha, double fBeta);
 double GetBinomDistPMF(double x, double n, double p); //probability mass function
+double GetHypGeomDist( double x, double n, double M, double N );
 void ScLogGamma();
 void ScGamma();
 void ScPhi();
@@ -745,6 +746,7 @@ void ScVariationen();
 void ScVariationen2();
 void ScB();
 void ScHypGeomDist();
+void ScHypGeomDist_MS();
 void ScLogNormDist();
 void ScLogNormInv();
 void ScTDist();
