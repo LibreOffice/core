@@ -57,9 +57,6 @@
 sal_uInt16  SwView::m_nMoveType = NID_PGE;
 sal_Int32 SwView::m_nActMark = 0;
 
-
-#define VIEW_IMAGECOLOR COL_LIGHTBLUE
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -561,23 +558,6 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
 sal_uInt16 SwView::GetMoveType()
 {
     return m_nMoveType;
-}
-
-void SwView::SetMoveType(sal_uInt16 nSet)
-{
-    sal_Bool bLastPage = m_nMoveType == NID_PGE;
-    m_nMoveType = nSet;
-    sal_Bool bNewPage = m_nMoveType == NID_PGE;
-    if(bNewPage != bLastPage)
-    {
-        Color aColor(bNewPage ? COL_BLACK : VIEW_IMAGECOLOR);
-        const TypeId aTypeId = TYPE(SwView);
-        SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
-        while( pView )
-        {
-            pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
-        }
-    }
 }
 
 void SwView::SetActMark(sal_Int32 nSet)
