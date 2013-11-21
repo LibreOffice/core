@@ -53,7 +53,7 @@ EasyWriter::Finish_OutputNode()
 csi::xml::Element &
 EasyWriter::Out()
 {
-    csv_assert( aCurDestination.size() > 0);
+    csv_assert( ! aCurDestination.empty() );
     return *aCurDestination.top();
 }
 

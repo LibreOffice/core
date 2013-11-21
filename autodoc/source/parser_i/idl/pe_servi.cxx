@@ -304,7 +304,7 @@ PE_Service::TransferData()
 {
     if (NOT bIsPreDeclaration)
     {
-        csv_assert(sData_Name.size() > 0);
+        csv_assert(! sData_Name.empty());
         csv_assert( (pCurService != 0) != (pCurSiService != 0) );
     }
 

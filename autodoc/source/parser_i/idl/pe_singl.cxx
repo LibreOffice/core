@@ -225,7 +225,7 @@ PE_Singleton::TransferData()
 {
     if (NOT bIsPreDeclaration)
     {
-        csv_assert(sData_Name.size() > 0);
+        csv_assert(! sData_Name.empty());
         csv_assert( (pCurSingleton != 0) != (pCurSiSingleton != 0) );
     }
 

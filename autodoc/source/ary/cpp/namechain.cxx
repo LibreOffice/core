@@ -129,7 +129,7 @@ NameChain::Add_Segment( const char * i_sSeg )
 List_TplParameter &
 NameChain::Templatize_LastSegment()
 {
-    csv_assert( aSegments.size() > 0 );
+    csv_assert( ! aSegments.empty() );
 
     return aSegments.back().AddTemplate();
 }
@@ -158,7 +158,7 @@ NameChain::Compare( const NameChain & i_rChain ) const
 const String  &
 NameChain::LastSegment() const
 {
-    if ( aSegments.size() > 0 )
+    if ( ! aSegments.empty() )
         return aSegments.back().Name();
     return String::Null_();
 }

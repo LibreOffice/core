@@ -113,7 +113,7 @@ inline ary::cpp::Namespace &
 ContextForAry::
 S_OwnerStack::CurNamespace() const
 {
-    csv_assert( aStack_Namespaces.size() > 0 );
+    csv_assert( ! aStack_Namespaces.empty() );
     return *aStack_Namespaces.top();
 }
 
@@ -204,7 +204,7 @@ inline void
 ContextForAry::
 S_OwnerStack::SetCurProtection( ary::cpp::E_Protection i_eProtection )
 {
-    csv_assert( aStack_Classes.size() > 0 );
+    csv_assert( ! aStack_Classes.empty() );
     aStack_Classes.top().second = i_eProtection;
 }
 

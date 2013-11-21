@@ -57,7 +57,7 @@ class OutputStack
 inline csi::xml::Element &
 OutputStack::Out() const
 {
-    csv_assert( aCurDestination.size() > 0 );
+    csv_assert( ! aCurDestination.empty() );
     return *aCurDestination.top();
 }
 
