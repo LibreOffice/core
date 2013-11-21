@@ -1245,9 +1245,9 @@ void PPDParser::parseOpenUI(const OString& rLine)
 
     sal_Int32 nIndex = 0;
     OString aValue = WhitespaceToSpace( rLine.getToken( 1, ':', nIndex ) );
-    if( aValue.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("boolean")))
+    if( aValue.equalsIgnoreAsciiCase("boolean"))
         pKey->m_eUIType = PPDKey::Boolean;
-    else if (aValue.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pickmany")))
+    else if (aValue.equalsIgnoreAsciiCase("pickmany"))
         pKey->m_eUIType = PPDKey::PickMany;
     else
         pKey->m_eUIType = PPDKey::PickOne;

@@ -1912,11 +1912,11 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
                                         if( nType == META_COMMENT_ACTION )
                                         {
                                             const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
-                                            if( ( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_BEGIN")) ) )
+                                            if( ( pA->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_BEGIN") ) )
                                             {
                                                 bIsTextShapeStarted = sal_True;
                                             }
-                                            else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) ) )
+                                            else if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_PAINTSHAPE_END" ) ) )
                                             {
                                                 bIsTextShapeStarted = sal_False;
                                             }

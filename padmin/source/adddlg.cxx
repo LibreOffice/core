@@ -586,7 +586,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
 
         aValue = aConfig.ReadKey( "Orientation", aDefOrientation );
         if (!aValue.isEmpty())
-            aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("landscape")) ? orientation::Landscape : orientation::Portrait;
+            aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCase("landscape") ? orientation::Landscape : orientation::Portrait;
         int nGroupKeys = aConfig.GetKeyCount();
         for( int nPPDKey = 0; nPPDKey < nGroupKeys; nPPDKey++ )
         {

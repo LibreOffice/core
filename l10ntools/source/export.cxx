@@ -371,7 +371,7 @@ int Export::Execute( int nToken, const char * pToken )
                     break;
                 }
             }
-            if( sToken.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("#define NO_LOCALIZE_EXPORT")) ){
+            if( sToken.equalsIgnoreAsciiCase("#define NO_LOCALIZE_EXPORT") ){
                             bSkipFile = true;
                             return 0;
                         }

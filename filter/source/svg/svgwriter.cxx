@@ -591,11 +591,11 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
             {
                 const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
                 const OString& rsComment = pA->GetComment();
-                if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOL" ) ) )
+                if( rsComment.equalsIgnoreAsciiCase( "XTEXT_EOL" ) )
                 {
                     bEOL = true;
                 }
-                else if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOP" ) ) )
+                else if( rsComment.equalsIgnoreAsciiCase( "XTEXT_EOP" ) )
                 {
                     bEOP = true;
 
@@ -630,7 +630,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
                         }
                     }
                 }
-                else if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) )
+                else if( rsComment.equalsIgnoreAsciiCase( "XTEXT_PAINTSHAPE_END" ) )
                 {
                     bETS = true;
                 }
@@ -708,7 +708,7 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
             {
                 const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
                 const OString& rsComment = pA->GetComment();
-                if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOP" ) ) )
+                if( rsComment.equalsIgnoreAsciiCase( "XTEXT_EOP" ) )
                 {
                     bEOP = true;
                 }
@@ -2686,8 +2686,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         sType.append(OStringToOUString(
                                         sComment, RTL_TEXTENCODING_UTF8));
                     }
-                    if (sComment.equalsIgnoreAsciiCaseL(
-                                RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN")))
+                    if (sComment.equalsIgnoreAsciiCase("FIELD_SEQ_BEGIN"))
                     {
                         sal_uInt8 const*const pData = pA->GetData();
                         if (pData && (pA->GetDataSize()))
@@ -2964,7 +2963,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
 
-                if( ( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) ) &&
+                if( ( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") ) &&
                     ( nWriteFlags & SVGWRITER_WRITE_FILL ) )
                 {
                     const MetaGradientExAction* pGradAction = NULL;
@@ -2978,7 +2977,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             pGradAction = (const MetaGradientExAction*) pAction;
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                  ( ( (const MetaCommentAction*) pAction )->GetComment().
-                                        equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_END")) ) )
+                                        equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
                         {
                             bDone = sal_True;
                         }
@@ -2987,7 +2986,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     if( pGradAction )
                         ImplWriteGradientEx( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), nWriteFlags );
                 }
-                else if( ( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_BEGIN")) ) &&
+                else if( ( pA->GetComment().equalsIgnoreAsciiCase("XPATHFILL_SEQ_BEGIN") ) &&
                          ( nWriteFlags & SVGWRITER_WRITE_FILL ) && !( nWriteFlags & SVGWRITER_NO_SHAPE_COMMENTS ) &&
                          pA->GetDataSize() )
                 {
@@ -3036,7 +3035,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                                     if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                         ( ( (const MetaCommentAction*) pAction )->GetComment().
-                                        equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) ) )
+                                               equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
                                     {
                                         bSkip = sal_False;
                                     }
@@ -3064,13 +3063,13 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                         if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                     ( ( (const MetaCommentAction*) pAction )->GetComment().
-                                    equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END")) ) )
+                                            equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
                         {
                             bSkip = sal_False;
                         }
                     }
                 }
-                else if( ( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_BEGIN")) ) &&
+                else if( ( pA->GetComment().equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_BEGIN") ) &&
                          ( nWriteFlags & SVGWRITER_WRITE_FILL ) && !( nWriteFlags & SVGWRITER_NO_SHAPE_COMMENTS ) &&
                          pA->GetDataSize() )
                 {
@@ -3204,7 +3203,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                         if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                     ( ( (const MetaCommentAction*) pAction )->GetComment().
-                                    equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END")) ) )
+                                    equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_END") ) )
                         {
                             bSkip = sal_False;
                         }
@@ -3212,7 +3211,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 }
                 else if( !mrExport.IsUsePositionedCharacters() && ( nWriteFlags & SVGWRITER_WRITE_TEXT ) )
                 {
-                    if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_BEGIN" ) ) ) )
+                    if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_PAINTSHAPE_BEGIN" ) ) )
                     {
                         if( pxShape )
                         {
@@ -3247,15 +3246,15 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             }
                         }
                     }
-                    else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) ) )
+                    else if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_PAINTSHAPE_END" ) ) )
                     {
                         maTextWriter.endTextShape();
                     }
-                    else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOP" ) ) ) )
+                    else if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_EOP" ) ) )
                     {
                         const MetaAction* pNextAction = rMtf.GetAction( nCurAction + 1 );
                         if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
-                               ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_END") ) )  ))
+                               ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_END") )  ))
                         {
                             // nTextFound == -1 => no text found and end of paragraph reached
                             // nTextFound ==  0 => no text found and end of text shape reached
@@ -3284,11 +3283,11 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                         }
                     }
-                    else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOL" ) ) ) )
+                    else if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_EOL" ) ) )
                     {
                         const MetaAction* pNextAction = rMtf.GetAction( nCurAction + 1 );
                         if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
-                               ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOP") ) ) ) )
+                               ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCase("XTEXT_EOP") ) ) )
                         {
                             // nTextFound == -2 => no text found and end of line reached
                             // nTextFound == -1 => no text found and end of paragraph reached

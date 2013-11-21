@@ -170,7 +170,7 @@ bool Merge(
     for(size_t n = 0; n < aLanguages.size(); ++n)
     {
         OString sCur = aLanguages[ n ];
-        if (sCur.isEmpty() || sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
+        if (sCur.isEmpty() || sCur.equalsIgnoreAsciiCase("en-US"))
             continue;
         const OString aDestinationFile(aDestinationDir + sCur + ".ui");
         if (!lcl_MergeLang(rMap, sCur, aDestinationFile))

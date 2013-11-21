@@ -1220,7 +1220,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
 {
     bool aSkipComment = false;
 
-    if (rAct.GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
+    if (rAct.GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
     {
         MetaGradientExAction* pAct = (MetaGradientExAction*) pMtf->NextAction();
 

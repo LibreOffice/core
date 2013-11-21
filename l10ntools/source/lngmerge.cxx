@@ -276,7 +276,7 @@ sal_Bool LngParser::Merge(
             for(size_t n = 0; n < aLanguages.size(); ++n)
             {
                 sCur = aLanguages[ n ];
-                if( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) && Text[sCur].isEmpty() && pEntrys )
+                if( !sCur.equalsIgnoreAsciiCase("en-US") && Text[sCur].isEmpty() && pEntrys )
                 {
 
                     OString sNewText;

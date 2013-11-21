@@ -418,7 +418,7 @@ void XRMResMerge::WorkOnDesc(
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
                 OString sContent;
-                if ( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US"))  &&
+                if ( !sCur.equalsIgnoreAsciiCase("en-US")  &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
                     !sContent.isEmpty())
@@ -507,7 +507,7 @@ void XRMResMerge::EndOfText(
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
                 OString sContent;
-                if (!sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) &&
+                if (!sCur.equalsIgnoreAsciiCase("en-US") &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
                     !sContent.isEmpty() &&

@@ -2028,7 +2028,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                     OString aDesc( pFDesc->fgd[ 0 ].cFileName );
                     rtl_TextEncoding    eTextEncoding = osl_getThreadTextEncoding();
 
-                    if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM(".URL")) )
+                    if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCase(".URL") )
                     {
                         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::NO_DECODE ),
                                                                                   STREAM_STD_READ );
@@ -2056,9 +2056,9 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                             while( pStream->ReadLine( aLine ) )
                             {
-                                if (aLine.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("[InternetShortcut]")))
+                                if (aLine.equalsIgnoreAsciiCase("[InternetShortcut]"))
                                     bSttFnd = sal_True;
-                                else if (bSttFnd && aLine.copy(0, 4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("URL=")))
+                                else if (bSttFnd && aLine.copy(0, 4).equalsIgnoreAsciiCase("URL="))
                                 {
                                     rBmk = INetBookmark( OStringToOUString(aLine.copy(4), eTextEncoding),
                                                          OStringToOUString(aDesc.copy(0, aDesc.getLength() - 4), eTextEncoding) );
