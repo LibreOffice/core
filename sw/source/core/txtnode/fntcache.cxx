@@ -2357,7 +2357,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     OSL_ENSURE( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
-    sal_uInt16 nTxtBreak = 0;
+    xub_StrLen nTxtBreak = 0;
     long nKern = 0;
 
     sal_uInt16 nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().getLength()
