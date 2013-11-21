@@ -138,10 +138,10 @@ private:
 
 }
 
-static void lcl_MakeToolbarVisible(SfxViewFrame *pViewFrame)
+void DataStream::MakeToolbarVisible()
 {
     css::uno::Reference< css::frame::XFrame > xFrame =
-        pViewFrame->GetFrame().GetFrameInterface();
+        ScDocShell::GetViewData()->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
     if (!xFrame.is())
         return;
 
@@ -163,18 +163,18 @@ static void lcl_MakeToolbarVisible(SfxViewFrame *pViewFrame)
     }
 }
 
-void DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange, sal_Int32 nLimit, const OUString& rMove)
+DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
+        sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings)
 {
     sfx2::SvBaseLink *pLink = 0;
-    pLink = new DataStream( pShell, rURL, rRange, nLimit, rMove );
+    pLink = new DataStream( pShell, rURL, rRange, nLimit, rMove, nSettings );
     sfx2::LinkManager* pLinkManager = pShell->GetDocument()->GetLinkManager();
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rURL, NULL, NULL );
-
-    lcl_MakeToolbarVisible(pShell->GetViewData()->GetViewShell()->GetViewFrame());
+    return dynamic_cast<DataStream*>(pLink);
 }
 
-DataStream::DataStream(ScDocShell *pShell, const OUString& rURL,
-        const OUString& rRange, sal_Int32 nLimit, const OUString& rMove)
+DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
+        sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings)
     : mpScDocShell(pShell)
     , mpScDocument(mpScDocShell->GetDocument())
     , meMove(NO_MOVE)
@@ -187,7 +187,7 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL,
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
 
-    Decode(rURL, rRange, rMove);
+    Decode(rURL, rRange, rMove, nSettings);
 
     mpStartRange.reset( new ScRange(*mpRange.get()) );
     sal_Int32 nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
@@ -215,6 +215,8 @@ OString DataStream::ConsumeLine()
     if (!mpLines || mnLinesCount >= mpLines->size())
     {
         mnLinesCount = 0;
+        if (mxReaderThread->mbTerminateReading)
+            return OString();
         osl::ResettableMutexGuard aGuard(mxReaderThread->maLinesProtector);
         if (mpLines)
             mxReaderThread->maUsedLines.push(mpLines);
@@ -233,18 +235,18 @@ OString DataStream::ConsumeLine()
     return mpLines->at(mnLinesCount++);
 }
 
-void DataStream::Decode( const OUString& rURL, const OUString& rRange, const OUString& rMove)
+void DataStream::Decode( const OUString& rURL, const OUString& rRange,
+        const OUString& rMove, sal_uInt32 nSettings)
 {
-    sal_Int32 nIndex = rURL.indexOf(sfx2::cTokenSeparator);
     SvStream *pStream = 0;
-    if (nIndex != -1)
-        pStream = new SvScriptStream(rURL.copy(0, nIndex));
+    if (nSettings & SCRIPT_STREAM)
+        pStream = new SvScriptStream(rURL);
     else
         pStream = new SvFileStream(rURL, STREAM_READ);
     mxReaderThread = new datastreams::ReaderThread( pStream );
     mxReaderThread->launch();
 
-    mbValuesInLine = !rRange.isEmpty();
+    mbValuesInLine = nSettings & VALUES_IN_LINE;
     if (!mbValuesInLine)
         return;
 
@@ -359,6 +361,14 @@ bool DataStream::ImportData()
                     aEndRow, mpRange->aStart.Tab()) ), PAINT_GRID );
 
     return mbRunning;
+}
+
+sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
+        const OUString& , const css::uno::Any& )
+{
+    MakeToolbarVisible();
+    Start();
+    return SUCCESS;
 }
 
 void DataStream::Edit(Window* , const Link& )
