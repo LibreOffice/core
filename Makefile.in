@@ -217,7 +217,7 @@ ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
 	mkdir -p $(INSTDIR) && install-gdb-printers -a $(INSTDIR) -c
 endif
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild \
-		$(if $(filter build,$(MAKECMDGOALS)),all) \
+		$(if $(filter build check,$(MAKECMDGOALS)),all) \
 		$(if $(filter build-nocheck,$(MAKECMDGOALS)),build) \
 		$(if $(filter check,$(MAKECMDGOALS)),subsequentcheck) \
 		$(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck check,$(MAKECMDGOALS))
