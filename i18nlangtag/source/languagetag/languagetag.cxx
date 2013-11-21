@@ -301,8 +301,6 @@ private:
     void                convertLangToLocale();
     void                convertLangToBcp47();
 
-    void                convertFromRtlLocale();
-
     /** @return whether BCP 47 language tag string was changed. */
     bool                canonicalize();
 
