@@ -2309,7 +2309,7 @@ void ScInterpreter::ScConfidenceT()
         if (sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1.0)
             PushIllegalArgument();
         else
-            PushDouble( sigma * GetTInv( 1 - alpha / 2, n - 1 ) / sqrt( n ) );
+            PushDouble( sigma * GetTInv( alpha, n - 1 ) / sqrt( n ) );
     }
 }
 
