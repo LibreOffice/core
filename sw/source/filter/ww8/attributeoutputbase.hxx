@@ -335,6 +335,8 @@ public:
     /// End of the abstract numbering definition instance.
     virtual void EndAbstractNumbering() {}
 
+    virtual void switchHeaderFooter(bool /*isHeaderFooter*/, sal_Int32 /*index*/){};
+
     /// All the numbering level information.
     virtual void NumberingLevel( sal_uInt8 nLevel,
         sal_uInt16 nStart,
@@ -600,7 +602,6 @@ protected:
     virtual void PostitField( const SwField* pFld ) = 0;
     virtual bool DropdownField( const SwField* pFld ) = 0;
     virtual bool PlaceholderField( const SwField* pFld ) = 0;
-
     virtual bool AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark );
 
     ww8::GridColsPtr GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
