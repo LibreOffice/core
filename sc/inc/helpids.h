@@ -700,5 +700,9 @@
 #define HID_FUNC_F_INV_LT                                       "SC_HID_FUNC_F_INV_LT"
 #define HID_FUNC_F_INV_RT                                       "SC_HID_FUNC_F_INV_RT"
 #define HID_FUNC_F_TEST_MS                                      "SC_HID_FUNC_F_TEST_MS"
+#define HID_FUNC_EXP_DIST_MS                                    "SC_HID_FUNC_EXP_DIST_MS"
+#define HID_FUNC_HYP_GEOM_DIST_MS                               "SC_HID_FUNC_HYP_GEOM_DIST_MS"
+#define HID_FUNC_POISSON_DIST_MS                                "SC_HID_FUNC_POISSON_DIST_MS"
+#define HID_FUNC_WEIBULL_DIST_MS                                "SC_HID_FUNC_WEIBULL_DIST_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

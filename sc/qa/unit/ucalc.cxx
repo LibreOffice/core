@@ -2388,6 +2388,7 @@ void Test::testFunctionLists()
         "COVARIANCE.S",
         "CRITBINOM",
         "DEVSQ",
+        "EXPON.DIST",
         "EXPONDIST",
         "F.DIST",
         "F.DIST.RT",
@@ -2407,6 +2408,7 @@ void Test::testFunctionLists()
         "GAUSS",
         "GEOMEAN",
         "HARMEAN",
+        "HYPGEOM.DIST",
         "HYPGEOMDIST",
         "INTERCEPT",
         "KURT",
@@ -2431,6 +2433,7 @@ void Test::testFunctionLists()
         "PERMUTATIONA",
         "PHI",
         "POISSON",
+        "POISSON.DIST",
         "PROB",
         "QUARTILE",
         "RANK",
@@ -2458,6 +2461,7 @@ void Test::testFunctionLists()
         "VARP",
         "VARPA",
         "WEIBULL",
+        "WEIBULL.DIST",
         "ZTEST",
         0
     };
