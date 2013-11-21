@@ -11613,7 +11613,6 @@ if test "$enable_ia2" = "yes"; then
     if test "$_os" = "WINNT"; then
         AC_MSG_RESULT([yes])
         ENABLE_IA2="TRUE"
-        SCPDEFS="$SCPDEFS -DENABLE_IA2"
     else
         AC_MSG_RESULT([no])
     fi

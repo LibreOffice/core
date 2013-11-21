@@ -315,7 +315,7 @@ STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
 STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
 #endif
 
-#if defined ENABLE_JAVA && defined WNT && !defined(ENABLE_IA2)
+#if defined ENABLE_JAVA && defined WNT
 STD_JAR_FILE( gid_File_Jar_Accessbridge, java_uno_accessbridge )
 #endif
 
