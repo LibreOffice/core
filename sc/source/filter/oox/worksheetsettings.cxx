@@ -244,21 +244,21 @@ void WorksheetSettings::finalizeImport()
             aPass[1] = maSheetProt.mnPasswordHash & 0xFF;
             aProtect.setPasswordHash(aPass, PASSHASH_XL);
         }
-        aProtect.setOption( ScTableProtection::OBJECTS, maSheetProt.mbObjects);
-        aProtect.setOption( ScTableProtection::SCENARIOS, maSheetProt.mbScenarios );
-        aProtect.setOption( ScTableProtection::FORMAT_CELLS, maSheetProt.mbFormatCells );
-        aProtect.setOption( ScTableProtection::FORMAT_COLUMNS, maSheetProt.mbFormatColumns );
-        aProtect.setOption( ScTableProtection::FORMAT_ROWS, maSheetProt.mbFormatRows );
-        aProtect.setOption( ScTableProtection::INSERT_COLUMNS, maSheetProt.mbInsertColumns );
-        aProtect.setOption( ScTableProtection::INSERT_ROWS,  maSheetProt.mbInsertRows );
-        aProtect.setOption( ScTableProtection::INSERT_HYPERLINKS, maSheetProt.mbInsertHyperlinks );
-        aProtect.setOption( ScTableProtection::DELETE_COLUMNS, maSheetProt.mbDeleteColumns );
-        aProtect.setOption( ScTableProtection::DELETE_ROWS,maSheetProt.mbDeleteRows );
-        aProtect.setOption( ScTableProtection::SELECT_LOCKED_CELLS, maSheetProt.mbSelectLocked );
-        aProtect.setOption( ScTableProtection::SORT, maSheetProt.mbSort );
-        aProtect.setOption( ScTableProtection::AUTOFILTER, maSheetProt.mbAutoFilter );
-        aProtect.setOption( ScTableProtection::PIVOT_TABLES, maSheetProt.mbPivotTables );
-        aProtect.setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, maSheetProt.mbSelectUnlocked );
+        aProtect.setOption( ScTableProtection::OBJECTS, !maSheetProt.mbObjects);
+        aProtect.setOption( ScTableProtection::SCENARIOS, !maSheetProt.mbScenarios );
+        aProtect.setOption( ScTableProtection::FORMAT_CELLS, !maSheetProt.mbFormatCells );
+        aProtect.setOption( ScTableProtection::FORMAT_COLUMNS, !maSheetProt.mbFormatColumns );
+        aProtect.setOption( ScTableProtection::FORMAT_ROWS, !maSheetProt.mbFormatRows );
+        aProtect.setOption( ScTableProtection::INSERT_COLUMNS, !maSheetProt.mbInsertColumns );
+        aProtect.setOption( ScTableProtection::INSERT_ROWS,  !maSheetProt.mbInsertRows );
+        aProtect.setOption( ScTableProtection::INSERT_HYPERLINKS, !maSheetProt.mbInsertHyperlinks );
+        aProtect.setOption( ScTableProtection::DELETE_COLUMNS, !maSheetProt.mbDeleteColumns );
+        aProtect.setOption( ScTableProtection::DELETE_ROWS,!maSheetProt.mbDeleteRows );
+        aProtect.setOption( ScTableProtection::SELECT_LOCKED_CELLS, !maSheetProt.mbSelectLocked );
+        aProtect.setOption( ScTableProtection::SORT, !maSheetProt.mbSort );
+        aProtect.setOption( ScTableProtection::AUTOFILTER, !maSheetProt.mbAutoFilter );
+        aProtect.setOption( ScTableProtection::PIVOT_TABLES, !maSheetProt.mbPivotTables );
+        aProtect.setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, !maSheetProt.mbSelectUnlocked );
 
         getScDocument().SetTabProtection( getSheetIndex(), &aProtect );
     }
