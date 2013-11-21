@@ -72,6 +72,7 @@
 #include "datauno.hxx"
 #include "globalnames.hxx"
 #include "documentimport.hxx"
+#include "drwlayer.hxx"
 
 #include "formulabuffer.hxx"
 #include "vcl/mapmod.hxx"
@@ -150,6 +151,7 @@ public:
     ScDocument& getScDocument() { return *mpDoc; }
     const ScDocument& getScDocument() const { return *mpDoc; }
 
+    ScDocShell& getDocShell();
     ScDocumentImport& getDocImport();
 
     /** Returns a reference to the source/target spreadsheet document model. */
@@ -305,6 +307,7 @@ private:
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
     bool                mbHasCodePage;          /// True = CODEPAGE record exists in imported stream.
     ScDocument* mpDoc;
+    ScDocShell* mpDocShell;
     boost::scoped_ptr<ScDocumentImport> mxDocImport;
 };
 
@@ -316,7 +319,8 @@ WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     meFilterType( FILTER_OOXML ),
     mpOoxFilter( &rFilter ),
     meBiff( BIFF_UNKNOWN ),
-    mpDoc( NULL )
+    mpDoc(NULL),
+    mpDocShell(NULL)
 {
     // register at the filter, needed for virtual callbacks (even during construction)
     mrExcelFilter.registerWorkbookGlobals( *this );
@@ -327,6 +331,11 @@ WorkbookGlobals::~WorkbookGlobals()
 {
     finalize();
     mrExcelFilter.unregisterWorkbookGlobals();
+}
+
+ScDocShell& WorkbookGlobals::getDocShell()
+{
+    return *mpDocShell;
 }
 
 ScDocumentImport& WorkbookGlobals::getDocImport()
@@ -534,11 +543,10 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     if (mxDoc.get())
     {
         ScModelObj* pModel = dynamic_cast<ScModelObj*>(mxDoc.get());
-        ScDocShell* pDocShell = NULL;
         if (pModel)
-            pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
-        if (pDocShell)
-            mpDoc = pDocShell->GetDocument();
+            mpDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
+        if (mpDocShell)
+            mpDoc = mpDocShell->GetDocument();
     }
 
     if (!mpDoc)
@@ -578,19 +586,16 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     // set some document properties needed during import
     if( mrBaseFilter.isImportFilter() )
     {
-        PropertySet aPropSet( mxDoc );
         // enable editing read-only documents (e.g. from read-only files)
-        aPropSet.setProperty( PROP_IsChangeReadOnlyEnabled, true );
+        mpDoc->EnableChangeReadOnly(true);
         // #i76026# disable Undo while loading the document
-        aPropSet.setProperty( PROP_IsUndoEnabled, false );
+        mpDoc->EnableUndo(false);
         // #i79826# disable calculating automatic row height while loading the document
-        aPropSet.setProperty( PROP_IsAdjustHeightEnabled, false );
+        mpDoc->EnableAdjustHeight(true);
         // disable automatic update of linked sheets and DDE links
-        aPropSet.setProperty( PROP_IsExecuteLinkEnabled, false );
+        mpDoc->EnableExecuteLink(false);
         // #i79890# disable automatic update of defined names
-        Reference< XActionLockable > xLockable( aPropSet.getAnyProperty( PROP_NamedRanges ), UNO_QUERY );
-        if( xLockable.is() )
-            xLockable->addActionLock();
+        mpDoc->CompileNameFormula(true);
 
         //! TODO: localize progress bar text
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Loading..." ) );
@@ -598,7 +603,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
 
         //prevent unnecessary broadcasts and "half way listeners" as
         //is done in ScDocShell::BeforeXMLLoading() for ods
-        getScDocument().SetInsertingFromOtherDoc(true);
+        mpDoc->SetInsertingFromOtherDoc(true);
     }
     else if( mrBaseFilter.isExportFilter() )
     {
@@ -625,26 +630,28 @@ void WorkbookGlobals::finalize()
     // set some document properties needed after import
     if( mrBaseFilter.isImportFilter() )
     {
-        PropertySet aPropSet( mxDoc );
         // #i74668# do not insert default sheets
-        aPropSet.setProperty( PROP_IsLoaded, true );
+        mpDocShell->SetEmpty(false);
         // #i79890# Compile named ranges before re-enabling row height adjustment. (no idea why).
         mpDoc->CompileNameFormula(false);
         // enable automatic update of linked sheets and DDE links
-        aPropSet.setProperty( PROP_IsExecuteLinkEnabled, true );
+        mpDoc->EnableExecuteLink(true);
         // #i79826# enable updating automatic row height after loading the document
-        aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
+        mpDoc->EnableAdjustHeight(true);
 
         // #i76026# enable Undo after loading the document
-        aPropSet.setProperty( PROP_IsUndoEnabled, true );
+        mpDoc->EnableUndo(true);
+
         // disable editing read-only documents (e.g. from read-only files)
-        aPropSet.setProperty( PROP_IsChangeReadOnlyEnabled, false );
+        mpDoc->EnableChangeReadOnly(false);
         // #111099# open forms in alive mode (has no effect, if no controls in document)
-        aPropSet.setProperty( PROP_ApplyFormDesignMode, false );
+        ScDrawLayer* pModel = mpDoc->GetDrawLayer();
+        if (pModel)
+            pModel->SetOpenInDesignMode(false);
 
         //stop preventing establishment of listeners as is done in
         //ScDocShell::AfterXMLLoading() for ods
-        getScDocument().SetInsertingFromOtherDoc(false);
+        mpDoc->SetInsertingFromOtherDoc(false);
         getDocImport().finalize();
     }
 }
@@ -743,6 +750,11 @@ ScDocument& WorkbookHelper::getScDocument()
 const ScDocument& WorkbookHelper::getScDocument() const
 {
     return mrBookGlob.getScDocument();
+}
+
+ScDocShell& WorkbookHelper::getDocShell()
+{
+    return mrBookGlob.getDocShell();
 }
 
 ScDocumentImport& WorkbookHelper::getDocImport()

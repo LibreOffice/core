@@ -1126,7 +1126,7 @@ public:
     bool            IsUndo() const                              { return bIsUndo; }
     bool            IsClipboard() const                         { return bIsClip; }
     bool            IsUndoEnabled() const                       { return mbUndoEnabled; }
-    void            EnableUndo( bool bVal );
+    SC_DLLPUBLIC void EnableUndo( bool bVal );
 
     bool            IsAdjustHeightEnabled() const               { return mbAdjustHeightEnabled; }
     void            EnableAdjustHeight( bool bVal )             { mbAdjustHeightEnabled = bVal; }

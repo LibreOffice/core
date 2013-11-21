@@ -56,6 +56,7 @@ namespace oox { namespace core {
 } }
 
 class ScDocument;
+class ScDocShell;
 class ScDocumentImport;
 class ScEditEngineDefaulter;
 
@@ -152,6 +153,7 @@ public:
     ScDocument& getScDocument();
     const ScDocument& getScDocument() const;
 
+    ScDocShell& getDocShell();
     ScDocumentImport& getDocImport();
 
     ScEditEngineDefaulter& getEditEngine() const;

@@ -338,7 +338,7 @@ void WorkbookFragment::finalizeImport()
 
     // Recalculate formula cells.
     ScDocument& rDoc = getScDocument();
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+    ScDocShell& rDocSh = getDocShell();
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     ScRecalcOptions nRecalcMode =
         static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get(xContext));
@@ -349,7 +349,7 @@ void WorkbookFragment::finalizeImport()
         {
             // Ask the user if full re-calculation is desired.
             QueryBox aBox(
-                pDocSh->GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                rDocSh.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
             aBox.SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 
@@ -373,7 +373,7 @@ void WorkbookFragment::finalizeImport()
         bHardRecalc = true;
 
     if (bHardRecalc)
-        pDocSh->DoHardRecalc(false);
+        rDocSh.DoHardRecalc(false);
     else
         rDoc.CalcFormulaTree(false, true, false);
 }
