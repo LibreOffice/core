@@ -800,8 +800,8 @@ void ScExportTest::testSheetProtectionXLSX()
             CPPUNIT_ASSERT( (sal_uInt8)aHash[1] == 61 );
         }
         // we could flesh out this check I guess
-        CPPUNIT_ASSERT ( pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
-        CPPUNIT_ASSERT ( pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) );
+        CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
+        CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) );
     }
     xDocSh->DoClose();
 }
