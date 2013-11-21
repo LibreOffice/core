@@ -83,6 +83,9 @@ class DocxExport : public MSWordExportBase
     /// Footer counter.
     sal_Int32 m_nFooters;
 
+    ///Footer and Header counter in Section properties
+    sal_Int32 m_nHeadersFootersInSection;
+
     /// Exporter of the VML shapes.
     oox::vml::VMLExport *m_pVMLExport;
 
