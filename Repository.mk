@@ -183,8 +183,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,onlineupdate, \
-	updatecheckui \
-	updchk \
+	$(if $(ENABLE_ONLINE_UPDATE), \
+		updatecheckui \
+		updchk \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
