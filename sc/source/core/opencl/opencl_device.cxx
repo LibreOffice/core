@@ -447,7 +447,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
         if (!profile)
         {
             // failed to initialize profile.
-            selectedDevice.oclDeviceID = NULL;
+            selectedDevice.type = DS_DEVICE_NATIVE_CPU;
             return selectedDevice;
         }
 
