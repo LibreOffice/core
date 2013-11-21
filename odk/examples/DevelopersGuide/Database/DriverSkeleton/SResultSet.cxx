@@ -39,7 +39,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/supportsService.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "propertyids.hxx"
 
