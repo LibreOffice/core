@@ -2357,16 +2357,15 @@ bool SwDoc::HasInvisibleContent() const
 
 bool SwDoc::RestoreInvisibleContent()
 {
-    bool bRet = false;
     SwUndoId nLastUndoId(UNDO_EMPTY);
     if (GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId)
         && (UNDO_UI_DELETE_INVISIBLECNTNT == nLastUndoId))
     {
         GetIDocumentUndoRedo().Undo();
         GetIDocumentUndoRedo().ClearRedo();
-        bRet = true;
+        return true;
     }
-    return bRet;
+    return false;
 }
 
 bool SwDoc::ConvertFieldsToText()
@@ -2589,9 +2588,6 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 
 OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
 {
-    OUString aResult;
-    bool bOK = false;
-
     if (rPam.GetNode(sal_True) == rPam.GetNode(sal_False))
     {
         SwTxtNode * pTxtNode = rPam.GetNode(sal_True)->GetTxtNode();
@@ -2601,28 +2597,23 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
             const sal_Int32 nStart = rPam.Start()->nContent.GetIndex();
             const sal_Int32 nEnd = rPam.End()->nContent.GetIndex();
 
-            aResult += SW_RES(STR_START_QUOTE);
-            aResult += ShortenString(pTxtNode->GetTxt().
-                                         copy(nStart, nEnd - nStart),
-                                     nUndoStringLength,
-                                     OUString(SW_RES(STR_LDOTS)));
-            aResult += SW_RES(STR_END_QUOTE);
-
-            bOK = true;
+            return SW_RESSTR(STR_START_QUOTE)
+                + ShortenString(pTxtNode->GetTxt().copy(nStart, nEnd - nStart),
+                                nUndoStringLength,
+                                SW_RESSTR(STR_LDOTS))
+                + SW_RESSTR(STR_END_QUOTE);
         }
     }
     else if (0 != rPam.GetNode(sal_True))
     {
         if (0 != rPam.GetNode(sal_False))
-            aResult += SW_RES(STR_PARAGRAPHS);
-
-        bOK = true;
+        {
+            return SW_RESSTR(STR_PARAGRAPHS);
+        }
+        return OUString();
     }
 
-    if (! bOK)
-        aResult += "??";
-
-    return aResult;
+    return OUString("??");
 }
 
 SwField * SwDoc::GetFieldAtPos(const SwPosition & rPos)
