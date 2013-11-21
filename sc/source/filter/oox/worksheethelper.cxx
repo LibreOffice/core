@@ -70,6 +70,8 @@
 #include "tokenarray.hxx"
 #include "tablebuffer.hxx"
 #include "documentimport.hxx"
+#include "stlsheet.hxx"
+#include "stlpool.hxx"
 
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
@@ -938,8 +940,14 @@ void WorksheetGlobals::setRowModel( const RowModel& rModel )
 void WorksheetGlobals::initializeWorksheetImport()
 {
     // set default cell style for unused cells
-    PropertySet aPropSet( mxSheet );
-    aPropSet.setProperty( PROP_CellStyle, getStyles().getDefaultStyleName() );
+    ScDocumentImport& rDoc = getDocImport();
+
+    ScStyleSheet* pStyleSheet =
+        static_cast<ScStyleSheet*>(rDoc.getDoc().GetStyleSheetPool()->Find(
+            getStyles().getDefaultStyleName(), SFX_STYLE_FAMILY_PARA));
+
+    if (pStyleSheet)
+        rDoc.setCellStyleToSheet(getSheetIndex(), *pStyleSheet);
 
     /*  Remember the current sheet index in global data, needed by global
         objects, e.g. the chart converter. */

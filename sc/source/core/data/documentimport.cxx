@@ -58,6 +58,15 @@ void ScDocumentImport::setDefaultNumericScript(sal_uInt16 nScript)
     mpImpl->mnDefaultScriptNumeric = nScript;
 }
 
+void ScDocumentImport::setCellStyleToSheet(SCTAB nTab, const ScStyleSheet& rStyle)
+{
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->ApplyStyleArea(0, 0, MAXCOL, MAXROW, rStyle);
+}
+
 SCTAB ScDocumentImport::getSheetIndex(const OUString& rName) const
 {
     SCTAB nTab = -1;
