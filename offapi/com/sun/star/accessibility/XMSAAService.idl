@@ -22,15 +22,14 @@
 #ifndef __com_sun_star_accessibility_XMSAASERVICE_idl__
 #define __com_sun_star_accessibility_XMSAASERVICE_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XComponent.idl>
 #endif
 
 module com { module sun { module star { module accessibility {
 
 /** The interface must be implemented for a server that can support MSAA com objects and send win32 accessible events
 */
-interface XMSAAService : ::com::sun::star::uno::XInterface
+interface XMSAAService : ::com::sun::star::lang::XComponent
 {
     /** Return com object pointer.
 

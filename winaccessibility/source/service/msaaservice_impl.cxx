@@ -18,13 +18,11 @@
  */
 
 #include <rtl/ref.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/accessibility/XMSAAService.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
@@ -60,20 +58,15 @@ static OUString getImplementationName_MSAAServiceImpl()
     return OUString( "com.sun.star.accessibility.my_sc_implementation.MSAAService" );
 }
 
-class MSAAServiceImpl : public ::cppu::WeakImplHelper4<
-            XMSAAService, lang::XServiceInfo,
-            lang::XInitialization, lang::XComponent >
+class MSAAServiceImpl : public ::cppu::WeakImplHelper2<
+            XMSAAService, lang::XServiceInfo >
 {
 private:
     rtl::Reference<AccTopWindowListener> m_pTopWindowListener;
-    OUString m_arg;
 
 public:
     MSAAServiceImpl ();
     virtual ~MSAAServiceImpl();
-
-    // XInitialization will be called upon createInstanceWithArguments[AndContext]()
-    virtual void SAL_CALL initialize( Sequence< Any > const & args ) throw (Exception);
 
     // XComponent - as used by VCL to lifecycle manage this bridge.
     virtual void SAL_CALL dispose();
@@ -90,24 +83,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName );
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames();
 };
-
-void MSAAServiceImpl::initialize( Sequence< Any > const & args ) throw (Exception)
-{
-    if (1 != args.getLength())
-    {
-        throw lang::IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("give a string instanciating this component!") ),
-            (::cppu::OWeakObject *)this, // resolve to XInterface reference
-            0 ); // argument pos
-    }
-    if (! (args[ 0 ] >>= m_arg))
-    {
-        throw lang::IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no string given as argument!") ),
-            (::cppu::OWeakObject *)this, // resolve to XInterface reference
-            0 ); // argument pos
-    }
-}
 
 /**
    * Implemention of getAccObjectPtr.

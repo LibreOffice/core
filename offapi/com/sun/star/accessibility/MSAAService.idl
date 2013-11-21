@@ -22,17 +22,11 @@
 #ifndef __com_sun_star_accessibility_Accessible_idl__
 #define __com_sun_star_accessibility_Accessible_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-#include "XMSAAService.idl"
+#include <com/sun/star/accessibility/XMSAAService.idl>
 
 module com { module sun { module star { module accessibility {
 
-service MSAAService
-{
-    interface XMSAAService;
-        interface com::sun::star::lang::XInitialization;
-};
+service MSAAService: XMSAAService;
 
 }; }; }; };
 
