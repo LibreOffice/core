@@ -230,6 +230,17 @@ void LiblantagDataRef::setupDataPath()
 }
 
 
+/* TODO: we could transform known vendor and browser-specific variants to known
+ * BCP 47 if available. For now just remove them to not confuse any later
+ * treatments that check for empty variants. This vendor stuff was never
+ * supported anyway. */
+static void handleVendorVariant( com::sun::star::lang::Locale & rLocale )
+{
+    if (!rLocale.Variant.isEmpty() && rLocale.Language != I18NLANGTAG_QLT)
+        rLocale.Variant = OUString();
+}
+
+
 class LanguageTagImpl
 {
 public:
@@ -483,6 +494,7 @@ LanguageTag::LanguageTag( const com::sun::star::lang::Locale & rLocale )
         mbInitializedLangID( false),
         mbIsFallback( false)
 {
+    handleVendorVariant( maLocale);
 }
 
 
@@ -1025,6 +1037,7 @@ LanguageTag & LanguageTag::reset( const com::sun::star::lang::Locale & rLocale )
     maLocale            = rLocale;
     mbSystemLocale      = rLocale.Language.isEmpty();
     mbInitializedLocale = !mbSystemLocale;
+    handleVendorVariant( maLocale);
     return *this;
 }
 
