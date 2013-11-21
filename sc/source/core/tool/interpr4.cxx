@@ -4099,15 +4099,18 @@ StackVar ScInterpreter::Interpret()
                 case ocMatRef           : ScMatRef();                   break;
                 case ocB                : ScB();                        break;
                 case ocNormDist         : ScNormDist();                 break;
-                case ocExpDist          : ScExpDist();                  break;
+                case ocExpDist          :
+                case ocExpDist_MS       : ScExpDist();                  break;
                 case ocBinomDist        :
                 case ocBinomDist_MS     : ScBinomDist();                break;
-                case ocPoissonDist      : ScPoissonDist();              break;
+                case ocPoissonDist      :
+                case ocPoissonDist_MS   : ScPoissonDist();              break;
                 case ocKombin           : ScKombin();                   break;
                 case ocKombin2          : ScKombin2();                  break;
                 case ocVariationen      : ScVariationen();              break;
                 case ocVariationen2     : ScVariationen2();             break;
                 case ocHypGeomDist      : ScHypGeomDist();              break;
+                case ocHypGeomDist_MS   : ScHypGeomDist_MS();           break;
                 case ocLogNormDist      : ScLogNormDist();              break;
                 case ocTDist            : ScTDist();                    break;
                 case ocFDist            :
@@ -4127,7 +4130,8 @@ StackVar ScInterpreter::Interpret()
                 case ocMedian           : ScMedian();                   break;
                 case ocGeoMean          : ScGeoMean();                  break;
                 case ocHarMean          : ScHarMean();                  break;
-                case ocWeibull          : ScWeibull();                  break;
+                case ocWeibull          :
+                case ocWeibull_MS       : ScWeibull();                  break;
                 case ocBinomInv         :
                 case ocKritBinom        : ScCritBinom();                break;
                 case ocNegBinomVert     : ScNegBinomDist();             break;

@@ -6295,6 +6295,46 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
+     // -=*# Resource for function POISSON.DIST #*=-
+    Resource SC_OPCODE_POISSON_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the Poisson distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_POISSON_DIST_MS );
+            3;  0;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the Poisson distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "mean" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Mean. The mean value of the Poisson distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Cumulative" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
+        };
+    };
      // -=*# Resource for function NORMVERT #*=-
     Resource SC_OPCODE_NORM_DIST
     {
@@ -6531,6 +6571,46 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_EXPONVERT );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value to which the exponential distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "lambda" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The parameters of the exponential distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "C" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
+        };
+    };
+     // -=*# Resource for function EXPON.DIST #*=-
+    Resource SC_OPCODE_EXP_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the exponential distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_EXP_DIST_MS );
             3;  0;  0;  0;
             0;
         };
@@ -6985,6 +7065,54 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
         };
     };
+     // -=*# Resource for function WEIBULL.DIST #*=-
+    Resource SC_OPCODE_WEIBULL_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the values of the Weibull distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_WEIBULL_DIST_MS );
+            4;  0;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the Weibull distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Alpha" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The Alpha parameter of the Weibull distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "beta" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The Beta parameter of the Weibull distribution." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "C" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
+        };
+    };
      // -=*# Resource for function HYPGEOMVERT #*=-
     Resource SC_OPCODE_HYP_GEOM_DIST
     {
@@ -7031,6 +7159,62 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 9 // Description of Parameter 4
         {
             Text [ en-US ] = "The population size." ;
+        };
+    };
+     // -=*# Resource for function HYPGEOM.DIST #*=-
+    Resource SC_OPCODE_HYP_GEOM_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the hypergeometric distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_HYP_GEOM_DIST_MS );
+            5;  0;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "X" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The number of successes in the sample." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "n_sample" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The size of the sample." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "successes" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The number of successes in the population." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "n_population" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "The population size." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "C" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "Cumulated. TRUE calculates the probabilty mass function, FALSE the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function TVERT #*=-
