@@ -20,6 +20,7 @@
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <basic/sbxcore.hxx>
@@ -56,7 +57,8 @@
 #include "scabstdlg.hxx"
 #include "impex.hxx"
 #include "asciiopt.hxx"
-#include "datastreams.hxx"
+#include "datastream.hxx"
+#include "datastreamdlg.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
 
@@ -734,17 +736,35 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             }
             break;
         case SID_DATA_STREAMS:
-            if (!pImpl->m_pDataStreams)
-                pImpl->m_pDataStreams = new DataStreams(GetViewData()->GetDocShell());
-            pImpl->m_pDataStreams->ShowDialog( pTabViewShell->GetDialogParent() );
+            {
+                DataStreamDlg aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+                if (aDialog.Execute() == RET_OK)
+                    aDialog.StartStream();
+            }
             break;
         case SID_DATA_STREAMS_PLAY:
-            if (pImpl->m_pDataStreams)
-                pImpl->m_pDataStreams->Start();
+            {
+                ScDocument *pDoc = GetViewData()->GetDocument();
+                if (pDoc->GetLinkManager())
+                {
+                    const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
+                    for (size_t i = 0; i < rLinks.size(); i++)
+                        if (DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i]))))
+                            pStream->Start();
+                }
+            }
             break;
         case SID_DATA_STREAMS_STOP:
-            if (pImpl->m_pDataStreams)
-                pImpl->m_pDataStreams->Stop();
+            {
+                ScDocument *pDoc = GetViewData()->GetDocument();
+                if (pDoc->GetLinkManager())
+                {
+                    const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
+                    for (size_t i = 0; i < rLinks.size(); i++)
+                        if (DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i]))))
+                            pStream->Stop();
+                }
+            }
             break;
         case SID_MANAGE_XML_SOURCE:
             ExecuteXMLSourceDialog();

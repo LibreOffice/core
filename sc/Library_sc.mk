@@ -385,6 +385,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/dialogs/searchresults \
     sc/source/ui/docshell/arealink \
     sc/source/ui/docshell/autostyl \
+    sc/source/ui/docshell/datastream \
     sc/source/ui/docshell/dbdocfun \
     sc/source/ui/docshell/dbdocimp \
     sc/source/ui/docshell/docfunc \
@@ -443,8 +444,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/miscdlgs/autofmt \
     sc/source/ui/miscdlgs/conflictsdlg \
     sc/source/ui/miscdlgs/crnrdlg \
-    sc/source/ui/miscdlgs/datastreams \
-    sc/source/ui/miscdlgs/datastreamsdlg \
+    sc/source/ui/miscdlgs/datastreamdlg \
     sc/source/ui/miscdlgs/highred \
     sc/source/ui/miscdlgs/optsolver \
     sc/source/ui/miscdlgs/protectiondlg \

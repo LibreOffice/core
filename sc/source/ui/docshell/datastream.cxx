@@ -7,13 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <datastreams.hxx>
+#include <datastream.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <osl/conditn.hxx>
 #include <rtl/strbuf.hxx>
 #include <salhelper/thread.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <asciiopt.hxx>
 #include <dbfunc.hxx>
@@ -30,14 +31,14 @@ namespace datastreams {
 
 class CallerThread : public salhelper::Thread
 {
-    DataStreams *mpDataStreams;
+    DataStream *mpDataStream;
 public:
     osl::Condition maStart;
     bool mbTerminate;
 
-    CallerThread(DataStreams *pData):
+    CallerThread(DataStream *pData):
         Thread("CallerThread")
-        ,mpDataStreams(pData)
+        ,mpDataStream(pData)
         ,mbTerminate(false)
     {}
 
@@ -53,7 +54,7 @@ private:
             maStart.wait();
             maStart.reset();
             if (!mbTerminate)
-                while (mpDataStreams->ImportData())
+                while (mpDataStream->ImportData())
                     wait(aTime);
         };
     }
@@ -137,19 +138,68 @@ private:
 
 }
 
-DataStreams::DataStreams(ScDocShell *pScDocShell):
-    mpScDocShell(pScDocShell)
+static void lcl_MakeToolbarVisible(SfxViewFrame *pViewFrame)
+{
+    css::uno::Reference< css::frame::XFrame > xFrame =
+        pViewFrame->GetFrame().GetFrameInterface();
+    if (!xFrame.is())
+        return;
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return;
+
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    if (!xLayoutManager.is())
+        return;
+
+    const OUString sResourceURL( "private:resource/toolbar/datastreams" );
+    css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
+    if (!xUIElement.is())
+    {
+        xLayoutManager->createElement( sResourceURL );
+        xLayoutManager->showElement( sResourceURL );
+    }
+}
+
+void DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange, sal_Int32 nLimit, const OUString& rMove)
+{
+    sfx2::SvBaseLink *pLink = 0;
+    pLink = new DataStream( pShell, rURL, rRange, nLimit, rMove );
+    sfx2::LinkManager* pLinkManager = pShell->GetDocument()->GetLinkManager();
+    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rURL, NULL, NULL );
+
+    lcl_MakeToolbarVisible(pShell->GetViewData()->GetViewShell()->GetViewFrame());
+}
+
+DataStream::DataStream(ScDocShell *pShell, const OUString& rURL,
+        const OUString& rRange, sal_Int32 nLimit, const OUString& rMove)
+    : mpScDocShell(pShell)
     , mpScDocument(mpScDocShell->GetDocument())
     , meMove(NO_MOVE)
     , mbRunning(false)
     , mpLines(0)
     , mnLinesCount(0)
+    , mpRange(new ScRange())
+    , mpEndRange(NULL)
 {
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
+
+    Decode(rURL, rRange, rMove);
+
+    mpStartRange.reset( new ScRange(*mpRange.get()) );
+    sal_Int32 nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
+    nLimit = nHeight * (nLimit / nHeight);
+    if (nLimit && mpRange->aStart.Row() + nLimit - 1 < MAXROW)
+    {
+        mpEndRange.reset( new ScRange(*mpRange) );
+        mpEndRange->Move(0, nLimit - nHeight, 0);
+    }
 }
 
-DataStreams::~DataStreams()
+DataStream::~DataStream()
 {
     if (mbRunning)
         Stop();
@@ -160,7 +210,7 @@ DataStreams::~DataStreams()
         mxReaderThread->endThread();
 }
 
-OString DataStreams::ConsumeLine()
+OString DataStream::ConsumeLine()
 {
     if (!mpLines || mnLinesCount >= mpLines->size())
     {
@@ -183,7 +233,32 @@ OString DataStreams::ConsumeLine()
     return mpLines->at(mnLinesCount++);
 }
 
-void DataStreams::Start()
+void DataStream::Decode( const OUString& rURL, const OUString& rRange, const OUString& rMove)
+{
+    sal_Int32 nIndex = rURL.indexOf(sfx2::cTokenSeparator);
+    SvStream *pStream = 0;
+    if (nIndex != -1)
+        pStream = new SvScriptStream(rURL.copy(0, nIndex));
+    else
+        pStream = new SvFileStream(rURL, STREAM_READ);
+    mxReaderThread = new datastreams::ReaderThread( pStream );
+    mxReaderThread->launch();
+
+    mbValuesInLine = !rRange.isEmpty();
+    if (!mbValuesInLine)
+        return;
+
+    mpRange->Parse(rRange, mpScDocument);
+    
+    if (rMove == "NO_MOVE")
+        meMove = NO_MOVE;
+    else if (rMove == "RANGE_DOWN")
+        meMove = RANGE_DOWN;
+    else if (rMove == "MOVE_DOWN")
+        meMove = MOVE_DOWN;
+}
+
+void DataStream::Start()
 {
     if (mbRunning)
         return;
@@ -191,30 +266,9 @@ void DataStreams::Start()
     mpScDocument->EnableUndo(false);
     mbRunning = true;
     mxThread->maStart.set();
-    css::uno::Reference< css::frame::XFrame > xFrame =
-        mpScDocShell->GetViewData()->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
-    if (!xFrame.is())
-        return;
-
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
-    if (!xPropSet.is())
-        return;
-
-    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
-    if (!xLayoutManager.is())
-        return;
-
-    const OUString sResourceURL( "private:resource/toolbar/datastreams" );
-    css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
-    if (!xUIElement.is())
-    {
-        xLayoutManager->createElement( sResourceURL );
-        xLayoutManager->showElement( sResourceURL );
-    }
 }
 
-void DataStreams::Stop()
+void DataStream::Stop()
 {
     if (!mbRunning)
         return;
@@ -222,36 +276,7 @@ void DataStreams::Stop()
     mpScDocument->EnableUndo(mbIsUndoEnabled);
 }
 
-void DataStreams::Set(SvStream *pStream, bool bValuesInLine,
-        const OUString& rRange, sal_Int32 nLimit, MoveEnum eMove)
-{
-    if (mxReaderThread.is())
-        mxReaderThread->endThread();
-    mxReaderThread = new datastreams::ReaderThread( pStream );
-    mxReaderThread->launch();
-
-    mpEndRange.reset( NULL );
-    mpRange.reset ( new ScRange() );
-    mbValuesInLine = bValuesInLine;
-    if (!mbValuesInLine)
-    {
-        meMove = NO_MOVE;
-        return;
-    }
-
-    mpRange->Parse(rRange, mpScDocument);
-    mpStartRange.reset( new ScRange(*mpRange.get()) );
-    meMove = eMove;
-    sal_Int32 nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
-    nLimit = nHeight * (nLimit / nHeight);
-    if (nLimit && mpRange->aStart.Row() + nLimit - 1 < MAXROW)
-    {
-        mpEndRange.reset( new ScRange(*mpRange) );
-        mpEndRange->Move(0, nLimit - nHeight, 0);
-    }
-}
-
-void DataStreams::MoveData()
+void DataStream::MoveData()
 {
     switch (meMove)
     {
@@ -273,7 +298,7 @@ void DataStreams::MoveData()
     }
 }
 
-bool DataStreams::ImportData()
+bool DataStream::ImportData()
 {
     SolarMutexGuard aGuard;
     MoveData();
@@ -334,6 +359,10 @@ bool DataStreams::ImportData()
                     aEndRow, mpRange->aStart.Tab()) ), PAINT_GRID );
 
     return mbRunning;
+}
+
+void DataStream::Edit(Window* , const Link& )
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
