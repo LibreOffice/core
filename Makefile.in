@@ -49,7 +49,7 @@ gb_Side ?= host
 
 include $(BUILDDIR)/config_$(gb_Side).mk
 
-export GMAKE_OPTIONS?=-r$(if $(verbose)$(VERBOSE),,s)$(MAKEFLAGS)
+export GMAKE_OPTIONS:=-r$(if $(verbose)$(VERBOSE),,s)$(value $(MAKEFLAGS))
 
 #
 # Partial Build
