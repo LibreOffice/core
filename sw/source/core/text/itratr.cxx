@@ -1031,12 +1031,16 @@ sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
     sal_uInt16 nRet = 0;
 
     sal_Int32 nIdx = 0;
-    sal_Unicode cCh;
 
-    while ( nIdx < GetTxt().getLength() &&
-             ( '\t' == ( cCh = GetTxt()[nIdx] ) ||
-                ' ' == cCh ) )
+    while ( nIdx < GetTxt().getLength() )
+    {
+        const sal_Unicode cCh = GetTxt()[nIdx];
+        if ( cCh!='\t' && cCh!=' ' )
+        {
+            break;
+        }
         ++nIdx;
+    }
 
     if ( nIdx > 0 )
     {
