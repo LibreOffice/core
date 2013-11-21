@@ -11,6 +11,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <sfx2/lnkbase.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -23,23 +24,28 @@ namespace datastreams {
 class ScDocShell;
 class ScDocument;
 class ScRange;
-class SvStream;
 class Window;
 
 typedef std::vector<OString> LinesList;
 
-class DataStreams : boost::noncopyable
+class DataStream : boost::noncopyable, public sfx2::SvBaseLink
 {
+    OString ConsumeLine();
+    void Decode(const OUString& rURL, const OUString& rRange, const OUString& rMove);
+    void MoveData();
+
 public:
     enum MoveEnum { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
-    DataStreams(ScDocShell *pScDocShell);
-    ~DataStreams();
-    OString ConsumeLine();
+
+    static void Set(ScDocShell *pShell, const OUString& rURL,
+            const OUString& rRange, sal_Int32 nLimit, const OUString& rMove);
+
+    DataStream(ScDocShell *pShell, const OUString& rURL,
+        const OUString& rRange, sal_Int32 nLimit, const OUString& rMove);
+    virtual ~DataStream();
+    virtual void Edit(Window* , const Link& ) SAL_OVERRIDE;
+
     bool ImportData();
-    void MoveData();
-    void Set(SvStream *pStream, bool bValuesInLine,
-            const OUString& rRange, sal_Int32 nLimit, MoveEnum eMove);
-    void ShowDialog(Window *pParent);
     void Start();
     void Stop();
 

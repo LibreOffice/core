@@ -33,19 +33,16 @@ class SvxClipboardFmtItem;
 class TransferableDataHelper;
 class TransferableClipboardListener;
 class AbstractScLinkedAreaDlg;
-class DataStreams;
 
 struct CellShell_Impl
 {
     TransferableClipboardListener*  m_pClipEvtLstnr;
     AbstractScLinkedAreaDlg*        m_pLinkedDlg;
-    DataStreams*                    m_pDataStreams;
     SfxRequest*                     m_pRequest;
 
     CellShell_Impl() :
         m_pClipEvtLstnr( NULL ),
         m_pLinkedDlg( NULL ),
-        m_pDataStreams( NULL ),
         m_pRequest( NULL ) {}
 };
 
