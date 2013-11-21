@@ -37,9 +37,7 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        void TextAsPolygonExtractor2D::processBasePrimitive2D(
-            const primitive2d::BasePrimitive2D& rCandidate,
-            const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
+        void TextAsPolygonExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitive2DID())
             {

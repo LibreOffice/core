@@ -740,9 +740,7 @@ namespace drawinglayer
 
         ****************************************************************************************************/
 
-        void VclMetafileProcessor2D::processBasePrimitive2D(
-            const primitive2d::BasePrimitive2D& rCandidate,
-            const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
+        void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitive2DID())
             {
@@ -1160,11 +1158,9 @@ namespace drawinglayer
 
                         primitive2d::PolygonHairlinePrimitive2D* pPLeft = new primitive2d::PolygonHairlinePrimitive2D(aLeft, rHairlinePrimitive.getBColor());
                         primitive2d::PolygonHairlinePrimitive2D* pPRight = new primitive2d::PolygonHairlinePrimitive2D(aRight, rHairlinePrimitive.getBColor());
-                        const primitive2d::Primitive2DReference aRefLeft(pPLeft);
-                        const primitive2d::Primitive2DReference aRefRight(pPRight);
 
-                        processBasePrimitive2D(*pPLeft, aRefLeft);
-                        processBasePrimitive2D(*pPRight, aRefRight);
+                        processBasePrimitive2D(*pPLeft);
+                        processBasePrimitive2D(*pPRight);
                     }
                     else
                     {
@@ -1214,11 +1210,9 @@ namespace drawinglayer
                             aLeft, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
                         primitive2d::PolygonStrokePrimitive2D* pPRight = new primitive2d::PolygonStrokePrimitive2D(
                             aRight, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
-                        const primitive2d::Primitive2DReference aRefLeft(pPLeft);
-                        const primitive2d::Primitive2DReference aRefRight(pPRight);
 
-                        processBasePrimitive2D(*pPLeft, aRefLeft);
-                        processBasePrimitive2D(*pPRight, aRefRight);
+                        processBasePrimitive2D(*pPLeft);
+                        processBasePrimitive2D(*pPRight);
                     }
                     else
                     {
@@ -1312,11 +1306,9 @@ namespace drawinglayer
                             rStrokeArrowPrimitive.getStrokeAttribute(),
                             aEmpty,
                             rStrokeArrowPrimitive.getEnd());
-                        const primitive2d::Primitive2DReference aRefLeft(pPLeft);
-                        const primitive2d::Primitive2DReference aRefRight(pPRight);
 
-                        processBasePrimitive2D(*pPLeft, aRefLeft);
-                        processBasePrimitive2D(*pPRight, aRefRight);
+                        processBasePrimitive2D(*pPLeft);
+                        processBasePrimitive2D(*pPRight);
                     }
                     else
                     {
@@ -1384,9 +1376,8 @@ namespace drawinglayer
                             new primitive2d::PolyPolygonGraphicPrimitive2D(
                             aLocalPolyPolygon,
                             rBitmapCandidate.getFillGraphic());
-                        const primitive2d::Primitive2DReference aRefSplitted(pSplitted);
 
-                        processBasePrimitive2D(*pSplitted, aRefSplitted);
+                        processBasePrimitive2D(*pSplitted);
                     }
                     else
                     {

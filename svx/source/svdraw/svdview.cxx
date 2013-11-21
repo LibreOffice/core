@@ -2250,7 +2250,7 @@ SdrObject* SdrView::FindConnector(
     sal_uInt32& o_rnID,
     bool& o_rbBest,
     bool& o_rbAuto,
-    const SdrEdgeObj* pAvoidConnectioWith)
+    const SdrEdgeObj* pAvoidConnectionWith)
 {
     SdrObject* pRetval = 0;
     SdrPageView* pSdrPageView = GetSdrPageView();
@@ -2271,7 +2271,7 @@ SdrObject* SdrView::FindConnector(
 
                 if(pSdrObjectCandidate &&
                     (pSdrObjGroup || rVisLayer.IsSet(pSdrObjectCandidate->GetLayer())) && // GetLayer at groups is zero
-                    (!pAvoidConnectioWith || pAvoidConnectioWith != pSdrObjectCandidate)) // no connections to pAvoidConnectioWith
+                    (!pAvoidConnectionWith || pAvoidConnectionWith != pSdrObjectCandidate)) // no connections to pAvoidConnectionWith
                 {
                     basegfx::B2DRange aCandidateRange(pSdrObjectCandidate->getObjectRange(this));
                     const double fHitToleranceDoubled(getHitTolLog() * 2.0);
@@ -2334,10 +2334,11 @@ SdrObject* SdrView::FindConnector(
                         }
 
                         // check if object is hit and setBestConnection
+                        // accept other connectors, but not the same as pAvoidConnectionWith
                         if(!pRetval
-                            && !dynamic_cast< const SdrEdgeObj* >(pSdrObjectCandidate)
+                            && pSdrObjectCandidate != pAvoidConnectionWith
                             && SdrObjectPrimitiveHit(*pSdrObjectCandidate, rPosition, fHitToleranceDoubled, *this, false, 0)
-                            && (!pAvoidConnectioWith || !pAvoidConnectioWith->GetSuppressDefaultConnect()))
+                            && (!pAvoidConnectionWith || !pAvoidConnectionWith->GetSuppressDefaultConnect()))
                         {
                             pRetval = pSdrObjectCandidate;
                             o_rnID = 0;

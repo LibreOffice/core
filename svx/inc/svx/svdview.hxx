@@ -286,14 +286,14 @@ public:
 
     void MoveHandleByVector(const SdrHdl& rHdl, const basegfx::B2DVector& rDistance, Window* pMakeVisibleWindow, SdrDragMethod* pOwnDragMethod);
 
-    /// find a SdrObject at position in rSource; evtl exclude a given SdrEdgeObj (pAvoidConnectioWith)
+    /// find a SdrObject at position in rSource; evtl exclude a given SdrEdgeObj (pAvoidConnectionWith)
     /// from that search. If no SdrObject connection is found, null is returned
     SdrObject* FindConnector(
         const basegfx::B2DPoint& rPosition,
         sal_uInt32& o_rnID,
         bool& o_rbBest,
         bool& o_rbAuto,
-        const SdrEdgeObj* pAvoidConnectioWith);
+        const SdrEdgeObj* pAvoidConnectionWith);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

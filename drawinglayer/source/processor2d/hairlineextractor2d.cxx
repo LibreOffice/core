@@ -72,9 +72,7 @@ namespace drawinglayer
             addB2DPolygon(rTransform * basegfx::tools::createUnitPolygon());
         }
 
-        void HairlineGeometryExtractor2D::processBasePrimitive2D(
-            const primitive2d::BasePrimitive2D& rCandidate,
-            const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
+        void HairlineGeometryExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitive2DID())
             {

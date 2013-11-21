@@ -94,9 +94,7 @@ namespace drawinglayer
             The main part of a processBasePrimitive2D implementation is a switch..case
             construct, looking like the following:
 
-            void foo::processBasePrimitive2D(
-                const primitive2d::BasePrimitive2D& rCandidate,
-                const primitive2d::Primitive2DReference& rUnoCandidate)
+            void foo::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
             {
                 switch(rCandidate.getPrimitive2DID())
                 {
@@ -185,9 +183,7 @@ namespace drawinglayer
                 implementation is handed over (rCandidate), but also the Uno Reference to it
                 (rUnoCandidate).
              */
-            virtual void processBasePrimitive2D(
-                const primitive2d::BasePrimitive2D& rCandidate,
-                const primitive2d::Primitive2DReference& rUnoCandidate);
+            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
             /// constructor/destructor

@@ -83,7 +83,7 @@ protected:
     // if preconditions for positions change, calculate current and set, The
     // position depends on the object connected to and the GluePointID, but also
     // needs to be checked on object change
-    void checkPositionFromObject();
+    void reactOnConnectedObjectChange();
     bool getPositionFromObject(basegfx::B2DPoint& rPosition);
 
 public:
@@ -103,13 +103,14 @@ public:
     /// inserted, e.g deleted but put to undo stack)
     void ownerPageChange();
 
-    // get a copy of the GluePoint referenced; returns true if
-    // a GluePoint is referenced and when it got copied to rGP
-    bool TakeGluePoint(sdr::glue::GluePoint& rGP) const;
-
     // allow SdrEdgeObj to adapt position in two cases: user defined
     // EdgeTrack or result of BestConnection being available
     void adaptBestConnectionPosition(const basegfx::B2DPoint& rPosition);
+
+    // when the layouter has decided the best possible AutoVertex for
+    // BestConnection mode he sets this value using this method. It does
+    // not need to trigger any updates, it only 'writes back' layout results
+    void adaptBestConnectorIDToAutoVertex(sal_uInt32 nNew);
 
     // data write access
     void SetPosition(const basegfx::B2DPoint& rPosition);
@@ -148,28 +149,46 @@ void SdrObjConnection::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 }
             }
 
-            if(mpConnectedSdrObject)
-            {
-                checkPositionFromObject();
-            }
+            reactOnConnectedObjectChange();
         }
     }
 }
 
-void SdrObjConnection::checkPositionFromObject()
+void SdrObjConnection::reactOnConnectedObjectChange()
 {
-    if(mpConnectedSdrObject)
+    if(mpConnectedSdrObject && mpOwner)
     {
-        basegfx::B2DPoint aNewPosition(maPosition);
+        bool bChanged(false);
 
-        if(getPositionFromObject(aNewPosition) && !maPosition.equal(aNewPosition))
+        // change implies interactive or listener-related change, so this
+        // can no longer be a user-defined EdgeTrack
+        if(mpOwner->mbEdgeTrackUserDefined)
         {
-            maPosition = aNewPosition;
+            mpOwner->mbEdgeTrackUserDefined = false;
+            bChanged = true;
+        }
 
-            if(mpOwner)
+        if(IsBestConnection())
+        {
+            // position cannot be checked because it depends on the best found EdgeTrack;
+            // still, execute a SetEdgeTrackDirty to trigger the EdgeTrack recalculation
+            // which will then set maPosition to the new best position found
+            bChanged = true;
+        }
+        else
+        {
+            basegfx::B2DPoint aNewPosition(maPosition);
+
+            if(getPositionFromObject(aNewPosition) && !maPosition.equal(aNewPosition))
             {
-                mpOwner->geometryChange();
+                maPosition = aNewPosition;
+                bChanged = true;
             }
+        }
+
+        if(bChanged)
+        {
+            mpOwner->forceEdgeTrackUpdate();
         }
     }
 }
@@ -181,7 +200,7 @@ bool SdrObjConnection::getPositionFromObject(basegfx::B2DPoint& rPosition)
         const sdr::glue::GluePointProvider& rProvider = mpConnectedSdrObject->GetGluePointProvider();
         bool bFound(false);
 
-        if(mbAutoVertex)
+        if(IsAutoVertex())
         {
             rPosition = rProvider.getAutoGluePointByIndex(mnConnectorId).getUnitPosition();
             bFound = true;
@@ -259,7 +278,7 @@ SdrObjConnection& SdrObjConnection::operator=(const SdrObjConnection& rSource)
         StartListening(*mpConnectedSdrObject);
     }
 
-    checkPositionFromObject();
+    reactOnConnectedObjectChange();
     return *this;
 }
 
@@ -272,6 +291,19 @@ void SdrObjConnection::adaptBestConnectionPosition(const basegfx::B2DPoint& rPos
     else
     {
         OSL_ENSURE(false, "SdrObjConnection::adaptBestConnectionPosition only allowed for BestConnection or UserDefined (!)");
+    }
+}
+
+void SdrObjConnection::adaptBestConnectorIDToAutoVertex(sal_uInt32 nNew)
+{
+    if(IsBestConnection())
+    {
+        mnConnectorId = nNew;
+        mbAutoVertex = true;
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrObjConnection::adaptBestConnectorIDToAutoVertex only allowed for BestConnection (!)");
     }
 }
 
@@ -290,7 +322,7 @@ void SdrObjConnection::SetPosition(const basegfx::B2DPoint& rPosition)
 
         if(mpOwner)
         {
-            mpOwner->geometryChange();
+            mpOwner->forceEdgeTrackUpdate();
         }
     }
 }
@@ -311,7 +343,7 @@ void SdrObjConnection::SetConnectedSdrObject(SdrObject* pConnectedSdrObject)
             StartListening(*mpConnectedSdrObject);
         }
 
-        checkPositionFromObject();
+        reactOnConnectedObjectChange();
     }
 }
 
@@ -320,7 +352,7 @@ void SdrObjConnection::SetConnectorID(sal_uInt32 nNew)
     if(nNew != mnConnectorId)
     {
         mnConnectorId = nNew;
-        checkPositionFromObject();
+        reactOnConnectedObjectChange();
     }
 }
 
@@ -337,39 +369,6 @@ void SdrObjConnection::ownerPageChange()
             EndListening(*mpConnectedSdrObject);
         }
     }
-}
-
-bool SdrObjConnection::TakeGluePoint(sdr::glue::GluePoint& rGP) const
-{
-    if(mpConnectedSdrObject)
-    {
-        // Ein Obj muss schon angedockt sein!
-        const sdr::glue::GluePointProvider& rProvider = mpConnectedSdrObject->GetGluePointProvider();
-
-        if(mbAutoVertex)
-        {
-            rGP = rProvider.getAutoGluePointByIndex(mnConnectorId);
-
-            return true;
-        }
-        else
-        {
-
-            if(rProvider.hasUserGluePoints())
-            {
-                const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(mnConnectorId);
-
-                if(pCandidate)
-                {
-                    rGP = *pCandidate;
-
-                    return true;
-                }
-            }
-        }
-    }
-
-    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1569,7 +1568,7 @@ SdrEdgeObj::~SdrEdgeObj()
 {
 }
 
-void SdrEdgeObj::geometryChange()
+void SdrEdgeObj::adaptLocalTransformation()
 {
     const basegfx::B2DHomMatrix aCurrent(
         SdrTextObj::getSdrObjectTransformation());
@@ -1584,15 +1583,17 @@ void SdrEdgeObj::geometryChange()
     if(aNew != aCurrent)
     {
         maSdrObjectTransformation.setB2DHomMatrix(aNew);
-        SetEdgeTrackDirty();
+    }
+}
+
+void SdrEdgeObj::forceEdgeTrackUpdate()
+{
+    if(!mbEdgeTrackUserDefined)
+    {
+        maEdgeTrack.clear();
+        ImpRecalcEdgeTrack();
         SetChanged();
-
-        // change implies interactive or listener-related change, so this
-        // can no longer be a user-defined EdgeTrack
-        mbEdgeTrackUserDefined = false;
-
-        // Broadcasting nur, wenn auf der selben Page
-        const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
+        adaptLocalTransformation();
     }
 }
 
@@ -1877,6 +1878,12 @@ void SdrEdgeObj::ConnectToSdrObject(bool bTail, SdrObject* pObj)
 {
     SdrObjConnection& rCon(bTail ? *mpCon1 : *mpCon2);
 
+    if(pObj && mbEdgeTrackUserDefined)
+    {
+        // reset EdgeTrackUserDefined when a connection is established
+        mbEdgeTrackUserDefined = false;
+    }
+
     rCon.SetConnectedSdrObject(pObj);
 }
 
@@ -1987,7 +1994,7 @@ sal_uInt32 SdrEdgeObj::GetConnectorId(bool bTail) const
 
 void SdrEdgeObj::ImpRecalcEdgeTrack()
 {
-    // #120437# if bEdgeTrackUserDefined, do not recalculate
+    // if bEdgeTrackUserDefined, do not recalculate
     if(mbEdgeTrackUserDefined)
     {
         return;
@@ -1999,84 +2006,121 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         return;
     }
 
-    // #120437# also not when model locked during import, but remember
+    // also not when model locked during import, but remember
     if(getSdrModelFromSdrObject().isLocked())
     {
         mbSuppressed = true;
         return;
     }
 
-    // #110649#
     if(IsBoundRectCalculationRunning())
     {
         // this object is involved into another ImpRecalcEdgeTrack() call
         // from another SdrEdgeObj. Do not calculate again to avoid loop.
         // Also, do not change mbEdgeTrackDirty so that it gets recalculated
         // later at the first non-looping call.
+        return;
     }
-    else
+
+    if(mbSuppressed)
     {
-        if(mbSuppressed)
+        // If layouting was ever suppressed, it needs to be done once
+        // and the attr need to be set at EdgeInfo, else these attr *will be lost*
+        // in the following call to ImpSetEdgeInfoToAttr() sice they were never
+        // set before (!)
+        maEdgeTrack = ImpCalcEdgeTrack(*mpCon1, *mpCon2, mpEdgeInfo, 0, 0);
+        ImpSetAttrToEdgeInfo();
+        mbSuppressed = false;
+    }
+
+    // To not run in a depth loop, use a coloring algorythm on
+    // SdrEdgeObj BoundRect calculations
+    mbBoundRectCalculationRunning = true;
+
+    // remember current SdrEdgeInfoRec and new polygon
+    const SdrEdgeInfoRec aPreserved(*mpEdgeInfo);
+    const basegfx::B2DPolygon aNew(ImpCalcEdgeTrack(*mpCon1, *mpCon2, mpEdgeInfo, 0, 0));
+    bool bBroadcastChange(false);
+
+    if(aNew != maEdgeTrack)
+    {
+        maEdgeTrack = aNew;
+
+        // if connections are in 'BestConnection' mode, update their position to the
+        // computed one, just to make sure when that data is fetched from the connection
+        // itself that it is correct
+        if(maEdgeTrack.count())
         {
-            // #123048# If layouting was ever suppressed, it needs to be done once
-            // and the attr need to be set at EdgeInfo, else these attr *will be lost*
-            // in the following call to ImpSetEdgeInfoToAttr() sice they were never
-            // set before (!)
-            maEdgeTrack = ImpCalcEdgeTrack(*mpCon1, *mpCon2, mpEdgeInfo, 0, 0);
-            ImpSetAttrToEdgeInfo();
-            mbSuppressed = false;
-        }
+            const basegfx::B2DPoint aStart(maEdgeTrack.getB2DPoint(0));
+            const basegfx::B2DPoint aEnd(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
 
-        // To not run in a depth loop, use a coloring algorythm on
-        // SdrEdgeObj BoundRect calculations
-        mbBoundRectCalculationRunning = true;
-
-        // remember current SdrEdgeInfoRec and new polygon
-        const SdrEdgeInfoRec aPreserved(*mpEdgeInfo);
-        const basegfx::B2DPolygon aNew(ImpCalcEdgeTrack(*mpCon1, *mpCon2, mpEdgeInfo, 0, 0));
-        bool bBroadcastChange(false);
-
-        if(aNew != maEdgeTrack)
-        {
-            maEdgeTrack = aNew;
-
-            // if connections are in 'BestConnection' mode, update their oposition to the
-            // computed one, just to make sure when that data is fetched from the connection
-            // itself that it is correct
-            if(maEdgeTrack.count())
+            if(mpCon1->IsBestConnection())
             {
-                const basegfx::B2DPoint aStart(maEdgeTrack.getB2DPoint(0));
-                const basegfx::B2DPoint aEnd(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
-
-                if(mpCon1->IsBestConnection())
-                {
-                    mpCon1->adaptBestConnectionPosition(aStart);
-                }
-
-                if(mpCon2->IsBestConnection())
-                {
-                    mpCon2->adaptBestConnectionPosition(aEnd);
-                }
+                mpCon1->adaptBestConnectionPosition(aStart);
             }
 
-            bBroadcastChange = true;
+            if(mpCon2->IsBestConnection())
+            {
+                mpCon2->adaptBestConnectionPosition(aEnd);
+            }
         }
 
-        if(aPreserved != *mpEdgeInfo)
-        {
-            ImpSetEdgeInfoToAttr();
-            bBroadcastChange = true;
-        }
-
-        if(bBroadcastChange)
-        {
-            // use local scope to trigger locally
-            const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
-        }
-
-        // #110649#
-        mbBoundRectCalculationRunning = false;
+        bBroadcastChange = true;
     }
+
+    if(aPreserved != *mpEdgeInfo)
+    {
+        ImpSetEdgeInfoToAttr();
+        bBroadcastChange = true;
+    }
+
+    if(bBroadcastChange)
+    {
+        // use local scope to trigger locally
+        const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
+    }
+
+    // #110649#
+    mbBoundRectCalculationRunning = false;
+}
+
+bool SdrEdgeObj::impGetGluePoint(
+    sdr::glue::GluePoint& o_rGP,
+    const SdrObjConnection& rCon,
+    sal_uInt32 nConnectorId) const
+{
+    const SdrObject* pConnected = rCon.GetConnectedSdrObject();
+
+    if(pConnected)
+    {
+        // Ein Obj muss schon angedockt sein!
+        const sdr::glue::GluePointProvider& rProvider = pConnected->GetGluePointProvider();
+
+        if(rCon.IsAutoVertex() || rCon.IsBestConnection())
+        {
+            // AutoGluePoint
+            o_rGP = rProvider.getAutoGluePointByIndex(nConnectorId);
+
+            return true;
+        }
+        else
+        {
+            // UserGluePoint or CustomShapeGluePoint
+            if(rProvider.hasUserGluePoints())
+            {
+                const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(nConnectorId);
+
+                if(pCandidate)
+                {
+                    o_rGP = *pCandidate;
+
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
@@ -2198,12 +2242,9 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
 
     for(sal_uInt16 nNum1(0); nNum1 < nAnz1; nNum1++)
     {
-        if(bAuto1)
-        {
-            rCon1.SetConnectorID(nNum1);
-        }
+        sdr::glue::GluePoint aGP1;
 
-        if(bCon1 && rCon1.TakeGluePoint(aGP1))
+        if(bCon1 && impGetGluePoint(aGP1, rCon1, bAuto1 ? nNum1 : rCon1.GetConnectorId()))
         {
             aPt1 = rCon1.GetConnectedSdrObject()->getSdrObjectTransformation() * aGP1.getUnitPosition();
             nEsc1 = aGP1.getEscapeDirections();
@@ -2223,12 +2264,9 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
 
         for(sal_uInt16 nNum2(0); nNum2 < nAnz2; nNum2++)
         {
-            if(bAuto2)
-            {
-                rCon2.SetConnectorID(nNum2);
-            }
+            sdr::glue::GluePoint aGP2;
 
-            if(bCon2 && rCon2.TakeGluePoint(aGP2))
+            if(bCon2 && impGetGluePoint(aGP2, rCon2, bAuto2 ? nNum2 : rCon2.GetConnectorId()))
             {
                 aPt2 = rCon2.GetConnectedSdrObject()->getSdrObjectTransformation() * aGP2.getUnitPosition();
                 nEsc2 = aGP2.getEscapeDirections();
@@ -2300,12 +2338,12 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
 
     if(bAuto1)
     {
-        rCon1.SetConnectorID(nBestAuto1);
+        rCon1.adaptBestConnectorIDToAutoVertex(nBestAuto1);
     }
 
     if(bAuto2)
     {
-        rCon2.SetConnectorID(nBestAuto2);
+        rCon2.adaptBestConnectorIDToAutoVertex(nBestAuto2);
     }
 
     if(pInfo)
@@ -2352,6 +2390,13 @@ void SdrEdgeObj::SetEdgeTrackPath(const basegfx::B2DPolygon& rPoly)
 
         mpCon2->SetConnectedSdrObject(0);
         mpCon2->adaptBestConnectionPosition(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
+
+        // adapt local transformation to changed start/end positions
+        adaptLocalTransformation();
+
+        // broadcast change
+        const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
+        SetChanged();
     }
     else
     {
@@ -2579,9 +2624,14 @@ SdrObject* SdrEdgeObj::getFullDragClone() const
 bool SdrEdgeObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
     if(!rDrag.GetActiveHdl())
+    {
         return false;
+    }
 
+    // need to add geo and attributes to undos, else moving and connecting of
+    // connector ends will not be in the undo stack
     rDrag.SetEndDragChangesAttributes(true);
+    rDrag.SetEndDragChangesGeoAndAttributes(true);
 
     if(rDrag.GetActiveHdl()->GetPointNum() < 2)
     {
@@ -2596,18 +2646,8 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
     const SdrEdgeObj* pOriginalEdge = dynamic_cast< const SdrEdgeObj* >(rDragStat.GetActiveHdl()->GetObj());
     const bool bOriginalEdgeModified(pOriginalEdge == this);
 
-    // not user defined if dragging
+    // no longer user defined if dragging is executed
     mbEdgeTrackUserDefined = false;
-
-    if(!bOriginalEdgeModified && pOriginalEdge)
-    {
-        // copy connections when clone is modified. This is needed because
-        // as preparation to this modification the data from the original object
-        // was copied to the clone using the operator=. As can be seen there,
-        // that operator does not copy the connections (for good reason)
-        ConnectToSdrObject(true, pOriginalEdge->mpCon1->GetConnectedSdrObject());
-        ConnectToSdrObject(false, pOriginalEdge->mpCon2->GetConnectedSdrObject());
-    }
 
     if(rDragStat.GetActiveHdl()->GetPointNum() < 2)
     {
@@ -2879,26 +2919,57 @@ void SdrEdgeObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
 
     if(rTransformation != aCurrentTransformation)
     {
-        // #54102# handle start and end point if not connected
+        basegfx::B2DHomMatrix aCompleteTransform;
+
+        if(mbEdgeTrackUserDefined)
+        {
+            // get old transform and invert, multiply with new transform to get full transform
+            aCompleteTransform = basegfx::tools::guaranteeMinimalScaling(aCurrentTransformation);
+            aCompleteTransform.invert();
+            aCompleteTransform = rTransformation * aCompleteTransform;
+
+            // if we are user defined (e.g. already happens after reload of a non-connected edge,
+            // but originally was intended for external format imports) and the transformation
+            // is not only a translation, switch off UserDefined. Keeping UserDefined when applying
+            // anything but translations will make the transformed EdgeTrack look strange (we else
+            // never have rotated or sheared connectors)
+            if(basegfx::fTools::equal(aCompleteTransform.get(0, 0), 1.0)
+                && basegfx::fTools::equal(aCompleteTransform.get(1, 1), 1.0)
+                && basegfx::fTools::equalZero(aCompleteTransform.get(1, 0))
+                && basegfx::fTools::equalZero(aCompleteTransform.get(0, 1)))
+            {
+                // upper left 2x2 is identity, thus this is a translation-only transformation
+            }
+            else
+            {
+                // we have scale, shear or rotate. Reset UserDefined
+                mbEdgeTrackUserDefined = false;
+            }
+        }
+
+        // handle start and end point if not connected
         const bool bCon1(GetSdrObjectConnection(true));
         const bool bCon2(GetSdrObjectConnection(false));
         const bool bUserDefined(maEdgeTrack.count() && mbEdgeTrackUserDefined);
         const bool bApplyTransform(bUserDefined || !bCon1 || !bCon2);
-        const bool bCheckUserDistaces(!IsPasteResize() && mpEdgeInfo->ImpUsesUserDistances());
-        bool bScale(false);
 
         if(bApplyTransform)
         {
-            // get old transform and invert, multiply with new transform to get full transform
-            basegfx::B2DHomMatrix aCompleteTransform(basegfx::tools::guaranteeMinimalScaling(aCurrentTransformation));
-            aCompleteTransform.invert();
-            aCompleteTransform = rTransformation * aCompleteTransform;
+            if(aCompleteTransform.isIdentity())
+            {
+                // get old transform and invert, multiply with new transform to get full transform
+                aCompleteTransform = basegfx::tools::guaranteeMinimalScaling(aCurrentTransformation);
+                aCompleteTransform.invert();
+                aCompleteTransform = rTransformation * aCompleteTransform;
+            }
 
-            if(bCheckUserDistaces)
+            bool bScaleUsed(false);
+
+            if(!IsPasteResize() && mpEdgeInfo->ImpUsesUserDistances())
             {
                 const basegfx::B2DVector aDiagonal(1.0, 1.0);
 
-                bScale = !basegfx::fTools::equal(aDiagonal.getLength(), (aCompleteTransform * aDiagonal).getLength());
+                bScaleUsed = !basegfx::fTools::equal(aDiagonal.getLength(), (aCompleteTransform * aDiagonal).getLength());
             }
 
             if(bUserDefined)
@@ -2911,6 +2982,9 @@ void SdrEdgeObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
 
                 mpCon2->SetConnectedSdrObject(0);
                 mpCon2->adaptBestConnectionPosition(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
+
+                // adapt local transformation to changed start/end positions
+                adaptLocalTransformation();
             }
             else
             {
@@ -2926,22 +3000,25 @@ void SdrEdgeObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
                     mpCon2->SetPosition(aCompleteTransform * mpCon2->GetPosition());
                 }
             }
+
+            // if resize contains scale and is not from paste, forget user distances
+            if(bScaleUsed)
+            {
+                mpEdgeInfo->ImpResetUserDistances();
+                ImpSetEdgeInfoToAttr();
+                SetEdgeTrackDirty();
+            }
+
+            // something has changed; we do not call parent, so do notification and
+            // change calls locally
+            const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
+            SetChanged();
         }
         else
         {
-            // both ends are connected to some SdrObject, thus transforming this
-            // object will do nothing, so no need to call parent and set the new
-            // transform at the underlying SdrObject.
-            // Reactions on changes of the connected SdrObjects is done in Notify.
-        }
-
-        // if resize contains scale and is not from paste, forget user distances
-        if(bCheckUserDistaces && bScale)
-        {
-            mpEdgeInfo->ImpResetUserDistances();
-            ImpSetEdgeInfoToAttr();
-            SetEdgeTrackDirty();
-            SetChanged();
+            // both ends are connected to some SdrObject or the EdgeTrack is user defined,
+            // thus transforming this object will do nothing, so no need to call parent and
+            // set the new transform at the underlying SdrObject.
         }
     }
 }
@@ -3060,13 +3137,14 @@ void SdrEdgeObj::SetTailPoint(bool bTail, const basegfx::B2DPoint& rPt)
 void SdrEdgeObj::setGluePointIndex(bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
     SdrObjConnection& rConn1(bTail ? *mpCon1 : *mpCon2);
+    const bool bBestConnection(nIndex < 0);
+    const bool bAutoVertex(nIndex >= 0 && nIndex < 4);
 
-    if( nIndex > 3 )
+    if(nIndex > 3)
     {
         nIndex -= 4; // The start api index and the implementation index is now both 0
 
-        // for user defined glue points we have
-        // to get the id for this index first
+        // for user defined glue points check if it exists
         const SdrObject* pCandidate = rConn1.GetConnectedSdrObject();
 
         if(pCandidate)
@@ -3079,14 +3157,14 @@ void SdrEdgeObj::setGluePointIndex(bool bTail, sal_Int32 nIndex /* = -1 */ )
             }
         }
     }
-    else if( nIndex < 0 )
+
+    if(nIndex >= 0)
     {
-        nIndex = 0;
+        rConn1.SetConnectorID(nIndex);
     }
 
-    rConn1.SetConnectorID(nIndex);
-    rConn1.setBestConnection(nIndex < 0);
-    rConn1.setAutoVertex(nIndex >= 0 && nIndex <= 3);
+    rConn1.setBestConnection(bBestConnection);
+    rConn1.setAutoVertex(bAutoVertex);
 }
 
 /** this method is used by the api to return a glue point id for a connection.
@@ -3094,7 +3172,7 @@ void SdrEdgeObj::setGluePointIndex(bool bTail, sal_Int32 nIndex /* = -1 */ )
 sal_Int32 SdrEdgeObj::getGluePointIndex(bool bTail)
 {
     SdrObjConnection& rConn1(bTail ? *mpCon1 : *mpCon2);
-    sal_Int32 nId = -1;
+    sal_Int32 nId(-1);
 
     if(!rConn1.IsBestConnection())
     {

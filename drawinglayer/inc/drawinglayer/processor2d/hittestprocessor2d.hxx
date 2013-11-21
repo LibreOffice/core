@@ -73,9 +73,7 @@ namespace drawinglayer
             bool                        mbHitTextOnly : 1;
 
             /// tooling methods
-            void processBasePrimitive2D(
-                const primitive2d::BasePrimitive2D& rCandidate,
-                const primitive2d::Primitive2DReference& rUnoCandidate);
+            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
             bool checkHairlineHitWithTolerance(
                 const basegfx::B2DPolygon& rPolygon,
                 double fDiscreteHitTolerance);

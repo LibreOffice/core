@@ -44,9 +44,7 @@ namespace drawinglayer
             std::vector< basegfx::B2DPolyPolygon >  maExtractedHairlines;
 
             /// tooling methods
-            void processBasePrimitive2D(
-                const primitive2d::BasePrimitive2D& rCandidate,
-                const primitive2d::Primitive2DReference& rUnoCandidate);
+            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
             void addB2DPolygon(const basegfx::B2DPolygon& rPolygon);
             void addB2DPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
             void addB2DTransform(const basegfx::B2DHomMatrix& rTransform);

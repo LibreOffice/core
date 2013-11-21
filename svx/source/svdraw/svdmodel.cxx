@@ -956,28 +956,9 @@ void SdrModel::ImpReformatAllEdgeObjects()
     for(nNum = 0; nNum < nAnz; nNum++)
     {
         SdrEdgeObj* pSdrEdgeObj = aSdrEdgeObjVector[nNum];
-        SdrObject* pObjA = pSdrEdgeObj->GetSdrObjectConnection(true);
-        SdrObject* pObjB = pSdrEdgeObj->GetSdrObjectConnection(false);
 
-        // TTTT: check what happens; it might just be a ImpDirtyEdgeTrack()
-        // and ActionChanged() at SdrEdgeObj::Notify
-        if(pObjA || pObjB)
-        {
-            pSdrEdgeObj->SetEdgeTrackDirty();
-            pSdrEdgeObj->ActionChanged();
-        }
-
-        //if(pObjA)
-        //{
-        //    SfxSimpleHint aHint(SFX_HINT_DATACHANGED);
-        //    pSdrEdgeObj->Notify(*pObjA, aHint);
-        //}
-        //
-        //if(pObjB)
-        //{
-        //    SfxSimpleHint aHint(SFX_HINT_DATACHANGED);
-        //    pSdrEdgeObj->Notify(*pObjB, aHint);
-        //}
+        pSdrEdgeObj->SetEdgeTrackDirty();
+        pSdrEdgeObj->ActionChanged();
     }
 }
 

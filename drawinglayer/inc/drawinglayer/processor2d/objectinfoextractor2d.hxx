@@ -47,9 +47,7 @@ namespace drawinglayer
             const primitive2d::ObjectInfoPrimitive2D*      mpFound;
 
             /// tooling methods
-            virtual void processBasePrimitive2D(
-                const primitive2d::BasePrimitive2D& rCandidate,
-                const primitive2d::Primitive2DReference& rUnoCandidate);
+            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
             ObjectInfoPrimitiveExtractor2D(const geometry::ViewInformation2D& rViewInformation);

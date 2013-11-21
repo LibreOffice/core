@@ -82,9 +82,7 @@ namespace drawinglayer
             sal_uInt32                              mnInText;
 
             // tooling methods
-            void processBasePrimitive2D(
-                const primitive2d::BasePrimitive2D& rCandidate,
-                const primitive2d::Primitive2DReference& rUnoCandidate);
+            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
             TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation);

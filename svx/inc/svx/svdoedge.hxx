@@ -86,11 +86,19 @@ private:
     // to a correct state for first real layouting
     unsigned                    mbSuppressed : 1;
 
-    /// internal post processing when one of the positions the geometry
-    /// is based on changes; this is only to be called from the object
-    /// connectons or internally. It will correct the local transformation
-    /// and do needed refreshes
-    void geometryChange();
+    /// recreate and set local transformation based on the positions from
+    /// both SdrObjConnections
+    void adaptLocalTransformation();
+
+    /// force recreation of EdgeTrack (except UserDefined) with all updates
+    /// and broadcasts
+    void forceEdgeTrackUpdate();
+
+    /// get GluePoint from connection with override of ConnectorID to not need to set it
+    bool impGetGluePoint(
+        sdr::glue::GluePoint& o_rGP,
+        const SdrObjConnection& rCon,
+        sal_uInt32 nConnectorId) const;
 
     /// helper to recalculate the EdgeTrack based on given information
     basegfx::B2DPolygon ImpCalcEdgeTrack(

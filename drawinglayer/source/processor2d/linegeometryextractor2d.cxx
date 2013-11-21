@@ -52,9 +52,7 @@ namespace drawinglayer
         {
         }
 
-        void LineGeometryExtractor2D::processBasePrimitive2D(
-            const primitive2d::BasePrimitive2D& rCandidate,
-            const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
+        void LineGeometryExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitive2DID())
             {

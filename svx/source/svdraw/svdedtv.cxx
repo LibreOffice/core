@@ -867,7 +867,7 @@ void SdrEditView::CheckPossibilities()
                     SdrObject* pNode1 = pEdge->GetSdrObjectConnection(true);
                     SdrObject* pNode2 = pEdge->GetSdrObjectConnection(false);
 
-                    if(pNode1 || pNode2)
+                    if(pNode1 && pNode2)
                     {
                         mbMoveAllowedOnSelection = false;
                     }
