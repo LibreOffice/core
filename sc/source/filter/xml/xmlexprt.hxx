@@ -62,6 +62,7 @@ class ScRangeName;
 class ScXMLEditAttributeMap;
 class EditTextObject;
 class ScFormulaCell;
+class ScSheetSaveData;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -155,7 +156,7 @@ class ScXMLExport : public SvXMLExport
     void ExportColumns(const sal_Int32 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const bool bHasColumnHeader);
     void ExportExternalRefCacheStyles();
     void ExportCellTextAutoStyles(sal_Int32 nTable);
-    void ExportAnnotationsTextAutoStyles();
+    void ExportAutoStylesFromNotes(ScSheetSaveData* pSheetData);
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();

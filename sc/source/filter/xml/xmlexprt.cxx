@@ -1366,42 +1366,6 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
     GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCellCount);
 }
 
-void ScXMLExport::ExportAnnotationsTextAutoStyles()
-{
-    UniReference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
-    UniReference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
-    const ScXMLEditAttributeMap& rAttrMap = GetEditAttributeMap();
-
-        std::vector<sc::NoteEntry> aEntries;
-        pDoc->GetAllNoteEntries(aEntries);
-        std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-
-        for (; it != itEnd; ++it)
-        {
-            const ScPostIt& pNote = *it->mpNote;
-            const EditTextObject* pEdit = pNote.GetEditTextObject();
-
-            std::vector<editeng::Section> aAttrs;
-            pEdit->GetAllSections(aAttrs);
-            if (aAttrs.empty())
-                continue;
-
-            std::vector<editeng::Section>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
-            for (; itSec != itSecEnd; ++itSec)
-            {
-                const std::vector<const SfxPoolItem*>& rSecAttrs = itSec->maAttributes;
-                if (rSecAttrs.empty())
-                    // No formats applied to this section. Skip it.
-                    continue;
-
-                std::vector<XMLPropertyState> aPropStates;
-                toXMLPropertyStates(aPropStates, rSecAttrs, xMapper, rAttrMap);
-                if (!aPropStates.empty())
-                    xStylePool->Add(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates, false);
-            }
-        }
-}
-
 void ScXMLExport::WriteRowContent()
 {
     ScMyRowFormatRange aRange;
@@ -1997,6 +1961,7 @@ void ScXMLExport::_ExportContent()
             sal_Int32 nStartOffset = -1;
             sal_Int32 nEndOffset = -1;
             if (pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) && !pDoc->GetChangeTrack())
+// LG            if (pSheetData && pDoc && !pDoc->GetChangeTrack())
                 pSheetData->GetStreamPos( nTable, nStartOffset, nEndOffset );
 
             if ( nStartOffset >= 0 && nEndOffset >= 0 && xSourceStream.is() )
@@ -2439,93 +2404,10 @@ void ScXMLExport::_ExportAutoStyles()
                 ++aTableIter;
             }
 
-            // stored styles for notes
+            // stored notes styles
+            ExportAutoStylesFromNotes(pSheetData);
 
-            UniReference<SvXMLExportPropertyMapper> xShapeMapper = XMLShapeExport::CreateShapePropMapper( *this );
-            GetShapeExport(); // make sure the graphics styles family is added
-
-            const std::vector<ScNoteStyleEntry>& rNoteEntries = pSheetData->GetNoteStyles();
-            std::vector<ScNoteStyleEntry>::const_iterator aNoteIter = rNoteEntries.begin();
-            std::vector<ScNoteStyleEntry>::const_iterator aNoteEnd = rNoteEntries.end();
-            while (aNoteIter != aNoteEnd)
-            {
-                ScAddress aPos = aNoteIter->maCellPos;
-                SCTAB nTable = aPos.Tab();
-                bool bCopySheet = pDoc->IsStreamValid( nTable );
-                if (bCopySheet)
-                {
-                    //! separate method AddStyleFromNote needed?
-
-                    ScPostIt* pNote = pDoc->GetNote(aPos);
-                    OSL_ENSURE( pNote, "note not found" );
-                    if (pNote)
-                    {
-                        SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
-                        // all uno shapes are created anyway in CollectSharedData
-                        Reference<beans::XPropertySet> xShapeProperties( pDrawObj->getUnoShape(), uno::UNO_QUERY );
-                        if (xShapeProperties.is())
-                        {
-                            if ( !aNoteIter->maStyleName.isEmpty() )
-                            {
-                                std::vector<XMLPropertyState> xPropStates(xShapeMapper->Filter(xShapeProperties));
-                                OUString sParent;
-                                OUString sName( aNoteIter->maStyleName );
-                                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_SD_GRAPHICS_ID, sParent, xPropStates);
-                                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_SD_GRAPHICS_ID, sName);
-                            }
-                            if ( !aNoteIter->maTextStyle.isEmpty() )
-                            {
-                                std::vector<XMLPropertyState> xPropStates(
-                                    GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(xShapeProperties));
-                                OUString sParent;
-                                OUString sName( aNoteIter->maTextStyle );
-                                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, sParent, xPropStates);
-                                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
-                            }
-                        }
-                    }
-                }
-                ++aNoteIter;
-            }
-
-            // note paragraph styles
-
-            UniReference<SvXMLExportPropertyMapper> xParaPropMapper = GetTextParagraphExport()->GetParagraphPropertyMapper();
-
-            const std::vector<ScTextStyleEntry>& rNoteParaEntries = pSheetData->GetNoteParaStyles();
-            std::vector<ScTextStyleEntry>::const_iterator aNoteParaIter = rNoteParaEntries.begin();
-            std::vector<ScTextStyleEntry>::const_iterator aNoteParaEnd = rNoteParaEntries.end();
-            while (aNoteParaIter != aNoteParaEnd)
-            {
-                ScAddress aPos = aNoteParaIter->maCellPos;
-                SCTAB nTable = aPos.Tab();
-                bool bCopySheet = pDoc->IsStreamValid( nTable );
-                if (bCopySheet)
-                {
-                    ScPostIt* pNote = pDoc->GetNote( aPos );
-                    OSL_ENSURE( pNote, "note not found" );
-                    if (pNote)
-                    {
-                        SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
-                        Reference<container::XEnumerationAccess> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
-                        Reference<beans::XPropertySet> xParaProp(
-                            lcl_GetEnumerated( xCellText, aNoteParaIter->maSelection.nStartPara ), uno::UNO_QUERY );
-                        if ( xParaProp.is() )
-                        {
-                            std::vector<XMLPropertyState> xPropStates(xParaPropMapper->Filter(xParaProp));
-                            OUString sParent;
-                            OUString sName( aNoteParaIter->maName );
-                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, sParent, xPropStates);
-                            GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
-                        }
-                    }
-                }
-                ++aNoteParaIter;
-            }
-
-            // text notes styles
             UniReference<SvXMLExportPropertyMapper> xTextPropMapper = XMLTextParagraphExport::CreateCharExtPropMapper( *this );
-            ExportAnnotationsTextAutoStyles();
 
             // stored text styles
 
@@ -2571,7 +2453,9 @@ void ScXMLExport::_ExportAutoStyles()
         }
         sal_Int32 nTableCount(xIndex->getCount());
         pCellStyles->AddNewTable(nTableCount - 1);
+
         CollectShapesAutoStyles(nTableCount);
+
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable, IncrementProgressBar(false))
         {
             bool bUseStream = pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) &&
@@ -2695,8 +2579,6 @@ void ScXMLExport::_ExportAutoStyles()
             ExportCellTextAutoStyles(nTable);
         }
 
-//     ExportAnnotationsTextAutoStyles();
-
         pChangeTrackingExportHelper->CollectAutoStyles();
 
         GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
@@ -2740,6 +2622,121 @@ void ScXMLExport::_ExportAutoStyles()
     if ((getExportFlags() & EXPORT_CONTENT) || (getExportFlags() & EXPORT_MASTERSTYLES))
         GetTextParagraphExport()->exportTextAutoStyles();
 }
+
+void ScXMLExport::ExportAutoStylesFromNotes(ScSheetSaveData* pSheetData)
+{
+
+//ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
+
+    // stored shape styles
+
+    UniReference<SvXMLExportPropertyMapper> xShapeMapper = XMLShapeExport::CreateShapePropMapper( *this );
+    GetShapeExport(); // make sure the graphics styles family is added
+
+    const std::vector<ScNoteStyleEntry>& rNoteEntries = pSheetData->GetNoteStyles();
+    std::vector<ScNoteStyleEntry>::const_iterator aNoteIter = rNoteEntries.begin();
+    std::vector<ScNoteStyleEntry>::const_iterator aNoteEnd = rNoteEntries.end();
+    while (aNoteIter != aNoteEnd)
+    {
+        ScAddress aPos = aNoteIter->maCellPos;
+        ScPostIt* pNote = pDoc->GetNote(aPos);
+        OSL_ENSURE( pNote, "note not found" );
+        if (pNote)
+        {
+            SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
+            // all uno shapes are created anyway in CollectSharedData
+            Reference<beans::XPropertySet> xShapeProperties( pDrawObj->getUnoShape(), uno::UNO_QUERY );
+            if (xShapeProperties.is())
+            {
+                if ( !aNoteIter->maStyleName.isEmpty() )
+                {
+                    std::vector<XMLPropertyState> xPropStates(xShapeMapper->Filter(xShapeProperties));
+                    OUString sParent;
+                    OUString sName( aNoteIter->maStyleName );
+                    GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_SD_GRAPHICS_ID, sParent, xPropStates);
+                    GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_SD_GRAPHICS_ID, sName);
+                }
+                if ( !aNoteIter->maTextStyle.isEmpty() )
+                {
+                    std::vector<XMLPropertyState> xPropStates(
+                        GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(xShapeProperties));
+                    OUString sParent;
+                    OUString sName( aNoteIter->maTextStyle );
+                    GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, sParent, xPropStates);
+                    GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
+                }
+            }
+        }
+        ++aNoteIter;
+    }
+
+    // stored para styles
+
+    UniReference<SvXMLExportPropertyMapper> xParaPropMapper = GetTextParagraphExport()->GetParagraphPropertyMapper();
+
+    const std::vector<ScTextStyleEntry>& rNoteParaEntries = pSheetData->GetNoteParaStyles();
+    std::vector<ScTextStyleEntry>::const_iterator aNoteParaIter = rNoteParaEntries.begin();
+    std::vector<ScTextStyleEntry>::const_iterator aNoteParaEnd = rNoteParaEntries.end();
+    while (aNoteParaIter != aNoteParaEnd)
+    {
+        ScAddress aPos = aNoteParaIter->maCellPos;
+        ScPostIt* pNote = pDoc->GetNote( aPos );
+        OSL_ENSURE( pNote, "note not found" );
+        if (pNote)
+        {
+            SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
+            Reference<container::XEnumerationAccess> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
+            Reference<beans::XPropertySet> xParaProp(
+                                lcl_GetEnumerated( xCellText, aNoteParaIter->maSelection.nStartPara ), uno::UNO_QUERY );
+            if ( xParaProp.is() )
+            {
+                std::vector<XMLPropertyState> xPropStates(xParaPropMapper->Filter(xParaProp));
+                OUString sParent;
+                OUString sName( aNoteParaIter->maName );
+                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, sParent, xPropStates);
+                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
+            }
+        }
+        ++aNoteParaIter;
+    }
+
+    // stored text style
+
+    UniReference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
+    UniReference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
+    const ScXMLEditAttributeMap& rAttrMap = GetEditAttributeMap();
+
+    std::vector<sc::NoteEntry> aEntries;
+    pDoc->GetAllNoteEntries(aEntries);
+    std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+
+    for (; it != itEnd; ++it)
+    {
+        const ScPostIt& pNote = *it->mpNote;
+        const EditTextObject* pEdit = pNote.GetEditTextObject();
+
+        std::vector<editeng::Section> aAttrs;
+        pEdit->GetAllSections(aAttrs);
+        if (aAttrs.empty())
+            continue;
+
+        std::vector<editeng::Section>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
+        for (; itSec != itSecEnd; ++itSec)
+        {
+            const std::vector<const SfxPoolItem*>& rSecAttrs = itSec->maAttributes;
+            if (rSecAttrs.empty())
+                // No formats applied to this section. Skip it.
+                continue;
+
+            std::vector<XMLPropertyState> aPropStates;
+            toXMLPropertyStates(aPropStates, rSecAttrs, xMapper, rAttrMap);
+            if (!aPropStates.empty())
+                xStylePool->Add(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates, false);
+        }
+    }
+}
+
+
 
 void ScXMLExport::_ExportMasterStyles()
 {
