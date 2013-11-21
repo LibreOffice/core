@@ -96,7 +96,8 @@ protected:
             "math-mso2k7.docx",
             "ImageCrop.docx",
             "test_GIF_ImageCrop.docx",
-            "test_PNG_ImageCrop.docx"
+            "test_PNG_ImageCrop.docx",
+            "testCrashWhileSave.docx"
         };
         std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
@@ -2034,6 +2035,13 @@ DECLARE_OOXMLEXPORT_TEST(testTableLineSpacing, "table_atleast.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
+    if (!pXmlDoc)
+                return;
+        CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

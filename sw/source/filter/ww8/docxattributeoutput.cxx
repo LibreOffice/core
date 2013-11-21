@@ -232,9 +232,9 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
         sal_uInt32 nCell = pTextNodeInfo->getCell();
 
         // New cell/row?
-        if ( m_nTableDepth > 0 && !m_bTableCellOpen )
+        if ( m_tableReference->m_nTableDepth > 0 && !m_tableReference->m_bTableCellOpen )
         {
-            ww8::WW8TableNodeInfoInner::Pointer_t pDeepInner( pTextNodeInfo->getInnerForDepth( m_nTableDepth ) );
+            ww8::WW8TableNodeInfoInner::Pointer_t pDeepInner( pTextNodeInfo->getInnerForDepth( m_tableReference->m_nTableDepth ) );
             if ( pDeepInner->getCell() == 0 )
                 StartTableRow( pDeepInner );
 
@@ -248,10 +248,10 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
             // continue the table cell]
             sal_uInt32 nCurrentDepth = pTextNodeInfo->getDepth();
 
-            if ( nCurrentDepth > m_nTableDepth )
+            if ( nCurrentDepth > m_tableReference->m_nTableDepth )
             {
                 // Start all the tables that begin here
-                for ( sal_uInt32 nDepth = m_nTableDepth + 1; nDepth <= pTextNodeInfo->getDepth(); ++nDepth )
+                for ( sal_uInt32 nDepth = m_tableReference->m_nTableDepth + 1; nDepth <= pTextNodeInfo->getDepth(); ++nDepth )
                 {
                     ww8::WW8TableNodeInfoInner::Pointer_t pInner( pTextNodeInfo->getInnerForDepth( nDepth ) );
 
@@ -260,7 +260,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
                     StartTableCell( pInner );
                 }
 
-                m_nTableDepth = nCurrentDepth;
+                m_tableReference->m_nTableDepth = nCurrentDepth;
             }
         }
     }
@@ -1935,13 +1935,18 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     // Horizontal spans
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+    sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
+    const SwWriteTableCells *tableCells =  &pRow->GetCells();
+    if (nCell < tableCells->size() )
+    {
+        const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
 
-    sal_uInt16 nColSpan = pCell->GetColSpan();
-    if ( nColSpan > 1 )
-        m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
-                FSNS( XML_w, XML_val ), OString::number( nColSpan ).getStr(),
-                FSEND );
+        sal_uInt16 nColSpan = pCell->GetColSpan();
+        if ( nColSpan > 1 )
+            m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
+                    FSNS( XML_w, XML_val ), OString::number( nColSpan ).getStr(),
+                    FSEND );
+    }
 
     // Vertical merges
     long vSpan = pTblBox->getRowSpan( );
@@ -1997,6 +2002,32 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
                 (sal_uInt16)nTblSz, false);
 }
 
+/**
+ * As we are exporting Header and footer in between when we are exporting document.xml.
+ * In this case we are facing issue in table export for header and footer. Because
+ * flags for table is getting shared in both export.
+ * So we are switching between flags in between exporting "document.xml" and Header & footer
+ * export.
+ */
+void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 index)
+{
+    if( isHeaderFooter && index == 1)
+    {
+        m_oldTableReference->m_bTableCellOpen = m_tableReference->m_bTableCellOpen;
+        m_oldTableReference->m_nTableDepth = m_tableReference->m_nTableDepth;
+        m_tableReference->m_bTableCellOpen = false;
+        m_tableReference->m_nTableDepth = 0;
+    }
+    else if( index == -1)
+    {
+        m_tableReference = m_oldTableReference;
+    }
+    else
+    {
+        m_tableReference->m_bTableCellOpen = false;
+        m_tableReference->m_nTableDepth = 0;
+    }
+}
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     m_pSerializer->startElementNS( XML_w, XML_tbl, FSEND );
@@ -2011,14 +2042,14 @@ void DocxAttributeOutput::EndTable()
 {
     m_pSerializer->endElementNS( XML_w, XML_tbl );
 
-    if ( m_nTableDepth > 0 )
-        --m_nTableDepth;
+    if ( m_tableReference->m_nTableDepth > 0 )
+        --m_tableReference->m_nTableDepth;
 
     tableFirstCells.pop_back();
 
     // We closed the table; if it is a nested table, the cell that contains it
     // still continues
-    m_bTableCellOpen = true;
+    m_tableReference->m_bTableCellOpen = true;
 
     // Cleans the table helper
     delete m_pTableWrt, m_pTableWrt = NULL;
@@ -2059,7 +2090,7 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
     // Write the cell properties here
     TableCellProperties( pTableTextNodeInfoInner );
 
-    m_bTableCellOpen = true;
+    m_tableReference->m_bTableCellOpen = true;
 }
 
 void DocxAttributeOutput::EndTableCell( )
@@ -2067,7 +2098,7 @@ void DocxAttributeOutput::EndTableCell( )
     m_pSerializer->endElementNS( XML_w, XML_tc );
 
     m_bBtLr = false;
-    m_bTableCellOpen = false;
+    m_tableReference->m_bTableCellOpen = false;
 }
 
 void DocxAttributeOutput::TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
@@ -2156,7 +2187,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             // If nested, tblInd is added to parent table's left spacing and defines left edge position
             // If not nested, text position of left-most cell must be at absolute X = tblInd
             // so, table_spacing + table_spacing_to_content = tblInd
-            if (m_nTableDepth == 0)
+            if (m_tableReference->m_nTableDepth == 0)
             {
                 const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
                 const SwFrmFmt * pFrmFmt = pTabBox->GetFrmFmt();
@@ -2329,19 +2360,24 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
 
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
-    switch( pCell->GetVertOri())
+    sal_uInt32 nCell = pTableTextNodeInfoInner->getCell();
+    const SwWriteTableCells *tableCells =  &pRow->GetCells();
+    if (nCell < tableCells->size() )
     {
+        const SwWriteTableCell *pCell = &pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+        switch( pCell->GetVertOri())
+        {
         case text::VertOrientation::TOP:
             break;
         case text::VertOrientation::CENTER:
             m_pSerializer->singleElementNS( XML_w, XML_vAlign,
-                FSNS( XML_w, XML_val ), "center", FSEND );
+            FSNS( XML_w, XML_val ), "center", FSEND );
             break;
         case text::VertOrientation::BOTTOM:
             m_pSerializer->singleElementNS( XML_w, XML_vAlign,
-                FSNS( XML_w, XML_val ), "bottom", FSEND );
+                    FSNS( XML_w, XML_val ), "bottom", FSEND );
             break;
+        }
     }
 }
 
@@ -6264,8 +6300,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bPostitStart(false),
       m_bPostitEnd(false),
       m_pTableWrt( NULL ),
-      m_bTableCellOpen( false ),
-      m_nTableDepth( 0 ),
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_bTextFrameSyntax( false ),
@@ -6281,6 +6315,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 0 ),
       m_nextFontId( 1 ),
+      m_tableReference(new TableReference()),
+      m_oldTableReference(new TableReference()),
       m_bBtLr(false),
       m_bFrameBtLr(false),
       m_pTableStyleExport(new DocxTableStyleExport(rExport.pDoc, pSerializer)),
