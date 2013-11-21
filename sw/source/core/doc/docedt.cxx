@@ -2764,7 +2764,7 @@ void SwDoc::RemoveLeadingWhiteSpace(const SwPosition & rPos )
     if ( pTNd )
     {
         const OUString& rTxt = pTNd->GetTxt();
-        xub_StrLen nIdx = 0;
+        sal_Int32 nIdx = 0;
         while (nIdx < rTxt.getLength())
         {
             sal_Unicode const cCh = rTxt[nIdx];
