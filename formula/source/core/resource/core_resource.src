@@ -195,9 +195,11 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_B { Text = "BINOM.DIST.RANGE" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
+    String SC_OPCODE_EXP_DIST_MS { Text = "COM.MICROSOFT.EXPON.DIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
     String SC_OPCODE_BINOM_DIST_MS { Text = "COM.MICROSOFT.BINOM.DIST" ; };
     String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
+    String SC_OPCODE_POISSON_DIST_MS { Text = "COM.MICROSOFT.POISSON.DIST" ; };
     String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
     String SC_OPCODE_KOMBIN_2 { Text = "COMBINA" ; };
     String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
@@ -281,6 +283,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_MATRIX_UNIT { Text = "MUNIT" ; };
     String SC_OPCODE_BACK_SOLVER { Text = "GOALSEEK" ; };
     String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
+    String SC_OPCODE_HYP_GEOM_DIST_MS { Text = "COM.MICROSOFT.HYPGEOM.DIST" ; };
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
     String SC_OPCODE_T_DIST { Text = "LEGACY.TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "LEGACY.FDIST" ; };
@@ -289,6 +292,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_CHI_DIST { Text = "LEGACY.CHIDIST" ; };
     String SC_OPCODE_CHI_DIST_MS { Text = "COM.MICROSOFT.CHISQ.DIST.RT" ; };
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
+    String SC_OPCODE_WEIBULL_MS { Text = "COM.MICROSOFT.WEIBULL.DIST" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
     String SC_OPCODE_BINOM_INV { Text = "COM.MICROSOFT.BINOM.INV" ; };
@@ -563,9 +567,11 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_B { Text = "B" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
+    String SC_OPCODE_EXP_DIST_MS { Text = "_xlfn.EXPON.DIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
     String SC_OPCODE_BINOM_DIST_MS { Text = "_xlfn.BINOM.DIST" ; };
     String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
+    String SC_OPCODE_POISSON_DIST_MS { Text = "_xlfn.POISSON.DIST" ; };
     String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
     String SC_OPCODE_KOMBIN_2 { Text = "_xlfn.COMBINA" ; };
     String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
@@ -649,6 +655,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_MATRIX_UNIT { Text = "_xlfn.MUNIT" ; };
     String SC_OPCODE_BACK_SOLVER { Text = "GOALSEEK" ; };
     String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
+    String SC_OPCODE_HYP_GEOM_DIST_MS { Text = "_xlfn.HYPGEOM.DIST" ; };
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
     String SC_OPCODE_T_DIST { Text = "TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "FDIST" ; };
@@ -657,6 +664,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_CHI_DIST { Text = "CHIDIST" ; };
     String SC_OPCODE_CHI_DIST_MS { Text = "_xlfn.CHISQ.DIST.RT" ; };
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
+    String SC_OPCODE_WEIBULL_MS { Text = "_xlfn.WEIBULL.DIST" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
     String SC_OPCODE_BINOM_INV { Text = "_xlfn.BINOM.INV" ; };
@@ -933,9 +941,11 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_B { Text = "B" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
+    String SC_OPCODE_EXP_DIST_MS { Text = "EXPON.DIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
     String SC_OPCODE_BINOM_DIST_MS { Text = "BINOM.DIST" ; };
     String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
+    String SC_OPCODE_POISSON_DIST_MS { Text = "POISSON.DIST" ; };
     String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
     String SC_OPCODE_KOMBIN_2 { Text = "COMBINA" ; };
     String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
@@ -1019,6 +1029,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_MATRIX_UNIT { Text = "MUNIT" ; };
     String SC_OPCODE_BACK_SOLVER { Text = "GOALSEEK" ; };
     String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
+    String SC_OPCODE_HYP_GEOM_DIST_MS { Text = "HYPGEOM.DIST" ; };
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
     String SC_OPCODE_T_DIST { Text = "TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "FDIST" ; };
@@ -1027,6 +1038,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CHI_DIST { Text = "CHIDIST" ; };
     String SC_OPCODE_CHI_DIST_MS { Text = "CHISQ.DIST.RT" ; };
     String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
+    String SC_OPCODE_WEIBULL_MS { Text = "WEIBULL.DIST" ; };
     String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
     String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
     String SC_OPCODE_BINOM_INV { Text = "BINOM.INV" ; };
@@ -1743,6 +1755,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "EXPONDIST" ;
     };
+    String SC_OPCODE_EXP_DIST_MS
+    {
+        Text [ en-US ] = "EXPON.DIST" ;
+    };
     String SC_OPCODE_BINOM_DIST
     {
         Text [ en-US ] = "BINOMDIST" ;
@@ -1754,6 +1770,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_POISSON_DIST
     {
         Text [ en-US ] = "POISSON" ;
+    };
+    String SC_OPCODE_POISSON_DIST_MS
+    {
+        Text [ en-US ] = "POISSON.DIST" ;
     };
     String SC_OPCODE_KOMBIN
     {
@@ -2088,6 +2108,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "HYPGEOMDIST" ;
     };
+    String SC_OPCODE_HYP_GEOM_DIST_MS
+    {
+        Text [ en-US ] = "HYPGEOM.DIST" ;
+    };
     String SC_OPCODE_LOG_NORM_DIST
     {
         Text [ en-US ] = "LOGNORMDIST" ;
@@ -2119,6 +2143,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_WEIBULL
     {
         Text [ en-US ] = "WEIBULL" ;
+    };
+    String SC_OPCODE_WEIBULL_MS
+    {
+        Text [ en-US ] = "WEIBULL.DIST" ;
     };
     String SC_OPCODE_NEG_BINOM_VERT
     {

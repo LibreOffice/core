@@ -1738,12 +1738,6 @@ static void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower
 
 /** Calculates a value of the hypergeometric distribution.
 
-    The algorithm is designed to avoid unnecessary multiplications and division
-    by expanding all factorial elements (9 of them).  It is done by excluding
-    those ranges that overlap in the numerator and the denominator.  This allows
-    for a fast calculation for large values which would otherwise cause an overflow
-    in the intermediate values.
-
     @author Kohei Yoshida <kohei@openoffice.org>
 
     @see #i47296#
@@ -1751,8 +1745,6 @@ static void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower
  */
 void ScInterpreter::ScHypGeomDist()
 {
-    const size_t nMaxArraySize = 500000; // arbitrary max array size
-
     if ( !MustHaveParamCount( GetByte(), 4 ) )
         return;
 
@@ -1767,6 +1759,63 @@ void ScInterpreter::ScHypGeomDist()
         return;
     }
 
+    PushDouble( GetHypGeomDist( x, n, M, N ) );
+}
+
+/** Calculates a value of the hypergeometric distribution (Excel 2010 function).
+
+    This function has an extra argument bCumulative as compared to ScHypGeomDist(),
+    which only calculates the non-cumulative distribution.
+
+    @see fdo#71722
+*/
+void ScInterpreter::ScHypGeomDist_MS()
+{
+    if ( !MustHaveParamCount( GetByte(), 5 ) )
+        return;
+
+    bool bCumulative = GetBool();
+    double N = ::rtl::math::approxFloor(GetDouble());
+    double M = ::rtl::math::approxFloor(GetDouble());
+    double n = ::rtl::math::approxFloor(GetDouble());
+    double x = ::rtl::math::approxFloor(GetDouble());
+
+    if( (x < 0.0) || (n < x) || (M < x) || (N < n) || (N < M) || (x < n - N + M) )
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    if ( bCumulative )
+    {
+        double fVal = 0.0;
+
+        for ( int i = 0; i <= x && !nGlobalError; i++ )
+            fVal += GetHypGeomDist( i, n, M, N );
+
+        PushDouble( fVal );
+    }
+    else
+        PushDouble( GetHypGeomDist( x, n, M, N ) );
+}
+
+/** Calculates a value of the hypergeometric distribution.
+
+    The algorithm is designed to avoid unnecessary multiplications and division
+    by expanding all factorial elements (9 of them).  It is done by excluding
+    those ranges that overlap in the numerator and the denominator.  This allows
+    for a fast calculation for large values which would otherwise cause an overflow
+    in the intermediate values.
+
+    @author Kohei Yoshida <kohei@openoffice.org>
+
+    @see #i47296#
+
+ */
+double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
+{
+    const size_t nMaxArraySize = 500000; // arbitrary max array size
+
     typedef ::std::vector< double > HypContainer;
     HypContainer cnNumer, cnDenom;
 
@@ -1775,7 +1824,7 @@ void ScInterpreter::ScHypGeomDist()
     if ( nEstContainerSize > nMaxSize )
     {
         PushNoValue();
-        return;
+        return 0;
     }
     cnNumer.reserve( nEstContainerSize + 10 );
     cnDenom.reserve( nEstContainerSize + 10 );
@@ -1959,7 +2008,7 @@ void ScInterpreter::ScHypGeomDist()
         fFactor *= fEnum / fDenom;
     }
 
-    PushDouble(fFactor);
+    return fFactor;
 }
 
 void ScInterpreter::ScGammaDist()
