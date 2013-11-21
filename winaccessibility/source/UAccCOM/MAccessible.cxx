@@ -207,7 +207,6 @@ m_pszValue(NULL),
 m_pszDescription(NULL),
 m_isDestroy(FALSE),
 m_pszActionDescription(NULL),
-m_pXAction(NULL),
 m_bRequiresSave(FALSE)
 {
     m_sLocation.m_dLeft=0;
@@ -2409,7 +2408,7 @@ STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 */
 STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
 {
-    m_pXAction = reinterpret_cast<XAccessibleAction*>(pAction);
+    m_xAction = reinterpret_cast<XAccessibleAction*>(pAction);
     return S_OK;
 }
 
@@ -2434,7 +2433,7 @@ HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultAction(VARIANT varChild, B
         {
             if(varChild.lVal==CHILDID_SELF)
             {
-                if( m_pXAction == NULL )
+                if (!m_xAction.is())
                     return DISP_E_MEMBERNOTFOUND;
                 SAFE_SYSFREESTRING(*pszDefaultAction);
                 *pszDefaultAction = SysAllocString(m_pszActionDescription);
@@ -2465,15 +2464,15 @@ HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(VARIANT varChild)
         ISDESTROY()
         if( varChild.vt != VT_I4 )
             return E_INVALIDARG;
-    if( m_pXAction == NULL )
+    if (!m_xAction.is())
         return E_FAIL;
-    if( m_pXAction->getAccessibleActionCount() == 0 )
+    if (m_xAction->getAccessibleActionCount() == 0)
         return E_FAIL;
 
     if(varChild.lVal==CHILDID_SELF)
     {
-        if(m_pXAction->getAccessibleActionCount() > 0)
-            m_pXAction->doAccessibleAction(0);
+        if (m_xAction->getAccessibleActionCount() > 0)
+            m_xAction->doAccessibleAction(0);
         return S_OK;
     }
 

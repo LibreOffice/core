@@ -229,7 +229,9 @@ private:
     BOOL m_isDestroy;
 
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
-    css::accessibility::XAccessibleAction *  m_pXAction;
+    // initially m_xAction and m_xContext are the same object
+    // but they may be different once AccObject::UpdateAction() is called?
+    css::uno::Reference<css::accessibility::XAccessibleAction>  m_xAction;
     css::uno::Reference<css::accessibility::XAccessibleContext> m_xContext;
 
 private:
