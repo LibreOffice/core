@@ -468,11 +468,6 @@ sub add_root_directories
             $productkey = $productkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'};
             $realproductkey = $realproductkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'};
         }
-        if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} )
-        {
-            $productkey = $productname;
-            $realproductkey = $realproductname;
-        }
         if ( $allvariableshashref->{'NOSPACEINDIRECTORYNAME'} )
         {
             $productkey =~ s/\ /\_/g;
