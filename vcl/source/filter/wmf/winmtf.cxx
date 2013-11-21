@@ -2006,7 +2006,7 @@ void WinMtfOutput::SetRefMill( const Size& rSize )
 void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
 {
     mnMapMode = nMapMode;
-    if ( nMapMode == MM_TEXT )
+    if ( nMapMode == MM_TEXT && !mbIsMapWinSet )
     {
         mnWinExtX = mnDevWidth;
         mnWinExtY = mnDevHeight;
