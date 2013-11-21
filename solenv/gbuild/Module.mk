@@ -125,7 +125,7 @@ build-l10n-only :
 	$(call gb_Output_announce_bell)
 
 build-non-l10n-only :
-	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),NLC,6)
+	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),BIN,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),BIN,6)
 	$(call gb_Output_announce_title,non-l10n done.)
 	$(call gb_Output_announce_bell)
