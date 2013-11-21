@@ -352,7 +352,7 @@ void ODbaseIndexDialog::Init()
                 aNDX = aKeyName.copy(0,3);
 
                 // yes -> add to the tables index list
-                if (aNDX.equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
+                if (aNDX == "NDX")
                 {
                     aEntry = OStringToOUString(aInfFile.ReadKey(aKeyName), osl_getThreadTextEncoding());
                     rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
@@ -455,7 +455,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
         aNDX = aKeyName.copy(0,3);
 
         //...if yes, delete index file, nKey is at subsequent key
-        if (aNDX.equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
+        if (aNDX == "NDX")
         {
             aInfFile.DeleteKey(aKeyName);
             nKeyCnt--;

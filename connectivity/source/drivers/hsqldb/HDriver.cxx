@@ -279,15 +279,13 @@ namespace connectivity
                                         continue;
                                     const OString sIniKey = comphelper::string::getToken(sLine, 0, '=');
                                     const OString sValue = comphelper::string::getToken(sLine, 1, '=');
-                                    if (sIniKey.equalsL(RTL_CONSTASCII_STRINGPARAM("hsqldb.compatible_version")))
+                                    if( sIniKey == "hsqldb.compatible_version" )
                                     {
                                         sVersionString = sValue;
                                     }
                                     else
                                     {
-                                        if (sIniKey.equalsL(RTL_CONSTASCII_STRINGPARAM("version"))
-                                            &&  ( sVersionString.isEmpty() )
-                                            )
+                                        if (sIniKey == "version" && sVersionString.isEmpty())
                                         {
                                             sVersionString = sValue;
                                         }

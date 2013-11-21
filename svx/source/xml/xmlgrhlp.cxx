@@ -61,7 +61,7 @@ const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
     if ( ( rMtf.GetActionSize() >= 2 )
             && ( rMtf.FirstAction()->GetType() == META_EPS_ACTION )
             && ( ((const MetaAction*)rMtf.GetAction( 1 ))->GetType() == META_COMMENT_ACTION )
-            && ( ((const MetaCommentAction*)rMtf.GetAction( 1 ))->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("EPSReplacementGraphic")) ) )
+            && ( ((const MetaCommentAction*)rMtf.GetAction( 1 ))->GetComment() == "EPSReplacementGraphic" ) )
         pComment = (const MetaCommentAction*)rMtf.GetAction( 1 );
 
     return pComment;

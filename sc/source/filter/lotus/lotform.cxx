@@ -1976,71 +1976,71 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
 {
     DefTokenId  eId = ocNoName;
 
-    if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("FACT")))
+    if (rTest == "FACT")
             eId = ocFact;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("ISEMPTY")))
+    else if (rTest == "ISEMPTY")
             eId=ocIsEmpty;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("DEGTORAD")))
+    else if (rTest == "DEGTORAD")
             eId=ocRad;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("RADTODEG")))
+    else if (rTest == "RADTODEG")
             eId=ocDeg;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("SIGN")))
+    else if (rTest == "SIGN")
             eId=ocPlusMinus;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("ACOSH")))
+    else if (rTest == "ACOSH")
             eId=ocArcCosHyp;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("ACOTH")))
+    else if (rTest == "ACOTH")
             eId=ocArcCotHyp;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("ASINH")))
+    else if (rTest == "ASINH")
             eId=ocArcSinHyp;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("ATANH")))
+    else if (rTest == "ATANH")
             eId=ocArcTanHyp;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("COSH")))
+    else if (rTest == "COSH")
             eId=ocCosHyp;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("COTH")))
+    else if (rTest == "COTH")
             eId=ocCotHyp;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("SINH")))
+    else if (rTest == "SINH")
             eId=ocSinHyp;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("TANH")))
+    else if (rTest == "TANH")
             eId=ocTanHyp;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("EVEN")))
+    else if (rTest == "EVEN")
             eId=ocIsEven;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("ODD")))
+    else if (rTest == "ODD")
             eId=ocIsOdd;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("ACOT")))
+    else if (rTest == "ACOT")
             eId=ocArcCot;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("COT")))
+    else if (rTest == "COT")
             eId=ocCot;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("TRUNC")))
+    else if (rTest == "TRUNC")
             eId=ocTrunc;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("GEOMEAN")))
+    else if (rTest == "GEOMEAN")
             eId=ocGeoMean;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("HARMEAN")))
+    else if (rTest == "HARMEAN")
             eId=ocHarMean;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("CORREL")))
+    else if (rTest == "CORREL")
             eId=ocCorrel;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("MEDIAN")))
+    else if (rTest == "MEDIAN")
             eId=ocMedian;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("COV")))
+    else if (rTest == "COV")
             eId=ocCovar;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("SKEWNESS")))
+    else if (rTest == "SKEWNESS")
             eId=ocSchiefe;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("CHITEST")))
+    else if (rTest == "CHITEST")
             eId=ocChiTest;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("FTEST")))
+    else if (rTest == "FTEST")
             eId=ocFTest;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("AVEDEV")))
+    else if (rTest == "AVEDEV")
             eId=ocAveDev;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("PRODUCT")))
+    else if (rTest == "PRODUCT")
             eId=ocProduct;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("PERMUT")))
+    else if (rTest == "PERMUT")
             eId=ocVariationen;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("GAMMALN")))
+    else if (rTest == "GAMMALN")
             eId=ocGammaLn;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("POISSON")))
+    else if (rTest =="POISSON")
             eId=ocPoissonDist;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("NORMAL")))
+    else if (rTest == "NORMAL")
             eId=ocNormDist;
-    else if (rTest.equalsL(RTL_CONSTASCII_STRINGPARAM("CRITBINOMIAL")))
+    else if (rTest == "CRITBINOMIAL")
             eId=ocKritBinom;
     return eId;
 }
