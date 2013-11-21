@@ -553,7 +553,7 @@ OUString getApplicationClassPath()
 
     OUStringBuffer buf;
     sal_Int32 index = 0;
-    char szClassPathSep[] = {SAL_PATHSEPARATOR,0};
+    const char szClassPathSep[] = {SAL_PATHSEPARATOR,0};
     do
     {
         OUString token( sParams.getToken( 0, ' ', index ).trim() );
@@ -566,8 +566,7 @@ OUString getApplicationClassPath()
             if (rc == osl_File_E_None && !systemPathElement.isEmpty())
             {
                 if (buf.getLength() > 0)
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                         szClassPathSep) );
+                    buf.append( szClassPathSep );
                 buf.append( systemPathElement );
             }
         }

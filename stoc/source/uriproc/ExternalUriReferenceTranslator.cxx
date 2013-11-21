@@ -102,8 +102,7 @@ OUString Translator::translateToInternal(
     OUString const & externalUriReference)
     throw (css::uno::RuntimeException)
 {
-    if (!externalUriReference.matchIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("file:/")))
+    if (!externalUriReference.matchIgnoreAsciiCase("file:/"))
     {
         return externalUriReference;
     }
@@ -112,7 +111,7 @@ OUString Translator::translateToInternal(
     buf.append(externalUriReference.getStr(), i);
     // Some environments (e.g., Java) produce illegal file URLs without an
     // authority part; treat them as having an empty authority part:
-    if (!externalUriReference.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("//"), i))
+    if (!externalUriReference.match("//", i))
     {
         buf.append("//");
     }
@@ -152,8 +151,7 @@ OUString Translator::translateToExternal(
     OUString const & internalUriReference)
     throw (css::uno::RuntimeException)
 {
-    if (!internalUriReference.matchIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("file://")))
+    if (!internalUriReference.matchIgnoreAsciiCase("file://"))
     {
         return internalUriReference;
     }

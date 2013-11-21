@@ -372,9 +372,9 @@ namespace /* private */
     bool is_batch_file(const rtl::OUString& file_name)
     {
         rtl::OUString ext = get_file_extension(file_name);
-        return (ext.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("bat")) ||
-                ext.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("cmd")) ||
-                ext.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("btm")));
+        return (ext.equalsIgnoreAsciiCase("bat") ||
+                ext.equalsIgnoreAsciiCase("cmd") ||
+                ext.equalsIgnoreAsciiCase("btm"));
     }
 
     //##########################################################

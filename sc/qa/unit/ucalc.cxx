@@ -3135,7 +3135,7 @@ void Test::testCopyPaste()
     fValue = m_pDoc->GetValue(ScAddress(1,1,1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", fValue, 0);
     aString = m_pDoc->GetString(2, 1, 1);
-    CPPUNIT_ASSERT_MESSAGE("after undo, string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
+    CPPUNIT_ASSERT_MESSAGE("after undo, string should be removed", aString == "");
     CPPUNIT_ASSERT_MESSAGE("after undo, note on A2 should be removed", !m_pDoc->HasNote(ScAddress(0, 1, 1)));
     CPPUNIT_ASSERT_MESSAGE("after undo, note on B2 should be removed", !m_pDoc->HasNote(ScAddress(1, 1, 1)));
     CPPUNIT_ASSERT_MESSAGE("after undo, note on C2 should be removed", !m_pDoc->HasNote(ScAddress(2, 1, 1)));

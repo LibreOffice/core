@@ -1502,8 +1502,7 @@ void SwXMLImport::initialize(
         beans::PropertyValue aValue;
         if ( aArguments[i] >>= aValue )
         {
-            if (aValue.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("PreserveRedlineMode")))
+            if (aValue.Name == "PreserveRedlineMode")
             {
                 OSL_VERIFY( aValue.Value >>= bPreserveRedlineMode );
             }
@@ -1513,8 +1512,7 @@ void SwXMLImport::initialize(
         beans::NamedValue aNamedValue;
         if ( aArguments[i] >>= aNamedValue )
         {
-            if (aNamedValue.Name.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("LateInitSettings")))
+            if (aNamedValue.Name == "LateInitSettings")
             {
                 OSL_VERIFY( aNamedValue.Value >>= xLateInitSettings );
             }

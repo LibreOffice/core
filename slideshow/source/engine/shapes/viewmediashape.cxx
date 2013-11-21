@@ -323,16 +323,13 @@ namespace slideshow
 
                             aDeviceParams[ 0 ] >>= aImplName;
 
-                            if( aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                    RTL_CONSTASCII_STRINGPARAM("VCL") ) || aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                    RTL_CONSTASCII_STRINGPARAM("Cairo") ) )
+                            if( aImplName.endsWithIgnoreAsciiCase( "VCL" ) ||
+                                aImplName.endsWithIgnoreAsciiCase( "Cairo" ) )
                             {
                                 implInitializeVCLBasedPlayerWindow( rBounds, aDeviceParams );
                             }
-                            else if( aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                         RTL_CONSTASCII_STRINGPARAM("DX")) ||
-                                     aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                         RTL_CONSTASCII_STRINGPARAM("DX9")))
+                            else if( aImplName.endsWithIgnoreAsciiCase("DX") ||
+                                     aImplName.endsWithIgnoreAsciiCase("DX9") )
                             {
                                 implInitializeDXBasedPlayerWindow( rBounds, aDeviceParams );
                             }

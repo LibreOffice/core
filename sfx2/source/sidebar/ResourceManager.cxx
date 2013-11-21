@@ -636,8 +636,7 @@ void ResourceManager::GetToolPanelNodeNames (
     const sal_Int32 nCount (aChildNodeNames.getLength());
     for (sal_Int32 nIndex(0); nIndex<nCount; ++nIndex)
     {
-        if (aChildNodeNames[nIndex].matchAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "private:resource/toolpanel/")))
+        if (aChildNodeNames[nIndex].startsWith( "private:resource/toolpanel/" ))
             rMatchingNames.push_back(aChildNodeNames[nIndex]);
     }
 }

@@ -74,7 +74,7 @@ OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nT
 
         if(nLength > 0)
         {
-            if(aString.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("f")))
+            if(aString.endsWith("f"))
             {
                 fRetval = std::max(0.0, std::min(1.0, aString.toDouble() / 65536.0));
             }

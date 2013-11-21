@@ -49,9 +49,7 @@ UIControllerFactory::UIControllerFactory(
     , m_pConfigAccess()
 {
     rtl::OUStringBuffer aBuffer;
-    aBuffer.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM(
-            "/org.openoffice.Office.UI.Controller/Registered/" ) );
+    aBuffer.append( "/org.openoffice.Office.UI.Controller/Registered/" );
     aBuffer.append( rConfigurationNode );
     m_pConfigAccess = new ConfigurationAccess_ControllerFactory( m_xContext, aBuffer.makeStringAndClear() );
     m_pConfigAccess->acquire();

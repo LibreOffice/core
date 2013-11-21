@@ -145,7 +145,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            bool bIsDocumentScript = ( aURL.Complete.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "document" ) ) !=-1 );
+            bool bIsDocumentScript = ( aURL.Complete.indexOf( "document" ) !=-1 );
                 // TODO: isn't this somewhat strange? This should be a test for a location=document parameter, shouldn't it?
 
             if ( bIsDocumentScript )

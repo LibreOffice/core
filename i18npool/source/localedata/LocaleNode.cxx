@@ -624,7 +624,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     if (!strFrom.isEmpty() && str.isEmpty())
         incErrorStr("replaceFrom=\"%s\" replaceTo=\"\" is empty replacement.", strFrom);
     // Locale data generator inserts FFFF for LangID, we need to adapt that.
-    if (str.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "-FFFF]")))
+    if (str.endsWithIgnoreAsciiCase( "-FFFF]"))
         incErrorStr("replaceTo=\"%s\" needs FFFF to be adapted to the real LangID value.", str);
     of.writeParameter("replaceTo", str, mnSection);
     // Remember the replaceTo value for "[CURRENCY]" to check format codes.
@@ -804,7 +804,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (sTheCurrencyReplaceTo.isEmpty())
                     {
                         OUString aCode( n->getValue());
-                        if (aCode.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "[CURRENCY]")) >= 0)
+                        if (aCode.indexOf( "[CURRENCY]" ) >= 0)
                             incErrorInt( "[CURRENCY] replaceTo not found for formatindex=\"%d\".", formatindex);
                     }
                     break;

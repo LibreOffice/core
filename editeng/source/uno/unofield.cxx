@@ -912,10 +912,8 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUSt
         {
             nId = text::textfield::Type::EXTENDED_FILE;
         }
-        else if (aFieldType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("docinfo.Title") ) ||
-                 aFieldType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("DocInfo.Title") ) )
+        else if (aFieldType == "docinfo.Title" ||
+                 aFieldType == "DocInfo.Title" )
         {
             nId = text::textfield::Type::DOCINFO_TITLE;
         }

@@ -50,7 +50,7 @@ sal_Bool SAL_CALL SwVbaCheckBox::getValue() throw ( uno::RuntimeException )
     {
         if( mxFormField->getParamName(i).equalsIgnoreAsciiCaseAscii( ECMA_FORMCHECKBOX_CHECKED ) )
         {
-            if( mxFormField->getParamValue(i).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) )
+            if( mxFormField->getParamValue(i).equalsIgnoreAsciiCase("on") )
                 bValue = sal_True;
             else
                 bValue = sal_False;

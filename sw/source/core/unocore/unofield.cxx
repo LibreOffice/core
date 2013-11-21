@@ -2484,8 +2484,7 @@ throw (uno::RuntimeException)
     OUString sServiceNameCC(  OldNameToNewName_Impl( sServiceName ) );
 
     return sServiceName == rServiceName || sServiceNameCC == rServiceName ||
-        rServiceName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent"));
+        rServiceName == "com.sun.star.text.TextContent";
 }
 
 uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()

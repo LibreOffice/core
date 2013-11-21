@@ -301,7 +301,7 @@ void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
             psp::normPath( aLine );
             // try to avoid bad fonts in some cases
             static bool bAvoid = (strncasecmp( lang, "ar", 2 ) == 0) || (strncasecmp( lang, "he", 2 ) == 0) || strncasecmp( lang, "iw", 2 ) == 0 || (strncasecmp( lang, "hi", 2 ) == 0);
-            if( bAvoid && aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("iso_8859")) != -1 )
+            if( bAvoid && aLine.indexOf("iso_8859") != -1 )
                 continue;
             o_rFontPaths.push_back( aLine );
         }

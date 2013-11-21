@@ -1070,12 +1070,6 @@ void bufferKey2TableConstraint(
 
 }
 
-static bool equalsIgnoreCase( const OString & str, const char *str2, int length2 )
-{
-    return 0 == rtl_str_compareIgnoreAsciiCase_WithLength(
-        str.pData->buffer, str.pData->length, str2, length2 );
-}
-
 void extractNameValuePairsFromInsert( String2StringMap & map, const OString & lastQuery )
 {
     OStringVector vec;
@@ -1084,15 +1078,15 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
     int nSize = vec.size();
 //     printf( "1 %d\n", nSize );
     if( nSize > 6  &&
-        equalsIgnoreCase( vec[0] , RTL_CONSTASCII_STRINGPARAM( "insert" ) ) &&
-        equalsIgnoreCase( vec[1] , RTL_CONSTASCII_STRINGPARAM( "into" ) ) )
+        vec[0].equalsIgnoreAsciiCase( "insert" ) &&
+        vec[1].equalsIgnoreAsciiCase( "into" ) )
     {
         int n = 2;
 
 //         printf( "1a\n" );
         // extract table name
         OString tableName;
-        if( equalsIgnoreCase( vec[n+1], RTL_CONSTASCII_STRINGPARAM( "." ) ) )
+        if( vec[n+1].equalsIgnoreAsciiCase( "." ) )
         {
             tableName = vec[n];
             tableName += vec[n+1];
@@ -1106,15 +1100,15 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
 
         OStringVector names;
         n ++;
-        if( equalsIgnoreCase( vec[n], RTL_CONSTASCII_STRINGPARAM( "(" ) ) )
+        if( vec[n].equalsIgnoreAsciiCase( "(" ) )
         {
 //             printf( "2\n" );
             // extract names
             n++;
-            while( nSize > n && ! equalsIgnoreCase(vec[n] , RTL_CONSTASCII_STRINGPARAM( ")" ) ) )
+            while( nSize > n && ! vec[n].equalsIgnoreAsciiCase( ")" ) )
             {
                 names.push_back( vec[n] );
-                if( nSize > n+1 && equalsIgnoreCase( vec[n+1] , RTL_CONSTASCII_STRINGPARAM( "," ) ) )
+                if( nSize > n+1 && vec[n+1].equalsIgnoreAsciiCase( "," ) )
                 {
                     n ++;
                 }
@@ -1123,15 +1117,15 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
             n++;
 
             // now read the values
-            if( nSize > n +1 && equalsIgnoreCase( vec[n], RTL_CONSTASCII_STRINGPARAM("VALUES") ) &&
-                equalsIgnoreCase(vec[n+1], RTL_CONSTASCII_STRINGPARAM( "(" ) ) )
+            if( nSize > n +1 && vec[n].equalsIgnoreAsciiCase("VALUES") &&
+                vec[n+1].equalsIgnoreAsciiCase( "(" ) )
             {
                 n +=2;
 //                 printf( "3\n" );
                 for ( OStringVector::size_type i = 0 ; i < names.size() && nSize > n ; i ++ )
                 {
                     map[names[i]] = vec[n];
-                    if( nSize > n+1 && equalsIgnoreCase( vec[n+1] , RTL_CONSTASCII_STRINGPARAM(",") ) )
+                    if( nSize > n+1 && vec[n+1].equalsIgnoreAsciiCase(",") )
                     {
                         n ++;
                     }

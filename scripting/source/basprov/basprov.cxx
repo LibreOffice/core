@@ -151,7 +151,7 @@ namespace basprov
                     else if ( aScheme.equalsIgnoreAsciiCase("vnd.sun.star.pkg") )
                     {
                         OUString aAuthority = xUriRef->getAuthority();
-                        if ( aAuthority.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.expand:" ) ) )
+                        if ( aAuthority.matchIgnoreAsciiCase( "vnd.sun.star.expand:" ) )
                         {
                             OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
                             aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );

@@ -208,11 +208,8 @@ OUString findPlugin(
     {
         throw FrameworkException(
             JFW_E_ERROR,
-            (OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "[Java framework] IllegalArgumentException in"
-                    " findPlugin: "))
-             + OUStringToOString(e.Message, osl_getThreadTextEncoding())));
+            OString("[Java framework] IllegalArgumentException in findPlugin: ")
+             + OUStringToOString(e.Message, osl_getThreadTextEncoding()));
     }
     OUString sUrl;
     try
@@ -223,12 +220,9 @@ OUString findPlugin(
     {
         throw FrameworkException(
             JFW_E_ERROR,
-            (OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "[Java framework] rtl::MalformedUriException in"
-                    " findPlugin: "))
+            OString("[Java framework] rtl::MalformedUriException in findPlugin: ")
              + OUStringToOString(
-                 e.getMessage(), osl_getThreadTextEncoding())));
+                 e.getMessage(), osl_getThreadTextEncoding()));
     }
     if (checkFileURL(sUrl) == jfw::FILE_OK)
     {

@@ -1957,7 +1957,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
         return true;
 
     // <HTML> somewhere in the first 80 characters of the document
-    nStart = sCmp.indexOfL(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_html));
+    nStart = sCmp.indexOf(OOO_STRING_SVTOOLS_HTML_html);
     if( nStart>0 && '<'==sCmp[nStart-1] &&
         nStart+4 < sCmp.getLength() && '>'==sCmp[nStart+4] )
         return true;

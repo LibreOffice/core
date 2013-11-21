@@ -2862,7 +2862,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
     SdrModel* pModel = ( m_pDrawModelWrapper ? &m_pDrawModelWrapper->getSdrModel() : NULL );
     if ( pModel )
     {
-        if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DashTable" ) ) == 0 )
+        if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.DashTable" ) == 0 )
         {
             if ( !m_xDashTable.is() )
             {
@@ -2870,7 +2870,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
             }
             return m_xDashTable;
         }
-        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.GradientTable" ) ) == 0 )
+        else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.GradientTable" ) == 0 )
         {
             if ( !m_xGradientTable.is() )
             {
@@ -2878,7 +2878,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
             }
             return m_xGradientTable;
         }
-        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.HatchTable" ) ) == 0 )
+        else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.HatchTable" ) == 0 )
         {
             if ( !m_xHatchTable.is() )
             {
@@ -2886,7 +2886,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
             }
             return m_xHatchTable;
         }
-        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.BitmapTable" ) ) == 0 )
+        else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.BitmapTable" ) == 0 )
         {
             if ( !m_xBitmapTable.is() )
             {
@@ -2894,7 +2894,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
             }
             return m_xBitmapTable;
         }
-        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) ) == 0 )
+        else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.TransparencyGradientTable" ) == 0 )
         {
             if ( !m_xTransGradientTable.is() )
             {
@@ -2902,7 +2902,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
             }
             return m_xTransGradientTable;
         }
-        else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.MarkerTable" ) ) == 0 )
+        else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.MarkerTable" ) == 0 )
         {
             if ( !m_xMarkerTable.is() )
             {

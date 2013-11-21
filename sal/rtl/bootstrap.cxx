@@ -67,8 +67,7 @@ namespace {
 static char const VND_SUN_STAR_PATHNAME[] = "vnd.sun.star.pathname:";
 
 bool isPathnameUrl(rtl::OUString const & url) {
-    return url.matchIgnoreAsciiCaseAsciiL(
-        RTL_CONSTASCII_STRINGPARAM(VND_SUN_STAR_PATHNAME));
+    return url.matchIgnoreAsciiCase(VND_SUN_STAR_PATHNAME);
 }
 
 bool resolvePathnameUrl(rtl::OUString * url) {

@@ -88,8 +88,8 @@ static Any isCurrency( const OUString & typeName )
 
 // static sal_Bool isAutoIncrement8( const OUString & typeName )
 // {
-//     return typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("serial8")) ||
-//         typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("bigserial"));
+//     return typeName.equalsIgnoreAsciiCase("serial8") ||
+//         typeName.equalsIgnoreAsciiCase("bigserial");
 // }
 
 static Any isAutoIncrement( const OUString & defaultValue )

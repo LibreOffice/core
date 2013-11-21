@@ -559,7 +559,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
             // our *Include hack does usually not begin
             // with *PPD-Adobe, so try some lines for *Include
             int nLines = 10;
-            while (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("*Include")) != 0 && --nLines)
+            while (aLine.indexOf("*Include") != 0 && --nLines)
                 aLine = aStream.ReadLine();
             if( nLines )
                 aRet = aStream.GetFileName();
@@ -702,18 +702,18 @@ PPDParser::PPDParser( const OUString& rFile ) :
                 {
                     bLanguageEncoding = true; // generally only the first one counts
                     OString aLower = aCurLine.toAsciiLowerCase();
-                    if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("isolatin1"), 17 ) != -1 ||
-                        aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("windowsansi"), 17 ) != -1 )
+                    if( aLower.indexOf("isolatin1", 17 ) != -1 ||
+                        aLower.indexOf("windowsansi", 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_MS_1252;
-                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("isolatin2"), 17 ) != -1 )
+                    else if( aLower.indexOf("isolatin2", 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_ISO_8859_2;
-                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("isolatin5"), 17 ) != -1 )
+                    else if( aLower.indexOf("isolatin5", 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_ISO_8859_5;
-                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("jis83-rksj"), 17 ) != -1 )
+                    else if( aLower.indexOf("jis83-rksj", 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_SHIFT_JIS;
-                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("macstandard"), 17 ) != -1 )
+                    else if( aLower.indexOf("macstandard", 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
-                    else if( aLower.indexOfL(RTL_CONSTASCII_STRINGPARAM("utf-8"), 17 ) != -1 )
+                    else if( aLower.indexOf("utf-8", 17 ) != -1 )
                         m_aFileEncoding = RTL_TEXTENCODING_UTF8;
                 }
             }

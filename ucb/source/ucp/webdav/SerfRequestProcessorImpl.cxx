@@ -65,8 +65,7 @@ void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeader
 
         OSL_TRACE( "Request Header - \"%s: %s\"", aHeader.getStr(), aValue.getStr() );
         if ( !bHasUserAgent )
-            bHasUserAgent = aHeaderIter->first.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "User-Agent" ) );
+            bHasUserAgent = aHeaderIter->first == "User-Agent";
 
         serf_bucket_headers_set( inoutSerfHeaderBucket,
                                  aHeader.getStr(),

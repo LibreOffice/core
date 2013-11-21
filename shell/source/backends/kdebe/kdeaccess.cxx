@@ -56,8 +56,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         sClientProgram = (const sal_Unicode *) aClientProgram.ucs2();
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( sClientProgram ) );
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("SourceViewFontHeight")))
+    } else if (id == "SourceViewFontHeight")
     {
         QFont aFixedFont;
         short nFontHeight;
@@ -66,8 +65,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         nFontHeight = aFixedFont.pointSize();
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( nFontHeight ) );
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("SourceViewFontName")))
+    } else if (id == "SourceViewFontName")
     {
         QFont aFixedFont;
         QString aFontName;
@@ -78,15 +76,13 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         sFontName = (const sal_Unicode *) aFontName.ucs2();
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( sFontName ) );
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("EnableATToolSupport")))
+    } else if (id == "EnableATToolSupport")
     {
         /* does not make much sense without an accessibility bridge */
         sal_Bool ATToolSupport = sal_False;
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( OUString::boolean( ATToolSupport ) ) );
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("WorkPathVariable")))
+    } else if (id == "WorkPathVariable")
     {
         QString aDocumentsDir( KGlobalSettings::documentPath() );
         OUString sDocumentsDir;
@@ -97,8 +93,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         osl_getFileURLFromSystemPath( sDocumentsDir.pData, &sDocumentsURL.pData );
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( sDocumentsURL ) );
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")))
+    } else if (id == "ooInetFTPProxyName")
     {
         QString aFTPProxy;
         switch ( KProtocolManager::proxyType() )
@@ -124,8 +119,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( sProxy ) );
         }
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")))
+    } else if (id == "ooInetFTPProxyPort")
     {
         QString aFTPProxy;
         switch ( KProtocolManager::proxyType() )
@@ -151,8 +145,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( nPort ) );
         }
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")))
+    } else if (id == "ooInetHTTPProxyName")
     {
         QString aHTTPProxy;
         switch ( KProtocolManager::proxyType() )
@@ -178,8 +171,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( sProxy ) );
         }
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")))
+    } else if (id == "ooInetHTTPProxyPort")
     {
         QString aHTTPProxy;
         switch ( KProtocolManager::proxyType() )
@@ -205,8 +197,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( nPort ) );
         }
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")))
+    } else if (id == "ooInetHTTPSProxyName")
     {
         QString aHTTPSProxy;
         switch ( KProtocolManager::proxyType() )
@@ -232,8 +223,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
             return css::beans::Optional< css::uno::Any >(
                 true, uno::makeAny( sProxy ) );
         }
-    } else if (id.equalsAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")))
+    } else if (id == "ooInetHTTPSProxyPort")
     {
         QString aHTTPSProxy;
         switch ( KProtocolManager::proxyType() )

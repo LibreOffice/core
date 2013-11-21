@@ -368,7 +368,7 @@ sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const OUString& i_rFactoryUR
     if ( nParamPos >= 0 )
     {
         // currently only the "slot" parameter is supported
-        const sal_Int32 nSlotPos = i_rFactoryURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "slot=" ), nParamPos );
+        const sal_Int32 nSlotPos = i_rFactoryURL.indexOf( "slot=", nParamPos );
         if ( nSlotPos > 0 )
             sSlotParam = i_rFactoryURL.copy( nSlotPos + 5 );
     }

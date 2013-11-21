@@ -744,7 +744,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         m_bActive = sal_True;
 
         OUString aCommand( m_aMenuItemCommand );
-        if (m_aMenuItemCommand.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(UNO_COMMAND)))
+        if (m_aMenuItemCommand.matchIgnoreAsciiCase(UNO_COMMAND))
         {
             // Remove protocol part from command so we can use an easier comparision method
             aCommand = aCommand.copy(RTL_CONSTASCII_LENGTH(UNO_COMMAND));

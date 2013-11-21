@@ -55,7 +55,7 @@ OUString SAL_CALL SwVbaFormField::getResult() throw ( uno::RuntimeException )
         {
             if( mxFormField->getParamName(i).equalsIgnoreAsciiCaseAscii( ECMA_FORMCHECKBOX_CHECKED ) )
             {
-                if( mxFormField->getParamValue(i).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) )
+                if( mxFormField->getParamValue(i).equalsIgnoreAsciiCase("on") )
                     nValue = 1;
                 else
                     nValue = 0;

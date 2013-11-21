@@ -2236,9 +2236,9 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     {
         xShape.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier,m_aProps->m_xContext),uno::UNO_QUERY);
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.PageStyle") ) == 0 ||
-              aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.FrameStyle") ) == 0 ||
-              aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.GraphicStyle") ) == 0
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.style.PageStyle" ) == 0 ||
+              aServiceSpecifier.reverseCompareTo( "com.sun.star.style.FrameStyle" ) == 0 ||
+              aServiceSpecifier.reverseCompareTo( "com.sun.star.style.GraphicStyle" ) == 0
               )
     {
         uno::Reference< style::XStyle> xStyle = new OStyle();
@@ -2249,72 +2249,72 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
 
         return xStyle.get();
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.document.Settings" ) == 0 )
     {
         uno::Reference<beans::XPropertySet> xProp = new OStyle();
 
         return xProp.get();
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.Defaults" ) == 0 )
     {
         uno::Reference<beans::XPropertySet> xProp = new OStyle();
         return xProp.get();
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.GradientTable" ) == 0 )
     {
         if ( !m_pImpl->m_xGradientTable.is() )
             m_pImpl->m_xGradientTable.set(SvxUnoGradientTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
         return m_pImpl->m_xGradientTable;
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.HatchTable" ) == 0 )
     {
         if ( !m_pImpl->m_xHatchTable.is() )
             m_pImpl->m_xHatchTable.set(SvxUnoHatchTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
         return m_pImpl->m_xHatchTable;
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.BitmapTable" ) == 0 )
     {
         if ( !m_pImpl->m_xBitmapTable.is() )
             m_pImpl->m_xBitmapTable.set(SvxUnoBitmapTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
         return m_pImpl->m_xBitmapTable;
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.TransparencyGradientTable" ) == 0 )
     {
         if ( !m_pImpl->m_xTransparencyGradientTable.is() )
             m_pImpl->m_xTransparencyGradientTable.set(SvxUnoTransGradientTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
         return m_pImpl->m_xTransparencyGradientTable;
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.DashTable" ) == 0 )
     {
         if ( !m_pImpl->m_xDashTable.is() )
             m_pImpl->m_xDashTable.set(SvxUnoDashTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
         return m_pImpl->m_xDashTable;
     }
-    else if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
+    else if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.MarkerTable" ) )
     {
         if( !m_pImpl->m_xMarkerTable.is() )
             m_pImpl->m_xMarkerTable.set(SvxUnoMarkerTable_createInstance( m_pImpl->m_pReportModel.get() ),uno::UNO_QUERY);
         return m_pImpl->m_xMarkerTable;
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver")) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.document.ImportEmbeddedObjectResolver" ) == 0 )
         return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_READ ));
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver")) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.document.ExportEmbeddedObjectResolver" ) == 0 )
         return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver")) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.document.ImportGraphicObjectResolver" ) == 0 )
     {
         SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,GRAPHICHELPER_MODE_WRITE);
         uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(pGraphicHelper));
         pGraphicHelper->release();
         return xRet;
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver")) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.document.ExportGraphicObjectResolver" ) == 0 )
     {
         SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,GRAPHICHELPER_MODE_WRITE);
         uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(pGraphicHelper));
         pGraphicHelper->release();
         return xRet;
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.data.DataProvider")) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.chart2.data.DataProvider" ) == 0 )
     {
         uno::Reference<chart2::data::XDatabaseDataProvider> xDataProvider(chart2::data::DatabaseDataProvider::createWithConnection( m_aProps->m_xContext, m_pImpl->m_xActiveConnection ));
         xDataProvider->setRowLimit(10);
@@ -2323,7 +2323,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
             xChild->setParent(*this);
         return uno::Reference< uno::XInterface >(xDataProvider,uno::UNO_QUERY);
     }
-    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap")) == 0 )
+    else if ( aServiceSpecifier.reverseCompareTo( "com.sun.star.xml.NamespaceMap" ) == 0 )
     {
         if ( !m_pImpl->m_xXMLNamespaceMap.is() )
             m_pImpl->m_xXMLNamespaceMap = comphelper::NameContainer_createInstance( ::getCppuType( (const OUString*) 0 ) ).get();

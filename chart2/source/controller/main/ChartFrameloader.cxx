@@ -140,8 +140,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
             if( aIt != aMediaDescriptor.end())
             {
                 OUString aURL( (*aIt).second.get< OUString >());
-                if( aURL.matchAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "private:factory/schart" )))
+                if( aURL.startsWith( "private:factory/schart" ) )
                 {
                     // create new file
                     uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );

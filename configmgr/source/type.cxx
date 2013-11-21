@@ -137,8 +137,7 @@ Type getDynamicType(css::uno::Any const & value) {
             OUString name(value.getValueType().getTypeName());
             if ( name == "[]byte" ) {
                 return TYPE_HEXBINARY;
-            } else if (name.equalsAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("[]boolean")))
+            } else if (name == "[]boolean")
             {
                 return TYPE_BOOLEAN_LIST;
             } else if ( name == "[]short" )
@@ -150,16 +149,13 @@ Type getDynamicType(css::uno::Any const & value) {
             } else if ( name == "[]hyper" )
             {
                 return TYPE_LONG_LIST;
-            } else if (name.equalsAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("[]double")))
+            } else if (name == "[]double")
             {
                 return TYPE_DOUBLE_LIST;
-            } else if (name.equalsAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("[]string")))
+            } else if (name == "[]string")
             {
                 return TYPE_STRING_LIST;
-            } else if (name.equalsAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("[][]byte")))
+            } else if (name == "[][]byte")
             {
                 return TYPE_HEXBINARY_LIST;
             }

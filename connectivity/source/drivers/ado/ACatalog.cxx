@@ -60,8 +60,8 @@ void OCatalog::refreshTables()
           if ( aElement.IsValid() )
           {
               OUString sTypeName = aElement.get_Type();
-                  if ( !sTypeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSTEM TABLE"))
-                    && !sTypeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("ACCESS TABLE")) )
+                  if ( !sTypeName.equalsIgnoreAsciiCase("SYSTEM TABLE")
+                    && !sTypeName.equalsIgnoreAsciiCase("ACCESS TABLE") )
                      aVector.push_back(aElement.get_Name());
                }
          }

@@ -857,7 +857,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                 aOStm.WriteLine(aLine);
             }
-            else if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("ImageList")) != -1)
+            else if (aLine.indexOf("ImageList") != -1)
             {
                 ::std::vector< ::std::pair< OString, sal_Int32 > > aEntryVector;
 
@@ -872,7 +872,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         if( !aIStm.ReadLine(aLine) )
                             break;
                     }
-                    while (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("Prefix")) == -1);
+                    while (aLine.indexOf("Prefix") == -1);
 
                     const OString aPrefix( getToken(aLine, 1, '"') );
                     aIStm.Seek( nImgListStartPos );
@@ -882,7 +882,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         if (!aIStm.ReadLine(aLine) )
                             break;
                     }
-                    while (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("IdList")) == -1);
+                    while (aLine.indexOf("IdList") == -1);
 
                     // scan all ids and collect images
                     while (aLine.indexOf('}') == -1)
@@ -917,7 +917,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     {
                         aIStm.ReadLine( aLine );
 
-                        if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("IdList")) != -1)
+                        if (aLine.indexOf("IdList") != -1)
                         {
                             while (aLine.indexOf('}') == -1)
                                 aIStm.ReadLine(aLine);

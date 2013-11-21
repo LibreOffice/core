@@ -96,13 +96,13 @@ ContentProvider::ContentProvider(
         xConfigAccess->getByName(OUString("ooName")) >>= aVal;
 
         OUString &aUserAgent = WebDAVUserAgent::get();
-        sal_Int32 nIndex = aUserAgent.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "$ooName" ) );
+        sal_Int32 nIndex = aUserAgent.indexOf( "$ooName" );
         if ( !aVal.getLength() || nIndex == -1 )
             return;
         aUserAgent = aUserAgent.replaceAt( nIndex, RTL_CONSTASCII_LENGTH( "$ooName" ), aVal );
 
         xConfigAccess->getByName(OUString("ooSetupVersion")) >>= aVal;
-        nIndex = aUserAgent.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "$ooSetupVersion" ) );
+        nIndex = aUserAgent.indexOf( "$ooSetupVersion" );
         if ( !aVal.getLength() || nIndex == -1 )
             return;
         aUserAgent = aUserAgent.replaceAt( nIndex, RTL_CONSTASCII_LENGTH( "$ooSetupVersion" ), aVal );

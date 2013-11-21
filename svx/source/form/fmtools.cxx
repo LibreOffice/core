@@ -107,7 +107,7 @@ namespace
         if ( !( _rError >>= aError ) )
             return true;
 
-        if ( aError.Message.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "[OOoBase]" ) ) != 0 )
+        if ( ! aError.Message.startsWith( "[OOoBase]" ) )
             // it is an exception *not* thrown by an OOo Base core component
             return true;
 

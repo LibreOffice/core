@@ -185,7 +185,7 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
     sal_Int32 nLen = rFullName.getLength();
     if ( nLen <= 0 ||
             !rFullName.startsWith( "<prop:" ) ||
-            !rFullName.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( "\">" ) ) )
+            !rFullName.endsWith( "\">" ) )
         return false;
 
     sal_Int32 nStart = RTL_CONSTASCII_LENGTH( "<prop:" );
@@ -198,7 +198,7 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
         return false;
 
     // TODO skip whitespaces?
-    if ( !rFullName.startsWith( RTL_CONSTASCII_STRINGPARAM( "xmlns:prop=\"" ), ++nEnd ) )
+    if ( !rFullName.startsWith( "xmlns:prop=\"", ++nEnd ) )
         return false;
 
     nStart = nEnd + RTL_CONSTASCII_LENGTH( "xmlns:prop=\"" );

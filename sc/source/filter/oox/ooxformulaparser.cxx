@@ -83,7 +83,7 @@ const FunctionInfo* OOXMLFormulaParserImpl::resolveBadFuncName( const OUString& 
                 // find preceding backslash that separates the last directory name
                 sal_Int32 nDirSep = rTokenData.lastIndexOf( '\\', nFileSep - 1 );
                 // function library is located in a directory called 'library'
-                if( (nDirSep > 0) && rTokenData.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "\\LIBRARY\\" ), nDirSep ) )
+                if( (nDirSep > 0) && rTokenData.matchIgnoreAsciiCase( "\\LIBRARY\\", nDirSep ) )
                 {
                     // try to find a function info for the function name
                     OUString aFuncName = rTokenData.copy( nExclamPos + 1 ).toAsciiUpperCase();

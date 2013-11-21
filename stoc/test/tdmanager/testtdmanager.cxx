@@ -138,8 +138,7 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const & arguments)
         OUString url;
         OSL_VERIFY( osl_File_E_None == osl_getFileURLFromSystemPath(
                         arguments[argPos].pData, &url.pData ) );
-        bool supposedToBeCompatible = ! url.endsWithIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("_incomp.rdb") );
+        bool supposedToBeCompatible = ! url.endsWithIgnoreAsciiCase("_incomp.rdb");
 
         css::uno::Reference<css::registry::XSimpleRegistry> xReg(
             m_context->getServiceManager()->createInstanceWithContext(

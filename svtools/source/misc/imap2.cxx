@@ -524,9 +524,9 @@ sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
         {
             aStr = aStr.toAsciiLowerCase();
 
-            if ( (aStr.indexOfL(RTL_CONSTASCII_STRINGPARAM("rect")) != -1) ||
-                 (aStr.indexOfL(RTL_CONSTASCII_STRINGPARAM("circ")) != -1) ||
-                 (aStr.indexOfL(RTL_CONSTASCII_STRINGPARAM("poly")) != -1) )
+            if ( (aStr.indexOf("rect") != -1) ||
+                 (aStr.indexOf("circ") != -1) ||
+                 (aStr.indexOf("poly") != -1) )
             {
                 if ( ( aStr.indexOf('(') != -1 ) &&
                      ( aStr.indexOf(')') != -1 ) )

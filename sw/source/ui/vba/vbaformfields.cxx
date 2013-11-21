@@ -38,7 +38,7 @@ OUString lcl_getFormFieldName( const uno::Reference< text::XFormField >& xFormFi
     sal_Int32 nCount = xFormField->getParamCount();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        if( xFormField->getParamName(i).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Name")) )
+        if( xFormField->getParamName(i).equalsIgnoreAsciiCase("Name") )
         {
             sName = xFormField->getParamValue(i);
             OSL_TRACE("lcl_getFormFieldName: %s", OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );
