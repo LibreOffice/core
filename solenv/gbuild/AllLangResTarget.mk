@@ -401,6 +401,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
 		$(gb_ResTarget_RSCCOMMAND) @$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
 
+#$(info $(call gb_ResTarget_get_target,$(1)))
 define gb_ResTarget_ResTarget
 $(call gb_ResTarget_get_target,$(1)) : LIBRARY = $(2)
 $(call gb_ResTarget_get_target,$(1)) : LANGUAGE = $(3)
@@ -457,7 +458,9 @@ $(call gb_AllLangResTarget_get_target,%) :
 
 gb_ResTarget_get_install_target = $(INSTROOT)/$(LIBO_SHARE_RESOURCE_FOLDER)/$(1).res
 
+gb_AllLangResTarget_ALLTARGETS :=
 define gb_AllLangResTarget_AllLangResTarget
+gb_AllLangResTarget_ALLTARGETS += $(1)
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 
