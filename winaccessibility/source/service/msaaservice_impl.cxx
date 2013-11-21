@@ -328,11 +328,6 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL iacc2_component_getImplementationEnvironment(
-        sal_Char const ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL iacc2_component_getFactory(
         sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
         registry::XRegistryKey * xRegistry )
