@@ -26,11 +26,11 @@ $(eval $(call gb_Module_add_targets,padmin,\
     Executable_spadmin.bin \
     Library_spa \
     Package_padmin \
-    UIConfig_spa \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,padmin,\
     AllLangResTarget_spa \
+    UIConfig_spa \
 ))
 
 endif

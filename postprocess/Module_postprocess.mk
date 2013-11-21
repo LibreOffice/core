@@ -16,8 +16,10 @@ $(eval $(call gb_Module_add_targets,postprocess,\
 	CustomTarget_images \
 	CustomTarget_registry \
 	Package_images \
-	Package_registry \
 	Rdb_services \
+))
+$(eval $(call gb_Module_add_l10n_targets,postprocess,\
+	Package_registry \
 ))
 
 ifeq ($(WINDOWS_BUILD_SIGNING),TRUE)

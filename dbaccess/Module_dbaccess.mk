@@ -18,13 +18,6 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	Library_dbmm \
 	Library_dbu \
 	Library_sdbt \
-	UIConfig_dbaccess \
-	UIConfig_dbapp \
-	UIConfig_dbbrowser \
-	UIConfig_dbquery \
-	UIConfig_dbrelation \
-	UIConfig_dbtable \
-	UIConfig_dbtdata \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
@@ -32,6 +25,13 @@ $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
     AllLangResTarget_dbmm \
     AllLangResTarget_dbu \
     AllLangResTarget_sdbt \
+	UIConfig_dbaccess \
+	UIConfig_dbapp \
+	UIConfig_dbbrowser \
+	UIConfig_dbquery \
+	UIConfig_dbrelation \
+	UIConfig_dbtable \
+	UIConfig_dbtdata \
 ))
 
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)

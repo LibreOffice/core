@@ -20,13 +20,13 @@ $(eval $(call gb_Module_add_targets,desktop,\
     $(if $(ENABLE_HEADLESS),,Library_spl) \
     Package_branding \
     $(if $(CUSTOM_BRAND_DIR),Package_branding_custom) \
-    UIConfig_deployment \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,desktop,\
     AllLangResTarget_deployment \
     AllLangResTarget_deploymentgui \
     AllLangResTarget_dkt \
+    UIConfig_deployment \
 ))
 
 ifeq ($(OS),LINUX)

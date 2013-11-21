@@ -68,7 +68,9 @@ endef
 # (i.e., if we are building with the language).
 #
 # gb_AllLangPackage_add_file target destination source
+gb_AllLangPackage_ALLDIRS :=
 define gb_AllLangPackage_add_file
+gb_AllLangPackage_ALLDIRS := $(sort $(gb_AllLangPackage_ALLDIRS) $(patsubst %$(3),%,$(2)))
 $(call gb_AllLangPackage__add_file,$(1),$(2),$(3),$(firstword $(subst /, ,$(3))))
 
 endef
