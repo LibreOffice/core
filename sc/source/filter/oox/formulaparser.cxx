@@ -388,9 +388,11 @@ void FormulaFinalizer::appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, s
     {
         case BIFF_FUNC_FLOOR:
         case BIFF_FUNC_CEILING:
-            OSL_ENSURE( nParam == 2, "FormulaFinalizer::appendCalcOnlyParameter - unexpected parameter index" );
-            maTokens.append< double >( OPCODE_PUSH, 1.0 );
-            maTokens.append( OPCODE_SEP );
+            if ( nParam == 2 )
+            {
+                maTokens.append< double >( OPCODE_PUSH, 1.0 );
+                maTokens.append( OPCODE_SEP );
+            }
         break;
     }
 }
