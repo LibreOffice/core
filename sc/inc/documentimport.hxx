@@ -23,6 +23,7 @@ class ScColumn;
 class ScAddress;
 class ScTokenArray;
 class ScFormulaCell;
+class ScStyleSheet;
 struct ScSetStringParam;
 struct ScTabOpParam;
 struct ScDocumentImportImpl;
@@ -48,6 +49,11 @@ public:
     const ScDocument& getDoc() const;
 
     void setDefaultNumericScript(sal_uInt16 nScript);
+
+    /**
+     * Apply specified cell style to an entire sheet.
+     */
+    void setCellStyleToSheet(SCTAB nTab, const ScStyleSheet& rStyle);
 
     /**
      * @param rName sheet name.
