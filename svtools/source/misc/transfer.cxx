@@ -1408,33 +1408,33 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 aFlavorEx.mnSotId = SOT_FORMATSTR_ID_HTML_NO_COMMENT;
                 rDataFlavorExVector.push_back( aFlavorEx );
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( OUString( "text/plain" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/plain" ) )
             {
                 // add, if it is a UTF-8 byte buffer
                 if( xMimeType->hasParameter( aCharsetStr ) )
                 {
-                    if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( OUString( "unicode" ) ) ||
-                        xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( OUString( "utf-16" ) ) )
+                    if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( "unicode" ) ||
+                        xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( "utf-16" ) )
                     {
                         rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_STRING;
 
                     }
                 }
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( OUString( "text/rtf" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/rtf" ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_RTF;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( OUString( "text/html" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/html" ) )
 
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_HTML;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( OUString( "text/uri-list" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/uri-list" ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMAT_FILE_LIST;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( OUString( "application/x-openoffice-objectdescriptor-xml" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "application/x-openoffice-objectdescriptor-xml" ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR;
             }
@@ -2338,19 +2338,19 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
         {
             if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( xRequestType2->getFullMediaType() ) )
             {
-                if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( OUString( "text/plain" ) ) )
+                if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( "text/plain" ) )
                 {
                     // special handling for text/plain media types
                     const OUString aCharsetString( "charset" );
 
                     if( !xRequestType2->hasParameter( aCharsetString ) ||
-                        xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( OUString( "utf-16" ) ) ||
-                        xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( OUString( "unicode" ) ) )
+                        xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( "utf-16" ) ||
+                        xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( "unicode" ) )
                     {
                         bRet = sal_True;
                     }
                 }
-                else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( OUString( "application/x-openoffice" ) ) )
+                else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( "application/x-openoffice" ) )
                 {
                     // special handling for application/x-openoffice media types
                     const OUString aFormatString( "windows_formatname" );

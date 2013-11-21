@@ -4448,21 +4448,21 @@ we check in the following sequence:
                 {
                     bool bChangeFileExtensionToPDF = false;
                     //examine the file type (.odm .odt. .odp, odg, ods)
-                    if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odm"  ) ) )
+                    if( aFileExtension.equalsIgnoreAsciiCase( "odm" ) )
                         bChangeFileExtensionToPDF = true;
-                    if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odt"  ) ) )
+                    if( aFileExtension.equalsIgnoreAsciiCase( "odt" ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odp"  ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase( "odp" ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odg"  ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase( "odg" ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(OUString( "ods"  ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase( "ods" ) )
                         bChangeFileExtensionToPDF = true;
                     if( bChangeFileExtensionToPDF )
                         aTargetURL.setExtension(OUString( "pdf"  ) );
                 }
                 //check if extension is pdf, see if GoToR should be forced
-                bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase(OUString( "pdf"  ) );
+                bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase( "pdf" );
                 if( m_aContext.ForcePDFAction && bTargetHasPDFExtension )
                     nSetGoToRMode++;
             }

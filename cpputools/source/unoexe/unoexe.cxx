@@ -479,7 +479,7 @@ SAL_IMPLEMENT_MAIN()
             sal_Int32 nIndex = 0, nTokens = 0;
             do { aUnoUrl.getToken( 0, ';', nIndex ); nTokens++; } while( nIndex != -1 );
             if (nTokens != 3 || aUnoUrl.getLength() < 10 ||
-                !aUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( OUString("uno:") ))
+                !aUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( "uno:" ))
             {
                 throw RuntimeException("illegal uno url given!", Reference< XInterface >() );
             }

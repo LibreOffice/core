@@ -93,7 +93,7 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const OUString& rAreas ) throw (css:
 {
     uno::Reference< sheet::XPrintAreas > xPrintAreas( mxSheet, uno::UNO_QUERY_THROW );
     if( rAreas.isEmpty() ||
-        rAreas.equalsIgnoreAsciiCase ( OUString("FALSE") ) )
+        rAreas.equalsIgnoreAsciiCase( "FALSE" ) )
     {
         // print the whole sheet
         uno::Sequence< table::CellRangeAddress > aSeq;

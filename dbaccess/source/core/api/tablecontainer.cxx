@@ -380,7 +380,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 
                 OUString sType;
                 xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;
-                bIsView = sType.equalsIgnoreAsciiCase(OUString("VIEW"));
+                bIsView = sType.equalsIgnoreAsciiCase("VIEW");
             }
 
             if(sComposedName.isEmpty())

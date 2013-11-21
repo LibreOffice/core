@@ -67,7 +67,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     {
         throw UnsupportedFlavorException( rFlavor.MimeType, static_cast < XTransferable * > ( this ) );
     }
-    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString("text/plain;charset=utf-16") ) )
+    if( rFlavor.MimeType.equalsIgnoreAsciiCase( "text/plain;charset=utf-16" ) )
     {
         int nLen = aData.getLength()/2;
         if( ((sal_Unicode*)aData.getConstArray())[nLen-1] == 0 )
@@ -105,7 +105,7 @@ sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFla
 {
     if( aFlavor.DataType != getCppuType( (Sequence< sal_Int8 >*)0 ) )
     {
-        if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( OUString("text/plain;charset=utf-16") ) &&
+        if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( "text/plain;charset=utf-16" ) &&
             aFlavor.DataType == getCppuType( (OUString*)0 ) )
             return false;
     }

@@ -207,7 +207,7 @@ bool SerfSession::isHeadRequestInProgress()
 
 bool SerfSession::isSSLNeeded()
 {
-    return m_aUri.GetScheme().equalsIgnoreAsciiCase( OUString( "https" ) );
+    return m_aUri.GetScheme().equalsIgnoreAsciiCase( "https" );
 }
 
 char* SerfSession::getHostinfo()

@@ -264,7 +264,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         while( nPos >= 0 && nPos < rURLStr.getLength() )
         {
             OUString aToken = rURLStr.getToken( 0, ',', nPos );
-            if ( aToken.equalsIgnoreAsciiCase( OUString( "oasis=false" ) ) )
+            if ( aToken.equalsIgnoreAsciiCase( "oasis=false" ) )
             {
                 if ( pOasisFormat )
                     *pOasisFormat = sal_False;

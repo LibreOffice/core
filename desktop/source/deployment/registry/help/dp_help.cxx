@@ -590,7 +590,7 @@ void BackendImpl::implCollectXhpFiles( const OUString& aDir,
             if( nLastDot != -1 )
             {
                 OUString aExt = aURL.copy( nLastDot + 1 );
-                if( aExt.equalsIgnoreAsciiCase( OUString("xhp" ) ) )
+                if( aExt.equalsIgnoreAsciiCase( "xhp" ) )
                     o_rXhpFileVector.push_back( aURL );
             }
         }
