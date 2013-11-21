@@ -68,6 +68,51 @@ namespace
     return eType;
 }
 
+template <class T, class D>
+bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::Reference<beans::XPropertySet> xProperties, OUString aPropertyID)
+{
+    OSL_ASSERT(xProperties.is());
+    if( xProperties.is() )
+    {
+        T aValue = static_cast<T>(static_cast<const D&>(rItemSet.Get( nWhichId )).GetValue());
+        T aOldValue = aValue;
+        bool aSuccess = xProperties->getPropertyValue( aPropertyID ) >>= aOldValue;
+        if (!aSuccess || aOldValue != aValue)
+        {
+            xProperties->setPropertyValue( aPropertyID , uno::makeAny( aValue ));
+            return true;
+        }
+    }
+    return false;
+}
+
+template <class T, class D>
+void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::Reference<beans::XPropertySet> xProperties, OUString aPropertyID)
+{
+    OSL_ASSERT(xProperties.is());
+    if( xProperties.is() )
+    {
+        T aValue = static_cast<T>(static_cast<const D&>(rItemSet.Get( nWhichId )).GetValue());
+        if(xProperties->getPropertyValue( aPropertyID ) >>= aValue)
+        {
+            rItemSet.Put(D( nWhichId, aValue ));
+        }
+    }
+}
+
+void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, uno::Reference<beans::XPropertySet> xProperties, OUString aPropertyID)
+{
+    OSL_ASSERT(xProperties.is());
+    if( xProperties.is() )
+    {
+        double aValue = static_cast<double>(static_cast<const SvxDoubleItem&>(rItemSet.Get( nWhichId )).GetValue());
+        if(xProperties->getPropertyValue( aPropertyID ) >>= aValue)
+        {
+            rItemSet.Put(SvxDoubleItem( aValue, nWhichId ));
+        }
+    }
+}
+
 } // anonymous namespace
 
 namespace chart
@@ -128,8 +173,8 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
     uno::Reference< chart2::XRegressionCurve > xCurve( GetPropertySet(), uno::UNO_QUERY );
     bool bChanged = false;
 
-    OSL_ASSERT( xCurve.is());
-    if( !xCurve.is())
+    OSL_ASSERT(xCurve.is());
+    if(!xCurve.is())
         return false;
 
     switch( nWhichId )
@@ -151,7 +196,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
                             m_xCurveContainer,
                             xCurve,
                             uno::Reference< uno::XComponentContext >());
-                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                uno::Reference<beans::XPropertySet> xProperties( xCurve, uno::UNO_QUERY );
                 resetPropertySet( xProperties );
                 bChanged = true;
             }
@@ -160,324 +205,128 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
         case SCHATTR_REGRESSION_DEGREE:
         {
-            sal_Int32 aDegree = static_cast< sal_Int32 >(
-                static_cast< const SfxInt32Item & >(
-                    rItemSet.Get( nWhichId )).GetValue());
-
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            OSL_ASSERT( xProperties.is());
-            if( xProperties.is() )
-            {
-                sal_Int32 aOldDegree = 2;
-                xProperties->getPropertyValue( "PolynomialDegree" ) >>= aOldDegree;
-                if (aOldDegree != aDegree)
-                {
-                    xProperties->setPropertyValue( "PolynomialDegree" , uno::makeAny( aDegree ));
-                    bChanged = true;
-                }
-            }
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, OUString("PolynomialDegree"));
         }
         break;
 
         case SCHATTR_REGRESSION_PERIOD:
         {
-            sal_Int32 aPeriod = static_cast< sal_Int32 >(
-                static_cast< const SfxInt32Item & >(
-                    rItemSet.Get( nWhichId )).GetValue());
-
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            OSL_ASSERT( xProperties.is());
-            if( xProperties.is() )
-            {
-                sal_Int32 aOldPeriod = 2;
-                xProperties->getPropertyValue( "MovingAveragePeriod" ) >>= aOldPeriod;
-                if (aOldPeriod != aPeriod)
-                {
-                    xProperties->setPropertyValue( "MovingAveragePeriod" , uno::makeAny( aPeriod ));
-                    bChanged = true;
-                }
-            }
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, "MovingAveragePeriod");
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
         {
-            double aValue = static_cast< double >(
-                static_cast< const SvxDoubleItem & >(
-                    rItemSet.Get( nWhichId )).GetValue());
-
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            OSL_ASSERT( xProperties.is());
-            if( xProperties.is() )
-            {
-                double aOldValue = 0.0;
-                xProperties->getPropertyValue( "ExtrapolateForward" ) >>= aOldValue;
-                if (aOldValue != aValue)
-                {
-                    xProperties->setPropertyValue( "ExtrapolateForward" , uno::makeAny( aValue ));
-                    bChanged = true;
-                }
-            }
+            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, "ExtrapolateForward");
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD:
         {
-            double aValue = static_cast< double >(
-                static_cast< const SvxDoubleItem & >(
-                    rItemSet.Get( nWhichId )).GetValue());
-
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            OSL_ASSERT( xProperties.is());
-            if( xProperties.is() )
-            {
-                double aOldValue = 0.0;
-                xProperties->getPropertyValue( "ExtrapolateBackward" ) >>= aOldValue;
-                if (aOldValue != aValue)
-                {
-                    xProperties->setPropertyValue( "ExtrapolateBackward" , uno::makeAny( aValue ));
-                    bChanged = true;
-                }
-            }
+            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, "ExtrapolateBackward");
         }
         break;
 
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
-            sal_Bool bNewValue = static_cast< sal_Bool >(
-                static_cast< const SfxBoolItem & >(
-                    rItemSet.Get( nWhichId )).GetValue());
-
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            OSL_ASSERT( xProperties.is());
-            if( xProperties.is() )
-            {
-                sal_Bool bOldValue = false;
-                xProperties->getPropertyValue( "ForceIntercept" ) >>= bOldValue;
-                if (bOldValue != bNewValue)
-                {
-                    xProperties->setPropertyValue( "ForceIntercept" , uno::makeAny( bNewValue ));
-                    bChanged = true;
-                }
-            }
+            bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xProperties, "ForceIntercept");
         }
         break;
 
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
-            double aValue = static_cast< double >(
-                static_cast< const SvxDoubleItem & >(
-                    rItemSet.Get( nWhichId )).GetValue());
-
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            OSL_ASSERT( xProperties.is());
-            if( xProperties.is() )
-            {
-                double aOldValue = 0.0;
-                xProperties->getPropertyValue( "InterceptValue" ) >>= aOldValue;
-                if (aOldValue != aValue)
-                {
-                    xProperties->setPropertyValue( "InterceptValue" , uno::makeAny( aValue ));
-                    bChanged = true;
-                }
-            }
+            bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, "InterceptValue");
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
-            bool bNewShow = static_cast< sal_Bool >(
-                static_cast< const SfxBoolItem & >(
-                    rItemSet.Get( nWhichId )).GetValue());
-
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-            OSL_ASSERT( xEqProp.is());
-            bool bOldShow = false;
-            if( xEqProp.is() &&
-                (xEqProp->getPropertyValue( "ShowEquation" ) >>= bOldShow) &&
-                bOldShow != bNewShow )
-            {
-                xEqProp->setPropertyValue( "ShowEquation" , uno::makeAny( bNewShow ));
-                bChanged = true;
-            }
+            bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowEquation");
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
-            bool bNewShow = static_cast< sal_Bool >(
-                static_cast< const SfxBoolItem & >(
-                    rItemSet.Get( nWhichId )).GetValue());
-
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-            OSL_ASSERT( xEqProp.is());
-            bool bOldShow = false;
-            if( xEqProp.is() &&
-                (xEqProp->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bOldShow) &&
-                bOldShow != bNewShow )
-            {
-                xEqProp->setPropertyValue( "ShowCorrelationCoefficient" , uno::makeAny( bNewShow ));
-                bChanged = true;
-            }
+            bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowCorrelationCoefficient");
         }
         break;
     }
     return bChanged;
 }
 
-void RegressionCurveItemConverter::FillSpecialItem(
-    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemSet& rOutItemSet ) const
     throw( uno::Exception )
 {
-    uno::Reference< chart2::XRegressionCurve > xCurve( GetPropertySet(), uno::UNO_QUERY );
+    uno::Reference<chart2::XRegressionCurve> xCurve(GetPropertySet(), uno::UNO_QUERY);
+    OSL_ASSERT(xCurve.is());
+    if(!xCurve.is())
+        return;
+
+    uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
 
     switch( nWhichId )
     {
         case SCHATTR_REGRESSION_TYPE:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                SvxChartRegress eRegress = static_cast< SvxChartRegress >(
-                    static_cast< sal_Int32 >( RegressionCurveHelper::getRegressionType( xCurve )));
-                rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_REGRESSION_TYPE ));
-            }
+            sal_Int32 aRegressionType = static_cast< sal_Int32 >(RegressionCurveHelper::getRegressionType(xCurve));
+            SvxChartRegress eRegress = static_cast< SvxChartRegress >(aRegressionType);
+            rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_REGRESSION_TYPE ));
         }
         break;
 
         case SCHATTR_REGRESSION_DEGREE:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-                OSL_ASSERT( xProperties.is());
-                sal_Int32 aDegree = 1;
-                if( xProperties.is() &&
-                    (xProperties->getPropertyValue( "PolynomialDegree" ) >>= aDegree))
-                {
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, aDegree ));
-                }
-            }
+            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "PolynomialDegree");
         }
         break;
 
         case SCHATTR_REGRESSION_PERIOD:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-                OSL_ASSERT( xProperties.is());
-                sal_Int32 aPeriod = 2;
-                if( xProperties.is() &&
-                    (xProperties->getPropertyValue( "MovingAveragePeriod" ) >>= aPeriod))
-                {
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, aPeriod ));
-                }
-            }
+            lclConvertToItemSet<sal_Int32, SfxInt32Item>(rOutItemSet, nWhichId, xProperties, "MovingAveragePeriod");
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-                OSL_ASSERT( xProperties.is());
-                double aValue = 0.0;
-                if( xProperties.is() &&
-                    (xProperties->getPropertyValue( "ExtrapolateForward" ) >>= aValue))
-                {
-                    rOutItemSet.Put( SvxDoubleItem( aValue, nWhichId ));
-                }
-            }
+            lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "ExtrapolateForward");
         }
         break;
 
         case SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-                OSL_ASSERT( xProperties.is());
-                double aValue = 0.0;
-                if( xProperties.is() &&
-                    (xProperties->getPropertyValue( "ExtrapolateBackward" ) >>= aValue))
-                {
-                    rOutItemSet.Put( SvxDoubleItem( aValue, nWhichId ));
-                }
-            }
+            lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "ExtrapolateBackward");
         }
         break;
 
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-                OSL_ASSERT( xProperties.is());
-                sal_Bool bForceIntercept = false;
-                if( xProperties.is() &&
-                    (xProperties->getPropertyValue( "ForceIntercept" ) >>= bForceIntercept))
-                {
-                    rOutItemSet.Put( SfxBoolItem( nWhichId, bForceIntercept ));
-                }
-            }
+            lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xProperties, "ForceIntercept");
         }
         break;
 
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-                OSL_ASSERT( xProperties.is());
-                double aValue = 0.0;
-                if( xProperties.is() &&
-                    (xProperties->getPropertyValue( "InterceptValue" ) >>= aValue))
-                {
-                    rOutItemSet.Put( SvxDoubleItem( aValue, nWhichId ));
-                }
-            }
+            lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "InterceptValue");
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-                OSL_ASSERT( xEqProp.is());
-                bool bShow = false;
-                if( xEqProp.is() &&
-                    (xEqProp->getPropertyValue( "ShowEquation" ) >>= bShow))
-                {
-                    rOutItemSet.Put( SfxBoolItem( nWhichId, bShow ));
-                }
-            }
+            lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "ShowEquation");
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
-            OSL_ASSERT( xCurve.is());
-            if( xCurve.is())
-            {
-                uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-                OSL_ASSERT( xEqProp.is());
-                bool bShow = false;
-                if( xEqProp.is() &&
-                    (xEqProp->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bShow))
-                {
-                    rOutItemSet.Put( SfxBoolItem( nWhichId, bShow ));
-                }
-            }
+            lclConvertToItemSet<sal_Bool, SfxBoolItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "ShowCorrelationCoefficient");
         }
         break;
     }
