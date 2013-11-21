@@ -248,8 +248,9 @@ sal_Bool AccObject::ImplInitializeCreateObj()
     HRESULT hr = CoCreateInstance( CLSID_MAccessible, NULL, CLSCTX_ALL,
                                    IID_IMAccessible,
                                    (void **)&m_pIMAcc);
-    if( !m_pIMAcc )
-        SAL_WARN( "iacc2", "Failed to create IAccessible2 instance" );
+    SAL_WARN_IF(
+        m_pIMAcc == 0, "iacc2",
+        "Failed to create IAccessible2 instance: 0x" << std::hex << hr);
     DeactivateActContext();
 
     if ( S_OK != hr )
