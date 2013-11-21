@@ -196,8 +196,7 @@ SfxApplication::SfxApplication()
 #ifdef DBG_UTIL
     if( !bOk )
     {
-        OStringBuffer aStr(
-            RTL_CONSTASCII_STRINGPARAM("No DDE-Service possible. Error: "));
+        OStringBuffer aStr("No DDE-Service possible. Error: ");
         if( GetDdeService() )
             aStr.append(static_cast<sal_Int32>(GetDdeService()->GetError()));
         else

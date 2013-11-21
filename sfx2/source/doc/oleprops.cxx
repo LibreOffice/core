@@ -316,8 +316,7 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     rStrm >> nSize;
     // size field includes trailing NUL character
     DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF),
-        OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
-            "SfxOleStringHelper::ImplLoadString8 - invalid string of len ")).
+        OStringBuffer("SfxOleStringHelper::ImplLoadString8 - invalid string of len ").
         append(nSize).getStr() );
     if( (0 < nSize) && (nSize <= 0xFFFF) )
     {
