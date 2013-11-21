@@ -83,9 +83,9 @@ struct ColumnModel
     double              mfWidth;            /// Column width in number of characters.
     sal_Int32           mnXfId;             /// Column default formatting.
     sal_Int32           mnLevel;            /// Column outline level.
-    bool                mbShowPhonetic;     /// True = cells in column show phonetic settings.
-    bool                mbHidden;           /// True = column is hidden.
-    bool                mbCollapsed;        /// True = column outline is collapsed.
+    bool                mbShowPhonetic:1;   /// True = cells in column show phonetic settings.
+    bool                mbHidden:1;         /// True = column is hidden.
+    bool                mbCollapsed:1;      /// True = column outline is collapsed.
 
     explicit            ColumnModel();
 
@@ -103,13 +103,13 @@ struct RowModel
     double              mfHeight;           /// Row height in points.
     sal_Int32           mnXfId;             /// Row default formatting (see mbIsFormatted).
     sal_Int32           mnLevel;            /// Row outline level.
-    bool                mbCustomHeight;     /// True = row has custom height.
-    bool                mbCustomFormat;     /// True = cells in row have explicit formatting.
-    bool                mbShowPhonetic;     /// True = cells in row show phonetic settings.
-    bool                mbHidden;           /// True = row is hidden.
-    bool                mbCollapsed;        /// True = row outline is collapsed.
-    bool                mbThickTop;         /// True = row has extra space above text.
-    bool                mbThickBottom;      /// True = row has extra space below text.
+    bool                mbCustomHeight:1;   /// True = row has custom height.
+    bool                mbCustomFormat:1;   /// True = cells in row have explicit formatting.
+    bool                mbShowPhonetic:1;   /// True = cells in row show phonetic settings.
+    bool                mbHidden:1;         /// True = row is hidden.
+    bool                mbCollapsed:1;      /// True = row outline is collapsed.
+    bool                mbThickTop:1;       /// True = row has extra space above text.
+    bool                mbThickBottom:1;    /// True = row has extra space below text.
 
     explicit            RowModel();
 
@@ -159,10 +159,10 @@ struct ValidationModel
     sal_Int32           mnType;
     sal_Int32           mnOperator;
     sal_Int32           mnErrorStyle;
-    bool                mbShowInputMsg;
-    bool                mbShowErrorMsg;
-    bool                mbNoDropDown;
-    bool                mbAllowBlank;
+    bool                mbShowInputMsg:1;
+    bool                mbShowErrorMsg:1;
+    bool                mbNoDropDown:1;
+    bool                mbAllowBlank:1;
 
     explicit            ValidationModel();
 
