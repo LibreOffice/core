@@ -923,7 +923,9 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
             // the base offset for objects <SwTxtFrm::CalcBaseOfstForFly()>
             // #i20505# Do not consider oversized objects
             SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
-            if ( !pIDDMA->IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
+            assert(pAnchoredObj);
+            if ( !pAnchoredObj ||
+                 !pIDDMA->IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
                    pAnchoredObj->GetAnchorFrm()->FindFooterOrHeader() ) )
