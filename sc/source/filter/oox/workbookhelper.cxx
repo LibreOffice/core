@@ -628,10 +628,8 @@ void WorkbookGlobals::finalize()
         PropertySet aPropSet( mxDoc );
         // #i74668# do not insert default sheets
         aPropSet.setProperty( PROP_IsLoaded, true );
-        // #i79890# enable automatic update of defined names (before IsAdjustHeightEnabled!)
-        Reference< XActionLockable > xLockable( aPropSet.getAnyProperty( PROP_NamedRanges ), UNO_QUERY );
-        if( xLockable.is() )
-            xLockable->removeActionLock();
+        // #i79890# Compile named ranges before re-enabling row height adjustment. (no idea why).
+        mpDoc->CompileNameFormula(false);
         // enable automatic update of linked sheets and DDE links
         aPropSet.setProperty( PROP_IsExecuteLinkEnabled, true );
         // #i79826# enable updating automatic row height after loading the document

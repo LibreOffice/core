@@ -1920,7 +1920,7 @@ public:
 
     void            CompileDBFormula();
     void            CompileDBFormula( bool bCreateFormulaString );
-    void            CompileNameFormula( bool bCreateFormulaString );
+    SC_DLLPUBLIC void CompileNameFormula( bool bCreateFormulaString );
     void            CompileColRowNameFormula();
 
     /** Maximum string length of a column, e.g. for dBase export.

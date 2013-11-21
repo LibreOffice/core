@@ -3198,7 +3198,6 @@ void ScColumn::CompileNameFormula( bool bCreateFormulaString )
 {
     CompileNameFormulaHandler aFunc(bCreateFormulaString);
     sc::ProcessFormula(maCells, aFunc);
-    RegroupFormulaCells();
 }
 
 void ScColumn::CompileColRowNameFormula()
