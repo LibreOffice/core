@@ -44,31 +44,31 @@ class SwASC_AttrIter
 {
     SwASCWriter& rWrt;
     const SwTxtNode& rNd;
-    xub_StrLen nAktSwPos;
+    sal_Int32 nAktSwPos;
 
-    xub_StrLen SearchNext( xub_StrLen nStartPos );
+    sal_Int32 SearchNext( sal_Int32 nStartPos );
 
 public:
-    SwASC_AttrIter( SwASCWriter& rWrt, const SwTxtNode& rNd, xub_StrLen nStt );
+    SwASC_AttrIter( SwASCWriter& rWrt, const SwTxtNode& rNd, sal_Int32 nStt );
 
     void NextPos()
     {
         nAktSwPos = SearchNext( nAktSwPos + 1 );
     }
 
-    xub_StrLen WhereNext() const
+    sal_Int32 WhereNext() const
     {
         return nAktSwPos;
     }
 
-    bool OutAttr( xub_StrLen nSwPos );
+    bool OutAttr( sal_Int32 nSwPos );
 };
 
 
 SwASC_AttrIter::SwASC_AttrIter(
     SwASCWriter& rWr,
     const SwTxtNode& rTxtNd,
-    xub_StrLen nStt )
+    sal_Int32 nStt )
     : rWrt( rWr )
     , rNd( rTxtNd )
     , nAktSwPos( 0 )
@@ -77,9 +77,9 @@ SwASC_AttrIter::SwASC_AttrIter(
 }
 
 
-xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
+sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
 {
-    xub_StrLen nMinPos = STRING_MAXLEN;
+    sal_Int32 nMinPos = SAL_MAX_INT32;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
@@ -90,7 +90,7 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( pHt->HasDummyChar() )
             {
-                xub_StrLen nPos = *pHt->GetStart();
+                sal_Int32 nPos = *pHt->GetStart();
 
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
@@ -118,7 +118,7 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 }
 
 
-bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
+bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
 {
     bool bRet = false;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
