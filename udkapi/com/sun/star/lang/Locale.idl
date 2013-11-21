@@ -51,27 +51,34 @@ module com {  module sun {  module star {  module lang {
  */
 published struct Locale
 {
-    /** specifies an <strong>ISO Language Code</strong>.
+    /** specifies an <strong>ISO 639 Language Code</strong>.
 
-        <p>These codes are the lower-case two-letter codes as defined by
-        ISO-639. You can find a full list of these codes at a number of
+        <p>These codes are preferably the lower-case two-letter codes as
+        defined by ISO 639-1, or three-letter codes as defined by ISO
+        639-3. You can find a full list of these codes at a number of
         sites, such as: <br/>
-        <a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_639.html">
-        <code>http://www.chemie.fu-berlin.de/diverse/doc/ISO_639.html</code></a>.
+        <a href="http://sil.org/iso639-3/codes.asp">
+        <code>http://sil.org/iso639-3/codes.asp</code></a>.
         </p>
 
         <p>If this field contains an empty string, the meaning depends on the
         context.</p>
+
+        <p>Since LibreOffice 4.2, if the locale can not be represented
+        using only ISO 639 and ISO 3166 codes this field contains the
+        ISO 639-3 reserved for local use code "<strong>qlt</strong>" and
+        a <strong>BCP 47</strong> language tag is present in the Variant
+        field. </p>
      */
     string Language;
 
-    /** specifies an <strong>ISO Country Code</strong>.
+    /** specifies an <strong>ISO 3166 Country Code</strong>.
 
         <p>These codes are the upper-case two-letter codes as
-        defined by ISO-3166.  You can find a full list of these codes at a
-        number of sites, such as: <br/>
-        <a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">
-        <code>http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</code></a>.
+        defined by ISO 3166-1.  You can find a full list of these codes
+        at a number of sites, such as: <br/>
+        <a href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/country_names_and_code_elements.htm">
+        <code>http://www.iso.org/iso/country_codes/iso_3166_code_lists/country_names_and_code_elements.htm</code></a>.
         </p>
 
         <p>If this field contains an empty string, the meaning depends on the
@@ -79,14 +86,22 @@ published struct Locale
      */
     string Country;
 
-    /** contains a variant of the locale; codes are vendor and
-        browser-specific.
+    /** specifies a <strong>BCP 47</strong> Language Tag.
 
-        <p>For example, use WIN for Windows, MAC for Macintosh, and POSIX
-        for POSIX. Wherever there are two variants, separate them with an
-        underscore, and put the most important one first. For example, a
-        traditional Spanish collation might construct a locale with parameters
-        for language, country and variant as: "es", "ES", "Traditional_WIN".</p>
+        <p>Since LibreOffice 4.2, <strong>if</strong> the Language field
+        is the code "<strong>qlt</strong>" this field contains the full
+        BCP 47 language tag. If the Language field is not "qlt" this
+        field is empty. </p>
+
+        <p>You can find BCP 47 language tag resources at <br/>
+        <a href="http://www.langtag.net/">
+        <code>http://www.langtag.net/</code></a>. </p>
+
+        <p>Earlier versions of the documentation mentioned "vendor and
+        browser-specific" codes but that was never supported. Use of any
+        arbitrary strings in the Variant field that do not form a valid
+        BCP 47 language tag is <strong>strongly deprecated</strong>.
+        </p>
      */
     string Variant;
 
