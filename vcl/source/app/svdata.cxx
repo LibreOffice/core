@@ -46,6 +46,7 @@
 #include "svids.hrc"
 
 #include "com/sun/star/accessibility/AccessBridge.hpp"
+#include "com/sun/star/accessibility/MSAAService.hpp"
 #include "com/sun/star/awt/XExtendedToolkit.hpp"
 #include "com/sun/star/java/JavaNotConfiguredException.hpp"
 #include "com/sun/star/java/JavaVMCreationFailureException.hpp"
@@ -328,11 +329,17 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
 
             if ( bTryIAcc2 ) // Windows only really
             {
-                // FIXME: convert to service ... pSVData->mxAccessBridge = css::accessibility::MSAAService::create( xContext );
-                pSVData->mxAccessBridge = Reference< XComponent >( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.accessibility.MSAAService", xContext ), UNO_QUERY );
-
-                SAL_INFO( "vcl", "IAccessible2 bridge is: " << (int)(pSVData->mxAccessBridge.is()) );
-                return pSVData->mxAccessBridge.is();
+                try {
+                    pSVData->mxAccessBridge
+                        = css::accessibility::MSAAService::create(xContext);
+                    SAL_INFO("vcl", "got IAccessible2 bridge");
+                    return true;
+                } catch (css::uno::DeploymentException & e) {
+                    SAL_INFO(
+                        "vcl",
+                        "got no IAccessible2 bridge, \"" << e.Message
+                            << "\", falling back to java");
+                }
             }
             else
                 SAL_INFO( "vcl", "IAccessible2 disabled, falling back to java" );
