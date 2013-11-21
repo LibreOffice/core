@@ -49,6 +49,9 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             break;
         case XML_bodyPr:
             break;
+        case XML_txbx:
+            mpShape->setServiceName("com.sun.star.text.TextFrame");
+            break;
         default:
             SAL_WARN("oox", "WpsContext::createFastChildContext: unhandled element:" << getBaseToken(nElementToken));
             break;

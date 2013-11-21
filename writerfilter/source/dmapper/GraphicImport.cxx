@@ -29,6 +29,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -975,10 +976,13 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                             (rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
                              uno::makeAny
                              (text::TextContentAnchorType_AS_CHARACTER));
-                        xShapeProps->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_TEXT_RANGE),
-                             uno::makeAny
-                             (m_pImpl->rDomainMapper.GetCurrentTextRange()));
+
+                        uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
+                        if (!xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+                            xShapeProps->setPropertyValue
+                                (rPropNameSupplier.GetName(PROP_TEXT_RANGE),
+                                 uno::makeAny
+                                 (m_pImpl->rDomainMapper.GetCurrentTextRange()));
 
                         awt::Size aSize(m_xShape->getSize());
 
