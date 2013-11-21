@@ -96,12 +96,14 @@ namespace {
 
 void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, const CellRangeAddress& rUsedArea, sal_Int32 nRow )
 {
-    if( rxProgressBar.get() && (rUsedArea.StartRow <= nRow) && (nRow <= rUsedArea.EndRow) )
-    {
-        double fPosition = static_cast< double >( nRow - rUsedArea.StartRow + 1 ) / (rUsedArea.EndRow - rUsedArea.StartRow + 1);
-        if( rxProgressBar->getPosition() < fPosition )
-            rxProgressBar->setPosition( fPosition );
-    }
+    if (!rxProgressBar || nRow < rUsedArea.StartRow || rUsedArea.EndRow < nRow)
+        return;
+
+    double fCurPos = rxProgressBar->getPosition();
+    double fNewPos = static_cast<double>(nRow - rUsedArea.StartRow + 1.0) / (rUsedArea.EndRow - rUsedArea.StartRow + 1.0);
+    if (fCurPos < fNewPos && (fNewPos - fCurPos) > 0.3)
+        // Try not to re-draw progress bar too frequently.
+        rxProgressBar->setPosition(fNewPos);
 }
 
 void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double fPosition )
