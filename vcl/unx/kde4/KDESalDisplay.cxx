@@ -46,22 +46,6 @@ SalKDEDisplay::~SalKDEDisplay()
     pDisp_ = NULL;
 }
 
-void SalKDEDisplay::Yield()
-{
-    if( DispatchInternalEvent() )
-        return;
-
-    DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
-                osl::Thread::getCurrentIdentifier(),
-                "will crash soon since solar mutex not locked in SalKDEDisplay::Yield" );
-
-    XEvent event;
-    XNextEvent( pDisp_, &event );
-    if( checkDirectInputEvent( &event ))
-        return;
-    qApp->x11ProcessEvent( &event );
-}
-
 // HACK: When using Qt event loop, input methods (japanese, etc.) will get broken because
 // of XFilterEvent() getting called twice, once by Qt, once by LO (bnc#665112).
 // This function is therefore called before any XEvent is passed to Qt event handling
