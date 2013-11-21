@@ -512,7 +512,7 @@ public:
     sal_Bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
 
 
-    sal_uInt16 GetLineCount( sal_uInt16 nPos );     //Ermittelt die Zeilenanzahl
+    sal_uInt16 GetLineCount( xub_StrLen nPos );     //Ermittelt die Zeilenanzahl
 
     //Fuer die Anzeige der Zeilennummern.
     sal_uLong GetAllLines()  const { return nAllLines; }
