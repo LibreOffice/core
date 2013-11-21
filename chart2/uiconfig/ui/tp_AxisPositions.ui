@@ -2,7 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkListStore" id="liststoreEDT_CROSSES_OTHER_AXIS_AT_CATEGORY"/>
   <object class="GtkBox" id="tp_AxisPositions">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -39,6 +38,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Cross other axis at</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">LB_CROSSES_OTHER_AXIS_AT</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -214,6 +214,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Distance</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">EDT_AXIS_LABEL_DISTANCE</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -291,6 +292,10 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Major:</property>
+                        <accessibility>
+                          <relation type="label-for" target="CB_TICKS_INNER"/>
+                          <relation type="label-for" target="CB_TICKS_OUTER"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -305,6 +310,10 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Minor:</property>
+                        <accessibility>
+                          <relation type="label-for" target="CB_MINOR_INNER"/>
+                          <relation type="label-for" target="CB_MINOR_OUTER"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -322,6 +331,9 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="FT_MAJOR"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -339,6 +351,9 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="FT_MAJOR"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -356,6 +371,9 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="FT_MINOR"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -373,6 +391,9 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="FT_MINOR"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -400,6 +421,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Place _marks</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">LB_PLACE_TICKS</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
