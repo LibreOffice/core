@@ -789,7 +789,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         mAny >>= nCharEscapement;
 
     if( nCharEscapement && GETAD( CharEscapementHeight ) ) {
-        sal_uInt32 nCharEscapementHeight;
+        sal_uInt32 nCharEscapementHeight = 0;
         mAny >>= nCharEscapementHeight;
         nSize = (nSize * nCharEscapementHeight) / 100;
         // MSO uses default ~58% size
