@@ -31,18 +31,22 @@ typedef std::vector<OString> LinesList;
 class DataStream : boost::noncopyable, public sfx2::SvBaseLink
 {
     OString ConsumeLine();
-    void Decode(const OUString& rURL, const OUString& rRange, const OUString& rMove);
+    void Decode(const OUString& rURL, const OUString& rRange, const OUString& rMove, sal_uInt32 nSettings);
     void MoveData();
 
 public:
     enum MoveEnum { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
+    enum { SCRIPT_STREAM = 1, VALUES_IN_LINE = 2 };
 
-    static void Set(ScDocShell *pShell, const OUString& rURL,
-            const OUString& rRange, sal_Int32 nLimit, const OUString& rMove);
+    static void MakeToolbarVisible(ScDocShell *pShell);
+    static DataStream* Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
+            sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
 
-    DataStream(ScDocShell *pShell, const OUString& rURL,
-        const OUString& rRange, sal_Int32 nLimit, const OUString& rMove);
+    DataStream(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
+            sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
     virtual ~DataStream() SAL_OVERRIDE;
+    virtual sfx2::SvBaseLink::UpdateResult DataChanged(
+            const OUString& , const css::uno::Any& ) SAL_OVERRIDE;
     virtual void Edit(Window* , const Link& ) SAL_OVERRIDE;
 
     bool ImportData();

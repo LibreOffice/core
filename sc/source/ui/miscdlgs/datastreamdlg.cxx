@@ -10,7 +10,6 @@
 #include <datastreamdlg.hxx>
 
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <svtools/inettbc.hxx>
 #include <vcl/layout.hxx>
 #include <datastream.hxx>
@@ -84,15 +83,21 @@ void DataStreamDlg::StartStream()
     if (m_pRBMaxLimit->IsChecked())
         nLimit = m_pEdLimit->GetText().toInt32();
     OUString rURL = m_pCbUrl->GetText();
+    sal_uInt32 nSettings = 0;
     if (m_pRBScriptData->IsChecked())
-       rURL += OUString(sfx2::cTokenSeparator);
-    DataStream::Set( mpDocShell,
+       nSettings |= DataStream::SCRIPT_STREAM;
+    if (m_pRBValuesInLine->IsChecked())
+       nSettings |= DataStream::VALUES_IN_LINE;
+    DataStream *pStream = DataStream::Set( mpDocShell,
             rURL,
             m_pEdRange->GetText(),
             nLimit,
             m_pRBNoMove->IsChecked() ? OUString("NO_MOVE") : m_pRBRangeDown->IsChecked()
                 ? OUString("RANGE_DOWN") : OUString("MOVE_DOWN")
+            , nSettings
             );
+    DataStream::MakeToolbarVisible( mpDocShell );
+    pStream->Start();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
