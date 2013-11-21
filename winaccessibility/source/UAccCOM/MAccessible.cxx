@@ -208,8 +208,7 @@ m_pszDescription(NULL),
 m_isDestroy(FALSE),
 m_pszActionDescription(NULL),
 m_pXAction(NULL),
-m_bRequiresSave(FALSE),
-pUNOInterface(NULL)
+m_bRequiresSave(FALSE)
 {
     m_sLocation.m_dLeft=0;
     m_sLocation.m_dTop = 0;
@@ -247,7 +246,6 @@ CMAccessible::~CMAccessible()
         m_pIParent->Release();
         m_pIParent=NULL;
     }
-    pRef = NULL;
     m_pEnumVar->Release();
     m_containedObjects.clear();
     pRContext = NULL;
@@ -310,10 +308,11 @@ STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
             return E_INVALIDARG;
         }
 
-        if(!pUNOInterface)
+        if (!m_xAccessible.is())
             return S_FALSE;
 
-        Reference< XAccessibleContext > pRContext = pUNOInterface->getAccessibleContext();
+        Reference<XAccessibleContext> const pRContext =
+            m_xAccessible->getAccessibleContext();
         if( pRContext.is() )
         {
             *pcountChildren = pRContext->getAccessibleChildCount();
@@ -556,9 +555,10 @@ STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
         {
             if(varChild.lVal == CHILDID_SELF)
             {
-                if(pUNOInterface)
+                if (m_xAccessible.is())
                 {
-                    Reference< XAccessibleContext > pContext = pUNOInterface->getAccessibleContext();
+                    Reference<XAccessibleContext> const pContext =
+                        m_xAccessible->getAccessibleContext();
                     if(pContext.is())
                     {
                         // add the STATE_SYSTEM_LINKED state
@@ -661,9 +661,10 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
         {
             if(varChild.lVal == CHILDID_SELF)
             {
-                if( pUNOInterface )
+                if (m_xAccessible.is())
                 {
-                    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+                    Reference<XAccessibleContext> const pRContext =
+                        m_xAccessible->getAccessibleContext();
                     if( !pRContext.is() )
                         return S_FALSE;
 
@@ -748,7 +749,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
                         {
                             xTargets = paccRelation->TargetSet;
                             pRAcc = xTargets[0];
-                            if(pUNOInterface != (XAccessible*)pRAcc.get())
+                            if (m_xAccessible.get() != (XAccessible*)pRAcc.get())
                                 return S_FALSE;
                         }
 
@@ -903,9 +904,10 @@ STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth
             if(varChild.lVal==CHILDID_SELF)
             {
 
-                if(pUNOInterface)
+                if (m_xAccessible.is())
                 {
-                    Reference< XAccessibleContext > pRContext = pUNOInterface->getAccessibleContext();
+                    Reference<XAccessibleContext> const pRContext =
+                        m_xAccessible->getAccessibleContext();
                     if( !pRContext.is() )
                         return S_FALSE;
                     Reference< XAccessibleComponent > pRComponent(pRContext,UNO_QUERY);
@@ -1006,7 +1008,7 @@ STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
         {
             int i, nCount;
             pvarChild->vt = VT_EMPTY;
-            Reference< XAccessibleContext > pRContext = GetContextByXAcc(pUNOInterface);
+            Reference< XAccessibleContext > pRContext = GetContextByXAcc(m_xAccessible.get());
             nCount = pRContext->getAccessibleChildCount();
             if(nCount > 256)
                 return E_FAIL;
@@ -1344,7 +1346,7 @@ STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 /**
 * When a UNO control disposing, it disposes its listeners,
 * then notify AccObject in bridge management, then notify
-* COM that the XAccessible is invalid,so set pUNOInterface as NULL
+* COM that the XAccessible is invalid,so set m_xAccessible as NULL
 * @param    isDestroy, true is it need to be destroyed.
 * @return   S_OK if successful and E_FAIL if failure.
 */
@@ -1352,7 +1354,7 @@ STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)
 {
 
     m_isDestroy = isDestroy;
-    pUNOInterface = NULL;
+    m_xAccessible.clear();
     return S_OK;
 }
 
@@ -1381,7 +1383,8 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
     }
     else
     {
-        Reference< XAccessibleContext > pRContext = pUNOInterface->getAccessibleContext();
+        Reference<XAccessibleContext> const pRContext =
+            m_xAccessible->getAccessibleContext();
         if( !pRContext.is() )
             return NULL;
 
@@ -1394,7 +1397,7 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 
         if(!isGet)
         {
-            g_pAgent->InsertAccObj(pXChild.get(), pUNOInterface,
+            g_pAgent->InsertAccObj(pXChild.get(), m_xAccessible.get(),
                     reinterpret_cast<sal_Int64>(m_hwnd));
             isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
         }
@@ -1429,7 +1432,7 @@ BOOL CMAccessible::IsDecendantManage()
 IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
 {
 
-    XAccessibleContext* pXContext = GetContextByXAcc(pUNOInterface);
+    XAccessibleContext* pXContext = GetContextByXAcc(m_xAccessible.get());
     if(pXContext==NULL)
     {
         return NULL;
@@ -1490,7 +1493,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         return NULL;
     }
     pChildXAcc = pRChildXAcc.get();
-    g_pAgent->InsertAccObj(pChildXAcc,pUNOInterface);
+    g_pAgent->InsertAccObj(pChildXAcc, m_xAccessible.get());
     return g_pAgent->GetIMAccByXAcc(pChildXAcc);
 }
 
@@ -1589,7 +1592,8 @@ HRESULT CMAccessible::GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
             return E_INVALIDARG;
         }
 
-        Reference< XAccessibleContext > pRContext = GetContextByXAcc(pUNOInterface);
+        Reference<XAccessibleContext> const pRContext =
+            GetContextByXAcc(m_xAccessible.get());
         if(pRContext.is())
         {
             varStart.iVal = sal_Int16(pRContext->getAccessibleIndexInParent() + 2);
@@ -1628,7 +1632,8 @@ HRESULT CMAccessible::GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
             return E_INVALIDARG;
         }
 
-        Reference< XAccessibleContext > pRContext = GetContextByXAcc(pUNOInterface);
+        Reference<XAccessibleContext> const pRContext =
+            GetContextByXAcc(m_xAccessible.get());
         if(pRContext.is())
         {
             varStart.iVal = sal_Int16(pRContext->getAccessibleIndexInParent());
@@ -1902,7 +1907,8 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
             return E_INVALIDARG;
         }
 
-        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+        Reference<XAccessibleContext> const pRContext =
+            m_xAccessible->getAccessibleContext();
         if(!pRContext.is())
             return E_FAIL;
         long Role = pRContext->getAccessibleRole();
@@ -1960,7 +1966,7 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
                             == (XAccessible*)pRAcc.get() &&
                             pRParentContext->getAccessibleChild(j)->getAccessibleContext()->getAccessibleRole() == RADIO_BUTTON)
                             number++;
-                        if(pRParentContext->getAccessibleChild(j).get() == pUNOInterface)
+                        if (pRParentContext->getAccessibleChild(j).get() == m_xAccessible.get())
                             index = number;
                     }
                 }
@@ -2152,9 +2158,10 @@ XAccessibleContext* CMAccessible::GetContextByXAcc( XAccessible* pXAcc )
 */
 Reference< XAccessibleSelection > CMAccessible::GetSelection()
 {
-    if( pUNOInterface == NULL )
+    if (!m_xAccessible.is())
         return NULL;
-    Reference< XAccessibleContext > pRContext = pUNOInterface->getAccessibleContext();
+    Reference<XAccessibleContext> const pRContext =
+        m_xAccessible->getAccessibleContext();
     if(pRContext.is())
     {
         Reference< XAccessibleSelection > pRSelection(pRContext,UNO_QUERY);
@@ -2173,7 +2180,7 @@ HRESULT CMAccessible::SelectChild(XAccessible* pItem)
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        XAccessibleContext* pParentContext = GetContextByXAcc( pUNOInterface );
+        XAccessibleContext* pParentContext = GetContextByXAcc(m_xAccessible.get());
     XAccessibleContext* pContext = GetContextByXAcc( pItem );
     if( pParentContext == NULL || pContext == NULL )
         return E_FAIL;
@@ -2198,7 +2205,7 @@ HRESULT CMAccessible::DeSelectChild(XAccessible* pItem)
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        XAccessibleContext* pParentContext = GetContextByXAcc( pUNOInterface );
+        XAccessibleContext* pParentContext = GetContextByXAcc(m_xAccessible.get());
     ;
     XAccessibleContext* pContext = GetContextByXAcc( pItem );
     if( pParentContext == NULL || pContext == NULL )
@@ -2273,12 +2280,11 @@ HRESULT CMAccessible::DeSelectMutipleChildren( XAccessible** pItem,int size )
 */
 STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 {
-    pUNOInterface = reinterpret_cast<XAccessible*>(pXAcc);
-    pRef = pUNOInterface;
+    m_xAccessible = reinterpret_cast<XAccessible*>(pXAcc);
     m_pEnumVar->PutSelection(/*XAccessibleSelection*/
-            reinterpret_cast<hyper>(pUNOInterface));
+            reinterpret_cast<hyper>(m_xAccessible.get()));
 
-    pRContext = pUNOInterface->getAccessibleContext();
+    pRContext = m_xAccessible->getAccessibleContext();
     pRContextInterface = (XAccessibleContext*)pRContext.is();
 
     return S_OK;
@@ -2393,7 +2399,7 @@ STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
     if(pXAcc == NULL)
         return E_INVALIDARG;
 
-    *pXAcc = reinterpret_cast<hyper>(pUNOInterface);
+    *pXAcc = reinterpret_cast<hyper>(m_xAccessible.get());
     return S_OK;
 }
 
@@ -2571,7 +2577,8 @@ HRESULT WINAPI CMAccessible::SmartQI(void* pv, REFIID iid, void** ppvObject)
         if(ImplIsEqualGUID(iid, *pMap->piid))
         {
             XInterface* pXI = NULL;
-            BOOL bFound = GetXInterfaceFromXAccessible(pUNOInterface,&pXI,pMap->XIFIndex);
+            BOOL bFound = GetXInterfaceFromXAccessible(m_xAccessible.get(),
+                                &pXI, pMap->XIFIndex);
             if(!bFound)
             {
                 return E_FAIL;
@@ -2595,7 +2602,7 @@ HRESULT WINAPI CMAccessible::SmartQI(void* pv, REFIID iid, void** ppvObject)
                     if(wrapper)
                     {
                         wrapper->put_XInterface(
-                                reinterpret_cast<hyper>(pUNOInterface));
+                                reinterpret_cast<hyper>(m_xAccessible.get()));
                         wrapper->Release();
                     }
                     return S_OK;
@@ -3246,7 +3253,7 @@ STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
 STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 {
     CHECK_ENABLE_INF
-        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+    Reference<XAccessibleContext> pRContext = m_xAccessible->getAccessibleContext();
     if( !pRContext.is() )
     {
         return E_FAIL;
