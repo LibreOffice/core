@@ -228,9 +228,7 @@ private:
     // specify if the XAccessible is invalid
     BOOL m_isDestroy;
 
-    css::accessibility::XAccessible * pUNOInterface;
-    css::uno::Reference<css::accessibility::XAccessible> pRef;
-    css::accessibility::XAccessible * pAchorUNOInterface;
+    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     css::accessibility::XAccessibleAction *  m_pXAction;
     css::accessibility::XAccessibleContext * pRContextInterface;
     css::uno::Reference<css::accessibility::XAccessibleContext> pRContext;
