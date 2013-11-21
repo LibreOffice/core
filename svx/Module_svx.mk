@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_targets,svx,\
     Library_svx \
     Library_svxcore \
     Library_textconversiondlgs \
-    UIConfig_svx \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,svx,\
@@ -31,6 +30,7 @@ $(eval $(call gb_Module_add_l10n_targets,svx,\
     AllLangResTarget_ofa \
     AllLangResTarget_gal \
     AllLangResTarget_textconversiondlgs \
+    UIConfig_svx \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

@@ -34,13 +34,13 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_bib \
 	Library_dbp \
 	Library_pcr \
-	UIConfig_sbibliography \
-	UIConfig_spropctrlr \
 ))
 $(eval $(call gb_Module_add_l10n_targets,extensions,\
 	AllLangResTarget_bib \
 	AllLangResTarget_dbp \
 	AllLangResTarget_pcr \
+	UIConfig_sbibliography \
+	UIConfig_spropctrlr \
 ))
 endif
 

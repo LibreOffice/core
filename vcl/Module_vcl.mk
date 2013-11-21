@@ -25,11 +25,11 @@ $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
 		StaticLibrary_vclmain \
 		Executable_ui-previewer) \
-    UIConfig_vcl \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\
     AllLangResTarget_vcl \
+    UIConfig_vcl \
 ))
 
 ifeq ($(GUIBASE),unx)

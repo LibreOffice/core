@@ -11,11 +11,11 @@ $(eval $(call gb_Module_Module,cui))
 
 $(eval $(call gb_Module_add_targets,cui,\
 	Library_cui \
-	UIConfig_cui \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,cui,\
 	AllLangResTarget_cui \
+	UIConfig_cui \
 ))
 
 # vim: set noet sw=4 ts=4:

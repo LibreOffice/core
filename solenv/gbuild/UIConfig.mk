@@ -308,12 +308,15 @@ $(call gb_UIConfig__add_translations,$(1),$(2),\
 
 endef
 
+
+gb_UIConfig_ALLFILES:=
 # Adds .ui file to the package
 #
 # The file is relative to $(SRCDIR) and without extension.
 #
 # gb_UIConfig_add_uifile target uifile
 define gb_UIConfig_add_uifile
+gb_UIConfig_ALLFILES+=$(1):$(notdir $(2))
 $(call gb_UIConfig__add_uifile,$(1),$(2))
 
 ifneq ($(gb_UIConfig_LANGS),)
