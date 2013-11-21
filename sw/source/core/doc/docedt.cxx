@@ -1789,7 +1789,7 @@ bool SwDoc::DeleteRange( SwPaM & rPam )
 }
 
 static void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult& rResult,
-    xub_StrLen /*nBeginGrammarCheck*/, const ModelToViewHelper &rConversionMap )
+    const ModelToViewHelper &rConversionMap )
 {
     if( rTxtNode.IsGrammarCheckDirty() )
         return;
@@ -1936,7 +1936,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     aResult = xGCIterator->checkSentenceAtPosition(
                                             xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
-                                    lcl_syncGrammarError( *((SwTxtNode*)pNd), aResult, nBeginGrammarCheck, aConversionMap );
+                                    lcl_syncGrammarError( *((SwTxtNode*)pNd), aResult, aConversionMap );
 
                                     // get suggestions to use for the specific error position
                                     nGrammarErrors = aResult.aErrors.getLength();
