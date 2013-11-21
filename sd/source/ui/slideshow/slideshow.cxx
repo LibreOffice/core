@@ -1235,10 +1235,15 @@ void SlideShow::StartFullscreenPresentation( )
         // frame view of the current view shell.  This avoids that
         // changes made by the presentation have an effect on the other
         // view shells.
-        FrameView* pOriginalFrameView = mpCurrentViewShellBase ? mpCurrentViewShellBase->GetMainViewShell()->GetFrameView() : 0;
+        FrameView* pOriginalFrameView = 0;
+        if (mpCurrentViewShellBase)
+        {
+            ::boost::shared_ptr<ViewShell> xShell(mpCurrentViewShellBase->GetMainViewShell());
+            if (xShell.get())
+                pOriginalFrameView = xShell->GetFrameView();
+        }
 
-        if( mpFullScreenFrameView )
-            delete mpFullScreenFrameView;
+        delete mpFullScreenFrameView;
         mpFullScreenFrameView = new FrameView(mpDoc, pOriginalFrameView);
 
         // The new frame is created hidden.  To make it visible and activate the
