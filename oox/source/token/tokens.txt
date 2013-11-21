@@ -5342,6 +5342,7 @@ txPr
 txSp
 txStyles
 txXfrm
+txbx
 txbxContent
 txtBox
 ty
