@@ -49,7 +49,10 @@ endef
 # Create and deliver help packs for a module for all languages.
 #
 # gb_AllLangHelp_AllLangHelp module
+gb_AllLangHelp_ALLTARGETS :=
+
 define gb_AllLangHelp_AllLangHelp
+gb_AllLangHelp_ALLTARGETS += $(1)
 $(foreach lang,$(gb_HELP_LANGS),\
 	$(call gb_AllLangHelp_AllLangHelp__one_lang,$(1),$(lang),$(call gb_AllLangHelp__get_helpname,$(1),$(lang))))
 
