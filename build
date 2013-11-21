@@ -78,6 +78,8 @@ do_configure()
                         --enable-ext-nlpsolver \
 			--with-ant-home=/cygdrive/c/ant \
                         --without-junit \
+			--with-system-dicts \
+			--with-myspell-dicts \
 			--with-help \
 			--with-cl-home="/cygdrive/c/Programme/Microsoft Visual Studio 9.0/VC/"  \
 			--with-midl-path="/cygdrive/c/Programme/Microsoft SDKs/Windows/v7.0/Bin/Midl.exe" \
@@ -124,6 +126,9 @@ do_configure()
 			--with-build-version="${BUILD_NUMBER}" \
 			--with-vendor="IT@M Landeshauptstadt München" \
 			--with-java \
+			--with-system-dicts \
+			--with-myspell-dicts \
+			--with-help \
 			--with-jdk-home=$JDK_HOME \
 			|| error "autogen.sh fehlgeschlagen."
 	fi
