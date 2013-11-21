@@ -48,18 +48,23 @@ SalKDEDisplay::~SalKDEDisplay()
 
 void SalKDEDisplay::Yield()
 {
+    // We yield the display throught the main Qt thread.
+    // Actually this Yield may call the Display::Yield, which can results in an
+    // unlimited loop.
+    static bool recursion = false;
+
     if( DispatchInternalEvent() )
         return;
+    if( recursion )
+        return;
+    recursion = true;
 
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
                 osl::Thread::getCurrentIdentifier(),
                 "will crash soon since solar mutex not locked in SalKDEDisplay::Yield" );
 
-    XEvent event;
-    XNextEvent( pDisp_, &event );
-    if( checkDirectInputEvent( &event ))
-        return;
-    qApp->x11ProcessEvent( &event );
+    static_cast<KDEXLib*>(GetXLib())->Yield( true, false );
+    recursion = false;
 }
 
 // HACK: When using Qt event loop, input methods (japanese, etc.) will get broken because
