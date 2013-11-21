@@ -275,16 +275,14 @@ GlyphSet::AddGlyphID (
                      sal_Int32* nOutGlyphSetID
                      )
 {
-    sal_uChar nMappedChar;
+    sal_uChar nMappedChar = 0;
 
     // XXX important: avoid to reencode type1 symbol fonts
     if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
         nMappedChar = GetSymbolMapping (nUnicode);
-    else
-        nMappedChar = GetAnsiMapping (nUnicode);
 
-    // create an empty glyphmap that is reserved for iso1252 encoded glyphs
-    // (or -- unencoded -- symbol glyphs) and a second map that takes any other
+    // create an empty glyphmap that is reserved for unencoded symbol glyphs,
+    // and a second map that takes any other
     if (maGlyphList.empty())
     {
         glyph_map_t aMap, aMapp;
@@ -302,7 +300,7 @@ GlyphSet::AddGlyphID (
     // insert a new glyph in the font subset
     if (nMappedChar)
     {
-        // always put iso1252 chars into the first map, map them on itself
+        // always put symbol glyphs into the first map, map them on itself
         glyph_map_t& aGlyphSet = maGlyphList.front();
         AddNotdef (aGlyphSet);
 
@@ -312,7 +310,7 @@ GlyphSet::AddGlyphID (
     }
     else
     {
-        // other chars are just appended to the list
+        // other glyphs are just appended to the list
         glyph_map_t& aGlyphSet = maGlyphList.back();
         AddNotdef (aGlyphSet);
 
