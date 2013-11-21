@@ -48,6 +48,7 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
 #include "sal/types.h"
@@ -109,7 +110,7 @@ private:
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
-    { return ServiceName == getSupportedServiceNames()[0]; } //TODO
+    { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
@@ -373,7 +374,7 @@ private:
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
-    { return ServiceName == getSupportedServiceNames()[0]; } //TODO
+    { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)

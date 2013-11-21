@@ -24,6 +24,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/implbase3.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
@@ -58,9 +59,9 @@ private:
         throw (css::uno::RuntimeException)
     { return read_only_access::getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const &)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
-    { return false; }
+    { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)

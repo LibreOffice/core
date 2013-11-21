@@ -21,6 +21,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XMSAAService.hpp>
@@ -130,8 +131,7 @@ OUString MSAAServiceImpl::getImplementationName() throw (RuntimeException)
    */
 sal_Bool MSAAServiceImpl::supportsService( OUString const & serviceName ) throw (RuntimeException)
 {
-    // this object only supports one service, so the test is simple
-    return serviceName == "com.sun.star.accessibility.MSAAService";
+    return cppu::supportsService(this, serviceName);
 }
 
 /**
