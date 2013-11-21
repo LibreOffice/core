@@ -426,6 +426,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             if (pShape)
             {
                 basegfx::B2DHomMatrix aMatrix;
+                pShape->setPosition(maPosition);
                 pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
                 mxWpsContext.clear();
@@ -510,6 +511,16 @@ void SAL_CALL ShapeContextHandler::setStartToken( ::sal_Int32 _starttoken ) thro
     mnStartToken = _starttoken;
 
 
+}
+
+awt::Point SAL_CALL ShapeContextHandler::getPosition() throw (uno::RuntimeException)
+{
+    return maPosition;
+}
+
+void SAL_CALL ShapeContextHandler::setPosition(const awt::Point& rPosition) throw (uno::RuntimeException)
+{
+    maPosition = rPosition;
 }
 
 OUString ShapeContextHandler::getImplementationName()

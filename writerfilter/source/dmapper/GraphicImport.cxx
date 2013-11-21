@@ -1000,7 +1000,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         // This needs to be AT_PARAGRAPH and not AT_CHARACTER, otherwise shape will move when the user inserts a new paragraph.
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
 
-                        m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
                         m_pImpl->applyMargins(xShapeProps);
                         bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
                         if (!bOpaque)

@@ -19,6 +19,7 @@ WpsContext::WpsContext(ContextHandler2Helper& rParent)
 : ContextHandler2(rParent)
 {
     mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
+    mpShape->setWps(true);
 }
 
 WpsContext::~WpsContext()

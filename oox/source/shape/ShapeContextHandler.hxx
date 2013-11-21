@@ -134,11 +134,15 @@ public:
     virtual ::sal_Int32 SAL_CALL getStartToken() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setStartToken( ::sal_Int32 _starttoken ) throw (::com::sun::star::uno::RuntimeException);
 
+    virtual css::awt::Point SAL_CALL getPosition() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPosition(const css::awt::Point& rPosition) throw (css::uno::RuntimeException);
+
 private:
     ShapeContextHandler(ShapeContextHandler &); // not defined
     void operator =(ShapeContextHandler &); // not defined
 
     ::sal_uInt32 mnStartToken;
+    css::awt::Point maPosition;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     drawingml::ShapePtr mpShape;

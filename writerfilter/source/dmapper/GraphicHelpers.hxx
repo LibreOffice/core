@@ -37,6 +37,7 @@ public:
     PositionHandler( bool vertical );
     ~PositionHandler( );
     static void setPositionOffset(const OUString & sText, bool vertical);
+    static int getPositionOffset(bool vertical);
     static void setAlignH(const OUString & sText);
     static void setAlignV(const OUString & sText);
     sal_Int16 orientation() const;

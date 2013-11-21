@@ -1526,6 +1526,13 @@ DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "Opaque")));
 }
 
+DECLARE_OOXMLIMPORT_TEST(lineWpsOnly, "line-wps-only.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Check position, it was -7223 as it was set after the CustomShapeGeometry property.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(210), xShape->getPosition().X);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
 {
     // The document contains a rotated bitmap

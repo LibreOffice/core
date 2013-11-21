@@ -42,6 +42,7 @@ interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandle
     [attribute] com::sun::star::io::XInputStream InputStream;
     [attribute] string RelationFragmentPath;
     [attribute] long StartToken;
+    [attribute] com::sun::star::awt::Point Position;
   };
 
 

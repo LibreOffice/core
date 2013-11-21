@@ -96,6 +96,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mbHidden( false )
 , mbHiddenMasterShape( false )
 , mbLockedCanvas( false )
+, mbWps( false )
 , maDiagramDoms( 0 )
 {
     if ( pServiceName )
@@ -132,6 +133,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbHidden( pSourceShape->mbHidden )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
+, mbWps( pSourceShape->mbWps )
 , maDiagramDoms( pSourceShape->maDiagramDoms )
 {}
 
@@ -257,6 +259,16 @@ void Shape::setLockedCanvas(bool bLockedCanvas)
 bool Shape::getLockedCanvas()
 {
     return mbLockedCanvas;
+}
+
+void Shape::setWps(bool bWps)
+{
+    mbWps = bWps;
+}
+
+bool Shape::getWps()
+{
+    return mbWps;
 }
 
 void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
@@ -606,6 +618,12 @@ Reference< XShape > Shape::createAndInsert(
                 mxShape->setSize(awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
             }
         }
+
+        // These can have a custom geometry, so position should be set here,
+        // after creation but before custom shape handling, using the position
+        // we got from the caller.
+        if (mbWps)
+            mxShape->setPosition(maPosition);
 
         if( bIsCustomShape )
         {

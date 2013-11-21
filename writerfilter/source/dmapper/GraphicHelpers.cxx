@@ -165,6 +165,14 @@ void PositionHandler::setPositionOffset(const OUString & sText, bool vertical)
         savedPositionOffsetH = ConversionHelper::convertEMUToMM100( sText.toInt32());
 }
 
+int PositionHandler::getPositionOffset(bool vertical)
+{
+    if (vertical)
+        return savedPositionOffsetV;
+    else
+        return savedPositionOffsetH;
+}
+
 void PositionHandler::setAlignH(const OUString & sText)
 {
     if( sText == "left")

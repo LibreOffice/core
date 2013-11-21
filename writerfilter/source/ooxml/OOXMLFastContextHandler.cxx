@@ -2102,6 +2102,8 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 {
     if ( mrShapeContext.is() && !m_bShapeSent )
     {
+        awt::Point aPosition(writerfilter::dmapper::PositionHandler::getPositionOffset(false), writerfilter::dmapper::PositionHandler::getPositionOffset(true));
+        mrShapeContext->setPosition(aPosition);
         uno::Reference<drawing::XShape> xShape(mrShapeContext->getShape());
         if (xShape.is())
         {
