@@ -247,7 +247,7 @@ public:
     void ShowOriginal( sal_uInt16 nLoop = 0 );
 
     /// Calculates the intersection with text node number nNdIdx.
-    void CalcStartEnd( sal_uLong nNdIdx, sal_uInt16& nStart, sal_uInt16& nEnd ) const;
+    void CalcStartEnd( sal_uLong nNdIdx, xub_StrLen& rStart, xub_StrLen& rEnd ) const;
 
     /// Initiate the layout.
     void InvalidateRange();

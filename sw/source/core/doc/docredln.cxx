@@ -3258,36 +3258,36 @@ void SwRedline::InvalidateRange()       // trigger the Layout
 
 /** Calculates the start and end position of the intersection rTmp and
     text node nNdIdx */
-void SwRedline::CalcStartEnd( sal_uLong nNdIdx, sal_uInt16& nStart, sal_uInt16& nEnd ) const
+void SwRedline::CalcStartEnd( sal_uLong nNdIdx, xub_StrLen& rStart, xub_StrLen& rEnd ) const
 {
     const SwPosition *pRStt = Start(), *pREnd = End();
     if( pRStt->nNode < nNdIdx )
     {
         if( pREnd->nNode > nNdIdx )
         {
-            nStart = 0;             // Paragraph is completely enclosed
-            nEnd = STRING_LEN;
+            rStart = 0;             // Paragraph is completely enclosed
+            rEnd = STRING_LEN;
         }
         else
         {
             OSL_ENSURE( pREnd->nNode == nNdIdx,
                 "SwRedlineItr::Seek: GetRedlinePos Error" );
-            nStart = 0;             // Paragraph is overlapped in the beginning
-            nEnd = pREnd->nContent.GetIndex();
+            rStart = 0;             // Paragraph is overlapped in the beginning
+            rEnd = pREnd->nContent.GetIndex();
         }
     }
     else if( pRStt->nNode == nNdIdx )
     {
-        nStart = pRStt->nContent.GetIndex();
+        rStart = pRStt->nContent.GetIndex();
         if( pREnd->nNode == nNdIdx )
-            nEnd = pREnd->nContent.GetIndex(); // Within the Paragraph
+            rEnd = pREnd->nContent.GetIndex(); // Within the Paragraph
         else
-            nEnd = STRING_LEN;      // Paragraph is overlapped in the end
+            rEnd = STRING_LEN;      // Paragraph is overlapped in the end
     }
     else
     {
-        nStart = STRING_LEN;
-        nEnd = STRING_LEN;
+        rStart = STRING_LEN;
+        rEnd = STRING_LEN;
     }
 }
 
