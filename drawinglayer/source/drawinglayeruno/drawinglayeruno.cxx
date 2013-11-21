@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/drawinglayerdllapi.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -25,7 +24,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <uno/environment.h>
 #include <cppuhelper/factory.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -45,23 +43,9 @@ namespace drawinglayer
     } // end of namespace unorenderer
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
-// component_getImplementationEnvironment
-
 extern "C"
 {
-    DRAWINGLAYER_DLLPUBLIC void SAL_CALL drawinglayer_component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// component_getFactory
-
-extern "C"
-{
-    DRAWINGLAYER_DLLPUBLIC void* SAL_CALL drawinglayer_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
+    SAL_DLLPUBLIC void* SAL_CALL drawinglayer_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory;
         void* pRet = 0;
