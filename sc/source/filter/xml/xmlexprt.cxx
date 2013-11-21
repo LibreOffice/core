@@ -1961,7 +1961,6 @@ void ScXMLExport::_ExportContent()
             sal_Int32 nStartOffset = -1;
             sal_Int32 nEndOffset = -1;
             if (pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) && !pDoc->GetChangeTrack())
-// LG            if (pSheetData && pDoc && !pDoc->GetChangeTrack())
                 pSheetData->GetStreamPos( nTable, nStartOffset, nEndOffset );
 
             if ( nStartOffset >= 0 && nEndOffset >= 0 && xSourceStream.is() )
@@ -2405,7 +2404,7 @@ void ScXMLExport::_ExportAutoStyles()
             }
 
             // stored notes styles
-            ExportAutoStylesFromNotes(pSheetData);
+            ExportAnnotationsAutoStyles(pSheetData);
 
             UniReference<SvXMLExportPropertyMapper> xTextPropMapper = XMLTextParagraphExport::CreateCharExtPropMapper( *this );
 
@@ -2623,11 +2622,8 @@ void ScXMLExport::_ExportAutoStyles()
         GetTextParagraphExport()->exportTextAutoStyles();
 }
 
-void ScXMLExport::ExportAutoStylesFromNotes(ScSheetSaveData* pSheetData)
+void ScXMLExport::ExportAnnotationsAutoStyles(ScSheetSaveData* pSheetData)
 {
-
-//ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
-
     // stored shape styles
 
     UniReference<SvXMLExportPropertyMapper> xShapeMapper = XMLShapeExport::CreateShapePropMapper( *this );
