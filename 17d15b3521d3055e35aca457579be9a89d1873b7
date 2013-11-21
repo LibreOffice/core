@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///1A\u003d",
+        "filename": "cui/source/options/treeopt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-11-21T07:51:09Z",
+      "side": 1,
+      "message": "no need to go via a temp var here (and similarly in other places),\n\n  sPageURL \u003d ::comphelper::getExpandedFilePath( sPageURL );\n\ndoes work as expected",
+      "revId": "17d15b3521d3055e35aca457579be9a89d1873b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
