@@ -230,8 +230,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     css::accessibility::XAccessibleAction *  m_pXAction;
-    css::accessibility::XAccessibleContext * pRContextInterface;
-    css::uno::Reference<css::accessibility::XAccessibleContext> pRContext;
+    css::uno::Reference<css::accessibility::XAccessibleContext> m_xContext;
 
 private:
 
