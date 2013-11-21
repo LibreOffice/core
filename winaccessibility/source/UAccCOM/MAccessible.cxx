@@ -248,7 +248,6 @@ CMAccessible::~CMAccessible()
     }
     m_pEnumVar->Release();
     m_containedObjects.clear();
-    pRContext = NULL;
 }
 
 /**
@@ -1667,9 +1666,10 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
 
         *nRelations = 0;
 
-        if( !pRContext.is() )
+        if (!m_xContext.is())
             return E_FAIL;
-        Reference<XAccessibleRelationSet> pRrelationSet = pRContext.get()->getAccessibleRelationSet();
+        Reference<XAccessibleRelationSet> pRrelationSet =
+            m_xContext.get()->getAccessibleRelationSet();
         if(!pRrelationSet.is())
         {
             *nRelations = 0;
@@ -1694,7 +1694,7 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
             return E_INVALIDARG;
         }
 
-        if( !pRContext.is() )
+        if (!m_xContext.is())
             return E_FAIL;
 
 
@@ -1712,9 +1712,8 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
 
         if( relationIndex < nMax )
         {
-
-
-            Reference<XAccessibleRelationSet> pRrelationSet = pRContext.get()->getAccessibleRelationSet();
+            Reference<XAccessibleRelationSet> const pRrelationSet =
+                m_xContext.get()->getAccessibleRelationSet();
             if(!pRrelationSet.is())
             {
 
@@ -1762,10 +1761,11 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
         }
         // #CHECK XInterface#
 
-        if( !pRContext.is() )
+        if (!m_xContext.is())
             return E_FAIL;
 
-        Reference<XAccessibleRelationSet> pRrelationSet = pRContext.get()->getAccessibleRelationSet();
+        Reference<XAccessibleRelationSet> const pRrelationSet =
+            m_xContext.get()->getAccessibleRelationSet();
         if(!pRrelationSet.is())
         {
             *nRelations = 0;
@@ -2284,8 +2284,7 @@ STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
     m_pEnumVar->PutSelection(/*XAccessibleSelection*/
             reinterpret_cast<hyper>(m_xAccessible.get()));
 
-    pRContext = m_xAccessible->getAccessibleContext();
-    pRContextInterface = (XAccessibleContext*)pRContext.is();
+    m_xContext = m_xAccessible->getAccessibleContext();
 
     return S_OK;
 }
@@ -3030,11 +3029,12 @@ STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
     CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
-        // #CHECK XInterface#
-        if( !pRContext.is() )
-            return E_FAIL;
 
-    Reference<XAccessibleStateSet> pRStateSet = pRContext.get()->getAccessibleStateSet();
+    if (!m_xContext.is())
+        return E_FAIL;
+
+    Reference<XAccessibleStateSet> const pRStateSet =
+        m_xContext.get()->getAccessibleStateSet();
     if(!pRStateSet.is())
     {
         return S_OK;
@@ -3117,11 +3117,10 @@ STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
         if(accParentIndex == NULL)
             return E_INVALIDARG;
 
-    // #CHECK XInterface#
-    if( !pRContext.is() )
+    if (!m_xContext.is())
         return E_FAIL;
 
-    *accParentIndex = pRContext.get()->getAccessibleIndexInParent();
+    *accParentIndex = m_xContext.get()->getAccessibleIndexInParent();
     return S_OK;
 
 
@@ -3135,12 +3134,11 @@ STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
         ISDESTROY()
         if(locale == NULL)
             return E_INVALIDARG;
-    // #CHECK XInterface#
 
-    if( !pRContext.is() )
+    if (!m_xContext.is())
         return E_FAIL;
 
-    ::com::sun::star::lang::Locale unoLoc = pRContext.get()->getLocale();
+    ::com::sun::star::lang::Locale unoLoc = m_xContext.get()->getLocale();
     locale->language = SysAllocString((OLECHAR*)unoLoc.Language.getStr());
     locale->country = SysAllocString((OLECHAR*)unoLoc.Country.getStr());
     locale->variant = SysAllocString((OLECHAR*)unoLoc.Variant.getStr());
