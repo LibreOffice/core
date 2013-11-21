@@ -81,7 +81,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">LIne _1</property>
+                        <property name="label" translatable="yes">Line _1</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_LINE_1:0.00cm</property>
                       </object>
@@ -262,7 +262,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_End verticalaa</property>
+                        <property name="label" translatable="yes">_End vertical</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_VERT_2:0.00mm</property>
                       </object>
