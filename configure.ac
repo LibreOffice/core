@@ -8667,6 +8667,9 @@ if test "$with_system_curl" = "yes"; then
     libo_MINGW_TRY_DLL([libgpg-error])
     libo_MINGW_TRY_DLL([libgcrypt])
     libo_MINGW_TRY_DLL([libssh2])
+elif test $_os = iOS; then
+    # Let's see if we need curl, I think not?
+    AC_MSG_RESULT([none])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=NO
