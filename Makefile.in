@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip subsequentcheck tags debugrun help slowcheck translations unitcheck
+.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip subsequentcheck tags debugrun help slowcheck translations unitcheck packageinfo
 
 MAKECMDGOALS?=all
 
@@ -220,12 +220,12 @@ endif
 		$(if $(filter build check,$(MAKECMDGOALS)),all) \
 		$(if $(filter build-nocheck,$(MAKECMDGOALS)),build) \
 		$(if $(filter check,$(MAKECMDGOALS)),subsequentcheck) \
-		$(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck check,$(MAKECMDGOALS))
+		$(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck check packageinfo,$(MAKECMDGOALS))
 ifeq ($(OS),IOS)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
 endif
 
-build-non-l10n-only build-l10n-only build-nocheck check debugrun help slowcheck translations unitcheck subsequentcheck : build
+build-non-l10n-only build-l10n-only build-nocheck check debugrun help slowcheck translations unitcheck subsequentcheck packageinfo: build
 
 cross-toolset: bootstrap fetch
 	$(GNUMAKE) gb_Side=build -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
@@ -301,6 +301,9 @@ distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-desktop-integration
 	$(SRCDIR)/bin/distro-install-sdk
 	$(SRCDIR)/bin/distro-install-file-lists
+
+install-package-%:
+	$(GNUMAKE) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 id:
 	@create-ids
