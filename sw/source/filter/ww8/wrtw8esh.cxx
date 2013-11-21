@@ -1105,10 +1105,10 @@ rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
 // der erste Parameter in SearchNext() liefert zurueck, ob es ein TxtAtr ist.
 xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
 {
-    sal_uInt16 nMinPos = STRING_MAXLEN;
+    xub_StrLen nMinPos = STRING_MAXLEN;
     for(std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
     {
-        sal_uInt16 nPos = i->nStart; // gibt erstes Attr-Zeichen
+        xub_StrLen nPos = i->nStart; // gibt erstes Attr-Zeichen
         if( nPos >= nStartPos && nPos <= nMinPos )
         {
             nMinPos = nPos;
