@@ -66,6 +66,7 @@ void DataStreamDlg::UpdateEnable()
         m_pVclFrameLimit->Hide();
         m_pVclFrameMove->Hide();
         m_pVclFrameRange->Hide();
+        m_pEdRange->SetText("");
     }
     else
     {
