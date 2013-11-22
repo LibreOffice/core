@@ -13,6 +13,7 @@ ifeq ($(OS),IOS)
 $(eval $(call gb_Module_add_targets,ios,\
 	Executable_LibreOffice \
 	CustomTarget_LibreOffice_app \
+	CustomTarget_MobileLibreOffice_app \
 ))
 
 endif
