@@ -263,7 +263,6 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "Oracle";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";
@@ -364,7 +363,6 @@ BEGIN
     @pcfdiffcomment = ();
     @epmdifflist = ();
     $desktoplinkexists = 0;
-    $sundirexists = 0;
     $analyze_spellcheckerlanguage = 0;
     %spellcheckerlanguagehash = ();
     %spellcheckerfilehash = ();
@@ -392,11 +390,8 @@ BEGIN
     $officedirhostname = "";
     $basisdirhostname = "";
     $uredirhostname = "";
-    $sundirhostname = "";
     $officedirgid = "";
     $basisdirgid = "";
-    $uredirgid = "";
-    $sundirgid = "";
 
     %sign_extensions = ("dll" => "1", "exe" => "1", "cab" => "1");
     %treestyles = ();
