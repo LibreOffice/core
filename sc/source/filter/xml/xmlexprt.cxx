@@ -3685,8 +3685,6 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
                                             false );
             Characters(OUString(aDate));
         }
-        // Write the TextEditObject part of the caption
-        WriteEditCell(pNote->GetEditTextObject());
     }
 }
 
