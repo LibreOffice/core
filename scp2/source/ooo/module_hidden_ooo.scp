@@ -107,8 +107,7 @@ Module gid_Module_Root_Files_3
 	Sortkey = "1300";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Dat_Root3,
-	gid_File_Jar_Unoil,
+	Files = (gid_File_Jar_Unoil,
 	gid_File_Jar_Hsqldb_Sdbc,
 	gid_File_Jar_Officebean,
 	gid_File_Jar_Report,
@@ -139,8 +138,7 @@ Module gid_Module_Root_Files_4
 	Sortkey = "1400";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Dat_Root4,
-	auto_ooo_ALL,
+	Files = (auto_ooo_ALL,
 	auto_ooobinarytable_ALL,
 	gid_File_Lib_Bib,
 	gid_File_Lib_J,
@@ -164,8 +162,7 @@ Module gid_Module_Root_Files_5
 	Sortkey = "1500";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Dat_Root5,
-	gid_File_Lib_Crypto,
+	Files = (gid_File_Lib_Crypto,
 #if ! defined SYSTEM_CLUCENE
         gid_File_Lib_CLucene,
 #endif
