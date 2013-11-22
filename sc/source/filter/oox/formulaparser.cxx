@@ -223,7 +223,7 @@ const ApiToken* FormulaFinalizer::processParameters(
                 // add embedded Calc-only parameters
                 if( aParamInfoIt.isCalcOnlyParam() )
                 {
-                    appendCalcOnlyParameter( *pRealFuncInfo, nParam );
+                    appendCalcOnlyParameter( *pRealFuncInfo, nParam, nParamCount );
                     while( aParamInfoIt.isCalcOnlyParam() ) ++aParamInfoIt;
                 }
 
@@ -274,7 +274,7 @@ const ApiToken* FormulaFinalizer::processParameters(
 
             // add trailing Calc-only parameters
             if( aParamInfoIt.isCalcOnlyParam() )
-                appendCalcOnlyParameter( *pRealFuncInfo, nLastValidCount );
+                appendCalcOnlyParameter( *pRealFuncInfo, nLastValidCount, nParamCount );
 
             // add optional parameters that are required in Calc
             appendRequiredParameters( *pRealFuncInfo, nLastValidCount );
@@ -381,16 +381,17 @@ void FormulaFinalizer::appendEmptyParameter( const FunctionInfo& rFuncInfo, size
         maTokens.append( OPCODE_MISSING );
 }
 
-void FormulaFinalizer::appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam )
+void FormulaFinalizer::appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam, size_t nParamCount )
 {
-    (void)nParam;   // prevent 'unused' warning
     switch( rFuncInfo.mnBiff12FuncId )
     {
         case BIFF_FUNC_FLOOR:
         case BIFF_FUNC_CEILING:
-            OSL_ENSURE( nParam == 2, "FormulaFinalizer::appendCalcOnlyParameter - unexpected parameter index" );
-            maTokens.append< double >( OPCODE_PUSH, 1.0 );
-            maTokens.append( OPCODE_SEP );
+            if (nParam == 2 && nParamCount < 3)
+            {
+                maTokens.append< double >( OPCODE_PUSH, 1.0 );
+                maTokens.append( OPCODE_SEP );
+            }
         break;
     }
 }
