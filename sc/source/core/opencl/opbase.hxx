@@ -133,7 +133,6 @@ public:
 
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
     const std::string &GetSymName(void) const { return mSymName; }
-    formula::FormulaToken *GetFormulaToken(void) const;
     virtual size_t GetWindowSize(void) const;
     virtual std::string DumpOpName(void) const { return std::string(""); }
     virtual void DumpInlineFun(std::set<std::string>& ,

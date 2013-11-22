@@ -444,13 +444,26 @@ public:
     }
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
 
-    virtual std::string GenSlidingWindowDeclRef(bool=false) const
+    virtual std::string GenSlidingWindowDeclRef(bool nested=false) const
     {
+        size_t nArrayLength = mpDVR->GetArrayLength();
         std::stringstream ss;
         if (!bIsStartFixed && !bIsEndFixed)
+        {
+            if (nested)
+                ss << "((i+gid0) <" << nArrayLength <<"?";
             ss << Base::GetName() << "[i + gid0]";
+            if (nested)
+                ss << ":NAN)";
+        }
         else
+        {
+            if (nested)
+                ss << "(i <" << nArrayLength <<"?";
             ss << Base::GetName() << "[i]";
+            if (nested)
+                ss << ":NAN)";
+        }
         return ss.str();
     }
     /// Controls how the elements in the DoubleVectorRef are traversed
@@ -533,9 +546,9 @@ return nCurWindowSize;
                         if(count==0){
                             temp1 << "if(i + gid0 < " <<mpDVR->GetArrayLength();
                             temp1 << "){\n\t\t";
-                            temp1 << "tmp = ";
+                            temp1 << "tmp = legalize(";
                             temp1 <<  mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
-                            temp1 << ";\n\t\t\t";
+                            temp1 << ", tmp);\n\t\t\t";
                             temp1 << "}\n\t";
                         }
                         ss << temp1.str();
@@ -548,9 +561,9 @@ return nCurWindowSize;
                     if(count==nCurWindowSize/outLoopSize*outLoopSize){
                         temp2 << "if(i + gid0 < " << mpDVR->GetArrayLength();
                         temp2 << "){\n\t\t";
-                        temp2 << "tmp = ";
+                        temp2 << "tmp = legalize(";
                         temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
-                        temp2 << ";\n\t\t\t";
+                        temp2 << ", tmp);\n\t\t\t";
                         temp2 << "}\n\t";
                     }
                     ss << temp2.str();
@@ -571,9 +584,9 @@ return nCurWindowSize;
                     for(int count=0; count < outLoopSize; count++){
                         ss << "i = outLoop*"<<outLoopSize<<"+"<<count<<";\n\t";
                         if(count==0){
-                            temp1 << "tmp = ";
+                            temp1 << "tmp = legalize(";
                             temp1 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
-                            temp1 << ";\n\t\t\t";
+                            temp1 << ", tmp);\n\t\t\t";
                         }
                         ss << temp1.str();
                     }
@@ -583,9 +596,9 @@ return nCurWindowSize;
                 for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize; count < nCurWindowSize; count++){
                     ss << "i = "<<count<<";\n\t";
                     if(count==nCurWindowSize/outLoopSize*outLoopSize){
-                        temp2 << "tmp = ";
+                        temp2 << "tmp = legalize(";
                         temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
-                        temp2 << ";\n\t\t\t";
+                        temp2 << ", tmp);\n\t\t\t";
                     }
                     ss << temp2.str();
                 }
@@ -673,13 +686,13 @@ public:
         ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
         ss << "    int loopOffset = l*512;\n";
         ss << "    if((loopOffset + lidx + offset + 256) < end) {\n";
-        ss << "        tmp = " << mpCodeGen->Gen2(
-                "A[loopOffset + lidx + offset]", "tmp") <<";\n";
-        ss << "        tmp = " << mpCodeGen->Gen2(
-                "A[loopOffset + lidx + offset + 256]", "tmp") << ";\n";
+        ss << "        tmp = legalize(" << mpCodeGen->Gen2(
+                "A[loopOffset + lidx + offset]", "tmp") <<", tmp);\n";
+        ss << "        tmp = legalize(" << mpCodeGen->Gen2(
+                "A[loopOffset + lidx + offset + 256]", "tmp") <<", tmp);\n";
         ss << "    } else if ((loopOffset + lidx + offset) < end)\n";
-        ss << "        tmp = " << mpCodeGen->Gen2(
-                "A[loopOffset + lidx + offset]", "tmp") <<";\n";
+        ss << "        tmp = legalize(" << mpCodeGen->Gen2(
+                "A[loopOffset + lidx + offset]", "tmp") <<", tmp);\n";
         ss << "    shm_buf[lidx] = tmp;\n";
         ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
         ss << "    for (int i = 128; i >0; i/=2) {\n";
@@ -1036,7 +1049,7 @@ public:
                 }
              }
         }
-        ss << "        tmp += ";
+        ss << "        tmp += fsum(";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
         {
             if (i)
@@ -1076,7 +1089,7 @@ public:
             ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
 #endif
         }
-        ss << ";\n\t}\n\t";
+        ss << ", 0.0);\n\t}\n\t";
         ss << "return tmp;\n";
         ss << "}";
 #endif
@@ -1094,7 +1107,7 @@ public:
                 if(count==0){
                     temp3 << "currentCount0 = i+gid0+1;\n\t";
                     temp3 << "currentCount1 = i+1;\n\t";
-                    temp3 << "tmp += ";
+                    temp3 << "tmp = fsum(";
                     for (unsigned i = 0; i < vSubArguments.size(); i++){
                         if (i)
                             temp3 << "*";
@@ -1126,7 +1139,7 @@ public:
                         else
                             temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
                     }
-                    temp3 << ";\n\t";
+                    temp3 << ", tmp);\n\t";
                 }
                 ss << temp3.str();
             }
@@ -1140,7 +1153,7 @@ public:
             if(count==nCurWindowSize/outLoopSize*outLoopSize){
                 temp4 << "currentCount0 = i+gid0+1;\n\t";
                 temp4 << "currentCount1 = i+1;\n\t";
-                temp4 << "tmp += ";
+                temp4 << "tmp = fsum(";
                 for (unsigned i = 0; i < vSubArguments.size(); i++)
                 {
                     if (i)
@@ -1179,7 +1192,7 @@ public:
                             ->GenSlidingWindowDeclRef(true);
                     }
                 }
-                temp4 << ";\n\t";
+                temp4 << ", tmp);\n\t";
             }
             ss << temp4.str();
         }
@@ -1257,7 +1270,7 @@ public:
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         std::stringstream ss;
-        ss << "fsum(" << lhs <<","<< rhs<<")";
+        ss << "((" << lhs <<")+("<< rhs<<"))";
         return ss.str();
     }
     virtual std::string BinFuncName(void) const { return "fsum"; }

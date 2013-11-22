@@ -66,7 +66,13 @@ void VectorRef::GenSlidingWindowDecl(std::stringstream &ss) const
 std::string VectorRef::GenSlidingWindowDeclRef(bool) const
 {
     std::stringstream ss;
+    formula::SingleVectorRefToken *pSVR =
+        dynamic_cast<formula::SingleVectorRefToken*>(DynamicKernelArgument::GetFormulaToken());
+    if (pSVR)
+        ss << "(gid0 < " << pSVR->GetArrayLength() << "?";
     ss << mSymName << "[gid0]";
+    if (pSVR)
+        ss << ":NAN)";
     return ss.str();
 }
 
