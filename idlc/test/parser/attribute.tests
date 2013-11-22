@@ -92,7 +92,7 @@ interface I1 {
 };
 
 
-EXPECT FAILURE "attribute.tests 9":
+EXPECT OLD-FAILURE "attribute.tests 9":
 exception E1 {};
 interface I1 {
     void E1();
@@ -102,7 +102,7 @@ interface I1 {
 };
 
 
-EXPECT FAILURE "attribute.tests 10":
+EXPECT OLD-FAILURE "attribute.tests 10":
 exception E1 {};
 interface I1 {
     [attribute] long E1 {
@@ -111,7 +111,7 @@ interface I1 {
 };
 
 
-EXPECT SUCCESS "attribute.tests 11":
+EXPECT NEW-FAILURE "attribute.tests 11":
 exception E1 {};
 interface I1 {
     [attribute] long a {
