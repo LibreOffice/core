@@ -121,6 +121,8 @@
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 
+#include <algorithm>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -1281,7 +1283,7 @@ void DocxAttributeOutput::RawText( const OUString& /*rText*/, bool /*bForceUnico
     OSL_TRACE("TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )" );
 }
 
-void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby )
+void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, sal_Int32 nPos, const SwFmtRuby& rRuby )
 {
     OSL_TRACE("TODO DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby )" );
     m_pSerializer->startElementNS( XML_w, XML_ruby, FSEND );
@@ -3622,7 +3624,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
             aAttrIter.NextPara( n );
 
         OUString aStr( rEditObj.GetText( n ));
-        xub_StrLen nAktPos = 0;
+        sal_Int32 nAktPos = 0;
         sal_Int32 nEnd = aStr.getLength();
 
         m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
@@ -3633,9 +3635,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         m_pSerializer->endElementNS(XML_w, XML_pPr);
 
         do {
-            xub_StrLen nNextAttr = aAttrIter.WhereNext();
-            if( nNextAttr > nEnd )
-                nNextAttr = nEnd;
+            const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
 
             m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 

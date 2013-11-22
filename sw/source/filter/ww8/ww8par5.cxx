@@ -2144,7 +2144,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
     bool bBracket  = false;
     WW8ReadFieldParams aReadParam( rStr );
 
-    xub_StrLen nOffset = 0;
+    sal_Int32 nOffset = 0;
 
     for (;;)
     {

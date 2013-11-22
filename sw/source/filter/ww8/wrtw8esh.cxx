@@ -101,6 +101,8 @@
 #include <svl/urihelper.hxx>
 #include <unotools/saveopt.hxx>
 
+#include <algorithm>
+
 using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
 using namespace sw::util;
@@ -1103,12 +1105,12 @@ rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
 }
 
 // der erste Parameter in SearchNext() liefert zurueck, ob es ein TxtAtr ist.
-xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
+sal_Int32 MSWord_SdrAttrIter::SearchNext( sal_Int32 nStartPos )
 {
-    xub_StrLen nMinPos = STRING_MAXLEN;
+    sal_Int32 nMinPos = SAL_MAX_INT32;
     for(std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
     {
-        xub_StrLen nPos = i->nStart; // gibt erstes Attr-Zeichen
+        sal_Int32 nPos = i->nStart; // gibt erstes Attr-Zeichen
         if( nPos >= nStartPos && nPos <= nMinPos )
         {
             nMinPos = nPos;
@@ -1170,7 +1172,7 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
     }
 }
 
-void MSWord_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
+void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
 {
     OutParaAttr(true);
 
@@ -1226,7 +1228,7 @@ void MSWord_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
     }
 }
 
-bool MSWord_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
+bool MSWord_SdrAttrIter::IsTxtAttr(sal_Int32 nSwPos)
 {
     for (std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
     {
@@ -1364,14 +1366,11 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         OSL_ENSURE( pO->empty(), " pO ist am Zeilenanfang nicht leer" );
 
         OUString aStr( rEditObj.GetText( n ));
-        xub_StrLen nAktPos = 0;
-        sal_Int32  nEnd = aStr.getLength();
+        sal_Int32 nAktPos = 0;
+        const sal_Int32 nEnd = aStr.getLength();
         do {
-            xub_StrLen nNextAttr = aAttrIter.WhereNext();
+            const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
-
-            if( nNextAttr > nEnd )
-                nNextAttr = nEnd;
 
             bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
             if( !bTxtAtr )

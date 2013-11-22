@@ -1406,13 +1406,13 @@ private:
     std::vector<const EECharAttrib*> aChrTxtAtrArr;
     std::vector<rtl_TextEncoding> aChrSetArr;
     sal_Int32 nPara;
-    xub_StrLen nAktSwPos;
-    xub_StrLen nTmpSwPos;                   // for HasItem()
+    sal_Int32 nAktSwPos;
+    sal_Int32 nTmpSwPos;                   // for HasItem()
     rtl_TextEncoding eNdChrSet;
     sal_uInt16 nScript;
     sal_uInt8 mnTyp;
 
-    xub_StrLen SearchNext( xub_StrLen nStartPos );
+    sal_Int32 SearchNext( sal_Int32 nStartPos );
     void SetCharSet(const EECharAttrib& rTxtAttr, bool bStart);
 
     //No copying
@@ -1425,15 +1425,15 @@ public:
     void OutParaAttr(bool bCharAttr);
     void OutEEField(const SfxPoolItem& rHt);
 
-    bool IsTxtAttr(xub_StrLen nSwPos);
+    bool IsTxtAttr(sal_Int32 nSwPos);
 
-    void NextPos() { if ( nAktSwPos < STRING_NOTFOUND ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nAktSwPos < SAL_MAX_INT32 ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
-    void OutAttr( xub_StrLen nSwPos );
+    void OutAttr( sal_Int32 nSwPos );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
-    bool OutAttrWithRange(xub_StrLen nPos);
-    xub_StrLen WhereNext() const                { return nAktSwPos; }
+    bool OutAttrWithRange(sal_Int32 nPos);
+    sal_Int32 WhereNext() const                { return nAktSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
 };
@@ -1459,7 +1459,7 @@ private:
     bool mbCharIsRTL;
 
     const SwRedline* pCurRedline;
-    xub_StrLen nAktSwPos;
+    sal_Int32 nAktSwPos;
     sal_uInt16 nCurRedlinePos;
 
     bool mbParaIsRTL;
@@ -1469,7 +1469,7 @@ private:
     sw::Frames maFlyFrms;     // #i2916#
     sw::FrameIter maFlyIter;
 
-    xub_StrLen SearchNext( xub_StrLen nStartPos );
+    sal_Int32 SearchNext( sal_Int32 nStartPos );
     void FieldVanish( const OUString& rTxt );
 
     void OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool bStart);
@@ -1482,27 +1482,27 @@ private:
 public:
     SwWW8AttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
 
-    bool IsTxtAttr( xub_StrLen nSwPos );
-    bool IsRedlineAtEnd( xub_StrLen nPos ) const;
+    bool IsTxtAttr( sal_Int32 nSwPos );
+    bool IsRedlineAtEnd( sal_Int32 nPos ) const;
     bool IsDropCap( int nSwPos );
     bool RequiresImplicitBookmark();
 
-    void NextPos() { if ( nAktSwPos < STRING_NOTFOUND ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nAktSwPos < SAL_MAX_INT32 ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
-    void OutAttr( xub_StrLen nSwPos, bool bRuby = false );
+    void OutAttr( sal_Int32 nSwPos, bool bRuby = false );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
-    int OutAttrWithRange(xub_StrLen nPos);
-    const SwRedlineData* GetRedline( xub_StrLen nPos );
-    void OutFlys(xub_StrLen nSwPos);
+    int OutAttrWithRange(sal_Int32 nPos);
+    const SwRedlineData* GetRedline( sal_Int32 nPos );
+    void OutFlys(sal_Int32 nSwPos);
 
-    xub_StrLen WhereNext() const    { return nAktSwPos; }
+    sal_Int32 WhereNext() const { return nAktSwPos; }
     sal_uInt16 GetScript() const { return mnScript; }
     bool IsCharRTL() const { return mbCharIsRTL; }
     bool IsParaRTL() const { return mbParaIsRTL; }
     rtl_TextEncoding GetCharSet() const { return meChrSet; }
-    OUString GetSnippet(const OUString &rStr, xub_StrLen nAktPos,
-        xub_StrLen nLen) const;
+    OUString GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
+        sal_Int32 nLen) const;
     const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
 };
 

@@ -1038,15 +1038,12 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
         AttrOutput().StartParagraph( ww8::WW8TableNodeInfo::Pointer_t());
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
         OUString aStr( rEditObj.GetText( n ));
-        xub_StrLen nAktPos = 0;
-        sal_Int32  nEnd = aStr.getLength();
+        sal_Int32 nAktPos = 0;
+        const sal_Int32 nEnd = aStr.getLength();
         do {
             AttrOutput().StartRun( NULL );
-            xub_StrLen nNextAttr = aAttrIter.WhereNext();
+            const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
-
-            if( nNextAttr > nEnd )
-                nNextAttr = nEnd;
 
             bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
             if( !bTxtAtr )

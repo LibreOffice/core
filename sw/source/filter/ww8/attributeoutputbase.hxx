@@ -199,7 +199,7 @@ public:
     virtual void RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) = 0;
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby ) = 0;
+    virtual void StartRuby( const SwTxtNode& rNode, sal_Int32 nPos, const SwFmtRuby& rRuby ) = 0;
 
     /// Output ruby end.
     virtual void EndRuby() = 0;

@@ -28,6 +28,8 @@
 #include <svx/unoapi.hxx>
 #include <vcl/cvtgrf.hxx>
 
+#include <algorithm>
+
 using namespace sw::util;
 using namespace css;
 
@@ -540,18 +542,15 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
 
         OUString aStr( rEditObj.GetText( n ));
-        xub_StrLen nAktPos = 0;
-        sal_Int32  nEnd = aStr.getLength();
+        sal_Int32 nAktPos = 0;
+        const sal_Int32 nEnd = aStr.getLength();
 
         aAttrIter.OutParaAttr(false);
         m_rAttrOutput.RunText().append(m_rAttrOutput.Styles().makeStringAndClear());
 
         do {
-            xub_StrLen nNextAttr = aAttrIter.WhereNext();
+            const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
-
-            if( nNextAttr > nEnd )
-                nNextAttr = nEnd;
 
             aAttrIter.OutAttr( nAktPos );
             m_rAttrOutput.RunText().append('{').append(m_rAttrOutput.Styles().makeStringAndClear()).append(SAL_NEWLINE_STRING);

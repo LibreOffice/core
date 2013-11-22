@@ -240,11 +240,11 @@ sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
     return min;
 }
 
-xub_StrLen SwWW8AttrIter::SearchNext( xub_StrLen nStartPos )
+sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 {
-    xub_StrLen nPos;
-    xub_StrLen nMinPos = STRING_MAXLEN;
-    xub_StrLen i=0;
+    sal_Int32 nPos;
+    sal_Int32 nMinPos = SAL_MAX_INT32;
+    sal_Int32 i=0;
 
     const OUString aTxt = rNd.GetTxt();
     sal_Int32 fieldEndPos = aTxt.indexOf(CH_TXT_ATR_FIELDEND, nStartPos);
@@ -379,7 +379,7 @@ static bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
             rItem.Which( ) == RES_CHRATR_CTL_FONTSIZE );
 }
 
-void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
+void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
 {
     m_rExport.AttrOutput().RTLAndCJKState( IsCharRTL(), GetScript() );
 
@@ -512,7 +512,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
     }
 }
 
-void SwWW8AttrIter::OutFlys(xub_StrLen nSwPos)
+void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 {
     /*
      #i2916#
@@ -534,7 +534,7 @@ void SwWW8AttrIter::OutFlys(xub_StrLen nSwPos)
     }
 }
 
-bool SwWW8AttrIter::IsTxtAttr( xub_StrLen nSwPos )
+bool SwWW8AttrIter::IsTxtAttr( sal_Int32 nSwPos )
 {
     // search for attrs with dummy character or content
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
@@ -641,7 +641,7 @@ const SfxPoolItem& SwWW8AttrIter::GetItem(sal_uInt16 nWhich) const
     return pRet ? *pRet : rNd.SwCntntNode::GetAttr(nWhich);
 }
 
-void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/, const SwFmtRuby& rRuby )
+void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, sal_Int32 /*nPos*/, const SwFmtRuby& rRuby )
 {
     OUString aStr( FieldString( ww::eEQ ) );
     aStr += "\\* jc";
@@ -1119,7 +1119,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
         FieldVanish( sTxt, eType );
 }
 
-int SwWW8AttrIter::OutAttrWithRange(xub_StrLen nPos)
+int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
 {
     int nRet = 0;
     if ( const SwpHints* pTxtAttrs = rNd.GetpSwpHints() )
@@ -1180,7 +1180,7 @@ int SwWW8AttrIter::OutAttrWithRange(xub_StrLen nPos)
     return nRet;
 }
 
-bool SwWW8AttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
+bool SwWW8AttrIter::IsRedlineAtEnd( sal_Int32 nEnd ) const
 {
     bool bRet = false;
     // search next Redline
@@ -1202,7 +1202,7 @@ bool SwWW8AttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
     return bRet;
 }
 
-const SwRedlineData* SwWW8AttrIter::GetRedline( xub_StrLen nPos )
+const SwRedlineData* SwWW8AttrIter::GetRedline( sal_Int32 nPos )
 {
     if( pCurRedline )
     {
@@ -1396,8 +1396,8 @@ Convert characters that need to be converted, the basic replacements and the
 ridicously complicated title case attribute mapping to hardcoded upper case
 because word doesn't have the feature
 */
-OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, xub_StrLen nAktPos,
-    xub_StrLen nLen) const
+OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
+    sal_Int32 nLen) const
 {
     if (!nLen)
         return OUString();
@@ -1801,7 +1801,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     sal_Int32 nAktPos = 0;
     sal_Int32 const nEnd = aStr.getLength();
     bool bRedlineAtEnd = false;
-    int nOpenAttrWithRange = 0;
+    sal_Int32 nOpenAttrWithRange = 0;
 
     ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner;
     if ( pTextNodeInfo.get() != NULL )

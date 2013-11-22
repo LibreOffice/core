@@ -455,7 +455,7 @@ void RtfAttributeOutput::RawText( const OUString& rText, bool /*bForceUnicode*/,
     m_aRunText->append(msfilter::rtfutil::OutString(rText, eCharSet));
 }
 
-void RtfAttributeOutput::StartRuby( const SwTxtNode& /*rNode*/, xub_StrLen /*nPos*/, const SwFmtRuby& /*rRuby*/ )
+void RtfAttributeOutput::StartRuby( const SwTxtNode& /*rNode*/, sal_Int32 /*nPos*/, const SwFmtRuby& /*rRuby*/ )
 {
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }

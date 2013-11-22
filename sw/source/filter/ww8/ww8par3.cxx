@@ -491,11 +491,10 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
 }
 
 static void lcl_CopyGreaterEight(OUString &rDest, OUString &rSrc,
-    sal_Int32 nStart, sal_Int32 nLen = STRING_LEN)
+    sal_Int32 nStart, sal_Int32 nLen = SAL_MAX_INT32)
 {
-    if (nLen > rSrc.getLength() || nLen == STRING_LEN)
-        nLen = rSrc.getLength();
-    for( sal_Int32 nI = nStart; nI < nLen; ++nI)
+    const sal_Int32 nMaxLen = std::min(rSrc.getLength(), nLen);
+    for( sal_Int32 nI = nStart; nI < nMaxLen; ++nI)
     {
         sal_Unicode nChar = rSrc[nI];
         if (nChar > WW8ListManager::nMaxLevel)
@@ -840,17 +839,17 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         */
         //First number appears at
         sal_uInt8 nOneBasedFirstNoIndex = aOfsNumsXCH[0];
-        xub_StrLen nFirstNoIndex =
-            nOneBasedFirstNoIndex > 0 ? nOneBasedFirstNoIndex -1 : STRING_LEN;
+        const sal_Int32 nFirstNoIndex =
+            nOneBasedFirstNoIndex > 0 ? nOneBasedFirstNoIndex -1 : SAL_MAX_INT32;
         lcl_CopyGreaterEight(sPrefix, sNumString, 0, nFirstNoIndex);
 
         //Next number appears at
         if (nUpperLevel)
         {
             sal_uInt8 nOneBasedNextNoIndex = aOfsNumsXCH[nUpperLevel-1];
-            xub_StrLen nNextNoIndex =
-                nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex -1 : STRING_LEN;
-            if (nNextNoIndex != STRING_LEN)
+            sal_Int32 nNextNoIndex =
+                nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex -1 : SAL_MAX_INT32;
+            if (nNextNoIndex != SAL_MAX_INT32)
                 ++nNextNoIndex;
             if (sNumString.getLength() > nNextNoIndex)
                 lcl_CopyGreaterEight(sPostfix, sNumString, nNextNoIndex);
