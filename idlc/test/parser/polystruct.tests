@@ -133,6 +133,11 @@ struct Struct1<T> { long member; };
 struct Struct2 { Struct1<Struct2> member; };
 
 
+EXPECT SUCCESS "polystruct.tests 25a":
+struct Struct<T> { long member; };
+interface X { [attribute] Struct<X> member; };
+
+
 EXPECT FAILURE "polystruct.tests 26":
 struct Struct1<T> { long member; };
 struct Struct2<T> { long member; };
