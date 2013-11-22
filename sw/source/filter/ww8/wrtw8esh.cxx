@@ -1185,12 +1185,11 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
         const SfxItemPool& rDstPool = m_rExport.pDoc->GetAttrPool();
 
         nTmpSwPos = nSwPos;
-        sal_uInt16 nWhich, nSlotId;
         for(std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
         {
             if (nSwPos >= i->nStart && nSwPos < i->nEnd)
             {
-                nWhich = i->pAttr->Which();
+                sal_uInt16 nWhich = i->pAttr->Which();
                 if (nWhich == EE_FEATURE_FIELD)
                 {
                     OutEEField(*(i->pAttr));
@@ -1201,8 +1200,8 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
                     m_rExport.WriteChar(0x9);
                     continue;
                 }
-                nSlotId = pSrcPool->GetSlotId(nWhich);
 
+                const sal_uInt16 nSlotId = pSrcPool->GetSlotId(nWhich);
                 if (nSlotId && nWhich != nSlotId)
                 {
                     nWhich = rDstPool.GetWhich(nSlotId);
