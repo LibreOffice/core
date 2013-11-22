@@ -2643,12 +2643,16 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     OUString sName(rName), sTypeName;
     sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
     if( USHRT_MAX == nResId )
-        throw container::NoSuchElementException();
+        throw container::NoSuchElementException(
+            "SwXTextFieldMasters::getByName(" + rName + ")",
+            css::uno::Reference<css::uno::XInterface>());
 
     sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
     SwFieldType* pType = GetDoc()->GetFldType(nResId, sName, sal_True);
     if(!pType)
-        throw container::NoSuchElementException();
+        throw container::NoSuchElementException(
+            "SwXTextFieldMasters::getByName(" + rName + ")",
+            css::uno::Reference<css::uno::XInterface>());
 
     uno::Reference<beans::XPropertySet> const xRet(
             SwXFieldMaster::CreateXFieldMaster(*GetDoc(), *pType));
@@ -2978,7 +2982,9 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     SolarMutexGuard aGuard;
 
     if (!(m_pImpl->m_nNextIndex < m_pImpl->m_Items.getLength()))
-        throw container::NoSuchElementException();
+        throw container::NoSuchElementException(
+            "SwXFieldEnumeration::nextElement",
+            css::uno::Reference<css::uno::XInterface>());
 
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference< text::XTextField > *pItems = m_pImpl->m_Items.getArray();
