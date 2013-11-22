@@ -54,7 +54,6 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 using namespace com::sun::star::uno;
 
 AccObjectWinManager* g_acc_manager = NULL;
-AccObjectWinManager* AccObjectWinManager::me = NULL;
 
 /**
    * Implementation of interface XMSAAService's method getAccObjectPtr() that return the
@@ -97,14 +96,11 @@ AccObjectWinManager::AccObjectWinManager( AccObjectManagerAgent* Agent ):
    */
 AccObjectWinManager* AccObjectWinManager::CreateAccObjectWinManagerInstance( AccObjectManagerAgent* Agent )
 {
-    if( me == NULL )
+    if (!g_acc_manager)
     {
-        me = new AccObjectWinManager( Agent );
-        g_acc_manager = me;
-        return me;
+        g_acc_manager = new AccObjectWinManager( Agent );
     }
-
-    return me;
+    return g_acc_manager;
 }
 
 
