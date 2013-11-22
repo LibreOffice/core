@@ -653,24 +653,24 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
 
     pCellStyles->AddNewTable(nTableCount - 1);
 
-    // create Note shape in draw page
-    std::vector<sc::NoteEntry> aEntries;
-    pDoc->GetAllNoteEntries(aEntries);
-    std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-    for (; it != itEnd; ++it)
-    {
-        ScPostIt& rNote = *it->mpNote;
-        ScAddress aPos = it->maPos;
-        SdrCaptionObj* pCaption = rNote.GetOrCreateCaption(aPos);
-        pDoc->GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( aPos.Tab() ) )->InsertObject( pCaption );
-    }
-
     for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
     {
         nCurrentTable = sal::static_int_cast<sal_uInt16>(nTable);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIndex->getByIndex(nTable), uno::UNO_QUERY);
         if (!xDrawPageSupplier.is())
             continue;
+
+        // create Note shape in draw page
+        std::vector<sc::NoteEntry> aEntries;
+        pDoc->GetTabNoteEntries(nTable, aEntries);
+        std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+        for (; it != itEnd; ++it)
+        {
+            ScPostIt& rNote = *it->mpNote;
+            ScAddress aPos = it->maPos;
+            SdrCaptionObj* pCaption = rNote.GetOrCreateCaption(aPos);
+            pDoc->GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( aPos.Tab() ) )->InsertObject( pCaption );
+        }
 
         uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
         ScMyDrawPage aDrawPage;
@@ -3704,7 +3704,6 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
         pCurrentCell = &rMyCell;
 
         SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(aCellPos);
-     //   pDoc->GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( aCellPos.Tab() ) )->InsertObject( pCaption );
 
         Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
 

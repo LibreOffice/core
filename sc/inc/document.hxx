@@ -917,6 +917,7 @@ public:
     SCROW GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const;
 
     SC_DLLPUBLIC void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
+    SC_DLLPUBLIC void GetTabNoteEntries( SCTAB nTab, std::vector<sc::NoteEntry>& rNotes ) const;
 
     SC_DLLPUBLIC void            SetDrawPageSize(SCTAB nTab);
 

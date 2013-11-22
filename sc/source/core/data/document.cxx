@@ -6202,12 +6202,15 @@ void ScDocument::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
     {
-        const ScTable* pTab = maTabs[nTab];
-        if (!pTab)
-            continue;
-
-        pTab->GetAllNoteEntries(rNotes);
+        GetTabNoteEntries(nTab, rNotes);
     }
+}
+
+void ScDocument::GetTabNoteEntries( SCTAB nTab, std::vector<sc::NoteEntry>& rNotes ) const
+{
+    const ScTable* pTab = maTabs[nTab];
+    if (pTab)
+        pTab->GetAllNoteEntries(rNotes);
 }
 
 void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )
