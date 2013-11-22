@@ -909,7 +909,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         OUString sUrl;
                         xShapeProps->getPropertyValue("GraphicURL") >>= sUrl;
 
-                        sal_Int32 nRotation;
+                        sal_Int32 nRotation = 0;
                         xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
 
                         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
