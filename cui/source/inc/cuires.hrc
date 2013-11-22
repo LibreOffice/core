@@ -452,6 +452,8 @@
 
 #define RID_SVXSTR_CHG_SMARTART                             (RID_SVX_START + 1251)
 
+#define RID_SVXSTR_PPI                                      (RID_SVX_START + 1252)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

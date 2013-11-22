@@ -44,6 +44,12 @@ String RID_SVXSTR_ROW
     Text [ en-US ] = "Insert Rows" ;
 };
 
+String RID_SVXSTR_PPI
+{
+    Text [ x-comment ] = "PPI is pixel per inch, %1 is a number" ;
+    Text [ en-US ] = "(%1 PPI)" ;
+};
+
 String RID_SVXSTR_COL
 {
     Text [ en-US ] = "Insert Columns" ;

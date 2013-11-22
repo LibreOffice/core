@@ -29,10 +29,10 @@
 #include <editeng/brushitem.hxx>
 #include <grfpage.hxx>
 #include <svx/grfcrop.hxx>
-#include <grfpage.hrc>
 #include <rtl/ustring.hxx>
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
+#include <vcl/builder.hxx>
 
 #define CM_1_TO_TWIP        567
 #define TWIP_TO_INCH        1440
@@ -48,86 +48,76 @@ static inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
  --------------------------------------------------------------------*/
 
 SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
-    : SfxTabPage( pParent,  CUI_RES( RID_SVXPAGE_GRFCROP ), rSet ),
-    aCropFL(        this, CUI_RES( FL_CROP    )),
-    aZoomConstRB(   this, CUI_RES( RB_ZOOMCONST)),
-    aSizeConstRB(   this, CUI_RES( RB_SIZECONST)),
-    aLeftFT(        this, CUI_RES( FT_LEFT    )),
-    aLeftMF(        this, CUI_RES( MF_LEFT    )),
-    aRightFT(       this, CUI_RES( FT_RIGHT   )),
-    aRightMF(       this, CUI_RES( MF_RIGHT   )),
-    aTopFT(         this, CUI_RES( FT_TOP     )),
-    aTopMF(         this, CUI_RES( MF_TOP     )),
-    aBottomFT(      this, CUI_RES( FT_BOTTOM  )),
-    aBottomMF(      this, CUI_RES( MF_BOTTOM  )),
-    aZoomFL(        this, CUI_RES( FL_ZOOM    )),
-    aWidthZoomFT(   this, CUI_RES( FT_WIDTHZOOM )),
-    aWidthZoomMF(   this, CUI_RES( MF_WIDTHZOOM )),
-    aHeightZoomFT(  this, CUI_RES( FT_HEIGHTZOOM)),
-    aHeightZoomMF(  this, CUI_RES( MF_HEIGHTZOOM)),
-    aSizeFL(        this, CUI_RES( FL_SIZE    )),
-    aWidthFT(       this, CUI_RES( FT_WIDTH   )),
-    aWidthMF(       this, CUI_RES( MF_WIDTH   )),
-    aHeightFT(      this, CUI_RES( FT_HEIGHT  )),
-    aHeightMF(      this, CUI_RES( MF_HEIGHT  )),
-    aOrigSizeFT(    this, CUI_RES(FT_ORIG_SIZE)),
-    aOrigSizePB(    this, CUI_RES( PB_ORGSIZE )),
-    aExampleWN(     this, CUI_RES( WN_BSP     )),
-    pLastCropField(0),
-    bInitialized(sal_False),
-    bSetOrigSize(sal_False)
+    : SfxTabPage(pParent, "CropPage", "cui/ui/croppage.ui", rSet)
+    , pLastCropField(0)
+    , bInitialized(false)
+    , bSetOrigSize(false)
 {
-    FreeResource();
+    get(m_pCropFrame, "cropframe");
+    get(m_pScaleFrame, "scaleframe");
+    get(m_pSizeFrame, "sizeframe");
+    get(m_pOrigSizeGrid, "origsizegrid");
+    get(m_pZoomConstRB, "keepscale");
+    get(m_pSizeConstRB, "keepsize");
+    get(m_pOrigSizeFT, "origsizeft");
+    get(m_pOrigSizePB, "origsize");
+    get(m_pLeftMF, "left");
+    get(m_pRightMF, "right");
+    get(m_pTopMF, "top");
+    get(m_pBottomMF, "bottom");
+    get(m_pWidthZoomMF, "widthzoom");
+    get(m_pHeightZoomMF, "heightzoom");
+    get(m_pWidthMF, "width");
+    get(m_pHeightMF, "height");
+    get(m_pExampleWN, "preview");
 
     SetExchangeSupport();
 
     // set the correct metric
     const FieldUnit eMetric = GetModuleFieldUnit( rSet );
 
-    SetFieldUnit( aWidthMF, eMetric );
-    SetFieldUnit( aHeightMF, eMetric );
-    SetFieldUnit( aLeftMF, eMetric );
-    SetFieldUnit( aRightMF, eMetric );
-    SetFieldUnit( aTopMF , eMetric );
-    SetFieldUnit( aBottomMF, eMetric );
+    SetFieldUnit( *m_pWidthMF, eMetric );
+    SetFieldUnit( *m_pHeightMF, eMetric );
+    SetFieldUnit( *m_pLeftMF, eMetric );
+    SetFieldUnit( *m_pRightMF, eMetric );
+    SetFieldUnit( *m_pTopMF , eMetric );
+    SetFieldUnit( *m_pBottomMF, eMetric );
 
     Link aLk = LINK(this, SvxGrfCropPage, SizeHdl);
-    aWidthMF.SetModifyHdl( aLk );
-    aHeightMF.SetModifyHdl( aLk );
+    m_pWidthMF->SetModifyHdl( aLk );
+    m_pHeightMF->SetModifyHdl( aLk );
 
     aLk = LINK(this, SvxGrfCropPage, ZoomHdl);
-    aWidthZoomMF.SetModifyHdl( aLk );
-    aHeightZoomMF.SetModifyHdl( aLk );
+    m_pWidthZoomMF->SetModifyHdl( aLk );
+    m_pHeightZoomMF->SetModifyHdl( aLk );
 
     aLk = LINK(this, SvxGrfCropPage, CropHdl);
-    aLeftMF.SetDownHdl( aLk );
-    aRightMF.SetDownHdl( aLk );
-    aTopMF.SetDownHdl( aLk );
-    aBottomMF.SetDownHdl( aLk );
-    aLeftMF.SetUpHdl( aLk );
-    aRightMF.SetUpHdl( aLk );
-    aTopMF.SetUpHdl( aLk );
-    aBottomMF.SetUpHdl( aLk );
+    m_pLeftMF->SetDownHdl( aLk );
+    m_pRightMF->SetDownHdl( aLk );
+    m_pTopMF->SetDownHdl( aLk );
+    m_pBottomMF->SetDownHdl( aLk );
+    m_pLeftMF->SetUpHdl( aLk );
+    m_pRightMF->SetUpHdl( aLk );
+    m_pTopMF->SetUpHdl( aLk );
+    m_pBottomMF->SetUpHdl( aLk );
 
     aLk = LINK(this, SvxGrfCropPage, CropModifyHdl);
-    aLeftMF.SetModifyHdl( aLk );
-    aRightMF.SetModifyHdl( aLk );
-    aTopMF.SetModifyHdl( aLk );
-    aBottomMF.SetModifyHdl( aLk );
+    m_pLeftMF->SetModifyHdl( aLk );
+    m_pRightMF->SetModifyHdl( aLk );
+    m_pTopMF->SetModifyHdl( aLk );
+    m_pBottomMF->SetModifyHdl( aLk );
 
     aLk = LINK(this, SvxGrfCropPage, CropLoseFocusHdl);
-    aLeftMF.SetLoseFocusHdl( aLk );
-    aRightMF.SetLoseFocusHdl( aLk );
-    aTopMF.SetLoseFocusHdl( aLk );
-    aBottomMF.SetLoseFocusHdl( aLk );
+    m_pLeftMF->SetLoseFocusHdl( aLk );
+    m_pRightMF->SetLoseFocusHdl( aLk );
+    m_pTopMF->SetLoseFocusHdl( aLk );
+    m_pBottomMF->SetLoseFocusHdl( aLk );
 
     aLk = LINK(this, SvxGrfCropPage, OrigSizeHdl);
-    aOrigSizePB.SetClickHdl( aLk );
+    m_pOrigSizePB->SetClickHdl( aLk );
 
     aTimer.SetTimeoutHdl(LINK(this, SvxGrfCropPage, Timeout));
     aTimer.SetTimeout( 1500 );
-
-    aOrigSizePB.SetAccessibleRelationLabeledBy( &aOrigSizeFT );
 }
 
 SvxGrfCropPage::~SvxGrfCropPage()
@@ -149,10 +139,10 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
                                     SID_ATTR_GRAF_KEEP_ZOOM ), sal_True, &pItem ))
     {
         if( ((const SfxBoolItem*)pItem)->GetValue() )
-            aZoomConstRB.Check();
+            m_pZoomConstRB->Check();
         else
-            aSizeConstRB.Check();
-        aZoomConstRB.SaveValue();
+            m_pSizeConstRB->Check();
+        m_pZoomConstRB->SaveValue();
     }
 
     sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
@@ -162,22 +152,22 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
 
         SvxGrfCrop* pCrop =  (SvxGrfCrop*)pItem;
 
-        aExampleWN.SetLeft(     pCrop->GetLeft());
-        aExampleWN.SetRight(    pCrop->GetRight());
-        aExampleWN.SetTop(      pCrop->GetTop());
-        aExampleWN.SetBottom(   pCrop->GetBottom());
+        m_pExampleWN->SetLeft(     pCrop->GetLeft());
+        m_pExampleWN->SetRight(    pCrop->GetRight());
+        m_pExampleWN->SetTop(      pCrop->GetTop());
+        m_pExampleWN->SetBottom(   pCrop->GetBottom());
 
-        aLeftMF.SetValue( aLeftMF.Normalize( pCrop->GetLeft()), eUnit );
-        aRightMF.SetValue( aRightMF.Normalize( pCrop->GetRight()), eUnit );
-        aTopMF.SetValue( aTopMF.Normalize( pCrop->GetTop()), eUnit );
-        aBottomMF.SetValue( aBottomMF.Normalize( pCrop->GetBottom()), eUnit );
+        m_pLeftMF->SetValue( m_pLeftMF->Normalize( pCrop->GetLeft()), eUnit );
+        m_pRightMF->SetValue( m_pRightMF->Normalize( pCrop->GetRight()), eUnit );
+        m_pTopMF->SetValue( m_pTopMF->Normalize( pCrop->GetTop()), eUnit );
+        m_pBottomMF->SetValue( m_pBottomMF->Normalize( pCrop->GetBottom()), eUnit );
     }
     else
     {
-        aLeftMF.SetValue( 0 );
-        aRightMF.SetValue( 0 );
-        aTopMF.SetValue( 0 );
-        aBottomMF.SetValue( 0 );
+        m_pLeftMF->SetValue( 0 );
+        m_pRightMF->SetValue( 0 );
+        m_pTopMF->SetValue( 0 );
+        m_pBottomMF->SetValue( 0 );
     }
 
     nW = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
@@ -188,13 +178,13 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
 
         aPageSize = ((const SvxSizeItem*)pItem)->GetSize();
 
-        sal_Int64 nTmp = aHeightMF.Normalize(aPageSize.Height());
-        aHeightMF.SetMax( nTmp, eUnit );
-        nTmp = aWidthMF.Normalize(aPageSize.Width());
-        aWidthMF.SetMax( nTmp, eUnit );
-        nTmp = aWidthMF.Normalize( 23 );
-        aHeightMF.SetMin( nTmp, eUnit );
-        aWidthMF.SetMin( nTmp, eUnit );
+        sal_Int64 nTmp = m_pHeightMF->Normalize(aPageSize.Height());
+        m_pHeightMF->SetMax( nTmp, eUnit );
+        nTmp = m_pWidthMF->Normalize(aPageSize.Width());
+        m_pWidthMF->SetMax( nTmp, eUnit );
+        nTmp = m_pWidthMF->Normalize( 23 );
+        m_pHeightMF->SetMin( nTmp, eUnit );
+        m_pWidthMF->SetMin( nTmp, eUnit );
     }
     else
     {
@@ -225,8 +215,8 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
         if( aOrigSize.Width() && aOrigSize.Height() )
         {
             CalcMinMaxBorder();
-            aExampleWN.SetGraphic( *pGrf );
-            aExampleWN.SetFrameSize( aOrigSize );
+            m_pExampleWN->SetGraphic( *pGrf );
+            m_pExampleWN->SetFrameSize( aOrigSize );
 
             bFound = sal_True;
             if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
@@ -244,8 +234,8 @@ sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 {
     const SfxItemPool& rPool = *rSet.GetPool();
     sal_Bool bModified = sal_False;
-    if( aWidthMF.GetSavedValue() != aWidthMF.GetText() ||
-        aHeightMF.GetSavedValue() != aHeightMF.GetText() )
+    if( m_pWidthMF->GetSavedValue() != m_pWidthMF->GetText() ||
+        m_pHeightMF->GetSavedValue() != m_pHeightMF->GetText() )
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_FRMSIZE );
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
@@ -263,13 +253,13 @@ sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
             aSz = (const SvxSizeItem&)GetItemSet().Get( nW );
 
         Size aTmpSz( aSz.GetSize() );
-        if( aWidthMF.GetText() != aWidthMF.GetSavedValue() )
-            aTmpSz.Width() = lcl_GetValue( aWidthMF, eUnit );
-        if( aHeightMF.GetText() != aHeightMF.GetSavedValue() )
-            aTmpSz.Height() = lcl_GetValue( aHeightMF, eUnit );
+        if( m_pWidthMF->GetText() != m_pWidthMF->GetSavedValue() )
+            aTmpSz.Width() = lcl_GetValue( *m_pWidthMF, eUnit );
+        if( m_pHeightMF->GetText() != m_pHeightMF->GetSavedValue() )
+            aTmpSz.Height() = lcl_GetValue( *m_pHeightMF, eUnit );
         aSz.SetSize( aTmpSz );
-        aWidthMF.SaveValue();
-        aHeightMF.SaveValue();
+        m_pWidthMF->SaveValue();
+        m_pHeightMF->SaveValue();
 
         bModified |= 0 != rSet.Put( aSz );
 
@@ -279,25 +269,25 @@ sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
                         SID_ATTR_GRAF_FRMSIZE_PERCENT ), Size( 0, 0 )) );
         }
     }
-    if( aLeftMF.IsModified() || aRightMF.IsModified() ||
-        aTopMF.IsModified()  || aBottomMF.IsModified() )
+    if( m_pLeftMF->IsModified() || m_pRightMF->IsModified() ||
+        m_pTopMF->IsModified()  || m_pBottomMF->IsModified() )
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
         SvxGrfCrop* pNew = (SvxGrfCrop*)rSet.Get( nW ).Clone();
 
-        pNew->SetLeft( lcl_GetValue( aLeftMF, eUnit ) );
-        pNew->SetRight( lcl_GetValue( aRightMF, eUnit ) );
-        pNew->SetTop( lcl_GetValue( aTopMF, eUnit ) );
-        pNew->SetBottom( lcl_GetValue( aBottomMF, eUnit ) );
+        pNew->SetLeft( lcl_GetValue( *m_pLeftMF, eUnit ) );
+        pNew->SetRight( lcl_GetValue( *m_pRightMF, eUnit ) );
+        pNew->SetTop( lcl_GetValue( *m_pTopMF, eUnit ) );
+        pNew->SetBottom( lcl_GetValue( *m_pBottomMF, eUnit ) );
         bModified |= 0 != rSet.Put( *pNew );
         delete pNew;
     }
 
-    if( aZoomConstRB.GetSavedValue() != aZoomConstRB.IsChecked() )
+    if( m_pZoomConstRB->GetSavedValue() != m_pZoomConstRB->IsChecked() )
     {
         bModified |= 0 != rSet.Put( SfxBoolItem( rPool.GetWhich(
-                    SID_ATTR_GRAF_KEEP_ZOOM), aZoomConstRB.IsChecked() ) );
+                    SID_ATTR_GRAF_KEEP_ZOOM), m_pZoomConstRB->IsChecked() ) );
     }
 
     bInitialized = sal_False;
@@ -323,34 +313,34 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     nOldWidth = aSize.Width();
     nOldHeight = aSize.Height();
 
-    sal_Int64 nWidth = aWidthMF.Normalize(nOldWidth);
-    sal_Int64 nHeight = aHeightMF.Normalize(nOldHeight);
+    sal_Int64 nWidth = m_pWidthMF->Normalize(nOldWidth);
+    sal_Int64 nHeight = m_pHeightMF->Normalize(nOldHeight);
 
-    if (nWidth != aWidthMF.GetValue(FUNIT_TWIP))
+    if (nWidth != m_pWidthMF->GetValue(FUNIT_TWIP))
     {
         if(!bReset)
         {
             // value was changed by wrap-tabpage and has to
             // be set with modify-flag
-            aWidthMF.SetUserValue(nWidth, FUNIT_TWIP);
+            m_pWidthMF->SetUserValue(nWidth, FUNIT_TWIP);
         }
         else
-            aWidthMF.SetValue(nWidth, FUNIT_TWIP);
+            m_pWidthMF->SetValue(nWidth, FUNIT_TWIP);
     }
-    aWidthMF.SaveValue();
+    m_pWidthMF->SaveValue();
 
-    if (nHeight != aHeightMF.GetValue(FUNIT_TWIP))
+    if (nHeight != m_pHeightMF->GetValue(FUNIT_TWIP))
     {
         if (!bReset)
         {
             // value was changed by wrap-tabpage and has to
             // be set with modify-flag
-            aHeightMF.SetUserValue(nHeight, FUNIT_TWIP);
+            m_pHeightMF->SetUserValue(nHeight, FUNIT_TWIP);
         }
         else
-            aHeightMF.SetValue(nHeight, FUNIT_TWIP);
+            m_pHeightMF->SetValue(nHeight, FUNIT_TWIP);
     }
-    aHeightMF.SaveValue();
+    m_pHeightMF->SaveValue();
     bInitialized = sal_True;
 
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
@@ -369,13 +359,13 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
         const Graphic* pGrf = rBrush.GetGraphic(referer);
         if( pGrf )
         {
-            aExampleWN.SetGraphic( *pGrf );
+            m_pExampleWN->SetGraphic( *pGrf );
             aOrigSize = GetGrfOrigSize( *pGrf );
             if (pGrf->GetType() == GRAPHIC_BITMAP && aOrigSize.Width() > 1 && aOrigSize.Height() > 1) {
                 Bitmap aBitmap = pGrf->GetBitmap();
                 aOrigPixelSize = aBitmap.GetSizePixel();
             }
-            aExampleWN.SetFrameSize(aOrigSize);
+            m_pExampleWN->SetFrameSize(aOrigSize);
             GraphicHasChanged( aOrigSize.Width() && aOrigSize.Height() );
             CalcMinMaxBorder();
         }
@@ -404,19 +394,19 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, MetricField *, pField )
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    if( pField == &aWidthZoomMF )
+    if( pField == m_pWidthZoomMF )
     {
-        long nLRBorders = lcl_GetValue(aLeftMF, eUnit)
-                         +lcl_GetValue(aRightMF, eUnit);
-        aWidthMF.SetValue( aWidthMF.Normalize(
+        long nLRBorders = lcl_GetValue(*m_pLeftMF, eUnit)
+                         +lcl_GetValue(*m_pRightMF, eUnit);
+        m_pWidthMF->SetValue( m_pWidthMF->Normalize(
             ((aOrigSize.Width() - nLRBorders) * pField->GetValue())/100L),
             eUnit);
     }
     else
     {
-        long nULBorders = lcl_GetValue(aTopMF, eUnit)
-                         +lcl_GetValue(aBottomMF, eUnit);
-        aHeightMF.SetValue( aHeightMF.Normalize(
+        long nULBorders = lcl_GetValue(*m_pTopMF, eUnit)
+                         +lcl_GetValue(*m_pBottomMF, eUnit);
+        m_pHeightMF->SetValue( m_pHeightMF->Normalize(
             ((aOrigSize.Height() - nULBorders ) * pField->GetValue())/100L) ,
             eUnit );
     }
@@ -435,28 +425,28 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, MetricField *, pField )
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    Size aSize( lcl_GetValue(aWidthMF, eUnit),
-                lcl_GetValue(aHeightMF, eUnit) );
+    Size aSize( lcl_GetValue(*m_pWidthMF, eUnit),
+                lcl_GetValue(*m_pHeightMF, eUnit) );
 
-    if(pField == &aWidthMF)
+    if(pField == m_pWidthMF)
     {
         long nWidth = aOrigSize.Width() -
-                ( lcl_GetValue(aLeftMF, eUnit) +
-                  lcl_GetValue(aRightMF, eUnit) );
+                ( lcl_GetValue(*m_pLeftMF, eUnit) +
+                  lcl_GetValue(*m_pRightMF, eUnit) );
         if(!nWidth)
             nWidth++;
         sal_uInt16 nZoom = (sal_uInt16)( aSize.Width() * 100L / nWidth);
-        aWidthZoomMF.SetValue(nZoom);
+        m_pWidthZoomMF->SetValue(nZoom);
     }
     else
     {
         long nHeight = aOrigSize.Height() -
-                ( lcl_GetValue(aTopMF, eUnit) +
-                  lcl_GetValue(aBottomMF, eUnit));
+                ( lcl_GetValue(*m_pTopMF, eUnit) +
+                  lcl_GetValue(*m_pBottomMF, eUnit));
         if(!nHeight)
             nHeight++;
         sal_uInt16 nZoom = (sal_uInt16)( aSize.Height() * 100L/ nHeight);
-        aHeightZoomMF.SetValue(nZoom);
+        m_pHeightZoomMF->SetValue(nZoom);
     }
 
     return 0;
@@ -473,66 +463,66 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    sal_Bool bZoom = aZoomConstRB.IsChecked();
-    if( pField == &aLeftMF || pField == &aRightMF )
+    sal_Bool bZoom = m_pZoomConstRB->IsChecked();
+    if( pField == m_pLeftMF || pField == m_pRightMF )
     {
-        long nLeft = lcl_GetValue( aLeftMF, eUnit );
-        long nRight = lcl_GetValue( aRightMF, eUnit );
-        long nWidthZoom = static_cast<long>(aWidthZoomMF.GetValue());
+        long nLeft = lcl_GetValue( *m_pLeftMF, eUnit );
+        long nRight = lcl_GetValue( *m_pRightMF, eUnit );
+        long nWidthZoom = static_cast<long>(m_pWidthZoomMF->GetValue());
         if(bZoom && ( ( ( aOrigSize.Width() - (nLeft + nRight )) * nWidthZoom )
                             / 100 >= aPageSize.Width() ) )
         {
-            if(pField == &aLeftMF)
+            if(pField == m_pLeftMF)
             {
                 nLeft = aOrigSize.Width() -
                             ( aPageSize.Width() * 100 / nWidthZoom + nRight );
-                aLeftMF.SetValue( aLeftMF.Normalize( nLeft ), eUnit );
+                m_pLeftMF->SetValue( m_pLeftMF->Normalize( nLeft ), eUnit );
             }
             else
             {
                 nRight = aOrigSize.Width() -
                             ( aPageSize.Width() * 100 / nWidthZoom + nLeft );
-                aRightMF.SetValue( aRightMF.Normalize( nRight ), eUnit );
+                m_pRightMF->SetValue( m_pRightMF->Normalize( nRight ), eUnit );
             }
         }
-        aExampleWN.SetLeft(nLeft);
-        aExampleWN.SetRight(nRight);
+        m_pExampleWN->SetLeft(nLeft);
+        m_pExampleWN->SetRight(nRight);
         if(bZoom)
         {
             // scale stays, recompute width
-            ZoomHdl(&aWidthZoomMF);
+            ZoomHdl(m_pWidthZoomMF);
         }
     }
     else
     {
-        long nTop = lcl_GetValue( aTopMF, eUnit );
-        long nBottom = lcl_GetValue( aBottomMF, eUnit );
-        long nHeightZoom = static_cast<long>(aHeightZoomMF.GetValue());
+        long nTop = lcl_GetValue( *m_pTopMF, eUnit );
+        long nBottom = lcl_GetValue( *m_pBottomMF, eUnit );
+        long nHeightZoom = static_cast<long>(m_pHeightZoomMF->GetValue());
         if(bZoom && ( ( ( aOrigSize.Height() - (nTop + nBottom )) * nHeightZoom)
                                             / 100 >= aPageSize.Height()))
         {
-            if(pField == &aTopMF)
+            if(pField == m_pTopMF)
             {
                 nTop = aOrigSize.Height() -
                             ( aPageSize.Height() * 100 / nHeightZoom + nBottom);
-                aTopMF.SetValue( aWidthMF.Normalize( nTop ), eUnit );
+                m_pTopMF->SetValue( m_pWidthMF->Normalize( nTop ), eUnit );
             }
             else
             {
                 nBottom = aOrigSize.Height() -
                             ( aPageSize.Height() * 100 / nHeightZoom + nTop);
-                aBottomMF.SetValue( aWidthMF.Normalize( nBottom ), eUnit );
+                m_pBottomMF->SetValue( m_pWidthMF->Normalize( nBottom ), eUnit );
             }
         }
-        aExampleWN.SetTop( nTop );
-        aExampleWN.SetBottom( nBottom );
+        m_pExampleWN->SetTop( nTop );
+        m_pExampleWN->SetBottom( nBottom );
         if(bZoom)
         {
             // scale stays, recompute height
-            ZoomHdl(&aHeightZoomMF);
+            ZoomHdl(m_pHeightZoomMF);
         }
     }
-    aExampleWN.Invalidate();
+    m_pExampleWN->Invalidate();
     // size and border changed -> recompute scale
     if(!bZoom)
         CalcZoom();
@@ -551,15 +541,15 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl)
                                                     SID_ATTR_GRAF_CROP ) ) );
 
     long nWidth = aOrigSize.Width() -
-        lcl_GetValue( aLeftMF, eUnit ) -
-        lcl_GetValue( aRightMF, eUnit );
-    aWidthMF.SetValue( aWidthMF.Normalize( nWidth ), eUnit );
+        lcl_GetValue( *m_pLeftMF, eUnit ) -
+        lcl_GetValue( *m_pRightMF, eUnit );
+    m_pWidthMF->SetValue( m_pWidthMF->Normalize( nWidth ), eUnit );
     long nHeight = aOrigSize.Height() -
-        lcl_GetValue( aTopMF, eUnit ) -
-        lcl_GetValue( aBottomMF, eUnit );
-    aHeightMF.SetValue( aHeightMF.Normalize( nHeight ), eUnit );
-    aWidthZoomMF.SetValue(100);
-    aHeightZoomMF.SetValue(100);
+        lcl_GetValue( *m_pTopMF, eUnit ) -
+        lcl_GetValue( *m_pBottomMF, eUnit );
+    m_pHeightMF->SetValue( m_pHeightMF->Normalize( nHeight ), eUnit );
+    m_pWidthZoomMF->SetValue(100);
+    m_pHeightZoomMF->SetValue(100);
     bSetOrigSize = sal_True;
     return 0;
 }
@@ -574,22 +564,22 @@ void SvxGrfCropPage::CalcZoom()
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    long nWidth = lcl_GetValue( aWidthMF, eUnit );
-    long nHeight = lcl_GetValue( aHeightMF, eUnit );
-    long nLRBorders = lcl_GetValue( aLeftMF, eUnit ) +
-                      lcl_GetValue( aRightMF, eUnit );
-    long nULBorders = lcl_GetValue( aTopMF, eUnit ) +
-                      lcl_GetValue( aBottomMF, eUnit );
+    long nWidth = lcl_GetValue( *m_pWidthMF, eUnit );
+    long nHeight = lcl_GetValue( *m_pHeightMF, eUnit );
+    long nLRBorders = lcl_GetValue( *m_pLeftMF, eUnit ) +
+                      lcl_GetValue( *m_pRightMF, eUnit );
+    long nULBorders = lcl_GetValue( *m_pTopMF, eUnit ) +
+                      lcl_GetValue( *m_pBottomMF, eUnit );
     sal_uInt16 nZoom = 0;
     long nDen;
     if( (nDen = aOrigSize.Width() - nLRBorders) > 0)
         nZoom = (sal_uInt16)((( nWidth  * 1000L / nDen )+5)/10);
-    aWidthZoomMF.SetValue(nZoom);
+    m_pWidthZoomMF->SetValue(nZoom);
     if( (nDen = aOrigSize.Height() - nULBorders) > 0)
         nZoom = (sal_uInt16)((( nHeight * 1000L / nDen )+5)/10);
     else
         nZoom = 0;
-    aHeightZoomMF.SetValue(nZoom);
+    m_pHeightZoomMF->SetValue(nZoom);
 }
 
 /*--------------------------------------------------------------------
@@ -602,23 +592,23 @@ void SvxGrfCropPage::CalcMinMaxBorder()
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
-    long nR = lcl_GetValue(aRightMF, eUnit );
+    long nR = lcl_GetValue(*m_pRightMF, eUnit );
     long nMinWidth = (aOrigSize.Width() * 10) /11;
     long nMin = nMinWidth - (nR >= 0 ? nR : 0);
-    aLeftMF.SetMax( aLeftMF.Normalize(nMin), eUnit );
+    m_pLeftMF->SetMax( m_pLeftMF->Normalize(nMin), eUnit );
 
-    long nL = lcl_GetValue(aLeftMF, eUnit );
+    long nL = lcl_GetValue(*m_pLeftMF, eUnit );
     nMin = nMinWidth - (nL >= 0 ? nL : 0);
-    aRightMF.SetMax( aRightMF.Normalize(nMin), eUnit );
+    m_pRightMF->SetMax( m_pRightMF->Normalize(nMin), eUnit );
 
-    long nUp  = lcl_GetValue( aTopMF, eUnit );
+    long nUp  = lcl_GetValue( *m_pTopMF, eUnit );
     long nMinHeight = (aOrigSize.Height() * 10) /11;
     nMin = nMinHeight - (nUp >= 0 ? nUp : 0);
-    aBottomMF.SetMax( aBottomMF.Normalize(nMin), eUnit );
+    m_pBottomMF->SetMax( m_pBottomMF->Normalize(nMin), eUnit );
 
-    long nLow = lcl_GetValue(aBottomMF, eUnit );
+    long nLow = lcl_GetValue(*m_pBottomMF, eUnit );
     nMin = nMinHeight - (nLow >= 0 ? nLow : 0);
-    aTopMF.SetMax( aTopMF.Normalize(nMin), eUnit );
+    m_pTopMF->SetMax( m_pTopMF->Normalize(nMin), eUnit );
 }
 /*--------------------------------------------------------------------
     description:   set spinsize to 1/20 of the original size,
@@ -634,46 +624,46 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ));
 
-        sal_Int64 nSpin = aLeftMF.Normalize(aOrigSize.Width()) / 20;
+        sal_Int64 nSpin = m_pLeftMF->Normalize(aOrigSize.Width()) / 20;
         nSpin = MetricField::ConvertValue( nSpin, aOrigSize.Width(), 0,
-                                               eUnit, aLeftMF.GetUnit());
+                                               eUnit, m_pLeftMF->GetUnit());
 
         // if the margin is too big, it is set to 1/3 on both pages
-        long nR = lcl_GetValue( aRightMF, eUnit );
-        long nL = lcl_GetValue( aLeftMF, eUnit );
+        long nR = lcl_GetValue( *m_pRightMF, eUnit );
+        long nL = lcl_GetValue( *m_pLeftMF, eUnit );
         if((nL + nR) < - aOrigSize.Width())
         {
             long nVal = aOrigSize.Width() / -3;
-            aRightMF.SetValue( aRightMF.Normalize( nVal ), eUnit );
-            aLeftMF.SetValue( aLeftMF.Normalize( nVal ), eUnit );
-            aExampleWN.SetLeft(nVal);
-            aExampleWN.SetRight(nVal);
+            m_pRightMF->SetValue( m_pRightMF->Normalize( nVal ), eUnit );
+            m_pLeftMF->SetValue( m_pLeftMF->Normalize( nVal ), eUnit );
+            m_pExampleWN->SetLeft(nVal);
+            m_pExampleWN->SetRight(nVal);
         }
-        long nUp  = lcl_GetValue(aTopMF, eUnit );
-        long nLow = lcl_GetValue(aBottomMF, eUnit );
+        long nUp  = lcl_GetValue(*m_pTopMF, eUnit );
+        long nLow = lcl_GetValue(*m_pBottomMF, eUnit );
         if((nUp + nLow) < - aOrigSize.Height())
         {
             long nVal = aOrigSize.Height() / -3;
-            aTopMF.SetValue( aTopMF.Normalize( nVal ), eUnit );
-            aBottomMF.SetValue( aBottomMF.Normalize( nVal ), eUnit );
-            aExampleWN.SetTop(nVal);
-            aExampleWN.SetBottom(nVal);
+            m_pTopMF->SetValue( m_pTopMF->Normalize( nVal ), eUnit );
+            m_pBottomMF->SetValue( m_pBottomMF->Normalize( nVal ), eUnit );
+            m_pExampleWN->SetTop(nVal);
+            m_pExampleWN->SetBottom(nVal);
         }
 
-        aLeftMF.SetSpinSize(nSpin);
-        aRightMF.SetSpinSize(nSpin);
-        nSpin = aTopMF.Normalize(aOrigSize.Height()) / 20;
+        m_pLeftMF->SetSpinSize(nSpin);
+        m_pRightMF->SetSpinSize(nSpin);
+        nSpin = m_pTopMF->Normalize(aOrigSize.Height()) / 20;
         nSpin = MetricField::ConvertValue( nSpin, aOrigSize.Width(), 0,
-                                               eUnit, aLeftMF.GetUnit() );
-        aTopMF.SetSpinSize(nSpin);
-        aBottomMF.SetSpinSize(nSpin);
+                                               eUnit, m_pLeftMF->GetUnit() );
+        m_pTopMF->SetSpinSize(nSpin);
+        m_pBottomMF->SetSpinSize(nSpin);
 
         // display original size
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
         MetricField aFld(this, WB_HIDE);
         SetFieldUnit( aFld, eMetric );
-        aFld.SetDecimalDigits( aWidthMF.GetDecimalDigits() );
+        aFld.SetDecimalDigits( m_pWidthMF->GetDecimalDigits() );
         aFld.SetMax( LONG_MAX - 1 );
 
         aFld.SetValue( aFld.Normalize( aOrigSize.Width() ), eUnit );
@@ -689,7 +679,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
              sal_Int32 ay = sal_Int32(floor((float)aOrigPixelSize.Height() /
                         ((float)aOrigSize.Height()/TWIP_TO_INCH)+0.5));
              sTemp += " ";
-             sTemp += CUI_RESSTR( STR_PPI );
+             sTemp += CUI_RESSTR( RID_SVXSTR_PPI );
              OUString sPPI = OUString::number(ax);
              if (abs(ax - ay) > 1) {
                 sPPI += OUString( sal_Unicode (0x00D7) );
@@ -697,29 +687,14 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
              }
              sTemp = sTemp.replaceAll("%1", sPPI);
         }
-        aOrigSizeFT.SetText( sTemp );
+        m_pOrigSizeFT->SetText( sTemp );
     }
-    aLeftFT         .Enable(bFound);
-    aLeftMF         .Enable(bFound);
-    aRightFT        .Enable(bFound);
-    aRightMF        .Enable(bFound);
-    aTopFT          .Enable(bFound);
-    aTopMF          .Enable(bFound);
-    aBottomFT       .Enable(bFound);
-    aBottomMF       .Enable(bFound);
-    aSizeConstRB    .Enable(bFound);
-    aZoomConstRB    .Enable(bFound);
-    aWidthFT        .Enable(bFound);
-    aWidthMF        .Enable(bFound);
-    aHeightFT       .Enable(bFound);
-    aHeightMF       .Enable(bFound);
-    aWidthZoomFT    .Enable(bFound);
-    aWidthZoomMF    .Enable(bFound);
-    aHeightZoomFT   .Enable(bFound);
-    aHeightZoomMF   .Enable(bFound);
-    aExampleWN      .Enable(bFound);
-    aOrigSizePB     .Enable(bFound);
-    aOrigSizeFT     .Enable(bFound);
+
+    m_pCropFrame->Enable(bFound);
+    m_pScaleFrame->Enable(bFound);
+    m_pSizeFrame->Enable(bFound);
+    m_pOrigSizeGrid->Enable(bFound);
+    m_pZoomConstRB->Enable(bFound);
 }
 
 IMPL_LINK_NOARG(SvxGrfCropPage, Timeout)
@@ -761,18 +736,32 @@ Size SvxGrfCropPage::GetGrfOrigSize( const Graphic& rGrf ) const
 
 /*****************************************************************/
 
-SvxGrfCropPage::SvxCropExample::SvxCropExample( Window* pPar,
-                                                const ResId& rResId )
-    : Window( pPar, rResId ),
-    aFrameSize( OutputDevice::LogicToLogic(
+SvxCropExample::SvxCropExample( Window* pPar, WinBits nStyle )
+    : Window( pPar, nStyle)
+    , aFrameSize( OutputDevice::LogicToLogic(
                             Size( CM_1_TO_TWIP / 2, CM_1_TO_TWIP / 2 ),
-                            MapMode( MAP_TWIP ), GetMapMode() )),
-    aTopLeft(0,0), aBottomRight(0,0)
+                            MapMode( MAP_TWIP ), GetMapMode() ))
+    , aTopLeft(0,0)
+    , aBottomRight(0,0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
-void SvxGrfCropPage::SvxCropExample::Paint( const Rectangle& )
+Size SvxCropExample::GetOptimalSize() const
+{
+    return LogicToPixel(Size(78, 78), MAP_APPFONT);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxCropExample(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SvxCropExample(pParent, nWinStyle);
+}
+
+void SvxCropExample::Paint( const Rectangle& )
 {
     Size aWinSize( PixelToLogic(GetOutputSizePixel() ));
     SetLineColor();
@@ -797,7 +786,7 @@ void SvxGrfCropPage::SvxCropExample::Paint( const Rectangle& )
     DrawRect( aRect );
 }
 
-void SvxGrfCropPage::SvxCropExample::SetFrameSize( const Size& rSz )
+void SvxCropExample::SetFrameSize( const Size& rSz )
 {
     aFrameSize = rSz;
     if(!aFrameSize.Width())

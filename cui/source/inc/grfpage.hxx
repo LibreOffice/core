@@ -26,6 +26,28 @@
 #include <vcl/graph.hxx>
 #include <sfx2/tabdlg.hxx>
 
+class SvxCropExample : public Window
+{
+    Size        aFrameSize;
+    Point       aTopLeft, aBottomRight;
+    Graphic     aGrf;
+
+public:
+    SvxCropExample( Window* pPar, WinBits nStyle );
+
+    virtual void Paint( const Rectangle& rRect );
+    virtual Size GetOptimalSize() const;
+
+    void SetTopLeft( const Point& rNew )    { aTopLeft = rNew; }
+    void SetTop( long nVal )                { aTopLeft.X() = nVal; }
+    void SetBottom( long nVal )             { aBottomRight.X() = nVal; }
+    void SetLeft( long nVal )               { aTopLeft.Y() = nVal; }
+    void SetRight( long nVal)               { aBottomRight.Y() = nVal; }
+    void SetBottomRight(const Point& rNew ) { aBottomRight = rNew; }
+    void SetFrameSize( const Size& rSz );
+    void SetGraphic( const Graphic& rGrf )  { aGrf = rGrf; }
+    const Graphic& GetGraphic() const       { return aGrf; }
+};
 
 class SvxGrfCropPage : public SfxTabPage
 {
@@ -33,56 +55,28 @@ class SvxGrfCropPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    class SvxCropExample : public Window
-    {
-        Size        aFrameSize;
-        Point       aTopLeft, aBottomRight;
-        Graphic     aGrf;
+    VclContainer*   m_pCropFrame;
+    RadioButton*    m_pZoomConstRB;
+    RadioButton*    m_pSizeConstRB;
+    MetricField*    m_pLeftMF;
+    MetricField*    m_pRightMF;
+    MetricField*    m_pTopMF;
+    MetricField*    m_pBottomMF;
 
-    public:
-        SvxCropExample( Window* pPar, const ResId& rResId );
+    VclContainer*   m_pScaleFrame;
+    MetricField*    m_pWidthZoomMF;
+    MetricField*    m_pHeightZoomMF;
 
-        virtual void Paint( const Rectangle& rRect );
+    VclContainer*   m_pSizeFrame;
+    MetricField*    m_pWidthMF;
+    MetricField*    m_pHeightMF;
 
-        void SetTopLeft( const Point& rNew )    { aTopLeft = rNew; }
-        void SetTop( long nVal )                { aTopLeft.X() = nVal; }
-        void SetBottom( long nVal )             { aBottomRight.X() = nVal; }
-        void SetLeft( long nVal )               { aTopLeft.Y() = nVal; }
-        void SetRight( long nVal)               { aBottomRight.Y() = nVal; }
-        void SetBottomRight(const Point& rNew ) { aBottomRight = rNew; }
-        void SetFrameSize( const Size& rSz );
-        void SetGraphic( const Graphic& rGrf )  { aGrf = rGrf; }
-        const Graphic& GetGraphic() const       { return aGrf; }
-    };
-
-    FixedLine       aCropFL;
-    RadioButton     aZoomConstRB;
-    RadioButton     aSizeConstRB;
-    FixedText       aLeftFT;
-    MetricField     aLeftMF;
-    FixedText       aRightFT;
-    MetricField     aRightMF;
-    FixedText       aTopFT;
-    MetricField     aTopMF;
-    FixedText       aBottomFT;
-    MetricField     aBottomMF;
-
-    FixedLine       aZoomFL;
-    FixedText       aWidthZoomFT;
-    MetricField     aWidthZoomMF;
-    FixedText       aHeightZoomFT;
-    MetricField     aHeightZoomMF;
-
-    FixedLine       aSizeFL;
-    FixedText       aWidthFT;
-    MetricField     aWidthMF;
-    FixedText       aHeightFT;
-    MetricField     aHeightMF;
-    FixedText       aOrigSizeFT;
-    PushButton      aOrigSizePB;
+    VclContainer*   m_pOrigSizeGrid;
+    FixedText*      m_pOrigSizeFT;
+    PushButton*     m_pOrigSizePB;
 
     // Example
-    SvxCropExample  aExampleWN;
+    SvxCropExample* m_pExampleWN;
 
 
     Timer           aTimer;
