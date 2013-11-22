@@ -21203,20 +21203,6 @@
         <!--Class BKD-->
         <!--Class SED-->
         <UML:Class xmi.id="SED" name="SED">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="needsdocument"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>12</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="size"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
           <UML:Classifier.feature>
             <UML:Attribute name="fn">
               <UML:ModelElement.taggedValue>
@@ -21476,14 +21462,6 @@
             </UML:Operation>
           </UML:Classifier.feature>
         </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="SED-Properties">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="SED"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Properties"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
         <!--Class SED-->
         <!--Class SHD-->
         <UML:Class xmi.id="SHD" name="SHD">
