@@ -242,6 +242,7 @@ public:
     void testStatisticalFormulaCovar();
     void testLogicalFormulaAnd();
     void testMathFormulaSumProduct();
+    void testStatisticalParallelCountBug();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -415,6 +416,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaCovar);
     CPPUNIT_TEST(testLogicalFormulaAnd);
     CPPUNIT_TEST(testMathFormulaSumProduct);
+    CPPUNIT_TEST(testStatisticalParallelCountBug);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4818,6 +4820,32 @@ void ScOpenclTest:: testLogicalFormulaAnd()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+
+//[AMLOEXT-243]
+void ScOpenclTest:: testStatisticalParallelCountBug()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh =
+        loadDoc("opencl/statistical/parallel_count_bug_243.", ODS);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes =
+        loadDoc("opencl/statistical/parallel_count_bug_243.", ODS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i < 13; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
 {
