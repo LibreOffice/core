@@ -142,15 +142,9 @@ Module gid_Module_Root_Files_4
 	auto_ooobinarytable_ALL,
 	gid_File_Lib_Bib,
 	gid_File_Lib_J,
-	gid_File_Lib_Oox,
-	gid_File_Lib_Spa,
 	gid_File_Lib_Sysdtrans,
 	gid_File_Lib_BaseBmp,
-	gid_File_Lib_Zip,
-	gid_File_Lib_Vclplug_Tde,
-	gid_File_Lib_Vclplug_Kde,
-	gid_File_Lib_Vclplug_Kde4,
-	gid_File_Lib_Vclplug_Svp);
+	gid_File_Lib_Zip);
 End
 
 Module gid_Module_Root_Files_5
