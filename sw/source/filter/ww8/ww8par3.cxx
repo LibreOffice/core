@@ -847,10 +847,8 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         if (nUpperLevel)
         {
             sal_uInt8 nOneBasedNextNoIndex = aOfsNumsXCH[nUpperLevel-1];
-            sal_Int32 nNextNoIndex =
-                nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex -1 : SAL_MAX_INT32;
-            if (nNextNoIndex != SAL_MAX_INT32)
-                ++nNextNoIndex;
+            const sal_Int32 nNextNoIndex =
+                nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex : SAL_MAX_INT32;
             if (sNumString.getLength() > nNextNoIndex)
                 lcl_CopyGreaterEight(sPostfix, sNumString, nNextNoIndex);
         }
