@@ -393,35 +393,35 @@ void lcl_fillCategoriesIntoStringVector(
 sal_Int32 lcl_getChartType( const OUString& sChartType )
 {
     chart::TypeId eChartTypeId = chart::TYPEID_UNKNOWN;
-    if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.BarDiagram" ))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.ColumnChartType" )))
+    if( sChartType == "com.sun.star.chart.BarDiagram"
+        || sChartType == "com.sun.star.chart2.ColumnChartType" )
         eChartTypeId = chart::TYPEID_BAR;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.AreaDiagram" ))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.AreaChartType" ) ) )
+    else if( sChartType == "com.sun.star.chart.AreaDiagram"
+             || sChartType == "com.sun.star.chart2.AreaChartType" )
         eChartTypeId = chart::TYPEID_AREA;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.LineDiagram" ))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.LineChartType" ) ) )
+    else if( sChartType == "com.sun.star.chart.LineDiagram"
+             || sChartType == "com.sun.star.chart2.LineChartType" )
         eChartTypeId = chart::TYPEID_LINE;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.PieDiagram" ))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.PieChartType") ) )
+    else if( sChartType == "com.sun.star.chart.PieDiagram"
+             || sChartType == "com.sun.star.chart2.PieChartType" )
         eChartTypeId = chart::TYPEID_PIE;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.DonutDiagram"))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.DonutChartType") ) )
+    else if( sChartType == "com.sun.star.chart.DonutDiagram"
+             || sChartType == "com.sun.star.chart2.DonutChartType" )
         eChartTypeId = chart::TYPEID_DOUGHNUT;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.XYDiagram"))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.ScatterChartType") ) )
+    else if( sChartType == "com.sun.star.chart.XYDiagram"
+             || sChartType == "com.sun.star.chart2.ScatterChartType" )
         eChartTypeId = chart::TYPEID_SCATTER;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.NetDiagram"))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.NetChartType") ) )
+    else if( sChartType == "com.sun.star.chart.NetDiagram"
+             || sChartType == "com.sun.star.chart2.NetChartType" )
         eChartTypeId = chart::TYPEID_RADARLINE;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.FilledNetDiagram"))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.FilledNetChartType") ) )
+    else if( sChartType == "com.sun.star.chart.FilledNetDiagram"
+             || sChartType == "com.sun.star.chart2.FilledNetChartType" )
         eChartTypeId = chart::TYPEID_RADARAREA;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.StockDiagram"))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.CandleStickChartType") ) )
+    else if( sChartType == "com.sun.star.chart.StockDiagram"
+             || sChartType == "com.sun.star.chart2.CandleStickChartType" )
         eChartTypeId = chart::TYPEID_STOCK;
-    else if(( 0 == sChartType.reverseCompareTo( "com.sun.star.chart.BubbleDiagram"))
-        || ( 0 == sChartType.reverseCompareTo( "com.sun.star.chart2.BubbleChartType") ) )
+    else if( sChartType == "com.sun.star.chart.BubbleDiagram"
+             || sChartType == "com.sun.star.chart2.BubbleChartType" )
         eChartTypeId = chart::TYPEID_BUBBLE;
 
     return eChartTypeId;

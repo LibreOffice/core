@@ -226,13 +226,13 @@ SvxSimpleUnoModel::~SvxSimpleUnoModel()
 uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( const OUString& aServiceSpecifier )
     throw(uno::Exception, uno::RuntimeException)
 {
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.text.NumberingRules" ) )
+    if( aServiceSpecifier == "com.sun.star.text.NumberingRules" )
     {
         return uno::Reference< uno::XInterface >(
             SvxCreateNumRule(), uno::UNO_QUERY );
     }
-    if (   (0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.text.textfield.DateTime" ))
-        || (0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.text.TextField.DateTime" ))
+    if (   aServiceSpecifier == "com.sun.star.text.textfield.DateTime"
+        || aServiceSpecifier == "com.sun.star.text.TextField.DateTime"
        )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::DATE );

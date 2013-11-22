@@ -407,15 +407,15 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
 
         if( !sFieldName.isEmpty() )
         {
-            if( sFieldName.reverseCompareTo( "Header" ) == 0 )
+            if( sFieldName == "Header" )
             {
                 return FIELD_ID_DRAW_HEADER;
             }
-            else if( sFieldName.reverseCompareTo( "Footer" ) == 0 )
+            else if( sFieldName == "Footer" )
             {
                 return FIELD_ID_DRAW_FOOTER;
             }
-            else if( sFieldName.reverseCompareTo( "DateTime" ) == 0 )
+            else if( sFieldName == "DateTime" )
             {
                 return FIELD_ID_DRAW_DATE_TIME;
             }

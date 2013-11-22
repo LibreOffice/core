@@ -286,7 +286,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mbSymbolSizeIsMissingInFile(false),
         maChartSize( rChartSize )
 {
-    if( 0 == aGlobalChartTypeName.reverseCompareTo( "com.sun.star.chart2.DonutChartType" ) )
+    if( aGlobalChartTypeName == "com.sun.star.chart2.DonutChartType" )
     {
         maSeriesChartTypeName = "com.sun.star.chart2.PieChartType";
         maGlobalChartTypeName = maSeriesChartTypeName;

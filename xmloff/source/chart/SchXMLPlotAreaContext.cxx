@@ -585,7 +585,7 @@ void SchXMLPlotAreaContext::EndElement()
         }
 
         // #i32366# stock has volume
-        if( ( 0 == mxDiagram->getDiagramType().reverseCompareTo("com.sun.star.chart.StockDiagram" )) &&
+        if( mxDiagram->getDiagramType() == "com.sun.star.chart.StockDiagram" &&
             mbStockHasVolume )
         {
             try

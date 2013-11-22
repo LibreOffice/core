@@ -367,43 +367,43 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 {
     ::SolarMutexGuard aGuard;
 
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.DashTable" ) )
+    if( aServiceSpecifier == "com.sun.star.drawing.DashTable" )
     {
         if( !mxDashTable.is() )
             mxDashTable = SvxUnoDashTable_createInstance( mpDoc );
         return mxDashTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.GradientTable" ) )
+    if( aServiceSpecifier == "com.sun.star.drawing.GradientTable" )
     {
         if( !mxGradientTable.is() )
             mxGradientTable = SvxUnoGradientTable_createInstance( mpDoc );
         return mxGradientTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.HatchTable" ) )
+    if( aServiceSpecifier == "com.sun.star.drawing.HatchTable" )
     {
         if( !mxHatchTable.is() )
             mxHatchTable = SvxUnoHatchTable_createInstance( mpDoc );
         return mxHatchTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.BitmapTable" ) )
+    if( aServiceSpecifier == "com.sun.star.drawing.BitmapTable" )
     {
         if( !mxBitmapTable.is() )
             mxBitmapTable = SvxUnoBitmapTable_createInstance( mpDoc );
         return mxBitmapTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.TransparencyGradientTable" ) )
+    if( aServiceSpecifier == "com.sun.star.drawing.TransparencyGradientTable" )
     {
         if( !mxTransGradientTable.is() )
             mxTransGradientTable = SvxUnoTransGradientTable_createInstance( mpDoc );
         return mxTransGradientTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.MarkerTable" ) )
+    if( aServiceSpecifier == "com.sun.star.drawing.MarkerTable" )
     {
         if( !mxMarkerTable.is() )
             mxMarkerTable = SvxUnoMarkerTable_createInstance( mpDoc );
         return mxMarkerTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.text.NumberingRules" ) )
+    if( aServiceSpecifier == "com.sun.star.text.NumberingRules" )
     {
         return uno::Reference< uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
     }
@@ -423,7 +423,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         return SvUnoImageMapPolygonObject_createInstance( ImplGetSupportedMacroItems() );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.text.TextField.DateTime" ) )
+    if( aServiceSpecifier == "com.sun.star.text.TextField.DateTime" )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField(text::textfield::Type::DATE);
     }

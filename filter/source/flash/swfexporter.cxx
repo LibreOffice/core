@@ -545,12 +545,12 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
             if( bMaster )
             {
                 OUString aShapeType( xShape->getShapeType() );
-                if( (0 == aShapeType.reverseCompareTo( "com.sun.star.presentation.TitleTextShape" )) ||
-                    (0 == aShapeType.reverseCompareTo( "com.sun.star.presentation.OutlinerShape" )) ||
-                    (0 == aShapeType.reverseCompareTo( "com.sun.star.presentation.HeaderShape" )) ||
-                    (0 == aShapeType.reverseCompareTo( "com.sun.star.presentation.FooterShape" )) ||
-                    (0 == aShapeType.reverseCompareTo( "com.sun.star.presentation.SlideNumberShape" )) ||
-                    (0 == aShapeType.reverseCompareTo( "com.sun.star.presentation.DateTimeShape" )))
+                if( aShapeType == "com.sun.star.presentation.TitleTextShape" ||
+                    aShapeType == "com.sun.star.presentation.OutlinerShape"  ||
+                    aShapeType == "com.sun.star.presentation.HeaderShape"    ||
+                    aShapeType == "com.sun.star.presentation.FooterShape"    ||
+                    aShapeType == "com.sun.star.presentation.SlideNumberShape"  ||
+                    aShapeType == "com.sun.star.presentation.DateTimeShape" )
                     return;
             }
         }
