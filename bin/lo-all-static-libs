@@ -18,7 +18,7 @@ if test "$OS" != ANDROID -a "$OS" != IOS; then
 fi
 
 foolibs=
-for var in EBOOK_LIBS FREEHAND_LIBS HUNSPELL_LIBS HYPHEN_LIB MYTHES_LIBS; do
+for var in EBOOK_LIBS FREEHAND_LIBS HARFBUZZ_LIBS HUNSPELL_LIBS HYPHEN_LIB MYTHES_LIBS; do
     dirs=
     libs=
     for i in `eval echo '$'$var`; do
@@ -34,9 +34,17 @@ for var in EBOOK_LIBS FREEHAND_LIBS HUNSPELL_LIBS HYPHEN_LIB MYTHES_LIBS; do
     done
 done
 
+androidlibs=
+if test "$OS" = ANDROID; then
+    androidlibs="$WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
+    androidlibs="$androidlibs $WORKDIR/UnpackedTarball/fontconfig/src/.libs/libfontconfig.a"
+    androidlibs="$androidlibs $WORKDIR/UnpackedTarball/freetype/src/.libs/libfreetype.a"
+fi
+
 echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
+     $androidlibs \
      $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libcdr/src/lib/.libs/*.a \
