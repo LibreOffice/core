@@ -1190,7 +1190,7 @@ namespace accessibility
             SvLBoxEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
             if ( pEntry )
             {
-                sal_Int32 nValue, nValueMin, nValueMax;
+                sal_Int32 nValue(0), nValueMin(0), nValueMax(0);
                 aNumber >>= nValue;
                 getMinimumValue() >>= nValueMin;
                 getMaximumValue() >>= nValueMax;
