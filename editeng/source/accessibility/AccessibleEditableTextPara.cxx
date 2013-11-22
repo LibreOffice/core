@@ -1782,7 +1782,7 @@ namespace accessibility
         return OCommonAccessibleText::getTextRange(nStartIndex, nEndIndex);
     }
 //IAccessibility2 Implementation 2009-----
-    void AccessibleEditableTextPara::_correctValues( const sal_Int32 nIndex,
+    void AccessibleEditableTextPara::_correctValues( const sal_Int32 /* nIndex */,
                                            uno::Sequence< PropertyValue >& rValues)
     {
         SvxTextForwarder& rCacheTF = GetTextForwarder();
