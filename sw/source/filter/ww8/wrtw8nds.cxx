@@ -526,11 +526,9 @@ void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 
         if ( nPos != nSwPos )
             break;
-        else
-        {
-            m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
-            ++maFlyIter;
-        }
+
+        m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
+        ++maFlyIter;
     }
 }
 
