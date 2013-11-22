@@ -2419,18 +2419,6 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
 
 }
 
-class AttribHere : public std::unary_function<const xub_StrLen*, bool>
-{
-private:
-    xub_StrLen nPosition;
-public:
-    AttribHere(xub_StrLen nPos) : nPosition(nPos) {}
-    bool operator()(const xub_StrLen *pPosition) const
-    {
-        return (*pPosition >= nPosition);
-    }
-};
-
 void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
 {
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
