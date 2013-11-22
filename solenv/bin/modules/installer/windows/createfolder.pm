@@ -76,16 +76,24 @@ sub get_createfolder_component
     # Therefore they can only belong to the root module and
     # will be added to a component at the root module.
     # All directories will be added to the component
-    # containing the file $allvariableshashref->{'GLOBALFILEGID'}
+    # $allvariableshashref->{'ROOTMODULEGID'}
 
-    if ( ! $allvariableshashref->{'GLOBALFILEGID'} ) { installer::exiter::exit_program("ERROR: GLOBALFILEGID must be defined in list file!", "get_createfolder_component"); }
+    if ( ! $allvariableshashref->{'ROOTMODULEGID'} ) { installer::exiter::exit_program("ERROR: ROOTMODULEGID must be defined in list file!", "get_createfolder_component"); }
 
-    my $globalfilegid = $allvariableshashref->{'GLOBALFILEGID'};
+    my $rootmodulegid = $allvariableshashref->{'ROOTMODULEGID'};
 
     my $onefile;
     if ( $installer::globals::languagepack ) { $onefile = get_languagepack_file($filesref, $onedir); }
     elsif ( $installer::globals::helppack ) { ($onefile) = grep {$_->{gid} eq 'gid_File_Help_Common_Zip'} @{$filesref} }
-    else { ($onefile) = grep {$_->{gid} eq $globalfilegid} @{$filesref} }
+    else {
+        foreach my $file (@{$filesref}) {
+            if ($file->{'modules'} eq $rootmodulegid)
+            {
+                $onefile = $file;
+                break;
+            }
+        }
+    }
 
     if (! defined $onefile) {
         installer::exiter::exit_program("ERROR: Could not find file!", "get_createfolder_component");

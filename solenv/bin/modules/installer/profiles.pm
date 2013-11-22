@@ -75,17 +75,24 @@ sub add_profile_into_filelist
 
     my %profile = ();
 
-    # Taking the base data from the "gid_File_Lib_Oox"
+    # Taking the base data from a file in the root module
 
-    my $vclgid = "gid_File_Lib_Oox";
-    if ( $allvariables->{'GLOBALFILEGID'} ) { $vclgid = $allvariables->{'GLOBALFILEGID'}; }
-    my ($vclfile) = grep {$_->{gid} eq $vclgid} @{$filesarrayref};
-    if (! defined $vclfile) {
-        die "Could not find file $vclgid in list of files!";
+    if ( ! $allvariableshashref->{'ROOTMODULEGID'} ) { installer::exiter::exit_program("ERROR: ROOTMODULEGID must be defined in list file!", "add_profile_into_filelist"); }
+    my $rootmodulegid = $allvariableshashref->{'ROOTMODULEGID'};
+    my $rootfile;
+    foreach my $file (@{$filesarrayref}) {
+        if ($file->{'modules'} eq $rootmodulegid)
+        {
+            $rootfile = $file;
+            break;
+        }
+    }
+    if (! defined $rootfile) {
+        die "Could not find any file from module $rootmodulegid in list of files!";
     }
 
     # copying all base data
-    installer::converter::copy_item_object($vclfile, \%profile);
+    installer::converter::copy_item_object($rootfile, \%profile);
 
     # and overriding all new values
 
