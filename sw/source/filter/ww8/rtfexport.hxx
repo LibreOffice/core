@@ -69,7 +69,7 @@ public:
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
 
-    virtual void AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen );
+    virtual void AppendBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen );
 
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
 

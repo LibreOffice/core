@@ -1344,12 +1344,11 @@ WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
     return nFc + aPcts.back().GetStartCp();
 }
 
-void WW8Export::AppendBookmarks( const SwTxtNode& rNd,
-    xub_StrLen nAktPos, xub_StrLen nLen )
+void WW8Export::AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     std::vector< const ::sw::mark::IMark* > aArr;
     sal_uInt16 nCntnt;
-    xub_StrLen nAktEnd = nAktPos + nLen;
+    const sal_Int32 nAktEnd = nAktPos + nLen;
     if( GetWriter().GetBookmarks( rNd, nAktPos, nAktEnd, aArr ))
     {
         sal_uLong nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
@@ -1748,8 +1747,8 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     nTxtTyp = nOldTyp;
 }
 
-void WW8Export::OutSwString(const OUString& rStr, xub_StrLen nStt,
-    xub_StrLen nLen, bool bUnicode, rtl_TextEncoding eChrSet)
+void WW8Export::OutSwString(const OUString& rStr, sal_Int32 nStt,
+    sal_Int32 nLen, bool bUnicode, rtl_TextEncoding eChrSet)
 
 {
     SAL_INFO( "sw.ww8.level2", "<OutSwString>" );

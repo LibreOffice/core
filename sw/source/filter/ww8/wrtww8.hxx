@@ -455,7 +455,7 @@ public:
     SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules
     const SwTxtNode *mpTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
     std::map< sal_uInt16, sal_uInt16 > aRuleDuplicates; //map to Duplicated numrules
-    std::stack< xub_StrLen > m_aCurrentCharPropStarts; ///< To remember the position in a run.
+    std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
     WW8_WrtBookmarks* pBkmks;
     WW8_WrtRedlineAuthor* pRedlAuthors;
     BitmapPalette* pBmpPal;
@@ -644,7 +644,7 @@ public:
     /// has two
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) = 0;
 
-    virtual void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, xub_StrLen nLen ) = 0;
+    virtual void AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
 
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) = 0;
     //For i120928,add this interface to export graphic of bullet
@@ -756,10 +756,10 @@ protected:
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
-    virtual xub_StrLen GetNextPos( SwWW8AttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
+    virtual sal_Int32 GetNextPos( SwWW8AttrIter* pAttrIter, const SwTxtNode& rNode, sal_Int32 nAktPos );
 
     /// Update the information for GetNextPos().
-    virtual void UpdatePosition( SwWW8AttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
+    virtual void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nAktPos, sal_Int32 nEnd );
 
     /// Output SwTxtNode
     virtual void OutputTextNode( const SwTxtNode& );
@@ -815,12 +815,11 @@ protected:
     /// Find the nearest bookmark from the current position.
     ///
     /// Returns false when there is no bookmark.
-    bool NearestBookmark( xub_StrLen& rNearest, const xub_StrLen nAktPos, bool bNextPositionOnly );
+    bool NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
 
-    void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
-                xub_StrLen nLen );
+    void GetSortedBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
 
-    bool GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt, xub_StrLen nEnd,
+    bool GetBookmarks( const SwTxtNode& rNd, sal_Int32 nStt, sal_Int32 nEnd,
             IMarkVector& rArr );
 
     const NfKeywordTable & GetNfKeywordTable();
@@ -1015,7 +1014,7 @@ public:
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, SvStorageRef xOleStg,
         SvStorageRef xObjStg, OUString &rStorageName, SwOLENode *pOLENd);
 
-    virtual void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, xub_StrLen nLen );
+    virtual void AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
 
     virtual void ExportGrfBullet(const SwTxtNode& rNd);
@@ -1031,7 +1030,7 @@ public:
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() );
     void WriteChar( sal_Unicode c );
 
-    void OutSwString(const OUString&, xub_StrLen nStt, xub_StrLen nLen,
+    void OutSwString(const OUString&, sal_Int32 nStt, sal_Int32 nLen,
         bool bUnicode, rtl_TextEncoding eChrSet);
 
     WW8_CP Fc2Cp( sal_uLong nFc ) const          { return pPiece->Fc2Cp( nFc ); }

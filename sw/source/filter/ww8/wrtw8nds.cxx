@@ -224,7 +224,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
 
 sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
 {
-    xub_StrLen min = -1;
+    sal_Int32 min = -1;
     if ( pos1 == -1 && pos2 != -1 )
         min = pos2;
     else if ( pos2 == -1 && pos1 != -1 )
@@ -595,7 +595,7 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if (pTxtAttrs && !m_rExport.m_aCurrentCharPropStarts.empty())
     {
-        xub_StrLen nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
+        const sal_Int32 nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
         for (sal_uInt16 i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
@@ -1591,11 +1591,11 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
     m_rWW8Export.pO->clear();
 }
 
-xub_StrLen MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos  )
+sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTxtNode& rNode, sal_Int32 nAktPos )
 {
     // Get the bookmarks for the normal run
-    xub_StrLen nNextPos = aAttrIter->WhereNext();
-    xub_StrLen nNextBookmark = nNextPos;
+    const sal_Int32 nNextPos = aAttrIter->WhereNext();
+    sal_Int32 nNextBookmark = nNextPos;
 
     if( nNextBookmark > nAktPos ) //no need to search for bookmarks otherwise (checked in UpdatePosition())
     {
@@ -1605,9 +1605,9 @@ xub_StrLen MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTxtNo
     return std::min( nNextPos, nNextBookmark );
 }
 
-void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, xub_StrLen nAktPos, xub_StrLen /*nEnd*/ )
+void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, sal_Int32 nAktPos, sal_Int32 /*nEnd*/ )
 {
-    xub_StrLen nNextPos;
+    sal_Int32 nNextPos;
 
     // go to next attribute if no bookmark is found or if the bookmark is behind the next attribute position
     // It may happened that the WhereNext() wasn't used in the previous increment because there was a
@@ -1617,8 +1617,8 @@ void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, xub_StrLen nAkt
         aAttrIter->NextPos();
 }
 
-bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
-                    xub_StrLen nEnd, IMarkVector& rArr )
+bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, sal_Int32 nStt,
+                    sal_Int32 nEnd, IMarkVector& rArr )
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     sal_uLong nNd = rNd.GetIndex( );
@@ -1632,8 +1632,8 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
         if ( pMark->GetMarkStart().nNode == nNd ||
              pMark->GetMarkEnd().nNode == nNd )
         {
-            xub_StrLen nBStart = pMark->GetMarkStart().nContent.GetIndex();
-            xub_StrLen nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nBStart = pMark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
             // Keep only the bookmars starting or ending in the snippet
             bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
@@ -1662,14 +1662,14 @@ public:
     }
 };
 
-bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest, const xub_StrLen nAktPos, bool bNextPositionOnly )
+bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly )
 {
     bool bHasBookmark = false;
 
     if ( !m_rSortedMarksStart.empty() )
     {
         IMark* pMarkStart = m_rSortedMarksStart.front();
-        xub_StrLen nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
+        const sal_Int32 nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
         if( !bNextPositionOnly || (nNext > nAktPos ))
         {
             rNearest = nNext;
@@ -1680,7 +1680,7 @@ bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest, const xub_StrLen n
     if ( !m_rSortedMarksEnd.empty() )
     {
         IMark* pMarkEnd = m_rSortedMarksEnd[0];
-        xub_StrLen nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
+        const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
         if( !bNextPositionOnly || nNext > nAktPos )
         {
             if ( !bHasBookmark )
@@ -1694,7 +1694,7 @@ bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest, const xub_StrLen n
     return bHasBookmark;
 }
 
-void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen )
+void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     IMarkVector aMarksStart;
     if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarksStart ) )
@@ -1810,7 +1810,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     do {
         const SwRedlineData* pRedlineData = aAttrIter.GetRedline( nAktPos );
 
-        xub_StrLen nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
+        sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
         // Is this the only run in this paragraph and it's empty?
         bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
         AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
@@ -1827,11 +1827,11 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
         nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nAktPos);
 
-        xub_StrLen nLen = nNextAttr - nAktPos;
+        sal_Int32 nLen = nNextAttr - nAktPos;
         if ( !bTxtAtr && nLen )
         {
             sal_Unicode ch = aStr[nAktPos];
-            int ofs = ( ch == CH_TXT_ATR_FIELDSTART || ch == CH_TXT_ATR_FIELDEND || ch == CH_TXT_ATR_FORMELEMENT? 1: 0 );
+            const sal_Int32 ofs = ( ch == CH_TXT_ATR_FIELDSTART || ch == CH_TXT_ATR_FIELDEND || ch == CH_TXT_ATR_FORMELEMENT? 1 : 0 );
 
             IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
             if ( ch == CH_TXT_ATR_FIELDSTART )
@@ -1935,9 +1935,9 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( isDropdownOrCheckbox )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
-            nLen -= static_cast< sal_Int32 >( ofs );
+            nLen -= ofs;
 
-            OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + static_cast< sal_Int32 >( ofs ), nLen ) );
+            OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + ofs, nLen ) );
             if ( ( nTxtTyp == TXT_EDN || nTxtTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
             {
                 // Insert tab for aesthetic puposes #i24762#

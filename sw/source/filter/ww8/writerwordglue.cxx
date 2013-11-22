@@ -324,9 +324,9 @@ namespace myImplHelpers
         : public std::unary_function<const sw::util::CharRunEntry&, bool>
     {
     private:
-        xub_StrLen mnStart;
+        sal_Int32 mnStart;
     public:
-        IfBeforeStart(xub_StrLen nStart) : mnStart(nStart) {}
+        IfBeforeStart(sal_Int32 nStart) : mnStart(nStart) {}
         bool operator()(const sw::util::CharRunEntry &rEntry) const
         {
             return rEntry.mnEndPos < mnStart;
@@ -502,7 +502,7 @@ namespace sw
         }
 
         CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd,
-            xub_StrLen nTxtStart, bool bSplitOnCharSet)
+            sal_Int32 nTxtStart, bool bSplitOnCharSet)
         {
             const OUString &rTxt = rTxtNd.GetTxt();
 
@@ -540,11 +540,11 @@ namespace sw
             typedef std::vector<DirEntry> DirChanges;
             typedef DirChanges::const_iterator cDirIter;
 
-            typedef std::pair<xub_StrLen, sal_Int16> CharSetEntry;
+            typedef std::pair<sal_Int32, sal_Int16> CharSetEntry;
             typedef std::vector<CharSetEntry> CharSetChanges;
             typedef CharSetChanges::const_iterator cCharSetIter;
 
-            typedef std::pair<xub_StrLen, sal_uInt16> ScriptEntry;
+            typedef std::pair<sal_Int32, sal_uInt16> ScriptEntry;
             typedef std::vector<ScriptEntry> ScriptChanges;
             typedef ScriptChanges::const_iterator cScriptIter;
 

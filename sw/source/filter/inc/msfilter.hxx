@@ -430,11 +430,11 @@ namespace sw
 
         struct CharRunEntry
         {
-            xub_StrLen mnEndPos;
+            sal_Int32 mnEndPos;
             sal_uInt16 mnScript;
             rtl_TextEncoding meCharSet;
             bool mbRTL;
-            CharRunEntry(xub_StrLen nEndPos, sal_uInt16 nScript,
+            CharRunEntry(sal_Int32 nEndPos, sal_uInt16 nScript,
                 rtl_TextEncoding eCharSet, bool bRTL)
             : mnEndPos(nEndPos), mnScript(nScript), meCharSet(eCharSet),
             mbRTL(bRTL)
@@ -475,7 +475,7 @@ namespace sw
             @see #i22537# for example
         */
         CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd,
-            xub_StrLen nStart = 0, bool bSplitOnCharSet = false);
+            sal_Int32 nStart = 0, bool bSplitOnCharSet = false);
     }
 }
 

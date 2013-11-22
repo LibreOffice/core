@@ -120,7 +120,7 @@ bool DocxExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich
     return true;
 }
 
-void DocxExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen )
+void DocxExport::AppendBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;

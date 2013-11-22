@@ -122,7 +122,7 @@ bool RtfExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
     return true;
 }
 
-void RtfExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen )
+void RtfExport::AppendBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
