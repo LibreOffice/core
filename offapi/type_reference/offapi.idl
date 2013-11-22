@@ -6493,9 +6493,6 @@ module com {
     };
    };
    module form {
-    module runtime {
-     interface XFormOperations;
-    };
     /** @deprecated */ published service FormController {
      [optional] service ::com::sun::star::form::FormControllerDispatcher;
      interface ::com::sun::star::form::XFormController;
@@ -6508,7 +6505,6 @@ module com {
      interface ::com::sun::star::sdb::XSQLErrorBroadcaster;
      interface ::com::sun::star::sdb::XRowSetApproveBroadcaster;
      interface ::com::sun::star::form::XDatabaseParameterBroadcaster;
-     [property, optional] ::com::sun::star::form::runtime::XFormOperations FormOperations;
     };
     published enum FormSubmitEncoding {
      URL = 0,
