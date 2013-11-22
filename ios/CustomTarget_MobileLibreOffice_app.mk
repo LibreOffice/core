@@ -41,36 +41,15 @@ MobileLibreOffice_setup:
 #==============================================================================
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 
-	# Put xcconfig in source dir for Xcode projects
+	# Libs #
+	# Create the link flags in the xcconfig for Xcode linkage
+	all_libs=`$(SRCDIR)/bin/lo-all-static-libs`; \
+	sed -i '' -e "s|^\(LINK_LDFLAGS =\).*$$|\1 $$all_libs|" $(LO_XCCONFIG)
+
+	# Copy lo.xcconfig to source dir for Xcode projects
 	if test $(SRCDIR) != $(BUILDDIR); then \
 		cp $(BUILDDIR)/ios/$(LO_XCCONFIG) $(SRCDIR)/ios; \
 	fi
-
-	# Libs #
-	# Create the link flags in the xcconfig for Xcode linkage
-	for path in $(INSTDIR)/program \
-				$(WORKDIR)/LinkTarget/StaticLibrary \
-				$(WORKDIR)/UnpackedTarball/*/.libs \
-				$(WORKDIR)/UnpackedTarball/*/src/.libs \
-				$(WORKDIR)/UnpackedTarball/*/src/*/.libs \
-				$(WORKDIR)/UnpackedTarball/xslt/libxslt/.libs \
-				$(WORKDIR)/UnpackedTarball/icu/source/lib \
-				$(WORKDIR)/UnpackedTarball/openssl; do \
-		flags=''; \
-        for lib in $$path/lib*.a; do \
-            if [ ! -r $$lib ]; then \
-                continue; \
-            fi; \
-            base="$${lib##*/lib}"; \
-            base=$${base%\.a}; \
-            flags+=" -l$${base}"; \
-        done; \
-		if [ "$$flags" ]; then \
-			all_flags+=" -L$$path $$flags"; \
-		fi; \
-	done; \
-	file=$(LO_XCCONFIG); \
-	sed -i '' -e "s|^\(LINK_LDFLAGS =\).*$$|\1 $$all_flags|" $$file;
 
 	# Resources #
 	rm -rf $(DEST_RESOURCE) 2>/dev/null
