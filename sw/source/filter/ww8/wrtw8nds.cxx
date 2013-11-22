@@ -224,20 +224,14 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
 
 sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
 {
-    sal_Int32 min = -1;
-    if ( pos1 == -1 && pos2 != -1 )
-        min = pos2;
-    else if ( pos2 == -1 && pos1 != -1 )
-        min = pos1;
-    else if ( pos1 != -1 && pos2 != -1 )
+    if ( pos1 >= 0 && pos2 >= 0 )
     {
-        if ( pos1 < pos2 )
-            min = pos1;
-        else
-            min = pos2;
+        // both valid: return minimum one
+        return std::min(pos1, pos2);
     }
 
-    return min;
+    // return the valid one, if any, or -1
+    return std::max(pos1, pos2);
 }
 
 sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
