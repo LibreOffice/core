@@ -28,52 +28,52 @@ $(call gb_CustomTarget_get_target,idlc/parser_test) : \
 	$(call gb_Helper_abbreviate_dirs,( \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/attribute.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/constant.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/constructor.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/interfaceinheritance.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/methodoverload.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/oldstyle.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/polystruct.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/published.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/struct.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {} && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/typedef.tests \
-                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
+                $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl 0 \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {}) \
             > $@.log 2>&1 || (cat $@.log && false))

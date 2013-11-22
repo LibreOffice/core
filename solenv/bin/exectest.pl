@@ -23,18 +23,21 @@ sub encode($)
     return $arg
 }
 
-$#ARGV >= 2
-    or die "Usage: $0 <input file> <temp file> <command> <arguments...>";
+$#ARGV >= 3
+    or die "Usage: $0 <input file> <temp file> <new?> <command> <arguments...>";
 open INPUT, '<', $ARGV[0] or die "cannot open $ARGV[0]: $!";
 shift @ARGV;
 $temp = $ARGV[0];
+shift @ARGV;
+$new = $ARGV[0];
 shift @ARGV;
 $failed = 0;
 $open = 0;
 while (1) {
     $eof = eof INPUT;
     $in = <INPUT> unless $eof;
-    if ($eof || $in =~ /^EXPECT (SUCCESS|FAILURE) "([^"]*)"?:\n$/)
+    if ($eof
+        || $in =~ /^EXPECT (SUCCESS|FAILURE|NEW-FAILURE|OLD-FAILURE) "([^"]*)"?:\n$/)
     {
         if ($open)
         {
@@ -86,6 +89,8 @@ while (1) {
         }
         last if $eof;
         $expect = $1;
+        $expect = ($new ? 'FAILURE' : 'SUCCESS') if $expect eq 'NEW-FAILURE';
+        $expect = ($new ? 'SUCCESS' : 'FAILURE') if $expect eq 'OLD-FAILURE';
         $title = $2;
         open OUTPUT, '>', $temp or die "cannot open $temp: $!";
         $open = 1;
