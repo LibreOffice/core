@@ -307,6 +307,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	odbcbase \
 	odfflatxml \
 	offacc \
+	oox \
 	passwordcontainer \
 	pcr \
 	$(if $(ENABLE_NPAPI_FROM_BROWSER),pl) \
@@ -325,6 +326,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	simplecanvas \
 	slideshow \
 	sot \
+	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
+		$(if $(ENABLE_HEADLESS),,spa) \
+	) \
 	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
@@ -354,7 +358,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
 	vclcanvas \
-	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))),vclplug_gen) \
+	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
+		vclplug_gen \
+		$(if $(ENABLE_TDE),vclplug_tde) \
+		$(if $(ENABLE_KDE),vclplug_kde) \
+		$(if $(ENABLE_KDE4),vclplug_kde4) \
+		$(if $(ENABLE_HEADLESS),,vclplug_svp) \
+	) \
 	xmlscript \
 	xmlfa \
 	xmlfd \
@@ -406,7 +416,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 		basebmp \
 	) \
 	communi \
-	oox \
 	ooxml \
 	sdbc \
 	avmediaQuickTime \
@@ -415,12 +424,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	rptui \
 	rptxml \
 	simplecm \
-	spa \
 	sts \
-	vclplug_tde \
-	vclplug_kde \
-	vclplug_kde4 \
-	vclplug_svp \
 ))
 
 ifneq (,$(filter ANDROID IOS,$(OS)))
@@ -522,6 +526,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
 	package2 \
+	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))),recentfile) \
 	$(if $(DISABLE_SCRIPTING),,scriptframe) \
 	sdbc2 \
 	sofficeapp \
@@ -561,7 +566,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	pyuno \
 	pyuno_wrapper \
-	recentfile \
 	ucpdav1 \
 	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
