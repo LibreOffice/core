@@ -1180,24 +1180,22 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
 
 bool SwWW8AttrIter::IsRedlineAtEnd( sal_Int32 nEnd ) const
 {
-    bool bRet = false;
     // search next Redline
     for( sal_uInt16 nPos = nCurRedlinePos;
         nPos < m_rExport.pDoc->GetRedlineTbl().size(); ++nPos )
     {
         const SwPosition* pEnd = m_rExport.pDoc->GetRedlineTbl()[ nPos ]->End();
-        if( pEnd->nNode == rNd )
+        if( pEnd->nNode != rNd )
         {
-            if( pEnd->nContent.GetIndex() == nEnd )
-            {
-                bRet = true;
-                break;
-            }
-        }
-        else
             break;
+        }
+
+        if( pEnd->nContent.GetIndex() == nEnd )
+        {
+            return true;
+        }
     }
-    return bRet;
+    return false;
 }
 
 const SwRedlineData* SwWW8AttrIter::GetRedline( sal_Int32 nPos )
