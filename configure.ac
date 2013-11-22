@@ -788,8 +788,9 @@ AC_ARG_ENABLE([hardlink-deliver],
 
 AC_ARG_ENABLE(mergelibs,
     AS_HELP_STRING([--enable-mergelibs=<all/yes>],
-        [Enables linking of big, merged, library. Experimental feature tested
-        only for Linux. 'all' will link a lot of libraries into libmerged
+        [Enables linking of big, merged, library. Experimental feature, tested
+        only for Linux at some stage in history, but possibly does not work even
+        for Linux any more. 'all' will link a lot of libraries into libmerged
         while 'yes' will do it for just a core set of libraries.])
 )
 
