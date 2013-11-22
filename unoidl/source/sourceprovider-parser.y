@@ -1882,20 +1882,20 @@ typedefDefn:
       unoidl::detail::SourceProviderType t(*$4);
       delete $4;
       OUString name(convertToFullName(data, $5));
-      // There is no good reason to forbid typedefs to VOID and to instantiated
-      // polymorphic struct types, but some old client code of registry data
-      // expects this typedef restriction (like the assert(false) default in
-      // handleTypedef in codemaker/source/javamaker/javatype.cxx), so forbid
-      // them for now:
+      // There is no good reason to forbid typedefs to VOID, to instantiated
+      // polymorphic struct types, and to exception types, but some old client
+      // code of registry data expects this typedef restriction (like the
+      // assert(false) default in handleTypedef in
+      // codemaker/source/javamaker/javatype.cxx), so forbid them for now:
       switch (t.type) {
       case unoidl::detail::SourceProviderType::TYPE_VOID:
+      case unoidl::detail::SourceProviderType::TYPE_EXCEPTION:
       case unoidl::detail::SourceProviderType::TYPE_INSTANTIATED_POLYMORPHIC_STRUCT:
           error(@4, yyscanner, "bad typedef type");
           YYERROR;
           break;
       case unoidl::detail::SourceProviderType::TYPE_ENUM:
       case unoidl::detail::SourceProviderType::TYPE_PLAIN_STRUCT:
-      case unoidl::detail::SourceProviderType::TYPE_EXCEPTION:
       case unoidl::detail::SourceProviderType::TYPE_INTERFACE:
           if ($2) {
               bool unpub = false;
