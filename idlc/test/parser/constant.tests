@@ -79,9 +79,9 @@ constants C {
     const byte C1 = -128;
     const byte C2 = -0200;
     const byte C3 = -0x80;
-    const byte C4 = 255;
-    const byte C5 = 0377;
-    const byte C6 = 0xFF;
+    const byte C4 = 127;
+    const byte C5 = 0177;
+    const byte C6 = 0x7F;
     const short C7 = -32768;
     const short C8 = -0100000;
     const short C9 = -0x8000;
@@ -115,6 +115,14 @@ constants C {
     const unsigned hyper C37 = 18446744073709551615;
     const unsigned hyper C38 = 01777777777777777777777;
     const unsigned hyper C39 = 0xFFFFFFFFFFFFFFFF;
+};
+
+
+EXPECT NEW-FAILURE "constant.tests 8a":
+constants C {
+    const byte C4 = 255;
+    const byte C5 = 0377;
+    const byte C6 = 0xFF;
 };
 
 
