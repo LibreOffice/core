@@ -164,13 +164,13 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
 
     pWin        ( pWn ),
     xSpell      ( xSpellChecker ),
+    mpTextObj( NULL),
     bOtherCntnt ( bOther ),
     bDialog     ( sal_False ),
     bHyphen     ( sal_False ),
     bAuto       ( sal_False ),
     bStartChk   ( bOther ),
     bRevAllowed ( bRevAllow ),
-    mpTextObj( NULL),
     bAllRight   ( bIsAllRight )
 {
     Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
@@ -190,6 +190,7 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
         const sal_Bool bStart, const sal_Bool bOther ) :
     pWin        ( pWn ),
     xHyph       ( xHyphenator ),
+    mpTextObj( NULL),
     bOtherCntnt ( bOther ),
     bDialog     ( sal_False ),
     bHyphen     ( sal_False ),
@@ -199,7 +200,6 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     bEndDone    ( bReverse && bStart && !bOther ),
     bStartChk   ( bOther ),
     bRevAllowed ( sal_False ),
-    mpTextObj( NULL),
     bAllRight   ( sal_True )
 {
 }
