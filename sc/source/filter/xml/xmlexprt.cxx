@@ -668,8 +668,9 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
         {
             ScPostIt& rNote = *it->mpNote;
             ScAddress aPos = it->maPos;
-            SdrCaptionObj* pCaption = rNote.GetOrCreateCaption(aPos);
-            pDoc->GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( aPos.Tab() ) )->InsertObject( pCaption );
+            SdrCaptionObj* pNoteCaption = rNote.GetOrCreateCaption(aPos);
+            Reference<drawing::XShape> xNoteShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
+            pSharedData->AddNoteObj(xNoteShape, aPos);
         }
 
         uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage());
@@ -2720,7 +2721,7 @@ void ScXMLExport::ExportAnnotationsAutoStyles(ScSheetSaveData* pSheetData)
 
     for (; it != itEnd; ++it)
     {
-        const ScPostIt& pNote = *it->mpNote;
+        ScPostIt& pNote = *it->mpNote;
         const EditTextObject* pEdit = pNote.GetEditTextObject();
 
         std::vector<editeng::Section> aAttrs;
