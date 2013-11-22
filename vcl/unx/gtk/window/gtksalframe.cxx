@@ -323,6 +323,14 @@ static sal_uInt16 GetKeyCode( guint keyval )
     return nCode;
 }
 
+static guint GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 group)
+{
+    guint updated_keyval = 0;
+    gdk_keymap_translate_keyboard_state(pKeyMap, hardware_keycode,
+        (GdkModifierType)0, group, &updated_keyval, NULL, NULL, NULL);
+    return updated_keyval;
+}
+
 // F10 means either KEY_F10 or KEY_MENU, which has to be decided
 // in the independent part.
 struct KeyAlternate
@@ -373,7 +381,7 @@ struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 void GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
                                  guint16 hardware_keycode,
-                                 guint8 /*group*/,
+                                 guint8 group,
                                  guint32 time,
                                  sal_Unicode aOrigCode,
                                  bool bDown,
@@ -405,33 +413,48 @@ void GtkSalFrame::doKeyCallback( guint state,
     }
 #endif
 
-    /* #i42122# translate all keys with Ctrl and/or Alt to group 0
-    *  else shortcuts (e.g. Ctrl-o) will not work but be inserted by
-    *  the application
-    */
-    /* #i52338# do this for all keys that the independent part has no key code for
-    */
+    /*
+     *  #i42122# translate all keys with Ctrl and/or Alt to group 0 else
+     *  shortcuts (e.g. Ctrl-o) will not work but be inserted by the
+     *  application
+     *
+     *  #i52338# do this for all keys that the independent part has no key code
+     *  for
+     *
+     *  fdo#41169 rather than use group 0, detect if there is a group which can
+     *  be used to input Latin text and use that if possible
+     */
     aEvent.mnCode = GetKeyCode( keyval );
     if( aEvent.mnCode == 0 )
     {
-        // check other mapping
-        gint eff_group, level;
-        GdkModifierType consumed;
-        guint updated_keyval = 0;
-        // use gdk_keymap_get_default instead of NULL;
-        // workaround a crahs fixed in gtk 2.4
-        if( gdk_keymap_translate_keyboard_state( gdk_keymap_get_default(),
-                                                 hardware_keycode,
-                                                 (GdkModifierType)0,
-                                                 0,
-                                                 &updated_keyval,
-                                                 &eff_group,
-                                                 &level,
-                                                 &consumed ) )
+        gint best_group = SAL_MAX_INT32;
+
+        // Try and find Latin layout
+        GdkKeymap* keymap = gdk_keymap_get_default();
+        GdkKeymapKey *keys;
+        gint n_keys;
+        if (gdk_keymap_get_entries_for_keyval(keymap, GDK_A, &keys, &n_keys))
         {
-            aEvent.mnCode   = GetKeyCode( updated_keyval );
+            // Find the lowest group that supports Latin layout
+            for (gint i = 0; i < n_keys; ++i)
+            {
+                if (keys[i].level != 0 && keys[i].level != 1)
+                    continue;
+                best_group = std::min(best_group, keys[i].group);
+                if (best_group == 0)
+                    break;
+            }
+            g_free(keys);
         }
+
+        //Unavailable, go with original group then I suppose
+        if (best_group == SAL_MAX_INT32)
+            best_group = group;
+
+        guint updated_keyval = GetKeyValFor(keymap, hardware_keycode, best_group);
+        aEvent.mnCode = GetKeyCode(updated_keyval);
     }
+
     aEvent.mnCode   |= GetKeyModCode( state );
 
     if( bDown )
