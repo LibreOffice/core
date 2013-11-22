@@ -70,7 +70,6 @@ private:
     com::sun::star::accessibility::XAccessible* oldFocus;
 
     AccObjectManagerAgent*   pAgent;
-    static AccObjectWinManager* me;
     ResIDGenerator ResIdGen;
 
     AccObjectWinManager(AccObjectManagerAgent* Agent=NULL);
