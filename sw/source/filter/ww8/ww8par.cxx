@@ -2974,11 +2974,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     // Reset Unicode flag and correct FilePos if needed.
     // Note: Seek is not expensive, as we're checking inline whether or not
     // the correct FilePos has already been reached.
-    xub_StrLen nStrLen;
-    if (nValidStrLen <= (STRING_MAXLEN-1))
-        nStrLen = writer_cast<xub_StrLen>(nValidStrLen);
-    else
-        nStrLen = STRING_MAXLEN-1;
+    const sal_Int32 nStrLen = std::min(nValidStrLen, SAL_MAX_INT32-1);
 
     const rtl_TextEncoding eSrcCharSet = bVer67 ? GetCurrentCharSet() :
         RTL_TEXTENCODING_MS_1252;
@@ -3002,13 +2998,13 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     // read the stream data
     sal_uInt8   nBCode = 0;
     sal_uInt16 nUCode;
-    xub_StrLen nL2;
 
     sal_uInt16 nCTLLang = 0;
     const SfxPoolItem * pItem = GetFmtAttr(RES_CHRATR_CTL_LANGUAGE);
     if (pItem != NULL)
         nCTLLang = dynamic_cast<const SvxLanguageItem *>(pItem)->GetLanguage();
 
+    sal_Int32 nL2;
     for( nL2 = 0; nL2 < nStrLen; ++nL2, ++pWork )
     {
         if (bIsUnicode)
@@ -3061,10 +3057,9 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
 
     if (nL2)
     {
-        xub_StrLen nEndUsed = nL2;
-
-        if (!bIsUnicode)
-            nEndUsed = Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nStrLen);
+        const sal_Int32 nEndUsed = !bIsUnicode
+            ? Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nStrLen)
+            : nL2;
 
         for( sal_Int32 nI = 0; nI < nStrLen; ++nI, ++pBuffer )
             if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))

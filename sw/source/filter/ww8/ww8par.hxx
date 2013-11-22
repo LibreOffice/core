@@ -403,8 +403,8 @@ class Position
 public:
     SwNodeIndex maMkNode;
     SwNodeIndex maPtNode;
-    xub_StrLen mnMkCntnt;
-    xub_StrLen mnPtCntnt;
+    sal_Int32 mnMkCntnt;
+    sal_Int32 mnPtCntnt;
     Position(const SwPaM &rPaM);
     Position(const Position &rEntry);
 private:
@@ -513,13 +513,13 @@ namespace sw
         {
         private:
             SwNodeIndex maPtNode;
-            xub_StrLen mnPtCntnt;
+            sal_Int32 mnPtCntnt;
         public:
             Position(const SwPosition &rPos);
             Position(const Position &rPos);
             operator SwPosition() const;
             SwNodeIndex GetPtNode() { return maPtNode; };
-            xub_StrLen GetPtCntnt() { return mnPtCntnt; };
+            sal_Int32 GetPtCntnt() { return mnPtCntnt; };
         };
     }
 }
@@ -542,7 +542,7 @@ class WW8FieldEntry
         void Swap(WW8FieldEntry &rOther) throw();
 
         SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
-        xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
+        sal_Int32 GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
         OUString GetBookmarkName();
         OUString GetBookmarkCode();
