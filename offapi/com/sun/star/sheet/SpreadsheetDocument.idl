@@ -177,14 +177,11 @@ published service SpreadsheetDocument
     [readonly, property] com::sun::star::container::XNameAccess DDELinks;
 
 
-#if 0
-    /** contains the collection of external document links in the document.
-
-        @since OOo 3.1
-     */
-    [optional, readonly, property] com::sun::star::sheet::XExternalDocLinks ExternalDocLinks;
-#endif
-
+//  /** contains the collection of external document links in the document.
+//
+//      @since OOo 3.1
+//   */
+//  [optional, readonly, property] com::sun::star::sheet::XExternalDocLinks ExternalDocLinks;
 };
 
 
