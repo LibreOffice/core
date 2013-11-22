@@ -11,7 +11,7 @@
 LO_XCCONFIG 	:= lo.xcconfig
 DEST_RESOURCE 	:= MobileLibreOffice/resource_link
 BUILDID			:=$(shell cd $(SRCDIR) && git log -1 --format=%H)
-          
+
 #- Macros ---------------------------------------------------------------------
 
 define MobileLibreOfficeXcodeBuild 
@@ -56,14 +56,14 @@ MobileLibreOffice_setup:
 				$(WORKDIR)/UnpackedTarball/icu/source/lib \
 				$(WORKDIR)/UnpackedTarball/openssl; do \
 		flags=''; \
-    	for lib in $$path/lib*.a; do \
-        	if [ ! -r $$lib ]; then \
-            	continue; \
-        	fi; \
-        	base="$${lib##*/lib}"; \
-        	base=$${base%\.a}; \
-        	flags+=" -l$${base}"; \
-    	done; \
+        for lib in $$path/lib*.a; do \
+            if [ ! -r $$lib ]; then \
+                continue; \
+            fi; \
+            base="$${lib##*/lib}"; \
+            base=$${base%\.a}; \
+            flags+=" -l$${base}"; \
+        done; \
 		if [ "$$flags" ]; then \
 			all_flags+=" -L$$path $$flags"; \
 		fi; \
@@ -91,10 +91,10 @@ MobileLibreOffice_setup:
 	# soffice.cfg
 	mkdir -p $(DEST_RESOURCE)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(DEST_RESOURCE)/share/config
-            
+
 	# "registry"
 	cp -R $(INSTDIR)/share/registry $(DEST_RESOURCE)/share
-            
+
 	# Set up rc, the "inifile". See getIniFileName_Impl().
 	file=$(DEST_RESOURCE)/rc; \
 	echo '[Bootstrap]'                                       >  $$file; \
@@ -127,7 +127,7 @@ MobileLibreOffice_setup:
 	echo "buildid=$(BUILDID)"   >> $$file; \
 	echo 'ProductMajor=360'     >> $$file; \
 	echo 'ProductMinor=1'       >> $$file; 
-	 
+
 #==============================================================================
 # Clean
 $(call gb_CustomTarget_get_clean_target,ios/MobileLibreOffice):
