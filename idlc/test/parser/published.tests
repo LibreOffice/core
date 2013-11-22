@@ -636,3 +636,46 @@ singleton S: I1;
 EXPECT SUCCESS "published.tests 118":
 published interface I1 {};
 published singleton S: I1;
+
+
+EXPECT FAILURE "published.tests 119":
+interface I1 {};
+published interface I2 { [optional] interface I1; };
+
+
+EXPECT FAILURE "published.tests 120":
+service S1 {};
+published service S2 { [optional] service S1; };
+
+
+EXPECT SUCCESS "published.tests 121":
+interface I {};
+published service S { [optional] interface I; };
+
+
+EXPECT FAILURE "published.tests 122":
+interface I {};
+published service S { [optional, property] I p; };
+
+
+EXPECT FAILURE "published.tests 123":
+interface I {};
+published service S { [optional, property] sequence<I> p; };
+
+
+EXPECT FAILURE "published.tests 124":
+struct P<T> { T m; };
+interface I {};
+published service S { [optional, property] P<I> p; };
+
+
+EXPECT FAILURE "published.tests 125":
+published struct P<T> { T m; };
+interface I {};
+published service S { [optional, property] P<I> p; };
+
+
+EXPECT FAILURE "published.tests 126":
+struct P<T> { T m; };
+published interface I {};
+published service S { [optional, property] P<I> p; };

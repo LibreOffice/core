@@ -134,10 +134,10 @@ void convertToCurrentName(
     assert(!data->currentName.isEmpty());
 }
 
-void clearCurrentName(unoidl::detail::SourceProviderScannerData * data) {
+void clearCurrentState(unoidl::detail::SourceProviderScannerData * data) {
     assert(data != 0);
-    assert(!data->currentName.isEmpty());
     data->currentName = "";
+    data->publishedContext = false;
 }
 
 unoidl::detail::SourceProviderEntity * getCurrentEntity(
@@ -339,6 +339,16 @@ Found findEntity(
                 // fall through
             case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
                 if (e->entity->getSort() == unoidl::Entity::SORT_TYPEDEF) {
+                    if (data->publishedContext
+                        && !static_cast<unoidl::TypedefEntity *>(
+                            e->entity.get())->isPublished())
+                    {
+                        error(
+                            location, yyscanner,
+                            ("type " + *name + " based on unpublished typedef "
+                             + n + " used in published context"));
+                        return FOUND_ERROR;
+                    }
                     OUString t(
                         static_cast<unoidl::TypedefEntity *>(e->entity.get())
                         ->getType());
@@ -461,6 +471,7 @@ Found findEntity(
                                             }
                                             break;
                                         case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+                                        case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                                             argT = unoidl::detail::SourceProviderType::TYPE_INTERFACE;
                                             break;
                                         case unoidl::detail::SourceProviderEntity::KIND_MODULE:
@@ -532,6 +543,7 @@ Found findEntity(
                 }
                 break;
             case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+            case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                 if (resolveInterfaceDefinitions) {
                     rtl::Reference<unoidl::Entity> ent(
                         data->manager->findEntity(n));
@@ -702,6 +714,7 @@ Found findEntity(
                         }
                         break;
                     case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+                    case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                         t = unoidl::detail::SourceProviderType(
                             unoidl::detail::SourceProviderType::TYPE_INTERFACE,
                             n, e);
@@ -761,6 +774,7 @@ Found findEntity(
                     }
                     // fall through
                 case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+                case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                     error(
                         location, yyscanner,
                         ("bad type " + *name
@@ -941,6 +955,7 @@ enumDefn:
   deprecated_opt published_opt TOK_ENUM identifier
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       convertToCurrentName(data, $4);
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
@@ -965,7 +980,7 @@ enumDefn:
       ent->entity = new unoidl::EnumTypeEntity(
           pad->isPublished(), pad->members, annotations($1));
       ent->pad.clear();
-      clearCurrentName(data);
+      clearCurrentState(data);
   }
 ;
 
@@ -1043,6 +1058,7 @@ plainStructDefn:
   deprecated_opt published_opt TOK_STRUCT identifier singleInheritance_opt
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       convertToCurrentName(data, $4);
       OUString baseName;
       rtl::Reference<unoidl::PlainStructTypeEntity> baseEnt;
@@ -1066,6 +1082,13 @@ plainStructDefn:
           }
           baseEnt = static_cast<unoidl::PlainStructTypeEntity *>(
               p->entity.get());
+          if ($2 && !baseEnt->isPublished()) {
+              error(
+                  @5, yyscanner,
+                  ("published plain struct type " + data->currentName + " base "
+                   + baseName + " is unpublished"));
+              YYERROR;
+          }
       }
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
@@ -1091,7 +1114,7 @@ plainStructDefn:
       ent->entity = new unoidl::PlainStructTypeEntity(
           pad->isPublished(), pad->baseName, pad->members, annotations($1));
       ent->pad.clear();
-      clearCurrentName(data);
+      clearCurrentState(data);
   }
 ;
 
@@ -1099,6 +1122,7 @@ polymorphicStructTemplateDefn:
   deprecated_opt published_opt TOK_STRUCT identifier '<'
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       convertToCurrentName(data, $4);
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
@@ -1125,7 +1149,7 @@ polymorphicStructTemplateDefn:
           pad->isPublished(), pad->typeParameters, pad->members,
           annotations($1));
       ent->pad.clear();
-      clearCurrentName(data);
+      clearCurrentState(data);
   }
 ;
 
@@ -1182,6 +1206,7 @@ exceptionDefn:
   deprecated_opt published_opt TOK_EXCEPTION identifier singleInheritance_opt
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       convertToCurrentName(data, $4);
       OUString baseName;
       rtl::Reference<unoidl::ExceptionTypeEntity> baseEnt;
@@ -1204,6 +1229,13 @@ exceptionDefn:
           }
           baseEnt = static_cast<unoidl::ExceptionTypeEntity *>(
               p->entity.get());
+          if ($2 && !baseEnt->isPublished()) {
+              error(
+                  @5, yyscanner,
+                  ("published exception type " + data->currentName + " base "
+                   + baseName + " is unpublished"));
+              YYERROR;
+          }
       }
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
@@ -1228,7 +1260,7 @@ exceptionDefn:
       ent->entity = new unoidl::ExceptionTypeEntity(
           pad->isPublished(), pad->baseName, pad->members, annotations($1));
       ent->pad.clear();
-      clearCurrentName(data);
+      clearCurrentState(data);
   }
 ;
 
@@ -1458,6 +1490,7 @@ interfaceDefn:
   deprecated_opt published_opt TOK_INTERFACE identifier singleInheritance_opt
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       convertToCurrentName(data, $4);
       OUString baseName;
       rtl::Reference<unoidl::InterfaceTypeEntity> baseEnt;
@@ -1480,15 +1513,36 @@ interfaceDefn:
               YYERROR;
           }
           baseEnt = static_cast<unoidl::InterfaceTypeEntity *>(p->entity.get());
+          if ($2 && !baseEnt->isPublished()) {
+              error(
+                  @5, yyscanner,
+                  ("published interface type " + data->currentName
+                   + " direct base " + baseName + " is unpublished"));
+              YYERROR;
+          }
       }
       std::map<OUString, unoidl::detail::SourceProviderEntity>::iterator i(
           data->entities.find(data->currentName));
-      if (i != data->entities.end()
-          && (i->second.kind
-              != unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL))
-      {
-          error(@4, yyscanner, "multiple entities named " + data->currentName);
-          YYERROR;
+      if (i != data->entities.end()) {
+          switch (i->second.kind) {
+          case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+              break;
+          case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
+              if (!$2) {
+                  error(
+                      @4, yyscanner,
+                      ("unpublished interface type " + data->currentName
+                       + " has been declared published"));
+                  YYERROR;
+              }
+              break;
+          default:
+              error(
+                  @4, yyscanner,
+                  "multiple entities named " + data->currentName);
+              YYERROR;
+              break;
+          }
       }
       data->entities[data->currentName] = unoidl::detail::SourceProviderEntity(
           new unoidl::detail::SourceProviderInterfaceTypeEntityPad(
@@ -1547,7 +1601,7 @@ interfaceDefn:
           pad->isPublished(), mbases, obases, pad->attributes, pad->methods,
           annotations($1));
       ent->pad.clear();
-      clearCurrentName(data);
+      clearCurrentState(data);
   }
 ;
 
@@ -1594,6 +1648,16 @@ interfaceBase:
               @4, yyscanner,
               ("interface type " + data->currentName + " direct base " + name
                + " does not resolve to an existing interface type"));
+          YYERROR;
+      }
+      if (data->publishedContext
+          && !(static_cast<unoidl::InterfaceTypeEntity *>(p->entity.get())
+               ->isPublished()))
+      {
+          error(
+              @4, yyscanner,
+              ("published interface type " + data->currentName + " direct base "
+               + name + " is unpublished"));
           YYERROR;
       }
       //TODO: check uniqueness (incl. that opt base != XInterface)
@@ -1807,8 +1871,10 @@ typedefDefn:
   deprecated_opt published_opt TOK_TYPEDEF type identifier ';'
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       unoidl::detail::SourceProviderType t(*$4);
       delete $4;
+      OUString name(convertToFullName(data, $5));
       // There is no good reason to forbid typedefs to VOID and to instantiated
       // polymorphic struct types, but some old client code of registry data
       // expects this typedef restriction (like the assert(false) default in
@@ -1819,12 +1885,43 @@ typedefDefn:
       case unoidl::detail::SourceProviderType::TYPE_INSTANTIATED_POLYMORPHIC_STRUCT:
           error(@4, yyscanner, "bad typedef type");
           YYERROR;
+          break;
+      case unoidl::detail::SourceProviderType::TYPE_ENUM:
+      case unoidl::detail::SourceProviderType::TYPE_PLAIN_STRUCT:
+      case unoidl::detail::SourceProviderType::TYPE_EXCEPTION:
+      case unoidl::detail::SourceProviderType::TYPE_INTERFACE:
+          if ($2) {
+              bool unpub = false;
+              switch (t.entity->kind) {
+              case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+                  unpub = true;
+                  break;
+              case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
+                  break;
+              case unoidl::detail::SourceProviderEntity::KIND_MODULE:
+                  assert(false); // this cannot happen
+              default:
+                  assert(t.entity->entity.is() || t.entity->pad.is());
+                  unpub
+                      = !(t.entity->entity.is()
+                          ? static_cast<unoidl::PublishableEntity *>(
+                              t.entity->entity.get())->isPublished()
+                          : t.entity->pad->isPublished());
+                  break;
+              }
+              if (unpub) {
+                  error(
+                      @4, yyscanner,
+                      "published typedef " + name + " type is unpublished");
+                  YYERROR;
+              }
+          }
+          break;
       case unoidl::detail::SourceProviderType::TYPE_PARAMETER:
           assert(false); // this cannot happen
       default:
           break;
       }
-      OUString name(convertToFullName(data, $5));
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
                   name,
@@ -1837,6 +1934,7 @@ typedefDefn:
           error(@5, yyscanner, "multiple entities named " + name);
           YYERROR;
       }
+      clearCurrentState(data);
   }
 ;
 
@@ -1844,6 +1942,7 @@ constantGroupDefn:
   deprecated_opt published_opt TOK_CONSTANTS identifier
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       convertToCurrentName(data, $4);
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
@@ -1868,7 +1967,7 @@ constantGroupDefn:
       ent->entity = new unoidl::ConstantGroupEntity(
           pad->isPublished(), pad->members, annotations($1));
       ent->pad.clear();
-      clearCurrentName(data);
+      clearCurrentState(data);
   }
 ;
 
@@ -2163,23 +2262,49 @@ singleInterfaceBasedServiceDefn:
   deprecated_opt published_opt TOK_SERVICE identifier singleInheritance
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       convertToCurrentName(data, $4);
       OUString base(convertName($5));
       unoidl::detail::SourceProviderEntity const * p;
       if (findEntity(@5, yyscanner, data, false, &base, &p, 0) == FOUND_ERROR) {
           YYERROR;
       }
-      if (p == 0
-          || ((p->kind
-               != unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL)
-              && (!p->entity.is()
-                  || (p->entity->getSort()
-                      != unoidl::Entity::SORT_INTERFACE_TYPE))))
-      {
+      bool ifcBase = false;
+      bool pubBase = false;
+      if (p != 0) {
+          switch (p->kind) {
+          case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+              ifcBase = true;
+              pubBase = false;
+              break;
+          case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
+              ifcBase = true;
+              pubBase = true;
+              break;
+          default:
+              if (p->entity.is()
+                  && (p->entity->getSort()
+                      == unoidl::Entity::SORT_INTERFACE_TYPE))
+              {
+                  ifcBase = true;
+                  pubBase = static_cast<unoidl::InterfaceTypeEntity *>(
+                      p->entity.get())->isPublished();
+              }
+              break;
+          }
+      }
+      if (!ifcBase) {
           error(
               @5, yyscanner,
               ("single-interface--based service " + data->currentName + " base "
                + base + " does not resolve to an interface type"));
+          YYERROR;
+      }
+      if ($2 && !pubBase) {
+          error(
+              @5, yyscanner,
+              ("published single-interface--based service " + data->currentName
+               + " base " + base + " is unpublished"));
           YYERROR;
       }
       if (!data->entities.insert(
@@ -2229,7 +2354,7 @@ singleInterfaceBasedServiceDefn:
       ent->entity = new unoidl::SingleInterfaceBasedServiceEntity(
           pad->isPublished(), pad->base, ctors, annotations($1));
       ent->pad.clear();
-      clearCurrentName(data);
+      clearCurrentState(data);
   }
 ;
 
@@ -2409,6 +2534,7 @@ accumulationBasedServiceDefn:
   deprecated_opt published_opt TOK_SERVICE identifier
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       convertToCurrentName(data, $4);
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
@@ -2436,7 +2562,7 @@ accumulationBasedServiceDefn:
           pad->directOptionalBaseInterfaces, pad->directProperties,
           annotations($1));
       ent->pad.clear();
-      clearCurrentName(data);
+      clearCurrentState(data);
   }
 ;
 
@@ -2481,6 +2607,16 @@ serviceBase:
                + " does not resolve to an accumulation-based service"));
           YYERROR;
       }
+      if (data->publishedContext
+          && !static_cast<unoidl::AccumulationBasedServiceEntity *>(
+              p->entity.get())->isPublished())
+      {
+          error(
+              @4, yyscanner,
+              ("published accumulation-based service " + data->currentName
+               + " direct base service " + name + " is unpublished"));
+          YYERROR;
+      }
       //TODO: check uniqueness
       (opt ? pad->directOptionalBaseServices : pad->directMandatoryBaseServices)
           .push_back(unoidl::AnnotatedReference(name, annotations($1)));
@@ -2506,18 +2642,43 @@ serviceInterfaceBase:
       if (findEntity(@4, yyscanner, data, false, &name, &p, 0) == FOUND_ERROR) {
           YYERROR;
       }
-      if (p == 0
-          || ((p->kind
-               != unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL)
-              && (!p->entity.is()
-                  || (p->entity->getSort()
-                      != unoidl::Entity::SORT_INTERFACE_TYPE))))
-      {
+      bool ifcBase = false;
+      bool pubBase = false;
+      if (p != 0) {
+          switch (p->kind) {
+          case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+              ifcBase = true;
+              pubBase = false;
+              break;
+          case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
+              ifcBase = true;
+              pubBase = true;
+              break;
+          default:
+              if (p->entity.is()
+                  && (p->entity->getSort()
+                      == unoidl::Entity::SORT_INTERFACE_TYPE))
+              {
+                  ifcBase = true;
+                  pubBase = static_cast<unoidl::InterfaceTypeEntity *>(
+                      p->entity.get())->isPublished();
+              }
+              break;
+          }
+      }
+      if (!ifcBase) {
           error(
               @4, yyscanner,
               ("accumulation-based service " + data->currentName
                + " direct base interface " + name
                + " does not resolve to an interface type"));
+          YYERROR;
+      }
+      if (data->publishedContext && !opt && !pubBase) {
+          error(
+              @5, yyscanner,
+              ("published accumulation-based service " + data->currentName
+               + " direct base interface " + name + " is unpublished"));
           YYERROR;
       }
       //TODO: check uniqueness
@@ -2615,23 +2776,49 @@ interfaceBasedSingletonDefn:
   deprecated_opt published_opt TOK_SINGLETON identifier singleInheritance ';'
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       OUString name(convertToFullName(data, $4));
       OUString base(convertName($5));
       unoidl::detail::SourceProviderEntity const * p;
       if (findEntity(@5, yyscanner, data, false, &base, &p, 0) == FOUND_ERROR) {
           YYERROR;
       }
-      if (p == 0
-          || ((p->kind
-               != unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL)
-              && (!p->entity.is()
-                  || (p->entity->getSort()
-                      != unoidl::Entity::SORT_INTERFACE_TYPE))))
-      {
+      bool ifcBase = false;
+      bool pubBase = false;
+      if (p != 0) {
+          switch (p->kind) {
+          case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+              ifcBase = true;
+              pubBase = false;
+              break;
+          case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
+              ifcBase = true;
+              pubBase = true;
+              break;
+          default:
+              if (p->entity.is()
+                  && (p->entity->getSort()
+                      == unoidl::Entity::SORT_INTERFACE_TYPE))
+              {
+                  ifcBase = true;
+                  pubBase = static_cast<unoidl::InterfaceTypeEntity *>(
+                      p->entity.get())->isPublished();
+              }
+              break;
+          }
+      }
+      if (!ifcBase) {
           error(
               @5, yyscanner,
               ("interface-based singleton " + name + " base " + base
                + " does not resolve to an interface type"));
+          YYERROR;
+      }
+      if ($2 && !pubBase) {
+          error(
+              @5, yyscanner,
+              ("published interface-based singleton " + name + " base " + base
+               + " is unpublished"));
           YYERROR;
       }
       if (!data->entities.insert(
@@ -2646,6 +2833,7 @@ interfaceBasedSingletonDefn:
           error(@4, yyscanner, "multiple entities named " + name);
           YYERROR;
       }
+      clearCurrentState(data);
   }
 ;
 
@@ -2654,6 +2842,7 @@ serviceBasedSingletonDefn:
   '}' ';'
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       OUString name(convertToFullName(data, $4));
       OUString base(convertName($7));
       unoidl::detail::SourceProviderEntity const * p;
@@ -2671,6 +2860,16 @@ serviceBasedSingletonDefn:
                + " does not resolve to an accumulation-based service"));
           YYERROR;
       }
+      if ($2
+          && !static_cast<unoidl::AccumulationBasedServiceEntity *>(
+              p->entity.get())->isPublished())
+      {
+          error(
+              @7, yyscanner,
+              ("published service-based singleton " + name + " base " + base
+               + " is unpublished"));
+          YYERROR;
+      }
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
                   name,
@@ -2683,6 +2882,7 @@ serviceBasedSingletonDefn:
           error(@4, yyscanner, "multiple entities named " + name);
           YYERROR;
       }
+      clearCurrentState(data);
   }
 ;
 
@@ -2722,6 +2922,16 @@ exceptions:
               ("exception " + name + " does not resolve to an exception type"));
           YYERROR;
       }
+      if (data->publishedContext
+          && !(static_cast<unoidl::ExceptionTypeEntity *>(p->entity.get())
+               ->isPublished()))
+      {
+          delete $1; /* see commented-out %destructor above */
+          error(
+              @3, yyscanner,
+              ("unpublished exception " + name + " used in published context"));
+          YYERROR;
+      }
       if (std::find($1->begin(), $1->end(), name) != $1->end()) {
           delete $1; /* see commented-out %destructor above */
           error(
@@ -2748,6 +2958,15 @@ exceptions:
               ("exception " + name + " does not resolve to an exception type"));
           YYERROR;
       }
+      if (data->publishedContext
+          && !(static_cast<unoidl::ExceptionTypeEntity *>(p->entity.get())
+               ->isPublished()))
+      {
+          error(
+              @1, yyscanner,
+              ("unpublished exception " + name + " used in published context"));
+          YYERROR;
+      }
       $$ = new std::vector<OUString>; $$->push_back(name);
   }
 ;
@@ -2756,27 +2975,49 @@ interfaceDecl:
   deprecated_opt/*ignored*/ published_opt TOK_INTERFACE identifier ';'
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      data->publishedContext = $2;
       OUString name(convertToFullName(data, $4));
       std::pair<std::map<OUString, unoidl::detail::SourceProviderEntity>::iterator, bool> p(
           data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
                   name,
                   unoidl::detail::SourceProviderEntity(
-                      unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL))));
-      if (!p.second
-          && (p.first->second.kind
-              != unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL))
-      {
-          assert(p.first->second.entity.is());
-          if (p.first->second.entity->getSort()
-              != unoidl::Entity::SORT_INTERFACE_TYPE)
-          {
-              error(
-                  @4, yyscanner,
-                  "multiple entities named " + data->currentName);
-              YYERROR;
+                      $2
+                      ? unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL
+                      : unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL))));
+      if (!p.second) {
+          switch (p.first->second.kind) {
+          case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+              if ($2) {
+                  p.first->second.kind
+                      = unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL;
+              }
+              break;
+          case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
+              break;
+          default:
+              assert(p.first->second.entity.is());
+              if (p.first->second.entity->getSort()
+                  != unoidl::Entity::SORT_INTERFACE_TYPE)
+              {
+                  error(
+                      @4, yyscanner,
+                      "multiple entities named " + data->currentName);
+                  YYERROR;
+              }
+              if ($2
+                  && !static_cast<unoidl::InterfaceTypeEntity *>(
+                      p.first->second.entity.get())->isPublished())
+              {
+                  error(
+                      @4, yyscanner,
+                      ("published interface type declaration "
+                       + data->currentName + " has been defined unpublished"));
+                  YYERROR;
+              }
           }
       }
+      clearCurrentState(data);
   }
 ;
 
@@ -3185,6 +3426,7 @@ primaryExpr:
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       unoidl::ConstantValue v(false); // dummy value
       bool found = false;
+      bool unpub = false;
       sal_Int32 i = name.lastIndexOf('.');
       if (i == -1) {
           rtl::Reference<unoidl::detail::SourceProviderEntityPad> pad(
@@ -3248,6 +3490,9 @@ primaryExpr:
                           if (j->name == id) {
                               v = j->value;
                               found = true;
+                              unpub
+                                  = !static_cast<unoidl::ConstantGroupEntity *>(
+                                      ent->entity.get())->isPublished();
                               break;
                           }
                       }
@@ -3265,6 +3510,7 @@ primaryExpr:
                           if (j->name == id) {
                               v = j->value;
                               found = true;
+                              unpub = !ent->pad->isPublished();
                               break;
                           }
                       }
@@ -3278,6 +3524,12 @@ primaryExpr:
               (name
                + (" does not resolve to neither a constant nor an unqualified"
                   " enum member")));
+          YYERROR;
+      }
+      if (data->publishedContext && unpub) {
+          error(
+              @1, yyscanner,
+              "unpublished value " + name + " used in published context");
           YYERROR;
       }
       switch (v.type) {
@@ -3470,6 +3722,13 @@ type:
               switch (ent->kind) {
               case unoidl::detail::SourceProviderEntity::KIND_LOCAL:
                   if (ent->pad.is()) {
+                      if (data->publishedContext && !ent->pad->isPublished()) {
+                          error(
+                              @1, yyscanner,
+                              ("unpublished entity " + name
+                               + " used in published context"));
+                          YYERROR;
+                      }
                       if (dynamic_cast<unoidl::detail::SourceProviderEnumTypeEntityPad *>(
                               ent->pad.get())
                           != 0)
@@ -3518,6 +3777,17 @@ type:
                   assert(ent->entity.is());
                   // fall through
               case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
+                  if (data->publishedContext
+                      && ent->entity->getSort() != unoidl::Entity::SORT_MODULE
+                      && !static_cast<unoidl::PublishableEntity *>(
+                          ent->entity.get())->isPublished())
+                  {
+                      error(
+                          @1, yyscanner,
+                          ("unpublished entity " + name
+                           + " used in published context"));
+                      YYERROR;
+                  }
                   switch (ent->entity->getSort()) {
                   case unoidl::Entity::SORT_ENUM_TYPE:
                       $$ = new unoidl::detail::SourceProviderType(
@@ -3558,6 +3828,15 @@ type:
                   }
                   break;
               case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+                  if (data->publishedContext) {
+                      error(
+                          @1, yyscanner,
+                          ("unpublished entity " + name
+                           + " used in published context"));
+                      YYERROR;
+                  }
+                  // fall through
+              case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                   $$ = new unoidl::detail::SourceProviderType(
                       unoidl::detail::SourceProviderType::TYPE_INTERFACE, name,
                       ent);
@@ -3612,16 +3891,21 @@ type:
           if (ent->entity->getSort()
               == unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE)
           {
-              if (args.size()
-                  != (static_cast<
-                          unoidl::PolymorphicStructTypeTemplateEntity *>(
-                              ent->entity.get())->
-                      getTypeParameters().size()))
-              {
+              rtl::Reference<unoidl::PolymorphicStructTypeTemplateEntity> e(
+                  static_cast<unoidl::PolymorphicStructTypeTemplateEntity *>(
+                      ent->entity.get()));
+              if (args.size() != e->getTypeParameters().size()) {
                   error(
                       @1, yyscanner,
                       ("bad number of polymorphic struct type template " + name
                        + " type arguments"));
+                  YYERROR;
+              }
+              if (data->publishedContext && !e->isPublished()) {
+                  error(
+                      @1, yyscanner,
+                      ("unpublished polymorphic struct type template " + name
+                       + " used in published context"));
                   YYERROR;
               }
               $$ = new unoidl::detail::SourceProviderType(name, ent, args);
@@ -3629,6 +3913,7 @@ type:
           }
           break;
       case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
+      case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
           break;
       case unoidl::detail::SourceProviderEntity::KIND_MODULE:
           assert(false); // this cannot happen
