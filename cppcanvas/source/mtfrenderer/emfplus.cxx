@@ -28,6 +28,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -625,7 +626,7 @@ namespace cppcanvas
                 delete[] customEndCap;
             }
 
-            void SetStrokeAttributes (rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
+            void SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
             {
 #if OSL_DEBUG_LEVEL > 1
                 if (width == 0.0) {
@@ -633,8 +634,10 @@ namespace cppcanvas
                 }
 #endif
                 rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getX());
+            }
 
-                // set dashing
+            void SetStrokeDashing(rendering::StrokeAttributes& rStrokeAttributes)
+            {
                 if (dashStyle != EmfPlusLineStyleSolid)
                 {
                     const float dash[] = {3, 3};
@@ -678,12 +681,18 @@ namespace cppcanvas
                     s >> transformation;
 
                 if (penFlags & 2)
+                {
                     s >> startCap;
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tstartCap: 0x" << std::hex << startCap);
+                }
                 else
                     startCap = 0;
 
                 if (penFlags & 4)
+                {
                     s >> endCap;
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tendCap: 0x" << std::hex << endCap);
+                }
                 else
                     endCap = 0;
 
@@ -749,24 +758,38 @@ namespace cppcanvas
                 } else
                     compoundArrayLen = 0;
 
-                if (penFlags & 2048) {
+                if (penFlags & 2048)
+                {
                     s >> customStartCapLen;
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
+
                     if( customStartCapLen<0 )
                         customStartCapLen=0;
                     customStartCap = new sal_uInt8 [customStartCapLen];
                     for (i = 0; i < customStartCapLen; i++)
+                    {
                         s >> customStartCap [i];
-                } else
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\t\tcustomStartCap[" << i << "]: 0x" << std::hex << int(customStartCap[i]));
+                    }
+                }
+                else
                     customStartCapLen = 0;
 
-                if (penFlags & 4096) {
+                if (penFlags & 4096)
+                {
                     s >> customEndCapLen;
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
+
                     if( customEndCapLen<0 )
                         customEndCapLen=0;
                     customEndCap = new sal_uInt8 [customEndCapLen];
                     for (i = 0; i < customEndCapLen; i++)
+                    {
                         s >> customEndCap [i];
-                } else
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\t\tcustomEndCap[" << i << "]: 0x" << std::hex << int(customEndCap[i]));
+                    }
+                }
+                else
                     customEndCapLen = 0;
 
                 EMFPBrush::Read (s, rR);
@@ -1151,7 +1174,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::EMFPPlusDrawPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
+        void ImplRenderer::EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
                                                 OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex)
         {
             EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
@@ -1165,22 +1188,24 @@ namespace cppcanvas
                 rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
                                                                            rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
 
-                polygon.transform( rState.mapModeTransform );
-                rendering::StrokeAttributes aStrokeAttributes;
+                basegfx::B2DPolyPolygon aPolyPolygon(polygon);
+                aPolyPolygon.transform(rState.mapModeTransform);
+                rendering::StrokeAttributes aCommonAttributes;
 
-                pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
+                // some attributes are common for the polygon, and the line
+                // starts & ends - like the stroke width
+                pen->SetStrokeWidth(aCommonAttributes, *this, rState);
 
-                ActionSharedPtr pPolyAction(
-                                            internal::PolyPolyActionFactory::createPolyPolyAction(
-                                                                                                  polygon, rParms.mrCanvas, rState, aStrokeAttributes ) );
+                // but eg. dashing has to be additionally set only on the
+                // polygon
+                rendering::StrokeAttributes aPolygonAttributes(aCommonAttributes);
+                pen->SetStrokeDashing(aPolygonAttributes);
 
+                // render the polygon
+                ActionSharedPtr pPolyAction(internal::PolyPolyActionFactory::createPolyPolyAction(aPolyPolygon, rParms.mrCanvas, rState, aPolygonAttributes));
                 if( pPolyAction )
                 {
-                    maActions.push_back(
-                                        MtfAction(
-                                                  pPolyAction,
-                                                  rParms.mrCurrActionIndex ) );
-
+                    maActions.push_back(MtfAction(pPolyAction, rParms.mrCurrActionIndex));
                     rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
                 }
             }
