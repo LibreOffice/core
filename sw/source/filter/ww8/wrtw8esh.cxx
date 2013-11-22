@@ -1195,7 +1195,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
                     OutEEField(*(i->pAttr));
                     continue;
                 }
-                else if (nWhich == EE_FEATURE_TAB)
+                if (nWhich == EE_FEATURE_TAB)
                 {
                     m_rExport.WriteChar(0x9);
                     continue;
@@ -1257,7 +1257,7 @@ const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(sal_uInt16 nWhich) const
         {
             if (nWhich == i->pAttr->Which() && nTmpSwPos >= i->nStart && nTmpSwPos < i->nEnd)
                 return i->pAttr;    // Found
-            else if (nTmpSwPos < i->nStart)
+            if (nTmpSwPos < i->nStart)
                 return NULL;        // dann kommt da nichts mehr
         }
     }
