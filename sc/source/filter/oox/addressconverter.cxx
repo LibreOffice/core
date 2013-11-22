@@ -226,16 +226,13 @@ bool AddressConverter::parseOoxAddress2d(
     return (ornColumn >= 0) && (ornRow >= 0);
 }
 
-bool AddressConverter::parseOoxAddress2d(
-    sal_Int32& ornColumn, sal_Int32& ornRow, const char* pStr, sal_Int32 nStrLen )
+bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRow, const char* pStr )
 {
     ornColumn = ornRow = 0;
 
-    const char* pStrEnd = pStr + nStrLen;
-
     enum { STATE_COL, STATE_ROW } eState = STATE_COL;
 
-    while (pStr < pStrEnd)
+    while (*pStr)
     {
         char cChar = *pStr;
         switch( eState )
@@ -356,11 +353,10 @@ bool AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
 }
 
 bool AddressConverter::convertToCellAddressUnchecked(
-        com::sun::star::table::CellAddress& orAddress,
-        const char* pStr, size_t nStrLen, sal_Int16 nSheet ) const
+        com::sun::star::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet ) const
 {
     orAddress.Sheet = nSheet;
-    return parseOoxAddress2d(orAddress.Column, orAddress.Row, pStr, nStrLen);
+    return parseOoxAddress2d(orAddress.Column, orAddress.Row, pStr);
 }
 
 bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
@@ -373,9 +369,9 @@ bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
 
 bool AddressConverter::convertToCellAddress(
     com::sun::star::table::CellAddress& rAddress,
-    const char* pStr, size_t nStrLen, sal_Int16 nSheet, bool bTrackOverflow )
+    const char* pStr, sal_Int16 nSheet, bool bTrackOverflow )
 {
-    if (!convertToCellAddressUnchecked(rAddress, pStr, nStrLen, nSheet))
+    if (!convertToCellAddressUnchecked(rAddress, pStr, nSheet))
         return false;
 
     return checkCellAddress(rAddress, bTrackOverflow);

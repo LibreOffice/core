@@ -76,7 +76,7 @@ public:
     // performance sensitive shortcuts to avoid allocation ...
     bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt);
     bool getAsDouble( sal_Int32 nToken, double &rDouble);
-    bool getAsChar( sal_Int32 nToken, const char*& rPos, size_t& rLen ) const;
+    bool getAsChar( sal_Int32 nToken, const char*& rPos ) const;
 
     // XFastAttributeList
     virtual ::sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);

@@ -311,18 +311,16 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
 bool SheetDataContext::importCell( const AttributeList& rAttribs )
 {
     bool bValid = true;
-    AttributeList::Char aChar = rAttribs.getChar(XML_r);
+    const char* p = rAttribs.getChar(XML_r);
 
-    if (!aChar.mpPos)
+    if (!p)
     {
         ++mnCol;
         maCellData.maCellAddr = CellAddress( mnSheet, mnCol, mnRow );
     }
     else
     {
-        bValid = mrAddressConv.convertToCellAddress(
-            maCellData.maCellAddr, aChar.mpPos, aChar.mnSize, mnSheet, true);
-
+        bValid = mrAddressConv.convertToCellAddress(maCellData.maCellAddr, p, mnSheet, true);
         mnCol = maCellData.maCellAddr.Column;
     }
 
