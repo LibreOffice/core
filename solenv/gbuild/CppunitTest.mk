@@ -91,11 +91,10 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
-			|| (RET=$$? \
-				$(if $(value gb_CppunitTest_postprocess), \
-					&& $(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1) \
-				; cat $@.log && $(call gb_UNIT_FAILED_MSG,Cppunit,$*) \
-				&& false))))
+			|| ($(if $(value gb_CppunitTest_postprocess), \
+					RET=$$?; \
+					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
+				cat $@.log; $(call gb_UNIT_FAILED_MSG,Cppunit,$*); false))))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktarget,$(1)))
