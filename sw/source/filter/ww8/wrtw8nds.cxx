@@ -236,27 +236,29 @@ sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
 
 sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 {
-    sal_Int32 nPos;
-    sal_Int32 nMinPos = SAL_MAX_INT32;
-    sal_Int32 i=0;
-
     const OUString aTxt = rNd.GetTxt();
     sal_Int32 fieldEndPos = aTxt.indexOf(CH_TXT_ATR_FIELDEND, nStartPos);
     sal_Int32 fieldStartPos = aTxt.indexOf(CH_TXT_ATR_FIELDSTART, nStartPos);
     sal_Int32 formElementPos = aTxt.indexOf(CH_TXT_ATR_FORMELEMENT, nStartPos);
 
-    sal_Int32 pos = lcl_getMinPos( fieldEndPos, fieldStartPos );
-    pos = lcl_getMinPos( pos, formElementPos );
+    const sal_Int32 pos = lcl_getMinPos(
+        lcl_getMinPos( fieldEndPos, fieldStartPos ),
+        formElementPos );
 
-    if (pos != -1)
-        nMinPos = pos;
+    sal_Int32 nMinPos = (pos>=0) ? pos : SAL_MAX_INT32;
 
     // first the redline, then the attributes
     if( pCurRedline )
     {
         const SwPosition* pEnd = pCurRedline->End();
-        if (pEnd->nNode == rNd && ((i = pEnd->nContent.GetIndex()) >= nStartPos) && i < nMinPos )
+        if (pEnd->nNode == rNd)
+        {
+            const sal_Int32 i = pEnd->nContent.GetIndex();
+            if ( i >= nStartPos && i < nMinPos )
+            {
                 nMinPos = i;
+            }
+        }
     }
 
     if ( nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().size() )
@@ -277,17 +279,21 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 
             if( pStt->nNode == rNd )
             {
-                if( ( i = pStt->nContent.GetIndex() ) >= nStartPos &&
-                    i < nMinPos )
+                const sal_Int32 i = pStt->nContent.GetIndex();
+                if( i >= nStartPos && i < nMinPos )
                     nMinPos = i;
             }
             else
                 break;
 
-            if( pEnd->nNode == rNd &&
-                ( i = pEnd->nContent.GetIndex() ) < nMinPos &&
-                i >= nStartPos )
+            if( pEnd->nNode == rNd )
+            {
+                const sal_Int32 i = pEnd->nContent.GetIndex();
+                if( i >= nStartPos && i < nMinPos )
+                {
                     nMinPos = i;
+                }
+            }
         }
     }
 
@@ -302,10 +308,10 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 
 // can be optimized if we consider that the TxtAttrs are sorted by start position.
 // but then we'd have to save 2 indices
-        for( i = 0; i < pTxtAttrs->Count(); i++ )
+        for( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            nPos = *pHt->GetStart();    // first Attr characters
+            sal_Int32 nPos = *pHt->GetStart();    // first Attr characters
             if( nPos >= nStartPos && nPos <= nMinPos )
                 nMinPos = nPos;
 
@@ -343,7 +349,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     {
         const SwPosition &rAnchor = maFlyIter->GetPosition();
 
-        nPos = rAnchor.nContent.GetIndex();
+        sal_Int32 nPos = rAnchor.nContent.GetIndex();
         if (nPos >= nStartPos && nPos <= nMinPos)
             nMinPos = nPos;
 
