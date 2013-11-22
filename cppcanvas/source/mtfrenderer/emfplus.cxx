@@ -92,6 +92,13 @@
 #define EmfPlusRegionInitialStateEmpty 0x10000002
 #define EmfPlusRegionInitialStateInfinite 0x10000003
 
+const sal_Int32 EmfPlusLineStyleSolid = 0x00000000;
+const sal_Int32 EmfPlusLineStyleDash = 0x00000001;
+const sal_Int32 EmfPlusLineStyleDot = 0x00000002;
+const sal_Int32 EmfPlusLineStyleDashDot = 0x00000003;
+const sal_Int32 EmfPlusLineStyleDashDotDot = 0x00000004;
+const sal_Int32 EmfPlusLineStyleCustom = 0x00000005;
+
 #if OSL_DEBUG_LEVEL > 1
 #define EMFP_DEBUG(x) x
 #else
@@ -605,6 +612,34 @@ namespace cppcanvas
             {
                 EMFP_DEBUG (if (width == 0.0) printf ("EMF+\tTODO: pen with zero width - using minimal which might not be correct\n"));
                 rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getX());
+
+                // set dashing
+                if (dashStyle != EmfPlusLineStyleSolid)
+                {
+                    const float dash[] = {3, 3};
+                    const float dot[] = {1, 3};
+                    const float dashdot[] = {3, 3, 1, 3};
+                    const float dashdotdot[] = {3, 3, 1, 3, 1, 3};
+
+                    sal_Int32 nLen = 0;
+                    const float *pPattern;
+                    switch (dashStyle)
+                    {
+                        case EmfPlusLineStyleDash:       nLen = SAL_N_ELEMENTS(dash); pPattern = dash; break;
+                        case EmfPlusLineStyleDot:        nLen = SAL_N_ELEMENTS(dot); pPattern = dot; break;
+                        case EmfPlusLineStyleDashDot:    nLen = SAL_N_ELEMENTS(dashdot); pPattern = dashdot; break;
+                        case EmfPlusLineStyleDashDotDot: nLen = SAL_N_ELEMENTS(dashdotdot); pPattern = dashdotdot; break;
+                        case EmfPlusLineStyleCustom:     nLen = dashPatternLen; pPattern = dashPattern; break;
+                    }
+                    if (nLen > 0)
+                    {
+                        uno::Sequence<double> aDashArray(nLen);
+                        for (int i = 0; i < nLen; ++i)
+                            aDashArray[i] = pPattern[i];
+
+                        rStrokeAttributes.DashArray = aDashArray;
+                    }
+                }
             }
 
             void Read (SvStream& s, ImplRenderer& rR, sal_Int32, sal_Int32 )
@@ -640,7 +675,10 @@ namespace cppcanvas
                     mitterLimit = 0;
 
                 if (penFlags & 32)
+                {
                     s >> dashStyle;
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tdashStyle: 0x" << std::hex << dashStyle);
+                }
                 else
                     dashStyle = 0;
 
@@ -654,14 +692,23 @@ namespace cppcanvas
                 else
                     dashOffset = 0;
 
-                if (penFlags & 256) {
+                if (penFlags & 256)
+                {
+                    dashStyle = EmfPlusLineStyleCustom;
+
                     s >> dashPatternLen;
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tdashPatternLen: " << dashPatternLen);
+
                     if( dashPatternLen<0 || sal_uInt32(dashPatternLen)>SAL_MAX_INT32/sizeof(float) )
                         dashPatternLen = SAL_MAX_INT32/sizeof(float);
                     dashPattern = new float [dashPatternLen];
                     for (i = 0; i < dashPatternLen; i++)
+                    {
                         s >> dashPattern [i];
-                } else
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\t\tdashPattern[" << i << "]: " << dashPattern[i]);
+                    }
+                }
+                else
                     dashPatternLen = 0;
 
                 if (penFlags & 512)
