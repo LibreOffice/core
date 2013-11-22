@@ -15,7 +15,7 @@ BUILDID			:=$(shell cd $(SRCDIR) && git log -1 --format=%H)
 #- Macros ---------------------------------------------------------------------
 
 define MobileLibreOfficeXcodeBuild 
-	CC=;xcodebuild -project MobileLibreOffice/MobileLibreOffice.xcodeproj -scheme MobileLibreOffice -arch armv7 -configuration $(if $(ENABLE_DEBUG),Debug,Release) $(1) >/dev/null
+	CC=;xcodebuild -project MobileLibreOffice/MobileLibreOffice.xcodeproj -scheme MobileLibreOffice -arch armv7 -configuration $(if $(ENABLE_DEBUG),Debug,Release) $(1) $(if $(verbose)$(VERBOSE),,>/dev/null)
 endef
 
 #- Targets --------------------------------------------------------------------
