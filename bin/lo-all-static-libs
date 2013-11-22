@@ -17,12 +17,25 @@ if test "$OS" != ANDROID -a "$OS" != IOS; then
     echo This script makes sense only in Android or iOS builds.
 fi
 
+foolibs=
+for var in EBOOK_LIBS FREEHAND_LIBS HUNSPELL_LIBS HYPHEN_LIB MYTHES_LIBS; do
+    dirs=
+    libs=
+    for i in `eval echo '$'$var`; do
+	case "$i" in
+	-L*) dirs="$dirs ${i#-L}";;
+        -l*) libs="$libs ${i#-l}";;
+	esac
+    done
+    for l in $libs; do
+	for d in $dirs; do
+	    test -f $d/lib$l.a && foolibs="$foolibs $d/lib$l.a"
+	done
+    done
+done
+
 echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
-     $EBOOK_LIBS \
-     $FREEHAND_LIBS \
-     $HUNSPELL_LIBS \
-     $HYPHEN_LIB \
-     $MYTHES_LIBS \
+     $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
      $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
