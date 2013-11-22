@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///xw\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-22T20:48:33Z",
+      "side": 1,
+      "message": "Please use our convention fdo#38592 to reference a bug, so the tools involved actually can read the bug number from the commit summary.",
+      "revId": "9fa724d859d7f6c415c03d859d02b31b4a640fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///xo\u003d",
+        "filename": "sc/source/filter/oox/formulaparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-22T20:48:33Z",
+      "side": 1,
+      "message": "IF the below change now introducing unconditional usage of nParam was done then this line would be moot.",
+      "revId": "9fa724d859d7f6c415c03d859d02b31b4a640fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///xs\u003d",
+        "filename": "sc/source/filter/oox/formulaparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-22T20:48:33Z",
+      "side": 1,
+      "message": "While this seems to be correct in this case I think it only fixes fixes a symptom. The entire FormulaFinalizer::appendCalcOnlyParameter() method should only be called if the parameter info indicates so, as can be seen in FormulaFinalizer::processParameters() where this method is called.\n\nSo actually there the FunctionInfo which FunctionParamInfoIterator aParamInfoIt points to seems to be wrong, or the nParamCount , or ...",
+      "revId": "9fa724d859d7f6c415c03d859d02b31b4a640fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
