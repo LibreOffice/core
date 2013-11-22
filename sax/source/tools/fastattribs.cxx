@@ -157,7 +157,7 @@ bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble)
     return false;
 }
 
-bool FastAttributeList::getAsChar( sal_Int32 nToken, const char*& rPos, size_t& rLen ) const
+bool FastAttributeList::getAsChar( sal_Int32 nToken, const char*& rPos ) const
 {
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
     {
@@ -166,12 +166,6 @@ bool FastAttributeList::getAsChar( sal_Int32 nToken, const char*& rPos, size_t& 
 
         sal_Int32 nOffset = maAttributeValues[i];
         rPos = mpChunk + nOffset;
-
-        if (i + 1 < maAttributeValues.size())
-            rLen = maAttributeValues[i+1] - nOffset - 1;
-        else
-            rLen = mnChunkLength - nOffset - 1;
-
         return true;
     }
 
