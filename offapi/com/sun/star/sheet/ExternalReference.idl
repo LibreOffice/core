@@ -46,20 +46,16 @@ struct ExternalReference
      */
     long Index;
 
-#if 0
-
-    /** Name of the sheet that the external reference points to.
-
-        <p>In case of a cell range reference that spans across multiple
-        sheets, this is the name of the first sheet in that range.</p>
-
-        <p>Note that an external range name ignores this value at the moment,
-        but <i>it may make use of this data in the future when Calc supports a
-        sheet-specific range name.</i></p>
-     */
-    string SheetName;
-#endif
-
+//  /** Name of the sheet that the external reference points to.
+//
+//      <p>In case of a cell range reference that spans across multiple
+//      sheets, this is the name of the first sheet in that range.</p>
+//
+//      <p>Note that an external range name ignores this value at the moment,
+//      but <i>it may make use of this data in the future when Calc supports a
+//      sheet-specific range name.</i></p>
+//   */
+//  string SheetName;
 
     /** Reference data.
 
