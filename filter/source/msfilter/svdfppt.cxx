@@ -2291,14 +2291,6 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     }
                     pPortion->ApplyTo( aPortionAttribs, (SdrPowerPointImport&)*this, nDestinationInstance, pTextObj );
                     rOutliner.QuickSetAttribs( aPortionAttribs, aSelection );
-
-                    // set the attribs for the entire paragraph, if it is a placeholder
-                    if ( pTextObj->GetOEPlaceHolderAtom() && aSelection.nStartPos == aSelection.nEndPos )
-                    {
-                        SfxItemSet& rItemSet = rOutliner.GetStyleSheet( nParaIndex )->GetItemSet();
-                        pPortion->ApplyTo( rItemSet, (SdrPowerPointImport&)*this, nDestinationInstance, pTextObj );
-                    }
-
                     aSelection.nStartPos = aSelection.nEndPos;
                 }
                 boost::optional< sal_Int16 > oStartNumbering;
