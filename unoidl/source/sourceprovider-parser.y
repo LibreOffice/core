@@ -802,6 +802,7 @@ Found findEntity(
     }
 }
 
+
 bool checkTypeArgument(
     YYLTYPE location, yyscan_t yyscanner,
     unoidl::detail::SourceProviderType const & type)
@@ -817,9 +818,31 @@ bool checkTypeArgument(
             location, yyscanner,
             "bad instantiated polymorphic struct type argument");
         return false;
+    case unoidl::detail::SourceProviderType::TYPE_SEQUENCE:
+        return checkTypeArgument(location, yyscanner, type.subtypes.front());
     default:
         return true;
     }
+}
+
+bool checkInstantiatedPolymorphicStructTypeArgument(
+    unoidl::detail::SourceProviderType const & type, OUString const & name)
+{
+    if (type.type
+        == unoidl::detail::SourceProviderType::TYPE_INSTANTIATED_POLYMORPHIC_STRUCT)
+    {
+        for (std::vector<unoidl::detail::SourceProviderType>::const_iterator i(
+                 type.subtypes.begin());
+             i != type.subtypes.end(); ++i)
+        {
+            if (checkInstantiatedPolymorphicStructTypeArgument(*i, name)
+                || i->getName() == name) // no need to worry about typedef
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 std::vector<OUString> annotations(bool deprecated) {
@@ -1161,16 +1184,7 @@ typeParameters:
           pad(getCurrentPad<unoidl::detail::SourceProviderPolymorphicStructTypeTemplateEntityPad>(
                   data));
       OUString id(convertName($3));
-      if (nameHasSameIdentifierAs(data->currentName, id)) {
-          error(
-              @3, yyscanner,
-              ("polymorphic struct type template " + data->currentName
-               + " type parameter " + id
-               + " has same unqualified identifer as the type itself"));
-          YYERROR;
-      }
-      if (std::find(
-              pad->typeParameters.begin(), pad->typeParameters.end(),  id)
+      if (std::find(pad->typeParameters.begin(), pad->typeParameters.end(), id)
           != pad->typeParameters.end())
       {
           error(
@@ -1189,14 +1203,6 @@ typeParameters:
           pad(getCurrentPad<unoidl::detail::SourceProviderPolymorphicStructTypeTemplateEntityPad>(
                   data));
       OUString id(convertName($1));
-      if (nameHasSameIdentifierAs(data->currentName, id)) {
-          error(
-              @1, yyscanner,
-              ("polymorphic struct type template " + data->currentName
-               + " type parameter " + id
-               + " has same unqualified identifer as the type itself"));
-          YYERROR;
-      }
       assert(pad->typeParameters.empty());
       pad->typeParameters.push_back(id);
   }
@@ -1288,11 +1294,23 @@ structMember:
       default:
           break;
       }
-      if (t.getName() == data->currentName) { // no need to worry about typedefs
+      if (t.type != unoidl::detail::SourceProviderType::TYPE_PARAMETER
+          && t.getName() == data->currentName) // no need to worry about typedef
+      {
           error(
               @2, yyscanner,
               ("struct/exception type " + data->currentName + " direct member "
                + id + " has same type as the type itself"));
+          YYERROR;
+      }
+      if (checkInstantiatedPolymorphicStructTypeArgument(t, data->currentName))
+      {
+          error(
+              @2, yyscanner,
+              ("struct/exception type " + data->currentName + " direct member "
+               + id
+               + (" has instantiated polymorphic struct type that uses the type"
+                  " itself as an argument")));
           YYERROR;
       }
       if (nameHasSameIdentifierAs(data->currentName, id)) {
@@ -1382,17 +1400,6 @@ structMember:
               p2 = dynamic_cast<unoidl::detail::SourceProviderPolymorphicStructTypeTemplateEntityPad *>(
                   ent->pad.get());
           if (p2 != 0) {
-              if (std::find(
-                      p2->typeParameters.begin(), p2->typeParameters.end(),  id)
-                  != p2->typeParameters.end())
-              {
-                  error(
-                      @3, yyscanner,
-                      ("polymorphic struct type template " + data->currentName
-                       + " direct member " + id
-                       + " has same identifier as a type parameter"));
-                  YYERROR;
-              }
               for (std::vector<unoidl::PolymorphicStructTypeTemplateEntity::Member>::iterator i(
                        p2->members.begin());
                    i != p2->members.end(); ++i)
