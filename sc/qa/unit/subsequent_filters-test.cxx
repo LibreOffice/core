@@ -380,20 +380,101 @@ void ScFiltersTest::testFunctionsExcel2010()
     ScDocument* pDoc = xDocSh->GetDocument();
     pDoc->CalcAll(); // perform hard re-calculation.
 
-    // B2:B6 and B8:B10 should all be formula cells, and shouldn't have errors.
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,1,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,3,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,4,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,5,0)));
-    // Skip B7.
+    // Which test rows to evaluate, 1-based as in UI to ease maintenance.
+    struct
+    {
+        SCROW nRow;
+        bool  bEvaluate;
+    } aTests[] = {
+        {  2, false },
+        {  3, true  },
+        {  4, true  },
+        {  5, true  },
+        {  6, true  },
+        {  7, true  },
+        {  8, true  },
+        {  9, false },
+        { 10, false },
+        { 11, true  },
+        { 12, true  },
+        { 13, true  },
+        { 14, true  },
+        { 15, true  },
+        { 16, true  },
+        { 17, true  },
+        { 18, true  },
+        { 19, true  },
+        { 20, false },
+        { 21, false },
+        { 22, true  },
+        { 23, true  },
+        { 24, true  },
+        { 25, true  },
+        { 26, true  },
+        { 27, true  },
+        { 28, true  },
+        { 29, true  },
+        { 30, false },
+        { 31, false },
+        { 32, false },
+        { 33, false },
+        { 34, true  },
+        { 35, true  },
+        { 36, false },
+        { 37, false },
+        { 38, false },
+        { 39, false },
+        { 40, false },
+        { 41, false },
+        { 42, false },
+        { 43, false },
+        { 44, false },
+        { 45, false },
+        { 46, false },
+        { 47, false },
+        { 48, false },
+        { 49, false },
+        { 50, false },
+        { 51, false },
+        { 52, false },
+        { 53, false },
+        { 54, true  },
+        { 55, true  },
+        { 56, false },
+        { 57, false },
+        { 58, false },
+        { 59, false },
+        { 60, true  },
+        { 61, true  },
+        { 62, false },
+        { 63, false },
+        { 64, false },
+        { 65, false },
+        { 66, false },
+        { 67, false },
+        { 68, true  },
+        { 69, true  },
+        { 70, true  },
+        { 71, true  },
+        { 72, false },
+        { 73, false }
+    };
 
-#if 0 //F.DIST.RT not yet supported in the core.
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,7,0)));
-#endif
-
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,8,0)));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell without error.", isFormulaWithoutError(*pDoc, ScAddress(1,9,0)));
+    for (size_t i=0; i < SAL_N_ELEMENTS(aTests); ++i)
+    {
+        if (aTests[i].bEvaluate)
+        {
+            // Column A is description, B is formula, C is Excel result, D is
+            // comparison.
+            SCROW nRow = aTests[i].nRow - 1;    // 0-based
+            CPPUNIT_ASSERT_MESSAGE( OString( "Expected a formula cell without error at row " +
+                    OString::number( aTests[i].nRow)).getStr(),
+                    isFormulaWithoutError( *pDoc, ScAddress( 1, nRow, 0)));
+            CPPUNIT_ASSERT_MESSAGE( OString( "Expected a TRUE value at row " +
+                    OString::number( aTests[i].nRow)).getStr(),
+                    0 != pDoc->GetValue( ScAddress( 3, nRow, 0)));
+        }
+    }
 
     xDocSh->DoClose();
 }
