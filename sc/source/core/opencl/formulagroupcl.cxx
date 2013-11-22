@@ -695,7 +695,7 @@ public:
         ss << "        if (lidx == 0)\n";
         ss << "            current_result =";
         if (dynamic_cast<OpCount*>(mpCodeGen.get()))
-            ss << "shm_buf[0]";
+            ss << "current_result + shm_buf[0]";
         else
             ss << mpCodeGen->Gen2("current_result", "shm_buf[0]");
         ss << ";\n";
