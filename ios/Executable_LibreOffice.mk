@@ -36,13 +36,6 @@ $(eval $(call gb_Executable_add_objcobjects,LibreOffice,\
 # rebuilt if any library has been rebuilt. Avoids need for "make
 # ios.clean".
 
-# Yeah, this isn't the full list. I couldn't be bothered. Do we want to
-# list everything here, too (as in gb_LinkTarget__command_dynamiclink in
-# solenv/gbuild/platform/IOS_ARM_GCC.mk)? Should we have a global gb_
-# variable for that list? (To be used for Android builds, too.)
-
-$(WORKDIR)/LinkTarget/Executable/LibreOffice : \
-    $(wildcard $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib*.a) \
-    $(wildcard $(WORKDIR)/LinkTarget/StaticLibrary/lib*.a)
+$(WORKDIR)/LinkTarget/Executable/LibreOffice : $(shell $(SRCDIR)/bin/lo-all-static-libs)
 
 # vim: set ts=4 sw=4 et:
