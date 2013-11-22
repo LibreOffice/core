@@ -11,7 +11,7 @@
 #define SC_OPENCL_FORMULAGROUPCL_PUBLIC_HXX
 
 const char* publicFunc =
- "int isNan(double a) { return a != a; }\n"
+ "int isNan(double a) { return isnan(a); }\n"
  "double fsum_count(double a, double b, __private int *p) {\n"
  "    bool t = isNan(a);\n"
  "    (*p) += t?0:1;\n"
