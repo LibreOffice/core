@@ -77,8 +77,8 @@ sub add_profile_into_filelist
 
     # Taking the base data from a file in the root module
 
-    if ( ! $allvariableshashref->{'ROOTMODULEGID'} ) { installer::exiter::exit_program("ERROR: ROOTMODULEGID must be defined in list file!", "add_profile_into_filelist"); }
-    my $rootmodulegid = $allvariableshashref->{'ROOTMODULEGID'};
+    if ( ! $allvariables->{'ROOTMODULEGID'} ) { installer::exiter::exit_program("ERROR: ROOTMODULEGID must be defined in list file!", "add_profile_into_filelist"); }
+    my $rootmodulegid = $allvariables->{'ROOTMODULEGID'};
     my $rootfile;
     foreach my $file (@{$filesarrayref}) {
         if ($file->{'modules'} eq $rootmodulegid)
