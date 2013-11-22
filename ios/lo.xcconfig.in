@@ -17,6 +17,8 @@ LO_INSTDIR = @INSTDIR@
 LO_SRCDIR = @SRC_ROOT@
 LO_WORKDIR = @WORKDIR@
 
+// The value of this variable is inserted in
+// CustomTarget_MobileLibreOffice_app.mk.
 LINK_LDFLAGS =
 
 // These are actual Xcode-known settings. The corresponding autoconf
