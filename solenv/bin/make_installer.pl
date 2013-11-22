@@ -87,6 +87,58 @@ use installer::worker;
 use installer::xpdinstaller;
 use installer::ziplist;
 
+use strict;
+
+sub GetSetupScriptLines ($$$)
+{
+    my ($allsettingsarrayref, $allvariableshashref, $includepatharrayref) = @_;
+
+    if ($installer::globals::setupscript_defined_in_productlist)
+    {
+        installer::setupscript::set_setupscript_name($allsettingsarrayref, $includepatharrayref);
+    }
+
+    $installer::logger::Info->print( "... analyzing script: $installer::globals::setupscriptname ... \n" );
+    installer::logger::globallog("setup script file: $installer::globals::setupscriptname");
+    $installer::logger::Info->print( "... analyzing script: $installer::globals::setupscriptname ... \n" );
+
+    # Reading the setup script file
+    my $setupscriptref = installer::files::read_file($installer::globals::setupscriptname);
+
+    # Resolving variables defined in the zip list file into setup
+    # script.  All the variables are defined in $allvariablesarrayref
+    installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
+
+    # Resolving %variables defined in the installation object
+    my $allscriptvariablesref = installer::setupscript::get_all_scriptvariables_from_installation_object(
+        $setupscriptref,
+        $installer::globals::setupscriptname);
+    installer::setupscript::add_lowercase_productname_setupscriptvariable($allscriptvariablesref);
+    installer::setupscript::resolve_lowercase_productname_setupscriptvariable($allscriptvariablesref);
+
+    $setupscriptref = installer::setupscript::replace_all_setupscriptvariables_in_script(
+        $setupscriptref,
+        $allscriptvariablesref);
+
+    # Adding all variables defined in the installation object into the
+    # hash of all variables.  This is needed if variables are defined
+    # in the installation object, but not in the zip list file.  If
+    # there is a definition in the zip list file and in the
+    # installation object, the installation object is more important
+    installer::setupscript::add_installationobject_to_variables($allvariableshashref, $allscriptvariablesref);
+
+    # Adding also all variables, that must be included into the $allvariableshashref.
+    installer::setupscript::add_forced_properties($allvariableshashref);
+
+    # Replacing preset properties, not using the default mechanisms (for example for UNIXPRODUCTNAME)
+    installer::setupscript::replace_preset_properties($allvariableshashref);
+
+    # We did this already.  Can this or the other one be removed.
+    installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
+
+    return $setupscriptref;
+}
+
 #################################################
 # Main program
 #################################################
@@ -334,43 +386,7 @@ installer::control::check_java_for_xpd($allvariableshashref);
 # Analyzing the setup script
 #####################################
 
-if ($installer::globals::setupscript_defined_in_productlist) { installer::setupscript::set_setupscript_name($allsettingsarrayref, $includepatharrayref); }
-
-installer::logger::globallog("setup script file: $installer::globals::setupscriptname");
-
-$installer::logger::Info->print( "... analyzing script: $installer::globals::setupscriptname ... \n" );
-
-my $setupscriptref = installer::files::read_file($installer::globals::setupscriptname); # Reading the setup script file
-
-# Resolving variables defined in the zip list file into setup script
-# All the variables are defined in $allvariablesarrayref
-
-installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
-
-# Resolving %variables defined in the installation object
-
-my $allscriptvariablesref = installer::setupscript::get_all_scriptvariables_from_installation_object($setupscriptref);
-
-installer::setupscript::add_lowercase_productname_setupscriptvariable($allscriptvariablesref);
-
-installer::setupscript::resolve_lowercase_productname_setupscriptvariable($allscriptvariablesref);
-
-$setupscriptref = installer::setupscript::replace_all_setupscriptvariables_in_script($setupscriptref, $allscriptvariablesref);
-
-# Adding all variables defined in the installation object into the hash of all variables.
-# This is needed if variables are defined in the installation object, but not in the zip list file.
-# If there is a definition in the zip list file and in the installation object, the installation object is more important
-
-installer::setupscript::add_installationobject_to_variables($allvariableshashref, $allscriptvariablesref);
-
-# Adding also all variables, that must be included into the $allvariableshashref.
-installer::setupscript::add_forced_properties($allvariableshashref);
-
-# Replacing preset properties, not using the default mechanisms (for example for UNIXPRODUCTNAME)
-installer::setupscript::replace_preset_properties($allvariableshashref);
-
-installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
-
+my $setupscriptref = GetSetupScriptLines($allsettingsarrayref, $allvariableshashref, $includepatharrayref);
 
 installer::logger::log_hashref($allvariableshashref);
 
@@ -656,7 +672,7 @@ for (;1;last)
     # Resolving include paths (language dependent)
     ################################################
 
-    $includepatharrayref_lang = installer::ziplist::replace_languages_in_pathes($includepatharrayref, $languagesarrayref);
+    my $includepatharrayref_lang = installer::ziplist::replace_languages_in_pathes($includepatharrayref, $languagesarrayref);
 
     if ( $installer::globals::refresh_includepathes ) { installer::worker::collect_all_files_from_includepathes($includepatharrayref_lang); }
 
