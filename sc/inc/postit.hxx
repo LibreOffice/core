@@ -249,9 +249,9 @@ namespace sc {
 struct NoteEntry
 {
     ScAddress maPos;
-    const ScPostIt* mpNote;
+    ScPostIt* mpNote;
 
-    NoteEntry( const ScAddress& rPos, const ScPostIt* pNote );
+    NoteEntry( ScAddress& rPos, ScPostIt* pNote );
 };
 
 }

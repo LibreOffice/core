@@ -388,11 +388,12 @@ void ScXMLAnnotationContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, const 
     rFmt.maSelection.nStartPos = nBegin;
     rFmt.maSelection.nEndPos = nEnd;
 
+/*
     // Store the used text styles for export.
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     ScAddress aCellPos = GetScImport().GetTables().GetCurrentCellPos();
     pSheetData->AddTextStyle(rStyleName, aCellPos, rFmt.maSelection);
-
+*/
     boost::scoped_ptr<SfxPoolItem> pPoolItem;
     sal_uInt16 nLastItemID = EE_CHAR_END + 1;
 
