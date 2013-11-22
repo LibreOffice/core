@@ -2197,6 +2197,12 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
             break;
     }
 
+    // VML import of shape text is already handled by
+    // OOXMLFastContextHandlerWrapper::lcl_createFastChildContext(), here we
+    // handle the WPS import of shape text, as there the parent context is a
+    // Shape one, so a different situation.
+    if (Element == static_cast<sal_Int32>(NS_wps | OOXML_txbx))
+        sendShape(Element);
 
     return xContextHandler;
 }

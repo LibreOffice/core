@@ -1533,6 +1533,14 @@ DECLARE_OOXMLIMPORT_TEST(lineWpsOnly, "line-wps-only.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(210), xShape->getPosition().X);
 }
 
+DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello world!"), xFrame->getString());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
 {
     // The document contains a rotated bitmap
