@@ -3325,6 +3325,11 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/security,\
 	XSanExtension \
 	XSerialNumberAdapter \
 ))
+
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet/opencl,\
+	XOpenCLSelection \
+))
+
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	ActivationEvent \
 	AddressConvention \

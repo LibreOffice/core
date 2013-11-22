@@ -185,6 +185,8 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo();
  */
 bool switchOpenclDevice(const OUString* pDeviceId, bool bAutoSelect);
 
+void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
+
 }}
 
 #endif

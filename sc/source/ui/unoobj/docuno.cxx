@@ -92,6 +92,9 @@
 #include "sheetevents.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
+#include "platforminfo.hxx"
+#include "interpre.hxx"
+#include "formulagroup.hxx"
 
 using namespace com::sun::star;
 
@@ -2285,6 +2288,59 @@ void ScModelObj::HandleCalculateEvents()
         pDoc->ResetCalcNotifications();
     }
 }
+
+// XOpenCLSelection
+
+sal_Bool ScModelObj::isOpenCLEnabled()
+    throw (uno::RuntimeException)
+{
+    return ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
+}
+
+void ScModelObj::enableOpenCL(sal_Bool bEnable)
+    throw (uno::RuntimeException)
+{
+    ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
+    aConfig.mbOpenCLEnabled = bEnable;
+    ScInterpreter::SetGlobalConfig(aConfig);
+}
+
+void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
+    throw (uno::RuntimeException)
+{
+    if(nPlatform < 0 || nDevice < 0)
+        throw uno::RuntimeException();
+
+    std::vector<sc::OpenclPlatformInfo> aPlatformInfo;
+    sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
+    if(size_t(nPlatform) >= aPlatformInfo.size())
+        throw uno::RuntimeException();
+
+    if(size_t(nDevice) >= aPlatformInfo[nPlatform].maDevices.size())
+        throw uno::RuntimeException();
+
+    OUString aDeviceString = aPlatformInfo[nPlatform].maVendor + " " + aPlatformInfo[nPlatform].maDevices[nDevice].maName;
+    sc::FormulaGroupInterpreter::switchOpenCLDevice(aDeviceString, false);
+}
+
+sal_Int32 ScModelObj::getPlatformID()
+    throw (uno::RuntimeException)
+{
+    sal_Int32 nPlatformId;
+    sal_Int32 nDeviceId;
+    sc::FormulaGroupInterpreter::getOpenCLDeviceInfo(nDeviceId, nPlatformId);
+    return nPlatformId;
+}
+
+sal_Int32 ScModelObj::getDeviceID()
+    throw (uno::RuntimeException)
+{
+    sal_Int32 nPlatformId;
+    sal_Int32 nDeviceId;
+    sc::FormulaGroupInterpreter::getOpenCLDeviceInfo(nDeviceId, nPlatformId);
+    return nDeviceId;
+}
+
 
 //------------------------------------------------------------------------
 

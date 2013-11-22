@@ -97,6 +97,7 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
     static void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms);
     static bool switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect);
     static void enableOpenCL(bool bEnable);
+    static void getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId);
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
     virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
