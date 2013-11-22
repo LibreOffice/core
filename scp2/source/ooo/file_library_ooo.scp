@@ -232,27 +232,6 @@ End
 
 #endif
 
-#if defined(UNX) && ! defined(MACOSX)
-#ifdef ENABLE_TDE
-File gid_File_Lib_Vclplug_Tde
-    Name = LIBNAME(vclplug_tde);
-    PACKED_LIB_FILE_BODY;
-End
-#endif
-#ifdef ENABLE_KDE
-File gid_File_Lib_Vclplug_Kde
-    Name = LIBNAME(vclplug_kde);
-    PACKED_LIB_FILE_BODY;
-End
-#endif
-#ifdef ENABLE_KDE4
-File gid_File_Lib_Vclplug_Kde4
-    Name = LIBNAME(vclplug_kde4);
-    PACKED_LIB_FILE_BODY;
-End
-#endif
-#endif
-
 #if defined(MACOSX)
 File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);
@@ -261,30 +240,7 @@ End
 #endif
 
 #if defined UNX && ! defined MACOSX
-#if ! defined LIBO_HEADLESS
-STD_LIB_FILE( gid_File_Lib_Vclplug_Svp, vclplug_svp )
-#endif
 STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
-#endif
-
-#if defined UNX && ! defined MACOSX
-
-File gid_File_Lib_Recentfile
-    PACKED_LIB_FILE_BODY;
-    Name = STRING(CONCAT2(librecentfile,UNXSUFFIX));
-End
-
-#endif
-
-STD_LIB_FILE( gid_File_Lib_Oox , oox)
-
-#if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
-
-File gid_File_Lib_Spa
-    Name = LIBNAME(spa);
-    PACKED_LIB_FILE_BODY;
-End
-
 #endif
 
 #if ! defined UNX
