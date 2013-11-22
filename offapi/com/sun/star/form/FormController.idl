@@ -40,18 +40,13 @@
 
  module com {  module sun {  module star {  module form {
 
-module runtime {
-    published interface XFormOperations;
-};
-
-
 /** is superseded by com::sun::star::form::runtime::FormController.
     @deprecated
 */
 published service FormController
 {
     [optional] service FormControllerDispatcher;
-    [optional, property] ::com::sun::star::form::runtime::XFormOperations FormOperations;
+    // [optional, property] ::com::sun::star::form::runtime::XFormOperations FormOperations; is not published
 
     /** is used for notifying the (de)activation of the controller.
      */
