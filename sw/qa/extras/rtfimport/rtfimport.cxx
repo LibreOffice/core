@@ -8,8 +8,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(MACOSX) && !defined(WNT)
-
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -109,6 +107,8 @@ protected:
 };
 
 #define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
+
+#if !defined(MACOSX) && !defined(WNT)
 
 DECLARE_RTFIMPORT_TEST(testFdo45553, "fdo45553.rtf")
 {
@@ -1366,6 +1366,21 @@ DECLARE_RTFIMPORT_TEST(testCp1000018, "cp1000018.rtf")
 }
 
 #endif
+
+DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")
+{
+    // The single-line document had a second fake empty para on Windows.
+    bool bFound = true;
+    try
+    {
+        getParagraph(2);
+    }
+    catch (const container::NoSuchElementException&)
+    {
+        bFound = false;
+    }
+    CPPUNIT_ASSERT_EQUAL(false, bFound);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
