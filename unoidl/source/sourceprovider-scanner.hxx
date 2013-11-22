@@ -218,7 +218,10 @@ private:
 };
 
 struct SourceProviderEntity {
-    enum Kind { KIND_EXTERNAL, KIND_LOCAL, KIND_INTERFACE_DECL, KIND_MODULE };
+    enum Kind {
+        KIND_EXTERNAL, KIND_LOCAL, KIND_INTERFACE_DECL,
+        KIND_PUBLISHED_INTERFACE_DECL, KIND_MODULE
+    };
 
     explicit SourceProviderEntity(
         Kind theKind, rtl::Reference<unoidl::Entity> const & externalEntity):
@@ -248,7 +251,7 @@ struct SourceProviderScannerData {
         manager(theManager),
         sourcePosition(), sourceEnd(),
             // avoid false warnings about uninitialized members
-        errorLine(0)
+        errorLine(0), publishedContext(false)
     { assert(manager.is()); }
 
     void setSource(void const * address, sal_uInt64 size) {
@@ -267,6 +270,7 @@ struct SourceProviderScannerData {
     std::map<OUString, SourceProviderEntity> entities;
     std::vector<OUString> modules;
     OUString currentName;
+    bool publishedContext;
 };
 
 bool parse(OUString const & uri, SourceProviderScannerData * data);
