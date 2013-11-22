@@ -1288,9 +1288,16 @@ structMember:
       default:
           break;
       }
-      if (nameHasSameIdentifierAs(data->currentName, id)) {
+      if (t.getName() == data->currentName) { // no need to worry about typedefs
           error(
               @2, yyscanner,
+              ("struct/exception type " + data->currentName + " direct member "
+               + id + " has same type as the type itself"));
+          YYERROR;
+      }
+      if (nameHasSameIdentifierAs(data->currentName, id)) {
+          error(
+              @3, yyscanner,
               ("struct/exception type " + data->currentName + " direct member "
                + id + " has same unqualified identifer as the type itself"));
           YYERROR;
