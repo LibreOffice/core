@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////
 
-bool bInitFont = true;
+static bool bInitFont = true;
 
 class SwExtraPainter
 {

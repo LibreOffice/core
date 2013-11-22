@@ -59,7 +59,7 @@ struct OldFormats
     sal_uInt16              nOldFormat;
 };
 
-static OldFormats aOldDateFmt40[] =
+static const OldFormats aOldDateFmt40[] =
 {
     // Datumsfelder:
     { NF_DATE_SYSTEM_SHORT,         DFF_SSYS },     // Kurzes Systemdatum
@@ -83,7 +83,7 @@ static OldFormats aOldDateFmt40[] =
     { NF_NUMERIC_START,             0  }                // Tabellenende
 };
 
-static OldFormats aOldDateFmt30[] =
+static const OldFormats aOldDateFmt30[] =
 {
     // Datumsfelder:
     { NF_DATE_SYSTEM_SHORT,         DFF_SSYS },     // Kurzes Systemdatum
@@ -107,7 +107,7 @@ static OldFormats aOldDateFmt30[] =
     { NF_NUMERIC_START,             0  }                // Tabellenende
 };
 
-static OldFormats aOldTimeFmt[] =
+static const OldFormats aOldTimeFmt[] =
 {
     // Zeitfelder:
     { NF_TIME_HHMMSS,                   TF_SYSTEM },        // Systemzeit
@@ -117,7 +117,7 @@ static OldFormats aOldTimeFmt[] =
     { NF_NUMERIC_START,             0 }             // Tabellenende
 };
 
-static OldFormats aOldGetSetExpFmt40[] =
+static const OldFormats aOldGetSetExpFmt40[] =
 {
     { NF_TEXT,                      VVF_CMD },      // Kommando anzeigen
     { NF_TEXT,                      VVF_INVISIBLE },    // unsichtbar
@@ -146,7 +146,7 @@ static OldFormats aOldGetSetExpFmt40[] =
     { NF_NUMERIC_START,                 0  }                // Tabellenende
 };
 
-static OldFormats aOldGetSetExpFmt30[] =
+static const OldFormats aOldGetSetExpFmt30[] =
 {
     { NF_TEXT,                      VVF_CMD },      // Kommando anzeigen
     { NF_TEXT,                      VVF_INVISIBLE },    // unsichtbar
