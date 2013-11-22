@@ -28,6 +28,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -36,8 +37,10 @@
 #include <rtl/ustring.hxx>
 #include <sal/alloca.h>
 
-#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <bitmapaction.hxx>
 #include <implrenderer.hxx>
@@ -95,6 +98,22 @@ const sal_Int32 EmfPlusLineStyleDot = 0x00000002;
 const sal_Int32 EmfPlusLineStyleDashDot = 0x00000003;
 const sal_Int32 EmfPlusLineStyleDashDotDot = 0x00000004;
 const sal_Int32 EmfPlusLineStyleCustom = 0x00000005;
+
+const sal_uInt32 EmfPlusCustomLineCapDataTypeDefault = 0x00000000;
+const sal_uInt32 EmfPlusCustomLineCapDataTypeAdjustableArrow = 0x00000001;
+
+const sal_uInt32 EmfPlusCustomLineCapDataFillPath = 0x00000001;
+const sal_uInt32 EmfPlusCustomLineCapDataLinePath = 0x00000002;
+
+const sal_uInt32 EmfPlusLineCapTypeFlat = 0x00000000;
+const sal_uInt32 EmfPlusLineCapTypeSquare = 0x00000001;
+const sal_uInt32 EmfPlusLineCapTypeRound = 0x00000002;
+const sal_uInt32 EmfPlusLineCapTypeTriangle = 0x00000003;
+
+const sal_uInt32 EmfPlusLineJoinTypeMiter = 0x00000000;
+const sal_uInt32 EmfPlusLineJoinTypeBevel = 0x00000001;
+const sal_uInt32 EmfPlusLineJoinTypeRound = 0x00000002;
+const sal_uInt32 EmfPlusLineJoinTypeMiterClipped = 0x00000003;
 
 using namespace ::com::sun::star;
 using namespace ::basegfx;
@@ -587,6 +606,137 @@ namespace cppcanvas
             }
         };
 
+        /// Convert stroke caps between EMF+ and rendering API
+        sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke)
+        {
+            switch (nEmfStroke)
+            {
+                case EmfPlusLineCapTypeSquare: return rendering::PathCapType::SQUARE;
+                case EmfPlusLineCapTypeRound:  return rendering::PathCapType::ROUND;
+            }
+
+            // we have no mapping for EmfPlusLineCapTypeTriangle, so return
+            // BUTT always
+            return rendering::PathCapType::BUTT;
+        }
+
+        struct EMFPCustomLineCap : public EMFPObject
+        {
+            sal_uInt32 type;
+            sal_uInt32 strokeStartCap, strokeEndCap, strokeJoin;
+            float miterLimit;
+            basegfx::B2DPolyPolygon polygon;
+
+        public:
+            EMFPCustomLineCap() : EMFPObject()
+            {
+            }
+
+            ~EMFPCustomLineCap()
+            {
+            }
+
+            void SetAttributes(rendering::StrokeAttributes& aAttributes)
+            {
+                aAttributes.StartCapType = lcl_convertStrokeCap(strokeStartCap);
+                aAttributes.EndCapType = lcl_convertStrokeCap(strokeEndCap);
+
+                switch (strokeJoin)
+                {
+                    case EmfPlusLineJoinTypeMiter:        // fall-through
+                    case EmfPlusLineJoinTypeMiterClipped: aAttributes.JoinType = rendering::PathJoinType::MITER; break;
+                    case EmfPlusLineJoinTypeBevel:        aAttributes.JoinType = rendering::PathJoinType::BEVEL; break;
+                    case EmfPlusLineJoinTypeRound:        aAttributes.JoinType = rendering::PathJoinType::ROUND; break;
+                }
+
+                aAttributes.MiterLimit = miterLimit;
+            }
+
+            void ReadPath(SvStream& s, ImplRenderer& rR, bool bClosed)
+            {
+                sal_Int32 pathLength;
+                s >> pathLength;
+                SAL_INFO("cppcanvas.emf", "EMF+\t\tpath length: " << pathLength);
+
+                sal_uInt32 pathHeader;
+                sal_Int32 pathPoints, pathFlags;
+                s >> pathHeader >> pathPoints >> pathFlags;
+
+                SAL_INFO("cppcanvas.emf", "EMF+\t\tpath (custom cap line path)");
+                SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec );
+
+                EMFPPath path(pathPoints);
+                path.Read(s, pathFlags, rR);
+
+                polygon = path.GetPolygon(rR, false);
+                polygon.setClosed(bClosed);
+
+                // transformation to convert the path to what LibreOffice
+                // expects
+                B2DHomMatrix aMatrix;
+                aMatrix.scale(1.0, -1.0);
+
+                polygon.transform(aMatrix);
+            };
+
+            void Read (SvStream& s, ImplRenderer& rR)
+            {
+                sal_uInt32 header;
+
+                s >> header >> type;
+
+                SAL_INFO("cppcanvas.emf", "EMF+\t\tcustom cap");
+                SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << header << " type: " << type << std::dec);
+
+                if (type == EmfPlusCustomLineCapDataTypeDefault)
+                {
+                    sal_uInt32 customLineCapDataFlags, baseCap;
+                    float baseInset;
+                    float widthScale;
+                    float fillHotSpotX, fillHotSpotY, strokeHotSpotX, strokeHotSpotY;
+
+                    s >> customLineCapDataFlags >> baseCap >> baseInset
+                      >> strokeStartCap >> strokeEndCap >> strokeJoin
+                      >> miterLimit >> widthScale
+                      >> fillHotSpotX >> fillHotSpotY >> strokeHotSpotX >> strokeHotSpotY;
+
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomLineCapDataFlags: 0x" << std::hex << customLineCapDataFlags);
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tbaseCap: 0x" << std::hex << baseCap);
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tbaseInset: " << baseInset);
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tstrokeStartCap: 0x" << std::hex << strokeStartCap);
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tstrokeEndCap: 0x" << std::hex << strokeEndCap);
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tstrokeJoin: 0x" << std::hex << strokeJoin);
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tmiterLimit: " << miterLimit);
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\twidthScale: " << widthScale);
+
+                    if (customLineCapDataFlags & EmfPlusCustomLineCapDataFillPath)
+                    {
+                        ReadPath(s, rR, true);
+                    }
+
+                    if (customLineCapDataFlags & EmfPlusCustomLineCapDataLinePath)
+                    {
+                        ReadPath(s, rR, false);
+                    }
+                }
+                else if (type == EmfPlusCustomLineCapDataTypeAdjustableArrow)
+                {
+                    // TODO only reads the data, does not use them [I've had
+                    // no test document to be able to implement it]
+
+                    sal_Int32 width, height, middleInset, fillState, lineStartCap;
+                    sal_Int32 lineEndCap, lineJoin, widthScale;
+                    float fillHotSpotX, fillHotSpotY, lineHotSpotX, lineHotSpotY;
+
+                    s >> width >> height >> middleInset >> fillState >> lineStartCap
+                      >> lineEndCap >> lineJoin >> miterLimit >> widthScale
+                      >> fillHotSpotX >> fillHotSpotY >> lineHotSpotX >> lineHotSpotY;
+
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tTODO - actually read EmfPlusCustomLineCapArrowData object (section 2.2.2.12)");
+                }
+            }
+        };
+
         struct EMFPPen : public EMFPBrush
         {
             XForm transformation;
@@ -604,16 +754,28 @@ namespace cppcanvas
             sal_Int32 compoundArrayLen;
             float *compoundArray;
             sal_Int32 customStartCapLen;
-            sal_uInt8 *customStartCap;
+            EMFPCustomLineCap *customStartCap;
             sal_Int32 customEndCapLen;
-            sal_uInt8 *customEndCap;
+            EMFPCustomLineCap *customEndCap;
 
         public:
             EMFPPen () : EMFPBrush ()
             {
+                dashPattern = NULL;
+                compoundArray = NULL;
+                customStartCap = NULL;
+                customEndCap = NULL;
             }
 
-            void SetStrokeAttributes (rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
+            ~EMFPPen ()
+            {
+                delete[] dashPattern;
+                delete[] compoundArray;
+                delete customStartCap;
+                delete customEndCap;
+            }
+
+            void SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
             {
 #if OSL_DEBUG_LEVEL > 1
                 if (width == 0.0) {
@@ -621,8 +783,10 @@ namespace cppcanvas
                 }
 #endif
                 rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getX());
+            }
 
-                // set dashing
+            void SetStrokeDashing(rendering::StrokeAttributes& rStrokeAttributes)
+            {
                 if (dashStyle != EmfPlusLineStyleSolid)
                 {
                     const float dash[] = {3, 3};
@@ -666,12 +830,18 @@ namespace cppcanvas
                     s >> transformation;
 
                 if (penFlags & 2)
+                {
                     s >> startCap;
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tstartCap: 0x" << std::hex << startCap);
+                }
                 else
                     startCap = 0;
 
                 if (penFlags & 4)
+                {
                     s >> endCap;
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tendCap: 0x" << std::hex << endCap);
+                }
                 else
                     endCap = 0;
 
@@ -737,24 +907,34 @@ namespace cppcanvas
                 } else
                     compoundArrayLen = 0;
 
-                if (penFlags & 2048) {
+                if (penFlags & 2048)
+                {
                     s >> customStartCapLen;
-                    if( customStartCapLen<0 )
-                        customStartCapLen=0;
-                    customStartCap = new sal_uInt8 [customStartCapLen];
-                    for (i = 0; i < customStartCapLen; i++)
-                        s >> customStartCap [i];
-                } else
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
+                    sal_uInt32 pos = s.Tell();
+
+                    customStartCap = new EMFPCustomLineCap();
+                    customStartCap->Read(s, rR);
+
+                    // maybe we don't read everything yet, play it safe ;-)
+                    s.Seek(pos + customStartCapLen);
+                }
+                else
                     customStartCapLen = 0;
 
-                if (penFlags & 4096) {
+                if (penFlags & 4096)
+                {
                     s >> customEndCapLen;
-                    if( customEndCapLen<0 )
-                        customEndCapLen=0;
-                    customEndCap = new sal_uInt8 [customEndCapLen];
-                    for (i = 0; i < customEndCapLen; i++)
-                        s >> customEndCap [i];
-                } else
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
+                    sal_uInt32 pos = s.Tell();
+
+                    customEndCap = new EMFPCustomLineCap();
+                    customEndCap->Read(s, rR);
+
+                    // maybe we don't read everything yet, play it safe ;-)
+                    s.Seek(pos + customEndCapLen);
+                }
+                else
                     customEndCapLen = 0;
 
                 EMFPBrush::Read (s, rR);
@@ -1140,7 +1320,39 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::EMFPPlusDrawPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
+
+        void ImplRenderer::EMFPPlusDrawLineCap(const ::basegfx::B2DPolygon& rPolygon, double fPolyLength,
+                const ::basegfx::B2DPolyPolygon& rLineCap, bool bStart, const rendering::StrokeAttributes& rAttributes,
+                const ActionFactoryParameters& rParms, OutDevState& rState)
+        {
+            if (!rLineCap.count())
+                return;
+
+            // it seems the line caps in EMF+ are 4*larger than what
+            // LibreOffice expects, and the mapping in
+            // createAreaGeometryForLineStartEnd scales that down, so
+            // correct it
+            // [unfortunately found no proof for this in the spec :-( - please
+            // feel free to correct this if it causes trouble]
+            double fWidth = rAttributes.StrokeWidth*4;
+
+            basegfx::B2DPolyPolygon aArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
+                        rPolygon, rLineCap, bStart,
+                        fWidth, fPolyLength, 0.0, NULL));
+
+            // createAreaGeometryForLineStartEnd from some reason always sets
+            // the path as closed, correct it
+            aArrow.setClosed(rLineCap.isClosed());
+
+            ActionSharedPtr pAction(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState, rAttributes));
+            if (pAction)
+            {
+                maActions.push_back(MtfAction(pAction, rParms.mrCurrActionIndex));
+                rParms.mrCurrActionIndex += pAction->getActionCount()-1;
+            }
+        }
+
+        void ImplRenderer::EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
                                                 OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex)
         {
             EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
@@ -1154,24 +1366,62 @@ namespace cppcanvas
                 rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
                                                                            rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
 
-                polygon.transform( rState.mapModeTransform );
-                rendering::StrokeAttributes aStrokeAttributes;
+                basegfx::B2DPolyPolygon aPolyPolygon(polygon);
+                aPolyPolygon.transform(rState.mapModeTransform);
+                rendering::StrokeAttributes aCommonAttributes;
 
-                pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
+                // some attributes are common for the polygon, and the line
+                // starts & ends - like the stroke width
+                pen->SetStrokeWidth(aCommonAttributes, *this, rState);
 
-                ActionSharedPtr pPolyAction(
-                                            internal::PolyPolyActionFactory::createPolyPolyAction(
-                                                                                                  polygon, rParms.mrCanvas, rState, aStrokeAttributes ) );
+                // but eg. dashing has to be additionally set only on the
+                // polygon
+                rendering::StrokeAttributes aPolygonAttributes(aCommonAttributes);
+                pen->SetStrokeDashing(aPolygonAttributes);
 
+                // render the polygon
+                ActionSharedPtr pPolyAction(internal::PolyPolyActionFactory::createPolyPolyAction(aPolyPolygon, rParms.mrCanvas, rState, aPolygonAttributes));
                 if( pPolyAction )
                 {
-                    maActions.push_back(
-                                        MtfAction(
-                                                  pPolyAction,
-                                                  rParms.mrCurrActionIndex ) );
-
+                    maActions.push_back(MtfAction(pPolyAction, rParms.mrCurrActionIndex));
                     rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
                 }
+
+                // render line starts & ends
+                if (pen->customStartCap || pen->customEndCap)
+                {
+                    for (sal_uInt32 i = 0; i < aPolyPolygon.count(); ++i)
+                    {
+                        // break the polypolygon into polygons
+                        basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(i));
+
+                        if (aPolygon.isClosed())
+                            continue;
+
+                        double fPolyLength = basegfx::tools::getLength(aPolygon);
+
+                        // line start
+                        if (pen->customStartCap)
+                        {
+                            rendering::StrokeAttributes aAttributes(aCommonAttributes);
+                            pen->customStartCap->SetAttributes(aAttributes);
+
+                            EMFPPlusDrawLineCap(aPolygon, fPolyLength, pen->customStartCap->polygon,
+                                    true, aAttributes, rParms, rState);
+                        }
+
+                        // line end
+                        if (pen->customEndCap)
+                        {
+                            rendering::StrokeAttributes aAttributes(aCommonAttributes);
+                            pen->customEndCap->SetAttributes(aAttributes);
+
+                            EMFPPlusDrawLineCap(aPolygon, fPolyLength, pen->customEndCap->polygon,
+                                    false, aAttributes, rParms, rState);
+                        }
+                    }
+                }
+
             }
         }
 
@@ -1550,7 +1800,7 @@ namespace cppcanvas
 
                             rendering::StrokeAttributes aStrokeAttributes;
 
-                            pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
+                            pen->SetStrokeWidth (aStrokeAttributes, *this, rState);
 
                             ActionSharedPtr pPolyAction(
                                 internal::PolyPolyActionFactory::createPolyPolyAction(
