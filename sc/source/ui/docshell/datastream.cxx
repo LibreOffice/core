@@ -16,6 +16,7 @@
 #include <salhelper/thread.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <arealink.hxx>
 #include <asciiopt.hxx>
 #include <dbfunc.hxx>
 #include <docsh.hxx>
@@ -166,9 +167,44 @@ void DataStream::MakeToolbarVisible()
 DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
         sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings)
 {
+    // Each DataStream needs a destination area in order to be exported.
+    // There can be only one ScAreaLink / DataStream per cell.
+    // So - if we don't need range (DataStream with mbValuesInLine == false),
+    // just find a free cell for now.
+    sfx2::LinkManager* pLinkManager = pShell->GetDocument()->GetLinkManager();
+    ScRange aDestArea;
+    aDestArea.Parse(rRange, pShell->GetDocument());
+    sal_uInt16 nLinkPos = 0;
+    while (nLinkPos < pLinkManager->GetLinks().size())
+    {
+        sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[nLinkPos];
+        if (rRange.isEmpty())
+        {
+            if ( (pBase->ISA(ScAreaLink) && dynamic_cast<ScAreaLink*>
+                        (&(*pBase))->GetDestArea().aStart == aDestArea.aStart)
+                || (pBase->ISA(DataStream) && dynamic_cast<DataStream*>
+                        (&(*pBase))->GetRange().aStart == aDestArea.aStart) )
+            {
+                aDestArea.Move(0, 1, 0);
+                nLinkPos = 0;
+                continue;
+            }
+            else
+                ++nLinkPos;
+        }
+        else if ( (pBase->ISA(ScAreaLink) && dynamic_cast<ScAreaLink*>
+                    (&(*pBase))->GetDestArea().aStart == aDestArea.aStart)
+                || (pBase->ISA(DataStream) && dynamic_cast<DataStream*>
+                    (&(*pBase))->GetRange().aStart == aDestArea.aStart) )
+        {
+            pLinkManager->Remove( pBase );
+        }
+        else
+            ++nLinkPos;
+    }
+
     sfx2::SvBaseLink *pLink = 0;
     pLink = new DataStream( pShell, rURL, rRange, nLimit, rMove, nSettings );
-    sfx2::LinkManager* pLinkManager = pShell->GetDocument()->GetLinkManager();
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rURL, NULL, NULL );
     return dynamic_cast<DataStream*>(pLink);
 }
@@ -181,20 +217,19 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const OUString&
     , mbRunning(false)
     , mpLines(0)
     , mnLinesCount(0)
-    , mpRange(new ScRange())
     , mpEndRange(NULL)
 {
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
 
-    Decode(rURL, rRange, rMove, nSettings);
+    Decode(rURL, rRange, nLimit, rMove, nSettings);
 
-    mpStartRange.reset( new ScRange(*mpRange.get()) );
-    sal_Int32 nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
+    maStartRange = maRange;
+    sal_Int32 nHeight = maRange.aEnd.Row() - maRange.aStart.Row() + 1;
     nLimit = nHeight * (nLimit / nHeight);
-    if (nLimit && mpRange->aStart.Row() + nLimit - 1 < MAXROW)
+    if (nLimit && maRange.aStart.Row() + nLimit - 1 < MAXROW)
     {
-        mpEndRange.reset( new ScRange(*mpRange) );
+        mpEndRange.reset( new ScRange(maRange) );
         mpEndRange->Move(0, nLimit - nHeight, 0);
     }
 }
@@ -235,28 +270,32 @@ OString DataStream::ConsumeLine()
     return mpLines->at(mnLinesCount++);
 }
 
-void DataStream::Decode( const OUString& rURL, const OUString& rRange,
-        const OUString& rMove, sal_uInt32 nSettings)
+void DataStream::Decode(const OUString& rURL, const OUString& rRange,
+        const sal_Int32 nLimit, const OUString& rMove, const sal_uInt32 nSettings)
 {
+    msURL = rURL;
+    msRange = rRange;
+    mnLimit = nLimit;
+    msMove = rMove;
+    mnSettings = nSettings;
+    maRange.Parse(msRange);
     SvStream *pStream = 0;
-    if (nSettings & SCRIPT_STREAM)
-        pStream = new SvScriptStream(rURL);
+    if (mnSettings & SCRIPT_STREAM)
+        pStream = new SvScriptStream(msURL);
     else
-        pStream = new SvFileStream(rURL, STREAM_READ);
+        pStream = new SvFileStream(msURL, STREAM_READ);
     mxReaderThread = new datastreams::ReaderThread( pStream );
     mxReaderThread->launch();
 
-    mbValuesInLine = nSettings & VALUES_IN_LINE;
+    mbValuesInLine = mnSettings & VALUES_IN_LINE;
     if (!mbValuesInLine)
         return;
 
-    mpRange->Parse(rRange, mpScDocument);
-    
-    if (rMove == "NO_MOVE")
+    if (msMove == "NO_MOVE")
         meMove = NO_MOVE;
-    else if (rMove == "RANGE_DOWN")
+    else if (msMove == "RANGE_DOWN")
         meMove = RANGE_DOWN;
-    else if (rMove == "MOVE_DOWN")
+    else if (msMove == "MOVE_DOWN")
         meMove = MOVE_DOWN;
 }
 
@@ -283,17 +322,17 @@ void DataStream::MoveData()
     switch (meMove)
     {
         case RANGE_DOWN:
-            if (mpRange->aStart == mpEndRange->aStart)
+            if (maRange.aStart == mpEndRange->aStart)
                 meMove = MOVE_UP;
             break;
         case MOVE_UP:
-            mpScDocument->DeleteRow(*mpStartRange);
+            mpScDocument->DeleteRow(maStartRange);
             mpScDocument->InsertRow(*mpEndRange);
             break;
         case MOVE_DOWN:
             if (mpEndRange.get())
                 mpScDocument->DeleteRow(*mpEndRange);
-            mpScDocument->InsertRow(*mpRange);
+            mpScDocument->InsertRow(maRange);
             break;
         case NO_MOVE:
             break;
@@ -306,7 +345,7 @@ bool DataStream::ImportData()
     MoveData();
     if (mbValuesInLine)
     {
-        SCROW nHeight = mpRange->aEnd.Row() - mpRange->aStart.Row() + 1;
+        SCROW nHeight = maRange.aEnd.Row() - maRange.aStart.Row() + 1;
         OStringBuffer aBuf;
         while (nHeight--)
         {
@@ -314,7 +353,7 @@ bool DataStream::ImportData()
             aBuf.append('\n');
         }
         SvMemoryStream aMemoryStream((void *)aBuf.getStr(), aBuf.getLength(), STREAM_READ);
-        ScImportExport aImport(mpScDocument, *mpRange);
+        ScImportExport aImport(mpScDocument, maRange);
         aImport.SetSeparator(',');
         aImport.ImportStream(aMemoryStream, OUString(), FORMAT_STRING);
     }
@@ -352,13 +391,13 @@ bool DataStream::ImportData()
 
     if (meMove == RANGE_DOWN)
     {
-        mpRange->Move(0, mpRange->aEnd.Row() - mpRange->aStart.Row() + 1, 0);
+        maRange.Move(0, maRange.aEnd.Row() - maRange.aStart.Row() + 1, 0);
         mpScDocShell->GetViewData()->GetView()->AlignToCursor(
-                mpRange->aStart.Col(), mpRange->aStart.Row(), SC_FOLLOW_JUMP);
+                maRange.aStart.Col(), maRange.aStart.Row(), SC_FOLLOW_JUMP);
     }
     SCROW aEndRow = mpEndRange.get() ? mpEndRange->aEnd.Row() : MAXROW;
-    mpScDocShell->PostPaint( ScRange( mpStartRange->aStart, ScAddress( mpRange->aEnd.Col(),
-                    aEndRow, mpRange->aStart.Tab()) ), PAINT_GRID );
+    mpScDocShell->PostPaint( ScRange( maStartRange.aStart, ScAddress( maRange.aEnd.Col(),
+                    aEndRow, maRange.aStart.Tab()) ), PAINT_GRID );
 
     return mbRunning;
 }

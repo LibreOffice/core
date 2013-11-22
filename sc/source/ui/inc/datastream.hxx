@@ -12,6 +12,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/lnkbase.hxx>
+#include <address.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -23,7 +24,6 @@ namespace datastreams {
 }
 class ScDocShell;
 class ScDocument;
-class ScRange;
 class Window;
 
 typedef std::vector<OString> LinesList;
@@ -31,7 +31,8 @@ typedef std::vector<OString> LinesList;
 class DataStream : boost::noncopyable, public sfx2::SvBaseLink
 {
     OString ConsumeLine();
-    void Decode(const OUString& rURL, const OUString& rRange, const OUString& rMove, sal_uInt32 nSettings);
+    void Decode(const OUString& rURL, const OUString& rRange, const sal_Int32 nLimit,
+            const OUString& rMove, const sal_uInt32 nSettings);
     void MoveData();
 
 public:
@@ -49,6 +50,11 @@ public:
             const OUString& , const css::uno::Any& ) SAL_OVERRIDE;
     virtual void Edit(Window* , const Link& ) SAL_OVERRIDE;
 
+    const ScRange& GetRange() const { return maRange; }
+    const OUString& GetURL() const { return msURL; }
+    const sal_Int32& GetLimit() const { return mnLimit; }
+    const OUString& GetMove() const { return msMove; }
+    const sal_uInt32& GetSettings() const { return mnSettings; }
     bool ImportData();
     void Start();
     void Stop();
@@ -56,14 +62,19 @@ public:
 private:
     ScDocShell *mpScDocShell;
     ScDocument *mpScDocument;
+    OUString msURL;
+    OUString msRange;
+    OUString msMove;
+    sal_Int32 mnLimit;
+    sal_uInt32 mnSettings;
     MoveEnum meMove;
     bool mbRunning;
     bool mbIsUndoEnabled;
     bool mbValuesInLine;
     LinesList *mpLines;
     size_t mnLinesCount;
-    boost::scoped_ptr<ScRange> mpRange;
-    boost::scoped_ptr<ScRange> mpStartRange;
+    ScRange maRange;
+    ScRange maStartRange;
     boost::scoped_ptr<ScRange> mpEndRange;
     rtl::Reference<datastreams::CallerThread> mxThread;
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;

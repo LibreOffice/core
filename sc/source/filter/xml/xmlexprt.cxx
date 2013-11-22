@@ -60,6 +60,8 @@
 #include "stylehelper.hxx"
 #include "edittextiterator.hxx"
 #include "editattributemap.hxx"
+#include <arealink.hxx>
+#include <datastream.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -147,6 +149,7 @@
 
 #include "XMLCodeNameProvider.hxx"
 
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <vector>
@@ -814,37 +817,35 @@ table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::X
     return aCellAddress;
 }
 
-void ScXMLExport::GetAreaLinks( uno::Reference< sheet::XSpreadsheetDocument>& xSpreadDoc,
-                                ScMyAreaLinksContainer& rAreaLinks )
+void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
 {
-    uno::Reference< beans::XPropertySet > xPropSet( xSpreadDoc, uno::UNO_QUERY );
-    if( !xPropSet.is() ) return;
-
-    uno::Reference< container::XIndexAccess > xLinksIAccess( xPropSet->getPropertyValue( OUString( SC_UNO_AREALINKS ) ), uno::UNO_QUERY);
-    if( xLinksIAccess.is() )
+    if (pDoc->GetLinkManager())
     {
-        const OUString sFilter( SC_UNONAME_FILTER );
-        const OUString sFilterOpt( SC_UNONAME_FILTOPT );
-        const OUString sURL( SC_UNONAME_LINKURL );
-        const OUString sRefresh( SC_UNONAME_REFDELAY );
-
-        sal_Int32 nCount(xLinksIAccess->getCount());
-        for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
+        const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
+        for (size_t i = 0; i < rLinks.size(); i++)
         {
-            uno::Reference< sheet::XAreaLink > xAreaLink(xLinksIAccess->getByIndex( nIndex ), uno::UNO_QUERY);
-            if( xAreaLink.is() )
+            ScAreaLink *pLink = dynamic_cast<ScAreaLink*>(&(*(*rLinks[i])));
+            if (pLink)
             {
                 ScMyAreaLink aAreaLink;
-                aAreaLink.aDestRange = xAreaLink->getDestArea();
-                aAreaLink.sSourceStr = xAreaLink->getSourceArea();
-                uno::Reference< beans::XPropertySet > xLinkProp( xAreaLink, uno::UNO_QUERY );
-                if( xLinkProp.is() )
-                {
-                    xLinkProp->getPropertyValue( sFilter ) >>= aAreaLink.sFilter;
-                    xLinkProp->getPropertyValue( sFilterOpt ) >>= aAreaLink.sFilterOptions;
-                    xLinkProp->getPropertyValue( sURL ) >>= aAreaLink.sURL;
-                    xLinkProp->getPropertyValue( sRefresh ) >>= aAreaLink.nRefresh;
-                }
+                ScUnoConversion::FillApiRange( aAreaLink.aDestRange, pLink->GetDestArea() );
+                aAreaLink.sSourceStr = pLink->GetSource();
+                aAreaLink.sFilter = pLink->GetFilter();
+                aAreaLink.sFilterOptions = pLink->GetOptions();
+                aAreaLink.sURL = pLink->GetFile();
+                aAreaLink.nRefresh = pLink->GetTimeout();
+                rAreaLinks.AddNewAreaLink( aAreaLink );
+            }
+            DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i])));
+            if (pStream)
+            {
+                ScMyAreaLink aAreaLink;
+                ScUnoConversion::FillApiRange( aAreaLink.aDestRange, pStream->GetRange() );
+                aAreaLink.sSourceStr = pStream->GetMove();
+                aAreaLink.sFilter = OUString::number(pStream->GetLimit());
+                aAreaLink.sFilterOptions = "DataStream";
+                aAreaLink.sURL = pStream->GetURL();
+                aAreaLink.nRefresh = pStream->GetSettings();
                 rAreaLinks.AddNewAreaLink( aAreaLink );
             }
         }
@@ -1904,7 +1905,7 @@ void ScXMLExport::_ExportContent()
         WriteCalculationSettings(xSpreadDoc);
         sal_Int32 nTableCount(xIndex->getCount());
         ScMyAreaLinksContainer aAreaLinks;
-        GetAreaLinks( xSpreadDoc, aAreaLinks );
+        GetAreaLinks( aAreaLinks );
         ScMyEmptyDatabaseRangesContainer aEmptyRanges(aExportDatabaseRanges.GetEmptyDatabaseRanges());
         ScMyDetectiveOpContainer aDetectiveOpContainer;
         GetDetectiveOpList( aDetectiveOpContainer );
