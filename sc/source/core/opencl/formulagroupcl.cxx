@@ -2894,6 +2894,11 @@ SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(
     return sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect);
 }
 
+SAL_DLLPUBLIC_EXPORT void SAL_CALL getOpenCLDeviceInfo(size_t* pDeviceId, size_t* pPlatformId)
+{
+    sc::opencl::getOpenCLDeviceInfo(*pDeviceId, *pPlatformId);
+}
+
 } // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

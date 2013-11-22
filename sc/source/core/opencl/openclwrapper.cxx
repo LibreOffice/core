@@ -889,6 +889,35 @@ cl_device_id findDeviceIdByDeviceString(const OUString& rString, const std::vect
     return NULL;
 }
 
+void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_t& rPlatformId)
+{
+    cl_platform_id platformId;
+    cl_int nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_PLATFORM,
+            sizeof(platformId), &platformId, NULL);
+
+    if(nState != CL_SUCCESS)
+        return;
+
+    const std::vector<OpenclPlatformInfo>& rPlatforms = fillOpenCLInfo();
+    for(size_t i = 0; i < rPlatforms.size(); ++i)
+    {
+        cl_platform_id platId = static_cast<cl_platform_id>(rPlatforms[i].platform);
+        if(platId != platformId)
+            continue;
+
+        for(size_t j = 0; j < rPlatforms[i].maDevices.size(); ++j)
+        {
+            cl_device_id id = static_cast<cl_device_id>(rPlatforms[i].maDevices[j].device);
+            if(id == aDeviceId)
+            {
+                rDeviceId = j;
+                rPlatformId = i;
+                return;
+            }
+        }
+    }
+}
+
 }
 
 bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
@@ -964,6 +993,12 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
     OpenclDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
     OpenclDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
     return !OpenclDevice::initOpenclRunEnv(0);
+}
+
+void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
+{
+    cl_device_id id = OpenclDevice::gpuEnv.mpDevID;
+    findDeviceInfoFromDeviceId(id, rDeviceId, rPlatformId);
 }
 
 }}

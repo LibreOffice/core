@@ -45,6 +45,7 @@
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XCellRangesAccess.hpp>
+#include <com/sun/star/sheet/opencl/XOpenCLSelection.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -81,7 +82,8 @@ class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::beans::XPropertySet,
                     public SvxFmMSFactory,  ///< derived from XMultiServiceFactory
                     public com::sun::star::lang::XServiceInfo,
-                    public ::com::sun::star::util::XChangesNotifier
+                    public ::com::sun::star::util::XChangesNotifier,
+                    public com::sun::star::sheet::opencl::XOpenCLSelection
 {
 private:
     SfxItemPropertySet      aPropSet;
@@ -315,6 +317,22 @@ public:
     virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XChangesListener >& aListener )
                                 throw (::com::sun::star::uno::RuntimeException);
+
+    // XOpenCLSelection
+    virtual sal_Bool SAL_CALL isOpenCLEnabled()
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL enableOpenCL(sal_Bool bEnable)
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL selectOpenCLDevice( sal_Int32 platform, sal_Int32 device )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getPlatformID()
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getDeviceID()
+                                throw(::com::sun::star::uno::RuntimeException);
 };
 
 
