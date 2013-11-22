@@ -1555,6 +1555,11 @@ DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4500), getProperty<sal_Int32>(getShape(1), "RotateAngle"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testLOCrash,"file_crash.docx")
+{
+    //The problem was libreoffice crash while opening the file.
+    getParagraph(1,"Contents");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

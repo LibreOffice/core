@@ -1616,7 +1616,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
             case TOKEN_ENTRY_TEXT:
                 {
-                    SwIndex aIdx( pTOXNd, rTxt.getLength() );
+                    SwIndex aIdx( pTOXNd, std::min(pTOXNd->GetTxt().getLength(),rTxt.getLength()) );
                     rBase.FillText( *pTOXNd, aIdx );
                     rTxt = lcl_RemoveLineBreaks(rTxt);
                 }
