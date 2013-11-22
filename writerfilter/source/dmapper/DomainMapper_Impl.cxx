@@ -313,7 +313,11 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             xCursor->goLeft( 1, true );
             // If this is a text on a shape, possibly the text has the trailing
             // newline removed already.
+#if defined(UNX)
             if (xCursor->getString() == "\n")
+#else
+            if (xCursor->getString() == "\r\n")
+#endif
                 xCursor->setString(OUString());
         }
     }
