@@ -782,7 +782,7 @@ private:
     // flag to check if auto spacing was set in original file
     bool m_bParaBeforeAutoSpacing,m_bParaAfterAutoSpacing;
     // store hardcoded value which was set during import.
-    sal_Int32 m_iParaBeforeSpacing,m_iParaAfterSpacing;
+    sal_Int32 m_nParaBeforeSpacing,m_nParaAfterSpacing;
 
     bool m_setFootnote;
 

@@ -5653,7 +5653,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         SAL_INFO("sw.ww8", "DocxAttributeOutput::FormatULSpace: setting spacing" << rULSpace.GetUpper() );
         // check if before auto spacing was set during import and spacing we get from actual object is same
         // that we set in import. If yes just write beforeAutoSpacing tag.
-        if (m_bParaBeforeAutoSpacing && m_iParaBeforeSpacing == rULSpace.GetUpper())
+        if (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == rULSpace.GetUpper())
         {
             m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_beforeAutospacing ),
                     "1" );
@@ -5666,7 +5666,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         m_bParaBeforeAutoSpacing = false;
         // check if after auto spacing was set during import and spacing we get from actual object is same
         // that we set in import. If yes just write afterAutoSpacing tag.
-        if (m_bParaAfterAutoSpacing && m_iParaAfterSpacing == rULSpace.GetLower())
+        if (m_bParaAfterAutoSpacing && m_nParaAfterSpacing == rULSpace.GetLower())
         {
             m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_afterAutospacing ),
                     "1" );
@@ -6204,17 +6204,17 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         {
             m_bParaBeforeAutoSpacing = true;
             // get fixed value which was set during import
-            i->second >>= m_iParaBeforeSpacing;
-            m_iParaBeforeSpacing = MM100_TO_TWIP(m_iParaBeforeSpacing);
-            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_iParaBeforeSpacing= " << m_iParaBeforeSpacing);
+            i->second >>= m_nParaBeforeSpacing;
+            m_nParaBeforeSpacing = MM100_TO_TWIP(m_nParaBeforeSpacing);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_nParaBeforeSpacing= " << m_nParaBeforeSpacing);
         }
         else if (i->first == "ParaBottomMarginAfterAutoSpacing")
         {
             m_bParaAfterAutoSpacing = true;
             // get fixed value which was set during import
-            i->second >>= m_iParaAfterSpacing;
-            m_iParaAfterSpacing = MM100_TO_TWIP(m_iParaAfterSpacing);
-            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_iParaBeforeSpacing= " << m_iParaAfterSpacing);
+            i->second >>= m_nParaAfterSpacing;
+            m_nParaAfterSpacing = MM100_TO_TWIP(m_nParaAfterSpacing);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_nParaBeforeSpacing= " << m_nParaAfterSpacing);
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
@@ -6272,8 +6272,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pTableStyleExport(new DocxTableStyleExport(rExport.pDoc, pSerializer)),
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
-      m_iParaBeforeSpacing(0),
-      m_iParaAfterSpacing(0),
+      m_nParaBeforeSpacing(0),
+      m_nParaAfterSpacing(0),
       m_setFootnote(false)
 {
 }
