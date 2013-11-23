@@ -77,7 +77,7 @@ the file is truncated; check it out with adb shell ls -l /data/data/....
 * Detailed explanation
 
 Unit tests are the first thing we want to run on Android, to get some
-idea how well, if at all, the basic LO libraraies work. We want to
+idea how well, if at all, the basic LO libraries work. We want to
 build even unit tests as normal Android apps, i.e. packaged as .apk
 files, so that they run in a sandboxed environment like that of
 whatever eventual end-user Android apps there will be that use LO
