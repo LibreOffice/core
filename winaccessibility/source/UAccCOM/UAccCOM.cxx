@@ -21,6 +21,7 @@
 #include "resource.h"
 #include <initguid.h>
 #include "UAccCOM.h"
+#include <accHelper.hxx>
 
 #include "UAccCOM_i.c"
 #include "ia2_api_all_i.c"
@@ -108,6 +109,14 @@ STDAPI DllRegisterServer(void)
 STDAPI DllUnregisterServer(void)
 {
     return _Module.UnregisterServer(TRUE);
+}
+
+
+IMAccessible * UAccCOMCreateInstance()
+{
+    IMAccessible * pIMA = 0;
+    HRESULT hr = createInstance<CMAccessible>(IID_IMAccessible, &pIMA);
+    return (S_OK == hr) ? pIMA : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,6 +20,8 @@
 #ifndef __ACCHELPER_HXX
 #define __ACCHELPER_HXX
 
+#include <UAccCOMdllapi.h>
+
 enum DIRECTION
 {
     FIRST_CHILD=0,
@@ -30,6 +32,8 @@ enum DIRECTION
 
 #define UNO_MSAA_UNMAPPING       0x00000000
 
+struct IMAccessible;
+UACCCOM_DLLPUBLIC IMAccessible * UAccCOMCreateInstance();
 
 #endif
 
