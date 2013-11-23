@@ -1382,7 +1382,7 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
 #else
     // FIXME: test me ! ...
     OUString aURL;
-    if( !osl::File::getFileURLFromSystemPath( OStringToOUString( aSysPath, osl_getThreadTextEncoding() ), aURL ) )
+    if( osl::File::getFileURLFromSystemPath( OStringToOUString( aSysPath, osl_getThreadTextEncoding() ), aURL ) != osl::File::E_None )
         return NULL;
     osl::File aFile( aURL );
     if( aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock ) != osl::File::E_None )
