@@ -99,9 +99,9 @@ public:
     void        SetWidthSpace(double space);
 
     /**
-     * @descr   Set outter line width for border with double line.
+     * @descr   Set outer line width for border with double line.
      */
-    void        SetWidthOutter(double outer);
+    void        SetWidthOuter(double outer);
 
 private:
     /**
@@ -122,7 +122,7 @@ private:
     sal_Bool    m_bSameWidth;
     double      m_fWidthInner;
     double      m_fWidthSpace;
-    double      m_fWidthOutter;
+    double      m_fWidthOuter;
 };
 
 /**
@@ -163,9 +163,9 @@ public:
     void    SetWidthSpace(enumXFBorder side, double space);
 
     /**
-     * @descr   Set outter border width of border side.
+     * @descr   Set outer border width of border side.
      */
-    void    SetWidthOutter(enumXFBorder side, double outer);
+    void    SetWidthOuter(enumXFBorder side, double outer);
 
     XFBorder * GetLeft() {return &m_aBorderLeft;}
 

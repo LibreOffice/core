@@ -104,7 +104,7 @@ namespace frm
             There are some attributes which are script dependent, e.g. the CharPosture. This means
             that in real, there are 3 attributes for this, one for every possible script type (latin,
             asian, complex). However, to the out world, we behave as if there is only one attribute:
-            E.g., if the outter world asks for the state of the "CharPosture" attribute, we return
+            E.g., if the outer world asks for the state of the "CharPosture" attribute, we return
             the state of either CharPostureLatin, CharPostureAsian, or CharPostureComplex, depending
             on the script type of the current selection. (In real, it may be more complex since
             the current selection may contain more than one script type.)

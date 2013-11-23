@@ -68,15 +68,15 @@ public class FolderIconView extends View{
         float height = (float)this.getHeight();
         float centerX = width*0.5f;// centered on horz axis
         float centerY = height*0.5f;
-        float outterRadius = 0.8f*0.5f* width;
+        float outerRadius = 0.8f*0.5f* width;
         float innerRadius = 0.7f*0.5f* width;
-        float thumbHeight = outterRadius*1.25f;
+        float thumbHeight = outerRadius*1.25f;
         float thumbWidth = thumbHeight*(float)(1/Math.sqrt(2));
-        float DZx = 0.2f*outterRadius;
-        float DZy = 0.2f*outterRadius;
+        float DZx = 0.2f*outerRadius;
+        float DZy = 0.2f*outerRadius;
         //Bitmap blankPage = BitmapFactory.decodeResource( getResources() , R.drawable.page );
         Log.i( TAG , Float.toString( width ) + " X " + Float.toString( height ) );
-        canvas.drawCircle( centerX , centerY , outterRadius , mPaintGray );
+        canvas.drawCircle( centerX , centerY , outerRadius , mPaintGray );
         canvas.drawCircle( centerX , centerY , innerRadius , mPaintBlack );
         //Either get thumbs from directory or use generic page images
         //For now just get the first 4 thumbs -> add some checks later
@@ -103,8 +103,8 @@ public class FolderIconView extends View{
         //      Show a generic blank page icon
         if( thumbs.isEmpty() )
             return;
-        /*float left = centerX ;//+ 0.25f*outterRadius;
-        float top = centerY - 0.5f*outterRadius;
+        /*float left = centerX ;//+ 0.25f*outerRadius;
+        float top = centerY - 0.5f*outerRadius;
         float right = left + thumbs.get(0).getWidth()*0.4f;
         float bottom = top + thumbs.get(0).getHeight()*0.4f;
         RectF dest = new RectF( left, top , right , bottom );
@@ -114,8 +114,8 @@ public class FolderIconView extends View{
         for( int i = 1 ; i <= size ; i++ ){
             canvas.drawRect( shadowBox , mPaintShadow);
             canvas.drawBitmap( thumbs.pop() , null , dest , null);
-            dest.offset( -outterRadius*0.2f , outterRadius*0.1f );
-            shadowBox.offset( -outterRadius*0.2f , outterRadius*0.1f );
+            dest.offset( -outerRadius*0.2f , outerRadius*0.1f );
+            shadowBox.offset( -outerRadius*0.2f , outerRadius*0.1f );
         }*/
         float left;
         float top;

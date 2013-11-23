@@ -430,7 +430,7 @@ enum enumXFLineNumberPos
     enumXFLineNumberLeft,
     enumXFLineNumberRight,
     enumXFLineNumberInner,
-    enumXFLineNumberOutter,
+    enumXFLineNumberOuter,
 };
 
 enum enumXFEntry

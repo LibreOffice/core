@@ -173,8 +173,8 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("text:number-position"), A2OUSTR("right") );
     else if( m_ePosition == enumXFLineNumberInner )
         pAttrList->AddAttribute( A2OUSTR("text:number-position"), A2OUSTR("inner") );
-    else if( m_ePosition == enumXFLineNumberOutter )
-        pAttrList->AddAttribute( A2OUSTR("text:number-position"), A2OUSTR("outter") );
+    else if( m_ePosition == enumXFLineNumberOuter )
+        pAttrList->AddAttribute( A2OUSTR("text:number-position"), A2OUSTR("outer") );
 
     pAttrList->AddAttribute( A2OUSTR("text:increment"), Int32ToOUString(m_nIncrement) );
 

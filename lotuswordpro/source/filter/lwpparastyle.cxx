@@ -281,21 +281,21 @@ void LwpParaStyle::ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::
     case 0x15: //double , fall through!
     case 0x16: //thick double
         pXFBorders->SetDoubleLine(eXFBorderSide, sal_True, sal_False);
-        pXFBorders->SetWidthOutter(eXFBorderSide, static_cast<float>(fWidth*0.333));
+        pXFBorders->SetWidthOuter(eXFBorderSide, static_cast<float>(fWidth*0.333));
         pXFBorders->SetWidthSpace(eXFBorderSide, static_cast<float>(fWidth*0.334));
         pXFBorders->SetWidthInner(eXFBorderSide, static_cast<float>(fWidth*0.333));
 //      pXFBorders->SetWidth(eXFBorderSide, fWidth);
         break;
     case 0x18: //thick-thin
         pXFBorders->SetDoubleLine(eXFBorderSide, sal_True, sal_False);
-        pXFBorders->SetWidthOutter(eXFBorderSide, static_cast<float>(fWidth*0.5));
+        pXFBorders->SetWidthOuter(eXFBorderSide, static_cast<float>(fWidth*0.5));
         pXFBorders->SetWidthInner(eXFBorderSide, static_cast<float>(fWidth*0.25));
         pXFBorders->SetWidthSpace(eXFBorderSide, static_cast<float>(fWidth*0.25));
         break;
     case 0x19: //thin-thick
         pXFBorders->SetDoubleLine(eXFBorderSide, sal_True, sal_False);
         pXFBorders->SetWidthInner(eXFBorderSide, static_cast<float>(fWidth*0.7));
-        pXFBorders->SetWidthOutter(eXFBorderSide, static_cast<float>(fWidth*0.15));
+        pXFBorders->SetWidthOuter(eXFBorderSide, static_cast<float>(fWidth*0.15));
         pXFBorders->SetWidthSpace(eXFBorderSide, static_cast<float>(fWidth*0.15));
         break;
     }

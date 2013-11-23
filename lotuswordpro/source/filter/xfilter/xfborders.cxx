@@ -66,7 +66,7 @@ XFBorder::XFBorder()
     m_bSameWidth = sal_False;
     m_fWidthInner = 0;
     m_fWidthSpace = 0;
-    m_fWidthOutter = 0;
+    m_fWidthOuter = 0;
 }
 
 void    XFBorder::SetColor(XFColor& color)
@@ -84,7 +84,7 @@ void    XFBorder::SetWidth(double width)
     else if( m_bDouble && m_bSameWidth )
     {
         m_fWidthInner = width;
-        m_fWidthOutter = width;
+        m_fWidthOuter = width;
         m_fWidthSpace = width;
     }
 }
@@ -107,10 +107,10 @@ void    XFBorder::SetWidthSpace(double space)
     m_fWidthSpace = space;
 }
 
-void    XFBorder::SetWidthOutter(double outer)
+void    XFBorder::SetWidthOuter(double outer)
 {
     assert(m_bDouble);
-    m_fWidthOutter = outer;
+    m_fWidthOuter = outer;
 }
 
 OUString   XFBorder::GetLineWidth()
@@ -121,7 +121,7 @@ OUString   XFBorder::GetLineWidth()
     {
         str = FloatToOUString(m_fWidthInner);
         str += A2OUSTR("cm ") + DoubleToOUString(m_fWidthSpace);
-        str += A2OUSTR("cm ") + DoubleToOUString(m_fWidthOutter) + A2OUSTR("cm");
+        str += A2OUSTR("cm ") + DoubleToOUString(m_fWidthOuter) + A2OUSTR("cm");
     }
     return str;
 }
@@ -132,7 +132,7 @@ OUString   XFBorder::ToString()
 
     if( m_bDouble )
     {
-        double width = m_fWidthInner + m_fWidthSpace + m_fWidthOutter;
+        double width = m_fWidthInner + m_fWidthSpace + m_fWidthOuter;
         if( width<FLOAT_MIN )
         {
             return str;
@@ -171,7 +171,7 @@ bool operator==(XFBorder& b1, XFBorder& b2)
             return true;
         if( b1.m_fWidthInner != b2.m_fWidthInner ||
             b1.m_fWidthSpace != b2.m_fWidthSpace ||
-            b1.m_fWidthOutter != b2.m_fWidthOutter
+            b1.m_fWidthOuter != b2.m_fWidthOuter
             )
             return false;
     }
@@ -293,21 +293,21 @@ void    XFBorders::SetWidthSpace(enumXFBorder side, double space)
     }
 }
 
-void    XFBorders::SetWidthOutter(enumXFBorder side, double outer)
+void    XFBorders::SetWidthOuter(enumXFBorder side, double outer)
 {
     switch(side)
     {
     case enumXFBorderLeft:
-        m_aBorderLeft.SetWidthOutter(outer);
+        m_aBorderLeft.SetWidthOuter(outer);
         break;
     case enumXFBorderRight:
-        m_aBorderRight.SetWidthOutter(outer);
+        m_aBorderRight.SetWidthOuter(outer);
         break;
     case enumXFBorderTop:
-        m_aBorderTop.SetWidthOutter(outer);
+        m_aBorderTop.SetWidthOuter(outer);
         break;
     case enumXFBorderBottom:
-        m_aBorderBottom.SetWidthOutter(outer);
+        m_aBorderBottom.SetWidthOuter(outer);
         break;
     default:
         break;
