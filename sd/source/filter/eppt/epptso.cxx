@@ -2376,14 +2376,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( nRadius )
                 {
                     ImplCreateShape( ESCHER_ShpInst_RoundRectangle, 0xa00, aSolverContainer ); // Flags: Connector | HasSpt
-                    sal_Int32 nLenght = maRect.GetWidth();
-                    if ( nLenght > maRect.GetHeight() )
-                        nLenght = maRect.GetHeight();
-                    nLenght >>= 1;
-                    if ( nRadius >= nLenght )
+                    sal_Int32 nLength = maRect.GetWidth();
+                    if ( nLength > maRect.GetHeight() )
+                        nLength = maRect.GetHeight();
+                    nLength >>= 1;
+                    if ( nRadius >= nLength )
                         nRadius = 0x2a30;                           // 0x2a30 ist PPTs maximum radius
                     else
-                        nRadius = ( 0x2a30 * nRadius ) / nLenght;
+                        nRadius = ( 0x2a30 * nRadius ) / nLength;
                     aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nRadius );
                 }
                 else

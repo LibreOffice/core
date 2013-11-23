@@ -39,10 +39,10 @@ TemplateContainerItem::~TemplateContainerItem ()
 }
 
 void TemplateContainerItem::calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
-                                     const long nPadding, sal_uInt32 nMaxTextLenght,
+                                     const long nPadding, sal_uInt32 nMaxTextLength,
                                      const ThumbnailItemAttributes *pAttrs)
 {
-    ThumbnailViewItem::calculateItemsPosition( nThumbnailHeight, nDisplayHeight, nPadding, nMaxTextLenght, pAttrs);
+    ThumbnailViewItem::calculateItemsPosition( nThumbnailHeight, nDisplayHeight, nPadding, nMaxTextLength, pAttrs);
     Point aPos (maDrawArea.getX() + nPadding, maDrawArea.getY() + nPadding);
     maThumbnailArea = Rectangle(aPos, Size(maDrawArea.GetWidth() - 2 * nPadding, nThumbnailHeight));
 }

@@ -609,7 +609,7 @@ enum ESCHER_LineWidth
 };
 
 // size of arrowhead
-enum ESCHER_LineEndLenght
+enum ESCHER_LineEndLength
 {
     ESCHER_LineShortArrow,
     ESCHER_LineMediumLenArrow,

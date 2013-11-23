@@ -1570,9 +1570,9 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXAr
 
         if ( mnTextAlign & TA_RIGHT_CENTER )
         {
-            double fLenght = ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : nTextWidth >> 1;
-            rPosition.X() -= (sal_Int32)( fLenght * cos( maFont.GetOrientation() * F_PI1800 ) );
-            rPosition.Y() -= (sal_Int32)(-( fLenght * sin( maFont.GetOrientation() * F_PI1800 ) ) );
+            double fLength = ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : nTextWidth >> 1;
+            rPosition.X() -= (sal_Int32)( fLength * cos( maFont.GetOrientation() * F_PI1800 ) );
+            rPosition.Y() -= (sal_Int32)(-( fLength * sin( maFont.GetOrientation() * F_PI1800 ) ) );
         }
 
         if( mnTextAlign & TA_UPDATECP )

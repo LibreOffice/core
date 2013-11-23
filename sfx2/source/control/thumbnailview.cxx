@@ -224,7 +224,7 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
     mpItemAttrs->aFillColor = maColor.getBColor();
     mpItemAttrs->aHighlightColor = rStyleSettings.GetHighlightColor().getBColor();
     mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize,GetFont(),false,true);
-    mpItemAttrs->nMaxTextLenght = -1;
+    mpItemAttrs->nMaxTextLength = -1;
 }
 
 void ThumbnailView::ImplInitScrollBar()
@@ -381,7 +381,7 @@ void ThumbnailView::CalculateItemPositions ()
             }
 
             pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-            pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLenght,mpItemAttrs);
+            pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs);
 
             if ( !((nCurCount+1) % mnCols) )
             {
@@ -1108,7 +1108,7 @@ sal_uInt16 ThumbnailView::getNextItemId() const
 
 void ThumbnailView::setItemMaxTextLength(sal_uInt32 nLength)
 {
-    mpItemAttrs->nMaxTextLenght = nLength;
+    mpItemAttrs->nMaxTextLength = nLength;
 }
 
 void ThumbnailView::setItemDimensions(long itemWidth, long thumbnailHeight, long displayHeight, int itemPadding)

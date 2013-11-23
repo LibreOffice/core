@@ -299,14 +299,14 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 nRadius = ImplMapSize( Size( nRadius, 0 )).Width();
                 ADD_SHAPE( ESCHER_ShpInst_RoundRectangle, 0xa00 );  // Flags: Connector | HasSpt
-                sal_Int32 nLenght = rObj.GetRect().GetWidth();
-                if ( nLenght > rObj.GetRect().GetHeight() )
-                    nLenght = rObj.GetRect().GetHeight();
-                nLenght >>= 1;
-                if ( nRadius >= nLenght )
+                sal_Int32 nLength = rObj.GetRect().GetWidth();
+                if ( nLength > rObj.GetRect().GetHeight() )
+                    nLength = rObj.GetRect().GetHeight();
+                nLength >>= 1;
+                if ( nRadius >= nLength )
                     nRadius = 0x2a30;                           // 0x2a30 is PPTs maximum radius
                 else
-                    nRadius = ( 0x2a30 * nRadius ) / nLenght;
+                    nRadius = ( 0x2a30 * nRadius ) / nLength;
                 aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nRadius );
             }
             else

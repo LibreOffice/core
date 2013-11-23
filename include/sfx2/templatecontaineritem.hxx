@@ -31,7 +31,7 @@ public:
                         const ThumbnailItemAttributes *pAttrs);
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
-                                         const long nPadding, sal_uInt32 nMaxTextLenght,
+                                         const long nPadding, sal_uInt32 nMaxTextLength,
                                          const ThumbnailItemAttributes *pAttrs);
 
     bool HasMissingPreview( );

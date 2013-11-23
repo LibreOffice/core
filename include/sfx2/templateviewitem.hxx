@@ -37,7 +37,7 @@ public:
     const OUString& getSubTitle () const { return maSubTitle; }
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
-                                         const long nPadding, sal_uInt32 nMaxTextLenght,
+                                         const long nPadding, sal_uInt32 nMaxTextLength,
                                          const ThumbnailItemAttributes *pAttrs);
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,

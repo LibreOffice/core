@@ -880,7 +880,7 @@ sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
                 {
 
                     /* todo:
-                    calculate the best option for ArrowLenght and ArrowWidth
+                    calculate the best option for ArrowLength and ArrowWidth
                     */
                     if ( aApiName == "Arrow concave" )
                         reLineEnd = ESCHER_LineArrowStealthEnd;

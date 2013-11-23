@@ -206,7 +206,7 @@ void ThumbnailViewItem::setDrawArea (const Rectangle &area)
 }
 
 void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, const long,
-                                                const long nPadding, sal_uInt32 nMaxTextLenght,
+                                                const long nPadding, sal_uInt32 nMaxTextLength,
                                                 const ThumbnailItemAttributes *pAttrs)
 {
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;
@@ -225,7 +225,7 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
 
     // Calculate text position
     aPos.Y() = maDrawArea.getY() + nThumbnailHeight + nPadding * 2;
-    aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLenght))/2;
+    aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2;
     maTextPos = aPos;
 
     // Calculate the text edit max area

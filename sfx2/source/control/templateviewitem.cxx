@@ -40,10 +40,10 @@ TemplateViewItem::~TemplateViewItem ()
 }
 
 void TemplateViewItem::calculateItemsPosition(const long nThumbnailHeight, const long nDisplayHeight,
-                                              const long nPadding, sal_uInt32 nMaxTextLenght,
+                                              const long nPadding, sal_uInt32 nMaxTextLength,
                                               const ThumbnailItemAttributes *pAttrs)
 {
-    ThumbnailViewItem::calculateItemsPosition(nThumbnailHeight,nDisplayHeight,nPadding,nMaxTextLenght, pAttrs);
+    ThumbnailViewItem::calculateItemsPosition(nThumbnailHeight,nDisplayHeight,nPadding,nMaxTextLength, pAttrs);
 
     if (!maSubTitle.isEmpty())
     {
@@ -59,7 +59,7 @@ void TemplateViewItem::calculateItemsPosition(const long nThumbnailHeight, const
         // Set subtitle position
         maSubTitlePos.setY(maTextPos.getY() + nSpace + aTextDev.getTextHeight());
         maSubTitlePos.setX(maDrawArea.Left() +
-                           (aRectSize.Width() - aTextDev.getTextWidth(maSubTitle,0,nMaxTextLenght)*SUBTITLE_SCALE_FACTOR)/2);
+                           (aRectSize.Width() - aTextDev.getTextWidth(maSubTitle,0,nMaxTextLength)*SUBTITLE_SCALE_FACTOR)/2);
     }
 }
 
