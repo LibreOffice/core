@@ -29765,12 +29765,6 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xC60D</UML:TaggedValue.dataValue>
@@ -29882,14 +29876,6 @@
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
         </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="sprmPChgTabsPapx-Properties">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="sprmPChgTabsPapx"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Properties"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
         <!--SPRM sprmPChgTabsPapx-->
         <!--SPRM sprmPDxaRight-->
         <UML:Class xmi.id="sprmPDxaRight" name="sprmPDxaRight">
