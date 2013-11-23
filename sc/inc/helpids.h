@@ -704,5 +704,8 @@
 #define HID_FUNC_HYP_GEOM_DIST_MS                               "SC_HID_FUNC_HYP_GEOM_DIST_MS"
 #define HID_FUNC_POISSON_DIST_MS                                "SC_HID_FUNC_POISSON_DIST_MS"
 #define HID_FUNC_WEIBULL_DIST_MS                                "SC_HID_FUNC_WEIBULL_DIST_MS"
+#define HID_FUNC_GAMMADIST_MS                                   "SC_HID_FUNC_GAMMADIST_MS"
+#define HID_FUNC_GAMMAINV_MS                                    "SC_HID_FUNC_GAMMAINV_MS"
+#define HID_FUNC_GAMMALN_MS                                     "SC_HID_FUNC_GAMMALN_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

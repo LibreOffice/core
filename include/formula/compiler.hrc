@@ -192,7 +192,8 @@
 #define SC_OPCODE_UNICODE           159
 #define SC_OPCODE_UNICHAR           160
 #define SC_OPCODE_GAMMA             161
-#define SC_OPCODE_STOP_1_PAR        162
+#define SC_OPCODE_GAMMA_LN_MS       162
+#define SC_OPCODE_STOP_1_PAR        163
 
 /*** Functions with more than one parameters ***/
 #define SC_OPCODE_START_2_PAR       201
@@ -434,8 +435,10 @@
 #define SC_OPCODE_HYP_GEOM_DIST_MS  436
 #define SC_OPCODE_POISSON_DIST_MS   437
 #define SC_OPCODE_WEIBULL_MS        438
+#define SC_OPCODE_GAMMA_DIST_MS     439
+#define SC_OPCODE_GAMMA_INV_MS      440
 
-#define SC_OPCODE_STOP_2_PAR        439     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_STOP_2_PAR        441     /* last function with two or more parameters' OpCode + 1 */
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */
 
