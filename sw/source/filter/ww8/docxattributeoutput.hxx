@@ -744,10 +744,10 @@ private:
 
     struct PostponedVMLDrawing
     {
-        PostponedVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt* frm, const Point* pt ) : object( sdrObj ), frame( frm ), vpt( pt ) {};
+        PostponedVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt* frm, const Point* pt ) : object( sdrObj ), frame( frm ), point( pt ) {};
         const SdrObject* object;
         const SwFrmFmt* frame;
-        const Point* vpt;
+        const Point* point;
     };
     std::list< PostponedVMLDrawing >* m_postponedVMLDrawing;
 

@@ -3285,7 +3285,7 @@ void DocxAttributeOutput::WritePostponedVMLDrawing()
          it != m_postponedVMLDrawing->end();
          ++it )
     {
-        WriteVMLDrawing(it->object, *(it->frame), *(it->vpt));
+        WriteVMLDrawing(it->object, *(it->frame), *(it->point));
     }
     delete m_postponedVMLDrawing;
     m_postponedVMLDrawing = NULL;
