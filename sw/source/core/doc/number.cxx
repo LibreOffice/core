@@ -53,14 +53,14 @@
 
 using namespace ::com::sun::star;
 
-sal_uInt16 SwNumRule::nRefCount = 0;
-SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
+sal_uInt16 SwNumRule::mnRefCount = 0;
+SwNumFmt* SwNumRule::maBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-SwNumFmt* SwNumRule::aLabelAlignmentBaseFmts[ RULE_END ][ MAXLEVEL ] = {
+SwNumFmt* SwNumRule::maLabelAlignmentBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-const sal_uInt16 SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
+const sal_uInt16 SwNumRule::maDefNumIndents[ MAXLEVEL ] = {
 //inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
         1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
         1440*9/4, 1440*5/2
@@ -73,22 +73,22 @@ OUString SwNumRule::GetOutlineRuleName()
 
 const SwNumFmt& SwNumRule::Get( sal_uInt16 i ) const
 {
-    OSL_ASSERT( i < MAXLEVEL && eRuleType < RULE_END );
-    return aFmts[ i ]
-           ? *aFmts[ i ]
+    OSL_ASSERT( i < MAXLEVEL && meRuleType < RULE_END );
+    return maFmts[ i ]
+           ? *maFmts[ i ]
            : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION
-               ? *aBaseFmts[ eRuleType ][ i ]
-               : *aLabelAlignmentBaseFmts[ eRuleType ][ i ] );
+               ? *maBaseFmts[ meRuleType ][ i ]
+               : *maLabelAlignmentBaseFmts[ meRuleType ][ i ] );
 }
 
 const SwNumFmt* SwNumRule::GetNumFmt( sal_uInt16 i ) const
 {
     const SwNumFmt * pResult = NULL;
 
-    OSL_ASSERT( i < MAXLEVEL && eRuleType < RULE_END );
-    if ( i < MAXLEVEL && eRuleType < RULE_END)
+    OSL_ASSERT( i < MAXLEVEL && meRuleType < RULE_END );
+    if ( i < MAXLEVEL && meRuleType < RULE_END)
     {
-        pResult = aFmts[ i ];
+        pResult = maFmts[ i ];
     }
 
     return pResult;
@@ -98,20 +98,20 @@ const SwNumFmt* SwNumRule::GetNumFmt( sal_uInt16 i ) const
 void SwNumRule::SetName( const OUString & rName,
                          IDocumentListsAccess& rDocListAccess)
 {
-    if ( sName != rName )
+    if ( msName != rName )
     {
-        if (pNumRuleMap)
+        if (mpNumRuleMap)
         {
-            pNumRuleMap->erase(sName);
-            (*pNumRuleMap)[rName] = this;
+            mpNumRuleMap->erase(msName);
+            (*mpNumRuleMap)[rName] = this;
 
             if ( !GetDefaultListId().isEmpty() )
             {
-                rDocListAccess.trackChangeOfListStyleName( sName, rName );
+                rDocListAccess.trackChangeOfListStyleName( msName, rName );
             }
         }
 
-        sName = rName;
+        msName = rName;
     }
 }
 
@@ -148,21 +148,21 @@ void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
 }
 
 void SwNumRule::SetNumRuleMap(boost::unordered_map<OUString, SwNumRule *, OUStringHash> *
-                              _pNumRuleMap)
+                              pNumRuleMap)
 {
-    pNumRuleMap = _pNumRuleMap;
+    mpNumRuleMap = pNumRuleMap;
 }
 
 sal_uInt16 SwNumRule::GetNumIndent( sal_uInt8 nLvl )
 {
     OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
-    return aDefNumIndents[ nLvl ];
+    return maDefNumIndents[ nLvl ];
 }
 
 sal_uInt16 SwNumRule::GetBullIndent( sal_uInt8 nLvl )
 {
     OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
-    return aDefNumIndents[ nLvl ];
+    return maDefNumIndents[ nLvl ];
 }
 
 static void lcl_SetRuleChgd( SwTxtNode& rNd, sal_uInt8 nLevel )
@@ -379,22 +379,22 @@ SwNumRule::SwNumRule( const OUString& rNm,
                       sal_Bool bAutoFlg )
   : maTxtNodeList(),
     maParagraphStyleList(),
-    pNumRuleMap(0),
-    sName( rNm ),
-    eRuleType( eType ),
-    nPoolFmtId( USHRT_MAX ),
-    nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX ),
-    bAutoRuleFlag( bAutoFlg ),
-    bInvalidRuleFlag( sal_True ),
-    bContinusNum( sal_False ),
-    bAbsSpaces( sal_False ),
-    bHidden( sal_False ),
+    mpNumRuleMap(0),
+    msName( rNm ),
+    meRuleType( eType ),
+    mnPoolFmtId( USHRT_MAX ),
+    mnPoolHelpId( USHRT_MAX ),
+    mnPoolHlpFileId( UCHAR_MAX ),
+    mbAutoRuleFlag( bAutoFlg ),
+    mbInvalidRuleFlag( sal_True ),
+    mbContinusNum( sal_False ),
+    mbAbsSpaces( sal_False ),
+    mbHidden( sal_False ),
     mbCountPhantoms( true ),
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
-    if( !nRefCount++ )          // for the first time, initialize
+    if( !mnRefCount++ )          // for the first time, initialize
     {
         SwNumFmt* pFmt;
         sal_uInt8 n;
@@ -411,7 +411,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFmt->SetFirstLineOffset( lNumFirstLineOffset );
             pFmt->SetSuffix( "." );
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
-            SwNumRule::aBaseFmts[ NUM_RULE ][ n ] = pFmt;
+            SwNumRule::maBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
         // position-and-space mode LABEL_ALIGNMENT
         // first line indent of general numbering in inch: -0,25 inch
@@ -434,7 +434,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFmt->SetIndentAt( cIndentAt[ n ] );
             pFmt->SetSuffix( "." );
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
-            SwNumRule::aLabelAlignmentBaseFmts[ NUM_RULE ][ n ] = pFmt;
+            SwNumRule::maLabelAlignmentBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
 
         // outline:
@@ -447,7 +447,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFmt->SetStart( 1 );
             pFmt->SetCharTextDistance( lOutlineMinTextDistance );
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
-            SwNumRule::aBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
+            SwNumRule::maBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
         }
         // position-and-space mode LABEL_ALIGNMENT:
         // indent values of default outline numbering in inch:
@@ -468,52 +468,52 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFmt->SetFirstLineIndent( -cOutlineIndentAt[ n ] );
             pFmt->SetIndentAt( cOutlineIndentAt[ n ] );
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
-            SwNumRule::aLabelAlignmentBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
+            SwNumRule::maLabelAlignmentBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
         }
     }
-    memset( aFmts, 0, sizeof( aFmts ));
-    OSL_ENSURE( !sName.isEmpty(), "NumRule without a name!" );
+    memset( maFmts, 0, sizeof( maFmts ));
+    OSL_ENSURE( !msName.isEmpty(), "NumRule without a name!" );
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     : maTxtNodeList(),
       maParagraphStyleList(),
-      pNumRuleMap(0),
-      sName( rNumRule.sName ),
-      eRuleType( rNumRule.eRuleType ),
-      nPoolFmtId( rNumRule.GetPoolFmtId() ),
-      nPoolHelpId( rNumRule.GetPoolHelpId() ),
-      nPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
-      bAutoRuleFlag( rNumRule.bAutoRuleFlag ),
-      bInvalidRuleFlag( sal_True ),
-      bContinusNum( rNumRule.bContinusNum ),
-      bAbsSpaces( rNumRule.bAbsSpaces ),
-      bHidden( rNumRule.bHidden ),
+      mpNumRuleMap(0),
+      msName( rNumRule.msName ),
+      meRuleType( rNumRule.meRuleType ),
+      mnPoolFmtId( rNumRule.GetPoolFmtId() ),
+      mnPoolHelpId( rNumRule.GetPoolHelpId() ),
+      mnPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
+      mbAutoRuleFlag( rNumRule.mbAutoRuleFlag ),
+      mbInvalidRuleFlag( sal_True ),
+      mbContinusNum( rNumRule.mbContinusNum ),
+      mbAbsSpaces( rNumRule.mbAbsSpaces ),
+      mbHidden( rNumRule.mbHidden ),
       mbCountPhantoms( true ),
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
       msDefaultListId( rNumRule.msDefaultListId )
 {
-    ++nRefCount;
-    memset( aFmts, 0, sizeof( aFmts ));
+    ++mnRefCount;
+    memset( maFmts, 0, sizeof( maFmts ));
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-        if( rNumRule.aFmts[ n ] )
-            Set( n, *rNumRule.aFmts[ n ] );
+        if( rNumRule.maFmts[ n ] )
+            Set( n, *rNumRule.maFmts[ n ] );
 }
 
 SwNumRule::~SwNumRule()
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-        delete aFmts[ n ];
+        delete maFmts[ n ];
 
-    if (pNumRuleMap)
+    if (mpNumRuleMap)
     {
-        pNumRuleMap->erase(GetName());
+        mpNumRuleMap->erase(GetName());
     }
 
-    if( !--nRefCount )          // the last one closes the door (?)
+    if( !--mnRefCount )          // the last one closes the door (?)
     {
             // Numbering:
-            SwNumFmt** ppFmts = (SwNumFmt**)SwNumRule::aBaseFmts;
+            SwNumFmt** ppFmts = (SwNumFmt**)SwNumRule::maBaseFmts;
             int n;
 
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
@@ -523,7 +523,7 @@ SwNumRule::~SwNumRule()
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
 
-            ppFmts = (SwNumFmt**)SwNumRule::aLabelAlignmentBaseFmts;
+            ppFmts = (SwNumFmt**)SwNumRule::maLabelAlignmentBaseFmts;
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
@@ -538,14 +538,14 @@ void SwNumRule::CheckCharFmts( SwDoc* pDoc )
 {
     SwCharFmt* pFmt;
     for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
-        if( aFmts[ n ] && 0 != ( pFmt = aFmts[ n ]->GetCharFmt() ) &&
+        if( maFmts[ n ] && 0 != ( pFmt = maFmts[ n ]->GetCharFmt() ) &&
             pFmt->GetDoc() != pDoc )
         {
             // copy
-            SwNumFmt* pNew = new SwNumFmt( *aFmts[ n ] );
+            SwNumFmt* pNew = new SwNumFmt( *maFmts[ n ] );
             pNew->SetCharFmt( pDoc->CopyCharFmt( *pFmt ) );
-            delete aFmts[ n ];
-            aFmts[ n ] = pNew;
+            delete maFmts[ n ];
+            maFmts[ n ] = pNew;
         }
 }
 
@@ -554,32 +554,32 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
     if( this != &rNumRule )
     {
         for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-            Set( n, rNumRule.aFmts[ n ] );
+            Set( n, rNumRule.maFmts[ n ] );
 
-        eRuleType = rNumRule.eRuleType;
-        sName = rNumRule.sName;
-        bAutoRuleFlag = rNumRule.bAutoRuleFlag;
-        bInvalidRuleFlag = sal_True;
-        bContinusNum = rNumRule.bContinusNum;
-        bAbsSpaces = rNumRule.bAbsSpaces;
-        bHidden = rNumRule.bHidden;
-        nPoolFmtId = rNumRule.GetPoolFmtId();
-        nPoolHelpId = rNumRule.GetPoolHelpId();
-        nPoolHlpFileId = rNumRule.GetPoolHlpFileId();
+        meRuleType = rNumRule.meRuleType;
+        msName = rNumRule.msName;
+        mbAutoRuleFlag = rNumRule.mbAutoRuleFlag;
+        mbInvalidRuleFlag = sal_True;
+        mbContinusNum = rNumRule.mbContinusNum;
+        mbAbsSpaces = rNumRule.mbAbsSpaces;
+        mbHidden = rNumRule.mbHidden;
+        mnPoolFmtId = rNumRule.GetPoolFmtId();
+        mnPoolHelpId = rNumRule.GetPoolHelpId();
+        mnPoolHlpFileId = rNumRule.GetPoolHlpFileId();
     }
     return *this;
 }
 
 sal_Bool SwNumRule::operator==( const SwNumRule& rRule ) const
 {
-    sal_Bool bRet = eRuleType == rRule.eRuleType &&
-                sName == rRule.sName &&
-                bAutoRuleFlag == rRule.bAutoRuleFlag &&
-                bContinusNum == rRule.bContinusNum &&
-                bAbsSpaces == rRule.bAbsSpaces &&
-                nPoolFmtId == rRule.GetPoolFmtId() &&
-                nPoolHelpId == rRule.GetPoolHelpId() &&
-                nPoolHlpFileId == rRule.GetPoolHlpFileId();
+    sal_Bool bRet = meRuleType == rRule.meRuleType &&
+                msName == rRule.msName &&
+                mbAutoRuleFlag == rRule.mbAutoRuleFlag &&
+                mbContinusNum == rRule.mbContinusNum &&
+                mbAbsSpaces == rRule.mbAbsSpaces &&
+                mnPoolFmtId == rRule.GetPoolFmtId() &&
+                mnPoolHelpId == rRule.GetPoolHelpId() &&
+                mnPoolHlpFileId == rRule.GetPoolHlpFileId();
     if( bRet )
     {
         for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
@@ -597,11 +597,11 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFmt& rNumFmt )
     OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
     if( i < MAXLEVEL )
     {
-        if( !aFmts[ i ] || !(rNumFmt == Get( i )) )
+        if( !maFmts[ i ] || !(rNumFmt == Get( i )) )
         {
-            delete aFmts[ i ];
-            aFmts[ i ] = new SwNumFmt( rNumFmt );
-            bInvalidRuleFlag = sal_True;
+            delete maFmts[ i ];
+            maFmts[ i ] = new SwNumFmt( rNumFmt );
+            mbInvalidRuleFlag = sal_True;
         }
     }
 }
@@ -611,19 +611,19 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFmt* pNumFmt )
     OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
     if( i >= MAXLEVEL )
         return;
-    SwNumFmt* pOld = aFmts[ i ];
+    SwNumFmt* pOld = maFmts[ i ];
     if( !pOld )
     {
         if( pNumFmt )
         {
-            aFmts[ i ] = new SwNumFmt( *pNumFmt );
-            bInvalidRuleFlag = sal_True;
+            maFmts[ i ] = new SwNumFmt( *pNumFmt );
+            mbInvalidRuleFlag = sal_True;
         }
     }
     else if( !pNumFmt )
-        delete pOld, aFmts[ i ] = 0, bInvalidRuleFlag = sal_True;
+        delete pOld, maFmts[ i ] = 0, mbInvalidRuleFlag = sal_True;
     else if( *pOld != *pNumFmt )
-        *pOld = *pNumFmt, bInvalidRuleFlag = sal_True;
+        *pOld = *pNumFmt, mbInvalidRuleFlag = sal_True;
 }
 
 OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, sal_Bool bInclStrings,
@@ -822,21 +822,21 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
-        Set( n, rNumRule.aFmts[ n ] );
-        if( aFmts[ n ] && aFmts[ n ]->GetCharFmt() &&
-            !pDoc->GetCharFmts()->Contains( aFmts[n]->GetCharFmt() ))
+        Set( n, rNumRule.maFmts[ n ] );
+        if( maFmts[ n ] && maFmts[ n ]->GetCharFmt() &&
+            !pDoc->GetCharFmts()->Contains( maFmts[n]->GetCharFmt() ))
             // If we copy across different Documents, then copy the
             // corresponding CharFormat into the new Document.
-            aFmts[n]->SetCharFmt( pDoc->CopyCharFmt( *aFmts[n]->
+            maFmts[n]->SetCharFmt( pDoc->CopyCharFmt( *maFmts[n]->
                                         GetCharFmt() ) );
     }
-    eRuleType = rNumRule.eRuleType;
-    sName = rNumRule.sName;
-    bAutoRuleFlag = rNumRule.bAutoRuleFlag;
-    nPoolFmtId = rNumRule.GetPoolFmtId();
-    nPoolHelpId = rNumRule.GetPoolHelpId();
-    nPoolHlpFileId = rNumRule.GetPoolHlpFileId();
-    bInvalidRuleFlag = sal_True;
+    meRuleType = rNumRule.meRuleType;
+    msName = rNumRule.msName;
+    mbAutoRuleFlag = rNumRule.mbAutoRuleFlag;
+    mnPoolFmtId = rNumRule.GetPoolFmtId();
+    mnPoolHelpId = rNumRule.GetPoolHelpId();
+    mnPoolHlpFileId = rNumRule.GetPoolHlpFileId();
+    mbInvalidRuleFlag = sal_True;
     return *this;
 }
 
@@ -845,20 +845,20 @@ void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         const SvxNumberFormat* pSvxFmt = rNumRule.Get(n);
-        delete aFmts[n];
-        aFmts[n] = pSvxFmt ? new SwNumFmt(*pSvxFmt, pDoc) : 0;
+        delete maFmts[n];
+        maFmts[n] = pSvxFmt ? new SwNumFmt(*pSvxFmt, pDoc) : 0;
     }
 
-    bInvalidRuleFlag = sal_True;
-    bContinusNum = rNumRule.IsContinuousNumbering();
+    mbInvalidRuleFlag = sal_True;
+    mbContinusNum = rNumRule.IsContinuousNumbering();
 }
 
 SvxNumRule SwNumRule::MakeSvxNumRule() const
 {
     SvxNumRule aRule(NUM_CONTINUOUS|NUM_CHAR_TEXT_DISTANCE|NUM_CHAR_STYLE|
                         NUM_ENABLE_LINKED_BMP|NUM_ENABLE_EMBEDDED_BMP,
-                        MAXLEVEL, bContinusNum,
-                        eRuleType ==
+                        MAXLEVEL, mbContinusNum,
+                        meRuleType ==
                             NUM_RULE ?
                                 SVX_RULETYPE_NUMBERING :
                                     SVX_RULETYPE_OUTLINE_NUMBERING );
@@ -867,7 +867,7 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
         SwNumFmt aNumFmt = Get(n);
         if(aNumFmt.GetCharFmt())
             aNumFmt.SetCharFmtName(aNumFmt.GetCharFmt()->GetName());
-        aRule.SetLevel(n, aNumFmt, aFmts[n] != 0);
+        aRule.SetLevel(n, aNumFmt, maFmts[n] != 0);
     }
     return aRule;
 }
@@ -893,7 +893,7 @@ void SwNumRule::SetInvalidRule(sal_Bool bFlag)
                        std::mem_fun( &SwList::InvalidateListTree ) );
     }
 
-    bInvalidRuleFlag = bFlag;
+    mbInvalidRuleFlag = bFlag;
 }
 
 /// change indent of all list levels by given difference

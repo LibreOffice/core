@@ -111,13 +111,13 @@ public:
 private:
     friend void _FinitCore();
 
-    static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
-    static const sal_uInt16 aDefNumIndents[ MAXLEVEL ];
+    static SwNumFmt* maBaseFmts [ RULE_END ][ MAXLEVEL ];
+    static const sal_uInt16 maDefNumIndents[ MAXLEVEL ];
     /// default list level properties for position-and-space mode LABEL_ALIGNMENT
-    static SwNumFmt* aLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
-    static sal_uInt16 nRefCount;
+    static SwNumFmt* maLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
+    static sal_uInt16 mnRefCount;
 
-    SwNumFmt* aFmts[ MAXLEVEL ];
+    SwNumFmt* maFmts[ MAXLEVEL ];
 
     /** container for associated text nodes */
     tTxtNodeList maTxtNodeList;
@@ -126,18 +126,18 @@ private:
     tParagraphStyleList maParagraphStyleList;
 
     /** boost::unordered_map containing "name->rule" relation */
-    boost::unordered_map<OUString, SwNumRule *, OUStringHash> * pNumRuleMap;
+    boost::unordered_map<OUString, SwNumRule *, OUStringHash> * mpNumRuleMap;
 
-    OUString sName;
-    SwNumRuleType eRuleType;
-    sal_uInt16 nPoolFmtId;      ///< Id-for NumRules created "automatically"
-    sal_uInt16 nPoolHelpId;     ///< HelpId for this Pool-style.
-    sal_uInt8 nPoolHlpFileId;   ///< FilePos at Doc on style helps.
-    sal_Bool bAutoRuleFlag : 1;
-    sal_Bool bInvalidRuleFlag : 1;
-    sal_Bool bContinusNum : 1;  ///< Continuous numbering without levels.
-    sal_Bool bAbsSpaces : 1;    ///< Levels represent absolute indents.
-    sal_Bool bHidden : 1;       ///< Is the numering rule to be hidden in the UI?
+    OUString msName;
+    SwNumRuleType meRuleType;
+    sal_uInt16 mnPoolFmtId;      ///< Id-for NumRules created "automatically"
+    sal_uInt16 mnPoolHelpId;     ///< HelpId for this Pool-style.
+    sal_uInt8 mnPoolHlpFileId;   ///< FilePos at Doc on style helps.
+    sal_Bool mbAutoRuleFlag : 1;
+    sal_Bool mbInvalidRuleFlag : 1;
+    sal_Bool mbContinusNum : 1;  ///< Continuous numbering without levels.
+    sal_Bool mbAbsSpaces : 1;    ///< Levels represent absolute indents.
+    sal_Bool mbHidden : 1;       ///< Is the numering rule to be hidden in the UI?
     bool mbCountPhantoms;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
@@ -161,8 +161,8 @@ public:
     const SwNumFmt* GetNumFmt( sal_uInt16 i ) const;
     const SwNumFmt& Get( sal_uInt16 i ) const;
 
-    sal_Bool IsHidden( ) const { return bHidden; }
-    void SetHidden( sal_Bool bValue ) { bHidden = bValue; }
+    sal_Bool IsHidden( ) const { return mbHidden; }
+    void SetHidden( sal_Bool bValue ) { mbHidden = bValue; }
 
     void Set( sal_uInt16 i, const SwNumFmt* );
     void Set( sal_uInt16 i, const SwNumFmt& );
@@ -214,9 +214,9 @@ public:
     static sal_uInt16 GetNumIndent( sal_uInt8 nLvl );
     static sal_uInt16 GetBullIndent( sal_uInt8 nLvl );
 
-    SwNumRuleType GetRuleType() const           { return eRuleType; }
-    void SetRuleType( SwNumRuleType eNew )      { eRuleType = eNew;
-                                                  bInvalidRuleFlag = sal_True; }
+    SwNumRuleType GetRuleType() const           { return meRuleType; }
+    void SetRuleType( SwNumRuleType eNew )      { meRuleType = eNew;
+                                                  mbInvalidRuleFlag = sal_True; }
 
     /** A kind of copy-constructor to make sure the num formats are
        attached to the correctCharFormats of a document!!
@@ -227,37 +227,37 @@ public:
        and copies them if appropriate. */
     void CheckCharFmts( SwDoc* pDoc );
 
-    OUString GetName() const { return sName; }
+    OUString GetName() const { return msName; }
 
     void SetName( const OUString& rNm,
                   IDocumentListsAccess& rDocListAccess );
 
-    sal_Bool IsAutoRule() const             { return bAutoRuleFlag; }
-    void SetAutoRule( sal_Bool bFlag )      { bAutoRuleFlag = bFlag; }
+    sal_Bool IsAutoRule() const             { return mbAutoRuleFlag; }
+    void SetAutoRule( sal_Bool bFlag )      { mbAutoRuleFlag = bFlag; }
 
-    sal_Bool IsInvalidRule() const          { return bInvalidRuleFlag; }
+    sal_Bool IsInvalidRule() const          { return mbInvalidRuleFlag; }
     void SetInvalidRule( sal_Bool bFlag );
 
-    sal_Bool IsContinusNum() const          { return bContinusNum; }
-    void SetContinusNum( sal_Bool bFlag )   { bContinusNum = bFlag; }
+    sal_Bool IsContinusNum() const          { return mbContinusNum; }
+    void SetContinusNum( sal_Bool bFlag )   { mbContinusNum = bFlag; }
 
-    sal_Bool IsAbsSpaces() const            { return bAbsSpaces; }
-    void SetAbsSpaces( sal_Bool bFlag )     { bAbsSpaces = bFlag; }
+    sal_Bool IsAbsSpaces() const            { return mbAbsSpaces; }
+    void SetAbsSpaces( sal_Bool bFlag )     { mbAbsSpaces = bFlag; }
 
-    sal_Bool IsOutlineRule() const { return eRuleType == OUTLINE_RULE; }
+    sal_Bool IsOutlineRule() const { return meRuleType == OUTLINE_RULE; }
 
     bool IsCountPhantoms() const;
     void SetCountPhantoms(bool bCountPhantoms);
 
     /// Query and set PoolFormat IDs.
-    sal_uInt16 GetPoolFmtId() const         { return nPoolFmtId; }
-    void SetPoolFmtId( sal_uInt16 nId )     { nPoolFmtId = nId; }
+    sal_uInt16 GetPoolFmtId() const         { return mnPoolFmtId; }
+    void SetPoolFmtId( sal_uInt16 nId )     { mnPoolFmtId = nId; }
 
     /// Query and set Help-IDs for document styles.
-    sal_uInt16 GetPoolHelpId() const        { return nPoolHelpId; }
-    void SetPoolHelpId( sal_uInt16 nId )    { nPoolHelpId = nId; }
-    sal_uInt8 GetPoolHlpFileId() const      { return nPoolHlpFileId; }
-    void SetPoolHlpFileId( sal_uInt8 nId )  { nPoolHlpFileId = nId; }
+    sal_uInt16 GetPoolHelpId() const        { return mnPoolHelpId; }
+    void SetPoolHelpId( sal_uInt16 nId )    { mnPoolHelpId = nId; }
+    sal_uInt8 GetPoolHlpFileId() const      { return mnPoolHlpFileId; }
+    void SetPoolHlpFileId( sal_uInt8 nId )  { mnPoolHlpFileId = nId; }
 
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
