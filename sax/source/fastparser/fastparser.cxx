@@ -998,14 +998,18 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
             rEvent.mnElementToken = GetToken( pName );
 
         if( rEvent.mnElementToken == FastToken::DONTKNOW )
+        {
             if( nPrefixLen > 0 )
             {
                 rEvent.msNamespace = GetNamespaceURL( pPrefix, nPrefixLen );
                 nNamespaceToken = GetNamespaceToken( rEvent.msNamespace );
             }
+            rEvent.msElementName = OUString( pName, nNameLen, RTL_TEXTENCODING_UTF8 );
+        }
+        else // token is always preferred.
+            rEvent.msElementName = OUString( "" );
 
         rEntity.maNamespaceStack.push( NameWithToken(rEvent.msNamespace, nNamespaceToken) );
-        rEvent.msElementName = OUString(pName, nNameLen, RTL_TEXTENCODING_UTF8);
         if (rEntity.mbEnableThreads)
             produce( START_ELEMENT );
         else
