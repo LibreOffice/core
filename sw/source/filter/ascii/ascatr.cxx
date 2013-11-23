@@ -35,6 +35,8 @@
 #include <fldbas.hxx>
 #include <ftninfo.hxx>
 
+#include <algorithm>
+
 /*
  * This file contains all output functions of the ASCII-Writer;
  * For all nodes, attributes, formats and chars.
@@ -175,11 +177,11 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     const SwTxtNode& rNd = (SwTxtNode&)rNode;
 
     sal_Int32 nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
-    const sal_Int32 nNodeEnde = rNd.Len();
-    sal_Int32 nEnde = nNodeEnde;
+    const sal_Int32 nNodeEnd = rNd.Len();
+    sal_Int32 nEnd = nNodeEnd;
     bool bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
     if( bLastNd )
-        nEnde = rWrt.pCurPam->GetMark()->nContent.GetIndex();
+        nEnd = rWrt.pCurPam->GetMark()->nContent.GetIndex();
 
     SwASC_AttrIter aAttrIter( (SwASCWriter&)rWrt, rNd, nStrPos );
 
@@ -201,10 +203,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                                     RTL_TEXTENCODING_UTF8 == rWrt.GetAsciiOptions().GetCharSet();
 
     do {
-        sal_Int32 nNextAttr = aAttrIter.WhereNext();
-
-        if( nNextAttr > nEnde )
-            nNextAttr = nEnde;
+        const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
 
         if( !aAttrIter.OutAttr( nStrPos ))
         {
@@ -216,11 +215,11 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
         nStrPos = nNextAttr;
         aAttrIter.NextPos();
-    } while( nStrPos < nEnde );
+    } while( nStrPos < nEnd );
 
     if( !bLastNd ||
         ( ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
-            && !nStrPos && nEnde == nNodeEnde ) )
+            && !nStrPos && nEnd == nNodeEnd ) )
         rWrt.Strm().WriteUnicodeOrByteText( ((SwASCWriter&)rWrt).GetLineEnd());
 
     return rWrt;
