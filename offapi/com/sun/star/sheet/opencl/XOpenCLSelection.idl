@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/sheet/opencl/OpenCLPlatform.idl>
+
 module com { module sun { module star { module sheet { module opencl {
 
 interface XOpenCLSelection : com::sun::star::uno::XInterface
@@ -37,6 +39,11 @@ interface XOpenCLSelection : com::sun::star::uno::XInterface
      * returns the device id of the currently selected device
      */
     long getDeviceID();
+
+    /**
+     * lists all OpenCL devices and platforms
+     */
+    sequence< OpenCLPlatform > getOpenCLPlatforms();
 
 };
 

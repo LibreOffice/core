@@ -997,6 +997,10 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
 
 void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
 {
+    int status = clewInit(OPENCL_DLL_NAME);
+    if (status < 0)
+        return;
+
     cl_device_id id = OpenclDevice::gpuEnv.mpDevID;
     findDeviceInfoFromDeviceId(id, rDeviceId, rPlatformId);
 }

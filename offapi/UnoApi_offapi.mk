@@ -3327,6 +3327,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/security,\
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet/opencl,\
+	OpenCLDevice \
+	OpenCLPlatform \
 	XOpenCLSelection \
 ))
 

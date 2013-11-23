@@ -46,6 +46,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XCellRangesAccess.hpp>
 #include <com/sun/star/sheet/opencl/XOpenCLSelection.hpp>
+#include <com/sun/star/sheet/opencl/OpenCLPlatform.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -332,6 +333,10 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getDeviceID()
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Sequence< com::sun::star::sheet::opencl::OpenCLPlatform >
+        SAL_CALL getOpenCLPlatforms()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
