@@ -4355,6 +4355,46 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "If given and not equal to zero then rounded up according to amount when a negative number and significance." ;
         };
     };
+     // -=*# Resource for function CEILING_ODF #*=-
+    Resource SC_OPCODE_CEIL_ODF
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Rounds a number up to the nearest multiple of significance." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_CEILING );
+            3;  0;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The number to be rounded up." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Significance" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "If given the number to whose multiple the value is rounded, else -1 or 1 depending on sign of Number." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Mode" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "If given and not equal to zero then rounded up according to amount when a negative number and significance." ;
+        };
+    };
      // -=*# Resource for function UNTERGRENZE #*=-
     Resource SC_OPCODE_FLOOR
     {
@@ -4385,6 +4425,46 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             Text [ en-US ] = "The number to whose multiple the value is to be rounded down." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Mode" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "If given and not equal to zero then rounded down according to amount when a negative number and significance." ;
+        };
+    };
+     // -=*# Resource for function FLOOR_ODF #*=-
+    Resource SC_OPCODE_FLOOR_ODF
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Rounds number down to the nearest multiple of significance." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_FLOOR );
+            3;  0;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The number to be rounded down." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Significance" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "If given, the number to whose multiple the value is to be rounded down, else -1 or 1 depending on signe of Number." ;
         };
         String 6 // Name of Parameter 3
         {

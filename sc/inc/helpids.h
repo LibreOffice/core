@@ -707,5 +707,7 @@
 #define HID_FUNC_GAMMADIST_MS                                   "SC_HID_FUNC_GAMMADIST_MS"
 #define HID_FUNC_GAMMAINV_MS                                    "SC_HID_FUNC_GAMMAINV_MS"
 #define HID_FUNC_GAMMALN_MS                                     "SC_HID_FUNC_GAMMALN_MS"
+#define HID_FUNC_CEILING                                        "SC_HID_FUNC_CEILING"
+#define HID_FUNC_FLOOR                                          "SC_HID_FUNC_FLOOR"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1275,6 +1275,10 @@ void FormulaCompiler::Factor()
                     eOp = Expression();
                 }
             }
+// fdo69552 next 2 lines are not yet correct. Possible they are not in the roght place too.
+//          intention: change formula name CEILING/FLOOR to CEILING_ODF/FLOOR_ODF when argument 2 is missing.
+//            if ( ( eOp == ocCeil || eOp == ocFloor ) && nSepCount < 2 )
+//                mpToken->NewOpCode( ocCeil_ODF, FormulaToken::PrivateAccess() );
             if (bBadName)
                 ;   // nothing, keep current token for return
             else if (eOp != ocClose)
