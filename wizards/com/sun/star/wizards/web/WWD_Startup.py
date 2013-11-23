@@ -127,6 +127,8 @@ class WWD_Startup(WWD_General):
         self.buildStep5()
         self.buildStep6()
         self.buildStep7(self.proxies, exclamationURL)
+        self.txtLocalDir.Model.Enabled = False
+        self.txtZip.Model.Enabled = False
         self.buildStepX()
         self.xMSF = xmsf
         xDesktop = Desktop.getDesktop(xmsf)
@@ -223,7 +225,6 @@ class WWD_Startup(WWD_General):
         DataAware.updateUIs(self.genAware)
         DataAware.updateUIs(self.pubAware)
         self.sessionNameDA.updateUI()
-        self.checkPublish()
 
     '''
     create the peer, add roadmap,
@@ -448,9 +449,9 @@ class WWD_Startup(WWD_General):
         self.pubAware_(
             LOCAL_PUBLISHER, self.chkLocalDir, self.txtLocalDir, False)
         self.pubAware_(
-            FTP_PUBLISHER, self.chkFTP, self.lblFTP, True)
-        self.pubAware_(
             ZIP_PUBLISHER, self.chkZip, self.txtZip, False)
+        self.pubAware_(
+            FTP_PUBLISHER, self.chkFTP, self.lblFTP, True)
         self.sessionNameDA = UnoDataAware.attachEditControl(
             self.settings.cp_DefaultSession, "cp_Name",
             self.cbSaveSettings, True)
@@ -466,8 +467,6 @@ class WWD_Startup(WWD_General):
     def pubAware_(self, publish, checkbox, textbox, isLabel):
         p = self.settings.cp_DefaultSession.cp_Publishing.getElement(publish)
         uda = UnoDataAware.attachCheckBox(p, "cp_Publish", checkbox, True)
-        uda.Inverse = True
-        uda.disableObjects = [textbox]
         self.pubAware.append(uda)
         if isLabel:
             aux = UnoDataAware.attachLabel(p, "cp_URL", textbox, False)

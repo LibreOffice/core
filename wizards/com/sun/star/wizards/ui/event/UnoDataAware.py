@@ -34,18 +34,12 @@ For those controls, static convenience methods are offered, to simplify use.
 
 class UnoDataAware(DataAware):
 
-    disableObjects = []
-
     def __init__(self, dataObject, field, unoObject_, unoPropName_, isShort=False):
         super(UnoDataAware,self).__init__(dataObject, field)
         self.unoControl = unoObject_
         self.unoModel = self.unoControl.Model
         self.unoPropName = unoPropName_
         self.isShort = isShort
-
-    def enableControls(self, value):
-        for i in self.disableObjects:
-            i.Model.Enabled = self.getBoolean(value)
 
     def setToUI(self, value):
         if (isinstance(value, list)):
@@ -64,28 +58,6 @@ class UnoDataAware(DataAware):
                 setattr(self.unoModel, self.unoPropName, value)
             else:
                 uno.invoke(self.unoModel, "set" + self.unoPropName, (value,))
-
-    # Try to get from an arbitrary object a boolean value.
-    # Null returns Boolean.FALSE;
-    # A Boolean object returns itself.
-    # An Array returns true if it not empty.
-    # An Empty String returns Boolean.FALSE.
-    # everything else returns a Boolean.TRUE.
-    # @param value
-    # @return
-    def getBoolean(self, value):
-        if (value is None):
-            return False
-        elif (isinstance(value, bool)):
-            return bool(value)
-        elif (isinstance(value, list)):
-            return True if (len(value) is not 0) else False
-        elif (value is ""):
-            return False
-        elif (isinstance(value, int)):
-            return True if (value == 0) else False
-        else:
-            return True
 
     def getFromUI(self):
         return getattr(self.unoModel, self.unoPropName)

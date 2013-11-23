@@ -30,10 +30,7 @@ from ..common.HelpIds import HelpIds
 from ..common.PropertyNames import PropertyNames
 from ..ui.event.ListModelBinder import ListModelBinder
 
-from com.sun.star.lang import IllegalArgumentException
-
 '''
-@author rpiterman
 This class implements general methods, used by different sub-classes
 (either WWD_Sturtup, or WWD_Events) or both.
 '''
@@ -172,6 +169,8 @@ class WWD_General(WebWizardDialog):
         If it is empty, then step3 and on are disabled.
         '''
         if self.checkDocList():
+            self.changeLocalDirState(self.chkLocalDir.Model.State)
+            self.changeZipState(self.chkZip.Model.State)
             self.checkPublish()
 
     '''
@@ -232,7 +231,7 @@ class WWD_General(WebWizardDialog):
         if p.cp_Publish:
             url = getattr(text.Model, _property)
             if url is None or url == "":
-                raise IllegalArgumentException ()
+                return False
             else:
                 return True
         else:
@@ -248,15 +247,12 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkPublish_(self):
-        try:
-            return \
-                self.checkPublish2(LOCAL_PUBLISHER, self.txtLocalDir, "Text") \
-                or (not self.proxies and self.checkPublish2(
-                    FTP_PUBLISHER, self.lblFTP, PropertyNames.PROPERTY_LABEL) \
-                or self.checkPublish2(ZIP_PUBLISHER, self.txtZip, "Text")) \
-                and self.checkSaveSession()
-        except IllegalArgumentException as ex:
-            return False
+        return \
+        self.checkPublish2(LOCAL_PUBLISHER, self.txtLocalDir, "Text") \
+        or (not self.proxies and self.checkPublish2(
+            FTP_PUBLISHER, self.lblFTP, PropertyNames.PROPERTY_LABEL) \
+        or self.checkPublish2(ZIP_PUBLISHER, self.txtZip, "Text")) \
+        and self.checkSaveSession()
 
     '''
     This method checks if the publishing
@@ -269,6 +265,20 @@ class WWD_General(WebWizardDialog):
     def checkPublish(self):
         self.enableFinishButton(self.checkPublish_())
 
+    def chkLocalDirItemChanged(self):
+        self.changeLocalDirState(self.chkLocalDir.Model.State)
+        self.checkPublish()
+
+    def chkZipItemChanged(self):
+        self.changeZipState(self.chkZip.Model.State)
+        self.checkPublish()
+
+    def changeLocalDirState(self, enable):
+        self.btnLocalDir.Model.Enabled = enable
+
+    def changeZipState(self, enable):
+        self.btnZip.Model.Enabled = enable
+        
     '''
     shows a message box "Unexpected Error... " :-)
     @param ex

@@ -425,8 +425,8 @@ class WWD_Events(WWD_Startup):
     '''
 
     def updatePublishUI(self, number):
-        (self.pubAware[number]).updateUI()
-        (self.pubAware[number + 1]).updateUI()
+        self.pubAware[number].updateUI()
+        self.pubAware[number + 1].updateUI()
         self.checkPublish()
 
     '''

@@ -599,7 +599,8 @@ class WebWizardDialog(WizardDialog):
                 self.resources.resbtnLocalDir_value, "btnLocalDir",
                 308, 77, 7, tabIndex + 1, 16), self)
         self.chkZip = self.insertCheckBox(
-            "chkZip", None, WebWizardDialog.PROPNAMES_CHKBOX,
+            "chkZip", CHKZIP_ITEM_CHANGED, 
+            WebWizardDialog.PROPNAMES_CHKBOX,
             (9, HelpIds.getHelpIdString(HID7_CHK_PUBLISH_ZIP),
                 self.resources.reschkZip_value, "chkZip", 103, 96, 0, 7,
                 tabIndex + 1, 215), self)
