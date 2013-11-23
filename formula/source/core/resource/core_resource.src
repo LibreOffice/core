@@ -141,6 +141,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_FISHER_INV { Text = "FISHERINV" ; };
     String SC_OPCODE_S_NORM_INV { Text = "LEGACY.NORMSINV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
+    String SC_OPCODE_GAMMA_LN_MS { Text = "COM.MICROSOFT.GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ORG.OPENOFFICE.ERRORTYPE" ; };
     String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // TODO: ancient legacy only, remove?
     String SC_OPCODE_FORMULA { Text = "FORMULA"; };
@@ -340,7 +341,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_CHI_INV { Text = "LEGACY.CHIINV" ; };
     String SC_OPCODE_CHI_INV_MS { Text = "COM.MICROSOFT.CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
+    String SC_OPCODE_GAMMA_DIST_MS { Text = "COM.MICROSOFT.GAMMA.DIST" ; };
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
+    String SC_OPCODE_GAMMA_INV_MS { Text = "COM.MICROSOFT.GAMMA.INV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
     String SC_OPCODE_F_INV { Text = "LEGACY.FINV" ; };
     String SC_OPCODE_F_INV_LT { Text = "COM.MICROSOFT.F.INV" ; };
@@ -513,6 +516,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_FISHER_INV { Text = "FISHERINV" ; };
     String SC_OPCODE_S_NORM_INV { Text = "NORMSINV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
+    String SC_OPCODE_GAMMA_LN_MS { Text = "_xlfn.GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ERRORTYPE" ; };
     String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // TODO: ancient legacy only, remove?
     String SC_OPCODE_FORMULA { Text = "_xlfn.FORMULATEXT"; };
@@ -712,7 +716,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_CHI_INV { Text = "CHIINV" ; };
     String SC_OPCODE_CHI_INV_MS { Text = "_xlfn.CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
+    String SC_OPCODE_GAMMA_DIST_MS { Text = "_xlfn.GAMMA.DIST" ; };
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
+    String SC_OPCODE_GAMMA_INV_MS { Text = "_xlfn.GAMMA.INV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
     String SC_OPCODE_F_INV { Text = "FINV" ; };
     String SC_OPCODE_F_INV_LT { Text = "_xlfn.F.INV" ; };
@@ -887,6 +893,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_FISHER_INV { Text = "FISHERINV" ; };
     String SC_OPCODE_S_NORM_INV { Text = "NORMSINV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
+    String SC_OPCODE_GAMMA_LN_MS { Text = "GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ERRORTYPE" ; };
     String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // TODO: ancient legacy only, remove?
     String SC_OPCODE_FORMULA { Text = "FORMULA"; };
@@ -1086,7 +1093,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CHI_INV { Text = "CHIINV" ; };
     String SC_OPCODE_CHI_INV_MS { Text = "CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
+    String SC_OPCODE_GAMMA_DIST_MS { Text = "GAMMA.DIST" ; };
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
+    String SC_OPCODE_GAMMA_INV_MS { Text = "GAMMA.INV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
     String SC_OPCODE_F_INV { Text = "FINV" ; };
     String SC_OPCODE_F_INV_LT { Text = "F.INV" ; };
@@ -1537,6 +1546,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_GAMMA_LN
     {
         Text [ en-US ] = "GAMMALN" ;
+    };
+    String SC_OPCODE_GAMMA_LN_MS
+    {
+        Text [ en-US ] = "GAMMALN.PRECISE" ;
     };
     String SC_OPCODE_ERROR_TYPE
     {
@@ -2336,9 +2349,17 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "GAMMADIST" ;
     };
+    String SC_OPCODE_GAMMA_DIST_MS
+    {
+        Text [ en-US ] = "GAMMA.DIST" ;
+    };
     String SC_OPCODE_GAMMA_INV
     {
         Text [ en-US ] = "GAMMAINV" ;
+    };
+    String SC_OPCODE_GAMMA_INV_MS
+    {
+        Text [ en-US ] = "GAMMA.INV" ;
     };
     String SC_OPCODE_T_INV
     {

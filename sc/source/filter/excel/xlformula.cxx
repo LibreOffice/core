@@ -454,7 +454,10 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_VR(         ocExpDist_MS,     3,  3,  0,  "EXPON.DIST" ),
     EXC_FUNCENTRY_V_VR(         ocHypGeomDist_MS, 5,  5,  0,  "HYPGEOM.DIST" ),
     EXC_FUNCENTRY_V_VR(         ocPoissonDist_MS, 3,  3,  0,  "POISSON.DIST" ),
-    EXC_FUNCENTRY_V_VR(         ocWeibull_MS,     4,  4,  0,  "WEIBULL.DIST" )
+    EXC_FUNCENTRY_V_VR(         ocWeibull_MS,     4,  4,  0,  "WEIBULL.DIST" ),
+    EXC_FUNCENTRY_V_VR(         ocGammaDist_MS,   4,  4,  0,  "GAMMA.DIST" ),
+    EXC_FUNCENTRY_V_VR(         ocGammaInv_MS,    3,  3,  0,  "GAMMA.INV" ),
+    EXC_FUNCENTRY_V_VR(         ocGammaLn_MS,     1,  1,  0,  "GAMMALN.PRECISE" )
 };
 
 /** Functions new in Excel 2013.

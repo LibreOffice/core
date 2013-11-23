@@ -4169,10 +4169,13 @@ StackVar ScInterpreter::Interpret()
                 case ocRGP              : ScRGP();                      break;
                 case ocRKP              : ScRKP();                      break;
                 case ocForecast         : ScForecast();                 break;
-                case ocGammaLn          : ScLogGamma();                 break;
+                case ocGammaLn          :
+                case ocGammaLn_MS       : ScLogGamma();                 break;
                 case ocGamma            : ScGamma();                    break;
-                case ocGammaDist        : ScGammaDist();                break;
-                case ocGammaInv         : ScGammaInv();                 break;
+                case ocGammaDist        : ScGammaDist( 3 );             break;
+                case ocGammaDist_MS     : ScGammaDist( 4 );             break;
+                case ocGammaInv         :
+                case ocGammaInv_MS      : ScGammaInv();                 break;
                 case ocChiTest          :
                 case ocChiTest_MS       : ScChiTest();                  break;
                 case ocChiInv           :

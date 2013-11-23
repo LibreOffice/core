@@ -2011,10 +2011,10 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
     return fFactor;
 }
 
-void ScInterpreter::ScGammaDist()
+void ScInterpreter::ScGammaDist( int nMinParamCount )
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
+    if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
     double bCumulative;
     if (nParamCount == 4)
