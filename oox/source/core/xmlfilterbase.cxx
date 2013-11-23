@@ -107,70 +107,71 @@ struct XmlFilterBaseImpl
 
 // ----------------------------------------------------------------------------
 
-namespace
+namespace {
+
+struct NamespaceIds: public rtl::StaticWithInit<
+    Sequence< beans::Pair< OUString, sal_Int32 > >,
+    NamespaceIds>
 {
-    struct NamespaceIds: public rtl::StaticWithInit<
-        Sequence< beans::Pair< OUString, sal_Int32 > >,
-        NamespaceIds>
+    Sequence< beans::Pair< OUString, sal_Int32 > > operator()()
     {
-        Sequence< beans::Pair< OUString, sal_Int32 > > operator()()
-        {
-            static const char* const namespaceURIs[] = {
-                "http://www.w3.org/XML/1998/namespace",
-                "http://schemas.openxmlformats.org/package/2006/relationships",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-                "http://schemas.openxmlformats.org/drawingml/2006/main",
-                "http://schemas.openxmlformats.org/drawingml/2006/diagram",
-                "http://schemas.openxmlformats.org/drawingml/2006/chart",
-                "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing",
-                "urn:schemas-microsoft-com:vml",
-                "urn:schemas-microsoft-com:office:office",
-                "urn:schemas-microsoft-com:office:word",
-                "urn:schemas-microsoft-com:office:excel",
-                "urn:schemas-microsoft-com:office:powerpoint",
-                "http://schemas.microsoft.com/office/2006/activeX",
-                "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-                "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-                "http://schemas.microsoft.com/office/excel/2006/main",
-                "http://schemas.openxmlformats.org/presentationml/2006/main",
-                "http://schemas.openxmlformats.org/markup-compatibility/2006",
-                "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
-                "http://schemas.microsoft.com/office/drawing/2008/diagram",
-                "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
-            };
+        static const char* const namespaceURIs[] = {
+            "http://www.w3.org/XML/1998/namespace",
+            "http://schemas.openxmlformats.org/package/2006/relationships",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            "http://schemas.openxmlformats.org/drawingml/2006/main",
+            "http://schemas.openxmlformats.org/drawingml/2006/diagram",
+            "http://schemas.openxmlformats.org/drawingml/2006/chart",
+            "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing",
+            "urn:schemas-microsoft-com:vml",
+            "urn:schemas-microsoft-com:office:office",
+            "urn:schemas-microsoft-com:office:word",
+            "urn:schemas-microsoft-com:office:excel",
+            "urn:schemas-microsoft-com:office:powerpoint",
+            "http://schemas.microsoft.com/office/2006/activeX",
+            "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+            "http://schemas.microsoft.com/office/excel/2006/main",
+            "http://schemas.openxmlformats.org/presentationml/2006/main",
+            "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
+            "http://schemas.microsoft.com/office/drawing/2008/diagram",
+            "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
+        };
 
-            static const sal_Int32 namespaceIds[] = {
-                NMSP_xml,
-                NMSP_packageRel,
-                NMSP_officeRel,
-                NMSP_dml,
-                NMSP_dmlDiagram,
-                NMSP_dmlChart,
-                NMSP_dmlChartDr,
-                NMSP_dmlSpreadDr,
-                NMSP_vml,
-                NMSP_vmlOffice,
-                NMSP_vmlWord,
-                NMSP_vmlExcel,
-                NMSP_vmlPowerpoint,
-                NMSP_xls,
-                NMSP_ppt,
-                NMSP_ax,
-                NMSP_xm,
-                NMSP_mce,
-                NMSP_mceTest,
-                NMSP_dsp,
-                NMSP_xlsExtLst
-            };
+        static const sal_Int32 namespaceIds[] = {
+            NMSP_xml,
+            NMSP_packageRel,
+            NMSP_officeRel,
+            NMSP_dml,
+            NMSP_dmlDiagram,
+            NMSP_dmlChart,
+            NMSP_dmlChartDr,
+            NMSP_dmlSpreadDr,
+            NMSP_vml,
+            NMSP_vmlOffice,
+            NMSP_vmlWord,
+            NMSP_vmlExcel,
+            NMSP_vmlPowerpoint,
+            NMSP_xls,
+            NMSP_ppt,
+            NMSP_ax,
+            NMSP_xm,
+            NMSP_mce,
+            NMSP_mceTest,
+            NMSP_dsp,
+            NMSP_xlsExtLst
+        };
 
-            Sequence< beans::Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
-            for( sal_Int32 i=0; i<aRet.getLength(); ++i )
-                aRet[i] = make_Pair(
-                    OUString::createFromAscii(namespaceURIs[i]),
-                    namespaceIds[i]);
-            return aRet;
-        }
-    };
+        Sequence< beans::Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
+        for( sal_Int32 i=0; i<aRet.getLength(); ++i )
+            aRet[i] = make_Pair(
+                OUString::createFromAscii(namespaceURIs[i]),
+                namespaceIds[i]);
+        return aRet;
+    }
+};
+
 }
 
 // ----------------------------------------------------------------------------
