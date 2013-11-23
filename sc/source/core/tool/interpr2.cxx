@@ -610,44 +610,68 @@ void ScInterpreter::ScRoundUp()
 void ScInterpreter::ScCeil()
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 2, 3 ) )
+    if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
         bool bAbs = ( nParamCount == 3 ? GetBool() : false );
-        double fDec = GetDouble();
-        double fVal = GetDouble();
-        if ( fDec == 0.0 )
-            PushInt(0);
-        else if (fVal*fDec < 0.0)
-            PushIllegalArgument();
+        double fDec, fVal;
+        if ( nParamCount == 1 )
+        {
+            fVal = GetDouble();
+            fDec = ( fVal < 0 ? -1 : 1 );
+        }
         else
         {
-            if ( !bAbs && fVal < 0.0 )
-                PushDouble(::rtl::math::approxFloor(fVal/fDec) * fDec);
-            else
-                PushDouble(::rtl::math::approxCeil(fVal/fDec) * fDec);
+            bool bArgumentMissing = IsMissing();
+            fDec = GetDouble();
+            fVal = GetDouble();
+            if ( bArgumentMissing )
+                fDec = ( fVal < 0 ? -1 : 1 );
         }
+        if ( fDec == 0.0 || fVal == 0.0 )
+            PushInt( 0 );
+        else if ( fVal * fDec > 0.0 )
+        {
+            if ( !bAbs && fVal < 0.0 )
+                PushDouble(::rtl::math::approxFloor( fVal / fDec ) * fDec );
+            else
+                PushDouble(::rtl::math::approxCeil( fVal / fDec ) * fDec );
+        }
+        else
+            PushIllegalArgument();
     }
 }
 
 void ScInterpreter::ScFloor()
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 2, 3 ) )
+    if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
         bool bAbs = ( nParamCount == 3 ? GetBool() : false );
-        double fDec = GetDouble();
-        double fVal = GetDouble();
-        if ( fDec == 0.0 )
-            PushInt(0);
-        else if (fVal*fDec < 0.0)
-            PushIllegalArgument();
+        double fDec, fVal;
+        if ( nParamCount == 1 )
+        {
+            fVal = GetDouble();
+            fDec = ( fVal < 0 ? -1 : 1 );
+        }
         else
         {
-            if ( !bAbs && fVal < 0.0 )
-                PushDouble(::rtl::math::approxCeil(fVal/fDec) * fDec);
-            else
-                PushDouble(::rtl::math::approxFloor(fVal/fDec) * fDec);
+            bool bArgumentMissing = IsMissing();
+            fDec = GetDouble();
+            fVal = GetDouble();
+            if ( bArgumentMissing )
+                fDec = ( fVal < 0 ? -1 : 1 );
         }
+        if ( fDec == 0.0 || fVal == 0.0 )
+            PushInt( 0 );
+        else if ( fVal * fDec > 0.0 )
+        {
+            if ( !bAbs && fVal < 0.0 )
+                PushDouble(::rtl::math::approxCeil( fVal / fDec ) * fDec );
+            else
+                PushDouble(::rtl::math::approxFloor( fVal / fDec ) * fDec );
+        }
+        else
+            PushIllegalArgument();
     }
 }
 
