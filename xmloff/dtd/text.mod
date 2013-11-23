@@ -1041,7 +1041,7 @@ indices, and there may be only one text:index-title element.
 <!ATTLIST text:linenumbering-configuration text:offset %nonNegativeLength; #IMPLIED>
 <!ATTLIST text:linenumbering-configuration style:num-format (1|a|A|i|I) "1">
 <!ATTLIST text:linenumbering-configuration style:num-letter-sync %boolean; "false">
-<!ATTLIST text:linenumbering-configuration text:number-position (left|rigth|inner|outer) "left">
+<!ATTLIST text:linenumbering-configuration text:number-position (left|right|inner|outer) "left">
 <!ATTLIST text:linenumbering-configuration text:increment %nonNegativeInteger; #IMPLIED>
 
 <!ELEMENT text:linenumbering-separator (#PCDATA)>

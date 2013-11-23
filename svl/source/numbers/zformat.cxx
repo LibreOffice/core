@@ -452,7 +452,7 @@ void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
                        OUString& rLoadedColorName )
 {
     sal_uInt16 nAnz;
-    rStream >> nAnz; //! Not nAnzStrings rigth away due to Enlarge
+    rStream >> nAnz; //! Not nAnzStrings right away due to Enlarge
     Enlarge( nAnz );
     aI.Load( rStream, nAnz );
     sColorName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );

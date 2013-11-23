@@ -483,7 +483,7 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
 /*
  * SwLayHelper
  *  is the helper class, which utilizes the layout cache information
- *  to distribute the document content to the rigth pages.
+ *  to distribute the document content to the right pages.
  * It's used by the _InsertCnt(..)-function.
  * If there's no layout cache, the distibution to the pages is more
  * a guess, but a guess with statistical background.

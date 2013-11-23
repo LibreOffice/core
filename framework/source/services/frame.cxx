@@ -935,7 +935,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
                                 continue;
                             }
 
-                            // Don't allow upper search here! Use rigth flags to regulate it.
+                            // Don't allow upper search here! Use right flags to regulate it.
                             // And allow deep search on children only - if it was allowed for us too.
                             sal_Int32 nRightFlags = css::frame::FrameSearchFlag::SELF;
                             if (nSearchFlags & css::frame::FrameSearchFlag::CHILDREN)
