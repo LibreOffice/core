@@ -157,6 +157,7 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD  - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD);
     ppPoolDefaults[SCHATTR_REGRESSION_SET_INTERCEPT         - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SET_INTERCEPT, sal_False);
     ppPoolDefaults[SCHATTR_REGRESSION_INTERCEPT_VALUE       - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_REGRESSION_INTERCEPT_VALUE);
+    ppPoolDefaults[SCHATTR_REGRESSION_CURVE_NAME            - SCHATTR_START] = new SfxStringItem(SCHATTR_REGRESSION_CURVE_NAME, OUString());
 
     /**************************************************************************
     * ItemInfos

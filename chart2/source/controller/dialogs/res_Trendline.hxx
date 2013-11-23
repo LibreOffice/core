@@ -57,6 +57,7 @@ private:
 
     NumericField* m_pNF_Degree;
     NumericField* m_pNF_Period;
+    Edit*         m_pEE_Name;
     NumericField* m_pNF_ExtrapolateForward;
     NumericField* m_pNF_ExtrapolateBackward;
     CheckBox*     m_pCB_SetIntercept;

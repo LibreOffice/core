@@ -24,6 +24,7 @@
 #include "chartview/ChartSfxItemIds.hxx"
 
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <vector>
@@ -36,26 +37,28 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
         m_eTrendLineType( CHREGRESS_LINEAR ),
         m_bTrendLineUnique( true )
 {
-    ((SfxTabPage*)pParent)->get(m_pRB_Linear,"linear");
-    ((SfxTabPage*)pParent)->get(m_pRB_Logarithmic,"logarithmic");
-    ((SfxTabPage*)pParent)->get(m_pRB_Exponential,"exponential");
-    ((SfxTabPage*)pParent)->get(m_pRB_Power,"power");
-    ((SfxTabPage*)pParent)->get(m_pRB_Polynomial,"polynomial");
-    ((SfxTabPage*)pParent)->get(m_pRB_MovingAverage,"movingAverage");
-    ((SfxTabPage*)pParent)->get(m_pNF_Degree,"degree");
-    ((SfxTabPage*)pParent)->get(m_pNF_Period,"period");
-    ((SfxTabPage*)pParent)->get(m_pNF_ExtrapolateForward,"extrapolateForward");
-    ((SfxTabPage*)pParent)->get(m_pNF_ExtrapolateBackward,"extrapolateBackward");
-    ((SfxTabPage*)pParent)->get(m_pCB_SetIntercept,"setIntercept");
-    ((SfxTabPage*)pParent)->get(m_pNF_InterceptValue,"interceptValue");
-    ((SfxTabPage*)pParent)->get(m_pCB_ShowEquation,"showEquation");
-    ((SfxTabPage*)pParent)->get(m_pCB_ShowCorrelationCoeff,"showCorrelationCoefficient");
-    ((SfxTabPage*)pParent)->get(m_pFI_Linear,"imageLinear");
-    ((SfxTabPage*)pParent)->get(m_pFI_Logarithmic,"imageLogarithmic");
-    ((SfxTabPage*)pParent)->get(m_pFI_Exponential,"imageExponential");
-    ((SfxTabPage*)pParent)->get(m_pFI_Power,"imagePower");
-    ((SfxTabPage*)pParent)->get(m_pFI_Polynomial,"imagePolynomial");
-    ((SfxTabPage*)pParent)->get(m_pFI_MovingAverage,"imageMovingAverage");
+    SfxTabPage* pTabPage = reinterpret_cast<SfxTabPage*>(pParent);
+    pTabPage->get(m_pRB_Linear,"linear");
+    pTabPage->get(m_pRB_Logarithmic,"logarithmic");
+    pTabPage->get(m_pRB_Exponential,"exponential");
+    pTabPage->get(m_pRB_Power,"power");
+    pTabPage->get(m_pRB_Polynomial,"polynomial");
+    pTabPage->get(m_pRB_MovingAverage,"movingAverage");
+    pTabPage->get(m_pNF_Degree,"degree");
+    pTabPage->get(m_pNF_Period,"period");
+    pTabPage->get(m_pEE_Name,"entry_name");
+    pTabPage->get(m_pNF_ExtrapolateForward,"extrapolateForward");
+    pTabPage->get(m_pNF_ExtrapolateBackward,"extrapolateBackward");
+    pTabPage->get(m_pCB_SetIntercept,"setIntercept");
+    pTabPage->get(m_pNF_InterceptValue,"interceptValue");
+    pTabPage->get(m_pCB_ShowEquation,"showEquation");
+    pTabPage->get(m_pCB_ShowCorrelationCoeff,"showCorrelationCoefficient");
+    pTabPage->get(m_pFI_Linear,"imageLinear");
+    pTabPage->get(m_pFI_Logarithmic,"imageLogarithmic");
+    pTabPage->get(m_pFI_Exponential,"imageExponential");
+    pTabPage->get(m_pFI_Power,"imagePower");
+    pTabPage->get(m_pFI_Polynomial,"imagePolynomial");
+    pTabPage->get(m_pFI_MovingAverage,"imageMovingAverage");
     FillValueSets();
 
     m_pRB_Linear->SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
@@ -103,6 +106,16 @@ IMPL_LINK( TrendlineResources, SelectTrendLine, RadioButton *, pRadioButton )
 void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
 {
     const SfxPoolItem *pPoolItem = NULL;
+
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_CURVE_NAME, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        OUString aName = static_cast< const SfxStringItem* >(pPoolItem)->GetValue();
+        m_pEE_Name->SetText(aName);
+    }
+    else
+    {
+        m_pEE_Name->SetText("");
+    }
 
     SfxItemState aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem );
     m_bTrendLineUnique = ( aState != SFX_ITEM_DONTCARE );
@@ -242,6 +255,9 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
     if( m_pCB_ShowCorrelationCoeff->GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_COEFF, m_pCB_ShowCorrelationCoeff->IsChecked() ));
+
+    OUString aName = m_pEE_Name->GetText();
+    rOutAttrs.Put(SfxStringItem(SCHATTR_REGRESSION_CURVE_NAME, aName));
 
     sal_Int32 aDegree = m_pNF_Degree->GetValue();
     rOutAttrs.Put(SfxInt32Item( SCHATTR_REGRESSION_DEGREE, aDegree ) );

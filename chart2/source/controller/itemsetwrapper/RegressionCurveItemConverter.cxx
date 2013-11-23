@@ -29,6 +29,7 @@
 // for SfxBoolItem
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/chrtitem.hxx>
 
 #include <functional>
@@ -245,6 +246,13 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
         }
         break;
 
+        case SCHATTR_REGRESSION_CURVE_NAME:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xProperties, "CurveName");
+        }
+        break;
+
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
@@ -258,6 +266,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
             bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xEqProp, "ShowCorrelationCoefficient");
         }
         break;
+
     }
     return bChanged;
 }
@@ -315,6 +324,12 @@ void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemS
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
             lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "InterceptValue");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_CURVE_NAME:
+        {
+            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xProperties, "CurveName");
         }
         break;
 
