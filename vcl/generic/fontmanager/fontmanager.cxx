@@ -907,7 +907,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
 
             OUString aURL;
             if (osl::File::getFileURLFromSystemPath(OStringToOUString(aFullPath, osl_getThreadTextEncoding()),
-                aURL))
+                aURL) == osl::File::E_None)
             {
                 osl::File aFile(aURL);
                 if (aFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock) == osl::File::E_None)
