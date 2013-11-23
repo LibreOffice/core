@@ -599,7 +599,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         aRefCxt.maRange = aNewRange;
         aRefCxt.mnColDelta = nDx;
         aRefCxt.mnRowDelta = nDy;
-        aRefCxt.mnTabDelta = pTable->nTab - nTab;
+        aRefCxt.mnTabDelta = nTab - pTable->nTab;
         pNewFormat->UpdateReference(aRefCxt, true);
 
         sal_uLong nMax = 0;
