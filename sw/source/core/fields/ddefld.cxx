@@ -63,8 +63,7 @@ public:
         {
             uno::Sequence< sal_Int8 > aSeq;
             rValue >>= aSeq;
-            OUString sStr( (sal_Char*)aSeq.getConstArray(), static_cast<xub_StrLen>(aSeq.getLength()),
-                               DDE_TXT_ENCODING  );
+            OUString sStr( (sal_Char*)aSeq.getConstArray(), aSeq.getLength(), DDE_TXT_ENCODING );
 
             // remove not needed CR-LF at the end
             sal_Int32 n = sStr.getLength();
