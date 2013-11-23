@@ -3309,28 +3309,24 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
     if (!pNd)
         return;
 
-    if ((pNd->GetTxt().getLength() + rAddString.getLength()) < STRING_MAXLEN-1)
+    const sal_Int32 nCharsLeft = SAL_MAX_INT32 - pNd->GetTxt().getLength();
+    if (nCharsLeft > 0)
     {
-        rDoc.InsertString(*pPaM, rAddString);
-    }
-    else
-    {
-
-        if (pNd->GetTxt().getLength() < STRING_MAXLEN -1)
+        if (rAddString.getLength() <= nCharsLeft)
         {
-            OUString sTempStr = rAddString.copy( 0,
-                STRING_MAXLEN - pNd->GetTxt().getLength() -1);
-            rDoc.InsertString(*pPaM, sTempStr);
-            sTempStr = rAddString.copy(sTempStr.getLength(),
-                rAddString.getLength() - sTempStr.getLength());
-            AppendTxtNode(*pPaM->GetPoint());
-            rDoc.InsertString(*pPaM, sTempStr);
+            rDoc.InsertString(*pPaM, rAddString);
         }
         else
         {
+            rDoc.InsertString(*pPaM, rAddString.copy(0, nCharsLeft));
             AppendTxtNode(*pPaM->GetPoint());
-            rDoc.InsertString(*pPaM, rAddString);
+            rDoc.InsertString(*pPaM, rAddString.copy(nCharsLeft));
         }
+    }
+    else
+    {
+        AppendTxtNode(*pPaM->GetPoint());
+        rDoc.InsertString(*pPaM, rAddString);
     }
 
     bReadTable = false;
