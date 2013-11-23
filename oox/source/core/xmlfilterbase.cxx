@@ -58,8 +58,6 @@ using ::com::sun::star::xml::dom::XDocumentBuilder;
 namespace oox {
 namespace core {
 
-// ============================================================================
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -74,12 +72,6 @@ using utl::MediaDescriptor;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
-
-
-
-
-// ============================================================================
-
 namespace {
 
 bool lclHasSuffix( const OUString& rFragmentPath, const OUString& rSuffix )
@@ -87,27 +79,6 @@ bool lclHasSuffix( const OUString& rFragmentPath, const OUString& rSuffix )
     sal_Int32 nSuffixPos = rFragmentPath.getLength() - rSuffix.getLength();
     return (nSuffixPos >= 0) && rFragmentPath.match( rSuffix, nSuffixPos );
 }
-
-} // namespace
-
-// ============================================================================
-
-struct XmlFilterBaseImpl
-{
-    typedef RefMap< OUString, Relations > RelationsMap;
-
-    FastParser                     maFastParser;
-    const OUString                 maBinSuffix;
-    const OUString                 maVmlSuffix;
-    RelationsMap                   maRelationsMap;
-    TextFieldStack                 maTextFieldStack;
-
-    explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
-};
-
-// ----------------------------------------------------------------------------
-
-namespace {
 
 struct NamespaceIds: public rtl::StaticWithInit<
     Sequence< beans::Pair< OUString, sal_Int32 > >,
@@ -172,9 +143,20 @@ struct NamespaceIds: public rtl::StaticWithInit<
     }
 };
 
-}
+} // namespace
 
-// ----------------------------------------------------------------------------
+struct XmlFilterBaseImpl
+{
+    typedef RefMap< OUString, Relations > RelationsMap;
+
+    FastParser                     maFastParser;
+    const OUString                 maBinSuffix;
+    const OUString                 maVmlSuffix;
+    RelationsMap                   maRelationsMap;
+    TextFieldStack                 maTextFieldStack;
+
+    explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
+};
 
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     maFastParser( rxContext ),
