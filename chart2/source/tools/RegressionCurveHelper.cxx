@@ -590,6 +590,18 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     if(!xServiceName.is())
         return aResult;
 
+    Reference<XPropertySet> xProperties( xRegressionCurve, uno::UNO_QUERY );
+    if( xProperties.is() )
+    {
+        OUString aValue = OUString();
+        if(xProperties->getPropertyValue("CurveName") >>= aValue)
+        {
+            if (!aValue.isEmpty())
+                return aValue;
+        }
+    }
+
+    // Did not get the curve name
     OUString aServiceName( xServiceName->getServiceName());
     if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
     {

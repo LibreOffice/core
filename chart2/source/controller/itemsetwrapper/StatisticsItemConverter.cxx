@@ -526,7 +526,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
-            bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xProperties, "InterceptValue");
+            bChanged = lclConvertToPropertySet<sal_Bool, SfxBoolItem>(rItemSet, nWhichId, xProperties, "ForceIntercept");
         }
         break;
 
@@ -534,6 +534,13 @@ bool StatisticsItemConverter::ApplySpecialItem(
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
             bChanged = lclConvertToPropertySet<double, SvxDoubleItem>(rItemSet, nWhichId, xProperties, "InterceptValue");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_CURVE_NAME:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
+            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xProperties, "CurveName");
         }
         break;
 
@@ -797,6 +804,13 @@ void StatisticsItemConverter::FillSpecialItem(
         {
             uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
             lclConvertToItemSetDouble(rOutItemSet, nWhichId, xProperties, "InterceptValue");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_CURVE_NAME:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xProperties, "CurveName");
         }
         break;
 
