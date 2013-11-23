@@ -109,6 +109,7 @@ CrossoverValue
 CursorPositionX
 CursorPositionY
 CurveStyle
+CurveName
 CustomShapeGeometry
 D3DSceneAmbientColor
 D3DSceneLightColor2
