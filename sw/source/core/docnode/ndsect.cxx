@@ -385,8 +385,8 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
     if( rRange.HasMark() )
     {
         // See if we have a valid Section
-        const SwPosition* pStt = rRange.Start(),
-                        * pEnd = rRange.End();
+        const SwPosition* pStt = rRange.Start();
+        const SwPosition* pEnd = rRange.End();
 
         const SwCntntNode* pCNd = pEnd->nNode.GetNode().GetCntntNode();
         const SwNode* pNd = &pStt->nNode.GetNode();
@@ -397,9 +397,9 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
             // Try to create an enclosing Section, but only if Start is
             // located at the Section's beginning and End at it's end
             nRet = 0;
-            if( !pStt->nContent.GetIndex() && pSectNd->GetIndex()
-                == pStt->nNode.GetIndex() - 1 && pEnd->nContent.GetIndex() ==
-                pCNd->Len() )
+            if( !pStt->nContent.GetIndex()
+                && pSectNd->GetIndex() == pStt->nNode.GetIndex() - 1
+                && pEnd->nContent.GetIndex() == pCNd->Len() )
             {
                 SwNodeIndex aIdx( pStt->nNode, -1 );
                 sal_uLong nCmp = pEnd->nNode.GetIndex();
