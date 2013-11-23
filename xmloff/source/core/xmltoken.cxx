@@ -2168,6 +2168,7 @@ namespace xmloff { namespace token {
         TOKEN( "regression-curve",                XML_REGRESSION_CURVE ),
         TOKEN( "regression-type",                 XML_REGRESSION_TYPE ),
         // Extended regression curve properties - ODF 1.2 extended
+        TOKEN( "regression-name",                 XML_REGRESSION_CURVE_NAME ),
         TOKEN( "regression-extrapolate-forward",  XML_REGRESSION_EXTRAPOLATE_FORWARD ),
         TOKEN( "regression-extrapolate-backward", XML_REGRESSION_EXTRAPOLATE_BACKWARD ),
         TOKEN( "regression-max-degree",           XML_REGRESSION_MAX_DEGREE ),
