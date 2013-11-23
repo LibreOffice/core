@@ -1031,8 +1031,8 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 
 /*  [Description]
 
-    Default implemetation of the virtual Method.
-    This is called when pages create their sets onDenamd.
+    Default implementation of the virtual Method.
+    This is called when pages create their sets onDemand.
 */
 
 {
