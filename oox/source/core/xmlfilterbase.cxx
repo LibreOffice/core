@@ -143,6 +143,13 @@ struct NamespaceIds: public rtl::StaticWithInit<
     }
 };
 
+void registerNamespaces( FastParser& rParser )
+{
+    const Sequence< beans::Pair<OUString, sal_Int32> > ids = NamespaceIds::get();
+    for (sal_Int32 i = 0; i < ids.getLength(); ++i)
+        rParser.registerNamespace(ids[i].Second);
+}
+
 } // namespace
 
 struct XmlFilterBaseImpl
@@ -164,10 +171,7 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
     maVmlSuffix( ".vml" )
 {
     // register XML namespaces
-    const Sequence< beans::Pair< OUString, sal_Int32 > > ids=
-        NamespaceIds::get();
-    for( sal_Int32 i=0; i<ids.getLength(); ++i )
-        maFastParser.registerNamespace( ids[i].Second );
+    registerNamespaces(maFastParser);
 }
 
 XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
@@ -203,13 +207,25 @@ void XmlFilterBase::importDocumentProperties()
     xImporter->importProperties( xDocumentStorage, xPropSupplier->getDocumentProperties() );
 }
 
+FastParser* XmlFilterBase::createParser() const
+{
+    FastParser* pParser = new FastParser(getComponentContext());
+    registerNamespaces(*pParser);
+    return pParser;
+}
+
 OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
 {
     // importRelations() caches the relations map for subsequence calls
     return importRelations( OUString() )->getFragmentPathFromFirstType( rType );
 }
 
-bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler )
+bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler )
+{
+    return importFragment(rxHandler, mxImpl->maFastParser);
+}
+
+bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler, FastParser& rParser )
 {
     OSL_ENSURE( rxHandler.is(), "XmlFilterBase::importFragment - missing fragment handler" );
     if( !rxHandler.is() )
@@ -263,8 +279,8 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         // own try/catch block for showing parser failure assertion with fragment path
         if( xInStrm.is() ) try
         {
-            mxImpl->maFastParser.setDocumentHandler( xDocHandler );
-            mxImpl->maFastParser.parseStream( xInStrm, aFragmentPath );
+            rParser.setDocumentHandler(xDocHandler);
+            rParser.parseStream(xInStrm, aFragmentPath);
             return true;
         }
         catch( Exception& )

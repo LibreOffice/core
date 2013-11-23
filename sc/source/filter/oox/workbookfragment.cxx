@@ -49,6 +49,7 @@
 #include "globstr.hrc"
 #include "calcconfig.hxx"
 
+#include <oox/core/fastparser.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <salhelper/thread.hxx>
@@ -240,13 +241,17 @@ class WorkerThread : public salhelper::Thread
     WorkbookFragment& mrWorkbookHandler;
     size_t mnID;
     FragmentHandlerRef mxHandler;
+    boost::scoped_ptr<oox::core::FastParser> mxParser;
     osl::Mutex maMtxAction;
     osl::Condition maCondActionChanged;
     WorkerAction meAction;
 public:
     WorkerThread( WorkbookFragment& rWorkbookHandler, size_t nID ) :
         salhelper::Thread("sheet-import-worker-thread"),
-        mrWorkbookHandler(rWorkbookHandler), mnID(nID), meAction(None) {}
+        mrWorkbookHandler(rWorkbookHandler),
+        mnID(nID),
+        mxParser(rWorkbookHandler.getOoxFilter().createParser()),
+        meAction(None) {}
 
     virtual void execute()
     {
@@ -271,7 +276,7 @@ public:
 
 #if 0
             // TODO : This still deadlocks in the fast parser code.
-            mrWorkbookHandler.importOoxFragment(mxHandler);
+            mrWorkbookHandler.importOoxFragment(mxHandler, *mxParser);
 #else
             double val = rand() / static_cast<double>(RAND_MAX);
             val *= 1000000; // normalize to 1 second.
