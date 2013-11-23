@@ -269,7 +269,7 @@ void RtfAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextN
         if ((nRow == 0 && nCell == 0) || (m_nTableDepth == 0 && pTextNodeInfo->getDepth()))
         {
             // Do we have to start the table?
-            // [If we are at the rigth depth already, it means that we
+            // [If we are at the right depth already, it means that we
             // continue the table cell]
             sal_uInt32 nCurrentDepth = pTextNodeInfo->getDepth();
 
