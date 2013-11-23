@@ -893,12 +893,12 @@ sal_Int32 SAL_CALL SvtFilePicker::getAvailableHeight() throw ( RuntimeException 
     checkAlive();
 
     SolarMutexGuard aGuard;
-    sal_Int32 nHeigth = 0;
+    sal_Int32 nHeight = 0;
 
     if ( getDialog() )
-        nHeigth = getDialog()->getAvailableHeight();
+        nHeight = getDialog()->getAvailableHeight();
 
-    return nHeigth;
+    return nHeight;
 }
 
 //------------------------------------------------------------------------------------

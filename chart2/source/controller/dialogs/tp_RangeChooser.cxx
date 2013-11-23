@@ -41,11 +41,11 @@ void lcl_ShowChooserButton(
     if( rChooserButton.IsVisible() != bShow )
     {
         rChooserButton.Show( bShow );
-        sal_Int32 nWidhtDiff = 10 + 2;
+        sal_Int32 nWidthDiff = 10 + 2;
         if( bShow )
-            nWidhtDiff = -nWidhtDiff;
+            nWidthDiff = -nWidthDiff;
         Size aSize = rChooserButton.PixelToLogic( rEditField.GetSizePixel(), MAP_APPFONT );
-        aSize.setWidth( aSize.getWidth() + nWidhtDiff );
+        aSize.setWidth( aSize.getWidth() + nWidthDiff );
         rEditField.SetSizePixel( rChooserButton.LogicToPixel( aSize, MAP_APPFONT ));
     }
 }

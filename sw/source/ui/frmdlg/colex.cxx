@@ -228,7 +228,7 @@ void SwColExample::DrawPage( const Point& rOrg,
         else
             SetFillColor( GetColor() );
 
-        // #97495# make sure that the automatic column widht's are always equal
+        // #97495# make sure that the automatic column width's are always equal
         sal_Bool bAutoWidth = pColMgr->IsAutoWidth();
         sal_Int32 nAutoColWidth = 0;
         if(bAutoWidth)

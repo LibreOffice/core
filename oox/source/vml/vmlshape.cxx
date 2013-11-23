@@ -580,7 +580,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     else
     {
         // FIXME Setting the relative width/heigh only for everything but text frames as
-        // TextFrames already have relative widht/heigh feature... but currently not working
+        // TextFrames already have relative width/height feature... but currently not working
         // in the way we need.
 
         // Set the relative width / height if any

@@ -789,7 +789,7 @@ void SwColumnPage::Init()
 
     if( 1 < nCols )
     {
-        // #97495# make sure that the automatic column widht's are always equal
+        // #97495# make sure that the automatic column width's are always equal
         if(bAutoWidth)
         {
             nColumnWidthSum /= nCols;

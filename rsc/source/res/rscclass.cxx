@@ -612,7 +612,7 @@ void RscClass::WriteSrc( const RSCINST & rInst,
                               aTmpI, fOutput, pTC, nTab, RscId(), pVarName );
                     fprintf( fOutput, " );\n" );
                 }
-                i += 2; //_X, _Y oder _Widht, Height ueberlesen
+                i += 2; //_X, _Y oder _Width, Height ueberlesen
             }
             else if( !IsDflt( rInst.pData, i )
                      && !IsValueDflt( rInst.pData, i ) )

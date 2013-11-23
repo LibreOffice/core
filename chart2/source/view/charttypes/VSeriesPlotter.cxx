@@ -456,14 +456,14 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         Reference< drawing::XShape > xSymbol;
         if(pLabel->ShowLegendSymbol)
         {
-            sal_Int32 nSymbolHeigth = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
+            sal_Int32 nSymbolHeight = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
             awt::Size aCurrentRatio = this->getPreferredLegendKeyAspectRatio();
             sal_Int32 nSymbolWidth = aCurrentRatio.Width;
             if( aCurrentRatio.Height > 0 )
             {
-                nSymbolWidth = nSymbolHeigth* aCurrentRatio.Width/aCurrentRatio.Height;
+                nSymbolWidth = nSymbolHeight* aCurrentRatio.Width/aCurrentRatio.Height;
             }
-            awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeigth );
+            awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeight );
 
             if( rDataSeries.isVaryColorsByPoint() )
                 xSymbol.set( VSeriesPlotter::createLegendSymbolForPoint( aMaxSymbolExtent, rDataSeries, nPointIndex, xTarget_, m_xShapeFactory ) );

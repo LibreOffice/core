@@ -2539,7 +2539,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pNode;
     sal_uInt16  i, j;
 
-    // initialize array that is to hold the maximum widhts of all
+    // initialize array that is to hold the maximum widths of all
     // elements (subnodes) in that column.
     long *pColWidth = new long[nNumCols];
     for (j = 0;  j  < nNumCols;  j++)

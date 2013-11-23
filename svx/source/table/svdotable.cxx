@@ -464,14 +464,14 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
         {
             if( (nEdge >= 0) && (nEdge <= getRowCount()) )
             {
-                sal_Int32 nHeigth = mpLayouter->getRowHeight( (!nEdge)?nEdge:(nEdge-1) );
+                sal_Int32 nHeight = mpLayouter->getRowHeight( (!nEdge)?nEdge:(nEdge-1) );
                 if(nEdge==0)
-                    nHeigth -= nOffset;
+                    nHeight -= nOffset;
                 else
-                    nHeigth += nOffset;
+                    nHeight += nOffset;
                 Reference< XIndexAccess > xRows( mxTable->getRows(), UNO_QUERY_THROW );
                 Reference< XPropertySet > xRowSet( xRows->getByIndex( (!nEdge)?nEdge:(nEdge-1) ), UNO_QUERY_THROW );
-                xRowSet->setPropertyValue( sSize, Any( nHeigth ) );
+                xRowSet->setPropertyValue( sSize, Any( nHeight ) );
             }
         }
         else

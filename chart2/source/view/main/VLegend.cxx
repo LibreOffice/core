@@ -867,8 +867,8 @@ void VLegend::createShapes(
             // create entries
             double fViewFontSize = lcl_CalcViewFontSize( xLegendProp, rPageSize );//todo
             // #i109336# Improve auto positioning in chart
-            sal_Int32 nSymbolHeigth = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
-            sal_Int32 nSymbolWidth = static_cast< sal_Int32 >( nSymbolHeigth );
+            sal_Int32 nSymbolHeight = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
+            sal_Int32 nSymbolWidth = static_cast< sal_Int32 >( nSymbolHeight );
 
             ::std::vector< LegendEntryProvider* >::const_iterator       aIter = m_aLegendEntryProviderList.begin();
             const ::std::vector< LegendEntryProvider* >::const_iterator aEnd  = m_aLegendEntryProviderList.end();
@@ -881,12 +881,12 @@ void VLegend::createShapes(
                     sal_Int32 nCurrentWidth = aCurrentRatio.Width;
                     if( aCurrentRatio.Height > 0 )
                     {
-                        nCurrentWidth = nSymbolHeigth* aCurrentRatio.Width/aCurrentRatio.Height;
+                        nCurrentWidth = nSymbolHeight* aCurrentRatio.Width/aCurrentRatio.Height;
                     }
                     nSymbolWidth = std::max( nSymbolWidth, nCurrentWidth );
                 }
             }
-            awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeigth );
+            awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeight );
 
             tViewLegendEntryContainer aViewEntries;
             for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; ++aIter )
