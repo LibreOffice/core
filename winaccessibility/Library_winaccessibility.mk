@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_externals,winaccessibility,\
 ))
 
 $(eval $(call gb_Library_use_libraries,winaccessibility,\
+	UAccCOM \
 	cppu \
 	cppuhelper \
 	vcl \

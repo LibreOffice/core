@@ -155,10 +155,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Clone(IEnumVARIANT __RPC_FAR *__RPC_FAR 
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Create(CEnumVariant __RPC_FAR *__RPC_FAR *ppenum)
 {
-    ActivateActContext();
-    HRESULT hr = CoCreateInstance(CLSID_EnumVariant,NULL,
-                                 CLSCTX_SERVER,IID_IEnumVariant,(void **)ppenum);
-    DeactivateActContext();
+    HRESULT hr = createInstance<CEnumVariant>(IID_IEnumVariant, ppenum);
     if (S_OK != hr)
     {
         return E_FAIL;

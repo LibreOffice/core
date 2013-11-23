@@ -20,6 +20,8 @@
 #include "stdafx.h"
 #include "UAccCOM.h"
 #include "AccHypertext.h"
+#include "AccHyperLink.h"
+#include "acccommon.h"
 
 #include "act.hxx"
 
@@ -325,11 +327,7 @@ STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hype
     }
 
     IAccessibleHyperlink* plink = NULL;
-    ActivateActContext();
-    HRESULT hr = CoCreateInstance( CLSID_AccHyperLink, NULL, CLSCTX_SERVER ,
-                                   IID_IAccessibleHyperlink,
-                                   (void **)&plink);
-    DeactivateActContext();
+    HRESULT hr = createInstance<CAccHyperLink>(IID_IAccessibleHyperlink, &plink);
     if( SUCCEEDED(hr) )
     {
         IUNOXWrapper* wrapper = NULL;
