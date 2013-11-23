@@ -62,7 +62,8 @@ enum
     PROPERTY_EXTRAPOLATE_FORWARD,
     PROPERTY_EXTRAPOLATE_BACKWARD,
     PROPERTY_FORCE_INTERCEPT,
-    PROPERTY_INTERCEPT_VALUE
+    PROPERTY_INTERCEPT_VALUE,
+    PROPERTY_CURVE_NAME
 };
 
 void lcl_AddPropertiesToVector(
@@ -109,6 +110,12 @@ void lcl_AddPropertiesToVector(
                 ::getCppuType( reinterpret_cast< const double* >(0) ),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "CurveName",
+                PROPERTY_CURVE_NAME,
+                ::getCppuType( reinterpret_cast< const OUString* >(0) ),
+                beans::PropertyAttribute::BOUND ));
 }
 
 struct StaticXXXDefaults_Initializer
