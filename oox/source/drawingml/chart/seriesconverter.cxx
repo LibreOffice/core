@@ -433,6 +433,8 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             Reference< XRegressionCurve > xRegCurve( createInstance( aServiceName ), UNO_QUERY_THROW );
             PropertySet aPropSet( xRegCurve );
 
+            // Name
+            aPropSet.setProperty( PROP_CurveName, mrModel.maName );
             aPropSet.setProperty( PROP_PolynomialDegree, mrModel.mnOrder );
             aPropSet.setProperty( PROP_MovingAveragePeriod, mrModel.mnPeriod );
 

@@ -1543,8 +1543,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BAR )
                         exportDataLabels( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
 
-                    if( eChartType == chart::TYPEID_SCATTER )
-                        exportTrendlines( aSeriesSeq[nSeriesIdx] );
+                    exportTrendlines( aSeriesSeq[nSeriesIdx] );
 
                     //export error bars here
                     Reference< XPropertySet > xSeriesPropSet( xSource, uno::UNO_QUERY );
@@ -2526,14 +2525,22 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
             if (!xRegCurve.is())
                 continue;
 
+            Reference< XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
+
             pFS->startElement( FSNS( XML_c, XML_trendline ), FSEND );
 
-            Reference< XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
+            OUString aName;
+            xProperties->getPropertyValue("CurveName") >>= aName;
+            if(!aName.isEmpty())
+            {
+                pFS->startElement( FSNS( XML_c, XML_name), FSEND);
+                pFS->writeEscaped(aName);
+                pFS->endElement( FSNS( XML_c, XML_name) );
+            }
 
             exportShapeProps( xProperties );
 
             OUString aService;
-
             Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
             if( !xServiceName.is() )
                 continue;
@@ -2596,8 +2603,8 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
             double aExtrapolateForward = 0.0;
             double aExtrapolateBackward = 0.0;
 
-            xProperties->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
-            xProperties->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
+            xProperties->getPropertyValue("ExtrapolateForward") >>= aExtrapolateForward;
+            xProperties->getPropertyValue("ExtrapolateBackward") >>= aExtrapolateBackward;
 
             pFS->singleElement( FSNS( XML_c, XML_forward ),
                     XML_val, OString::number(aExtrapolateForward).getStr(),
@@ -2608,29 +2615,28 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
                     FSEND );
 
             sal_Bool aForceIntercept = false;
-            xProperties->getPropertyValue( "ForceIntercept") >>= aForceIntercept;
+            xProperties->getPropertyValue("ForceIntercept") >>= aForceIntercept;
 
             if (aForceIntercept)
             {
                 double aInterceptValue = 0.0;
-                xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
+                xProperties->getPropertyValue("InterceptValue") >>= aInterceptValue;
 
                 pFS->singleElement( FSNS( XML_c, XML_intercept ),
                     XML_val, OString::number(aInterceptValue).getStr(),
                     FSEND );
             }
 
-
             // Equation properties
             Reference< XPropertySet > xEquationProperties( xRegCurve->getEquationProperties() );
 
             // Show Equation
             sal_Bool aShowEquation = false;
-            xEquationProperties->getPropertyValue( "ShowEquation" ) >>= aShowEquation;
+            xEquationProperties->getPropertyValue("ShowEquation") >>= aShowEquation;
 
             // Show R^2
             sal_Bool aShowCorrelationCoefficient = false;
-            xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient" ) >>= aShowCorrelationCoefficient;
+            xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= aShowCorrelationCoefficient;
 
             pFS->singleElement( FSNS( XML_c, XML_dispRSqr ),
                     XML_val, aShowCorrelationCoefficient ? "1" : "0",

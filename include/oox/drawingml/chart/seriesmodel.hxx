@@ -148,7 +148,7 @@ struct TrendlineModel
 
     ShapeRef            mxShapeProp;        /// Trendline formatting.
     TrendlineLabelRef   mxLabel;            /// Trendline label text object.
-    OUString     maName;             /// User-defined name of the trendline.
+    OUString            maName;             /// User-defined name of the trendline.
     OptValue< double >  mfBackward;         /// Size of trendline before first data point.
     OptValue< double >  mfForward;          /// Size of trendline behind last data point.
     OptValue< double >  mfIntercept;        /// Crossing point with Y axis.
