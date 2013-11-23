@@ -660,7 +660,7 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
     rDeviceId = -1;
     rPlatformId = -1;
     bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
-    if(bOpenCLEnabled)
+    if(!bOpenCLEnabled)
         return;
 
 #if HAVE_FEATURE_OPENCL

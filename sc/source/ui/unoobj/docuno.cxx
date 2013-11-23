@@ -477,6 +477,7 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( lang::XMultiServiceFactory )
     SC_QUERYINTERFACE( lang::XServiceInfo )
     SC_QUERYINTERFACE( util::XChangesNotifier )
+    SC_QUERYINTERFACE( sheet::opencl::XOpenCLSelection )
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue()
@@ -529,7 +530,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         long nAggLen = aAggTypes.getLength();
         const uno::Type* pAggPtr = aAggTypes.getConstArray();
 
-        const long nThisLen = 15;
+        const long nThisLen = 16;
         aTypes.realloc( nParentLen + nAggLen + nThisLen );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetDocument>*)0);
@@ -547,6 +548,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         pPtr[nParentLen +12] = getCppuType((const uno::Reference<lang::XMultiServiceFactory>*)0);
         pPtr[nParentLen +13] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
         pPtr[nParentLen +14] = getCppuType((const uno::Reference<util::XChangesNotifier>*)0);
+        pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::opencl::XOpenCLSelection>*)0);
 
         long i;
         for (i=0; i<nParentLen; i++)
@@ -2339,6 +2341,31 @@ sal_Int32 ScModelObj::getDeviceID()
     sal_Int32 nDeviceId;
     sc::FormulaGroupInterpreter::getOpenCLDeviceInfo(nDeviceId, nPlatformId);
     return nDeviceId;
+}
+
+uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
+    throw (uno::RuntimeException)
+{
+    std::vector<sc::OpenclPlatformInfo> aPlatformInfo;
+    sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
+
+    uno::Sequence<sheet::opencl::OpenCLPlatform> aRet(aPlatformInfo.size());
+    for(size_t i = 0; i < aPlatformInfo.size(); ++i)
+    {
+        aRet[i].Name = aPlatformInfo[i].maName;
+        aRet[i].Vendor = aPlatformInfo[i].maVendor;
+
+        aRet[i].Devices.realloc(aPlatformInfo[i].maDevices.size());
+        for(size_t j = 0; j < aPlatformInfo[i].maDevices.size(); ++j)
+        {
+            const sc::OpenclDeviceInfo& rDevice = aPlatformInfo[i].maDevices[j];
+            aRet[i].Devices[j].Name = rDevice.maName;
+            aRet[i].Devices[j].Vendor = rDevice.maVendor;
+            aRet[i].Devices[j].Driver = rDevice.maDriver;
+        }
+    }
+
+    return aRet;
 }
 
 
