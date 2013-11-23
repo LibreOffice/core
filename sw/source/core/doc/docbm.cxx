@@ -295,15 +295,11 @@ OUString IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
 
 bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
 {
-    bool bRet( false );
-
-    bRet = rPaM.Start()->nNode.GetNode().IsTxtNode() &&
+    return rPaM.Start()->nNode.GetNode().IsTxtNode() &&
            rPaM.Start()->nContent.GetIndex() == 0 &&
            ( !rPaM.HasMark() ||
              ( rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
                rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTxtNode()->Len() ) );
-
-    return bRet;
 }
 
 namespace sw { namespace mark
