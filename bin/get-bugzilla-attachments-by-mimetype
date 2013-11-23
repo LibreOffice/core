@@ -304,6 +304,7 @@ mimetypes = {
 # misc
     'text/csv': 'csv',
     'text/spreadsheet': 'slk',
+    'application/x-dbase': 'dbf',
     'application/vnd.corel-draw': 'cdr',
     'application/vnd.lotus-wordpro': 'lwp',
     'application/vnd.lotus-1-2-3': 'wks',

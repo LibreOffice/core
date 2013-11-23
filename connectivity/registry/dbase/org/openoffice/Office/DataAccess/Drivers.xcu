@@ -82,7 +82,7 @@
         </node>
         <node oor:name="MediaType" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:string">
-            <value>application/dbase</value>
+            <value>application/x-dbase</value>
           </prop>
         </node>
       </node>
