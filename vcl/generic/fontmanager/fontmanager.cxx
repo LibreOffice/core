@@ -903,20 +903,14 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
             fprintf( stderr, "ttc: %s contains %d fonts\n", aFullPath.getStr(), nLength );
 #endif
 
-            sal_uInt64 fileSize;
+            sal_uInt64 fileSize = 0;
 
             OUString aURL;
-            if (!osl::File::getFileURLFromSystemPath(OStringToOUString(aFullPath, osl_getThreadTextEncoding()),
+            if (osl::File::getFileURLFromSystemPath(OStringToOUString(aFullPath, osl_getThreadTextEncoding()),
                 aURL))
             {
-                fileSize = 0;
-            }
-            else
-            {
                 osl::File aFile(aURL);
-                if (aFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock) != osl::File::E_None)
-                    fileSize = 0;
-                else
+                if (aFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock) == osl::File::E_None)
                 {
                     osl::DirectoryItem aItem;
                     osl::DirectoryItem::get( aURL, aItem );
