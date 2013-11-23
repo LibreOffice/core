@@ -1012,9 +1012,14 @@ XmlFilterBase& WorkbookHelper::getOoxFilter() const
     return mrBookGlob.getOoxFilter();
 }
 
-bool WorkbookHelper::importOoxFragment( const ::rtl::Reference< FragmentHandler >& rxHandler )
+bool WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& rxHandler )
 {
     return getOoxFilter().importFragment( rxHandler );
+}
+
+bool WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& rxHandler, oox::core::FastParser& rParser )
+{
+    return getOoxFilter().importFragment(rxHandler, rParser);
 }
 
 // BIFF specific --------------------------------------------------------------

@@ -53,6 +53,7 @@ namespace oox { namespace core {
     class FilterBase;
     class FragmentHandler;
     class XmlFilterBase;
+    class FastParser;
 } }
 
 class ScDocument;
@@ -269,7 +270,10 @@ public:
 
     /** Imports a fragment using the passed fragment handler, which contains
         the full path to the fragment stream. */
-    bool                importOoxFragment( const ::rtl::Reference< ::oox::core::FragmentHandler >& rxHandler );
+    bool importOoxFragment( const rtl::Reference<oox::core::FragmentHandler>& rxHandler );
+
+    bool importOoxFragment( const rtl::Reference<oox::core::FragmentHandler>& rxHandler, oox::core::FastParser& rParser );
+
 
     // BIFF2-BIFF8 specific (MUST NOT be called in OOXML/BIFF12 filter) -------
 

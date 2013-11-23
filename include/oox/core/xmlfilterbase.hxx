@@ -56,8 +56,7 @@ namespace oox {
 namespace core {
 
 class FragmentHandler;
-
-// ============================================================================
+class FastParser;
 
 struct TextField {
     com::sun::star::uno::Reference< com::sun::star::text::XText > xText;
@@ -107,7 +106,8 @@ public:
 
         @return  True, if the fragment could be imported.
      */
-    bool                importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler );
+    bool importFragment( const rtl::Reference<FragmentHandler>& rxHandler );
+    bool importFragment( const rtl::Reference<FragmentHandler>& rxHandler, FastParser& rParser );
 
     /** Imports a fragment into an xml::dom::XDocument.
 
@@ -230,6 +230,8 @@ public:
     sal_Int32 getNamespaceId( const OUString& rUrl );
 
     void importDocumentProperties();
+
+    FastParser* createParser() const;
 
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >

@@ -74,12 +74,6 @@ using utl::MediaDescriptor;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
-
-
-
-
-// ============================================================================
-
 namespace {
 
 bool lclHasSuffix( const OUString& rFragmentPath, const OUString& rSuffix )
@@ -88,9 +82,77 @@ bool lclHasSuffix( const OUString& rFragmentPath, const OUString& rSuffix )
     return (nSuffixPos >= 0) && rFragmentPath.match( rSuffix, nSuffixPos );
 }
 
-} // namespace
+struct NamespaceIds: public rtl::StaticWithInit<
+    Sequence< beans::Pair< OUString, sal_Int32 > >,
+    NamespaceIds>
+{
+    Sequence< beans::Pair< OUString, sal_Int32 > > operator()()
+    {
+        static const char* const namespaceURIs[] = {
+            "http://www.w3.org/XML/1998/namespace",
+            "http://schemas.openxmlformats.org/package/2006/relationships",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            "http://schemas.openxmlformats.org/drawingml/2006/main",
+            "http://schemas.openxmlformats.org/drawingml/2006/diagram",
+            "http://schemas.openxmlformats.org/drawingml/2006/chart",
+            "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing",
+            "urn:schemas-microsoft-com:vml",
+            "urn:schemas-microsoft-com:office:office",
+            "urn:schemas-microsoft-com:office:word",
+            "urn:schemas-microsoft-com:office:excel",
+            "urn:schemas-microsoft-com:office:powerpoint",
+            "http://schemas.microsoft.com/office/2006/activeX",
+            "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
+            "http://schemas.microsoft.com/office/excel/2006/main",
+            "http://schemas.openxmlformats.org/presentationml/2006/main",
+            "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
+            "http://schemas.microsoft.com/office/drawing/2008/diagram",
+            "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
+        };
 
-// ============================================================================
+        static const sal_Int32 namespaceIds[] = {
+            NMSP_xml,
+            NMSP_packageRel,
+            NMSP_officeRel,
+            NMSP_dml,
+            NMSP_dmlDiagram,
+            NMSP_dmlChart,
+            NMSP_dmlChartDr,
+            NMSP_dmlSpreadDr,
+            NMSP_vml,
+            NMSP_vmlOffice,
+            NMSP_vmlWord,
+            NMSP_vmlExcel,
+            NMSP_vmlPowerpoint,
+            NMSP_xls,
+            NMSP_ppt,
+            NMSP_ax,
+            NMSP_xm,
+            NMSP_mce,
+            NMSP_mceTest,
+            NMSP_dsp,
+            NMSP_xlsExtLst
+        };
+
+        Sequence< beans::Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
+        for( sal_Int32 i=0; i<aRet.getLength(); ++i )
+            aRet[i] = make_Pair(
+                OUString::createFromAscii(namespaceURIs[i]),
+                namespaceIds[i]);
+        return aRet;
+    }
+};
+
+void registerNamespaces( FastParser& rParser )
+{
+    const Sequence< beans::Pair<OUString, sal_Int32> > ids = NamespaceIds::get();
+    for (sal_Int32 i = 0; i < ids.getLength(); ++i)
+        rParser.registerNamespace(ids[i].Second);
+}
+
+} // namespace
 
 struct XmlFilterBaseImpl
 {
@@ -105,75 +167,6 @@ struct XmlFilterBaseImpl
     explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
 };
 
-// ----------------------------------------------------------------------------
-
-namespace
-{
-    struct NamespaceIds: public rtl::StaticWithInit<
-        Sequence< beans::Pair< OUString, sal_Int32 > >,
-        NamespaceIds>
-    {
-        Sequence< beans::Pair< OUString, sal_Int32 > > operator()()
-        {
-            static const char* const namespaceURIs[] = {
-                "http://www.w3.org/XML/1998/namespace",
-                "http://schemas.openxmlformats.org/package/2006/relationships",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-                "http://schemas.openxmlformats.org/drawingml/2006/main",
-                "http://schemas.openxmlformats.org/drawingml/2006/diagram",
-                "http://schemas.openxmlformats.org/drawingml/2006/chart",
-                "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing",
-                "urn:schemas-microsoft-com:vml",
-                "urn:schemas-microsoft-com:office:office",
-                "urn:schemas-microsoft-com:office:word",
-                "urn:schemas-microsoft-com:office:excel",
-                "urn:schemas-microsoft-com:office:powerpoint",
-                "http://schemas.microsoft.com/office/2006/activeX",
-                "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-                "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-                "http://schemas.microsoft.com/office/excel/2006/main",
-                "http://schemas.openxmlformats.org/presentationml/2006/main",
-                "http://schemas.openxmlformats.org/markup-compatibility/2006",
-                "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
-                "http://schemas.microsoft.com/office/drawing/2008/diagram",
-                "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
-            };
-
-            static const sal_Int32 namespaceIds[] = {
-                NMSP_xml,
-                NMSP_packageRel,
-                NMSP_officeRel,
-                NMSP_dml,
-                NMSP_dmlDiagram,
-                NMSP_dmlChart,
-                NMSP_dmlChartDr,
-                NMSP_dmlSpreadDr,
-                NMSP_vml,
-                NMSP_vmlOffice,
-                NMSP_vmlWord,
-                NMSP_vmlExcel,
-                NMSP_vmlPowerpoint,
-                NMSP_xls,
-                NMSP_ppt,
-                NMSP_ax,
-                NMSP_xm,
-                NMSP_mce,
-                NMSP_mceTest,
-                NMSP_dsp,
-                NMSP_xlsExtLst
-            };
-
-            Sequence< beans::Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
-            for( sal_Int32 i=0; i<aRet.getLength(); ++i )
-                aRet[i] = make_Pair(
-                    OUString::createFromAscii(namespaceURIs[i]),
-                    namespaceIds[i]);
-            return aRet;
-        }
-    };
-}
-
-// ----------------------------------------------------------------------------
 
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     maFastParser( rxContext ),
@@ -181,10 +174,7 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
     maVmlSuffix( ".vml" )
 {
     // register XML namespaces
-    const Sequence< beans::Pair< OUString, sal_Int32 > > ids=
-        NamespaceIds::get();
-    for( sal_Int32 i=0; i<ids.getLength(); ++i )
-        maFastParser.registerNamespace( ids[i].Second );
+    registerNamespaces(maFastParser);
 }
 
 XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
@@ -220,13 +210,25 @@ void XmlFilterBase::importDocumentProperties()
     xImporter->importProperties( xDocumentStorage, xPropSupplier->getDocumentProperties() );
 }
 
+FastParser* XmlFilterBase::createParser() const
+{
+    FastParser* pParser = new FastParser(getComponentContext());
+    registerNamespaces(*pParser);
+    return pParser;
+}
+
 OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
 {
     // importRelations() caches the relations map for subsequence calls
     return importRelations( OUString() )->getFragmentPathFromFirstType( rType );
 }
 
-bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler )
+bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler )
+{
+    return importFragment(rxHandler, mxImpl->maFastParser);
+}
+
+bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler, FastParser& rParser )
 {
     OSL_ENSURE( rxHandler.is(), "XmlFilterBase::importFragment - missing fragment handler" );
     if( !rxHandler.is() )
@@ -280,8 +282,8 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         // own try/catch block for showing parser failure assertion with fragment path
         if( xInStrm.is() ) try
         {
-            mxImpl->maFastParser.setDocumentHandler( xDocHandler );
-            mxImpl->maFastParser.parseStream( xInStrm, aFragmentPath );
+            rParser.setDocumentHandler(xDocHandler);
+            rParser.parseStream(xInStrm, aFragmentPath);
             return true;
         }
         catch( Exception& )
