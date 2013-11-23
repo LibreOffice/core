@@ -195,13 +195,6 @@ void lclConvertTimeInterval( Any& rInterval, sal_uInt16 nValue, bool bAuto, sal_
         rInterval <<= cssc::TimeInterval( nValue, lclGetApiTimeUnit( nTimeUnit ) );
 }
 
-bool lcl_IsForceIntercept(double intercept)
-{
-    sal_math_Double* pIntercept = reinterpret_cast<sal_math_Double*>(&intercept);
-    return (pIntercept->w32_parts.msw != 0xFFFFFFFF ||
-            pIntercept->w32_parts.lsw != 0xFFFFFFFF);
-}
-
 } // namespace
 
 // Common =====================================================================
@@ -1658,7 +1651,7 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
         aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_FORWARD, maData.mfForecastFor);
         aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_BACKWARD, maData.mfForecastBack);
 
-        sal_Bool bForceIntercept = lcl_IsForceIntercept(maData.mfIntercept);
+        sal_Bool bForceIntercept = !rtl::math::isNan(maData.mfIntercept);
         aPropSet.SetProperty(EXC_CHPROP_FORCE_INTERCEPT, bForceIntercept);
         if (bForceIntercept)
         {
