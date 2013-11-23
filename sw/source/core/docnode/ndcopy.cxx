@@ -114,10 +114,10 @@ namespace
         {
             // dann nur den Content anpassen
             if( nCntntPos > rOrigStt.nContent.GetIndex() )
-                nCntntPos = nCntntPos - rOrigStt.nContent.GetIndex();
+                nCntntPos -= rOrigStt.nContent.GetIndex();
             else
                 nCntntPos = 0;
-            nCntntPos = nCntntPos + rCpyStt.nContent.GetIndex();
+            nCntntPos += rCpyStt.nContent.GetIndex();
         }
         rChgPos.nContent.Assign( rChgPos.nNode.GetNode().GetCntntNode(), nCntntPos );
     }
