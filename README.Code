@@ -4,7 +4,7 @@
 
     You can develop for LibreOffice in one of two ways, one
 recommended and one much less so. First the somewhat less recommended
-way: it is possible to use the SDK, for wihch you can read the API
+way: it is possible to use the SDK, for which you can read the API
 docs here http://api.libreoffice.org/. This re-uses the (extremely
 generic) APIs we provide for macro scripting in StarBasic.
 
