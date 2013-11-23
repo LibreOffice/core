@@ -17,7 +17,6 @@
 #
 import traceback
 import uno
-import time
 
 from .WWD_Startup import WWD_Startup
 from .WWD_General import WWD_General
@@ -25,7 +24,6 @@ from .WebWizardConst import *
 from ..common.FileAccess import FileAccess
 from ..common.Configuration import Configuration
 from ..ui.event.ListModelBinder import ListModelBinder
-from ..ui.event.CommonListener import KeyListenerProcAdapter
 from ..ui.event.Task import Task
 from .data.CGDocument import CGDocument
 from .data.CGSession import CGSession
@@ -61,13 +59,8 @@ class WWD_Events(WWD_Startup):
 
     def __init__(self, xmsf):
         super(WWD_Events, self).__init__(xmsf)
-        c = KeyListenerProcAdapter(self.keyPressed)
-        self.chkFTP.addKeyListener(c)
-        self.chkLocalDir.addKeyListener(c)
-        self.chkZip.addKeyListener(c)
         self.currentSession = ""
         self.exitOnCreate = True
-        self.time = 0
         self.count = 0
         self.bgDialog = None
         self.iconsDialog = None
@@ -100,15 +93,6 @@ class WWD_Events(WWD_Startup):
 
             if sessionToLoad is not self.currentSession:
                 self.loadSession(sessionToLoad)
-
-    def keyPressed(self, ke):
-        if (ke.KeyChar == '&'):
-            self.time = time.time()
-        elif (ke.KeyChar == '%' and ((time.time() - self.time) < 300)):
-            b = self.xDialogModel.btnWizardFinish.Enabled
-            if (b):
-                self.finishWizard1(False)
-
 
     '''
     **************
