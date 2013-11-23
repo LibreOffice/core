@@ -21,6 +21,7 @@
 #include "resource.h"
 #include <initguid.h>
 #include "UAccCOM.h"
+#include <accHelper.hxx>
 
 #include "UAccCOM_i.c"
 #include "ia2_api_all_i.c"
@@ -93,5 +94,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
+
+
+IMAccessible * UAccCOMCreateInstance()
+{
+    IMAccessible * pIMA = 0;
+    HRESULT hr = createInstance<CMAccessible>(IID_IMAccessible, &pIMA);
+    return (S_OK == hr) ? pIMA : 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

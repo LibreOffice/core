@@ -20,6 +20,8 @@
 #include "stdafx.h"
 #include "UAccCOM.h"
 #include "AccHypertext.h"
+#include "AccHyperLink.h"
+#include "acccommon.h"
 
 
 using namespace com::sun::star::accessibility;
@@ -324,9 +326,7 @@ STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hype
     }
 
     IAccessibleHyperlink* plink = NULL;
-    HRESULT hr = CoCreateInstance( CLSID_AccHyperLink, NULL, CLSCTX_SERVER ,
-                                   IID_IAccessibleHyperlink,
-                                   (void **)&plink);
+    HRESULT hr = createInstance<CAccHyperLink>(IID_IAccessibleHyperlink, &plink);
     if( SUCCEEDED(hr) )
     {
         IUNOXWrapper* wrapper = NULL;

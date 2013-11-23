@@ -243,19 +243,11 @@ void AccObject::UpdateValidWindow()
    */
 sal_Bool AccObject::ImplInitializeCreateObj()
 {
-    HRESULT hr = CoCreateInstance( CLSID_MAccessible, NULL, CLSCTX_ALL,
-                                   IID_IMAccessible,
-                                   (void **)&m_pIMAcc);
-    SAL_WARN_IF(
-        m_pIMAcc == 0, "iacc2",
-        "Failed to create IAccessible2 instance: 0x" << std::hex << hr);
+    m_pIMAcc = UAccCOMCreateInstance();
 
-    if ( S_OK != hr )
-    {
-        return sal_False;
-    }
+    assert(m_pIMAcc);
 
-    return sal_True;
+    return m_pIMAcc != 0;
 }
 
 /**

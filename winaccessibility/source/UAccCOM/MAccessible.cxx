@@ -23,6 +23,15 @@
 
 #include <algorithm>
 #include "AccAction.h"
+#include "AccRelation.h"
+#include "AccComponent.h"
+#include "AccText.h"
+#include "AccEditableText.h"
+#include "AccImage.h"
+#include "AccTable.h"
+#include "AccValue.h"
+#include "AccHypertext.h"
+#include "AccHyperLink.h"
 
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -1719,9 +1728,8 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
             }
 
             IAccessibleRelation* pRelation = NULL;
-            HRESULT hr = CoCreateInstance( CLSID_AccRelation, NULL, CLSCTX_SERVER ,
-                IID_IAccessibleRelation,
-                (void **)&pRelation);
+            HRESULT hr = createInstance<CAccRelation>(IID_IAccessibleRelation,
+                            &pRelation);
             if(SUCCEEDED(hr))
             {
                 IUNOXWrapper* wrapper = NULL;
@@ -1781,9 +1789,8 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
         for(int i=0; i<nCount ; i++)
         {
             IAccessibleRelation* pRelation = NULL;
-            HRESULT hr = CoCreateInstance( CLSID_AccRelation, NULL, CLSCTX_SERVER ,
-                IID_IAccessibleRelation,
-                (void **)&pRelation);
+            HRESULT hr = createInstance<CAccRelation>(IID_IAccessibleRelation,
+                            &pRelation);
             if(SUCCEEDED(hr))
             {
                 IUNOXWrapper* wrapper = NULL;
@@ -2552,7 +2559,18 @@ BOOL CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface**
     return FALSE;
 }
 
-HRESULT WINAPI CMAccessible::SmartQI(void* pv, REFIID iid, void** ppvObject)
+template<typename T> HRESULT
+createAggInstance(CMAccessible &rOuter, REFIID iid, void ** ppvObject)
+{
+//    return CComCreator< CComAggObject<T> >::CreateInstance(
+//    XXX: do not use CComAggObject - the aggregation is hand-crafted!
+//         the SmartQI method must not call itself recursively -
+//         which it will do if CComAggObject redirects QueryInterface.
+    return CComCreator< CComObject<T> >::CreateInstance(
+            rOuter.GetControllingUnknown(), iid, ppvObject);
+}
+
+HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
 {
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -2584,7 +2602,40 @@ HRESULT WINAPI CMAccessible::SmartQI(void* pv, REFIID iid, void** ppvObject)
             }
             else
             {
-                HRESULT hr = pMap->pfnCreateInstance(pv, iid, ppvObject);
+                HRESULT hr(REGDB_E_CLASSNOTREG);
+                switch (pMap->XIFIndex)
+                {
+                    case XI_COMPONENT:
+                        hr = createAggInstance<CAccComponent>(*this, iid, ppvObject);
+                        break;
+                    case XI_TEXT:
+                        hr = createAggInstance<CAccText>(*this, iid, ppvObject);
+                        break;
+                    case XI_EDITABLETEXT:
+                        hr = createAggInstance<CAccEditableText>(*this, iid, ppvObject);
+                        break;
+                    case XI_IMAGE:
+                        hr = createAggInstance<CAccImage>(*this, iid, ppvObject);
+                        break;
+                    case XI_TABLE:
+                        hr = createAggInstance<CAccTable>(*this, iid, ppvObject);
+                        break;
+                    case XI_ACTION:
+                        hr = createAggInstance<CAccAction>(*this, iid, ppvObject);
+                        break;
+                    case XI_VALUE:
+                        hr = createAggInstance<CAccValue>(*this, iid, ppvObject);
+                        break;
+                    case XI_HYPERTEXT:
+                        hr = createAggInstance<CAccHypertext>(*this, iid, ppvObject);
+                        break;
+                    case XI_HYPERLINK:
+                        hr = createAggInstance<CAccHyperLink>(*this, iid, ppvObject);
+                        break;
+                    default:
+                        assert(false);
+                }
+                assert(hr == S_OK);
                 if(hr == S_OK)
                 {
                     m_containedObjects.insert(XGUIDToComObjHash::value_type(*pMap->piid,(IUnknown*)*ppvObject));

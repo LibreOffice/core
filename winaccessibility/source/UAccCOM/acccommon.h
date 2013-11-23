@@ -85,6 +85,12 @@ inline BOOL ImplIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 
 static DWORD GetMSAAStateFromUNO(short xState);
 
+template<typename T, typename Ifc> HRESULT
+createInstance(REFIID iid, Ifc ** ppIfc)
+{
+    return CComCreator< CComObject<T> >::CreateInstance(0, iid, (void**)ppIfc);
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,UAccCOM,\
 ))
 
 $(eval $(call gb_Library_add_defs,UAccCOM,\
+	-DUACCCOM_DLLIMPLEMENTATION \
 	-D_UNICODE=1 \
 ))
 
