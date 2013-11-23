@@ -41,7 +41,7 @@ namespace basegfx
 
             // special-casing the empty rect case (this will fail most
             // of the times below, because of the DBL_MIN/MAX special
-            // values denoting emptyness in the rectangle.
+            // values denoting emptiness in the rectangle.
             if( a.isEmpty() )
             {
                 o_rRanges.push_back( b );
