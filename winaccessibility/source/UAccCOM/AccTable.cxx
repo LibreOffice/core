@@ -213,22 +213,23 @@ STDMETHODIMP CAccTable::get_columnHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *
     }
     *startingRowIndex = 0 ;
 
-    IAccessible* m_pIMacc = NULL;
+    IMAccessible* pIMacc = NULL;
     ActivateActContext();
     HRESULT hr = CoCreateInstance( CLSID_MAccessible, NULL, CLSCTX_ALL ,
                                     IID_IMAccessible,
-                                    (void **)&m_pIMacc
+                                    (void **)&pIMacc
                                   );
     DeactivateActContext();
-    ((CMAccessible*)m_pIMacc)->SetXAccessible(
-        reinterpret_cast<hyper>(pRXColumnHeader.get()));
-    m_pIMacc->QueryInterface(IID_IAccessibleTable,(void **)accessibleTable);
-    if( SUCCEEDED(hr) )
-    {
-        return S_OK;
-    }
 
-    return E_FAIL;
+    if (!SUCCEEDED(hr))
+    {
+        return E_FAIL;
+    }
+    pIMacc->SetXAccessible(
+        reinterpret_cast<hyper>(pRXColumnHeader.get()));
+    pIMacc->QueryInterface(IID_IAccessibleTable,(void **)accessibleTable);
+
+    return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -446,22 +447,23 @@ STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *acc
     }
     *startingColumnIndex = 0 ;
 
-    IAccessible* m_pIMacc = NULL;
+    IMAccessible* pIMacc = NULL;
     ActivateActContext();
     HRESULT hr = CoCreateInstance( CLSID_MAccessible, NULL, CLSCTX_ALL ,
                                     IID_IMAccessible,
-                                    (void **)&m_pIMacc
+                                    (void **)&pIMacc
                                   );
     DeactivateActContext();
-    ((CMAccessible*)m_pIMacc)->SetXAccessible(
-        reinterpret_cast<hyper>(pRXRowHeader.get()));
-    m_pIMacc->QueryInterface(IID_IAccessibleTable,(void **)accessibleTable);
-    if( SUCCEEDED(hr) )
-    {
-        return S_OK;
-    }
 
-    return E_FAIL;
+    if (!SUCCEEDED(hr))
+    {
+        return E_FAIL;
+    }
+    pIMacc->SetXAccessible(
+        reinterpret_cast<hyper>(pRXRowHeader.get()));
+    pIMacc->QueryInterface(IID_IAccessibleTable,(void **)accessibleTable);
+
+    return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
