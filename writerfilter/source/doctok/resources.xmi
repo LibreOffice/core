@@ -36470,9 +36470,6 @@
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>0xD612</UML:TaggedValue.dataValue>
