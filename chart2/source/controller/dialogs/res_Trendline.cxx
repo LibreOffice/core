@@ -282,6 +282,18 @@ void TrendlineResources::FillValueSets()
 
 void TrendlineResources::UpdateControlStates()
 {
+    bool bMovingAverage = ( m_eTrendLineType == CHREGRESS_MOVING_AVERAGE );
+    m_pNF_ExtrapolateForward->Enable(!bMovingAverage);
+    m_pNF_ExtrapolateBackward->Enable(!bMovingAverage);
+    m_pCB_SetIntercept->Enable(!bMovingAverage);
+    m_pNF_InterceptValue->Enable(!bMovingAverage);
+    if(bMovingAverage)
+    {
+        m_pCB_ShowEquation->SetState( STATE_NOCHECK );
+        m_pCB_ShowCorrelationCoeff->SetState( STATE_NOCHECK );
+    }
+    m_pCB_ShowEquation->Enable(!bMovingAverage);
+    m_pCB_ShowCorrelationCoeff->Enable(!bMovingAverage);
 }
 
 IMPL_LINK( TrendlineResources, ChangeNumericField, NumericField *, pNumericField)
