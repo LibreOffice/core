@@ -628,7 +628,7 @@ static void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines&
 // because of unnecessary expanded redlines
 // From now on this class saves the redline positions of all redlines which ends exact at the
 // insert position (node _and_ content index)
-_SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, xub_StrLen nCnt )
+_SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nCnt )
     : pSavArr( 0 ), pSavIdx( 0 ), nSavCntnt( nCnt )
 {
     SwNode& rNd = rInsIdx.GetNode();

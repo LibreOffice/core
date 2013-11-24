@@ -202,13 +202,13 @@ struct SwTblToTxtSave
 {
     sal_uLong m_nSttNd;
     sal_uLong m_nEndNd;
-    xub_StrLen m_nCntnt;
+    sal_Int32 m_nCntnt;
     SwHistory* m_pHstry;
     // metadata references for first and last paragraph in cell
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
-    SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, xub_StrLen nCntnt );
+    SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, sal_Int32 nCntnt );
     ~SwTblToTxtSave() { delete m_pHstry; }
 };
 
@@ -359,7 +359,7 @@ SwRewriter SwUndoInsTbl::GetRewriter() const
     return aRewriter;
 }
 
-SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, xub_StrLen nCnt )
+SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, sal_Int32 nCnt )
     : m_nSttNd( nNd ), m_nEndNd( nEndIdx), m_nCntnt( nCnt ), m_pHstry( 0 )
 {
     // keep attributes of the joined node
@@ -550,10 +550,10 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         const SwTblToTxtSave* pSave = &rSavedData[ --n ];
         // if the start node was merged with last from prev. cell,
         // subtract 1 from index to get the merged paragraph, and split that
-        aSttIdx = pSave->m_nSttNd - ( ( USHRT_MAX != pSave->m_nCntnt ) ? 1 : 0);
+        aSttIdx = pSave->m_nSttNd - ( ( SAL_MAX_INT32 != pSave->m_nCntnt ) ? 1 : 0);
         SwTxtNode* pTxtNd = aSttIdx.GetNode().GetTxtNode();
 
-        if( USHRT_MAX != pSave->m_nCntnt )
+        if( SAL_MAX_INT32 != pSave->m_nCntnt )
         {
             // split at ContentPosition, delete previous char (= separator)
             OSL_ENSURE( pTxtNd, "Where is my TextNode?" );
@@ -681,7 +681,7 @@ void SwUndoTblToTxt::SetRange( const SwNodeRange& rRg )
     nEndNd = rRg.aEnd.GetIndex();
 }
 
-void SwUndoTblToTxt::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx, xub_StrLen nCntntIdx )
+void SwUndoTblToTxt::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx, sal_Int32 nCntntIdx )
 {
     SwTblToTxtSave* pNew = new SwTblToTxtSave( rDoc, nNdIdx, nEndIdx, nCntntIdx );
     pBoxSaves->push_back( pNew );

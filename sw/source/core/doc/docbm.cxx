@@ -926,14 +926,14 @@ namespace
             struct { sal_uInt16 nType, nCount; } TC;
             sal_uLong nTypeCount;
             } TYPECOUNT;
-        xub_StrLen nContent;
+        sal_Int32 nContent;
 
     public:
         _SwSaveTypeCountContent() { TYPECOUNT.nTypeCount = 0; nContent = 0; }
         _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
             {
                 TYPECOUNT.nTypeCount = rArr[ rPos++ ];
-                nContent = static_cast<xub_StrLen>(rArr[ rPos++ ]);
+                nContent = static_cast<sal_Int32>(rArr[ rPos++ ]);
             }
         void Add( std::vector<sal_uLong> &rArr )
         {
@@ -954,8 +954,8 @@ namespace
         void SetTypeAndCount( sal_uInt16 nT, sal_uInt16 nC )
             { TYPECOUNT.TC.nCount = nC; TYPECOUNT.TC.nType = nT; }
 
-        void SetContent( xub_StrLen n )     { nContent = n; }
-        xub_StrLen GetContent() const       { return nContent; }
+        void SetContent( sal_Int32 n )     { nContent = n; }
+        sal_Int32 GetContent() const       { return nContent; }
     };
 
     // #i59534: If a paragraph will be splitted we have to restore some redline positions
@@ -1235,7 +1235,7 @@ void _DelBookmarks(
 
 void _SaveCntntIdx(SwDoc* pDoc,
     sal_uLong nNode,
-    xub_StrLen nCntnt,
+    sal_Int32 nCntnt,
     std::vector<sal_uLong> &rSaveArr,
     sal_uInt8 nSaveFly)
 {
@@ -1454,7 +1454,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
 void _RestoreCntntIdx(SwDoc* pDoc,
     std::vector<sal_uLong> &rSaveArr,
     sal_uLong nNode,
-    xub_StrLen nOffset,
+    sal_Int32 nOffset,
     bool bAuto)
 {
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
@@ -1616,8 +1616,8 @@ void _RestoreCntntIdx(SwDoc* pDoc,
 
 void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
     const SwNode& rNd,
-    xub_StrLen nLen,
-    xub_StrLen nChkLen)
+    sal_Int32 nLen,
+    sal_Int32 nChkLen)
 {
     const SwDoc* pDoc = rNd.GetDoc();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();

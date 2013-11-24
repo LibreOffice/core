@@ -80,13 +80,13 @@ void _DelBookmarks(const SwNodeIndex& rStt,
     ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =0,
     const SwIndex* pSttIdx =0,
     const SwIndex* pEndIdx =0);
-void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, xub_StrLen nCntnt,
+void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
                     std::vector<sal_uLong>& rSaveArr, sal_uInt8 nSaveFly = 0 );
 void _RestoreCntntIdx( SwDoc* pDoc, std::vector<sal_uLong>& rSaveArr,
-                        sal_uLong nNode, xub_StrLen nOffset = 0,
+                        sal_uLong nNode, sal_Int32 nOffset = 0,
                         bool bAuto = false );
 void _RestoreCntntIdx( std::vector<sal_uLong>& rSaveArr, const SwNode& rNd,
-                        xub_StrLen nLen, xub_StrLen nCorrLen );
+                        sal_Int32 nLen, sal_Int32 nCorrLen );
 
 
 /** data structure to temporarily hold fly anchor positions relative to some
@@ -143,7 +143,7 @@ void PaMCorrAbs( const SwPaM& rRange,
     // Setzt alle PaMs in OldNode auf relative Pos
 void PaMCorrRel( const SwNodeIndex &rOldNode,
                  const SwPosition &rNewPos,
-                 const xub_StrLen nOffset = 0 );
+                 const sal_Int32 nOffset = 0 );
 
 
 // Hilfsklasse zum kopieren von absatzgebundenen Flys. Durch die Sortierung
@@ -186,11 +186,11 @@ class _SaveRedlEndPosForRestore
 {
     std::vector<SwPosition*>* pSavArr;
     SwNodeIndex* pSavIdx;
-    xub_StrLen nSavCntnt;
+    sal_Int32 nSavCntnt;
 
     void _Restore();
 public:
-    _SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, xub_StrLen nCntnt );
+    _SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nCntnt );
     ~_SaveRedlEndPosForRestore();
     void Restore() { if( pSavArr ) _Restore(); }
 };

@@ -124,7 +124,7 @@ public:
 
     void SetRange( const SwNodeRange& );
     void AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx,
-                    xub_StrLen nCntntIdx = STRING_MAXLEN);
+                    sal_Int32 nCntntIdx = SAL_MAX_INT32);
 };
 
 class SwUndoAttrTbl : public SwUndo

@@ -245,7 +245,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rStartNode,
 
 void PaMCorrRel( const SwNodeIndex &rOldNode,
                  const SwPosition &rNewPos,
-                 const xub_StrLen nOffset )
+                 const sal_Int32 nOffset )
 {
     const SwNode* pOldNode = &rOldNode.GetNode();
     SwPosition aNewPos( rNewPos );
