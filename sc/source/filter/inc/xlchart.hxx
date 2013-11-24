@@ -68,6 +68,7 @@ class XclRoot;
 #define EXC_CHPROP_CROSSOVERPOSITION        "CrossoverPosition"
 #define EXC_CHPROP_CROSSOVERVALUE           "CrossoverValue"
 #define EXC_CHPROP_CURVESTYLE               "CurveStyle"
+#define EXC_CHPROP_CURVENAME                "CurveName"
 #define EXC_CHPROP_D3DCAMERAGEOMETRY        "D3DCameraGeometry"
 #define EXC_CHPROP_D3DSCENEAMBIENTCOLOR     "D3DSceneAmbientColor"
 #define EXC_CHPROP_D3DSCENELIGHTON1         "D3DSceneLightOn1"
