@@ -63,19 +63,15 @@
 
 using namespace ::com::sun::star;
 
-DBG_NAME( OutputDevice )
 #ifdef DISABLE_DYNLOADING
 // Linking all needed LO code into one .so/executable, these already
 // exist in the tools library, so put them in the anonymous namespace
 // here to avoid clash...
 namespace {
 #endif
-DBG_NAME( Polygon )
-DBG_NAME( PolyPolygon )
 #ifdef DISABLE_DYNLOADING
 }
 #endif
-DBG_NAMEEX( Region )
 
 #ifdef DBG_UTIL
 const char* ImplDbgCheckOutputDevice( const void* pObj )
@@ -326,7 +322,6 @@ OutputDevice::OutputDevice() :
     maTextLineColor( COL_TRANSPARENT ),
     maSettings( Application::GetSettings() )
 {
-    DBG_CTOR( OutputDevice, ImplDbgCheckOutputDevice );
 
     mpGraphics          = NULL;
     mpUnoGraphicsList   = NULL;
@@ -407,7 +402,6 @@ OutputDevice::OutputDevice() :
 
 OutputDevice::~OutputDevice()
 {
-    DBG_DTOR( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( GetUnoGraphicsList() )
     {
@@ -1030,7 +1024,6 @@ void OutputDevice::ImplSetClipRegion( const Region* pRegion )
 
 void OutputDevice::SetClipRegion()
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaClipRegionAction( Region(), sal_False ) );
@@ -1043,7 +1036,6 @@ void OutputDevice::SetClipRegion()
 
 void OutputDevice::SetClipRegion( const Region& rRegion )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, sal_True ) );
@@ -1064,14 +1056,12 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
 
 Region OutputDevice::GetClipRegion() const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     return PixelToLogic( maRegion );
 }
 
 Region OutputDevice::GetActiveClipRegion() const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
@@ -1092,7 +1082,6 @@ Region OutputDevice::GetActiveClipRegion() const
 
 void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mbClipRegion )
     {
@@ -1110,7 +1099,6 @@ void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
 
 void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaISectRectClipRegionAction( rRect ) );
@@ -1126,7 +1114,6 @@ void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
 
 void OutputDevice::IntersectClipRegion( const Region& rRegion )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if(!rRegion.IsNull())
     {
@@ -1145,7 +1132,6 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 
 void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     mnDrawMode = nDrawMode;
 
@@ -1155,7 +1141,6 @@ void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
 
 void OutputDevice::SetRasterOp( RasterOp eRasterOp )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRasterOpAction( eRasterOp ) );
@@ -1175,7 +1160,6 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
 
 void OutputDevice::SetLineColor()
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineColorAction( Color(), sal_False ) );
@@ -1234,7 +1218,6 @@ Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
 
 void OutputDevice::SetLineColor( const Color& rColor )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor = ImplDrawModeToColor( rColor );
 
@@ -1266,7 +1249,6 @@ void OutputDevice::SetLineColor( const Color& rColor )
 
 void OutputDevice::SetFillColor()
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaFillColorAction( Color(), sal_False ) );
@@ -1284,7 +1266,6 @@ void OutputDevice::SetFillColor()
 
 void OutputDevice::SetFillColor( const Color& rColor )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor( rColor );
 
@@ -1353,7 +1334,6 @@ void OutputDevice::SetFillColor( const Color& rColor )
 
 void OutputDevice::SetBackground()
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     maBackground = Wallpaper();
     mbBackground = sal_False;
@@ -1364,7 +1344,6 @@ void OutputDevice::SetBackground()
 
 void OutputDevice::SetBackground( const Wallpaper& rBackground )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     maBackground = rBackground;
 
@@ -1379,7 +1358,6 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
 
 void OutputDevice::SetRefPoint()
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRefPointAction( Point(), sal_False ) );
@@ -1393,7 +1371,6 @@ void OutputDevice::SetRefPoint()
 
 void OutputDevice::SetRefPoint( const Point& rRefPoint )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRefPointAction( rRefPoint, sal_True ) );
@@ -1407,7 +1384,6 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt ) );
@@ -1604,7 +1580,6 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( rLineInfo.IsDefault() )
     {
@@ -1655,7 +1630,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
 void OutputDevice::DrawRect( const Rectangle& rRect )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRectAction( rRect ) );
@@ -1693,8 +1667,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rPoly, Polygon, NULL );
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyLineAction( rPoly ) );
@@ -1768,8 +1740,6 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rPoly, Polygon, NULL );
 
     if ( rLineInfo.IsDefault() )
     {
@@ -1857,8 +1827,6 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
 
 void OutputDevice::DrawPolygon( const Polygon& rPoly )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rPoly, Polygon, NULL );
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
@@ -1950,8 +1918,6 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
 void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
@@ -2064,7 +2030,6 @@ void OutputDevice::DrawPolygon( const ::basegfx::B2DPolygon& rB2DPolygon)
 
 void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( PolyPolygon( rB2DPolyPoly ) ) );
@@ -2242,7 +2207,6 @@ void OutputDevice::DrawPolyLine(
     basegfx::B2DLineJoin eLineJoin,
     com::sun::star::drawing::LineCap eLineCap)
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if( mpMetaFile )
     {
@@ -2351,7 +2315,6 @@ sal_uInt32 OutputDevice::GetGCStackDepth() const
 
 void OutputDevice::Push( sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPushAction( nFlags ) );
@@ -2435,7 +2398,6 @@ void OutputDevice::Push( sal_uInt16 nFlags )
 
 void OutputDevice::Pop()
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPopAction() );
@@ -2548,7 +2510,6 @@ void OutputDevice::SetSettings( const AllSettings& rSettings )
 
 sal_uInt16 OutputDevice::GetBitCount() const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( meOutDevType == OUTDEV_VIRDEV )
         return ((VirtualDevice*)this)->mnBitCount;
@@ -2565,7 +2526,6 @@ sal_uInt16 OutputDevice::GetBitCount() const
 
 sal_uInt16 OutputDevice::GetAlphaBitCount() const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( meOutDevType == OUTDEV_VIRDEV &&
         mpAlphaVDev != NULL )
@@ -2578,7 +2538,6 @@ sal_uInt16 OutputDevice::GetAlphaBitCount() const
 
 sal_uLong OutputDevice::GetColorCount() const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     const sal_uInt16 nBitCount = GetBitCount();
     return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (sal_uLong) 1 ) << nBitCount) );

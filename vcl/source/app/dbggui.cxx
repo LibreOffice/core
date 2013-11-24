@@ -68,64 +68,12 @@ static const sal_Char* pDbgHelpText[] =
 "------------------------------------------\n",
 "\n",
 "--- Macros ---\n",
-"DBG_NAME( aName )\n",
-"Defines the administration data for a class. This macro may only be used "
-" in a source file with the same name.\n",
-"\n",
-"DBG_NAMEEX( aName )\n",
-"Like DBG_NAME, only for other source files.\n",
-"\n",
-"DBG_CTOR( aName, fTest )\n",
-"Must be used in all constructors of a class (also in the CopyCtor). "
-"The first parameter must be the registered name (best would be the "
-"class name) and the second parameter the test function or 0.\n",
-"\n",
-"DBG_DTOR( aName, fTest )\n",
-"Must be used in the destructor of the class. The first parameter is "
-"the registered name and the second parameter is the test function or "
-"0.\n",
-"\n",
-"DBG_CHKTHIS( aName, fTest )\n",
-"Can be used in methods of the class when constructors and the "
-"desctructor of the class are equiped with the corresponding macros. "
-"The first parameter is the registered name, the second parameter is "
-"the test function or 0.\n",
-"\n",
-"DBG_CHKOBJ( pObj, aName, fTest )\n",
-"Can be used on instances of a class where the constructors and the "
-"destructor of the class are equiped with the corresponding macros. "
-"The first parameter is the registered name, the second parameter is "
-"the test function or 0.\n",
-"\n",
-"To make the macros work DBG_UTIL must be defined.\n",
-"\n",
-"--- Options ---\n",
-"This\n",
-"The This pointer is validated. This way all objects that are equiped "
-"with it can be tested to make sure one is working with existing objects. "
-"This way it's easier to find bugs in case of multiple inheritence, "
-"alignment or compiler errors. Since almost all standard classes of SV "
-"(String, List, Pen, Brush, Polygon, ...) are equiped with DBG_CHKTHIS() "
-"a lot of errors are found, although this test will impact performance "
-"accordingly.\n",
 "\n",
 "Function\n",
 "When a function is passed with macros, it will be called.\n",
 "\n",
 "Exit\n",
 "This- and Func-Test will also run when exiting the function.\n",
-"\n",
-"Report\n",
-"At the end of the program the number of generated objects is produced "
-"as output. Because all important SV classes have at least DBG_CTOR() / "
-"DBG_DTOR() it can checked so called resource leaks (system objects which "
-" are not freed) exist. These include OutputDevice, Window, VirtualDevice, "
-" Printer and Menu. Note: Dtor calls of static objects are not taken into "
-" account. Therefor each SV program leaves 2 strings and a bitmap behind.\n",
-"\n",
-"Trace\n",
-"Creation, destruction and usage of objects which are equiped with "
-"DBG_XTOR is logged.\n",
 "\n",
 "\n",
 "\nOther tests and macros\n",
@@ -137,7 +85,6 @@ static const sal_Char* pDbgHelpText[] =
 "and the time this took (including calls to children) in milliseconds is "
 "output. These macros can be used to check the same function runs over the "
 "entire development period, for example the startup speed. The registered name "
-"which was registered with DBG_NAME() must be passed to the macros.\n",
 "\n",
 "Resources\n",
 "In case of resource errors an error dialog is produced before the "
@@ -293,7 +240,6 @@ static const sal_Char* pDbgHelpText[] =
 "Example\n",
 "------------------------------------------\n",
 "\n",
-"DBG_NAME( String );\n",
 "\n",
 "#ifdef DBG_UTIL\n",
 "const sal_Char* DbgCheckString( const void* pString )\n",
@@ -309,31 +255,21 @@ static const sal_Char* pDbgHelpText[] =
 "\n",
 "String::String()\n",
 "{\n",
-"    DBG_CTOR( String, DbgCheckString );\n",
 "    // ...\n",
 "}\n",
 "\n",
 "String::~String()\n",
 "{\n",
-"    DBG_DTOR( String, DbgCheckString );\n",
 "    //...\n",
 "}\n",
 "\n",
 "char& String::operator [] ( sal_uInt16 nIndex )\n",
 "{\n",
-"    DBG_CHKTHIS( String, DbgCheckString );\n",
 "    DBG_ASSERT( nIndex <= pData->nLen, \"String::[] : nIndex > Len\" );\n",
 "\n",
 "    //...\n",
 "}\n",
 "\n",
-"sal_uInt16 String::Search( const String& rStr, sal_uInt16 nIndex ) const\n",
-"{\n",
-"    DBG_CHKTHIS( String, DbgCheckString );\n",
-"    DBG_CHKOBJ( &rStr, String, DbgCheckString );\n",
-"\n",
-"    //...\n",
-"}",
 "\n",
 NULL
 };

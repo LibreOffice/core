@@ -25,7 +25,6 @@
 
 #include <jobset.h>
 
-DBG_NAME( JobSetup )
 
 #define JOBSET_FILE364_SYSTEM   ((sal_uInt16)0xFFFF)
 #define JOBSET_FILE605_SYSTEM   ((sal_uInt16)0xFFFE)
@@ -121,15 +120,12 @@ const ImplJobSetup* JobSetup::ImplGetConstData() const
 
 JobSetup::JobSetup()
 {
-    DBG_CTOR( JobSetup, NULL );
 
     mpData = NULL;
 }
 
 JobSetup::JobSetup( const JobSetup& rJobSetup )
 {
-    DBG_CTOR( JobSetup, NULL );
-    DBG_CHKOBJ( &rJobSetup, JobSetup, NULL );
     DBG_ASSERT( !rJobSetup.mpData || (rJobSetup.mpData->mnRefCount < 0xFFFE), "JobSetup: RefCount overflow" );
 
     mpData = rJobSetup.mpData;
@@ -139,7 +135,6 @@ JobSetup::JobSetup( const JobSetup& rJobSetup )
 
 JobSetup::~JobSetup()
 {
-    DBG_DTOR( JobSetup, NULL );
 
     if ( mpData )
     {
@@ -176,8 +171,6 @@ void JobSetup::SetValue( const OUString& rKey, const OUString& rValue )
 
 JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 {
-    DBG_CHKTHIS( JobSetup, NULL );
-    DBG_CHKOBJ( &rJobSetup, JobSetup, NULL );
     DBG_ASSERT( !rJobSetup.mpData || (rJobSetup.mpData->mnRefCount) < 0xFFFE, "JobSetup: RefCount overflow" );
 
     // Increment refcount first, so that we can assign to ourselves
@@ -201,8 +194,6 @@ JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 
 sal_Bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 {
-    DBG_CHKTHIS( JobSetup, NULL );
-    DBG_CHKOBJ( &rJobSetup, JobSetup, NULL );
 
     if ( mpData == rJobSetup.mpData )
         return sal_True;

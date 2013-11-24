@@ -33,14 +33,12 @@
 
 // =======================================================================
 
-DBG_NAMEEX( OutputDevice )
 
 // =======================================================================
 
 void OutputDevice::DrawRect( const Rectangle& rRect,
                              sal_uLong nHorzRound, sal_uLong nVertRound )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRoundRectAction( rRect, nHorzRound, nVertRound ) );
@@ -98,7 +96,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
 
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaEllipseAction( rRect ) );
@@ -148,7 +145,6 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
 void OutputDevice::DrawArc( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaArcAction( rRect, rStartPt, rEndPt ) );
@@ -194,7 +190,6 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
 void OutputDevice::DrawPie( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPieAction( rRect, rStartPt, rEndPt ) );
@@ -247,7 +242,6 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
 void OutputDevice::DrawChord( const Rectangle& rRect,
                               const Point& rStartPt, const Point& rEndPt )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaChordAction( rRect, rStartPt, rEndPt ) );
