@@ -972,6 +972,11 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > x
     return ulimit_cast< sal_uInt16 >( nValueCount, EXC_CHDATAFORMAT_MAXPOINTCOUNT );
 }
 
+void XclExpChSourceLink::ConvertString( OUString aString )
+{
+    mxString = XclExpStringHelper::CreateString( GetRoot(), aString, EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH | EXC_STR_SEPARATEFORMATS );
+}
+
 sal_uInt16 XclExpChSourceLink::ConvertStringSequence( const Sequence< Reference< XFormattedString > >& rStringSeq )
 {
     mxString.reset();
@@ -2049,10 +2054,16 @@ bool XclExpChSeries::ConvertStockSeries( XDataSeriesRef xDataSeries,
 bool XclExpChSeries::ConvertTrendLine( const XclExpChSeries& rParent, Reference< XRegressionCurve > xRegCurve )
 {
     InitFromParent( rParent );
+
     mxTrendLine.reset( new XclExpChSerTrendLine( GetChRoot() ) );
     bool bOk = mxTrendLine->Convert( xRegCurve, mnSeriesIdx );
     if( bOk )
     {
+        OUString aName;
+        ScfPropertySet aProperties( xRegCurve );
+        aProperties.GetProperty(aName, EXC_CHPROP_CURVENAME);
+        mxTitleLink->ConvertString(aName);
+
         mxSeriesFmt = mxTrendLine->GetDataFormat();
         GetChartData().SetDataLabel( mxTrendLine->GetDataLabel() );
     }

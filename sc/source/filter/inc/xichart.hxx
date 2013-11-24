@@ -736,11 +736,14 @@ public:
     /** Sets formatting information for the trend line. */
     inline void         SetDataFormat( XclImpChDataFormatRef xDataFmt ) { mxDataFmt = xDataFmt; }
 
+    inline void         SetTrendlineName( OUString aTrendlineName) { maTrendLineName = aTrendlineName; }
+
     /** Creates an API object representing this trend line. */
     XRegressionCurveRef CreateRegressionCurve() const;
 
 private:
-    XclChSerTrendLine   maData;             /// Contents of the CHSERTRENDLINE record.
+    OUString  maTrendLineName;
+    XclChSerTrendLine maData;               /// Contents of the CHSERTRENDLINE record.
     XclImpChDataFormatRef mxDataFmt;        /// Formatting settings of the trend line.
 };
 
