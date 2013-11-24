@@ -2330,7 +2330,7 @@ sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefau
             case sal_Unicode('I'):
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 'n'
-                    || rString[nPos+1] == 'n'))
+                    || rString[nPos+1] == 'N'))
                     nRetUnit = MeasureUnit::INCH;
                 break;
             }
