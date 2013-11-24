@@ -164,15 +164,12 @@ SwCallLink::~SwCallLink()
             if ( ((SwTxtNode*)pCNd)->HasHints() )
             {
                 const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
-                sal_uInt16 n;
-                sal_Int32 nStart;
-                const sal_Int32 *pEnd;
 
-                for( n = 0; n < rHts.Count(); n++ )
+                for( sal_uInt16 n = 0; n < rHts.Count(); n++ )
                 {
                     const SwTxtAttr* pHt = rHts[ n ];
-                    pEnd = pHt->End();
-                    nStart = *pHt->GetStart();
+                    const sal_Int32 *pEnd = pHt->End();
+                    const sal_Int32 nStart = *pHt->GetStart();
 
                     // If "only start" or "start and end equal" then call on
                     // every overflow of start.
@@ -193,7 +190,6 @@ SwCallLink::~SwCallLink()
                         rShell.CallChgLnk();
                         return;
                     }
-                    nStart = 0;
                 }
             }
 
