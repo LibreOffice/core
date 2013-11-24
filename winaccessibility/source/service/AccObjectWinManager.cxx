@@ -185,7 +185,7 @@ XAccessible* AccObjectWinManager::GetXAccByAccObj(AccObject* pAccObj)
         AccObject* tmp = &(iter->second);
         if(tmp== pAccObj)
             return (XAccessible*)(iter->first);
-        iter++;
+        ++iter;
     }
     return NULL;
 }
@@ -517,7 +517,7 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
         pAccChildObj = (AccObject*)(iter->second);
         if(pAccChildObj != NULL)
             NotifyWinEvent(EVENT_OBJECT_SELECTIONREMOVE,pAccObj->GetParentHWND(), OBJID_CLIENT,pAccChildObj->GetResID());
-        iter++;
+        ++iter;
     }
     return 0;
 
@@ -550,7 +550,7 @@ void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible* pXAcc )
             HwndXAcc.erase(iter);
             return;
         }
-        iter++;
+        ++iter;
     }
 }
 
