@@ -74,32 +74,30 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
 
 static void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
 {
-    if ( pNode != NULL )
+    if ( !pNode )
+        return;
+
+    SwFrm *const pMyFrm = pNode->getLayoutFrm( rShell.GetLayout() );
+    if ( !pMyFrm )
+        return;
+
+    // We need to emulated a change of the row height in order
+    // to have the complete row redrawn
+    SwRowFrm *const pRow = pMyFrm->FindRowFrm();
+    if ( !pRow )
+        return;
+
+    const SwTableLine* pLine = pRow->GetTabLine( );
+    // Avoid redrawing the complete row if there are no nested tables
+    for (SwFrm *pCell = pRow->GetLower(); pCell; pCell = pCell->GetNext())
     {
-        SwFrm *myFrm = pNode->getLayoutFrm( rShell.GetLayout() );
-        if (myFrm!=NULL)
+        for (SwFrm *pContent = pCell->GetLower(); pContent; pContent = pContent->GetNext())
         {
-            // We need to emulated a change of the row height in order
-            // to have the complete row redrawn
-            SwRowFrm* pRow = myFrm->FindRowFrm();
-            if ( pRow )
+            if (pContent->GetType() == FRM_TAB)
             {
-                const SwTableLine* pLine = pRow->GetTabLine( );
-                // Avoid redrawing the complete row if there are no nested tables
-                bool bHasTable = false;
-                SwFrm *pCell = pRow->GetLower();
-                for (; pCell && !bHasTable; pCell = pCell->GetNext())
-                {
-                    SwFrm *pContent = pCell->GetLower();
-                    for (; pContent && !bHasTable; pContent = pContent->GetNext())
-                        if (pContent->GetType() == FRM_TAB)
-                            bHasTable = true;
-                }
-                if (bHasTable)
-                {
-                    SwFmtFrmSize pSize = pLine->GetFrmFmt()->GetFrmSize();
-                    pRow->ModifyNotification(NULL, &pSize);
-                }
+                SwFmtFrmSize pSize = pLine->GetFrmFmt()->GetFrmSize();
+                pRow->ModifyNotification(NULL, &pSize);
+                return;
             }
         }
     }
