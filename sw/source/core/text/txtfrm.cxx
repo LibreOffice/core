@@ -495,7 +495,7 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
 // (c) the anchor character is an as-character anchored graphic.
 bool sw_HideObj( const SwTxtFrm& _rFrm,
                   const RndStdIds _eAnchorType,
-                  const xub_StrLen _nObjAnchorPos,
+                  const sal_Int32 _nObjAnchorPos,
                   SwAnchoredObject* _pAnchoredObj )
 {
     bool bRet( true );
