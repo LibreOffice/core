@@ -20,7 +20,6 @@ import os.path
 from .LetterWizardDialog import LetterWizardDialog, uno, HelpIds, HID
 from .LetterDocument import LetterDocument, BusinessPaperObject
 from .CGLetterWizard import CGLetterWizard
-from ..common.NoValidPathException import NoValidPathException
 from ..common.FileAccess import FileAccess
 from ..common.Configuration import Configuration
 from ..common.SystemDialog import SystemDialog
@@ -34,7 +33,6 @@ from ..text.TextFieldHandler import TextFieldHandler
 from ..document.OfficeDocument import OfficeDocument
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
-from com.sun.star.uno import RuntimeException
 from com.sun.star.util import CloseVetoException
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.document.UpdateDocMode import FULL_UPDATE
@@ -169,7 +167,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.switchToStep(self.getCurrentStep(), self.nMaxStep)
         endWizard = True
         try:
-            fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
             if not self.sPath or not os.path.exists(self.sPath):
                 self.myPathSelection.triggerPathPicker()
@@ -493,9 +490,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                     self.myLetterDoc.xTextDocument, " ", iFrameWidth, iReceiverHeight,
                     iFrameX, iFrameY - iReceiverHeight)
                 self.setPossibleAddressReceiver(False)
-            except NoSuchElementException:
-                traceback.print_exc()
-            except WrappedTargetException:
+            except Exception:
                 traceback.print_exc()
 
             if self.chkPaperCompanyAddress.State != 0:
