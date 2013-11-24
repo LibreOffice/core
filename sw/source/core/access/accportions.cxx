@@ -354,13 +354,11 @@ sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
                       aAccessiblePositions[nPortionNo] ),
                     "accesability portion disagrees with text model" );
 
-        sal_Int32 nWithinPortion = nPos - aAccessiblePositions[nPortionNo];
-        nStartPos += nWithinPortion;
+        nStartPos += nPos - aAccessiblePositions[nPortionNo];
     }
     // else: return nStartPos unmodified
 
-    OSL_ENSURE( (nStartPos >= 0) && (nStartPos < USHRT_MAX),
-                "How can the SwTxtNode have so many characters?" );
+    OSL_ENSURE( nStartPos >= 0, "There's something weird in number of characters of SwTxtNode" );
     return nStartPos;
 }
 
