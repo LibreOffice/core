@@ -341,7 +341,7 @@ public class MSOfficePostscriptCreator implements IOffice
                     {
                         aStr = "\"\"";
                     }
-                    aList[i] = new String(aStr);
+                    aList[i] = aStr;
                 }
 
                 // This is really the latest point where we can check if we are running within windows environment

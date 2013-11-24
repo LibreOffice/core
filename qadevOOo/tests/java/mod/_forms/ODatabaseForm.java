@@ -623,7 +623,7 @@ public class ODatabaseForm extends TestCase {
 
         /*****  statement parameter types and their initial
                 values must be added here as relation. */
-        params.add(new String("SAU99")) ;
+        params.add("SAU99") ;
         params.add(new Boolean(false)) ;
         params.add(new Byte((byte) 123)) ;
         params.add(new Short((short) 234)) ;

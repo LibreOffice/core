@@ -179,7 +179,7 @@ public class OSingleSelectQueryComposer extends TestCase {
 
             log.println("check XMultiServiceFactory");
             XMultiServiceFactory xConn = UnoRuntime.queryInterface(XMultiServiceFactory.class,
-            xDS.getConnection(new String(),new String()));
+            xDS.getConnection("", ""));
 
             log.println("check getAvailableServiceNames");
             String[] sServiceNames = xConn.getAvailableServiceNames();

@@ -67,9 +67,9 @@ public class _Presentation extends MultiPropertyTest {
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if ( ((String)oldValue).equals("SecondPresentation") ) {
-                return new String("FirstPresentation");
+                return "FirstPresentation";
             } else {
-                return new String("SecondPresentation");
+                return "SecondPresentation";
             }
         }
     };

@@ -66,7 +66,7 @@ public class _XCellRangeData extends MultiMethodTest {
         Object[][] emptyData = new Object[newData.length][newData[0].length];
         for (int i=0; i<emptyData.length; i++) {
             for (int j=0; j<emptyData[i].length; j++) {
-                emptyData[i][j] = new String();
+                emptyData[i][j] = "";
             }
         }
         oObj.setDataArray(emptyData);

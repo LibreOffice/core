@@ -88,7 +88,7 @@ public class AccessibleEditableTextPara extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
                     try {
-                    int l = new String("AccessibleEditablePara").length();
+                    int l = "AccessibleEditablePara".length();
                     edText.deleteText(0, l);
                     edText.setText("Event");
                     edText.setText("AccessibleEditablePara");

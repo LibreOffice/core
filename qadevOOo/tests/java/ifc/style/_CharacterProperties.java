@@ -262,7 +262,7 @@ public class _CharacterProperties extends MultiPropertyTest {
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException {
             if (utils.isVoid(oldValue)) {
-                return new String("RubyText");
+                return "RubyText";
             } else {
                 return ValueChanger.changePValue(oldValue);
             }

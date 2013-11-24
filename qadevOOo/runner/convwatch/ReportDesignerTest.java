@@ -314,7 +314,7 @@ public class ReportDesignerTest extends ComplexTestCase {
                 // sAppExecutionCommand = utils.replaceAll13(sAppExecutionCommand, "${USERNAME}", sUser);
 
                 checkIfOfficeExists(sAppExecutionCommand);
-                param.put("AppExecutionCommand", new String(sAppExecutionCommand));
+                param.put("AppExecutionCommand", sAppExecutionCommand);
 
                 // System.exit(1);
 

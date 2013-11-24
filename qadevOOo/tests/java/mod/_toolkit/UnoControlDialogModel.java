@@ -90,9 +90,7 @@ public class UnoControlDialogModel extends TestCase {
             xPSetDialog.setPropertyValue("PositionY", new Integer(100));
             xPSetDialog.setPropertyValue("Width", new Integer(150));
             xPSetDialog.setPropertyValue("Height", new Integer(100));
-            xPSetDialog.setPropertyValue("Title",
-                                         new String("Runtime Dialog Demo"));
-
+            xPSetDialog.setPropertyValue("Title", "Runtime Dialog Demo");
 
             // get the service manager from the dialog model
             xMultiServiceFactory = UnoRuntime.queryInterface(
@@ -110,7 +108,7 @@ public class UnoControlDialogModel extends TestCase {
             xPSetButton.setPropertyValue("Height", new Integer(14));
             xPSetButton.setPropertyValue("Name", _buttonName);
             xPSetButton.setPropertyValue("TabIndex", new Short((short) 0));
-            xPSetButton.setPropertyValue("Label", new String("Click Me"));
+            xPSetButton.setPropertyValue("Label", "Click Me");
 
             // create the label model and set the properties
             Object labelModel = xMultiServiceFactory.createInstance(

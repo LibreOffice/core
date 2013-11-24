@@ -112,7 +112,7 @@ public class OQueryDesign extends TestCase {
             log.println("check XMultiServiceFactory");
 
         try {
-            xConn = xDS.getConnection(new String(), new String());
+            xConn = xDS.getConnection("", "");
         } catch (SQLException ex) {
             ex.printStackTrace( log );
             throw new StatusException( "Could not get XConnection", ex );
