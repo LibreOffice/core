@@ -382,6 +382,7 @@ public:
     SCROW GetNotePosition( SCCOL nCol, size_t nIndex ) const;
 
     void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
+    bool ContainsNotesInRange( const ScRange& rRange ) const;
 
     bool TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );

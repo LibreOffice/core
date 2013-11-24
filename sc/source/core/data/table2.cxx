@@ -1516,6 +1516,20 @@ void ScTable::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
         aCol[nCol].GetAllNoteEntries(rNotes);
 }
 
+bool ScTable::ContainsNotesInRange( const ScRange& rRange ) const
+{
+    SCROW nStartRow = rRange.aStart.Row();
+    SCROW nEndRow = rRange.aEnd.Row();
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        bool bContainsNote = !aCol[nCol].IsNotesEmptyBlock(nStartRow, nEndRow);
+        if(bContainsNote)
+            return true;
+    }
+
+    return false;
+}
+
 CellType ScTable::GetCellType( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow( nCol, nRow ))
