@@ -18,7 +18,6 @@ $(eval $(call gb_Pyuno_add_files,web,wizards/web,\
 	FTPDialogResources.py \
 	IconsDialog.py \
 	ImageListDialog.py \
-	LogTaskListener.py \
 	Process.py \
 	ProcessErrorHandler.py \
 	ProcessErrors.py \
