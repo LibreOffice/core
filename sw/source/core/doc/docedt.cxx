@@ -1223,22 +1223,20 @@ static std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
 
 static bool lcl_StrLenOverFlow( const SwPaM& rPam )
 {
-    // If we try to merge two paragraph we have to test if afterwards
+    // If we try to merge two paragraphs we have to test if afterwards
     // the string doesn't exceed the allowed string length
-    bool bRet = false;
     if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
     {
         const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
         const SwTxtNode* pEndNd = pEnd->nNode.GetNode().GetTxtNode();
         if( (0 != pEndNd) && pStt->nNode.GetNode().IsTxtNode() )
         {
-            sal_uInt64 nSum = pStt->nContent.GetIndex() +
+            const sal_uInt64 nSum = pStt->nContent.GetIndex() +
                 pEndNd->GetTxt().getLength() - pEnd->nContent.GetIndex();
-            if( nSum > STRING_LEN )
-                bRet = true;
+            return nSum > static_cast<sal_uInt64>(SAL_MAX_INT32);
         }
     }
-    return bRet;
+    return false;
 }
 
 void sw_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
