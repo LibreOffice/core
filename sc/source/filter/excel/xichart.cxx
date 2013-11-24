@@ -1652,6 +1652,7 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
         ScfPropertySet aPropSet( xRegCurve );
         mxDataFmt->ConvertLine( aPropSet, EXC_CHOBJTYPE_TRENDLINE );
 
+        aPropSet.SetProperty(EXC_CHPROP_CURVENAME, maTrendLineName);
         aPropSet.SetProperty(EXC_CHPROP_POLYNOMIAL_DEGREE, static_cast<sal_Int32> (maData.mnOrder) );
         aPropSet.SetProperty(EXC_CHPROP_MOVING_AVERAGE_PERIOD, static_cast<sal_Int32> (maData.mnOrder) );
         aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_FORWARD, maData.mfForecastFor);
@@ -1918,9 +1919,17 @@ void XclImpChSeries::FinalizeDataFormats()
 
         // copy series formatting to child objects
         for( XclImpChSerTrendLineList::iterator aLIt = maTrendLines.begin(), aLEnd = maTrendLines.end(); aLIt != aLEnd; ++aLIt )
-            (*aLIt)->SetDataFormat( mxSeriesFmt );
+        {
+            (*aLIt)->SetDataFormat(mxSeriesFmt);
+            if (mxTitleLink->HasString())
+            {
+                (*aLIt)->SetTrendlineName(mxTitleLink->GetString());
+            }
+        }
         for( XclImpChSerErrorBarMap::iterator aMIt = maErrorBars.begin(), aMEnd = maErrorBars.end(); aMIt != aMEnd; ++aMIt )
+        {
             aMIt->second->SetSeriesData( mxValueLink, mxSeriesFmt );
+        }
     }
     else if( XclImpChTypeGroup* pTypeGroup = GetChartData().GetTypeGroup( mnGroupIdx ).get() )
     {
@@ -2162,7 +2171,9 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) c
             {
                 Reference< XRegressionCurve > xRegCurve = (*aIt)->CreateRegressionCurve();
                 if( xRegCurve.is() )
+                {
                     xRegCurveCont->addRegressionCurve( xRegCurve );
+                }
             }
             catch( Exception& )
             {
