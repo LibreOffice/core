@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -701,7 +701,7 @@ File gid_Starregistry_Services_Rdb
     Styles = (PACKED);
 End
 
-#ifdef MACOSX 
+#ifdef MACOSX
 File gid_File_App_InfoPlist
     TXT_FILE_BODY;
     Dir = FILELIST_DIR;
@@ -998,6 +998,15 @@ End
 File gid_File_Extension_Dictionary_Kmr_Latn
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-kmr-Latn.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
+	TXT_FILE_BODY;
+End
+#endif
+
+#if defined WITH_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Lo
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-lo.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
