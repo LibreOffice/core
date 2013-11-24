@@ -6226,6 +6226,22 @@ void ScDocument::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
     }
 }
 
+bool ScDocument::ContainsNotesInRange( const ScRangeList& rRange ) const
+{
+    for( size_t i = 0; i < rRange.size(); ++i)
+    {
+        const ScRange* pRange = rRange[i];
+        for( SCTAB nTab = pRange->aStart.Tab(); nTab < pRange->aEnd.Tab(); ++nTab )
+        {
+            bool bContainsNote = maTabs[nTab]->ContainsNotesInRange( *pRange );
+            if(bContainsNote)
+                return true;
+        }
+    }
+
+    return false;
+}
+
 void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )
 {
     delete pAutoNameCache;

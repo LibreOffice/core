@@ -979,22 +979,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             // look for at least one note in selection
                             ScRangeList aRanges;
                             rMark.FillRangeListWithMarks( &aRanges, false );
-                            size_t nCount = aRanges.size();
-                            for (size_t nPos = 0; nPos < nCount && !bEnable; ++nPos)
-                            {
-                                SCTAB aTab = aRanges[nPos]->aStart.Tab();
-                                for (SCCOL aCol=aRanges[nPos]->aStart.Col(); aCol <= aRanges[nPos]->aEnd.Col() && !bEnable; aCol++)
-                                {
-                                    for (SCROW aRow=aRanges[nPos]->aStart.Row(); aRow <= aRanges[nPos]->aEnd.Row(); aRow++)
-                                    {
-                                        if (pDoc->HasNote(aCol, aRow, aTab))
-                                        {
-                                            bEnable = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
+                            bEnable = pDoc->ContainsNotesInRange( aRanges );
                         }
                     }
                     else
