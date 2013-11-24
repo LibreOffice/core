@@ -137,20 +137,6 @@ WW8sprmTCellShd::get_shd(sal_uInt32 pos)
         (new WW8CellShd(*this, 0x3 + pos * WW8CellShd::getSize()));
 }
 
-/* WW8sprmTCellShadow */
-
-sal_uInt32 WW8sprmTCellShadow::get_cellShadow_count()
-{
-    return getU8(0x2) / WW8CellShd::getSize();
-}
-
-writerfilter::Reference<Properties>::Pointer_t
-WW8sprmTCellShadow::get_cellShadow(sal_uInt32 pos)
-{
-    return writerfilter::Reference<Properties>::Pointer_t
-        (new WW8CellShd(*this, 0x3 + pos * WW8CellShd::getSize()));
-}
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

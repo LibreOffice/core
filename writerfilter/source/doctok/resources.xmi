@@ -38519,13 +38519,7 @@
         <!--SPRM sprmTCellShadow-->
         <UML:Class xmi.id="sprmTCellShadow" name="sprmTCellShadow">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8nocalcsize"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
