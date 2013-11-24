@@ -66,7 +66,7 @@ class AbstractErrorHandler(ErrorHandler):
                 return self.showMessage(self.getMessageFor(ex, arg, ix, errorType), errorType)
         elif (errorType == ErrorHandler.ERROR_MESSAGE):
                 return self.showMessage(self.getMessageFor(ex, arg, ix, errorType), errorType)
-        raise IllegalArgumentException("unknown error type")
+        raise ValueError("unknown error type")
 
     # @deprecated
     # @param message
@@ -109,7 +109,7 @@ class AbstractErrorHandler(ErrorHandler):
                 return 2
         elif (errorType in (ErrorHandler.ERROR_WARNING, ErrorHandler.ERROR_MESSAGE)):
                 return 1
-        raise IllegalArgumentException("unkonown error type")
+        raise ValueError("unkonown error type")
 
 
     # @param errorType
@@ -136,7 +136,7 @@ class AbstractErrorHandler(ErrorHandler):
                 return OK
         elif (errorType == ErrorHandler.ERROR_MESSAGE):
                 return OK
-        raise IllegalArgumentException("unkonown error type")
+        raise ValueError("unkonown error type")
 
     # @deprecated
     # @param errorType
@@ -163,7 +163,7 @@ class AbstractErrorHandler(ErrorHandler):
                 return "warningbox"
         elif (errorType == ErrorHandler.ERROR_MESSAGE):
                 return "infobox"
-        raise IllegalArgumentException("unkonown error type")
+        raise ValueError("unkonown error type")
 
     # renders the error
     # @param ex the exception

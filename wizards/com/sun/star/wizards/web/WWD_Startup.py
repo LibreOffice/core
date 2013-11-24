@@ -16,15 +16,12 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import uno
 
 from .WWD_General import WWD_General
 from .WebWizardConst import *
 from .StylePreview import StylePreview
 from ..common.Configuration import Configuration
 from ..common.FileAccess import FileAccess
-from ..common.Desktop import Desktop
-from ..common.Properties import Properties
 from ..document.OfficeDocument import OfficeDocument
 from .data.CGSettings import CGSettings
 from .data.CGDocument import CGDocument
@@ -38,8 +35,6 @@ from ..ui.event.CommonListener import TerminateListenerProcAdapter
 from ..ui.DocumentPreview import DocumentPreview
 from ..ui.event.DataAware import DataAware
 from ..ui.event.Task import Task
-
-from com.sun.star.lang import IllegalArgumentException
 
 '''
 Web Wizard Dialog implementation : Startup.
@@ -131,7 +126,6 @@ class WWD_Startup(WWD_General):
         self.txtZip.Model.Enabled = False
         self.buildStepX()
         self.xMSF = xmsf
-        xDesktop = Desktop.getDesktop(xmsf)
         self.terminateListener = TerminateListenerProcAdapter(self)
         self.myFrame = OfficeDocument.createNewFrame(xmsf, self.terminateListener)
         doc = OfficeDocument.createNewDocument(

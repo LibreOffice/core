@@ -16,10 +16,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import uno
 
 from .WWD_Startup import WWD_Startup
-from .WWD_General import WWD_General
+
 from .WebWizardConst import *
 from ..common.FileAccess import FileAccess
 from ..common.Configuration import Configuration
@@ -561,7 +560,7 @@ class WWD_Events(WWD_Startup):
 
                 try:
                     fileAccess.xInterface.createFolder(p.cp_URL)
-                except Exception as ex:
+                except Exception:
                     message = self.resources.resLocalTargetCouldNotCreate.replace(
                         "%FILENAME", path)
                     AbstractErrorHandler.showMessage1(
@@ -643,7 +642,7 @@ class WWD_Events(WWD_Startup):
 
                 try:
                     fileAccess.mkdir(p.url)
-                except Exception as ex:
+                except Exception:
                     message = self.resources.resFTPTargetCouldNotCreate.replace(
                         "%FILENAME", path)
                     AbstractErrorHandler.showMessage1(
@@ -679,7 +678,7 @@ class WWD_Events(WWD_Startup):
                             ErrorHandler.ERROR_NORMAL_IGNORE):
                         return False  #remove the old session
                 Configuration.removeNode(conf, name)
-            except NoSuchElementException as nsex:
+            except NoSuchElementException:
                 pass
 
             self.settings.cp_DefaultSession.cp_Index = 0
@@ -892,7 +891,7 @@ class WWD_Events(WWD_Startup):
             #if ProcessStatusRenderer is not None:
             #    ProcessStatusRenderer.close(False)
 
-        except Exception as ex:
+        except Exception:
             traceback.print_exc()
 
     class LoadDocs(object):

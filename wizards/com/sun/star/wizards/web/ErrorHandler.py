@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 
 from com.sun.star.awt.VclWindowPeerAttribute import OK, DEF_OK, OK_CANCEL, DEF_CANCEL
-from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO, DEF_YES
+from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 
 class ErrorHandler:
 

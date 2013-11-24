@@ -15,8 +15,6 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-import uno
-
 from os import sep as separator
 from ...common.ConfigGroup import ConfigGroup
 from ...document.OfficeDocument import OfficeDocument
@@ -142,7 +140,6 @@ class CGDocument(ConfigGroup):
 
         task.advance(True)
         #5
-        valid = True
         if self.cp_Title == "":
             self.cp_Title = self.title
 

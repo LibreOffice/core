@@ -18,7 +18,6 @@
 
 from .AbstractExporter import AbstractExporter
 from ...common.Properties import Properties
-from ...ui.event.Task import Task
 
 from com.sun.star.io import IOException
 

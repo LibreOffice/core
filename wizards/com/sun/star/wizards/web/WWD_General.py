@@ -300,6 +300,6 @@ class WWD_General(WebWizardDialog):
     def substitute(self, path):
         try:
             return self.xStringSubstitution.substituteVariables(path, False)
-        except Exception as ex:
+        except Exception:
             traceback.print_exc()
             return path

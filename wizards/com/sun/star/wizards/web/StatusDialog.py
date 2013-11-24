@@ -18,8 +18,6 @@ import uno
 import traceback
 
 from ..ui.UnoDialog2 import UnoDialog2
-from ..ui.UnoDialog import UnoDialog
-from ..ui.event.TaskListener import TaskListener
 from ..common.PropertyNames import PropertyNames
 
 # Note on the argument resource:
@@ -45,7 +43,7 @@ class StatusDialog(UnoDialog2):
         self.res = resources
         if not (len(self.res) == 6):
             # display a close button?
-            raise IllegalArgumentException("The resources argument should contain 6 Strings, see doc on constructor.")
+            raise ValueError("The resources argument should contain 6 Strings, see doc on constructor.")
 
         b = not (self.enableBreak or self.closeOnFinish)
 

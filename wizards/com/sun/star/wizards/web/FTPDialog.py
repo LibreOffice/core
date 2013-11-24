@@ -28,8 +28,6 @@ from ..common.SystemDialog import SystemDialog
 from ..common.FileAccess import FileAccess
 from ..common.HelpIds import HelpIds
 from ..common.UCB import UCB
-from .data.CGPublish import CGPublish
-from .data.CGSettings import CGSettings
 
 from com.sun.star.ucb import AuthenticationRequest
 from com.sun.star.ucb import InteractiveAugmentedIOException
@@ -305,18 +303,18 @@ class FTPDialog(UnoDialog2, UIConsts):
         try:
             self.connect1(self.getFullUrl())
             success = True
-        except InteractiveAugmentedIOException as iaioex:
+        except InteractiveAugmentedIOException:
             try:
                 self.connect1(self.getAccountUrl())
                 self.setDir("/")
                 success = True
             except Exception:
                 self.setLabel(self.STATUS_NO_RIGHTS)
-        except InteractiveNetworkResolveNameException as inrne:
+        except InteractiveNetworkResolveNameException:
             self.setLabel(self.STATUS_SERVER_NOT_FOUND)
-        except AuthenticationRequest as ar:
+        except AuthenticationRequest:
             self.setLabel(self.STATUS_USER_PWD_WRONG)
-        except InteractiveNetworkConnectException as incx:
+        except InteractiveNetworkConnectException:
             self.setLabel(self.STATUS_HOST_UNREACHABLE)
         except Exception:
             self.setLabel(-1)
@@ -341,18 +339,12 @@ class FTPDialog(UnoDialog2, UIConsts):
     def connect1(self, acountUrl):
         content = self.ucb.getContent(self.getAccountUrl())
 
-        # list files in the content.
-        l = self.ucb.listFiles(self.getAccountUrl(), None)
-
         # open the content
         aArg = OpenCommandArgument2()
         aArg.Mode = FOLDERS # FOLDER, DOCUMENTS -> simple filter
         aArg.Priority = 32768 # Ignored by most implementations
 
         self.ucb.executeCommand(content, "open", aArg)
-
-        # get the title property of the content.
-        obj = self.ucb.getContentProperty(content, "Title", str)
 
     # changes the ftp subdirectory, in both
     # the UI and the data.

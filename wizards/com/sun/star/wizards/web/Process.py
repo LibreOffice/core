@@ -25,12 +25,7 @@ from ..ui.event.CommonListener import StreamListenerProcAdapter
 from .ProcessErrors import ProcessErrors
 from .ExtensionVerifier import ExtensionVerifier
 from .ErrorHandler import ErrorHandler
-from .data.CGContent import CGContent
 from .data.CGDocument import CGDocument
-from .data.CGExporter import CGExporter
-from .data.CGLayout import CGLayout
-from .data.CGPublish import CGPublish
-from .data.CGSettings import CGSettings
 
 from com.sun.star.io import IOException
 from com.sun.star.uno import SecurityException

@@ -18,7 +18,6 @@
 import traceback
 from ..common.ConfigGroup import ConfigGroup
 from ..common.Configuration import Configuration
-from ..common.XMLProvider import XMLProvider
 from ..ui.event.EventListenerList import EventListenerList
 from ..ui.event.ListDataEvent import ListDataEvent
 from ..ui.event.ListDataListener import ListDataListener
@@ -124,7 +123,7 @@ class WebConfigSet(ConfigGroup):
         self.childrenMap.clear()
         del self.childrenList[:]
 
-    def update(i):
+    def update(self, i):
         self.fireListDataListenerContentsChanged(i, i)
 
     def createDOM(self, parent):

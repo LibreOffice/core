@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import uno
 from datetime import date as dateTimeObject
 
 from ...common.FileAccess import FileAccess
@@ -35,7 +34,6 @@ from .CGSession import CGSession
 
 from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DMMMYYYY
 from com.sun.star.i18n.NumberFormatIndex import NUMBER_1000DEC2
-from com.sun.star.util import DateTime
 
 class CGSettings(ConfigGroup):
 

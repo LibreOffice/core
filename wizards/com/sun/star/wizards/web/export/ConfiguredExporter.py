@@ -48,4 +48,3 @@ class ConfiguredExporter(FilterExporter):
             if (s == "true"):
                 return True
         return None
-

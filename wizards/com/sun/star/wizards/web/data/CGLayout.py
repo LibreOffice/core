@@ -32,7 +32,6 @@ class CGLayout(ConfigGroup):
     def createTemplates(self, xmsf):
         self.templates = {}
 
-        workPath = self.getSettings().workPath
         fa = FileAccess(xmsf)
         stylesheetPath = fa.getURL(
             self.getSettings().workPath, "layouts/" + self.cp_FSName)
@@ -46,7 +45,6 @@ class CGLayout(ConfigGroup):
             i += 1
 
     def getImageUrls(self):
-        sRetUrls = range(1)
         ResId = UIConsts.RID_IMG_WEB + (self.cp_Index * 2)
         return [ResId, ResId + 1]
 
