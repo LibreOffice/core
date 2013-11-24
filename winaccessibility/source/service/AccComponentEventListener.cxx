@@ -167,7 +167,6 @@ void AccComponentEventListener::SetComponentState(short state, bool enable)
             FireStatePropertyChange(state, enable);
         }
         break;
-        break;
     case AccessibleStateType::FOCUSED:
         FireStateFocusedChange(enable);
         break;
