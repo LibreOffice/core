@@ -45,7 +45,6 @@ public:
 
 // =======================================================================
 
-DBG_NAME( Accelerator )
 
 // =======================================================================
 
@@ -220,7 +219,6 @@ void Accelerator::ImplDeleteData()
 void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
                                    sal_Bool bEnable, Accelerator* pAutoAccel )
 {
-    DBG_CHKTHIS( Accelerator, NULL );
     DBG_ASSERT( nItemId, "Accelerator::InsertItem(): ItemId == 0" );
 
     if ( rKeyCode.IsFunction() )
@@ -275,7 +273,6 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
 
 Accelerator::Accelerator()
 {
-    DBG_CTOR( Accelerator, NULL );
 
     ImplInit();
     mpData = new ImplAccelData;
@@ -288,8 +285,6 @@ Accelerator::Accelerator( const Accelerator& rAccel ) :
     maHelpStr( rAccel.maHelpStr ),
     maCurKeyCode( rAccel.maCurKeyCode )
 {
-    DBG_CTOR( Accelerator, NULL );
-    DBG_CHKOBJ( &rAccel, Accelerator, NULL );
 
     ImplInit();
     mpData = new ImplAccelData;
@@ -300,7 +295,6 @@ Accelerator::Accelerator( const Accelerator& rAccel ) :
 
 Accelerator::Accelerator( const ResId& rResId )
 {
-    DBG_CTOR( Accelerator, NULL );
 
     ImplInit();
     mpData = new ImplAccelData;
@@ -328,7 +322,6 @@ void Accelerator::ImplLoadRes( const ResId& rResId )
 
 Accelerator::~Accelerator()
 {
-    DBG_DTOR( Accelerator, NULL );
 
     // inform AccelManager about deleting the Accelerator
     if ( mpDel )
@@ -370,7 +363,6 @@ void Accelerator::InsertItem( sal_uInt16 nItemId, const KeyCode& rKeyCode )
 
 void Accelerator::InsertItem( const ResId& rResId )
 {
-    DBG_CHKTHIS( Accelerator, NULL );
 
     sal_uLong               nObjMask;
     sal_uInt16              nAccelKeyId;
@@ -405,7 +397,6 @@ void Accelerator::InsertItem( const ResId& rResId )
 
 sal_uInt16 Accelerator::GetItemCount() const
 {
-    DBG_CHKTHIS( Accelerator, NULL );
 
     return (sal_uInt16)mpData->maIdList.size();
 }
@@ -414,7 +405,6 @@ sal_uInt16 Accelerator::GetItemCount() const
 
 KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
 {
-    DBG_CHKTHIS( Accelerator, NULL );
 
     sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
@@ -427,7 +417,6 @@ KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
 
 sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS( Accelerator, NULL );
 
     ImplAccelEntry* pEntry = ( nPos < mpData->maIdList.size() ) ? mpData->maIdList[ nPos ] : NULL;
     if ( pEntry )
@@ -440,7 +429,6 @@ sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
 
 Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
 {
-    DBG_CHKTHIS( Accelerator, NULL );
 
     sal_uInt16 nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
@@ -453,8 +441,6 @@ Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
 
 Accelerator& Accelerator::operator=( const Accelerator& rAccel )
 {
-    DBG_CHKTHIS( Accelerator, NULL );
-    DBG_CHKOBJ( &rAccel, Accelerator, NULL );
 
     // assign new data
     maHelpStr       = rAccel.maHelpStr;

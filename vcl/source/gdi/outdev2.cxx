@@ -39,7 +39,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-DBG_NAMEEX( OutputDevice )
 
 #define OUTDEV_INIT()                       \
 {                                           \
@@ -225,7 +224,6 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect
 void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                const Point& rSrcPt,  const Size& rSrcSize )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 
     if( ImplIsRecordLayout() )
@@ -278,8 +276,6 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                const Point& rSrcPt,  const Size& rSrcSize,
                                const OutputDevice& rOutDev )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rOutDev, OutputDevice, ImplDbgCheckOutputDevice );
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
     DBG_ASSERT( rOutDev.meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 
@@ -348,7 +344,6 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                              const Point& rSrcPt,  const Size& rSrcSize,
                              sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 
     if ( meOutDevType == OUTDEV_PRINTER || ImplIsRecordLayout() )
@@ -411,7 +406,6 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                      const OutputDevice& rOutDev, const Region& rRegion )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
     bool            bOldMap = mbMap;
@@ -457,7 +451,6 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
 void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                     OutputDevice& rDev )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     bool bOldMap = mbMap;
     mbMap = false;
@@ -514,7 +507,6 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                    const Bitmap& rBitmap, const sal_uLong nAction )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( ( mnDrawMode & DRAWMODE_NOBITMAP ) )
     {
@@ -902,7 +894,6 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                                      const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                      const BitmapEx& rBitmapEx, const sal_uLong nAction )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     OSL_ENSURE(TRANSPARENT_NONE != rBitmapEx.GetTransparentType(), "ImplDrawBitmapEx not needed, no transparency in BitmapEx (!)");
 
     if ( mnDrawMode & DRAWMODE_NOBITMAP )
@@ -1222,7 +1213,6 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
                                  const Bitmap& rBitmap, const Color& rMaskColor,
                                  const sal_uLong nAction )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if( ROP_INVERT == meRasterOp )
     {
@@ -1416,7 +1406,6 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
 
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     OSL_ENSURE(OUTDEV_PRINTER != GetOutDevType(), "OutputDevice::GetBitmap with sorce type OUTDEV_PRINTER should not be used (!)");
 
     Bitmap  aBmp;
@@ -1521,7 +1510,6 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
 BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // #110958# Extract alpha value from VDev, if any
     if( mpAlphaVDev )
@@ -1540,7 +1528,6 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
 
 Color OutputDevice::GetPixel( const Point& rPt ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor;
 
@@ -1564,7 +1551,6 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
 
 void OutputDevice::DrawPixel( const Point& rPt )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPointAction( rPt ) );
@@ -1596,7 +1582,6 @@ void OutputDevice::DrawPixel( const Point& rPt )
 
 void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor = ImplDrawModeToColor( rColor );
 
@@ -1631,7 +1616,6 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
         DrawPixel( rPts, GetLineColor() );
     else
     {
-        DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
         DBG_ASSERT( pColors, "OutputDevice::DrawPixel: No color array specified" );
 
         const sal_uInt16 nSize = rPts.GetSize();

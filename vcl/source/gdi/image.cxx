@@ -41,21 +41,17 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-DBG_NAME( Image )
-DBG_NAME( ImageList )
 
 using namespace ::com::sun::star;
 
 Image::Image() :
     mpImplData( NULL )
 {
-    DBG_CTOR( Image, NULL );
 }
 
 Image::Image( const ResId& rResId ) :
     mpImplData( NULL )
 {
-    DBG_CTOR( Image, NULL );
 
     rResId.SetRT( RSC_IMAGE );
 
@@ -102,7 +98,6 @@ Image::Image( const ResId& rResId ) :
 Image::Image( const Image& rImage ) :
     mpImplData( rImage.mpImplData )
 {
-    DBG_CTOR( Image, NULL );
 
     if( mpImplData )
         ++mpImplData->mnRefCount;
@@ -111,7 +106,6 @@ Image::Image( const Image& rImage ) :
 Image::Image( const BitmapEx& rBitmapEx ) :
     mpImplData( NULL )
 {
-    DBG_CTOR( Image, NULL );
 
     ImplInit( rBitmapEx );
 }
@@ -119,7 +113,6 @@ Image::Image( const BitmapEx& rBitmapEx ) :
 Image::Image( const Bitmap& rBitmap ) :
     mpImplData( NULL )
 {
-    DBG_CTOR( Image, NULL );
 
     ImplInit( rBitmap );
 }
@@ -127,7 +120,6 @@ Image::Image( const Bitmap& rBitmap ) :
 Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
     mpImplData( NULL )
 {
-    DBG_CTOR( Image, NULL );
 
     const BitmapEx aBmpEx( rBitmap, rMaskBitmap );
 
@@ -137,7 +129,6 @@ Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
 Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
     mpImplData( NULL )
 {
-    DBG_CTOR( Image, NULL );
 
     const BitmapEx aBmpEx( rBitmap, rColor );
 
@@ -147,7 +138,6 @@ Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
 Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
     mpImplData( NULL )
 {
-    DBG_CTOR( Image, NULL );
 
     const Graphic aGraphic( rxGraphic );
     ImplInit( aGraphic.GetBitmapEx() );
@@ -156,7 +146,6 @@ Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
 Image::Image( const OUString &rFileUrl ) :
     mpImplData( NULL )
 {
-    DBG_CTOR( Image, NULL );
     OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
     Graphic aGraphic;
@@ -169,7 +158,6 @@ Image::Image( const OUString &rFileUrl ) :
 
 Image::~Image()
 {
-    DBG_DTOR( Image, NULL );
 
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
         delete mpImplData;
@@ -197,7 +185,6 @@ void Image::ImplInit( const BitmapEx& rBmpEx )
 
 Size Image::GetSizePixel() const
 {
-    DBG_CHKTHIS( Image, NULL );
 
     Size aRet;
 
@@ -220,7 +207,6 @@ Size Image::GetSizePixel() const
 
 BitmapEx Image::GetBitmapEx() const
 {
-    DBG_CHKTHIS( Image, NULL );
 
     BitmapEx aRet;
 
@@ -250,8 +236,6 @@ uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
 
 Image& Image::operator=( const Image& rImage )
 {
-    DBG_CHKTHIS( Image, NULL );
-    DBG_CHKOBJ( &rImage, Image, NULL );
 
     if( rImage.mpImplData )
         ++rImage.mpImplData->mnRefCount;
@@ -266,8 +250,6 @@ Image& Image::operator=( const Image& rImage )
 
 sal_Bool Image::operator==( const Image& rImage ) const
 {
-    DBG_CHKTHIS( Image, NULL );
-    DBG_CHKOBJ( &rImage, Image, NULL );
 
     bool bRet = false;
 
@@ -303,7 +285,6 @@ ImageList::ImageList( sal_uInt16 nInit, sal_uInt16 nGrow ) :
     mnInitSize( nInit ),
     mnGrowSize( nGrow )
 {
-    DBG_CTOR( ImageList, NULL );
 }
 
 ImageList::ImageList( const ResId& rResId ) :
@@ -313,7 +294,6 @@ ImageList::ImageList( const ResId& rResId ) :
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList( const ResId& rResId )" );
 
-    DBG_CTOR( ImageList, NULL );
 
     rResId.SetRT( RSC_IMAGELIST );
 
@@ -363,7 +343,6 @@ ImageList::ImageList( const ::std::vector< OUString >& rNameVector,
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList(const vector< OUString >& ..." );
 
-    DBG_CTOR( ImageList, NULL );
 
     ImplInit( sal::static_int_cast< sal_uInt16 >( rNameVector.size() ), Size() );
 
@@ -379,7 +358,6 @@ ImageList::ImageList( const ImageList& rImageList ) :
     mnInitSize( rImageList.mnInitSize ),
     mnGrowSize( rImageList.mnGrowSize )
 {
-    DBG_CTOR( ImageList, NULL );
 
     if( mpImplData )
         ++mpImplData->mnRefCount;
@@ -387,7 +365,6 @@ ImageList::ImageList( const ImageList& rImageList ) :
 
 ImageList::~ImageList()
 {
-    DBG_DTOR( ImageList, NULL );
 
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
         delete mpImplData;
@@ -511,7 +488,6 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
 
 sal_uInt16 ImageList::ImplGetImageId( const OUString& rImageName ) const
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
     if( pImg )
@@ -547,7 +523,6 @@ void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 
 void ImageList::RemoveImage( sal_uInt16 nId )
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); ++i )
     {
@@ -561,7 +536,6 @@ void ImageList::RemoveImage( sal_uInt16 nId )
 
 Image ImageList::GetImage( sal_uInt16 nId ) const
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     Image aRet;
 
@@ -611,14 +585,12 @@ Image ImageList::GetImage( const OUString& rImageName ) const
 
 sal_uInt16 ImageList::GetImageCount() const
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     return mpImplData ? static_cast< sal_uInt16 >( mpImplData->maImages.size() ) : 0;
 }
 
 sal_uInt16 ImageList::GetImagePos( sal_uInt16 nId ) const
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     if( mpImplData && nId )
     {
@@ -639,7 +611,6 @@ bool ImageList::HasImageAtPos( sal_uInt16 nId ) const
 
 sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     if( mpImplData && !rImageName.isEmpty() )
     {
@@ -655,7 +626,6 @@ sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const
 
 sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     if( mpImplData && (nPos < GetImageCount()) )
         return mpImplData->maImages[ nPos ]->mnId;
@@ -665,7 +635,6 @@ sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
 
 OUString ImageList::GetImageName( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     if( mpImplData && (nPos < GetImageCount()) )
         return mpImplData->maImages[ nPos ]->maName;
@@ -677,7 +646,6 @@ void ImageList::GetImageNames( ::std::vector< OUString >& rNames ) const
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::GetImageNames" );
 
-    DBG_CHKTHIS( ImageList, NULL );
 
     rNames = ::std::vector< OUString >();
 
@@ -694,7 +662,6 @@ void ImageList::GetImageNames( ::std::vector< OUString >& rNames ) const
 
 Size ImageList::GetImageSize() const
 {
-    DBG_CHKTHIS( ImageList, NULL );
 
     Size aRet;
 
@@ -715,8 +682,6 @@ Size ImageList::GetImageSize() const
 
 ImageList& ImageList::operator=( const ImageList& rImageList )
 {
-    DBG_CHKTHIS( ImageList, NULL );
-    DBG_CHKOBJ( &rImageList, ImageList, NULL );
 
     if( rImageList.mpImplData )
         ++rImageList.mpImplData->mnRefCount;
@@ -731,8 +696,6 @@ ImageList& ImageList::operator=( const ImageList& rImageList )
 
 sal_Bool ImageList::operator==( const ImageList& rImageList ) const
 {
-    DBG_CHKTHIS( ImageList, NULL );
-    DBG_CHKOBJ( &rImageList, ImageList, NULL );
 
     bool bRet = false;
 

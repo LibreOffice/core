@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <vcl/mapmod.hxx>
 
-DBG_NAME( MapMode )
 
 ImplMapMode::ImplMapMode() :
     maOrigin( 0, 0 ),
@@ -103,15 +102,12 @@ inline void MapMode::ImplMakeUnique()
 
 MapMode::MapMode()
 {
-    DBG_CTOR( MapMode, NULL );
 
     mpImplMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
 }
 
 MapMode::MapMode( const MapMode& rMapMode )
 {
-    DBG_CTOR( MapMode, NULL );
-    DBG_CHKOBJ( &rMapMode, MapMode, NULL );
     DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
 
     // Take over Shared Instance Data and increment refcount
@@ -123,7 +119,6 @@ MapMode::MapMode( const MapMode& rMapMode )
 
 MapMode::MapMode( MapUnit eUnit )
 {
-    DBG_CTOR( MapMode, NULL );
 
     mpImplMapMode = ImplMapMode::ImplGetStaticMapMode( eUnit );
 }
@@ -131,7 +126,6 @@ MapMode::MapMode( MapUnit eUnit )
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
                   const Fraction& rScaleX, const Fraction& rScaleY )
 {
-    DBG_CTOR( MapMode, NULL );
 
     mpImplMapMode           = new ImplMapMode;
     mpImplMapMode->meUnit   = eUnit;
@@ -142,7 +136,6 @@ MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
 
 MapMode::~MapMode()
 {
-    DBG_DTOR( MapMode, NULL );
 
     // If it's not static ImpData and it's the last reference, delete it,
     // else decrement refcounter
@@ -157,7 +150,6 @@ MapMode::~MapMode()
 
 void MapMode::SetMapUnit( MapUnit eUnit )
 {
-    DBG_CHKTHIS( MapMode, NULL );
 
     ImplMakeUnique();
     mpImplMapMode->meUnit = eUnit;
@@ -165,7 +157,6 @@ void MapMode::SetMapUnit( MapUnit eUnit )
 
 void MapMode::SetOrigin( const Point& rLogicOrg )
 {
-    DBG_CHKTHIS( MapMode, NULL );
 
     ImplMakeUnique();
     mpImplMapMode->maOrigin = rLogicOrg;
@@ -173,7 +164,6 @@ void MapMode::SetOrigin( const Point& rLogicOrg )
 
 void MapMode::SetScaleX( const Fraction& rScaleX )
 {
-    DBG_CHKTHIS( MapMode, NULL );
 
     ImplMakeUnique();
     mpImplMapMode->maScaleX = rScaleX;
@@ -181,7 +171,6 @@ void MapMode::SetScaleX( const Fraction& rScaleX )
 
 void MapMode::SetScaleY( const Fraction& rScaleY )
 {
-    DBG_CHKTHIS( MapMode, NULL );
 
     ImplMakeUnique();
     mpImplMapMode->maScaleY = rScaleY;
@@ -189,8 +178,6 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
 
 MapMode& MapMode::operator=( const MapMode& rMapMode )
 {
-    DBG_CHKTHIS( MapMode, NULL );
-    DBG_CHKOBJ( &rMapMode, MapMode, NULL );
     DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
 
     // First increment refcount so that we can reference ourselves
@@ -215,8 +202,6 @@ MapMode& MapMode::operator=( const MapMode& rMapMode )
 
 sal_Bool MapMode::operator==( const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( MapMode, NULL );
-    DBG_CHKOBJ( &rMapMode, MapMode, NULL );
 
     if ( mpImplMapMode == rMapMode.mpImplMapMode )
         return sal_True;
@@ -232,7 +217,6 @@ sal_Bool MapMode::operator==( const MapMode& rMapMode ) const
 
 sal_Bool MapMode::IsDefault() const
 {
-    DBG_CHKTHIS( MapMode, NULL );
 
     ImplMapMode* pDefMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
     if ( mpImplMapMode == pDefMapMode )

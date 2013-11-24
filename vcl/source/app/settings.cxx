@@ -50,7 +50,6 @@ using namespace ::com::sun::star;
 #include "impimagetree.hxx"
 // =======================================================================
 
-DBG_NAME( AllSettings )
 
 // =======================================================================
 
@@ -1393,7 +1392,6 @@ ImplAllSettingsData::~ImplAllSettingsData()
 
 AllSettings::AllSettings()
 {
-    DBG_CTOR( AllSettings, NULL );
 
     mpData = new ImplAllSettingsData();
 }
@@ -1402,7 +1400,6 @@ AllSettings::AllSettings()
 
 AllSettings::AllSettings( const AllSettings& rSet )
 {
-    DBG_CTOR( AllSettings, NULL );
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "Settings: RefCount overflow" );
 
     // copy shared instance data and increse reference counter
@@ -1414,7 +1411,6 @@ AllSettings::AllSettings( const AllSettings& rSet )
 
 AllSettings::~AllSettings()
 {
-    DBG_DTOR( AllSettings, NULL );
 
     // if last reference then delete data
     if ( mpData->mnRefCount == 1 )
@@ -1428,8 +1424,6 @@ AllSettings::~AllSettings()
 const AllSettings& AllSettings::operator =( const AllSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "AllSettings: RefCount overflow" );
-    DBG_CHKTHIS( AllSettings, NULL );
-    DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
     // increase reference counter first, to be able to assign oneself
     rSet.mpData->mnRefCount++;
@@ -1449,7 +1443,6 @@ const AllSettings& AllSettings::operator =( const AllSettings& rSet )
 
 void AllSettings::CopyData()
 {
-    DBG_CHKTHIS( AllSettings, NULL );
 
     // copy if other references exist
     if ( mpData->mnRefCount != 1 )
@@ -1463,8 +1456,6 @@ void AllSettings::CopyData()
 
 sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
 {
-    DBG_CHKTHIS( AllSettings, NULL );
-    DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
     sal_uLong nChangeFlags = 0;
 
@@ -1529,8 +1520,6 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
 
 sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 {
-    DBG_CHKTHIS( AllSettings, NULL );
-    DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
     sal_uLong nChangeFlags = 0;
 
@@ -1556,8 +1545,6 @@ sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 
 sal_Bool AllSettings::operator ==( const AllSettings& rSet ) const
 {
-    DBG_CHKTHIS( AllSettings, NULL );
-    DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
     if ( mpData == rSet.mpData )
         return sal_True;

@@ -27,7 +27,6 @@
 #include <wall2.hxx>
 #include <vcl/dibtools.hxx>
 
-DBG_NAME( Wallpaper )
 
 // -----------------------------------------------------------------------
 
@@ -202,7 +201,6 @@ inline void Wallpaper::ImplMakeUnique( sal_Bool bReleaseCache )
 
 Wallpaper::Wallpaper()
 {
-    DBG_CTOR( Wallpaper, NULL );
 
     static ImplWallpaper aStaticImplWallpaper;
 
@@ -214,8 +212,6 @@ Wallpaper::Wallpaper()
 
 Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
 {
-    DBG_CTOR( Wallpaper, NULL );
-    DBG_CHKOBJ( &rWallpaper, Wallpaper, NULL );
     DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFFFFFE, "Wallpaper: RefCount overflow" );
 
     // Instance Daten uebernehmen und Referenzcounter erhoehen
@@ -229,7 +225,6 @@ Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
 
 Wallpaper::Wallpaper( const Color& rColor )
 {
-    DBG_CTOR( Wallpaper, NULL );
 
     mpImplWallpaper             = new ImplWallpaper;
     mpImplWallpaper->maColor    = rColor;
@@ -240,7 +235,6 @@ Wallpaper::Wallpaper( const Color& rColor )
 
 Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
 {
-    DBG_CTOR( Wallpaper, NULL );
 
     mpImplWallpaper             = new ImplWallpaper;
     mpImplWallpaper->mpBitmap   = new BitmapEx( rBmpEx );
@@ -251,7 +245,6 @@ Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
 
 Wallpaper::Wallpaper( const Gradient& rGradient )
 {
-    DBG_CTOR( Wallpaper, NULL );
 
     mpImplWallpaper             = new ImplWallpaper;
     mpImplWallpaper->mpGradient = new Gradient( rGradient );
@@ -262,7 +255,6 @@ Wallpaper::Wallpaper( const Gradient& rGradient )
 
 Wallpaper::~Wallpaper()
 {
-    DBG_DTOR( Wallpaper, NULL );
 
     // Wenn es keine statischen ImpDaten sind, dann loeschen, wenn es
     // die letzte Referenz ist, sonst Referenzcounter decrementieren
@@ -279,7 +271,6 @@ Wallpaper::~Wallpaper()
 
 void Wallpaper::SetColor( const Color& rColor )
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     ImplMakeUnique();
     mpImplWallpaper->maColor = rColor;
@@ -292,7 +283,6 @@ void Wallpaper::SetColor( const Color& rColor )
 
 const Color& Wallpaper::GetColor() const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     return mpImplWallpaper->maColor;
 }
@@ -301,7 +291,6 @@ const Color& Wallpaper::GetColor() const
 
 void Wallpaper::SetStyle( WallpaperStyle eStyle )
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     ImplMakeUnique( sal_False );
 
@@ -317,7 +306,6 @@ void Wallpaper::SetStyle( WallpaperStyle eStyle )
 
 WallpaperStyle Wallpaper::GetStyle() const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     return mpImplWallpaper->meStyle;
 }
@@ -326,7 +314,6 @@ WallpaperStyle Wallpaper::GetStyle() const
 
 void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     if ( !rBitmap )
     {
@@ -354,7 +341,6 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
 
 BitmapEx Wallpaper::GetBitmap() const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     if ( mpImplWallpaper->mpBitmap )
         return *(mpImplWallpaper->mpBitmap);
@@ -369,7 +355,6 @@ BitmapEx Wallpaper::GetBitmap() const
 
 sal_Bool Wallpaper::IsBitmap() const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     return (mpImplWallpaper->mpBitmap != 0);
 }
@@ -379,7 +364,6 @@ sal_Bool Wallpaper::IsBitmap() const
 
 void Wallpaper::SetGradient( const Gradient& rGradient )
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     ImplMakeUnique();
 
@@ -396,7 +380,6 @@ void Wallpaper::SetGradient( const Gradient& rGradient )
 
 Gradient Wallpaper::GetGradient() const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     if( WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle )
         return ImplGetApplicationGradient();
@@ -413,7 +396,6 @@ Gradient Wallpaper::GetGradient() const
 
 sal_Bool Wallpaper::IsGradient() const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     return (mpImplWallpaper->mpGradient != 0);
 }
@@ -439,7 +421,6 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
 
 void Wallpaper::SetRect( const Rectangle& rRect )
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     ImplMakeUnique( sal_False );
 
@@ -464,7 +445,6 @@ void Wallpaper::SetRect( const Rectangle& rRect )
 
 Rectangle Wallpaper::GetRect() const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     if ( mpImplWallpaper->mpRect )
         return *(mpImplWallpaper->mpRect);
@@ -479,7 +459,6 @@ Rectangle Wallpaper::GetRect() const
 
 sal_Bool Wallpaper::IsRect() const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
 
     return (mpImplWallpaper->mpRect != 0);
 }
@@ -513,8 +492,6 @@ sal_Bool Wallpaper::IsScrollable() const
 
 Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
-    DBG_CHKOBJ( &rWallpaper, Wallpaper, NULL );
     DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFFFFFE, "Wallpaper: RefCount overflow" );
 
     // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
@@ -540,8 +517,6 @@ Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 
 sal_Bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
 {
-    DBG_CHKTHIS( Wallpaper, NULL );
-    DBG_CHKOBJ( &rWallpaper, Wallpaper, NULL );
 
     if ( mpImplWallpaper == rWallpaper.mpImplWallpaper )
         return sal_True;

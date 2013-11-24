@@ -27,7 +27,6 @@
 #include <impanmvw.hxx>
 #include <vcl/dibtools.hxx>
 
-DBG_NAME( Animation )
 
 #define MIN_TIMEOUT 2L
 #define INC_TIMEOUT 0L
@@ -72,7 +71,6 @@ Animation::Animation() :
     mbLoopTerminated    ( sal_False ),
     mbIsWaiting         ( sal_False )
 {
-    DBG_CTOR( Animation, NULL );
     maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
 }
 
@@ -86,7 +84,6 @@ Animation::Animation( const Animation& rAnimation ) :
     mbLoopTerminated    ( rAnimation.mbLoopTerminated ),
     mbIsWaiting         ( rAnimation.mbIsWaiting )
 {
-    DBG_CTOR( Animation, NULL );
 
     for( size_t i = 0, nCount = rAnimation.maList.size(); i < nCount; i++ )
         maList.push_back( new AnimationBitmap( *rAnimation.maList[ i ] ) );
@@ -97,7 +94,6 @@ Animation::Animation( const Animation& rAnimation ) :
 
 Animation::~Animation()
 {
-    DBG_DTOR( Animation, NULL );
 
     if( mbIsInAnimation )
         Stop();

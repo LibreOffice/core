@@ -26,7 +26,6 @@
 
 // =======================================================================
 
-DBG_NAMEEX( Accelerator )
 
 // =======================================================================
 
@@ -135,7 +134,6 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
     if ( mpSequenceList )
     {
         pAccel = mpSequenceList->empty() ? NULL : (*mpSequenceList)[ 0 ];
-        DBG_CHKOBJ( pAccel, Accelerator, NULL );
 
         // not found ?
         if ( !pAccel )
@@ -154,7 +152,6 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
             // is an accelerator coupled ?
             if ( pNextAccel )
             {
-                DBG_CHKOBJ( pNextAccel, Accelerator, NULL );
 
                 mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
 
@@ -182,7 +179,6 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                     // did the accelerator survive the call
                     if ( !bDel )
                     {
-                        DBG_CHKOBJ( pAccel, Accelerator, NULL );
                         pAccel->maCurKeyCode    = KeyCode();
                         pAccel->mnCurId         = 0;
                         pAccel->mnCurRepeat     = 0;
@@ -212,7 +208,6 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
     for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i )
     {
         pAccel = (*mpAccelList)[ i ];
-        DBG_CHKOBJ( pAccel, Accelerator, NULL );
 
         // is the entry contained ?
         ImplAccelEntry* pEntry = pAccel->ImplGetAccelData( rKeyCode );
@@ -223,7 +218,6 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
             // is an accelerator assigned ?
             if ( pNextAccel )
             {
-                DBG_CHKOBJ( pNextAccel, Accelerator, NULL );
 
                 // create sequence list
                 mpSequenceList = new ImplAccelList;
@@ -256,7 +250,6 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                     // if the accelerator did survive the call
                     if ( !bDel )
                     {
-                        DBG_CHKOBJ( pAccel, Accelerator, NULL );
                         pAccel->maCurKeyCode    = KeyCode();
                         pAccel->mnCurId         = 0;
                         pAccel->mnCurRepeat     = 0;

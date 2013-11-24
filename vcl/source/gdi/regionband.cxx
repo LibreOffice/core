@@ -23,9 +23,6 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-DBG_NAME( RegionBand )
-DBG_NAMEEX( Polygon )
-DBG_NAMEEX( PolyPolygon )
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +30,6 @@ RegionBand::RegionBand()
 :   mpFirstBand(0),
     mpLastCheckedBand(0)
 {
-    DBG_CTOR(RegionBand, ImplDbgTestRegionBand);
 }
 
 RegionBand::RegionBand(const RegionBand& rRef)
@@ -41,7 +37,6 @@ RegionBand::RegionBand(const RegionBand& rRef)
     mpLastCheckedBand(0)
 {
     *this = rRef;
-    DBG_CTOR(RegionBand, ImplDbgTestRegionBand);
 }
 
 RegionBand& RegionBand::operator=(const RegionBand& rRef)
@@ -67,8 +62,6 @@ RegionBand& RegionBand::operator=(const RegionBand& rRef)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
-    DBG_CHKOBJ(&rRef, RegionBand, ImplDbgTestRegionBand);
 
     return *this;
 }
@@ -88,7 +81,6 @@ RegionBand::RegionBand(const Rectangle& rRect)
     // Set left and right boundaries of the band
     mpFirstBand->Union(nLeft, nRight);
 
-    DBG_CTOR(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::implReset()
@@ -104,19 +96,15 @@ void RegionBand::implReset()
 
     mpLastCheckedBand = 0;
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 RegionBand::~RegionBand()
 {
     implReset();
-    DBG_DTOR(RegionBand, ImplDbgTestRegionBand);
 }
 
 bool RegionBand::operator==( const RegionBand& rRegionBand ) const
 {
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
-    DBG_CHKOBJ(&rRegionBand, RegionBand, ImplDbgTestRegionBand);
 
     // initialise pointers
     ImplRegionBand*      pOwnRectBand = mpFirstBand;
@@ -272,12 +260,10 @@ void RegionBand::load(SvStream& rIStrm)
         rIStrm >> nTmp16;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::save(SvStream& rOStrm) const
 {
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
     ImplRegionBand* pBand = mpFirstBand;
 
     while(pBand)
@@ -346,7 +332,6 @@ void RegionBand::InsertBand(ImplRegionBand* pPreviousBand, ImplRegionBand* pBand
         pBandToInsert->mpPrevBand = pPreviousBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::processPoints()
@@ -360,7 +345,6 @@ void RegionBand::processPoints()
         pRegionBand = pRegionBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 /** This function is similar to the RegionBand::InsertBands() method.
@@ -409,7 +393,6 @@ void RegionBand::ImplAddMissingBands(const long nTop, const long nBottom)
                 nBottom));
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::CreateBandRange(long nYTop, long nYBottom)
@@ -435,7 +418,6 @@ void RegionBand::CreateBandRange(long nYTop, long nYBottom)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 bool RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLineId)
@@ -445,7 +427,6 @@ bool RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
     // lines consisting of a single point do not interest here
     if ( rStartPt == rEndPt )
     {
-        DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
         return true;
     }
 
@@ -527,7 +508,6 @@ bool RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
         InsertPoint( Point( nEndX, nEndY ), nLineId, true, eLineType );
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
     return true;
 }
 
@@ -550,7 +530,6 @@ bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, 
             if ( rPoint.Y() == mpLastCheckedBand->mnYTop )
             {
                 mpLastCheckedBand->InsertPoint( rPoint.X(), nLineID, bEndPoint, eLineType );
-                DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
                 return true;
             }
 
@@ -568,7 +547,6 @@ bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, 
             if ( rPoint.Y() == mpLastCheckedBand->mnYTop )
             {
                 mpLastCheckedBand->InsertPoint( rPoint.X(), nLineID, bEndPoint, eLineType );
-                DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
                 return true;
             }
 
@@ -583,7 +561,6 @@ bool RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, 
     // reinitialize pointer (should never be reached!)
     mpLastCheckedBand = mpFirstBand;
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
     return false;
 }
 
@@ -666,7 +643,6 @@ bool RegionBand::OptimizeBandList()
     }
 #endif
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
     return (0 != mpFirstBand);
 }
 
@@ -692,7 +668,6 @@ void RegionBand::Move(long nHorzMove, long nVertMove)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::Scale(double fScaleX, double fScaleY)
@@ -717,7 +692,6 @@ void RegionBand::Scale(double fScaleX, double fScaleY)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::InsertBands(long nTop, long nBottom)
@@ -727,7 +701,6 @@ void RegionBand::InsertBands(long nTop, long nBottom)
     {
         // add band with boundaries of the rectangle
         mpFirstBand = new ImplRegionBand( nTop, nBottom );
-        DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
         return;
     }
 
@@ -800,7 +773,6 @@ void RegionBand::InsertBands(long nTop, long nBottom)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
@@ -808,7 +780,6 @@ bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
     // boundary already included in band with height 1? -> nothing to do!
     if ( (pBand->mnYTop == pBand->mnYBottom) && (nYBandPosition == pBand->mnYTop) )
     {
-        DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
         return true;
     }
 
@@ -826,7 +797,6 @@ bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
         pBand->mnYBottom = nYBandPosition;
         pBand->mpNextBand = pNewBand;
 
-        DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
         return true;
     }
 
@@ -853,7 +823,6 @@ bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
         pBand->mnYBottom = nYBandPosition - 1;
         pBand->mpNextBand = pNewBand;
 
-        DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
         return true;
     }
 
@@ -871,7 +840,6 @@ bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
 
             // append band to the list
             pBand->mpNextBand = pNewBand;
-            DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
             return true;
         }
 
@@ -882,12 +850,10 @@ bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
 
             // append band to the list
             pBand->mpNextBand = pNewBand;
-            DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
             return true;
         }
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
     return false;
 }
 
@@ -925,7 +891,6 @@ void RegionBand::Union(long nLeft, long nTop, long nRight, long nBottom)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::Intersect(long nLeft, long nTop, long nRight, long nBottom)
@@ -962,7 +927,6 @@ void RegionBand::Intersect(long nLeft, long nTop, long nRight, long nBottom)
         }
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::Union(const RegionBand& rSource)
@@ -987,7 +951,6 @@ void RegionBand::Union(const RegionBand& rSource)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::Exclude(long nLeft, long nTop, long nRight, long nBottom)
@@ -1029,7 +992,6 @@ void RegionBand::Exclude(long nLeft, long nTop, long nRight, long nBottom)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::XOr(long nLeft, long nTop, long nRight, long nBottom)
@@ -1071,7 +1033,6 @@ void RegionBand::XOr(long nLeft, long nTop, long nRight, long nBottom)
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 void RegionBand::Intersect(const RegionBand& rSource)
@@ -1153,7 +1114,6 @@ void RegionBand::Intersect(const RegionBand& rSource)
         }
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
 
 bool RegionBand::Exclude(const RegionBand& rSource)
@@ -1178,20 +1138,17 @@ bool RegionBand::Exclude(const RegionBand& rSource)
         // to test less bands, already check in the loop
         if ( !OptimizeBandList() )
         {
-            DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
             return false;
         }
 
         pBand = pBand->mpNextBand;
     }
 
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
     return true;
 }
 
 Rectangle RegionBand::GetBoundRect() const
 {
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 
     // get the boundaries of the first band
     long nYTop(mpFirstBand->mnYTop);
@@ -1238,7 +1195,6 @@ void RegionBand::XOr(const RegionBand& rSource)
 
 bool RegionBand::IsInside(const Point& rPoint) const
 {
-    DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 
     // search band list
     ImplRegionBand* pBand = mpFirstBand;

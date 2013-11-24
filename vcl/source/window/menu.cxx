@@ -80,7 +80,6 @@ struct MenuLayoutData : public ControlLayoutData
 using namespace ::com::sun::star;
 using namespace vcl;
 
-DBG_NAME( Menu )
 
 #define ITEMPOS_INVALID     0xFFFF
 
@@ -916,7 +915,6 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
 
 Menu::Menu()
 {
-    DBG_CTOR( Menu, NULL );
     bIsMenuBar = sal_False;
     ImplInit();
 }
@@ -925,14 +923,12 @@ Menu::Menu()
 // with the correct type (ie, MenuBar vs. PopupMenu)
 Menu::Menu( sal_Bool bMenubar )
 {
-    DBG_CTOR( Menu, NULL );
     bIsMenuBar = bMenubar;
     ImplInit();
 }
 
 Menu::~Menu()
 {
-    DBG_DTOR( Menu, NULL );
 
     vcl::LazyDeletor<Menu>::Undelete( this );
 
