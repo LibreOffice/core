@@ -49,10 +49,6 @@ using namespace com::sun::star;
 
 // =======================================================================
 
-DBG_NAMEEX( Window )
-
-// =======================================================================
-
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
 
@@ -67,9 +63,6 @@ struct ImplFocusDelData : public ImplDelData
 
 sal_Bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    DBG_CHKOBJ( pTestWindow, Window, ImplDbgCheckWindow );
-
     // check for overlapping window
     pTestWindow = pTestWindow->ImplGetFirstOverlapWindow();
     const Window* pTempWindow = pTestWindow;
@@ -267,8 +260,6 @@ void Window::ImplDeleteOverlapBackground()
 
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;
     while ( pWindow )
     {
@@ -302,8 +293,6 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
 
 void Window::ShowFocus( const Rectangle& rRect )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if( mpWindowImpl->mbInShowFocus )
         return;
     mpWindowImpl->mbInShowFocus = sal_True;
@@ -351,7 +340,6 @@ void Window::ShowFocus( const Rectangle& rRect )
 
 void Window::HideFocus()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( mpWindowImpl->mbInHideFocus )
         return;
@@ -387,8 +375,6 @@ void Window::HideFocus()
 
 void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( !IsDeviceOutputNecessary() )
         return;
 
@@ -423,8 +409,6 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( !IsDeviceOutputNecessary() )
         return;
 
@@ -461,8 +445,6 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
 
 void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     ImplWinData* pWinData = ImplGetWinData();
 
     if ( !mpWindowImpl->mbInPaint || !(nFlags & SHOWTRACK_WINDOW) )
@@ -491,8 +473,6 @@ void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void Window::HideTracking()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( mpWindowImpl->mbTrackVisible )
     {
         ImplWinData* pWinData = ImplGetWinData();
@@ -506,8 +486,6 @@ void Window::HideTracking()
 
 void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
 
     if ( aRect.IsEmpty() )
@@ -571,8 +549,6 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     sal_uInt16 nPoints = rPoly.GetSize();
 
     if ( nPoints < 2 )
@@ -650,8 +626,6 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
 
 void Window::StartTracking( sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maWinData.mpTrackWin != this )
@@ -688,7 +662,6 @@ void Window::EndTracking( sal_uInt16 nFlags )
         // due to DbgChkThis in brackets, as the window could be destroyed
         // in the handler
         {
-        DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
         if ( pSVData->maWinData.mpTrackTimer )
         {
@@ -724,8 +697,6 @@ void Window::EndTracking( sal_uInt16 nFlags )
 
 sal_Bool Window::IsTracking() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     return (ImplGetSVData()->maWinData.mpTrackWin == this);
 }
 
@@ -733,8 +704,6 @@ sal_Bool Window::IsTracking() const
 
 void Window::StartAutoScroll( sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maWinData.mpAutoScrollWin != this )
@@ -752,8 +721,6 @@ void Window::StartAutoScroll( sal_uInt16 nFlags )
 
 void Window::EndAutoScroll()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maWinData.mpAutoScrollWin == this )
@@ -771,8 +738,6 @@ void Window::EndAutoScroll()
 void Window::SaveBackground( const Point& rPos, const Size& rSize,
                              const Point& rDestOff, VirtualDevice& rSaveDevice )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( mpWindowImpl->mpPaintRegion )
     {
         Region      aClip( *mpWindowImpl->mpPaintRegion );
@@ -845,8 +810,6 @@ sal_Bool Window::EndSaveFocus( sal_uIntPtr nSaveId, sal_Bool bRestore )
 
 void Window::SetZoom( const Fraction& rZoom )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( mpWindowImpl->maZoom != rZoom )
     {
         mpWindowImpl->maZoom = rZoom;
@@ -865,8 +828,6 @@ inline long WinFloatRound( double fVal )
 
 void Window::SetZoomedPointFont( const Font& rFont )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     const Fraction& rZoom = GetZoom();
     if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
     {
@@ -907,7 +868,6 @@ void Window::SetZoomedPointFont( const Font& rFont )
 
 long Window::CalcZoom( long nCalc ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     const Fraction& rZoom = GetZoom();
     if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
@@ -924,8 +884,6 @@ long Window::CalcZoom( long nCalc ) const
 
 void Window::SetControlFont()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( mpWindowImpl->mpControlFont )
     {
         delete mpWindowImpl->mpControlFont;
@@ -938,8 +896,6 @@ void Window::SetControlFont()
 
 void Window::SetControlFont( const Font& rFont )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( rFont == Font() )
     {
         SetControlFont();
@@ -962,8 +918,6 @@ void Window::SetControlFont( const Font& rFont )
 
 Font Window::GetControlFont() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( mpWindowImpl->mpControlFont )
         return *mpWindowImpl->mpControlFont;
     else
@@ -977,8 +931,6 @@ Font Window::GetControlFont() const
 
 void Window::SetControlForeground()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( mpWindowImpl->mbControlForeground )
     {
         mpWindowImpl->maControlForeground = Color( COL_TRANSPARENT );
@@ -991,8 +943,6 @@ void Window::SetControlForeground()
 
 void Window::SetControlForeground( const Color& rColor )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( rColor.GetTransparency() )
     {
         if ( mpWindowImpl->mbControlForeground )
@@ -1017,8 +967,6 @@ void Window::SetControlForeground( const Color& rColor )
 
 void Window::SetControlBackground()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( mpWindowImpl->mbControlBackground )
     {
         mpWindowImpl->maControlBackground = Color( COL_TRANSPARENT );
@@ -1031,8 +979,6 @@ void Window::SetControlBackground()
 
 void Window::SetControlBackground( const Color& rColor )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     if ( rColor.GetTransparency() )
     {
         if ( mpWindowImpl->mbControlBackground )
@@ -1057,8 +1003,6 @@ void Window::SetControlBackground( const Color& rColor )
 
 Size Window::CalcWindowSize( const Size& rOutSz ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     Size aSz = rOutSz;
     aSz.Width()  += mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder;
     aSz.Height() += mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder;
@@ -1069,8 +1013,6 @@ Size Window::CalcWindowSize( const Size& rOutSz ) const
 
 Size Window::CalcOutputSize( const Size& rWinSz ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     Size aSz = rWinSz;
     aSz.Width()  -= mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder;
     aSz.Height() -= mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder;
@@ -1081,8 +1023,6 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
 
 Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     Font    aFont = GetPointFont();
     Size    aFontSize = aFont.GetSize();
     MapMode aPtMapMode( MAP_POINT );
@@ -1095,8 +1035,6 @@ Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
 
 long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     long nP = nPixels;
     if ( pDev->GetOutDevType() != OUTDEV_WINDOW )
     {
@@ -1146,8 +1084,6 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN, bool isMultiplyBy
 sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                                   ScrollBar* pHScrl, ScrollBar* pVScrl )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     sal_Bool bRet = sal_False;
 
     if ( pHScrl || pVScrl )
@@ -2035,7 +1971,6 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
 
 void Window::set_height_request(sal_Int32 nHeightRequest)
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
 
@@ -2048,7 +1983,6 @@ void Window::set_height_request(sal_Int32 nHeightRequest)
 
 void Window::set_width_request(sal_Int32 nWidthRequest)
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
 

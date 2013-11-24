@@ -37,7 +37,6 @@
 
 using namespace vcl;
 
-DBG_NAME( Font )
 
 Impl_Font::Impl_Font() :
     maColor( COL_TRANSPARENT ),
@@ -228,7 +227,6 @@ void Font::MakeUnique()
 
 Font::Font()
 {
-    DBG_CTOR( Font, NULL );
 
     static Impl_Font aStaticImplFont;
     // RefCount is zero for static objects
@@ -238,8 +236,6 @@ Font::Font()
 
 Font::Font( const Font& rFont )
 {
-    DBG_CTOR( Font, NULL );
-    DBG_CHKOBJ( &rFont, Font, NULL );
     bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
     DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
 
@@ -251,7 +247,6 @@ Font::Font( const Font& rFont )
 
 Font::Font( const OUString& rFamilyName, const Size& rSize )
 {
-    DBG_CTOR( Font, NULL );
 
     mpImplFont               = new Impl_Font;
     mpImplFont->maFamilyName = rFamilyName;
@@ -260,7 +255,6 @@ Font::Font( const OUString& rFamilyName, const Size& rSize )
 
 Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize )
 {
-    DBG_CTOR( Font, NULL );
 
     mpImplFont              = new Impl_Font;
     mpImplFont->maFamilyName= rFamilyName;
@@ -270,7 +264,6 @@ Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size&
 
 Font::Font( FontFamily eFamily, const Size& rSize )
 {
-    DBG_CTOR( Font, NULL );
 
     mpImplFont              = new Impl_Font;
     mpImplFont->meFamily    = eFamily;
@@ -279,7 +272,6 @@ Font::Font( FontFamily eFamily, const Size& rSize )
 
 Font::~Font()
 {
-    DBG_DTOR( Font, NULL );
 
     // decrement reference counter and delete if last reference
     // if the object is not static (Refcounter==0)
@@ -294,7 +286,6 @@ Font::~Font()
 
 void Font::SetColor( const Color& rColor )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->maColor != rColor )
     {
@@ -305,7 +296,6 @@ void Font::SetColor( const Color& rColor )
 
 void Font::SetFillColor( const Color& rColor )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     MakeUnique();
     mpImplFont->maFillColor = rColor;
@@ -315,7 +305,6 @@ void Font::SetFillColor( const Color& rColor )
 
 void Font::SetTransparent( sal_Bool bTransparent )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->mbTransparent != bTransparent )
     {
@@ -326,7 +315,6 @@ void Font::SetTransparent( sal_Bool bTransparent )
 
 void Font::SetAlign( FontAlign eAlign )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meAlign != eAlign )
     {
@@ -337,7 +325,6 @@ void Font::SetAlign( FontAlign eAlign )
 
 void Font::SetName( const OUString& rFamilyName )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     MakeUnique();
     mpImplFont->maFamilyName = rFamilyName;
@@ -345,7 +332,6 @@ void Font::SetName( const OUString& rFamilyName )
 
 void Font::SetStyleName( const OUString& rStyleName )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     MakeUnique();
     mpImplFont->maStyleName = rStyleName;
@@ -353,7 +339,6 @@ void Font::SetStyleName( const OUString& rStyleName )
 
 void Font::SetSize( const Size& rSize )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->maSize != rSize )
     {
@@ -364,7 +349,6 @@ void Font::SetSize( const Size& rSize )
 
 void Font::SetFamily( FontFamily eFamily )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meFamily != eFamily )
     {
@@ -375,7 +359,6 @@ void Font::SetFamily( FontFamily eFamily )
 
 void Font::SetCharSet( rtl_TextEncoding eCharSet )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meCharSet != eCharSet )
     {
@@ -386,7 +369,6 @@ void Font::SetCharSet( rtl_TextEncoding eCharSet )
 
 void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->maLanguageTag != rLanguageTag )
     {
@@ -397,7 +379,6 @@ void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 
 void Font::SetCJKContextLanguageTag( const LanguageTag& rLanguageTag )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->maCJKLanguageTag != rLanguageTag )
     {
@@ -408,7 +389,6 @@ void Font::SetCJKContextLanguageTag( const LanguageTag& rLanguageTag )
 
 void Font::SetLanguage( LanguageType eLanguage )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->maLanguageTag.getLanguageType( false) != eLanguage )
     {
@@ -419,7 +399,6 @@ void Font::SetLanguage( LanguageType eLanguage )
 
 void Font::SetCJKContextLanguage( LanguageType eLanguage )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->maCJKLanguageTag.getLanguageType( false) != eLanguage )
     {
@@ -430,7 +409,6 @@ void Font::SetCJKContextLanguage( LanguageType eLanguage )
 
 void Font::SetPitch( FontPitch ePitch )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->mePitch != ePitch )
     {
@@ -441,7 +419,6 @@ void Font::SetPitch( FontPitch ePitch )
 
 void Font::SetOrientation( short nOrientation )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->mnOrientation != nOrientation )
     {
@@ -452,7 +429,6 @@ void Font::SetOrientation( short nOrientation )
 
 void Font::SetVertical( sal_Bool bVertical )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->mbVertical != bVertical )
     {
@@ -463,7 +439,6 @@ void Font::SetVertical( sal_Bool bVertical )
 
 void Font::SetKerning( FontKerning nKerning )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->mnKerning != nKerning )
     {
@@ -479,7 +454,6 @@ sal_Bool Font::IsKerning() const
 
 void Font::SetWeight( FontWeight eWeight )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meWeight != eWeight )
     {
@@ -490,7 +464,6 @@ void Font::SetWeight( FontWeight eWeight )
 
 void Font::SetWidthType( FontWidth eWidth )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meWidthType != eWidth )
     {
@@ -501,7 +474,6 @@ void Font::SetWidthType( FontWidth eWidth )
 
 void Font::SetItalic( FontItalic eItalic )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meItalic != eItalic )
     {
@@ -512,7 +484,6 @@ void Font::SetItalic( FontItalic eItalic )
 
 void Font::SetOutline( sal_Bool bOutline )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->mbOutline != bOutline )
     {
@@ -523,7 +494,6 @@ void Font::SetOutline( sal_Bool bOutline )
 
 void Font::SetShadow( sal_Bool bShadow )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->mbShadow != bShadow )
     {
@@ -534,7 +504,6 @@ void Font::SetShadow( sal_Bool bShadow )
 
 void Font::SetUnderline( FontUnderline eUnderline )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meUnderline != eUnderline )
     {
@@ -545,7 +514,6 @@ void Font::SetUnderline( FontUnderline eUnderline )
 
 void Font::SetOverline( FontUnderline eOverline )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meOverline != eOverline )
     {
@@ -556,7 +524,6 @@ void Font::SetOverline( FontUnderline eOverline )
 
 void Font::SetStrikeout( FontStrikeout eStrikeout )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meStrikeout != eStrikeout )
     {
@@ -567,7 +534,6 @@ void Font::SetStrikeout( FontStrikeout eStrikeout )
 
 void Font::SetRelief( FontRelief eRelief )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meRelief != eRelief )
     {
@@ -578,7 +544,6 @@ void Font::SetRelief( FontRelief eRelief )
 
 void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->meEmphasisMark != eEmphasisMark )
     {
@@ -589,7 +554,6 @@ void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 
 void Font::SetWordLineMode( sal_Bool bWordLine )
 {
-    DBG_CHKTHIS( Font, NULL );
 
     if( mpImplFont->mbWordLine != bWordLine )
     {
@@ -600,8 +564,6 @@ void Font::SetWordLineMode( sal_Bool bWordLine )
 
 Font& Font::operator=( const Font& rFont )
 {
-    DBG_CHKTHIS( Font, NULL );
-    DBG_CHKOBJ( &rFont, Font, NULL );
     bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
     DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
 
@@ -627,8 +589,6 @@ Font& Font::operator=( const Font& rFont )
 
 sal_Bool Font::operator==( const Font& rFont ) const
 {
-    DBG_CHKTHIS( Font, NULL );
-    DBG_CHKOBJ( &rFont, Font, NULL );
 
     if( mpImplFont == rFont.mpImplFont )
         return sal_True;

@@ -44,10 +44,6 @@
 
 // =======================================================================
 
-DBG_NAMEEX( OutputDevice )
-DBG_NAMEEX( Polygon )
-DBG_NAMEEX( PolyPolygon )
-DBG_NAMEEX( Region )
 
 // =======================================================================
 
@@ -700,7 +696,6 @@ void OutputDevice::EnableMapMode( sal_Bool bEnable )
 
 void OutputDevice::SetMapMode()
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaMapModeAction( MapMode() ) );
@@ -735,7 +730,6 @@ void OutputDevice::SetMapMode()
 
 void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     bool bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
 
@@ -836,7 +830,6 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 
 void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // Ist der MapMode der gleiche wie vorher, dann mache nichts
     if ( maMapMode == rNewMapMode )
@@ -1021,7 +1014,6 @@ basegfx::B2DHomMatrix OutputDevice::ImplGetDeviceTransformation() const
 
 Point OutputDevice::LogicToPixel( const Point& rLogicPt ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( !mbMap )
         return rLogicPt;
@@ -1038,7 +1030,6 @@ Point OutputDevice::LogicToPixel( const Point& rLogicPt ) const
 
 Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( !mbMap )
         return rLogicSize;
@@ -1055,7 +1046,6 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
 
 Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( !mbMap || rLogicRect.IsEmpty() )
         return rLogicRect;
@@ -1078,8 +1068,6 @@ Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect ) const
 
 Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rLogicPoly, Polygon, NULL );
 
     if ( !mbMap )
         return rLogicPoly;
@@ -1111,8 +1099,6 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
 
 PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rLogicPolyPoly, PolyPolygon, NULL );
 
     if ( !mbMap )
         return rLogicPolyPoly;
@@ -1151,7 +1137,6 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
 
 Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if(!mbMap || rLogicRegion.IsNull() || rLogicRegion.IsEmpty())
     {
@@ -1206,7 +1191,6 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
 Point OutputDevice::LogicToPixel( const Point& rLogicPt,
                                   const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( rMapMode.IsDefault() )
         return rLogicPt;
@@ -1229,7 +1213,6 @@ Point OutputDevice::LogicToPixel( const Point& rLogicPt,
 Size OutputDevice::LogicToPixel( const Size& rLogicSize,
                                  const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( rMapMode.IsDefault() )
         return rLogicSize;
@@ -1252,7 +1235,6 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize,
 Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect,
                                       const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( rMapMode.IsDefault() || rLogicRect.IsEmpty() )
         return rLogicRect;
@@ -1281,8 +1263,6 @@ Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect,
 Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
                                     const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rLogicPoly, Polygon, NULL );
 
     if ( rMapMode.IsDefault() )
         return rLogicPoly;
@@ -1320,8 +1300,6 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
 PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
     const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rLogicPolyPoly, PolyPolygon, NULL );
 
     if ( rMapMode.IsDefault() )
         return rLogicPolyPoly;
@@ -1362,7 +1340,6 @@ basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogi
 
 Region OutputDevice::LogicToPixel( const Region& rLogicRegion, const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if(rMapMode.IsDefault() || rLogicRegion.IsNull() || rLogicRegion.IsEmpty())
     {
@@ -1416,7 +1393,6 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion, const MapMode& rM
 
 Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( !mbMap )
         return rDevicePt;
@@ -1433,7 +1409,6 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
 
 Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( !mbMap )
         return rDeviceSize;
@@ -1450,7 +1425,6 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
 
 Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( !mbMap || rDeviceRect.IsEmpty() )
         return rDeviceRect;
@@ -1473,8 +1447,6 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect ) const
 
 Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rDevicePoly, Polygon, NULL );
 
     if ( !mbMap )
         return rDevicePoly;
@@ -1506,8 +1478,6 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
 
 PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rDevicePolyPoly, PolyPolygon, NULL );
 
     if ( !mbMap )
         return rDevicePolyPoly;
@@ -1534,7 +1504,6 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
 
 Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if(!mbMap || rDeviceRegion.IsNull() || rDeviceRegion.IsEmpty())
     {
@@ -1589,7 +1558,6 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
 Point OutputDevice::PixelToLogic( const Point& rDevicePt,
                                   const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // Ist Default-MapMode, dann bereche nichts
     if ( rMapMode.IsDefault() )
@@ -1613,7 +1581,6 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt,
 Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
                                  const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // Ist Default-MapMode, dann bereche nichts
     if ( rMapMode.IsDefault() )
@@ -1637,7 +1604,6 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
 Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
                                       const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // Ist Default-MapMode, dann bereche nichts
     if ( rMapMode.IsDefault() || rDeviceRect.IsEmpty() )
@@ -1667,8 +1633,6 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
 Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
                                     const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rDevicePoly, Polygon, NULL );
 
     // Ist Default-MapMode, dann bereche nichts
     if ( rMapMode.IsDefault() )
@@ -1707,8 +1671,6 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
 PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
     const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rDevicePolyPoly, PolyPolygon, NULL );
 
     if ( rMapMode.IsDefault() )
         return rDevicePolyPoly;
@@ -1749,7 +1711,6 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
 
 Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& rMapMode ) const
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if(rMapMode.IsDefault() || rDeviceRegion.IsNull() || rDeviceRegion.IsEmpty())
     {

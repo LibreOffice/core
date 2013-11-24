@@ -34,9 +34,6 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-DBG_NAME( Region )
-DBG_NAMEEX( Polygon )
-DBG_NAMEEX( PolyPolygon )
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -341,7 +338,6 @@ Region::Region(const Polygon& rPolygon)
     mpRegionBand(),
     mbIsNull(false)
 {
-    DBG_CHKOBJ( &rPolygon, Polygon, NULL );
 
     if(rPolygon.GetSize())
     {
@@ -355,7 +351,6 @@ Region::Region(const PolyPolygon& rPolyPoly)
     mpRegionBand(),
     mbIsNull(false)
 {
-    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
 
     if(rPolyPoly.Count())
     {
@@ -369,7 +364,6 @@ Region::Region(const basegfx::B2DPolyPolygon& rPolyPoly)
     mpRegionBand(),
     mbIsNull(false)
 {
-    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
 
     if(rPolyPoly.count())
     {

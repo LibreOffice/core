@@ -50,7 +50,6 @@
 
 // =======================================================================
 
-DBG_NAMEEX( Window )
 
 // =======================================================================
 
@@ -1730,7 +1729,6 @@ static void ImplAddButtonBorder( long &rWidth, long& rHeight, sal_Bool bNativeBu
 
 sal_Bool ToolBox::ImplCalcItem()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     // recalc required ?
     if ( !mbCalc )
@@ -2265,7 +2263,6 @@ static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
 
 void ToolBox::ImplFormat( sal_Bool bResize )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     // Has to re-formatted
     if ( !mbFormat )
@@ -2755,7 +2752,6 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 
 IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( mbFormat )
         ImplFormat();
@@ -2919,7 +2915,6 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight )
 
 void ToolBox::ImplDrawSpin( sal_Bool bUpperIn, sal_Bool bLowerIn )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     sal_Bool    bTmpUpper;
     sal_Bool    bTmpLower;
@@ -3026,7 +3021,6 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 h
 
 void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPaint, sal_Bool bLayout )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( nPos >= mpData->m_aItems.size() )
         return;
@@ -3392,7 +3386,6 @@ void ToolBox::ImplDrawFloatwinBorder( ImplToolItem* pItem )
 
 void ToolBox::ImplFloatControl( sal_Bool bStart, FloatingWindow* pFloatWindow )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( bStart )
     {
@@ -3433,7 +3426,6 @@ void ToolBox::ImplFloatControl( sal_Bool bStart, FloatingWindow* pFloatWindow )
 
 void ToolBox::ShowLine( sal_Bool bNext )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     mbFormat = sal_True;
 
@@ -3602,7 +3594,6 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
                 }
 
                 {
-                    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
                 }
 
                 // Items not destroyed, in Select handler

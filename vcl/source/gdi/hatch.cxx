@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <vcl/hatch.hxx>
 
-DBG_NAME( Hatch )
 
 ImplHatch::ImplHatch() :
     mnRefCount  ( 1 ),
@@ -44,14 +43,11 @@ ImplHatch::ImplHatch( const ImplHatch& rImplHatch ) :
 
 Hatch::Hatch()
 {
-    DBG_CTOR( Hatch, NULL );
     mpImplHatch = new ImplHatch;
 }
 
 Hatch::Hatch( const Hatch& rHatch )
 {
-    DBG_CTOR( Hatch, NULL );
-    DBG_CHKOBJ( &rHatch, Hatch, NULL );
     mpImplHatch = rHatch.mpImplHatch;
     mpImplHatch->mnRefCount++;
 }
@@ -59,7 +55,6 @@ Hatch::Hatch( const Hatch& rHatch )
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
               long nDistance, sal_uInt16 nAngle10 )
 {
-    DBG_CTOR( Hatch, NULL );
     mpImplHatch = new ImplHatch;
     mpImplHatch->maColor = rColor;
     mpImplHatch->meStyle = eStyle;
@@ -69,15 +64,12 @@ Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
 
 Hatch::~Hatch()
 {
-    DBG_DTOR( Hatch, NULL );
     if( !( --mpImplHatch->mnRefCount ) )
         delete mpImplHatch;
 }
 
 Hatch& Hatch::operator=( const Hatch& rHatch )
 {
-    DBG_CHKTHIS( Hatch, NULL );
-    DBG_CHKOBJ( &rHatch, Hatch, NULL );
 
     rHatch.mpImplHatch->mnRefCount++;
 
@@ -90,8 +82,6 @@ Hatch& Hatch::operator=( const Hatch& rHatch )
 
 sal_Bool Hatch::operator==( const Hatch& rHatch ) const
 {
-    DBG_CHKTHIS( Hatch, NULL );
-    DBG_CHKOBJ( &rHatch, Hatch, NULL );
 
     return( mpImplHatch == rHatch.mpImplHatch ||
             ( mpImplHatch->maColor == rHatch.mpImplHatch->maColor &&
@@ -113,21 +103,18 @@ void Hatch::ImplMakeUnique()
 
 void Hatch::SetColor( const Color& rColor )
 {
-    DBG_CHKTHIS( Hatch, NULL );
     ImplMakeUnique();
     mpImplHatch->maColor = rColor;
 }
 
 void Hatch::SetDistance( long nDistance )
 {
-    DBG_CHKTHIS( Hatch, NULL );
     ImplMakeUnique();
     mpImplHatch->mnDistance = nDistance;
 }
 
 void Hatch::SetAngle( sal_uInt16 nAngle10 )
 {
-    DBG_CHKTHIS( Hatch, NULL );
     ImplMakeUnique();
     mpImplHatch->mnAngle = nAngle10;
 }

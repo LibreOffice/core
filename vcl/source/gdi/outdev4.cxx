@@ -56,8 +56,6 @@ extern "C" int SAL_CALL ImplHatchCmpFnc( const void* p1, const void* p2 )
     return ( nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1: nY1 == nY2 ? 0 : -1 : -1 );
 }
 
-DBG_NAMEEX( OutputDevice )
-DBG_NAMEEX( Gradient )
 
 void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly )
 {
@@ -564,8 +562,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 void OutputDevice::DrawGradient( const Rectangle& rRect,
                                  const Gradient& rGradient )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
     if ( mnDrawMode & DRAWMODE_NOGRADIENT )
         return;
@@ -692,8 +688,6 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
     if( mbInitClipRegion )
         ImplInitClipRegion();
@@ -913,8 +907,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& rGradient,
                                        GDIMetaFile& rMtf )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
     Rectangle aRect( rRect );
 
@@ -954,7 +946,6 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
 
 void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Hatch aHatch( rHatch );
 
@@ -1030,7 +1021,6 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
 void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& rHatch,
                                     GDIMetaFile& rMtf )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     PolyPolygon aPolyPoly( rPolyPoly );
     aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME | POLY_OPTIMIZE_CLOSE );

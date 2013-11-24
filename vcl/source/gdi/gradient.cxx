@@ -23,7 +23,6 @@
 #include <tools/gen.hxx>
 #include <vcl/gradient.hxx>
 
-DBG_NAME( Gradient )
 
 Impl_Gradient::Impl_Gradient() :
     maStartColor( COL_BLACK ),
@@ -69,15 +68,12 @@ void Gradient::MakeUnique()
 
 Gradient::Gradient()
 {
-    DBG_CTOR( Gradient, NULL );
 
     mpImplGradient = new Impl_Gradient;
 }
 
 Gradient::Gradient( const Gradient& rGradient )
 {
-    DBG_CTOR( Gradient, NULL );
-    DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
     // Take over instance data and increment refcount
     mpImplGradient = rGradient.mpImplGradient;
@@ -87,7 +83,6 @@ Gradient::Gradient( const Gradient& rGradient )
 Gradient::Gradient( GradientStyle eStyle,
                     const Color& rStartColor, const Color& rEndColor )
 {
-    DBG_CTOR( Gradient, NULL );
 
     mpImplGradient                  = new Impl_Gradient;
     mpImplGradient->meStyle         = eStyle;
@@ -97,7 +92,6 @@ Gradient::Gradient( GradientStyle eStyle,
 
 Gradient::~Gradient()
 {
-    DBG_DTOR( Gradient, NULL );
 
     // If it's the last reference, delete it, otherwise
     // decrement refcount
@@ -109,7 +103,6 @@ Gradient::~Gradient()
 
 void Gradient::SetStyle( GradientStyle eStyle )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->meStyle = eStyle;
@@ -117,7 +110,6 @@ void Gradient::SetStyle( GradientStyle eStyle )
 
 void Gradient::SetStartColor( const Color& rColor )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->maStartColor = rColor;
@@ -125,7 +117,6 @@ void Gradient::SetStartColor( const Color& rColor )
 
 void Gradient::SetEndColor( const Color& rColor )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->maEndColor = rColor;
@@ -133,7 +124,6 @@ void Gradient::SetEndColor( const Color& rColor )
 
 void Gradient::SetAngle( sal_uInt16 nAngle )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->mnAngle = nAngle;
@@ -141,7 +131,6 @@ void Gradient::SetAngle( sal_uInt16 nAngle )
 
 void Gradient::SetBorder( sal_uInt16 nBorder )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->mnBorder = nBorder;
@@ -149,7 +138,6 @@ void Gradient::SetBorder( sal_uInt16 nBorder )
 
 void Gradient::SetOfsX( sal_uInt16 nOfsX )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->mnOfsX = nOfsX;
@@ -157,7 +145,6 @@ void Gradient::SetOfsX( sal_uInt16 nOfsX )
 
 void Gradient::SetOfsY( sal_uInt16 nOfsY )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->mnOfsY = nOfsY;
@@ -165,7 +152,6 @@ void Gradient::SetOfsY( sal_uInt16 nOfsY )
 
 void Gradient::SetStartIntensity( sal_uInt16 nIntens )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->mnIntensityStart = nIntens;
@@ -173,7 +159,6 @@ void Gradient::SetStartIntensity( sal_uInt16 nIntens )
 
 void Gradient::SetEndIntensity( sal_uInt16 nIntens )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->mnIntensityEnd = nIntens;
@@ -181,7 +166,6 @@ void Gradient::SetEndIntensity( sal_uInt16 nIntens )
 
 void Gradient::SetSteps( sal_uInt16 nSteps )
 {
-    DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->mnStepCount = nSteps;
@@ -267,8 +251,6 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
 
 Gradient& Gradient::operator=( const Gradient& rGradient )
 {
-    DBG_CHKTHIS( Gradient, NULL );
-    DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
     // Increment refcount first so that we can reference ourselves
     rGradient.mpImplGradient->mnRefCount++;
@@ -285,8 +267,6 @@ Gradient& Gradient::operator=( const Gradient& rGradient )
 
 sal_Bool Gradient::operator==( const Gradient& rGradient ) const
 {
-    DBG_CHKTHIS( Gradient, NULL );
-    DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
     if ( mpImplGradient == rGradient.mpImplGradient )
         return sal_True;

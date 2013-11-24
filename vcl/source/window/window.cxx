@@ -109,10 +109,6 @@ using ::com::sun::star::awt::XTopWindow;
 
 // =======================================================================
 
-DBG_NAME( Window )
-
-// =======================================================================
-
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
 #define IMPL_PAINT_PAINTALLCHILDREN   ((sal_uInt16)0x0004)
@@ -1402,8 +1398,6 @@ SalGraphics* Window::ImplGetFrameGraphics() const
 
 Window* Window::ImplFindWindow( const Point& rFramePos )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
     Window* pTempWindow;
     Window* pFindWindow;
 
@@ -4215,8 +4209,6 @@ void Window::ImplNewInputContext()
 
 Window::Window( WindowType nType )
 {
-    DBG_CTOR( Window, ImplDbgCheckWindow );
-
     ImplInitWindowData( nType );
 }
 
@@ -4224,7 +4216,6 @@ Window::Window( WindowType nType )
 
 Window::Window( Window* pParent, WinBits nStyle )
 {
-    DBG_CTOR( Window, ImplDbgCheckWindow );
 
     ImplInitWindowData( WINDOW_WINDOW );
     ImplInit( pParent, nStyle, NULL );
@@ -4235,8 +4226,6 @@ Window::Window( Window* pParent, WinBits nStyle )
 Window::Window( Window* pParent, const ResId& rResId )
     : mpWindowImpl(NULL)
 {
-    DBG_CTOR( Window, ImplDbgCheckWindow );
-
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInitWindowData( WINDOW_WINDOW );
@@ -4276,7 +4265,6 @@ Window::~Window()
 {
     vcl::LazyDeletor<Window>::Undelete( this );
 
-    DBG_DTOR( Window, ImplDbgCheckWindow );
     DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
 
 
@@ -4739,10 +4727,6 @@ void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const
 
 void Window::MouseMove( const MouseEvent& rMEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     NotifyEvent aNEvt( EVENT_MOUSEMOVE, this, &rMEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbMouseMove = sal_True;
@@ -4752,10 +4736,6 @@ void Window::MouseMove( const MouseEvent& rMEvt )
 
 void Window::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     NotifyEvent aNEvt( EVENT_MOUSEBUTTONDOWN, this, &rMEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbMouseButtonDown = sal_True;
@@ -4765,10 +4745,6 @@ void Window::MouseButtonDown( const MouseEvent& rMEvt )
 
 void Window::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     NotifyEvent aNEvt( EVENT_MOUSEBUTTONUP, this, &rMEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbMouseButtonUp = sal_True;
@@ -4778,10 +4754,6 @@ void Window::MouseButtonUp( const MouseEvent& rMEvt )
 
 void Window::KeyInput( const KeyEvent& rKEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     NotifyEvent aNEvt( EVENT_KEYINPUT, this, &rKEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbKeyInput = sal_True;
@@ -4791,10 +4763,6 @@ void Window::KeyInput( const KeyEvent& rKEvt )
 
 void Window::KeyUp( const KeyEvent& rKEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     NotifyEvent aNEvt( EVENT_KEYUP, this, &rKEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbKeyUp = sal_True;
@@ -4810,10 +4778,6 @@ void Window::PrePaint()
 
 void Window::Paint( const Rectangle& rRect )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     ImplCallEventListeners( VCLEVENT_WINDOW_PAINT, (void*)&rRect );
 }
 
@@ -4827,45 +4791,18 @@ void Window::PostPaint()
 
 void Window::Draw( OutputDevice*, const Point&, const Size&, sal_uLong )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
 
-// -----------------------------------------------------------------------
+void Window::Move() {}
 
-void Window::Move()
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-}
+void Window::Resize() {}
 
-// -----------------------------------------------------------------------
+void Window::Activate() {}
 
-void Window::Resize()
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-}
-
-// -----------------------------------------------------------------------
-
-void Window::Activate()
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-}
-
-// -----------------------------------------------------------------------
-
-void Window::Deactivate()
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-}
-
-// -----------------------------------------------------------------------
+void Window::Deactivate() {}
 
 void Window::GetFocus()
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     if ( HasFocus() && mpWindowImpl->mpLastFocusWindow && !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) )
     {
         ImplDelData aDogtag( this );
@@ -4882,10 +4819,6 @@ void Window::GetFocus()
 
 void Window::LoseFocus()
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     NotifyEvent aNEvt( EVENT_LOSEFOCUS, this );
     Notify( aNEvt );
 }
@@ -4894,10 +4827,6 @@ void Window::LoseFocus()
 
 void Window::RequestHelp( const HelpEvent& rHEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     // if Balloon-Help is requested, show the balloon
     // with help text set
     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
@@ -4950,10 +4879,6 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 
 void Window::Command( const CommandEvent& rCEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     ImplCallEventListeners( VCLEVENT_WINDOW_COMMAND, (void*)&rCEvt );
 
     NotifyEvent aNEvt( EVENT_COMMAND, this, &rCEvt );
@@ -4965,7 +4890,6 @@ void Window::Command( const CommandEvent& rCEvt )
 
 void Window::Tracking( const TrackingEvent& rTEvt )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     if( pWrapper )
@@ -4976,14 +4900,12 @@ void Window::Tracking( const TrackingEvent& rTEvt )
 
 void Window::UserEvent( sal_uLong, void* )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::StateChanged( StateChangedType eType )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     switch (eType)
     {
         //stuff that doesn't invalidate the layout
@@ -5009,7 +4931,6 @@ void Window::StateChanged( StateChangedType eType )
 
 void Window::DataChanged( const DataChangedEvent& )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
 
 // -----------------------------------------------------------------------
@@ -5117,10 +5038,6 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
 
 long Window::PreNotify( NotifyEvent& rNEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     long bDone = sal_False;
     if ( mpWindowImpl->mpParent && !ImplIsOverlapWindow() )
         bDone = mpWindowImpl->mpParent->PreNotify( rNEvt );
@@ -5164,10 +5081,6 @@ long Window::PreNotify( NotifyEvent& rNEvt )
 
 long Window::Notify( NotifyEvent& rNEvt )
 {
-    { // Parentheses, as in this handler the window can be destroyed
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
     long nRet = sal_False;
 
     // check for docking window
@@ -5371,7 +5284,6 @@ sal_uLong Window::PostUserEvent( const Link& rLink, void* pCaller )
 
 sal_Bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mnEvent   = 0;
@@ -5396,7 +5308,6 @@ sal_Bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pC
 
 void Window::RemoveUserEvent( sal_uLong nUserEvent )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplSVEvent* pSVEvent = (ImplSVEvent*)nUserEvent;
 
@@ -5439,7 +5350,6 @@ sal_Bool Window::IsLocked( sal_Bool bChildren ) const
 
 void Window::SetStyle( WinBits nStyle )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mnStyle != nStyle )
     {
@@ -5453,7 +5363,6 @@ void Window::SetStyle( WinBits nStyle )
 
 void Window::SetExtendedStyle( WinBits nExtendedStyle )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mnExtendedStyle != nExtendedStyle )
     {
@@ -5480,7 +5389,6 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
 
 SystemWindow* Window::GetSystemWindow() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     const Window* pWin = this;
     while ( pWin && !pWin->IsSystemWindow() )
@@ -5492,7 +5400,6 @@ SystemWindow* Window::GetSystemWindow() const
 
 void Window::SetBorderStyle( sal_uInt16 nBorderStyle )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -5535,7 +5442,6 @@ void Window::SetBorderStyle( sal_uInt16 nBorderStyle )
 
 sal_uInt16 Window::GetBorderStyle() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -5552,7 +5458,6 @@ sal_uInt16 Window::GetBorderStyle() const
 
 long Window::CalcTitleWidth() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -5583,7 +5488,6 @@ long Window::CalcTitleWidth() const
 
 void Window::EnableClipSiblings( sal_Bool bClipSiblings )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->EnableClipSiblings( bClipSiblings );
@@ -5595,7 +5499,6 @@ void Window::EnableClipSiblings( sal_Bool bClipSiblings )
 
 void Window::SetMouseTransparent( sal_Bool bTransparent )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetMouseTransparent( bTransparent );
@@ -5610,7 +5513,6 @@ void Window::SetMouseTransparent( sal_Bool bTransparent )
 
 void Window::SetPaintTransparent( sal_Bool bTransparent )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     // transparency is not useful for frames as the background would have to be provided by a different frame
     if( bTransparent && mpWindowImpl->mbFrame )
@@ -5626,7 +5528,6 @@ void Window::SetPaintTransparent( sal_Bool bTransparent )
 
 void Window::SetInputContext( const InputContext& rInputContext )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     mpWindowImpl->maInputContext = rInputContext;
     if ( !mpWindowImpl->mbInFocusHdl && HasFocus() )
@@ -5637,7 +5538,6 @@ void Window::SetInputContext( const InputContext& rInputContext )
 
 void Window::EndExtTextInput( sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mbExtTextInput )
         ImplGetFrame()->EndExtTextInput( nFlags );
@@ -5647,7 +5547,6 @@ void Window::EndExtTextInput( sal_uInt16 nFlags )
 
 void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplWinData* pWinData = ImplGetWinData();
     if ( pWinData->mpCursorRect )
@@ -5674,7 +5573,6 @@ void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
 
 const Rectangle* Window::GetCursorRect() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplWinData* pWinData = ImplGetWinData();
     return pWinData->mpCursorRect;
@@ -5684,7 +5582,6 @@ const Rectangle* Window::GetCursorRect() const
 
 long Window::GetCursorExtTextInputWidth() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplWinData* pWinData = ImplGetWinData();
     return pWinData->mnCursorExtWidth;
@@ -5693,7 +5590,6 @@ long Window::GetCursorExtTextInputWidth() const
 // -----------------------------------------------------------------------
 
 void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, sal_Bool bVertical ) {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplWinData* pWinData = ImplGetWinData();
     delete[] pWinData->mpCompositionCharRects;
@@ -5716,7 +5612,6 @@ void Window::SetSettings( const AllSettings& rSettings )
 
 void Window::SetSettings( const AllSettings& rSettings, sal_Bool bChild )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -5754,7 +5649,6 @@ void Window::SetSettings( const AllSettings& rSettings, sal_Bool bChild )
 
 void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -5825,7 +5719,6 @@ void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
 
 void Window::NotifyAllChildren( DataChangedEvent& rDCEvt )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     DataChanged( rDCEvt );
 
@@ -5841,7 +5734,6 @@ void Window::NotifyAllChildren( DataChangedEvent& rDCEvt )
 
 void Window::SetPointFont( const Font& rFont )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Font aFont = rFont;
     ImplPointToLogic( aFont );
@@ -5852,7 +5744,6 @@ void Window::SetPointFont( const Font& rFont )
 
 Font Window::GetPointFont() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Font aFont = GetFont();
     ImplLogicToPoint( aFont );
@@ -5863,7 +5754,6 @@ Font Window::GetPointFont() const
 
 void Window::SetParentClipMode( sal_uInt16 nMode )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetParentClipMode( nMode );
@@ -5882,7 +5772,6 @@ void Window::SetParentClipMode( sal_uInt16 nMode )
 
 sal_uInt16 Window::GetParentClipMode() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         return mpWindowImpl->mpBorderWindow->GetParentClipMode();
@@ -5894,7 +5783,6 @@ sal_uInt16 Window::GetParentClipMode() const
 
 void Window::SetWindowRegionPixel()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetWindowRegionPixel();
@@ -5931,7 +5819,6 @@ void Window::SetWindowRegionPixel()
 
 void Window::SetWindowRegionPixel( const Region& rRegion )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetWindowRegionPixel( rRegion );
@@ -6020,7 +5907,6 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
 
 const Region& Window::GetWindowRegionPixel() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         return mpWindowImpl->mpBorderWindow->GetWindowRegionPixel();
@@ -6032,7 +5918,6 @@ const Region& Window::GetWindowRegionPixel() const
 
 sal_Bool Window::IsWindowRegionPixel() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         return mpWindowImpl->mpBorderWindow->IsWindowRegionPixel();
@@ -6044,7 +5929,6 @@ sal_Bool Window::IsWindowRegionPixel() const
 
 Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Region aWinClipRegion;
 
@@ -6081,7 +5965,6 @@ Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
 
 Region Window::GetPaintRegion() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpPaintRegion )
     {
@@ -6138,7 +6021,6 @@ static SystemWindow *ImplGetLastSystemWindow( Window *pWin )
 
 void Window::SetParent( Window* pNewParent )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     DBG_ASSERT( pNewParent, "Window::SetParent(): pParent == NULL" );
     DBG_ASSERT( pNewParent != this, "someone tried to reparent a window to itself" );
 
@@ -6307,7 +6189,6 @@ void Window::SetParent( Window* pNewParent )
 
 void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mbVisible == bVisible )
         return;
@@ -6594,7 +6475,6 @@ void Window::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
 
 void Window::Enable( bool bEnable, bool bChild )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( !bEnable )
     {
@@ -6678,7 +6558,6 @@ bool Window::IsCallHandlersOnInputDisabled() const
 
 void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     sal_Bool bNotify = (bEnable != mpWindowImpl->mbInputDisabled);
     if ( mpWindowImpl->mpBorderWindow )
@@ -6745,7 +6624,6 @@ void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild )
 void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
                           const Window* pExcludeWindow )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     EnableInput( bEnable, bChild );
     if ( bSysWin )
@@ -6811,7 +6689,6 @@ void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
 
 void Window::AlwaysEnableInput( sal_Bool bAlways, sal_Bool bChild )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->AlwaysEnableInput( bAlways, sal_False );
@@ -6843,7 +6720,6 @@ void Window::AlwaysEnableInput( sal_Bool bAlways, sal_Bool bChild )
 
 void Window::AlwaysDisableInput( sal_Bool bAlways, sal_Bool bChild )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->AlwaysDisableInput( bAlways, sal_False );
@@ -6875,7 +6751,6 @@ void Window::AlwaysDisableInput( sal_Bool bAlways, sal_Bool bChild )
 
 void Window::SetActivateMode( sal_uInt16 nMode )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetActivateMode( nMode );
@@ -6909,7 +6784,6 @@ void Window::SetActivateMode( sal_uInt16 nMode )
 
 void Window::ToTop( sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplStartToTop( nFlags );
     ImplFocusToTop( nFlags, IsReallyVisible() );
@@ -6919,7 +6793,6 @@ void Window::ToTop( sal_uInt16 nFlags )
 
 void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -7095,7 +6968,6 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
 
 void Window::EnableAlwaysOnTop( sal_Bool bEnable )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     mpWindowImpl->mbAlwaysOnTop = bEnable;
 
@@ -7113,7 +6985,6 @@ void Window::EnableAlwaysOnTop( sal_Bool bEnable )
 void Window::setPosSizePixel( long nX, long nY,
                               long nWidth, long nHeight, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     bool bHasValidSize = !mpWindowImpl->mbDefSize;
 
@@ -7397,7 +7268,6 @@ Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, sal_Boo
 
 void Window::Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplScroll( Rectangle( Point( mnOutOffX, mnOutOffY ),
                            Size( mnOutWidth, mnOutHeight ) ),
@@ -7409,7 +7279,6 @@ void Window::Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags )
 void Window::Scroll( long nHorzScroll, long nVertScroll,
                      const Rectangle& rRect, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Rectangle aRect = ImplLogicToDevicePixel( rRect );
     aRect.Intersection( Rectangle( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) ) );
@@ -7421,7 +7290,6 @@ void Window::Scroll( long nHorzScroll, long nVertScroll,
 
 void Window::Invalidate( sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
@@ -7433,7 +7301,6 @@ void Window::Invalidate( sal_uInt16 nFlags )
 
 void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
@@ -7450,7 +7317,6 @@ void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void Window::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
@@ -7469,7 +7335,6 @@ void Window::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
 
 void Window::Validate( sal_uInt16 nFlags )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
         return;
@@ -7481,7 +7346,6 @@ void Window::Validate( sal_uInt16 nFlags )
 
 sal_Bool Window::HasPaintEvent() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( !mpWindowImpl->mbReallyVisible )
         return sal_False;
@@ -7511,7 +7375,6 @@ sal_Bool Window::HasPaintEvent() const
 
 void Window::Update()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -7581,7 +7444,6 @@ void Window::Update()
 
 void Window::Flush()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     const Rectangle aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
     mpWindowImpl->mpFrame->Flush( aWinRect );
@@ -7591,7 +7453,6 @@ void Window::Flush()
 
 void Window::Sync()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     mpWindowImpl->mpFrame->Sync();
 }
@@ -7600,7 +7461,6 @@ void Window::Sync()
 
 void Window::SetUpdateMode( sal_Bool bUpdate )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     mpWindowImpl->mbNoUpdate = !bUpdate;
     StateChanged( STATE_CHANGE_UPDATEMODE );
@@ -7610,7 +7470,6 @@ void Window::SetUpdateMode( sal_Bool bUpdate )
 
 void Window::GrabFocus()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplGrabFocus( 0 );
 }
@@ -7619,7 +7478,6 @@ void Window::GrabFocus()
 
 sal_Bool Window::HasFocus() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     // #107575# the first floating window always has the keyboard focus, see also winproc.cxx: ImplGetKeyInputWindow()
     //  task was shifted to 6.y, so its commented out
@@ -7661,7 +7519,6 @@ void Window::SetFakeFocus( bool bFocus )
 
 sal_Bool Window::HasChildPathFocus( sal_Bool bSystemWindow ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     // #107575#, the first floating window always has the keyboard focus, see also winproc.cxx: ImplGetKeyInputWindow()
     //  task was shifted to 6.y, so its commented out
@@ -7682,7 +7539,6 @@ sal_Bool Window::HasChildPathFocus( sal_Bool bSystemWindow ) const
 
 void Window::CaptureMouse()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -7704,7 +7560,6 @@ void Window::CaptureMouse()
 
 void Window::ReleaseMouse()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -7723,7 +7578,6 @@ void Window::ReleaseMouse()
 
 sal_Bool Window::IsMouseCaptured() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     return (this == ImplGetSVData()->maWinData.mpCaptureWin);
 }
@@ -7732,7 +7586,6 @@ sal_Bool Window::IsMouseCaptured() const
 
 void Window::SetPointer( const Pointer& rPointer )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->maPointer == rPointer )
         return;
@@ -7748,7 +7601,6 @@ void Window::SetPointer( const Pointer& rPointer )
 
 void Window::EnableChildPointerOverwrite( sal_Bool bOverwrite )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mbChildPtrOverwrite == bOverwrite )
         return;
@@ -7764,7 +7616,6 @@ void Window::EnableChildPointerOverwrite( sal_Bool bOverwrite )
 
 void Window::SetPointerPosPixel( const Point& rPos )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Point aPos = ImplOutputToFrame( rPos );
     if( ImplHasMirroredGraphics() )
@@ -7788,7 +7639,6 @@ void Window::SetPointerPosPixel( const Point& rPos )
 
 Point Window::GetPointerPosPixel()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Point aPos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
     if( ImplIsAntiparallel() )
@@ -7803,7 +7653,6 @@ Point Window::GetPointerPosPixel()
 
 Point Window::GetLastPointerPosPixel()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Point aPos( mpWindowImpl->mpFrameData->mnBeforeLastMouseX, mpWindowImpl->mpFrameData->mnBeforeLastMouseY );
     if( ImplIsAntiparallel() )
@@ -7818,7 +7667,6 @@ Point Window::GetLastPointerPosPixel()
 
 void Window::ShowPointer( sal_Bool bVisible )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mbNoPtrVisible != !bVisible )
     {
@@ -7864,7 +7712,6 @@ sal_Bool Window::IsMouseOver()
 
 void Window::EnterWait()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     mpWindowImpl->mnWaitCount++;
 
@@ -7880,7 +7727,6 @@ void Window::EnterWait()
 
 void Window::LeaveWait()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mnWaitCount )
     {
@@ -7899,7 +7745,6 @@ void Window::LeaveWait()
 
 void Window::SetCursor( Cursor* pCursor )
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if ( mpWindowImpl->mpCursor != pCursor )
     {
@@ -7918,7 +7763,6 @@ void Window::SetText( const OUString& rStr )
     if (rStr == mpWindowImpl->maText)
         return;
 
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     OUString oldTitle( mpWindowImpl->maText );
     mpWindowImpl->maText = rStr;
@@ -7948,7 +7792,6 @@ void Window::SetText( const OUString& rStr )
 
 OUString Window::GetText() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     return mpWindowImpl->maText;
 }
@@ -7957,7 +7800,6 @@ OUString Window::GetText() const
 
 OUString Window::GetDisplayText() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     return GetText();
 }
@@ -7994,7 +7836,6 @@ const Wallpaper& Window::GetDisplayBackground() const
 
 const OUString& Window::GetHelpText() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     OUString aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
     bool bStrHelpId = !aStrHelpId.isEmpty();
@@ -8032,7 +7873,6 @@ const OUString& Window::GetHelpText() const
 
 Window* Window::FindWindow( const Point& rPos ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Point aPos = OutputToScreenPixel( rPos );
     return ((Window*)this)->ImplFindWindow( aPos );
@@ -8042,7 +7882,6 @@ Window* Window::FindWindow( const Point& rPos ) const
 
 sal_uInt16 Window::GetChildCount() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     sal_uInt16  nChildCount = 0;
     Window* pChild = mpWindowImpl->mpFirstChild;
@@ -8059,7 +7898,6 @@ sal_uInt16 Window::GetChildCount() const
 
 Window* Window::GetChild( sal_uInt16 nChild ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     sal_uInt16  nChildCount = 0;
     Window* pChild = mpWindowImpl->mpFirstChild;
@@ -8078,7 +7916,6 @@ Window* Window::GetChild( sal_uInt16 nChild ) const
 
 Window* Window::GetWindow( sal_uInt16 nType ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     switch ( nType )
     {
@@ -8170,8 +8007,6 @@ Window* Window::GetWindow( sal_uInt16 nType ) const
 
 sal_Bool Window::IsChild( const Window* pWindow, sal_Bool bSystemWindow ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    DBG_CHKOBJ( pWindow, Window, ImplDbgCheckWindow );
 
     do
     {
@@ -8192,8 +8027,6 @@ sal_Bool Window::IsChild( const Window* pWindow, sal_Bool bSystemWindow ) const
 
 sal_Bool Window::IsWindowOrChild( const Window* pWindow, sal_Bool bSystemWindow ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    DBG_CHKOBJ( pWindow, Window, ImplDbgCheckWindow );
 
     if ( this == pWindow )
         return sal_True;
@@ -8204,7 +8037,6 @@ sal_Bool Window::IsWindowOrChild( const Window* pWindow, sal_Bool bSystemWindow 
 
 const SystemEnvData* Window::GetSystemData() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : NULL;
 }
@@ -8334,7 +8166,6 @@ void Window::ImplStartDnd()
 
 uno::Reference< XDropTarget > Window::GetDropTarget()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( ! mpWindowImpl->mxDNDListenerContainer.is() )
     {
@@ -8395,7 +8226,6 @@ uno::Reference< XDropTarget > Window::GetDropTarget()
 
 uno::Reference< XDragSource > Window::GetDragSource()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
 #if HAVE_FEATURE_DESKTOP
 
@@ -8470,7 +8300,6 @@ uno::Reference< XDragGestureRecognizer > Window::GetDragGestureRecognizer()
 
 uno::Reference< XClipboard > Window::GetClipboard()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( mpWindowImpl->mpFrameData )
     {
@@ -8500,7 +8329,6 @@ uno::Reference< XClipboard > Window::GetClipboard()
 
 uno::Reference< XClipboard > Window::GetPrimarySelection()
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( mpWindowImpl->mpFrameData )
     {
@@ -8617,7 +8445,6 @@ sal_uInt16 Window::ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirst
 
 Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, sal_Bool bTopLevel ) const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( bTopLevel )
         rChildCount = 0;

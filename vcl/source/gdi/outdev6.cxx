@@ -44,13 +44,11 @@
 
 // ========================================================================
 
-DBG_NAMEEX( OutputDevice )
 
 // ------------------------------------------------------------------------
 
 void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
     aDstRect.Intersection( rRect );
@@ -148,7 +146,6 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
 
 void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency)
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolyPoly.count())
@@ -212,7 +209,6 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // short circuit for drawing an opaque polygon
     if( (nTransparencePercent < 1) || ((mnDrawMode & DRAWMODE_NOTRANSPARENCY) != 0) )
@@ -608,7 +604,6 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                                     const Size& rSize, const Gradient& rTransparenceGradient )
 {
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     const Color aBlack( COL_BLACK );
 

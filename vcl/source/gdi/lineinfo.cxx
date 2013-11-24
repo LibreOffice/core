@@ -26,7 +26,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <numeric>
 
-DBG_NAME( LineInfo )
 
 // ----------------
 // - ImplLineInfo -
@@ -83,7 +82,6 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
 
 LineInfo::LineInfo( LineStyle eStyle, long nWidth )
 {
-    DBG_CTOR( LineInfo, NULL );
     mpImplLineInfo = new ImplLineInfo;
     mpImplLineInfo->meStyle = eStyle;
     mpImplLineInfo->mnWidth = nWidth;
@@ -93,8 +91,6 @@ LineInfo::LineInfo( LineStyle eStyle, long nWidth )
 
 LineInfo::LineInfo( const LineInfo& rLineInfo )
 {
-    DBG_CTOR( LineInfo, NULL );
-    DBG_CHKOBJ( &rLineInfo, LineInfo, NULL );
     mpImplLineInfo = rLineInfo.mpImplLineInfo;
     mpImplLineInfo->mnRefCount++;
 }
@@ -103,7 +99,6 @@ LineInfo::LineInfo( const LineInfo& rLineInfo )
 
 LineInfo::~LineInfo()
 {
-    DBG_DTOR( LineInfo, NULL );
     if( !( --mpImplLineInfo->mnRefCount ) )
         delete mpImplLineInfo;
 }
@@ -112,8 +107,6 @@ LineInfo::~LineInfo()
 
 LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 {
-    DBG_CHKTHIS( LineInfo, NULL );
-    DBG_CHKOBJ( &rLineInfo, LineInfo, NULL );
 
     rLineInfo.mpImplLineInfo->mnRefCount++;
 
@@ -128,8 +121,6 @@ LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 
 sal_Bool LineInfo::operator==( const LineInfo& rLineInfo ) const
 {
-    DBG_CHKTHIS( LineInfo, NULL );
-    DBG_CHKOBJ( &rLineInfo, LineInfo, NULL );
 
     return( mpImplLineInfo == rLineInfo.mpImplLineInfo ||
            *mpImplLineInfo == *rLineInfo.mpImplLineInfo );
@@ -152,7 +143,6 @@ void LineInfo::ImplMakeUnique()
 
 void LineInfo::SetStyle( LineStyle eStyle )
 {
-    DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
     mpImplLineInfo->meStyle = eStyle;
 }
@@ -161,7 +151,6 @@ void LineInfo::SetStyle( LineStyle eStyle )
 
 void LineInfo::SetWidth( long nWidth )
 {
-    DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
     mpImplLineInfo->mnWidth = nWidth;
 }
@@ -170,7 +159,6 @@ void LineInfo::SetWidth( long nWidth )
 
 void LineInfo::SetDashCount( sal_uInt16 nDashCount )
 {
-    DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
     mpImplLineInfo->mnDashCount = nDashCount;
 }
@@ -179,7 +167,6 @@ void LineInfo::SetDashCount( sal_uInt16 nDashCount )
 
 void LineInfo::SetDashLen( long nDashLen )
 {
-    DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
     mpImplLineInfo->mnDashLen = nDashLen;
 }
@@ -188,7 +175,6 @@ void LineInfo::SetDashLen( long nDashLen )
 
 void LineInfo::SetDotCount( sal_uInt16 nDotCount )
 {
-    DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
     mpImplLineInfo->mnDotCount = nDotCount;
 }
@@ -197,7 +183,6 @@ void LineInfo::SetDotCount( sal_uInt16 nDotCount )
 
 void LineInfo::SetDotLen( long nDotLen )
 {
-    DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
     mpImplLineInfo->mnDotLen = nDotLen;
 }
@@ -206,7 +191,6 @@ void LineInfo::SetDotLen( long nDotLen )
 
 void LineInfo::SetDistance( long nDistance )
 {
-    DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
     mpImplLineInfo->mnDistance = nDistance;
 }
@@ -215,7 +199,6 @@ void LineInfo::SetDistance( long nDistance )
 
 void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 {
-    DBG_CHKTHIS( LineInfo, NULL );
 
     if(eLineJoin != mpImplLineInfo->meLineJoin)
     {
@@ -228,7 +211,6 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 
 void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
 {
-    DBG_CHKTHIS( LineInfo, NULL );
     if(eLineCap != mpImplLineInfo->meLineCap)
     {
         ImplMakeUnique();
