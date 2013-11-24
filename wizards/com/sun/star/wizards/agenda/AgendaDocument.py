@@ -571,15 +571,6 @@ class AgendaDocument(TextDocument):
         rows = table.Rows
         rows.insertByIndex(start, count)
 
-    '''returns the row index for this cell name.
-    @param cellName
-    @return the row index for this cell name.
-    '''
-
-    @classmethod
-    def getRowIndex(self, cellName):
-        return int(cellName.RangeName[1:])
-
     '''
     returns the rows count of this table, assuming
     there is no vertical merged cells.
@@ -699,8 +690,6 @@ class ItemsTable(object):
         if cellName == cursor.RangeName:
             return
 
-        rowIndex = AgendaDocument.getRowIndex(cursor)
-        rowsCount = AgendaDocument.getRowCount(ItemsTable.table)
         '''
         now before deleteing i move the cursor up so it
         does not disappear, because it will crash office.

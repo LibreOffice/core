@@ -20,11 +20,8 @@ import traceback
 from abc import ABCMeta, abstractmethod
 from .UnoDialog2 import UnoDialog2, Desktop, PropertyNames, UIConsts, \
     ItemListenerProcAdapter
-from .event.CommonListener import TerminateListenerProcAdapter
 from ..common.Resource import Resource
 from ..common.HelpIds import HelpIds
-from ..document.OfficeDocument import OfficeDocument
-from ..text.TextDocument import TextDocument
 
 from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.frame import TerminationVetoException

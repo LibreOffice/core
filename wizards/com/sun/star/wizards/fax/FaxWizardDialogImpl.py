@@ -148,7 +148,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.switchToStep(self.getCurrentStep(), self.nMaxStep)
         endWizard = True
         try:
-            fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
             if not self.sPath or not os.path.exists(self.sPath):
                 self.myPathSelection.triggerPathPicker()

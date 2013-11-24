@@ -18,7 +18,6 @@
 import uno
 import traceback
 from unohelper import systemPathToFileUrl, absolutize
-from ..ui.event.CommonListener import TerminateListenerProcAdapter
 from ..common.Desktop import Desktop
 
 from com.sun.star.awt import WindowDescriptor

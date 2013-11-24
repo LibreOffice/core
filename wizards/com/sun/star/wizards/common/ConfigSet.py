@@ -17,7 +17,6 @@
 #
 import traceback
 from .ConfigGroup import ConfigGroup
-from .Configuration import Configuration
 
 class ConfigSet(ConfigGroup):
     '''

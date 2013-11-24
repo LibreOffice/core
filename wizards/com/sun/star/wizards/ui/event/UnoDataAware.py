@@ -17,9 +17,8 @@
 #
 import uno
 from .CommonListener import ItemListenerProcAdapter, TextListenerProcAdapter
-from .DataAware import DataAware, PropertyNames, datetime, Date, Time
-
-from com.sun.star.script import CannotConvertException
+from .DataAware import DataAware, datetime, Date, Time
+from ...common.PropertyNames import PropertyNames
 
 '''
 @author rpiterman

@@ -16,9 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import uno
-from .CGTopic import CGTopic
 from ..ui.ControlScroller import ControlScroller, PropertyNames, traceback, \
-    HelpIds, UnoDialog
+    HelpIds
 from .AgendaWizardDialogConst import HID
 from ..common.Properties import Properties
 from ..ui.event.CommonListener import FocusListenerProcAdapter, \
@@ -436,8 +435,8 @@ class TopicsControl(ControlScroller):
         if (event.KeyCode == TAB) and \
                 (event.Modifiers == SHIFT):
             if self.nscrollvalue > 0:
-                setScrollValue(self.nscrollvalue - 1)
-                focus(self.lastTime)
+                self.setScrollValue(self.nscrollvalue - 1)
+                self.focus(self.lastTime)
 
     '''
     sets focus to the given control.

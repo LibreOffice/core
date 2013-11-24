@@ -35,9 +35,9 @@ from ..common.Configuration import Configuration
 from ..common.FileAccess import FileAccess
 from ..document.OfficeDocument import OfficeDocument
 
+from com.sun.star.util import CloseVetoException
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
-from com.sun.star.awt.VclWindowPeerAttribute import OK
 
 class AgendaWizardDialogImpl(AgendaWizardDialog):
 
@@ -260,9 +260,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     #checkbox listeners
     def chkUseMeetingTypeItemChanged(self):
-        self.myAgendaDoc.agenda.cp_IncludeMinutes = bool(self.chkMinutes.State)
-
-    def chkUseMeetingTypeItemChanged(self):
         self.myAgendaDoc.redraw(self.templateConsts.FILLIN_MEETING_TYPE)
 
     def chkUseReadItemChanged(self):
@@ -316,7 +313,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         bSaveSuccess = False
         endWizard = True
         try:
-            fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
             if not self.sPath or not os.path.exists(self.sPath):
                 self.myPathSelection.triggerPathPicker()
@@ -388,7 +384,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     def closeDocument(self):
         try:
-            xCloseable = self.myAgendaDoc.xFrame.close(False)
+            self.myAgendaDoc.xFrame.close(False)
         except CloseVetoException:
             traceback.print_exc()
 

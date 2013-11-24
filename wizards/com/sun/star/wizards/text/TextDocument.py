@@ -25,8 +25,6 @@ from ..common.Desktop import Desktop
 from ..common.Configuration import Configuration
 from ..common.NumberFormatter import NumberFormatter
 
-from com.sun.star.container import NoSuchElementException
-from com.sun.star.lang import WrappedTargetException
 from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DDMMYY
 from com.sun.star.view.DocumentZoomType import ENTIRE_PAGE
 from com.sun.star.beans.PropertyState import DIRECT_VALUE

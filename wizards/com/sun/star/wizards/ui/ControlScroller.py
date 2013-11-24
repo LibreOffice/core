@@ -21,7 +21,7 @@ from ..common.Desktop import Desktop
 from ..common.PropertyNames import PropertyNames
 from ..common.HelpIds import HelpIds
 
-from com.sun.star.awt.ScrollBarOrientation import HORIZONTAL, VERTICAL
+from com.sun.star.awt.ScrollBarOrientation import VERTICAL
 
 class ControlScroller(object):
 

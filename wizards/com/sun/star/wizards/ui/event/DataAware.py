@@ -18,7 +18,6 @@
 import traceback
 import uno
 from abc import ABCMeta, abstractmethod
-from ...common.PropertyNames import PropertyNames
 
 from com.sun.star.util import Date
 from com.sun.star.util import Time

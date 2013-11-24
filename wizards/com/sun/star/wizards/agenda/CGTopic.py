@@ -41,7 +41,6 @@ class CGTopic(ConfigGroup):
             self.cp_Responsible = str()
             self.cp_Time = str()        
         else:
-            num = row[0].Value
             self.cp_Index = int(row[0].Value[:-1])
             self.cp_Topic = row[1].Value
             self.cp_Responsible = row[2].Value
