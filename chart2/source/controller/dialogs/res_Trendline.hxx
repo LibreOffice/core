@@ -70,6 +70,7 @@ private:
 
     void UpdateControlStates();
     DECL_LINK( SelectTrendLine, RadioButton * );
+    DECL_LINK( ChangeNumericField, NumericField *);
 };
 
 } //  namespace chart

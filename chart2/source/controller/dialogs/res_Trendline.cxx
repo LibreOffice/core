@@ -58,12 +58,18 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
     ((SfxTabPage*)pParent)->get(m_pFI_MovingAverage,"imageMovingAverage");
     FillValueSets();
 
-    m_pRB_Linear->SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
-    m_pRB_Logarithmic->SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
-    m_pRB_Exponential->SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
-    m_pRB_Power->SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
-    m_pRB_Polynomial->SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
-    m_pRB_MovingAverage->SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
+    Link aLink = LINK(this, TrendlineResources, SelectTrendLine );
+    m_pRB_Linear->SetClickHdl( aLink );
+    m_pRB_Logarithmic->SetClickHdl( aLink );
+    m_pRB_Exponential->SetClickHdl( aLink );
+    m_pRB_Power->SetClickHdl( aLink );
+    m_pRB_Polynomial->SetClickHdl( aLink );
+    m_pRB_MovingAverage->SetClickHdl( aLink );
+
+    aLink = LINK(this, TrendlineResources, ChangeNumericField );
+    m_pNF_Degree->SetModifyHdl( aLink );
+    m_pNF_Period->SetModifyHdl( aLink );
+    m_pNF_InterceptValue->SetModifyHdl( aLink );
 
     m_pNF_ExtrapolateForward->SetMin( SAL_MIN_INT64 );
     m_pNF_ExtrapolateForward->SetMax( SAL_MAX_INT64 );
@@ -276,6 +282,34 @@ void TrendlineResources::FillValueSets()
 
 void TrendlineResources::UpdateControlStates()
 {
+}
+
+IMPL_LINK( TrendlineResources, ChangeNumericField, NumericField *, pNumericField)
+{
+    if( pNumericField == m_pNF_Degree )
+    {
+        if( !m_pRB_Polynomial->IsChecked() )
+        {
+                m_pRB_Polynomial->Check();
+                SelectTrendLine(m_pRB_Polynomial);
+        }
+    }
+    else if( pNumericField == m_pNF_Period )
+    {
+        if( !m_pRB_MovingAverage->IsChecked() )
+        {
+                m_pRB_MovingAverage->Check();
+                SelectTrendLine(m_pRB_MovingAverage);
+        }
+    }
+    else if( pNumericField == m_pNF_InterceptValue )
+    {
+        if( !m_pCB_SetIntercept->IsChecked() )
+                m_pCB_SetIntercept->Check();
+    }
+    UpdateControlStates();
+
+    return 0;
 }
 
 } //  namespace chart
