@@ -14,6 +14,7 @@
 
 #include <cassert>
 #include <map>
+#include <set>
 #include <vector>
 
 #include "rtl/ref.hxx"
@@ -26,6 +27,8 @@
 #include "sourceprovider-parser.hxx"
 
 namespace unoidl { namespace detail {
+
+struct SourceProviderScannerData;
 
 class SourceProviderEntityPad: public salhelper::SimpleReferenceObject {
 public:
@@ -103,41 +106,76 @@ private:
 
 class SourceProviderInterfaceTypeEntityPad: public SourceProviderEntityPad {
 public:
-    struct Base {
-        Base(
+    struct DirectBase {
+        DirectBase(
             OUString const & theName,
             rtl::Reference<unoidl::InterfaceTypeEntity> const & theEntity,
             std::vector<OUString> const & theAnnotations):
             name(theName), entity(theEntity), annotations(theAnnotations)
-        {}
+        { assert(theEntity.is()); }
 
         OUString name;
         rtl::Reference<unoidl::InterfaceTypeEntity> entity;
         std::vector<OUString> annotations;
     };
 
-    SourceProviderInterfaceTypeEntityPad(
-        bool published, OUString singleBaseName,
-        rtl::Reference<unoidl::InterfaceTypeEntity> const & singleBaseEntity):
-        SourceProviderEntityPad(published),
-        singleBase(!singleBaseName.isEmpty())
-    {
-        assert(singleBaseName.isEmpty() != (bool) singleBaseEntity.is());
-        if (singleBase) {
-            mandatoryBases.push_back(
-                Base(
-                    singleBaseName, singleBaseEntity, std::vector<OUString>()));
-        }
-    }
+    enum BaseKind {
+        BASE_INDIRECT_OPTIONAL, BASE_DIRECT_OPTIONAL, BASE_INDIRECT_MANDATORY,
+        BASE_DIRECT_MANDATORY
+    };
+
+    struct Member {
+        OUString mandatory;
+        std::set<OUString> optional;
+
+        explicit Member(OUString theMandatory): mandatory(theMandatory) {}
+    };
+
+    SourceProviderInterfaceTypeEntityPad(bool published, bool theSingleBase):
+        SourceProviderEntityPad(published), singleBase(theSingleBase)
+    {}
+
+    bool addDirectBase(
+        YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+        DirectBase const & base, bool optional);
+
+    bool addDirectMember(
+        YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+        OUString const & name);
 
     bool singleBase;
-    std::vector<Base> mandatoryBases;
-    std::vector<Base> optionalBases;
-    std::vector<unoidl::InterfaceTypeEntity::Attribute> attributes;
-    std::vector<unoidl::InterfaceTypeEntity::Method> methods;
+    std::vector<DirectBase> directMandatoryBases;
+    std::vector<DirectBase> directOptionalBases;
+    std::vector<unoidl::InterfaceTypeEntity::Attribute> directAttributes;
+    std::vector<unoidl::InterfaceTypeEntity::Method> directMethods;
+    std::map<OUString, BaseKind> allBases;
+    std::map<OUString, Member> allMembers;
 
 private:
     virtual ~SourceProviderInterfaceTypeEntityPad() throw () {}
+
+    bool checkBaseClashes(
+        YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+        OUString const & name,
+        rtl::Reference<unoidl::InterfaceTypeEntity> const & entity,
+        bool direct, bool optional, bool outerOptional,
+        std::set<OUString> * seen) const;
+
+    bool checkMemberClashes(
+        YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+        OUString const & interfaceName, OUString const & memberName,
+        bool checkOptional) const;
+
+    bool addBase(
+        YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+        OUString const & directBaseName, OUString const & name,
+        rtl::Reference<unoidl::InterfaceTypeEntity> const & entity, bool direct,
+        bool optional);
+
+    bool addOptionalBaseMembers(
+        YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+        OUString const & name,
+        rtl::Reference<unoidl::InterfaceTypeEntity> const & entity);
 };
 
 class SourceProviderConstantGroupEntityPad: public SourceProviderEntityPad {

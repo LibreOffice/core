@@ -316,7 +316,7 @@ Found findEntity(
     YYLTYPE location, yyscan_t yyscanner,
     unoidl::detail::SourceProviderScannerData * data,
     bool resolveInterfaceDefinitions, OUString * name,
-    unoidl::detail::SourceProviderEntity const ** entity,
+    unoidl::detail::SourceProviderEntity const ** entity, bool * typedefed,
     unoidl::detail::SourceProviderType * typedefedType)
 {
     //TODO: avoid recursion
@@ -339,6 +339,9 @@ Found findEntity(
                 // fall through
             case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
                 if (e->entity->getSort() == unoidl::Entity::SORT_TYPEDEF) {
+                    if (typedefed != 0) {
+                        *typedefed = true;
+                    }
                     if (data->publishedContext
                         && !static_cast<unoidl::TypedefEntity *>(
                             e->entity.get())->isPublished())
@@ -413,7 +416,7 @@ Found findEntity(
                                 switch (
                                     findEntity(
                                         location, yyscanner, data, false,
-                                        &argName, &argEnt, &argType))
+                                        &argName, &argEnt, 0, &argType))
                                 {
                                 case FOUND_ERROR:
                                     return FOUND_ERROR;
@@ -1088,7 +1091,7 @@ plainStructDefn:
       if ($5 != 0) {
           baseName = convertName($5);
           unoidl::detail::SourceProviderEntity const * p;
-          if (findEntity(@5, yyscanner, data, false, &baseName, &p, 0)
+          if (findEntity(@5, yyscanner, data, false, &baseName, &p, 0, 0)
               == FOUND_ERROR)
           {
               YYERROR;
@@ -1219,7 +1222,7 @@ exceptionDefn:
       if ($5 != 0) {
           baseName = convertName($5);
           unoidl::detail::SourceProviderEntity const * p;
-          if (findEntity(@5, yyscanner, data, false, &baseName, &p, 0)
+          if (findEntity(@5, yyscanner, data, false, &baseName, &p, 0, 0)
               == FOUND_ERROR)
           {
               YYERROR;
@@ -1371,7 +1374,8 @@ structMember:
                       break;
                   }
                   unoidl::detail::SourceProviderEntity const * p;
-                  if (findEntity(@2, yyscanner, data, false, &baseName, &p, 0)
+                  if (findEntity(
+                          @2, yyscanner, data, false, &baseName, &p, 0, 0)
                       == FOUND_ERROR)
                   {
                       YYERROR;
@@ -1471,7 +1475,7 @@ structMember:
                       }
                       unoidl::detail::SourceProviderEntity const * p;
                       if (findEntity(
-                              @2, yyscanner, data, false, &baseName, &p, 0)
+                              @2, yyscanner, data, false, &baseName, &p, 0, 0)
                           == FOUND_ERROR)
                       {
                           YYERROR;
@@ -1511,7 +1515,7 @@ interfaceDefn:
       if ($5 != 0) {
           baseName = convertName($5);
           unoidl::detail::SourceProviderEntity const * p;
-          if (findEntity(@5, yyscanner, data, true, &baseName, &p, 0)
+          if (findEntity(@5, yyscanner, data, true, &baseName, &p, 0, 0)
               == FOUND_ERROR)
           {
               YYERROR;
@@ -1558,25 +1562,35 @@ interfaceDefn:
               break;
           }
       }
-      data->entities[data->currentName] = unoidl::detail::SourceProviderEntity(
+      rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad> pad(
           new unoidl::detail::SourceProviderInterfaceTypeEntityPad(
-              $2, baseName, baseEnt));
+              $2, baseEnt.is()));
+      if (baseEnt.is()
+          && !pad->addDirectBase(
+              @4, yyscanner, data,
+              unoidl::detail::SourceProviderInterfaceTypeEntityPad::DirectBase(
+                  baseName, baseEnt, std::vector<OUString>()),
+              false))
+      {
+          YYERROR;
+      }
+      data->entities[data->currentName] = unoidl::detail::SourceProviderEntity(
+          pad.get());
   }
   '{' interfaceMembers '}' ';'
   {
-      //TODO: check direct member uniqueness
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       unoidl::detail::SourceProviderEntity * ent = getCurrentEntity(data);
       unoidl::detail::SourceProviderInterfaceTypeEntityPad * pad =
           dynamic_cast<unoidl::detail::SourceProviderInterfaceTypeEntityPad *>(
               ent->pad.get());
       assert(pad != 0);
-      if (pad->mandatoryBases.empty()
+      if (pad->directMandatoryBases.empty()
           && data->currentName != "com.sun.star.uno.XInterface")
       {
           OUString base(".com.sun.star.uno.XInterface");
           unoidl::detail::SourceProviderEntity const * p;
-          if (findEntity(@4, yyscanner, data, true, &base, &p, 0)
+          if (findEntity(@4, yyscanner, data, true, &base, &p, 0, 0)
               == FOUND_ERROR)
           {
               YYERROR;
@@ -1591,29 +1605,35 @@ interfaceDefn:
                    + " does not resolve to an existing interface type"));
               YYERROR;
           }
-          pad->mandatoryBases.push_back(
-              unoidl::detail::SourceProviderInterfaceTypeEntityPad::Base(
-                  base,
-                  static_cast<unoidl::InterfaceTypeEntity *>(p->entity.get()),
-                  std::vector<OUString>()));
+          if (!pad->addDirectBase(
+                  @3, yyscanner, data,
+                  unoidl::detail::SourceProviderInterfaceTypeEntityPad::DirectBase(
+                      base,
+                      static_cast<unoidl::InterfaceTypeEntity *>(
+                          p->entity.get()),
+                      std::vector<OUString>()),
+                  false))
+          {
+              YYERROR;
+          }
       }
       std::vector<unoidl::AnnotatedReference> mbases;
-      for (std::vector<unoidl::detail::SourceProviderInterfaceTypeEntityPad::Base>::const_iterator
-               i(pad->mandatoryBases.begin());
-           i != pad->mandatoryBases.end(); ++i)
+      for (std::vector<unoidl::detail::SourceProviderInterfaceTypeEntityPad::DirectBase>::const_iterator
+               i(pad->directMandatoryBases.begin());
+           i != pad->directMandatoryBases.end(); ++i)
       {
           mbases.push_back(unoidl::AnnotatedReference(i->name, i->annotations));
       }
       std::vector<unoidl::AnnotatedReference> obases;
-      for (std::vector<unoidl::detail::SourceProviderInterfaceTypeEntityPad::Base>::const_iterator
-               i(pad->optionalBases.begin());
-           i != pad->optionalBases.end(); ++i)
+      for (std::vector<unoidl::detail::SourceProviderInterfaceTypeEntityPad::DirectBase>::const_iterator
+               i(pad->directOptionalBases.begin());
+           i != pad->directOptionalBases.end(); ++i)
       {
           obases.push_back(unoidl::AnnotatedReference(i->name, i->annotations));
       }
       ent->entity = new unoidl::InterfaceTypeEntity(
-          pad->isPublished(), mbases, obases, pad->attributes, pad->methods,
-          annotations($1));
+          pad->isPublished(), mbases, obases, pad->directAttributes,
+          pad->directMethods, annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
   }
@@ -1651,8 +1671,12 @@ interfaceBase:
           YYERROR;
       }
       bool opt = ($2 & unoidl::detail::FLAG_OPTIONAL) != 0;
+      OUString orgName(name);
       unoidl::detail::SourceProviderEntity const * p;
-      if (findEntity(@4, yyscanner, data, true, &name, &p, 0) == FOUND_ERROR) {
+      bool typedefed = false;
+      if (findEntity(@4, yyscanner, data, true, &name, &p, &typedefed, 0)
+          == FOUND_ERROR)
+      {
           YYERROR;
       }
       if (p == 0 || !p->entity.is()
@@ -1664,22 +1688,30 @@ interfaceBase:
                + " does not resolve to an existing interface type"));
           YYERROR;
       }
-      if (data->publishedContext
-          && !(static_cast<unoidl::InterfaceTypeEntity *>(p->entity.get())
-               ->isPublished()))
-      {
+      if (typedefed) {
+          error(
+              @4, yyscanner,
+              ("interface type " + data->currentName + " direct base " + orgName
+               + " is a typedef"));
+          YYERROR;
+      }
+      rtl::Reference<unoidl::InterfaceTypeEntity> ent(
+          static_cast<unoidl::InterfaceTypeEntity *>(p->entity.get()));
+      if (data->publishedContext && !ent->isPublished()) {
           error(
               @4, yyscanner,
               ("published interface type " + data->currentName + " direct base "
                + name + " is unpublished"));
           YYERROR;
       }
-      //TODO: check uniqueness (incl. that opt base != XInterface)
-      (opt ? pad->optionalBases : pad->mandatoryBases).push_back(
-          unoidl::detail::SourceProviderInterfaceTypeEntityPad::Base(
-              name,
-              static_cast<unoidl::InterfaceTypeEntity *>(p->entity.get()),
-              annotations($1)));
+      if (!pad->addDirectBase(
+              @4, yyscanner, data,
+              unoidl::detail::SourceProviderInterfaceTypeEntityPad::DirectBase(
+                  name, ent, annotations($1)),
+              opt))
+      {
+          YYERROR;
+      }
   }
 ;
 
@@ -1722,7 +1754,10 @@ interfaceAttribute:
       rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad> pad(
           getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
               data));
-      pad->attributes.push_back(
+      if (!pad->addDirectMember(@4, yyscanner, data, id)) {
+          YYERROR;
+      }
+      pad->directAttributes.push_back(
           unoidl::InterfaceTypeEntity::Attribute(
               id, t.getName(), ($2 & unoidl::detail::FLAG_BOUND) != 0,
               ($2 & unoidl::detail::FLAG_READONLY) != 0,
@@ -1757,8 +1792,8 @@ attributeAccessDecl:
       rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad>
           pad(getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
               data));
-      assert(!pad->attributes.empty());
-      pad->attributes.back().getExceptions = *$2;
+      assert(!pad->directAttributes.empty());
+      pad->directAttributes.back().getExceptions = *$2;
       delete $2;
       $$ = unoidl::detail::ACCESS_DECL_GET;
   }
@@ -1768,14 +1803,15 @@ attributeAccessDecl:
       rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad>
           pad(getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
               data));
-      assert(!pad->attributes.empty());
-      pad->attributes.back().setExceptions = *$2;
+      assert(!pad->directAttributes.empty());
+      pad->directAttributes.back().setExceptions = *$2;
       delete $2;
-      if (pad->attributes.back().readOnly) {
+      if (pad->directAttributes.back().readOnly) {
           error(
               @1, yyscanner,
               ("interface type " + data->currentName
-               + " direct read-only attribute " + pad->attributes.back().name
+               + " direct read-only attribute "
+               + pad->directAttributes.back().name
                + " cannot have set access declaration"));
           YYERROR;
       }
@@ -1800,7 +1836,10 @@ interfaceMethod:
       rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad> pad(
           getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
               data));
-      pad->methods.push_back(
+      if (!pad->addDirectMember(@3, yyscanner, data, id)) {
+          YYERROR;
+      }
+      pad->directMethods.push_back(
           unoidl::InterfaceTypeEntity::Method(
               id, t.getName(),
               std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>(),
@@ -1814,8 +1853,8 @@ interfaceMethod:
           rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad>
               pad(getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
                   data));
-          assert(!pad->methods.empty());
-          pad->methods.back().exceptions = *$8;
+          assert(!pad->directMethods.empty());
+          pad->directMethods.back().exceptions = *$8;
           delete $8;
       }
   }
@@ -1841,34 +1880,34 @@ methodParam:
       rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad>
           pad(getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
               data));
-      assert(!pad->methods.empty());
+      assert(!pad->directMethods.empty());
       switch (t.type) {
       case unoidl::detail::SourceProviderType::TYPE_VOID:
       case unoidl::detail::SourceProviderType::TYPE_EXCEPTION:
           error(
               @4, yyscanner,
               ("illegal interface type " + data->currentName
-               + " direct method " + pad->methods.back().name + " parameter "
-               + id + " type"));
+               + " direct method " + pad->directMethods.back().name
+               + " parameter " + id + " type"));
           YYERROR;
           break;
       default:
           break;
       }
       for (std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>::iterator
-               i(pad->methods.back().parameters.begin());
-           i != pad->methods.back().parameters.end(); ++i)
+               i(pad->directMethods.back().parameters.begin());
+           i != pad->directMethods.back().parameters.end(); ++i)
       {
           if (id == i->name) {
               error(
                   @5, yyscanner,
                   ("interface type " + data->currentName + " direct method "
-                   + pad->methods.back().name + " parameter " + id
+                   + pad->directMethods.back().name + " parameter " + id
                    + " has same identifier as another parameter"));
               YYERROR;
           }
       }
-      pad->methods.back().parameters.push_back(
+      pad->directMethods.back().parameters.push_back(
           unoidl::InterfaceTypeEntity::Method::Parameter(id, t.getName(), $2));
   }
 ;
@@ -2280,7 +2319,9 @@ singleInterfaceBasedServiceDefn:
       convertToCurrentName(data, $4);
       OUString base(convertName($5));
       unoidl::detail::SourceProviderEntity const * p;
-      if (findEntity(@5, yyscanner, data, false, &base, &p, 0) == FOUND_ERROR) {
+      if (findEntity(@5, yyscanner, data, false, &base, &p, 0, 0)
+          == FOUND_ERROR)
+      {
           YYERROR;
       }
       bool ifcBase = false;
@@ -2607,7 +2648,9 @@ serviceBase:
       }
       bool opt = ($2 & unoidl::detail::FLAG_OPTIONAL) != 0;
       unoidl::detail::SourceProviderEntity const * p;
-      if (findEntity(@4, yyscanner, data, false, &name, &p, 0) == FOUND_ERROR) {
+      if (findEntity(@4, yyscanner, data, false, &name, &p, 0, 0)
+          == FOUND_ERROR)
+      {
           YYERROR;
       }
       if (p == 0 || !p->entity.is()
@@ -2653,7 +2696,9 @@ serviceInterfaceBase:
       }
       bool opt = ($2 & unoidl::detail::FLAG_OPTIONAL) != 0;
       unoidl::detail::SourceProviderEntity const * p;
-      if (findEntity(@4, yyscanner, data, false, &name, &p, 0) == FOUND_ERROR) {
+      if (findEntity(@4, yyscanner, data, false, &name, &p, 0, 0)
+          == FOUND_ERROR)
+      {
           YYERROR;
       }
       bool ifcBase = false;
@@ -2794,7 +2839,9 @@ interfaceBasedSingletonDefn:
       OUString name(convertToFullName(data, $4));
       OUString base(convertName($5));
       unoidl::detail::SourceProviderEntity const * p;
-      if (findEntity(@5, yyscanner, data, false, &base, &p, 0) == FOUND_ERROR) {
+      if (findEntity(@5, yyscanner, data, false, &base, &p, 0, 0)
+          == FOUND_ERROR)
+      {
           YYERROR;
       }
       bool ifcBase = false;
@@ -2860,7 +2907,9 @@ serviceBasedSingletonDefn:
       OUString name(convertToFullName(data, $4));
       OUString base(convertName($7));
       unoidl::detail::SourceProviderEntity const * p;
-      if (findEntity(@7, yyscanner, data, false, &base, &p, 0) == FOUND_ERROR) {
+      if (findEntity(@7, yyscanner, data, false, &base, &p, 0, 0)
+          == FOUND_ERROR)
+      {
           YYERROR;
       }
       if (p == 0
@@ -2922,7 +2971,9 @@ exceptions:
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       OUString name(convertName($3));
       unoidl::detail::SourceProviderEntity const * p;
-      if (findEntity(@3, yyscanner, data, false, &name, &p, 0) == FOUND_ERROR) {
+      if (findEntity(@3, yyscanner, data, false, &name, &p, 0, 0)
+          == FOUND_ERROR)
+      {
           delete $1; /* see commented-out %destructor above */
           YYERROR;
       }
@@ -2960,7 +3011,9 @@ exceptions:
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       OUString name(convertName($1));
       unoidl::detail::SourceProviderEntity const * p;
-      if (findEntity(@1, yyscanner, data, false, &name, &p, 0) == FOUND_ERROR) {
+      if (findEntity(@1, yyscanner, data, false, &name, &p, 0, 0)
+          == FOUND_ERROR)
+      {
           YYERROR;
       }
       if (p == 0
@@ -3479,7 +3532,7 @@ primaryExpr:
       } else {
           OUString scope(name.copy(0, i));
           unoidl::detail::SourceProviderEntity const * ent;
-          if (findEntity(@1, yyscanner, data, false, &scope, &ent, 0)
+          if (findEntity(@1, yyscanner, data, false, &scope, &ent, 0, 0)
               == FOUND_ERROR)
           {
               YYERROR;
@@ -3720,7 +3773,7 @@ type:
       if (!done) {
           unoidl::detail::SourceProviderEntity const * ent;
           unoidl::detail::SourceProviderType t;
-          switch (findEntity(@1, yyscanner, data, false, &name, &ent, &t)) {
+          switch (findEntity(@1, yyscanner, data, false, &name, &ent, 0, &t)) {
           case FOUND_ERROR:
               YYERROR;
               break;
@@ -3874,7 +3927,8 @@ type:
       std::vector<unoidl::detail::SourceProviderType> args(*$3);
       delete $3;
       unoidl::detail::SourceProviderEntity const * ent;
-      if (findEntity(@1, yyscanner, data, false, &name, &ent, 0) == FOUND_ERROR)
+      if (findEntity(@1, yyscanner, data, false, &name, &ent, 0, 0)
+          == FOUND_ERROR)
       {
           YYERROR;
       }
@@ -4036,6 +4090,377 @@ bool SourceProviderType::equals(SourceProviderType const & other) const {
     {
         if (!i->equals(*j)) {
             return false;
+        }
+    }
+    return true;
+}
+
+bool SourceProviderInterfaceTypeEntityPad::addDirectBase(
+    YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+    DirectBase const & base, bool optional)
+{
+    std::set<OUString> seen;
+    if (!(checkBaseClashes(
+              location, yyscanner, data, base.name, base.entity, true, optional,
+              optional, &seen)
+          && addBase(
+              location, yyscanner, data, base.name, base.name, base.entity,
+              true, optional)))
+    {
+        return false;
+    }
+    if (optional) {
+        addOptionalBaseMembers(
+            location, yyscanner, data, base.name, base.entity);
+    }
+    //TODO: check that opt base != XInterface
+    (optional ? directOptionalBases : directMandatoryBases).push_back(base);
+    return true;
+}
+
+bool SourceProviderInterfaceTypeEntityPad::addDirectMember(
+    YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+    OUString const & name)
+{
+    assert(data != 0);
+    if (!checkMemberClashes(location, yyscanner, data, "", name, true)) {
+        return false;
+    }
+    allMembers.insert(
+        std::map<OUString, Member>::value_type(
+            name, Member(data->currentName)));
+    return true;
+}
+
+bool SourceProviderInterfaceTypeEntityPad::checkBaseClashes(
+    YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+    OUString const & name,
+    rtl::Reference<unoidl::InterfaceTypeEntity> const & entity, bool direct,
+    bool optional, bool outerOptional, std::set<OUString> * seen) const
+{
+    assert(data != 0);
+    assert(entity.is());
+    assert(seen != 0);
+    if (direct || optional || seen->insert(name).second) {
+        std::map<OUString, BaseKind>::const_iterator i(allBases.find(name));
+        if (i != allBases.end()) {
+            switch (i->second) {
+            case BASE_INDIRECT_OPTIONAL:
+                if (direct && optional) {
+                    error(
+                        location, yyscanner,
+                        ("interface type " + data->currentName
+                         + " duplicate base " + name));
+                    return false;
+                }
+                break;
+            case BASE_DIRECT_OPTIONAL:
+                if (direct || !outerOptional) {
+                    error(
+                        location, yyscanner,
+                        ("interface type " + data->currentName
+                         + " duplicate base " + name));
+                    return false;
+                }
+                return true;
+            case BASE_INDIRECT_MANDATORY:
+                if (direct) {
+                    error(
+                        location, yyscanner,
+                        ("interface type " + data->currentName
+                         + " duplicate base " + name));
+                    return false;
+                }
+                return true;
+            case BASE_DIRECT_MANDATORY:
+                if (direct || (!optional && !outerOptional)) {
+                    error(
+                        location, yyscanner,
+                        ("interface type " + data->currentName
+                         + " duplicate base " + name));
+                    return false;
+                }
+                return true;
+            }
+        }
+        if (direct || !optional) {
+            for (std::vector<unoidl::AnnotatedReference>::const_iterator j(
+                     entity->getDirectMandatoryBases().begin());
+                 j != entity->getDirectMandatoryBases().end(); ++j)
+            {
+                OUString n("." + j->name);
+                unoidl::detail::SourceProviderEntity const * p;
+                if (findEntity(location, yyscanner, data, true, &n, &p, 0, 0)
+                    == FOUND_ERROR)
+                {
+                    return false;
+                }
+                if (p == 0 || !p->entity.is()
+                    || (p->entity->getSort()
+                        != unoidl::Entity::SORT_INTERFACE_TYPE))
+                {
+                    error(
+                        location, yyscanner,
+                        ("inconsistent type manager: interface type "
+                         + data->currentName + " base " + n
+                         + " does not resolve to an existing interface type"));
+                    return false;
+                }
+                if (!checkBaseClashes(
+                        location, yyscanner, data, n,
+                        static_cast<unoidl::InterfaceTypeEntity *>(
+                            p->entity.get()),
+                        false, false, outerOptional, seen))
+                {
+                    return false;
+                }
+            }
+            for (std::vector<unoidl::AnnotatedReference>::const_iterator j(
+                     entity->getDirectOptionalBases().begin());
+                 j != entity->getDirectOptionalBases().end(); ++j)
+            {
+                OUString n("." + j->name);
+                unoidl::detail::SourceProviderEntity const * p;
+                if (findEntity(location, yyscanner, data, true, &n, &p, 0, 0)
+                    == FOUND_ERROR)
+                {
+                    return false;
+                }
+                if (p == 0 || !p->entity.is()
+                    || (p->entity->getSort()
+                        != unoidl::Entity::SORT_INTERFACE_TYPE))
+                {
+                    error(
+                        location, yyscanner,
+                        ("inconsistent type manager: interface type "
+                         + data->currentName + " base " + n
+                         + " does not resolve to an existing interface type"));
+                    return false;
+                }
+                if (!checkBaseClashes(
+                        location, yyscanner, data, n,
+                        static_cast<unoidl::InterfaceTypeEntity *>(
+                            p->entity.get()),
+                        false, true, outerOptional, seen))
+                {
+                    return false;
+                }
+            }
+            for (std::vector<unoidl::InterfaceTypeEntity::Attribute>::const_iterator
+                     j(entity->getDirectAttributes().begin());
+                 j != entity->getDirectAttributes().end(); ++j)
+            {
+                if (!checkMemberClashes(
+                        location, yyscanner, data, name, j->name,
+                        !outerOptional))
+                {
+                    return false;
+                }
+            }
+            for (std::vector<unoidl::InterfaceTypeEntity::Method>::const_iterator
+                     j(entity->getDirectMethods().begin());
+                 j != entity->getDirectMethods().end(); ++j)
+            {
+                if (!checkMemberClashes(
+                        location, yyscanner, data, name, j->name,
+                        !outerOptional))
+                {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool SourceProviderInterfaceTypeEntityPad::checkMemberClashes(
+    YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+    OUString const & interfaceName, OUString const & memberName,
+    bool checkOptional) const
+{
+    std::map<OUString, Member>::const_iterator i(allMembers.find(memberName));
+    if (i != allMembers.end()) {
+        if (!i->second.mandatory.isEmpty()) {
+            // For a direct member, interfaceName will be empty, so this will
+            // catch two direct members with the same name:
+            if (i->second.mandatory != interfaceName) {
+                error(
+                    location, yyscanner,
+                    ("interface type " + data->currentName
+                     + " duplicate member " + memberName));
+                return false;
+            }
+        } else if (checkOptional) {
+            for (std::set<OUString>::const_iterator j(
+                     i->second.optional.begin());
+                 j != i->second.optional.end(); ++j)
+            {
+                if (*j != interfaceName) {
+                    error(
+                        location, yyscanner,
+                        ("interface type " + data->currentName
+                         + " duplicate member " + memberName));
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool SourceProviderInterfaceTypeEntityPad::addBase(
+    YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+    OUString const & directBaseName, OUString const & name,
+    rtl::Reference<unoidl::InterfaceTypeEntity> const & entity, bool direct,
+    bool optional)
+{
+    assert(data != 0);
+    assert(entity.is());
+    BaseKind kind = optional
+        ? direct ? BASE_DIRECT_OPTIONAL : BASE_INDIRECT_OPTIONAL
+        : direct ? BASE_DIRECT_MANDATORY : BASE_INDIRECT_MANDATORY;
+    std::pair<std::map<OUString, BaseKind>::iterator, bool> p(
+        allBases.insert(
+            std::map<OUString, BaseKind>::value_type(name, kind)));
+    bool seen = !p.second && p.first->second >= BASE_INDIRECT_MANDATORY;
+    if (!p.second && kind > p.first->second) {
+        p.first->second = kind;
+    }
+    if (!optional && !seen) {
+        for (std::vector<unoidl::AnnotatedReference>::const_iterator i(
+                 entity->getDirectMandatoryBases().begin());
+             i != entity->getDirectMandatoryBases().end(); ++i)
+        {
+            OUString n("." + i->name);
+            unoidl::detail::SourceProviderEntity const * q;
+            if (findEntity(location, yyscanner, data, true, &n, &q, 0, 0)
+                == FOUND_ERROR)
+            {
+                return false;
+            }
+            if (q == 0 || !q->entity.is()
+                || q->entity->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
+            {
+                error(
+                    location, yyscanner,
+                    ("inconsistent type manager: interface type "
+                     + data->currentName + " base " + n
+                     + " does not resolve to an existing interface type"));
+                return false;
+            }
+            if (!addBase(
+                    location, yyscanner, data, directBaseName, n,
+                    static_cast<unoidl::InterfaceTypeEntity *>(q->entity.get()),
+                    false, false))
+            {
+                return false;
+            }
+        }
+        for (std::vector<unoidl::AnnotatedReference>::const_iterator i(
+                 entity->getDirectOptionalBases().begin());
+             i != entity->getDirectOptionalBases().end(); ++i)
+        {
+            OUString n("." + i->name);
+            unoidl::detail::SourceProviderEntity const * q;
+            if (findEntity(location, yyscanner, data, true, &n, &q, 0, 0)
+                == FOUND_ERROR)
+            {
+                return false;
+            }
+            if (q == 0 || !q->entity.is()
+                || q->entity->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
+            {
+                error(
+                    location, yyscanner,
+                    ("inconsistent type manager: interface type "
+                     + data->currentName + " base " + n
+                     + " does not resolve to an existing interface type"));
+                return false;
+            }
+            if (!addBase(
+                    location, yyscanner, data, directBaseName, n,
+                    static_cast<unoidl::InterfaceTypeEntity *>(q->entity.get()),
+                    false, true))
+            {
+                return false;
+            }
+        }
+        for (std::vector<unoidl::InterfaceTypeEntity::Attribute>::const_iterator
+                 i(entity->getDirectAttributes().begin());
+             i != entity->getDirectAttributes().end(); ++i)
+        {
+            allMembers.insert(
+                std::map<OUString, Member>::value_type(i->name, Member(name)));
+        }
+        for (std::vector<unoidl::InterfaceTypeEntity::Method>::const_iterator i(
+                 entity->getDirectMethods().begin());
+             i != entity->getDirectMethods().end(); ++i)
+        {
+            allMembers.insert(
+                std::map<OUString, Member>::value_type(i->name, Member(name)));
+        }
+    }
+    return true;
+}
+
+bool SourceProviderInterfaceTypeEntityPad::addOptionalBaseMembers(
+    YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
+    OUString const & name,
+    rtl::Reference<unoidl::InterfaceTypeEntity> const & entity)
+{
+    assert(entity.is());
+    for (std::vector<unoidl::AnnotatedReference>::const_iterator i(
+             entity->getDirectMandatoryBases().begin());
+         i != entity->getDirectMandatoryBases().end(); ++i)
+    {
+        OUString n("." + i->name);
+        unoidl::detail::SourceProviderEntity const * p;
+        if (findEntity(location, yyscanner, data, true, &n, &p, 0, 0)
+            == FOUND_ERROR)
+        {
+            return false;
+        }
+        if (p == 0 || !p->entity.is()
+            || p->entity->getSort() != unoidl::Entity::SORT_INTERFACE_TYPE)
+        {
+            error(
+                location, yyscanner,
+                ("inconsistent type manager: interface type "
+                 + data->currentName + " base " + n
+                 + " does not resolve to an existing interface type"));
+            return false;
+        }
+        if (!addOptionalBaseMembers(
+                location, yyscanner, data, n,
+                static_cast<unoidl::InterfaceTypeEntity *>(p->entity.get())))
+        {
+            return false;
+        }
+    }
+    for (std::vector<unoidl::InterfaceTypeEntity::Attribute>::const_iterator i(
+             entity->getDirectAttributes().begin());
+         i != entity->getDirectAttributes().end(); ++i)
+    {
+        Member & m(
+            allMembers.insert(
+                std::map<OUString, Member>::value_type(
+                    i->name, Member("")))
+            .first->second);
+        if (m.mandatory.isEmpty()) {
+            m.optional.insert(name);
+        }
+    }
+    for (std::vector<unoidl::InterfaceTypeEntity::Method>::const_iterator i(
+             entity->getDirectMethods().begin());
+         i != entity->getDirectMethods().end(); ++i)
+    {
+        Member & m(
+            allMembers.insert(
+                std::map<OUString, Member>::value_type(
+                    i->name, Member("")))
+            .first->second);
+        if (m.mandatory.isEmpty()) {
+            m.optional.insert(name);
         }
     }
     return true;
