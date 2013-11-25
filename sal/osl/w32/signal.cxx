@@ -401,7 +401,7 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
 /* osl_setErrorReporting */
 /*****************************************************************************/
 
-void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* pExcPtrs)
+void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* /* pExcPtrs */)
 {
     const char* pSEHName = NULL;
     switch( nSEHCode)
