@@ -108,7 +108,7 @@ string processccargs(vector<string> rawargs) {
             }
             else
             {
-                cerr << "unknonwn -o argument - please adapt gcc-wrapper for \""
+                cerr << "unknown -o argument - please adapt gcc-wrapper for \""
                      << (*i) << "\"";
                 exit(1);
             }

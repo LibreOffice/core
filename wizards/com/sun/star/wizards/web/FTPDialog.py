@@ -60,7 +60,7 @@ class FTPDialog(UnoDialog2, UIConsts):
     # A Constant used for the setLabel(int) method to change the
     # status-display. "unknown" is the status when the user first
     # opens the dialog, or changes the servername/username/password.
-    STATUS_UNKONWN = 0
+    STATUS_UNKNOWN = 0
     # A Constant used for the setLabel(int) method to change the
     # status-display. (connection established)
     STATUS_OK = 1
@@ -216,7 +216,7 @@ class FTPDialog(UnoDialog2, UIConsts):
         self.username = "" if (self.publish.cp_Username == None) else self.publish.cp_Username
         self.password = "" if (self.publish.password == None) else self.publish.password
         self.folder = self.extractDir(self.publish.cp_URL)
-        self.setLabel(self.STATUS_UNKONWN)
+        self.setLabel(self.STATUS_UNKNOWN)
 
         self.enableTestButton()
         self.updateUI()
@@ -365,14 +365,14 @@ class FTPDialog(UnoDialog2, UIConsts):
         self.enableTestButton()
         self.setEnabled(self.btnOK, False)
         self.setEnabled(self.btnDir, False)
-        self.setLabel(self.STATUS_UNKONWN)
+        self.setLabel(self.STATUS_UNKNOWN)
 
     # changes the status label and icon, according to the
     # given status
     # @param status one opf the private status-constants.
     # if this param is not one of them, an "unknown error" status is displayed.
     def setLabel(self, status):
-        if status == self.STATUS_UNKONWN:
+        if status == self.STATUS_UNKNOWN:
             # not connected yet
             self.setLabel1(self.resources.resFTPDisconnected, self.ICON_UNKNOWN)
         elif status == self.STATUS_OK:

@@ -566,7 +566,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     default:
     {
         OUStringBuffer buf;
-        buf.appendAscii( "Unknonwn UNO type class " );
+        buf.appendAscii( "Unknown UNO type class " );
         buf.append( (sal_Int32 ) a.getValueTypeClass() );
         throw RuntimeException(buf.makeStringAndClear( ), Reference< XInterface > () );
     }

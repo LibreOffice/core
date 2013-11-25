@@ -109,7 +109,7 @@ class AbstractErrorHandler(ErrorHandler):
                 return 2
         elif (errorType in (ErrorHandler.ERROR_WARNING, ErrorHandler.ERROR_MESSAGE)):
                 return 1
-        raise ValueError("unkonown error type")
+        raise ValueError("unknown error type")
 
 
     # @param errorType
@@ -136,7 +136,7 @@ class AbstractErrorHandler(ErrorHandler):
                 return OK
         elif (errorType == ErrorHandler.ERROR_MESSAGE):
                 return OK
-        raise ValueError("unkonown error type")
+        raise ValueError("unknown error type")
 
     # @deprecated
     # @param errorType
@@ -163,7 +163,7 @@ class AbstractErrorHandler(ErrorHandler):
                 return "warningbox"
         elif (errorType == ErrorHandler.ERROR_MESSAGE):
                 return "infobox"
-        raise ValueError("unkonown error type")
+        raise ValueError("unknown error type")
 
     # renders the error
     # @param ex the exception

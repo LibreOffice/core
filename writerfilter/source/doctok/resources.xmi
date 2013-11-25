@@ -24226,7 +24226,7 @@
             <UML:Attribute name="unknown">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>unkonwn</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="comment"/>
                   </UML:TaggedValue.type>
@@ -24284,7 +24284,7 @@
             <UML:Attribute name="dropdownIndex">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>unkonwn</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="comment"/>
                   </UML:TaggedValue.type>

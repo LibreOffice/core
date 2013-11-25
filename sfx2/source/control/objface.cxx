@@ -366,7 +366,7 @@ const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(nSlotId);
-        OSL_FAIL("unkonown Slot");
+        OSL_FAIL("unknown Slot");
         return 0;
     }
 
