@@ -239,7 +239,7 @@ bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
 const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
 {
     SwDoc* pDoc = dynamic_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
-    sal_uInt16 nDummy = USHRT_MAX;
+    sal_Int32 nDummy = -1;
     return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
 }
 
@@ -274,7 +274,8 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
     SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
     // finding the reference target (the number)
-    sal_uInt16 nNumStart, nNumEnd;
+    sal_Int32 nNumStart = -1;
+    sal_Int32 nNumEnd = -1;
     SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor(
         pDoc, sSetRefName, nSubType, nSeqNo, &nNumStart, &nNumEnd
     );
@@ -314,8 +315,8 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 // "Category and Number"
                 case REF_ONLYNUMBER:
                     if (bHasCat) {
-                        nStart = std::min<unsigned>(nNumStart, nCatStart);
-                        nEnd = std::max<unsigned>(nNumEnd, nCatEnd);
+                        nStart = std::min(nNumStart, nCatStart);
+                        nEnd = std::max(nNumEnd, nCatEnd);
                     } else {
                         nStart = nNumStart;
                         nEnd = nNumEnd;
@@ -329,14 +330,14 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                         pTxtNd->GetTxtAttrForCharAt(nNumStart, RES_TXTATR_FIELD)
                     ) {
                         // start searching from nFrom
-                        const sal_Int32 nFrom = bHasCat ?
-                            std::max<unsigned>(nNumStart + 1, nCatEnd) : nNumStart + 1;
+                        const sal_Int32 nFrom = bHasCat
+                            ? std::max(nNumStart + 1, nCatEnd)
+                            : nNumStart + 1;
                         nStart = SwGetExpField::GetReferenceTextPos(
                             pTxtAttr->GetFmtFld(), *pDoc, nFrom
                         );
                     } else {
-                        nStart = bHasCat ?
-                            std::max<unsigned>(nNumEnd, nCatEnd) : nNumEnd;
+                        nStart = bHasCat ? std::max(nNumEnd, nCatEnd) : nNumEnd;
                     }
                     nEnd = nLen;
                     break;
@@ -360,7 +361,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 nStart = nNumStart;
                 // Text steht ueber verschiedene Nodes verteilt.
                 // Gesamten Text oder nur bis zum Ende vom Node?
-                nEnd = nNumEnd == USHRT_MAX ? nLen : nNumEnd;
+                nEnd = nNumEnd<0 ? nLen : nNumEnd;
                 break;
 
             case REF_OUTLINE:
@@ -815,7 +816,7 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
 
 SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
-                                        sal_uInt16* pStt, sal_uInt16* pEnd )
+                                        sal_Int32* pStt, sal_Int32* pEnd )
 {
     OSL_ENSURE( pStt, "Why did noone check the StartPos?" );
 
@@ -885,7 +886,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                     else if(pBkmk->GetOtherMarkPos().nNode == pBkmk->GetMarkPos().nNode)
                         *pEnd = pBkmk->GetMarkEnd().nContent.GetIndex();
                     else
-                        *pEnd = USHRT_MAX;
+                        *pEnd = -1;
                 }
             }
         }

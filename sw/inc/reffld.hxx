@@ -74,7 +74,7 @@ public:
 
     static SwTxtNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
-                                        sal_uInt16* pStt, sal_uInt16* pEnd = 0 );
+                                        sal_Int32* pStt, sal_Int32* pEnd = 0 );
 };
 
 

@@ -1096,7 +1096,7 @@ sal_Bool SwCrsrShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
-    sal_uInt16 nPos;
+    sal_Int32 nPos = -1;
     SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor( GetDoc(), rRefMark,
                                                     nSubType, nSeqNo, &nPos );
     if( pTxtNd && pTxtNd->GetNodes().IsDocNodes() )
