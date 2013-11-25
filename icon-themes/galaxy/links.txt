@@ -1,4 +1,4 @@
-cmd/lc_datastreamsplay.png cmd/lc_runbasic.png
-cmd/sc_datastreamsplay.png cmd/sc_runbasic.png
-cmd/lc_datastreamsstop.png cmd/lc_basicstop.png
-cmd/sc_datastreamsstop.png cmd/sc_basicstop.png
+cmd/lc_datastreamsplay.png avmedia/res/avl02049.png
+cmd/sc_datastreamsplay.png avmedia/res/av02049.png
+cmd/lc_datastreamsstop.png avmedia/res/avl02051.png
+cmd/sc_datastreamsstop.png avmedia/res/av02051.png
