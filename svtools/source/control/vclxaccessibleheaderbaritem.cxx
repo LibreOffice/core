@@ -85,7 +85,6 @@ IMPL_LINK( VCLXAccessibleHeaderBarItem, WindowEventListener, VclSimpleEvent*, pE
 
 void VCLXAccessibleHeaderBarItem::ProcessWindowEvent( const VclWindowEvent& )
 {
-    Any aOldValue, aNewValue;
 }
 
 // -----------------------------------------------------------------------------
