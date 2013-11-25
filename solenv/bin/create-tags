@@ -8,7 +8,14 @@
 #
 
 omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
-ctags -h "+.hdl.hrc" --langmap=c:+.hdl.hrc.src $omnicppoptions \
+
+ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
       -R --exclude=instdir --exclude=workdir \
       --exclude=clone --totals=yes *
+
+ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
+      --languages=-HTML,Java,JavaScript \
+      -R --append=yes --totals=yes \
+      workdir/UnoApiHeadersTarget/udkapi/normal \
+      workdir/UnoApiHeadersTarget/offapi/normal
