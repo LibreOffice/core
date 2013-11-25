@@ -404,11 +404,12 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
 void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* pExcPtrs)
 {
     const char* pSEHName = NULL;
-    switch( nSEHCode) {
+    switch( nSEHCode)
+    {
         case EXCEPTION_ACCESS_VIOLATION:         pSEHName = "SEH Exception: ACCESS VIOLATION"; break;
         case EXCEPTION_DATATYPE_MISALIGNMENT:    pSEHName = "SEH Exception: DATATYPE MISALIGNMENT"; break;
-//      case EXCEPTION_BREAKPOINT:               pSEHName = "SEH Exception: BREAKPOINT"; break;
-//      case EXCEPTION_SINGLE_STEP:              pSEHName = "SEH Exception: SINGLE STEP"; break;
+        case EXCEPTION_BREAKPOINT:               /*pSEHName = "SEH Exception: BREAKPOINT";*/ break;
+        case EXCEPTION_SINGLE_STEP:              /*pSEHName = "SEH Exception: SINGLE STEP";*/ break;
         case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:    pSEHName = "SEH Exception: ARRAY BOUNDS EXCEEDED"; break;
         case EXCEPTION_FLT_DENORMAL_OPERAND:     pSEHName = "SEH Exception: DENORMAL FLOAT OPERAND"; break;
         case EXCEPTION_FLT_DIVIDE_BY_ZERO:       pSEHName = "SEH Exception: FLOAT DIVIDE_BY_ZERO"; break;
@@ -430,7 +431,9 @@ void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* pExcPtrs)
 //      case EXCEPTION_POSSIBLE_DEADLOCK:        pSEHName = "SEH Exception: POSSIBLE DEADLOCK"; break;
         default:                                 pSEHName = "Unknown SEH Exception"; break;
     }
-    throw std::runtime_error( pSEHName);
+
+    if( pSEHName)
+        throw std::runtime_error( pSEHName);
 }
 
 sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
