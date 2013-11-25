@@ -108,6 +108,8 @@ public:
     bool IsLocked() const;
     bool IsChart() const;
 
+    OUString GetChartType();
+
     // #i104867#
     // Provides a graphic version number for the fetchable Graphic during this object's lifetime. Internally,
     // that number is incremented at each change of the Graphic. This mechanism is needed to identify if a

@@ -316,6 +316,8 @@ public:
 
     static sal_Bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
     static sal_Bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
+
+    Color               GetTextColor() const { return maTextColor; }
 };
 
 #endif // INCLUDED_VCL_TEXTENG_HXX

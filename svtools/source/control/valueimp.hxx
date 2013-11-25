@@ -55,6 +55,7 @@ struct ValueSetItem
     Color               maColor;
     OUString            maText;
     void*               mpData;
+    bool                mbSelected;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
     ValueSetItem( ValueSet& rParent );

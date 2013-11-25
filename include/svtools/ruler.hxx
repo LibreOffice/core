@@ -28,6 +28,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#include <svtools/accessibleruler.hxx>
+
 class MouseEvent;
 class TrackingEvent;
 class DataChangedEvent;
@@ -658,6 +660,8 @@ private:
     boost::scoped_ptr<RulerSelection> mpCurrentHitTest;
     boost::scoped_ptr<RulerSelection> mpPreviousHitTest;
 
+    SvtRulerAccessible* pAccContext;
+
     SVT_DLLPRIVATE void ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void ImplVDrawText( long nX, long nY, const OUString& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
@@ -813,6 +817,8 @@ public:
     void            SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
 
     void            DrawTicks();
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 #endif  // _RULER_HXX

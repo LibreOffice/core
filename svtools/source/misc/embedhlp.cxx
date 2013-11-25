@@ -28,7 +28,12 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
-
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -812,6 +817,100 @@ bool EmbeddedObjectRef::IsChart() const
     }
 
     return false;
+}
+
+// MT: Only used for getting accessible attributes, which are not localized
+OUString EmbeddedObjectRef::GetChartType()
+{
+    OUString Style;
+    if ( mpImpl->mxObj.is() )
+    {
+        if ( IsChart() )
+        {
+            if ( svt::EmbeddedObjectRef::TryRunningState( mpImpl->mxObj ) )
+            {
+                uno::Reference< chart2::XChartDocument > xChart( mpImpl->mxObj->getComponent(), uno::UNO_QUERY );
+                if (xChart.is())
+                {
+                    uno::Reference< chart2::XDiagram > xDiagram( xChart->getFirstDiagram());
+                    if( ! xDiagram.is())
+                        return OUString();
+                    uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
+                    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+                    // IA2 CWS. Unused: int nCoordinateCount = aCooSysSeq.getLength();
+                    sal_Bool bGetChartType = sal_False;
+                    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+                    {
+                        uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
+                        uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+                        int nDimesionCount = aCooSysSeq[nCooSysIdx]->getDimension();
+                        if( nDimesionCount == 3 )
+                            Style += "3D ";
+                        else
+                            Style += "2D ";
+                        for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+                        {
+                            OUString strChartType = aChartTypes[nCTIdx]->getChartType();
+                            if (strChartType == "com.sun.star.chart2.AreaChartType")
+                            {
+                                Style += "Areas";
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType == "com.sun.star.chart2.BarChartType")
+                            {
+                                Style += "Bars";
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType == "com.sun.star.chart2.ColumnChartType")
+                            {
+                                uno::Reference< beans::XPropertySet > xProp( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
+                                if( xProp.is())
+                                {
+                                    bool bCurrent = false;
+                                    if( xProp->getPropertyValue( OUString("SwapXAndYAxis") ) >>= bCurrent )
+                                    {
+                                        if (bCurrent)
+                                            Style += "Bars";
+                                        else
+                                            Style += "Columns";
+                                        bGetChartType = sal_True;
+                                    }
+                                }
+                            }
+                            else if (strChartType == "com.sun.star.chart2.LineChartType")
+                            {
+                                Style += "Lines";
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType == "com.sun.star.chart2.ScatterChartType")
+                            {
+                                Style += "XY Chart";
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType == "com.sun.star.chart2.PieChartType")
+                            {
+                                Style += "Pies";
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType == "com.sun.star.chart2.NetChartType")
+                            {
+                                Style += "Radar";
+                                bGetChartType = sal_True;
+                            }
+                            else if (strChartType == "com.sun.star.chart2.CandleStickChartType")
+                            {
+                                Style += "Candle Stick Chart";
+                                bGetChartType = sal_True;
+                            }
+                            if (bGetChartType)
+                                return Style;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return Style;
 }
 
 // #i104867#

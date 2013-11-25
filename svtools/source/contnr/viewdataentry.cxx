@@ -26,6 +26,7 @@ DBG_NAME(SvViewDataEntry);
 SvViewDataEntry::SvViewDataEntry() :
     nVisPos(0),
     mbSelected(false),
+    mbObjectSelected(false),
     mbHighlighted(false),
     mbExpanded(false),
     mbFocused(false),
@@ -38,6 +39,7 @@ SvViewDataEntry::SvViewDataEntry() :
 SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
     nVisPos(rData.nVisPos),
     mbSelected(false),
+    mbObjectSelected(false),
     mbHighlighted(false),
     mbExpanded(rData.mbExpanded),
     mbFocused(false),
@@ -94,6 +96,11 @@ void SvViewDataEntry::SetSelected( bool bSelected )
 {
     mbSelected = bSelected;
     mbHighlighted = bSelected;
+}
+
+void SvViewDataEntry::SetObjectSelected( bool bSelected )
+{
+    mbObjectSelected = bSelected;
 }
 
 void SvViewDataEntry::SetHighlighted( bool bHighlighted )

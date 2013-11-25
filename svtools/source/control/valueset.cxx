@@ -1907,6 +1907,19 @@ void ValueSet::SetItemWidth( long nNewItemWidth )
     }
 }
 
+//method to set accessible when the style is user draw.
+void ValueSet::InsertItem( sal_uInt16 nItemId, const OUString& rText, size_t nPos  )
+{
+    DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
+    DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
+                "ValueSet::InsertItem(): ItemId already exists" );
+    ValueSetItem* pItem = new ValueSetItem( *this );
+    pItem->mnId     = nItemId;
+    pItem->meType   = VALUESETITEM_USERDRAW;
+    pItem->maText   = rText;
+    ImplInsertItem( pItem, nPos );
+}
+
 // -----------------------------------------------------------------------
 
 void ValueSet::SetItemHeight( long nNewItemHeight )

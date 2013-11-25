@@ -24,11 +24,18 @@
 #include <vcl/i18nhelp.hxx>
 
 #include <svtools/ruler.hxx>
+#include <svtools/svtresid.hxx>
+#include <svtools/svtools.hrc>
 
 #include <boost/scoped_array.hpp>
 #include <vector>
 
 using namespace std;
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::accessibility;
 
 #define RULER_OFF           3
 #define RULER_TEXTOFF       5
@@ -271,6 +278,7 @@ void Ruler::ImplInit( WinBits nWinBits )
         aDefSize.Width() = nDefHeight;
     SetOutputSizePixel( aDefSize );
     SetType(WINDOW_RULER);
+    pAccContext = NULL;
 }
 
 Ruler::Ruler( Window* pParent, WinBits nWinStyle ) :
@@ -290,6 +298,8 @@ Ruler::~Ruler()
         Application::RemoveUserEvent( mnUpdateEvtId );
     delete mpSaveData;
     delete mpDragData;
+    if( pAccContext )
+        pAccContext->release();
 }
 
 void Ruler::ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 )
@@ -2791,6 +2801,33 @@ void Ruler::DrawTicks()
 {
     mbFormat = sal_True;
     Paint(Rectangle());
+}
+
+uno::Reference< XAccessible > Ruler::CreateAccessible()
+{
+    Window* pParent = GetAccessibleParentWindow();
+    OSL_ENSURE( pParent, "-SvxRuler::CreateAccessible(): No Parent!" );
+    uno::Reference< XAccessible >   xAccParent  = pParent->GetAccessible();
+    if( xAccParent.is() )
+    {
+        // MT: Fixed compiler issue because the address from a temporary object was used.
+        // BUT: Shoudl it really be a Pointer, instead of const&???
+        OUString aStr;
+        if ( mnWinStyle & WB_HORZ )
+        {
+            aStr = SvtResId(STR_SVT_ACC_RULER_HORZ_NAME);
+        }
+        else
+        {
+            aStr = SvtResId(STR_SVT_ACC_RULER_VERT_NAME);
+        }
+        pAccContext = new SvtRulerAccessible( xAccParent, *this, aStr );
+        pAccContext->acquire();
+        this->SetAccessible(pAccContext);
+        return pAccContext;
+    }
+    else
+        return uno::Reference< XAccessible >();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1504,6 +1504,7 @@ void SvTreeListBox::InitTreeView()
     nFirstSelTab = 0;
     nLastSelTab = 0;
     nFocusWidth = -1;
+    nAllItemAccRoleType = 0;
     mnCheckboxItemWidth = 0;
 
     Link* pLink = new Link( LINK(this,SvTreeListBox, DefaultCompare) );
@@ -1527,6 +1528,79 @@ void SvTreeListBox::InitTreeView()
     SetTabs();
 }
 
+OUString SvTreeListBox::GetEntryAltText( SvTreeListEntry* ) const
+{
+    return OUString();
+}
+
+OUString SvTreeListBox::GetEntryLongDescription( SvTreeListEntry* ) const
+{
+    return OUString();
+}
+
+OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
+{
+    DBG_CHKTHIS(SvTreeListBox,0);
+    DBG_ASSERT( pEntry, "SvTreeListBox::SearchEntryText(): no entry" );
+    OUString sRet;
+
+    sal_uInt16 nCount = pEntry->ItemCount();
+    sal_uInt16 nCur = 0;
+    sal_uInt16 nHeaderCur = 0;
+    SvLBoxItem* pItem;
+    while( nCur < nCount )
+    {
+        // MT: SV_ITEM_ID_EXTENDRLBOXSTRING / GetExtendText() was in use in IA2 cws, but only used in sc: ScSolverOptionsString. Needed?
+        pItem = pEntry->GetItem( nCur );
+        if ( (pItem->GetType() == SV_ITEM_ID_LBOXSTRING ) &&
+             !static_cast<SvLBoxString*>( pItem )->GetText().isEmpty() )
+        {
+            //want the column header
+            if (!headString.isEmpty())
+            {
+                sal_Int32 nEnd = headString.indexOf('\t');
+                if( nEnd == -1 )
+                {
+                    if (!sRet.isEmpty())
+                    {
+                        sRet += ",";
+                    }
+                    if (!headString.isEmpty())
+                    {
+                        sRet += headString ;
+                        sRet += ":" ;
+                    }
+                }
+                else
+                {
+                    OUString  aString=headString.getToken(nHeaderCur, '\t');
+                    if (!sRet.isEmpty())
+                    {
+                        sRet += ",";
+                    }
+                    if (!aString.isEmpty())
+                    {
+                        sRet += aString ;
+                        sRet += ":" ;
+                    }
+                    nHeaderCur++;
+                }
+                sRet += static_cast<SvLBoxString*>( pItem )->GetText();
+            }
+            else
+            {
+                sRet += static_cast<SvLBoxString*>( pItem )->GetText();
+                sRet += ",";
+            }
+            //end want to the column header
+        }
+        nCur++;
+    }
+
+    if (!sRet.isEmpty())
+        sRet = sRet.copy(0, sRet.getLength() - 1);
+    return sRet;
+}
 
 SvTreeListBox::~SvTreeListBox()
 {
@@ -2232,18 +2306,37 @@ void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 void SvTreeListBox::GetFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
+    //If there is no item in the tree, draw focus.
+    if( !First())
+    {
+        Invalidate();
+    }
     pImp->GetFocus();
     Control::GetFocus();
 
     SvTreeListEntry* pEntry = FirstSelected();
+    if ( !pEntry )
+    {
+        pEntry = pImp->GetCurrentEntry();
+    }
+    if (pImp->pCursor)
+    {
+        if (pEntry != pImp->pCursor)
+            pEntry = pImp->pCursor;
+    }
     if ( pEntry )
-        pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+        pImp->CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pEntry );
 
 }
 
 void SvTreeListBox::LoseFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
+    //If there is no item in the tree, delete visual focus.
+    if( !First())
+    {
+        Invalidate();
+    }
     pImp->LoseFocus();
     Control::LoseFocus();
 }
@@ -2491,7 +2584,7 @@ sal_Bool SvTreeListBox::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
         if( bSelect )
         {
             SelectHdl();
-            pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+            CallEventListeners( VCLEVENT_LISTBOX_TREESELECT, pEntry);
         }
         else
             DeselectHdl();
@@ -2628,6 +2721,22 @@ void SvTreeListBox::Paint( const Rectangle& rRect )
     if( nTreeFlags & TREEFLAG_RECALCTABS )
         SetTabs();
     pImp->Paint( rRect );
+    //Add visual focus draw
+    if( !First() )
+    {
+        if( HasFocus() )
+        {
+            long tempHeight = GetTextHeight();
+            Rectangle tempRect(
+                                Point(0,0),Size(GetSizePixel().Width(),tempHeight)
+                               );
+            ShowFocus(tempRect);
+        }
+
+        else{
+            HideFocus();
+        }
+    }
 }
 
 void SvTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
@@ -3964,6 +4073,19 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl:
         rStateSet.AddState( AccessibleStateType::VISIBLE );
     if ( IsSelected( pEntry ) )
         rStateSet.AddState( AccessibleStateType::SELECTED );
+    if ( IsEnabled() )
+    {
+        rStateSet.AddState( AccessibleStateType::ENABLED );
+        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+        rStateSet.AddState( AccessibleStateType::SELECTABLE );
+        SvViewDataEntry* pViewDataNewCur = 0;
+        if( pEntry )
+        {
+            pViewDataNewCur= GetViewDataEntry(pEntry);
+            if(pViewDataNewCur->HasFocus())
+                rStateSet.AddState( AccessibleStateType::FOCUSED );
+        }
+    }
 }
 
 Rectangle SvTreeListBox::GetBoundingRect( SvTreeListEntry* pEntry )

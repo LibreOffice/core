@@ -101,6 +101,7 @@ public:
     virtual sal_uInt16 GetType() const;
     virtual void    InitViewData(SvTreeListBox*, SvTreeListEntry*, SvViewDataItem*);
     OUString   GetText() const { return maText; }
+    virtual OUString GetExtendText() const { return OUString(); }
     void            SetText( const OUString& rText ) { maText = rText; }
 
     virtual void Paint(
@@ -176,6 +177,7 @@ public:
 
     // Check whether this button can be modified via UI
     bool            CheckModification() const;
+    SvLBoxButtonData* GetButtonData() const{ return pData;}
 };
 
 inline void SvLBoxButton::SetStateChecked()

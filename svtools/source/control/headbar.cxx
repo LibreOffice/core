@@ -18,20 +18,20 @@
  */
 
 #include <svtools/headbar.hxx>
+#include <svtools/vclxaccessibleheaderbar.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-
-// =======================================================================
 
 class ImplHeadItem
 {
 public:
-    sal_uInt16              mnId;
+    sal_uInt16          mnId;
     HeaderBarItemBits   mnBits;
     long                mnSize;
     OString             maHelpId;
@@ -76,6 +76,7 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
     mbOutDrag       = sal_False;
     mbItemMode      = sal_False;
 
+    m_pVCLXHeaderBar = NULL;
     // StyleBits auswerten
     if ( nWinStyle & WB_DRAG )
         mbDragable = sal_True;
@@ -1552,5 +1553,21 @@ void HeaderBar::SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::sta
 {
     mxAccessible = _xAccessible;
 }
+
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > HeaderBar::GetComponentInterface( sal_Bool bCreate )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer
+        (Window::GetComponentInterface(false));
+    if ( !xPeer.is() && bCreate )
+    {
+        ::com::sun::star::awt::XWindowPeer* mxPeer = new VCLXHeaderBar(this);
+        m_pVCLXHeaderBar = (VCLXHeaderBar*)(mxPeer);
+        SetComponentInterface(mxPeer);
+        return mxPeer;
+    }
+    else
+        return xPeer;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
