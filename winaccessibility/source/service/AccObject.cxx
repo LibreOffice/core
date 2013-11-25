@@ -36,7 +36,6 @@
 #include "UAccCOM_i.c"
 #include "AccResource.hxx"
 
-#include "act.hxx"
 
 using namespace std;
 using namespace com::sun::star::uno;
