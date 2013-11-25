@@ -47,7 +47,7 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
 
 String RID_STR_COULDNOTCONNECT_NODRIVER
 {
-    Text [ en-US ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text [ en-US ] = "The connection to the external data source could not be established. No SDBC driver was found for the URL '$name$'.";
 };
 
 String RID_STR_COULDNOTLOAD_MANAGER

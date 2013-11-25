@@ -735,7 +735,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     if ( !xReturn.is() )
     {
-        OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
+        OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId )
+            .replaceAll("$name$", m_pImpl->m_sConnectURL);
 
         SQLContext aContext;
         aContext.Message = DBACORE_RESSTRING(RID_STR_CONNECTION_REQUEST).
