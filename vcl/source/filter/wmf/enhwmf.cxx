@@ -490,8 +490,8 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     EMFP_DEBUG(printf ("\t\tunknown id: 0x%x\n",(unsigned int) id));
                 }
             }
-        } else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )
-
+        }
+        else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )
         switch( nRecType )
         {
             case EMR_POLYBEZIERTO :
@@ -523,14 +523,14 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             case EMR_SETWINDOWEXTEX :
             {                                                       // #75383#
                 *pWMF >> nW >> nH;
-                pOut->SetWinExt( Size( nW, nH ) );
+                pOut->SetWinExt( Size( nW, nH ), true);
             }
             break;
 
             case EMR_SETWINDOWORGEX :
             {
                 *pWMF >> nX32 >> nY32;
-                pOut->SetWinOrg( Point( nX32, nY32 ) );
+                pOut->SetWinOrg( Point( nX32, nY32 ), true);
             }
             break;
 
@@ -922,7 +922,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 PolyPolygon aPolyPoly;
                 if ( cbRgnData )
                     ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
-                pOut->SetClipPath( aPolyPoly, iMode, sal_False );
+                pOut->SetClipPath( aPolyPoly, iMode, sal_True );
             }
             break;
 
@@ -1357,7 +1357,7 @@ sal_Bool EnhWMFReader::ReadHeader()
         return sal_False;
 
     // bound size
-    Rectangle rclBounds;    // rectangle in logical units 1/100th mm
+    Rectangle rclBounds;    // rectangle in logical units
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
     rclBounds.Left() = nLeft;
     rclBounds.Top() = nTop;
@@ -1365,7 +1365,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     rclBounds.Bottom() = nBottom;
 
     // picture frame size
-    Rectangle rclFrame;     // rectangle in device units
+    Rectangle rclFrame;     // rectangle in device units 1/100th mm
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
     rclFrame.Left() = nLeft;
     rclFrame.Top() = nTop;
