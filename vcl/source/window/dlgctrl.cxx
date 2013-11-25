@@ -541,7 +541,13 @@ namespace
 {
     bool isSuitableDestination(Window *pWindow)
     {
-        return (pWindow && isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled());
+        return (pWindow && isVisibleInLayout(pWindow) &&
+                isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() &&
+                //Pure window shouldn't get window after controls such as
+                //buttons.
+                (pWindow->GetType() != WINDOW_WINDOW && pWindow->GetType() != WINDOW_SYSWINDOW &&
+                  pWindow->GetType() != WINDOW_WORKWINDOW && pWindow->GetType() != WINDOW_CONTROL)
+               );
     }
 
     bool focusNextInGroup(std::vector<RadioButton*>::iterator aStart, std::vector<RadioButton*> &rGroup)

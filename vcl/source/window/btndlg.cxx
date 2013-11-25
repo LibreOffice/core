@@ -231,11 +231,16 @@ void ButtonDialog::StateChanged( StateChangedType nType )
     if ( nType == STATE_CHANGE_INITSHOW )
     {
         ImplPosControls();
+        for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+        {
+            if ( it->mpPushButton && it->mbOwnButton )
+                it->mpPushButton->SetZOrder(0, WINDOW_ZORDER_LAST);
+        }
 
         // Set focus on default button.
         if ( mnFocusButtonId != BUTTONDIALOG_BUTTON_NOTFOUND )
         {
-            for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+            for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
             {
                 if (it->mnId == mnFocusButtonId )
                 {
