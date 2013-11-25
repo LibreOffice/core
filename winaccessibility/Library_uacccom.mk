@@ -51,9 +51,6 @@ $(eval $(call gb_Library_add_exception_objects,UAccCOM,\
 
 $(eval $(call gb_Library_add_ldflags,UAccCOM,\
 	/DEF:$(SRCDIR)/winaccessibility/source/UAccCOM/UAccCOM.def \
-	-LIBPATH:$(ATL_LIB) \
-	-delayload:$(call gb_Library_get_filename,cppu) \
-	-delayload:$(call gb_Library_get_filename,sal) \
 ))
 
 $(eval $(call gb_Library_use_libraries,UAccCOM,\
