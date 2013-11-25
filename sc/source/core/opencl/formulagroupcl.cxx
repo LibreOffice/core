@@ -1103,10 +1103,30 @@ public:
             ss << "for(int outLoop=0; outLoop<" <<
             nCurWindowSize/outLoopSize<< "; outLoop++){\n\t";
             for(int count=0; count < outLoopSize; count++){
-                ss << "i = outLoop*"<<outLoopSize<<"+"<<count<<";\n\t";
+                ss << "i = outLoop*"<<outLoopSize<<"+"<<count<<";\n";
                 if(count==0){
-                    temp3 << "currentCount0 = i+gid0+1;\n\t";
-                    temp3 << "currentCount1 = i+1;\n\t";
+                    for (unsigned i = 0; i < vSubArguments.size(); i++)
+                    {
+                        tmpCur = vSubArguments[i]->GetFormulaToken();
+                        if(ocPush==tmpCur->GetOpCode())
+                        {
+                            pCurDVR= dynamic_cast<
+                                const formula::DoubleVectorRefToken *>(tmpCur);
+                            if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+                            {
+                                temp3 << "        currentCount";
+                                temp3 << i;
+                                temp3 <<" =i+gid0+1;\n";
+                            }
+                            else
+                            {
+                                temp3 << "        currentCount";
+                                temp3 << i;
+                                temp3 << " =i+1;\n";
+                            }
+                        }
+                    }
+
                     temp3 << "tmp = fsum(";
                     for (unsigned i = 0; i < vSubArguments.size(); i++){
                         if (i)
@@ -1149,10 +1169,30 @@ public:
         for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize;
         count < nCurWindowSize; count++)
         {
-            ss << "i =" <<count<<";\n\t";
+            ss << "i =" <<count<<";\n";
             if(count==nCurWindowSize/outLoopSize*outLoopSize){
-                temp4 << "currentCount0 = i+gid0+1;\n\t";
-                temp4 << "currentCount1 = i+1;\n\t";
+                for (unsigned i = 0; i < vSubArguments.size(); i++)
+                {
+                    tmpCur = vSubArguments[i]->GetFormulaToken();
+                    if(ocPush==tmpCur->GetOpCode())
+                    {
+                        pCurDVR= dynamic_cast<
+                            const formula::DoubleVectorRefToken *>(tmpCur);
+                        if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+                        {
+                            temp4 << "        currentCount";
+                            temp4 << i;
+                            temp4 <<" =i+gid0+1;\n";
+                        }
+                        else
+                        {
+                            temp4 << "        currentCount";
+                            temp4 << i;
+                            temp4 << " =i+1;\n";
+                        }
+                    }
+                }
+
                 temp4 << "tmp = fsum(";
                 for (unsigned i = 0; i < vSubArguments.size(); i++)
                 {
