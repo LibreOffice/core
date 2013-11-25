@@ -562,6 +562,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
     //it's a uno::Sequence< beans::PropertyValues >*
     RowPropertyValuesSeq_t* pCellProperties = aCellProperties.getArray();
+    PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
     while( aRowOfCellsIterator != aRowOfCellsIteratorEnd )
     {
         //aRowOfCellsIterator points to a vector of PropertyMapPtr
@@ -580,6 +581,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             if(rInfo.nTblLook&0x40)
                 nRowStyleMask |= CNF_LAST_ROW;      // last row style used
         }
+        else if (aRowIter->get() && aRowIter->get()->find(PROP_TBL_HEADER) != aRowIter->get()->end())
+            nRowStyleMask |= CNF_FIRST_ROW; // table header implies first row
         if(!nRowStyleMask)                          // if no row style used yet
         {
             // banding used only if not first and or last row style used
@@ -729,6 +732,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 #endif
         ++nRow;
         ++aRowOfCellsIterator;
+        ++aRowIter;
     }
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
@@ -758,6 +762,10 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
             //set default to 'break across pages"
             if( aRowIter->get()->find(PROP_IS_SPLIT_ALLOWED) == aRowIter->get()->end())
                 aRowIter->get()->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(sal_True ) );
+            // tblHeader is only our property, remove before the property map hits UNO
+            PropertyMap::const_iterator aIter = aRowIter->get()->find(PROP_TBL_HEADER);
+            if (aIter != aRowIter->get()->end())
+                aRowIter->get()->erase(aIter);
 
             aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER

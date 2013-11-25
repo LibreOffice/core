@@ -315,6 +315,7 @@ enum PropertyIds
         ,PROP_FOOTNOTE_LINE_RELATIVE_WIDTH
         ,PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING
         ,PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING
+        ,PROP_TBL_HEADER
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

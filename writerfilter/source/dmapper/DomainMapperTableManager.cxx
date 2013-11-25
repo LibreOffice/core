@@ -201,6 +201,13 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
                 else
                     m_nHeaderRepeat = -1;
+                if (nIntValue)
+                {
+                    // Store the info that this is a header, we'll need that when we apply table styles.
+                    TablePropertyMapPtr pPropMap( new TablePropertyMap );
+                    pPropMap->Insert( PROP_TBL_HEADER, uno::makeAny(nIntValue));
+                    insertRowProps(pPropMap);
+                }
             break;
             case 0xd608: // TDefTable
             {
