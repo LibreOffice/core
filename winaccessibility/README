@@ -15,7 +15,7 @@ source/service/
 	  internal accessibilty objects when events arrive.
 
 source/UAccCom/
-	+ implementations of the MSAA / IAccessible2 interfaces
+	+ COM implementations of the MSAA / IAccessible2 interfaces
 	  to provide native peers for the accessbility code.
 
 source/UAccCOMIDL/
@@ -29,12 +29,7 @@ vcl/ <-> toolkit/ <-> accessibility/ <-> winaccessibility/ <-> UAccCom/
 
 Debugging / playing with winaccessibility
 
-First you need to ensure that UAccCOM.dll is registered, if this did
-not happen at install time use:
-
-regsvr32 /absolute/path/to/program/UAccCOM.dll
-
-Next you need to enable 'experiemental mode' in Tools->Options. After
+You need to enable 'experiemental mode' in Tools->Options. After
 that NVDA should work as expected. In order to use 'accprobe' to debug
 it is necessary to override the check for whether an AT (like NVDA) is
 running; to do that use:
