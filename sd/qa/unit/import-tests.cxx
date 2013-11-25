@@ -15,6 +15,8 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/escapementitem.hxx>
+#include <editeng/colritem.hxx>
+#include <rsc/rscsfx.hxx>
 
 #include <svx/svdotext.hxx>
 #include <animations/animationnodehelper.hxx>
@@ -47,6 +49,7 @@ public:
     void testFdo64512();
     void testFdo71075();
     void testN828390();
+    void testFdo68594();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -56,6 +59,7 @@ public:
     CPPUNIT_TEST(testFdo64512);
     CPPUNIT_TEST(testFdo71075);
     CPPUNIT_TEST(testN828390);
+    CPPUNIT_TEST(testFdo68594);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -238,6 +242,25 @@ void SdFiltersTest::testN778859()
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
         CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
     }
+}
+
+void SdFiltersTest::testFdo68594()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/fdo68594.ppt"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = &(pDoc->GetPage (1)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    SdrObject *pObj = pPage->GetObj(1);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    const SvxColorItem *pC = dynamic_cast<const SvxColorItem *>(&pTxtObj->GetMergedItem(EE_CHAR_COLOR));
+    CPPUNIT_ASSERT_MESSAGE( "no color item", pC != NULL);
+    // Color should be black
+    CPPUNIT_ASSERT_MESSAGE( "Placeholder color mismatch", pC->GetValue().GetColor() == 0);
 }
 
 void SdFiltersTest::testFdo64512()
