@@ -88,7 +88,7 @@ SAL_DLLPUBLIC oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     oslSecurity *pSecurity
     );
 
-/** Query if the user who is denotes by this security has administrator rigths.
+/** Query if the user who is denotes by this security has administrator rights.
     @param[in] Security the security handle for th user.
     @return True, if the user has adminsitrator rights, otherwise false.
 */

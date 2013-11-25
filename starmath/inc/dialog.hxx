@@ -416,7 +416,7 @@ class SmSymDefineDialog : public ModalDialog
     PushButton      aChangeBtn;
     PushButton      aDeleteBtn;
     FixedImage      aRightArrow;
-    Image           aRigthArrow_Im;
+    Image           aRightArrow_Im;
 
     SmSymbolManager     aSymbolMgrCopy,
                        &rSymbolMgr;
