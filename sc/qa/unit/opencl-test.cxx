@@ -242,6 +242,7 @@ public:
     void testStatisticalFormulaCovar();
     void testLogicalFormulaAnd();
     void testMathFormulaSumProduct();
+    void testMathFormulaSumProduct2();
     void testStatisticalParallelCountBug();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
@@ -416,6 +417,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaCovar);
     CPPUNIT_TEST(testLogicalFormulaAnd);
     CPPUNIT_TEST(testMathFormulaSumProduct);
+    CPPUNIT_TEST(testMathFormulaSumProduct2);
     CPPUNIT_TEST(testStatisticalParallelCountBug);
     CPPUNIT_TEST_SUITE_END();
 
@@ -4792,6 +4794,30 @@ void ScOpenclTest::testMathFormulaSumProduct()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-245]
+void ScOpenclTest::testMathFormulaSumProduct2()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/math/sumproductTest.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/sumproductTest.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 2; i <= 12; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(4,i,1));
+        double fExcel = pDocRes->GetValue(ScAddress(4,i,1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel,  fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
 //[AMLOEXT-217]
 void ScOpenclTest:: testLogicalFormulaAnd()
 {
