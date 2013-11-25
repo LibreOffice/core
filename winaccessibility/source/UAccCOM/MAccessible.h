@@ -94,7 +94,8 @@ class ATL_NO_VTABLE CMAccessible :
 public:
     CMAccessible();
     virtual ~CMAccessible();
-    DECLARE_REGISTRY_RESOURCEID(IDR_MACCESSIBLE)
+
+    DECLARE_NO_REGISTRY()
 
     DECLARE_GET_CONTROLLING_UNKNOWN()
 

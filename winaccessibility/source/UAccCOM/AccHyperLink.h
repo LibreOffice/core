@@ -54,7 +54,7 @@ public:
     COM_INTERFACE_ENTRY(IUNOXWrapper)
     END_COM_MAP()
 
-    DECLARE_REGISTRY_RESOURCEID(IDR_AccHyperLink)
+    DECLARE_NO_REGISTRY()
 
     static HRESULT WINAPI _SmartQI(void* pv,
                                    REFIID iid, void** ppvObject, DWORD)

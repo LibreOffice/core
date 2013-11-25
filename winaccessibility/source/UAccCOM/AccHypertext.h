@@ -68,9 +68,8 @@ public:
         return E_FAIL;
     }
 
-    DECLARE_REGISTRY_RESOURCEID(IDR_AccHypertext)
+    DECLARE_NO_REGISTRY()
 
-    // IAccessibleHypertext
 public:
     // IAccessibleText
 

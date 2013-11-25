@@ -69,9 +69,8 @@ public:
         return E_FAIL;
     }
 
-    DECLARE_REGISTRY_RESOURCEID(IDR_AccComponent)
+    DECLARE_NO_REGISTRY()
 
-    // IAccessibleComponent
 public:
     // IAccessibleComponent
 
