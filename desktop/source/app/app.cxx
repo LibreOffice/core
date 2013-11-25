@@ -1488,11 +1488,8 @@ int Desktop::Main()
 
         // set static variable to enabled/disable crash reporter
         retrieveCrashReporterState();
-        if ( !isCrashReporterEnabled() )
-        {
-            osl_setErrorReporting( sal_False );
-            // disable stack trace feature
-        }
+        const bool bCrashReporterEnabled = isCrashReporterEnabled();
+        osl_setErrorReporting( !bCrashReporterEnabled );
 
         // create title string
         LanguageTag aLocale( LANGUAGE_SYSTEM);
