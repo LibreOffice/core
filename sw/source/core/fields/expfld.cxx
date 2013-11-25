@@ -866,13 +866,13 @@ void SwGetExpField::SetValue( const double& rAny )
  * @param nHint search starting position after the current field (or 0 if default)
  * @return
  */
-xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc, unsigned nHint)
+sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc, sal_Int32 nHint)
 {
     //
     const SwTxtFld* pTxtFld = rFmt.GetTxtFld();
     const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
     //
-    xub_StrLen nRet = nHint ? nHint : *pTxtFld->GetStart() + 1;
+    sal_Int32 nRet = nHint ? nHint : *pTxtFld->GetStart() + 1;
     OUString sNodeText = rTxtNode.GetTxt();
 
     if(nRet<sNodeText.getLength())

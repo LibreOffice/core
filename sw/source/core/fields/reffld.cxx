@@ -285,14 +285,13 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
         return ;
     }
     // where is the category name (e.g. "Illustration")?
-    OUString const Text = pTxtNd->GetTxt();
-    unsigned const nCatStart = Text.indexOf(sSetRefName);
-    unsigned const nCatEnd = nCatStart == unsigned(-1) ?
-        unsigned(-1) : nCatStart + sSetRefName.getLength();
-    bool const bHasCat = nCatStart != unsigned(-1);
+    OUString const sText = pTxtNd->GetTxt();
+    const sal_Int32 nCatStart = sText.indexOf(sSetRefName);
+    const bool bHasCat = nCatStart>=0;
+    const sal_Int32 nCatEnd = bHasCat ? nCatStart + sSetRefName.getLength() : -1;
 
     // length of the referenced text
-    unsigned const nLen = Text.getLength();
+    const sal_Int32 nLen = sText.getLength();
 
     // which format?
     switch( GetFormat() )
@@ -303,7 +302,8 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_ONLYSEQNO:
         {
             // needed part of Text
-            unsigned nStart, nEnd;
+            sal_Int32 nStart;
+            sal_Int32 nEnd;
 
             switch( nSubType )
             {
@@ -329,7 +329,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                         pTxtNd->GetTxtAttrForCharAt(nNumStart, RES_TXTATR_FIELD)
                     ) {
                         // start searching from nFrom
-                        unsigned const nFrom = bHasCat ?
+                        const sal_Int32 nFrom = bHasCat ?
                             std::max<unsigned>(nNumStart + 1, nCatEnd) : nNumStart + 1;
                         nStart = SwGetExpField::GetReferenceTextPos(
                             pTxtAttr->GetFmtFld(), *pDoc, nFrom
@@ -345,7 +345,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 // "Numbering"
                 case REF_ONLYSEQNO:
                     nStart = nNumStart;
-                    nEnd = std::min<unsigned>(nStart + 1, nLen);
+                    nEnd = std::min(nStart + 1, nLen);
                     break;
 
                 // "Reference" (whole Text)

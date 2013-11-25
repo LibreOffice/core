@@ -124,7 +124,7 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
-    static xub_StrLen   GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc, unsigned nHint = 0);
+    static sal_Int32    GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc, sal_Int32 nHint = 0);
     // #i82544#
     void                SetLateInitialization() { bLateInitialization = true;}
 };
