@@ -901,7 +901,6 @@ void TextWindow::Command( const CommandEvent& rCEvt )
 
 void TextWindow::GetFocus()
 {
-    Window::GetFocus();
     if ( !mbActivePopup )
     {
         sal_Bool bGotoCursor = !mpExtTextView->IsReadOnly();
@@ -1195,7 +1194,6 @@ void VclMultiLineEdit::GetFocus()
     if ( !pImpVclMEdit )  // might be called from within the dtor, when pImpVclMEdit == NULL is a valid state
         return;
 
-    Edit::GetFocus();
     pImpVclMEdit->GetFocus();
 }
 

@@ -1046,7 +1046,7 @@ namespace svt
                 {
                     commitTableEvent(
                         ACTIVE_DESCENDANT_CHANGED,
-                        makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol ) ) ),
+                        makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol -1) ) ),
                         Any()
                     );
                 }

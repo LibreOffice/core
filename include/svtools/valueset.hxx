@@ -321,6 +321,8 @@ public:
                                 size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
                                 size_t nPos = VALUESET_APPEND );
+    void            InsertItem( sal_uInt16 nItemId, const OUString& rStr,
+                                size_t nPos = VALUESET_APPEND );
     void            RemoveItem( sal_uInt16 nItemId );
 
     void            Clear();
@@ -364,7 +366,7 @@ public:
     bool            IsColor() const { return maColor.GetTransparency() == 0; }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
-    sal_uInt16          GetExtraSpacing() { return mnSpacing; }
+    sal_uInt16      GetExtraSpacing() { return mnSpacing; }
 
     void            Format();
 

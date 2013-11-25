@@ -208,7 +208,7 @@ sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point
 
 // Object data and state ------------------------------------------------------
 
-OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 ) const
+OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
 {
     OUString aRetText;
     switch( eObjType )
@@ -226,7 +226,16 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             aRetText = "ColumnHeaderBar";
             break;
         case ::svt::BBTYPE_TABLECELL:
-            aRetText = "TableCell";
+            if( ColCount() !=0 && GetRowCount()!=0)
+            {
+
+                sal_Int32 columnId = _nPosition % ColCount() +1;
+                aRetText = OUString( GetColumnDescription( sal_Int16( columnId ) ) );
+                sal_Int32 rowId = _nPosition / GetRowCount() + 1;
+                aRetText += OUString::number(rowId);
+            }
+            else
+                aRetText = "TableCell";
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));
@@ -236,7 +245,10 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
-            aRetText = "RowHeaderCell";
+            {
+                sal_Int32 rowId = _nPosition + 1;
+                aRetText = OUString::number( rowId );
+            }
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));
@@ -246,7 +258,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            aRetText = "ColumnHeaderCell";
+            aRetText = OUString( GetColumnDescription( sal_Int16( _nPosition ) ) );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));

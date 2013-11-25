@@ -97,6 +97,10 @@ enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE 
 #define TREEFLAG_MANINS         0x0004
 #define TREEFLAG_RECALCTABS     0x0008
 
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_NOTSET 0x00
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_LIST   0x01
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_TREE   0x02
+
 typedef sal_Int64   ExtendedWinBits;
 
 // disable the behavior of automatically selecting a "CurEntry" upon painting the control
@@ -106,6 +110,7 @@ typedef sal_Int64   ExtendedWinBits;
 #define SV_ITEM_ID_LBOXBMP          2
 #define SV_ITEM_ID_LBOXBUTTON       3
 #define SV_ITEM_ID_LBOXCONTEXTBMP   4
+#define SV_ITEM_ID_EXTENDRLBOXSTRING    5
 
 class SvLBoxTab
 {
@@ -226,6 +231,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     short           nEntryHeightOffs;
     short           nIndent;
     short           nFocusWidth;
+    short           nAllItemAccRoleType;
     sal_uInt16      nFirstSelTab;
     sal_uInt16      nLastSelTab;
     long mnCheckboxItemWidth;
@@ -501,6 +507,17 @@ public:
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     void EnableCellFocus();
+
+                        // For overwriting accessible role for all entries - normally 0, so each entry can be different
+    void                SetAllEntriesAccessibleRoleType( short n ) { nAllItemAccRoleType = n; }
+    short               GetAllEntriesAccessibleRoleType() const { return nAllItemAccRoleType; }
+
+    sal_uInt16          GetTreeFlags() const {return nTreeFlags;}
+
+    OUString            headString;
+    OUString            SearchEntryTextWithHeadTitle(SvTreeListEntry* pEntry);
+    virtual OUString    GetEntryAltText(SvTreeListEntry* pEntry) const;
+    virtual OUString    GetEntryLongDescription(SvTreeListEntry* pEntry) const;
 
     void set_min_width_in_chars(sal_Int32 nChars);
 
