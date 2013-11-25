@@ -36,7 +36,6 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -65,8 +64,6 @@ using namespace ::com::sun::star::task;
 
 
 #define MAP_LEN(x) x, sizeof(x) - 1
-
-Reference< com::sun::star::frame::XModel > xModel;
 
 sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
@@ -341,9 +338,6 @@ void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::
 {
     meType = FILTER_EXPORT;
     mxDoc = xDoc;
-        com::sun::star::uno::Reference< com::sun::star::frame::XModel >rModel ( com::sun::star::uno::Reference< com::sun::star::frame::XModel >::query( xDoc ) );
-    xModel=rModel;
-
 }
 
 // XImporter
@@ -352,7 +346,6 @@ void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< ::com::sun::
 {
     meType = FILTER_IMPORT;
     mxDoc = xDoc;
-    //xModel = uno::Reference< frame::XModel >::query( xDoc );
 }
 // XInitialization
 void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
