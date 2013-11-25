@@ -234,7 +234,8 @@ OUString OAccessibleMenuItemComponent::GetItemText()
 
 void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    if ( IsEnabled() )
+    sal_Bool bEnabled = IsEnabled();
+    if ( bEnabled )
     {
         rStateSet.AddState( AccessibleStateType::ENABLED );
         rStateSet.AddState( AccessibleStateType::SENSITIVE );
@@ -242,10 +243,10 @@ void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateS
 
     if ( IsVisible() )
     {
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
         rStateSet.AddState( AccessibleStateType::SHOWING );
+        if( !IsMenuHideDisabledEntries() || bEnabled )
+            rStateSet.AddState( AccessibleStateType::VISIBLE );
     }
-
     rStateSet.AddState( AccessibleStateType::OPAQUE );
 }
 
@@ -491,5 +492,17 @@ OUString OAccessibleMenuItemComponent::getToolTipText(  ) throw (RuntimeExceptio
 }
 
 // -----------------------------------------------------------------------------
+
+sal_Bool OAccessibleMenuItemComponent::IsMenuHideDisabledEntries()
+{
+    if (m_pParent )
+    {
+        if( m_pParent->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES)
+        {
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

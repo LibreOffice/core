@@ -30,6 +30,8 @@
 
 namespace accessibility
 {
+    ::sal_Int32 getSelectionType(::sal_Int32 nNewFirstPara, ::sal_Int32 nNewFirstPos, ::sal_Int32 nNewLastPara, ::sal_Int32 nNewLastPos);
+    void sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId);
 
 // Both ::osl::Mutex and ParagraphBase implement acquire and release, and thus
 // ::rtl::Reference< Paragraph > does not work.  So ParagraphImpl was factored
@@ -1002,16 +1004,114 @@ Document::retrieveCharacterBounds(ParagraphImpl const * pParagraph,
         // XXX  numeric overflow
 }
 
+struct IndexCompare
+{
+    const ::css::beans::PropertyValue* pValues;
+    IndexCompare( const ::css::beans::PropertyValue* pVals ) : pValues(pVals) {}
+    bool operator() ( const sal_Int32& a, const sal_Int32& b ) const
+    {
+        return (pValues[a].Name < pValues[b].Name) ? true : false;
+    }
+};
+
 css::uno::Sequence< css::beans::PropertyValue >
 Document::retrieveCharacterAttributes(
     ParagraphImpl const * pParagraph, ::sal_Int32 nIndex,
     const css::uno::Sequence< OUString >& aRequestedAttributes)
 {
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+
+    Font aFont = m_rEngine.GetFont();
+    const sal_Int32 AttributeCount = 9;
+    sal_Int32 i = 0;
+    ::css::uno::Sequence< ::css::beans::PropertyValue > aAttribs( AttributeCount );
+    //character background color
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharBackColor"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = mapFontColor( aFont.GetFillColor() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+    //character color
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharColor"));
+        aAttribs[i].Handle = -1;
+        //aAttribs[i].Value = mapFontColor( aFont.GetColor() );
+        aAttribs[i].Value = mapFontColor( m_rEngine.GetTextColor() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+    //character font name
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFontName"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = ::css::uno::makeAny( (::rtl::OUString)aFont.GetName() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+    //character height
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetHeight() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+    //character posture
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPosture"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetItalic() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+    //character relief
+    /*{
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRelief"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetRelief() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }*/
+    //character strikeout
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharStrikeout"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetStrikeout() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+    //character underline
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharUnderline"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)aFont.GetUnderline() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+    //character weight
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharWeight"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = ::css::uno::makeAny( (float)aFont.GetWeight() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+    //character alignment
+    {
+        aAttribs[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAdjust"));
+        aAttribs[i].Handle = -1;
+        aAttribs[i].Value = ::css::uno::makeAny( (sal_Int16)m_rEngine.GetTextAlign() );
+        aAttribs[i].State = ::css::beans::PropertyState_DIRECT_VALUE;
+        i++;
+    }
+
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
         // XXX  numeric overflow
-    if (nIndex < 0 || nIndex >= m_rEngine.GetText(nNumber).getLength())
+        // nIndex can be equal to getLength();
+    if (nIndex < 0 || nIndex > m_rEngine.GetText(nNumber).getLength())
         throw css::lang::IndexOutOfBoundsException(
             "textwindowaccessibility.cxx:"
             " Document::retrieveCharacterAttributes",
@@ -1033,7 +1133,31 @@ Document::retrieveCharacterAttributes(
         aCharAttrSeq[ aRunIter->first ] = aRunIter->second;
     }
 
-    return convertHashMapToSequence( aCharAttrSeq );
+    ::css::beans::PropertyValue* pValues = aAttribs.getArray();
+    for (i = 0; i < AttributeCount; i++,pValues++)
+    {
+        aCharAttrSeq[ pValues->Name ] = *pValues;
+    }
+
+    ::css::uno::Sequence< ::css::beans::PropertyValue > aRes = convertHashMapToSequence( aCharAttrSeq );
+
+    // sort the attributes
+    sal_Int32 nLength = aRes.getLength();
+    const ::css::beans::PropertyValue* pPairs = aRes.getConstArray();
+    sal_Int32* pIndices = new sal_Int32[nLength];
+    for( i = 0; i < nLength; i++ )
+        pIndices[i] = i;
+    std::sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
+    // create sorted sequences accoring to index array
+    ::css::uno::Sequence< ::css::beans::PropertyValue > aNewValues( nLength );
+    ::css::beans::PropertyValue* pNewValues = aNewValues.getArray();
+    for( i = 0; i < nLength; i++ )
+    {
+        pNewValues[i] = pPairs[pIndices[i]];
+    }
+    delete[] pIndices;
+
+    return aNewValues;
 }
 
 void Document::retrieveDefaultAttributesImpl(
@@ -1388,7 +1512,8 @@ void Document::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             // #107179# if our parent is a compound control (e.g. MultiLineEdit),
             // suppress the window focus events here
-            if ( !m_bCompoundControlChild )
+// IAccessible2 implementation 2009
+            //if ( !m_bCompoundControlChild )
                 VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
         }
         break;
@@ -1453,7 +1578,26 @@ Document::getAccessibleAtPoint(css::awt::Point const & rPoint)
     }
     return 0;
 }
+void Document::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+{
+    VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
+    if (!m_rView.IsReadOnly())
+        rStateSet.AddState( ::css::accessibility::AccessibleStateType::EDITABLE );
+}
 
+void    Document::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
+{
+    if( getAccessibleParent()->getAccessibleContext()->getAccessibleRole() == ::css::accessibility::AccessibleRole::SCROLL_PANE )
+    {
+        ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > > aSequence(1);
+        aSequence[0] = getAccessibleParent();
+        rRelationSet.AddRelation( ::css::accessibility::AccessibleRelation( ::css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+    }
+    else
+    {
+         VCLXAccessibleComponent::FillAccessibleRelationSet(rRelationSet);
+    }
+}
 // virtual
 void SAL_CALL Document::disposing()
 {
@@ -1596,9 +1740,25 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
             ::osl::MutexGuard aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
-
-            if (m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd)
+            //to enable the PARAGRAPH to get focus for multiline edit
+            ::sal_Int32 count = getAccessibleChildCount();
+            ::sal_Bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
+            if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
+                Paragraphs::iterator m_aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
+                ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(m_aTemp));
+                if (xParagraph.is())
+                {
+                    xParagraph->notifyEvent(
+                        ::css::accessibility::AccessibleEventId::
+                        STATE_CHANGED,
+                        ::css::uno::Any(),
+                        ::css::uno::makeAny(
+                            ::css::accessibility::AccessibleStateType::
+                            FOCUSED));
+                }
+            }
+            /*
                 ::rtl::Reference< ParagraphImpl > xParagraph(
                     getParagraph(m_aFocused));
                 if (xParagraph.is())
@@ -1609,7 +1769,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
                         css::uno::makeAny(
                             css::accessibility::AccessibleStateType::
                             FOCUSED));
-            }
+            */
             break;
         }
     case VCLEVENT_WINDOW_LOSEFOCUS:
@@ -1617,7 +1777,24 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
             ::osl::MutexGuard aInternalGuard(GetMutex());
             if (!isAlive())
                 break;
+            //to enable the PARAGRAPH to get focus for multiline edit
+            ::sal_Int32 count = getAccessibleChildCount();
+            ::sal_Bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
+            if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
+            {
+                Paragraphs::iterator m_aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
+                ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(m_aTemp));
+                if (xParagraph.is())
+                    xParagraph->notifyEvent(
+                        ::css::accessibility::AccessibleEventId::
+                        STATE_CHANGED,
+                        ::css::uno::makeAny(
+                            ::css::accessibility::AccessibleStateType::
+                            FOCUSED),
+                        ::css::uno::Any());
+            }
 
+            /*
             if (m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd)
             {
                 ::rtl::Reference< ParagraphImpl > xParagraph(
@@ -1631,6 +1808,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
                             FOCUSED),
                         css::uno::Any());
             }
+            */
             break;
         }
     }
@@ -1987,6 +2165,124 @@ void Document::handleParagraphNotifications()
     }
 }
 
+::sal_Int32 Document::getSelectionType(::sal_Int32 nNewFirstPara, ::sal_Int32 nNewFirstPos, ::sal_Int32 nNewLastPara, ::sal_Int32 nNewLastPos)
+{
+    if (m_nSelectionFirstPara == -1)
+        return -1;
+    ::sal_Int32 Osp = m_nSelectionFirstPara, Osl = m_nSelectionFirstPos, Oep = m_nSelectionLastPara, Oel = m_nSelectionLastPos;
+    ::sal_Int32 Nsp = nNewFirstPara, Nsl = nNewFirstPos, Nep = nNewLastPara, Nel = nNewLastPos;
+    TextPaM Ns(Nsp, sal_uInt16(Nsl));
+    TextPaM Ne(Nep, sal_uInt16(Nel));
+    TextPaM Os(Osp, sal_uInt16(Osl));
+    TextPaM Oe(Oep, sal_uInt16(Oel));
+
+    if (Os == Oe && Ns == Ne)
+    {
+        //only caret moves.
+        return 1;
+    }
+    else if (Os == Oe && Ns != Ne)
+    {
+        //old has no selection but new has selection
+        return 2;
+    }
+    else if (Os != Oe && Ns == Ne)
+    {
+        //old has selection but new has no selection.
+        return 3;
+    }
+    else if (Os != Oe && Ns != Ne && Osp == Nsp && Osl == Nsl)
+    {
+        //both old and new have selections.
+        if (Oep == Nep )
+        {
+            //Send text_selection_change event on Nep
+
+            return 4;
+        }
+        else if (Oep < Nep)
+        {
+            //all the following examples like 1,2->1,3 means that old start select para is 1, old end select para is 2,
+            // then press shift up, the new start select para is 1, new end select para is 3;
+            //for example, 1, 2 -> 1, 3; 4,1 -> 4, 7; 4,1 -> 4, 2; 4,4->4,5
+            if (Nep >= Nsp)
+            {
+                // 1, 2 -> 1, 3; 4, 1 -> 4, 7; 4,4->4,5;
+                if (Oep < Osp)
+                {
+                    // 4,1 -> 4,7;
+                    return 5;
+                }
+                else if (Oep >= Osp)
+                {
+                    // 1, 2 -> 1, 3; 4,4->4,5;
+                    return 6;
+                }
+            }
+            else
+            {
+                // 4,1 -> 4,2,
+                if (Oep < Osp)
+                {
+                    // 4,1 -> 4,2,
+                    return 7;
+                }
+                else if (Oep >= Osp)
+                {
+                    // no such condition. Oep > Osp = Nsp > Nep
+                }
+            }
+        }
+        else if (Oep > Nep)
+        {
+            // 3,2 -> 3,1; 4,7 -> 4,1; 4, 7 -> 4,6; 4,4 -> 4,3
+            if (Nep >= Nsp)
+            {
+                // 4,7 -> 4,6
+                if (Oep <= Osp)
+                {
+                    //no such condition, Oep<Osp=Nsp <= Nep
+                }
+                else if (Oep > Osp)
+                {
+                    // 4,7 ->4,6
+                    return 8;
+                }
+            }
+            else
+            {
+                // 3,2 -> 3,1, 4,7 -> 4,1; 4,4->4,3
+                if (Oep <= Osp)
+                {
+                    // 3,2 -> 3,1; 4,4->4,3
+                    return 9;
+                }
+                else if (Oep > Osp)
+                {
+                    // 4,7 -> 4,1
+                    return 10;
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+
+void Document::sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId)
+{
+     Paragraphs::iterator aEnd = ::std::min(m_xParagraphs->begin() + end + 1, m_aVisibleEnd);
+    for (Paragraphs::iterator aIt = ::std::max(m_xParagraphs->begin() + start, m_aVisibleBegin);
+         aIt < aEnd; ++aIt)
+    {
+        ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(aIt));
+        if (xParagraph.is())
+            xParagraph->notifyEvent(
+            nEventId,
+                ::css::uno::Any(), ::css::uno::Any());
+    }
+}
+
 void Document::handleSelectionChangeNotification()
 {
     ::TextSelection const & rSelection = m_rView.GetSelection();
@@ -2028,7 +2324,11 @@ void Document::handleSelectionChangeNotification()
         ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(aIt));
         if (xParagraph.is())
         {
-            if (aIt != m_aFocused)
+        //disable the first event when user types in empty field.
+        ::sal_Int32 count = getAccessibleChildCount();
+        ::sal_Bool bEmpty = count > 1;
+            //if (aIt != m_aFocused)
+            if (aIt != m_aFocused && bEmpty)
                 xParagraph->notifyEvent(
                     css::accessibility::AccessibleEventId::
                     STATE_CHANGED,
@@ -2048,6 +2348,100 @@ void Document::handleSelectionChangeNotification()
     }
     m_aFocused = aIt;
 
+    ::sal_Int32 nMin;
+    ::sal_Int32 nMax;
+    ::sal_Int32 ret = getSelectionType(nNewFirstPara, nNewFirstPos, nNewLastPara, nNewLastPos);
+    switch (ret)
+    {
+        case -1:
+            {
+                //no event
+            }
+            break;
+        case 1:
+            {
+                //only caret moved, already handled in above
+            }
+            break;
+        case 2:
+            {
+                //old has no selection but new has selection
+                nMin = ::std::min(nNewFirstPara, nNewLastPara);
+                nMax = ::std::max(nNewFirstPara, nNewLastPara);
+                sendEvent(nMin, nMax,  ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nMin, nMax,  ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        case 3:
+            {
+                //old has selection but new has no selection.
+                nMin = ::std::min(m_nSelectionFirstPara, m_nSelectionLastPara);
+                nMax = ::std::max(m_nSelectionFirstPara, m_nSelectionLastPara);
+                sendEvent(nMin, nMax,  ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nMin, nMax,  ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        case 4:
+            {
+                //Send text_selection_change event on Nep
+                sendEvent(nNewLastPara, nNewLastPara, ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        case 5:
+            {
+                // 4, 1 -> 4, 7
+                sendEvent(m_nSelectionLastPara, m_nSelectionFirstPara-1, ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nNewFirstPara+1, nNewLastPara, ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+
+                sendEvent(m_nSelectionLastPara, nNewLastPara, ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        case 6:
+            {
+                // 1, 2 -> 1, 4; 4,4->4,5;
+                sendEvent(m_nSelectionLastPara+1, nNewLastPara, ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+
+                sendEvent(m_nSelectionLastPara, nNewLastPara, ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        case 7:
+            {
+                // 4,1 -> 4,3,
+                sendEvent(m_nSelectionLastPara +1, nNewLastPara , ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+
+                sendEvent(m_nSelectionLastPara, nNewLastPara, ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        case 8:
+            {
+                // 4,7 ->4,5;
+                sendEvent(nNewLastPara + 1, m_nSelectionLastPara, ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+
+                sendEvent(nNewLastPara, m_nSelectionLastPara, ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        case 9:
+            {
+                // 3,2 -> 3,1; 4,4->4,3
+                sendEvent(nNewLastPara, m_nSelectionLastPara - 1, ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+
+                sendEvent(nNewLastPara, m_nSelectionLastPara, ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        case 10:
+            {
+                // 4,7 -> 4,1
+                sendEvent(m_nSelectionFirstPara + 1, m_nSelectionLastPara, ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+                sendEvent(nNewLastPara, nNewFirstPara - 1, ::css::accessibility::AccessibleEventId::SELECTION_CHANGED);
+
+                sendEvent(nNewLastPara, m_nSelectionLastPara, ::css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
+            }
+            break;
+        default:
+            break;
+    }
+
+    /*
     // Update both old and new selection.  (Regardless of how the two selections
     // look like, there will always be two ranges to the left and right of the
     // overlap---the overlap and/or the range to the right of it possibly being
@@ -2123,7 +2517,7 @@ void Document::handleSelectionChangeNotification()
     // notify selection changes
     notifySelectionChange( nFirst1, nLast1 );
     notifySelectionChange( nFirst2, nLast2 );
-
+    */
     m_nSelectionFirstPara = nNewFirstPara;
     m_nSelectionFirstPos = nNewFirstPos;
     m_nSelectionLastPara = nNewLastPara;

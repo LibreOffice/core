@@ -131,6 +131,63 @@ namespace accessibility
                     }
                     break;
                 }
+                case VCLEVENT_WINDOW_GETFOCUS :
+                {
+                    uno::Any aOldValue, aNewValue;
+                    aNewValue <<= AccessibleStateType::FOCUSED;
+                    commitEvent( AccessibleEventId::STATE_CHANGED, aNewValue, aOldValue );
+                    break;
+
+                }
+                case VCLEVENT_WINDOW_LOSEFOCUS :
+                {
+                    uno::Any aOldValue, aNewValue;
+                    aOldValue <<= AccessibleStateType::FOCUSED;
+                    commitEvent( AccessibleEventId::STATE_CHANGED, aNewValue, aOldValue );
+                    break;
+                }
+                case VCLEVENT_LISTBOX_TREESELECT:
+                    {
+                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                        if (pEntry)
+                        {
+                            sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
+                            Reference< XAccessible > xChild = m_pTabListBox->CreateAccessibleCell( nRow, m_pTabListBox->GetCurrColumn() );
+                            TriState eState = STATE_DONTKNOW;
+                            if ( m_pTabListBox->IsCellCheckBox( nRow, m_pTabListBox->GetCurrColumn(), eState ) )
+                            {
+                                AccessibleCheckBoxCell* pCell = static_cast< AccessibleCheckBoxCell* >( xChild.get() );
+                                pCell->commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+                            }
+                            else
+                            {
+                                AccessibleBrowseBoxTableCell* pCell = static_cast< AccessibleBrowseBoxTableCell* >( xChild.get() );
+                                pCell->commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+                            }
+                        }
+                    }
+                    break;
+                case VCLEVENT_LISTBOX_TREEFOCUS:
+                    {
+                        if ( m_pTabListBox && m_pTabListBox->HasFocus() )
+                        {
+                            uno::Any aOldValue, aNewValue;
+                            SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                            if ( pEntry )
+                            {
+                                sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
+                                m_xCurChild = m_pTabListBox->CreateAccessibleCell( nRow, m_pTabListBox->GetCurrColumn() );
+                                aNewValue <<= m_xCurChild;
+                                commitEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aNewValue ,aOldValue);
+                            }
+                            else
+                            {
+                                aNewValue <<= AccessibleStateType::FOCUSED;
+                                commitEvent( AccessibleEventId::STATE_CHANGED, aNewValue ,aOldValue);
+                            }
+                        }
+                    }
+                    break;
 
                 case VCLEVENT_CHECKBOX_TOGGLE :
                 {

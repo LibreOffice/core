@@ -48,6 +48,10 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
 
+#include "svtools/svtools.hrc"
+#include <vcl/svapp.hxx>
+#include <unotools/accessiblerelationsethelper.hxx>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <memory>
 #include <queue>
 #include <boost/unordered_map.hpp>
@@ -571,6 +575,9 @@ private:
     SAL_CALL getAccessibleAtPoint(css::awt::Point const & rPoint)
         throw (css::uno::RuntimeException);
 
+    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
+
     // ??? Will be called with both the external (Solar) and internal mutex
     // locked:
     virtual void SAL_CALL disposing();
@@ -622,6 +629,8 @@ private:
     void handleSelectionChangeNotification();
 
     void notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast );
+    ::sal_Int32 getSelectionType(::sal_Int32 nNewFirstPara, ::sal_Int32 nNewFirstPos, ::sal_Int32 nNewLastPara, ::sal_Int32 nNewLastPos);
+    void sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId);
 
     void justifySelection( TextPaM& rTextStart, TextPaM& rTextEnd );
 

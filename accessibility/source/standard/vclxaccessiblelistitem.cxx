@@ -300,9 +300,14 @@ Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleListItem::getAccessibleS
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
         pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
-        pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-        pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-        pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
+
+        if(m_pListBoxHelper->IsEnabled())
+        {
+            pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
+            pStateSetHelper->AddState( AccessibleStateType::ENABLED );
+            pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
+        }
+
         if ( m_bSelected )
             pStateSetHelper->AddState( AccessibleStateType::SELECTED );
         if ( m_bVisible )

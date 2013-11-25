@@ -43,6 +43,7 @@ namespace accessibility
         virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const = 0;
         virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow ) = 0;
         virtual bool            IsActive() const = 0;
+        virtual bool            IsEnabled() const = 0;
         virtual bool            IsEntryVisible( sal_uInt16 nPos ) const = 0;
         virtual sal_uInt16      GetDisplayLineCount() const = 0;
         virtual void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const = 0;
