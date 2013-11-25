@@ -23,25 +23,25 @@
 #include "nameclashdlg.hrc"
 
 #define DLG_WIDTH       250
-#define DLG_HEIGTH       75
+#define DLG_HEIGHT       75
 #define BORDER_OFFSET     6
-#define EDIT_HEIGTH      12
+#define EDIT_HEIGHT      12
 #define BTN_WIDTH        50
-#define BTN_HEIGTH       14
+#define BTN_HEIGHT       14
 
 ModalDialog DLG_SIMPLE_NAME_CLASH
 {
     HelpId      = HID_DLG_SIMPLE_NAME_CLASH ;
     OutputSize  = TRUE ;
     SVLook      = TRUE ;
-    Size        = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGTH ) ;
+    Size        = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
     Moveable    = TRUE ;
     Text [ en-US ] = "File Exists" ;
 
     FixedText FT_FILE_EXISTS_WARNING
     {
         Pos       = MAP_APPFONT ( BORDER_OFFSET, BORDER_OFFSET ) ;
-        Size      = MAP_APPFONT ( DLG_WIDTH - 2*BORDER_OFFSET, DLG_HEIGTH - EDIT_HEIGTH - BTN_HEIGTH - 4*BORDER_OFFSET ) ;
+        Size      = MAP_APPFONT ( DLG_WIDTH - 2*BORDER_OFFSET, DLG_HEIGHT - EDIT_HEIGHT - BTN_HEIGHT - 4*BORDER_OFFSET ) ;
         WordBreak = TRUE ;
     };
 
@@ -49,15 +49,15 @@ ModalDialog DLG_SIMPLE_NAME_CLASH
     {
         HelpID = "uui:Edit:DLG_SIMPLE_NAME_CLASH:EDIT_NEW_NAME";
         Border      = TRUE ;
-        Pos         = MAP_APPFONT ( BORDER_OFFSET, DLG_HEIGTH - EDIT_HEIGTH - BTN_HEIGTH - 2*BORDER_OFFSET ) ;
-        Size        = MAP_APPFONT ( DLG_WIDTH - 2*BORDER_OFFSET , EDIT_HEIGTH ) ;
+        Pos         = MAP_APPFONT ( BORDER_OFFSET, DLG_HEIGHT - EDIT_HEIGHT - BTN_HEIGHT - 2*BORDER_OFFSET ) ;
+        Size        = MAP_APPFONT ( DLG_WIDTH - 2*BORDER_OFFSET , EDIT_HEIGHT ) ;
     };
 
     PushButton BTN_OVERWRITE
     {
         HelpID = "uui:PushButton:DLG_SIMPLE_NAME_CLASH:BTN_OVERWRITE";
-        Pos         = MAP_APPFONT (  DLG_WIDTH - 3*(BTN_WIDTH + BORDER_OFFSET) , DLG_HEIGTH - BTN_HEIGTH - BORDER_OFFSET ) ;
-        Size        = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGTH ) ;
+        Pos         = MAP_APPFONT (  DLG_WIDTH - 3*(BTN_WIDTH + BORDER_OFFSET) , DLG_HEIGHT - BTN_HEIGHT - BORDER_OFFSET ) ;
+        Size        = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGHT ) ;
         TabStop     = TRUE ;
         Text [ en-US ] = "Replace" ;
     };
@@ -65,8 +65,8 @@ ModalDialog DLG_SIMPLE_NAME_CLASH
     PushButton BTN_RENAME
     {
         HelpID = "uui:PushButton:DLG_SIMPLE_NAME_CLASH:BTN_RENAME";
-        Pos         = MAP_APPFONT ( DLG_WIDTH - 2*(BTN_WIDTH + BORDER_OFFSET) , DLG_HEIGTH - BTN_HEIGTH - BORDER_OFFSET ) ;
-        Size        = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGTH ) ;
+        Pos         = MAP_APPFONT ( DLG_WIDTH - 2*(BTN_WIDTH + BORDER_OFFSET) , DLG_HEIGHT - BTN_HEIGHT - BORDER_OFFSET ) ;
+        Size        = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGHT ) ;
         TabStop     = TRUE ;
         Text [ en-US ] = "Rename" ;
         DefButton   = TRUE ;
@@ -74,15 +74,15 @@ ModalDialog DLG_SIMPLE_NAME_CLASH
 
     CancelButton BTN_CANCEL
     {
-        Pos     = MAP_APPFONT ( DLG_WIDTH - BTN_WIDTH - BORDER_OFFSET, DLG_HEIGTH - BTN_HEIGTH - BORDER_OFFSET ) ;
-        Size    = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGTH ) ;
+        Pos     = MAP_APPFONT ( DLG_WIDTH - BTN_WIDTH - BORDER_OFFSET, DLG_HEIGHT - BTN_HEIGHT - BORDER_OFFSET ) ;
+        Size    = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGHT ) ;
         TabStop = TRUE ;
     };
 
     HelpButton BTN_HELP
     {
-        Pos     = MAP_APPFONT ( BORDER_OFFSET, DLG_HEIGTH - BTN_HEIGTH - BORDER_OFFSET ) ;
-        Size    = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGTH ) ;
+        Pos     = MAP_APPFONT ( BORDER_OFFSET, DLG_HEIGHT - BTN_HEIGHT - BORDER_OFFSET ) ;
+        Size    = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGHT ) ;
         TabStop = TRUE ;
     };
 };

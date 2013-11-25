@@ -521,7 +521,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
     // determine position:
-    // the window is divided into lines with height TABWIN_SPACING_Y+TABWIN_HEIGTH_STD.
+    // the window is divided into lines with height TABWIN_SPACING_Y+TABWIN_HEIGHT_STD.
     // Then for each line is checked, if there is space for another window.
     // If there is no space, the next line is checked.
     Size aOutSize = GetSizePixel();

@@ -66,7 +66,7 @@ enum XMLImageMapToken
     XML_TOK_IMAP_CENTER_X,
     XML_TOK_IMAP_CENTER_Y,
     XML_TOK_IMAP_WIDTH,
-    XML_TOK_IMAP_HEIGTH,
+    XML_TOK_IMAP_HEIGHT,
     XML_TOK_IMAP_POINTS,
     XML_TOK_IMAP_VIEWBOX,
     XML_TOK_IMAP_NOHREF,
@@ -85,7 +85,7 @@ static SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
     { XML_NAMESPACE_SVG,    XML_CX,             XML_TOK_IMAP_CENTER_X       },
     { XML_NAMESPACE_SVG,    XML_CY,             XML_TOK_IMAP_CENTER_Y       },
     { XML_NAMESPACE_SVG,    XML_WIDTH,          XML_TOK_IMAP_WIDTH          },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,         XML_TOK_IMAP_HEIGTH         },
+    { XML_NAMESPACE_SVG,    XML_HEIGHT,         XML_TOK_IMAP_HEIGHT         },
     { XML_NAMESPACE_SVG,    XML_R,              XML_TOK_IMAP_RADIUS         },
     { XML_NAMESPACE_SVG,    XML_VIEWBOX,        XML_TOK_IMAP_VIEWBOX        },
     { XML_NAMESPACE_DRAW,   XML_POINTS,         XML_TOK_IMAP_POINTS         },
@@ -393,7 +393,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
                 bWidthOK = sal_True;
             }
             break;
-        case XML_TOK_IMAP_HEIGTH:
+        case XML_TOK_IMAP_HEIGHT:
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
