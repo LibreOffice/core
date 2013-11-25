@@ -74,6 +74,7 @@ private:
     DECL_DLLPRIVATE_LINK(   ImplSelectionChangedHdl, void* );
     DECL_DLLPRIVATE_LINK(   ImplUserDrawHdl, UserDrawEvent* );
     DECL_DLLPRIVATE_LINK(   ImplAutocompleteHdl, Edit* );
+    DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , void* );
 
 protected:
     using Window::ImplInit;
@@ -178,8 +179,8 @@ public:
     void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep = ';' );
     OUString        GetMRUEntries( sal_Unicode cSep = ';' ) const;
     void            SetMaxMRUCount( sal_uInt16 n );
-    sal_uInt16          GetMaxMRUCount() const;
-
+    sal_uInt16      GetMaxMRUCount() const;
+    sal_uInt16      GetMRUCount() const;
     void            SetEntryData( sal_uInt16 nPos, void* pNewData );
     void*           GetEntryData( sal_uInt16 nPos ) const;
 

@@ -127,9 +127,6 @@ void MoreButton::Click()
     mbState = !mbState;
     ShowState();
 
-    // Call Click handler here, so that we can initialize the Controls
-    PushButton::Click();
-
     // Update the windows according to the status
     if ( mbState )
     {
@@ -170,6 +167,8 @@ void MoreButton::Click()
             }
         }
     }
+    // Call Click handler here, so that we can initialize the Controls
+    PushButton::Click();
 }
 
 void MoreButton::AddWindow( Window* pWindow )

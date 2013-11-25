@@ -1709,7 +1709,8 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
             ImplCallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
 
             // Notify
-            ImplCallEventListeners( VCLEVENT_TOOLBOX_CLICK, reinterpret_cast< void* >( nPos ) );
+            //Solution:Call accessible listener to notify state_changed event
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMUPDATED, reinterpret_cast< void* >(nPos) );
         }
     }
 }

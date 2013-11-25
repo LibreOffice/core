@@ -253,6 +253,8 @@ private:
     Link            maDoubleClickHdl;
     Link            maUserDrawHdl;
     Link            maMRUChangedHdl;
+    Link            maFocusHdl;
+    Link            maListItemSelectHdl;
 
     ::vcl::QuickSelectionEngine maQuickSelectionEngine;
 
@@ -266,7 +268,7 @@ protected:
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    sal_Bool            SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, sal_Bool bShift = sal_False, sal_Bool bCtrl = sal_False );
+    sal_Bool        SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, sal_Bool bShift = sal_False, sal_Bool bCtrl = sal_False, sal_Bool bSelectPosChange = sal_False );
     void            ImplPaint( sal_uInt16 nPos, sal_Bool bErase = sal_False, bool bLayout = false );
     void            ImplDoPaint( const Rectangle& rRect, bool bLayout = false );
     void            ImplCalcMetrics();
@@ -363,9 +365,13 @@ public:
     const Link&     GetUserDrawHdl() const              { return maUserDrawHdl; }
     void            SetMRUChangedHdl( const Link& rLink )   { maMRUChangedHdl = rLink; }
     const Link&     GetMRUChangedHdl() const                { return maMRUChangedHdl; }
+    void            SetFocusHdl( const Link& rLink )    { maFocusHdl = rLink ; }
+    const Link&     GetFocusHdl() const             { return maFocusHdl; }
 
+    void            SetListItemSelectHdl( const Link& rLink )   { maListItemSelectHdl = rLink ; }
+    const Link&     GetListItemSelectHdl() const                { return maListItemSelectHdl; }
     bool            IsSelectionChanged() const { return mbSelectionChanged; }
-    sal_uInt16          GetSelectModifier() const { return mnSelectModifier; }
+    sal_uInt16      GetSelectModifier() const { return mnSelectModifier; }
 
     void            EnableSort( bool b ) { mbSort = b; }
 
@@ -499,6 +505,10 @@ public:
     void            SetUserDrawHdl( const Link& rLink ) { maLBWindow.SetUserDrawHdl( rLink ); }
     const Link&     GetUserDrawHdl() const              { return maLBWindow.GetUserDrawHdl(); }
 
+    void            SetFocusHdl( const Link& rLink )    { maLBWindow.SetFocusHdl( rLink ); }
+    const Link&     GetFocusHdl() const             { return maLBWindow.GetFocusHdl(); }
+    void            SetListItemSelectHdl( const Link& rLink )   { maLBWindow.SetListItemSelectHdl( rLink ); }
+    const Link&     GetListItemSelectHdl() const    { return maLBWindow.GetListItemSelectHdl(); }
     void            SetSelectionChangedHdl( const Link& rLnk )  { maLBWindow.GetEntryList()->SetSelectionChangedHdl( rLnk ); }
     void            SetCallSelectionChangedHdl( sal_Bool bCall )    { maLBWindow.GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
     sal_Bool            IsSelectionChanged() const                  { return maLBWindow.IsSelectionChanged(); }

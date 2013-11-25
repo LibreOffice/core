@@ -5441,7 +5441,10 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus )
                 mnCurPos = aPos;
             ImplShowFocus();
 
-            ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
+            if( pItem->mpWindow )
+                pItem->mpWindow->GrabFocus();
+            if( pItem != pOldItem )
+                ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
         }
     }
     else
