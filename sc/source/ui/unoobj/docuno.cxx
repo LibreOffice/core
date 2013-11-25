@@ -2307,6 +2307,29 @@ void ScModelObj::enableOpenCL(sal_Bool bEnable)
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 
+void ScModelObj::enableAutomaticDeviceSelection(sal_Bool bForce)
+    throw (uno::RuntimeException)
+{
+    ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
+    aConfig.mbOpenCLAutoSelect = true;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    ScFormulaOptions aOptions = SC_MOD()->GetFormulaOptions();
+    aOptions.SetCalcConfig(aConfig);
+    SC_MOD()->SetFormulaOptions(aOptions);
+    sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(), true, bForce);
+}
+
+void ScModelObj::disableAutomaticDeviceSelection()
+    throw (uno::RuntimeException)
+{
+    ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
+    aConfig.mbOpenCLAutoSelect = false;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    ScFormulaOptions aOptions = SC_MOD()->GetFormulaOptions();
+    aOptions.SetCalcConfig(aConfig);
+    SC_MOD()->SetFormulaOptions(aOptions);
+}
+
 void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
     throw (uno::RuntimeException)
 {

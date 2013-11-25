@@ -31,7 +31,7 @@
 
 extern "C" size_t getOpenCLPlatformCount(void);
 extern "C" void fillOpenCLInfo(sc::OpenclPlatformInfo*, size_t);
-extern "C" bool switchOpenClDevice(const OUString*, bool);
+extern "C" bool switchOpenClDevice(const OUString*, bool, bool);
 extern "C" sc::FormulaGroupInterpreter* createFormulaGroupOpenCLInterpreter();
 extern "C" void getOpenCLDeviceInfo(size_t*, size_t*);
 
@@ -504,7 +504,7 @@ static void SAL_CALL thisModule() {}
 typedef FormulaGroupInterpreter* (*__createFormulaGroupOpenCLInterpreter)(void);
 typedef size_t (*__getOpenCLPlatformCount)(void);
 typedef void (*__fillOpenCLInfo)(OpenclPlatformInfo*, size_t);
-typedef bool (*__switchOpenClDevice)(const OUString*, bool);
+typedef bool (*__switchOpenClDevice)(const OUString*, bool, bool);
 typedef void (*__getOpenCLDeviceInfo)(size_t*, size_t*);
 
 #endif
@@ -587,7 +587,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
 #endif
 }
 
-bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect)
+bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation)
 {
     bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
     if(!bOpenCLEnabled || rDeviceId == "Software")
@@ -614,11 +614,11 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     if (!fn)
         return false;
 
-    bool bSuccess = reinterpret_cast<__switchOpenClDevice>(fn)(&rDeviceId, bAutoSelect);
+    bool bSuccess = reinterpret_cast<__switchOpenClDevice>(fn)(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
         return false;
 #else
-    bool bSuccess = switchOpenClDevice(&rDeviceId, bAutoSelect);
+    bool bSuccess = switchOpenClDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
         return false;
 #endif

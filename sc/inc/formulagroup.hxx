@@ -95,7 +95,7 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
  public:
     static FormulaGroupInterpreter *getStatic();
     static void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms);
-    static bool switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect);
+    static bool switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation = false);
     static void enableOpenCL(bool bEnable);
     static void getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId);
 

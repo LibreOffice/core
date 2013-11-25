@@ -25,6 +25,17 @@ interface XOpenCLSelection : com::sun::star::uno::XInterface
     void enableOpenCL( [in] boolean enable );
 
     /**
+     * Enables automatic OpenCL Device Selection
+     * @param force forces a new evaluation of the best device
+     */
+    void enableAutomaticDeviceSelection( [in] boolean force );
+
+    /**
+     * Disbales automatic OpenCL Device Selection
+     */
+    void disableAutomaticDeviceSelection();
+
+    /**
      * Set the OpenCL device with the platform ID and device ID
      * Uses the ID of the platform and the device
      */

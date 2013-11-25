@@ -326,6 +326,12 @@ public:
     virtual void SAL_CALL enableOpenCL(sal_Bool bEnable)
                                 throw(::com::sun::star::uno::RuntimeException);
 
+    virtual void SAL_CALL enableAutomaticDeviceSelection(sal_Bool bForce)
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL disableAutomaticDeviceSelection()
+                                throw(::com::sun::star::uno::RuntimeException);
+
     virtual void SAL_CALL selectOpenCLDevice( sal_Int32 platform, sal_Int32 device )
                                 throw(::com::sun::star::uno::RuntimeException);
 
