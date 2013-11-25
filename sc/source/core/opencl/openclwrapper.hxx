@@ -183,7 +183,8 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo();
  *
  * @return returns true if there is a valid opencl device that has been set up
  */
-bool switchOpenclDevice(const OUString* pDeviceId, bool bAutoSelect);
+bool switchOpenclDevice(const OUString* pDeviceId, bool bAutoSelect,
+        bool bForceEvaluation);
 
 void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
 

@@ -920,7 +920,7 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
 
 }
 
-bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
+bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation)
 {
     cl_device_id pDeviceId = NULL;
     if(pDevice)
@@ -937,7 +937,7 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
         OUString path;
         osl::FileBase::getSystemPathFromFileURL(url,path);
         OString dsFileName = rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8);
-        ds_device pSelectedDevice = sc::OpenCLDevice::getDeviceSelection(dsFileName.getStr());
+        ds_device pSelectedDevice = sc::OpenCLDevice::getDeviceSelection(dsFileName.getStr(), bForceEvaluation);
         pDeviceId = pSelectedDevice.oclDeviceID;
 
     }

@@ -2889,9 +2889,10 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(
 }
 
 SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(
-                       const OUString* pDeviceId, bool bAutoSelect)
+                       const OUString* pDeviceId, bool bAutoSelect,
+                       bool bForceEvaluation)
 {
-    return sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect);
+    return sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect, bForceEvaluation);
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL getOpenCLDeviceInfo(size_t* pDeviceId, size_t* pPlatformId)
