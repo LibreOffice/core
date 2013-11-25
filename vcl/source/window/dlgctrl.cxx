@@ -878,7 +878,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
 
                         nStyle = pWindow->GetStyle();
 
-                        if ( isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() )
+                        if (isSuitableDestination(pWindow))
                         {
                             if ( pWindow != pSWindow )
                                 pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
