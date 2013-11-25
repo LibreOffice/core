@@ -2225,8 +2225,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                         rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? true : false ));
                     break;
                     case NS_sprm::LN_CFSmallCaps: /*sprmCFSmallCaps*/
-                        rContext->Insert(ePropertyId,
-                                         uno::makeAny( nIntValue ? style::CaseMap::SMALLCAPS : style::CaseMap::NONE));
+                        // If smallcaps would be just disabled and an other casemap is already inserted, don't do anything.
+                        if (nIntValue || rContext->find(ePropertyId) == rContext->end())
+                            rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? style::CaseMap::SMALLCAPS : style::CaseMap::NONE));
                         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "smallCaps", OUString::number(nIntValue));
                     break;
                     case NS_sprm::LN_CFCaps: /*sprmCFCaps*/

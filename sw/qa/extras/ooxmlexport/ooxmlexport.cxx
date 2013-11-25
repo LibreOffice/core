@@ -24,6 +24,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -1389,6 +1390,11 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar1, "calendar1.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
 {
+    // Problem was that CharCaseMap was style::CaseMap::NONE.
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, getProperty<sal_Int16>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharCaseMap"));
+
     // This paragraph property was missing in table style.
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
     if (!pXmlStyles)
