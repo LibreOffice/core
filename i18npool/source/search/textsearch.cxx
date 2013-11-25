@@ -764,8 +764,30 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
     aChevronMatcherE.reset();
 #endif
     pRegexMatcher = new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr);
-    if( nIcuErr)
-        { delete pRegexMatcher; pRegexMatcher = NULL;}
+    if (nIcuErr)
+    {
+        delete pRegexMatcher;
+        pRegexMatcher = NULL;
+    }
+    else
+    {
+        // Pathological patterns may result in exponential run time making the
+        // application appear to be frozen. Limit that. Documentation for this
+        // call says
+        // https://ssl.icu-project.org/apiref/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
+        // "The units of the limit are steps of the match engine.
+        // Correspondence with actual processor time will depend on the speed
+        // of the processor and the details of the specific pattern, but will
+        // typically be on the order of milliseconds."
+        // Just what is a good value? 42 is always an answer ... the 23 enigma
+        // as well.. which on the dev's machine is roughly 50 seconds with the
+        // pattern of fdo#70627.
+        /* TODO: make this a configuration settable value and possibly take
+         * complexity of expression into account and maybe even length of text
+         * to be matched; currently (2013-11-25) that is at most one 64k
+         * paragraph per RESrchFrwrd()/RESrchBkwrd() call. */
+        pRegexMatcher->setTimeLimit( 23*1000, nIcuErr);
+    }
 }
 
 //---------------------------------------------------------------------------
