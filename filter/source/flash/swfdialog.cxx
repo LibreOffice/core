@@ -91,14 +91,12 @@ Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMul
 SWFDialog::SWFDialog( const Reference< XComponentContext> &rxContext ) :
     OGenericUnoDialog( rxContext )
 {
-    mpResMgr = ResMgr::CreateResMgr( "flash", Application::GetSettings().GetUILanguageTag() );
 }
 
 // -----------------------------------------------------------------------------
 
 SWFDialog::~SWFDialog()
 {
-    delete mpResMgr;
 }
 
 // -----------------------------------------------------------------------------
@@ -162,7 +160,7 @@ Dialog* SWFDialog::createDialog( Window* pParent )
 {
     Dialog* pRet = NULL;
 
-    if( mpResMgr && mxSrcDoc.is() )
+    if (mxSrcDoc.is())
     {
 /*      TODO: From the controler we may get information what page is visible and what shapes
               are selected, if we optionaly want to limit output to that

@@ -39,7 +39,6 @@ class SWFDialog : public ::svt::OGenericUnoDialog,
 {
 private:
 
-    ResMgr*                     mpResMgr;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   maMediaDescriptor;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   maFilterData;
     com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >     mxSrcDoc;
