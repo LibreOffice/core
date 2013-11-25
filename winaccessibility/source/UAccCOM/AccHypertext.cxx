@@ -23,7 +23,6 @@
 #include "AccHyperLink.h"
 #include "acccommon.h"
 
-#include "act.hxx"
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
