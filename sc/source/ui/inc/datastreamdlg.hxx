@@ -13,6 +13,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 
+class DataStream;
 class ScDocShell;
 class SvtURLBox;
 
@@ -25,6 +26,7 @@ class DataStreamDlg : public ModalDialog
     RadioButton*    m_pRBScriptData;
     RadioButton*    m_pRBValuesInLine;
     RadioButton*    m_pRBAddressValue;
+    RadioButton*    m_pRBDataDown;
     RadioButton*    m_pRBRangeDown;
     RadioButton*    m_pRBNoMove;
     RadioButton*    m_pRBMaxLimit;
@@ -43,7 +45,9 @@ class DataStreamDlg : public ModalDialog
 public:
     DataStreamDlg(ScDocShell *pDocShell, Window* pParent);
     ~DataStreamDlg() {}
-    void StartStream();
+    void Init(const OUString& rURL, const OUString& rRange, const sal_Int32 nLimit,
+            const OUString& rMove, const sal_uInt32 nSettings);
+    void StartStream(DataStream *pStream = 0);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

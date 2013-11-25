@@ -31,8 +31,6 @@ typedef std::vector<OString> LinesList;
 class DataStream : boost::noncopyable, public sfx2::SvBaseLink
 {
     OString ConsumeLine();
-    void Decode(const OUString& rURL, const OUString& rRange, const sal_Int32 nLimit,
-            const OUString& rMove, const sal_uInt32 nSettings);
     void MoveData();
 
 public:
@@ -55,6 +53,8 @@ public:
     const sal_Int32& GetLimit() const { return mnLimit; }
     const OUString& GetMove() const { return msMove; }
     const sal_uInt32& GetSettings() const { return mnSettings; }
+    void Decode(const OUString& rURL, const OUString& rRange, sal_Int32 nLimit,
+            const OUString& rMove, const sal_uInt32 nSettings);
     bool ImportData();
     void Start();
     void Stop();

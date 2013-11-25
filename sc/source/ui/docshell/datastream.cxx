@@ -18,6 +18,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <arealink.hxx>
 #include <asciiopt.hxx>
+#include <datastreamdlg.hxx>
 #include <dbfunc.hxx>
 #include <docsh.hxx>
 #include <documentimport.hxx>
@@ -217,21 +218,11 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const OUString&
     , mbRunning(false)
     , mpLines(0)
     , mnLinesCount(0)
-    , mpEndRange(NULL)
 {
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
 
     Decode(rURL, rRange, nLimit, rMove, nSettings);
-
-    maStartRange = maRange;
-    sal_Int32 nHeight = maRange.aEnd.Row() - maRange.aStart.Row() + 1;
-    nLimit = nHeight * (nLimit / nHeight);
-    if (nLimit && maRange.aStart.Row() + nLimit - 1 < MAXROW)
-    {
-        mpEndRange.reset( new ScRange(maRange) );
-        mpEndRange->Move(0, nLimit - nHeight, 0);
-    }
 }
 
 DataStream::~DataStream()
@@ -271,14 +262,15 @@ OString DataStream::ConsumeLine()
 }
 
 void DataStream::Decode(const OUString& rURL, const OUString& rRange,
-        const sal_Int32 nLimit, const OUString& rMove, const sal_uInt32 nSettings)
+        sal_Int32 nLimit, const OUString& rMove, const sal_uInt32 nSettings)
 {
     msURL = rURL;
     msRange = rRange;
     mnLimit = nLimit;
     msMove = rMove;
     mnSettings = nSettings;
-    maRange.Parse(msRange);
+    mpEndRange.reset( NULL );
+
     SvStream *pStream = 0;
     if (mnSettings & SCRIPT_STREAM)
         pStream = new SvScriptStream(msURL);
@@ -288,8 +280,6 @@ void DataStream::Decode(const OUString& rURL, const OUString& rRange,
     mxReaderThread->launch();
 
     mbValuesInLine = mnSettings & VALUES_IN_LINE;
-    if (!mbValuesInLine)
-        return;
 
     if (msMove == "NO_MOVE")
         meMove = NO_MOVE;
@@ -297,6 +287,16 @@ void DataStream::Decode(const OUString& rURL, const OUString& rRange,
         meMove = RANGE_DOWN;
     else if (msMove == "MOVE_DOWN")
         meMove = MOVE_DOWN;
+
+    maRange.Parse(msRange);
+    maStartRange = maRange;
+    sal_Int32 nHeight = maRange.aEnd.Row() - maRange.aStart.Row() + 1;
+    nLimit = nHeight * (nLimit / nHeight);
+    if (nLimit && maRange.aStart.Row() + nLimit - 1 < MAXROW)
+    {
+        mpEndRange.reset( new ScRange(maRange) );
+        mpEndRange->Move(0, nLimit - nHeight, 0);
+    }
 }
 
 void DataStream::Start()
@@ -410,8 +410,18 @@ sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
     return SUCCESS;
 }
 
-void DataStream::Edit(Window* , const Link& )
+void DataStream::Edit(Window* pWindow, const Link& )
 {
+    DataStreamDlg aDialog(mpScDocShell, pWindow);
+    aDialog.Init(msURL, msRange, mnLimit, msMove, mnSettings);
+    if (aDialog.Execute() == RET_OK)
+    {
+        bool bWasRunning = mbRunning;
+        Stop();
+        aDialog.StartStream(this);
+        if (bWasRunning)
+            Start();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
