@@ -1212,16 +1212,9 @@ SAL_CALL rtl_machdep_alloc (
 #elif defined(SAL_W32)
     addr = VirtualAlloc (NULL, (SIZE_T)(size), MEM_COMMIT, PAGE_READWRITE);
 #elif defined(SAL_OS2)
-    {
-    APIRET rc;
-    addr = 0;
-    // Use DosAlloc* to get a 4KB page aligned address.
-    rc = DosAllocMem( &addr, size, PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_ANY);
-    if (rc) {
-        fprintf( stderr, "sal3::DosAllocMem failed rc=%d\n", rc);
-        addr = 0;
-    }
-    }
+    /* Use valloc() to use libc 16MB chunks when allocating high memory, to reduce
+       virtual address fragmentation. */
+    addr = valloc( size);
 #endif /* (SAL_UNX || SAL_W32 || SAL_OS2) */
 
     if (addr != MAP_FAILED)
@@ -1256,7 +1249,7 @@ SAL_CALL rtl_machdep_free (
 #elif defined(SAL_W32)
     (void) VirtualFree ((LPVOID)(pAddr), (SIZE_T)(0), MEM_RELEASE);
 #elif defined(SAL_OS2)
-    (void) DosFreeMem( pAddr);
+    free(pAddr);
 #endif /* (SAL_UNX || SAL_W32) */
 }
 
