@@ -58,6 +58,8 @@
 #include <queue>
 #include <boost/scoped_ptr.hpp>
 
+#define MULTI_THREAD_SHEET_PARSING 0
+
 #include "oox/ole/vbaproject.hxx"
 
 namespace oox {
@@ -203,10 +205,12 @@ const RecordInfo* WorkbookFragment::getRecordInfos() const
 
 namespace {
 
-class WorkerThread;
-
 typedef std::pair<WorksheetGlobalsRef, FragmentHandlerRef> SheetFragmentHandler;
 typedef std::vector<SheetFragmentHandler> SheetFragmentVector;
+
+#if MULTI_THREAD_SHEET_PARSING
+
+class WorkerThread;
 typedef rtl::Reference<WorkerThread> WorkerThreadRef;
 
 struct WorkerThreadData
@@ -311,9 +315,11 @@ public:
     }
 };
 
+#endif
+
 void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
 {
-#if 0 // threaded version
+#if MULTI_THREAD_SHEET_PARSING // threaded version
     size_t nThreadCount = 3;
     if (nThreadCount > rSheets.size())
         nThreadCount = rSheets.size();
