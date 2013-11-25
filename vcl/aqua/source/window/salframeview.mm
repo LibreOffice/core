@@ -105,6 +105,38 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
     return nKeyCode;
 }
 
+static sal_uInt16 ImplMapKeyCode(sal_uInt16 nKeyCode)
+{
+    /*
+      http://stackoverflow.com/questions/2080312/where-can-i-find-a-list-of-key-codes-for-use-with-cocoas-nsevent-class/2080324#2080324
+      /System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h
+     */
+
+    static sal_uInt16 aKeyCodeMap[ 0x80 ] =
+    {
+        KEY_A,               KEY_S,     KEY_D,        KEY_F,      KEY_H,      KEY_G,            KEY_Z,         KEY_X,
+        KEY_C,               KEY_V,     0,            KEY_B,      KEY_Q,      KEY_W,            KEY_E,         KEY_R,
+        KEY_Y,               KEY_T,     KEY_1,        KEY_2,      KEY_3,      KEY_4,            KEY_6,         KEY_5,
+        KEY_EQUAL,           KEY_9,     KEY_7, KEY_SUBTRACT,      KEY_8,      KEY_0, KEY_BRACKETRIGHT,         KEY_0,
+        KEY_U,     KEY_BRACKETLEFT,     KEY_I,        KEY_P, KEY_RETURN,      KEY_L,            KEY_J, KEY_QUOTELEFT,
+        KEY_K,       KEY_SEMICOLON,         0,    KEY_COMMA, KEY_DIVIDE,      KEY_N,            KEY_M,     KEY_POINT,
+        KEY_TAB,         KEY_SPACE, KEY_TILDE,   KEY_DELETE,          0, KEY_ESCAPE,                0,             0,
+              0,      KEY_CAPSLOCK,         0,            0,          0,          0,                0,             0,
+        KEY_F17,       KEY_DECIMAL,         0, KEY_MULTIPLY,          0,    KEY_ADD,		    0,             0,
+              0,                 0,         0,   KEY_DIVIDE, KEY_RETURN,          0,     KEY_SUBTRACT,       KEY_F18,
+        KEY_F19,         KEY_EQUAL,         0,            0,          0,          0,                0,             0,
+              0,                 0,   KEY_F20,            0,          0,          0,                0,             0,
+         KEY_F5,            KEY_F6,    KEY_F7,       KEY_F3,     KEY_F8,     KEY_F9,                0,       KEY_F11,
+              0,           KEY_F13,   KEY_F16,      KEY_F14,          0,    KEY_F10,                0,       KEY_F12,
+              0,           KEY_F15,  KEY_HELP,     KEY_HOME, KEY_PAGEUP, KEY_DELETE,           KEY_F4,       KEY_END,
+         KEY_F2,      KEY_PAGEDOWN,    KEY_F1,     KEY_LEFT,  KEY_RIGHT,   KEY_DOWN,           KEY_UP,		   0
+    };
+
+    if (nKeyCode < SAL_N_ELEMENTS(aKeyCodeMap))
+        return aKeyCodeMap[nKeyCode];
+    return 0;
+}
+
 // store the frame the mouse last entered
 static AquaSalFrame* s_pMouseFrame = NULL;
 // store the last pressed button for enter/exit events
@@ -1444,6 +1476,11 @@ private:
     {
         unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
         sal_uInt16 nKeyCode = ImplMapCharCode( keyChar );
+        if (nKeyCode == 0)
+        {
+            sal_uInt16 nOtherKeyCode = [pEvent keyCode];
+            nKeyCode = ImplMapKeyCode(nOtherKeyCode);
+        }
         if( nKeyCode != 0 )
         {
             // don't send unicodes in the private use area
