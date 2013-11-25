@@ -83,9 +83,9 @@ private:
         @param  _aNewValue
             is the new value
     */
-    void                    NotifyAccessibleEvent(  sal_Int16 _nEventId,
+    /*void                  NotifyAccessibleEvent(  sal_Int16 _nEventId,
                                                     const ::com::sun::star::uno::Any& _aOldValue,
-                                                    const ::com::sun::star::uno::Any& _aNewValue );
+                                                    const ::com::sun::star::uno::Any& _aNewValue );*/
 
 protected:
     virtual ~VCLXAccessibleListItem();
@@ -111,6 +111,7 @@ public:
                             sal_Int32 _nIndexInParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent );
 
+    void                    NotifyAccessibleEvent(  sal_Int16 _nEventId, const ::com::sun::star::uno::Any& _aOldValue, const ::com::sun::star::uno::Any& _aNewValue );
 
     inline sal_Bool         IsSelected() const { return m_bSelected; }
     void                    SetSelected( sal_Bool _bSelected );

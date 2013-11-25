@@ -195,7 +195,7 @@ VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( sal_Int32 _nPos,
     {
         ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find( _nPos );
         // returns only toolbox buttons, not windows
-        if ( aIter != m_aAccessibleChildren.end()  && !aIter->second.is())
+        if ( aIter != m_aAccessibleChildren.end()  && aIter->second.is())
             pItem = static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
     }
 
@@ -271,11 +271,14 @@ void VCLXAccessibleToolBox::ReleaseFocus_Impl( sal_Int32 _nPos )
     }
 }
 // -----------------------------------------------------------------------------
-void VCLXAccessibleToolBox::UpdateChecked_Impl( sal_Int32  )
+void VCLXAccessibleToolBox::UpdateChecked_Impl( sal_Int32 _nPos )
 {
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pToolBox )
     {
+        sal_uInt16 nFocusId = pToolBox->GetItemId( (sal_uInt16)_nPos );
+        VCLXAccessibleToolBoxItem* pFocusItem = NULL;
+
         for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
               aIter != m_aAccessibleChildren.end(); ++aIter )
         {
@@ -284,7 +287,12 @@ void VCLXAccessibleToolBox::UpdateChecked_Impl( sal_Int32  )
                 VCLXAccessibleToolBoxItem* pItem =
                     static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
                 pItem->SetChecked( pToolBox->IsItemChecked( nItemId ) );
+                if ( nItemId == nFocusId )
+                    pFocusItem = pItem;
         }
+        //Solution:If the position is not a child item,the focus should not be called
+        if ( pFocusItem && (sal_uInt16)_nPos != TOOLBOX_ITEM_NOTFOUND )
+            pFocusItem->SetFocus( sal_True );
     }
 }
 // -----------------------------------------------------------------------------
@@ -525,23 +533,41 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
     // to prevent an early release of the toolbox (VCLEVENT_OBJECT_DYING)
     Reference< XAccessibleContext > xTemp = this;
 
+    ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_TOOLBOX_CLICK:
+        case VCLEVENT_TOOLBOX_SELECT:
         {
             if ( rVclWindowEvent.GetData() )
             {
                 UpdateChecked_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
                 UpdateIndeterminate_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData() );
             }
+            else if( pToolBox->GetItemPos(pToolBox->GetCurItemId()) != TOOLBOX_ITEM_NOTFOUND )
+            {
+                UpdateChecked_Impl( pToolBox->GetItemPos(pToolBox->GetCurItemId()) );
+                        UpdateIndeterminate_Impl( pToolBox->GetItemPos(pToolBox->GetCurItemId()) );
+            }
             break;
         }
         case VCLEVENT_TOOLBOX_DOUBLECLICK:
         case VCLEVENT_TOOLBOX_ACTIVATE:
         case VCLEVENT_TOOLBOX_DEACTIVATE:
-        case VCLEVENT_TOOLBOX_SELECT:
+        //case VCLEVENT_TOOLBOX_SELECT:
             break;
-
+        // IA2 CWS. MT: Still using VCLEVENT_TOOLBOX_CLICK, see comment in vcl/source/window/toolbox2.cxx
+        /*
+        case VCLEVENT_TOOLBOX_ITEMUPDATED:
+        {
+            if ( rVclWindowEvent.GetData() )
+            {
+                UpdateChecked_Impl( TOOLBOX_ITEM_NOTFOUND );
+                UpdateIndeterminate_Impl( (sal_Int32)rVclWindowEvent.GetData() );
+            }
+        break;
+        }
+        */
         case VCLEVENT_TOOLBOX_HIGHLIGHT:
             UpdateFocus_Impl();
             break;
@@ -551,7 +577,6 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             break;
 
         case VCLEVENT_TOOLBOX_ITEMADDED :
-//            UpdateItem_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData(), VCLEVENT_TOOLBOX_ITEMADDED == rVclWindowEvent.GetId() );
             UpdateItem_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData(), sal_True );
             break;
 
@@ -598,14 +623,14 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         case VCLEVENT_OBJECT_DYING :
         {
             // if this toolbox is a subtoolbox, we have to relese it from its parent
-            ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
-            if ( pToolBox && pToolBox->GetParent() &&
-                 pToolBox->GetParent()->GetType() == WINDOW_TOOLBOX )
+            ToolBox* pBox = static_cast< ToolBox* >( GetWindow() );
+            if ( pBox && pBox->GetParent() &&
+                 pBox->GetParent()->GetType() == WINDOW_TOOLBOX )
             {
                 VCLXAccessibleToolBox* pParent = static_cast< VCLXAccessibleToolBox* >(
-                    pToolBox->GetParent()->GetAccessible()->getAccessibleContext().get() );
+                    pBox->GetParent()->GetAccessible()->getAccessibleContext().get() );
                 if ( pParent )
-                    pParent->ReleaseSubToolBox( pToolBox );
+                    pParent->ReleaseSubToolBox( pBox );
             }
 
             // dispose all items

@@ -39,6 +39,8 @@ class AccessibleTabListBoxTable : public AccessibleBrowseBoxTable, public Access
 private:
     SvHeaderTabListBox*     m_pTabListBox;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >  m_xCurChild;
+
     void                    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     DECL_LINK(              WindowEventListener, VclSimpleEvent* );
 

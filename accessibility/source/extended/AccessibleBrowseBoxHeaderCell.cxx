@@ -61,6 +61,7 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
         SolarMutexGuard aSolarGuard;
+        mpBrowseBox->FillAccessibleStateSet( *pStateSetHelper, getType() );
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );

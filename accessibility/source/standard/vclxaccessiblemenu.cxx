@@ -242,4 +242,14 @@ void VCLXAccessibleMenu::deselectAccessibleChild( sal_Int32 nChildIndex ) throw 
 
 // -----------------------------------------------------------------------------
 
+OUString VCLXAccessibleMenu::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+
+    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+        throw IndexOutOfBoundsException();
+
+    return OUString(  );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,6 +49,8 @@ protected:
     void                    SetItemText( const OUString& sItemText );
     OUString                GetItemText();
 
+    virtual sal_Bool        IsMenuHideDisabledEntries();
+
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // OCommonAccessibleComponent

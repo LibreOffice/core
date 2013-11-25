@@ -24,11 +24,13 @@
 #include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <com/sun/star/accessibility/XAccessibleValue.hpp>
+#include <cppuhelper/implbase3.hxx>
 
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper3<
     ::com::sun::star::accessibility::XAccessible,
+    ::com::sun::star::accessibility::XAccessibleValue,
     ::com::sun::star::accessibility::XAccessibleAction
     > VCLXAccessibleBox_BASE;
 
@@ -121,7 +123,22 @@ public:
     */
     virtual void SAL_CALL disposing (void);
 
+    //=====  XAccessibleValue  ================================================
 
+    virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue( )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL setCurrentValue(
+        const ::com::sun::star::uno::Any& aNumber )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getMaximumValue(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    bool IsDropDownBox() {return m_bIsDropDownBox;};
+    BoxType GetBoxType() { return m_aBoxType;};
 protected:
     /** Specifies whether the box is a combo box or a list box.  List boxes
         have multi selection.
@@ -162,6 +179,7 @@ protected:
     virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent);
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent);
 
+    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
 private:
     /// Index in parent.  This is settable from the outside.

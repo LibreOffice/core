@@ -93,6 +93,10 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
                 ( ( nBits & TIB_AUTOCHECK ) == TIB_AUTOCHECK )
                )
                 m_nRole = AccessibleRole::TOGGLE_BUTTON;
+            else if ( (nBits & TIB_DROPDOWN) == TIB_DROPDOWN )
+            {
+                m_nRole = AccessibleRole::BUTTON_DROPDOWN;
+            }
             else if ( m_pToolBox->GetItemWindow( m_nItemId ) )
                 m_nRole = AccessibleRole::PANEL;
             break;
@@ -127,6 +131,18 @@ OUString VCLXAccessibleToolBoxItem::GetText( bool _bAsName )
     if ( m_pToolBox && m_nItemId > 0 && ( _bAsName || m_pToolBox->GetButtonType() != BUTTON_SYMBOL ) )
     {
         sRet = m_pToolBox->GetItemText( m_nItemId );
+        if (sRet.isEmpty())
+        {
+            Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
+            if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
+                 pItemWindow->GetAccessible()->getAccessibleContext().is() )
+            {
+                OUString sWinText = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
+                if (!sWinText.isEmpty())
+                    sRet = sWinText;
+            }
+        }
+
     }
     return sRet;
 }
@@ -148,6 +164,8 @@ void VCLXAccessibleToolBoxItem::SetFocus( sal_Bool _bFocus )
 // -----------------------------------------------------------------------------
 void VCLXAccessibleToolBoxItem::SetChecked( sal_Bool _bCheck )
 {
+    if( m_nRole == AccessibleRole::PANEL)
+        return;
     if ( m_bIsChecked != _bCheck )
     {
         Any aOldValue;
@@ -346,11 +364,17 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleDescription(  ) throw 
 {
     OExternalLockGuard aGuard( this );
 
-    OUString sDescription;
-    if ( m_pToolBox )
-        sDescription = m_pToolBox->GetHelpText( m_nItemId );
-
-    return sDescription;
+    if (m_nRole == AccessibleRole::PANEL && getAccessibleChildCount() > 0)
+    {
+        return TK_RES_STRING( RID_STR_ACC_PANEL_DESCRIPTION );
+    }
+    else
+    {
+        OUString sDescription;
+        if ( m_pToolBox )
+            sDescription = m_pToolBox->GetHelpText( m_nItemId );
+        return sDescription;
+    }
 }
 // -----------------------------------------------------------------------------
 OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleName(  ) throw (RuntimeException)
@@ -380,11 +404,11 @@ Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleToolBoxItem::getAccessib
     if ( m_pToolBox && !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
-        if ( m_bIsChecked )
+        if ( m_bIsChecked && m_nRole != AccessibleRole::PANEL )
             pStateSetHelper->AddState( AccessibleStateType::CHECKED );
         if ( m_bIndeterminate )
             pStateSetHelper->AddState( AccessibleStateType::INDETERMINATE );
-        if ( m_pToolBox->IsItemEnabled( m_nItemId ) )
+        if ( m_pToolBox->IsEnabled() && m_pToolBox->IsItemEnabled( m_nItemId ) )
         {
             pStateSetHelper->AddState( AccessibleStateType::ENABLED );
             pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
@@ -650,6 +674,8 @@ Any VCLXAccessibleToolBoxItem::getCurrentValue(  ) throw (RuntimeException)
     if ( m_pToolBox )
         aValue <<= (sal_Int32)m_pToolBox->IsItemChecked( m_nItemId );
 
+    if( m_nRole == AccessibleRole::PANEL )
+        aValue <<= (sal_Int32)0;
     return aValue;
 }
 // -----------------------------------------------------------------------------

@@ -75,8 +75,6 @@ void VCLXAccessibleTabControl::UpdateFocused()
 
 void VCLXAccessibleTabControl::UpdateSelected( sal_Int32 i, bool bSelected )
 {
-    NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
-
     if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );

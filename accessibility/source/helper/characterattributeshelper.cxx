@@ -38,6 +38,7 @@ CharacterAttributesHelper::CharacterAttributesHelper( const Font& rFont, sal_Int
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharStrikeout" ),     makeAny( (sal_Int16) rFont.GetStrikeout() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharUnderline" ),     makeAny( (sal_Int16) rFont.GetUnderline() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharWeight" ),        makeAny( (float) rFont.GetWeight() ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharPosture" ),       makeAny( (sal_Int16)rFont.GetItalic() ) ) );
 }
 
 

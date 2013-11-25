@@ -119,12 +119,9 @@ namespace accessibility
         SolarMethodGuard aGuard( *this );
 
         // TODO: localize this!
-        OUStringBuffer sName(mpBrowseBox->GetColumnDescription( ::sal::static_int_cast< sal_uInt16 >( getColumnPos() ) ));
-        if ( sName.isEmpty() )
-        {
-            sName.appendAscii("Column ");
-            sName.append(getColumnPos());
-        }
+        OUStringBuffer sName;
+        sName.appendAscii("Column ");
+        sName.append(getColumnPos()-1);
 
         sName.appendAscii(", Row ");
         sName.append(getRowPos());

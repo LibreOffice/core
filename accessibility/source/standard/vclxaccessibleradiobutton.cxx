@@ -189,7 +189,7 @@ OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 n
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
+    return TK_RES_STRING( RID_STR_ACC_ACTION_SELECT );
 }
 
 // -----------------------------------------------------------------------------
