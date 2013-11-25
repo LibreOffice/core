@@ -66,9 +66,8 @@ public:
         return E_FAIL;
     }
 
-    DECLARE_REGISTRY_RESOURCEID(IDR_AccImage)
+    DECLARE_NO_REGISTRY()
 
-    // IAccessibleImage
 public:
     // IAccessibleImage
 

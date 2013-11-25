@@ -94,23 +94,6 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
-
-STDAPI DllRegisterServer(void)
-{
-    // registers object, typelib and all interfaces in typelib
-    return _Module.RegisterServer(TRUE);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
-
-STDAPI DllUnregisterServer(void)
-{
-    return _Module.UnregisterServer(TRUE);
-}
-
 
 IMAccessible * UAccCOMCreateInstance()
 {

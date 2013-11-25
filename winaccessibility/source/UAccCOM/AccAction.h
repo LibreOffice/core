@@ -42,7 +42,7 @@ public:
 
     }
 
-    DECLARE_REGISTRY_RESOURCEID(IDR_ACCACTION)
+    DECLARE_NO_REGISTRY()
 
     BEGIN_COM_MAP(CAccAction)
     COM_INTERFACE_ENTRY(IAccessibleAction)

@@ -63,9 +63,8 @@ public:
         return E_FAIL;
     }
 
-    DECLARE_REGISTRY_RESOURCEID(IDR_ACCTABLE)
+    DECLARE_NO_REGISTRY()
 
-    // IAccessibleTable
 public:
     // IAccessibleTable
 

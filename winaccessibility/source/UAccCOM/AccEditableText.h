@@ -67,9 +67,8 @@ public:
         return E_FAIL;
     }
 
-    DECLARE_REGISTRY_RESOURCEID(IDR_AccEditableText)
+    DECLARE_NO_REGISTRY()
 
-    // IAccessibleEditableText
 public:
     // IAccessibleEditableText
 

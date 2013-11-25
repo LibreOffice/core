@@ -64,9 +64,8 @@ public:
         return E_FAIL;
     }
 
-    DECLARE_REGISTRY_RESOURCEID(IDR_AccText)
+    DECLARE_NO_REGISTRY()
 
-    // IAccessibleText
 public:
     // IAccessibleText
 

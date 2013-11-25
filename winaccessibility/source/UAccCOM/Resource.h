@@ -23,37 +23,6 @@
 //
 
 #define IDS_PROJNAME                    100
-#define IDR_MACCESSIBLE                 101
-#define IDR_ENUMVARIANT                 106
-#define IDR_UNOXWRAPPER                 107
-#define IDS_ACCCOMPONENT_DESC           108
-#define IDR_AccComponent                109
-#define IDS_ACCCONTEXT_DESC             110
-#define IDR_AccContext                  111
-#define IDR_ACCRELATION                 112
-#define IDR_ACCACTION                   113
-#define IDS_ACCFONT_DESC                114
-#define IDR_AccFont                     115
-#define IDS_ACCSELECTION_DESC           116
-#define IDR_AccSelection                117
-#define IDS_ACCEXTENDEDCOMPONENT_DESC   118
-#define IDR_AccExtendedComponent        119
-#define IDS_ACCTEXT_DESC                120
-#define IDR_AccText                     121
-#define IDS_ACCEDITABLETEXT_DESC        122
-#define IDR_AccEditableText             123
-#define IDS_ACCHYPERTEXT_DESC           124
-#define IDR_AccHypertext                125
-#define IDS_ACCIMAGE_DESC               126
-#define IDR_AccImage                    127
-#define IDS_ACCVALUE_DESC               128
-#define IDR_AccValue                    129
-#define IDS_ACCTABLE_DESC               130
-#define IDR_ACCTABLE                    131
-#define IDS_ACCHYPERLINK_DESC           132
-#define IDR_AccHyperLink                133
-#define IDS_ACCKEYBINDING_DESC          134
-#define IDR_AccKeyBinding               135
 
 // Next default values for new objects
 //
