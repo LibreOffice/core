@@ -666,7 +666,7 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
             nRefPos = aLineBreaks[ nMyLine ];
 
         // fill char offset and 'special position'
-        rPos.nCharOfst = static_cast<sal_uInt16>( nPos - nRefPos );
+        rPos.nCharOfst = nPos - nRefPos;
         rPos.nExtendRange = nExtend;
         rPos.nLineOfst = nLineOffset;
     }

@@ -101,7 +101,7 @@ struct Sw2LinesPos
 
 struct SwSpecialPos
 {
-    xub_StrLen nCharOfst;
+    sal_Int32 nCharOfst;
     sal_uInt16 nLineOfst;
     sal_uInt8 nExtendRange;
 
