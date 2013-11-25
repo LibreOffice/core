@@ -97,6 +97,12 @@ const sal_Int32 EmfPlusLineStyleDashDot = 0x00000003;
 const sal_Int32 EmfPlusLineStyleDashDotDot = 0x00000004;
 const sal_Int32 EmfPlusLineStyleCustom = 0x00000005;
 
+const sal_uInt32 EmfPlusCustomLineCapDataTypeDefault = 0x00000000;
+const sal_uInt32 EmfPlusCustomLineCapDataTypeAdjustableArrow = 0x00000001;
+
+const sal_uInt32 EmfPlusCustomLineCapDataFillPath = 0x00000001;
+const sal_uInt32 EmfPlusCustomLineCapDataLinePath = 0x00000002;
+
 using namespace ::com::sun::star;
 using namespace ::basegfx;
 
@@ -588,6 +594,94 @@ namespace cppcanvas
             }
         };
 
+        struct EMFPCustomLineCap : public EMFPObject
+        {
+            sal_uInt32 type;
+
+        public:
+            EMFPCustomLineCap() : EMFPObject()
+            {
+            }
+
+            ~EMFPCustomLineCap()
+            {
+            }
+
+            void Read (SvStream& s, ImplRenderer& rR)
+            {
+                sal_uInt32 header;
+
+                s >> header >> type;
+
+                SAL_INFO("cppcanvas.emf", "EMF+\t\tcustom cap");
+                SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << header << " type: " << type << std::dec);
+
+                if (type == EmfPlusCustomLineCapDataTypeDefault)
+                {
+                    sal_Int32 customLineCapDataFlags, baseCap, baseInset;
+                    sal_Int32 strokeStartCap, strokeEndCap, strokeJoin;
+                    sal_Int32 strokeMiterLimit, widthScale;
+                    float fillHotSpotX, fillHotSpotY, strokeHotSpotX, strokeHotSpotY;
+
+                    s >> customLineCapDataFlags >> baseCap >> baseInset
+                      >> strokeStartCap >> strokeEndCap >> strokeJoin
+                      >> strokeMiterLimit >> widthScale
+                      >> fillHotSpotX >> fillHotSpotY >> strokeHotSpotX >> strokeHotSpotY;
+
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomLinCapDataFlags: 0x" << std::hex << customLineCapDataFlags);
+
+                    if (customLineCapDataFlags & EmfPlusCustomLineCapDataFillPath)
+                    {
+                        sal_Int32 pathLength;
+                        s >> pathLength;
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\tpath length: " << pathLength);
+
+                        sal_uInt32 pathHeader;
+                        sal_Int32 pathPoints, pathFlags;
+                        s >> pathHeader >> pathPoints >> pathFlags;
+
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\tpath (custom cap fill path)");
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec );
+
+                        EMFPPath path(pathPoints);
+                        path.Read(s, pathFlags, rR);
+                    }
+
+                    if (customLineCapDataFlags & EmfPlusCustomLineCapDataLinePath)
+                    {
+                        sal_Int32 pathLength;
+                        s >> pathLength;
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\tpath length: " << pathLength);
+
+                        sal_uInt32 pathHeader;
+                        sal_Int32 pathPoints, pathFlags;
+                        s >> pathHeader >> pathPoints >> pathFlags;
+
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\tpath (custom cap line path)");
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec );
+
+                        EMFPPath path(pathPoints);
+                        path.Read(s, pathFlags, rR);
+                    }
+                }
+                else if (type == EmfPlusCustomLineCapDataTypeAdjustableArrow)
+                {
+                    // TODO only reads the data, does not use them [I've had
+                    // no test document to be able to implement it]
+
+                    sal_Int32 width, height, middleInset, fillState, lineStartCap;
+                    sal_Int32 lineEndCap, lineJoin, lineMiterLimit, widthScale;
+                    float fillHotSpotX, fillHotSpotY, lineHotSpotX, lineHotSpotY;
+
+                    s >> width >> height >> middleInset >> fillState >> lineStartCap
+                      >> lineEndCap >> lineJoin >> lineMiterLimit >> widthScale
+                      >> fillHotSpotX >> fillHotSpotY >> lineHotSpotX >> lineHotSpotY;
+
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tTODO - actually read EmfPlusCustomLineCapArrowData object (section 2.2.2.12)");
+                }
+            }
+        };
+
         struct EMFPPen : public EMFPBrush
         {
             XForm transformation;
@@ -605,9 +699,9 @@ namespace cppcanvas
             sal_Int32 compoundArrayLen;
             float *compoundArray;
             sal_Int32 customStartCapLen;
-            sal_uInt8 *customStartCap;
+            EMFPCustomLineCap *customStartCap;
             sal_Int32 customEndCapLen;
-            sal_uInt8 *customEndCap;
+            EMFPCustomLineCap *customEndCap;
 
         public:
             EMFPPen () : EMFPBrush ()
@@ -622,8 +716,8 @@ namespace cppcanvas
             {
                 delete[] dashPattern;
                 delete[] compoundArray;
-                delete[] customStartCap;
-                delete[] customEndCap;
+                delete customStartCap;
+                delete customEndCap;
             }
 
             void SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
@@ -762,15 +856,13 @@ namespace cppcanvas
                 {
                     s >> customStartCapLen;
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
+                    sal_uInt32 pos = s.Tell();
 
-                    if( customStartCapLen<0 )
-                        customStartCapLen=0;
-                    customStartCap = new sal_uInt8 [customStartCapLen];
-                    for (i = 0; i < customStartCapLen; i++)
-                    {
-                        s >> customStartCap [i];
-                        SAL_INFO("cppcanvas.emf", "EMF+\t\t\tcustomStartCap[" << i << "]: 0x" << std::hex << int(customStartCap[i]));
-                    }
+                    customStartCap = new EMFPCustomLineCap();
+                    customStartCap->Read(s, rR);
+
+                    // maybe we don't read everything yet, play it safe ;-)
+                    s.Seek(pos + customStartCapLen);
                 }
                 else
                     customStartCapLen = 0;
@@ -779,15 +871,13 @@ namespace cppcanvas
                 {
                     s >> customEndCapLen;
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
+                    sal_uInt32 pos = s.Tell();
 
-                    if( customEndCapLen<0 )
-                        customEndCapLen=0;
-                    customEndCap = new sal_uInt8 [customEndCapLen];
-                    for (i = 0; i < customEndCapLen; i++)
-                    {
-                        s >> customEndCap [i];
-                        SAL_INFO("cppcanvas.emf", "EMF+\t\t\tcustomEndCap[" << i << "]: 0x" << std::hex << int(customEndCap[i]));
-                    }
+                    customEndCap = new EMFPCustomLineCap();
+                    customEndCap->Read(s, rR);
+
+                    // maybe we don't read everything yet, play it safe ;-)
+                    s.Seek(pos + customEndCapLen);
                 }
                 else
                     customEndCapLen = 0;
