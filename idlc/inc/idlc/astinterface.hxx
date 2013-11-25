@@ -109,7 +109,7 @@ private:
     void checkInheritedInterfaceClashes(
         DoubleDeclarations & doubleDeclarations,
         std::set< OString > & seenInterfaces, AstInterface const * ifc,
-        bool optional, bool direct, bool mainOptional) const;
+        bool direct, bool optional, bool mainOptional) const;
 
     void checkMemberClashes(
         DoubleMemberDeclarations & doubleMembers, AstDeclaration const * member,
