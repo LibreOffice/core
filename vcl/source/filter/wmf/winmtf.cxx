@@ -352,6 +352,20 @@ Color WinMtf::ReadColor()
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
 
+Point WinMtfOutput::ImplScale( const Point& rPt)//Hack to set varying defaults for incompletely defined files.
+{
+        if (mbIsMapDevSet && mbIsMapWinSet)
+        {
+            return Point((rPt.X())*mnWinExtX/mnDevWidth-mrclFrame.Left(),(rPt.Y())*mnWinExtY/mnDevHeight-mrclFrame.Top());
+        }
+        else
+        {
+            return Point((rPt.X())*UNDOCUMENTED_WIN_RCL_RELATION-mrclFrame.Left(),(rPt.Y())*UNDOCUMENTED_WIN_RCL_RELATION-mrclFrame.Top());
+        }
+}
+
+//-----------------------------------------------------------------------------------
+
 Point WinMtfOutput::ImplMap( const Point& rPt )
 {
     if ( mnWinExtX && mnWinExtY )
@@ -366,25 +380,12 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
         {
             switch( mnMapMode )
             {
-                case MM_TEXT:
-                    fX2 -= mnWinOrgX;
-                    fY2 -= mnWinOrgY;
-                    if( mnDevWidth != 1 || mnDevHeight != 1 ) {
-                        fX2 *= 2540.0/mnUnitsPerInch;
-                        fY2 *= 2540.0/mnUnitsPerInch;
-                    }
-                    fX2 += mnDevOrgX;
-                    fY2 += mnDevOrgY;
-                    fX2 *= (double)mnMillX * 100.0 / (double)mnPixX;
-                    fY2 *= (double)mnMillY * 100.0 / (double)mnPixY;
-
-                    break;
                 case MM_LOENGLISH :
                 {
                     fX2 -= mnWinOrgX;
                     fY2  = mnWinOrgY-fY2;
-                    fX2 *= 25.40;
-                    fY2 *= 25.40;
+                    fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
+                    fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
                     fX2 += mnDevOrgX;
                     fY2 += mnDevOrgY;
                 }
@@ -393,8 +394,18 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
                 {
                     fX2 -= mnWinOrgX;
                     fY2  = mnWinOrgY-fY2;
-                    fX2 *= 2.540;
-                    fY2 *= 2.540;
+                    fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
+                    fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
+                    fX2 += mnDevOrgX;
+                    fY2 += mnDevOrgY;
+                }
+                break;
+                case MM_TWIPS:
+                {
+                    fX2 -= mnWinOrgX;
+                    fY2  = mnWinOrgY-fY2;
+                    fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH/MILLIINCH_PER_TWIPS;
+                    fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH/MILLIINCH_PER_TWIPS;
                     fX2 += mnDevOrgX;
                     fY2 += mnDevOrgY;
                 }
@@ -409,7 +420,7 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
                     fY2 += mnDevOrgY;
                 }
                 break;
-                case MM_HIMETRIC :
+                case MM_HIMETRIC : //in hundredth of a millimeter
                 {
                     fX2 -= mnWinOrgX;
                     fY2  = mnWinOrgY-fY2;
@@ -454,25 +465,16 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
         {
             switch( mnMapMode )
             {
-                case MM_TEXT:
-                if( mnDevWidth != 1 && mnDevHeight != 1 ) {
-                    fWidth *= 2540.0/mnUnitsPerInch;
-                    fHeight*= 2540.0/mnUnitsPerInch;
-                } else {
-                    fWidth *= (double)mnMillX * 100 / (double)mnPixX;
-                    fHeight *= (double)mnMillY * 100 / (double)mnPixY;
-                }
-                break;
                 case MM_LOENGLISH :
                 {
-                    fWidth *= 25.40;
-                    fHeight*=-25.40;
+                    fWidth *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
+                    fHeight*=-HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
                 }
                 break;
                 case MM_HIENGLISH :
                 {
-                    fWidth *= 2.540;
-                    fHeight*=-2.540;
+                    fWidth *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
+                    fHeight*=-HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
                 }
                 break;
                 case MM_LOMETRIC :
@@ -481,9 +483,15 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
                     fHeight*=-10;
                 }
                 break;
-                case MM_HIMETRIC :
+                case MM_HIMETRIC : //in hundredth of millimeters
                 {
                     fHeight *= -1;
+                }
+                break;
+                case MM_TWIPS:
+                {
+                    fWidth *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH/MILLIINCH_PER_TWIPS;
+                    fHeight*=-HUNDREDTH_MILLIMETERS_PER_MILLIINCH/MILLIINCH_PER_TWIPS;
                 }
                 break;
                 default :
@@ -539,6 +547,27 @@ Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
         rPolygon[ i ] = ImplMap( rPolygon[ i ] );
     }
     return rPolygon;
+}
+
+//-----------------------------------------------------------------------------------
+
+Polygon& WinMtfOutput::ImplScale( Polygon& rPolygon )
+{
+    sal_uInt16 nPoints = rPolygon.GetSize();
+    for ( sal_uInt16 i = 0; i < nPoints; i++ )
+    {
+        rPolygon[ i ] = ImplScale( rPolygon[ i ] );
+    }
+    return rPolygon;
+}
+
+//-----------------------------------------------------------------------------------
+
+PolyPolygon& WinMtfOutput::ImplScale( PolyPolygon& rPolyPolygon )
+{
+    sal_uInt16 nPolys = rPolyPolygon.Count();
+    for ( sal_uInt16 i = 0; i < nPolys; ImplScale( rPolyPolygon[ i++ ] ) ) ;
+    return rPolyPolygon;
 }
 
 //-----------------------------------------------------------------------------------
@@ -838,6 +867,10 @@ void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
 void WinMtfOutput::IntersectClipRect( const Rectangle& rRect )
 {
     mbClipNeedsUpdate=true;
+    if ((rRect.Left()-rRect.Right()==0) && (rRect.Top()-rRect.Bottom()==0))
+    {
+        return; // empty rectangles cause trouble
+    }
     aClipPath.intersectClipRect( ImplMap( rRect ) );
 }
 
@@ -861,7 +894,10 @@ void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClip
 {
     mbClipNeedsUpdate=true;
     if ( bIsMapped )
-        aClipPath.setClipPath( rPolyPolygon, nClippingMode );
+    {
+        PolyPolygon aPP( rPolyPolygon );
+        aClipPath.setClipPath( ImplScale( aPP ), nClippingMode );
+    }
     else
     {
         PolyPolygon aPP( rPolyPolygon );
@@ -891,7 +927,6 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mbComplexClip       ( false ),
     mnGfxMode           ( GM_COMPATIBLE ),
     mnMapMode           ( MM_TEXT ),
-    mnUnitsPerInch ( 96 ),
     mnDevOrgX           ( 0 ),
     mnDevOrgY           ( 0 ),
     mnDevWidth          ( 1 ),
@@ -906,6 +941,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnMillY             ( 1 ),
     mpGDIMetaFile       ( &rGDIMetaFile )
 {
+    mbIsMapWinSet = sal_False;
+    mbIsMapDevSet = sal_False;
     mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );      // The original clipregion has to be on top
                                                                             // of the stack so it can always be restored
                                                                             // this is necessary to be able to support
@@ -1116,7 +1153,6 @@ void WinMtfOutput::MoveTo( const Point& rPoint, sal_Bool bRecordPath )
 void WinMtfOutput::LineTo( const Point& rPoint, sal_Bool bRecordPath )
 {
     UpdateClipRegion();
-
     Point aDest( ImplMap( rPoint ) );
     if ( bRecordPath )
         aPathObj.AddPoint( aDest );
@@ -1896,7 +1932,7 @@ void WinMtfOutput::SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetDevExt( const Size& rSize )
+void WinMtfOutput::SetDevExt( const Size& rSize ,sal_Bool regular)
 {
     if ( rSize.Width() && rSize.Height() )
     {
@@ -1908,6 +1944,10 @@ void WinMtfOutput::SetDevExt( const Size& rSize )
                 mnDevWidth = rSize.Width();
                 mnDevHeight = rSize.Height();
             }
+        }
+        if (regular)
+        {
+            mbIsMapDevSet=sal_True;
         }
     }
 }
@@ -1922,10 +1962,15 @@ void WinMtfOutput::ScaleDevExt( double fX, double fY )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetWinOrg( const Point& rPoint )
+void WinMtfOutput::SetWinOrg( const Point& rPoint , sal_Bool bIsEMF)
 {
     mnWinOrgX = rPoint.X();
     mnWinOrgY = rPoint.Y();
+    if (bIsEMF)
+    {
+        SetDevByWin();
+    }
+    mbIsMapWinSet=sal_True;
 }
 
 //-----------------------------------------------------------------------------------
@@ -1938,9 +1983,21 @@ void WinMtfOutput::SetWinOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::SetWinExt( const Size& rSize )
+void WinMtfOutput::SetDevByWin() //mnWinExt...-stuff has to be assigned before.
 {
+    if (!mbIsMapDevSet)
+    {
+        if ((mnMapMode == MM_ISOTROPIC) ) //TODO: WHAT ABOUT ANISOTROPIC???
+        {
+            SetDevExt(Size((mnWinExtX+mnWinOrgX)>>MS_FIXPOINT_BITCOUNT_28_4,-((mnWinExtY-mnWinOrgY)>>MS_FIXPOINT_BITCOUNT_28_4)),sal_False);
+        }
+    }
+}
 
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::SetWinExt( const Size& rSize, sal_Bool bIsEMF )
+{
     if( rSize.Width() && rSize.Height() )
     {
         switch( mnMapMode )
@@ -1950,6 +2007,11 @@ void WinMtfOutput::SetWinExt( const Size& rSize )
             {
                 mnWinExtX = rSize.Width();
                 mnWinExtY = rSize.Height();
+                if (bIsEMF)
+                {
+                    SetDevByWin();
+                }
+                mbIsMapWinSet=sal_True;
             }
         }
     }
@@ -1998,7 +2060,7 @@ void WinMtfOutput::SetRefMill( const Size& rSize )
 void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
 {
     mnMapMode = nMapMode;
-    if ( nMapMode == MM_TEXT )
+    if ( nMapMode == MM_TEXT && !mbIsMapWinSet )
     {
         mnWinExtX = mnDevWidth;
         mnWinExtY = mnDevHeight;
@@ -2008,14 +2070,6 @@ void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
         mnWinExtX = mnMillX * 100;
         mnWinExtY = mnMillY * 100;
     }
-}
-
-//-----------------------------------------------------------------------------------
-
-void WinMtfOutput::SetUnitsPerInch( sal_uInt16 nUnitsPerInch )
-{
-    if( nUnitsPerInch != 0 )
-    mnUnitsPerInch = nUnitsPerInch;
 }
 
 //-----------------------------------------------------------------------------------
