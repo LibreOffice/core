@@ -113,3 +113,65 @@ interface Derived {
 	[optional] interface Base1;
 	[optional] interface Base2;
 };
+
+
+EXPECT FAILURE "methodoverload.tests 10":
+interface I {
+    [attribute] long a;
+    [attribute] short a;
+};
+
+
+EXPECT FAILURE "methodoverload.tests 11":
+interface I1 {
+    [attribute] long a;
+};
+interface I2 {
+    [attribute] short a;
+    interface I1;
+};
+
+
+EXPECT FAILURE "methodoverload.tests 12":
+interface I {
+    [attribute] long a;
+    void a();
+};
+
+
+EXPECT FAILURE "methodoverload.tests 13":
+interface I1 {
+    [attribute] long a;
+}
+interface I2 {
+    void a();
+    interface I1;
+};
+
+
+EXPECT FAILURE "methodoverload.tests 14":
+interface I1 {
+    void a();
+}
+interface I2 {
+    [attribute] long a;
+    interface I1;
+};
+
+
+EXPECT SUCCESS "methodoverload.tests 15":
+interface I {
+    [attribute] long a;
+    void geta();
+    void seta();
+};
+
+
+EXPECT SUCCESS "methodoverload.tests 16":
+interface I1 {
+    [attribute] long a;
+};
+interface I2: I1 {
+    void geta();
+    void seta();
+};

@@ -16,6 +16,7 @@ $(eval $(call gb_Module_add_targets,unoidl, \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,unoidl, \
+    CustomTarget_unoidl-write_test \
     Executable_unoidl-check \
     Executable_unoidl-write \
 ))
