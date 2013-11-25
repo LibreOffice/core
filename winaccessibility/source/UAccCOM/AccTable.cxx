@@ -214,13 +214,10 @@ STDMETHODIMP CAccTable::get_columnHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *
     *startingRowIndex = 0 ;
 
     IMAccessible* pIMacc = NULL;
-    ActivateActContext();
     HRESULT hr = CoCreateInstance( CLSID_MAccessible, NULL, CLSCTX_ALL ,
                                     IID_IMAccessible,
                                     (void **)&pIMacc
                                   );
-    DeactivateActContext();
-
     if (!SUCCEEDED(hr))
     {
         return E_FAIL;
@@ -448,13 +445,10 @@ STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *acc
     *startingColumnIndex = 0 ;
 
     IMAccessible* pIMacc = NULL;
-    ActivateActContext();
     HRESULT hr = CoCreateInstance( CLSID_MAccessible, NULL, CLSCTX_ALL ,
                                     IID_IMAccessible,
                                     (void **)&pIMacc
                                   );
-    DeactivateActContext();
-
     if (!SUCCEEDED(hr))
     {
         return E_FAIL;

@@ -1720,11 +1720,9 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
             }
 
             IAccessibleRelation* pRelation = NULL;
-            ActivateActContext();
             HRESULT hr = CoCreateInstance( CLSID_AccRelation, NULL, CLSCTX_SERVER ,
                 IID_IAccessibleRelation,
                 (void **)&pRelation);
-            DeactivateActContext();
             if(SUCCEEDED(hr))
             {
                 IUNOXWrapper* wrapper = NULL;
@@ -1784,11 +1782,9 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
         for(int i=0; i<nCount ; i++)
         {
             IAccessibleRelation* pRelation = NULL;
-            ActivateActContext();
             HRESULT hr = CoCreateInstance( CLSID_AccRelation, NULL, CLSCTX_SERVER ,
                 IID_IAccessibleRelation,
                 (void **)&pRelation);
-            DeactivateActContext();
             if(SUCCEEDED(hr))
             {
                 IUNOXWrapper* wrapper = NULL;
@@ -2589,9 +2585,7 @@ HRESULT WINAPI CMAccessible::SmartQI(void* pv, REFIID iid, void** ppvObject)
             }
             else
             {
-                ActivateActContext();
                 HRESULT hr = pMap->pfnCreateInstance(pv, iid, ppvObject);
-                DeactivateActContext();
                 if(hr == S_OK)
                 {
                     m_containedObjects.insert(XGUIDToComObjHash::value_type(*pMap->piid,(IUnknown*)*ppvObject));

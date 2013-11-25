@@ -325,11 +325,9 @@ STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hype
     }
 
     IAccessibleHyperlink* plink = NULL;
-    ActivateActContext();
     HRESULT hr = CoCreateInstance( CLSID_AccHyperLink, NULL, CLSCTX_SERVER ,
                                    IID_IAccessibleHyperlink,
                                    (void **)&plink);
-    DeactivateActContext();
     if( SUCCEEDED(hr) )
     {
         IUNOXWrapper* wrapper = NULL;
