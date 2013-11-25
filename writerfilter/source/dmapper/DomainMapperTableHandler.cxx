@@ -763,7 +763,7 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
             if( aRowIter->get()->find(PROP_IS_SPLIT_ALLOWED) == aRowIter->get()->end())
                 aRowIter->get()->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(sal_True ) );
             // tblHeader is only our property, remove before the property map hits UNO
-            PropertyMap::const_iterator aIter = aRowIter->get()->find(PROP_TBL_HEADER);
+            PropertyMap::iterator const aIter = aRowIter->get()->find(PROP_TBL_HEADER);
             if (aIter != aRowIter->get()->end())
                 aRowIter->get()->erase(aIter);
 
