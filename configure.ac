@@ -1318,11 +1318,6 @@ AC_ARG_ENABLE(library-bin-tar,
         for the next time.]),
 )
 
-AC_ARG_ENABLE(ia2,
-    AS_HELP_STRING([--enable-ia2],
-        [Enable the Windows IAccessibility2. Disables Java Accessibility Bridge.]),
-,)
-
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -11611,21 +11606,6 @@ else
     fi
 fi
 AC_SUBST(ENABLE_ONLINE_UPDATE)
-
-dnl ===================================================================
-dnl Test whether to enable ia2
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable IA2])
-ENABLE_IA2=
-if test "$enable_ia2" = "yes"; then
-    if test "$_os" = "WINNT"; then
-        AC_MSG_RESULT([yes])
-        ENABLE_IA2="TRUE"
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST(ENABLE_IA2)
 
 dnl ===================================================================
 dnl Test whether to create MSI with LIMITUI=1 (silent install)
