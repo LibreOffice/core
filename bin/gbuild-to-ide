@@ -292,4 +292,8 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(1)
 
+# Local Variables:
+# indent-tabs-mode: nil
+# End:
+#
 # vim: set noet sw=4 ts=4:
