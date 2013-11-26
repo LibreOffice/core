@@ -354,6 +354,25 @@ public:
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TOP_MARGIN ), uno::makeAny(nTopMargin));
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), uno::makeAny(nBottomMargin));
     }
+
+    void applyPosition(uno::Reference< beans::XPropertySet > xGraphicObjectProperties) const
+    {
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT          ),
+                uno::makeAny(nHoriOrient));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_POSITION),
+                uno::makeAny(nLeftPosition));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_RELATION ),
+                uno::makeAny(nHoriRelation));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_TOGGLE ),
+                uno::makeAny(bPageToggle));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT          ),
+                uno::makeAny(nVertOrient));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_POSITION),
+                uno::makeAny(nTopPosition));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
+                uno::makeAny(nVertRelation));
+    }
 };
 
 
@@ -1008,12 +1027,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
                         {
                             // For non-textframes, this is handled already in oox::drawingml::Shape::createAndInsert().
-                            xShapeProps->setPropertyValue("HoriOrient", uno::makeAny(text::HoriOrientation::NONE));
-                            xShapeProps->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::NONE));
-                            xShapeProps->setPropertyValue("HoriOrientPosition", uno::makeAny(m_pImpl->nLeftPosition));
-                            xShapeProps->setPropertyValue("VertOrientPosition", uno::makeAny(m_pImpl->nTopPosition));
-                            xShapeProps->setPropertyValue("HoriOrientRelation", uno::makeAny(text::RelOrientation::FRAME));
-                            xShapeProps->setPropertyValue("VertOrientRelation", uno::makeAny(text::RelOrientation::FRAME));
+                            m_pImpl->applyPosition(xShapeProps);
                         }
 
                         m_pImpl->applyMargins(xShapeProps);
@@ -1496,21 +1510,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     m_pImpl->nLeftPosition = 0;
                 }
 
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT          ),
-                    uno::makeAny(m_pImpl->nHoriOrient));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_POSITION),
-                    uno::makeAny(m_pImpl->nLeftPosition));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_RELATION ),
-                    uno::makeAny(m_pImpl->nHoriRelation));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_TOGGLE ),
-                    uno::makeAny(m_pImpl->bPageToggle));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT          ),
-                    uno::makeAny(m_pImpl->nVertOrient));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_POSITION),
-                    uno::makeAny(m_pImpl->nTopPosition));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
-                uno::makeAny(m_pImpl->nVertRelation));
-
+                m_pImpl->applyPosition(xGraphicObjectProperties);
                 bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter( );
                 if( !bOpaque )
                 {

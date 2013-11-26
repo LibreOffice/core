@@ -1539,6 +1539,8 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Hello world!"), xFrame->getString());
+    // Position wasn't horizontally centered.
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xFrame, "HoriOrient"));
 
     // Position was the default (hori center, vert top) for the textbox.
     xFrame.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
