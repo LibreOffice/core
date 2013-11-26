@@ -1,0 +1,18 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+    <node oor:name="mov_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>mov_MOV</value></prop>
+        <prop oor:name="FormatName"><value>SVMOV</value></prop>
+        <prop oor:name="RealFilterName"><value>MOV - MOV</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">MOV - QuickTime File Format</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

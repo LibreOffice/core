@@ -54,6 +54,7 @@ struct ConvertData;
 #define GRFILTER_I_FLAGS_ALLOW_PARTIAL_STREAMREAD   00000010
 
 #define IMP_BMP                 "SVBMP"
+#define IMP_MOV                 "SVMOV"
 #define IMP_SVMETAFILE          "SVMETAFILE"
 #define IMP_WMF                 "SVWMF"
 #define IMP_EMF                 "SVEMF"
@@ -74,6 +75,7 @@ struct ConvertData;
 #define EXP_PNG                 "SVEPNG"
 
 #define BMP_SHORTNAME           "BMP"
+#define MOV_SHORTNAME           "MOV"
 #define GIF_SHORTNAME           "GIF"
 #define JPG_SHORTNAME           "JPG"
 #define MET_SHORTNAME           "MET"
@@ -113,6 +115,7 @@ struct ConvertData;
 #define GFF_SGV ( (sal_uInt16)0x00f7 )
 #define GFF_EMF ( (sal_uInt16)0x00f8 )
 #define GFF_SVG ( (sal_uInt16)0x00f9 )
+#define GFF_MOV ( (sal_uInt16)0x00fa )
 #define GFF_XXX ( (sal_uInt16)0xffff )
 
 // ---------------------
@@ -159,6 +162,7 @@ class VCL_DLLPUBLIC GraphicDescriptor
     sal_Bool            ImpDetectSGV( SvStream& rStm, sal_Bool bExtendedInfo );
     sal_Bool            ImpDetectEMF( SvStream& rStm, sal_Bool bExtendedInfo );
     sal_Bool            ImpDetectSVG( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool            ImpDetectMOV( SvStream& rStm, sal_Bool bExtendedInfo );
     GraphicDescriptor( const GraphicDescriptor& );
     GraphicDescriptor& operator=( const GraphicDescriptor& );
 

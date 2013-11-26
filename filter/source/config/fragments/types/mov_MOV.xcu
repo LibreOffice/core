@@ -1,0 +1,20 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+    <node oor:name="mov_MOV" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>mov MOV</value></prop>
+        <prop oor:name="MediaType"><value>application/movie</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>MOV - MOV</value></prop>
+        <prop oor:name="UIName">
+            <value>MOV - QuickTime File Format</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

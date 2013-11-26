@@ -103,6 +103,7 @@ enum GfxLinkType
     GFX_LINK_TYPE_NATIVE_MET    = 7,    // Don't forget to update the following defines
     GFX_LINK_TYPE_NATIVE_PCT    = 8,    // Don't forget to update the following defines
     GFX_LINK_TYPE_NATIVE_SVG    = 9,    // Don't forget to update the following defines
+    GFX_LINK_TYPE_NATIVE_MOV    = 10,
     GFX_LINK_TYPE_USER          = 0xffff
 };
 

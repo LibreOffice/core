@@ -220,6 +220,7 @@ int getFlatTypeRank(const OUString& rType)
         "psd_Adobe_Photoshop",
         "png_Portable_Network_Graphic",
         "jpg_JPEG",
+        "mov_MOV",
         "gif_Graphics_Interchange",
         "bmp_MS_Windows",
         "pcx_Zsoft_Paintbrush",

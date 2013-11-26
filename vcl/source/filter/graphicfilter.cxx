@@ -765,6 +765,19 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         }
     }
 
+    if(!bTest || rFormatExtension.startsWith( "MOV" ))
+    {
+        if ((sFirstBytes[ 4 ] == 'f' && sFirstBytes[ 5 ] == 't' && sFirstBytes[ 6 ] == 'y' &&
+             sFirstBytes[ 7 ] == 'p' && sFirstBytes[ 8 ] == 'q' && sFirstBytes[ 9 ] == 't') ||
+            (sFirstBytes[ 4 ] == 'm' && sFirstBytes[ 5 ] == 'o' && sFirstBytes[ 6 ] == 'o' &&
+             sFirstBytes[ 7 ] == 'v' && sFirstBytes[ 11 ] == 'l' && sFirstBytes[ 12 ] == 'm'))
+        {
+            bSomethingTested=true;
+            rFormatExtension = "MOV";
+            return true;
+        }
+    }
+
     return bTest && !bSomethingTested;
 }
 
@@ -1563,6 +1576,16 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             rIStream >> rGraphic;
             if( rIStream.GetError() )
                 nStatus = GRFILTER_FORMATERROR;
+        }
+        else if( aFilterName.equalsIgnoreAsciiCase( IMP_MOV ) )
+        {
+            rIStream >> rGraphic;
+            if( rIStream.GetError() )
+                nStatus = GRFILTER_FORMATERROR;
+            else
+                rGraphic.SetDefaultType();
+                rIStream.Seek( STREAM_SEEK_TO_END );
+                eLinkType = GFX_LINK_TYPE_NATIVE_MOV;
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_WMF ) ||
                 aFilterName.equalsIgnoreAsciiCase( IMP_EMF ) )
