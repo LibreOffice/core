@@ -281,10 +281,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='LibreOffice gbuild IDE project generator')
     parser.add_argument('--ide', dest='ide', required=True,
-        help='the ide to generate project files for')
+        help='the IDE to generate project files for')
+    parser.add_argument('--input', dest='input', required=False,
+        help='the input file, not normally used, for debugging this script')
     args = parser.parse_args()
     paths = {}
-    gbuildparser = GbuildParser().parse(sys.stdin)
+    if args.input:
+        gbuildparser = GbuildParser().parse(open(args.input, 'r'))
+    else:
+        gbuildparser = GbuildParser().parse(sys.stdin)
     #DebugIntegrationGenerator(gbuildparser).emit()
     if args.ide == 'kdevelop':
         KdevelopIntegrationGenerator(gbuildparser).emit()
