@@ -166,6 +166,8 @@ void ContextHandler2Helper::popElementInfo()
 void ContextHandler2Helper::processCollectedChars()
 {
     OSL_ENSURE( !mxContextStack->empty(), "ContextHandler2Helper::processCollectedChars - no context info" );
+    if (mxContextStack->empty())
+        return;
     ElementInfo& rInfo = mxContextStack->back();
     if( !rInfo.maChars.isEmpty() )
     {
