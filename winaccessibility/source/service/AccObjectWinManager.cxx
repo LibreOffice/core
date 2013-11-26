@@ -776,24 +776,16 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
     }
     //end of file name
 
-    AccEventListener* listener = createAccEventListener(pXAcc, pAgent);
-    if(listener==NULL)
+    ::rtl::Reference<AccEventListener> const pListener =
+        CreateAccEventListener(pXAcc);
+    if (!pListener.is())
         return sal_False;
     Reference<XAccessibleComponent> xComponent(pRContext,UNO_QUERY);
     Reference<XAccessibleEventBroadcaster> broadcaster(xComponent,UNO_QUERY);
     if (broadcaster.is())
     {
-        Reference <XAccessibleEventListener> pp (
-            static_cast< XAccessibleEventListener* >(listener),UNO_QUERY );
-        if(pp.is())
-        {
-            broadcaster->addAccessibleEventListener(pp);
-        }
-        else
-        {
-            delete listener;
-            return sal_False;
-        }
+        Reference<XAccessibleEventListener> const xListener(pListener.get());
+        broadcaster->addAccessibleEventListener(xListener);
     }
     else
         return sal_False;
@@ -805,9 +797,7 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
     AccObject* pCurObj = GetAccObjByXAcc(pXAcc);
     if( pCurObj )
     {
-        pCurObj->SetListener( listener );
-        if(listener != NULL)
-            listener->acquire();
+        pCurObj->SetListener(pListener);
     }
 
     AccObject* pParentObj = GetAccObjByXAcc(pParentXAcc);
@@ -830,32 +820,29 @@ void AccObjectWinManager::SaveTopWindowHandle(HWND hWnd, com::sun::star::accessi
 }
 
 
-/**
-   * create the corresponding listener.
-   * @param pXAcc XAccessible interface.
-   * @param Agent The agent kept in all listeners,it's the sole interface by which
-   *        listener communicate with windows manager.
-   * @return
-   */
-AccEventListener* AccObjectWinManager::createAccEventListener(XAccessible* pXAcc, AccObjectManagerAgent* /* Agent */ )
+/** Create the corresponding listener.
+ *  @param pXAcc XAccessible interface.
+ */
+::rtl::Reference<AccEventListener>
+AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
 {
-    AccEventListener* listener = NULL;
+    ::rtl::Reference<AccEventListener> pRet;
     Reference<XAccessibleContext> xContext(pXAcc->getAccessibleContext(),UNO_QUERY);
     if(xContext.is())
     {
         switch( xContext->getAccessibleRole() )
         {
         case /*AccessibleRole::*/DIALOG:
-            listener = new AccDialogEventListener(pXAcc,pAgent);
+            pRet = new AccDialogEventListener(pXAcc,pAgent);
             break;
         case /*AccessibleRole::*/FRAME:
-            listener = new AccFrameEventListener(pXAcc,pAgent);
+            pRet = new AccFrameEventListener(pXAcc,pAgent);
             break;
         case /*AccessibleRole::*/WINDOW:
-            listener = new AccWindowEventListener(pXAcc,pAgent);
+            pRet = new AccWindowEventListener(pXAcc,pAgent);
             break;
         case /*AccessibleRole::*/ROOT_PANE:
-            listener = new AccFrameEventListener(pXAcc,pAgent);
+            pRet = new AccFrameEventListener(pXAcc,pAgent);
             break;
             //Container
         case /*AccessibleRole::*/CANVAS:
@@ -879,11 +866,11 @@ AccEventListener* AccObjectWinManager::createAccEventListener(XAccessible* pXAcc
         case /*AccessibleRole::*/TABLE_CELL:
         case /*AccessibleRole::*/TOOL_BAR:
         case /*AccessibleRole::*/VIEW_PORT:
-            listener = new AccContainerEventListener(pXAcc,pAgent);
+            pRet = new AccContainerEventListener(pXAcc,pAgent);
             break;
         case /*AccessibleRole::*/PARAGRAPH:
         case /*AccessibleRole::*/HEADING:
-            listener = new AccParagraphEventListener(pXAcc,pAgent);
+            pRet = new AccParagraphEventListener(pXAcc,pAgent);
             break;
             //Component
         case /*AccessibleRole::*/CHECK_BOX:
@@ -901,15 +888,15 @@ AccEventListener* AccObjectWinManager::createAccEventListener(XAccessible* pXAcc
         case /*AccessibleRole::*/TOOL_TIP:
         case /*AccessibleRole::*/SPIN_BOX:
         case DATE_EDITOR:
-            listener = new AccComponentEventListener(pXAcc,pAgent);
+            pRet = new AccComponentEventListener(pXAcc,pAgent);
             break;
             //text component
         case /*AccessibleRole::*/TEXT:
-            listener = new AccTextComponentEventListener(pXAcc,pAgent);
+            pRet = new AccTextComponentEventListener(pXAcc,pAgent);
             break;
             //menu
         case /*AccessibleRole::*/MENU:
-            listener = new AccMenuEventListener(pXAcc,pAgent);
+            pRet = new AccMenuEventListener(pXAcc,pAgent);
             break;
             //object container
         case /*AccessibleRole::*/SHAPE:
@@ -917,27 +904,26 @@ AccEventListener* AccObjectWinManager::createAccEventListener(XAccessible* pXAcc
         case /*AccessibleRole::*/EMBEDDED_OBJECT:
         case /*AccessibleRole::*/GRAPHIC:
         case /*AccessibleRole::*/TEXT_FRAME:
-            listener = new AccObjectContainerEventListener(pXAcc,pAgent);
+            pRet = new AccObjectContainerEventListener(pXAcc,pAgent);
             break;
             //descendmanager
         case /*AccessibleRole::*/LIST:
-            listener = new AccListEventListener(pXAcc,pAgent);
+            pRet = new AccListEventListener(pXAcc,pAgent);
             break;
         case /*AccessibleRole::*/TREE:
-            listener = new AccTreeEventListener(pXAcc,pAgent);
+            pRet = new AccTreeEventListener(pXAcc,pAgent);
             break;
             //special
         case /*AccessibleRole::*/COLUMN_HEADER:
         case /*AccessibleRole::*/TABLE:
-            listener = new AccTableEventListener(pXAcc,pAgent);
+            pRet = new AccTableEventListener(pXAcc,pAgent);
             break;
         default:
-            listener = new AccContainerEventListener(pXAcc,pAgent);
+            pRet = new AccContainerEventListener(pXAcc,pAgent);
             break;
         }
     }
-
-    return listener;
+    return pRet;
 }
 
 /**

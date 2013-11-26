@@ -25,6 +25,8 @@
 #include <oleacc.h>
 #include <windows.h>
 
+#include <rtl/ref.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -51,7 +53,7 @@ private:
     IMAccessible*       m_pIMAcc;
     AccObject*          m_pParentObj;
     IAccChildList       m_childrenList;
-    AccEventListener*   m_accListener;
+    ::rtl::Reference<AccEventListener>  m_pListener;
     IAccSelectionList   m_selectionList;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > m_xAccRef;
@@ -86,7 +88,7 @@ public:
     void SetParentHWND(HWND hWnd);//need to set top window handle when send event to AT
     HWND GetParentHWND();
 
-    void SetListener( AccEventListener* Listener );
+    void SetListener(::rtl::Reference<AccEventListener> const& pListener);
     AccEventListener* getListener();
 
     void SetParentObj(AccObject* pParentAccObj);
