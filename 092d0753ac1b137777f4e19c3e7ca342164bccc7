@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///j8\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 4387,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-26T16:47:37Z",
+      "side": 1,
+      "message": "typo, signe \u003d\u003e sign",
+      "revId": "092d0753ac1b137777f4e19c3e7ca342164bccc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
