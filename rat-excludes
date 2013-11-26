@@ -1353,6 +1353,7 @@ main/unixODBC/inc/sqlext.h
 main/unixODBC/inc/sqltypes.h
 main/unixODBC/inc/sqlucode.h
 
+main/winaccessibility/source/UAccCOMIDL/ia2_api_all.idl
 
 ##############################################################################
 #
