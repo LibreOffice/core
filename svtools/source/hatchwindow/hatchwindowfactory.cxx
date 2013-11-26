@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hatchwindowfactory.hxx"
 #include "hatchwindow.hxx"
 #include "cppuhelper/factory.hxx"
@@ -28,7 +27,6 @@
 
 using namespace ::com::sun::star;
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -37,21 +35,17 @@ uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::impl_staticGetSupportedS
     return aRet;
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OHatchWindowFactory::impl_staticGetImplementationName()
 {
     return OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
 }
 
-//-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OHatchWindowFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new OHatchWindowFactory( xServiceManager ) );
 }
 
-
-//-------------------------------------------------------------------------
 uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchWindowInstance(
                 const uno::Reference< awt::XWindowPeer >& xParent,
                 const awt::Rectangle& aBounds,
@@ -84,43 +78,5 @@ uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames
 {
     return impl_staticGetSupportedServiceNames();
 }
-
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL hatchwindowfactory_component_getFactory (
-    const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
-{
-    void * pResult = 0;
-    if (pServiceManager)
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory;
-        if (OHatchWindowFactory::impl_staticGetImplementationName().equalsAscii(pImplementationName ))
-        {
-            xFactory = cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory* >(pServiceManager),
-                OHatchWindowFactory::impl_staticGetImplementationName(),
-                OHatchWindowFactory::impl_staticCreateSelfInstance,
-                OHatchWindowFactory::impl_staticGetSupportedServiceNames());
-        }
-        else if (ODocumentCloser::impl_staticGetImplementationName().equalsAscii(pImplementationName ))
-        {
-            xFactory = cppu::createSingleFactory(
-                reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                ODocumentCloser::impl_staticGetImplementationName(),
-                ODocumentCloser::impl_staticCreateSelfInstance,
-                ODocumentCloser::impl_staticGetSupportedServiceNames() );
-        }
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pResult = xFactory.get();
-        }
-    }
-    return pResult;
-}
-
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
