@@ -47,8 +47,10 @@ void UnknownAttribute::FillAttribute( Attribute* pAttrib ) const
     }
 }
 
-FastAttributeList::FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler )
-: mxTokenHandler( xTokenHandler )
+FastAttributeList::FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler,
+                                      sax_fastparser::FastTokenHandlerBase *pTokenHandler)
+: mxTokenHandler( xTokenHandler ),
+  mpTokenHandler( pTokenHandler )
 {
     // random initial size of buffer to store attribute values
     mnChunkLength = 58;
@@ -114,7 +116,7 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXExcept
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return maTokenLookup.getTokenFromChars( mxTokenHandler,
+            return maTokenLookup.getTokenFromChars( mxTokenHandler, mpTokenHandler,
                                                     mpChunk + maAttributeValues[ i ],
                                                     AttributeValueLength( i ) );
 
@@ -125,7 +127,7 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return maTokenLookup.getTokenFromChars( mxTokenHandler,
+            return maTokenLookup.getTokenFromChars( mxTokenHandler, mpTokenHandler,
                                                     mpChunk + maAttributeValues[ i ],
                                                     AttributeValueLength( i ) );
 
@@ -227,6 +229,7 @@ FastTokenLookup::FastTokenLookup()
  */
 sal_Int32 FastTokenLookup::getTokenFromChars(
         const ::css::uno::Reference< ::css::xml::sax::XFastTokenHandler > &xTokenHandler,
+        FastTokenHandlerBase *pTokenHandler,
         const char *pToken, size_t nLen /* = 0 */ )
 {
     sal_Int32 nRet;
@@ -234,23 +237,12 @@ sal_Int32 FastTokenLookup::getTokenFromChars(
     if( !nLen )
         nLen = strlen( pToken );
 
-    if ( static_cast<sal_Int32>(nLen) < mnUtf8BufferSize )
-    {
-        // Get intimate with the underlying sequence cf. sal/types.h
-        sal_Sequence *pSeq = maUtf8Buffer.get();
-
-        sal_Int32 nPreRefCount = pSeq->nRefCount;
-
-        pSeq->nElements = nLen;
-        memcpy( pSeq->elements, pToken, nLen );
-        nRet = xTokenHandler->getTokenFromUTF8( maUtf8Buffer );
-
-        (void)nPreRefCount; // for non-debug mode.
-        assert( pSeq->nRefCount == nPreRefCount ); // callee must not take ref
-    }
+    if( pTokenHandler )
+        nRet = pTokenHandler->getTokenDirect( pToken, (sal_Int32) nLen );
     else
     {
-        Sequence< sal_Int8 > aSeq( (sal_Int8*)pToken, nLen ); // heap allocate & free
+        // heap allocate, copy & then free
+        Sequence< sal_Int8 > aSeq( (sal_Int8*)pToken, nLen );
         nRet = xTokenHandler->getTokenFromUTF8( aSeq );
     }
 

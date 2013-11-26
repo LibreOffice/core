@@ -108,28 +108,29 @@ css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifi
 #endif
 }
 
-::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getTokenFromUTF8
-(const css::uno::Sequence< ::sal_Int8 > & Identifier) throw (css::uno::RuntimeException)
+::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getTokenDirect( const char *pStr, sal_Int32 nLength ) const
 {
-    ::sal_Int32 nResult = OOXML_FAST_TOKENS_END;
-
     struct tokenmap::token * pToken =
-        tokenmap::Perfect_Hash::in_word_set
-        (reinterpret_cast<const char *>(Identifier.getConstArray()),
-         Identifier.getLength());
+        tokenmap::Perfect_Hash::in_word_set( pStr, nLength );
 
-    if (pToken != NULL)
-        nResult = pToken->nToken;
+    sal_Int32 nResult = pToken != NULL ? pToken->nToken : OOXML_FAST_TOKENS_END;
 
 #ifdef DEBUG_TOKEN
     clog << "getTokenFromUTF8: "
-         << string(reinterpret_cast<const char *>
-                   (Identifier.getConstArray()), Identifier.getLength())
+         << string(pStr, nLength)
          << ", " << nResult
          << (pToken == NULL ? ", failed" : "") << endl;
 #endif
 
     return nResult;
+}
+
+::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getTokenFromUTF8
+(const css::uno::Sequence< ::sal_Int8 > & Identifier) throw (css::uno::RuntimeException)
+{
+    return getTokenDirect(reinterpret_cast<const char *>
+                          (Identifier.getConstArray()),
+                          Identifier.getLength());
 }
 
 }}

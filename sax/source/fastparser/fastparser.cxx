@@ -190,6 +190,7 @@ OUString SAL_CALL FastLocatorImpl::getSystemId(void) throw (RuntimeException)
 // --------------------------------------------------------------------
 
 ParserData::ParserData()
+    : mpTokenHandler( NULL )
 {}
 
 ParserData::~ParserData()
@@ -382,7 +383,9 @@ void FastSaxParser::DefineNamespace( const OString& rPrefix, const sal_Char* pNa
 
 sal_Int32 FastSaxParser::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0 */ )
 {
-    return maTokenLookup.getTokenFromChars( getEntity().mxTokenHandler, pToken, nLen );
+    return maTokenLookup.getTokenFromChars( getEntity().mxTokenHandler,
+                                            getEntity().mpTokenHandler,
+                                            pToken, nLen );
 }
 
 // --------------------------------------------------------------------
@@ -623,9 +626,10 @@ void FastSaxParser::setFastDocumentHandler( const Reference< XFastDocumentHandle
     maData.mxDocumentHandler = Handler;
 }
 
-void SAL_CALL FastSaxParser::setTokenHandler( const Reference< XFastTokenHandler >& Handler ) throw (RuntimeException)
+void SAL_CALL FastSaxParser::setTokenHandler( const Reference< XFastTokenHandler >& xHandler ) throw (RuntimeException)
 {
-    maData.mxTokenHandler = Handler;
+    maData.mxTokenHandler = xHandler;
+    maData.mpTokenHandler = dynamic_cast< FastTokenHandlerBase *>( xHandler.get() );
 }
 
 void SAL_CALL FastSaxParser::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (IllegalArgumentException, RuntimeException)
@@ -918,7 +922,9 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
     if (rEvent.mxAttributes.is())
         rEvent.mxAttributes->clear();
     else
-        rEvent.mxAttributes.set( new FastAttributeList( rEntity.mxTokenHandler ) );
+        rEvent.mxAttributes.set(
+                new FastAttributeList( rEntity.mxTokenHandler,
+                                       rEntity.mpTokenHandler ) );
 
     sal_Int32 nNameLen, nPrefixLen;
     const XML_Char *pName;

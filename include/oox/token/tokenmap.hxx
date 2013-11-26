@@ -47,9 +47,29 @@ public:
 
     /** Returns the token identifier for the passed UTF8 token name. */
     sal_Int32           getTokenFromUtf8(
-                            const ::com::sun::star::uno::Sequence< sal_Int8 >& rUtf8Name ) const;
+                            const ::com::sun::star::uno::Sequence< sal_Int8 >& rUtf8Name ) const
+    {
+        return getTokenFromUTF8( reinterpret_cast< const char * >(
+                                rUtf8Name.getConstArray() ),
+                             rUtf8Name.getLength() );
+    }
+
+    /** Returns the token identifier for a UTF8 string passed in pToken */
+    sal_Int32 getTokenFromUTF8( const char *pToken, sal_Int32 nLength ) const
+    {
+        // 50% of OOXML tokens are primarily 1 lower-case character, a-z
+        if( nLength == 1)
+        {
+            sal_Char c = pToken[0];
+            if (c >= 'a' && c <= 'z')
+                return mnAlphaTokens[ c - 'a' ];
+        }
+        return getTokenPerfectHash( pToken, nLength );
+    }
 
 private:
+    sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength ) const;
+
     struct TokenName
     {
         OUString maUniName;
