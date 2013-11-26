@@ -412,6 +412,11 @@ void IconChoiceDialog::ShowPage( sal_uInt16 nId )
     ActivatePageImpl( );
     if(bInvalidate)
         Invalidate();
+
+    // IA2 CWS. MT: I guess we want the event now, and not in Paint()?
+    IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
+    if(pData)
+        ShowPageImpl ( pData );
 }
 
 /**********************************************************************
