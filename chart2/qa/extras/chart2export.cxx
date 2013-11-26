@@ -100,7 +100,6 @@ void checkCommonTrendline(
 
 void checkNameAndType(Reference<XPropertySet> xProperties, OUString aExpectedName, OUString aExpectedServiceName)
 {
-    OUString aService;
     Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
     CPPUNIT_ASSERT(xServiceName.is());
 
