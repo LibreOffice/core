@@ -147,9 +147,26 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                 if ( pPlaceholder.get() )
                 {
                     bool bUseText = true;
-                    // TODO: Check if pPlaceholder->getSubType is none (i.e. none explicitly specified)
-                    if( pPlaceholder->getSubType() == XML_obj )
-                        bUseText = false;
+                    switch( pPlaceholder->getSubType() )
+                    {
+                        case XML_title :
+                        case XML_body :
+                        case XML_ctrTitle :
+                        case XML_subTitle :
+                        case XML_dt :
+                        case XML_sldNum :
+                        case XML_ftr :
+                        case XML_hdr :
+                        case XML_obj :
+                        case XML_chart :
+                        case XML_tbl :
+                        case XML_clipArt :
+                        case XML_dgm :
+                        case XML_media :
+                        case XML_sldImg :
+                        case XML_pic :
+                            bUseText = false;
+                    }
                     mpShapePtr->applyShapeReference( *pPlaceholder.get(), bUseText );
                     PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                     if ( pPPTShape )
