@@ -216,15 +216,15 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         eGrammar( formula::FormulaGrammar::GRAM_NATIVE ),
         bStyleSheetUsageInvalid( sal_True ),
         mbUndoEnabled( true ),
-//IAccessibility2 Implementation 2009-----
-        bReadOnly(sal_False),
-//-----IAccessibility2 Implementation 2009
         mbAdjustHeightEnabled( true ),
         mbExecuteLinkEnabled( true ),
         mbChangeReadOnlyEnabled( false ),
         mbStreamValidLocked( false ),
         mbIsTemporary(false), // #118840#
-        mnNamedRangesLockCount( 0 )
+        mnNamedRangesLockCount( 0 ),
+//IAccessibility2 Implementation 2009-----
+        bReadOnly(sal_False)
+//-----IAccessibility2 Implementation 2009
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
 
