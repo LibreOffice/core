@@ -33,8 +33,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
 AccDescendantManagerEventListener::AccDescendantManagerEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-        :AccComponentEventListener(pAcc, Agent),
-        pActiveDescendant(NULL)
+    :   AccComponentEventListener(pAcc, Agent)
 {
 }
 
@@ -167,7 +166,7 @@ void AccDescendantManagerEventListener::HandleChildChangedNoFocusEvent(Any oldVa
             pAgent->InsertAccObj(pAcc,pAccessible);
             pAgent->InsertChildrenAccObj(pAcc);
 
-            pActiveDescendant= pAcc;
+            m_xActiveDescendant = xChild;
         }
     }
     if (oldValue >>= xChild)
