@@ -20,9 +20,6 @@
 
 
 #include "unoiface.hxx"
-#include <svtools/textwindowpeer.hxx>
-
-
 
 MultiLineEdit::MultiLineEdit( Window* pParent, WinBits nWinStyle )
     : VclMultiLineEdit( pParent,nWinStyle )
