@@ -44,8 +44,6 @@ protected:
         com::sun::star::accessibility::XAccessible> m_xAccessible;
     //agent pointer for objects' manager
     AccObjectManagerAgent* pAgent;
-    //disposed state indicator
-    bool  m_isDisposed;
 public:
     AccEventListener( com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccEventListener();

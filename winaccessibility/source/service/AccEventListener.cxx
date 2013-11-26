@@ -47,7 +47,6 @@ AccEventListener::AccEventListener(com::sun::star::accessibility::XAccessible* p
                                    AccObjectManagerAgent* Agent)
     : m_xAccessible(pAcc)
     , pAgent(Agent)
-    , m_isDisposed(false)
 {}
 
 AccEventListener::~AccEventListener()
@@ -230,9 +229,6 @@ void AccEventListener::RemoveMeFromBroadcaster()
 {
     try
     {
-        if(m_isDisposed)
-            return;
-
         if (!m_xAccessible.is())
         {
             return;
@@ -243,7 +239,6 @@ void AccEventListener::RemoveMeFromBroadcaster()
         {
             //remove the lister from accessible object
             xBroadcaster->removeAccessibleEventListener(this);
-            m_isDisposed = true;
             pAgent->NotifyDestroy(m_xAccessible.get());
         }
         m_xAccessible.clear(); // release cyclic reference
