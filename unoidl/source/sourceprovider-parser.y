@@ -2673,9 +2673,21 @@ serviceBase:
                + " direct base service " + name + " is unpublished"));
           YYERROR;
       }
-      //TODO: check uniqueness
-      (opt ? pad->directOptionalBaseServices : pad->directMandatoryBaseServices)
-          .push_back(unoidl::AnnotatedReference(name, annotations($1)));
+      std::vector<unoidl::AnnotatedReference> & v(
+          opt
+          ? pad->directOptionalBaseServices : pad->directMandatoryBaseServices);
+      for (std::vector<unoidl::AnnotatedReference>::iterator i(v.begin());
+           i != v.end(); ++i)
+      {
+          if (name == i->name) {
+              error(
+                  @4, yyscanner,
+                  ("accumulation-based service " + data->currentName
+                   + " duplicate direct base service " + name));
+              YYERROR;
+          }
+      }
+      v.push_back(unoidl::AnnotatedReference(name, annotations($1)));
   }
 ;
 
@@ -2734,16 +2746,27 @@ serviceInterfaceBase:
       }
       if (data->publishedContext && !opt && !pubBase) {
           error(
-              @5, yyscanner,
+              @4, yyscanner,
               ("published accumulation-based service " + data->currentName
                + " direct base interface " + name + " is unpublished"));
           YYERROR;
       }
-      //TODO: check uniqueness
-      (opt
-       ? pad->directOptionalBaseInterfaces
-       : pad->directMandatoryBaseInterfaces)
-          .push_back(unoidl::AnnotatedReference(name, annotations($1)));
+      std::vector<unoidl::AnnotatedReference> & v(
+          opt
+          ? pad->directOptionalBaseInterfaces
+          : pad->directMandatoryBaseInterfaces);
+      for (std::vector<unoidl::AnnotatedReference>::iterator i(v.begin());
+           i != v.end(); ++i)
+      {
+          if (name == i->name) {
+              error(
+                  @4, yyscanner,
+                  ("accumulation-based service " + data->currentName
+                   + " duplicate direct base interface " + name));
+              YYERROR;
+          }
+      }
+      v.push_back(unoidl::AnnotatedReference(name, annotations($1)));
   }
 ;
 
@@ -2812,7 +2835,7 @@ serviceProperty:
           error(
               @3, yyscanner,
               ("illegal accumulation-based service " + data->currentName
-               + " direct attribute " + id + " type"));
+               + " direct property " + id + " type"));
           YYERROR;
           break;
       default:
@@ -2821,7 +2844,18 @@ serviceProperty:
       rtl::Reference<unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad>
           pad(getCurrentPad<unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad>(
                   data));
-      //TODO: check uniqueness
+      for (std::vector<unoidl::AccumulationBasedServiceEntity::Property>::iterator
+               i(pad->directProperties.begin());
+           i != pad->directProperties.end(); ++i)
+      {
+          if (id == i->name) {
+              error(
+                  @4, yyscanner,
+                  ("accumulation-based service " + data->currentName
+                   + " duplicate direct property " + id));
+              YYERROR;
+          }
+      }
       pad->directProperties.push_back(
           unoidl::AccumulationBasedServiceEntity::Property(
               id, t.getName(),
