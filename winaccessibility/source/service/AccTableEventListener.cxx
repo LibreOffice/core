@@ -58,25 +58,25 @@ throw (::com::sun::star::uno::RuntimeException)
     case AccessibleEventId::TABLE_CAPTION_CHANGED:
         {
 
-            pAgent->NotifyAccEvent(UM_EVENT_TABLE_CAPTION_CHANGED, pAccessible);
+            pAgent->NotifyAccEvent(UM_EVENT_TABLE_CAPTION_CHANGED, m_xAccessible.get());
             break;
         }
     case AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED:
         {
 
-            pAgent->NotifyAccEvent(UM_EVENT_TABLE_COLUMN_DESCRIPTION_CHANGED, pAccessible);
+            pAgent->NotifyAccEvent(UM_EVENT_TABLE_COLUMN_DESCRIPTION_CHANGED, m_xAccessible.get());
             break;
         }
     case AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
         {
 
-            pAgent->NotifyAccEvent(UM_EVENT_TABLE_COLUMN_HEADER_CHANGED, pAccessible);
+            pAgent->NotifyAccEvent(UM_EVENT_TABLE_COLUMN_HEADER_CHANGED, m_xAccessible.get());
             break;
         }
     case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
         {
 
-            pAgent->NotifyAccEvent(UM_EVENT_TABLE_ROW_HEADER_CHANGED, pAccessible);
+            pAgent->NotifyAccEvent(UM_EVENT_TABLE_ROW_HEADER_CHANGED, m_xAccessible.get());
             break;
         }
     case AccessibleEventId::TABLE_MODEL_CHANGED:
@@ -88,13 +88,13 @@ throw (::com::sun::star::uno::RuntimeException)
     case AccessibleEventId::TABLE_SUMMARY_CHANGED:
         {
 
-            pAgent->NotifyAccEvent(UM_EVENT_TABLE_SUMMARY_CHANGED, pAccessible);
+            pAgent->NotifyAccEvent(UM_EVENT_TABLE_SUMMARY_CHANGED, m_xAccessible.get());
             break;
         }
     case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
         {
 
-            pAgent->NotifyAccEvent(UM_EVENT_TABLE_ROW_DESCRIPTION_CHANGED, pAccessible);
+            pAgent->NotifyAccEvent(UM_EVENT_TABLE_ROW_DESCRIPTION_CHANGED, m_xAccessible.get());
             break;
         }
     default:
@@ -116,7 +116,7 @@ void AccTableEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            pAgent->InsertAccObj(pAcc,pAccessible);
+            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             pAgent->NotifyAccEvent(UM_EVENT_ACTIVE_DESCENDANT_CHANGED, pAcc);
         }
     }
@@ -136,14 +136,14 @@ void AccTableEventListener::HandleTableModelChangeEvent(Any newValue)
     AccessibleTableModelChange aModelChange;
     if (newValue >>= aModelChange)
     {
-        if( pAccessible )
+        if (m_xAccessible.is())
         {
             //delete all oldValue's existing children
-            pAgent->DeleteChildrenAccObj( pAccessible );
+            pAgent->DeleteChildrenAccObj(m_xAccessible.get());
             //add all oldValue's existing children
-            pAgent->InsertChildrenAccObj( pAccessible );
+            pAgent->InsertChildrenAccObj(m_xAccessible.get());
         }
-        pAgent->NotifyAccEvent(UM_EVENT_TABLE_MODEL_CHANGED, pAccessible);
+        pAgent->NotifyAccEvent(UM_EVENT_TABLE_MODEL_CHANGED, m_xAccessible.get());
     }
 }
 

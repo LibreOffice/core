@@ -80,7 +80,7 @@ void AccDialogEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
         {
             XAccessible* pAcc = xChild.get();
             //add this child
-            pAgent->InsertAccObj( pAcc,pAccessible);
+            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(pAcc);
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
@@ -122,9 +122,9 @@ void AccDialogEventListener::SetComponentState(short state, bool enable)
     case AccessibleStateType::VISIBLE:
         // UNO !VISIBLE == MSAA INVISIBLE
         if( enable )
-            pAgent->IncreaseState( pAccessible, AccessibleStateType::VISIBLE );
+            pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         else
-            pAgent->DecreaseState( pAccessible, AccessibleStateType::VISIBLE );
+            pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         break;
     case AccessibleStateType::ACTIVE:
         // Only frames should be active

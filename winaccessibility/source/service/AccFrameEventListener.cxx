@@ -86,12 +86,13 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
         {
             XAccessible* pAcc = xChild.get();
 
-            VCLXWindow* pvclwindow = (VCLXWindow*)pAccessible;
+            VCLXWindow* pvclwindow =
+                dynamic_cast<VCLXWindow*>(m_xAccessible.get());
             Window* window = pvclwindow->GetWindow();
             const SystemEnvData* systemdata=window->GetSystemData();
 
             //add this child
-            pAgent->InsertAccObj(pAcc, pAccessible,
+            pAgent->InsertAccObj(pAcc, m_xAccessible.get(),
                     reinterpret_cast<sal_Int64>(systemdata->hWnd));
             //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(pAcc);
@@ -134,9 +135,9 @@ void AccFrameEventListener::SetComponentState(short state, bool enable )
     case AccessibleStateType::VISIBLE:
         // UNO !VISIBLE == MSAA INVISIBLE
         if( enable )
-            pAgent->IncreaseState( pAccessible, AccessibleStateType::VISIBLE );
+            pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         else
-            pAgent->DecreaseState( pAccessible, AccessibleStateType::VISIBLE );
+            pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         break;
     case AccessibleStateType::ACTIVE:
         // Only frames should be active

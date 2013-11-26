@@ -85,7 +85,7 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
             XAccessible* pAcc = xChild.get();
 
             // Valueset has cache the child item xacc,Update state if no insert obj
-            sal_Bool bHasCache = pAgent->InsertAccObj(pAcc,pAccessible);
+            bool bHasCache = pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             if (!bHasCache)
             {
                 pAgent->UpdateState(pAcc);
@@ -117,7 +117,8 @@ void AccListEventListener::HandleValueChangedEvent(Any oldValue, Any newValue)
     //to enable value changed event
     if (GetParentRole() == AccessibleRole::COMBO_BOX)
     {
-        XAccessible* pParentAcc = pAgent->GetParentXAccessible(pAccessible);
+        XAccessible* pParentAcc =
+            pAgent->GetParentXAccessible(m_xAccessible.get());
         pAgent->UpdateValue(pParentAcc);
         pAgent->NotifyAccEvent(UM_EVENT_OBJECT_VALUECHANGE, pParentAcc);
     }
