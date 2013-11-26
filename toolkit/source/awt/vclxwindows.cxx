@@ -4798,6 +4798,17 @@ VCLXDateField::~VCLXDateField()
 {
 }
 
+//change the window type here to match the role
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXDateField::CreateAccessibleContext()
+{
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        pWindow->SetType( WINDOW_DATEFIELD );
+    }
+    return getAccessibleFactory().createAccessibleContext( this );
+}
+
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXDateField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -5133,6 +5144,17 @@ VCLXTimeField::VCLXTimeField()
 
 VCLXTimeField::~VCLXTimeField()
 {
+}
+
+//change the window type here to match the role
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXTimeField::CreateAccessibleContext()
+{
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        pWindow->SetType( WINDOW_TIMEFIELD );
+    }
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 // ::com::sun::star::uno::XInterface

@@ -31,6 +31,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
+#include <vcl/edit.hxx>
 #include <tools/debug.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -436,12 +437,45 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
 
         if ( pWindow->GetStyle() & WB_SIZEABLE )
             rStateSet.AddState( accessibility::AccessibleStateType::RESIZABLE );
-
+        // 6. frame doesn't have MOVABLE state
+        // 10. for password text, where is the sensitive state?
+        if( ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||getAccessibleRole() == accessibility::AccessibleRole::DIALOG )&& pWindow->GetStyle() & WB_MOVEABLE )
+            rStateSet.AddState( accessibility::AccessibleStateType::MOVEABLE );
         if( pWindow->IsDialog() )
         {
             Dialog *pDlg = static_cast< Dialog* >( pWindow );
             if( pDlg->IsInExecute() )
                 rStateSet.AddState( accessibility::AccessibleStateType::MODAL );
+        }
+        //If a combobox or list's edit child isn't read-only,EDITABLE state
+        //should be set.
+        if( pWindow && pWindow->GetType() == WINDOW_COMBOBOX )
+        {
+            if( !( pWindow->GetStyle() & WB_READONLY) ||
+                !((Edit*)pWindow)->IsReadOnly() )
+                    rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
+        }
+
+        Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+
+        while( pWindow && pChild )
+        {
+            Window* pWinTemp = pChild->GetWindow( WINDOW_FIRSTCHILD );
+            if( pWinTemp && pWinTemp->GetType() == WINDOW_EDIT )
+            {
+                if( !( pWinTemp->GetStyle() & WB_READONLY) ||
+                    !((Edit*)pWinTemp)->IsReadOnly() )
+                    rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
+                break;
+            }
+            if( pChild->GetType() == WINDOW_EDIT )
+            {
+                if( !( pChild->GetStyle() & WB_READONLY) ||
+                    !((Edit*)pChild)->IsReadOnly())
+                    rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
+                break;
+            }
+            pChild = pChild->GetWindow( WINDOW_NEXT );
         }
     }
     else
@@ -767,6 +801,9 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
             else
                 aFont = pWindow->GetFont();
             nColor = aFont.GetColor().GetColor();
+            // COL_AUTO is not very meaningful for AT
+            if ( nColor == (sal_Int32)COL_AUTO)
+                nColor = pWindow->GetTextColor().GetColor();
         }
     }
 
