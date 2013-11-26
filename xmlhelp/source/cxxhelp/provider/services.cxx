@@ -22,6 +22,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "provider.hxx"
+#include "tvfactory.hxx"
 
 using namespace com::sun::star;
 
@@ -36,12 +37,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpchelp_component_getFactory(
         reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    // Create factory, if implementation name matches.
-
     if ( ::chelp::ContentProvider::getImplementationName_Static().
              equalsAscii( pImplName ) )
     {
         xFactory = ::chelp::ContentProvider::createServiceFactory( xSMgr );
+    }
+    else if ( treeview::TVFactory::getImplementationName_static().equalsAscii( pImplName ) )
+    {
+        xFactory = treeview::TVFactory::createServiceFactory( xSMgr );
     }
 
     if ( xFactory.is() )

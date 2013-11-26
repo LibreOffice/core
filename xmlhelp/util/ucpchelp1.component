@@ -23,4 +23,8 @@
     <service name="com.sun.star.help.XMLHelp"/>
     <service name="com.sun.star.ucb.HelpContentProvider"/>
   </implementation>
+  <implementation name="com.sun.star.help.TreeViewImpl">
+    <service name="com.sun.star.help.TreeView"/>
+    <service name="com.sun.star.ucb.HiearchyDataSource"/>
+  </implementation>
 </component>

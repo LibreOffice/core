@@ -73,6 +73,8 @@ $(eval $(call gb_Library_add_exception_objects,ucpchelp1,\
     xmlhelp/source/cxxhelp/provider/urlparameter \
     xmlhelp/source/cxxhelp/qe/DocGenerator \
     xmlhelp/source/cxxhelp/util/Decompressor \
+    xmlhelp/source/treeview/tvfactory \
+    xmlhelp/source/treeview/tvread \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
