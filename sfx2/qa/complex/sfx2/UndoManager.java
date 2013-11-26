@@ -429,13 +429,13 @@ public class UndoManager
         final XAccessibleAction controlActions = UnoRuntime.queryInterface( XAccessibleAction.class, accessible.getAccessibleContext() );
         for ( int i=0; i<controlActions.getAccessibleActionCount(); ++i )
         {
-            if ( controlActions.getAccessibleActionDescription(i).equals( "click" ) )
+            if (controlActions.getAccessibleActionDescription(i).equals("press"))
             {
                 controlActions.doAccessibleAction(i);
                 return;
             }
         }
-        fail( "did not find the accessible action named 'click'" );
+        fail("did not find the accessible action named 'press'");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
