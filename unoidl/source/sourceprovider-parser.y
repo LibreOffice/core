@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/*TODO: @deprecated annotations */
 /*TODO: check Exception, RuntimeException, XInterface defns */
 
 %locations
