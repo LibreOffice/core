@@ -1575,7 +1575,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /
             ++pShape;
         }
 
-        const int SELECTION_WITH_NUM =10;
+        const unsigned int SELECTION_WITH_NUM = 10;
         if (vecxShapeAdd.size() > SELECTION_WITH_NUM )
         {
             uno::Reference< XAccessible > xDoc = GetDocumentView( );
