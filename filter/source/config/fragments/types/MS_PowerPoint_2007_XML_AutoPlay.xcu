@@ -22,6 +22,6 @@
     <prop oor:name="MediaType"><value>application/vnd.openxmlformats-officedocument.presentationml.slideshow</value></prop>
     <prop oor:name="Preferred"><value>true</value></prop>
     <prop oor:name="PreferredFilter"><value>Impress MS PowerPoint 2007 XML AutoPlay</value></prop>
-    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft PowerPoint 2007/2010 XML</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft PowerPoint 2007/2010/2013 XML</value></prop>
     <prop oor:name="ClipboardFormat"/>
 </node>

@@ -17,6 +17,6 @@
 -->
     <node oor:name="MS Word 2007 XML">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Microsoft Word 2007/2010 XML</value>
+            <value xml:lang="en-US">Microsoft Word 2007/2010/2013 XML</value>
         </prop>
     </node>
