@@ -69,7 +69,6 @@ public:
 	hash_map& operator=( const hash_map& r) { hash_map c(r); this->swap(c); return *this; }
 #endif
 
-	void resize( size_t n) { _super::rehash(n); }
 private:
 	// setting the hasher dynamically is not supported in the emulation!
 	hash_map( size_t, const __H&, const __E& rE=__E(), const __A& rA=__A()); // not implemented
@@ -98,7 +97,6 @@ public:
 	hash_multimap& operator=( const hash_multimap& r) { hash_multimap c(r); this->swap(c); return *this; }
 #endif
 
-	void resize( size_t n) { _super::rehash(n); }
 private:
 	// setting the hasher dynamically is not supported in the emulation!
 	hash_multimap( size_t, const __H&, const __E& rE=__E(), const __A& rA=__A()); // not implemented

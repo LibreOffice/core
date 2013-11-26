@@ -102,7 +102,7 @@ class SvtCmdOptions
 
         void SetContainerSize( sal_Int32 nSize )
         {
-            m_aCommandHashMap.resize( nSize );
+            m_aCommandHashMap.rehash( nSize );
         }
 
         sal_Bool Lookup( const OUString& aCmd ) const

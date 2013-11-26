@@ -58,7 +58,6 @@ class hash_set
 public:
 	hash_set( void) {}
 	hash_set( size_t n) : _super(n) {}
-	void resize( size_t n) { _super::rehash( n); }
 
 #ifdef BOOST_TR1_UNORDERED_SET_INCLUDED // workaround pre-BOOST_UNORDERED_USE_MOVE problem 
 	// in derived classes the copy assignment operator can only be declared implicitly if
@@ -84,7 +83,6 @@ class hash_multiset
 public:
 	hash_multiset( void) {}
 	hash_multiset( size_t n) : _super( n) {}
-	void resize( size_t n) { _super::rehash( n); }
 
 #ifdef BOOST_TR1_UNORDERED_SET_INCLUDED // workaround pre-BOOST_UNORDERED_USE_MOVE problem 
 	// in derived classes the copy assignment operator can only be declared implicitly if
