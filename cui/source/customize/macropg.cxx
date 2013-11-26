@@ -162,8 +162,8 @@ long _HeaderTabListBox::Notify( NotifyEvent& rNEvt )
 
 _HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId ) :
     Control( pParent, rId ),
-    maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
-    maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
+    maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
+    maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
 {
     maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
 
