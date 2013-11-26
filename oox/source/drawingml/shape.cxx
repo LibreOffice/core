@@ -508,7 +508,8 @@ Reference< XShape > Shape::createAndInsert(
             if( xNamed.is() )
                 xNamed->setName( msName );
         }
-        rxShapes->add( mxShape );
+        if (aServiceName != "com.sun.star.text.TextFrame")
+            rxShapes->add( mxShape );
 
         if ( mbHidden || mbHiddenMasterShape )
         {
