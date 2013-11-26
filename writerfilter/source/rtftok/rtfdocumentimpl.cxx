@@ -34,6 +34,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include <comphelper/string.hxx>
 #include <tools/globname.hxx>
+#include <tools/datetimeutils.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -162,7 +163,7 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
 
 static OString lcl_DTTM22OString(long lDTTM)
 {
-    return msfilter::util::DateTimeToOString(msfilter::util::DTTM2DateTime(lDTTM));
+    return DateTimeToOString(msfilter::util::DTTM2DateTime(lDTTM));
 }
 
 static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(int nPos, OUString& rString)
