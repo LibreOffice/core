@@ -165,6 +165,8 @@ public:
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 
+    void dumpAsXml(xmlTextWriterPtr w);
+
     /** Search next or previous Redline with the same Seq. No.
        Search can be restricted via Lookahaed.
        Using 0 or USHRT_MAX makes search the whole array. */
