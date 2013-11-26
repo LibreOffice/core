@@ -227,18 +227,20 @@ void Entity::startElement( Event *pEvent )
     const sal_Int32& nElementToken = pEvent->mnElementToken;
     const OUString& aNamespace = pEvent->msNamespace;
     const OUString& aElementName = pEvent->msElementName;
-    Reference< XFastContextHandler > xParentContext;
+
+    // Use un-wrapped pointers to avoid significant acquire/release overhead
+    XFastContextHandler *pParentContext = NULL;
     if( !maContextStack.empty() )
     {
-        xParentContext = maContextStack.top().mxContext;
-        if (!xParentContext.is())
+        pParentContext = maContextStack.top().mxContext.get();
+        if( !pParentContext )
         {
             maContextStack.push( SaxContext(nElementToken, aNamespace, aElementName) );
             return;
         }
     }
 
-    maContextStack.push( SaxContext(nElementToken, aNamespace, aElementName) );
+    maContextStack.push( SaxContext( nElementToken, aNamespace, aElementName ) );
 
     try
     {
@@ -246,8 +248,8 @@ void Entity::startElement( Event *pEvent )
         Reference< XFastContextHandler > xContext;
         if( nElementToken == FastToken::DONTKNOW )
         {
-            if( xParentContext.is() )
-                xContext = xParentContext->createUnknownChildContext( aNamespace, aElementName, xAttr );
+            if( pParentContext )
+                xContext = pParentContext->createUnknownChildContext( aNamespace, aElementName, xAttr );
             else if( mxDocumentHandler.is() )
                 xContext = mxDocumentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
 
@@ -258,17 +260,17 @@ void Entity::startElement( Event *pEvent )
         }
         else
         {
-            if( xParentContext.is() )
-                xContext = xParentContext->createFastChildContext( nElementToken, xAttr );
+            if( pParentContext )
+                xContext = pParentContext->createFastChildContext( nElementToken, xAttr );
             else if( mxDocumentHandler.is() )
                 xContext = mxDocumentHandler->createFastChildContext( nElementToken, xAttr );
 
             if( xContext.is() )
-            {
                 xContext->startFastElement( nElementToken, xAttr );
-            }
         }
-        maContextStack.top().mxContext = xContext;
+        // swap the reference we own in to avoid referencing thrash.
+        maContextStack.top().mxContext.set( static_cast<XFastContextHandler *>( xContext.get() ) );
+        xContext.set( NULL, UNO_REF_NO_ACQUIRE );
     }
     catch (const Exception& e)
     {
