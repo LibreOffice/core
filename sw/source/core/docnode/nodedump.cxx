@@ -494,7 +494,7 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                     //writer.writeFormatAttribute( "ptr", "%p", &pStartContent );
                     //writer.writeFormatAttribute( "content_index", "%d", pStartContent.GetIndex() );
                     //writer.endElement( );    // swindex
-                    writer.writeFormatAttribute( "swindex_content_index", TMP_FORMAT, pStartContent.GetIndex() );
+                    writer.writeFormatAttribute( "swindex_content_index", TMP_FORMAT_I32, pStartContent.GetIndex() );
                 }
                 //writer.endElement( );    // swnodeindex
             }
@@ -534,7 +534,7 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                     //writer.writeFormatAttribute( "ptr", "%p", &pEndContent );
                     //writer.writeFormatAttribute( "content_index", "%d", pEndContent.GetIndex() );
                     //writer.endElement( );    // swindex
-                    writer.writeFormatAttribute( "swindex_content_index", TMP_FORMAT, pEndContent.GetIndex() );
+                    writer.writeFormatAttribute( "swindex_content_index", TMP_FORMAT_I32, pEndContent.GetIndex() );
                 }
                 //writer.endElement( );    // swnodeindex
             }
