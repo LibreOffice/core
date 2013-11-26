@@ -177,6 +177,11 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="oldpreview-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Old Color</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -191,6 +196,11 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="newpreview-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">New Color</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

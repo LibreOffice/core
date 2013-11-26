@@ -60,7 +60,7 @@
                         <property name="valign">start</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="CTL_PIXEL-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                            <property name="AtkObject::accessible-name" translatable="yes">Pattern Editor</property>
                           </object>
                         </child>
                       </object>
