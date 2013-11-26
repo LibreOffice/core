@@ -793,7 +793,7 @@ namespace cppcanvas
                     const float dashdotdot[] = {3, 3, 1, 3, 1, 3};
 
                     sal_Int32 nLen = 0;
-                    const float *pPattern;
+                    const float *pPattern = NULL;
                     switch (dashStyle)
                     {
                         case EmfPlusLineStyleDash:       nLen = SAL_N_ELEMENTS(dash); pPattern = dash; break;
