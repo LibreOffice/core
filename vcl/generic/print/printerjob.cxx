@@ -971,30 +971,24 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     WritePS (pFile, "%%BeginSetup\n%\n");
 
     // download fonts
-    std::list< OString > aFonts[2];
-    m_pGraphics->writeResources( pFile, aFonts[0], aFonts[1] );
+    std::list< OString > aFonts;
+    m_pGraphics->writeResources( pFile, aFonts );
 
-    for( int i = 0; i < 2; i++ )
+    if( !aFonts.empty() )
     {
-        if( !aFonts[i].empty() )
+        std::list< OString >::const_iterator it = aFonts.begin();
+        OStringBuffer aLine( 256 );
+        aLine.append( "%%DocumentSuppliedResources: font " );
+        aLine.append( *it );
+        aLine.append( "\n" );
+        WritePS ( pFile, aLine.getStr() );
+        while( (++it) != aFonts.end() )
         {
-            std::list< OString >::const_iterator it = aFonts[i].begin();
-            OStringBuffer aLine( 256 );
-            if( i == 0 )
-                aLine.append( "%%DocumentSuppliedResources: font " );
-            else
-                aLine.append( "%%DocumentNeededResources: font " );
+            aLine.setLength(0);
+            aLine.append( "%%+ font " );
             aLine.append( *it );
             aLine.append( "\n" );
             WritePS ( pFile, aLine.getStr() );
-            while( (++it) != aFonts[i].end() )
-            {
-                aLine.setLength(0);
-                aLine.append( "%%+ font " );
-                aLine.append( *it );
-                aLine.append( "\n" );
-                WritePS ( pFile, aLine.getStr() );
-            }
         }
     }
 

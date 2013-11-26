@@ -912,14 +912,8 @@ void GenPspGraphics::ClearDevFontCache()
     GlyphCache::GetInstance().ClearFontCache();
 }
 
-void GenPspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
+void GenPspGraphics::GetDevFontSubstList( OutputDevice* )
 {
-    const psp::PrinterInfo& rInfo = psp::PrinterInfoManager::get().getPrinterInfo( m_pJobData->m_aPrinterName );
-    if( rInfo.m_bPerformFontSubstitution )
-    {
-        for( boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it = rInfo.m_aFontSubstitutes.begin(); it != rInfo.m_aFontSubstitutes.end(); ++it )
-            pOutDev->ImplAddDevFontSubstitute( it->first, it->second, FONT_SUBSTITUTE_ALWAYS );
-    }
 }
 
 void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
