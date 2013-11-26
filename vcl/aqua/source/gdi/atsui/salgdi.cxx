@@ -597,13 +597,6 @@ sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rR
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::GetDevFontSubstList( OutputDevice* )
-{
-    // nothing to do since there are no device-specific fonts on Aqua
-}
-
-// -----------------------------------------------------------------------
-
 void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {
 }

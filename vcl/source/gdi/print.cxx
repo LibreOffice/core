@@ -494,7 +494,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     // Init data
     ImplUpdatePageData();
     mpFontList = new ImplDevFontList();
-    mpFontCache = new ImplFontCache( sal_True );
+    mpFontCache = new ImplFontCache();
     mpGraphics->GetDevFontList( mpFontList );
 }
 

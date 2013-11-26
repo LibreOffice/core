@@ -95,7 +95,6 @@ public:
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics must drop any cached font info
     virtual void ClearDevFontCache();
-    virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
 
     virtual sal_Bool            CreateFontSubset( const OUString& rToFile,

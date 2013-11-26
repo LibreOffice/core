@@ -580,13 +580,6 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 
 // ----------------------------------------------------------------------------
 
-void X11SalGraphics::GetDevFontSubstList( OutputDevice* )
-{
-    // no device specific font substitutions on X11 needed
-}
-
-// ----------------------------------------------------------------------------
-
 void cairosubcallback(void* pPattern)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

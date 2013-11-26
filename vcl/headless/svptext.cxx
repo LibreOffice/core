@@ -300,10 +300,6 @@ void SvpSalGraphics::ClearDevFontCache()
 }
 
 
-void SvpSalGraphics::GetDevFontSubstList( OutputDevice* )
-{}
-
-
 bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
     const OUString&, const OUString& )
 {

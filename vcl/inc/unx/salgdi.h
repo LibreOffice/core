@@ -232,7 +232,6 @@ public:
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void ClearDevFontCache();
-    virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
     virtual sal_Bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,

@@ -507,10 +507,6 @@ public:
 
     SAL_DLLPRIVATE sal_Bool         ImplIsRecordLayout() const;
 
-                   void         ImplAddDevFontSubstitute( const OUString& rFontName,
-                                                  const OUString& rReplaceFontName,
-                                                  sal_uInt16 nFlags = 0 );
-
     SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
     SAL_DLLPRIVATE static sal_Bool ImplIsUnderlineAbove( const Font& );
 

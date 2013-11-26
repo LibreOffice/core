@@ -4200,7 +4200,7 @@ void Window::ImplNewInputContext()
                 aSize.Height() = (12*pFocusWin->mnDPIY)/72;
         }
         pFontEntry = pFocusWin->mpFontCache->GetFontEntry( pFocusWin->mpFontList,
-                         rFont, aSize, static_cast<float>(aSize.Height()), NULL );
+                         rFont, aSize, static_cast<float>(aSize.Height()) );
         if ( pFontEntry )
             aNewContext.mpFont = &pFontEntry->maFontSelData;
     }

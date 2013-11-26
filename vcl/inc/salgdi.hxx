@@ -245,10 +245,6 @@ public:
     // graphics must drop any cached font info
     virtual void            ClearDevFontCache() = 0;
 
-    // graphics should call ImplAddDevFontSubstitute on supplied
-    // OutputDevice for all its device specific preferred font substitutions
-    virtual void            GetDevFontSubstList( OutputDevice* ) = 0;
-
     virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName ) = 0;
 
     // CreateFontSubset: a method to get a subset of glyhps of a font
