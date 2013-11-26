@@ -2030,6 +2030,18 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
       assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testExtraSectionBreak, "1_page.docx")
+{
+    // There was a problem for some documents during export.Invalid sectPr getting added
+    // because of faulty calculation of PageDesc value
+    // This was the reason for increasing number of pages after RT
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
