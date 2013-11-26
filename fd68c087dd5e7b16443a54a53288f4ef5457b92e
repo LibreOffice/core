@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///kg\u003d",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-26T16:56:36Z",
+      "side": 1,
+      "message": "Really just a nitpick, no need to change if nothing else needs a change.. ;-)\n\nHaving elements aligned IMHO is more pleasant to read when browsing the code, especially when it comes to long lists.",
+      "revId": "fd68c087dd5e7b16443a54a53288f4ef5457b92e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///kc\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 6735,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-11-26T16:56:36Z",
+      "side": 1,
+      "message": "Omitted can\u0027t be if the function has no optional parameter.",
+      "revId": "fd68c087dd5e7b16443a54a53288f4ef5457b92e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
