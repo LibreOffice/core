@@ -485,6 +485,7 @@ private:
     bool            bInSelection:1;
     bool            bIsInUndo:1;
     bool            bUpdate:1;
+    bool            bUpdateForAcc:1;
     bool            bUndoEnabled:1;
     bool            bOwnerOfRefDev:1;
     bool            bDowning:1;
@@ -688,6 +689,9 @@ public:
 
     void                    SetUpdateMode( bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
     bool                    GetUpdateMode() const   { return bUpdate; }
+
+    void                    SetUpdateModeForAcc(bool bUp);
+    bool                    GetUpdateModeForAcc() const { return bUpdateForAcc; }
 
     ViewsType& GetEditViews() { return aEditViews; }
     const ViewsType& GetEditViews() const { return aEditViews; }

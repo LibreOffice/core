@@ -406,9 +406,9 @@ sal_Bool SvxEditEngineForwarder::GetWordIndices( sal_Int32 nPara, sal_uInt16 nIn
     return sal_False;
 }
 
-sal_Bool SvxEditEngineForwarder::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nPara, sal_uInt16 nIndex ) const
+sal_Bool SvxEditEngineForwarder::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nPara, sal_uInt16 nIndex, sal_Bool bInCell ) const
 {
-    return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rEditEngine, nPara, nIndex );
+    return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rEditEngine, nPara, nIndex, bInCell );
 }
 
 sal_uInt16 SvxEditEngineForwarder::GetLineCount( sal_Int32 nPara ) const

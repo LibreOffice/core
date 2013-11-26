@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 }}}}
 
 class Window;
-
+class SdrObject;
 // misc functions ---------------------------------------------------------------
 
 void EDITENG_DLLPUBLIC SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText );
@@ -55,6 +55,7 @@ private:
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >    xHyph;
+    SdrObject*  mpTextObj;
     sal_uInt16  nOldLang;        // Set Language, only call SetLanguage on changes
     sal_Bool    bOtherCntnt : 1; // set => Check special sections initially
     sal_Bool    bDialog     : 1; // Is pWin the Svx...Dialog?
@@ -144,6 +145,8 @@ protected:
     virtual void AutoCorrect( const OUString& rAktStr, const OUString& rNewStr );
     virtual void InsertHyphen( const sal_uInt16 nPos ); // Insert hyphen
 
+    void SetCurTextObj( SdrObject* pObj ) { mpTextObj = pObj; }
+    SdrObject* GetCurTextObj() { return mpTextObj; }
 };
 
 #endif
