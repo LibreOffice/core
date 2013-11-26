@@ -54,13 +54,6 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-template< typename charT, typename traits > std::basic_ostream<charT, traits> &
-operator <<(
-    std::basic_ostream<charT, traits> & stream, rtl_String * string)
-{
-    return stream << rtl_string_getStr(string);
-}
-
 /*******************************************************************
  *
  * FileHandle_Impl interface
