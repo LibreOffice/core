@@ -2509,7 +2509,7 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
     }
     else if ( nType == FINDREPLACEFLOWTO )
     {
-        sal_Bool bSuccess;
+        sal_Bool bSuccess(sal_False);
         rAny >>= bSuccess;
         if ( bSuccess )
         {
