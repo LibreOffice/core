@@ -76,8 +76,6 @@
 #include "com/sun/star/beans/XMaterialHolder.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 
-#define PRINTER_METRICDIR "fontmetric"
-
 using namespace vcl;
 using namespace utl;
 using namespace psp;
@@ -205,20 +203,7 @@ PrintFontManager::TrueTypeFontFile::~TrueTypeFontFile()
 
 // -------------------------------------------------------------------------
 
-PrintFontManager::BuiltinFont::~BuiltinFont()
-{
-}
-
-// -------------------------------------------------------------------------
-
 bool PrintFontManager::Type1FontFile::queryMetricPage( int /*nPage*/, MultiAtomProvider* pProvider )
-{
-    return readAfmMetrics( pProvider, false, false );
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::BuiltinFont::queryMetricPage( int /*nPage*/, MultiAtomProvider* pProvider )
 {
     return readAfmMetrics( pProvider, false, false );
 }
@@ -444,22 +429,6 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "Encoding %d for %s\n", m_aEncoding, pInfo->gfi->fontName );
 #endif
-    }
-
-    // hack for GB encoded builtin fonts posing as FontSpecific
-    if( m_eType == fonttype::Builtin && ( nAdobeEncoding == 3 || nAdobeEncoding == 0 ) )
-    {
-        int nLen = aFamily.getLength();
-        if( nLen > 2 &&
-            aFamily.endsWith("GB") &&
-            pInfo->numOfChars > 255 )
-        {
-            m_aEncoding = RTL_TEXTENCODING_GBK;
-            m_bFontEncodingOnly = true;
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "found builtin font %s with GBK encoding\n", pInfo->gfi->fontName );
-#endif
-        }
     }
 
     // #i37313# check if Fontspecific is not rather some character encoding
@@ -793,7 +762,7 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
 
 enum fontFormat
 {
-    UNKNOWN, TRUETYPE, CFF, TYPE1, AFM
+    UNKNOWN, TRUETYPE, CFF, TYPE1
 };
 
 bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::std::list< PrintFontManager::PrintFont* >& rNewFonts, const char *pFormat ) const
@@ -825,8 +794,6 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
         OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
         if( aExt.equalsIgnoreAsciiCase("pfb") || aExt.equalsIgnoreAsciiCase("pfa") )
             eFormat = TYPE1;
-        else if( aExt.equalsIgnoreAsciiCase("afm"))
-            eFormat = AFM;
         else if( aExt.equalsIgnoreAsciiCase("ttf")
              ||  aExt.equalsIgnoreAsciiCase("ttc")
              ||  aExt.equalsIgnoreAsciiCase("tte") ) // #i33947# for Gaiji support
@@ -880,18 +847,6 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
                 break;
             }
         }
-    }
-    else if (eFormat == AFM)
-    {
-        BuiltinFont* pFont = new BuiltinFont();
-        pFont->m_nDirectory     = nDirID;
-        pFont->m_aMetricFile    = rFontFile;
-        if( pFont->readAfmMetrics( m_pAtoms, false, true ) )
-        {
-            rNewFonts.push_back( pFont );
-        }
-        else
-            delete pFont;
     }
     else if (eFormat == TRUETYPE || eFormat == CFF)
     {
@@ -966,21 +921,6 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
 
 // -------------------------------------------------------------------------
 
-fontID PrintFontManager::findFontBuiltinID( int nPSNameAtom ) const
-{
-    fontID nID = 0;
-    ::boost::unordered_map< fontID, PrintFont* >::const_iterator it;
-    for( it = m_aFonts.begin(); nID == 0 && it != m_aFonts.end(); ++it )
-    {
-        if( it->second->m_eType == fonttype::Builtin &&
-            it->second->m_nPSName == nPSNameAtom )
-            nID = it->first;
-    }
-    return nID;
-}
-
-// -------------------------------------------------------------------------
-
 fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, int nFaceIndex ) const
 {
     fontID nID = 0;
@@ -1012,11 +952,6 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, i
                         nID = it->first;
             }
             break;
-            case fonttype::Builtin:
-                if( static_cast<const BuiltinFont*>((*it).second)->m_nDirectory == nDirID &&
-                    static_cast<const BuiltinFont*>((*it).second)->m_aMetricFile == rFontFile )
-                    nID = it->first;
-                break;
             default:
                 break;
         }
@@ -1056,11 +991,6 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
                     aIds.push_back(it->first);
             }
             break;
-            case fonttype::Builtin:
-                if( static_cast<const BuiltinFont*>((*it).second)->m_nDirectory == nDirID &&
-                    static_cast<const BuiltinFont*>((*it).second)->m_aMetricFile == rFontFile )
-                    aIds.push_back(it->first);
-                break;
             default:
                 break;
         }
@@ -1383,8 +1313,6 @@ void PrintFontManager::initialize()
     CALLGRIND_ZERO_STATS();
     #endif
 
-    long aDirEntBuffer[ (sizeof(struct dirent)+PATH_MAX)+1 ];
-
     if( ! m_pFontCache )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -1416,9 +1344,6 @@ void PrintFontManager::initialize()
     clock_t aStart;
     clock_t aStep1;
     clock_t aStep2;
-    clock_t aStep3;
-    int nBuiltinFonts = 0;
-    int nCached = 0;
 
     struct tms tms;
 
@@ -1493,14 +1418,9 @@ void PrintFontManager::initialize()
                     m_aFontFileToFontID[ static_cast<Type1FontFile*>(*it)->m_aFontFile ].insert( aFont );
                 else if( (*it)->m_eType == fonttype::TrueType )
                     m_aFontFileToFontID[ static_cast<TrueTypeFontFile*>(*it)->m_aFontFile ].insert( aFont );
-                else if( (*it)->m_eType == fonttype::Builtin )
-                    m_aFontFileToFontID[ static_cast<BuiltinFont*>(*it)->m_aMetricFile ].insert( aFont );
 #if OSL_DEBUG_LEVEL > 1
                 else
                     fprintf(stderr, "Un-cached type '%d'\n", (*it)->m_eType);
-                if( (*it)->m_eType == fonttype::Builtin )
-                    nBuiltinFonts++;
-                nCached++;
 #if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "adding cached font %d: %s\n", aFont, getFontFileSysPath( aFont ).getStr() );
 #endif
@@ -1516,95 +1436,6 @@ void PrintFontManager::initialize()
     aStep1 = times( &tms );
 #endif
 
-    // part two - look for metrics for builtin printer fonts
-    std::list< OUString > aMetricDirs;
-    psp::getPrinterPathList( aMetricDirs, PRINTER_METRICDIR );
-
-    for( std::list< OUString >::const_iterator met_dir_it = aMetricDirs.begin(); met_dir_it != aMetricDirs.end(); ++met_dir_it )
-    {
-        OString aDir = OUStringToOString( *met_dir_it, aEncoding );
-
-        // ask the font cache whether it handles this directory
-        std::list< PrintFont* > aCacheFonts;
-
-        if( m_pFontCache->listDirectory( aDir, aCacheFonts ) )
-        {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "adding cache directory: %s\n", aDir.getStr() );
-#endif
-            for( ::std::list< PrintFont* >::iterator it = aCacheFonts.begin(); it != aCacheFonts.end(); ++it )
-            {
-                fontID aFont = m_nNextFontID++;
-                m_aFonts[ aFont ] = *it;
-                if( (*it)->m_eType == fonttype::Type1 )
-                    m_aFontFileToFontID[ static_cast<Type1FontFile*>(*it)->m_aFontFile ].insert( aFont );
-                else if( (*it)->m_eType == fonttype::TrueType )
-                    m_aFontFileToFontID[ static_cast<TrueTypeFontFile*>(*it)->m_aFontFile ].insert( aFont );
-                else if( (*it)->m_eType == fonttype::Builtin )
-                    m_aFontFileToFontID[ static_cast<BuiltinFont*>(*it)->m_aMetricFile ].insert( aFont );
-#if OSL_DEBUG_LEVEL > 1
-                if( (*it)->m_eType == fonttype::Builtin )
-                    nBuiltinFonts++;
-                nCached++;
-#if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "adding cached font %d: from %s\n", aFont,
-                         getFontFileSysPath( aFont ).getStr() );
-#endif
-#endif
-            }
-            continue;
-        }
-
-        DIR* pDIR = opendir( aDir.getStr() );
-        if( pDIR )
-        {
-            struct dirent* pDirEntry = (struct dirent*)aDirEntBuffer;
-            int nDirID = getDirectoryAtom( aDir, true );
-            int nDirFonts = 0;
-
-            while( ! readdir_r( pDIR, (struct dirent*)aDirEntBuffer, &pDirEntry ) && pDirEntry )
-            {
-                OStringBuffer aFile(aDir);
-                aFile.append('/').append(pDirEntry->d_name);
-                struct stat aStat;
-                if( ! stat( aFile.getStr(), &aStat )
-                    && S_ISREG( aStat.st_mode )
-                    )
-                {
-                    OString aFileName( pDirEntry->d_name, strlen( pDirEntry->d_name ) );
-                    OString aExt( aFileName.copy( aFileName.lastIndexOf( '.' )+1 ) );
-                    if( aExt.equalsIgnoreAsciiCase( "afm" ) )
-                    {
-                        ::std::list< PrintFont* > aNewFonts;
-
-                        analyzeFontFile( nDirID, aFileName, aNewFonts );
-                        for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
-                        {
-                            if( findFontBuiltinID( (*it)->m_nPSName ) == 0 )
-                            {
-                                m_aFontFileToFontID[ aFileName ].insert( m_nNextFontID );
-                                m_aFonts[ m_nNextFontID++ ] = *it;
-                                m_pFontCache->updateFontCacheEntry( *it, false );
-                                ++nDirFonts;
-#if OSL_DEBUG_LEVEL > 2
-                                nBuiltinFonts++;
-#endif
-                            }
-                            else
-                                delete *it;
-                        }
-                    }
-                }
-            }
-            closedir( pDIR );
-            if( ! nDirFonts )
-                m_pFontCache->markEmptyDir( nDirID );
-        }
-    }
-
-#if OSL_DEBUG_LEVEL > 1
-    aStep2 = times( &tms );
-#endif
 
     // part three - fill in family styles
     ::boost::unordered_map< fontID, PrintFont* >::iterator font_it;
@@ -1621,12 +1452,11 @@ void PrintFontManager::initialize()
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    aStep3 = times( &tms );
-    fprintf( stderr, "PrintFontManager::initialize: collected %" SAL_PRI_SIZET "u fonts (%d builtin, %d cached)\n", m_aFonts.size(), nBuiltinFonts, nCached );
+    aStep2 = times( &tms );
+    fprintf( stderr, "PrintFontManager::initialize: collected %" SAL_PRI_SIZET "u fonts\n", m_aFonts.size() );
     double fTick = (double)sysconf( _SC_CLK_TCK );
     fprintf( stderr, "Step 1 took %lf seconds\n", (double)(aStep1 - aStart)/fTick );
     fprintf( stderr, "Step 2 took %lf seconds\n", (double)(aStep2 - aStep1)/fTick );
-    fprintf( stderr, "Step 3 took %lf seconds\n", (double)(aStep3 - aStep2)/fTick );
 #endif
 
     m_pFontCache->flush();
@@ -1638,147 +1468,14 @@ void PrintFontManager::initialize()
 }
 
 // -------------------------------------------------------------------------
-inline bool
-equalPitch (FontPitch from, FontPitch to)
-{
-    return from == to;
-}
 
-inline bool
-equalWeight (FontWeight from, FontWeight to)
-{
-    return from > to ? (from - to) <= 3 : (to - from) <= 3;
-}
-
-inline bool
-equalItalic (FontItalic from, FontItalic to)
-{
-    if ( (from == ITALIC_NORMAL) || (from == ITALIC_OBLIQUE) )
-        return (to == ITALIC_NORMAL) || (to == ITALIC_OBLIQUE);
-    return to == from;
-}
-inline bool
-equalEncoding (rtl_TextEncoding from, rtl_TextEncoding to)
-{
-    if ((from == RTL_TEXTENCODING_ISO_8859_1) || (from == RTL_TEXTENCODING_MS_1252))
-        return (to == RTL_TEXTENCODING_ISO_8859_1) || (to == RTL_TEXTENCODING_MS_1252);
-    return from == to;
-}
-
-namespace {
-    struct BuiltinFontIdentifier
-    {
-        OUString            aFamily;
-        FontItalic          eItalic;
-        FontWeight          eWeight;
-        FontPitch           ePitch;
-        rtl_TextEncoding    aEncoding;
-
-        BuiltinFontIdentifier( const OUString& rFam,
-                               FontItalic eIt,
-                               FontWeight eWg,
-                               FontPitch ePt,
-                               rtl_TextEncoding enc ) :
-            aFamily( rFam ),
-            eItalic( eIt ),
-            eWeight( eWg ),
-            ePitch( ePt ),
-            aEncoding( enc )
-        {}
-
-        bool operator==( const BuiltinFontIdentifier& rRight ) const
-        {
-            return equalItalic( eItalic, rRight.eItalic ) &&
-                   equalWeight( eWeight, rRight.eWeight ) &&
-                   equalPitch( ePitch, rRight.ePitch ) &&
-                   equalEncoding( aEncoding, rRight.aEncoding ) &&
-                   aFamily.equalsIgnoreAsciiCase( rRight.aFamily );
-        }
-    };
-
-    struct BuiltinFontIdentifierHash
-    {
-        size_t operator()( const BuiltinFontIdentifier& rFont ) const
-        {
-            return rFont.aFamily.hashCode() ^ rFont.eItalic ^ rFont.eWeight ^ rFont.ePitch ^ rFont.aEncoding;
-        }
-    };
-}
-
-void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDParser* pParser )
+void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs )
 {
     rFontIDs.clear();
     boost::unordered_map< fontID, PrintFont* >::const_iterator it;
 
-    /*
-    * Note: there are two easy steps making this faster:
-    * first: insert the printer builtins first, then the not builtins,
-    * if they do not match.
-    * drawback: this would change the sequence of fonts; this could have
-    * subtle, unknown consequences in vcl font matching
-    * second: instead of comparing attributes to see whether a softfont
-    * is duplicate to a builtin one could simply compare the PSName (which is
-    * supposed to be unique), which at this point is just an int.
-    * drawback: this could change which fonts are listed; especially TrueType
-    * fonts often have a rather dubious PSName, so this could change the
-    * font list not so subtle.
-    * Until getFontList for a printer becomes a performance issue (which is
-    * currently not the case), best stay with the current algorithm.
-    */
-
-    // fill sets of printer supported fonts
-    if( pParser )
-    {
-        std::set<int> aBuiltinPSNames;
-        boost::unordered_set< BuiltinFontIdentifier,
-                       BuiltinFontIdentifierHash
-                       > aBuiltinFonts;
-
-        int nFonts = pParser->getFonts();
-        for( int i = 0; i < nFonts; i++ )
-            aBuiltinPSNames.insert( m_pAtoms->getAtom( ATOM_PSNAME, pParser->getFont( i ) ) );
-        for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
-        {
-            PrintFont* pFont = it->second;
-            if( it->second->m_eType == fonttype::Builtin &&
-                aBuiltinPSNames.find( pFont->m_nPSName ) != aBuiltinPSNames.end() )
-            {
-                aBuiltinFonts.insert( BuiltinFontIdentifier(
-                    m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ),
-                    pFont->m_eItalic,
-                    pFont->m_eWeight,
-                    pFont->m_ePitch,
-                    pFont->m_aEncoding
-                ) );
-            }
-        }
-        for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
-        {
-            PrintFont* pFont = it->second;
-            if( it->second->m_eType == fonttype::Builtin )
-            {
-                if( aBuiltinPSNames.find( pFont->m_nPSName ) != aBuiltinPSNames.end() )
-                {
-                    rFontIDs.push_back( it->first );
-                }
-            }
-            else if( aBuiltinFonts.find( BuiltinFontIdentifier(
-                m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ),
-                pFont->m_eItalic,
-                pFont->m_eWeight,
-                pFont->m_ePitch,
-                pFont->m_aEncoding
-                ) ) == aBuiltinFonts.end() )
-            {
-                rFontIDs.push_back( it->first );
-            }
-        }
-    }
-    else // no specific printer
-    {
-        for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
-            rFontIDs.push_back( it->first );
-    }
+    for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
+        rFontIDs.push_back( it->first );
 }
 
 // -------------------------------------------------------------------------
@@ -1830,11 +1527,11 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo
 
 // -------------------------------------------------------------------------
 
-void PrintFontManager::getFontListWithFastInfo( ::std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser )
+void PrintFontManager::getFontListWithFastInfo( ::std::list< FastPrintFontInfo >& rFonts )
 {
     rFonts.clear();
     ::std::list< fontID > aFontList;
-    getFontList( aFontList, pParser );
+    getFontList( aFontList );
 
     ::std::list< fontID >::iterator it;
     for( it = aFontList.begin(); it != aFontList.end(); ++it )
@@ -1883,7 +1580,7 @@ bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin,
         if( pFont->m_nXMin == 0 && pFont->m_nYMin == 0 && pFont->m_nXMax == 0 && pFont->m_nYMax == 0 )
         {
             // might be a truetype font not analyzed or type1 without metrics read
-            if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
+            if( pFont->m_eType == fonttype::Type1 )
                 pFont->readAfmMetrics( m_pAtoms, false, true );
             else if( pFont->m_eType == fonttype::TrueType )
                 analyzeTrueTypeFile( pFont );
@@ -1995,14 +1692,6 @@ OString PrintFontManager::getAfmFile( PrintFont* pFont ) const
                 aMetricPath += pPSFont->m_aMetricFile;
             }
             break;
-            case fonttype::Builtin:
-            {
-                BuiltinFont* pBuiltinFont = static_cast< BuiltinFont* >(pFont);
-                aMetricPath = getDirectory( pBuiltinFont->m_nDirectory );
-                aMetricPath += "/";
-                aMetricPath += pBuiltinFont->m_aMetricFile;
-            }
-            break;
             default: break;
         }
     }
@@ -2058,7 +1747,7 @@ int PrintFontManager::getFontAscend( fontID nFontID ) const
         // might be a truetype font not yet analyzed
         if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
-        else if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
+        else if( pFont->m_eType == fonttype::Type1 )
             pFont->readAfmMetrics( m_pAtoms, false, true );
     }
     return pFont->m_nAscend;
@@ -2074,7 +1763,7 @@ int PrintFontManager::getFontDescend( fontID nFontID ) const
         // might be a truetype font not yet analyzed
         if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
-        else if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
+        else if( pFont->m_eType == fonttype::Type1 )
             pFont->readAfmMetrics( m_pAtoms, false, true );
     }
     return pFont->m_nDescend;
@@ -2160,7 +1849,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
         )
     {
         // might be a font not yet analyzed
-        if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
+        if( pFont->m_eType == fonttype::Type1 )
             pFont->readAfmMetrics( m_pAtoms, false, false );
         else if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
@@ -2207,7 +1896,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
         )
     {
         // might be a font not yet analyzed
-        if( pFont->m_eType == fonttype::Type1 || pFont->m_eType == fonttype::Builtin )
+        if( pFont->m_eType == fonttype::Type1 )
             pFont->readAfmMetrics( m_pAtoms, false, false );
         else if( pFont->m_eType == fonttype::TrueType )
             analyzeTrueTypeFile( pFont );
@@ -2477,9 +2166,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
 const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( fontID nFont, const std::map< sal_Unicode, OString >** pNonEncoded ) const
 {
     PrintFont* pFont = getFont( nFont );
-    if( !pFont ||
-        (pFont->m_eType != fonttype::Type1 && pFont->m_eType != fonttype::Builtin)
-        )
+    if( !pFont || pFont->m_eType != fonttype::Type1 )
         return NULL;
 
     if( ! pFont->m_aEncodingVector.size() )

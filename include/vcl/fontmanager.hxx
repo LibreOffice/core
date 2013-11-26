@@ -56,7 +56,6 @@ enum type {
     Unknown = 0,
     Type1 = 1,
     TrueType = 2,
-    Builtin = 3
 };
 }
 
@@ -141,11 +140,9 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     struct PrintFont;
     struct TrueTypeFontFile;
     struct Type1FontFile;
-    struct BuiltinFont;
     friend struct PrintFont;
     friend struct TrueTypeFontFile;
     friend struct Type1FontFile;
-    friend struct BuiltinFont;
     friend class FontCache;
 
     struct PrintFontMetrics
@@ -238,16 +235,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
 
-    struct BuiltinFont : public PrintFont
-    {
-        int                 m_nDirectory;       // atom containing system dependent path
-        OString      m_aMetricFile;
-
-        BuiltinFont() : PrintFont( fonttype::Builtin ) {}
-        virtual ~BuiltinFont();
-        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
-    };
-
     fontID                                      m_nNextFontID;
     boost::unordered_map< fontID, PrintFont* >       m_aFonts;
     boost::unordered_map< int, FontFamily >        m_aFamilyTypes;
@@ -291,8 +278,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     {
         return findFontFileID(nDirID, rFile, 0) != 0;
     }
-
-    fontID findFontBuiltinID( int nPSNameAtom ) const;
 
     FontFamily matchFamilyName( const OUString& rFamily ) const;
 
@@ -349,16 +334,10 @@ public:
     // returns the number of managed fonts
     int getFontCount() const { return m_aFonts.size(); }
 
-    // caution: the getFontList* methods can change the font list on demand
-    // depending on the pParser argument. That is getFontCount() may
-    // return a larger value after getFontList()
-
-    // returns the ids of all managed fonts. on pParser != NULL
-    // all fonttype::Builtin type fonts are not listed
-    // which do not occur in the PPD of pParser
-    void getFontList( std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL );
-    // get the font list and fast font info. see getFontList for pParser
-    void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL );
+    // returns the ids of all managed fonts.
+    void getFontList( std::list< fontID >& rFontIDs );
+    // get the font list and fast font info.
+    void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts );
 
     // get font info for a specific font
     bool getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const;
@@ -453,16 +432,15 @@ public:
     // the user is responsible to allocate pArray large enough
     bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray, bool bVertical = false ) const;
 
-    // get encoding vector of font, currently only for Type1 and Builtin fonts
-    // returns NULL if encoding vector is empty or font is neither type1 or
-    // builtin; if ppNonEncoded is set and non encoded type1 glyphs exist
+    // get encoding vector of font, currently only for Type1 fonts
+    // returns NULL if encoding vector is empty or font is not type1;
+    // if ppNonEncoded is set and non encoded type1 glyphs exist
     // then *ppNonEncoded is set to the mapping for nonencoded glyphs.
     // the encoding vector contains -1 for non encoded glyphs
     const std::map< sal_Unicode, sal_Int32 >* getEncodingMap( fontID nFontID, const std::map< sal_Unicode, OString >** ppNonEncoded ) const;
 
     // evaluates copyright flags for TrueType fonts for printing/viewing
     // type1 fonts do not have such a feature, so return for them is true
-    // returns true for builtin fonts (surprise!)
     bool isFontDownloadingAllowedForPrinting( fontID nFont ) const;
 
     // helper for type 1 fonts
