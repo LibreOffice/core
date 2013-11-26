@@ -718,8 +718,6 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFon
             aIter->PSUploadFont (*pFile, *this, mbUploadPS42Fonts ? true : false, rSuppliedFonts );
         }
         else
-        // (   aIter->GetFontType() == fonttype::Type1
-        //  || aIter->GetFontType() == fonttype::Builtin )
         {
             aIter->PSUploadEncoding (pFile, *this);
         }

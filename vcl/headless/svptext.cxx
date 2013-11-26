@@ -269,11 +269,6 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
         if( !rMgr.getFontFastInfo( *it, aInfo ) )
             continue;
 
-        // the GlyphCache must not bother with builtin fonts because
-        // it cannot access or use them anyway
-        if( aInfo.m_eType == psp::fonttype::Builtin )
-            continue;
-
         // normalize face number to the GlyphCache
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 

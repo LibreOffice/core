@@ -318,9 +318,7 @@ void FontCache::read()
 
             fonttype::type eType = (fonttype::type)atoi( pLine );
             if( eType != fonttype::TrueType     &&
-                eType != fonttype::Type1        &&
-                eType != fonttype::Builtin
-                )
+                eType != fonttype::Type1 )
                 continue;
             while( *pLine && *pLine != ';' )
                 pLine++;
@@ -343,9 +341,6 @@ void FontCache::read()
                         break;
                     case fonttype::Type1:
                         pFont = new PrintFontManager::Type1FontFile();
-                        break;
-                    case fonttype::Builtin:
-                        pFont = new PrintFontManager::BuiltinFont();
                         break;
                     default: break;
                 }
@@ -433,10 +428,6 @@ void FontCache::read()
                         nStyleTokenNr++;
                     }
                     break;
-                    case fonttype::Builtin:
-                        static_cast<PrintFontManager::BuiltinFont*>(pFont)->m_nDirectory = nDir;
-                        static_cast<PrintFontManager::BuiltinFont*>(pFont)->m_aMetricFile = aFile;
-                        break;
                     default: break;
                 }
                 if( nTokens > nStyleTokenNr )
@@ -504,10 +495,6 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
             static_cast<PrintFontManager::Type1FontFile*>(pTo)->m_aFontFile = static_cast<const PrintFontManager::Type1FontFile*>(pFrom)->m_aFontFile;
             static_cast<PrintFontManager::Type1FontFile*>(pTo)->m_aMetricFile = static_cast<const PrintFontManager::Type1FontFile*>(pFrom)->m_aMetricFile;
             break;
-        case fonttype::Builtin:
-            static_cast<PrintFontManager::BuiltinFont*>(pTo)->m_nDirectory = static_cast<const PrintFontManager::BuiltinFont*>(pFrom)->m_nDirectory;
-            static_cast<PrintFontManager::BuiltinFont*>(pTo)->m_aMetricFile = static_cast<const PrintFontManager::BuiltinFont*>(pFrom)->m_aMetricFile;
-            break;
         default: break;
     }
     pTo->m_nFamilyName      = pFrom->m_nFamilyName;
@@ -562,15 +549,6 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
                 return false;
         }
         break;
-        case fonttype::Builtin:
-        {
-            const PrintFontManager::BuiltinFont* pLT = static_cast<const PrintFontManager::BuiltinFont*>(pLeft);
-            const PrintFontManager::BuiltinFont* pRT = static_cast<const PrintFontManager::BuiltinFont*>(pRight);
-            if( pRT->m_nDirectory       != pLT->m_nDirectory        ||
-                pRT->m_aMetricFile      != pLT->m_aMetricFile )
-                return false;
-        }
-        break;
         default: break;
     }
     if( pRight->m_nFamilyName       != pLeft->m_nFamilyName     ||
@@ -615,9 +593,6 @@ PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::
             break;
         case fonttype::Type1:
             pFont = new PrintFontManager::Type1FontFile();
-            break;
-        case fonttype::Builtin:
-            pFont = new PrintFontManager::BuiltinFont();
             break;
         default: break;
     }
@@ -668,10 +643,6 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
         case fonttype::Type1:
             nDirID = static_cast<const PrintFontManager::Type1FontFile*>(pFont)->m_nDirectory;
             aFile = static_cast<const PrintFontManager::Type1FontFile*>(pFont)->m_aFontFile;
-            break;
-        case fonttype::Builtin:
-            nDirID = static_cast<const PrintFontManager::BuiltinFont*>(pFont)->m_nDirectory;
-            aFile = static_cast<const PrintFontManager::BuiltinFont*>(pFont)->m_aMetricFile;
             break;
         default:
             return;

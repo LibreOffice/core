@@ -338,7 +338,6 @@ GlyphSet::GetCharSetName (sal_Int32 nGlyphSetID)
         return aSetName.makeStringAndClear();
     }
     else
-    /* (meBaseType == fonttype::Type1 || meBaseType == fonttype::Builtin) */
     {
         return maBaseName;
     }
@@ -358,7 +357,6 @@ GlyphSet::GetGlyphSetName (sal_Int32 nGlyphSetID)
         return aSetName.makeStringAndClear();
     }
     else
-    /* (meBaseType == fonttype::Type1 || meBaseType == fonttype::Builtin) */
     {
         return maBaseName;
     }
@@ -371,7 +369,6 @@ GlyphSet::GetGlyphSetEncoding (sal_Int32 nGlyphSetID)
         return RTL_TEXTENCODING_DONTKNOW;
     else
     {
-    /* (meBaseType == fonttype::Type1 || meBaseType == fonttype::Builtin) */
         if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
             return RTL_TEXTENCODING_SYMBOL;
         else
@@ -411,7 +408,7 @@ void
 GlyphSet::PSDefineReencodedFont (osl::File* pOutFile, sal_Int32 nGlyphSetID)
 {
     // only for ps fonts
-    if ((meBaseType != fonttype::Builtin) && (meBaseType != fonttype::Type1))
+    if (meBaseType != fonttype::Type1)
         return;
 
     sal_Char  pEncodingVector [256];
@@ -617,7 +614,7 @@ sal_Bool
 GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 {
     // only for ps fonts
-    if ((meBaseType != fonttype::Builtin) && (meBaseType != fonttype::Type1))
+    if (meBaseType != fonttype::Type1)
         return sal_False;
     if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
         return sal_False;
