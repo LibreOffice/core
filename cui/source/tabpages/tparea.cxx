@@ -2036,6 +2036,9 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
     m_pFlPosition->Enable();
     m_pFlOffset->Enable();
 
+    if (!m_pRbtRow->IsChecked() && !m_pRbtColumn->IsChecked())
+        m_pRbtRow->Check();
+
     // Controls for Hatch-Background
     m_pFlHatchBckgrd->Hide();
 

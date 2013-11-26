@@ -311,8 +311,6 @@ GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rG
 
     maCbxInvert.Check( bInvert );
     maCbxInvert.SetToggleHdl( GetModifyHdl() );
-
-    maMtrThreshold.GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
@@ -371,8 +369,6 @@ GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic
 
     maMtrSepia.SetValue( nSepiaPercent );
     maMtrSepia.SetModifyHdl( GetModifyHdl() );
-
-    maMtrSepia.GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
@@ -423,7 +419,6 @@ GraphicFilterPoster::GraphicFilterPoster( Window* pParent, const Graphic& rGraph
     maNumPoster.SetLast( rGraphic.GetBitmapEx().GetBitCount() );
     maNumPoster.SetValue( nPosterCount );
     maNumPoster.SetModifyHdl( GetModifyHdl() );
-    maNumPoster.GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
