@@ -32,12 +32,3 @@
 
 TYPEINIT1(SfxSimpleHint, SfxHint);
 
-//====================================================================
-// creates a SimpleHint with the type nId
-
-SfxSimpleHint::SfxSimpleHint( sal_uLong nIdP )
-{
-    nId = nIdP;
-}
-
-
