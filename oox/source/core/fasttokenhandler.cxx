@@ -92,6 +92,11 @@ sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdent
     return mrTokenMap.getTokenFromUtf8( rIdentifier );
 }
 
+sal_Int32 FastTokenHandler::getTokenDirect( const char *pToken, sal_Int32 nLength ) const
+{
+    return mrTokenMap.getTokenFromUTF8( pToken, nLength );
+}
+
 // ============================================================================
 
 } // namespace core

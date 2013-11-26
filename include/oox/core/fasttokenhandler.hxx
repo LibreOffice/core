@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <sax/fastattribs.hxx>
 
 namespace oox { class TokenMap; }
 
@@ -36,7 +37,8 @@ typedef ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::su
 /** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
     that provides access to the tokens generated from the internal token name list.
  */
-class FastTokenHandler : public FastTokenHandler_BASE
+class FastTokenHandler : public FastTokenHandler_BASE,
+                         public sax_fastparser::FastTokenHandlerBase
 {
 public:
     explicit            FastTokenHandler();
@@ -52,6 +54,9 @@ public:
     virtual OUString SAL_CALL getIdentifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const ::com::sun::star::uno::Sequence< sal_Int8 >& Identifier ) throw (::com::sun::star::uno::RuntimeException);
+
+    // Much faster direct C++ shortcut to the method that matters
+    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const;
 
 private:
     const TokenMap&     mrTokenMap;     ///< Reference to global token map singleton.
