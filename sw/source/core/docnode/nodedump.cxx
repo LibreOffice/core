@@ -18,12 +18,16 @@
 #include "fmtautofmt.hxx"
 #include "charfmt.hxx"
 #include "paratr.hxx"
+#include "redline.hxx"
+#include <swmodule.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/intitem.hxx>
+#include <tools/datetimeutils.hxx>
 
 #include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
 #include <boost/optional.hpp>
+#include <rtl/strbuf.hxx>
 
 namespace
 {
@@ -117,6 +121,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpTxtFmtCollTbl->dumpAsXml( writer );
     mpCharFmtTbl->dumpAsXml( writer );
     mpNumRuleTbl->dumpAsXml( writer );
+    mpRedlineTbl->dumpAsXml( writer );
     writer.endElement();
 }
 
@@ -431,6 +436,132 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
         GetNumRule()->dumpAsXml(w);
 
     writer.endElement();
+}
+
+void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
+{
+    WriterHelper writer( w );
+
+    writer.startElement( "swredlinetbl" );
+    writer.writeFormatAttribute( "ptr", "%p", this );
+
+    for( sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < size(); ++nCurRedlinePos )
+    {
+        const SwRedlineTbl& redlineTbl = (*this);
+        const SwRedline* pRedline = redlineTbl[ nCurRedlinePos ];
+
+        writer.startElement( "swredline" );
+        writer.writeFormatAttribute( "ptr", "%p", pRedline );
+
+        OString aId( OString::number( pRedline->GetSeqNo() ) );
+        const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
+        OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
+        OString aDate( DateTimeToOString( pRedline->GetTimeStamp() ) );
+        OString sRedlineType;
+        switch( pRedline->GetType() )
+        {
+            case nsRedlineType_t::REDLINE_INSERT:
+                sRedlineType = "REDLINE_INSERT";
+                break;
+            case nsRedlineType_t::REDLINE_DELETE:
+                sRedlineType = "REDLINE_DELETE";
+                break;
+            case nsRedlineType_t::REDLINE_FORMAT:
+                sRedlineType = "REDLINE_FORMAT";
+                break;
+            default:
+                sRedlineType = "UNKNOWN";
+                break;
+        };
+        writer.writeFormatAttribute( "id", "%s", BAD_CAST(aId.getStr()) );
+        writer.writeFormatAttribute( "author", "%s", BAD_CAST(aAuthor.getStr()) );
+        writer.writeFormatAttribute( "date", "%s", BAD_CAST(aDate.getStr()) );
+        writer.writeFormatAttribute( "type", "%s", BAD_CAST(sRedlineType.getStr()) );
+        {
+            const SwPosition* pStart = pRedline->Start();
+
+            writer.startElement( "start_swposition" );
+            //writer.writeFormatAttribute( "ptr", "%p", pStart );
+            {
+                const SwNodeIndex pStartNodeIndex = pStart->nNode;
+                //writer.startElement( "swnodeindex" );
+                //writer.writeFormatAttribute( "ptr", "%p", &pStartNodeIndex );
+                {
+                    const SwNode&     pStartSwNode      = pStartNodeIndex.GetNode();
+                    //writer.startElement( "swnode" );
+                    //writer.writeFormatAttribute( "ptr", "%p", &pStartSwNode );
+                    //writer.writeFormatAttribute( "type", "%d", pStartSwNode.GetNodeType() );
+                    //writer.endElement( );    // swnode
+                    writer.writeFormatAttribute( "swnode_type", "%d", pStartSwNode.GetNodeType() );
+
+                    const SwIndex&    pStartContent   = pStart->nContent;
+                    //writer.startElement( "swindex" );
+                    //writer.writeFormatAttribute( "ptr", "%p", &pStartContent );
+                    //writer.writeFormatAttribute( "content_index", "%d", pStartContent.GetIndex() );
+                    //writer.endElement( );    // swindex
+                    writer.writeFormatAttribute( "swindex_content_index", "%d", pStartContent.GetIndex() );
+                }
+                //writer.endElement( );    // swnodeindex
+            }
+            writer.endElement( );    // start_swposition
+
+
+            const SwPosition* pEnd;
+            bool bEndIsMark = false;
+            if ( pStart == pRedline->GetPoint() )
+            {
+                // End = Mark
+                pEnd = pRedline->GetMark();
+                bEndIsMark = true;
+            }
+            else
+            {
+                // End = Point
+                pEnd = pRedline->GetPoint();
+            }
+
+            writer.startElement( "end___swposition" );
+            //writer.writeFormatAttribute( "ptr", "%p", pStart );
+            {
+                const SwNodeIndex pEndNodeIndex = pEnd->nNode;
+                //writer.startElement( "swnodeindex" );
+                //writer.writeFormatAttribute( "ptr", "%p", &pEndNodeIndex );
+                {
+                    const SwNode&     pEndSwNode      = pEndNodeIndex.GetNode();
+                    //writer.startElement( "swnode" );
+                    //writer.writeFormatAttribute( "ptr", "%p", &pEndSwNode );
+                    //writer.writeFormatAttribute( "type", "%d", pEndSwNode.GetNodeType() );
+                    //writer.endElement( );    // swnode
+                    writer.writeFormatAttribute( "swnode_type", "%d", pEndSwNode.GetNodeType() );
+
+                    const SwIndex&    pEndContent   = pEnd->nContent;
+                    //writer.startElement( "swindex" );
+                    //writer.writeFormatAttribute( "ptr", "%p", &pEndContent );
+                    //writer.writeFormatAttribute( "content_index", "%d", pEndContent.GetIndex() );
+                    //writer.endElement( );    // swindex
+                    writer.writeFormatAttribute( "swindex_content_index", "%d", pEndContent.GetIndex() );
+                }
+                //writer.endElement( );    // swnodeindex
+            }
+            writer.writeFormatAttribute( "end_is", "%s", BAD_CAST(bEndIsMark ? "mark" : "point"));
+            writer.endElement( );    // end_swposition
+
+            //const SwRedlineData& aRedlineData = pRedline->GetRedlineData();
+            const SwRedlineExtraData* pExtraRedlineData = pRedline->GetExtraData();
+            writer.startElement( "extra_redline_data" );
+            {
+                if (pExtraRedlineData == NULL)
+                    writer.writeFormatAttribute( "data", "%s", BAD_CAST( "none" ) );
+                else
+                    writer.writeFormatAttribute( "data", "%s", BAD_CAST( "exists" ) );
+            }
+            writer.endElement( );    // end_swposition
+        }
+
+        writer.endElement( );    // extra_redline_data
+    }
+
+    writer.endElement( );    // swredlinetbl
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
