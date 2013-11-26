@@ -2511,7 +2511,7 @@ void MSWordExportBase::WriteText()
         {
             SwCntntNode* pCNd = (SwCntntNode*)pNd;
 
-            const SwPageDesc* pTemp = pCNd->GetSwAttrSet().GetPageDesc().GetPageDesc();
+            const SwPageDesc* pTemp = pNd->FindPageDesc(sal_False);
             if ( pTemp )
                 pAktPageDesc = pTemp;
 
