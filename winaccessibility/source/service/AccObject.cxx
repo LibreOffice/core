@@ -1160,7 +1160,7 @@ IMAccessible*  AccObject::GetIMAccessible()
     return m_pIMAcc;
 }
 
-Reference < XAccessible > AccObject::GetXAccessible()
+Reference<XAccessible> const& AccObject::GetXAccessible()
 {
     return m_xAccRef;
 }

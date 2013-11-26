@@ -79,7 +79,8 @@ public:
     void UpdateDefaultAction();
 
     IMAccessible*  GetIMAccessible();   //return COM interface in acc object
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > GetXAccessible();
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible> const& GetXAccessible();
 
     void SetResID(long id);//ResID means ChildID in MSAA
     long GetResID();
