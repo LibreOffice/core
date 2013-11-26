@@ -84,6 +84,7 @@ certain functionality.
 
 @li @c sc
 @li @c sc.opencl
+@li @c sc.opencl.source
 @li @c sc.opencl.thread
 @li @c sc.qa
 @li @c sc.core

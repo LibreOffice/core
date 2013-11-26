@@ -2514,9 +2514,8 @@ public:
         decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
             DK->GenSlidingWindowDeclRef(false) << ";\n}\n";
         mFullProgramSrc = decl.str();
-#if 1
-        std::cerr<< "Program to be compiled = \n" << mFullProgramSrc << "\n";
-#endif
+
+        SAL_INFO("sc.opencl.source", "Program to be compiled:\n" << mFullProgramSrc);
     }
     /// Produce kernel hash
     std::string GetMD5(void)
@@ -2590,15 +2589,12 @@ private:
 DynamicKernel::~DynamicKernel()
 {
     if (mpResClmem) {
-        std::cerr<<"Freeing kernel "<< GetMD5() << " result buffer\n";
         clReleaseMemObject(mpResClmem);
     }
     if (mpKernel) {
-        std::cerr<<"Freeing kernel "<< GetMD5() << " kernel\n";
         clReleaseKernel(mpKernel);
     }
     if (mpProgram) {
-        std::cerr<<"Freeing kernel "<< GetMD5() << " program\n";
         clReleaseProgram(mpProgram);
     }
     if (mpCode)
@@ -2647,13 +2643,11 @@ const DynamicKernelArgument *SymbolTable::DeclRefArg(
     ArgumentMap::iterator it = mSymbols.find(ref);
     if (it == mSymbols.end()) {
         // Allocate new symbols
-        std::cerr << "DeclRefArg: Allocate a new symbol:";
         std::stringstream ss;
         ss << "tmp"<< mCurId++;
         boost::shared_ptr<DynamicKernelArgument> new_arg(new T(ss.str(), t, pCodeGen));
         mSymbols[ref] = new_arg;
         mParams.push_back(new_arg);
-        std::cerr << ss.str() <<"\n";
         return new_arg.get();
     } else {
         return it->second.get();
