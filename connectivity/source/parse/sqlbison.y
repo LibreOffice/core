@@ -62,11 +62,11 @@ inline connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID = 0);
 
-inline connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
+inline connectivity::OSQLInternalNode* newNode(const OString& _NewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID = 0);
 
-inline connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
+inline connectivity::OSQLInternalNode* newNode(const OUString& _NewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID = 0);
 
@@ -4278,75 +4278,19 @@ connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
     return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);
 }
 
-connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
+connectivity::OSQLInternalNode* newNode(const OString& _NewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID)
 {
     return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
 }
 
-connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
+connectivity::OSQLInternalNode* newNode(const OUString& _NewValue,
         const connectivity::SQLNodeType eNodeType,
         const sal_uInt32 nNodeID)
 {
     return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
 }
-
-
-//============================================================
-//= a helper for static ascii pseudo-unicode strings
-//============================================================
-// string constants
-struct _ConstAsciiString_
-{
-	sal_Int32 length;
-	sal_Char  const* str;
-
-	operator rtl::OUString () const { return rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
-	operator const sal_Char * () const { return str; }
-	operator ::rtl::OString() const { return str; }
-};
-
-#define IMPLEMENT_CONSTASCII_STRING( name, string ) \
-	_ConstAsciiString_ const name = { sizeof(string)-1, string }
-
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_GENERAL, "Syntax error in SQL expression");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_VALUE_NO_LIKE, "The value #1 can not be used with LIKE.");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_FIELD_NO_LIKE, "LIKE can not be used with this field.");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COMPARE, "The entered criterion can not be compared with this field.");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_DATE_COMPARE, "The field can not be compared with a date.");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_REAL_COMPARE,	"The field can not be compared with a floating point number.");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_INT_COMPARE,	"The field can not be compared with a number.");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE,	"The database does not contain a table named \"#\".");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_OR_QUERY,   "The database does contain neither a table nor a query named \"#\".");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#1\" is unknown in the table \"#2\".");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_EXIST,	"The database already contains a table or view with name \"#\".");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_QUERY_EXIST,	"The database already contains a query with name \"#\".");
-
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_NULL, "NULL");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_TRUE, "True");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_FALSE, "False");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_IS, "IS");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_BETWEEN, "BETWEEN");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_OR, "OR");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_AND, "AND");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_AVG, "AVG");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_COUNT, "COUNT");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_MAX, "MAX");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_MIN, "MIN");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_SUM, "SUM");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_EVERY, "EVERY");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_ANY, "ANY");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_SOME, "SOME");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_STDDEV_POP, "STDDEV_POP");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_STDDEV_SAMP, "STDDEV_SAMP");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_VAR_SAMP, "VAR_SAMP");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_VAR_POP, "VAR_POP");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_COLLECT, "COLLECT");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_FUSION, "FUSION");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_INTERSECTION, "INTERSECTION");
 
 //==========================================================================
 //= OParseContext
@@ -4362,23 +4306,23 @@ OParseContext::~OParseContext()
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OUString OParseContext::getErrorMessage(ErrorCode _eCode) const
+OUString OParseContext::getErrorMessage(ErrorCode _eCode) const
 {
-	::rtl::OUString aMsg;
+	OUString aMsg;
 	switch (_eCode)
 	{
-		case ERROR_GENERAL:					aMsg = ERROR_STR_GENERAL; break;
-		case ERROR_VALUE_NO_LIKE:			aMsg = ERROR_STR_VALUE_NO_LIKE; break;
-		case ERROR_FIELD_NO_LIKE:			aMsg = ERROR_STR_FIELD_NO_LIKE; break;
-		case ERROR_INVALID_COMPARE:			aMsg = ERROR_STR_INVALID_COMPARE; break;
-		case ERROR_INVALID_INT_COMPARE:		aMsg = ERROR_STR_INVALID_INT_COMPARE; break;
-		case ERROR_INVALID_DATE_COMPARE:	aMsg = ERROR_STR_INVALID_DATE_COMPARE; break;
-		case ERROR_INVALID_REAL_COMPARE:	aMsg = ERROR_STR_INVALID_REAL_COMPARE; break;
-		case ERROR_INVALID_TABLE:			aMsg = ERROR_STR_INVALID_TABLE; break;
-		case ERROR_INVALID_TABLE_OR_QUERY:  aMsg = ERROR_STR_INVALID_TABLE_OR_QUERY; break;
-		case ERROR_INVALID_COLUMN:			aMsg = ERROR_STR_INVALID_COLUMN; break;
-		case ERROR_INVALID_TABLE_EXIST:		aMsg = ERROR_STR_INVALID_TABLE_EXIST; break;
-		case ERROR_INVALID_QUERY_EXIST:		aMsg = ERROR_STR_INVALID_QUERY_EXIST; break;
+		case ERROR_GENERAL:					aMsg = "Syntax error in SQL expression"; break;
+		case ERROR_VALUE_NO_LIKE:			aMsg = "The value #1 can not be used with LIKE."; break;
+		case ERROR_FIELD_NO_LIKE:			aMsg = "LIKE can not be used with this field."; break;
+		case ERROR_INVALID_COMPARE:			aMsg = "The entered criterion can not be compared with this field."; break;
+		case ERROR_INVALID_INT_COMPARE:		aMsg = "The field can not be compared with a number."; break;
+		case ERROR_INVALID_DATE_COMPARE:	aMsg = "The field can not be compared with a date."; break;
+		case ERROR_INVALID_REAL_COMPARE:	aMsg = "The field can not be compared with a floating point number."; break;
+		case ERROR_INVALID_TABLE:			aMsg = "The database does not contain a table named \"#\"."; break;
+		case ERROR_INVALID_TABLE_OR_QUERY:  aMsg = "The database does contain neither a table nor a query named \"#\"."; break;
+		case ERROR_INVALID_COLUMN:			aMsg = "The column \"#1\" is unknown in the table \"#2\"."; break;
+		case ERROR_INVALID_TABLE_EXIST:		aMsg = "The database already contains a table or view with name \"#\"."; break;
+		case ERROR_INVALID_QUERY_EXIST:		aMsg = "The database already contains a query with name \"#\"."; break;
         default:
             OSL_FAIL( "OParseContext::getErrorMessage: unknown error code!" );
             break;
@@ -4387,35 +4331,35 @@ OParseContext::~OParseContext()
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OString OParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
+OString OParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 {
-	::rtl::OString aKeyword;
+	OString aKeyword;
 	switch (_eKey)
 	{
-		case KEY_LIKE:		aKeyword = KEY_STR_LIKE; break;
-		case KEY_NOT:		aKeyword = KEY_STR_NOT; break;
-		case KEY_NULL:		aKeyword = KEY_STR_NULL; break;
-		case KEY_TRUE:		aKeyword = KEY_STR_TRUE; break;
-		case KEY_FALSE:		aKeyword = KEY_STR_FALSE; break;
-		case KEY_IS:		aKeyword = KEY_STR_IS; break;
-		case KEY_BETWEEN:	aKeyword = KEY_STR_BETWEEN; break;
-		case KEY_OR:		aKeyword = KEY_STR_OR; break;
-		case KEY_AND:		aKeyword = KEY_STR_AND; break;
-		case KEY_AVG:		aKeyword = KEY_STR_AVG; break;
-		case KEY_COUNT:		aKeyword = KEY_STR_COUNT; break;
-		case KEY_MAX:		aKeyword = KEY_STR_MAX; break;
-		case KEY_MIN:		aKeyword = KEY_STR_MIN; break;
-		case KEY_SUM:		aKeyword = KEY_STR_SUM; break;
-        case KEY_EVERY:     aKeyword = KEY_STR_EVERY; break;
-        case KEY_ANY:       aKeyword = KEY_STR_ANY; break;
-        case KEY_SOME:      aKeyword = KEY_STR_SOME; break;
-        case KEY_STDDEV_POP: aKeyword = KEY_STR_STDDEV_POP; break;
-        case KEY_STDDEV_SAMP: aKeyword = KEY_STR_STDDEV_SAMP; break;
-        case KEY_VAR_SAMP:  aKeyword = KEY_STR_VAR_SAMP; break;
-        case KEY_VAR_POP:   aKeyword = KEY_STR_VAR_POP; break;
-        case KEY_COLLECT:   aKeyword = KEY_STR_COLLECT; break;
-        case KEY_FUSION:    aKeyword = KEY_STR_FUSION; break;
-        case KEY_INTERSECTION:aKeyword = KEY_STR_INTERSECTION; break;
+		case KEY_LIKE:		aKeyword = "LIKE"; break;
+		case KEY_NOT:		aKeyword = "NOT"; break;
+		case KEY_NULL:		aKeyword = "NULL"; break;
+		case KEY_TRUE:		aKeyword = "True"; break;
+		case KEY_FALSE:		aKeyword = "False"; break;
+		case KEY_IS:		aKeyword = "IS"; break;
+		case KEY_BETWEEN:	aKeyword = "BETWEEN"; break;
+		case KEY_OR:		aKeyword = "OR"; break;
+		case KEY_AND:		aKeyword = "AND"; break;
+		case KEY_AVG:		aKeyword = "AVG"; break;
+		case KEY_COUNT:		aKeyword = "COUNT"; break;
+		case KEY_MAX:		aKeyword = "MAX"; break;
+		case KEY_MIN:		aKeyword = "MIN"; break;
+		case KEY_SUM:		aKeyword = "SUM"; break;
+        case KEY_EVERY:     aKeyword = "EVERY"; break;
+        case KEY_ANY:       aKeyword = "ANY"; break;
+        case KEY_SOME:      aKeyword = "SOME"; break;
+        case KEY_STDDEV_POP: aKeyword = "STDDEV_POP"; break;
+        case KEY_STDDEV_SAMP: aKeyword = "STDDEV_SAMP"; break;
+        case KEY_VAR_SAMP:  aKeyword = "VAR_SAMP"; break;
+        case KEY_VAR_POP:   aKeyword = "VAR_POP"; break;
+        case KEY_COLLECT:   aKeyword = "COLLECT"; break;
+        case KEY_FUSION:    aKeyword = "FUSION"; break;
+        case KEY_INTERSECTION:aKeyword = "INTERSECTION"; break;
         case KEY_NONE:      break;
         default:
             OSL_FAIL( "OParseContext::getIntlKeywordAscii: unknown key!" );
@@ -4425,7 +4369,7 @@ OParseContext::~OParseContext()
 }
 
 //-----------------------------------------------------------------------------
-IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::OString& rToken) const
+IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const OString& rToken) const
 {
 	static IParseContext::InternationalKeyCode Intl_TokenID[] =
 	{
@@ -4440,7 +4384,7 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 	sal_uInt32 nCount = SAL_N_ELEMENTS( Intl_TokenID );
 	for (sal_uInt32 i = 0; i < nCount; i++)
 	{
-		::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
+		OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
 		if (rToken.equalsIgnoreAsciiCase(aKey))
 			return Intl_TokenID[i];
 	}
@@ -4451,11 +4395,7 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 //------------------------------------------------------------------------------
 static Locale& impl_getLocaleInstance( )
 {
-	static Locale s_aLocale(
-		::rtl::OUString( "en"  ),
-		::rtl::OUString( "US"  ),
-		::rtl::OUString( )
-	);
+	static Locale s_aLocale( "en", "US", "" );
 	return s_aLocale;
 }
 
@@ -4481,9 +4421,9 @@ const Locale& OParseContext::getDefaultLocale()
 // Member-Variable.
 
 //------------------------------------------------------------------
-::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational)
+OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational)
 {
-	::rtl::OUStringBuffer aMatchStr(0);
+	OUStringBuffer aMatchStr(0);
 	if (pTokenNode->isToken())
 	{
 		sal_Unicode cEscape = 0;
@@ -4493,7 +4433,7 @@ const Locale& OParseContext::getDefaultLocale()
 		// Platzhalter austauschen
 		aMatchStr = pTokenNode->getTokenValue();
 		const sal_Int32 nLen = aMatchStr.getLength();
-		::rtl::OUStringBuffer sSearch,sReplace;
+		OUStringBuffer sSearch,sReplace;
 		if ( bInternational )
 		{
 		    sSearch.appendAscii("%_",2);
@@ -4570,7 +4510,7 @@ void OSQLParser::setParseTree(OSQLParseNode * pNewParseTree)
     See also getComment()/concatComment() implementation for
     OQueryController::translateStatement().
  */
-static ::rtl::OUString delComment( const ::rtl::OUString& rQuery )
+static OUString delComment( const OUString& rQuery )
 {
     // First a quick search if there is any "--" or "//" or "/*", if not then the whole
     // copying loop is pointless.
@@ -4584,7 +4524,7 @@ static ::rtl::OUString delComment( const ::rtl::OUString& rQuery )
     bool bIsText2  = false;     // 'text'
     bool bComment2 = false;     // /* comment */
     bool bComment  = false;     // -- or // comment
-    ::rtl::OUStringBuffer aBuf(nQueryLen);
+    OUStringBuffer aBuf(nQueryLen);
     for (sal_Int32 i=0; i < nQueryLen; ++i)
     {
         if (bComment2)
@@ -4625,8 +4565,8 @@ static ::rtl::OUString delComment( const ::rtl::OUString& rQuery )
     return aBuf.makeStringAndClear();
 }
 //-----------------------------------------------------------------------------
-OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
-									 const ::rtl::OUString& rStatement,
+OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
+									 const OUString& rStatement,
 								     sal_Bool bInternational)
 {
 
@@ -4637,7 +4577,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	setParser(this);
 
 	// delete comments before parsing
-	::rtl::OUString sTemp = delComment(rStatement);
+	OUString sTemp = delComment(rStatement);
 
 	// defines how to scan
 	s_pScanner->SetRule(s_pScanner->GetSQLRule()); // initial
@@ -4646,7 +4586,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	SQLyylval.pParseNode = NULL;
 	//	SQLyypvt = NULL;
 	m_pParseTree = NULL;
-	m_sErrorMessage = ::rtl::OUString();
+	m_sErrorMessage = "";
 
     // start parsing
 	if (SQLyyparse() != 0)
@@ -4677,9 +4617,9 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	}
 }
 //-----------------------------------------------------------------------------
-::rtl::OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext)
+OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext)
 {
-	::rtl::OString aStr;
+	OString aStr;
 	if (pContext)
 	{
 		IParseContext::InternationalKeyCode eKeyCode = IParseContext::KEY_NONE;
@@ -4714,15 +4654,15 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 }
 
 #if OSL_DEBUG_LEVEL > 1
-::rtl::OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
+OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
 	OSL_ENSURE(nRuleID < SAL_N_ELEMENTS(yytname), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
-	return ::rtl::OUString::createFromAscii(yytname[nRuleID]);
+	return OUString::createFromAscii(yytname[nRuleID]);
 }
 #endif
 
 //-----------------------------------------------------------------------------
-sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
+sal_uInt32 OSQLParser::StrToRuleID(const OString & rValue)
 {
 	// Search for the given name in yytname and return the index
 	// (or UNKNOWN_RULE, if not found)
@@ -4817,7 +4757,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 //-----------------------------------------------------------------------------
 sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral)
 {
-	OSQLParseNode* pComp = new OSQLInternalNode(::rtl::OUString("="), SQL_NODE_EQUAL);
+	OSQLParseNode* pComp = new OSQLInternalNode("=", SQL_NODE_EQUAL);
 	return buildPredicateRule(pAppend,pLiteral,pComp);
 }
 
@@ -4828,7 +4768,7 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 	OSL_ENSURE(pLiteral->isRule(), "This is no ::com::sun::star::chaos::Rule");
 	OSL_ENSURE(pLiteral->count() == 2, "OSQLParser::ReduceLiteral() Invalid count");
 	OSQLParseNode* pTemp = pLiteral;
-	::rtl::OUStringBuffer aValue(pLiteral->getChild(0)->getTokenValue());
+	OUStringBuffer aValue(pLiteral->getChild(0)->getTokenValue());
 	if (bAppendBlank)
 	{
 		aValue.appendAscii(" ");
@@ -4845,17 +4785,17 @@ void OSQLParser::error(const sal_Char *fmt)
 {
 	if(m_sErrorMessage.isEmpty())
 	{
-		::rtl::OUString sStr(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
-		::rtl::OUString sSQL_TOKEN("SQL_TOKEN_");
+		OUString sStr(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
+		OUString sSQL_TOKEN("SQL_TOKEN_");
 
 		sal_Int32 nPos1 = sStr.indexOf(sSQL_TOKEN);
 		if(nPos1 != -1)
 		{
-			::rtl::OUString sFirst  = sStr.copy(0,nPos1);
+			OUString sFirst  = sStr.copy(0,nPos1);
 			sal_Int32 nPos2 = sStr.indexOf(sSQL_TOKEN,nPos1+1);
 			if(nPos2 != -1)
 			{
-				::rtl::OUString sSecond = sStr.copy(nPos1+sSQL_TOKEN.getLength(),nPos2-nPos1-sSQL_TOKEN.getLength());
+				OUString sSecond = sStr.copy(nPos1+sSQL_TOKEN.getLength(),nPos2-nPos1-sSQL_TOKEN.getLength());
 				sFirst  += sSecond;
 				sFirst  += sStr.copy(nPos2+sSQL_TOKEN.getLength());
 			}
@@ -4867,10 +4807,10 @@ void OSQLParser::error(const sal_Char *fmt)
 		else
 			m_sErrorMessage = sStr;
 
-		::rtl::OUString aError = s_pScanner->getErrorMessage();
+		OUString aError = s_pScanner->getErrorMessage();
 		if(!aError.isEmpty())
 		{
-			m_sErrorMessage += ::rtl::OUString(", ");
+			m_sErrorMessage += ", ";
 			m_sErrorMessage += aError;
 		}
 	}
