@@ -430,7 +430,7 @@ void  AccObject::SetValue( Any pAny )
         sal_uInt16 val;
         if (pAny >>= val)
         {
-            strValue=::rtl::OUString::valueOf((sal_Int32)val);
+            strValue=::rtl::OUString::number(val);
 
         }
     }
@@ -460,7 +460,7 @@ void  AccObject::SetValue( Any pAny )
         double val;
         if (pAny >>= val)
         {
-            strValue=::rtl::OUString::valueOf(val);
+            strValue=::rtl::OUString::number(val);
         }
     }
     else if(pAny.getValueType() == getCppuType( (sal_Int32 *)0 ) )
@@ -468,7 +468,7 @@ void  AccObject::SetValue( Any pAny )
         sal_Int32 val;
         if (pAny >>= val)
         {
-            strValue=::rtl::OUString::valueOf(val);
+            strValue=::rtl::OUString::number(val);
         }
     }
     else if (pAny.getValueType() == getCppuType( (com::sun::star::accessibility::TextSegment *)0 ) )
