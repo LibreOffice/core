@@ -35,11 +35,12 @@ ImageList DLG_STYLE_DESIGNER
     IdCount = { 3 ; };
 };
 
- // Strings ---------------------------------------------------------------
+// Strings ---------------------------------------------------------------
 String STR_STYLE_ELEMTLIST
 {
     Text [ en-US ] = "Style List" ;
 };
+
 String STR_STYLE_FILTER_HIERARCHICAL
 {
     Text [ en-US ] = "Hierarchical" ;

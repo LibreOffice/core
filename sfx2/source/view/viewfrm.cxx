@@ -676,7 +676,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( pSalvageItem )
                 {
                     aURL = pSalvageItem->GetValue();
-                    pNewSet->ClearItem( SID_DOC_SALVAGE );
+                    if (pNewSet)
+                    {
+                        pNewSet->ClearItem( SID_ORIGURL );
+                        pNewSet->ClearItem( SID_DOC_SALVAGE );
+                    }
                 }
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
@@ -3134,13 +3138,13 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
     sal_Bool bHasChild = HasChildWindow(nSID);
     sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
+    GetDispatcher()->Update_Impl( sal_True );
 
     // Perform action.
     if ( !pShowItem || bShow != bHasChild )
         ToggleChildWindow( nSID );
 
     GetBindings().Invalidate( nSID );
-    GetDispatcher()->Update_Impl( sal_True );
 
     // Record if possible.
     if ( nSID == SID_HYPERLINK_DIALOG || nSID == SID_SEARCH_DLG )
