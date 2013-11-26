@@ -17,18 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/smplhint.hxx>
 
-
 TYPEINIT1(SfxSimpleHint, SfxHint);
-
-// creates a SimpleHint with the type nId
-
-SfxSimpleHint::SfxSimpleHint( sal_uLong nIdP )
-{
-    nId = nIdP;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
