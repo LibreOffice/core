@@ -428,6 +428,7 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
 
 void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* pExcPtrs)
 {
+    (void*)pExcPtrs; // currently unused, but useful inside a debugger
     const char* pSEHName = NULL;
     switch( nSEHCode)
     {
