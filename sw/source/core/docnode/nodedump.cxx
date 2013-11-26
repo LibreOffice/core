@@ -487,14 +487,14 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                     //writer.writeFormatAttribute( "ptr", "%p", &pStartSwNode );
                     //writer.writeFormatAttribute( "type", "%d", pStartSwNode.GetNodeType() );
                     //writer.endElement( );    // swnode
-                    writer.writeFormatAttribute( "swnode_type", "%d", pStartSwNode.GetNodeType() );
+                    writer.writeFormatAttribute( "swnode_type", TMP_FORMAT, pStartSwNode.GetNodeType() );
 
                     const SwIndex&    pStartContent   = pStart->nContent;
                     //writer.startElement( "swindex" );
                     //writer.writeFormatAttribute( "ptr", "%p", &pStartContent );
                     //writer.writeFormatAttribute( "content_index", "%d", pStartContent.GetIndex() );
                     //writer.endElement( );    // swindex
-                    writer.writeFormatAttribute( "swindex_content_index", "%d", pStartContent.GetIndex() );
+                    writer.writeFormatAttribute( "swindex_content_index", TMP_FORMAT, pStartContent.GetIndex() );
                 }
                 //writer.endElement( );    // swnodeindex
             }
@@ -527,14 +527,14 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                     //writer.writeFormatAttribute( "ptr", "%p", &pEndSwNode );
                     //writer.writeFormatAttribute( "type", "%d", pEndSwNode.GetNodeType() );
                     //writer.endElement( );    // swnode
-                    writer.writeFormatAttribute( "swnode_type", "%d", pEndSwNode.GetNodeType() );
+                    writer.writeFormatAttribute( "swnode_type", TMP_FORMAT, pEndSwNode.GetNodeType() );
 
                     const SwIndex&    pEndContent   = pEnd->nContent;
                     //writer.startElement( "swindex" );
                     //writer.writeFormatAttribute( "ptr", "%p", &pEndContent );
                     //writer.writeFormatAttribute( "content_index", "%d", pEndContent.GetIndex() );
                     //writer.endElement( );    // swindex
-                    writer.writeFormatAttribute( "swindex_content_index", "%d", pEndContent.GetIndex() );
+                    writer.writeFormatAttribute( "swindex_content_index", TMP_FORMAT, pEndContent.GetIndex() );
                 }
                 //writer.endElement( );    // swnodeindex
             }
