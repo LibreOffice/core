@@ -83,6 +83,11 @@
                     <property name="id_column">1</property>
                     <property name="dropdown">False</property>
                     <property name="max_width_chars">60</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="stylename-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Style name</property>
+                      </object>
+                    </child>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="comboboxtext-entry">
                         <property name="can_focus">False</property>
