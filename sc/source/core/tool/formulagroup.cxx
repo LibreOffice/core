@@ -651,6 +651,8 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
         return bSuccess;
 #endif
     }
+#else
+    (void) bForceEvaluation;
 #endif
     return false;
 }
