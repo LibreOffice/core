@@ -5502,9 +5502,7 @@ static bool ImplHandleGetObject( HWND hWnd, LPARAM lParam, WPARAM wParam, long &
     // to avoid RFT interrupts regular accessibility processing
     if ( !pSVData->mxAccessBridge.is() )
     {
-        bool bCancelled = false;
-        InitAccessBridge( false, bCancelled );
-        if( bCancelled )
+        if( !InitAccessBridge() )
             return false;
     }
 

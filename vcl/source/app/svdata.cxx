@@ -45,13 +45,7 @@
 #include "salsys.hxx"
 #include "svids.hrc"
 
-#include "com/sun/star/accessibility/AccessBridge.hpp"
 #include "com/sun/star/accessibility/MSAAService.hpp"
-#include "com/sun/star/awt/XExtendedToolkit.hpp"
-#include "com/sun/star/java/JavaNotConfiguredException.hpp"
-#include "com/sun/star/java/JavaVMCreationFailureException.hpp"
-#include "com/sun/star/java/MissingJavaRuntimeException.hpp"
-#include "com/sun/star/java/JavaDisabledException.hpp"
 
 #include "officecfg/Office/Common.hxx"
 
@@ -78,14 +72,6 @@ SalSystem* ImplGetSalSystem()
     if( ! pSVData->mpSalSystem )
         pSVData->mpSalSystem = pSVData->mpDefInst->CreateSalSystem();
     return pSVData->mpSalSystem;
-}
-
-
-static OUString ReplaceJavaErrorMessages( const OUString& rString )
-{
-    return rString.replaceAll("%OK", Button::GetStandardText(BUTTON_OK)).
-            replaceAll("%IGNORE", Button::GetStandardText(BUTTON_IGNORE)).
-            replaceAll("%CANCEL", Button::GetStandardText(BUTTON_CANCEL));
 }
 
 // =======================================================================
@@ -298,226 +284,27 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const OUStr
 }
 
 
-bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
+bool ImplInitAccessBridge()
 {
-    rCancelled = false;
-
-    bool bErrorMessage = true;
-
-    // Note:
-    // if bAllowCancel is sal_True we were called from application startup
-    //  where we will disable any Java errorboxes and show our own accessibility dialog if Java throws an exception
-    // if bAllowCancel is sal_False we were called from Tools->Options
-    //  where we will see Java errorboxes, se we do not show our dialogs in addition to Java's
-
-    try
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->mxAccessBridge.is() )
     {
-        // No error messages when env var is set ..
-        static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
-        if( pEnv && *pEnv )
-        {
-            bErrorMessage = false;
-        }
+        css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
 
-        ImplSVData* pSVData = ImplGetSVData();
-        if( ! pSVData->mxAccessBridge.is() )
-        {
-            css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
-
-            bool bTryIAcc2 = ( officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) &&
-                               !getenv ("SAL_DISABLE_IACCESSIBLE2") );
-
-            if ( bTryIAcc2 ) // Windows only really
-            {
-                try {
-                    pSVData->mxAccessBridge
-                        = css::accessibility::MSAAService::create(xContext);
-                    SAL_INFO("vcl", "got IAccessible2 bridge");
-                    return true;
-                } catch (css::uno::DeploymentException & e) {
-                    SAL_INFO(
-                        "vcl",
-                        "got no IAccessible2 bridge, \"" << e.Message
-                            << "\", falling back to java");
-                }
-            }
-            else
-                SAL_INFO( "vcl", "IAccessible2 disabled, falling back to java" );
-
-            css::uno::Reference< XExtendedToolkit > xToolkit =
-                css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
-
-            // Disable default java error messages on startup, because they were probably unreadable
-            // for a disabled user. Use native message boxes which are accessible without java support.
-            // No need to do this when activated by Tools-Options dialog ..
-            if( bAllowCancel )
-            {
-                // customize the java-not-available-interaction-handler entry within the
-                // current context when called at startup.
-                com::sun::star::uno::ContextLayer layer(
-                    new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
-
-                pSVData->mxAccessBridge
-                    = css::accessibility::AccessBridge::createWithToolkit(
-                        xContext, xToolkit);
-            }
-            else
-            {
-                pSVData->mxAccessBridge
-                    = css::accessibility::AccessBridge::createWithToolkit(
-                        xContext, xToolkit);
-            }
-        }
-
-        return true;
+         try {
+             pSVData->mxAccessBridge
+                 = css::accessibility::MSAAService::create(xContext);
+             SAL_INFO("vcl", "got IAccessible2 bridge");
+             return true;
+         } catch (css::uno::DeploymentException & e) {
+             SAL_WARN(
+                 "vcl",
+                 "got no IAccessible2 bridge" << e.Message);
+             return false;
+         }
     }
-    catch (const ::com::sun::star::java::JavaNotConfiguredException&)
-    {
-        ResMgr *pResMgr = ImplGetResMgr();
-        if( bErrorMessage && bAllowCancel && pResMgr )
-        {
-            OUString aTitle(ResId(SV_ACCESSERROR_JAVA_NOT_CONFIGURED, *pResMgr).toString());
-            OUStringBuffer aMessage((ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr)).toString());
 
-            aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
-
-            int ret = ImplGetSalSystem()->ShowNativeMessageBox(
-                aTitle,
-                ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
-
-            // Do not change the setting in case the user chooses to cancel
-            if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = true;
-        }
-
-        return false;
-    }
-    catch (const ::com::sun::star::java::JavaVMCreationFailureException&)
-    {
-        ResMgr *pResMgr = ImplGetResMgr();
-        if( bErrorMessage && bAllowCancel && pResMgr )
-        {
-            OUString aTitle(ResId(SV_ACCESSERROR_FAULTY_JAVA, *pResMgr).toString());
-            OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
-
-            aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
-
-            int ret = ImplGetSalSystem()->ShowNativeMessageBox(
-                aTitle,
-                ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
-
-            // Do not change the setting in case the user chooses to cancel
-            if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = true;
-        }
-
-        return false;
-    }
-    catch (const ::com::sun::star::java::MissingJavaRuntimeException&)
-    {
-        ResMgr *pResMgr = ImplGetResMgr();
-        if( bErrorMessage && bAllowCancel && pResMgr )
-        {
-            OUString aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, *pResMgr).toString());
-            OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
-
-            aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
-
-            int ret = ImplGetSalSystem()->ShowNativeMessageBox(
-                aTitle,
-                ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
-
-            // Do not change the setting in case the user chooses to cancel
-            if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = true;
-        }
-
-        return false;
-    }
-    catch (const ::com::sun::star::java::JavaDisabledException&)
-    {
-        ResMgr *pResMgr = ImplGetResMgr();
-        if( bErrorMessage && bAllowCancel && pResMgr )
-        {
-            OUString aTitle(ResId(SV_ACCESSERROR_JAVA_DISABLED, *pResMgr).toString());
-            OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
-
-            aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
-
-            int ret = ImplGetSalSystem()->ShowNativeMessageBox(
-                aTitle,
-                ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
-
-            // Do not change the setting in case the user chooses to cancel
-            if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = true;
-        }
-
-        return false;
-    }
-    catch (const ::com::sun::star::uno::RuntimeException& e)
-    {
-        ResMgr *pResMgr = ImplGetResMgr();
-        if( bErrorMessage && pResMgr )
-        {
-            OUString aTitle;
-            OUStringBuffer aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr).toString());
-
-            if( e.Message.startsWith("ClassNotFound") )
-            {
-                aTitle = ResId(SV_ACCESSERROR_MISSING_BRIDGE, *pResMgr).toString();
-            }
-            else if( e.Message.startsWith("NoSuchMethod") )
-            {
-                aTitle = ResId(SV_ACCESSERROR_WRONG_VERSION, *pResMgr).toString();
-            }
-
-            if (!aTitle.isEmpty())
-            {
-                if( bAllowCancel )
-                {
-                    // Something went wrong initializing the Java AccessBridge (on Windows) during the
-                    // startup. Since the office will be probably unusable for a disabled user, we offer
-                    // to terminate directly.
-                    aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
-
-                    int ret = ImplGetSalSystem()->ShowNativeMessageBox(
-                        aTitle,
-                        ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
-                        SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
-                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, true);
-
-                    // Do not change the setting in case the user chooses to cancel
-                    if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                        rCancelled = sal_True;
-                }
-                else
-                {
-                    // The user tried to activate accessibility support using Tools-Options dialog,
-                    // so we don't offer to terminate here !
-                    ImplGetSalSystem()->ShowNativeMessageBox(
-                        aTitle,
-                        ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
-                        SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
-                        SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK, true);
-                }
-            }
-        }
-
-        return false;
-    }
-    catch (...)
-    {
-        return false;
-    }
+    return true;
 }
 
 // -----------------------------------------------------------------------
