@@ -25,7 +25,6 @@ export LIBATOMIC_OPS_TARBALL := libatomic_ops-7_2d.zip
 LIBEOT_MD5SUM := aa24f5dd2a2992f4a116aa72af817548
 export LIBEOT_TARBALL := libeot-0.01.tar.bz2
 
-export AFMS_TARBALL := 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
 export APACHE_COMMONS_HTTPCLIENT_TARBALL := 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
 export APACHE_COMMONS_LANG_TARBALL := 625ff5f2f968dd908bca43c9469d6e6b-commons-lang-2.4-src.tar.gz

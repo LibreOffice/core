@@ -117,7 +117,7 @@ copy-stuff:
 	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
 # presets - becomes the users home directory, .stamp forces .zip dir creation
 	for D in $(strip autocorr autotext backup basic config gallery \
-	         psprint/driver psprint/fontmetric template \
+	         psprint/driver template \
 		 uno_packages/cache wordbook); do \
 		mkdir -p assets/presets/$$D ; \
 		echo "content" > assets/presets/$$D/stamp; \

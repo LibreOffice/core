@@ -88,7 +88,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
-		$(call fetch_Optional,AFMS,$(AFMS_TARBALL)) \
 		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_CODEC_TARBALL)) \
 		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_HTTPCLIENT_TARBALL)) \
 		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_LANG_TARBALL)) \

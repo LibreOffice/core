@@ -1396,13 +1396,6 @@ AC_ARG_WITH(ppds,
          PPDs are known to be already available (every recent distro with CUPS backend).]),
 ,)
 
-AC_ARG_WITH(afms,
-    AS_HELP_STRING([--without-afms],
-        [Removes bitmap font files from LibreOffice installation set, for people
-         building for specific distributions where AFM files or TrueType Fonts
-         are known to be available.]),
-,)
-
 AC_ARG_WITH(epm,
     AS_HELP_STRING([--with-epm],
         [Decides which epm to use. Default is to use the one from the system if
@@ -11481,20 +11474,6 @@ else
     SCPDEFS="$SCPDEFS -DWITHOUT_PPDS"
 fi
 AC_SUBST(WITHOUT_PPDS)
-
-dnl ===================================================================
-dnl Test whether to include afms
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include AFMs])
-if test "$with_afms" != "no"; then
-    AC_MSG_RESULT([yes])
-    BUILD_TYPE="$BUILD_TYPE AFMS"
-else
-    AC_MSG_RESULT([no])
-    WITHOUT_AFMS=YES
-    SCPDEFS="$SCPDEFS -DWITHOUT_AFMS"
-fi
-AC_SUBST(WITHOUT_AFMS)
 
 dnl ===================================================================
 dnl Test whether to include extra galleries
