@@ -253,7 +253,7 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
     if ( rNewFilter != aFilterName )
         aOptions = "";
 
-    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, pFilter);
+    SfxMedium* pMed = ScDocumentLoader::CreateMedium( aNewUrl, pFilter, aOptions);
 
     // aRef->DoClose() will be closed explicitly, but it is still more safe to use SfxObjectShellLock here
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
