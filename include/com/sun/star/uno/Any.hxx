@@ -598,7 +598,7 @@ sal_uInt16 Any::get<sal_uInt16>() const;
    @since LibreOffice 4.2
 */
 template<typename charT, typename traits>
-inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &o, Any &any) {
+inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &o, Any const &any) {
     o << "<Any: (" << any.getValueTypeName() << ')';
     switch(any.pType->eTypeClass) {
         case typelib_TypeClass_VOID:
