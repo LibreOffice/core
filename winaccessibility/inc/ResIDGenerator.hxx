@@ -29,27 +29,21 @@ class ResIDGenerator
 {
 private:
 
-    long min;
     long max;
     std::deque<long> subList;
 
 public:
 
-    ResIDGenerator( long minNum = PRIMARY_RESID,long maxNum = PRIMARY_RESID);
+    ResIDGenerator(long maxNum = PRIMARY_RESID)
+        : max(maxNum) {}
+    ~ResIDGenerator();
     long GenerateNewResID();
     void SetSub(long number)
     {
         subList.push_back(number);
     };
-    virtual ~ResIDGenerator();
 
 };
-
-inline ResIDGenerator::ResIDGenerator( long minNum ,long maxNum )
-{
-    min = minNum;
-    max = maxNum;
-}
 
 #endif
 
