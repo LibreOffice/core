@@ -492,6 +492,10 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
             sMediaType = "image/x-pict";
             pExtension = ".pct";
             break;
+        case GFX_LINK_TYPE_NATIVE_MOV:
+            sMediaType = "application/movie";
+            pExtension = ".MOV";
+            break;
         default: {
             GraphicType aType = rGraphic.GetType();
             if ( aType == GRAPHIC_BITMAP ) {

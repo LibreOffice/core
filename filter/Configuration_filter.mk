@@ -734,6 +734,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_types.xcu,
 	graphic_SWF \
 	jpg_JPEG \
 	met_OS2_Metafile \
+        mov_MOV \
 	pbm_Portable_Bitmap \
 	pcd_Photo_CD_Base \
 	pcd_Photo_CD_Base16 \
@@ -764,6 +765,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_filters.
 	GIF___Graphics_Interchange \
 	JPG___JPEG \
 	MET___OS_2_Metafile \
+	mov__MOV \
 	PBM___Portable_Bitmap \
 	PCT___Mac_Pict \
 	PCX___Zsoft_Paintbrush \
@@ -880,6 +882,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics_types.
 	gif_Graphics_Interchange \
 	jpg_JPEG \
 	met_OS2_Metafile \
+        mov_MOV \
 	pbm_Portable_Bitmap \
 	pcd_Photo_CD_Base \
 	pcd_Photo_CD_Base16 \
@@ -947,6 +950,7 @@ $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgrap
 	xbm_Import \
 	xpm_Export \
 	xpm_Import \
+        mov_Import \
 )
 
 # fcfg_xslt
