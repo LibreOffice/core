@@ -94,8 +94,6 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
             pAgent->IncreaseState( pAcc, AccessibleStateType::FOCUSED);
 
             pAgent->NotifyAccEvent(UM_EVENT_ACTIVE_DESCENDANT_CHANGED, pAcc);
-
-            m_xActiveDescendant = xChild;
         }
     }
     if (oldValue >>= xChild)
