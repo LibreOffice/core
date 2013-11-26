@@ -19,12 +19,8 @@
 
 #include "ResIDGenerator.hxx"
 
-/**
-   * Destructor
-   *
-   * @param
-   * @return
-   */
+#include <cassert>
+
 ResIDGenerator::~ResIDGenerator()
 {
 }
@@ -39,15 +35,13 @@ ResIDGenerator::~ResIDGenerator()
    */
 long ResIDGenerator::GenerateNewResID()
 {
-    if (max == LONG_MAX)
+    if (!subList.empty())
     {
-        if (!subList.empty())
-        {
-            long nRes = *(subList.begin());
-            subList.pop_front();
-            return nRes;
-        }
+        long nRes = *(subList.begin());
+        subList.pop_front();
+        return nRes;
     }
+    assert(max < LONG_MAX);
     return -(++max);
 }
 
