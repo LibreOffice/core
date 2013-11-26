@@ -26,9 +26,6 @@ $(eval $(call gb_UnoApi_use_api,offapi,\
 ))
 
 
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/accessibility,\
-	AccessBridge \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/animations,\
 	AnimateColor \
 	AnimateMotion \

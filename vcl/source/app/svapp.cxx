@@ -1614,17 +1614,15 @@ void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
     pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType, rDocumentService);
 }
 
-bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
+bool InitAccessBridge()
 {
-// Disable Java bridge on UNIX
+// Disable MSAA bridge on UNIX
 #if defined UNX
-    (void) bShowCancel; // unused
-    (void) rCancelled; // unused
     return true;
 #else
-    bool bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
+    bool bRet = ImplInitAccessBridge();
 
-    if( !bRet && bShowCancel && !rCancelled )
+    if( !bRet )
     {
         // disable accessibility if the user chooses to continue
         AllSettings aSettings = Application::GetSettings();

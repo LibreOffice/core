@@ -142,7 +142,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	uui \
 	vbahelper \
 	vcl \
-	$(if $(ENABLE_IA2),winaccessibility) \
+	winaccessibility \
 	wizards \
 	writerfilter \
 	writerperfect \
