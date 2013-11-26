@@ -35,12 +35,13 @@ private:
     XHatchListRef       mpHatchingList;
     XBitmapListRef      mpBitmapList;
 
+    sal_uInt16          m_nAreaPageId;
+
 protected:
     virtual void Apply();
 
 public:
     SvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel );
-    ~SvxFormatCellsDialog();
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 

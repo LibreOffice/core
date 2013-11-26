@@ -28,47 +28,37 @@
 #include <svx/dialogs.hrc>
 
 SvxFormatCellsDialog::SvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel )
-: SfxTabDialog        ( pParent, CUI_RES( RID_SVX_FORMAT_CELLS_DLG ), pAttr )
-, mrOutAttrs            ( *pAttr )
-, mpColorTab           ( pModel->GetColorList() )
-, mpGradientList       ( pModel->GetGradientList() )
-, mpHatchingList       ( pModel->GetHatchList() )
-, mpBitmapList         ( pModel->GetBitmapList() )
-
+    : SfxTabDialog(pParent, "FormatCellsDialog", "cui/ui/formatcellsdialog.ui", pAttr)
+    , mrOutAttrs(*pAttr)
+    , mpColorTab(pModel->GetColorList())
+    , mpGradientList(pModel->GetGradientList())
+    , mpHatchingList(pModel->GetHatchList())
+    , mpBitmapList(pModel->GetBitmapList())
+    , m_nAreaPageId(0)
 {
-    FreeResource();
-
-    AddTabPage( RID_SVXPAGE_CHAR_NAME );
-    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
-    AddTabPage( RID_SVXPAGE_BORDER );
-    AddTabPage( RID_SVXPAGE_AREA );
-}
-
-SvxFormatCellsDialog::~SvxFormatCellsDialog()
-{
+    AddTabPage("name", RID_SVXPAGE_CHAR_NAME);
+    AddTabPage("effects", RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage("border", RID_SVXPAGE_BORDER );
+    m_nAreaPageId = AddTabPage("area", RID_SVXPAGE_AREA);
 }
 
 void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    switch( nId )
+    if (nId == m_nAreaPageId)
     {
-        case RID_SVXPAGE_AREA:
-            ( (SvxAreaTabPage&) rPage ).SetColorList( mpColorTab );
-            ( (SvxAreaTabPage&) rPage ).SetGradientList( mpGradientList );
-            ( (SvxAreaTabPage&) rPage ).SetHatchingList( mpHatchingList );
-            ( (SvxAreaTabPage&) rPage ).SetBitmapList( mpBitmapList );
-            ( (SvxAreaTabPage&) rPage ).SetPageType( PT_AREA );
-            ( (SvxAreaTabPage&) rPage ).SetDlgType( 1 );
-            ( (SvxAreaTabPage&) rPage ).SetPos( 0 );
-            ( (SvxAreaTabPage&) rPage ).Construct();
-            ( (SvxAreaTabPage&) rPage ).ActivatePage( mrOutAttrs );
-
-        break;
-
-        default:
-            SfxTabDialog::PageCreated( nId, rPage );
-            break;
+        SvxAreaTabPage& rAreaPage = ((SvxAreaTabPage&)rPage);
+        rAreaPage.SetColorList( mpColorTab );
+        rAreaPage.SetGradientList( mpGradientList );
+        rAreaPage.SetHatchingList( mpHatchingList );
+        rAreaPage.SetBitmapList( mpBitmapList );
+        rAreaPage.SetPageType( PT_AREA );
+        rAreaPage.SetDlgType( 1 );
+        rAreaPage.SetPos( 0 );
+        rAreaPage.Construct();
+        rAreaPage.ActivatePage( mrOutAttrs );
     }
+    else
+        SfxTabDialog::PageCreated( nId, rPage );
 }
 
 void SvxFormatCellsDialog::Apply()

@@ -41,6 +41,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/connpooloptions \
 	cui/uiconfig/ui/dbregisterpage \
 	cui/uiconfig/ui/effectspage \
+	cui/uiconfig/ui/formatcellsdialog \
 	cui/uiconfig/ui/hatchpage \
 	cui/uiconfig/ui/hyphenate \
 	cui/uiconfig/ui/insertfloatingframe \

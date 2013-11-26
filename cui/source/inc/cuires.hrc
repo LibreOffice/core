@@ -39,10 +39,6 @@
 #define RID_CUI_GALLERY_START               (RID_SVX_START + 360)
 //      RID_CUI_GALLERY_END                 (RID_SVX_START + 410)
 
-// tab pages
-// used in "dialogs"
-#define RID_SVX_FORMAT_CELLS_DLG            ( RID_SVX_START + 42 )
-
 // used in "tabpages"
 #define RID_SVXDLG_LINE                     (RID_SVX_START +  50)
 #define RID_SVXDLG_BBDLG                    (RID_SVX_START +  40)
