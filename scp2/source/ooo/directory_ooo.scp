@@ -433,15 +433,6 @@ End
 
 #endif
 
-#ifdef UNX
-
-Directory gid_Dir_Psprint_Fontmetric
-    ParentID = gid_Dir_Psprint;
-    DosName = "fontmetric";
-End
-
-#endif
-
 /* *** Accessories Extras *** */
 
 /* ** Gallery ** */

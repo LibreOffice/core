@@ -96,19 +96,6 @@ End
 
 #ifdef UNX
 
-#ifndef WITHOUT_AFMS
-File gid_File_Extra_Fontunxafm
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "afms_fontunxafm.filelist";
-End
-#endif
-
-#endif
-
-#ifdef UNX
-
 #ifndef WITHOUT_PPDS
 File gid_File_Extra_Fontunxppds
     Dir = FILELIST_DIR;
