@@ -108,89 +108,85 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_uInt16 nIndex, sal_Bool /*bInCell*/ )
+sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_uInt16 nIndex, sal_Bool bInCell )
 {
     // IA2 CWS introduced bInCell, but also did many other changes here.
     // Need to verify implementation with AT (IA2 and ATK)
     // Old implementation at the end of the method for reference...
 
-#if 0 // IA2 CWS
-
     //added dummy attributes for the default text
-    EECharAttribArray aCharAttribs, aTempCharAttribs;
+    std::vector<EECharAttrib> aCharAttribs, aTempCharAttribs;
     rEE.GetCharAttribs( nPara, aTempCharAttribs );
-    if ( aTempCharAttribs.Count() )
+
+    if (!aTempCharAttribs.empty())
     {
         sal_uInt32 nIndex2 = 0;
         sal_uInt32 nParaLen = rEE.GetTextLen(nPara);
-        for ( sal_uInt16 nAttr = 0; nAttr < aTempCharAttribs.Count(); nAttr++ )
+        for (size_t nAttr = 0; nAttr < aTempCharAttribs.size(); ++nAttr)
         {
-            if ( nIndex2 < aTempCharAttribs[nAttr].nStart )
+            if (nIndex2 < aTempCharAttribs[nAttr].nStart)
             {
                 EECharAttrib aEEAttr;
-                aEEAttr.nStart = sal_uInt16(nIndex2);
+                aEEAttr.nStart = nIndex2;
                 aEEAttr.nEnd = aTempCharAttribs[nAttr].nStart;
-                aCharAttribs.Insert( aEEAttr, nAttr );
+                aCharAttribs.insert(aCharAttribs.begin() + nAttr, aEEAttr);
             }
             nIndex2 = aTempCharAttribs[nAttr].nEnd;
-            aCharAttribs.Insert( aTempCharAttribs[nAttr], aCharAttribs.Count() );
+            aCharAttribs.push_back(aTempCharAttribs[nAttr]);
         }
         if ( nIndex2 != nParaLen )
         {
             EECharAttrib aEEAttr;
-            aEEAttr.nStart = sal_uInt16(nIndex2);
-            aEEAttr.nEnd = sal_uInt16(nParaLen);
-            aCharAttribs.Insert( aEEAttr, aCharAttribs.Count() );
+            aEEAttr.nStart = nIndex2;
+            aEEAttr.nEnd = nParaLen;
+            aCharAttribs.push_back(aEEAttr);
         }
     }
     // find closest index in front of nIndex
-    sal_uInt16 nAttr, nCurrIndex;
-    sal_Int32 nClosestStartIndex;
-    sal_Int32 nClosestStartIndex_s, nClosestStartIndex_e;
-    for( nAttr=0, nClosestStartIndex_s=0, nClosestStartIndex_e=0; nAttr<aCharAttribs.Count(); ++nAttr )
+    sal_uInt16 nCurrIndex;
+    sal_Int32 nClosestStartIndex_s = 0, nClosestStartIndex_e = 0;
+    for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
     {
-        nCurrIndex = aCharAttribs[nAttr].nStart;
-
-        //if( nCurrIndex > nIndex )
-        //    break; // aCharAttribs array is sorted in increasing order for nStart values
+        nCurrIndex = i->nStart;
 
         if( nCurrIndex > nClosestStartIndex_s &&
             nCurrIndex <= nIndex)
         {
             nClosestStartIndex_s = nCurrIndex;
         }
-        nCurrIndex = aCharAttribs[nAttr].nEnd;
+        nCurrIndex = i->nEnd;
         if ( nCurrIndex > nClosestStartIndex_e &&
             nCurrIndex < nIndex )
         {
             nClosestStartIndex_e = nCurrIndex;
         }
     }
-    nClosestStartIndex = nClosestStartIndex_s > nClosestStartIndex_e ? nClosestStartIndex_s : nClosestStartIndex_e;
+    sal_Int32 nClosestStartIndex = nClosestStartIndex_s > nClosestStartIndex_e ? nClosestStartIndex_s : nClosestStartIndex_e;
 
     // find closest index behind of nIndex
-    sal_Int32 nClosestEndIndex;
     sal_Int32 nClosestEndIndex_s, nClosestEndIndex_e;
-    for( nAttr=0, nClosestEndIndex_s=nClosestEndIndex_e=rEE.GetTextLen(nPara); nAttr<aCharAttribs.Count(); ++nAttr )
+    nClosestEndIndex_s = nClosestEndIndex_e = rEE.GetTextLen(nPara);
+    for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
     {
-        nCurrIndex = aCharAttribs[nAttr].nEnd;
+        nCurrIndex = i->nEnd;
 
         if( nCurrIndex > nIndex &&
             nCurrIndex < nClosestEndIndex_e )
         {
             nClosestEndIndex_e = nCurrIndex;
         }
-        nCurrIndex = aCharAttribs[nAttr].nStart;
+        nCurrIndex = i->nStart;
         if ( nCurrIndex > nIndex &&
             nCurrIndex < nClosestEndIndex_s)
         {
             nClosestEndIndex_s = nCurrIndex;
         }
     }
-    nClosestEndIndex = nClosestEndIndex_s < nClosestEndIndex_e ? nClosestEndIndex_s : nClosestEndIndex_e;
+    sal_Int32 nClosestEndIndex = nClosestEndIndex_s < nClosestEndIndex_e ? nClosestEndIndex_s : nClosestEndIndex_e;
 
     nStartIndex = static_cast<sal_uInt16>( nClosestStartIndex );
     nEndIndex = static_cast<sal_uInt16>( nClosestEndIndex );
+
     if ( bInCell )
     {
         EPosition aStartPos( nPara, nStartIndex ), aEndPos( nPara, nEndIndex );
@@ -256,52 +252,15 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
         nEndIndex = 0;
         if ( aEndPos.nPara > 0 )
         {
-            for ( sal_uInt16 i = 0; i < aEndPos.nPara; i++ )
-            {
-                nEndIndex += rEE.GetTextLen(i)+1;
-            }
+           for ( sal_uInt16 i = 0; i < aEndPos.nPara; i++ )
+           {
+               nEndIndex += rEE.GetTextLen(i)+1;
+           }
         }
         nEndIndex += aEndPos.nIndex;
     }
 
     return sal_True;
-
-#else // old implementation
-    std::vector<EECharAttrib> aCharAttribs;
-
-    rEE.GetCharAttribs( nPara, aCharAttribs );
-
-    // find closest index in front of nIndex
-    sal_uInt16 nCurrIndex;
-    sal_Int32 nClosestStartIndex = 0;
-    for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
-    {
-        nCurrIndex = i->nStart;
-
-        if( nCurrIndex > nIndex )
-            break; // aCharAttribs array is sorted in increasing order for nStart values
-        else if( nCurrIndex > nClosestStartIndex )
-        {
-            nClosestStartIndex = nCurrIndex;
-        }
-    }
-
-    // find closest index behind of nIndex
-    sal_Int32 nClosestEndIndex = rEE.GetTextLen(nPara);
-    for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
-    {
-        nCurrIndex = i->nEnd;
-
-        if( nCurrIndex > nIndex && nCurrIndex < nClosestEndIndex )
-            nClosestEndIndex = nCurrIndex;
-    }
-
-    nStartIndex = static_cast<sal_uInt16>( nClosestStartIndex );
-    nEndIndex = static_cast<sal_uInt16>( nClosestEndIndex );
-
-    return sal_True;
-
-#endif
 }
 
 Point SvxEditSourceHelper::EEToUserSpace( const Point& rPoint, const Size& rEESize, bool bIsVertical )
