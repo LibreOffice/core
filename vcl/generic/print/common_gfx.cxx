@@ -60,12 +60,6 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
     mnDpi = rPrinterJob.GetResolution();
     rPrinterJob.GetScale (mfScaleX, mfScaleY);
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rPrinterJob.GetPrinterName() ) );
-    if( mpFontSubstitutes )
-        delete const_cast< ::boost::unordered_map<fontID,fontID>* >(mpFontSubstitutes);
-    if( rInfo.m_bPerformFontSubstitution )
-        mpFontSubstitutes = new ::boost::unordered_map< fontID, fontID >( rInfo.m_aFontSubstitutions );
-    else
-        mpFontSubstitutes = NULL;
     mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? sal_True : sal_False ) : sal_False;
 
     return sal_True;
@@ -84,12 +78,6 @@ PrinterGfx::Init (const JobData& rData)
     mfScaleX        = (double)72.0 / (double)mnDpi;
     mfScaleY        = (double)72.0 / (double)mnDpi;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
-    if( mpFontSubstitutes )
-        delete const_cast< ::boost::unordered_map<fontID,fontID>* >(mpFontSubstitutes);
-    if( rInfo.m_bPerformFontSubstitution )
-        mpFontSubstitutes = new ::boost::unordered_map< fontID, fontID >( rInfo.m_aFontSubstitutions );
-    else
-        mpFontSubstitutes = NULL;
     mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? sal_True : sal_False ) : sal_False;
 
     return sal_True;
@@ -112,8 +100,7 @@ PrinterGfx::PrinterGfx() :
         mbCompressBmp (sal_True),
         maFillColor (0xff,0,0),
         maTextColor (0,0,0),
-        maLineColor (0, 0xff, 0),
-        mpFontSubstitutes( NULL )
+        maLineColor (0, 0xff, 0)
 {
     maVirtualStatus.mfLineWidth = 1.0;
     maVirtualStatus.mnTextHeight = 12;
@@ -124,16 +111,6 @@ PrinterGfx::PrinterGfx() :
 
 PrinterGfx::~PrinterGfx()
 {
-    /*
-     *  the original reasoning why mpFontSubstitutes is a pointer was
-     *  that applications should release all PrinterGfx when printers change
-     *  because they are really invalid; the corresponding printers may have
-     *  changed their settings or even not exist anymore.
-     *
-     *  Alas, this is not always done real time. So we keep a local copy of
-     *  the font substitutes now in case of bad timing.
-     */
-    delete const_cast< ::boost::unordered_map<fontID,fontID>* >(mpFontSubstitutes);
 }
 
 void

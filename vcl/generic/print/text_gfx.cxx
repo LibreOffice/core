@@ -36,42 +36,39 @@ using namespace psp ;
 namespace psp {
 /*
  container for a font and its helper fonts:
- 1st font is the font substitute e.g. helvetica substitutes arial on the printer
- 2nd is the font itself
- 3rd is a fallback font, usually a font with unicode glyph repertoir (e.g. andale)
+ 1st is the font itself
+ 2nd is a fallback font, usually a font with unicode glyph repertoir (e.g. andale)
  symbol fonts (adobe-fontspecific) may need special glyphmapping
  (symbol page vc. latin page)
 */
-class Font3
+class Font2
 {
     private:
 
-        #define Font3Size 3
+        #define Font2Size 2
 
-        fontID  mpFont [Font3Size];
+        fontID  mpFont [Font2Size];
         bool    mbSymbol;
 
     public:
 
         fontID  GetFont (int nIdx) const
-                    { return nIdx < Font3Size ? mpFont[nIdx] : -1 ; }
+                    { return nIdx < Font2Size ? mpFont[nIdx] : -1 ; }
         bool    IsSymbolFont () const
                     { return mbSymbol; }
 
-        Font3 (const PrinterGfx &rGfx);
-        ~Font3 () {}
+        Font2 (const PrinterGfx &rGfx);
+        ~Font2 () {}
 };
 
-Font3::Font3(const PrinterGfx &rGfx)
+Font2::Font2(const PrinterGfx &rGfx)
 {
-    mpFont[0] = rGfx.getFontSubstitute();
-    mpFont[1] = rGfx.GetFontID();
-    mpFont[2] = rGfx.getFallbackID();
-    // mpFont[2] = rGfx.GetFontID();
+    mpFont[0] = rGfx.GetFontID();
+    mpFont[1] = rGfx.getFallbackID();
 
-       PrintFontManager &rMgr = PrintFontManager::get();
-    mbSymbol = mpFont[1] != -1 ?
-                rMgr.getFontEncoding(mpFont[1]) == RTL_TEXTENCODING_SYMBOL : false;
+    PrintFontManager &rMgr = PrintFontManager::get();
+    mbSymbol = mpFont[0] != -1 ?
+                rMgr.getFontEncoding(mpFont[0]) == RTL_TEXTENCODING_SYMBOL : false;
 }
 
 } // namespace psp
@@ -311,7 +308,7 @@ PrinterGfx::DrawText (
 
     // setup font[substitutes] and map the string into the symbol area in case of
     // symbol font
-    Font3 aFont(*this);
+    Font2 aFont(*this);
     sal_Unicode *pEffectiveStr;
     if ( aFont.IsSymbolFont() )
     {
@@ -610,12 +607,12 @@ PrinterGfx::getCharWidth (sal_Bool b_vert, sal_Unicode n_char, CharacterMetric *
 }
 
 fontID
-PrinterGfx::getCharMetric (const Font3 &rFont, sal_Unicode n_char, CharacterMetric *p_bbox)
+PrinterGfx::getCharMetric (const Font2 &rFont, sal_Unicode n_char, CharacterMetric *p_bbox)
 {
     p_bbox->width  = -1;
     p_bbox->height = -1;
 
-    for (fontID n = 0; n < 3; n++)
+    for (fontID n = 0; n < Font2Size; n++)
     {
         fontID n_font = rFont.GetFont(n);
         if (n_font != -1)
@@ -629,24 +626,10 @@ PrinterGfx::getCharMetric (const Font3 &rFont, sal_Unicode n_char, CharacterMetr
     return rFont.GetFont(0) != -1 ? rFont.GetFont(0) : rFont.GetFont(1);
 }
 
-fontID
-PrinterGfx::getFontSubstitute () const
-{
-    if( mpFontSubstitutes )
-    {
-        ::boost::unordered_map< fontID, fontID >::const_iterator it =
-              mpFontSubstitutes->find( mnFontID );
-        if( it != mpFontSubstitutes->end() )
-            return it->second;
-    }
-
-    return -1;
-}
-
 sal_Int32
 PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
 {
-    Font3 aFont(*this);
+    Font2 aFont(*this);
     if (aFont.IsSymbolFont() && (nFrom < 256) && (nTo < 256))
     {
         nFrom += 0xF000;
@@ -684,7 +667,7 @@ PrinterGfx::OnEndJob ()
 }
 
 void
-PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts, std::list< OString >& rNeededFonts )
+PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts )
 {
     // write all type 1 fonts
     std::list< sal_Int32 >::iterator aFont;
@@ -739,11 +722,6 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFon
         //  || aIter->GetFontType() == fonttype::Builtin )
         {
             aIter->PSUploadEncoding (pFile, *this);
-            if( aIter->GetFontType() == fonttype::Builtin )
-                rNeededFonts.push_back(
-                      OUStringToOString(
-                           mrFontMgr.getPSName( aIter->GetFontID() ),
-                           RTL_TEXTENCODING_ASCII_US ) );
         }
     }
 }

@@ -122,11 +122,6 @@ bool PrinterInfoManager::addOrRemovePossible() const
     return false;
 }
 
-void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& /* rInfo */ ) const
-{
-
-}
-
 void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& /* rCommands */ )
 {
 

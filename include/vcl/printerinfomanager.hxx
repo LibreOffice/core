@@ -50,24 +50,9 @@ struct PrinterInfo : JobData
     // a list of special features separated by ',' not used by psprint
     // but assigned from the outside (currently for "fax","pdf=","autoqueue","external_dialog")
     OUString             m_aFeatures;
-    // a mapping of fonts to other fonts.
-    // this provides a method for the user
-    // to replace arbitrary fonts by printer builtin fonts
-    // currently this is only a mapping between font names
-    // assuming that only adbobe standard encoding fonts are
-    // built into the printer. in future it may be necessary
-    // to map to a font name and UCS2 vector which should be mapped
-    // this vector is currently implicitly given by the adobe
-    // standard encoding
-    bool                        m_bPerformFontSubstitution;
-    boost::unordered_map< OUString, OUString, OUStringHash >
-    m_aFontSubstitutes;
-    boost::unordered_map< fontID, fontID >
-    m_aFontSubstitutions;
 
     PrinterInfo() :
-            JobData(),
-            m_bPerformFontSubstitution( false )
+            JobData()
     {}
 };
 
@@ -132,10 +117,6 @@ protected:
     PrinterInfoManager( Type eType = Default );
 
     virtual void initialize();
-
-    // fill in font substitutions
-    // the resulting boost::unordered_map maps from source to target font ids
-    void fillFontSubstitutions( PrinterInfo& rInfo ) const;
 
     // fill default paper if not configured in config file
     // default paper is e.g. locale dependent

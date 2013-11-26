@@ -117,7 +117,7 @@ public:
  * forward declarations
  */
 
-class Font3;
+class Font2;
 class GlyphSet;
 class PrinterJob;
 class PrintFontManager;
@@ -171,7 +171,7 @@ struct GraphicsStatus
     GraphicsStatus();
 };
 
-class Font3;
+class Font2;
 
 class VCL_DLLPUBLIC PrinterGfx
 {
@@ -242,14 +242,12 @@ private:
     std::list< GraphicsStatus >     maGraphicsStack;
     GraphicsStatus& currentState() { return maGraphicsStack.front(); }
 
-    /* font / font substitution */
-    friend class Font3;
-    const ::boost::unordered_map< fontID, fontID >*    mpFontSubstitutes;
+    /* font */
+    friend class Font2;
     int             getCharWidth (sal_Bool b_vert, sal_Unicode n_char,
                                   CharacterMetric *p_bbox);
-    fontID          getCharMetric (const Font3 &rFont, sal_Unicode n_char,
+    fontID          getCharMetric (const Font2 &rFont, sal_Unicode n_char,
                                    CharacterMetric *p_bbox);
-    fontID          getFontSubstitute () const;
     fontID          getFallbackID () const { return mnFallbackID; }
 
 public:
@@ -301,7 +299,7 @@ public:
 
     void            OnEndPage ();
     void            OnEndJob ();
-    void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts, std::list< OString >& rNeededFonts );
+    void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
     void            drawVerticalizedText (const Point& rPoint,

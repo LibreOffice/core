@@ -23,7 +23,6 @@
 #include <signal.h>
 
 #include "cupsmgr.hxx"
-#include "vcl/fontmanager.hxx"
 #include "vcl/strhelper.hxx"
 
 #include "unx/saldata.hxx"
@@ -232,7 +231,6 @@ void PrinterInfoManager::initialize()
     // need a parser for the PPDContext. generic printer should do.
     m_aGlobalDefaults.m_pParser = PPDParser::getParser( OUString( "SGENPRT" ) );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
-    m_aGlobalDefaults.m_bPerformFontSubstitution = true;
     m_bDisableCUPS = false;
 
     if( ! m_aGlobalDefaults.m_pParser )
@@ -293,15 +291,6 @@ void PrinterInfoManager::initialize()
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_nPDFDevice = aValue.toInt32();
 
-            aValue = aConfig.ReadKey( "PerformFontSubstitution" );
-            if (!aValue.isEmpty())
-            {
-                if (!aValue.equals("0") && !aValue.equalsIgnoreAsciiCase("false"))
-                    m_aGlobalDefaults.m_bPerformFontSubstitution = true;
-                else
-                    m_aGlobalDefaults.m_bPerformFontSubstitution = false;
-            }
-
             aValue = aConfig.ReadKey( "DisableCUPS" );
             if (!aValue.isEmpty())
             {
@@ -327,19 +316,10 @@ void PrinterInfoManager::initialize()
                         sal_True );
                     }
                 }
-                else if (aKey.startsWith("SubstFont_"))
-                {
-                    aValue = aConfig.ReadKey( aKey );
-                    m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
-                }
             }
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "global settings: fontsubst = %s, %" SAL_PRI_SIZET "u substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
-            #endif
         }
     }
     setDefaultPaper( m_aGlobalDefaults.m_aContext );
-    fillFontSubstitutions( m_aGlobalDefaults );
 
     // now collect all available printers
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
@@ -393,11 +373,6 @@ void PrinterInfoManager::initialize()
                 Printer aPrinter;
                 // initialize to global defaults
                 aPrinter.m_aInfo = m_aGlobalDefaults;
-                // global settings do not default the printer substitution
-                // list ! the substitution list in there is only used for
-                // newly created printers
-                aPrinter.m_aInfo.m_aFontSubstitutes.clear();
-                aPrinter.m_aInfo.m_aFontSubstitutions.clear();
 
                 aPrinterName = OStringToOUString(aValue.copy(nNamePos+1),
                     RTL_TEXTENCODING_UTF8);
@@ -511,15 +486,8 @@ void PrinterInfoManager::initialize()
                 if (!aValue.isEmpty())
                     aPrinter.m_aInfo.m_nPDFDevice = aValue.toInt32();
 
-                aValue = aConfig.ReadKey( "PerformFontSubstitution" );
-                if (!aValue.equals("0") && !aValue.equalsIgnoreAsciiCase("false"))
-                    aPrinter.m_aInfo.m_bPerformFontSubstitution = true;
-                else
-                    aPrinter.m_aInfo.m_bPerformFontSubstitution = false;
-
                 // now iterate over all keys to extract multi key information:
                 // 1. PPDContext information
-                // 2. Font substitution table
                 for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
                 {
                     OString aKey( aConfig.GetKeyName( nKey ) );
@@ -535,15 +503,9 @@ void PrinterInfoManager::initialize()
                             sal_True );
                         }
                     }
-                    else if( aKey.startsWith("SubstFont_") )
-                    {
-                        aValue = aConfig.ReadKey( aKey );
-                        aPrinter.m_aInfo.m_aFontSubstitutes[ OStringToOUString( aKey.copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
-                    }
                 }
 
                 setDefaultPaper( aPrinter.m_aInfo.m_aContext );
-                fillFontSubstitutions( aPrinter.m_aInfo );
 
                 // finally insert printer
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
@@ -575,8 +537,7 @@ void PrinterInfoManager::initialize()
         return;
 
     // add a default printer for every available print queue
-    // merge paper and font substitution from default printer,
-    // all else from global defaults
+    // merge paper default printer, all else from global defaults
     PrinterInfo aMergeInfo( m_aGlobalDefaults );
     aMergeInfo.m_aDriverName    = "SGENPRT";
     aMergeInfo.m_aFeatures      = "autoqueue";
@@ -584,8 +545,6 @@ void PrinterInfoManager::initialize()
     if( !m_aDefaultPrinter.isEmpty() )
     {
         PrinterInfo aDefaultInfo( getPrinterInfo( m_aDefaultPrinter ) );
-        aMergeInfo.m_bPerformFontSubstitution = aDefaultInfo.m_bPerformFontSubstitution;
-        fillFontSubstitutions( aMergeInfo );
 
         const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( OUString( "PageSize" ) );
         const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( OUString( "PageSize" ) );
@@ -657,8 +616,6 @@ void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const Prin
     if( it != m_aPrinters.end() )
     {
         it->second.m_aInfo      = rNewInfo;
-        // recalculate font substitutions
-        fillFontSubstitutions( it->second.m_aInfo );
         it->second.m_bModified  = true;
         writePrinterConfig();
     }
@@ -804,16 +761,6 @@ bool PrinterInfoManager::writePrinterConfig()
                     pConfig->WriteKey(aKey.makeStringAndClear(), aValue.makeStringAndClear());
                 }
             }
-
-            // write font substitution table
-            pConfig->WriteKey( "PerformFontSubstitution", it->second.m_aInfo.m_bPerformFontSubstitution ? "true" : "false" );
-            for( ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
-            subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
-            {
-                OStringBuffer aKey("SubstFont_");
-                aKey.append(OUStringToOString(subst->first, RTL_TEXTENCODING_ISO_8859_1));
-                pConfig->WriteKey( aKey.makeStringAndClear(), OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
-            }
         }
     }
 
@@ -841,7 +788,6 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         aPrinter.m_aInfo.m_aContext.setParser( pParser );
         aPrinter.m_aInfo.m_aPrinterName             = rPrinterName;
 
-        fillFontSubstitutions( aPrinter.m_aInfo );
         // merge PPD values with global defaults
         for( int nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
         {
@@ -958,103 +904,6 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 bool PrinterInfoManager::addOrRemovePossible() const
 {
     return true;
-}
-
-// -----------------------------------------------------------------
-
-void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
-{
-    PrintFontManager& rFontManager( PrintFontManager::get() );
-    rInfo.m_aFontSubstitutions.clear();
-
-    if( ! rInfo.m_bPerformFontSubstitution ||
-        ! rInfo.m_aFontSubstitutes.size() )
-        return;
-
-    ::std::list< FastPrintFontInfo > aFonts;
-    ::boost::unordered_map< OUString, ::std::list< FastPrintFontInfo >, OUStringHash > aPrinterFonts;
-    rFontManager.getFontListWithFastInfo( aFonts, rInfo.m_pParser );
-
-    // get builtin fonts
-    ::std::list< FastPrintFontInfo >::const_iterator it;
-    for( it = aFonts.begin(); it != aFonts.end(); ++it )
-        if( it->m_eType == fonttype::Builtin )
-            aPrinterFonts[ it->m_aFamilyName.toAsciiLowerCase() ].push_back( *it );
-
-    // map lower case, so build a local copy of the font substitutions
-    ::boost::unordered_map< OUString, OUString, OUStringHash > aSubstitutions;
-    ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst;
-    for( subst = rInfo.m_aFontSubstitutes.begin(); subst != rInfo.m_aFontSubstitutes.end(); ++subst )
-    {
-        OUString aFamily( subst->first.toAsciiLowerCase() );
-        // first look if there is a builtin of this family
-        // in this case override the substitution table
-        if( aPrinterFonts.find( aFamily ) != aPrinterFonts.end() )
-            aSubstitutions[ aFamily ] = aFamily;
-        else
-            aSubstitutions[ aFamily ] = subst->second.toAsciiLowerCase();
-    }
-
-
-    // now find substitutions
-    for( it = aFonts.begin(); it != aFonts.end(); ++it )
-    {
-        if( it->m_eType != fonttype::Builtin )
-        {
-            OUString aFamily( it->m_aFamilyName.toAsciiLowerCase() );
-            subst = aSubstitutions.find( aFamily );
-            if( subst != aSubstitutions.end() )
-            {
-                // search a substitution
-                const ::std::list< FastPrintFontInfo >& rBuiltins( aPrinterFonts[ aSubstitutions[ aFamily ] ] );
-                ::std::list< FastPrintFontInfo >::const_iterator builtin;
-                int nLastMatch = -10000;
-                fontID nSubstitute = -1;
-                for( builtin = rBuiltins.begin(); builtin != rBuiltins.end(); ++builtin )
-                {
-                    int nMatch = 0;
-                    int nDiff;
-                    if( builtin->m_eItalic == it->m_eItalic )
-                        nMatch += 8000;
-
-                    nDiff = builtin->m_eWeight - it->m_eWeight;
-                    nDiff = nDiff < 0 ? -nDiff : nDiff;
-                    nMatch += 4000 - 1000*nDiff;
-
-                    nDiff = builtin->m_eWidth - it->m_eWidth;
-                    nDiff = nDiff < 0 ? -nDiff : nDiff;
-                    nMatch += 2000 - 500*nDiff;
-
-                    if( nMatch > nLastMatch )
-                    {
-                        nLastMatch = nMatch;
-                        nSubstitute = builtin->m_nID;
-                    }
-                }
-                if( nSubstitute != -1 )
-                {
-                    rInfo.m_aFontSubstitutions[ it->m_nID ] = nSubstitute;
-#if OSL_DEBUG_LEVEL > 2
-                    FastPrintFontInfo aInfo;
-                    rFontManager.getFontFastInfo( nSubstitute, aInfo );
-                    fprintf( stderr,
-                    "substitute %s %s %d %d\n"
-                    " ->        %s %s %d %d\n",
-                             OUStringToOString( it->m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                    it->m_eItalic == ITALIC_NONE ? "r" : it->m_eItalic == ITALIC_OBLIQUE ? "o" : it->m_eItalic == ITALIC_NORMAL ? "i" : "u",
-                    it->m_eWeight,
-                    it->m_eWidth,
-
-                             OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                    aInfo.m_eItalic == ITALIC_NONE ? "r" : aInfo.m_eItalic == ITALIC_OBLIQUE ? "o" : aInfo.m_eItalic == ITALIC_NORMAL ? "i" : "u",
-                    aInfo.m_eWeight,
-                    aInfo.m_eWidth
-                    );
-#endif
-                }
-            }
-        }
-    }
 }
 
 // -----------------------------------------------------------------
