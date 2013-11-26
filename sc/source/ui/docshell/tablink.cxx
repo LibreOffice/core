@@ -506,6 +506,17 @@ void ScDocumentLoader::RemoveAppPrefix( OUString& rFilterName )
         rFilterName = rFilterName.copy( aAppPrefix.getLength());
 }
 
+SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, const SfxFilter* pFilter,
+        const OUString& rOptions )
+{
+    // Always create SfxItemSet so ScDocShell can set options.
+    SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+    if ( !rOptions.isEmpty() )
+        pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
+
+    return new SfxMedium( rFileName, STREAM_STD_READ, pFilter, pSet );
+}
+
 ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
                                     OUString& rFilterName, OUString& rOptions,
                                     sal_uInt32 nRekCnt, bool bWithInteraction ) :
@@ -517,12 +528,7 @@ ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
 
     const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
 
-    //  ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
-    SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
-    if ( !rOptions.isEmpty() )
-        pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
-
-    pMedium = new SfxMedium( rFileName, STREAM_STD_READ, pFilter, pSet );
+    pMedium = CreateMedium( rFileName, pFilter, rOptions);
     if ( pMedium->GetError() != ERRCODE_NONE )
         return ;
 
