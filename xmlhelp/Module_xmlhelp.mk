@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,xmlhelp))
 
 $(eval $(call gb_Module_add_targets,xmlhelp,\
-	Library_tvhlp1 \
 	Library_ucpchelp1 \
 	Package_helpxsl \
 ))

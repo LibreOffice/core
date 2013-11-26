@@ -216,32 +216,4 @@ TVFactory::CreateInstance(
     return Reference< XInterface >::query( xP );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL treeview_component_getFactory(
-    const sal_Char * pImplName,void * pServiceManager,void * pRegistryKey )
-{
-    (void)pRegistryKey;
-
-    void * pRet = 0;
-
-    Reference< XMultiServiceFactory > xSMgr(
-        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
-
-    Reference< XSingleServiceFactory > xFactory;
-
-    // File Content Provider.
-
-    if ( TVFactory::getImplementationName_static().equalsAscii( pImplName ) )
-    {
-        xFactory = TVFactory::createServiceFactory( xSMgr );
-    }
-
-    if ( xFactory.is() )
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-
-    return pRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

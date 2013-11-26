@@ -325,7 +325,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/resource/res \
 	extensions/source/scanner/scn \
 	extensions/source/update/feed/updatefeed \
-	xmlhelp/source/treeview/tvhlp1 \
 	xmlhelp/util/ucpchelp1 \
 	xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows) \
 	$(if $(filter-out WNT,$(OS)),\
