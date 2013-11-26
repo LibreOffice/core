@@ -126,12 +126,17 @@ certain functionality.
 @li @c embeddedobj.general
 @li @c embeddedobj.ole - OLE embedded objects
 
+@section embedserv
+@li @c embedserv - embedding server
+@li @c embedserv.ole - OLE server
+
 @section extensions
 
 @li @c extensions.dbpilots
 @li @c extensions.plugin
 @li @c extensions.scanner
 @li @c extensions.update
+@li @c extensions.olebridge - OLE automation bridge
 
 @section Filter
 

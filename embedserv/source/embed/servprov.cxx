@@ -79,31 +79,18 @@ void *CurThreadData::getData()
     return (osl_getThreadKeyData(m_hKey));
 }
 
-
-// CoInitializeEx *
-typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInitEx)( LPVOID, DWORD);
-// CoInitialize *
-typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInit)( LPVOID);
-
 void o2u_attachCurrentThread()
 {
     static CurThreadData oleThreadData;
 
     if ( oleThreadData.getData() != 0 )
     {
-        HINSTANCE inst= LoadLibrary( _T("ole32.dll"));
-        if( inst )
-        {
-            HRESULT hr;
-            ptrCoInitEx initFuncEx= (ptrCoInitEx)GetProcAddress( inst, _T("CoInitializeEx"));
-            if( initFuncEx)
-                hr= initFuncEx( NULL, COINIT_MULTITHREADED);
-            else
-            {
-                ptrCoInit initFunc= (ptrCoInit)GetProcAddress( inst,_T("CoInitialize"));
-                if( initFunc)
-                    hr= initFunc( NULL);
-            }
+        HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+        if (!SUCCEEDED(hr))
+        {   // FIXME: is it a problem that this ends up in STA currently?
+            assert(RPC_E_CHANGED_MODE == hr);
+            SAL_INFO("embedserv.ole",
+                    "CoInitializeEx fail: probably thread is in STA already?");
         }
         oleThreadData.setData((void*)sal_True);
     }

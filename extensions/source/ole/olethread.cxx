@@ -25,10 +25,6 @@ using namespace std;
 
 namespace ole_adapter
 {
-// CoInitializeEx *
-typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInitEx)( LPVOID, DWORD);
-// CoInitialize *
-typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInit)( LPVOID);
 
 void o2u_attachCurrentThread()
 {
@@ -36,21 +32,12 @@ void o2u_attachCurrentThread()
 
     if ((sal_Bool)(sal_IntPtr)oleThreadData.getData() != sal_True)
     {
-        HINSTANCE inst= LoadLibrary( _T("ole32.dll"));
-        if( inst )
-        {
-            HRESULT hr;
-            // Try DCOM
-            ptrCoInitEx initFuncEx= (ptrCoInitEx)GetProcAddress( inst, _T("CoInitializeEx"));
-            if( initFuncEx)
-                hr= initFuncEx( NULL, COINIT_MULTITHREADED);
-            // No DCOM, try COM
-            else
-            {
-                ptrCoInit initFunc= (ptrCoInit)GetProcAddress( inst,_T("CoInitialize"));
-                if( initFunc)
-                    hr= initFunc( NULL);
-            }
+        HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+        if (!SUCCEEDED(hr))
+        {   // FIXME: is it a problem that this ends up in STA currently?
+            assert(RPC_E_CHANGED_MODE == hr);
+            SAL_INFO("extensions.olebridge",
+                    "CoInitializeEx fail: probably thread is in STA already?");
         }
         oleThreadData.setData((void*)sal_True);
     }
