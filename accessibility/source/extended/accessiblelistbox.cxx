@@ -270,7 +270,6 @@ namespace accessibility
         {
             return pEntryFocus;
         }
-        return NULL;
     }
 
     void AccessibleListBox::RemoveChildEntries(SvTreeListEntry* pEntry)
