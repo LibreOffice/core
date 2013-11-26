@@ -188,10 +188,10 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                     if (m_bIsDropDownBox || ( !m_bIsDropDownBox && m_aBoxType==COMBOBOX))
                         NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
 
-                        Any aOldValue;
-                        Any aNewValue;
-                        aOldValue <<= AccessibleStateType::INDETERMINATE;
-                        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
+                    Any aOldValue;
+                    Any aNewValue;
+                    aOldValue <<= AccessibleStateType::INDETERMINATE;
+                    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
 
                 }
                     }
