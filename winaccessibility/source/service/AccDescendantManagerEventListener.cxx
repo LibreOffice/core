@@ -91,7 +91,7 @@ void AccDescendantManagerEventListener::HandleChildChangedEvent(Any oldValue, An
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            pAgent->InsertAccObj( pAcc,pAccessible);
+            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             pAgent->InsertChildrenAccObj(pAcc);
 
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
@@ -149,7 +149,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedEvent(Any oldValue
     }
     if (!bSend)
     {
-        pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, pAccessible);
+        pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, m_xAccessible.get());
     }
 }
 
@@ -163,7 +163,7 @@ void AccDescendantManagerEventListener::HandleChildChangedNoFocusEvent(Any oldVa
         {
             XAccessible* pAcc = xChild.get();
 
-            pAgent->InsertAccObj(pAcc,pAccessible);
+            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             pAgent->InsertChildrenAccObj(pAcc);
         }
     }
@@ -188,7 +188,8 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(short nWinEvent,const A
             XAccessible* pAcc = xChild.get();
             pAgent->NotifyAccEvent(nWinEvent, pAcc);
 
-            if (pAgent && pAgent->IsStateManageDescendant(pAccessible) && ( nWinEvent == UM_EVENT_SELECTION_CHANGED_REMOVE) )
+            if (pAgent && pAgent->IsStateManageDescendant(m_xAccessible.get())
+                    && (nWinEvent == UM_EVENT_SELECTION_CHANGED_REMOVE))
             {
                 pAgent->DeleteAccObj( pAcc );
             }
@@ -203,7 +204,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedAddEvent(const Any
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_ADD,pAccessible);
+    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_ADD, m_xAccessible.get());
 }
 
 void AccDescendantManagerEventListener::HandleSelectionChangedRemoveEvent(const Any& /*oldValue*/, const Any &newValue)
@@ -212,7 +213,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedRemoveEvent(const 
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_REMOVE,pAccessible);
+    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_REMOVE, m_xAccessible.get());
 }
 
 void AccDescendantManagerEventListener::HandleSelectionChangedWithinEvent(const Any& /*oldValue*/, const Any &newValue)
@@ -221,7 +222,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedWithinEvent(const 
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_WITHIN,pAccessible);
+    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_WITHIN, m_xAccessible.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

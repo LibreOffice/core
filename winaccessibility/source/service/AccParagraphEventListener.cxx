@@ -65,12 +65,12 @@ throw (::com::sun::star::uno::RuntimeException)
             short State;
             if( (aEvent.NewValue >>= State) && (State == AccessibleStateType::SELECTED) )
             {
-                pAgent->IncreaseState( pAccessible, State);
+                pAgent->IncreaseState(m_xAccessible.get(), State);
                 break;
             }
             else if( (aEvent.OldValue >>= State) && (State == AccessibleStateType::SELECTED) )
             {
-                pAgent->DecreaseState( pAccessible, State);
+                pAgent->DecreaseState(m_xAccessible.get(), State);
                 break;
             }
 
@@ -95,8 +95,8 @@ throw (::com::sun::star::uno::RuntimeException)
  */
 void AccParagraphEventListener::HandleCaretChangedEvent(Any oldValue, Any newValue)
 {
-    pAgent->UpdateLocation(pAccessible);
-    pAgent->NotifyAccEvent(UM_EVENT_OBJECT_CARETCHANGE, pAccessible);
+    pAgent->UpdateLocation(m_xAccessible.get());
+    pAgent->NotifyAccEvent(UM_EVENT_OBJECT_CARETCHANGE, m_xAccessible.get());
 }
 
 /**
@@ -126,7 +126,7 @@ void AccParagraphEventListener::SetComponentState(short state, bool enable )
 
 void AccParagraphEventListener::HandleTextSelectionChangedEvent()
 {
-    pAgent->NotifyAccEvent(UM_EVENT_TEXT_SELECTION_CHANGED, pAccessible);
+    pAgent->NotifyAccEvent(UM_EVENT_TEXT_SELECTION_CHANGED, m_xAccessible.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

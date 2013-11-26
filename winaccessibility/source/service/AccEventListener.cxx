@@ -45,7 +45,7 @@ using namespace cppu;
 
 AccEventListener::AccEventListener(com::sun::star::accessibility::XAccessible* pAcc,
                                    AccObjectManagerAgent* Agent)
-    : pAccessible(pAcc)
+    : m_xAccessible(pAcc)
     , pAgent(Agent)
     , m_isDisposed(false)
 {}
@@ -85,9 +85,9 @@ throw (::com::sun::star::uno::RuntimeException)
  */
 void AccEventListener::HandleNameChangedEvent(Any name)
 {
-    if ( pAgent->IsTopWinAcc( pAccessible ) )
+    if (pAgent->IsTopWinAcc(m_xAccessible.get()))
     {
-        XAccessible* pAccDoc = pAgent->GetAccDocByAccTopWin( pAccessible );
+        XAccessible* pAccDoc = pAgent->GetAccDocByAccTopWin(m_xAccessible.get());
         if ( pAccDoc )
         {
             pAgent->UpdateAccName(pAccDoc);
@@ -95,8 +95,8 @@ void AccEventListener::HandleNameChangedEvent(Any name)
         }
     }
 
-    pAgent->UpdateAccName(pAccessible, name);
-    pAgent->NotifyAccEvent(UM_EVENT_OBJECT_NAMECHANGE, pAccessible);
+    pAgent->UpdateAccName(m_xAccessible.get(), name);
+    pAgent->NotifyAccEvent(UM_EVENT_OBJECT_NAMECHANGE, m_xAccessible.get());
 }
 
 /**
@@ -105,8 +105,8 @@ void AccEventListener::HandleNameChangedEvent(Any name)
  */
 void AccEventListener::HandleDescriptionChangedEvent(Any desc)
 {
-    pAgent->UpdateDescription(pAccessible, desc);
-    pAgent->NotifyAccEvent(UM_EVENT_OBJECT_DESCRIPTIONCHANGE, pAccessible);
+    pAgent->UpdateDescription(m_xAccessible.get(), desc);
+    pAgent->NotifyAccEvent(UM_EVENT_OBJECT_DESCRIPTIONCHANGE, m_xAccessible.get());
 }
 
 /**
@@ -114,8 +114,8 @@ void AccEventListener::HandleDescriptionChangedEvent(Any desc)
  */
 void AccEventListener::HandleBoundrectChangedEvent()
 {
-    pAgent->UpdateLocation(pAccessible);
-    pAgent->NotifyAccEvent(UM_EVENT_BOUNDRECT_CHANGED, pAccessible);
+    pAgent->UpdateLocation(m_xAccessible.get());
+    pAgent->NotifyAccEvent(UM_EVENT_BOUNDRECT_CHANGED, m_xAccessible.get());
 }
 
 /**
@@ -123,8 +123,8 @@ void AccEventListener::HandleBoundrectChangedEvent()
  */
 void AccEventListener::HandleVisibleDataChangedEvent()
 {
-    pAgent->UpdateValue(pAccessible);
-    pAgent->NotifyAccEvent(UM_EVENT_VISIBLE_DATA_CHANGED, pAccessible);
+    pAgent->UpdateValue(m_xAccessible.get());
+    pAgent->NotifyAccEvent(UM_EVENT_VISIBLE_DATA_CHANGED, m_xAccessible.get());
 }
 
 /**
@@ -171,8 +171,8 @@ void AccEventListener::FireStateFocusedChange(bool enable)
 {
     if(enable)
     {
-        pAgent->IncreaseState( pAccessible, AccessibleStateType::FOCUSED);
-        pAgent->NotifyAccEvent(UM_EVENT_STATE_FOCUSED, pAccessible);
+        pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+        pAgent->NotifyAccEvent(UM_EVENT_STATE_FOCUSED, m_xAccessible.get());
     }
     else
     {
@@ -203,7 +203,8 @@ void AccEventListener::FireStatePropertyChange(short /*state*/, bool set )
  */
 short AccEventListener::GetRole()
 {
-    Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+    Reference<com::sun::star::accessibility::XAccessibleContext> const
+        xContext(m_xAccessible->getAccessibleContext());
     if(xContext.is())
     {
         return xContext->getAccessibleRole();
@@ -216,9 +217,9 @@ short AccEventListener::GetRole()
  */
 short AccEventListener::GetParentRole()
 {
-    if(pAccessible)
+    if (m_xAccessible.is())
     {
-        return pAgent->GetParentRole(pAccessible);
+        return pAgent->GetParentRole(m_xAccessible.get());
     }
     return -1;
 }
@@ -231,35 +232,21 @@ void AccEventListener::RemoveMeFromBroadcaster()
     {
         if(m_isDisposed)
             return;
-        //get accessible context
-        Reference< XAccessibleContext > pRContext;
-        XAccessibleContext* pContext =NULL;
 
-        if( pAccessible == NULL)
+        if (!m_xAccessible.is())
         {
             return;
         }
-        pRContext = pAccessible->getAccessibleContext();
-        if( !pRContext.is() )
-        {
-            return;
-        }
-
-        //get broadcaster from accessible component
-        Reference<XAccessibleComponent> xComponent(pRContext,UNO_QUERY);
-        if(!xComponent.is())
-        {
-            return;
-        }
-        Reference<XAccessibleEventBroadcaster> broadcaster(xComponent,UNO_QUERY);
-        XAccessibleEventBroadcaster* pBroadcaster = broadcaster.get();
-        if (pBroadcaster != NULL)
+        Reference<XAccessibleEventBroadcaster> const xBroadcaster(
+                m_xAccessible->getAccessibleContext(), UNO_QUERY);
+        if (xBroadcaster.is())
         {
             //remove the lister from accessible object
-            pBroadcaster->removeAccessibleEventListener(this);
+            xBroadcaster->removeAccessibleEventListener(this);
             m_isDisposed = true;
-            pAgent->NotifyDestroy(pAccessible);
+            pAgent->NotifyDestroy(m_xAccessible.get());
         }
+        m_xAccessible.clear(); // release cyclic reference
     }
     catch(...)
     {

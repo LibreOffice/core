@@ -79,7 +79,7 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
         {
             XAccessible* pAcc = xChild.get();
             //add this child
-            pAgent->InsertAccObj( pAcc,pAccessible);
+            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(pAcc);
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
@@ -110,7 +110,7 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
  */
 void AccMenuEventListener::HandleSelectionChangedEventNoArgs()
 {
-    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, pAccessible);
+    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, m_xAccessible.get());
 }
 
 /**
@@ -125,9 +125,8 @@ void AccMenuEventListener::FireStatePropertyChange(short state, bool set)
         {
             //for sub menu is popup, there is a menu selected event.
         case AccessibleStateType::SELECTED:
-            pAgent->IncreaseState( pAccessible, state);
-
-            pAgent->UpdateChildState(pAccessible);
+            pAgent->IncreaseState(m_xAccessible.get(), state);
+            pAgent->UpdateChildState(m_xAccessible.get());
             break;
         default:
             AccComponentEventListener::FireStatePropertyChange(state, set);
@@ -140,7 +139,7 @@ void AccMenuEventListener::FireStatePropertyChange(short state, bool set)
         {
             //for sub menu is popup, there is a menu selected event.
         case AccessibleStateType::SELECTED:
-            pAgent->DecreaseState( pAccessible, state );
+            pAgent->DecreaseState(m_xAccessible.get(), state);
 
             break;
         default:

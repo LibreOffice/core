@@ -40,7 +40,8 @@ class AccEventListener
 {
 protected:
     //accessible owner's pointer
-    com::sun::star::accessibility::XAccessible* pAccessible;
+    com::sun::star::uno::Reference<
+        com::sun::star::accessibility::XAccessible> m_xAccessible;
     //agent pointer for objects' manager
     AccObjectManagerAgent* pAgent;
     //disposed state indicator
@@ -74,7 +75,7 @@ public:
     //for visible data changed event
     virtual void HandleVisibleDataChangedEvent();
 
-    //get the accessible role of pAccessible
+    // get the accessible role of m_xAccessible
     virtual short GetRole();
     //get the accessible parent's role
     virtual short GetParentRole();
