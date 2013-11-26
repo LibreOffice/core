@@ -825,7 +825,6 @@ namespace accessibility
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
-        static const OUString sActionDesc( "toggleExpand" );
         static const OUString sActionDesc1( "Check" );
         static const OUString sActionDesc2( "UnCheck" );
         // sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
