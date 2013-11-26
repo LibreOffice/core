@@ -83,9 +83,9 @@ certain functionality.
 @section Calc
 
 @li @c sc
-@li @c sc.opencl
-@li @c sc.opencl.source
-@li @c sc.opencl.thread
+@li @c sc.opencl - OpenCL-related stuff in general
+@li @c sc.opencl.source - Generated OpenCL source code
+@li @c sc.opencl.thread - Background thread to compile OpenCL kernels
 @li @c sc.qa
 @li @c sc.core
 @li @c sc.filter - Calc filter
