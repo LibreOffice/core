@@ -770,7 +770,7 @@ void ParagraphImpl::checkDisposed()
 }
 
 Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
-                   ::TextView & rView, bool bCompoundControlChild):
+                   ::TextView & rView, bool /* bCompoundControlChild */):
     VCLXAccessibleComponent(pVclXWindow),
     m_xAccessible(pVclXWindow),
     m_rEngine(rEngine),
@@ -784,8 +784,7 @@ Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
     m_nSelectionFirstPos(-1),
     m_nSelectionLastPara(-1),
     m_nSelectionLastPos(-1),
-    m_bSelectionChangedNotification(false),
-    m_bCompoundControlChild(bCompoundControlChild)
+    m_bSelectionChangedNotification(false)
 {}
 
 css::lang::Locale Document::retrieveLocale()
