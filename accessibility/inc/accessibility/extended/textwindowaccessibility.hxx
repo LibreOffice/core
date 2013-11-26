@@ -555,10 +555,6 @@ public:
     css::uno::Reference< css::accessibility::XAccessibleRelationSet >
     retrieveParagraphRelationSet( ParagraphImpl const * pParagraph );
 
-protected:
-    // window event listener from base class
-    virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-
 private:
     virtual ::sal_Int32 SAL_CALL getAccessibleChildCount()
         throw (css::uno::RuntimeException);

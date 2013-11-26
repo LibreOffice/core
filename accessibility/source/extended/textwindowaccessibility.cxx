@@ -1503,25 +1503,6 @@ Document::retrieveParagraphRelationSet( ParagraphImpl const * pParagraph )
     return xSet;
 }
 
-void Document::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
-{
-    switch ( rVclWindowEvent.GetId() )
-    {
-        case VCLEVENT_WINDOW_GETFOCUS:
-        case VCLEVENT_WINDOW_LOSEFOCUS:
-        {
-            // #107179# if our parent is a compound control (e.g. MultiLineEdit),
-            // suppress the window focus events here
-// IAccessible2 implementation 2009
-            //if ( !m_bCompoundControlChild )
-                VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
-        }
-        break;
-        default:
-            VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
-    }
-}
-
 // virtual
 ::sal_Int32 SAL_CALL Document::getAccessibleChildCount()
     throw (css::uno::RuntimeException)
