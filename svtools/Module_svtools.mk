@@ -20,7 +20,6 @@
 $(eval $(call gb_Module_Module,svtools))
 
 $(eval $(call gb_Module_add_targets,svtools,\
-    Library_hatchwindowfactory \
     Library_svt \
     UIConfig_svt \
 ))

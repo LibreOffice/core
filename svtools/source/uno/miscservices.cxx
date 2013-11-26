@@ -26,6 +26,9 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <osl/diagnose.h>
 #include <uno/mapping.hxx>
+#include "documentcloser.hxx"
+#include "hatchwindowfactory.hxx"
+#include "hatchwindow.hxx"
 #include "fpicker.hxx"
 #include "provider.hxx"
 #include "renderer.hxx"
@@ -47,8 +50,6 @@ namespace sdecl = comphelper::service_decl;
 namespace unographic {
 extern sdecl::ServiceDecl const serviceDecl;
 }
-
-// -------------------------------------------------------------------------------------
 
 // for CreateInstance functions implemented elsewhere
 #define DECLARE_CREATEINSTANCE( ImplName ) \
@@ -82,18 +83,27 @@ namespace
             FolderPicker_getSupportedServiceNames,
             ::cppu::createSingleComponentFactory, 0, 0
         },
+        {
+            OHatchWindowFactory::impl_staticCreateSelfInstance,
+            OHatchWindowFactory::impl_staticGetImplementationName,
+            OHatchWindowFactory::impl_staticGetSupportedServiceNames,
+            ::cppu::createSingleComponentFactory, 0, 0
+        },
+        {
+            ODocumentCloser::impl_staticCreateSelfInstance,
+            ODocumentCloser::impl_staticGetImplementationName,
+            ODocumentCloser::impl_staticGetSupportedServiceNames,
+            ::cppu::createOneInstanceFactory, 0, 0
+        },
         { 0, 0, 0, 0, 0, 0 }
     };
 }
-
-// -------------------------------------------------------------------------------------
 
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 DECLARE_CREATEINSTANCE( SvFilterOptionsDialog )
 DECLARE_CREATEINSTANCE_NAMESPACE( unographic, GraphicProvider )
 DECLARE_CREATEINSTANCE_NAMESPACE( unographic, GraphicRendererVCL )
 
-// -------------------------------------------------------------------------------------
 extern "C"
 {
 
@@ -148,14 +158,14 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
         {
             pResult = comphelper::service_decl::component_getFactoryHelper(
                 pImplementationName,
-                static_cast<css::lang::XMultiServiceFactory *>(
-                    _pServiceManager),
+                static_cast<css::lang::XMultiServiceFactory *>(_pServiceManager),
                 static_cast<css::registry::XRegistryKey *>(pRegistryKey),
                 serviceDecl );
             if ( !pResult )
-                pResult = cppu::component_getFactoryHelper(
-                    pImplementationName, _pServiceManager, pRegistryKey,
-                    s_aServiceEntries );
+                pResult = cppu::component_getFactoryHelper(pImplementationName,
+                                                        _pServiceManager,
+                                                        pRegistryKey,
+                                                        s_aServiceEntries);
         }
 
         if ( xFactory.is() )
