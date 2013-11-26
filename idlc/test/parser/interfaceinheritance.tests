@@ -269,3 +269,11 @@ interface Derived {
     interface Hidden;
     interface Base;
 };
+
+
+EXPECT FAILURE "interfaceinheritance.tests 30":
+interface Base {};
+interface Derived {
+    interface Base;
+    [optional] interface com::sun::star::uno::XInterface;
+};

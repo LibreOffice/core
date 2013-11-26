@@ -4113,7 +4113,6 @@ bool SourceProviderInterfaceTypeEntityPad::addDirectBase(
         addOptionalBaseMembers(
             location, yyscanner, data, base.name, base.entity);
     }
-    //TODO: check that opt base != XInterface
     (optional ? directOptionalBases : directMandatoryBases).push_back(base);
     return true;
 }
