@@ -97,6 +97,7 @@ public:
     const StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
     const StyleSheetEntryPtr FindStyleSheetByStyleName(const OUString& rIndex);
     const StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const OUString& rIndex);
+    const StyleSheetEntryPtr FindDefaultParaStyle();
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
     const StyleSheetEntryPtr FindParentStyleSheet(OUString sBaseStyle);
 

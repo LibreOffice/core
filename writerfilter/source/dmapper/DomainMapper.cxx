@@ -2276,15 +2276,26 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             {
                 rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );
             }
-            else if (!m_pImpl->m_bInTableStyleRunProps)
+            else
             {
-                //Asian get the same value as Western
-                rContext->Insert( PROP_CHAR_HEIGHT, aVal );
-                rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
+                bool bIgnore = false;
+                if (m_pImpl->m_bInTableStyleRunProps)
+                {
+                    // If the default para style contains PROP_CHAR_HEIGHT, that should have priority over the table style.
+                    StyleSheetEntryPtr pTable = m_pImpl->GetStyleSheetTable()->FindDefaultParaStyle();
+                    if (pTable && pTable->pProperties->find(PROP_CHAR_HEIGHT) != pTable->pProperties->end())
+                        bIgnore = true;
+                }
+                if (!bIgnore)
+                {
+                    //Asian get the same value as Western
+                    rContext->Insert( PROP_CHAR_HEIGHT, aVal );
+                    rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
 
-                uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
-                if (xCharStyle.is())
-                    xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT), aVal);
+                    uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
+                    if (xCharStyle.is())
+                        xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT), aVal);
+                }
             }
             // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
             if (!m_pImpl->IsStyleSheetImport())

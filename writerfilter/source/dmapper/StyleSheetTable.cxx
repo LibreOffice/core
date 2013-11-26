@@ -1293,6 +1293,20 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(con
 }
 
 
+const StyleSheetEntryPtr StyleSheetTable::FindDefaultParaStyle()
+{
+    StyleSheetEntryPtr pRet;
+    for (size_t i = 0; i < m_pImpl->m_aStyleSheetEntries.size(); ++i)
+    {
+        StyleSheetEntryPtr pEntry = m_pImpl->m_aStyleSheetEntries[i];
+        if (pEntry->bIsDefaultStyle && pEntry->nStyleTypeCode == STYLE_TYPE_PARA)
+        {
+            pRet = pEntry;
+            break;
+        }
+    }
+    return pRet;
+}
 
 const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(OUString sBaseStyle)
 {

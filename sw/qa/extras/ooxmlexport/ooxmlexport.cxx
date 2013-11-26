@@ -1398,6 +1398,9 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
     // Font size in the second row was 11.
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharHeight"));
+    // Font size in the third row was 11 as well.
+    xCell.set(xTable->getCellByName("A3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(14.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharHeight"));
 
     // This paragraph property was missing in table style.
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
