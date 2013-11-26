@@ -33,9 +33,6 @@
  */
 class AccDescendantManagerEventListener: public AccComponentEventListener
 {
-protected:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > m_xActiveDescendant;
 
 public:
     AccDescendantManagerEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);

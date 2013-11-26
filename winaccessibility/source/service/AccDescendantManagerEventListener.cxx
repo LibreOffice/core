@@ -165,8 +165,6 @@ void AccDescendantManagerEventListener::HandleChildChangedNoFocusEvent(Any oldVa
 
             pAgent->InsertAccObj(pAcc,pAccessible);
             pAgent->InsertChildrenAccObj(pAcc);
-
-            m_xActiveDescendant = xChild;
         }
     }
     if (oldValue >>= xChild)
