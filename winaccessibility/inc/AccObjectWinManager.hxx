@@ -78,8 +78,6 @@ private:
     long ImpleGenerateResID();
     AccObject* GetAccObjByXAcc( com::sun::star::accessibility::XAccessible* pXAcc);
 
-    com::sun::star::accessibility::XAccessible* GetXAccByAccObj(AccObject* pAccObj);
-
     AccObject* GetTopWindowAccObj(HWND hWnd);
 
     com::sun::star::accessibility::XAccessible* GetAccDocByHWND(HWND hWnd);

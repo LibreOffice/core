@@ -173,24 +173,6 @@ AccObject* AccObjectWinManager::GetAccObjByXAcc( XAccessible* pXAcc)
 }
 
 /**
-   * Search XAccessible by AccObject pointer from our container.
-   * @param pAccObj AccObject pointer.
-   * @return Pointer of XAccessible Interface.
-   */
-XAccessible* AccObjectWinManager::GetXAccByAccObj(AccObject* pAccObj)
-{
-    XIdToAccObjHash::iterator iter = XIdAccList.begin();
-    while(iter!=XIdAccList.end())
-    {
-        AccObject* tmp = &(iter->second);
-        if(tmp== pAccObj)
-            return (XAccessible*)(iter->first);
-        ++iter;
-    }
-    return NULL;
-}
-
-/**
    * get acc object of top window by its handle
    * @param hWnd, top window handle
    * @return pointer to AccObject
@@ -563,7 +545,6 @@ void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
 {
     AccObject* currentObj=NULL;
     AccObject* childObj=NULL;
-    XAccessible* pTmpXAcc=NULL;
 
     currentObj =  GetAccObjByXAcc( pXAcc);
     if(currentObj)
@@ -571,7 +552,7 @@ void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
         childObj = currentObj->NextChild();
         while(childObj)
         {
-            pTmpXAcc = GetXAccByAccObj(childObj);
+            XAccessible *const pTmpXAcc = childObj->GetXAccessible().get();
             if(pTmpXAcc)
             {
                 DeleteChildrenAccObj(pTmpXAcc);
