@@ -950,7 +950,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
             assert(awAttributes[i+1]);
 
             if( awAttributes[i][0] != 'x' ||
-                strncmp( awAttributes[i], "xmlns") != 0 )
+                strncmp( awAttributes[i], "xmlns", 5) != 0 )
                 continue;
 
             splitName( awAttributes[i], pPrefix, nPrefixLen, pName, nNameLen );
