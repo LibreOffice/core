@@ -72,6 +72,7 @@ public:
 
 class ScDocument;
 class SfxMedium;
+class SfxFilter;
 
 class SC_DLLPUBLIC ScDocumentLoader
 {
@@ -96,7 +97,12 @@ public:
 
     void                ReleaseDocRef();    // without calling DoClose
 
-    static OUString GetOptions( SfxMedium& rMedium );
+    /** Create SfxMedium for stream read with SfxFilter and filter options set
+        at the medium's SfxItemSet.
+     */
+    static SfxMedium*   CreateMedium( const OUString& rFileName, const SfxFilter* pFilter, const OUString& rOptions );
+
+    static OUString     GetOptions( SfxMedium& rMedium );
 
     /** Returns the filter name and options from a file name.
         @param bWithContent
