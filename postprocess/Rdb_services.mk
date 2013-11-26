@@ -80,7 +80,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	svl/source/fsstor/fsstorage \
 	svl/source/passwordcontainer/passwordcontainer \
 	svl/util/svl \
-	svtools/source/hatchwindow/hatchwindowfactory \
 	svtools/util/svt \
 	svgio/svgio \
 	svx/util/svx \

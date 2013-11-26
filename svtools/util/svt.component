@@ -43,4 +43,11 @@
   <implementation name="com.sun.star.comp.svt.FolderPicker">
     <service name="com.sun.star.ui.dialogs.FolderPicker"/>
   </implementation>
+  <implementation name="com.sun.star.comp.embed.DocumentCloser">
+    <service name="com.sun.star.embed.DocumentCloser"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.embed.HatchWindowFactory">
+    <service name="com.sun.star.comp.embed.HatchWindowFactory"/>
+    <service name="com.sun.star.embed.HatchWindowFactory"/>
+  </implementation>
 </component>
