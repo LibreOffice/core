@@ -17,15 +17,4 @@ $(eval $(call gb_Module_add_l10n_targets,accessibility,\
     AllLangResTarget_acc \
 ))
 
-ifneq ($(ENABLE_JAVA),)
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,accessibility,\
-    CustomTarget_bridge \
-    CustomTarget_bridge_inc \
-    Jar_uno_accessbridge \
-    Library_java_uno_accessbridge \
-))
-endif
-endif
-
 # vim:set noet sw=4 ts=4:
