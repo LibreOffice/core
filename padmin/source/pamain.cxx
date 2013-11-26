@@ -115,15 +115,13 @@ int MyApp::Main()
     com::sun::star::ucb::UniversalContentBroker::create(xCtx);
 
     /*
-     * Initialize the Java UNO AccessBridge if accessibility is turned on
+     * Initialize the MSAA UNO AccessBridge if accessibility is turned on
      */
 
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
     {
-        bool bQuitApp;
-        if( !InitAccessBridge( true, bQuitApp ) )
-            if( bQuitApp )
-                return EXIT_FAILURE;
+        if( !InitAccessBridge() )
+            return EXIT_FAILURE;
     }
 
     ResMgr::SetReadStringHook( MyApp::ReadStringHook );

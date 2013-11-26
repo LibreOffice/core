@@ -554,9 +554,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		ftransl \
 		$(if $(DISABLE_ATL),,\
 			inprocserv \
-		) \
-		$(if $(ENABLE_JAVA),java_uno_accessbridge) \
-		$(if $(ENABLE_IA2), \
 			UAccCOM \
 			winaccessibility \
 		) \
@@ -663,7 +660,6 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	fax \
 	form \
 	htmlsoff \
-	java_uno_accessbridge \
 	letter \
 	officebean \
 	pexcel \
