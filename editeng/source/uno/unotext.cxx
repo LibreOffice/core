@@ -2571,7 +2571,7 @@ sal_Bool SvxDummyTextSource::GetWordIndices( sal_Int32, sal_uInt16, sal_uInt16&,
     return sal_False;
 }
 
-sal_Bool SvxDummyTextSource::GetAttributeRun( sal_uInt16&, sal_uInt16&, sal_Int32, sal_uInt16 ) const
+sal_Bool SvxDummyTextSource::GetAttributeRun( sal_uInt16&, sal_uInt16&, sal_Int32, sal_uInt16, sal_Bool ) const
 {
     return sal_False;
 }

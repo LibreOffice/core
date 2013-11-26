@@ -382,14 +382,13 @@
 #define RID_SVXITEMS_JUSTMETHOD_AUTO            (RID_EDIT_START + 326)
 #define RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE      (RID_EDIT_START + 327)
 
-#if 327 > (RID_EDIT_END-RID_EDIT_START)
+#define RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION   (RID_EDIT_START + 328)
+#define RID_SVXSTR_A11Y_PARAGRAPH_NAME          (RID_EDIT_START + 329)
+
+#if 329 > (RID_EDIT_END-RID_EDIT_START)
 #error Resource-Ueberlauf in #line, #file
 #endif
 
-
-
 #endif
-
-// ******************************************************************* EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

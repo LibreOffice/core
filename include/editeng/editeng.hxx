@@ -120,6 +120,7 @@ const sal_uInt8 EditEngineAttribs_OnlyHard = 2;     /// returns only attributes 
 #define GETATTRIBS_CHARATTRIBS  (sal_uInt8)0x04
 #define GETATTRIBS_ALL          (sal_uInt8)0xFF
 
+class SdrObject;
 class EDITENG_DLLPUBLIC EditEngine
 {
     friend class EditView;
@@ -196,6 +197,8 @@ public:
 
     void            SetUpdateMode( sal_Bool bUpdate );
     sal_Bool            GetUpdateMode() const;
+    void                    SetUpdateModeForAcc( sal_Bool bUp);
+    sal_Bool                GetUpdateModeForAcc( ) const;
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
@@ -500,7 +503,7 @@ public:
     static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
     static sal_Bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
     static sal_Bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
-
+    virtual SdrObject* GetCurTextObj() { return NULL; }
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link& rLink );
     Link            GetBeginDropHdl() const;

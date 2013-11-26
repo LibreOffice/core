@@ -91,6 +91,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bInSelection(false),
     bIsInUndo(false),
     bUpdate(true),
+    bUpdateForAcc(true),
     bUndoEnabled(true),
     bOwnerOfRefDev(false),
     bDowning(false),

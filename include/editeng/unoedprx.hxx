@@ -69,11 +69,13 @@ public:
     virtual OutputDevice*   GetRefDevice() const;
     virtual sal_Bool        GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_uInt16& nIndex ) const;
     virtual sal_Bool        GetWordIndices( sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const;
-    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nPara, sal_uInt16 nIndex ) const;
-    virtual sal_uInt16          GetLineCount( sal_Int32 nPara ) const;
-    virtual sal_uInt16          GetLineLen( sal_Int32 nPara, sal_uInt16 nLine ) const;
+    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nPara, sal_uInt16 nIndex, sal_Bool bInCell = sal_False ) const;
+    virtual sal_uInt16      GetLineCount( sal_Int32 nPara ) const;
+    virtual sal_uInt16      GetLineLen( sal_Int32 nPara, sal_uInt16 nLine ) const;
+    virtual void            SetUpdateModeForAcc( sal_Bool bUp);
+    virtual sal_Bool        GetUpdateModeForAcc() const;
     virtual void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_Int32 nParagraph, sal_uInt16 nLine ) const;
-    virtual sal_uInt16          GetLineNumberAtIndex( sal_Int32 nPara, sal_uInt16 nIndex ) const;
+    virtual sal_uInt16      GetLineNumberAtIndex( sal_Int32 nPara, sal_uInt16 nIndex ) const;
 
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const OUString&, const ESelection& );

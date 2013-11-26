@@ -350,12 +350,15 @@ namespace accessibility
     {
         DBG_ASSERT( 0 <= nStartPara && 0 <= nEndPara &&
                     maChildren.size() > static_cast<size_t>(nStartPara) &&
-                    maChildren.size() >= static_cast<size_t>(nEndPara) ,
-                    "AccessibleParaManager::FireEvent: invalid index" );
+                    maChildren.size() >= static_cast<size_t>(nEndPara) &&
+                    nEndPara >= nStartPara, "AccessibleParaManager::FireEvent: invalid index" );
+
+
 
         if( 0 <= nStartPara && 0 <= nEndPara &&
                 maChildren.size() > static_cast<size_t>(nStartPara) &&
-                maChildren.size() >= static_cast<size_t>(nEndPara) )
+                maChildren.size() >= static_cast<size_t>(nEndPara) &&
+                nEndPara >= nStartPara )
         {
             VectorOfChildren::const_iterator front = maChildren.begin();
             VectorOfChildren::const_iterator back = front;

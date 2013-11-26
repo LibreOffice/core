@@ -132,6 +132,7 @@ sal_Bool EditSpellWrapper::SpellMore()
     if ( pSpellInfo->bMultipleDoc )
     {
         bMore = pEE->SpellNextDocument();
+        SetCurTextObj( pEE->GetCurTextObj() );
         if ( bMore )
         {
             // The text has been entered into the engine, when backwords then
