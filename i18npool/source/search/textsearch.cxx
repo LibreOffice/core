@@ -766,6 +766,7 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
     pRegexMatcher = new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr);
     if (nIcuErr)
     {
+        SAL_INFO( "i18npool", "TextSearch::RESrchPrepare UErrorCode " << nIcuErr);
         delete pRegexMatcher;
         pRegexMatcher = NULL;
     }
@@ -792,6 +793,21 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
 
 //---------------------------------------------------------------------------
 
+static bool lcl_findRegex( RegexMatcher * pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
+{
+    if (!pRegexMatcher->find( nStartPos, rIcuErr))
+    {
+        /* TODO: future versions could pass the UErrorCode or translations
+         * thereof to the caller, for example to inform the user of
+         * U_REGEX_TIME_OUT. The strange thing though is that an error is set
+         * only after the second call that returns immediately and not if
+         * timeout occurred on the first call?!? */
+        SAL_INFO( "i18npool", "lcl_findRegex UErrorCode " << rIcuErr);
+        return false;
+    }
+    return true;
+}
+
 SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
             throw(RuntimeException)
@@ -811,7 +827,7 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
     // search until there is a valid match
     for(;;)
     {
-        if( !pRegexMatcher->find( startPos, nIcuErr))
+        if (!lcl_findRegex( pRegexMatcher, startPos, nIcuErr))
             return aRet;
 
         // #i118887# ignore zero-length matches e.g. "a*" in "bc"
@@ -863,7 +879,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     UErrorCode nIcuErr = U_ZERO_ERROR;
     const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), startPos);
     pRegexMatcher->reset( aSearchTargetStr);
-    if( !pRegexMatcher->find( endPos, nIcuErr))
+    if (!lcl_findRegex( pRegexMatcher, endPos, nIcuErr))
         return aRet;
 
     // find the last match
@@ -885,7 +901,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
         bFirst = false;
         if( nFoundEnd == nLastPos)
             ++nFoundEnd;
-    } while( pRegexMatcher->find( nFoundEnd, nIcuErr));
+    } while( lcl_findRegex( pRegexMatcher, nFoundEnd, nIcuErr));
 
     // Ignore all zero-length matches except "$" anchor on first match.
     if (nGoodPos == nGoodEnd)
@@ -897,7 +913,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     }
 
     // find last match again to get its details
-    pRegexMatcher->find( nGoodPos, nIcuErr);
+    lcl_findRegex( pRegexMatcher, nGoodPos, nIcuErr);
 
     // fill in the details of the last match
     const int nGroupCount = pRegexMatcher->groupCount();
