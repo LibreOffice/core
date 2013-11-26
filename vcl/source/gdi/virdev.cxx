@@ -451,7 +451,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mpFontList = pSVData->maGDIData.mpScreenFontList->Clone( true, false );
 
     // prepare to use new font lists
-    mpFontCache = new ImplFontCache( false );
+    mpFontCache = new ImplFontCache();
 }
 
 // -----------------------------------------------------------------------

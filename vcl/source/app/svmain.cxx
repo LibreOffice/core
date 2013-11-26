@@ -295,7 +295,7 @@ bool InitVCL()
 
     // Initialize global data
     pSVData->maGDIData.mpScreenFontList     = new ImplDevFontList;
-    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache( sal_False );
+    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache;
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Set exception handler

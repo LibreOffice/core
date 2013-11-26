@@ -34,7 +34,6 @@ class ImplDevFontListData;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
 class ImplFontEntry;
-class ImplDirectFontSubstitution;
 class ImplPreMatchFontSubstitution;
 class ImplGlyphFallbackFontSubstitution;
 class FontSelectPattern;
@@ -233,7 +232,7 @@ public:
 
     // find the device font
     ImplDevFontListData*    FindFontFamily( const OUString& rFontName ) const;
-    ImplDevFontListData*    ImplFindByFont( FontSelectPattern&, bool bPrinter, ImplDirectFontSubstitution* ) const;
+    ImplDevFontListData*    ImplFindByFont( FontSelectPattern& ) const;
     ImplDevFontListData*    ImplFindBySearchName( const OUString& ) const;
 
     // suggest fonts for glyph fallback

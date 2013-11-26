@@ -912,10 +912,6 @@ void GenPspGraphics::ClearDevFontCache()
     GlyphCache::GetInstance().ClearFontCache();
 }
 
-void GenPspGraphics::GetDevFontSubstList( OutputDevice* )
-{
-}
-
 void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
 {
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();

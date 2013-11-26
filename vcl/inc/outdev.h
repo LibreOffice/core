@@ -211,14 +211,12 @@ private:
     FontInstanceList    maFontInstanceList;
 
 public:
-                        ImplFontCache( bool bPrinter );
+                        ImplFontCache();
                         ~ImplFontCache();
 
     ImplFontEntry*      GetFontEntry( ImplDevFontList*,
-                             const Font&, const Size& rPixelSize, float fExactHeight,
-                ImplDirectFontSubstitution* pDevSpecific );
-    ImplFontEntry*      GetFontEntry( ImplDevFontList*,
-                    FontSelectPattern&, ImplDirectFontSubstitution* pDevSpecific );
+                             const Font&, const Size& rPixelSize, float fExactHeight);
+    ImplFontEntry*      GetFontEntry( ImplDevFontList*, FontSelectPattern& );
     ImplFontEntry*      GetGlyphFallbackFont( ImplDevFontList*, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
     void                Release( ImplFontEntry* );
@@ -238,7 +236,6 @@ struct ImplOutDevData
     VirtualDevice*              mpRotateDev;
     vcl::ControlLayoutData*     mpRecordLayout;
     Rectangle                   maRecordRect;
-    ImplDirectFontSubstitution      maDevFontSubst;
 
     // #i75163#
     basegfx::B2DHomMatrix*      mpViewTransform;

@@ -2256,11 +2256,6 @@ void WinSalGraphics::ClearDevFontCache()
     //anything to do here ?
 }
 
-// ----------------------------------------------------------------------------
-
-void WinSalGraphics::GetDevFontSubstList( OutputDevice* )
-{}
-
 // -----------------------------------------------------------------------
 
 sal_Bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& rRect )

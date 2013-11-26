@@ -206,14 +206,11 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
                     if( mpFontCache && mpFontCache != pSVData->maGDIData.mpScreenFontCache )
                         delete mpFontCache;
                     mpFontList = pSVData->maGDIData.mpScreenFontList->Clone( true, true );
-                    mpFontCache = new ImplFontCache( sal_False );
+                    mpFontCache = new ImplFontCache();
                 }
                 else
                 {
-                    if( mpOutDevData )
-                        mpOutDevData->maDevFontSubst.Clear();
                     mpGraphics->GetDevFontList( mpFontList );
-                    mpGraphics->GetDevFontSubstList( this );
                 }
             }
         }
@@ -336,14 +333,6 @@ ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
     GetEnglishSearchFontName( maSearchReplaceName );
 }
 
-void OutputDevice::ImplAddDevFontSubstitute( const OUString& rFontName,
-                                             const OUString& rReplaceFontName,
-                                             sal_uInt16 nFlags )
-{
-    ImplInitOutDevData();
-    mpOutDevData->maDevFontSubst.AddFontSubstitute( rFontName, rReplaceFontName, nFlags );
-}
-
 void OutputDevice::RemoveFontSubstitute( sal_uInt16 n )
 {
     ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
@@ -387,8 +376,7 @@ bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
     return false;
 }
 
-static void ImplFontSubstitute( OUString& rFontName,
-    sal_uInt16 nFlags, ImplDirectFontSubstitution* pDevSpecific )
+static void ImplFontSubstitute( OUString& rFontName )
 {
 #ifdef DBG_UTIL
     OUString aTempName = rFontName;
@@ -401,16 +389,6 @@ static void ImplFontSubstitute( OUString& rFontName,
     // apply user-configurable font replacement (eg, from the list in Tools->Options)
     const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( pSubst && pSubst->FindFontSubstitute( aSubstFontName, rFontName, FONT_SUBSTITUTE_ALWAYS ) )
-    {
-        rFontName = aSubstFontName;
-        return;
-    }
-
-    // apply device specific font replacement (e.g. to use printer builtin fonts)
-    if( !pDevSpecific )
-        return;
-
-    if( pDevSpecific->FindFontSubstitute( aSubstFontName, rFontName, nFlags ) )
     {
         rFontName = aSubstFontName;
         return;
@@ -552,7 +530,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
 
                     // get the name of the first available font
                     float fExactHeight = static_cast<float>(aSize.Height());
-                    ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontList, aFont, aSize, fExactHeight, pOutDev->mpOutDevData ? &pOutDev->mpOutDevData->maDevFontSubst : NULL );
+                    ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontList, aFont, aSize, fExactHeight );
                     if (pEntry)
                     {
                         if( pEntry->maFontSelData.mpFontData )
@@ -2182,10 +2160,9 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
     return true;
 }
 
-ImplFontCache::ImplFontCache( bool bPrinter )
+ImplFontCache::ImplFontCache()
 :   mpFirstEntry( NULL ),
-    mnRef0Count( 0 ),
-    mbPrinter( bPrinter )
+    mnRef0Count( 0 )
 {}
 
 ImplFontCache::~ImplFontCache()
@@ -2199,17 +2176,17 @@ ImplFontCache::~ImplFontCache()
 }
 
 ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
-    const Font& rFont, const Size& rSize, float fExactHeight, ImplDirectFontSubstitution* pDevSpecific )
+    const Font& rFont, const Size& rSize, float fExactHeight )
 {
     OUString aSearchName = rFont.GetName();
 
     // initialize internal font request object
     FontSelectPattern aFontSelData( rFont, aSearchName, rSize, fExactHeight );
-    return GetFontEntry( pFontList, aFontSelData, pDevSpecific );
+    return GetFontEntry( pFontList, aFontSelData );
 }
 
 ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
-    FontSelectPattern& aFontSelData, ImplDirectFontSubstitution* pDevSpecific )
+    FontSelectPattern& aFontSelData )
 {
     // check if a directly matching logical font instance is already cached,
     // the most recently used font usually has a hit rate of >50%
@@ -2228,7 +2205,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
     if( !pEntry ) // no direct cache hit
     {
         // find the best matching logical font family and update font selector accordingly
-        pFontFamily = pFontList->ImplFindByFont( aFontSelData, mbPrinter, pDevSpecific );
+        pFontFamily = pFontList->ImplFindByFont( aFontSelData );
         DBG_ASSERT( (pFontFamily != NULL), "ImplFontCache::Get() No logical font found!" );
         if( pFontFamily )
             aFontSelData.maSearchName = pFontFamily->GetSearchName();
@@ -2343,18 +2320,11 @@ namespace
     }
 }
 
-ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
-    bool bPrinter, ImplDirectFontSubstitution* pDevSpecific ) const
+ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD ) const
 {
     // give up if no fonts are available
     if( !Count() )
         return NULL;
-
-    // test if a font in the token list is available
-    // substitute the font if this was requested
-    sal_uInt16 nSubstFlags = FONT_SUBSTITUTE_ALWAYS;
-    if ( bPrinter )
-        nSubstFlags |= FONT_SUBSTITUTE_SCREENONLY;
 
     bool bMultiToken = false;
     sal_Int32 nTokenPos = 0;
@@ -2380,7 +2350,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
 #endif
 
         GetEnglishSearchFontName( aSearchName );
-        ImplFontSubstitute( aSearchName, nSubstFlags, pDevSpecific );
+        ImplFontSubstitute( aSearchName );
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.GetWeight() > WEIGHT_MEDIUM)
@@ -2479,7 +2449,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         if( mpPreMatchHook )
             if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
                 GetEnglishSearchFontName( aSearchName );
-        ImplFontSubstitute( aSearchName, nSubstFlags, pDevSpecific );
+        ImplFontSubstitute( aSearchName );
         ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
@@ -2691,8 +2661,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
         rFontSelData.maSearchName = "";
     }
 
-    // get device font without doing device specific substitutions
-    ImplFontEntry* pFallbackFont = GetFontEntry( pFontList, rFontSelData, NULL );
+    ImplFontEntry* pFallbackFont = GetFontEntry( pFontList, rFontSelData );
     return pFallbackFont;
 }
 
@@ -2925,11 +2894,8 @@ bool OutputDevice::ImplNewFont() const
         aSize.Width() = 1;
 
     // get font entry
-    ImplDirectFontSubstitution* pDevSpecificSubst = NULL;
-    if( mpOutDevData )
-        pDevSpecificSubst = &mpOutDevData->maDevFontSubst;
     ImplFontEntry* pOldEntry = mpFontEntry;
-    mpFontEntry = mpFontCache->GetFontEntry( mpFontList, maFont, aSize, fExactHeight, pDevSpecificSubst );
+    mpFontEntry = mpFontCache->GetFontEntry( mpFontList, maFont, aSize, fExactHeight );
     if( pOldEntry )
         mpFontCache->Release( pOldEntry );
 
@@ -5899,13 +5865,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
 
     FontSelectPattern aFontSelData = mpFontEntry->maFontSelData;
 
-    // when device specific font substitution may have been performed for
-    // the originally selected font then make sure that a fallback to that
-    // font is performed first
-    int nDevSpecificFallback = 0;
-    if( mpOutDevData && !mpOutDevData->maDevFontSubst.Empty() )
-        nDevSpecificFallback = 1;
-
     // try if fallback fonts support the missing unicodes
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
@@ -5916,7 +5875,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         aFontSelData.mpFontEntry = mpFontEntry; // reset the fontentry to base-level
 #endif
         ImplFontEntry* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontList,
-            aFontSelData, nFallbackLevel-nDevSpecificFallback, aMissingCodes );
+            aFontSelData, nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
             break;
 
