@@ -201,6 +201,19 @@ OptValue< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
 
 OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
 {
+    const char *pAttr;
+
+    // catch the common cases as quickly as possible first
+    bool bHasAttr = getAttribList()->getAsChar( nAttrToken, pAttr );
+    if( !bHasAttr )
+        return OptValue< bool >();
+    if( !strcmp( pAttr, "false" ) )
+        return OptValue< bool >( false );
+    if( !strcmp( pAttr, "true" ) )
+        return OptValue< bool >( true );
+
+    // now for all the crazy stuff
+
     // boolean attributes may be "t", "f", "true", "false", "on", "off", "1", or "0"
     switch( getToken( nAttrToken, XML_TOKEN_INVALID ) )
     {
