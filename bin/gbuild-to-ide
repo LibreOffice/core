@@ -277,6 +277,174 @@ VersionControl=kdevgit
             self.write_modulestub(location, modulename)
             self.write_modulebeef(location, modulename)
 
+class XcodeIntegrationGenerator(IdeIntegrationGenerator):
+    def indent(self, file, level):
+        if level == 0:
+            return
+        for i in range(0, level):
+            file.write(' ')
+
+    def write_object(self, object, file, indent):
+        if isinstance(object, int):
+            file.write('%d' % object)
+        elif isinstance(object, str) and not re.search('[^A-Za-z0-9_]', object):
+            file.write('%s' % object)
+        elif isinstance(object, str):
+            file.write('"%s"' % object)
+        elif isinstance(object, dict):
+            self.write_dict(object, file, indent)
+
+    # Write a dictionary out as an "old-style (NeXT) ASCII plist"
+    def write_dict(self, dict, file, indent):
+        file.write('{')
+        file.write('\n')
+        for key in sorted(dict.keys()):
+            self.indent(file, indent+1)
+            file.write('%s = ' % key)
+            self.write_object(dict[key], file, indent+1)
+            file.write(';\n')
+        self.indent(file, indent)
+        file.write('}')
+
+    def write_dict_to_plist(self, dict, file):
+        file.write('// !$*UTF8*$!\n')
+        indent = 0
+        self.write_dict(dict, file, 0)
+
+    def get_product_type(self, modulename):
+        if modulename in self.gbuildparser.libs:
+            return 'com.apple.product-type.library.dynamic'
+        elif modulename in self.gbuildparser.exes:
+            return 'com.apple.product-type.something'
+
+    counter = 0
+    def generate_id(self):
+        XcodeIntegrationGenerator.counter = XcodeIntegrationGenerator.counter + 1
+        return str('X%07x' % XcodeIntegrationGenerator.counter)
+
+    def generate_build_phases(self, modulename):
+        result = [ self.sourcesBuildPhaseId ]
+        return result
+
+    def generate_root_object(self, modulename):
+        result = { 'isa':'PBXProject',
+                   'attributes':{ 'LastUpgradeCheck':'0500',
+                                  'ORGANIZATIONNAME':'LibreOffice' },
+                   'buildConfigurationList':self.generate_id(),
+                   'compatibilityVersion':'Xcode 3.2',
+                   'hasScannedForEncodings':0,
+                   'knownRegions':['en'],
+                   'mainGroup':self.mainGroupId,
+                   'productRefGroup':self.productRefGroupId,
+                   'projectDirPath':'',
+                   'projectRoot':'',
+                   'targets':self.targetId }
+        return result
+
+    def generate_target(self, modulename):
+        result = { 'isa':'PBXNativeTarget',
+                   'buildConfigurationList':self.generate_id(),
+                   'buildPhases':self.generate_build_phases(modulename),
+                   'buildRules':[],
+                   'dependencies':[],
+                   'name':modulename,
+                   'productName':modulename,
+                   'productReference':self.productReferenceId,
+                   'productType':self.get_product_type(modulename) }
+        return result
+
+    def generate_main_group(self, modulename):
+        result = { 'isa':'PBXGroup',
+                   'children':[ self.subMainGroupId, self.productGroupId ],
+                   'sourceTree':'<group>' }
+        return result;
+
+    def generate_sub_main_children(self, modulename):
+        return {}
+
+    def generate_sub_main_group(self, modulename):
+        result = { 'isa':'PBXGroup',
+                   'children':self.generate_sub_main_children(modulename),
+                   'path':modulename,
+                   'sourceTree':'<group>' }
+        return result;
+
+    def generate_product_group(self, modulename):
+        result = { 'isa':'PBXGroup',
+                   'children':[ self.productReferenceId ],
+                   'name':'Products',
+                   'sourceTree':'<group>' }
+        return result;
+
+    def build_source_list(self, modulename):
+        self.sourceList = { }
+        self.sourceRefList = { }
+        for i in self.gbuildparser.libs[modulename].cxxobjects:
+            ref = self.generate_id()
+            self.sourceList[self.generate_id()] = ref
+            self.sourceRefList[ref] = { 'lastKnownFileType':'sourcecode.cpp.cpp',
+                                        'path':i + '.cxx',
+                                        'sourceTree':'<group>' }
+
+    def generate_sources_build_phase(self, modulename):
+        result = { 'isa':'PBXSourcesBuildPhase',
+                   'buildActionMask':2147483647,
+                   'files':self.sourceList.keys(),
+                   'runOnlyForDeploymentPostprocessing':0 }
+        return result;
+
+    def generate_project(self, modulename):
+        self.rootObjectId = self.generate_id()
+        self.mainGroupId = self.generate_id()
+        self.subMainGroupId = self.generate_id()
+        self.productReferenceId = self.generate_id()
+        self.productRefGroupId = self.generate_id()
+        self.productGroupId = self.generate_id()
+        self.targetId = self.generate_id()
+        self.build_source_list(modulename)
+        self.sourcesBuildPhaseId = self.generate_id()
+        objects = { self.rootObjectId:self.generate_root_object(modulename),
+                    self.targetId:self.generate_target(modulename),
+                    self.mainGroupId:self.generate_main_group(modulename),
+                    self.subMainGroupId:self.generate_sub_main_group(modulename),
+                    self.productGroupId:self.generate_product_group(modulename),
+                    self.sourcesBuildPhaseId:self.sources_build_phase(modulename)
+                    }
+        for i in self.sourceList.keys():
+            ref = self.sourceList[i]
+            objects[i] = { 'isa':'PBXBuildFile',
+                           'fileRef':ref }
+            objects[ref] = { 'isa':'PBXFileReference',
+                             'lastKnownFileType':self.sourceRefList[ref]['lastKnownFileType'],
+                             'path':self.sourceRefList[ref]['path'] }
+        project = { 'archiveVersion':1,
+                    'classes':{},
+                    'objectVersion':46,
+                    'objects':objects,
+                    'rootObject':self.rootObjectId }
+        return project
+
+    def write_xcodeproj(self, moduledir, modulename):
+        xcodeprojdir = os.path.join(moduledir, '%s.xcodeproj' % modulename)
+        try:
+            os.mkdir(xcodeprojdir)
+        except:
+            pass
+        self.write_dict_to_plist(self.generate_project(modulename),open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w'))
+
+    def __init__(self, gbuildparser):
+        IdeIntegrationGenerator.__init__(self, gbuildparser)
+        self.target_by_location = {}
+        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
+            if not target.location in self.target_by_location:
+                self.target_by_location[target.location] = set()
+            self.target_by_location[target.location] |= set([target])
+
+    def emit(self):
+        for location in self.target_by_location:
+            modulename = os.path.split(location)[1]
+            self.write_xcodeproj(location, modulename)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='LibreOffice gbuild IDE project generator')
@@ -293,6 +461,8 @@ if __name__ == '__main__':
     #DebugIntegrationGenerator(gbuildparser).emit()
     if args.ide == 'kdevelop':
         KdevelopIntegrationGenerator(gbuildparser).emit()
+    elif args.ide == 'xcode':
+        XcodeIntegrationGenerator(gbuildparser).emit()
     else:
         parser.print_help()
         sys.exit(1)

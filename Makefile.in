@@ -331,7 +331,8 @@ $(1)-ide-integration:
 endef
 
 $(foreach ide,\
-	kdevelop, \
+	kdevelop \
+	xcode, \
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
 endif # MAKE_RESTARTS
