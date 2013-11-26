@@ -144,12 +144,12 @@ const short ROLE_TABLE[][2] =
    * @return.
    */
 AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
-                     AccEventListener* listener) :
+                     AccEventListener* pListener) :
         m_pIMAcc    (NULL),
         m_resID     (NULL),
         m_pParantID (NULL),
         m_pParentObj(NULL),
-        m_accListener (listener),
+        m_pListener (pListener),
         m_bShouldDestroy(sal_False),
         m_xAccRef( pAcc )
 {
@@ -1169,13 +1169,15 @@ void AccObject::SetParentHWND(HWND hWnd)
 {
     m_pParantID = hWnd;
 }
-void AccObject::SetListener( AccEventListener* Listener )
+
+void AccObject::SetListener(rtl::Reference<AccEventListener> const& pListener)
 {
-    m_accListener = Listener;
+    m_pListener = pListener;
 }
+
 AccEventListener* AccObject::getListener()
 {
-    return m_accListener;
+    return m_pListener.get();
 }
 
 long AccObject::GetResID()

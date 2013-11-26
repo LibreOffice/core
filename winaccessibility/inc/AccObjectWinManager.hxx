@@ -26,7 +26,7 @@
 #include <map>
 #include <windows.h>
 #include <osl/mutex.hxx>
-#include <vcl/dllapi.h>
+#include <rtl/ref.hxx>
 #include "ResIDGenerator.hxx"
 #include "UAccCOM.h"
 
@@ -90,7 +90,8 @@ private:
     void       DeleteFromHwndXAcc(com::sun::star::accessibility::XAccessible* pXAcc );
     int  UpdateAccSelection(com::sun::star::accessibility::XAccessible* pXAcc);
 
-    AccEventListener* createAccEventListener(com::sun::star::accessibility::XAccessible* pXAcc, AccObjectManagerAgent* Agent);
+    ::rtl::Reference<AccEventListener> CreateAccEventListener(
+            com::sun::star::accessibility::XAccessible* pXAcc);
 public:
     virtual ~AccObjectWinManager();
     sal_Bool InsertAccObj( com::sun::star::accessibility::XAccessible* pXAcc,com::sun::star::accessibility::XAccessible* pParentXAcc,HWND pWnd);
