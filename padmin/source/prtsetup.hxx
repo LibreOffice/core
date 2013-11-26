@@ -40,7 +40,6 @@ namespace padmin {
 class RTSPaperPage;
 class RTSDevicePage;
 class RTSOtherPage;
-class RTSFontSubstPage;
 class RTSCommandPage;
 
 class RTSDialog : public TabDialog
@@ -48,7 +47,6 @@ class RTSDialog : public TabDialog
     friend class RTSPaperPage;
     friend class RTSDevicePage;
     friend class RTSOtherPage;
-    friend class RTSFontSubstPage;
     friend class RTSCommandPage;
 
     ::psp::PrinterInfo      m_aJobData;
@@ -63,7 +61,6 @@ class RTSDialog : public TabDialog
     RTSPaperPage*           m_pPaperPage;
     RTSDevicePage*          m_pDevicePage;
     RTSOtherPage*           m_pOtherPage;
-    RTSFontSubstPage*       m_pFontSubstPage;
     RTSCommandPage*         m_pCommandPage;
 
     // some resources
@@ -160,31 +157,6 @@ public:
     ~RTSOtherPage();
 
     void save();
-};
-
-class RTSFontSubstPage : public TabPage
-{
-    RTSDialog*          m_pParent;
-
-    FixedText           m_aSubstitutionsText;
-    DelMultiListBox     m_aSubstitutionsBox;
-    FixedText           m_aFromFontText;
-    ComboBox            m_aFromFontBox;
-    FixedText           m_aToFontText;
-    ListBox             m_aToFontBox;
-
-    PushButton          m_aAddButton;
-    PushButton          m_aRemoveButton;
-    CheckBox            m_aEnableBox;
-
-    DECL_LINK( ClickBtnHdl, Button* );
-    DECL_LINK( SelectHdl, ListBox* );
-    DECL_LINK( DelPressedHdl, ListBox* );
-
-    void update();
-public:
-    RTSFontSubstPage( RTSDialog* );
-    ~RTSFontSubstPage();
 };
 
 } // namespace

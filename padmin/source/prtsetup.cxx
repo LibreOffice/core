@@ -22,8 +22,6 @@
 #include "rtsetup.hrc"
 #include "cmddlg.hxx"
 
-#include "vcl/fontmanager.hxx"
-
 #include "osl/thread.h"
 
 #include <officecfg/Office/Common.hxx>
@@ -83,7 +81,6 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, boo
     , m_pPaperPage(NULL)
     , m_pDevicePage(NULL)
     , m_pOtherPage(NULL)
-    , m_pFontSubstPage(NULL)
     , m_pCommandPage(NULL)
     , m_aInvalidString(PaResId(RID_RTS_RTSDIALOG_INVALID_TXT).toString())
 {
@@ -97,7 +94,6 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, boo
     if( ! bAllPages )
     {
         m_pTabControl->RemovePage(m_pTabControl->GetPageId("other"));
-        m_pTabControl->RemovePage(m_pTabControl->GetPageId("font"));
         m_pTabControl->RemovePage(m_pTabControl->GetPageId("command"));
     }
     else if( m_aJobData.m_aDriverName.startsWith("CUPS:") && ! PrinterInfoManager::get().isCUPSDisabled() )
@@ -119,7 +115,6 @@ RTSDialog::~RTSDialog()
     delete m_pPaperPage;
     delete m_pDevicePage;
     delete m_pOtherPage;
-    delete m_pFontSubstPage;
     delete m_pCommandPage;
 }
 
@@ -141,8 +136,6 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
             pPage = m_pDevicePage = new RTSDevicePage( this );
         else if (sPage == "other")
             pPage = m_pOtherPage = new RTSOtherPage( this );
-        else if (sPage == "font")
-            pPage = m_pFontSubstPage = new RTSFontSubstPage( this );
         else if (sPage == "command")
             pPage = m_pCommandPage = new RTSCommandPage( this );
         if( pPage )
@@ -616,144 +609,6 @@ IMPL_LINK( RTSOtherPage, ClickBtnHdl, Button*, pButton )
             m_pParent->m_aJobData.m_nBottomMarginAdjust = 0;
 
         initValues();
-    }
-    return 0;
-}
-
-// ------------------------------------------------------------------
-
-/*
- *  RTSFontSubstPage
- */
-
-RTSFontSubstPage::RTSFontSubstPage( RTSDialog* pParent ) :
-        TabPage( pParent->m_pTabControl, PaResId( RID_RTS_FONTSUBSTPAGE ) ),
-        m_pParent( pParent ),
-        m_aSubstitutionsText( this, PaResId( RID_RTS_FS_SUBST_TXT ) ),
-        m_aSubstitutionsBox( this, PaResId( RID_RTS_FS_SUBST_BOX ) ),
-        m_aFromFontText( this, PaResId( RID_RTS_FS_FROM_TXT ) ),
-        m_aFromFontBox( this, PaResId( RID_RTS_FS_FROM_BOX ) ),
-        m_aToFontText( this, PaResId( RID_RTS_FS_TO_TXT ) ),
-        m_aToFontBox( this, PaResId( RID_RTS_FS_TO_BOX ) ),
-        m_aAddButton( this, PaResId( RID_RTS_FS_ADD_BTN ) ),
-        m_aRemoveButton( this, PaResId( RID_RTS_FS_REMOVE_BTN ) ),
-        m_aEnableBox( this, PaResId( RID_RTS_FS_ENABLE_BTN ) )
-{
-    FreeResource();
-
-    // fill to box
-    PrintFontManager& rFontManager = PrintFontManager::get();
-    ::std::list< FastPrintFontInfo > aFonts;
-    rFontManager.getFontListWithFastInfo( aFonts, m_pParent->m_aJobData.m_pParser );
-    ::std::list< FastPrintFontInfo >::const_iterator it;
-    ::boost::unordered_map< OUString, int, OUStringHash > aToMap, aFromMap;
-    for( it = aFonts.begin(); it != aFonts.end(); ++it )
-    {
-        if( it->m_eType == fonttype::Builtin )
-        {
-            if( aToMap.find( it->m_aFamilyName ) == aToMap.end() )
-            {
-                m_aToFontBox.InsertEntry( it->m_aFamilyName );
-                aToMap[ it->m_aFamilyName ] = 1;
-            }
-        }
-        else
-        {
-            if( aFromMap.find( it->m_aFamilyName ) == aFromMap.end() )
-            {
-                m_aFromFontBox.InsertEntry( it->m_aFamilyName );
-                aFromMap[ it->m_aFamilyName ] = 1;
-            }
-        }
-    }
-
-    m_aEnableBox.Check( m_pParent->m_aJobData.m_bPerformFontSubstitution );
-    m_aRemoveButton.Enable( sal_False );
-    if( ! m_pParent->m_aJobData.m_bPerformFontSubstitution )
-    {
-        m_aSubstitutionsBox.Enable( sal_False );
-        m_aSubstitutionsText.Enable( sal_False );
-        m_aAddButton.Enable( sal_False );
-        m_aToFontBox.Enable( sal_False );
-        m_aToFontText.Enable( sal_False );
-        m_aFromFontBox.Enable( sal_False );
-        m_aFromFontText.Enable( sal_False );
-    }
-
-    update();
-
-    m_aAddButton.SetClickHdl( LINK( this, RTSFontSubstPage, ClickBtnHdl ) );
-    m_aRemoveButton.SetClickHdl( LINK( this, RTSFontSubstPage, ClickBtnHdl ) );
-    m_aEnableBox.SetClickHdl( LINK( this, RTSFontSubstPage, ClickBtnHdl ) );
-    m_aSubstitutionsBox.SetSelectHdl( LINK( this, RTSFontSubstPage, SelectHdl ) );
-    m_aSubstitutionsBox.setDelPressedLink( LINK( this, RTSFontSubstPage, DelPressedHdl ) );
-}
-
-RTSFontSubstPage::~RTSFontSubstPage()
-{
-}
-
-void RTSFontSubstPage::update()
-{
-    m_aSubstitutionsBox.Clear();
-    m_aRemoveButton.Enable( sal_False );
-    // fill substitutions box
-    ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
-    for( it = m_pParent->m_aJobData.m_aFontSubstitutes.begin();
-         it != m_pParent->m_aJobData.m_aFontSubstitutes.end(); ++it )
-    {
-        OUString aEntry = it->first + " -> " + it->second;
-        m_aSubstitutionsBox.InsertEntry( aEntry );
-    }
-}
-
-IMPL_LINK( RTSFontSubstPage, DelPressedHdl, ListBox*, pBox )
-{
-    if( pBox == &m_aSubstitutionsBox &&
-        m_aRemoveButton.IsEnabled() )
-        ClickBtnHdl( &m_aRemoveButton );
-    return 0;
-}
-
-IMPL_LINK( RTSFontSubstPage, SelectHdl, ListBox*, pBox )
-{
-    if( pBox == &m_aSubstitutionsBox )
-    {
-        m_aRemoveButton.Enable( m_aSubstitutionsBox.GetSelectEntryCount() && m_pParent->m_aJobData.m_bPerformFontSubstitution );
-    }
-    return 0;
-}
-
-IMPL_LINK( RTSFontSubstPage, ClickBtnHdl, Button*, pButton )
-{
-    if( pButton == &m_aAddButton )
-    {
-        m_pParent->m_aJobData.m_aFontSubstitutes[ m_aFromFontBox.GetText() ] = m_aToFontBox.GetSelectEntry();
-        update();
-    }
-    else if( pButton == &m_aRemoveButton )
-    {
-        for( int i = 0; i < m_aSubstitutionsBox.GetSelectEntryCount(); i++ )
-        {
-            OUString aEntry( m_aSubstitutionsBox.GetSelectEntry( i ) );
-            sal_Int32 nPos = aEntry.indexOf(" -> ");
-            if (nPos != -1)
-                aEntry = aEntry.copy(0, nPos);
-            m_pParent->m_aJobData.m_aFontSubstitutes.erase( aEntry );
-        }
-        update();
-    }
-    else if( pButton == &m_aEnableBox )
-    {
-        m_pParent->m_aJobData.m_bPerformFontSubstitution = m_aEnableBox.IsChecked() ? true : false;
-        m_aSubstitutionsBox.Enable( m_pParent->m_aJobData.m_bPerformFontSubstitution );
-        m_aSubstitutionsText.Enable( m_pParent->m_aJobData.m_bPerformFontSubstitution );
-        m_aAddButton.Enable( m_pParent->m_aJobData.m_bPerformFontSubstitution );
-        m_aRemoveButton.Enable( m_aSubstitutionsBox.GetSelectEntryCount() && m_pParent->m_aJobData.m_bPerformFontSubstitution );
-        m_aToFontBox.Enable( m_pParent->m_aJobData.m_bPerformFontSubstitution );
-        m_aToFontText.Enable( m_pParent->m_aJobData.m_bPerformFontSubstitution );
-        m_aFromFontBox.Enable( m_pParent->m_aJobData.m_bPerformFontSubstitution );
-        m_aFromFontText.Enable( m_pParent->m_aJobData.m_bPerformFontSubstitution );
     }
     return 0;
 }

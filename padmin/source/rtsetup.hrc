@@ -35,17 +35,6 @@
 #define RID_RTS_OTHER_COMMENT_EDT           10
 #define RID_RTS_OTHER_DEFAULT_BTN           11
 
-#define RID_RTS_FONTSUBSTPAGE               4005
-#define RID_RTS_FS_SUBST_TXT                1
-#define RID_RTS_FS_SUBST_BOX                2
-#define RID_RTS_FS_FROM_TXT             3
-#define RID_RTS_FS_FROM_BOX             4
-#define RID_RTS_FS_TO_TXT                   5
-#define RID_RTS_FS_TO_BOX                   6
-#define RID_RTS_FS_ADD_BTN                  7
-#define RID_RTS_FS_REMOVE_BTN               8
-#define RID_RTS_FS_ENABLE_BTN               9
-
 #define RID_RTS_COMMANDPAGE                4006
 #define RID_RTS_CMD_TXT_PRTNAME         1
 #define RID_RTS_CMD_TXT_CONNECT         2
