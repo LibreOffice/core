@@ -1467,11 +1467,8 @@ int Desktop::Main()
         SAL_INFO( "desktop.app", "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
-            bool bQuitApp;
-
-            if( !InitAccessBridge( true, bQuitApp ) )
-                if( bQuitApp )
-                    return EXIT_FAILURE;
+            if( !InitAccessBridge() )
+                return EXIT_FAILURE;
         }
         SAL_INFO( "desktop.app", "} GetEnableATToolSupport" );
 #endif

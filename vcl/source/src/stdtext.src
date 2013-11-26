@@ -34,56 +34,6 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text [ en-US ] = "Do not show warning again.";
 };
 
-String SV_ACCESSERROR_WRONG_VERSION
-{
-    Text [ en-US ] = "Wrong Version";
-};
-
-String SV_ACCESSERROR_BRIDGE_MSG
-{
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
-};
-
-String SV_ACCESSERROR_OK_CANCEL_MSG
-{
-    Text [ en-US ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
-};
-
-String SV_ACCESSERROR_MISSING_BRIDGE
-{
-    Text [ en-US ] = "No Java Access Bridge";
-};
-
-String SV_ACCESSERROR_FAULTY_JAVA
-{
-    Text [ en-US ] = "Faulty Java Installation";
-};
-
-String SV_ACCESSERROR_JAVA_MSG
-{
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires Java 1.4.0_02 or later version to support accessibility.";
-};
-
-String SV_ACCESSERROR_MISSING_JAVA
-{
-    Text [ en-US ] = "No Java Installation";
-};
-
-String SV_ACCESSERROR_JAVA_NOT_CONFIGURED
-{
-    Text [ en-US ] = "Missing Java Configuration";
-};
-
-String SV_ACCESSERROR_JAVA_DISABLED
-{
-    Text [ en-US ] = "Java Disabled";
-};
-
-String SV_ACCESSERROR_TURNAROUND_MSG
-{
-    Text [ en-US ] = "The Java Access Bridge could not be started.";
-};
-
 String SV_ACCESSERROR_NO_FONTS
 {
     Text [ en-US ] = "No fonts could be found on the system.";
