@@ -770,7 +770,7 @@ void ParagraphImpl::checkDisposed()
 }
 
 Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
-                   ::TextView & rView, bool /* bCompoundControlChild */):
+                   ::TextView & rView):
     VCLXAccessibleComponent(pVclXWindow),
     m_xAccessible(pVclXWindow),
     m_rEngine(rEngine),

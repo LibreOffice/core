@@ -103,7 +103,7 @@ namespace svt
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
             createAccessibleTextWindowContext(
-                VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView, bool bCompoundControlChild
+                VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView
             ) const = 0;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

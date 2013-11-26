@@ -24,8 +24,8 @@
 
 namespace svt
 {
-    TextWindowPeer::TextWindowPeer(::TextView & rView, bool bCompoundControlChild):
-        m_rEngine(*rView.GetTextEngine()), m_rView(rView), m_bCompoundControlChild(bCompoundControlChild)
+    TextWindowPeer::TextWindowPeer(::TextView & rView):
+        m_rEngine(*rView.GetTextEngine()), m_rView(rView)
     {
         SetWindow(rView.GetWindow());
         m_pFactoryAccess.reset( new AccessibleFactoryAccess );
@@ -39,7 +39,7 @@ namespace svt
     css::uno::Reference< css::accessibility::XAccessibleContext > TextWindowPeer::CreateAccessibleContext()
     {
         return m_pFactoryAccess->getFactory().createAccessibleTextWindowContext(
-            this, m_rEngine, m_rView, m_bCompoundControlChild
+            this, m_rEngine, m_rView
         );
     }
 }

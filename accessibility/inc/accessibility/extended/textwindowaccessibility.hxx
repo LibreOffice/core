@@ -396,7 +396,7 @@ class Document: public ::VCLXAccessibleComponent, public ::SfxListener
 {
 public:
     Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
-             ::TextView & rView, bool bCompoundControlChild);
+             ::TextView & rView);
 
     inline css::uno::Reference< css::accessibility::XAccessible >
     getAccessible() { return m_xAccessible; }

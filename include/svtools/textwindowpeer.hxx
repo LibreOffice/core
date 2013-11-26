@@ -35,7 +35,7 @@ namespace svt
 class TextWindowPeer: public ::VCLXWindow
 {
 public:
-    SVT_DLLPUBLIC TextWindowPeer(::TextView & rView, bool bCompoundControlChild = false);
+    SVT_DLLPUBLIC TextWindowPeer(::TextView & rView);
 
     virtual ~TextWindowPeer();
 
@@ -53,7 +53,6 @@ private:
 
     ::TextEngine & m_rEngine;
     ::TextView & m_rView;
-    bool m_bCompoundControlChild;
 
     ::std::auto_ptr< ::svt::AccessibleFactoryAccess  >  m_pFactoryAccess;
 };
