@@ -648,7 +648,7 @@ void SwSendMailDialog::UpdateTransferStatus()
 {
     OUString sStatus( m_sTransferStatus );
     sStatus = sStatus.replaceFirst("%1", OUString::number(m_nSendCount) );
-    sStatus = sStatus.replaceFirst("%2", OUString::number(m_pImpl->nDocumentCount));
+    sStatus = sStatus.replaceFirst("%2", OUString::number(m_pImpl->aDescriptors.size()));
     m_aTransferStatusFT.SetText(sStatus);
 
     sStatus = m_sErrorStatus.replaceFirst("%1", OUString::number(m_nErrorCount) );
