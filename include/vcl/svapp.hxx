@@ -538,7 +538,7 @@ VCL_DLLPUBLIC Application* GetpApp();
 VCL_DLLPUBLIC bool InitVCL();
 VCL_DLLPUBLIC void DeInitVCL();
 
-VCL_DLLPUBLIC bool InitAccessBridge( bool bAllowCancel, bool &rCancelled );
+VCL_DLLPUBLIC bool InitAccessBridge();
 
 // only allowed to call, if no thread is running. You must call JoinMainLoopThread to free all memory.
 VCL_DLLPUBLIC void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData );

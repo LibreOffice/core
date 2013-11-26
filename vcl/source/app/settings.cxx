@@ -1178,8 +1178,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
 {
     if ( bEnable != mpData->mnEnableATT )
     {
-        bool bDummy;
-        if( bEnable && !ImplInitAccessBridge(false, bDummy) )
+        if( bEnable && !ImplInitAccessBridge() )
             return;
 
         HKEY hkey;
