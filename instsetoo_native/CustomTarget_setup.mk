@@ -16,6 +16,7 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	$(if $(filter TRUE,$(DISABLE_PYTHON)),,$(call gb_Helper_get_rcfile,pythonloader.uno)) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),$(if $(filter-out MACOSX,$(OS)), \
 	    $(call gb_Helper_get_rcfile,redirect))) \
+	$(call gb_Helper_get_rcfile,soffice) \
 	$(call gb_Helper_get_rcfile,uno) \
 	$(call gb_Helper_get_rcfile,version) \
 ))
@@ -107,6 +108,22 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
 		echo '[Bootstrap]' \
+		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
+	) > $@
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,soffice) :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	( \
+		echo '[Bootstrap]' \
+		&& echo 'HideEula=1' \
+		&& echo 'Logo=1' \
+		&& echo 'NativeProgress=false' \
+		&& echo 'ProgressBarColor=128,128,128' \
+		&& echo 'ProgressFrameColor=245,245,245' \
+		&& echo 'ProgressPosition=72,189' \
+		&& echo 'ProgressSize=409,8' \
+		&& echo 'ProgressTextBaseline=170' \
+		&& echo 'ProgressTextColor=255,255,255' \
 		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
 	) > $@
 
