@@ -28,7 +28,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-//#define _ATL_APARTMENT_THREADED
+// this turns off ATL's locking in the COM component implementations
+// (we don't need it since we use SolarMutex instead)
+#define _ATL_APARTMENT_THREADED
 
 #include <prewin.h>
 #include <windows.h>

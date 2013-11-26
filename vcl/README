@@ -64,6 +64,13 @@ portable C++ class library for GUIs, with very old roots, that was
 developed by StarDivision. Nowadays it is not used by anything except
 LibreOffice (and OpenOffice).
 
+== COM threading ==
+
+The way COM is used in LO generally:
+- vcl InitSalData() puts main thread into Single-threaded Apartment (STA)
+- oslWorkerWrapperFunction() puts every thread spawned via oslCreateThread()
+  into MTA (free-threaded)
+
 == EMF+ ==
 
 emf+ is vector file format used by MSO and is successor of wmf and

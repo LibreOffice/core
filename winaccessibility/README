@@ -26,6 +26,22 @@ Here is one way of visualising the code / control flow
 VCL <-> UNO toolkit <-> UNO a11y <-> win a11y <-> COM / IAccessible2
 vcl/ <-> toolkit/ <-> accessibility/ <-> winaccessibility/ <-> UAccCom/
 
+Threading
+
+It's possible that the UNO components are called from threads other
+than the main thread, so they have to be synchronized. It would be nice
+to put the component into an UNO apartment (and the COM components into STA)
+but UNO would spawn a new thread for it so it's not possible.
+The COM components also call into the same global AccObjectWinManager
+as the UNO components do so both have to be synchronized in the same way.
+So we use the SolarMutex for all synchronization since anything else
+would be rather difficult to make work.  Unfortunately there is a
+pre-exising problem in vcl with Win32 Window creation and destruction
+on non-main threads where a synchronous SendMessage is used while
+the SolarMutex is locked that can cause deadlocks if the main thread is
+waiting on the SolarMutex itself at that time and thus not handing the
+Win32 message; this is easy to trigger with JunitTests but hopefully
+not by actual end users.
 
 Debugging / playing with winaccessibility
 

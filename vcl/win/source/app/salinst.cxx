@@ -446,7 +446,7 @@ SalData::~SalData()
 void InitSalData()
 {
     SalData* pSalData = new SalData;
-    CoInitialize(0);
+    CoInitialize(0); // put main thread in Single Threaded Apartment (STA)
 
     // init GDIPlus
     static Gdiplus::GdiplusStartupInput gdiplusStartupInput;

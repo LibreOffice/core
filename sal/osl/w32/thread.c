@@ -49,9 +49,8 @@ static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
 {
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)pData;
 
-    /* Initialize COM */
-
-    CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    /* Initialize COM - Multi Threaded Apartment (MTA) for all threads */
+    CoInitializeEx(0, COINIT_MULTITHREADED); /* spawned by oslCreateThread */
 
     /* call worker-function with data */
 
