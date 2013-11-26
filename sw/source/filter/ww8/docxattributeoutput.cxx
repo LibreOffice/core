@@ -80,6 +80,7 @@
 #include <svx/xflgrit.hxx>
 #include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <tools/datetimeutils.hxx>
 
 #include <anchoredobject.hxx>
 #include <docufld.hxx>
@@ -1452,7 +1453,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
     OString aId( OString::number( pRedline->GetSeqNo() ) );
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
-    OString aDate( msfilter::util::DateTimeToOString( pRedline->GetTimeStamp() ) );
+    OString aDate( DateTimeToOString( pRedline->GetTimeStamp() ) );
 
     OUString sVal;
     OString sOVal;
@@ -1513,7 +1514,7 @@ void DocxAttributeOutput::StartRedline()
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
 
-    OString aDate( msfilter::util::DateTimeToOString( pRedlineData->GetTimeStamp() ) );
+    OString aDate( DateTimeToOString( pRedlineData->GetTimeStamp() ) );
 
     switch ( pRedlineData->GetType() )
     {
@@ -4866,7 +4867,7 @@ void DocxAttributeOutput::WritePostitFields()
         const SwPostItField* f = m_postitFields[ i ];
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
             FSNS( XML_w, XML_author ), OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSNS( XML_w, XML_date ), msfilter::util::DateTimeToOString(f->GetDateTime()).getStr(),
+            FSNS( XML_w, XML_date ), DateTimeToOString(f->GetDateTime()).getStr(),
             FSNS( XML_w, XML_initials ), OUStringToOString( f->GetInitials(), RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
         // Check for the text object existing, it seems that it can be NULL when saving a newly created
         // comment without giving focus back to the main document. As GetTxt() is empty in that case as well,
