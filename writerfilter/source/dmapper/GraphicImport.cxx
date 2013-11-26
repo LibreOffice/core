@@ -1004,6 +1004,18 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         // This needs to be AT_PARAGRAPH and not AT_CHARACTER, otherwise shape will move when the user inserts a new paragraph.
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
 
+                        uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
+                        if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+                        {
+                            // For non-textframes, this is handled already in oox::drawingml::Shape::createAndInsert().
+                            xShapeProps->setPropertyValue("HoriOrient", uno::makeAny(text::HoriOrientation::NONE));
+                            xShapeProps->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::NONE));
+                            xShapeProps->setPropertyValue("HoriOrientPosition", uno::makeAny(m_pImpl->nLeftPosition));
+                            xShapeProps->setPropertyValue("VertOrientPosition", uno::makeAny(m_pImpl->nTopPosition));
+                            xShapeProps->setPropertyValue("HoriOrientRelation", uno::makeAny(text::RelOrientation::FRAME));
+                            xShapeProps->setPropertyValue("VertOrientRelation", uno::makeAny(text::RelOrientation::FRAME));
+                        }
+
                         m_pImpl->applyMargins(xShapeProps);
                         bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
                         if (!bOpaque)

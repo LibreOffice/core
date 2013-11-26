@@ -623,7 +623,7 @@ Reference< XShape > Shape::createAndInsert(
         // These can have a custom geometry, so position should be set here,
         // after creation but before custom shape handling, using the position
         // we got from the caller.
-        if (mbWps)
+        if (mbWps && aServiceName != "com.sun.star.text.TextFrame")
             mxShape->setPosition(maPosition);
 
         if( bIsCustomShape )
