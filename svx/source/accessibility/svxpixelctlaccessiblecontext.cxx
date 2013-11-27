@@ -345,7 +345,6 @@ void SvxPixelCtlAccessible::grabFocus(  ) throw (uno::RuntimeException)
 sal_Int32 SvxPixelCtlAccessible::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    uno::Any aRet;
     ::osl::MutexGuard   aGuard( m_aMutex );
     IsValid();
     return pPixelCtl->GetControlForeground().GetColor();
@@ -354,7 +353,6 @@ sal_Int32 SvxPixelCtlAccessible::getForeground(  )
 sal_Int32 SvxPixelCtlAccessible::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    uno::Any aRet;
     ::osl::MutexGuard   aGuard( m_aMutex );
     IsValid();
     return pPixelCtl->GetControlBackground().GetColor();
