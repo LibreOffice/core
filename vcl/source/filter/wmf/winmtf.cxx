@@ -374,19 +374,6 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
         {
             switch( mnMapMode )
             {
-                case MM_TEXT:
-                    fX2 -= mnWinOrgX;
-                    fY2 -= mnWinOrgY;
-                    if( mnDevWidth != 1 || mnDevHeight != 1 ) {
-                        fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*1000/mnUnitsPerInch;
-                        fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*1000/mnUnitsPerInch;
-                    }
-                    fX2 += mnDevOrgX;
-                    fY2 += mnDevOrgY;
-                    fX2 *= (double)mnMillX * 100.0 / (double)mnPixX;
-                    fY2 *= (double)mnMillY * 100.0 / (double)mnPixY;
-
-                    break;
                 case MM_LOENGLISH :
                 {
                     fX2 -= mnWinOrgX;
@@ -471,15 +458,6 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
         {
             switch( mnMapMode )
             {
-                case MM_TEXT:
-                if( mnDevWidth != 1 && mnDevHeight != 1 ) {
-                    fWidth *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*1000/mnUnitsPerInch;
-                    fHeight*= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*1000/mnUnitsPerInch;
-                } else {
-                    fWidth *= (double)mnMillX * 100 / (double)mnPixX;
-                    fHeight *= (double)mnMillY * 100 / (double)mnPixY;
-                }
-                break;
                 case MM_LOENGLISH :
                 {
                     fWidth *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
@@ -916,7 +894,6 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mbComplexClip       ( false ),
     mnGfxMode           ( GM_COMPATIBLE ),
     mnMapMode           ( MM_TEXT ),
-    mnUnitsPerInch ( 96 ),
     mnDevOrgX           ( 0 ),
     mnDevOrgY           ( 0 ),
     mnDevWidth          ( 1 ),
@@ -2025,7 +2002,7 @@ void WinMtfOutput::SetRefMill( const Size& rSize )
 void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
 {
     mnMapMode = nMapMode;
-    if ( nMapMode == MM_TEXT )
+    if ( nMapMode == MM_TEXT && !mbIsMapWinSet )
     {
         mnWinExtX = mnDevWidth;
         mnWinExtY = mnDevHeight;
@@ -2035,14 +2012,6 @@ void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
         mnWinExtX = mnMillX * 100;
         mnWinExtY = mnMillY * 100;
     }
-}
-
-
-
-void WinMtfOutput::SetUnitsPerInch( sal_uInt16 nUnitsPerInch )
-{
-    if( nUnitsPerInch != 0 )
-    mnUnitsPerInch = nUnitsPerInch;
 }
 
 
