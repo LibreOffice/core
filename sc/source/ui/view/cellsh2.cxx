@@ -750,7 +750,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
                     for (size_t i = 0; i < rLinks.size(); i++)
                         if (DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i]))))
-                            pStream->Start();
+                            pStream->StartImport();
                 }
             }
             break;
@@ -762,7 +762,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
                     for (size_t i = 0; i < rLinks.size(); i++)
                         if (DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i]))))
-                            pStream->Stop();
+                            pStream->StopImport();
                 }
             }
             break;

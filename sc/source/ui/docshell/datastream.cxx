@@ -31,37 +31,6 @@
 
 namespace datastreams {
 
-class CallerThread : public salhelper::Thread
-{
-    DataStream *mpDataStream;
-public:
-    osl::Condition maStart;
-    bool mbTerminate;
-
-    CallerThread(DataStream *pData):
-        Thread("CallerThread")
-        ,mpDataStream(pData)
-        ,mbTerminate(false)
-    {}
-
-private:
-    virtual void execute()
-    {
-        while (!mbTerminate)
-        {
-            // wait for a small amount of time, so that
-            // painting methods have a chance to be called.
-            // And also to make UI more responsive.
-            TimeValue const aTime = {0, 100000};
-            maStart.wait();
-            maStart.reset();
-            if (!mbTerminate)
-                while (mpDataStream->ImportData())
-                    wait(aTime);
-        };
-    }
-};
-
 class ReaderThread : public salhelper::Thread
 {
     SvStream *mpStream;
@@ -219,19 +188,16 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const OUString&
     , mpLines(0)
     , mnLinesCount(0)
 {
-    mxThread = new datastreams::CallerThread( this );
-    mxThread->launch();
-
+    SetRefreshHandler(LINK( this, DataStream, RefreshHdl ));
+    SetRefreshControl(mpScDocument->GetRefreshTimerControlAddress());
+    SetTimeout( 1 );
     Decode(rURL, rRange, nLimit, rMove, nSettings);
 }
 
 DataStream::~DataStream()
 {
     if (mbRunning)
-        Stop();
-    mxThread->mbTerminate = true;
-    mxThread->maStart.set();
-    mxThread->join();
+        StopImport();
     if (mxReaderThread.is())
         mxReaderThread->endThread();
 }
@@ -299,21 +265,22 @@ void DataStream::Decode(const OUString& rURL, const OUString& rRange,
     }
 }
 
-void DataStream::Start()
+void DataStream::StartImport()
 {
     if (mbRunning)
         return;
     mbIsUndoEnabled = mpScDocument->IsUndoEnabled();
     mpScDocument->EnableUndo(false);
     mbRunning = true;
-    mxThread->maStart.set();
+    AutoTimer::Start();
 }
 
-void DataStream::Stop()
+void DataStream::StopImport()
 {
     if (!mbRunning)
         return;
     mbRunning = false;
+    AutoTimer::Stop();
     mpScDocument->EnableUndo(mbIsUndoEnabled);
 }
 
@@ -339,9 +306,14 @@ void DataStream::MoveData()
     }
 }
 
+IMPL_LINK_NOARG(DataStream, RefreshHdl)
+{
+    ImportData();
+    return 0;
+}
+
 bool DataStream::ImportData()
 {
-    SolarMutexGuard aGuard;
     MoveData();
     if (mbValuesInLine)
     {
@@ -406,7 +378,7 @@ sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
         const OUString& , const css::uno::Any& )
 {
     MakeToolbarVisible(mpScDocShell);
-    Start();
+    StartImport();
     return SUCCESS;
 }
 
@@ -417,10 +389,10 @@ void DataStream::Edit(Window* pWindow, const Link& )
     if (aDialog.Execute() == RET_OK)
     {
         bool bWasRunning = mbRunning;
-        Stop();
+        StopImport();
         aDialog.StartStream(this);
         if (bWasRunning)
-            Start();
+            StartImport();
     }
 }
 

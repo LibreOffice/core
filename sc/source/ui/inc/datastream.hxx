@@ -13,13 +13,13 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <address.hxx>
+#include <refreshtimer.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
 namespace datastreams {
-    class CallerThread;
     class ReaderThread;
 }
 class ScDocShell;
@@ -28,10 +28,11 @@ class Window;
 
 typedef std::vector<OString> LinesList;
 
-class DataStream : boost::noncopyable, public sfx2::SvBaseLink
+class DataStream : boost::noncopyable, public sfx2::SvBaseLink, ScRefreshTimer
 {
     OString ConsumeLine();
     void MoveData();
+    DECL_LINK( RefreshHdl, void* );
 
 public:
     enum MoveEnum { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
@@ -44,6 +45,7 @@ public:
     DataStream(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
             sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
     virtual ~DataStream() SAL_OVERRIDE;
+    // sfx2::SvBaseLink
     virtual sfx2::SvBaseLink::UpdateResult DataChanged(
             const OUString& , const css::uno::Any& ) SAL_OVERRIDE;
     virtual void Edit(Window* , const Link& ) SAL_OVERRIDE;
@@ -56,8 +58,8 @@ public:
     void Decode(const OUString& rURL, const OUString& rRange, sal_Int32 nLimit,
             const OUString& rMove, const sal_uInt32 nSettings);
     bool ImportData();
-    void Start();
-    void Stop();
+    void StartImport();
+    void StopImport();
 
 private:
     ScDocShell *mpScDocShell;
@@ -76,7 +78,6 @@ private:
     ScRange maRange;
     ScRange maStartRange;
     boost::scoped_ptr<ScRange> mpEndRange;
-    rtl::Reference<datastreams::CallerThread> mxThread;
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;
 };
 

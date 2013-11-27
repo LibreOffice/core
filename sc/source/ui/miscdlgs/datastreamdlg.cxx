@@ -128,7 +128,7 @@ void DataStreamDlg::StartStream(DataStream *pStream)
             , nSettings
             );
     DataStream::MakeToolbarVisible( mpDocShell );
-    pStream->Start();
+    pStream->StartImport();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
